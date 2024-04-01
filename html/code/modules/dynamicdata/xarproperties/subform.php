@@ -592,6 +592,8 @@ class SubFormProperty extends DataProperty
         $module    = empty($module) ? $this->getModule() : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
 
+        // Pass along the object context for xarTpl::property()
+        $data['context'] ??= $this->objectref?->getContext();
         return xarTpl::property($module, $template, 'showoutput', $data);
     }
 

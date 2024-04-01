@@ -78,7 +78,8 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
     if (!$parentobject->checkAccess('config')) {
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $parentobject->label));
     }
-    unset($parentobject);
+    // @todo For now, always add a reference to the parent object? - see DataPropertyMaster::addProperty()
+    //unset($parentobject);
 
     // check if the module+itemtype this property belongs to is hooked to the uploads module
     /* FIXME: can we do without this hardwiring? Comment out for now
@@ -100,6 +101,8 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
     $data['id']         = $id;
     // pass the original invalid value here
     $data['invalid']    = !empty($invalid) ? $invalid : '';
+    // @todo For now, always add a reference to the parent object? - see DataPropertyMaster::addProperty()
+    $data['objectref'] = $parentobject;
     $property = DataPropertyMaster::getProperty($data);
     if (empty($property)) {
         return;
@@ -178,6 +181,11 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
     $data['object'] = & $myobject;
 
     xarTpl::setPageTitle(xarML('Configuration for DataProperty #(1)', $itemid));
+    $data['has_overview'] = false;
+    $typename = $data['propertytype']->name;
+    if (file_exists(sys::code() . 'properties/' . $typename . '/xartemplates/includes/overview.xt')) {
+        $data['has_overview'] = true;
+    }
 
     // Return the template variables defined in this function
     return $data;
@@ -260,6 +268,11 @@ function dynamicdata_config_propval($proptype)
     $data['propertytype'] = & DataPropertyMaster::getProperty(['type' => $proptype]);
 
     xarTpl::setPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));
+    $data['has_overview'] = false;
+    $typename = $data['propertytype']->name;
+    if (file_exists(sys::code() . 'properties/' . $typename . '/xartemplates/includes/overview.xt')) {
+        $data['has_overview'] = true;
+    }
 
     return $data;
 }

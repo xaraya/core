@@ -153,7 +153,8 @@ class xarBlock extends xarObject implements ixarBlock
                 // @todo: deprecate use of these 
                 $blockinfo['group'] = $block->group;
                 $blockinfo['group_id'] = $block->group_id;
-                $blockinfo['context'] = $block->getContext();
+                // Pass along the block context for xarTpl::renderBlockBox() if needed
+                $blockinfo['context'] ??= $block->getContext();
                 $boxOutput = xarTpl::renderBlockBox($blockinfo, $block->box_template);
             }                      
 
@@ -354,6 +355,7 @@ class xarBlock extends xarObject implements ixarBlock
                 $block->setTemplateBase($block_tpl);
                 $block->setBlockTemplate(null);
             }
+            // Pass along the block context for xarTpl::block() if needed
             $tplData['context'] ??= $block->getContext();
             return xarTpl::block(
                 $block->module, $block->type, $tplData, $block->block_template, $block->template_base, $block->tplmodule);

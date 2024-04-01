@@ -18,7 +18,7 @@
  * 
  * @return array<mixed>|string|void data for the template display
  */
-function blocks_admin_modify_instance()
+function blocks_admin_modify_instance(array $args=[], $context = null)
 {
     /**
      * Pending
@@ -98,6 +98,8 @@ function blocks_admin_modify_instance()
         }          
         // get the block object and load the interface
         $block = xarBlock::getObject($blockinfo, $interface);
+        // set context if available in gui function
+        $block->setContext($context);
 
         $block_groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
             array('type_category' => 'group',));

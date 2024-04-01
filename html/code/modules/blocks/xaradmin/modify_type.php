@@ -20,7 +20,7 @@
  * @throws IDNotFoundException
  * @throws FunctionNotFoundException
  */
-function blocks_admin_modify_type(Array $args=array())
+function blocks_admin_modify_type(array $args=[], $context = null)
 {
     if (!xarSecurity::check('ManageBlocks')) return;
     
@@ -65,6 +65,8 @@ function blocks_admin_modify_type(Array $args=array())
             if (!xarSecurity::check('AdminBlocks')) return;    
         // get the block object and load the interface
         $block = xarBlock::getObject($type, $interface);
+        // set context if available in gui function
+        $block->setContext($context);
     }
     
     // handle update phase

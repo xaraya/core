@@ -71,6 +71,8 @@ trait UserGuiTrait
      */
     public function main(array $args = [])
     {
+        // Pass along the context for xarTpl::module() if needed
+        $args['context'] ??= $this->getContext();
         return $args;
     }
 }

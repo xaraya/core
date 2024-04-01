@@ -180,6 +180,7 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
     $data['tplmodule'] = $args['tplmodule'];   //TODO: is this needed
     $data['objectid'] = $args['objectid'];
     $data['authid'] = xarSec::genAuthKey();
+    $data['context'] = $object->getContext();
 
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {

@@ -763,6 +763,9 @@ class xarMod extends xarObject implements IxarMod
         $templateName = NULL;
         if (isset($tplData['_bl_template'])) $templateName = $tplData['_bl_template'];
 
+        // @todo Pass along the context for xarTpl::module() if needed
+        $tplData['context'] ??= $context;
+
         // Create the output.
         $tplOutput = xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
 

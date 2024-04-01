@@ -86,6 +86,8 @@ class xarTwigTpl extends xarTpl
         $twigbridge = new TwigBridge($paths, $options, $context);
         $twig = $twigbridge->getEnvironment();
 
+        // @todo this only affects links generated *after* the main module has executed, so it's too late for that
+        // see e.g. blocks admin view_instances - info_link, type_link etc. are already url-encoded
         // @checkme set generate XML urls to false to avoid autoescape issues
         xarServer::$generateXMLURLs = false;
         xarMod::$genXmlUrls = false;
@@ -113,6 +115,7 @@ class xarTwigTpl extends xarTpl
             'library' => 'code/modules/library',
             'workflow' => 'code/modules/workflow',
             'xarcachemanager' => 'code/modules/xarcachemanager',
+            //'publications' => 'code/modules/publications',
             // no namespace for themes
             '' => 'themes',
         ];
@@ -155,6 +158,10 @@ class xarTwigTpl extends xarTpl
             $output = $e->getMessage();
         }
          */
+        // @todo let's be drastic about double-encoding for now...
+        if (str_contains($output, '&amp;amp;')) {
+            $output = str_replace('&amp;amp;', '&amp;', $output);
+        }
         // don't use trace in page templates to avoid adding comments to page
         if (empty($trace) || !xarTpl::outputTemplateFilenames()) {
             return $output;
@@ -428,6 +435,9 @@ class xarTwigTpl extends xarTpl
      */
     public static function block($modName, $blockType, $tplData = [], $tplName = null, $tplBase = null, $tplModule = null)
     {
+        if (is_bool($tplData['context']['twig'])) {
+            $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
+        }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
         //return parent::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
         $trace = "[$themeName] xarTwigTpl::block($modName, $blockType, [...], $tplName, $tplBase, $tplModule)";

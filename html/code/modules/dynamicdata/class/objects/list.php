@@ -798,6 +798,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         $args['object'] = $this;
+        // Pass along the object context for xarTpl::object()
         $args['context'] = $this->getContext();
         return xarTpl::object($args['tplmodule'], $args['template'], 'showview', $args);
     }
