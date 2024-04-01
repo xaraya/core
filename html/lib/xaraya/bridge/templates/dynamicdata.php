@@ -8,6 +8,7 @@ namespace Xaraya\Bridge\TemplateEngine;
 use Twig\TwigFunction;
 use DataObjectFactory;
 use DataPropertyMaster;
+use AccessProperty;
 use xarConfigVars;
 use xarMod;
 use xarModVars;
@@ -18,6 +19,14 @@ use Exception;
 
 /**
  * DynamicData Tags
+ * ```twig
+ * {{ xar_data_view({object: objectlist}) }}
+ * {{ xar_data_display({object: objectitem}) }}
+ * {{ xar_data_output({property: property}) }}
+ * {% set properties, items = xar_data_getitems({object: objectlist}) %}
+ * {% set properties = xar_data_getitem({object: objectitem, itemid: 1}) %}
+ * {% if xar_access(...) %}...{% endif %}
+ * ```
  */
 class DynamicDataTagExtension extends XarayaTwigExtension
 {
@@ -50,6 +59,10 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             new TwigFunction('xar_data_filter', [$this, 'xar_data_filter'], ['is_safe' => ['html']]),
             new TwigFunction('xar_data_getitems', [$this, 'xar_data_getitems']),
             new TwigFunction('xar_data_getitem', [$this, 'xar_data_getitem']),
+            new TwigFunction('xar_data_objectlist', [$this, 'xar_data_objectlist']),
+            new TwigFunction('xar_data_object', [$this, 'xar_data_object']),
+            new TwigFunction('xar_data_property', [$this, 'xar_data_property']),
+            new TwigFunction('xar_access', [$this, 'xar_access']),
         ];
     }
 
@@ -266,8 +279,8 @@ class DynamicDataTagExtension extends XarayaTwigExtension
     public function xar_data_getitems($args = [])
     {
         // take a copy of the arguments if we're passing variables we want to re-use!?
-        $properties = $args['properties'];
-        $values = $args['values'];
+        $properties = $args['properties'] ?? [];
+        $values = $args['values'] ?? [];
         $params = $args;
         unset($params['properties']);
         unset($params['values']);
@@ -299,7 +312,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
     public function xar_data_getitem($args = [])
     {
         // take a copy of the arguments if we're passing variables we want to re-use!?
-        $properties = $args['properties'];
+        $properties = $args['properties'] ?? [];
         $params = $args;
         unset($params['properties']);
         if (!empty($args['object'])) {
@@ -322,5 +335,29 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         // @todo not sure this will help unless we change template too
         $properties = $object->getProperties($params);
         return $properties;
+    }
+
+    public function xar_data_objectlist($args)
+    {
+        return DataObjectFactory::getObjectList($args, $this->context);
+    }
+
+    public function xar_data_object($args)
+    {
+        return DataObjectFactory::getObject($args, $this->context);
+    }
+
+    public function xar_data_property($args, $objectref = null)
+    {
+        $property = DataPropertyMaster::getProperty($args);
+        $property->objectref = $objectref ?? new DummyObject($this->context);
+        return $property;
+    }
+
+    public function xar_access($args = [], $exclusive = 1)
+    {
+        /** @var AccessProperty $access */
+        $access = DataPropertyMaster::getProperty(['type' => 'access']);
+        return $access->checkAccessTag($args, $exclusive);
     }
 }

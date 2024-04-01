@@ -1214,7 +1214,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $pieces = explode(',', $matches[1]);
             $parts = [];
             foreach ($pieces as $piece) {
-                [$name, $value] = explode('=>', $piece . '=>', 2);
+                [$name, $value] = explode('=>', $piece . '=>');
                 $name = trim($name);
                 $value = trim($value);
                 if (empty($name)) {
@@ -1300,7 +1300,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $methodName = $matches[1];
             $args = $matches[2];
             if ($methodName == 'getFormattedDate') {
-                [$format, $value] = explode(',', $args . ',', 2);
+                [$format, $value] = explode(',', $args, 2);
                 $format = trim($format);
                 $value = trim($value);
                 if (empty($value)) {
@@ -1309,7 +1309,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
                 return 'xar_localedate(' . $this->replaceVariable($value) . ', ' . $this->replaceVariable($format) . ", '')";
             }
             if ($methodName == 'getFormattedTime') {
-                [$format, $value] = explode(',', $args . ',', 2);
+                [$format, $value] = explode(',', $args, 2);
                 $format = trim($format);
                 $value = trim($value);
                 if (empty($value)) {
@@ -1456,7 +1456,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
         $pattern = '~json_encode\(([^)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
-            [$value, $flags] = explode(',', $matches[1] . ',', 2);
+            [$value, $flags] = explode(',', $matches[1], 2);
             if ($flags) {
                 $flags = trim($flags);
                 return trim($this->replaceVariable($value)) . '|json_encode(constant(\'' . $flags . '\'))';

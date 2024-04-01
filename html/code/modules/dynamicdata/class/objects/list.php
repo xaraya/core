@@ -344,7 +344,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
 
             // Add the field's order clause
-            $this->dataquery->addorder($this->properties[$criteria]->source, $sortorder);
+            if (array_key_exists($criteria, $this->properties)) {
+                $this->dataquery->addorder($this->properties[$criteria]->source, $sortorder);
+            }
             // @todo fix setSort() and/or dataquery to support other datastores than relational ones
             if (is_object($this->datastore) && $this->datastore->getClassName() !== 'RelationalDataStore') {
                 $this->addSort($criteria, $sortorder);

@@ -7,15 +7,9 @@ namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\TwigFunction;
 use xarBlock;
-use xarConfigVars;
-use xarController;
 use xarMLS;
 use xarMod;
-use xarModVars;
-use xarSecurity;
-use xarSession;
 use xarTpl;
-use xarUser;
 use xarVar;
 use Exception;
 
@@ -43,13 +37,6 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
             new TwigFunction('xar_twig_header', [$this, 'xar_twig_header']),
             new TwigFunction('xar_blockgroup', [$this, 'xar_blockgroup'], ['is_safe' => ['html']]),
             new TwigFunction('xar_block', [$this, 'xar_block'], ['is_safe' => ['html']]),
-            /**
-            <xar:set name="checked">
-                <xar:var scope="module" module="themes" name="var_dump"/>
-            </xar:set>
-            // @todo use context where relevant
-            */
-            new TwigFunction('xar_var', [$this, 'xar_var']),
             // <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
             new TwigFunction('xar_pager', [$this, 'xar_pager'], ['is_safe' => ['html']]),
             // <xar:javascript scope="theme" filename="checkall.js" position="head"/>
@@ -61,7 +48,7 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
             new TwigFunction('xar_style', [$this, 'xar_style']),
             // <xar:place-css />
             new TwigFunction('xar_place_css', [$this, 'xar_place_css'], ['is_safe' => ['html']]),
-            // @todo <xar:meta type="name" value="keywords" content="$keywords" lang="en" dir="ltr" append="1"/>
+            new TwigFunction('xar_meta', [$this, 'xar_meta']),
             // <xar:place-meta/>
             new TwigFunction('xar_place_meta', [$this, 'xar_place_meta'], ['is_safe' => ['html']]),
             // <xar:img scope="theme" file="icons/info.png" class="xar-icon" alt="info"/>
@@ -75,8 +62,6 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
             new TwigFunction('xar_prep_display', [$this, 'xar_prep_display'], ['is_safe' => ['html']]),
             // @todo do we even want this with autoescape enabled?
             new TwigFunction('xar_prep_html', [$this, 'xar_prep_html'], ['is_safe' => ['html']]),
-            // <xar:sec mask="..." catch="false">
-            new TwigFunction('xar_security_check', [$this, 'xar_security_check']),
         ];
     }
 
@@ -113,31 +98,6 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
         return xarBlock::renderBlock($params, $this->context);
     }
 
-    /**
-    <xar:set name="checked">
-        <xar:var scope="module" module="themes" name="var_dump"/>
-    </xar:set>
-    // @todo use context where relevant
-    */
-    public function xar_var($args = [])
-    {
-        // @todo not sure how this is supposed to work
-        $args['scope'] ??= 'local';
-        $result = match ($args['scope']) {
-            'local' => $args['name'],
-            'module' => xarModVars::get($args['module'], $args['name']),
-            'user' => xarUser::getVar($args['name'], $args['user'] ?? null),
-            'config' => xarConfigVars::get(null, $args['name']),
-            'session' => xarSession::getVar($args['name']),
-            'request' => xarController::getVar($args['name']),
-            default => 'Unknown scope ' . $args['scope'],
-        };
-        if (!empty($args['prep'])) {
-            return xarVar::prepForDisplay($result);
-        }
-        return $result;
-    }
-
     public function xar_pager($args = [])
     {
         //$args['context'] ??= $this->context;
@@ -172,6 +132,12 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
         $params = ['method' => 'render', 'base' => 'theme'];
         $params['context'] = $this->context;
         return xarMod::apiFunc('themes', 'user', 'deliver', $params);
+    }
+
+    public function xar_meta($args = [])
+    {
+        xarMod::apiFunc('themes','user','registermeta', $args, $this->context);
+        return '';
     }
 
     public function xar_place_meta($args = [])
@@ -212,10 +178,5 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
     public function xar_prep_html(...$args)
     {
         return xarVar::prepHTMLDisplay(...$args);
-    }
-
-    public function xar_security_check($mask, $catch = 0)
-    {
-        return xarSecurity::check($mask, $catch);
     }
 }

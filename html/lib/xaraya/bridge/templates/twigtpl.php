@@ -199,7 +199,7 @@ class xarTwigTpl extends xarTpl
         $templateName = static::findPageTemplate($twig, $themeName, 'pages', $pageTemplate, '');
         if (empty($templateName)) {
             //return parent::renderPage($mainModuleOutput, $pageTemplate, $context);
-            return $trace;
+            return 'Twig template not found: ' . $trace;
         }
         // see xarTpl::renderPage
         $tpl = (object) null; // Create an object to hold the 'specials'
@@ -276,7 +276,7 @@ class xarTwigTpl extends xarTpl
         $templateName = static::findBoxTemplate($twig, $themeName, $tplName ?? '');
         if (empty($templateName)) {
             //return parent::renderPage($mainModuleOutput, $pageTemplate, $context);
-            return $trace;
+            return 'Twig template not found: ' . $trace;
         }
         //var_dump($blockInfo);
         //return $templateName . ':' . $trace;
@@ -346,7 +346,7 @@ class xarTwigTpl extends xarTpl
         $templateName = static::findModuleTemplate($twig, $themeName, $modName, $modType, $funcName, $tplName ?? '');
         if (empty($templateName)) {
             //return parent::module($modName, $modType, $funcName, $tplData, $templateName);
-            return $trace;
+            return 'Twig template not found: ' . $trace;
         }
         $template = $twig->load($templateName);
         return static::renderTemplate($template, $tplData, $templateName, $trace);
@@ -446,7 +446,7 @@ class xarTwigTpl extends xarTpl
         $templateName = static::findBlockTemplate($twig, $themeName, $modName, $blockType, $tplName ?? '', $tplBase ?? '', $tplModule ?? '');
         if (empty($templateName)) {
             //return parent::object($modName, $objectName, $tplType, $tplData, $tplBase);
-            return $trace;
+            return 'Twig template not found: ' . $trace;
         }
         //var_dump($tplData);
         //return $templateName . ':' . $trace;
@@ -521,7 +521,7 @@ class xarTwigTpl extends xarTpl
         $templateName = static::findObjectTemplate($twig, $themeName, $modName, $objectName, $tplType, $tplBase ?? '');
         if (empty($templateName)) {
             //return parent::object($modName, $objectName, $tplType, $tplData, $tplBase);
-            return $trace;
+            return 'Twig template not found: ' . $trace;
         }
         $template = $twig->load($templateName);
         return static::renderTemplate($template, $tplData, $templateName, $trace);
@@ -598,7 +598,7 @@ class xarTwigTpl extends xarTpl
         $templateName = static::findPropertyTemplate($twig, $themeName, $modName, $propertyName, $tplType, $tplBase ?? '');
         if (empty($templateName)) {
             //return parent::property($modName, $propertyName, $tplType, $tplData, $tplBase);
-            return $trace;
+            return 'Twig template not found: ' . $trace;
         }
         $template = $twig->load($templateName);
         return static::renderTemplate($template, $tplData, $templateName, $trace);

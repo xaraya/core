@@ -6,10 +6,13 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\TwigFunction;
+use xarConfigVars;
+use xarController;
 use xarLocale;
 use xarMLS;
 use xarMod;
 use xarModVars;
+use xarSec;
 use xarSecurity;
 use xarServer;
 use xarSession;
@@ -69,9 +72,18 @@ class XarayaCoreExtension extends XarayaTwigExtension
             new TwigFunction('xar_fileurl', [$this, 'xar_fileurl'], ['is_safe' => ['html']]),
             new TwigFunction('xar_username', [$this, 'xar_username']),
             new TwigFunction('xar_uservar', [$this, 'xar_uservar']),
-            new TwigFunction('xar_modvar', [$this, 'xar_modvar']),
+            new TwigFunction('xar_configvar', [$this, 'xar_configvar']),
+            new TwigFunction('xar_modulevar', [$this, 'xar_modulevar']),
+            new TwigFunction('xar_moduleid', [$this, 'xar_moduleid']),
+            new TwigFunction('xar_var', [$this, 'xar_var']),
+            new TwigFunction('xar_userid', [$this, 'xar_userid']),
+            new TwigFunction('xar_modname', [$this, 'xar_modname']),
+            new TwigFunction('xar_request', [$this, 'xar_request']),
             new TwigFunction('xar_translate', [$this, 'xar_translate']),
             new TwigFunction('xar_localedate', [$this, 'xar_localedate']),
+            // <xar:sec mask="..." catch="false">
+            new TwigFunction('xar_security_check', [$this, 'xar_security_check']),
+            new TwigFunction('xar_security_authkey', [$this, 'xar_security_authkey']),
             // {% set infolink = attribute('xarServer', 'getObjectURL', ['workflow_tracker', 'display', {'itemid': item['id']}]) %}
             // @todo placeholder until corresponding functions have been added
             new TwigFunction('xar_coremethod', [$this, 'xar_coremethod']),
@@ -133,19 +145,81 @@ class XarayaCoreExtension extends XarayaTwigExtension
         return xarTpl::getFile($fileName, $scope, $package);
     }
 
-    public function xar_username($userId, $name = 'name')
+    public function xar_username($userId)
+    {
+        return xarUser::getVar('name', $userId);
+    }
+
+    public function xar_uservar($name = 'id', $userId = null)
     {
         return xarUser::getVar($name, $userId);
     }
 
-    public function xar_uservar($name = 'id')
+    public function xar_configvar($name)
     {
-        return xarUser::getVar($name);
+        return xarConfigVars::get(null, $name);
     }
 
-    public function xar_modvar($scope, $name)
+    public function xar_modulevar($scope, $name)
     {
         return xarModVars::get($scope, $name);
+    }
+
+    public function xar_moduleid($modName)
+    {
+        return xarMod::getRegId($modName);
+    }
+
+    /**
+     * <xar:set name="checked">
+     *    <xar:var scope="module" module="themes" name="var_dump"/>
+     * </xar:set>
+     * @todo use context where relevant
+     * @deprecated 2.5.0 use specific xar_*var() function instead
+     */
+    public function xar_var($args = [])
+    {
+        // @todo not sure how this is supposed to work
+        $args['scope'] ??= 'local';
+        $result = match ($args['scope']) {
+            'local' => $args['name'],
+            'module' => xarModVars::get($args['module'], $args['name']),
+            'user' => xarUser::getVar($args['name'], $args['user'] ?? null),
+            'config' => xarConfigVars::get(null, $args['name']),
+            'session' => xarSession::getVar($args['name']),
+            'request' => xarController::getVar($args['name']),
+            default => 'Unknown scope ' . $args['scope'],
+        };
+        if (!empty($args['prep'])) {
+            return xarVar::prepForDisplay($result);
+        }
+        return $result;
+    }
+
+    /**
+     * Get the current user id
+     * @return int|false current user id or false if anonymous
+     */
+    public function xar_userid($context = null)
+    {
+        // @todo use context to get user id
+        if (!xarUser::isLoggedIn()) {
+            return false;
+        }
+        if (isset($context)) {
+            return $context->getUserId() ?? xarSession::getVar('role_id');
+        }
+        return xarSession::getVar('role_id');
+    }
+
+    public function xar_modname($regId = null)
+    {
+        return xarMod::getName($regId);
+    }
+
+    public function xar_request($url = null)
+    {
+        return xarController::getRequest($url);
     }
 
     public function xar_translate($rawstring, ...$args)
@@ -165,8 +239,35 @@ class XarayaCoreExtension extends XarayaTwigExtension
         return $date;
     }
 
+    public function xar_security_check($mask, $catch = 0, $component = '', $instance = '', $module = '', $rolename = '', $realm = 0, $level = 0)
+    {
+        return xarSecurity::check($mask, $catch, $component, $instance, $module, $rolename, $realm, $level);
+    }
+
+    public function xar_security_authkey($modName = null)
+    {
+        return xarSec::genAuthKey($modName);
+    }
+
+    /**
+     * Call static method of core class with params
+     * Note: also supports calling allowed function with params
+     * @todo replace with specific functions or set as template variable
+     */
     public function xar_coremethod($class, $method, ...$params)
     {
+        if (!isset($class)) {
+            // see DD test_apis
+            $allowed = ['filemtime'];
+            if (!in_array($method, $allowed)) {
+                throw new Exception('Function ' . $method . ' is not allowed');
+            }
+            return $method(...$params);
+        }
+        $allowed = [];
+        //if (!in_array($class, $allowed)) {
+        //    throw new Exception('Class ' . $class . ' is not allowed');
+        //}
         return $class::$method(...$params);
     }
 }
