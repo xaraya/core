@@ -165,7 +165,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
         return $date;
     }
 
-    public function xar_coremethod($class, $method, $params = [])
+    public function xar_coremethod($class, $method, ...$params)
     {
         return $class::$method(...$params);
     }
