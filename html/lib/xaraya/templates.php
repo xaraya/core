@@ -713,7 +713,7 @@ class xarTpl extends xarObject
  * @param  string $tplType      the template type to render
  *                              properties: ( showoutput(default)|showinput|showhidden|validation|label )
  * @param array<mixed> $tplData arguments for the template
- * @param  ?string $tplBase      the template type can be overridden too ( unused )
+ * @param  ?string $tplBase      the template type can be overridden too ( used by xar:data-label - why not change tplType? )
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */

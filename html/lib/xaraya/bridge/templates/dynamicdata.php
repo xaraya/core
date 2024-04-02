@@ -183,6 +183,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         // Ok, we have nothin, but a label
         if (!empty($args['label'])) {
             $args['context'] ??= $this->context;
+            // @todo why are we using this here instead of changing showoutput directly? - see xar:data-label
             return xarTpl::property('dynamicdata', 'label', 'showoutput', $args, 'label');
         }
         return 'I need an object or a property or a label attribute';

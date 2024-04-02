@@ -173,10 +173,10 @@ class xarTwigTpl extends xarTpl
         if (empty($trace) || !xarTpl::outputTemplateFilenames()) {
             return $output;
         }
-        return '<!-- start: ' . $templateName . ' -->' .
+        return '<!-- start: ' . $templateName . " -->\n" .
             //'<!-- args: ' . $trace . ' -->' .
-            $output .
-            '<!-- end: ' . $templateName . ' -->';
+            trim($output) .
+            '<!-- end: ' . $templateName . " -->\n";
     }
 
     /**
@@ -699,7 +699,7 @@ class xarTwigTpl extends xarTpl
      * @param string $propertyName
      * @param string $tplType
      * @param array<string, mixed> $tplData
-     * @param ?string $tplBase - unused
+     * @param ?string $tplBase - used by xar:data-label - why not change tplType?
      * @return string
      */
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = [], $tplBase = null)
@@ -728,7 +728,7 @@ class xarTwigTpl extends xarTpl
      * @param string $modName
      * @param string $propertyName
      * @param string $tplType
-     * @param string $tplBase - unused
+     * @param string $tplBase - used by xar:data-label - why not change tplType?
      * @return string|null
      */
     public static function findPropertyTemplate($twig, $themeName, $modName, $propertyName, $tplType, $tplBase)
@@ -737,6 +737,9 @@ class xarTwigTpl extends xarTpl
         // cache frequently-used sourcefilenames
         if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
             return xarCoreCache::getCached('Templates.Twig', $cachename);
+        }
+        if (!empty($tplBase)) {
+            $tplType = xarVar::prepForOS($tplBase);
         }
 
         // @todo define this in theme config
