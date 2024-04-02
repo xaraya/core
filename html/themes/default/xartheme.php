@@ -26,4 +26,5 @@ $themeinfo = array(
     'xar_version'   => '2.0',
     'bl_version'    => '2.0',
     'class'         => 2,
+    'twigtemplates' => true,
 );

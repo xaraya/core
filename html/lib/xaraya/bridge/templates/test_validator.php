@@ -65,6 +65,18 @@ class TestValidator
 
         return $validator->validateDir($targetPath);
     }
+
+    public function validateProperties()
+    {
+        // validate all *.html.twig templates for properties
+        $options = [
+            'namespace' => 'properties',
+        ];
+        $validator = new TwigValidator($options);
+        $targetPath = $this->baseDir . '/templates/twig/code/properties';
+
+        return $validator->validateDir($targetPath);
+    }
 }
 
 $tester = new TestValidator($baseDir);
@@ -74,13 +86,15 @@ foreach ($namespaces as $module => $path) {
     if (!str_contains($path, 'code/modules/')) {
         continue;
     }
-    $dependencies = $tester->validateModule($module);
+    //$dependencies = $tester->validateModule($module);
     //var_export($dependencies);
 }
 
 $themes = ['common', 'default', 'rss', 'print', 'installer'];
 $subDir = '';  // 'pages';
 foreach ($themes as $theme) {
-    $dependencies = $tester->validateTheme($theme);
+    //$dependencies = $tester->validateTheme($theme);
     //var_export($dependencies);
 }
+
+$dependencies = $tester->validateProperties();

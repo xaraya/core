@@ -316,10 +316,28 @@ Xaraya has been using Blocklayout for templates since the early days. This bridg
 
 Requirement:
 ```shell
-$ composer require twig/twig
+$ composer require xaraya/twig
 ```
 
-Usage:
+Usage for site setup:
+
+The Twig bridge has been integrated into the template system, so all you need to do
+is tell Xaraya to use it :-)
+
+In `index.php`:
+```php
+    ...
+
+    // Get context of the request if available
+    $context = $request->getServerContext()?->getContext();
+    // Use Twig templates with Xaraya - install xaraya/twig package with composer first
+    /** un-comment the next line to activate Twig templates */
+    $context['twig'] = true;
+
+    ...
+```
+
+Usage for core/custom development:
 ```php
 use Xaraya\Bridge\TemplateEngine\TwigBridge;
 
@@ -349,6 +367,8 @@ return $template->render($data);
 ### New Twig Functions (Xaraya Extensions)
 
 ```twig
+{# @todo update this list #}
+
 {% set info = xar_apifunc(modName, modType, funcName, params) %}
 {% set link = xar_moduleurl(modName, modType, funcName, params) %}
 {{ xar_objecturl(objectName, methodName, params) }}
@@ -369,18 +389,48 @@ return $template->render($data);
 
 Experimental template converter from Blocklayout to Twig syntax
 
+When you start from the original BL templates, this will convert about 80% of your templates correctly, but you'll still need to clean up a bit afterwards - see validator below.
+
+See [test_converter.php](./templates/test_converter.php) for examples
+
 Usage:
 ```php
 use Xaraya\Bridge\TemplateEngine\BlocklayoutToTwigConverter;
 
-// convert all test_*.xt templates from includes directory
+// convert all test_*.xt templates from workflow includes directory
 $options = [
     'namespace' => 'workflow/includes',
 ];
 $converter = new BlocklayoutToTwigConverter($options);
-$sourcePath = dirname(__DIR__) . '/xartemplates/includes';
-$targetPath = dirname(__DIR__) . '/templates/includes';
-$converter->convertDir($sourcePath, $targetPath, '.xt', 'test_');
+$sourcePath = sys::root() . '/html/code/modules/workflow/xartemplates/includes';
+$targetPath = sys::root() . '/templates/twig/workflow/includes';
+// start from depth 1 here to avoid renaming
+$converter->convertDir($sourcePath, $targetPath, '.xt', 'test_', 1);
+```
+
+### Twig Template Validator
+
+Experimental Twig template validator for converted theme/module/property templates
+
+This will tell you which template file and 1st line Twig complains about when trying to compile all templates.
+You'll need to run this several times after fixing each issue - an IDE with a Twig syntax checker plugin
+will help :-)
+
+See [test_validator.php](./templates/test_validator.php) for examples
+
+Usage:
+```php
+use Xaraya\Bridge\TemplateEngine\TwigValidator;
+
+// validate all *.html.twig templates for workflow includes directory
+$options = [
+    'namespace' => 'workflow/includes',
+    //'extension' => '.html.twig',
+];
+$validator = new TwigValidator($options);
+$targetPath = sys::root() . '/templates/twig/workflow/includes';
+
+$dependencies = $validator->validateDir($targetPath);
 ```
 
 Enjoy :-)

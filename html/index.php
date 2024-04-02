@@ -186,6 +186,7 @@ function xarMain()
         // Get context of the request if available
         $context = $request->getServerContext()?->getContext();
         // Use Twig templates with Xaraya - install xaraya/twig package with composer first
+        /** un-comment the next line to activate Twig templates */
         //$context['twig'] = true;
 
         // Process the request

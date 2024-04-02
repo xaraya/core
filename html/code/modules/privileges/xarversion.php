@@ -34,3 +34,4 @@ $modversion['user']               = false;
 $modversion['class']              = 'Core Complete';
 $modversion['category']           = 'Users & Groups';
 $modversion['securityschema']     = array('Privileges::' => 'name:id');
+$modversion['twigtemplates']      = true;

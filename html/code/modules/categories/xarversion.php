@@ -31,4 +31,5 @@ $modversion = array(
     'category'       => 'Content',
     'securityschema' => array('categories::category' => 'Category name::Category ID',
                                       'categories::item' => 'Category ID:Module ID:Item ID'),
+    'twigtemplates'  => true,
 );

@@ -38,4 +38,5 @@ $modversion = array(
     'user'               => true,
     'class'              => 'Authentication',
     'category'           => 'Users & Groups',
+    'twigtemplates'      => true,
 );

@@ -569,6 +569,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             } else {
                 $file = $attrib['file'];
             }
+            // @todo check and handle 'property' attribute for stand-alone properties + adapt includes path
             $namespace = $this->getNamespace();
             if (!empty($attrib['module']) && $attrib['module'] !== $namespace) {
                 $namespace = $attrib['module'];

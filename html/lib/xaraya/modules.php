@@ -666,6 +666,8 @@ class xarMod extends xarObject implements IxarMod
         }
         $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
         $FileInfo['namespace']      = isset($version['namespace'])      ? $version['namespace'] : '';
+        $FileInfo['twigtemplates']  = isset($version['twigtemplates'])  ? $version['twigtemplates'] : false;
+        $FileInfo['twigextension']  = isset($version['twigextension'])  ? $version['twigextension'] : '.html.twig';
 
         xarCoreCache::setCached('Mod.getFileInfos', $modOsDir ." / " . $type, $FileInfo);
         return $FileInfo;

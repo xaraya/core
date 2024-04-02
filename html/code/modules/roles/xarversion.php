@@ -40,4 +40,5 @@ $modversion = array(
     'user'               => true,
     'class'              => 'Core Complete',
     'category'           => 'Users & Groups',
+    'twigtemplates'      => true,
 );

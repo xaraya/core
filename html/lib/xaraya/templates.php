@@ -420,7 +420,9 @@ class xarTpl extends xarObject
     {
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
             sys::import('xaraya.bridge.templates.twigtpl');
-            return xarTwigTpl::module($modName, $modType, $funcName, $tplData, $templateName);
+            if (xarTwigTpl::isModuleSupported($modName)) {
+                return xarTwigTpl::module($modName, $modType, $funcName, $tplData, $templateName);
+            }
         }
         // Basename of module template is apitype-functioname
         $tplBase        = "$modType-$funcName";
@@ -472,12 +474,14 @@ class xarTpl extends xarObject
  */
     public static function block($modName, $blockType, $tplData = array(), $tplName = NULL, $tplBase = NULL, $tplModule = NULL)
     {
-        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            sys::import('xaraya.bridge.templates.twigtpl');
-            return xarTwigTpl::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
-        }
         // use name of blocktype as base unless over-ridden
         $tplBase = empty($tplBase) ? $blockType : $tplBase;
+        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
+            sys::import('xaraya.bridge.templates.twigtpl');
+            if (xarTwigTpl::isBlockSupported($tplBase, $modName)) {
+                return xarTwigTpl::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
+            }
+        }
         if (!empty($modName)) {
             // get module block template (current > common > module)
             $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $tplName, 'blocks');
@@ -672,7 +676,9 @@ class xarTpl extends xarObject
     {
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
             sys::import('xaraya.bridge.templates.twigtpl');
-            return xarTwigTpl::object($modName, $objectName, $tplType, $tplData, $tplBase);
+            if (xarTwigTpl::isObjectSupported($objectName, $modName)) {
+                return xarTwigTpl::object($modName, $objectName, $tplType, $tplData, $tplBase);
+            }
         }
         $modName = xarVar::prepForOS($modName);
         $objectName = xarVar::prepForOS($objectName);
@@ -713,10 +719,10 @@ class xarTpl extends xarObject
  */
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
     {
+        // @todo check and handle stand-alone properties with module 'auto' + adapt includes path
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
-            // @todo only use for supported modules
-            if (in_array($modName, ['base', 'dynamicdata', 'workflow'])) {
-                sys::import('xaraya.bridge.templates.twigtpl');
+            sys::import('xaraya.bridge.templates.twigtpl');
+            if (xarTwigTpl::isPropertySupported($propertyName, $modName)) {
                 return xarTwigTpl::property($modName, $propertyName, $tplType, $tplData, $tplBase);
             }
         }
@@ -1076,7 +1082,9 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
         if (empty($pageTemplate)) $pageTemplate = self::getPageTemplateName();
         if (!empty($context) && !empty($context['twig'])) {
             sys::import('xaraya.bridge.templates.twigtpl');
-            return xarTwigTpl::renderPage($mainModuleOutput, $pageTemplate, $context);
+            if (xarTwigTpl::isThemeSupported($context)) {
+                return xarTwigTpl::renderPage($mainModuleOutput, $pageTemplate, $context);
+            }
         }
 
         // get page template source (current > common)
@@ -1108,7 +1116,9 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
     {
         if (!empty($blockInfo['context']) && !empty($blockInfo['context']['twig'])) {
             sys::import('xaraya.bridge.templates.twigtpl');
-            return xarTwigTpl::renderBlockBox($blockInfo, $templateName);
+            if (xarTwigTpl::isThemeSupported($blockInfo['context'])) {
+                return xarTwigTpl::renderBlockBox($blockInfo, $templateName);
+            }
         }
         // look for specific templateName.xt (current > common)
         if (!empty($templateName))

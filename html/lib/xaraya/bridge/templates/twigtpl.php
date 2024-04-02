@@ -1,7 +1,6 @@
 <?php
 /**
  * Use Twig template engine for output in Xaraya
- * @todo implement methods :-)
  */
 sys::import('xaraya.templates');
 sys::import('xaraya.bridge.templates.twigbridge');
@@ -13,12 +12,15 @@ use Xaraya\Bridge\TemplateEngine\TwigBridge;
 use Xaraya\Context\Context;
 
 /**
- * Twig Template Engine
+ * Use Twig template engine to generate output in Xaraya
+ *
  * @uses \sys::autoload()
  * @link https://twig.symfony.com/
  */
 class xarTwigTpl extends xarTpl
 {
+    public static string $twigDir = '';
+
     public static function init(array $args = [])
     {
         //return parent::init($args);
@@ -50,6 +52,7 @@ class xarTwigTpl extends xarTpl
         if (!is_dir($twigDir)) {
             $twigDir = $rootDir . '/vendor/xaraya/twig/templates/twig';
         }
+        static::$twigDir = $twigDir;
         // support local directory for custom templates only
         $customDir = $rootDir . '/templates/custom';
 
@@ -91,6 +94,7 @@ class xarTwigTpl extends xarTpl
         // @checkme set generate XML urls to false to avoid autoescape issues
         xarServer::$generateXMLURLs = false;
         xarMod::$genXmlUrls = false;
+        xarLog::message(__METHOD__ . ": New twig environment for context from " . ($context['source'] ?? 'unknown'), xarLog::LEVEL_NOTICE);
 
         return $twig;
     }
@@ -98,7 +102,6 @@ class xarTwigTpl extends xarTpl
     public static function getNamespaces()
     {
         $namespaces = [
-            //'blocks' => 'code/blocks',
             'authsystem' => 'code/modules/authsystem',
             'base' => 'code/modules/base',
             'blocks' => 'code/modules/blocks',
@@ -110,14 +113,18 @@ class xarTwigTpl extends xarTpl
             'privileges' => 'code/modules/privileges',
             'roles' => 'code/modules/roles',
             'themes' => 'code/modules/themes',
+            // no namespace for themes
+            '' => 'themes',
+            // @todo support stand-alone properties (partial)
             'properties' => 'code/properties',
+            // @todo support stand-alone blocks
+            //'blocks' => 'code/blocks',
+            // @todo make list of other modules configurable based on modinfo
             'apischemas' => 'code/modules/apischemas',
             'library' => 'code/modules/library',
             'workflow' => 'code/modules/workflow',
             'xarcachemanager' => 'code/modules/xarcachemanager',
             //'publications' => 'code/modules/publications',
-            // no namespace for themes
-            '' => 'themes',
         ];
         return $namespaces;
     }
@@ -170,6 +177,31 @@ class xarTwigTpl extends xarTpl
             //'<!-- args: ' . $trace . ' -->' .
             $output .
             '<!-- end: ' . $templateName . ' -->';
+    }
+
+    /**
+     * Check if the theme supports twig templates
+     * @param Context<string, mixed> $context
+     * @return bool
+     */
+    public static function isThemeSupported($context)
+    {
+        $themeName = $context['theme'] ?? xarTpl::getThemeName();
+        // let's keep the installer with blocklayout for now
+        if (in_array($themeName, ['common', 'default', 'print', 'rss'])) {
+            return true;
+        }
+        if (in_array($themeName, ['installer', 'kingston', 'Xaraya_Classic'])) {
+            return false;
+        }
+        // make other themes configurable based on fileinfo from xartheme.php
+        $themeOsDir = xarVar::prepForOS($themeName);
+        $info = xarTheme::getFileInfo($themeOsDir);
+        $supported = $info['twigtemplates'] ?? false;
+        if (!$supported) {
+            xarLog::message(__METHOD__ . ": Theme {$themeName} does not support twig templates", xarLog::LEVEL_INFO);
+        }
+        return $supported;
     }
 
     /**
@@ -326,6 +358,30 @@ class xarTwigTpl extends xarTpl
     }
 
     /**
+     * Check if the module supports twig templates
+     * @return bool
+     */
+    public static function isModuleSupported(string $modName)
+    {
+        // let's keep the installer with blocklayout for now
+        if (in_array($modName, ['authsystem', 'base', 'blocks', 'categories', 'dynamicdata', 'mail', 'modules', 'privileges', 'roles', 'themes'])) {
+            return true;
+        }
+        if (in_array($modName, ['installer'])) {
+            xarLog::message(__METHOD__ . ": Core module installer does not support twig templates", xarLog::LEVEL_INFO);
+            return false;
+        }
+        // make other modules configurable based on fileinfo from xarversion.php
+        $modOsDir = xarVar::prepForOS($modName);
+        $info = xarMod::getFileInfo($modOsDir);
+        $supported = $info['twigtemplates'] ?? false;
+        if (!$supported) {
+            xarLog::message(__METHOD__ . ": Module {$modName} does not support twig templates", xarLog::LEVEL_INFO);
+        }
+        return $supported;
+    }
+
+    /**
      * @param string $modName
      * @param string $modType
      * @param string $funcName
@@ -425,6 +481,26 @@ class xarTwigTpl extends xarTpl
     }
 
     /**
+     * Check if the block supports twig templates
+     * @return bool
+     */
+    public static function isBlockSupported(string $blockType, string $modName)
+    {
+        // @todo support stand-alone blocks
+        if (empty($modName) || $modName == 'auto') {
+            xarLog::message(__METHOD__ . ": Stand-alone block {$blockType} does not support twig templates", xarLog::LEVEL_INFO);
+            return false;
+        }
+        // let the module be the main blocker here
+        if (!static::isModuleSupported($modName)) {
+            xarLog::message(__METHOD__ . ": Block {$blockType} of module {$modName} does not support twig templates", xarLog::LEVEL_INFO);
+            return false;
+        }
+        // otherwise let's always assume that it is supported ;-)
+        return true;
+    }
+
+    /**
      * @param string $modName
      * @param string $blockType
      * @param array<string, mixed> $tplData
@@ -499,6 +575,21 @@ class xarTwigTpl extends xarTpl
         <!-- end: themes/common/blocks/header.xt -->
         <!-- end: code/modules/blocks/xartemplates/blocks/blockgroup.xt -->
          */
+    }
+
+    /**
+     * Check if the object supports twig templates
+     * @return bool
+     */
+    public static function isObjectSupported(string $objectName, string $modName)
+    {
+        // let the module be the main blocker here
+        if (!static::isModuleSupported($modName)) {
+            xarLog::message(__METHOD__ . ": Object {$objectName} of module {$modName} does not support twig templates", xarLog::LEVEL_INFO);
+            return false;
+        }
+        // otherwise let's always assume that it is supported ;-)
+        return true;
     }
 
     /**
@@ -578,6 +669,32 @@ class xarTwigTpl extends xarTpl
     }
 
     /**
+     * Check if the property supports twig templates
+     * @return bool
+     */
+    public static function isPropertySupported(string $propertyName, string $modName)
+    {
+        // support stand-alone properties (partial)
+        if ($modName == 'auto') {
+            // @todo let's try the hard way for now, and check the template path
+            $namespaces = static::getNamespaces();
+            $path = $namespaces['properties'];
+            if (is_dir(static::$twigDir . '/' . $path . '/' . $propertyName)) {
+                return true;
+            }
+            xarLog::message(__METHOD__ . ": Stand-alone property {$propertyName} does not support twig templates", xarLog::LEVEL_INFO);
+            return false;
+        }
+        // let the module be the main blocker here
+        if (!static::isModuleSupported($modName)) {
+            xarLog::message(__METHOD__ . ": Property {$propertyName} of module {$modName} does not support twig templates", xarLog::LEVEL_INFO);
+            return false;
+        }
+        // otherwise let's always assume that it is supported ;-)
+        return true;
+    }
+
+    /**
      * @param string $modName
      * @param string $propertyName
      * @param string $tplType
@@ -587,6 +704,7 @@ class xarTwigTpl extends xarTpl
      */
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = [], $tplBase = null)
     {
+        // @todo check and handle stand-alone properties with module 'auto' + adapt includes path
         // xarTwigTpl::property(base, dropdown, showoutput, [...], )
         if (is_bool($tplData['context']['twig'])) {
             $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
@@ -627,11 +745,18 @@ class xarTwigTpl extends xarTpl
             $extension = '.xml.twig';
         }
         $templates = [];
-        $templates[] = $themeName . '/modules/' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;
-        $templates[] = $themeName . '/modules/' . $modName . '/properties/' . $tplType . $extension;
-        // @todo many property templates are actually in the base module
-        $templates[] = '@' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;
-        $templates[] = '@' . $modName . '/properties/' . $tplType . $extension;
+        if ($modName == 'auto') {
+            $templates[] = $themeName . '/properties/' . $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = $themeName . '/properties/' . $propertyName . '/' . $tplType . $extension;
+            $templates[] = '@properties/' .  $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@properties/' .  $propertyName . '/' . $tplType . $extension;
+        } else {
+            $templates[] = $themeName . '/modules/' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = $themeName . '/modules/' . $modName . '/properties/' . $tplType . $extension;
+            // @todo many property templates are actually in the base module
+            $templates[] = '@' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@' . $modName . '/properties/' . $tplType . $extension;
+        }
         if ($modName !== 'dynamicdata') {
             $templates[] = $themeName . '/modules/dynamicdata/properties/' . $tplType . '-' . $propertyName . $extension;
             $templates[] = $themeName . '/modules/dynamicdata/properties/' . $tplType . $extension;

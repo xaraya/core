@@ -39,4 +39,5 @@ $modversion = [
     'class'              => 'Core Complete',
     'category'           => 'Content',
     'namespace'          => 'Xaraya\DataObject',
+    'twigtemplates'      => true,
 ];
