@@ -182,13 +182,16 @@ function dynamicdata_admin_test_apis(array $args = [], $context = null)
     }
 
     $data = [];
+    $data['filemtimes'] = [];
     $openapi = sys::varpath() . '/cache/api/openapi.json';
     if (file_exists($openapi)) {
         $data['openapi'] = $openapi;
+        $data['filemtimes']['openapi'] = filemtime($openapi);
     }
     $schema = sys::varpath() . '/cache/api/schema.graphql';
     if (file_exists($schema)) {
         $data['schema'] = $schema;
+        $data['filemtimes']['schema'] = filemtime($schema);
     }
     $data['restapilist'] = $restapilist;
     $data['graphqllist'] = $graphqllist;

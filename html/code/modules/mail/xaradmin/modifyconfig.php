@@ -40,6 +40,8 @@ function mail_admin_modifyconfig()
         $data['redirectaddress']='';
     }
 
+    $data['library_exists'] = file_exists(sys::lib() . 'PHPMailer');
+
     if (xarMod::isAvailable('scheduler')) {
         $intervals = xarMod::apiFunc('scheduler','user','intervals');
         $data['intervals'][] = array('id' => '', 'name' => xarML('not supported'));

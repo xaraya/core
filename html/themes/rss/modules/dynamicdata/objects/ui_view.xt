@@ -3,13 +3,11 @@
     <!-- FIXME: this does not generate valid RSS feeds -->
     <xar:if condition="!empty($object)">
         <xar:if condition="$object:name eq 'objects' and $object:linktype eq 'object'">
-            <label>#$object:label#</label>
+            <category>#$object:label#</category>
             <!-- show the list of main objects -->
-            <items>
-                <xar:template type="module" file="main_objects"/>
-            </items>
+            <xar:template type="module" file="main_objects"/>
         <xar:else/>
-            <label>#$object:label#</label>
+            <category>#$object:label#</category>
             <xar:set name="searchlink">$object->getActionURL('search')</xar:set>
             <searchlink>#$searchlink#</searchlink>
             <xar:if condition="!empty($object:primary) and $object:checkAccess('create')">
@@ -17,9 +15,7 @@
                 <newlink>#$newlink#</newlink>
             </xar:if>
             <!-- don't show a newlink here -->
-            <items>
-                <xar:data-view object="$object" newlink=""/>
-            </items>
+            <xar:data-view object="$object" newlink=""/>
         </xar:if>
     <xar:else />
         <error>Please select one of the available objects</error>

@@ -194,7 +194,9 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         if (empty($args['property'])) {
             // No prop, get one (the right one, preferably)
             $property = DataPropertyMaster::getProperty($args);
-            $property->objectref = new DummyObject($this->context);
+            if (empty($property->objectref)) {
+                $property->objectref = new DummyObject($this->context);
+            }
             // if we have a field attribute, use just that, otherwise use all attributes
             if (!empty($args['field'])) {
                 return $property->showOutput($args['field']);
@@ -223,7 +225,9 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             if (empty($args['property'])) {
                 // No property, gotta make one
                 $property = DataPropertyMaster::getProperty($params);
-                $property->objectref = new DummyObject($this->context);
+                if (empty($property->objectref)) {
+                    $property->objectref = new DummyObject($this->context);
+                }
             } else {
                 // We do have a property in the attribute
                 $property = $args['property'];
@@ -243,7 +247,8 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             if (xarModVars::get('dynamicdata', 'debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
                 return "<pre>" . $e->getMessage() . "</pre>";
             }
-            return '';
+            return '<pre>' . $e . '</pre>';
+            //return '';
         }
     }
 
@@ -256,7 +261,9 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             if (empty($args['property'])) {
                 // No property, gotta make one
                 $property = DataPropertyMaster::getProperty($params);
-                $property->objectref = new DummyObject($this->context);
+                if (empty($property->objectref)) {
+                    $property->objectref = new DummyObject($this->context);
+                }
             } else {
                 // We do have a property in the attribute
                 $property = $args['property'];

@@ -158,6 +158,14 @@ function themes_admin_view()
             break;
             
         }
+        // See includes/admin-list-preview
+        if ($data['tab'] == 'preview') {
+            $theme['preview_img'] = false;
+            $preview_img = 'themes/' . $theme['directory'] . '/images/preview.jpg';
+            if (is_file($preview_img)) {
+                $theme['preview_img'] = $preview_img;
+            }
+        }
         $themes[$key] = $theme;
     }
 

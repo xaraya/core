@@ -28,6 +28,9 @@ function base_admin_modifyconfig()
     $data = [];
     if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
     if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'display', xarVar::NOT_REQUIRED)) return;
+    if (empty($data['tab'])) {
+        $data['tab'] = 'display';
+    }
 
     $localehome = sys::varpath() . "/locales";
     if (!file_exists($localehome)) {
@@ -110,13 +113,68 @@ function base_admin_modifyconfig()
                 	if (in_array($db, $nonxaraya)) continue;
                 	$data['allowed_dbs'][] = array('id' => $db, 'name' => $db);
                 }
+                $data['xarCoreBuild'] = xarCore::$build;
+                $data['realpaths'] = [];
+                $data['realpaths']['index.php'] = realpath('index.php');
+                $data['realpaths']['bootstrap.php'] = realpath('bootstrap.php');
+                $data['realpaths']['config.system.php'] = realpath(sys::varpath() . '/' . 'config.system.php');
+                $data['realpaths']['config.log.php'] = realpath(sys::varpath() . '/logs/' . 'config.log.php');
                 break;
                 case 'security':
                 break;
                 case 'caching':
                     $data['cache_settings'] = xarCache::getConfig();
-                    if (empty($data['cache_settings']['Variable.CacheStorage']))
-                        $data['cache_settings']['Variable.CacheStorage'] = 'database';
+                    if (empty($data['cache_settings']['Variable.CacheStorage'])) {
+                        $data['cache_settings']['Variable.CacheStorage'] = 'apcu';
+                    }
+                    $cache_config_file = sys::varpath() . '/cache/config.caching.php';
+                    if (file_exists($cache_config_file)) {
+                        $data['cache_config_file'] = $cache_config_file;
+                        $data['core_cache_sizes'] = [];
+                        if (!empty($data['cache_settings']['CoreCache.Preload'])) {
+                            // check if core cache file exists and save its filesize
+                            foreach ($data['cache_settings']['CoreCache.Preload'] as $scope => $value) {
+                                if (str_contains($scope, ':')) {
+                                    $pieces = explode(':', $scope);
+                                    $filepath = sys::varpath() . '/cache/core/' . $pieces[0] . '.' . $pieces[1] . '.php';
+                                    if (file_exists($filepath)) {
+                                        $data['core_cache_sizes'][$scope] = filesize($filepath);
+                                    }
+                                } else {
+                                    $filepath = sys::varpath() . '/cache/core/' . $scope . '.php';
+                                    if (file_exists($filepath)) {
+                                        $data['core_cache_sizes'][$scope] = filesize($filepath);
+                                    }
+                                }
+                            }
+/**
+                    {% for scope, value in cache_settings['CoreCache.Preload'] %}
+                        {% if '.' in scope %}
+                            {% set pieces = scope|split('.') %}
+                            {% set filepath = xar_coremethod('sys', 'varpath') ~ '/cache/core/' ~ pieces[0] ~ '.' ~ pieces[1] ~ '.php' %}
+                            {% if value is null %}
+                                Scope: {{ pieces[0] }} - Name: {{ pieces[1] }} (disabled)<br/>
+                            {# @todo elseif file_exists(filepath) #}
+                            {% elseif "file_exists(filepath)" %}
+                                    Scope: {{ pieces[0] }} - Name: {{ pieces[1] }} ("filesize(filepath)"{# @todo filesize(filepath) #} bytes)<br/>
+                            {% else %}
+                                Scope: {{ pieces[0] }} - Name: {{ pieces[1] }} (not cached)<br/>
+                            {% endif %}
+                        {% else %}
+                            {% set filepath = xar_coremethod('sys', 'varpath') ~ '/cache/core/' ~ scope ~ '.php' %}
+                            {% if value is null %}
+                                Scope: {{ scope }} (disabled)<br/>
+                            {# @todo elseif file_exists(filepath) #}
+                            {% elseif "file_exists(filepath)" %}
+                                Scope: {{ scope }} ("filesize(filepath)"{# @todo filesize(filepath) #} bytes)<br/>
+                            {% else %}
+                                Scope: {{ scope }} (not cached)<br/>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+ */
+                        }
+                    }
                 break;
                 case 'logging':
                     $filepath = $picker->initialization_basedirectory . xarSystemVars::get(sys::CONFIG, 'Log.Filename');

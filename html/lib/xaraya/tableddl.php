@@ -435,7 +435,7 @@ class xarXMLInstaller extends xarObject
             $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-'. $dbType . '.xsl';
         if (!file_exists($xslFile)) {
             $msg = xarML('The file #(1) was not found', $xslFile);
-            throw new BadParameterException($msg);
+            throw new BadParameterException(null, $msg);
         }
         sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
@@ -454,7 +454,7 @@ class xarXMLInstaller extends xarObject
         $xmlfile = sys::code() . 'modules/' . $module . '/xardata/' . $tablefile . '.xml';
         if (!file_exists($xmlfile)) {
             $msg = xarML('Could not find the file #(1) to create tables from', $xmlfile);
-            throw new BadParameterException($msg);
+            throw new BadParameterException(null, $msg);
         }
         $sqlCode = self::transform($xmlfile, 'create');
         $queries = explode(';',$sqlCode);

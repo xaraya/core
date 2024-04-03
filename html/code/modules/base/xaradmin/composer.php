@@ -49,6 +49,10 @@ function base_admin_composer()
             $data['composer_file'] = $root . '/composer.json';
         }
     }
+    $data['writable'] = false;
+    if (!empty($data['composer_file'])) {
+        $data['writable'] = file_exists($data['composer_file']) && is_writable($data['composer_file']);
+    }
 
     // Default message is none
     $data['message'] = array();

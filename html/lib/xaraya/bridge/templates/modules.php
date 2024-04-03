@@ -29,6 +29,11 @@ class ModuleTagExtension extends XarayaTwigExtension
     {
         return [
             // @todo add other module tags as needed
+            /**
+             * Image tags
+             */
+            // <xar:image-resize src="$preview_img" label="$img_alt" width="250px" height="187px" constrain="true" class="xar-alt-outline"/>
+            new TwigFunction('xar_image_resize', [$this, 'xar_image_resize'], ['is_safe' => ['html']]),
 
             /**
              * Workflow tags
@@ -40,6 +45,13 @@ class ModuleTagExtension extends XarayaTwigExtension
     }
 
     // @todo add other module tags as needed
+    /**
+     * Image tags
+     */
+    public function xar_image_resize($args = [])
+    {
+        return xarMod::apiFunc('image', 'user', 'resize', $args, $this->context);
+    }
 
     /**
      * Workflow tags
