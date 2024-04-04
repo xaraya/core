@@ -102,4 +102,14 @@ class Context extends ArrayObject implements ContextInterface
     {
         $this->offsetSet('status', $status);
     }
+
+    /**
+     * Avoid issues with serialize, cfr. pager blockOptions with context
+     * @internal
+     */
+    public function __serialize(): array
+    {
+        $vars = $this->getArrayCopy();
+        return array_diff_key($vars, ['twig' => false]);
+    }
 }

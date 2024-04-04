@@ -76,7 +76,7 @@ function base_userapi_pager(array $args=[], $context = null)
 
     if (empty($tplmodule)) $tplmodule = 'base';
     if (empty($template)) $template = 'default';
-    // Pass along the context for xarTpl::module() if needed - from pager tag?
+    // Pass along the context for xarTpl::module() if needed - from pager tag
     $blockoptions['context'] ??= $context;
 
     return xarTplPager::getPager($startnum, $total, $urltemplate, $itemsperpage, $blockoptions, $template, $tplmodule);
