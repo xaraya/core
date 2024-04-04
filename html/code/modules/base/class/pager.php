@@ -242,6 +242,8 @@ class xarTplPager extends xarObject
             xarCoreCache::setCached('Pager.last', 'rightarrow', $data['lasturl']);
         }
 
+        // @todo Pass along the context for xarTpl::module() if needed - from blockOptions?
+        //$data['context'] ??= $context;
         return trim(xarTpl::module($tplmodule, 'pager', $template, $data));
     }
 

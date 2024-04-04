@@ -35,7 +35,7 @@ use Exception;
  * {% set link = xar_fileurl(fileName, scope, package) %}
  * {{ xar_username(userId) }} or {% set email = xar_username(userId, 'email') %}
  * {{ xar_uservar('id') }}
- * {% set info = xar_modvar(scope, name) %}
+ * {% set info = xar_modulevar(scope, name) %}
  * {{ xar_translate(text) }} or {{ xar_translate(text, arg1, arg2, ...) }}
  * {{ xar_localedate(timestamp) }}
  *

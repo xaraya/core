@@ -263,6 +263,8 @@ class TwigValidator
                             }
                             $value = implode('.', $values);
                             $this->variables['includes'][$value] ??= $value;
+                        } elseif ($arg instanceof \Twig\Node\Expression\ArrayExpression) {
+                            // @todo
                         } else {
                             var_dump($arg);
                         }

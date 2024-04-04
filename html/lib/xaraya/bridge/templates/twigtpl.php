@@ -120,11 +120,26 @@ class xarTwigTpl extends xarTpl
             // @todo support stand-alone blocks
             //'blocks' => 'code/blocks',
             // @todo make list of other modules configurable based on modinfo
+            /**
             'apischemas' => 'code/modules/apischemas',
             'library' => 'code/modules/library',
             'workflow' => 'code/modules/workflow',
             'xarcachemanager' => 'code/modules/xarcachemanager',
-            //'publications' => 'code/modules/publications',
+            'publications' => 'code/modules/publications',
+            'calendar' => 'code/modules/calendar',
+            'changelog' => 'code/modules/changelog',
+            'ckeditor' => 'code/modules/ckeditor',
+            'comments' => 'code/modules/comments',
+            'hitcount' => 'code/modules/hitcount',
+            'images' => 'code/modules/images',
+            'logconfig' => 'code/modules/logconfig',
+            'keywords' => 'code/modules/keywords',
+            'messages' => 'code/modules/messages',
+            'mime' => 'code/modules/mime',
+            'ratings' => 'code/modules/ratings',
+            'scheduler' => 'code/modules/scheduler',
+            'uploads' => 'code/modules/uploads',
+             */
         ];
         return $namespaces;
     }
@@ -371,6 +386,7 @@ class xarTwigTpl extends xarTpl
             xarLog::message(__METHOD__ . ": Core module installer does not support twig templates", xarLog::LEVEL_INFO);
             return false;
         }
+        //return true;
         // make other modules configurable based on fileinfo from xarversion.php
         $modOsDir = xarVar::prepForOS($modName);
         $info = xarMod::getFileInfo($modOsDir);

@@ -47,6 +47,8 @@ function categories_userapi_getcatinfotag($args)
         // Return the formatted category array.
         // Pass all the arguments in too, allowing for a 'passthrough' from
         // the original theme tag.
+        // @todo Pass along the context for xarTpl::module() if needed
+        //$data['context'] ??= $context;
         return xarTpl::module(
             'categories', 'user', 'catinfo',
             array_merge($args, array('cats'=>$cats)), $template

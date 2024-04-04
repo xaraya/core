@@ -1292,7 +1292,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             [$scope, $name] = explode(',', $args, 2);
             $scope = trim($scope);
             $name = trim($name);
-            return 'xar_modvar(' . $this->replaceVariable($scope) . ', ' . $this->replaceVariable($name) . ')';
+            return 'xar_modulevar(' . $this->replaceVariable($scope) . ', ' . $this->replaceVariable($name) . ')';
         }, $expression);
 
         $pattern = '~xarLocale::(\w+)\(([^)]*)\)~';

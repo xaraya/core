@@ -31,11 +31,11 @@ function base_userapi_get_output_buffer()
             } else {
                 $pageBuffer[] = $contents;
             }
-        } while (@ob_end_clean());
+        } while (ob_get_level() && ob_end_clean());
     } else {
         do {
             $pageBuffer[] = ob_get_contents();
-        } while (@ob_end_clean());
+        } while (ob_get_level() && ob_end_clean());
     }
 
     $buffer = array_reverse($pageBuffer);
