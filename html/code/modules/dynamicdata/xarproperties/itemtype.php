@@ -120,7 +120,7 @@ class ItemTypeProperty extends ComboProperty
                     'user',
                     'getitemlinks',
                     ['itemtype' => $this->itemtype,
-                                                 'itemids'  => null]
+                    'itemids'  => null]
                 );
                 if (!empty($itemlinks)) {
                     foreach ($itemlinks as $itemid => $linkinfo) {

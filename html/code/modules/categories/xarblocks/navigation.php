@@ -630,9 +630,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                     if (empty($title) && !empty($itemtype)) {
                         // Get the list of all item types for this module (if any)
                         try {
-                            $mytypes = xarMod::apiFunc($modname,'user','getitemtypes',
-                            // don't throw an exception if this function doesn't exist
-                            array());
+                            $mytypes = xarMod::apiFunc($modname,'user','getitemtypes');
                         } catch (Exception $e) {
                             $mytypes = [];
                         }

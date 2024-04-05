@@ -37,9 +37,7 @@ function categories_admin_checklinks(array $args = [], $context = null)
             $modinfo = xarMod::getInfo($modid);
             // Get the list of all item types for this module (if any)
             try {
-                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                // don't throw an exception if this function doesn't exist
-                array());
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes');
             } catch (Exception $e) {
                 $mytypes = [];
             }
@@ -82,9 +80,7 @@ function categories_admin_checklinks(array $args = [], $context = null)
             $data['itemtype'] = $itemtype;
             // Get the list of all item types for this module (if any)
             try {
-                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                // don't throw an exception if this function doesn't exist
-                array());
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes');
             } catch (Exception $e) {
                 $mytypes = [];
             }
@@ -122,7 +118,7 @@ function categories_admin_checklinks(array $args = [], $context = null)
             try {
                 $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
                                             array('itemtype' => $itemtype,
-                                                    'itemids' => $itemids)); // don't throw an exception here
+                                                    'itemids' => $itemids));
             } catch (Exception $e) {
                 $itemlinks = [];
             }

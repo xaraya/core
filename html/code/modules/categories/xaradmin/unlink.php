@@ -47,9 +47,7 @@ function categories_admin_unlink(array $args = [], $context = null)
             } else {
                 // Get the list of all item types for this module (if any)
                 try {
-                    $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                    // don't throw an exception if this function doesn't exist
-                    array());
+                    $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes');
                 } catch (Exception $e) {
                     $mytypes = array();
                 }

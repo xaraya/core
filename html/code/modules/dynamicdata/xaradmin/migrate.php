@@ -141,14 +141,12 @@ function dynamicdata_admin_migrate(array $args = [], $context = null)
             // we have a from module
             $data['from']['module'] = $from['module'];
             $modinfo = xarMod::getInfo($from['module']);
-
-            // get the list of itemtypes for this module
-            $itemtypes = xarMod::apiFunc(
-                $modinfo['name'],
-                'user',
-                'getitemtypes',
-                []
-            );
+            // Get the list of all item types for this module (if any)
+            try {
+                $itemtypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+            } catch (Exception $e) {
+                $itemtypes = [];
+            }
             if (!empty($itemtypes)) {
                 $data['fromitemtypes'] = $itemtypes;
             } else {
@@ -272,14 +270,12 @@ function dynamicdata_admin_migrate(array $args = [], $context = null)
             // we have a to module
             $data['to']['module'] = $to['module'];
             $modinfo = xarMod::getInfo($to['module']);
-
-            // get the list of itemtypes for this module
-            $itemtypes = xarMod::apiFunc(
-                $modinfo['name'],
-                'user',
-                'getitemtypes',
-                []
-            );
+            // Get the list of all item types for this module (if any)
+            try {
+                $itemtypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+            } catch (Exception $e) {
+                $itemtypes = [];
+            }
             if (!empty($itemtypes)) {
                 $data['toitemtypes'] = $itemtypes;
             } else {
