@@ -20,7 +20,7 @@
  * 
  * @return mixed Data array for the template display or output display string if invalid data submitted
  */
-function base_admin_modifyconfig()
+function base_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminBase')) return;

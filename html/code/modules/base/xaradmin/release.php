@@ -16,7 +16,7 @@
  * 
  * @return array<mixed>|string|void data for the template display
  */
-function base_admin_release()
+function base_admin_release(array $args = [], $context = null)
 {
     /**
      * Pending

@@ -19,7 +19,7 @@
 
  * @return array<mixed>|void Data array for display template.
 */
-function base_admin_confirmlogout()
+function base_admin_confirmlogout(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditBase')) return;

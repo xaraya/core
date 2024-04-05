@@ -17,7 +17,7 @@
  * @param string $args['data'] Data to be written to the file
  * @return boolean Returns true on success, false on failure
  */
-function base_adminapi_write_file($args)
+function base_adminapi_write_file(array $args = [], $context = null)
 {
     if (empty($args['file'])) return false;
     try {

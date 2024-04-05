@@ -44,7 +44,7 @@
  *
  * @return string|void Output display string
  */
-function base_userapi_pager(array $args=[], $context = null)
+function base_userapi_pager(array $args = [], $context = null)
 {
     extract($args);
     if (empty($startnum) || !is_numeric($startnum))

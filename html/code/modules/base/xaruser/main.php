@@ -24,7 +24,7 @@
  * @return mixed output display string
  */
  
-function base_user_main(array $args=[], $context = null)
+function base_user_main(array $args = [], $context = null)
 {
     // Security Check
     if(!xarSecurity::check('ViewBase')) return;

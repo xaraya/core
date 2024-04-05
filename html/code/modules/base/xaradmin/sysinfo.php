@@ -14,7 +14,7 @@
  *
  * @return array<mixed>|void of info from phpinfo()
  */
-function base_admin_sysinfo()
+function base_admin_sysinfo(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminBase')) return;

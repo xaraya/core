@@ -38,7 +38,7 @@
  * @param boolean  $args[nolinks] optionally force looking for links only from xml files
  * @return array<mixed> menulinks for the module
  */
-function base_adminapi_loadmenuarray(Array $args=array())
+function base_adminapi_loadmenuarray(array $args = [], $context = null)
 {
     if (!isset($args['modname']) || !isset($args['modtype']) || !isset($args['funcname'])) {
         $urlinfo = xarController::getRequest()->getInfo();

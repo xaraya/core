@@ -20,7 +20,7 @@
  *        string   $args['url'] The absolute URL for the file
  * @return string Content of the file
  */
-function base_userapi_getfavicon(Array $args=array())
+function base_userapi_getfavicon(array $args = [], $context = null)
 {
     extract($args);
     if (!isset($url)) throw new BadParameterException($url);

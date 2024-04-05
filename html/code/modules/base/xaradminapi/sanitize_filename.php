@@ -13,7 +13,7 @@
  * Remove or change unallowed characters from a file name
  * Taken from http://www.house6.com/blog/?p=83
  */
-function base_adminapi_sanitize_filename($args)
+function base_adminapi_sanitize_filename(array $args = [], $context = null)
 {
     if (empty($args['filename'])) 
         throw new BadParameterException('filename');

@@ -16,7 +16,7 @@
  * @param string $args['file'] File to be opened.
  * @return boolean|string Return either the file contents or false if no file was given.
  */
-function base_adminapi_read_file($args)
+function base_adminapi_read_file(array $args = [], $context = null)
 {
     if (empty($args['file'])) return false;
     try {

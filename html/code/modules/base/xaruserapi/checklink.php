@@ -21,7 +21,7 @@
  *        boolean $args['follow'] Indicates if we want to follow redirects or not (default is true)<br/>
  * @return integer Status of the link
  */
-function base_userapi_checklink(Array $args=array())
+function base_userapi_checklink(array $args = [], $context = null)
 {
     extract($args);
 

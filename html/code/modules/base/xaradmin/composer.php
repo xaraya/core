@@ -14,7 +14,7 @@
  * @author Marc Lutolf
  * 
  */
-function base_admin_composer()
+function base_admin_composer(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('ManageBase')) return;

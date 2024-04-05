@@ -16,7 +16,7 @@
  * @return object Returns data object
  * @throws Exception Thrown if module parameter was not given
  */
-function base_adminapi_getmodulesettings(Array $args=array())
+function base_adminapi_getmodulesettings(array $args = [], $context = null)
 {
     if (empty($args['module']))
         throw new Exception(xarML('The getmodulesettings function requires a module parameter'));

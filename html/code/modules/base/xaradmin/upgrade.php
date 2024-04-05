@@ -16,7 +16,7 @@
  *
  * @return array<mixed>|void Data for the template display
  */
-function base_admin_upgrade()
+function base_admin_upgrade(array $args = [], $context = null)
 {
     /**
      * Pending
