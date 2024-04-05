@@ -413,7 +413,7 @@ class xarBlock extends xarObject implements ixarBlock
  * @return string
  * @todo   this function calls a module function, keep an eye on it.
  */
-    public static function renderBlock(array $args=[], $context = null)
+    public static function renderBlock(array $args = [], $context = null)
     {
         // All the hard work is done in this function.
         // It keeps the core code lighter when standalone blocks are not used.

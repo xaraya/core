@@ -42,7 +42,7 @@ function privileges_admin_modifyrealm(array $args = [], $context = null)
     } else {
         if (!xarVar::fetch('newname',   'str:1.20',$newname, '',xarVar::NOT_REQUIRED)) {return;}
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         }        
 
         $bindvars = array();

@@ -20,7 +20,7 @@ function modules_admin_updatehooks(array $args = [], $context = null)
     if(!xarSecurity::check('ManageModules')) {return;}
 
     if (!xarSec::confirmAuthKey()) {
-        //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        //return xarController::badRequest('bad_author', $context);
     }        
     // Curhook contains module name
     if (!xarVar::fetch('curhook', 'str:1:', $curhook)) {return;}

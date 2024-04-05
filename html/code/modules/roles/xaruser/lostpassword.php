@@ -46,7 +46,7 @@ function roles_user_lostpassword(array $args = [], $context = null)
 
             // Confirm authorisation code.
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
 
             $data['showmessage'] = 0;    

@@ -21,7 +21,7 @@ function categories_admin_create(array $args = [], $context = null)
 {
     // Confirm authorisation code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     $data = [];

@@ -26,7 +26,7 @@ function themes_admin_setdefault(array $args = [], $context = null)
     
     // Security and sanity checks
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }
     
     if (!xarVar::fetch('id', 'int:1:', $defaulttheme, 0, xarVar::NOT_REQUIRED)) return;

@@ -53,7 +53,7 @@ function blocks_admin_delete_type(array $args = [], $context = null)
         
         if ($confirmed) {
             if (!xarSec::confirmAuthKey())
-                return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             if (!xarMod::apiFunc('blocks', 'types', 'deleteitem', 
                 array('type_id' => $type_id))) return;
             if (!xarVar::fetch('return_url', 'pre:trim:str:1:',

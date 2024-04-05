@@ -43,7 +43,7 @@ function roles_admin_modifynotice(array $args = [], $context = null)
             if (!xarVar::fetch('askpasswordemail', 'checkbox', $askpasswordemail, false, xarVar::NOT_REQUIRED)) return;
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             // Update module variables
             xarModVars::set('roles', 'askwelcomeemail', $askwelcomeemail);

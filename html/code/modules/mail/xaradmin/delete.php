@@ -13,7 +13,7 @@ function mail_admin_delete(array $args = [], $context = null)
 {
     // Are we legitimally here?
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
     // Security
     if (!xarSecurity::check('ManageMail')) return; 

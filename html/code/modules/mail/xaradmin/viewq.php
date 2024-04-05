@@ -29,7 +29,7 @@ function mail_admin_viewq(array $args = [], $context = null)
     if (!empty($action)) {
         // Confirm authorisation code
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         }        
 
         switch ($action)

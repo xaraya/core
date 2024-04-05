@@ -48,7 +48,7 @@
             case 'update':
                 // Confirm authorisation code
                 if (!xarSec::confirmAuthKey()) {
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarController::badRequest('bad_author', $context);
                 }        
                 if (!xarVar::fetch('usejsdisplay', 'checkbox', $usejsdisplay, xarModVars::get('categories', 'usejsdisplay'), xarVar::NOT_REQUIRED)) return;
                 if (!xarVar::fetch('numstats', 'int', $numstats, xarModVars::get('categories', 'numstats'), xarVar::NOT_REQUIRED)) return;

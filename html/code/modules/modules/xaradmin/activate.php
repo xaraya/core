@@ -29,7 +29,7 @@ function modules_admin_activate(array $args = [], $context = null)
     
     // Security and sanity checks
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;

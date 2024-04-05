@@ -49,7 +49,7 @@ function blocks_admin_modifyconfig(array $args = [], $context = null)
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {

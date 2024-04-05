@@ -88,7 +88,7 @@ function themes_admin_modifyconfig(array $args = [], $context = null)
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             $isvalid = $data['module_settings']->checkInput();
             $andvalid = ($data['enable_user_menu'] != false) ? $data['user_themes']->checkInput('user_themes') : true;

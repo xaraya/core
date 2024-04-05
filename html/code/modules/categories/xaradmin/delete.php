@@ -66,7 +66,7 @@ function categories_admin_delete(array $args = [], $context = null)
 
     // Confirm Auth Key
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     sys::import('modules.categories.class.worker');

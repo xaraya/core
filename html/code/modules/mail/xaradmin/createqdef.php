@@ -16,7 +16,7 @@ function mail_admin_createqdef(array $args = [], $context = null)
     
     // Are we legitimately here
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // First determine whether we need to look at the name entered, or the object chosen

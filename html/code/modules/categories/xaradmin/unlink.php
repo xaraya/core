@@ -68,7 +68,7 @@ function categories_admin_unlink(array $args = [], $context = null)
     } 
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
     // unlink API does not support deleting all category links for all modules
     if (!empty($modid)) {

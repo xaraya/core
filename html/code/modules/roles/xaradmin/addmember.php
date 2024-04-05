@@ -36,7 +36,7 @@ function roles_admin_addmember(array $args = [], $context = null)
 
     // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // check that this assignment hasn't already been made

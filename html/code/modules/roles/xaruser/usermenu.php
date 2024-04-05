@@ -89,7 +89,7 @@ function roles_user_usermenu(array $args = [], $context = null)
 
             if ($isvalid) {
                 if (!xarSec::confirmAuthKey('roles')) {
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarController::badRequest('bad_author', $context);
                 }
 
                 $newpass = $object->properties['password']->value;
@@ -287,7 +287,7 @@ function roles_user_usermenu(array $args = [], $context = null)
                     xarMod::apiFunc($moduleload, 'user', 'usermenu', array('phase' => 'updateitem', 'object' => $object));
                 } catch (Exception $e) {
                     if (!xarSec::confirmAuthKey($moduleload)) {
-                        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                        return xarController::badRequest('bad_author', $context);
                     }
                     $object->updateItem();
                 }

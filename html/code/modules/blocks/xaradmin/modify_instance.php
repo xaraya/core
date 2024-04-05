@@ -233,7 +233,7 @@ function blocks_admin_modify_instance(array $args = [], $context = null)
                         if (empty($invalid)) {
 
                             if (!xarSec::confirmAuthKey())
-                                return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
+                                return xarController::badRequest('bad_author', $context);
 
                             if (isset($result) && is_array($result)) {
                                 if (!empty($result['content']))
@@ -306,8 +306,7 @@ function blocks_admin_modify_instance(array $args = [], $context = null)
                         // update block configuration 
                         if (empty($invalid)) {
                             if (!xarSec::confirmAuthKey())
-                                return xarTpl::module('privileges', 'user', 'errors', 
-                                    array('layout' => 'bad_author'));
+                                return xarController::badRequest('bad_author', $context);
                             if (!empty($result) && is_array($result)) {
                                 if (!empty($result['content']))
                                     $block->setContent($result['content']);
@@ -351,8 +350,7 @@ function blocks_admin_modify_instance(array $args = [], $context = null)
                 // update block configuration 
                 if (empty($invalid)) {
                     if (!xarSec::confirmAuthKey())
-                        return xarTpl::module('privileges', 'user', 'errors', 
-                            array('layout' => 'bad_author'));
+                        return xarController::badRequest('bad_author', $context);
                     if (!empty($result) && is_array($result)) {
                         if (!empty($result['content']))
                             $block->setContent($result['content']);
@@ -385,8 +383,7 @@ function blocks_admin_modify_instance(array $args = [], $context = null)
                 // update block configuration 
                 if (empty($invalid)) {
                     if (!xarSec::confirmAuthKey())
-                        return xarTpl::module('privileges', 'user', 'errors', 
-                            array('layout' => 'bad_author'));
+                        return xarController::badRequest('bad_author', $context);
                     if (!empty($result) && is_array($result)) {
                         if (!empty($result['content']))
                             $block->setContent($result['content']);
@@ -422,8 +419,7 @@ function blocks_admin_modify_instance(array $args = [], $context = null)
                 // update block configuration 
                 if (empty($invalid)) {
                     if (!xarSec::confirmAuthKey())
-                        return xarTpl::module('privileges', 'user', 'errors', 
-                            array('layout' => 'bad_author'));
+                        return xarController::badRequest('bad_author', $context);
                     if (!empty($result) && is_array($result)) {
                         if (!empty($result['content']))
                             $block->setContent($result['content']);

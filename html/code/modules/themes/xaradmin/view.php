@@ -29,7 +29,7 @@ function themes_admin_view(array $args = [], $context = null)
     // update default themes
     if ($phase == 'update') {
         if (!xarSec::confirmAuthKey()) 
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         $old_user_theme = xarModVars::get('themes', 'default_theme');
         $old_admin_theme = xarModVars::get('themes', 'admin_theme');
         if (!xarVar::fetch('user_theme', 'pre:trim:lower:str:1:',

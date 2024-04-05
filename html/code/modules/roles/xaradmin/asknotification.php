@@ -67,7 +67,7 @@ function roles_admin_asknotification(array $args = [], $context = null)
         case 'notify' :
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             if (!xarVar::fetch('subject', 'str:1:', $data['subject'], NULL, xarVar::NOT_REQUIRED)) return;
             if (!xarVar::fetch('message', 'str:1:', $data['message'], NULL, xarVar::NOT_REQUIRED)) return;

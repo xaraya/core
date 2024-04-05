@@ -100,7 +100,7 @@ function blocks_admin_new_instance(array $args = [], $context = null)
     if ($phase == 'update') {
         // validations
         if (!xarSec::confirmAuthKey())
-            return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         // groups, optional, if supplied must be valid block groups
         // validated here because createitem has no knowledge of them
         if (!empty($data['groups'])) {

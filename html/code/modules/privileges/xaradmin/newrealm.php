@@ -28,7 +28,7 @@ function privileges_admin_newrealm(array $args = [], $context = null)
 
     if ($confirmed) {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         }        
 
         $dbconn = xarDB::getConn();

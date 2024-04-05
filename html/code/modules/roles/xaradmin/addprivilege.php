@@ -26,7 +26,7 @@ function roles_admin_addprivilege(array $args = [], $context = null)
 
     // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // Call the Roles class and get the role

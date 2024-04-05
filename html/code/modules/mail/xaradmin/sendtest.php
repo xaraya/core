@@ -34,7 +34,7 @@ function mail_admin_sendtest(array $args = [], $context = null)
 
     // Confirm authorisation code.
     if (!xarSec::confirmAuthKey()) {
-//        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        //return xarController::badRequest('bad_author', $context);
     }        
     if (empty($email)) {
         $email = xarModVars::get('mail', 'adminmail');

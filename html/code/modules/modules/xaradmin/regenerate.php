@@ -26,7 +26,7 @@ function modules_admin_regenerate(array $args = [], $context = null)
     if (!xarSecurity::check('AdminModules')) return; 
     
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // Regenerate modules

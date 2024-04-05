@@ -155,7 +155,7 @@ function categories_admin_checklinks(array $args = [], $context = null)
         if(!xarVar::fetch('confirm',  'str:1:', $confirm,    '', xarVar::NOT_REQUIRED)) return;
         if (!empty($seencid) && !empty($confirm)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             if (!xarMod::apiFunc('categories','admin','unlinkcids',
                                array('modid' => $modid,

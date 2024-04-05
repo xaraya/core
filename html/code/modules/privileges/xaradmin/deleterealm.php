@@ -49,7 +49,7 @@ function privileges_admin_deleterealm(array $args = [], $context = null)
 
 // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     $bindvars = array();

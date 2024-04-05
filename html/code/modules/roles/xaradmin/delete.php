@@ -75,7 +75,7 @@ function roles_admin_delete(array $args = [], $context = null)
         return $data;
     } else {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         }        
         // Check to make sure the user is not active on the site.
         $check = xarMod::apiFunc('roles',

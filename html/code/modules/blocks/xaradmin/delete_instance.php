@@ -70,7 +70,7 @@ function blocks_admin_delete_instance(array $args = [], $context = null)
     
     if ($confirmed) {
         if (!xarSec::confirmAuthKey())
-            return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         
         // delete instance from db
         try {
