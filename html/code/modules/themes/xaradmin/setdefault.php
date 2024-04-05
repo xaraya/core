@@ -30,7 +30,7 @@ function themes_admin_setdefault(array $args = [], $context = null)
     }
     
     if (!xarVar::fetch('id', 'int:1:', $defaulttheme, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($defaulttheme)) return xarResponse::notFound();
+    if (empty($defaulttheme)) return xarController::notFound(null, $context);
 
 
     $whatwasbefore = xarModVars::get('themes', 'default_theme');
@@ -42,7 +42,7 @@ function themes_admin_setdefault(array $args = [], $context = null)
     $themeInfo = xarTheme::getInfo($defaulttheme);
 
     if ($themeInfo['class'] != 2) {
-        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'), null, $context);
     }
 
     if (xarVar::isCached('Mod.Variables.themes', 'default_theme')) {
@@ -51,7 +51,7 @@ function themes_admin_setdefault(array $args = [], $context = null)
 
     //update the database - activate the theme
     if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$defaulttheme))) {
-        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'), null, $context);
     }
 
     // update the data
@@ -60,6 +60,7 @@ function themes_admin_setdefault(array $args = [], $context = null)
 
     // set the target location (anchor) to go to within the page
     $target = $themeInfo['name'];
-    xarController::redirect(xarController::URL('themes', 'admin', 'view', array('state' => 0), NULL, $target));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view',
+        array('state' => 0), NULL, $target), null, $context);
     return true;
 }

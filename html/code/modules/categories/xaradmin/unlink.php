@@ -82,6 +82,6 @@ function categories_admin_unlink(array $args = [], $context = null)
         }
         // TODO: support deleting all links for a category too (cfr. checklinks)
     }
-    xarController::redirect(xarController::URL('categories', 'admin', 'stats'));
+    xarController::redirect(xarController::URL('categories', 'admin', 'stats'), null, $context);
     return true;
 }

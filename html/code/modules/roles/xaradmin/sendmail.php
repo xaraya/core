@@ -107,6 +107,6 @@ function roles_admin_sendmail(array $args = [], $context = null)
     // If it was on, turn it back on
     xarModVars::set('themes','ShowTemplates',$themecomments);
 
-    xarController::redirect(xarController::URL('roles', 'admin', 'createmail'));
+    xarController::redirect(xarController::URL('roles', 'admin', 'createmail'), null, $context);
     return true;
 }

@@ -27,7 +27,7 @@ function categories_admin_main(array $args = [], $context = null)
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return array();
     } else {
-        xarController::redirect(xarController::URL('categories', 'admin', 'view'));
+        xarController::redirect(xarController::URL('categories', 'admin', 'view'), null, $context);
     }
 
     return true;

@@ -40,7 +40,7 @@ function themes_admin_new_config(array $args = [], $context = null)
             $itemid = $data['object']->createItem();
             
             // Jump to the next page
-            xarController::redirect(xarController::URL('themes','admin','view_configs'));
+            xarController::redirect(xarController::URL('themes','admin','view_configs'), null, $context);
             return true;
         }
     }

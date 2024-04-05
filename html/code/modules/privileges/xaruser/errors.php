@@ -23,7 +23,7 @@
             if ($data['redirecturl'] == 'local_halt') {
             	return $data;
             } else {
-				xarController::redirect($data['redirecturl']);
+				xarController::redirect($data['redirecturl'], null, $context);
 				return true;
             }
         }

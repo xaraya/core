@@ -81,6 +81,6 @@ function privileges_admin_addprivilege(array $args = [], $context = null)
                     'privileges'));
 
 // redirect to the next page
-    xarController::redirect(xarController::URL('privileges', 'admin', 'new'));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'new'), null, $context);
     return true;
 }

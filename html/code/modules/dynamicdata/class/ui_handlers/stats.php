@@ -315,7 +315,8 @@ class StatsHandler extends DefaultHandler
             // save the report and redirect
         } elseif (!empty($save) && !empty($stats['report']) && $this->object->checkAccess('config')) {
             $this->saveReport($stats['report'], $stats, $info);
-            xarController::redirect(xarServer::getObjectURL($this->object->name, 'report', ['report' => $stats['report']]));
+            xarController::redirect(xarServer::getObjectURL($this->object->name, 'report',
+                ['report' => $stats['report']]), null, $this->getContext());
             return true;
 
             // get the result

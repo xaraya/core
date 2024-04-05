@@ -23,8 +23,8 @@ function privileges_admin_removerole(array $args = [], $context = null)
     if (!xarVar::fetch('id',          'isset', $id,          NULL, xarVar::DONT_SET)) {return;}
     if (!xarVar::fetch('roleid',       'isset', $roleid,       NULL, xarVar::DONT_SET)) {return;}
     if (!xarVar::fetch('confirmation', 'isset', $confirmation, NULL, xarVar::DONT_SET)) {return;}
-    if (empty($id)) return xarResponse::notFound();
-    if (empty($roleid)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
+    if (empty($roleid)) return xarController::notFound(null, $context);
 
 //Call the Roles class and get the role to be removed
     $role = xarRoles::get($roleid);
@@ -78,7 +78,7 @@ function privileges_admin_removerole(array $args = [], $context = null)
         xarController::redirect(xarController::URL('privileges',
                                  'admin',
                                  'viewroles',
-                                 array('id'=>$id)));
+                                 array('id'=>$id)), null, $context);
         return true;
     }
 

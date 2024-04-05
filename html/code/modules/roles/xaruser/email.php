@@ -31,7 +31,7 @@ function roles_user_email(array $args = [], $context = null)
     extract($args);
 
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
 
     if (!xarVar::fetch('phase', 'enum:modify:confirm', $phase, 'modify', xarVar::NOT_REQUIRED)) return;
 
@@ -116,7 +116,7 @@ function roles_user_email(array $args = [], $context = null)
             )) return;
 
             // lets update status and display updated configuration
-            xarController::redirect(xarController::URL('roles', 'user', 'viewlist'));
+            xarController::redirect(xarController::URL('roles', 'user', 'viewlist'), null, $context);
 
             break;
     }

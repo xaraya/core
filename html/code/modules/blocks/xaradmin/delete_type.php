@@ -60,7 +60,7 @@ function blocks_admin_delete_type(array $args = [], $context = null)
                 $return_url, '', xarVar::NOT_REQUIRED)) return;
             if (empty($return_url))
                 $return_url = xarController::URL('blocks', 'admin', 'view_types');
-            xarController::redirect($return_url);                
+            xarController::redirect($return_url, null, $context);                
         }
         
     }

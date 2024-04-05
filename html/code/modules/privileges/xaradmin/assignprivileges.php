@@ -83,7 +83,8 @@
                     }
                 }
 
-                xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',
+                    array('tabmodule' => $tabmodule, 'tab' => $data['tab'])), null, $context);
                 return true;
 
             case 'remove':
@@ -98,7 +99,8 @@
                     $dbconn->Execute($query,$bindvars);
                 }
 
-                xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',
+                    array('tabmodule' => $tabmodule, 'tab' => $data['tab'])), null, $context);
                 return true;
         }
         $data['moduletabs'] = $moduletabs;

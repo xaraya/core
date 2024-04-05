@@ -86,7 +86,7 @@ function roles_admin_asknotification(array $args = [], $context = null)
                 return xarTpl::module('roles','user','errors',array('layout'=> 'mail_failed')); 
             }
             xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
-                              array('id' => $data['groupid'], 'state' => $data['state'])));
+                              array('id' => $data['groupid'], 'state' => $data['state'])), null, $context);
             return true;
     }
 }

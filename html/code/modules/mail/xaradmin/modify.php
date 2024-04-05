@@ -12,7 +12,7 @@
 function mail_admin_modify(array $args = [], $context = null)
 {
     if(!xarVar::fetch('itemid','int:1:',$itemid,0,xarVar::NOT_REQUIRED)) return;
-    if (empty($itemid)) return xarResponse::notFound();
-    xarController::redirect(xarController::URL('mail','admin','view',array('itemid' => $itemid)));
+    if (empty($itemid)) return xarController::notFound(null, $context);
+    xarController::redirect(xarController::URL('mail','admin','view',array('itemid' => $itemid)), null, $context);
     return true;
 }

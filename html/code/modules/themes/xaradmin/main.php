@@ -32,7 +32,7 @@ function themes_admin_main(array $args = [], $context = null)
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('themes','admin','overview');
     } else {
-        xarController::redirect(xarController::URL('themes', 'admin', 'view'));
+        xarController::redirect(xarController::URL('themes', 'admin', 'view'), null, $context);
         return true;
     }
 }

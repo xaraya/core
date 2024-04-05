@@ -23,7 +23,7 @@ function modules_admin_viewerror(array $args = [], $context = null)
     
     // Get parameters
     xarVar::fetch('id', 'int', $regId, 0, xarVar::NOT_REQUIRED);
-    if (empty($regId)) return xarResponse::notFound();
+    if (empty($regId)) return xarController::notFound(null, $context);
 
     //if (!xarSec::confirmAuthKey()) return;
 

@@ -212,7 +212,7 @@ function dynamicdata_admin_update(array $args = [], $context = null)
     }
 
     if (!empty($return_url)) {
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     } elseif ($myobject->objectid == 1) { // for dynamic objects, return to modify
         xarController::redirect(xarController::URL(
             'dynamicdata',

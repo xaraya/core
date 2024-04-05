@@ -11,6 +11,6 @@
 
 function mail_admin_new(array $args = [], $context = null)
 {
-    xarController::redirect(xarController::URL('mail','admin','view'));
+    xarController::redirect(xarController::URL('mail','admin','view'), null, $context);
     return true;
 }

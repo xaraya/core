@@ -31,7 +31,7 @@ function themes_admin_initialise(array $args = [], $context = null)
     }        
 
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
 
     // Initialise theme
     $initialised = xarMod::apiFunc('themes',
@@ -41,6 +41,6 @@ function themes_admin_initialise(array $args = [], $context = null)
 
     if (!isset($initialised)) return;
 
-    xarController::redirect(xarController::URL('themes', 'admin', 'view'));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view'), null, $context);
     return true;
 }

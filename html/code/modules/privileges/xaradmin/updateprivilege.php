@@ -82,6 +82,7 @@ function privileges_admin_updateprivilege(array $args = [], $context = null)
                     'privileges'));
 
 // redirect to the next page
-    xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
+        array('id' => $id)), null, $context);
     return true;
 }

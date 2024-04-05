@@ -268,7 +268,7 @@ function blocks_admin_modify_type(array $args = [], $context = null)
                         'interface' => $interface,
                         'block_method' => $method,
                     ));
-            xarController::redirect($return_url);
+            xarController::redirect($return_url, null, $context);
         }
         $data['invalid'] = $invalid;
           

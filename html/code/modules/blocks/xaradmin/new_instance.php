@@ -179,7 +179,7 @@ function blocks_admin_new_instance(array $args = [], $context = null)
             if (empty($return_url))
                 $return_url = xarController::URL('blocks', 'admin', 'modify_instance', 
                     array('block_id' => $block_id));
-            xarController::redirect($return_url);
+            xarController::redirect($return_url, null, $context);
             
         } else {
             // redisplay with invalid messages

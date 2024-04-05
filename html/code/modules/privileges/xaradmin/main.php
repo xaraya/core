@@ -31,7 +31,7 @@ function privileges_admin_main(array $args = [], $context = null)
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('privileges','admin','overview');
     } else {
-        xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'));
+        xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'), null, $context);
         return true;
     }
 }

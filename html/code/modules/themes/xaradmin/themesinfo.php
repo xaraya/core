@@ -29,7 +29,7 @@ function themes_admin_themesinfo(array $args = [], $context = null)
     if (!xarVar::fetch('id', 'int:1:', $themeid, 0, xarVar::NOT_REQUIRED)) return; 
     if (!xarVar::fetch('exit', 'isset', $exit, NULL, xarVar::DONT_SET)) {return;}
     if (!xarVar::fetch('confirm', 'isset', $confirm, NULL, xarVar::DONT_SET)) {return;}
-    if (empty($themeid)) return xarResponse::notFound();
+    if (empty($themeid)) return xarController::notFound(null, $context);
 
     // obtain maximum information about a theme
     $info = xarTheme::getInfo($themeid);
@@ -60,9 +60,10 @@ function themes_admin_themesinfo(array $args = [], $context = null)
             
             // Jump to the next page
             if ($exit) {
-                xarController::redirect(xarController::URL('themes','admin','view'));
+                xarController::redirect(xarController::URL('themes','admin','view'), null, $context);
             } else {
-                xarController::redirect(xarController::URL('themes','admin','themesinfo',array('id' => $themeid)));
+                xarController::redirect(xarController::URL('themes','admin','themesinfo',
+                    array('id' => $themeid)), null, $context);
             }
             return true;
         }

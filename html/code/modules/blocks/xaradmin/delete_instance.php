@@ -84,7 +84,7 @@ function blocks_admin_delete_instance(array $args = [], $context = null)
         }
             
         $return_url = xarController::URL('blocks', 'admin', 'view_instances');
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     }
     
     $data = array();

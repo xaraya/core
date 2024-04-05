@@ -27,9 +27,9 @@ function roles_user_main(array $args = [], $context = null)
     $authmodule=$defaultauthdata['defaultauthmodname'];
 
     if (xarUser::isLoggedIn()) {
-        xarController::redirect(xarController::URL('roles', 'user', 'account'));
+        xarController::redirect(xarController::URL('roles', 'user', 'account'), null, $context);
     } else {
-        xarController::redirect(xarController::URL($loginmodule, 'user', 'showloginform'));
+        xarController::redirect(xarController::URL($loginmodule, 'user', 'showloginform'), null, $context);
     }
     return true;
 }

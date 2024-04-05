@@ -36,7 +36,7 @@ function blocks_admin_main(array $args = [], $context = null)
         if (!xarVar::fetch('tab', 'pre:trim:lower:str:1:', $data['tab'], '', xarVar::NOT_REQUIRED)) return;
         return xarTpl::module('blocks','admin','overview', $data);
     } else {
-        xarController::redirect(xarController::URL('blocks', 'admin', 'view_instances'));
+        xarController::redirect(xarController::URL('blocks', 'admin', 'view_instances'), null, $context);
         return true;
     }
 }

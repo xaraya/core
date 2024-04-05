@@ -35,11 +35,11 @@ function roles_admin_createpassword(array $args = [], $context = null)
 
     if (!xarModVars::get('roles', 'askpasswordemail')) {
         xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
-                      array('id' => $groupid, 'state' => $state)));
+                      array('id' => $groupid, 'state' => $state)), null, $context);
     } else {
         xarSession::setVar('tmppass',$pass);
         xarController::redirect(xarController::URL('roles', 'admin', 'asknotification',
-        array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)));
+        array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)), null, $context);
     }
     return true;
 }

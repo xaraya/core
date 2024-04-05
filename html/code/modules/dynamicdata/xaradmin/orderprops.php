@@ -147,7 +147,7 @@ function dynamicdata_admin_orderprops(array $args = [], $context = null)
         'modifyprop',
         ['module_id'    => $module_id,
         'itemtype' => $itemtype]
-    ));
+    ), null, $context);
 
 
     // Return

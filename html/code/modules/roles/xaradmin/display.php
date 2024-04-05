@@ -17,7 +17,7 @@ function roles_admin_display(array $args = [], $context = null)
 {
     if (!xarVar::fetch('itemtype','id',$itemtype, 1, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
 
 
     $data = array();

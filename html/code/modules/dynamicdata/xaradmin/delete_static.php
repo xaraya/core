@@ -45,7 +45,8 @@ function dynamicdata_admin_delete_static(array $args = [], $context = null)
         $dbconn->Execute($query);
 
         // Jump to the next page
-        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static', ['table' => $data['table']]));
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static',
+            ['table' => $data['table']]), null, $context);
         return true;
     }
     return $data;

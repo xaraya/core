@@ -69,6 +69,6 @@ function mail_admin_sendtest(array $args = [], $context = null)
                 'when' => $when))) return;
 
     // lets update status and display updated configuration
-    xarController::redirect(xarController::URL('mail', 'admin', 'compose', array('confirm' => 1)));
+    xarController::redirect(xarController::URL('mail', 'admin', 'compose', array('confirm' => 1)), null, $context);
     return true;
 }

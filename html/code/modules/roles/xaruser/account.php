@@ -33,7 +33,8 @@ function roles_user_account(array $args = [], $context = null)
     if (!xarUser::isLoggedIn()){
         // bring the user back here after login :)
         $redirecturl = xarController::URL('roles', 'user', 'account');
-        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform', array('redirecturl' => urlencode($redirecturl))));
+        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform',
+            array('redirecturl' => urlencode($redirecturl))), null, $context);
     }
 
     $id = xarUser::getVar('id');

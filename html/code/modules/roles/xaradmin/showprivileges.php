@@ -22,7 +22,7 @@ function roles_admin_showprivileges(array $args = [], $context = null)
     if (!xarSecurity::check('EditRoles')) return;
     
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
 
     // Call the Roles class and get the role
     $role = xarRoles::get($id);

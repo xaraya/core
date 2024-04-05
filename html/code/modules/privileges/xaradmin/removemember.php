@@ -42,6 +42,6 @@ function privileges_admin_removemember(array $args = [], $context = null)
     xarController::redirect(xarController::URL('privileges',
                              'admin',
                              'modifyprivilege',
-                             array('id'=>$childid)));
+                             array('id'=>$childid)), null, $context);
     return true;
 }

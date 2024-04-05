@@ -54,7 +54,7 @@ function base_admin_release(array $args = [], $context = null)
                                         'refresh' => 604800,
                                         'extension' => '.xml'));
     } catch (Exception $e) {
-        return xarResponse::NotFound(xarML('No release feed is currently available'));
+        return xarController::notFound(xarML('No release feed is currently available'), $context);
     }
 
     if (!$feeddata) return;
@@ -89,7 +89,7 @@ function base_admin_release(array $args = [], $context = null)
       $data['chanlink']   =   $info['channel']['link'];
       $data['chandesc']   =   $info['channel']['description'];
     } else {
-        return xarResponse::NotFound(xarML('No release feed is currently available'));
+        return xarController::notFound(xarML('No release feed is currently available'), $context);
     }
     $data['releasenumber']=$releasenumber;
     $data['feedcontent'] = $feedcontent;

@@ -37,7 +37,7 @@ function privileges_admin_deleterealm(array $args = [], $context = null)
     }
 
     // Security
-    if (empty($name)) return xarResponse::NotFound();
+    if (empty($name)) return xarController::notFound(null, $context);
     if(!xarSecurity::check('ManagePrivileges',0,'Realm',$name)) return;
 
     if (empty($confirmed)) {
@@ -62,6 +62,6 @@ function privileges_admin_deleterealm(array $args = [], $context = null)
 //xarModHooks::call('item', 'delete', $id, '');
 
 // redirect to the next page
-    xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'), null, $context);
     return true;
 }

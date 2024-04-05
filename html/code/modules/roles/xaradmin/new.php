@@ -56,7 +56,7 @@ function roles_admin_new(array $args = [], $context = null)
             $itemid = $data['object']->createItem();
 
             // Jump to the next page
-            xarController::redirect(xarController::URL('roles','admin','new'));
+            xarController::redirect(xarController::URL('roles','admin','new'), null, $context);
             return true;
         }
     }

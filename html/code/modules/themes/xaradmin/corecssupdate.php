@@ -34,7 +34,8 @@ function themes_admin_corecssupdate(array $args = [], $context = null)
     // set modvars
     xarModVars::set('themes', 'csslinkoption', $linkoptions);
 
-    xarController::redirect(xarController::URL('themes','admin','cssconfig',array('component'=>'core')));
+    xarController::redirect(xarController::URL('themes','admin','cssconfig',
+        array('component'=>'core')), null, $context);
     // Return
     return true;
 }

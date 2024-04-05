@@ -65,5 +65,5 @@ function dynamicdata_admin_importprops(array $args = [], $context = null)
         'modifyprop',
         ['module_id' => $module_id,
         'itemtype' => $itemtype]
-    ));
+    ), null, $context);
 }

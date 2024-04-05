@@ -73,6 +73,6 @@ function categories_admin_delete(array $args = [], $context = null)
     $worker = new CategoryWorker();
     $result = $worker->delete($data['itemid']);
 
-    xarController::redirect(xarController::URL('categories','admin','view', array()));
+    xarController::redirect(xarController::URL('categories','admin','view', array()), null, $context);
     return true;
 }

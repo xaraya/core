@@ -208,7 +208,8 @@ function base_admin_modifyconfig(array $args = [], $context = null)
                     if (!xarVar::fetch('database', 'str', $database, $current_database ,xarVar::NOT_REQUIRED)) return;
                     $variables['DB.Name'] = $database;                    
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
-                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'setup')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig',
+                        array('tab' => 'setup')), null, $context);
                     break;
                 case 'display':
                     if (!xarVar::fetch('alternatepagetemplate','checkbox',$alternatePageTemplate,false, xarVar::NOT_REQUIRED)) return;
@@ -299,7 +300,8 @@ function base_admin_modifyconfig(array $args = [], $context = null)
                     );
                     xarMod::apiFunc('installer','admin','modifysystemvars', $args);
                     */
-                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'security')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig',
+                        array('tab' => 'security')), null, $context);
                     break;
                 case 'locales':
                     if (!xarVar::fetch('defaultlocale','str:1:',$defaultLocale)) return;
@@ -325,7 +327,8 @@ function base_admin_modifyconfig(array $args = [], $context = null)
                     // It sets the navigation locale for all logged in users who have not explicitly chosen one
                     xarModVars::set('roles', 'locale', $defaultLocale);
 
-                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig',
+                        array('tab' => 'locales')), null, $context);
                     break;
                 case 'caching':                    
                     break;
@@ -345,7 +348,8 @@ function base_admin_modifyconfig(array $args = [], $context = null)
                     $variables = array('Log.Enabled' => $logenabled, 'Log.Available' => $data['logavailable']->value,'Log.Level' => $loglevel, 'Log.Filename' => $logfilename);
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables' => $variables));
                     
-                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig',
+                        array('tab' => 'logging')), null, $context);
                     break;
                 case 'other':
                     if (!xarVar::fetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), xarVar::NOT_REQUIRED)) return;
@@ -376,7 +380,8 @@ function base_admin_modifyconfig(array $args = [], $context = null)
                         xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
                     }
                     xarModVars::set('roles', 'usertimezone', xarConfigVars::get(null, 'Site.Core.TimeZone'));
-                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'other')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig',
+                        array('tab' => 'other')), null, $context);
                     break;
             }
             // save to cache if enabled

@@ -36,6 +36,6 @@ function themes_admin_regenerate(array $args = [], $context = null)
 
     if (!isset($regenerated)) return;
     // Redirect
-    xarController::redirect(xarController::URL('themes', 'admin', 'view'));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view'), null, $context);
     return true;
 }

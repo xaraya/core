@@ -153,7 +153,7 @@ function themes_admin_modifyconfig(array $args = [], $context = null)
                 foreach ($files as $file) unlink($picker->initialization_basedirectory . "/" . $file['id']);
             }
             
-            xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
+            xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'), null, $context);
             return true;
 
         case 'flush':

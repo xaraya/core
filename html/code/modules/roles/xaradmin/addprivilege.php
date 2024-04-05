@@ -21,8 +21,8 @@ function roles_admin_addprivilege(array $args = [], $context = null)
     // get parameters
     if (!xarVar::fetch('privid', 'int:1:', $privid, 0, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('roleid', 'int:1:', $roleid, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($privid)) return xarResponse::notFound();
-    if (empty($roleid)) return xarResponse::notFound();
+    if (empty($privid)) return xarController::notFound(null, $context);
+    if (empty($roleid)) return xarController::notFound(null, $context);
 
     // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
@@ -65,6 +65,6 @@ function roles_admin_addprivilege(array $args = [], $context = null)
     }
 
     // redirect to the next page
-    xarController::redirect($return_url);
+    xarController::redirect($return_url, null, $context);
     return true;
 }

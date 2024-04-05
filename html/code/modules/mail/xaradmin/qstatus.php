@@ -24,7 +24,7 @@ function mail_admin_qstatus(array $args = [], $context = null)
     // Do we have the master ?
     if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         // Redirect to the view page, which offers to create one
-        xarController::redirect(xarController::URL('mail','admin','view'));
+        xarController::redirect(xarController::URL('mail','admin','view'), null, $context);
         return true;
     }
     // Retrieve the queues

@@ -58,7 +58,7 @@ function categories_admin_clone(array $args = [], $context = null)
         // Change the name of the top level category we added
         $data['object']->updateItem(array('itemid' => $toplevel, 'name' => $newname));
 
-        xarController::redirect(xarController::URL('categories','admin','view'));
+        xarController::redirect(xarController::URL('categories','admin','view'), null, $context);
         return true;
     }  
     return $data;

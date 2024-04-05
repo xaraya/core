@@ -29,7 +29,7 @@ function roles_user_usermenu(array $args = [], $context = null)
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
     if (!xarUser::isLoggedIn()){
-        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform'));
+        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform'), null, $context);
     }
 
     $id = xarUser::getVar('id');
@@ -151,7 +151,7 @@ function roles_user_usermenu(array $args = [], $context = null)
                 }
                 if (empty($returnurl))
                     $returnurl = xarController::URL('roles', 'user', 'account', array('tab' => 'basic'));
-                return xarController::redirect($returnurl);
+                return xarController::redirect($returnurl, null, $context);
             } else {
                 // invalid, we need to show the form data again
                 $data = array();
@@ -293,7 +293,7 @@ function roles_user_usermenu(array $args = [], $context = null)
                 }
                 if (empty($returnurl))
                     $returnurl = xarController::URL('roles', 'user', 'account', array('moduleload' => $moduleload));
-                return xarController::redirect($returnurl);
+                return xarController::redirect($returnurl, null, $context);
             }
 
             // must have invalid data, show the form again

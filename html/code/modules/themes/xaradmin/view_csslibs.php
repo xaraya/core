@@ -26,7 +26,7 @@ function themes_admin_view_csslibs(array $args = [], $context = null)
 
     if (!isset($data['object'])) {return;}
     if (!$data['object']->checkAccess('view'))
-        return xarResponse::Forbidden(xarML('View #(1) is forbidden', $data['object']->label));
+        return xarController::forbidden(xarML('View #(1) is forbidden', $data['object']->label), $context);
     $data['properties'] = $data['object']->getProperties();
        
     sys::import('modules.themes.class.xarcss');

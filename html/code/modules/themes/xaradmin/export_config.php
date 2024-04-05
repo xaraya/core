@@ -25,9 +25,9 @@ function themes_admin_export_config(array $args = [], $context = null)
 
     // Security
     if (empty($data['object']))
-        return xarResponse::NotFound();
+        return xarController::notFound(null, $context);
     if (!$data['object']->checkAccess('config'))
-        return xarResponse::Forbidden(xarML('Export #(1) is forbidden', $data['object']->label));
+        return xarController::forbidden(xarML('Export #(1) is forbidden', $data['object']->label), $context);
 
     $where = "theme_id = " . $data['itemid'];
     $items = $data['object']->getItems(array('where' => $where));

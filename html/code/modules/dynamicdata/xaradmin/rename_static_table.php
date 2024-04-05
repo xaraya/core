@@ -36,14 +36,16 @@ function dynamicdata_admin_rename_static_table(array $args = [], $context = null
 
     if ($data['confirm']) {
         if (empty($data['newtable'])) {
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static', ['table' => $data['table']]));
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static',
+                ['table' => $data['table']]), null, $context);
         }
         $query = 'RENAME TABLE ' . $data['table'] . ' TO ' . $data['newtable'];
         $dbconn = xarDB::getConn();
         $dbconn->Execute($query);
 
         // Jump to the next page
-        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static', ['table' => $data['newtable']]));
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static',
+            ['table' => $data['newtable']]), null, $context);
         return true;
     }
     return $data;

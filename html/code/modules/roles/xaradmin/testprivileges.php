@@ -28,7 +28,7 @@ function roles_admin_testprivileges(array $args = [], $context = null)
 
     // Get Parameters
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
     if (!xarVar::fetch('pmodule', 'int', $modRegId, xarSecurity::PRIVILEGES_ALL, xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;
     if (!xarVar::fetch('name', 'str:1', $name, '', xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;
     if (!xarVar::fetch('test', 'str:1:35:', $test, '', xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;

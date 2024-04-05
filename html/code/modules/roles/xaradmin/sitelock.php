@@ -107,7 +107,7 @@ function roles_admin_sitelock(array $args = [], $context = null)
                               'notifymsg' => $notifymsg);
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
 			// Refresh by jumping to the same page
-            xarController::redirect(xarController::URL('roles', 'admin', 'sitelock'));
+            xarController::redirect(xarController::URL('roles', 'admin', 'sitelock'), null, $context);
 
 # --------------------------------------------------------
 # We are locking or unlocking the site
@@ -181,7 +181,7 @@ function roles_admin_sitelock(array $args = [], $context = null)
                 return xarTpl::module('roles','user','errors',array('layout' => 'mail_failed', 'badmails' => $badmails));
             }
 			// Refresh by jumping to the same page
-            xarController::redirect(xarController::URL('roles', 'admin', 'sitelock'));
+            xarController::redirect(xarController::URL('roles', 'admin', 'sitelock'), null, $context);
         }
     }
 

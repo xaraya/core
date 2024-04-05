@@ -102,7 +102,7 @@ function themes_admin_cacheview(array $args = [], $context = null)
         return $data;
     }
 
-    xarController::redirect(xarController::URL('themes', 'admin', 'cacheview'));
+    xarController::redirect(xarController::URL('themes', 'admin', 'cacheview'), null, $context);
     /*  Return */
     return true;
 }

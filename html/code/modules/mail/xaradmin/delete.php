@@ -21,7 +21,7 @@ function mail_admin_delete(array $args = [], $context = null)
     // Required parameters
     if(!xarVar::fetch('itemid','int:1:',$itemid, 0, xarVar::NOT_REQUIRED)) return;
     if(!xarVar::fetch('objectid','int:1:',$objectid, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($itemid) || empty($objectid)) return xarResponse::notFound();
+    if (empty($itemid) || empty($objectid)) return xarController::notFound(null, $context);
 
     $qdefObject = xarMod::apiFunc('dynamicdata','user','getobject',array('objectid' => $objectid));
     if(!$qdefObject) return;
@@ -29,5 +29,5 @@ function mail_admin_delete(array $args = [], $context = null)
     $result = $qdefObject->deleteItem(array('itemid' => $itemid));
     if(!$result) return;
 
-    return xarController::redirect(xarController::URL('mail','admin','view'));
+    return xarController::redirect(xarController::URL('mail','admin','view'), null, $context);
 }

@@ -30,8 +30,8 @@ function roles_admin_removemember(array $args = [], $context = null)
     $member = xarRoles::get($childid);
 
     // Security
-    if (empty($role)) return xarResponse::NotFound();
-    if (empty($member)) return xarResponse::NotFound();
+    if (empty($role)) return xarController::notFound(null, $context);
+    if (empty($member)) return xarController::notFound(null, $context);
     if(!xarSecurity::check('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // Check for authorization code
@@ -49,6 +49,7 @@ function roles_admin_removemember(array $args = [], $context = null)
     xarModHooks::call('item', 'unlink', $parentid, $pargs);
 
     // redirect to the next page
-    xarController::redirect(xarController::URL('roles', 'admin', 'modify',  array('id' => $childid)));
+    xarController::redirect(xarController::URL('roles', 'admin', 'modify',
+        array('id' => $childid)), null, $context);
     return true;
 }

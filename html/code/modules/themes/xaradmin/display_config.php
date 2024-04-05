@@ -24,7 +24,7 @@ function themes_admin_display_config(array $args = [], $context = null)
 
     if (!isset($data['object'])) return;
     if (!$data['object']->checkAccess('display'))
-        return xarResponse::Forbidden(xarML('Display #(1) is forbidden', $data['object']->label));
+        return xarController::forbidden(xarML('Display #(1) is forbidden', $data['object']->label), $context);
 
     $data['object']->getItem(array('itemid' => $data['itemid']));
     return $data;

@@ -23,7 +23,7 @@ function themes_admin_view_configs(array $args = [], $context = null)
 
     if (!isset($data['object'])) {return;}
     if (!$data['object']->checkAccess('view'))
-        return xarResponse::Forbidden(xarML('View #(1) is forbidden', $data['object']->label));
+        return xarController::forbidden(xarML('View #(1) is forbidden', $data['object']->label), $context);
 
     // Count the number of items matching the preset arguments - do this before getItems()
     $data['object']->countItems();

@@ -74,7 +74,7 @@ function themes_admin_view(array $args = [], $context = null)
             xarModVars::set('themes', 'admin_theme', $new_admin_theme);
         }
         $return_url = xarController::URL('themes', 'admin', 'view');
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     }
     
     // display phase     

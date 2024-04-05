@@ -26,7 +26,7 @@ function privileges_admin_deleteprivilege(array $args = [], $context = null)
 //Call the Privileges class and get the privilege to be deleted
     sys::import('modules.privileges.class.privileges');
     $priv = xarPrivileges::getprivilege($id);
-    if (empty($priv)) return xarResponse::NotFound();
+    if (empty($priv)) return xarController::notFound(null, $context);
     $name = $priv->getName();
 
     // Security
@@ -63,6 +63,6 @@ function privileges_admin_deleteprivilege(array $args = [], $context = null)
                     'privileges'));
 
 // redirect to the next page
-    xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'), null, $context);
     return true;
 }

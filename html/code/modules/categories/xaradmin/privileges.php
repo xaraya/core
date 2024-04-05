@@ -111,7 +111,7 @@ function categories_admin_privileges(array $args = [], $context = null)
 
             // redirect to the privilege
             xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
-                                          array('pid' => $pid)));
+                                          array('pid' => $pid)), null, $context);
             return true;
         }
 
@@ -232,7 +232,7 @@ function categories_admin_privileges(array $args = [], $context = null)
 
         // redirect to the privilege
         xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
-                                      array('pid' => $pid)));
+                                      array('pid' => $pid)), null, $context);
         return true;
     }
 

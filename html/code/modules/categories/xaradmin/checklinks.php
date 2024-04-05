@@ -163,7 +163,7 @@ function categories_admin_checklinks(array $args = [], $context = null)
                                      'cids' => array_keys($seencid)))) {
                 return;
             }
-            xarController::redirect(xarController::URL('categories', 'admin', 'checklinks'));
+            xarController::redirect(xarController::URL('categories', 'admin', 'checklinks'), null, $context);
             return true;
         }
 

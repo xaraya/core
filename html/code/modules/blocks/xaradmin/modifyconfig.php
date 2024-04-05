@@ -59,12 +59,12 @@ function blocks_admin_modifyconfig(array $args = [], $context = null)
                 $itemid = $data['module_settings']->updateItem();
                 if (!xarVar::fetch('noexceptions', 'int:0:1', $noexceptions, 0, xarVar::NOT_REQUIRED)) return;
                 xarModVars::set('blocks', 'noexceptions', $noexceptions);
-            //    xarController::redirect(xarController::URL('blocks', 'admin', 'modifyconfig'));
+            //    xarController::redirect(xarController::URL('blocks', 'admin', 'modifyconfig'), null, $context);
             //    return true;
             }
             // If this is an AJAX call, end here
             xarController::getRequest()->exitAjax();
-            xarController::redirect(xarServer::getCurrentURL());
+            xarController::redirect(xarServer::getCurrentURL(), null, $context);
             return true;
     }
     return $data;

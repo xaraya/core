@@ -232,7 +232,8 @@ function roles_admin_modifyconfig(array $args = [], $context = null)
                     xarConfigVars::set(null, 'Site.User.DebugAdmins', $debugadmins);
                 break;
             }
-            xarController::redirect(xarController::URL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
+            xarController::redirect(xarController::URL('roles','admin','modifyconfig',
+                array('tab' => $data['tab'])), null, $context);
             break;
     }
     return $data;

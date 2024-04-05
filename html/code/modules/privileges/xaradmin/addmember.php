@@ -39,7 +39,7 @@ function privileges_admin_addmember(array $args = [], $context = null)
         xarController::redirect(xarController::URL('privileges',
                                       'admin',
                                       'modifyprivilege',
-                                      array('id'=>$id)));
+                                      array('id'=>$id)), null, $context);
         return true;
     }
 
@@ -71,6 +71,6 @@ function privileges_admin_addmember(array $args = [], $context = null)
     xarController::redirect(xarController::URL('privileges',
                              'admin',
                              'modifyprivilege',
-                             array('id'=>$id)));
+                             array('id'=>$id)), null, $context);
     return true;
 }

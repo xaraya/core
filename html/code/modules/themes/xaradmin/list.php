@@ -17,6 +17,6 @@
  */
 function themes_admin_list(array $args = [], $context = null)
 {
-    xarController::redirect(xarController::URL('themes', 'admin', 'view'));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view'), null, $context);
     return true;
 }

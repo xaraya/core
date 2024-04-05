@@ -66,7 +66,7 @@ function privileges_admin_modifyrealm(array $args = [], $context = null)
         $bindvars[] = $id;
         $result = $stmt->executeQuery($bindvars);
 
-        xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'));
+        xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'), null, $context);
     }
 
     $data['id'] = $id;

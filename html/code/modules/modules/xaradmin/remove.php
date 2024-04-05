@@ -34,7 +34,7 @@ function modules_admin_remove(array $args = [], $context = null)
     }        
 
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
     if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
         $return_url, '', xarVar::NOT_REQUIRED)) return;
         
@@ -58,7 +58,7 @@ function modules_admin_remove(array $args = [], $context = null)
             if(!xarMod::apiFunc('modules','admin','remove',array('regid' => $id)))  return;
             // Clear the property cache
             PropertyRegistration::importPropertyTypes(true);
-            xarController::redirect($return_url);
+            xarController::redirect($return_url, null, $context);
         } else {
             // There are dependents, let's build a GUI
             $data                 = array();
@@ -83,8 +83,8 @@ function modules_admin_remove(array $args = [], $context = null)
 
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarController::URL
-    //    xarController::redirect(xarController::URL('modules', 'admin', "list#$target"));
-    xarController::redirect($return_url);
+    //    xarController::redirect(xarController::URL('modules', 'admin', "list#$target"), null, $context);
+    xarController::redirect($return_url, null, $context);
     // Never reached
     return true;
 }

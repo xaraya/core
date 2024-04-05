@@ -35,7 +35,7 @@ function authsystem_user_showloginform(array $args = [], $context = null)
     
     // If we don't ask to forward, then forward immediately
     if (!(int)xarModVars::get('authsystem', 'ask_forward') && xarUser::isLoggedIn()) {
-        xarController::redirect($data['redirecturl']);
+        xarController::redirect($data['redirecturl'], null, $context);
         return true;
     }
 

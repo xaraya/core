@@ -34,7 +34,7 @@ function base_admin_main(array $args = [], $context = null)
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('base','admin','overview');
     } else {
-        xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig'), null, $context);
         return true;
     }
 }

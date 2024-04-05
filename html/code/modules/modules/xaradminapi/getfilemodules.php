@@ -118,12 +118,14 @@ function modules_adminapi_getfilemodules(array $args = [], $context = null)
                     foreach ($fileModules as $module) {
                         if($regId == $module['regid']) {
                             $msg = xarML('The same registered ID (#(1)) was found in two different modules, #(2) and #(3). Please remove one of the modules and regenerate the list.',$regId, $name, $module['name']);
-                            xarController::redirect(xarController::URL('modules', 'user', 'errors', array('message' => urlencode($msg))));
+                            xarController::redirect(xarController::URL('modules', 'user', 'errors',
+                                array('message' => urlencode($msg))), null, $context);
                             return true;
                         }
                         if($nameinfile == $module['nameinfile']) {
                             $msg = xarML('The module #(1) was found under two different registered IDs, #(2) and #(3). Please remove one of the modules and regenerate the list',$nameinfile, $regId, $module['regid']);
-                            xarController::redirect(xarController::URL('modules', 'user', 'errors', array('message' => urlencode($msg))));
+                            xarController::redirect(xarController::URL('modules', 'user', 'errors',
+                                array('message' => urlencode($msg))), null, $context);
                             return true;
                         }
                     }

@@ -55,7 +55,7 @@ function mail_admin_template(array $args = [], $context = null)
             }
 
             xarController::redirect(xarController::URL('mail', 'admin', 'template',
-                                          array('mailtype' => $data['mailtype'])));
+                array('mailtype' => $data['mailtype'])), null, $context);
             return true;
     }
 

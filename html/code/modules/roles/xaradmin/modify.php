@@ -26,7 +26,7 @@ function roles_admin_modify(array $args = [], $context = null)
     if (!xarVar::fetch('duvs', 'array', $data['duvs'], array(), xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = xarRoles::get($id);
-    if (empty($data['object'])) return xarResponse::NotFound();
+    if (empty($data['object'])) return xarController::notFound(null, $context);
     $data['object']->properties['name']->display_layout = 'single';
     $data['itemtype'] = $data['object']->getType();
 
@@ -96,7 +96,8 @@ function roles_admin_modify(array $args = [], $context = null)
             $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
 
             // Jump to the next page
-            xarController::redirect(xarController::URL('roles','admin','modify',array('itemid' => $data['itemid'])));
+            xarController::redirect(xarController::URL('roles','admin','modify',
+                array('itemid' => $data['itemid'])), null, $context);
             return true;
         }
     }

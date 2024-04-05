@@ -41,10 +41,10 @@
                 // Good data: create the item
                 $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
                 if ($data['update']) {
-                    xarController::redirect(xarController::URL('themes','admin','view_configs'));
+                    xarController::redirect(xarController::URL('themes','admin','view_configs'), null, $context);
                     return true;
                 } else {
-                    xarController::redirect(xarController::URL('themes','admin','modify_config', $data));
+                    xarController::redirect(xarController::URL('themes','admin','modify_config', $data), null, $context);
                     return true;
                 }
             }

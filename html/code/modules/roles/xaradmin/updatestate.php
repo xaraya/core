@@ -40,7 +40,7 @@ function roles_admin_updatestate(array $args = [], $context = null)
                              array('authid'  => $data['authid'],
                                    'state'   => $data['state'],
                                    'invalid' => $invalid,
-                                   'id'     => $data['groupid'])));
+                                   'id'     => $data['groupid'])), null, $context);
     }
     //Get the notice message
     switch ($data['status']) {
@@ -90,11 +90,11 @@ function roles_admin_updatestate(array $args = [], $context = null)
     // Success
      if ((!xarModVars::get('roles', 'ask'.$mailtype.'email')) || (count($idnotify) == 0)) {
             xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
-                          array('id' => $data['groupid'], 'state' => $data['state'])));
+                array('id' => $data['groupid'], 'state' => $data['state'])), null, $context);
      }
      else {
         xarController::redirect(xarController::URL('roles', 'admin', 'asknotification',
-                          array('id' => $ids, 'mailtype' => $mailtype, 'groupid' => $data['groupid'], 'state' => $data['state'])));
+            array('id' => $ids, 'mailtype' => $mailtype, 'groupid' => $data['groupid'], 'state' => $data['state'])), null, $context);
      }
      return true;
 }

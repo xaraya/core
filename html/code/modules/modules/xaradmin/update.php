@@ -43,9 +43,9 @@ function modules_admin_update(array $args = [], $context = null)
 
     xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET);
     if (!empty($return_url)) {
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     } else {
-        xarController::redirect(xarController::URL('modules', 'admin', 'modify', array('id' => $regId)));
+        xarController::redirect(xarController::URL('modules', 'admin', 'modify', array('id' => $regId)), null, $context);
     }
     
     return true;

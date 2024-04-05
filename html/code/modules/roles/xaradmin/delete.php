@@ -27,7 +27,7 @@ function roles_admin_delete(array $args = [], $context = null)
     sys::import('modules.roles.class.roles');
     // get the role to be deleted
     $role = xarRoles::get($id);
-    if (empty($role)) return xarResponse::NotFound();
+    if (empty($role)) return xarController::notFound(null, $context);
     $itemtype = $role->getType();
 
     // get the array of parents of this role
@@ -99,9 +99,9 @@ function roles_admin_delete(array $args = [], $context = null)
         }
         // redirect to the next page
         if (empty($returnurl)) {
-            xarController::redirect(xarController::URL('roles', 'admin', 'showusers'));
+            xarController::redirect(xarController::URL('roles', 'admin', 'showusers'), null, $context);
         } else {
-            xarController::redirect($returnurl);
+            xarController::redirect($returnurl, null, $context);
         }
         return true;
     }

@@ -98,7 +98,8 @@ function roles_admin_modifyemail(array $args = [], $context = null)
                 $msg = 'The messaging template "#(1)" is not writable or it is not allowed to delete files from #(2)';
                 throw new ConfigurationException(array($filename,$messaginghome),$msg);
             }
-            xarController::redirect(xarController::URL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
+            xarController::redirect(xarController::URL('roles', 'admin', 'modifyemail',
+                array('mailtype' => $data['mailtype'])), null, $context);
             return true;
     }
     return $data;

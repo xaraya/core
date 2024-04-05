@@ -30,7 +30,7 @@ function categories_admin_create(array $args = [], $context = null)
     if (!xarVar::fetch('reassign', 'checkbox',  $reassign, false, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('repeat',   'int:1:100', $data['repeat'],   1,     xarVar::NOT_REQUIRED)) return;
     if ($reassign) {
-        xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])));
+        xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])), null, $context);
         return true;
     }
 
@@ -49,7 +49,7 @@ function categories_admin_create(array $args = [], $context = null)
         $data['objects'][$i]->createItem();
     }
 
-    xarController::redirect(xarController::URL('categories','admin','view'));
-//    xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])));
+    xarController::redirect(xarController::URL('categories','admin','view'), null, $context);
+//    xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])), null, $context);
     return true;
 }

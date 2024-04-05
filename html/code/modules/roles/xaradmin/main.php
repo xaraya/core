@@ -29,7 +29,7 @@ function roles_admin_main(array $args = [], $context = null)
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('roles','admin','overview');
     } else {
-        xarController::redirect(xarController::URL('roles', 'admin', 'showusers'));
+        xarController::redirect(xarController::URL('roles', 'admin', 'showusers'), null, $context);
         return true;
     }
 }

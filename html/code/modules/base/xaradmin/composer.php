@@ -95,7 +95,7 @@ function base_admin_composer(array $args = [], $context = null)
             $output = shell_exec('rm ' . $setup_path);
             if (!empty($output)) $data['message'][] = $output;
             if (empty($data['message'])) {
-                xarController::redirect(xarServer::getCurrentURL());
+                xarController::redirect(xarServer::getCurrentURL(), null, $context);
             }
         }
     } elseif ($install) {
