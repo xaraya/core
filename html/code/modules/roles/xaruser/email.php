@@ -20,12 +20,12 @@
  * @throws  ForbiddenOperationException
  * @todo    handle empty subject and/or message?
  */
-function roles_user_email(Array $args=array())
+function roles_user_email(array $args=[], $context = null)
 {
     // we can only send emails to other members if we are logged in
     if(!xarUser::isLoggedIn())
     {
-        throw new ForbiddenOperationException(null,'You are not logged in, sending emails is not allowed');
+        throw new ForbiddenOperationException(null,'You are not logged in, sending emails is not allowed', $context);
     }
 
     extract($args);
@@ -82,7 +82,7 @@ function roles_user_email(Array $args=array())
 
             // Confirm authorisation code.
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
 
             // Security Check

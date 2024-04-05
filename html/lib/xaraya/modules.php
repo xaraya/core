@@ -817,16 +817,22 @@ class xarMod extends xarObject implements IxarMod
         $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
         if (empty($modName) || empty($funcName)) {
             // This is not a valid function syntax - CHECKME: also for api functions ?
-            if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
-            else return xarResponse::NotFound();
+            if ($funcType == "api") {
+                throw new FunctionNotFoundException($modFunc);
+            } else {
+                return xarController::notFound('Function not found', $context);
+            }
         }
 
         // good thing this information is cached :)
         $modBaseInfo = self::getBaseInfo($modName);
         if (!isset($modBaseInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
-            if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
-            else return xarResponse::NotFound();
+            if ($funcType == "api") {
+                throw new FunctionNotFoundException($modFunc);
+            } else {
+                return xarController::notFound('Function not found', $context);
+            }
         }
 
         // Call function
@@ -841,7 +847,7 @@ class xarMod extends xarObject implements IxarMod
                 try {
                     xarMod::load($modName,$modType);
                 } catch (Exception $e) {
-                    return xarResponse::NotFound();
+                    return xarController::notFound('Function not found', $context);
                 }
             }
 
@@ -853,8 +859,11 @@ class xarMod extends xarObject implements IxarMod
                 $funcFile = sys::code() . 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
                 if (!file_exists($funcFile)) {
                     // Valid syntax, but the function doesn't exist
-                    if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
-                    else return xarResponse::NotFound();
+                    if ($funcType == "api") {
+                        throw new FunctionNotFoundException($modFunc);
+                    } else {
+                        return xarController::notFound('Function not found', $context);
+                    }
                 } else {
                     ob_start();
                     $r = sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
@@ -876,7 +885,9 @@ class xarMod extends xarObject implements IxarMod
             }
         }
 
-        if (!$found) return xarResponse::NotFound();
+        if (!$found) {
+            return xarController::notFound('Function not found', $context);
+        }
 
         $funcResult = $modFunc($args, $context);
         return $funcResult;

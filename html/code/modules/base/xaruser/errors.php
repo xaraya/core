@@ -15,14 +15,14 @@
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-function base_user_errors($args)
+function base_user_errors(array $args = [], $context = null)
 {
     if (!xarVar::fetch('errortype', 'str', $errortype, '', xarVar::NOT_REQUIRED)) return;
     switch ($errortype) {
         case 'forbidden':
             if (!xarVar::fetch('message',  'str', $msg,      '',   xarVar::NOT_REQUIRED)) return;
             if (!xarVar::fetch('template', 'str', $template, NULL, xarVar::NOT_REQUIRED)) return;
-            return xarResponse::Forbidden($msg, 'base', 'message', 'forbidden', $template);
+            return xarController::forbidden($msg, $context, $template);
         case 'exception':
         case 'systemerror':
         case 'systeminfo':
@@ -31,6 +31,6 @@ function base_user_errors($args)
         default:
             if (!xarVar::fetch('message',  'str', $msg,      '',   xarVar::NOT_REQUIRED)) return;
             if (!xarVar::fetch('template', 'str', $template, NULL, xarVar::NOT_REQUIRED)) return;
-            return xarResponse::NotFound($msg, 'base', 'message', 'notfound', $template);
+            return xarController::notFound($msg, $context, $template);
     }
 }

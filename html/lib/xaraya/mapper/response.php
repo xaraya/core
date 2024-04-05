@@ -16,6 +16,38 @@
 class xarResponse extends xarObject
 {
     public string $output;
+    public int $status;
+    public string $mediaType;
+    /** @var array<string, mixed> */
+    public array $headers;
+
+    /**
+     * @todo no arguments are set/known by xarController::setResponse() before dispatch()
+     * @param array<string, mixed> $headers
+     */
+    public function __construct(?string $output = null, int $status = 200, string $mediaType = '', array $headers = [])
+    {
+        $this->output = $output ?? '';
+        $this->status = $status;
+        $this->mediaType = $mediaType;
+        $this->headers = $headers;
+    }
+
+    public function setOutput(string $output): void
+    {
+        $this->output = $output;
+    }
+
+    public function getOutput(): string
+    {
+        return $this->output;
+    }
+
+    public function getMediaType(): string
+    {
+        $this->mediaType = $this->mediaType ?: 'text/html; charset=' . xarMLS::getCharsetFromLocale(xarMLS::getSiteLocale());
+        return $this->mediaType;
+    }
 
     /**
      * initialize
@@ -46,9 +78,10 @@ class xarResponse extends xarObject
      * @param string $modType template overrides, cfr. xarTpl::module (optional)
      * @param string $funcName template overrides, cfr. xarTpl::module (optional)
      * @param string $templateName template overrides, cfr. xarTpl::module (optional)
+     * @param mixed $context
      * @return string output display string
      */
-    public static function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = null)
+    public static function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = null, $context = null)
     {
         xarCache::noCache();
         if (!headers_sent()) {
@@ -57,7 +90,11 @@ class xarResponse extends xarObject
 
         xarTpl::setPageTitle('404 Not Found');
 
-        return xarTpl::module($modName, $modType, $funcName, array('msg' => $msg), $templateName);
+        $tplData = [
+            'msg' => $msg,
+            'context' => $context,
+        ];
+        return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
     }
 
     /**
@@ -76,9 +113,10 @@ class xarResponse extends xarObject
      * @param string $modType template overrides, cfr. xarTpl::module (optional)
      * @param string $funcName template overrides, cfr. xarTpl::module (optional)
      * @param string $templateName template overrides, cfr. xarTpl::module (optional)
+     * @param mixed $context
      * @return string output display string
      */
-    public static function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = null)
+    public static function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = null, $context = null)
     {
         xarCache::noCache();
         if (!headers_sent()) {
@@ -87,7 +125,11 @@ class xarResponse extends xarObject
 
         xarTpl::setPageTitle('403 Forbidden');
 
-        return xarTpl::module($modName, $modType, $funcName, array('msg' => $msg), $templateName);
+        $tplData = [
+            'msg' => $msg,
+            'context' => $context,
+        ];
+        return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
     }
 
     /**
@@ -96,14 +138,10 @@ class xarResponse extends xarObject
      * @access public
      * @param string $url the URL to redirect to
      * @return bool|never
+     * @deprecated 2.2.0 use xarController::redirect() instead
      */
     public static function Redirect($url = '')
     {
         return xarController::redirect($url);
-    }
-
-    public function getOutput(): string
-    {
-        return $this->output;
     }
 }
