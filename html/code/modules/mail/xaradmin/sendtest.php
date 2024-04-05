@@ -17,7 +17,7 @@
  * @access  public
  * @return  bool|void true on success or void on failure
 */
-function mail_admin_sendtest()
+function mail_admin_sendtest(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('ManageMail')) return;

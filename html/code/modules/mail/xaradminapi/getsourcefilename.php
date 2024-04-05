@@ -21,7 +21,7 @@
  * @return string
  *
  */
-function mail_adminapi_getsourcefilename(Array $args=array())
+function mail_adminapi_getsourcefilename(array $args = [], $context = null)
 {
     extract($args);  
     

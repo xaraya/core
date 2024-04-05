@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/771.html
  */
 
-function mail_user_display(Array $args=array())
+function mail_user_display(array $args = [], $context = null)
 {
     if(!xarVar::fetch('itemid','int:1:',$itemid,0,xarVar::NOT_REQUIRED)) return;
     if (empty($itemid)) return xarResponse::notFound();

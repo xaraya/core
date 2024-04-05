@@ -14,7 +14,7 @@
  *
  * @return array<mixed> data for the template display
  */
-function mail_admin_qstatus(Array $args=array())
+function mail_admin_qstatus(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminMail')) return;

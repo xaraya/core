@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/771.html
  */
 
-function mail_admin_delete($args = array())
+function mail_admin_delete(array $args = [], $context = null)
 {
     // Are we legitimally here?
     if (!xarSec::confirmAuthKey()) {

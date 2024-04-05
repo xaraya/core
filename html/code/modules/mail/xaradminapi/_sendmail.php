@@ -44,7 +44,7 @@
  * @param  $args['redirectaddress' is the email address we are redirecting mails.(optional)
  * 
  */
-function mail_adminapi__sendmail(Array $args=array())
+function mail_adminapi__sendmail(array $args = [], $context = null)
 {
     // Branch off if we are using a newer version of PHPMailer in the lib directory
     $use_lib = xarModVars::get('mail', 'use_external_lib');

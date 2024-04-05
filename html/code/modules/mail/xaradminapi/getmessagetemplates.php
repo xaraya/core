@@ -16,7 +16,7 @@
  *        string   $args['module'] module directory in var/messaging
  * @return array<mixed> of template names and labels
  */
-function mail_adminapi_getmessagetemplates(Array $args=array())
+function mail_adminapi_getmessagetemplates(array $args = [], $context = null)
 {
     extract($args);
 

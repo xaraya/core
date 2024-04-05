@@ -16,7 +16,7 @@
  * @return array<mixed> the itemtypes of this module and their description *
  */
 sys::import('modules.dynamicdata.class.objects.factory');
-function mail_userapi_getitemtypes(Array $args=array())
+function mail_userapi_getitemtypes(array $args = [], $context = null)
 {
     $itemtypes = array();
 

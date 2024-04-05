@@ -19,7 +19,7 @@
  * @return integer exitcode to gateway script
  * @todo what do we do with security here?
  */
-function mail_cliapi_process(Array $args=array())
+function mail_cliapi_process(array $args = [], $context = null)
 {
     xarLog::message("MAIL: processing incoming message", xarLog::LEVEL_INFO);
     extract($args);

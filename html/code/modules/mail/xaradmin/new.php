@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/771.html
  */
 
-function mail_admin_new(Array $args=array())
+function mail_admin_new(array $args = [], $context = null)
 {
     xarController::redirect(xarController::URL('mail','admin','view'));
     return true;

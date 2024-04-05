@@ -18,7 +18,7 @@
  * @access  public
  * @return array<mixed>|void data for the template display
 */
-function mail_admin_compose()
+function mail_admin_compose(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('ManageMail')) return;

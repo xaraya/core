@@ -12,7 +12,7 @@
 /**
  * @param array<string, mixed> $args array of optional parameters<br/>
  */
-function mail_userapi_getqueues(Array $args=array())
+function mail_userapi_getqueues(array $args = [], $context = null)
 {
     // Queues are different from the itemtypes here, in the sense
     // that we want the registered queues, which may or may not be an

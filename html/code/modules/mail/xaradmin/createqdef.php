@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/771.html
  */
 
-function mail_admin_createqdef(Array $args=array())
+function mail_admin_createqdef(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminMail')) return; 

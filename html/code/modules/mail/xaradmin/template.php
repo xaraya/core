@@ -13,7 +13,7 @@
  *
  * @return array<mixed>|string|bool|void data for the template display
  */
-function mail_admin_template(Array $args=array())
+function mail_admin_template(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminMail')) return;

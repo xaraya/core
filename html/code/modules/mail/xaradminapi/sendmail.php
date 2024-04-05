@@ -40,7 +40,7 @@
  *        string   $args['redirectsending'] set this to redirect email.(optional)<br/>
  *        string   $args['redirectaddress'] is the email address we are redirecting mails.(optional)
  */
-function mail_adminapi_sendmail(Array $args=array())
+function mail_adminapi_sendmail(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

@@ -15,7 +15,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return boolean true on success, false on failure
  */
-function mail_userapi_qisactive(Array $args=array())
+function mail_userapi_qisactive(array $args = [], $context = null)
 {
     extract($args);
     if(!isset($objectid)) return false; // we're lazy

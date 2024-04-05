@@ -17,7 +17,7 @@
  * @access  public
  * @return array<mixed>|string|void data for the template display
 */
-function mail_admin_viewq(Array $args=array())
+function mail_admin_viewq(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminMail')) return;

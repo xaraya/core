@@ -21,7 +21,7 @@
  *        string   $args['mailtype']     The type of mail html|text
  * @return string xarTpl::file($sourceFileName, $tplData) 
  */
-function mail_adminapi_mailsubjectmodule(Array $args=array())
+function mail_adminapi_mailsubjectmodule(array $args = [], $context = null)
 {
     extract($args);
     // Get the right source filename

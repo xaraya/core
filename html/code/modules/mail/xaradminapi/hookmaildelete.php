@@ -19,7 +19,7 @@
  *        integer  $args['modid'] is the module that is sending mail.<br/>
  *        integer  $args['objectid'] is the item deleted.
  */
-function mail_adminapi_hookmaildelete(Array $args=array())
+function mail_adminapi_hookmaildelete(array $args = [], $context = null)
 {
     extract($args);
 

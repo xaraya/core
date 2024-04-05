@@ -13,7 +13,7 @@
  * Psspl : Added API function to read the contents of template files (.xt) as plain text
  * @param array<string, mixed> $args array of optional parameters<br/>
  */
-function mail_adminapi_getsourcestring(Array $args=array())
+function mail_adminapi_getsourcestring(array $args = [], $context = null)
 {   
     $sourceFileName = xarMod::apiFunc('mail', 'admin', 'getsourcefilename', $args);      
     if (!file_exists($sourceFileName)) throw new FileNotFoundException($sourceFileName);
