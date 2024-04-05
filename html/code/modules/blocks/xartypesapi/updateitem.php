@@ -20,7 +20,7 @@
  * @throws EmptyParameterException
  * @throws BadParameterException
  */
-function blocks_typesapi_updateitem(Array $args=array())
+function blocks_typesapi_updateitem(array $args = [], $context = null)
 {
     if (empty($args)) {
         $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';

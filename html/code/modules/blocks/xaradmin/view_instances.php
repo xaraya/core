@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|void Teamplate display data array
  */
-function blocks_admin_view_instances()
+function blocks_admin_view_instances(array $args = [], $context = null)
 {
     if (!xarSecurity::check('ManageBlocks')) return;
     

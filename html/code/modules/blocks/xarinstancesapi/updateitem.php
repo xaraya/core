@@ -22,7 +22,7 @@
  * @return integer|void Returns block id
  * @throws BadParameterException
  */
-function blocks_instancesapi_updateitem(Array $args=array())
+function blocks_instancesapi_updateitem(array $args = [], $context = null)
 {
     extract($args);
     

@@ -21,7 +21,7 @@
  * @throws IDNotFoundException
  * @throws DuplicateException
  */
-function blocks_instancesapi_createitem(Array $args=array())
+function blocks_instancesapi_createitem(array $args = [], $context = null)
 {
     extract($args);
     

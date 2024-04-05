@@ -24,7 +24,7 @@
  * @return mixed output display string or boolean true if redirected
  */
 
-function blocks_admin_main()
+function blocks_admin_main(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditBlocks')) return;

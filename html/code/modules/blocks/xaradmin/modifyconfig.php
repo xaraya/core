@@ -22,7 +22,7 @@
  *
  * @return boolean|array<mixed>|string|void data array for the template display or output display string if invalid data submitted
  */
-function blocks_admin_modifyconfig()
+function blocks_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminBlocks')) return;

@@ -22,7 +22,7 @@
  * @param array<string, mixed> $args
  * @return array<mixed> Returns block state array
  */
-function blocks_instancesapi_getstates(Array $args=array())
+function blocks_instancesapi_getstates(array $args = [], $context = null)
 {
     return array(
         xarBlock::BLOCK_STATE_INACTIVE =>

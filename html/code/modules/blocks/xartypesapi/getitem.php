@@ -21,7 +21,7 @@
  * @throws EmptyParameterException
  * @throws BadParameterException
  */
-function blocks_typesapi_getitem(Array $args=array())
+function blocks_typesapi_getitem(array $args = [], $context = null)
 {
     if (empty($args)) {
         $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';

@@ -18,7 +18,7 @@
  * @param array<string, mixed> $args
  * @return array<mixed> Block state array
  */
-function blocks_typesapi_getstates(Array $args=array())
+function blocks_typesapi_getstates(array $args = [], $context = null)
 {
 
         return array(

@@ -19,7 +19,7 @@
  * 
  * @return array<mixed>|string|void Data display array
 */
-function blocks_admin_new_instance()
+function blocks_admin_new_instance(array $args = [], $context = null)
 {
     // @checkme: Add here vs Manage elsewhere ?
     // @checkme: Instance mask still relevent with anon masks in play?

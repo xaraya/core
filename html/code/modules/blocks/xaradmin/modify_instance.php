@@ -18,7 +18,7 @@
  * 
  * @return array<mixed>|string|void data for the template display
  */
-function blocks_admin_modify_instance(array $args=[], $context = null)
+function blocks_admin_modify_instance(array $args = [], $context = null)
 {
     /**
      * Pending
@@ -85,12 +85,12 @@ function blocks_admin_modify_instance(array $args=[], $context = null)
             case 'caching':
             case 'access':
                 if (!$isadmin)
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'no_privileges'));
+                    return xarController::badRequest('no_privileges', $context);
                 $method = $interface;
             case 'config':
             default:
                 if (!$canmodify)
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'no_privileges'));
+                    return xarController::badRequest('no_privileges', $context);
                 if (empty($method))
                     $method = $interface;
             break;

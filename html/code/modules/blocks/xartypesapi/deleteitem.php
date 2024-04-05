@@ -20,7 +20,7 @@
  * @throws EmptyParameterException
  * @throws IDNotFoundException
  */
-function blocks_typesapi_deleteitem(Array $args=array())
+function blocks_typesapi_deleteitem(array $args = [], $context = null)
 {
     if (empty($args['type_id']) || !is_numeric($args['type_id'])) {
         $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';

@@ -20,7 +20,7 @@
  * @throws IDNotFoundException
  * @throws FunctionNotFoundException
  */
-function blocks_admin_modify_type(array $args=[], $context = null)
+function blocks_admin_modify_type(array $args = [], $context = null)
 {
     if (!xarSecurity::check('ManageBlocks')) return;
     

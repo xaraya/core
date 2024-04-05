@@ -18,7 +18,7 @@
  * @param array<string, mixed> $args Parameter data array
  * @return boolean|void True on success, false on failure
  */
-function blocks_typesapi_refresh(Array $args=array())
+function blocks_typesapi_refresh(array $args = [], $context = null)
 {
     // only need to run this once 
     static $runonce = false;

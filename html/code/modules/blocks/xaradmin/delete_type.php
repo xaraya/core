@@ -20,7 +20,7 @@
  * @throws EmptyParameterException
  * @throws IDNotFoundException
  */
-function blocks_admin_delete_type(Array $args = array())
+function blocks_admin_delete_type(array $args = [], $context = null)
 {
     if (!xarSecurity::check('AdminBlocks')) return;
 

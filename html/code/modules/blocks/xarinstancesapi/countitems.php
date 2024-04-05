@@ -19,7 +19,7 @@
  * @return integer|void Item count
  * @throws BadParameterException
  */
-function blocks_instancesapi_countitems(Array $args=array())
+function blocks_instancesapi_countitems(array $args = [], $context = null)
 {
     extract($args);
     

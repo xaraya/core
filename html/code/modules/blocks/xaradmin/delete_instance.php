@@ -23,7 +23,7 @@
  * @throws EmptyParameterException Thrown if no block id has been passed
  * @throws IDNotFoundException Thrown if no block with the given block id was found in the API
  */
-function blocks_admin_delete_instance()
+function blocks_admin_delete_instance(array $args = [], $context = null)
 {
     if (!xarSecurity::check('ManageBlocks')) return;
 
@@ -63,7 +63,7 @@ function blocks_admin_delete_instance()
         $candelete = $accessproperty->check($args);
     }
     if (!$candelete)
-        return xarTpl::module('privileges','user','errors',array('layout' => 'no_privileges'));
+        return xarController::badRequest('no_privileges', $context);
 
     if (!xarVar::fetch('confirm', 'checkbox', 
         $confirmed, false, xarVar::NOT_REQUIRED)) return;

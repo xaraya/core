@@ -21,7 +21,7 @@
  *     array<int> $args['itemids'] array of item ids to get
  * @return array<mixed> the itemlink(s) for the item(s).
  */
-function blocks_userapi_getitemlinks(Array $args=array())
+function blocks_userapi_getitemlinks(array $args = [], $context = null)
 {
     extract($args);
 
