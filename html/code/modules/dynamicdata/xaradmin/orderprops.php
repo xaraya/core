@@ -17,7 +17,7 @@
  *
  * @return boolean|void true on success and redirect to modifyprop
  */
-function dynamicdata_admin_orderprops()
+function dynamicdata_admin_orderprops(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditDynamicData')) {

@@ -12,7 +12,7 @@
  */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function dynamicdata_admin_rename_static_table()
+function dynamicdata_admin_rename_static_table(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminDynamicData')) {

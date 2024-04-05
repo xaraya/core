@@ -14,7 +14,7 @@
 /**
  * generate the common admin menu configuration
  */
-function dynamicdata_adminapi_menu()
+function dynamicdata_adminapi_menu(array $args = [], $context = null)
 {
     // Initialise the array that will hold the menu configuration
     $menu = [];

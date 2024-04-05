@@ -483,7 +483,7 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
     return $data;
 }
 
-function dynamicdata_sync_relations()
+function dynamicdata_sync_relations(array $args = [], $context = null)
 {
     /*
         // add foreign keys to table links

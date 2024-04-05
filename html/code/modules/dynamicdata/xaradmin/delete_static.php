@@ -12,7 +12,7 @@
  */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function dynamicdata_admin_delete_static()
+function dynamicdata_admin_delete_static(array $args = [], $context = null)
 {
     //Security
     if (!xarSecurity::check('AdminDynamicData')) {
