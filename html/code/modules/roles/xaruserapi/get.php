@@ -22,7 +22,7 @@
  *        string   $args['email'] email of user to get
  * @return mixed user array, or false on failure
  */
-function roles_userapi_get(Array $args=array())
+function roles_userapi_get(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

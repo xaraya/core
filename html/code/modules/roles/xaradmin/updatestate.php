@@ -13,7 +13,7 @@
 /* Update users from roles_admin_showusers
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
-function roles_admin_updatestate()
+function roles_admin_updatestate(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;

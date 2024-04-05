@@ -14,7 +14,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * generate the common admin menu configuration
  */
-function roles_adminapi_menu()
+function roles_adminapi_menu(array $args = [], $context = null)
 {
     // Initialise the array that will hold the menu configuration
     $menu = array();

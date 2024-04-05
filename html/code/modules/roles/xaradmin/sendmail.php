@@ -11,7 +11,7 @@
  * @link http://xaraya.info/index.php/release/27.html
  */
 
-function roles_admin_sendmail()
+function roles_admin_sendmail(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('MailRoles')) return;

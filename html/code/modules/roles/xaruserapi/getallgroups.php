@@ -18,7 +18,7 @@
  * @todo this code is unreadable
  */
 
-function roles_userapi_getallgroups(Array $args=array())
+function roles_userapi_getallgroups(array $args = [], $context = null)
 {
     extract($args);
     $xartable = xarDB::getTables();

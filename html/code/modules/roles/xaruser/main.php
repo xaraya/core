@@ -18,7 +18,7 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
 */
-function roles_user_main()
+function roles_user_main(array $args = [], $context = null)
 {
     // Get the default authentication data - this supplies default auth module and corrected login and logout module
     $defaultauthdata=xarMod::apiFunc('roles','user','getdefaultauthdata');

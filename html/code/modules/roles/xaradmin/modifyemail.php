@@ -12,7 +12,7 @@
  * Modify the  email for users
  * @return array<mixed>|bool|void data for the template display
  */
-function roles_admin_modifyemail(Array $args=array())
+function roles_admin_modifyemail(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;

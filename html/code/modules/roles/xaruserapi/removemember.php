@@ -18,7 +18,7 @@
  *        integer  $args['id'] role id
  * @return boolean|void true on succes, false on failure
  */
-function roles_userapi_removemember(Array $args=array())
+function roles_userapi_removemember(array $args = [], $context = null)
 {
     extract($args);
 

@@ -20,7 +20,7 @@
  *        array    $args['idlist'] array of user ids
  * @return mixed array of users, or false on failure
  */
-function roles_userapi_getall(Array $args=array())
+function roles_userapi_getall(array $args = [], $context = null)
 {
     extract($args);
 

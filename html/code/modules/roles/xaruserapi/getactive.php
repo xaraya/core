@@ -17,7 +17,7 @@
  *        boolean   $args['include_anonymous'] whether or not to include anonymous user
  * @return mixed array of users, or false on failure
  */
-function roles_userapi_getactive(Array $args=array())
+function roles_userapi_getactive(array $args = [], $context = null)
 {
     extract($args);
 

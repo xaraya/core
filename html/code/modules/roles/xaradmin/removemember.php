@@ -20,7 +20,7 @@
  * @access public
  * @return string|void
  */
-function roles_admin_removemember()
+function roles_admin_removemember(array $args = [], $context = null)
 {
     // get input from any view of this page
     if (!xarVar::fetch('parentid', 'int', $parentid, xarVar::NOT_REQUIRED)) return;

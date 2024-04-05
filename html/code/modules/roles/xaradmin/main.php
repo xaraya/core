@@ -19,7 +19,7 @@
  *
  * @return mixed output display string or boolean true if redirected
  */
-function roles_admin_main()
+function roles_admin_main(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;

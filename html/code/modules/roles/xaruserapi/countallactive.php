@@ -19,7 +19,7 @@
  *        string   $args['filter']
  * @return integer|void the number of users
  */
-function roles_userapi_countallactive(Array $args=array())
+function roles_userapi_countallactive(array $args = [], $context = null)
 {
     extract($args);
 

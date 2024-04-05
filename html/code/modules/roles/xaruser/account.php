@@ -18,7 +18,7 @@
  * @return array<mixed>|void data for the template display
  * @todo   Finish this function.
  */
-function roles_user_account(array $args = [])
+function roles_user_account(array $args = [], $context = null)
 {
     extract($args);
     if(!xarVar::fetch('moduleload','str', $moduleload, '', xarVar::NOT_REQUIRED)) {return;}

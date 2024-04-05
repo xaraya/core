@@ -16,7 +16,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return array<mixed>|string|void data for the template display
  */
-function roles_admin_showprivileges()
+function roles_admin_showprivileges(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;

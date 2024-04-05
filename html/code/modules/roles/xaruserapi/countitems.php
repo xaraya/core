@@ -15,7 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return integer the number of items held by this module
  */
-function roles_userapi_countitems()
+function roles_userapi_countitems(array $args = [], $context = null)
 {
     // Get database setup
     $dbconn = xarDB::getConn();

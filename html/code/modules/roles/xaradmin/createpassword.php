@@ -13,7 +13,7 @@
 /**
  * createpassword - create a new password for the user
  */
-function roles_admin_createpassword()
+function roles_admin_createpassword(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;

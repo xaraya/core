@@ -14,7 +14,7 @@
  * Update users from roles_admin_showusers
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
-function roles_admin_asknotification(Array $args=array())
+function roles_admin_asknotification(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;

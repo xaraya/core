@@ -17,7 +17,7 @@
  *
  * @return mixed data array for the template display or output display string if invalid data submitted
  */
-function roles_admin_modifyconfig()
+function roles_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminRoles')) return;

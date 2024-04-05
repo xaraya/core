@@ -15,7 +15,7 @@
  * @author Johnny Robeson
  * @return array<mixed>|string|bool|void data for the template display
  */
-function roles_admin_new()
+function roles_admin_new(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AddRoles')) return;

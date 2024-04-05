@@ -17,7 +17,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return array<mixed> the itemtypes of this module and their description *
  */
-function roles_userapi_getitemtypes(Array $args=array())
+function roles_userapi_getitemtypes(array $args = [], $context = null)
 {
     return xarMod::apiFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
 }

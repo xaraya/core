@@ -15,7 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return mixed data array for the template display or output display string if invalid data submitted
  */
-function roles_admin_modify()
+function roles_admin_modify(array $args = [], $context = null)
 {
     $data = [];
     if (!xarVar::fetch('confirm',     'int',   $confirm, 0, xarVar::NOT_REQUIRED)) return;

@@ -17,7 +17,7 @@
  *        boolean  $args['include_anonymous'] whether or not to include anonymous user
  * @return mixed array of users, or false on failure
  */
-function roles_userapi_getallactive(Array $args=array())
+function roles_userapi_getallactive(array $args = [], $context = null)
 {
     // Security Check
     if(!xarSecurity::check('ViewRoles')) return;

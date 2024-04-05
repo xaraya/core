@@ -14,7 +14,7 @@
  * view users
  * @return string|void output display string
  */
-function roles_user_view(Array $args=array())
+function roles_user_view(array $args = [], $context = null)
 {
     if (!xarSecurity::check('ViewRoles')) return;
 

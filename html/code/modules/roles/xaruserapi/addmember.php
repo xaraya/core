@@ -18,7 +18,7 @@
  *        integer  $args['id'] role id
  * @return boolean|void true on succes, false on failure
  */
-function roles_userapi_addmember(Array $args=array())
+function roles_userapi_addmember(array $args = [], $context = null)
 {
     extract($args);
 

@@ -16,7 +16,7 @@
  *        integer  $args['id'] id of the role that is being called
  * @return boolean true on success, false on failure
  */
-function roles_adminapi_recall(Array $args=array())
+function roles_adminapi_recall(array $args = [], $context = null)
 {
     // Get arguments
     extract($args);

@@ -18,7 +18,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return array<mixed> the menulinks for the user menu items of this module.
  */
-function roles_userapi_getmenulinks()
+function roles_userapi_getmenulinks(array $args = [], $context = null)
 {
     //If we have turned on role list (memberlist) display and users have requisite level to see them
     $menulinks = array();

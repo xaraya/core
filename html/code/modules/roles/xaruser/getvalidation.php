@@ -23,7 +23,7 @@
  * @TODO jojodee - validation process, duplication of functions and call to registration module needs to be rethought
  *         Rethink to provide cleaner separation between roles, authentication and registration
  */
-function roles_user_getvalidation()
+function roles_user_getvalidation(array $args = [], $context = null)
 {
     // Security check
     if (!xarSecurity::check('ViewRoles')) return;

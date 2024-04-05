@@ -17,7 +17,7 @@
  * @return array<mixed> data for the template display
  */
 
-function roles_admin_sitelock(Array $args=array())
+function roles_admin_sitelock(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('ManageRoles')) return;

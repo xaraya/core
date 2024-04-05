@@ -14,7 +14,7 @@
  * modify configuration
  * @return array<mixed>|string|bool|void data for the template display
  */
-function roles_admin_modifynotice()
+function roles_admin_modifynotice(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminRoles')) return;

@@ -14,7 +14,7 @@
  *
  * prompts for confirmation
  */
-function roles_admin_delete()
+function roles_admin_delete(array $args = [], $context = null)
 {
     if (!xarVar::fetch('id', 'id', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('itemid', 'id', $itemid, NULL, xarVar::DONT_SET)) return;

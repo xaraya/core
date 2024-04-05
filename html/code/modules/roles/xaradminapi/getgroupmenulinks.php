@@ -16,7 +16,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return array<mixed> the menulinks for the main menu items.
  */
-function roles_adminapi_getgroupmenulinks()
+function roles_adminapi_getgroupmenulinks(array $args = [], $context = null)
 {
 
 // Security Check

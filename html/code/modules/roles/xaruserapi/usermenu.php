@@ -21,7 +21,7 @@
  *        string   $args['object'] user_settings object (default roles_user_settings)
  * @return mixed array on showform, bool on checkinput, invalid = false, valid = true, bool on updateitem, error = false, success = true
  */
-function roles_userapi_usermenu(Array $args=array())
+function roles_userapi_usermenu(array $args = [], $context = null)
 {
     // not logged in?
     if (!xarUser::isLoggedIn()){

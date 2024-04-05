@@ -16,7 +16,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
-function roles_admin_removeprivilege()
+function roles_admin_removeprivilege(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;

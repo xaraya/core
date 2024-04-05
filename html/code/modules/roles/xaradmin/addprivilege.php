@@ -16,7 +16,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
-function roles_admin_addprivilege()
+function roles_admin_addprivilege(array $args = [], $context = null)
 {
     // get parameters
     if (!xarVar::fetch('privid', 'int:1:', $privid, 0, xarVar::NOT_REQUIRED)) return;

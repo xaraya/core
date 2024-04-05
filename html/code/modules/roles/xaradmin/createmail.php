@@ -13,7 +13,7 @@
 /**
  * @return array<mixed>|void data for the template display
   */
-function roles_admin_createmail()
+function roles_admin_createmail(array $args = [], $context = null)
 {
     // TODO allow selection by group or user or all users.
     // Security

@@ -19,7 +19,7 @@
  *        array    $args ['itemids'] array of item ids to get
  * @return array<mixed>|void the itemlink(s) for the item(s).
  */
-function roles_userapi_getitemlinks(Array $args=array())
+function roles_userapi_getitemlinks(array $args = [], $context = null)
 {
     $itemlinks = array();
     if (!xarSecurity::check('ViewRoles', 0)) {

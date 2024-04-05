@@ -20,7 +20,7 @@
  * @throws  ForbiddenOperationException
  * @todo    handle empty subject and/or message?
  */
-function roles_user_email(array $args=[], $context = null)
+function roles_user_email(array $args = [], $context = null)
 {
     // we can only send emails to other members if we are logged in
     if(!xarUser::isLoggedIn())

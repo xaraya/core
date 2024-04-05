@@ -13,7 +13,7 @@
  * display role
  * @return array<mixed>|string|void data for the template display
  */
-function roles_admin_display()
+function roles_admin_display(array $args = [], $context = null)
 {
     if (!xarVar::fetch('itemtype','id',$itemtype, 1, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;

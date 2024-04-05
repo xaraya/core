@@ -16,7 +16,7 @@
  *        integer  $args['itemid']
  * @return string|void representing the user home
  */
-function roles_userapi_getuserhome(Array $args=array())
+function roles_userapi_getuserhome(array $args = [], $context = null)
 {
     extract($args);
 

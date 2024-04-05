@@ -20,7 +20,7 @@
  * @access public
  * @return string|void
  */
-function roles_admin_addmember()
+function roles_admin_addmember(array $args = [], $context = null)
 {
     // get parameters
     if (!xarVar::fetch('id',    'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;

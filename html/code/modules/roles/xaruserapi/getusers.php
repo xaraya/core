@@ -17,7 +17,7 @@
  *        integer  $args['id'] group id
  * @return array<mixed>|void array containing uname, id of the users
  */
-function roles_userapi_getUsers(Array $args=array())
+function roles_userapi_getUsers(array $args = [], $context = null)
 {
     extract($args);
 

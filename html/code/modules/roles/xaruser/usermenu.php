@@ -15,7 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return string|void output display string
  */
-function roles_user_usermenu(Array $args=array())
+function roles_user_usermenu(array $args = [], $context = null)
 {
     if (!xarSecurity::check('ViewRoles')) return;
     extract($args);

@@ -21,7 +21,7 @@
  * @access public
  * @return array<mixed>|string|void data for the template display
  */
-function roles_admin_testprivileges()
+function roles_admin_testprivileges(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;

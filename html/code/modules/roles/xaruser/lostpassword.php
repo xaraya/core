@@ -16,7 +16,7 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @return string|void output display string
  */
-function roles_user_lostpassword()
+function roles_user_lostpassword(array $args = [], $context = null)
 {
     // Security check
     if (!xarSecurity::check('ViewRoles')) return;
