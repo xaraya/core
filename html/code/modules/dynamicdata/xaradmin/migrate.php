@@ -412,7 +412,7 @@ function dynamicdata_admin_migrate(array $args = [], $context = null)
     // migrate item(s)
     if ((!empty($test) || !empty($confirm)) && !empty($data['check'])) {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+            return xarController::badRequest('bad_author', $context);
         }
 
         if (!empty($test)) {
@@ -438,7 +438,7 @@ function dynamicdata_admin_migrate(array $args = [], $context = null)
                 'migrate',
                 ['load' => 1, 'map' => $map]
             );
-            xarController::redirect($url);
+            xarController::redirect($url, null, $context);
             return true;
         }
     }

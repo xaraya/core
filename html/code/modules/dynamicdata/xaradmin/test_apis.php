@@ -166,7 +166,7 @@ function dynamicdata_admin_test_apis(array $args = [], $context = null)
     }
     if (!empty($create_rst)) {
         DataObjectRESTBuilder::create_openapi($restapilist, $storageType, $tokenExpires, $enableTimer, $enableCache);
-        xarController::redirect(xarServer::getCurrentURL(['create_rst' => null]));
+        xarController::redirect(xarServer::getCurrentURL(['create_rst' => null]), null, $context);
         return true;
     }
     if (!xarVar::fetch('create_gql', 'notempty', $create_gql, 0, xarVar::NOT_REQUIRED)) {
@@ -177,7 +177,7 @@ function dynamicdata_admin_test_apis(array $args = [], $context = null)
         sys::import('modules.dynamicdata.class.graphql');
         $extraTypes = xarGraphQL::find_extra_types($graphqllist);
         xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
-        xarController::redirect(xarServer::getCurrentURL(['create_gql' => null]));
+        xarController::redirect(xarServer::getCurrentURL(['create_gql' => null]), null, $context);
         return true;
     }
 

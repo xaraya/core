@@ -86,14 +86,13 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
     );
 
     // Security
-    if (empty($object)) {
-        return xarResponse::NotFound();
-    }
-    if (empty($itemid)) {
-        return xarResponse::NotFound();
+    if (empty($object) || empty($itemid)) {
+        $msg = xarML('Data object not found');
+        return xarController::notFound($msg, $context);
     }
     if (!$object->checkAccess('update')) {
-        return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
+        $msg = xarML('Update #(1) is forbidden', $object->label);
+        return xarController::forbidden($msg, $context);
     }
 
     $args = $object->toArray();
@@ -116,10 +115,12 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
                 // set context if available in function
                 $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid], $context);
                 if (empty($tmpobject)) {
-                    return xarResponse::NotFound();
+                    $msg = xarML('Data object not found');
+                    return xarController::notFound($msg, $context);
                 }
                 if (!$tmpobject->checkAccess('config')) {
-                    return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+                    $msg = xarML('Configure #(1) is forbidden', $tmpobject->label);
+                    return xarController::forbidden($msg, $context);
                 }
 
                 // if we're editing a dynamic object, check its own visibility
@@ -136,7 +137,8 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
                 // set context if available in function
                 $tmpobject = DataObjectFactory::getObject(['objectid' => $object->properties['objectid']->value], $context);
                 if (!$tmpobject->checkAccess('config')) {
-                    return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+                    $msg = xarML('Configure #(1) is forbidden', $tmpobject->label);
+                    return xarController::forbidden($msg, $context);
                 }
                 unset($tmpobject);
 

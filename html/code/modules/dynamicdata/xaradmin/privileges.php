@@ -132,7 +132,7 @@ function dynamicdata_admin_privileges(array $args = [], $context = null)
             'admin',
             'modifyprivilege',
             ['id' => $pid]
-        ));
+        ), null, $context);
         return true;
     }
 

@@ -19,7 +19,7 @@ use xarCache;
 use xarObjectCache;
 use xarMLS;
 use xarMod;
-use xarResponse;
+use xarController;
 use xarTpl;
 use DataObjectFactory;
 use DataPropertyMaster;
@@ -141,7 +141,8 @@ class SearchHandler extends DefaultHandler
             // set context if available in handler
             $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
 
             if (empty($this->tplmodule)) {
@@ -157,8 +158,8 @@ class SearchHandler extends DefaultHandler
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
-            $this->getContext()?->setStatus(403);
-            return xarResponse::Forbidden(xarMLS::translate('Search #(1) is forbidden', $this->object->label));
+            $msg = xarMLS::translate('Search #(1) is forbidden', $this->object->label);
+            return xarController::forbidden($msg, $this->getContext());
         }
 
         if (empty($search['field']) || count($search['field']) < 1) {
@@ -194,7 +195,8 @@ class SearchHandler extends DefaultHandler
             // set context if available in handler
             $result = DataObjectFactory::getObjectList($this->args, $this->getContext());
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
@@ -292,7 +294,8 @@ class SearchHandler extends DefaultHandler
             // set context if available in handler
             $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
 
             if (empty($this->tplmodule)) {
@@ -308,8 +311,8 @@ class SearchHandler extends DefaultHandler
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
-            $this->getContext()?->setStatus(403);
-            return xarResponse::Forbidden(xarMLS::translate('Query #(1) is forbidden', $this->object->label));
+            $msg = xarMLS::translate('Query #(1) is forbidden', $this->object->label);
+            return xarController::forbidden($msg, $this->getContext());
         }
 
         // get where clauses
@@ -358,7 +361,8 @@ class SearchHandler extends DefaultHandler
             // set context if available in handler
             $result = DataObjectFactory::getObjectList($this->args, $this->getContext());
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';

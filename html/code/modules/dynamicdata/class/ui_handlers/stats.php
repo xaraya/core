@@ -22,7 +22,6 @@ use xarMod;
 use xarModVars;
 use xarController;
 use xarServer;
-use xarResponse;
 use xarTpl;
 use DataObjectFactory;
 use DataPropertyMaster;
@@ -32,7 +31,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
 
 /**
  * Dynamic Object User Interface Handler
- *
+ * @todo add context
  */
 class StatsHandler extends DefaultHandler
 {
@@ -159,7 +158,8 @@ class StatsHandler extends DefaultHandler
             // set context if available in handler
             $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
 
             if (empty($this->tplmodule)) {
@@ -184,8 +184,8 @@ class StatsHandler extends DefaultHandler
         }
         */
         if (!$this->object->checkAccess('view')) {
-            $this->getContext()?->setStatus(403);
-            return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
+            $msg = xarMLS::translate('View #(1) is forbidden', $this->object->label);
+            return xarController::forbidden($msg, $this->getContext());
         }
 
         // load previously defined report if available
@@ -382,7 +382,8 @@ class StatsHandler extends DefaultHandler
             // set context if available in handler
             $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
 
             if (empty($this->tplmodule)) {
@@ -398,8 +399,8 @@ class StatsHandler extends DefaultHandler
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
-            $this->getContext()?->setStatus(403);
-            return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
+            $msg = xarMLS::translate('View #(1) is forbidden', $this->object->label);
+            return xarController::forbidden($msg, $this->getContext());
         }
 
         $report['reportlist'] = $this->getReportList();

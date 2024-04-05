@@ -27,7 +27,8 @@ function dynamicdata_admin_access(array $args = [], $context = null)
         return;
     }
     if (empty($itemid)) {
-        return xarResponse::notFound();
+        $msg = xarML('Data object not found');
+        return xarController::notFound($msg, $context);
     }
     if(!xarVar::fetch('name', 'isset', $name, 'objects', xarVar::DONT_SET)) {
         return;
@@ -66,7 +67,8 @@ function dynamicdata_admin_access(array $args = [], $context = null)
 
     // Security
     if (!$tmpobject->checkAccess('config') && !xarSecurity::check('AdminDynamicData', 0)) {
-        return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+        $msg = xarML('Configure #(1) is forbidden', $tmpobject->label);
+        return xarController::forbidden($msg, $context);
     }
     unset($tmpobject);
 
@@ -108,7 +110,7 @@ function dynamicdata_admin_access(array $args = [], $context = null)
 
     if (!empty($confirm)) {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+            return xarController::badRequest('bad_author', $context);
         }
 
         // Get the access information from the template
@@ -182,7 +184,7 @@ function dynamicdata_admin_access(array $args = [], $context = null)
             return;
         }
         if (!empty($return_url)) {
-            xarController::redirect($return_url);
+            xarController::redirect($return_url, null, $context);
         } else {
             xarController::redirect(xarController::URL(
                 'dynamicdata',
@@ -190,7 +192,7 @@ function dynamicdata_admin_access(array $args = [], $context = null)
                 'access',
                 ['itemid' => $itemid,
                 'tplmodule' => $tplmodule]
-            ));
+            ), null, $context);
         }
         return true;
     }

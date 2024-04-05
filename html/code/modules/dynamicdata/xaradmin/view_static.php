@@ -61,10 +61,11 @@ function dynamicdata_admin_view_static(array $args = [], $context = null)
         ['module'   => $module,
         'module_id'    => $module_id,
         'itemtype' => $itemtype,
-        'table'    => $table]
+        'table'    => $table],
+        $context
     );
 
-    $metas = xarMod::apiFunc('dynamicdata', 'util', 'getmeta');
+    $metas = xarMod::apiFunc('dynamicdata', 'util', 'getmeta', [], $context);
     $data['tables'] = [];
     foreach ($metas as $name => $value) {
         $data['tables'][] = ['id' => $name, 'name' => $name];

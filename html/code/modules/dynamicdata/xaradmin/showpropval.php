@@ -76,7 +76,8 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
         return;
     }
     if (!$parentobject->checkAccess('config')) {
-        return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $parentobject->label));
+        $msg = xarML('Configure #(1) is forbidden', $parentobject->label);
+        return xarController::forbidden($msg, $context);
     }
     // @todo For now, always add a reference to the parent object? - see DataPropertyMaster::addProperty()
     //unset($parentobject);
@@ -125,7 +126,7 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
                 // store the updated configuration rule back in the value
                 $myobject->properties['configuration']->value = $property->configuration;
                 if (!xarSec::confirmAuthKey()) {
-                    return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+                    return xarController::badRequest('bad_author', $context);
                 }
 
                 $newid = $myobject->updateItem();
@@ -135,7 +136,7 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
 
                 if (empty($exit)) {
                     $return_url = xarController::URL('dynamicdata', 'admin', 'showpropval', ['itemid' => $itemid]);
-                    xarController::redirect($return_url);
+                    xarController::redirect($return_url, null, $context);
                     return true;
                 }
             }
@@ -152,7 +153,7 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
                         ['itemid' => $parentobjectid]
                     );
                 }
-                xarController::redirect($return_url);
+                xarController::redirect($return_url, null, $context);
                 return true;
             }
             // show preview/updated values
@@ -233,14 +234,14 @@ function dynamicdata_config_propval($proptype)
             /*
             // CHECKME: allow updating the default configuration for a property type someday ? See
             //          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
-                        if (!empty($confirm)) {
-                            if (!xarSec::confirmAuthKey()) {
-                                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-                            }
+            if (!empty($confirm)) {
+                if (!xarSec::confirmAuthKey()) {
+                    return xarController::badRequest('bad_author', $context);
+                }
             // TODO: we need some method in PropertyRegistration to update a property type ;-)
 
             // TODO: we need some way to avoid overwriting this whenever we flush property types
-                        }
+            }
             */
         } else {
             $data['invalid'] = $property->invalid;

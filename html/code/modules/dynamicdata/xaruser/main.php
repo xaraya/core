@@ -34,7 +34,7 @@ function dynamicdata_user_main(array $args = [], $context = null)
             'truecurrenturl' => $truecurrenturl],
             $context
         );
-        xarController::redirect($urldata['redirecturl'], 302, $context);
+        xarController::redirect($urldata['redirecturl'], null, $context);
         return true;
     }
 
@@ -54,7 +54,7 @@ function dynamicdata_user_main(array $args = [], $context = null)
         if (is_array($starter) && xarSec::confirmAuthKey()) {
             $startlist = array_keys($starter);
             xarModVars::set('dynamicdata', 'starter_object_list', serialize($startlist));
-            xarController::redirect(xarServer::getCurrentURL(['update'=> null]));
+            xarController::redirect(xarServer::getCurrentURL(['update'=> null]), null, $context);
             return true;
         }
     }

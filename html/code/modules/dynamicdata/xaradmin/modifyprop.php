@@ -71,7 +71,8 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
         // set context if available in function
         $tmpobject = DataObjectFactory::getObject($objectinfo, $context);
         if (!$tmpobject->checkAccess('config')) {
-            return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+            $msg = xarML('Configure #(1) is forbidden', $tmpobject->label);
+            return xarController::forbidden($msg, $context);
         }
         if ($objectid <= 3) {
             // always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
@@ -130,7 +131,8 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
     try {
         $data['sources'] = DataStoreFactory::getDataSources($object);
     } catch (Exception $e) {
-        return xarResponse::NotFound($e->getMessage());
+        $msg = $e->getMessage();
+        return xarController::notFound($msg, $context);
     }
 
     $isprimary = 0;

@@ -55,8 +55,12 @@ function dynamicdata_admin_orderprops()
         throw new BadParameterException($vars, $msg);
     }
 
+    // @todo presumably this was removed for Ajax calls? But confirmAuthKey() already skips them
     if (!xarSec::confirmAuthKey()) {
-        //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        //return xarController::badRequest('bad_author', $context);
+        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+        $vars = ['authid', 'admin', 'orderprops', 'dynamicdata'];
+        throw new BadParameterException($vars, $msg);
     }
 
     $objectinfo = DataObjectFactory::getObjectInfo(

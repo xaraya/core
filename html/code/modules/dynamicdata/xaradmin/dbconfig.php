@@ -66,7 +66,7 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
                 'dynamicdata',
                 'admin',
                 'dbconfig',
-            ));
+            ), null, $context);
             return true;
         }
         $data['db'] = $db;

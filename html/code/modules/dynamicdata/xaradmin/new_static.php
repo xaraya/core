@@ -10,12 +10,13 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
  */
-/**
- * @return mixed data array for the template display or output display string if invalid data submitted
- */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function dynamicdata_admin_new_static()
+/**
+ * @return mixed data array for the template display or output display string if invalid data submitted
+ * @todo use context
+ */
+function dynamicdata_admin_new_static(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminDynamicData')) {
@@ -37,7 +38,7 @@ function dynamicdata_admin_new_static()
 
         // Check for a valid confirmation key
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+            return xarController::badRequest('bad_author', $context);
         }
 
         // Get the data from the form

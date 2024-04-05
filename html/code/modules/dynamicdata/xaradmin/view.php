@@ -79,7 +79,8 @@ function dynamicdata_admin_view(array $args = [], $context = null)
     }
 
     if (!$object->checkAccess('view')) {
-        return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
+        $msg = xarML('View #(1) is forbidden', $object->label);
+        return xarController::forbidden($msg, $context);
     }
 
     // Check if we are filtering
@@ -102,6 +103,7 @@ function dynamicdata_admin_view(array $args = [], $context = null)
 
     // Pass the object list to the template
     $data['object'] = $object;
+    $data['context'] = $object->getContext();
 
     // TODO: another stray
     $data['catid'] = $catid;

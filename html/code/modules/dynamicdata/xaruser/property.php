@@ -23,7 +23,8 @@ function dynamicdata_user_property(array $args = [], $context = null)
         return;
     }
     if (empty($property) || empty($act)) {
-        return xarResponse::NotFound();
+        $msg = xarML('Property not found');
+        return xarController::notFound($msg, $context);
     }
 
     try {
@@ -36,7 +37,8 @@ function dynamicdata_user_property(array $args = [], $context = null)
             echo "<pre>";
             print($e->__toString());
         } else {
-            return xarResponse::NotFound();
+            $msg = xarML('Property not found');
+            return xarController::notFound($msg, $context);
         }
     }
 }

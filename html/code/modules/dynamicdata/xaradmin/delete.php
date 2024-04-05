@@ -32,7 +32,8 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
         return;
     }
     if (empty($itemid)) {
-        return xarResponse::notFound();
+        $msg = xarML('Data object not found');
+        return xarController::notFound($msg, $context);
     }
     if(!xarVar::fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
         return;
@@ -73,7 +74,8 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
 
     // Security
     if (!$myobject->checkAccess('delete')) {
-        return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $myobject->label));
+        $msg = xarML('Delete #(1) is forbidden', $myobject->label);
+        return xarController::forbidden($msg, $context);
     }
 
     $data = $myobject->toArray();
@@ -85,7 +87,7 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
 
     if (!empty($noconfirm)) {
         if (!empty($return_url)) {
-            xarController::redirect($return_url);
+            xarController::redirect($return_url, null, $context);
         } elseif (!empty($table)) {
             xarController::redirect(xarController::URL(
                 'dynamicdata',
@@ -93,7 +95,7 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
                 'view',
                 ['table'     => $table,
                 'tplmodule' => $data['tplmodule']]
-            ));
+            ), null, $context);
         } else {
             xarController::redirect(xarController::URL(
                 'dynamicdata',
@@ -101,7 +103,7 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
                 'view',
                 ['itemid'    => $data['objectid'],
                 'tplmodule' => $data['tplmodule']]
-            ));
+            ), null, $context);
         }
         return true;
     }
@@ -115,7 +117,8 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
             // set context if available in function
             $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->itemid], $context);
             if (!$tmpobject->checkAccess('config')) {
-                return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+                $msg = xarML('Configure #(1) is forbidden', $tmpobject->label);
+                return xarController::forbidden($msg, $context);
             }
 
             // if we're editing a dynamic object, check its own visibility
@@ -132,7 +135,8 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
             // set context if available in function
             $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->properties['objectid']->value], $context);
             if (!$tmpobject->checkAccess('config')) {
-                return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+                $msg = xarML('Configure #(1) is forbidden', $tmpobject->label);
+                return xarController::forbidden($msg, $context);
             }
             unset($tmpobject);
         }
@@ -161,7 +165,7 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
     // If we get here it means that the user has confirmed the action
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+        return xarController::badRequest('bad_author', $context);
     }
 
     // special case for a dynamic object : delete its properties too // TODO: and items
@@ -176,7 +180,7 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
 
     $itemid = $myobject->deleteItem();
     if (!empty($return_url)) {
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     } elseif (!empty($table)) {
         xarController::redirect(xarController::URL(
             'dynamicdata',
@@ -184,7 +188,7 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
             'view',
             ['table'     => $table,
             'tplmodule' => $tplmodule]
-        ));
+        ), null, $context);
     } else {
         xarController::redirect(xarController::URL(
             'dynamicdata',
@@ -192,7 +196,7 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
             'view',
             ['name' => $myobject->name,
             'tplmodule' => $tplmodule]
-        ));
+        ), null, $context);
     }
 
     return true;

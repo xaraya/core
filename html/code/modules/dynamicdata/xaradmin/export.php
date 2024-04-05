@@ -68,7 +68,8 @@ function dynamicdata_admin_export(array $args = [], $context = null)
     }
     // check security of the object
     if (!$myobject->checkAccess('config')) {
-        return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $myobject->label));
+        $msg = xarML('Configure #(1) is forbidden', $myobject->label);
+        return xarController::forbidden($msg, $context);
     }
 
     $proptypes = DataPropertyMaster::getPropertyTypes();

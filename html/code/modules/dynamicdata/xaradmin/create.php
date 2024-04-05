@@ -59,7 +59,7 @@ function dynamicdata_admin_create(array $args = [], $context = null)
     }
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+        return xarController::badRequest('bad_author', $context);
     }
 
     // set context if available in function
@@ -73,7 +73,8 @@ function dynamicdata_admin_create(array $args = [], $context = null)
 
     // Security (Bug:
     if (!$myobject->checkAccess('create')) {
-        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
+        $msg = xarML('Create #(1) is forbidden', $myobject->label);
+        return xarController::forbidden($msg, $context);
     }
 
     $isvalid = $myobject->checkInput();
@@ -115,14 +116,14 @@ function dynamicdata_admin_create(array $args = [], $context = null)
     } // throw back
 
     if (!empty($return_url)) {
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     } elseif (!empty($table)) {
         xarController::redirect(xarController::URL(
             'dynamicdata',
             'admin',
             'view',
             ['table' => $table]
-        ));
+        ), null, $context);
     } else {
         xarController::redirect(xarController::URL(
             'dynamicdata',
@@ -130,7 +131,7 @@ function dynamicdata_admin_create(array $args = [], $context = null)
             'view',
             ['itemid' => $objectid,
             'tplmodule' => $tplmodule],
-        ));
+        ), null, $context);
     }
     return true;
 }
