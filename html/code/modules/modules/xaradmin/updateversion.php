@@ -16,7 +16,7 @@
  *
  * @author Xaraya Development Team
  */
-function modules_admin_updateversion()
+function modules_admin_updateversion(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminModules')) return;

@@ -14,7 +14,7 @@
  *
  * @author Xaraya Development Team
  */
-function modules_admin_updatehooks()
+function modules_admin_updatehooks(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('ManageModules')) {return;}

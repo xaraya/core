@@ -16,7 +16,7 @@
  *        integer  $args['regId'] the id number of the module to update
  * @return boolean|void true on success, false on failure
  */
-function modules_adminapi_updateversion(Array $args=array())
+function modules_adminapi_updateversion(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

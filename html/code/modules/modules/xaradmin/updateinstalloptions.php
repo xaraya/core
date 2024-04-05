@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/1.html
  */
 
- function modules_admin_updateinstalloptions()
+ function modules_admin_updateinstalloptions(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

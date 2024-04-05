@@ -23,7 +23,7 @@
 
 // Remove/Deactivate/Install GUI functions are basically copied and pasted versions...
 // Refactor later on
-function modules_admin_remove ()
+function modules_admin_remove(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

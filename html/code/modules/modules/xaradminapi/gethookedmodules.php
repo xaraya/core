@@ -21,7 +21,7 @@
  * @return array<mixed> modules calling this hook module
  * @throws EmptyParameterException
  */
-function modules_adminapi_gethookedmodules(Array $args=array())
+function modules_adminapi_gethookedmodules(array $args = [], $context = null)
 {
 // Security Check (called by other modules, so we can't use one this here)
 //    if(!xarSecurity::check('ManageModules')) return;

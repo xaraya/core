@@ -17,7 +17,7 @@
  *        integer  $args['regid'] the id of the module
  * @return boolean|void true on success, false on failure
  */
-function modules_adminapi_removemissing(Array $args=array())
+function modules_adminapi_removemissing(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

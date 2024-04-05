@@ -17,7 +17,7 @@
  * @return array<mixed>|void data for the template display
  * @todo some facelift
  */
-function modules_admin_modinfo()
+function modules_admin_modinfo(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('ViewModules')) return; 

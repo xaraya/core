@@ -21,7 +21,7 @@
  * @param int id the module id to deactivate
  * @return boolean|string|void true on success, false on failure
  */
-function modules_admin_deactivate ()
+function modules_admin_deactivate (array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

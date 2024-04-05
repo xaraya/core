@@ -19,7 +19,7 @@
  * @throws EmptyParameterException
  * @todo Do the db changes in a transaction to completely fail or succeed?
  */
-function modules_adminapi_setstate(Array $args=array())
+function modules_adminapi_setstate(array $args = [], $context = null)
 {
     // Get arguments from argument array
 

@@ -16,7 +16,7 @@
  *        string   $args['modName'] optional module we're looking for
  * @return array<mixed>|void of known hooks
  */
-function modules_adminapi_gethooklist(Array $args=array())
+function modules_adminapi_gethooklist(array $args = [], $context = null)
 {
     // Security Check
     // @CHECKME: is this info not useful to other modules?

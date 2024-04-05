@@ -20,7 +20,7 @@
  * @return boolean|string|void true on success, false on failure
  * 
  */
-function modules_admin_regenerate()
+function modules_admin_regenerate(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

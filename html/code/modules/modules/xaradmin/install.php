@@ -25,7 +25,7 @@
  */
 sys::import('modules.modules.class.installer');
 
-function modules_admin_install()
+function modules_admin_install(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

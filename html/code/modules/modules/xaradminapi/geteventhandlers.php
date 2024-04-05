@@ -15,7 +15,7 @@
  * @return boolean null on exceptions, true on sucess to update
  * @deprecated 2.4.0 replaced with xarEvent code and event observers
  */
-function modules_adminapi_geteventhandlers()
+function modules_adminapi_geteventhandlers(array $args = [], $context = null)
 {
     static $check = true;  // switch to always true
 

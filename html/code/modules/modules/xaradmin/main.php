@@ -21,7 +21,7 @@
  *
  * @author Xaraya Development Team
  */
-function modules_admin_main()
+function modules_admin_main(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditModules')) return;

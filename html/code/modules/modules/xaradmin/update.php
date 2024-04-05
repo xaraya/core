@@ -17,7 +17,7 @@
  * @param string newdescription the new description
  * @return mixed true on success, error message on failure
  */
-function modules_admin_update()
+function modules_admin_update(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditModules')) return; 

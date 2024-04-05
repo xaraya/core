@@ -25,7 +25,7 @@
  *        integer  $args['regid'] - optional regid to retrieve
  * @return array<mixed>|bool modules from the file system
  */
-function modules_adminapi_getfilemodules(Array $args=array())
+function modules_adminapi_getfilemodules(array $args = [], $context = null)
 {
     // Get arguments
     extract($args);

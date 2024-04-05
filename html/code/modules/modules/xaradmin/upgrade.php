@@ -20,7 +20,7 @@
  * @param int id the module id to upgrade
  * @return bool|string|void true on success, false on failure
  */
-function modules_admin_upgrade()
+function modules_admin_upgrade(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

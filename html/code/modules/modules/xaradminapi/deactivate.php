@@ -21,7 +21,7 @@
  * @return boolean|void true on success, false on failure
  * @throws EmptyParameterException
  */
-function modules_adminapi_deactivate(Array $args=array())
+function modules_adminapi_deactivate(array $args = [], $context = null)
 {
     extract($args);
 

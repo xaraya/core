@@ -16,7 +16,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return boolean|void result of action
 **/
-function modules_adminapi_standarddeinstall(Array $args=array())
+function modules_adminapi_standarddeinstall(array $args = [], $context = null)
 {
     extract($args);
     if (!isset($module)) return false;

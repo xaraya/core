@@ -22,7 +22,7 @@
  * @param int id the module id to activate
  * @return boolean|string|void true on success, false on failure
  */
-function modules_admin_activate()
+function modules_admin_activate(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

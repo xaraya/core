@@ -21,7 +21,7 @@
  * @param string return_url optional return URL after updating the hooks
  * @return array<mixed>|string|void data for the template display
  */
-function modules_admin_modify(Array $args=array())
+function modules_admin_modify(array $args = [], $context = null)
 {
     
     extract($args);

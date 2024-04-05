@@ -18,7 +18,7 @@
  * @return boolean|void true on success, false on failure in the called function
  * @throws EmptyParameterException
  */
-function modules_adminapi_executeinitfunction(Array $args=array())
+function modules_adminapi_executeinitfunction(array $args = [], $context = null)
 {
     // Security Check
     if(!xarSecurity::check('AdminModules')) return;

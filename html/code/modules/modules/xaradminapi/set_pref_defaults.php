@@ -15,7 +15,7 @@
  * @access public
  * @return boolean|void true on success, false on failure
  */
-function modules_adminapi_set_pref_defaults()
+function modules_adminapi_set_pref_defaults(array $args = [], $context = null)
 {
     // no beating around the bush here
     if(xarModUserVars::get('modules', 'hidecore'))     xarModUserVars::delete('modules', 'hidecore');

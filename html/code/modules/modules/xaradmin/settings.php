@@ -14,7 +14,7 @@
  *
  * @author Xaraya Development Team
  */
-function modules_admin_settings()
+function modules_admin_settings(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminModules')) return;

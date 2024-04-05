@@ -17,7 +17,7 @@
  *        string   $args['name'] module's name
  * @return boolean|void true on success, false on failure
  */
-function modules_adminapi_remove(Array $args=array())
+function modules_adminapi_remove(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

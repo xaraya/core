@@ -16,7 +16,7 @@
  * @param int id the module's registered id
  * @return mixed true on success, error message on failure
  */
-function modules_admin_viewerror()
+function modules_admin_viewerror(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

@@ -20,7 +20,7 @@
  * @return boolean true on success, false on failure
  * @throws EmptyParameterException
  */
-function modules_adminapi_disablehooks(Array $args=array())
+function modules_adminapi_disablehooks(array $args = [], $context = null)
 {
     // Security Check (called by other modules, so we can't use one this here)
     //    if(!xarSecurity::check('ManageModules')) return;

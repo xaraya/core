@@ -15,7 +15,7 @@
  * @access public
  * @return array<mixed>|void data for the template display
  */
-function modules_admin_prefs()
+function modules_admin_prefs(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminModules')) return;

@@ -21,7 +21,7 @@
  * @access  public
  * @return  mixed data array for the template display or output display string if invalid data submitted
 */
-function modules_admin_modifyconfig()
+function modules_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminModules')) return;

@@ -18,7 +18,7 @@
  * @param bool usercapable the whether the module shows a user menu
  * @return mixed true on success, error message on failure
  */
-function modules_admin_updateproperties()
+function modules_admin_updateproperties(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 
