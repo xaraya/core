@@ -24,7 +24,7 @@
  *        string  $args[type] type to render, optional
  * @return string templated output of js to render
 **/    
-function themes_userapi_renderjs($args)
+function themes_userapi_renderjs(array $args = [], $context = null)
 {    
     sys::import('modules.themes.class.xarjs');
     $javascript = xarJS::getInstance();

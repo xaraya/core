@@ -20,7 +20,7 @@
  * @param int id $ the theme id to initialise
  * @return boolean|string|void true on success, false on failure
  */
-function themes_admin_initialise()
+function themes_admin_initialise(array $args = [], $context = null)
 { 
     // Security
     if (!xarSecurity::check('AdminThemes')) return; 

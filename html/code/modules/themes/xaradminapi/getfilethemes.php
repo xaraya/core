@@ -15,7 +15,7 @@
  * @author Marty Vance
  * @return array<mixed> the themes from the file system
  */
-function themes_adminapi_getfilethemes()
+function themes_adminapi_getfilethemes(array $args = [], $context = null)
 {
     $fileThemes = array();
     $basedir = xarConfigVars::get(null,'Site.BL.ThemesDirectory');

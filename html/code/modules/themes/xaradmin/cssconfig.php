@@ -17,7 +17,7 @@
 * @author AndyV_at_Xaraya_dot_Com
  * @return array<mixed>|void data for the template display
 */
-function themes_admin_cssconfig()
+function themes_admin_cssconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminThemes',0)) return;

@@ -22,7 +22,7 @@
  * @access public
  * @return boolean|string|void true on success, false on failure
  */
-function themes_admin_regenerate()
+function themes_admin_regenerate(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminThemes')) return; 

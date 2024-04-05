@@ -21,7 +21,7 @@
  * @param int id $ the theme id
  * @return boolean|string|void true on success, false on failure
  */
-function themes_admin_remove()
+function themes_admin_remove(array $args = [], $context = null)
 { 
     // Security
     if (!xarSecurity::check('ManageThemes')) return; 

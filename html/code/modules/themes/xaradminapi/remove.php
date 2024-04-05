@@ -20,7 +20,7 @@
  * @return boolean|void true on success, false on failure
  * @throws ForbiddenOperationException
  */
-function themes_adminapi_remove(Array $args=array())
+function themes_adminapi_remove(array $args = [], $context = null)
 {
     extract($args);
 

@@ -16,7 +16,7 @@
  * @author Marty Vance
  * @return boolean|void true on success, false on failure
  */
-function themes_adminapi_regenerate()
+function themes_adminapi_regenerate(array $args = [], $context = null)
 {
 // Security Check
     if(!xarSecurity::check('AdminThemes')) return;

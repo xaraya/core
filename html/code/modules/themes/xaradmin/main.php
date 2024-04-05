@@ -22,7 +22,7 @@
  *
  * @author Marty Vance
  */
-function themes_admin_main()
+function themes_admin_main(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditThemes')) return;

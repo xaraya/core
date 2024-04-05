@@ -13,7 +13,7 @@
  */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function themes_admin_new_config()
+function themes_admin_new_config(array $args = [], $context = null)
 {
     if(!xarSecurity::check('AddThemes')) return;
 

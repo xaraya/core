@@ -19,7 +19,7 @@
  * @return array<mixed>|string|void data for the template display
  * @todo some facelift
  */
-function themes_admin_themesinfo()
+function themes_admin_themesinfo(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditThemes')) return; 

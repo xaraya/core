@@ -13,7 +13,7 @@
  */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function themes_admin_delete_config()
+function themes_admin_delete_config(array $args = [], $context = null)
 {
     $data = [];
     if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;

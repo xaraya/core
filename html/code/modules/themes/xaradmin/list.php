@@ -15,7 +15,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * @return array<mixed>|bool data for the template display
  */
-function themes_admin_list()
+function themes_admin_list(array $args = [], $context = null)
 {
     xarController::redirect(xarController::URL('themes', 'admin', 'view'));
     return true;

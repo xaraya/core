@@ -19,7 +19,7 @@
  * @return boolean true on success, false on failure
  * @throws EmptyParameterException
  */
-function themes_adminapi_initialise(Array $args=array())
+function themes_adminapi_initialise(array $args = [], $context = null)
 {
 
     extract($args);

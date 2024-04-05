@@ -18,7 +18,7 @@
  * @param  $ 'action' action taken on cache file
  * @param $ 'confirm' confirm action on delete
  */
-function themes_admin_cacheview($args)
+function themes_admin_cacheview(array $args = [], $context = null)
 {
     /* Get parameters from whatever input we need. */
     if (!xarVar::fetch('action',  'str:1',  $action,  false, xarVar::NOT_REQUIRED)) return;

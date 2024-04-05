@@ -20,7 +20,7 @@
  *
  * @author Marty Vance
  */
-function themes_admin_modifyconfig()
+function themes_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminThemes')) return;

@@ -21,7 +21,7 @@
  * @param int id the module id to initialise
  * @return boolean|string|void true on success, false on failure
  */
-function themes_admin_install()
+function themes_admin_install(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminThemes')) return; 

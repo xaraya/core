@@ -18,7 +18,7 @@
 * @author AndyV_at_Xaraya_dot_Com
  * @return boolean|string|void true on success, false on failure
 */
-function themes_admin_corecssupdate()
+function themes_admin_corecssupdate(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminThemes')) return;

@@ -14,7 +14,7 @@
 
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function themes_admin_view_csslibs()
+function themes_admin_view_csslibs(array $args = [], $context = null)
 {
     // Security
      if(!xarSecurity::check('EditThemes')) return;

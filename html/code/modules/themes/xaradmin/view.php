@@ -15,7 +15,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * @return array<mixed>|string|void data for the template display
  */
-function themes_admin_view()
+function themes_admin_view(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminThemes')) return;

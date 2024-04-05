@@ -22,7 +22,7 @@
  * @param int id $ the theme id to activate
  * @return boolean|string|void true on success, false on failure
  */
-function themes_admin_activate()
+function themes_admin_activate(array $args = [], $context = null)
 { 
     // Security
     if (!xarSecurity::check('AdminThemes')) return; 

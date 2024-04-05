@@ -16,7 +16,7 @@
  * @author Marty Vance
  * @return array<mixed>|void of themes in the database
  */
-function themes_adminapi_getdbthemes()
+function themes_adminapi_getdbthemes(array $args = [], $context = null)
 {
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();

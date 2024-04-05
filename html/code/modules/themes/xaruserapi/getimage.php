@@ -25,7 +25,7 @@
  *         $args[property] name of property, required when in property scope
  * @return string url to image
 **/  
-function themes_userapi_getimage($args)
+function themes_userapi_getimage(array $args = [], $context = null)
 {   
     extract($args);
     if (empty($file)) return '';

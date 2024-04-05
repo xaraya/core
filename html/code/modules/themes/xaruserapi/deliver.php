@@ -21,7 +21,7 @@
  * @todo option to turn on/off style comments in UI, cfr template comments
  * @return string templated output of css to render
 **/
-function themes_userapi_deliver(Array $args=array())
+function themes_userapi_deliver(array $args = [], $context = null)
 {
     sys::import('modules.themes.class.xarcss');
     $css = xarCSS::getInstance();

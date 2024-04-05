@@ -21,7 +21,7 @@
  * @param array<string, mixed> $args array of optional parameters (todo)
  * @return string templated output of meta tags to render
 **/    
-function themes_userapi_rendermeta($args)
+function themes_userapi_rendermeta(array $args = [], $context = null)
 {    
     sys::import('modules.themes.class.xarmeta');
     $meta = xarMeta::getInstance();
