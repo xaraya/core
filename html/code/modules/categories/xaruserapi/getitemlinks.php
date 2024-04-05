@@ -19,7 +19,7 @@
  * @param $args['itemids'] array of item ids to get
  * @return array<mixed> Returns array containing the itemlink(s) for the item(s).
  */
-function categories_userapi_getitemlinks($args)
+function categories_userapi_getitemlinks(array $args = [], $context = null)
 {
     $itemlinks = array();
     $catlist = xarMod::apiFunc('categories','user','getcatinfo',

@@ -17,7 +17,7 @@
  * 
  * @return bool|string|null Returns true on success, null on failure
  */
-function categories_admin_update()
+function categories_admin_update(array $args = [], $context = null)
 {
     $data = [];
     //Checkbox work for submit buttons too
@@ -35,7 +35,7 @@ function categories_admin_update()
 
     // Root category cannot be modified except by the site admin
     if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
-        return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
+        return xarController::badRequest('no_privileges', $context);
 
     //Reverses the order of cids with the 'last children' option:
     //Look at bug #997

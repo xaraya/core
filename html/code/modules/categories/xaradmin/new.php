@@ -19,7 +19,7 @@
      * 
      * @return array<mixed>|null Returns display data array on success, null on failure
      */
-    function categories_admin_new()
+    function categories_admin_new(array $args = [], $context = null)
     {
         $data = [];
         if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}

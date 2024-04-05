@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|void Returns display data array on succes, null on failure
  */
-function categories_admin_view()
+function categories_admin_view(array $args = [], $context = null)
 {
     $data = [];
     // Get parameters

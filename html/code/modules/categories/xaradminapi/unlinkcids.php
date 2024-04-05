@@ -21,7 +21,7 @@
  * @return boolean|null Returns true on success, null on failure
  * @throws BadParameterException Thrown if invalid parameters have been given.
  */
-function categories_adminapi_unlinkcids($args)
+function categories_adminapi_unlinkcids(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

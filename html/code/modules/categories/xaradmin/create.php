@@ -17,7 +17,7 @@
  * 
  * @return boolean|string|void Returns true on success, string on security failure
  */
-function categories_admin_create()
+function categories_admin_create(array $args = [], $context = null)
 {
     // Confirm authorisation code
     if (!xarSec::confirmAuthKey()) {

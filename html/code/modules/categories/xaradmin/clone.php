@@ -19,7 +19,7 @@
  * 
  * @return array<mixed>|string|bool|void Returns display data array on success, null on failure
  */
-function categories_admin_clone()
+function categories_admin_clone(array $args = [], $context = null)
 {
     $data = [];
     if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}
@@ -43,7 +43,7 @@ function categories_admin_clone()
         $access = xarSecurity::check('',0,'All',"All:" . $data['object']->name . ":" . "All",0,'',0,700);
 
         if (!$access)
-            return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
+            return xarController::badRequest('no_privileges', $context);
 
         $data['name'] = $data['object']->properties['name']->value;
         if(!xarVar::fetch('newname',   'str', $newname,   "", xarVar::NOT_REQUIRED)) {return;}

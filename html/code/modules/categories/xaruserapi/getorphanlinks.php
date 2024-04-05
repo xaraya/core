@@ -21,7 +21,7 @@
  * @param $args['startnum'] optional start at this number (1-based)
  * @return array<mixed>|bool|void Returns an array of orphan links, or false on failure
  */
-function categories_userapi_getorphanlinks($args)
+function categories_userapi_getorphanlinks(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

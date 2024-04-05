@@ -20,7 +20,7 @@
  * @param $args['extrainfo'] extra information
  * @return array<mixed> Returns data array.
  */
-function categories_adminapi_updateconfighook($args)
+function categories_adminapi_updateconfighook(array $args = [], $context = null)
 {
     sys::import('modules.dynamicdata.class.properties.master');
     $picker = DataPropertyMaster::getProperty(array('name' => 'categorypicker'));

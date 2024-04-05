@@ -38,7 +38,7 @@
  *               ...
  *               'moduleid' => 'nuke_categories_linkage.module_id')
  */
-function categories_userapi_leftjoin($args)
+function categories_userapi_leftjoin(array $args = [], $context = null)
 {
     /**
      * Pending 

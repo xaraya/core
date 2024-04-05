@@ -20,7 +20,7 @@
  * @return string Returns display string
  * @throws BadParameterException Thrown if modid was not found
  */
-function categories_admin_modifyconfighook($args)
+function categories_admin_modifyconfighook(array $args = [], $context = null)
 {
     extract($args);
 

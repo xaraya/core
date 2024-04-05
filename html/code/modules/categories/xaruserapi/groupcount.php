@@ -25,7 +25,7 @@
  * @param $args['groupcids'] the number of categories you want items grouped by
  * @return array<mixed>|void Returns array of number of items per category, or caterogies per item
  */
-function categories_userapi_groupcount($args)
+function categories_userapi_groupcount(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

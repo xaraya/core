@@ -22,7 +22,7 @@
  * @param $args['groupcids'] the number of categories you want items grouped by
  * @return array<mixed> Number of items per category, or caterogies per item
  */
-function categories_userapi_deepcount($args)
+function categories_userapi_deepcount(array $args = [], $context = null)
 {
     extract($args);
 

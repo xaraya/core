@@ -17,7 +17,7 @@
      * 
      * @return mixed Returns display data array or true on success, null on failure.
      */
-    function categories_admin_modifyconfig()
+    function categories_admin_modifyconfig(array $args = [], $context = null)
     {
         // Security Check
         if (!xarSecurity::check('AdminCategories')) return;

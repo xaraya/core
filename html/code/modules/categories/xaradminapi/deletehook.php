@@ -20,7 +20,7 @@
  * @return array<mixed>|void Data array
  * @throws BadParameterException Thrown if object was not found
  */
-function categories_adminapi_deletehook($args)
+function categories_adminapi_deletehook(array $args = [], $context = null)
 {
     extract($args);
 

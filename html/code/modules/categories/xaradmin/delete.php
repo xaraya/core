@@ -21,7 +21,7 @@
  * @return array<mixed>|bool|string|void Returns display data array on success, null on failure
  * @throws BadParameterException Thrown if given category was not found in API
  */
-function categories_admin_delete()
+function categories_admin_delete(array $args = [], $context = null)
 {
     $data = [];
     if (!xarVar::fetch('itemid','int:1:',$data['itemid'], 0, xarVar::NOT_REQUIRED)) return;
@@ -32,7 +32,7 @@ function categories_admin_delete()
 
     // Root category cannot be deleted except by the site admin
     if (($data['itemid'] == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
-        return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
+        return xarController::badRequest('no_privileges', $context);
 
     // Check for confirmation
     if (empty($confirm)) {

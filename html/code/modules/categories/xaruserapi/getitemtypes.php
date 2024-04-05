@@ -19,7 +19,7 @@
  * @param array<string, mixed> $args Parameter data array
  * @return array<mixed> Returns array containing the item types and their description
  */
-function categories_userapi_getitemtypes($args)
+function categories_userapi_getitemtypes(array $args = [], $context = null)
 {
     $itemtypes = array();
 

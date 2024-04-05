@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|void Returns display data array on success, null on security check failure
  */
-function categories_admin_hooks()
+function categories_admin_hooks(array $args = [], $context = null)
 {
     // Security check
     if(!xarSecurity::check('ManageCategories')) return;

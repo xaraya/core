@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|bool|string|void Returns data array on success, false|null on failure
  */
-function categories_admin_checklinks()
+function categories_admin_checklinks(array $args = [], $context = null)
 {
     // Security Check
     if (!xarSecurity::check('AdminCategories')) return;

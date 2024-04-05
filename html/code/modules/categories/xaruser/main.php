@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|void Returns display data array
  */
-function categories_user_main()
+function categories_user_main(array $args = [], $context = null)
 {
     $data = array();
 

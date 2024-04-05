@@ -21,7 +21,7 @@
  * @param $args['return_itself'] =Boolean= return the cid itself (default false)
  * @return array<mixed>|bool Return array of category info arrays, false on failure
  */
-function categories_userapi_getchildren($args)
+function categories_userapi_getchildren(array $args = [], $context = null)
 {
     extract($args);
 

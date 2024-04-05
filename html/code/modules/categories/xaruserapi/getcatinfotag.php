@@ -30,7 +30,7 @@
  * @param $args Array containing the form field definition of the module, type, id, base, ...
  * @return string Returns category information tag string or an empty string on failure
  */
-function categories_userapi_getcatinfotag($args)
+function categories_userapi_getcatinfotag(array $args = [], $context = null)
 {
     if (!empty($args['runtime'])) {
         // Runtime mode.

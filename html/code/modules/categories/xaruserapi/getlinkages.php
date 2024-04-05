@@ -26,7 +26,7 @@
  * @param $args['groupcids'] the number of categories you want items grouped by
  * @return array<mixed>|void Returns array of linkages with keys either item_id or category_id
  */
-function categories_userapi_getlinkages($args)
+function categories_userapi_getlinkages(array $args = [], $context = null)
 {
     if(!xarSecurity::check('ViewCategoryLink')) return;
 

@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|null Returns display data array on success, null on failure.
  */
-function categories_admin_stats()
+function categories_admin_stats(array $args = [], $context = null)
 {
     // Security Check
     if (!xarSecurity::check('AdminCategories')) return;

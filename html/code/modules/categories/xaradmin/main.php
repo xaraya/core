@@ -17,7 +17,7 @@
  * This function redirects to the view categories function
  * @return bool|array<mixed>|void Returns true on success, false on failure
  */
-function categories_admin_main()
+function categories_admin_main(array $args = [], $context = null)
 {
     // Security check
     if(!xarSecurity::check('EditCategories')) return;

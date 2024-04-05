@@ -23,7 +23,7 @@
  * @param $args['right_id'] The right value for that category (optional)
  * @return int|void Returns number of categories
  */
-function categories_userapi_countcats($args)
+function categories_userapi_countcats(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

@@ -16,7 +16,7 @@
  * Create a new category
  *
  */
-function categories_adminapi_create($args)
+function categories_adminapi_create(array $args = [], $context = null)
 {
     // Make sure we have all the required values
     if (empty($args['name'])) $args['name'] = xarML('New Category');

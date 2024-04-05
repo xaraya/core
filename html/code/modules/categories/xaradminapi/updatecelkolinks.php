@@ -19,7 +19,7 @@
  * @return boolean|null Returns true on success, null on failure.
  * @throws BadParameterException Thrown is invalid parameters have been given.
  */
-function categories_adminapi_updatecelkolinks($args)
+function categories_adminapi_updatecelkolinks(array $args = [], $context = null)
 {
     extract($args);
 

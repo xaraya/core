@@ -19,7 +19,7 @@
  * 
  * @return array<mixed> Array containing menulinks for the main menu items.
  */
-function categories_adminapi_getmenulinks()
+function categories_adminapi_getmenulinks(array $args = [], $context = null)
 {
     return xarMod::apiFunc('base','admin','menuarray',array('module' => 'categories'));
 

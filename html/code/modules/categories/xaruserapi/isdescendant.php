@@ -27,7 +27,7 @@
  * @param $args['include_root'] flag to indicate whether a branch root is included in the check [false]
  * @return boolean|void Returns true if one or more cids is a descendant of one or more of the branch roots
  */
-function categories_userapi_isdescendant($args)
+function categories_userapi_isdescendant(array $args = [], $context = null)
 {
     extract($args);
 

@@ -22,7 +22,7 @@
  * @param array<string, mixed> $args Parameter data array
  * @return array<mixed>|bool|void Return display data array on success, null on failure.
  */
-function categories_admin_privileges($args)
+function categories_admin_privileges(array $args = [], $context = null)
 {
     // Security Check
     if (!xarSecurity::check('AdminCategories')) return;

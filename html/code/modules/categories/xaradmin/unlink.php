@@ -21,7 +21,7 @@
  * 
  * @return boolean|array<mixed>|string|void Returns true on success, null on failure.
  */
-function categories_admin_unlink()
+function categories_admin_unlink(array $args = [], $context = null)
 { 
     // Security Check
     if(!xarSecurity::check('AdminCategories')) return;

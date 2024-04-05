@@ -20,7 +20,7 @@
  * @return array<mixed> of category bases
  */
 
-function categories_userapi_getallcatbases($args)
+function categories_userapi_getallcatbases(array $args = [], $context = null)
 {
     sys::import('modules.categories.class.worker');
     $worker = new CategoryWorker();
