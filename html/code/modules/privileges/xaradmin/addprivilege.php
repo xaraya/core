@@ -15,7 +15,7 @@
  * addPrivilege - add a privilege to the repository
  * This is an action page
  */
-function privileges_admin_addprivilege()
+function privileges_admin_addprivilege(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AddPrivileges')) return; 

@@ -20,7 +20,7 @@
  * @access  public
  * @return array<mixed>|string|void
  */
-function privileges_admin_removemember()
+function privileges_admin_removemember(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditPrivileges')) return; 

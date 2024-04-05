@@ -25,7 +25,7 @@
  *        integer  $args['level']
     */
 
-    function privileges_adminapi_returnprivilege(Array $args=array())
+function privileges_adminapi_returnprivilege(array $args = [], $context = null)
     {
         extract($args);
 

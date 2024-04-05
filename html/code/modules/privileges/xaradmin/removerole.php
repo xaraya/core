@@ -15,7 +15,7 @@
  * removeRole - remove a role from a privilege assignment
  * prompts for confirmation
  */
-function privileges_admin_removerole()
+function privileges_admin_removerole(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditPrivileges')) return;

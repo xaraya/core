@@ -15,7 +15,7 @@
  *displayprivilege - display privilege details
  * @return array<mixed>|void data for the template display
  */
-function privileges_admin_displayprivilege()
+function privileges_admin_displayprivilege(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditPrivileges')) return;

@@ -16,7 +16,7 @@
  * deleteRealm - delete a realm
  * prompts for confirmation
  */
-function privileges_admin_deleterealm()
+function privileges_admin_deleterealm(array $args = [], $context = null)
 {
     if (!xarVar::fetch('id',          'isset', $id,          NULL, xarVar::DONT_SET)) return;
     if (!xarVar::fetch('confirmed', 'isset', $confirmed, NULL, xarVar::DONT_SET)) return;

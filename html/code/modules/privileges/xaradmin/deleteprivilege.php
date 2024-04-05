@@ -15,7 +15,7 @@
  * deletePrivilege - delete a privilege
  * prompts for confirmation
  */
-function privileges_admin_deleteprivilege()
+function privileges_admin_deleteprivilege(array $args = [], $context = null)
 {
     if (!xarVar::fetch('id',          'isset', $id,          NULL, xarVar::DONT_SET)) return;
     if (!xarVar::fetch('confirmation', 'isset', $confirmation, NULL, xarVar::DONT_SET)) return;

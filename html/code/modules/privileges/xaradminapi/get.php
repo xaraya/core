@@ -14,7 +14,7 @@
  * Transient hack, will be removed
  * @param array<string, mixed> $args array of optional parameters<br/>
  */
-function privileges_adminapi_get(Array $args=array())
+function privileges_adminapi_get(array $args = [], $context = null)
 {
     extract($args);
     if (empty($itemid) && empty($name)) {

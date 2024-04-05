@@ -23,7 +23,7 @@
  *        integer  $args['parentid']
  * @return  boolean
  */
-function privileges_adminapi_removemember(Array $args=array())
+function privileges_adminapi_removemember(array $args = [], $context = null)
 {
     extract($args);
     //Do nothing if the params aren't there

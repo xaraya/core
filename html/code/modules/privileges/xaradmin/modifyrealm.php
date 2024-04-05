@@ -17,7 +17,7 @@
  * @param int id of the realm to be modified
  * @return array<mixed>|string|void data for the template display
  */
-function privileges_admin_modifyrealm()
+function privileges_admin_modifyrealm(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditPrivileges',0,'Realm')) return;

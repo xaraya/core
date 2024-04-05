@@ -14,7 +14,7 @@
  * viewroles - display the roles this privilege is assigned to
  * @return array<mixed>|string|void data for the template display
  */
-function privileges_admin_viewroles()
+function privileges_admin_viewroles(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditRoles')) return;

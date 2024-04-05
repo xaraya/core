@@ -16,7 +16,7 @@
  * addRealm - create a new realm
  * @return array<mixed>|string|void data for the template display
  */
-function privileges_admin_newrealm()
+function privileges_admin_newrealm(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AddPrivileges',0,'Realm')) return;

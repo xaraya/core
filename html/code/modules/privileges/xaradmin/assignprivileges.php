@@ -12,7 +12,7 @@
  * @return array<mixed>|string|bool|void data for the template display
  */
 
-    function privileges_admin_assignprivileges()
+    function privileges_admin_assignprivileges(array $args = [], $context = null)
     {
         // Security
         if (!xarSecurity::check('ManagePrivileges')) return;

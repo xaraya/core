@@ -19,7 +19,7 @@
  *
  * @return mixed data array for the template display or output display string if invalid data submitted
  */
-function privileges_admin_modifyconfig()
+function privileges_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminPrivileges')) return;

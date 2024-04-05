@@ -13,7 +13,7 @@
 /**
  * updateprivilege - update a privilege
  */
-function privileges_admin_updateprivilege()
+function privileges_admin_updateprivilege(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditPrivileges')) return; 

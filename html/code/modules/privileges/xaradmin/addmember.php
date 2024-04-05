@@ -22,7 +22,7 @@
  * @access  public
  * @return  mixed
  */
-function privileges_admin_addmember()
+function privileges_admin_addmember(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AddPrivileges')) return; 
