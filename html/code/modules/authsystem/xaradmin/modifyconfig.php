@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|string|void Returns display template data on success else an output string will be returned.
  */
-function authsystem_admin_modifyconfig()
+function authsystem_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminAuthsystem')) return;

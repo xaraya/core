@@ -22,7 +22,7 @@
  * 
  * @return boolean True after redirection
  */
-function authsystem_user_main()
+function authsystem_user_main(array $args = [], $context = null)
 {
     $redirect = xarModVars::get('authsystem','frontend_page');
     if (!empty($redirect)) {

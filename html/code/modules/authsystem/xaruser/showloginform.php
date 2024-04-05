@@ -20,7 +20,7 @@
  * @param array<string, mixed> $args Optional 'redirecturl' parameter
  * @return array<mixed>|bool Returns data for display template.
  */
-function authsystem_user_showloginform(Array $args = array())
+function authsystem_user_showloginform(array $args = [], $context = null)
 {
     extract($args);
     xarVar::fetch('redirecturl', 'str:1:254', $redirecturl, '', xarVar::NOT_REQUIRED);

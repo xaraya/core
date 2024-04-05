@@ -21,7 +21,7 @@
  * 
  * @return string|boolean|void If the page redirects true is returned, else a display string.
  */
-function authsystem_admin_main()
+function authsystem_admin_main(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditAuthsystem')) return;

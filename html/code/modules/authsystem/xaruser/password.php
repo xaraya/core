@@ -18,7 +18,7 @@
  * @param array<string, mixed> $args Arguments passed to Gui function. 
  * @return array<mixed> Data for the display template
  */
-function authsystem_user_password($args = array())
+function authsystem_user_password(array $args = [], $context = null)
 {
-    return xarMod::guiFunc('roles','user','lostpassword',$args);
+    return xarMod::guiFunc('roles','user','lostpassword', $args, $context);
 }
