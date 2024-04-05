@@ -198,7 +198,7 @@ function categories_userapi_getcat(array $args = [], $context = null)
 
     $SQLquery .= " ORDER BY P1.left_id";
 
-// cfr. xarcachemanager - this approach might change later
+// cfr. cachemanager - this approach might change later
     $expire = xarModVars::get('categories','cache.userapi.getcat');
     if (is_numeric($items_per_page) && $items_per_page > 0 && is_numeric($startnum) && $startnum > -1) {
         if (!empty($expire)){

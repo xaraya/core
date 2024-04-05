@@ -124,7 +124,7 @@ class xarTwigTpl extends xarTpl
             'apischemas' => 'code/modules/apischemas',
             'library' => 'code/modules/library',
             'workflow' => 'code/modules/workflow',
-            'xarcachemanager' => 'code/modules/xarcachemanager',
+            'cachemanager' => 'code/modules/cachemanager',
             'publications' => 'code/modules/publications',
             'calendar' => 'code/modules/calendar',
             'changelog' => 'code/modules/changelog',

@@ -178,7 +178,7 @@ function roles_userapi_getall(array $args = [], $context = null)
     // We got the complete query, prepare it
     $stmt = $dbconn->prepareStatement($query);
 
-    // cfr. xarcachemanager - this approach might change later
+    // cfr. cachemanager - this approach might change later
     $expire = xarModVars::get('roles', 'cache.userapi.getall');
 
     if($startnum > 0) {

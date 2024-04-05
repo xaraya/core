@@ -65,7 +65,7 @@ function roles_userapi_getallactive(array $args = [], $context = null)
     $bindvars[] = xarRoles::ROLES_USERTYPE;
     $stmt = $dbconn->prepareStatement($query);
 
-    // cfr. xarcachemanager - this approach might change later
+    // cfr. cachemanager - this approach might change later
     $expire = xarModVars::get('roles','cache.userapi.getallactive');
 
     if($startnum > 0) {

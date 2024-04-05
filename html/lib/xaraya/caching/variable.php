@@ -123,7 +123,7 @@ class xarVariableCache extends xarObject
     public static function getCacheSettings()
     {
         if (!isset(self::$cacheSettings)) {
-            // TODO: make things configurable in xarcachemanager
+            // TODO: make things configurable in cachemanager
             // Load the caching configuration
             $config = xarCache::getConfig();
             $settings = $config['Variable.CacheSettings'] ?? [];
@@ -157,7 +157,7 @@ class xarVariableCache extends xarObject
 
         if (!empty($settings) && !empty($settings[$scope])) {
             // this variable scope is configured for caching
-            // TODO: make things configurable in xarcachemanager
+            // TODO: make things configurable in cachemanager
             // CHECKME: if we want to go further and specify rules by name within a scope someday...
             //if (is_array($settings[$scope]) && empty($settings[$scope][$name])) {
             //    // this variable scope & name is not configured for caching

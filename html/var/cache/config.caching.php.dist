@@ -64,7 +64,7 @@ $cachingConfiguration['Page.ShowTime'] = 1;
 $cachingConfiguration['Page.ExpireHeader'] = 0;
 // Allow page caching for the following user groups (besides anonymous)
 $cachingConfiguration['Page.CacheGroups'] = '';
-// Only cache the pages of modules hooked to xarCacheManager
+// Only cache the pages of modules hooked to CacheManager
 $cachingConfiguration['Page.HookedOnly'] = 0;
 // Store the cached pages in filesystem, database, apcu or doctrine cache provider
 $cachingConfiguration['Page.CacheStorage'] = 'filesystem';

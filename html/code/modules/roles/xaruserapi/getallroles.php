@@ -110,7 +110,7 @@ function roles_userapi_getallroles(array $args = [], $context = null)
         }
     }
 
-// cfr. xarcachemanager - this approach might change later
+// cfr. cachemanager - this approach might change later
     $expire = xarModVars::get('roles','cache.userapi.getallroles');
     if (!empty($expire)){
         $expire = unserialize($expire);
