@@ -158,11 +158,12 @@ class xarTwigTpl extends xarTpl
                 }
             }
         }
+        $twigDir = static::getTwigTemplatesDir();
         static::addCoreTemplates();
         static::addModuleTemplates();
         static::addThemeTemplates();
-        static::addPropertyTemplates(static::$twigDir);
-        static::addBlockTemplates(static::$twigDir);
+        static::addPropertyTemplates($twigDir);
+        static::addBlockTemplates($twigDir);
         // @todo use cache trait if/when variable caching is enabled by default
         if (function_exists('apcu_store')) {
             $config = [
@@ -188,8 +189,8 @@ class xarTwigTpl extends xarTpl
             'privileges' => 'code/modules/privileges',
             'roles' => 'code/modules/roles',
             'themes' => 'code/modules/themes',
-            // no namespace for themes
-            '' => 'themes',
+            // use @theme (singular) namespace for themes
+            'theme' => 'themes',
             // @todo support stand-alone properties (partial)
             'property' => 'code/properties',
             // @todo support stand-alone blocks
@@ -405,23 +406,23 @@ class xarTwigTpl extends xarTpl
         $templates = [];
         // @todo align better with current theme template lookup?
         if (!empty($pageName)) {
-            $templates[] = $themeName . '/' . $tplType . '/' . $tplName . '-' . $pageName . $extension;
-            $templates[] = $themeName . '/' . $tplType . '/' . $tplName . $extension;
+            $templates[] = '@theme/' . $themeName . '/' . $tplType . '/' . $tplName . '-' . $pageName . $extension;
+            $templates[] = '@theme/' . $themeName . '/' . $tplType . '/' . $tplName . $extension;
             if ($themeName != 'default') {
-                $templates[] = 'default/' . $tplType . '/' . $tplName . '-' . $pageName . $extension;
-                $templates[] = 'default/' . $tplType . '/' . $tplName . $extension;
+                $templates[] = '@theme/default/' . $tplType . '/' . $tplName . '-' . $pageName . $extension;
+                $templates[] = '@theme/default/' . $tplType . '/' . $tplName . $extension;
             }
             if ($themeName != 'common') {
-                $templates[] = 'common/' . $tplType . '/' . $tplName . '-' . $pageName . $extension;
-                $templates[] = 'common/' . $tplType . '/' . $tplName . $extension;
+                $templates[] = '@theme/common/' . $tplType . '/' . $tplName . '-' . $pageName . $extension;
+                $templates[] = '@theme/common/' . $tplType . '/' . $tplName . $extension;
             }
         } else {
-            $templates[] = $themeName . '/' . $tplType . '/' . $tplName . $extension;
+            $templates[] = '@theme/' . $themeName . '/' . $tplType . '/' . $tplName . $extension;
             if ($themeName != 'default') {
-                $templates[] = 'default/' . $tplType . '/' . $tplName . $extension;
+                $templates[] = '@theme/default/' . $tplType . '/' . $tplName . $extension;
             }
             if ($themeName != 'common') {
-                $templates[] = 'common/' . $tplType . '/' . $tplName . $extension;
+                $templates[] = '@theme/common/' . $tplType . '/' . $tplName . $extension;
             }
         }
 
@@ -474,15 +475,15 @@ class xarTwigTpl extends xarTpl
         $templates = [];
         // look for specific templateName.xt (current > common)
         if (!empty($tplName)) {
-            $templates[] = $themeName . '/blocks/' . $tplName . $extension;
+            $templates[] = '@theme/' . $themeName . '/blocks/' . $tplName . $extension;
             if ($themeName !== 'common') {
-                $templates[] = 'common/blocks/' . $tplName . $extension;
+                $templates[] = '@theme/common/blocks/' . $tplName . $extension;
             }
         }
         // no specific template, fallback to default.xt (current > common)
         $templates[] = $themeName . '/blocks/default' . $extension;
         if ($themeName !== 'common') {
-            $templates[] = 'common/blocks/default' . $extension;
+            $templates[] = '@theme/common/blocks/default' . $extension;
         }
         // no default, fallback to blocks module block.xt (current > common > module)
         $templates[] = '@blocks/blocks/block' . $extension;
@@ -569,41 +570,41 @@ class xarTwigTpl extends xarTpl
         // user templates are now in the top level directory and all others in subdirectories
         if ($modType == 'user') {
             if (!empty($tplName)) {
-                $templates[] = $themeName . '/modules/' . $modName . '/' . $funcName . '-' . $tplName . $extension;
-                $templates[] = $themeName . '/modules/' . $modName . '/' . $funcName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $funcName . '-' . $tplName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $funcName . '-' . $tplName . $extension;
                 $templates[] = '@' . $modName . '/' . $funcName . $extension;
                 if ($modName !== 'dynamicdata') {
-                    $templates[] = $themeName . '/modules/dynamicdata/' . $funcName . '-' . $tplName . $extension;
-                    $templates[] = $themeName . '/modules/dynamicdata/' . $funcName . $extension;
+                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $funcName . '-' . $tplName . $extension;
+                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $funcName . '-' . $tplName . $extension;
                     $templates[] = '@dynamicdata/' . $funcName . $extension;
                 }
             } else {
-                $templates[] = $themeName . '/modules/' . $modName . '/' . $funcName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $funcName . $extension;
                 if ($modName !== 'dynamicdata') {
-                    $templates[] = $themeName . '/modules/dynamicdata/' . $funcName . $extension;
+                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $funcName . $extension;
                 }
             }
         } else {
             if (!empty($tplName)) {
-                $templates[] = $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
-                $templates[] = $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
                 $templates[] = '@' . $modName . '/' . $modType . '/' . $funcName . $extension;
                 if ($modName !== 'dynamicdata') {
-                    $templates[] = $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
-                    $templates[] = $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . $extension;
+                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
+                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
                     $templates[] = '@dynamicdata/' . $modType . '/' . $funcName . $extension;
                 }
             } else {
-                $templates[] = $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $modType . '/' . $funcName . $extension;
                 if ($modName !== 'dynamicdata') {
-                    $templates[] = $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . $extension;
+                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $modType . '/' . $funcName . $extension;
                 }
             }
@@ -697,7 +698,7 @@ class xarTwigTpl extends xarTpl
             $extension = static::$extensions['themes'][$themeName];
         }
         $templates = [];
-        $templates[] = $themeName . '/modules/' . $modName . '/blocks/' . $tplBase . $extension;
+        $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/blocks/' . $tplBase . $extension;
         $templates[] = '@' . $modName . '/blocks/' . $tplBase . $extension;
 
         $templateName = static::findTwigTemplate($twig, $templates);
@@ -782,20 +783,20 @@ class xarTwigTpl extends xarTpl
         $templates = [];
         // @todo ui_* templates are typically not overridden by objectName, but they could be...
         if (str_starts_with($tplType, 'ui_')) {
-            $templates[] = $themeName . '/modules/' . $modName . '/objects/' . $tplType . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/objects/' . $tplType . $extension;
             $templates[] = '@' . $modName . '/objects/' . $tplType . $extension;
             if ($modName !== 'dynamicdata') {
-                $templates[] = $themeName . '/modules/dynamicdata/objects/' . $tplType . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/objects/' . $tplType . $extension;
                 $templates[] = '@dynamicdata/objects/' . $tplType . $extension;
             }
         } else {
-            $templates[] = $themeName . '/modules/' . $modName . '/objects/' . $tplType . '-' . $objectName . $extension;
-            $templates[] = $themeName . '/modules/' . $modName . '/objects/' . $tplType . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/objects/' . $tplType . '-' . $objectName . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/objects/' . $tplType . $extension;
             $templates[] = '@' . $modName . '/objects/' . $tplType . '-' . $objectName . $extension;
             $templates[] = '@' . $modName . '/objects/' . $tplType . $extension;
             if ($modName !== 'dynamicdata') {
-                $templates[] = $themeName . '/modules/dynamicdata/objects/' . $tplType . '-' . $objectName . $extension;
-                $templates[] = $themeName . '/modules/dynamicdata/objects/' . $tplType . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/objects/' . $tplType . '-' . $objectName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/objects/' . $tplType . $extension;
                 $templates[] = '@dynamicdata/objects/' . $tplType . '-' . $objectName . $extension;
                 $templates[] = '@dynamicdata/objects/' . $tplType . $extension;
             }
@@ -886,20 +887,20 @@ class xarTwigTpl extends xarTpl
         }
         $templates = [];
         if ($modName == 'auto') {
-            $templates[] = $themeName . '/properties/' . $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
-            $templates[] = $themeName . '/properties/' . $propertyName . '/' . $tplType . $extension;
+            $templates[] = '@theme/' . $themeName . '/properties/' . $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@theme/' . $themeName . '/properties/' . $propertyName . '/' . $tplType . $extension;
             $templates[] = '@properties/' .  $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
             $templates[] = '@properties/' .  $propertyName . '/' . $tplType . $extension;
         } else {
-            $templates[] = $themeName . '/modules/' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;
-            $templates[] = $themeName . '/modules/' . $modName . '/properties/' . $tplType . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/properties/' . $tplType . $extension;
             // @todo many property templates are actually in the base module
             $templates[] = '@' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;
             $templates[] = '@' . $modName . '/properties/' . $tplType . $extension;
         }
         if ($modName !== 'dynamicdata') {
-            $templates[] = $themeName . '/modules/dynamicdata/properties/' . $tplType . '-' . $propertyName . $extension;
-            $templates[] = $themeName . '/modules/dynamicdata/properties/' . $tplType . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/properties/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/properties/' . $tplType . $extension;
             $templates[] = '@dynamicdata/properties/' . $tplType . '-' . $propertyName . $extension;
             $templates[] = '@dynamicdata/properties/' . $tplType . $extension;
         }

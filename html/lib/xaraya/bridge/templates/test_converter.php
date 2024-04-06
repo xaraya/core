@@ -62,8 +62,10 @@ class TestConverter
 
     public function convertTheme(string $theme, string $subDir = '', string $prefix = '')
     {
-        // no namespace for themes pages etc.
-        $options = [];
+        // use @theme (singular) namespace for themes
+        $options = [
+            'namespace' => '@theme/' . $theme,
+        ];
         // use .xml.twig extension for rss theme
         if ($theme == 'rss') {
             $options['extension'] = '.xml.twig';
@@ -75,6 +77,7 @@ class TestConverter
             $sourcePath .= '/' . $subDir;
             $targetPath .= '/' . $subDir;
         }
+        // @todo fix page includes and renaming module files
         $converter->convertDir($sourcePath, $targetPath, '.xt');
     }
 

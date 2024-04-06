@@ -105,6 +105,7 @@ class TwigConverter
             if (!str_ends_with($fileName, $suffix)) {
                 continue;
             }
+            // @todo apply this for modules in themes too
             if ($depth == 0) {
                 $fileName = $this->renameFile($fileName, $prefix);
             }
