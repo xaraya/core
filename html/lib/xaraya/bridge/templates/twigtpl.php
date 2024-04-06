@@ -19,12 +19,36 @@ use Xaraya\Context\Context;
  */
 class xarTwigTpl extends xarTpl
 {
+    public const DEFAULT_EXTENSION = '.html.twig';
+    public const CONFIG_CACHE_KEY = 'xaraya/twig_config';
+    public const CONFIG_CACHE_TTL = 300;
     public static string $twigDir = '';
+    /** @var array<string, string> */
+    public static array $namespaces = [];
+    /** @var array<string, mixed> */
+    public static array $extensions = [
+        'themes' => [
+            'common' => '.html.twig',
+            //'rss' => '.xml.twig',
+        ],
+        'modules' => [],
+        'property' => [],
+        'block' => [],
+    ];
 
     public static function init(array $args = [])
     {
         //return parent::init($args);
         // @todo initialize twig with supported module namespaces
+        return false;
+    }
+
+    public static function hasTwigEnvironment()
+    {
+        sys::autoload();
+        if (class_exists('\Twig\Environment')) {
+            return true;
+        }
         return false;
     }
 
@@ -39,22 +63,10 @@ class xarTwigTpl extends xarTpl
     {
         sys::autoload();
 
-        $rootDir = sys::root();
-        // fix common issues with rootDir
-        if (empty($rootDir) || $rootDir == sys::web()) {
-            $rootDir = dirname(__DIR__, 5);
-        }
-        if (str_ends_with($rootDir, '/')) {
-            $rootDir = rtrim($rootDir, '/');
-        }
-        // support vendor/xaraya/twig deployment for standard templates too
-        $twigDir = $rootDir . '/templates/twig';
-        if (!is_dir($twigDir)) {
-            $twigDir = $rootDir . '/vendor/xaraya/twig/templates/twig';
-        }
-        static::$twigDir = $twigDir;
-        // support local directory for custom templates only
-        $customDir = $rootDir . '/templates/custom';
+        // support templates/twig or vendor/xaraya/twig directory for standard templates
+        $twigDir = static::getTwigTemplatesDir();
+        // support templates/custom directory for custom templates only
+        $customDir = static::getXarayaRootDir() . '/templates/custom';
 
         $namespaces = static::getNamespaces();
 
@@ -99,9 +111,72 @@ class xarTwigTpl extends xarTpl
         return $twig;
     }
 
+    /**
+     * Support templates/twig or vendor/xaraya/twig directory for standard templates
+     * @return string
+     */
+    public static function getTwigTemplatesDir()
+    {
+        if (!empty(static::$twigDir)) {
+            return static::$twigDir;
+        }
+        $rootDir = static::getXarayaRootDir();
+        $twigDir = $rootDir . '/templates/twig';
+        if (!is_dir($twigDir)) {
+            $twigDir = $rootDir . '/vendor/xaraya/twig/templates/twig';
+        }
+        static::$twigDir = $twigDir;
+        return static::$twigDir;
+    }
+
+    public static function getXarayaRootDir()
+    {
+        $rootDir = sys::root();
+        // fix common issues with rootDir
+        if (empty($rootDir) || $rootDir == sys::web()) {
+            $rootDir = dirname(__DIR__, 5);
+        }
+        if (str_ends_with($rootDir, '/')) {
+            $rootDir = rtrim($rootDir, '/');
+        }
+        return $rootDir;
+    }
+
     public static function getNamespaces()
     {
-        $namespaces = [
+        if (!empty(static::$namespaces)) {
+            return static::$namespaces;
+        }
+        // @todo use cache trait if/when variable caching is enabled by default
+        if (function_exists('apcu_fetch')) {
+            if (apcu_exists(static::CONFIG_CACHE_KEY)) {
+                $config = apcu_fetch(static::CONFIG_CACHE_KEY);
+                if (!empty($config) && !empty($config['namespaces']) && !empty($config['extensions'])) {
+                    static::$namespaces = $config['namespaces'];
+                    static::$extensions = $config['extensions'];
+                    return static::$namespaces;
+                }
+            }
+        }
+        static::addCoreTemplates();
+        static::addModuleTemplates();
+        static::addThemeTemplates();
+        static::addPropertyTemplates(static::$twigDir);
+        static::addBlockTemplates(static::$twigDir);
+        // @todo use cache trait if/when variable caching is enabled by default
+        if (function_exists('apcu_store')) {
+            $config = [
+                'namespaces' => static::$namespaces,
+                'extensions' => static::$extensions,
+            ];
+            apcu_store(static::CONFIG_CACHE_KEY, $config, static::CONFIG_CACHE_TTL);
+        }
+        return static::$namespaces;
+    }
+
+    public static function addCoreTemplates()
+    {
+        static::$namespaces = [
             'authsystem' => 'code/modules/authsystem',
             'base' => 'code/modules/base',
             'blocks' => 'code/modules/blocks',
@@ -116,32 +191,79 @@ class xarTwigTpl extends xarTpl
             // no namespace for themes
             '' => 'themes',
             // @todo support stand-alone properties (partial)
-            'properties' => 'code/properties',
+            'property' => 'code/properties',
             // @todo support stand-alone blocks
-            //'blocks' => 'code/blocks',
-            // @todo make list of other modules configurable based on modinfo
-            /**
-            'apischemas' => 'code/modules/apischemas',
-            'library' => 'code/modules/library',
-            'workflow' => 'code/modules/workflow',
-            'cachemanager' => 'code/modules/cachemanager',
-            'publications' => 'code/modules/publications',
-            'calendar' => 'code/modules/calendar',
-            'changelog' => 'code/modules/changelog',
-            'ckeditor' => 'code/modules/ckeditor',
-            'comments' => 'code/modules/comments',
-            'hitcount' => 'code/modules/hitcount',
-            'images' => 'code/modules/images',
-            'logconfig' => 'code/modules/logconfig',
-            'keywords' => 'code/modules/keywords',
-            'messages' => 'code/modules/messages',
-            'mime' => 'code/modules/mime',
-            'ratings' => 'code/modules/ratings',
-            'scheduler' => 'code/modules/scheduler',
-            'uploads' => 'code/modules/uploads',
-             */
+            'block' => 'code/blocks',
         ];
-        return $namespaces;
+    }
+
+    public static function addModuleTemplates()
+    {
+        // make other modules configurable based on fileinfo from xarversion.php
+        $fileModules = xarMod::apiFunc('modules', 'admin', 'getfilemodules');
+        foreach ($fileModules as $name => $fileInfo) {
+            $name = strtolower($name);
+            if (in_array($name, static::$namespaces)) {
+                continue;
+            }
+            if (empty($fileInfo['twigtemplates'])) {
+                continue;
+            }
+            static::$namespaces[$name] = 'code/modules/' . $fileInfo['directory'];
+            // @todo if a module uses a specific file extension for twig templates, e.g. to create xml feeds
+            if (!empty($fileInfo['twigextension']) && $fileInfo['twigextension'] != static::DEFAULT_EXTENSION) {
+                static::$extensions['modules'][$name] = $fileInfo['twigextension'];
+            } else {
+                static::$extensions['modules'][$name] = static::DEFAULT_EXTENSION;
+            }
+        }
+    }
+
+    public static function addThemeTemplates()
+    {
+        // make other themes configurable based on fileinfo from xartheme.php
+        $fileThemes = xarMod::apiFunc('themes', 'admin', 'getfilethemes');
+        foreach ($fileThemes as $name => $fileInfo) {
+            $name = strtolower($name);
+            // no namespace for themes
+            if (empty($fileInfo['twigtemplates'])) {
+                continue;
+            }
+            // if a theme uses a specific file extension for twig templates, e.g. to create xml feeds
+            if (!empty($fileInfo['twigextension']) && $fileInfo['twigextension'] != static::DEFAULT_EXTENSION) {
+                static::$extensions['themes'][$name] = $fileInfo['twigextension'];
+            } else {
+                static::$extensions['themes'][$name] = static::DEFAULT_EXTENSION;
+            }
+        }
+    }
+
+    public static function addPropertyTemplates(string $twigDir)
+    {
+        // make stand-alone properties configurable: if they have templates in their twig directory!?
+        static::addAvailableTemplates($twigDir, 'property');
+    }
+
+    public static function addBlockTemplates(string $twigDir)
+    {
+        // @todo make stand-alone blocks configurable: if they have templates in their twig directory!?
+        static::addAvailableTemplates($twigDir, 'block');
+    }
+
+    public static function addAvailableTemplates(string $twigDir, string $type)
+    {
+        $path = $twigDir . '/' . static::$namespaces[$type];
+        $fileList = scandir($path);
+        foreach ($fileList as $fileName) {
+            if (str_starts_with($fileName, '.')) {
+                continue;
+            }
+            $filePath = $path . '/' . $fileName;
+            if (is_dir($filePath)) {
+                $name = strtolower($fileName);
+                static::$extensions[$type][$name] = static::DEFAULT_EXTENSION;
+            }
+        }
     }
 
     /**
@@ -209,14 +331,13 @@ class xarTwigTpl extends xarTpl
         if (in_array($themeName, ['installer', 'kingston', 'Xaraya_Classic'])) {
             return false;
         }
+        $themeName = strtolower($themeName);
         // make other themes configurable based on fileinfo from xartheme.php
-        $themeOsDir = xarVar::prepForOS($themeName);
-        $info = xarTheme::getFileInfo($themeOsDir);
-        $supported = $info['twigtemplates'] ?? false;
-        if (!$supported) {
+        if (empty(static::$extensions['themes'][$themeName])) {
             xarLog::message(__METHOD__ . ": Theme {$themeName} does not support twig templates", xarLog::LEVEL_INFO);
+            return false;
         }
-        return $supported;
+        return true;
     }
 
     /**
@@ -277,9 +398,9 @@ class xarTwigTpl extends xarTpl
         }
 
         // @todo define this in theme config
-        $extension = '.html.twig';
-        if ($themeName === 'rss') {
-            $extension = '.xml.twig';
+        $extension = static::DEFAULT_EXTENSION;
+        if (!empty(static::$extensions['themes'][$themeName])) {
+            $extension = static::$extensions['themes'][$themeName];
         }
         $templates = [];
         // @todo align better with current theme template lookup?
@@ -346,9 +467,9 @@ class xarTwigTpl extends xarTpl
         }
 
         // @todo define this in theme config
-        $extension = '.html.twig';
-        if ($themeName === 'rss') {
-            $extension = '.xml.twig';
+        $extension = static::DEFAULT_EXTENSION;
+        if (!empty(static::$extensions['themes'][$themeName])) {
+            $extension = static::$extensions['themes'][$themeName];
         }
         $templates = [];
         // look for specific templateName.xt (current > common)
@@ -386,15 +507,13 @@ class xarTwigTpl extends xarTpl
             xarLog::message(__METHOD__ . ": Core module installer does not support twig templates", xarLog::LEVEL_INFO);
             return false;
         }
-        //return true;
+        $modName = strtolower($modName);
         // make other modules configurable based on fileinfo from xarversion.php
-        $modOsDir = xarVar::prepForOS($modName);
-        $info = xarMod::getFileInfo($modOsDir);
-        $supported = $info['twigtemplates'] ?? false;
-        if (!$supported) {
+        if (empty(static::$extensions['modules'][$modName])) {
             xarLog::message(__METHOD__ . ": Module {$modName} does not support twig templates", xarLog::LEVEL_INFO);
+            return false;
         }
-        return $supported;
+        return true;
     }
 
     /**
@@ -442,9 +561,9 @@ class xarTwigTpl extends xarTpl
         }
 
         // @todo define this in theme config
-        $extension = '.html.twig';
-        if ($themeName === 'rss') {
-            $extension = '.xml.twig';
+        $extension = static::DEFAULT_EXTENSION;
+        if (!empty(static::$extensions['themes'][$themeName])) {
+            $extension = static::$extensions['themes'][$themeName];
         }
         $templates = [];
         // user templates are now in the top level directory and all others in subdirectories
@@ -502,10 +621,14 @@ class xarTwigTpl extends xarTpl
      */
     public static function isBlockSupported(string $blockType, string $modName)
     {
-        // @todo support stand-alone blocks
+        // @todo make stand-alone blocks configurable: if they have templates in their twig directory!?
         if (empty($modName) || $modName == 'auto') {
-            xarLog::message(__METHOD__ . ": Stand-alone block {$blockType} does not support twig templates", xarLog::LEVEL_INFO);
-            return false;
+            $blockType = strtolower($blockType);
+            if (empty(static::$extensions['block'][$blockType])) {
+                xarLog::message(__METHOD__ . ": Stand-alone block {$blockType} does not support twig templates", xarLog::LEVEL_INFO);
+                return false;
+            }
+            return true;
         }
         // let the module be the main blocker here
         if (!static::isModuleSupported($modName)) {
@@ -569,9 +692,9 @@ class xarTwigTpl extends xarTpl
 
         // [default] xarTwigTpl::block(base, adminmenu, [...], , verticallistbycats, )
         // @todo define this in theme config
-        $extension = '.html.twig';
-        if ($themeName === 'rss') {
-            $extension = '.xml.twig';
+        $extension = static::DEFAULT_EXTENSION;
+        if (!empty(static::$extensions['themes'][$themeName])) {
+            $extension = static::$extensions['themes'][$themeName];
         }
         $templates = [];
         $templates[] = $themeName . '/modules/' . $modName . '/blocks/' . $tplBase . $extension;
@@ -652,9 +775,9 @@ class xarTwigTpl extends xarTpl
         }
 
         // @todo define this in theme config
-        $extension = '.html.twig';
-        if ($themeName === 'rss') {
-            $extension = '.xml.twig';
+        $extension = static::DEFAULT_EXTENSION;
+        if (!empty(static::$extensions['themes'][$themeName])) {
+            $extension = static::$extensions['themes'][$themeName];
         }
         $templates = [];
         // @todo ui_* templates are typically not overridden by objectName, but they could be...
@@ -690,16 +813,14 @@ class xarTwigTpl extends xarTpl
      */
     public static function isPropertySupported(string $propertyName, string $modName)
     {
-        // support stand-alone properties (partial)
+        // make stand-alone properties configurable: if they have templates in their twig directory!?
         if ($modName == 'auto') {
-            // @todo let's try the hard way for now, and check the template path
-            $namespaces = static::getNamespaces();
-            $path = $namespaces['properties'];
-            if (is_dir(static::$twigDir . '/' . $path . '/' . $propertyName)) {
-                return true;
+            $propertyName = strtolower($propertyName);
+            if (empty(static::$extensions['property'][$propertyName])) {
+                xarLog::message(__METHOD__ . ": Stand-alone property {$propertyName} does not support twig templates", xarLog::LEVEL_INFO);
+                return false;
             }
-            xarLog::message(__METHOD__ . ": Stand-alone property {$propertyName} does not support twig templates", xarLog::LEVEL_INFO);
-            return false;
+            return true;
         }
         // let the module be the main blocker here
         if (!static::isModuleSupported($modName)) {
@@ -759,9 +880,9 @@ class xarTwigTpl extends xarTpl
         }
 
         // @todo define this in theme config
-        $extension = '.html.twig';
-        if ($themeName === 'rss') {
-            $extension = '.xml.twig';
+        $extension = static::DEFAULT_EXTENSION;
+        if (!empty(static::$extensions['themes'][$themeName])) {
+            $extension = static::$extensions['themes'][$themeName];
         }
         $templates = [];
         if ($modName == 'auto') {

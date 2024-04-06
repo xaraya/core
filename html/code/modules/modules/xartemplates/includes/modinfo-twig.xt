@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:if condition="!empty($twigenabled)">
+    <div class="xar-row">
+        <div class="xar-col">
+            <label class="xar-form-label">
+                Twig Templates
+                (enabled)
+            </label>
+        </div>
+        <div class="xar-col">
+            <fieldset>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Standard Theme
+                    </div>
+                    <div class="xar-col">
+                        <strong>templates/twig/themes/{theme}/</strong>modules/#$modname# or in <strong>vendor/xaraya/twig/</strong>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Standard Module
+                    </div>
+                    <div class="xar-col">
+                        <strong>templates/twig/</strong>code/modules/#$modname# or in <strong>vendor/xaraya/twig/</strong>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Custom Theme
+                    </div>
+                    <div class="xar-col">
+                        <strong>templates/custom/themes/{theme}/</strong>modules/#$modname#
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Custom Module
+                    </div>
+                    <div class="xar-col">
+                        <strong>templates/custom/</strong>code/modules/#$modname#
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Extension
+                    </div>
+                    <div class="xar-col">
+                        #$twigextension#
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+<xar:else/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <label class="xar-form-label">
+                Twig Templates
+                (disabled)
+            </label>
+        </div>
+        <div class="xar-col">
+            <pre>$ composer xar-twig-install</pre>
+        </div>
+    </div>
+</xar:if>
+</xar:template>

@@ -52,6 +52,8 @@ function themes_adminapi_getfilethemes(array $args = [], $context = null)
                     $xar_version  = isset($themeFileInfo['xar_version']);
                     $bl_version   = $themeFileInfo['bl_version'];
                     $class        = $themeFileInfo['class'];
+                    $twigtemplates = $themeFileInfo['twigtemplates'] ?? false;
+                    $twigextension = $themeFileInfo['twigextension'] ?? '.html.twig';
 
                     // TODO: beautify :-)
                     if (!isset($regId)) {
@@ -66,22 +68,9 @@ function themes_adminapi_getfilethemes(array $args = [], $context = null)
                           "but should be in $basedir/$directory according to $basedir/$themeOsDir/xartheme.php... Skipping this theme until resolved.");
                         continue 2;
                     }
-                    //Defaults
-                    if (!isset($version)) {
-                        $version = 1.0;
-                    }
-
+                    //Defaults - @todo do we still need this anywhere?
                     if (!isset($xar_version)) {
                         $xar_version = 2.0;
-                    }
-
-                    if (!isset($bl_version)) {
-                        $bl_version = 2.0;
-                    }
-
-                    //FIXME: <johnny> add class and category checking
-                    if (!isset($class)) {
-                        $class = '0';
                     }
 
                     $fileThemes[$name] = array('name'             => $name,
@@ -97,7 +86,9 @@ function themes_adminapi_getfilethemes(array $args = [], $context = null)
                                                'version'          => $version,
                                                'xar_version'      => $xar_version,
                                                'bl_version'       => $bl_version,
-                                               'class'            => $class);
+                                               'class'            => $class,
+                                               'twigtemplates'    => $twigtemplates,
+                                               'twigextension'    => $twigextension);
                 } // if
         } // switch
     } // while

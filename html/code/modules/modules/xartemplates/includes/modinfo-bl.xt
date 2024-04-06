@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-row">
+        <div class="xar-col">
+            <label class="xar-form-label">
+                Blocklayout Templates
+            </label>
+        </div>
+        <div class="xar-col">
+            <fieldset>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Theme
+                    </div>
+                    <div class="xar-col">
+                        <strong>html/themes/{theme}/</strong>modules/#$modname#
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Module
+                    </div>
+                    <div class="xar-col">
+                        <strong>html/</strong>code/modules/#$modname#
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Extension
+                    </div>
+                    <div class="xar-col">
+                        .xt
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</xar:template>

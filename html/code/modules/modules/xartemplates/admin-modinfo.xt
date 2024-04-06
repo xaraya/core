@@ -186,6 +186,10 @@
                     </div>
                 </div>
             </xar:if>
+            <xar:if condition="!empty($twigtemplates)">
+                <xar:template module="modules" file="modinfo-bl"/>
+                <xar:template module="modules" file="modinfo-twig"/>
+            </xar:if>
         </fieldset>
         <div class="xar-form-actions">
             <div class="xar-row">

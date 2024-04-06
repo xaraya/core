@@ -69,49 +69,14 @@ function modules_adminapi_getfilemodules(array $args = [], $context = null)
                     $userCapable    = $modFileInfo['user_capable'];
                     $dependency     = $modFileInfo['dependency'];
                     $dependencyinfo = $modFileInfo['dependencyinfo'];
-
+                    $namespace      = $modFileInfo['namespace'] ?? '';
+                    $twigtemplates  = $modFileInfo['twigtemplates'] ?? false;
+                    $twigextension  = $modFileInfo['twigextension'] ?? '.html.twig';
+            
                     // TODO: beautify :-)
                     if (!isset($regId)) {
                         xarSession::setVar('errormsg', "Module '$name' doesn't seem to have a registered module ID defined in xarversion.php - skipping...\nPlease register your module at http://www.xaraya.com");
                         continue 2;
-                    }
-
-                    //Defaults
-                    if (!isset($version)) {
-                        $version = 0;
-                    }
-
-                    //FIXME: <johnny> add class and category checking
-                    if (!isset($class)) {
-                        $class = 'Miscellaneous';
-                    }
-
-                    if (!isset($category)) {
-                        $category = 'Miscellaneous';
-                    }
-
-                    // Work out if admin-capable
-                    if (!isset($adminCapable)) {
-                        $adminCapable = false;
-                    }
-
-                    //FIXME: <johnny> remove this when xarversion.php contains the user setting
-                    if (file_exists(sys::code() . 'modules/' . $modOsDir .'/xaruser.php')) {
-                        $userCapable = true;
-                    }
-
-                    // No dependency information = ok
-                    if (!isset($dependency)) {
-                        $dependency = array();
-                    }
-
-                    //FIXME: <johnny> this detection isn't finished yet... we should be checking
-                    //for xaruser.php and then overriding with if $modFileInfo['user_capable'] is 1
-                    // Work out if user-capable
-                    if (true == $modFileInfo['user_capable']) {
-                        $userCapable = true;
-                    } else {
-                        $userCapable = false;
                     }
 
                     //Check for duplicates
@@ -142,7 +107,10 @@ function modules_adminapi_getfilemodules(array $args = [], $context = null)
                                          'admin_capable' => $adminCapable,
                                          'user_capable'  => $userCapable,
                                          'dependency'    => $dependency,
-                                         'dependencyinfo'=> $dependencyinfo);
+                                         'dependencyinfo'=> $dependencyinfo,
+                                         'namespace'     => $namespace,
+                                         'twigtemplates' => $twigtemplates,
+                                         'twigextension' => $twigextension);
                     } else {
                             $fileModules[$name] = array('directory'     => $modOsDir,
                                                         'name'          => $name,
@@ -154,7 +122,10 @@ function modules_adminapi_getfilemodules(array $args = [], $context = null)
                                                         'admin_capable' => $adminCapable,
                                                         'user_capable'  => $userCapable,
                                                         'dependency'    => $dependency,
-                                                        'dependencyinfo'=> $dependencyinfo);
+                                                        'dependencyinfo'=> $dependencyinfo,
+                                                        'namespace'     => $namespace,
+                                                        'twigtemplates' => $twigtemplates,
+                                                        'twigextension' => $twigextension);
                     } // if
                 } // if
         } // switch
