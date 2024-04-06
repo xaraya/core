@@ -102,7 +102,7 @@ abstract class BasicBlock extends BlockType implements iBlock
     }
 
     // this method is called by blocks_admin_modify_instance()
-    public function update(array $data = [])
+    public function update($data = [])
     {
         $data = $this->getInfo();
         return $data;
