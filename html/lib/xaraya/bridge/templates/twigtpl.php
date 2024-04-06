@@ -63,7 +63,7 @@ class xarTwigTpl extends xarTpl
     {
         sys::autoload();
 
-        // support templates/twig or vendor/xaraya/twig directory for standard templates
+        // support templates/twig or vendor/xaraya/twig/html directory for standard templates
         $twigDir = static::getTwigTemplatesDir();
         // support templates/custom directory for custom templates only
         $customDir = static::getXarayaRootDir() . '/templates/custom';
@@ -112,7 +112,7 @@ class xarTwigTpl extends xarTpl
     }
 
     /**
-     * Support templates/twig or vendor/xaraya/twig directory for standard templates
+     * Support templates/twig or vendor/xaraya/twig/html directory for standard templates
      * @return string
      */
     public static function getTwigTemplatesDir()
@@ -123,7 +123,7 @@ class xarTwigTpl extends xarTpl
         $rootDir = static::getXarayaRootDir();
         $twigDir = $rootDir . '/templates/twig';
         if (!is_dir($twigDir)) {
-            $twigDir = $rootDir . '/vendor/xaraya/twig/templates/twig';
+            $twigDir = $rootDir . '/vendor/xaraya/twig/html';
         }
         static::$twigDir = $twigDir;
         return static::$twigDir;
@@ -222,6 +222,7 @@ class xarTwigTpl extends xarTpl
 
     public static function addThemeTemplates()
     {
+        // @todo this assumes we're running in sys::web() because it looks for 'themes'
         // make other themes configurable based on fileinfo from xartheme.php
         $fileThemes = xarMod::apiFunc('themes', 'admin', 'getfilethemes');
         foreach ($fileThemes as $name => $fileInfo) {

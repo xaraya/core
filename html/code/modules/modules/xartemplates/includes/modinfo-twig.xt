@@ -15,7 +15,7 @@
                         Standard Theme
                     </div>
                     <div class="xar-col">
-                        <strong>templates/twig/themes/{theme}/</strong>modules/#$modname# or in <strong>vendor/xaraya/twig/</strong>
+                        <strong>templates/twig/themes/{theme}/</strong>modules/#$modname# or in <strong>vendor/xaraya/twig/html/</strong>
                     </div>
                 </div>
                 <div class="xar-row">
@@ -23,7 +23,7 @@
                         Standard Module
                     </div>
                     <div class="xar-col">
-                        <strong>templates/twig/</strong>code/modules/#$modname# or in <strong>vendor/xaraya/twig/</strong>
+                        <strong>templates/twig/</strong>code/modules/#$modname# or in <strong>vendor/xaraya/twig/html/</strong>
                     </div>
                 </div>
                 <div class="xar-row">

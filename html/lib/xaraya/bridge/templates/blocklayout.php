@@ -35,6 +35,11 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
         return [
             // <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
             new TwigFunction('xar_twig_header', [$this, 'xar_twig_header']),
+            new TwigFunction('xar_twig_block', [$this, 'xar_twig_block'], [
+                'needs_environment' => true,
+                'needs_context' => true,
+                'is_safe' => ['html'],
+            ]),
             new TwigFunction('xar_blockgroup', [$this, 'xar_blockgroup'], ['is_safe' => ['html']]),
             new TwigFunction('xar_block', [$this, 'xar_block'], ['is_safe' => ['html']]),
             // <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
@@ -77,6 +82,25 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
         }
         // Note: doctype is already converted once
         return '';
+    }
+
+    /**
+     * Render twig template block or template from within another template
+     * {{ xar_twig_block('@theme/common/includes/user-message.html.twig', 'user_message', {'message': 'Hello world!'}) }}
+     * See https://twig.symfony.com/doc/3.x/advanced.html#context-aware-filters
+     */
+    public function xar_twig_block(\Twig\Environment $env, $context, $templateName, $blockName = null, $tplData = [])
+    {
+        try {
+            $template = $env->load($templateName);
+            $context = array_replace($context, $tplData);
+            if (empty($blockName)) {
+                return $template->render($context);
+            }
+            return $template->renderBlock($blockName, $context);
+        } catch (Exception $e) {
+            return 'Error renderBlock() for template ' . $templateName . ' block ' . $blockName . ': ' . $e->getMessage();
+        }
     }
 
     public function xar_blockgroup($groupname, $template = null)
