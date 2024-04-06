@@ -85,6 +85,7 @@ function roles_user_lostpassword(array $args = [], $context = null)
             if (!xarMod::apiFunc('roles', 'admin','senduseremail', array('id' => array($user['id'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
 
             // Let user know that they have an email on the way.
+            $data['context'] ??= $context;
             $data = xarTpl::module('roles','user','requestpwconfirm', $data);
           break;
     }

@@ -46,6 +46,7 @@ function categories_admin_update(array $args = [], $context = null)
 
     if (!$isvalid) {
         $data['authid'] = xarSec::genAuthKey();
+        $data['context'] ??= $context;
         return xarTpl::module('categories','admin','modfiy',$data);
     }
 

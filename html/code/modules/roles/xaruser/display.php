@@ -82,5 +82,6 @@ function roles_user_display(array $args = [], $context = null)
     $data['itemtypename'] = $types[$itemtype]['label'];
     $data['layout'] = $args['layout'];
 
+    $data['context'] ??= $context;
     return xarTpl::module($args['tplmodule'],'user','display',$data,$args['template']);
 }

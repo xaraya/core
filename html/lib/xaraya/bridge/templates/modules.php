@@ -50,7 +50,7 @@ class ModuleTagExtension extends XarayaTwigExtension
      */
     public function xar_image_resize($args = [])
     {
-        return xarMod::apiFunc('image', 'user', 'resize', $args, $this->context);
+        return xarMod::apiFunc('images', 'user', 'resize', $args, $this->context);
     }
 
     /**

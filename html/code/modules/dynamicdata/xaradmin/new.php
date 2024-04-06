@@ -92,6 +92,7 @@ function dynamicdata_admin_new(array $args = [], $context = null)
     //$modinfo = xarMod::getInfo(182);
     $myobject->callHooks('new');
     $data['hooks'] = $myobject->hookoutput;
+    $data['context'] ??= $myobject->getContext();
 
     xarTpl::setPageTitle(xarML('Manage - Create New Item in #(1)', $myobject->label));
 

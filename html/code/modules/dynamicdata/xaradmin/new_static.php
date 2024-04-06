@@ -46,6 +46,7 @@ function dynamicdata_admin_new_static(array $args = [], $context = null)
 
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
+            $data['context'] ??= $context;
             return xarTpl::module('dynamicdata', 'admin', 'new_static', $data);
         } else {
             if (empty($data['table'])) {

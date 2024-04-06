@@ -54,6 +54,7 @@ function blocks_admin_modifyconfig(array $args = [], $context = null)
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
                 xarController::getRequest()->msgAjax($data['module_settings']->getInvalids());
+                $data['context'] ??= $context;
                 return xarTpl::module('blocks','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();

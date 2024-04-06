@@ -99,6 +99,7 @@ function dynamicdata_admin_create(array $args = [], $context = null)
         //$modinfo = xarMod::getInfo(182);
         $myobject->callHooks('new');
         $data['hooks'] = $myobject->hookoutput;
+        $data['context'] ??= $myobject->getContext();
 
         if(!isset($template)) {
             $template = $myobject->name;

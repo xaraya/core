@@ -263,6 +263,7 @@ function roles_user_usermenu(array $args = [], $context = null)
                     $returnurl = xarController::URL('roles', 'user', 'account', array('tab' => 'basic'));
                 $data['returnurl'] = $returnurl;
                 $data['submitlabel'] = xarML('Update Settings');
+                $data['context'] ??= $context;
                 return xarTpl::module('roles','user','account', $data);
             }
 
@@ -389,6 +390,7 @@ function roles_user_usermenu(array $args = [], $context = null)
             $data['moduleload'] = $moduleload;
             $data['tab'] = '';
             if (empty($message)) $data['message'] = '';
+            $data['context'] ??= $context;
             return xarTpl::module('roles', 'user', 'account', $data);
 
     }

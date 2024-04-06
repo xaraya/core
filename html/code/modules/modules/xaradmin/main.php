@@ -29,7 +29,8 @@ function modules_admin_main(array $args = [], $context = null)
     $samemodule = xarController::isRefererSameModule();
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTpl::module('modules','admin','overview');
+        $data = ['context' => $context];
+        return xarTpl::module('modules','admin','overview', $data);
     } else {
         xarController::redirect(xarController::URL('modules', 'admin', 'list'), null, $context);
         return true;

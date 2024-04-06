@@ -151,6 +151,7 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
             }
         }
         $data['authid'] = xarSec::genAuthKey();
+        $data['context'] ??= $myobject->getContext();
 
         xarTpl::setPageTitle(xarML('Delete Item #(1) in #(2)', $data['itemid'], $myobject->label));
 

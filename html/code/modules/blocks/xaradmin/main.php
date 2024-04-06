@@ -34,6 +34,7 @@ function blocks_admin_main(array $args = [], $context = null)
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         $data = array();
         if (!xarVar::fetch('tab', 'pre:trim:lower:str:1:', $data['tab'], '', xarVar::NOT_REQUIRED)) return;
+        $data['context'] = $context;
         return xarTpl::module('blocks','admin','overview', $data);
     } else {
         xarController::redirect(xarController::URL('blocks', 'admin', 'view_instances'), null, $context);

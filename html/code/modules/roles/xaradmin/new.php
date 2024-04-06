@@ -50,6 +50,7 @@ function roles_admin_new(array $args = [], $context = null)
 
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
+            $data['context'] ??= $context;
             return xarTpl::module('roles','admin','new', $data);        
         } else {
             // Good data: create the item

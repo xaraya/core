@@ -35,6 +35,7 @@
             
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
+                $data['context'] ??= $context;
                 return xarTpl::module('themes','admin','modify_config', $data);
             } else {
 

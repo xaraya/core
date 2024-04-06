@@ -66,6 +66,7 @@
 
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
+                    $data['context'] ??= $context;
                     return xarTpl::module('categories','admin','modifyconfig', $data);        
                 } else {
                     $itemid = $data['module_settings']->updateItem();

@@ -123,8 +123,11 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         xarLog::message("xarLog in displayInvalids function", xarLog::LEVEL_INFO);
 
-        $invalids = $this->getInvalids($args);
-        return xarTpl::module('dynamicdata', 'user', 'displayinvalids', ['invalids' => $invalids]);
+        $data = [
+            'invalids' => $this->getInvalids($args),
+            'context' => $this->getContext(),
+        ];
+        return xarTpl::module('dynamicdata', 'user', 'displayinvalids', $data);
     }
 
     public function clearInvalids()

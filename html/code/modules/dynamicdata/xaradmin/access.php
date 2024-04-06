@@ -273,6 +273,7 @@ function dynamicdata_admin_access(array $args = [], $context = null)
     ];
 
     $data['authid'] = xarSec::genAuthKey();
+    $data['context'] ??= $context;
 
     if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access.xt') ||
         file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access-' . $data['template'] . '.xt')) {

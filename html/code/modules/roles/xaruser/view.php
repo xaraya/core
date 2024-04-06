@@ -67,5 +67,6 @@ function roles_user_view(array $args = [], $context = null)
     $data['urltemplate'] = xarController::URL('roles', 'user', 'view', $pagerfilter);
     $data['urlitemmatch'] = '%%';
 
+    $data['context'] ??= $context;
     return xarTpl::module($args['tplmodule'],'user','view',$data,$args['template']);
 }

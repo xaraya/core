@@ -42,6 +42,7 @@ function categories_admin_create(array $args = [], $context = null)
 
     if (!$isvalid) {
         $data['authid'] = xarSec::genAuthKey();
+        $data['context'] ??= $context;
         return xarTpl::module('categories','admin','new',$data);
     }
     

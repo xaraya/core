@@ -118,5 +118,6 @@ function categories_admin_modifyconfighook(array $args = [], $context = null)
     $data['modname'] = $modname;
     $data['itemtype'] = $extrainfo['itemtype'];
 
+    $data['context'] ??= $context;
     return xarTpl::module('categories','admin','modifyconfighook', $data);
 }

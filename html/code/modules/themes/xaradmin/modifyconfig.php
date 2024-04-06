@@ -94,6 +94,7 @@ function themes_admin_modifyconfig(array $args = [], $context = null)
             $andvalid = ($data['enable_user_menu'] != false) ? $data['user_themes']->checkInput('user_themes') : true;
           
             if (!$isvalid || !$andvalid) {
+                $data['context'] ??= $context;
                 return xarTpl::module('themes','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();

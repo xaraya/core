@@ -120,6 +120,7 @@ function dynamicdata_admin_update(array $args = [], $context = null)
                     $data['label'] = $myobject->label;
                     xarTpl::setPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
                 }
+                $data['context'] ??= $myobject->getContext();
                 return xarTpl::module($tplmodule, 'admin', 'modify', $data);
             }
 

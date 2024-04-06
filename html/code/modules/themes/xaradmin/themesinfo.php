@@ -53,6 +53,7 @@ function themes_admin_themesinfo(array $args = [], $context = null)
         $isvalid = $data['theme']->properties['configuration']->checkInput();
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
+            $data['context'] ??= $context;
             return xarTpl::module('themes','admin','themesinfo', $data);        
         } else {
             // Good data: create the item

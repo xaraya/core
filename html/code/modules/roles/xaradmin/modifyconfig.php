@@ -181,6 +181,7 @@ function roles_admin_modifyconfig(array $args = [], $context = null)
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
+                        $data['context'] ??= $context;
                         return xarTpl::module('roles','admin','modifyconfig', $data);
                     } else {
                         $itemid = $data['module_settings']->updateItem();
@@ -207,6 +208,7 @@ function roles_admin_modifyconfig(array $args = [], $context = null)
                 case 'duvs':
                     $isvalid = $data['user_settings']->checkInput();
                     if (!$isvalid) {
+                        $data['context'] ??= $context;
                         return xarTpl::module('roles','admin','modifyconfig', $data);
                     } else {
                         $itemid = $data['user_settings']->updateItem();

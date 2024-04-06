@@ -72,6 +72,7 @@ function dynamicdata_admin_form(array $args = [], $context = null)
     }
 
     $data['object'] = & $myobject;
+    $data['context'] ??= $myobject->getContext();
 
     $template = $myobject->name;
     return xarTpl::module('dynamicdata', 'admin', 'form', $data, $template);

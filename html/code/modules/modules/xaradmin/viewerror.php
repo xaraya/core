@@ -70,5 +70,6 @@ function modules_admin_viewerror(array $args = [], $context = null)
     }
 
     // Return the template variables to BL
+    $data['context'] ??= $context;
     return xarTpl::module('modules', 'admin', $template, $data);
 }

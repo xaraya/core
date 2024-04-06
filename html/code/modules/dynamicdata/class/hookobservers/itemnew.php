@@ -83,7 +83,8 @@ class ItemNew extends DataObjectHookObserver
             'dynamicdata',
             'admin',
             'newhook',
-            ['properties' => $properties],
+            ['properties' => $properties,
+            'context' => $object->getContext()],
             $template
         );
     }

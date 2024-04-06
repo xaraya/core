@@ -27,7 +27,8 @@ function roles_admin_main(array $args = [], $context = null)
     $samemodule = xarController::isRefererSameModule();
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTpl::module('roles','admin','overview');
+        $data = ['context' => $context];
+        return xarTpl::module('roles','admin','overview', $data);
     } else {
         xarController::redirect(xarController::URL('roles', 'admin', 'showusers'), null, $context);
         return true;

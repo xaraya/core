@@ -71,6 +71,7 @@ function dynamicdata_user_display(array $args = [], $context = null)
     // Display hooks - not called automatically (yet)
     $myobject->callHooks('display');
     $data['hooks'] = $myobject->hookoutput;
+    $data['context'] ??= $myobject->getContext();
 
     xarTpl::setPageTitle($myobject->label);
 

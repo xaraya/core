@@ -124,6 +124,7 @@ function dynamicdata_user_view(array $args = [], $context = null)
     $data['module_id'] = $data['moduleid'];
     // TODO: another stray
     $data['catid'] = $catid;
+    $data['context'] ??= $object->getContext();
 
     xarTpl::setPageTitle(xarML('View #(1)', $object->label));
 
