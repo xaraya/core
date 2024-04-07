@@ -15,7 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return mixed data array for the template display or output display string if invalid data submitted
  */
-function roles_admin_modify()
+function roles_admin_modify(array $args = [], $context = null)
 {
     $data = [];
     if (!xarVar::fetch('confirm',     'int',   $confirm, 0, xarVar::NOT_REQUIRED)) return;
@@ -26,7 +26,7 @@ function roles_admin_modify()
     if (!xarVar::fetch('duvs', 'array', $data['duvs'], array(), xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = xarRoles::get($id);
-    if (empty($data['object'])) return xarResponse::NotFound();
+    if (empty($data['object'])) return xarController::notFound(null, $context);
     $data['object']->properties['name']->display_layout = 'single';
     $data['itemtype'] = $data['object']->getType();
 
@@ -90,13 +90,15 @@ function roles_admin_modify()
 
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
+            $data['context'] ??= $context;
             return xarTpl::module('roles','admin','modify', $data);        
         } else {
             // Good data: create the item
             $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
 
             // Jump to the next page
-            xarController::redirect(xarController::URL('roles','admin','modify',array('itemid' => $data['itemid'])));
+            xarController::redirect(xarController::URL('roles','admin','modify',
+                array('itemid' => $data['itemid'])), null, $context);
             return true;
         }
     }

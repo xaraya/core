@@ -51,7 +51,7 @@
  * @return array<mixed> array of module information arrays
  * @throws BadParameterException
  */
-function modules_adminapi_getlist(Array $args=array())
+function modules_adminapi_getlist(array $args = [], $context = null)
 {
     extract($args);
     static $validOrderFields = array('name' => 'mods', 'regid' => 'mods','id' => 'mods',

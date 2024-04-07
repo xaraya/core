@@ -18,7 +18,7 @@
  * @return boolean|void true on success, false on failure
  * @throws EmptyParameterException
  */
-function modules_adminapi_initialise(Array $args=array())
+function modules_adminapi_initialise(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

@@ -17,7 +17,7 @@
  * @access  public
  * @return  bool|void true on success or void on failure
 */
-function mail_admin_sendtest()
+function mail_admin_sendtest(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('ManageMail')) return;
@@ -34,7 +34,7 @@ function mail_admin_sendtest()
 
     // Confirm authorisation code.
     if (!xarSec::confirmAuthKey()) {
-//        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        //return xarController::badRequest('bad_author', $context);
     }        
     if (empty($email)) {
         $email = xarModVars::get('mail', 'adminmail');
@@ -69,6 +69,6 @@ function mail_admin_sendtest()
                 'when' => $when))) return;
 
     // lets update status and display updated configuration
-    xarController::redirect(xarController::URL('mail', 'admin', 'compose', array('confirm' => 1)));
+    xarController::redirect(xarController::URL('mail', 'admin', 'compose', array('confirm' => 1)), null, $context);
     return true;
 }

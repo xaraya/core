@@ -18,7 +18,6 @@ use xarVar;
 use xarMLS;
 use xarMod;
 use xarController;
-use xarResponse;
 use xarSec;
 use xarTpl;
 use DataObjectFactory;
@@ -69,7 +68,8 @@ class CreateHandler extends DefaultHandler
             // set context if available in handler
             $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
 
             if (empty($this->tplmodule)) {
@@ -81,8 +81,8 @@ class CreateHandler extends DefaultHandler
             $this->object->setContext($this->getContext());
         }
         if (!$this->object->checkAccess('create')) {
-            $this->getContext()?->setStatus(403);
-            return xarResponse::Forbidden(xarMLS::translate('Create #(1) is forbidden', $this->object->label));
+            $msg = xarMLS::translate('Create #(1) is forbidden', $this->object->label);
+            return xarController::forbidden($msg, $this->getContext());
         }
 
         // there's no item to get here yet
@@ -97,7 +97,7 @@ class CreateHandler extends DefaultHandler
 
         if (!empty($args['preview']) || !empty($args['confirm'])) {
             if (!empty($args['confirm']) && !xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+                return xarController::badRequest('bad_author', $this->getContext());
             }
 
             $isvalid = $this->object->checkInput($args);

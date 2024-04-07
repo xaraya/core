@@ -15,7 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return array<mixed>|void data for the template display
  */
-function roles_user_search()
+function roles_user_search(array $args = [], $context = null)
 {
     if (!xarVar::fetch('startnum', 'isset', $startnum,  NULL, xarVar::DONT_SET)) {return;}
     if (!xarVar::fetch('email',    'isset', $email,     NULL, xarVar::DONT_SET)) {return;}

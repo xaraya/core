@@ -22,15 +22,15 @@
  * 
  * @return boolean True after redirection
  */
-function authsystem_user_main()
+function authsystem_user_main(array $args = [], $context = null)
 {
     $redirect = xarModVars::get('authsystem','frontend_page');
     if (!empty($redirect)) {
         $truecurrenturl = xarServer::getCurrentURL(array(), false);
         $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=> $redirect,'truecurrenturl'=>$truecurrenturl));
-        xarController::redirect($urldata['redirecturl']);
+        xarController::redirect($urldata['redirecturl'], null, $context);
     } else {
-        xarController::redirect(xarController::URL('authsystem', 'user', 'showloginform'));
+        xarController::redirect(xarController::URL('authsystem', 'user', 'showloginform'), null, $context);
     }
     return true;
 }

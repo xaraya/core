@@ -464,7 +464,7 @@ class xarDatabase extends xarObject
 			break;
 			
 			default:
-			throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
+			throw new Exception(xarML("Unknown database type: '#(1)'", $databaseType));
         }
         $systemArgs = array('databaseHost'    => $host,
                             'databasePort'    => $port,

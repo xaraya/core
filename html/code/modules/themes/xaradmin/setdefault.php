@@ -19,18 +19,18 @@
  * @param int id the theme id to set
  * @return boolean|string|void true on success, false on failure
  */
-function themes_admin_setdefault()
+function themes_admin_setdefault(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminThemes')) return;
     
     // Security and sanity checks
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }
     
     if (!xarVar::fetch('id', 'int:1:', $defaulttheme, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($defaulttheme)) return xarResponse::notFound();
+    if (empty($defaulttheme)) return xarController::notFound(null, $context);
 
 
     $whatwasbefore = xarModVars::get('themes', 'default_theme');
@@ -42,7 +42,7 @@ function themes_admin_setdefault()
     $themeInfo = xarTheme::getInfo($defaulttheme);
 
     if ($themeInfo['class'] != 2) {
-        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'), null, $context);
     }
 
     if (xarVar::isCached('Mod.Variables.themes', 'default_theme')) {
@@ -51,7 +51,7 @@ function themes_admin_setdefault()
 
     //update the database - activate the theme
     if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$defaulttheme))) {
-        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'), null, $context);
     }
 
     // update the data
@@ -60,6 +60,7 @@ function themes_admin_setdefault()
 
     // set the target location (anchor) to go to within the page
     $target = $themeInfo['name'];
-    xarController::redirect(xarController::URL('themes', 'admin', 'view', array('state' => 0), NULL, $target));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view',
+        array('state' => 0), NULL, $target), null, $context);
     return true;
 }

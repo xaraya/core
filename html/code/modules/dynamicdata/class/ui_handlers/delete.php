@@ -18,7 +18,6 @@ use xarVar;
 use xarMLS;
 use xarMod;
 use xarController;
-use xarResponse;
 use xarSec;
 use xarTpl;
 use DataObjectFactory;
@@ -75,7 +74,8 @@ class DeleteHandler extends DefaultHandler
             // set context if available in handler
             $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
 
             if (empty($this->tplmodule)) {
@@ -87,18 +87,19 @@ class DeleteHandler extends DefaultHandler
             $this->object->setContext($this->getContext());
         }
         if (!$this->object->checkAccess('delete')) {
-            $this->getContext()?->setStatus(403);
-            return xarResponse::Forbidden(xarMLS::translate('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+            $msg = xarMLS::translate('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
+            return xarController::forbidden($msg, $this->getContext());
         }
 
         $itemid = $this->object->getItem();
         if (empty($itemid) || $itemid != $this->object->itemid) {
-            return xarResponse::NotFound(xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
-        }
+            $msg = xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
+            return xarController::notFound($msg, $this->getContext());
+    }
 
         if (!empty($args['confirm'])) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+                return xarController::badRequest('bad_author', $this->getContext());
             }
 
             $itemid = $this->object->deleteItem();

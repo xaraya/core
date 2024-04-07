@@ -24,7 +24,7 @@
  * @return mixed output display string or boolean true if redirected
  */
 
-function blocks_admin_main()
+function blocks_admin_main(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditBlocks')) return;
@@ -34,9 +34,10 @@ function blocks_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         $data = array();
         if (!xarVar::fetch('tab', 'pre:trim:lower:str:1:', $data['tab'], '', xarVar::NOT_REQUIRED)) return;
+        $data['context'] = $context;
         return xarTpl::module('blocks','admin','overview', $data);
     } else {
-        xarController::redirect(xarController::URL('blocks', 'admin', 'view_instances'));
+        xarController::redirect(xarController::URL('blocks', 'admin', 'view_instances'), null, $context);
         return true;
     }
 }

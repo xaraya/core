@@ -23,7 +23,7 @@
  * @return int Returns the point of insertion value
  * @throws BadParameterException Thrown if parameters contain invalid values
  */
-function categories_adminapi_find_point_of_insertion($args)
+function categories_adminapi_find_point_of_insertion(array $args = [], $context = null)
 {
 
     extract($args);

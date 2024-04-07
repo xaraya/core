@@ -66,7 +66,7 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
                 'dynamicdata',
                 'admin',
                 'dbconfig',
-            ));
+            ), null, $context);
             return true;
         }
         $data['db'] = $db;
@@ -145,7 +145,13 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
         if (empty($item['config'])) {
             continue;
         }
-        $configuration = unserialize($item['config']);
+        try {
+            $configuration = unserialize($item['config']);
+        } catch (Exception $e) {
+            echo "Error unserializing config '" . $item['config'] . "' for object '" . $item['name'] . "':\n";
+            echo $e->getMessage();
+            $configuration = [];
+        }
         if (empty($configuration['dbConnIndex']) && empty($configuration['dbConnArgs'])) {
             continue;
         }

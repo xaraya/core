@@ -18,7 +18,7 @@
  *        integer  $args['modid'] is the module that is sending mail.<br/>
  *        integer  $args['itemid'] is the item created.
  */
-function mail_adminapi_hookmailcreate(Array $args=array())
+function mail_adminapi_hookmailcreate(array $args = [], $context = null)
 {
     extract($args);
 

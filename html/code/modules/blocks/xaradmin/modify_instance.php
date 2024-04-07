@@ -18,7 +18,7 @@
  * 
  * @return array<mixed>|string|void data for the template display
  */
-function blocks_admin_modify_instance()
+function blocks_admin_modify_instance(array $args = [], $context = null)
 {
     /**
      * Pending
@@ -85,12 +85,12 @@ function blocks_admin_modify_instance()
             case 'caching':
             case 'access':
                 if (!$isadmin)
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'no_privileges'));
+                    return xarController::badRequest('no_privileges', $context);
                 $method = $interface;
             case 'config':
             default:
                 if (!$canmodify)
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'no_privileges'));
+                    return xarController::badRequest('no_privileges', $context);
                 if (empty($method))
                     $method = $interface;
             break;
@@ -98,6 +98,8 @@ function blocks_admin_modify_instance()
         }          
         // get the block object and load the interface
         $block = xarBlock::getObject($blockinfo, $interface);
+        // set context if available in gui function
+        $block->setContext($context);
 
         $block_groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
             array('type_category' => 'group',));
@@ -231,7 +233,7 @@ function blocks_admin_modify_instance()
                         if (empty($invalid)) {
 
                             if (!xarSec::confirmAuthKey())
-                                return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
+                                return xarController::badRequest('bad_author', $context);
 
                             if (isset($result) && is_array($result)) {
                                 if (!empty($result['content']))
@@ -304,8 +306,7 @@ function blocks_admin_modify_instance()
                         // update block configuration 
                         if (empty($invalid)) {
                             if (!xarSec::confirmAuthKey())
-                                return xarTpl::module('privileges', 'user', 'errors', 
-                                    array('layout' => 'bad_author'));
+                                return xarController::badRequest('bad_author', $context);
                             if (!empty($result) && is_array($result)) {
                                 if (!empty($result['content']))
                                     $block->setContent($result['content']);
@@ -349,8 +350,7 @@ function blocks_admin_modify_instance()
                 // update block configuration 
                 if (empty($invalid)) {
                     if (!xarSec::confirmAuthKey())
-                        return xarTpl::module('privileges', 'user', 'errors', 
-                            array('layout' => 'bad_author'));
+                        return xarController::badRequest('bad_author', $context);
                     if (!empty($result) && is_array($result)) {
                         if (!empty($result['content']))
                             $block->setContent($result['content']);
@@ -383,8 +383,7 @@ function blocks_admin_modify_instance()
                 // update block configuration 
                 if (empty($invalid)) {
                     if (!xarSec::confirmAuthKey())
-                        return xarTpl::module('privileges', 'user', 'errors', 
-                            array('layout' => 'bad_author'));
+                        return xarController::badRequest('bad_author', $context);
                     if (!empty($result) && is_array($result)) {
                         if (!empty($result['content']))
                             $block->setContent($result['content']);
@@ -420,8 +419,7 @@ function blocks_admin_modify_instance()
                 // update block configuration 
                 if (empty($invalid)) {
                     if (!xarSec::confirmAuthKey())
-                        return xarTpl::module('privileges', 'user', 'errors', 
-                            array('layout' => 'bad_author'));
+                        return xarController::badRequest('bad_author', $context);
                     if (!empty($result) && is_array($result)) {
                         if (!empty($result['content']))
                             $block->setContent($result['content']);
@@ -448,7 +446,7 @@ function blocks_admin_modify_instance()
                         'interface' => $interface,
                         'block_method' => $method,
                     ));
-            xarController::redirect($return_url);
+            xarController::redirect($return_url, null, $context);
         }  
         // failed to validate, pass the invalid messages back to the form 
         $data['invalid'] = $invalid;

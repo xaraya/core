@@ -24,7 +24,7 @@
  * 
  * @return mixed Output display string or boolean true if redirected
  */
-function base_admin_main()
+function base_admin_main(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditBase')) return;
@@ -32,9 +32,10 @@ function base_admin_main()
     $samemodule = xarController::isRefererSameModule();
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTpl::module('base','admin','overview');
+        $data = ['context' => $context];
+        return xarTpl::module('base','admin','overview', $data);
     } else {
-        xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig'), null, $context);
         return true;
     }
 }

@@ -17,7 +17,7 @@
  * @todo  finish cleanup, styles, filters and sort orders
  * @return array<mixed>|void data for the template display
  */
-function modules_admin_view()
+function modules_admin_view(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminModules')) return;

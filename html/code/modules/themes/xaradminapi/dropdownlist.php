@@ -49,7 +49,7 @@
 /**
  * @param array<string, mixed> $args array of optional parameters<br/>
  */
-function themes_adminapi_dropdownlist(Array $args=array())
+function themes_adminapi_dropdownlist(array $args = [], $context = null)
 {
 
     $themelist = xarMod::apiFunc('themes', 'admin', 'getthemelist', $args);

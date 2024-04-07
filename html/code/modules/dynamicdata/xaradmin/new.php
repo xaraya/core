@@ -72,10 +72,12 @@ function dynamicdata_admin_new(array $args = [], $context = null)
     );
     // Security
     if (empty($myobject)) {
-        return xarResponse::NotFound();
+        $msg = xarML('Data object not found');
+        return xarController::notFound($msg, $context);
     }
     if (!$myobject->checkAccess('create')) {
-        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
+        $msg = xarML('Create #(1) is forbidden', $myobject->label);
+        return xarController::forbidden($msg, $context);
     }
 
     $args = $myobject->toArray();
@@ -90,6 +92,7 @@ function dynamicdata_admin_new(array $args = [], $context = null)
     //$modinfo = xarMod::getInfo(182);
     $myobject->callHooks('new');
     $data['hooks'] = $myobject->hookoutput;
+    $data['context'] ??= $myobject->getContext();
 
     xarTpl::setPageTitle(xarML('Manage - Create New Item in #(1)', $myobject->label));
 

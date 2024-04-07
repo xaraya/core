@@ -17,8 +17,9 @@
  * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
  * @return mixed data array for the template display or output display string if invalid data submitted
+ * @todo use context
  */
-function dynamicdata_admin_modifyconfig()
+function dynamicdata_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminDynamicData')) {
@@ -45,7 +46,7 @@ function dynamicdata_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+                return xarController::badRequest('bad_author', $context);
             }
             if (!xarVar::fetch('debugmode', 'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), xarVar::NOT_REQUIRED)) {
                 return;
@@ -66,6 +67,7 @@ function dynamicdata_admin_modifyconfig()
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
+                $data['context'] ??= $context;
                 return xarTpl::module('dynamicdata', 'admin', 'modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();

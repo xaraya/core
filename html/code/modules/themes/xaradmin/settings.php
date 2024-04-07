@@ -14,7 +14,7 @@
  * @author Marty Vance
  * @param array several params from the associated form in template
  */
-function themes_admin_settings()
+function themes_admin_settings(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminThemes')) return;
@@ -33,6 +33,7 @@ function themes_admin_settings()
     if (!xarModUserVars::set('themes', 'selclass', $selclass)) return;
     if (!xarModUserVars::set('themes', 'useicons', $useicons)) return;
 
-    xarController::redirect(xarController::URL('themes', 'admin', 'view', array('regen' => $regen = 1)));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view',
+        array('regen' => $regen = 1)), null, $context);
     return true;
 }

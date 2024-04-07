@@ -17,7 +17,7 @@
      * 
      * @return mixed Returns display data array or true on success, null on failure.
      */
-    function categories_admin_modifyconfig()
+    function categories_admin_modifyconfig(array $args = [], $context = null)
     {
         // Security Check
         if (!xarSecurity::check('AdminCategories')) return;
@@ -48,7 +48,7 @@
             case 'update':
                 // Confirm authorisation code
                 if (!xarSec::confirmAuthKey()) {
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarController::badRequest('bad_author', $context);
                 }        
                 if (!xarVar::fetch('usejsdisplay', 'checkbox', $usejsdisplay, xarModVars::get('categories', 'usejsdisplay'), xarVar::NOT_REQUIRED)) return;
                 if (!xarVar::fetch('numstats', 'int', $numstats, xarModVars::get('categories', 'numstats'), xarVar::NOT_REQUIRED)) return;
@@ -66,12 +66,14 @@
 
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
+                    $data['context'] ??= $context;
                     return xarTpl::module('categories','admin','modifyconfig', $data);        
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                 }
 
-                xarController::redirect(xarController::URL('categories', 'admin', 'modifyconfig',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarController::URL('categories', 'admin', 'modifyconfig',
+                    array('tabmodule' => $tabmodule, 'tab' => $data['tab'])), null, $context);
                 // Return
                 return true;
 

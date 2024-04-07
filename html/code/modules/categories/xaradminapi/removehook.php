@@ -20,7 +20,7 @@
  * @return array<mixed>|void Data array
  * @throws BadParameterException Thrown is invalid parameters have been given
  */
-function categories_adminapi_removehook($args)
+function categories_adminapi_removehook(array $args = [], $context = null)
 {
     /**
      * Pending

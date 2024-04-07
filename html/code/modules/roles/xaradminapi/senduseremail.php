@@ -27,7 +27,7 @@
  * @return boolean true on success, false on failure
  * @throws EmptyParameterException
  */
-function roles_adminapi_senduseremail(Array $args=array())
+function roles_adminapi_senduseremail(array $args = [], $context = null)
 {
     // Send Email
     extract($args);

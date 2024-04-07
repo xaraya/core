@@ -16,14 +16,14 @@
  *
  * @author Xaraya Development Team
  */
-function modules_admin_updateversion()
+function modules_admin_updateversion(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminModules')) return;
 
     // Get parameters from input
     xarVar::fetch('id', 'int:1', $regId, 0, xarVar::NOT_REQUIRED);
-    if (empty($regId)) return xarResponse::notFound();
+    if (empty($regId)) return xarController::notFound(null, $context);
 
 
     if (!isset($regId)) throw new EmptyParameterException('regid');
@@ -37,7 +37,7 @@ function modules_admin_updateversion()
     if (!isset($updated)) return;
 
     // Redirect to module list
-    xarController::redirect(xarController::URL('modules', 'admin', 'list'));
+    xarController::redirect(xarController::URL('modules', 'admin', 'list'), null, $context);
 
     return true;
 }

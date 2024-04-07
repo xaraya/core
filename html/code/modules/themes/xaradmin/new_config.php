@@ -13,7 +13,7 @@
  */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function themes_admin_new_config()
+function themes_admin_new_config(array $args = [], $context = null)
 {
     if(!xarSecurity::check('AddThemes')) return;
 
@@ -34,13 +34,14 @@ function themes_admin_new_config()
         
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
+            $data['context'] ??= $context;
             return xarTpl::module('themes','admin','new_config', $data);        
         } else {
             // Good data: create the item
             $itemid = $data['object']->createItem();
             
             // Jump to the next page
-            xarController::redirect(xarController::URL('themes','admin','view_configs'));
+            xarController::redirect(xarController::URL('themes','admin','view_configs'), null, $context);
             return true;
         }
     }

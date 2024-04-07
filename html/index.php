@@ -183,13 +183,19 @@ function xarMain()
             ob_start();
         }
 
+        // Get context of the request if available
+        $context = $request->getServerContext()?->getContext();
+        // Use Twig templates with Xaraya - install xaraya/twig package with composer first
+        /** un-comment the next line to activate Twig templates */
+        //$context['twig'] = true;
+
         // Process the request
         xarLog::message('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_NOTICE);
         xarController::dispatch($request);
 
         // Retrieve the output to send to the browser
         xarLog::message('Processing request ' . $request->getModule() . "_"  . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_NOTICE);
-        $mainModuleOutput = xarController::$response->getOutput();
+        $mainModuleOutput = xarController::getResponse()->getOutput();
 
         if (xarCore::isDebuggerActive()) {
             if (ob_get_length() > 0) {
@@ -209,9 +215,9 @@ function xarMain()
         xarLog::message('Notifying listeners of this request', xarLog::LEVEL_NOTICE);
         xarEvents::notify('ServerRequest');
         
-        // Render page with the output
+        // Render page with the output + pass along the current context
         xarLog::message('Creating the page output', xarLog::LEVEL_NOTICE);
-        $pageOutput = xarTpl::renderPage($mainModuleOutput);
+        $pageOutput = xarTpl::renderPage($mainModuleOutput, null, $context);
 
         // Set the output of the page in cache
         if (!empty($cacheKey)) {

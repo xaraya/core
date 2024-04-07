@@ -16,7 +16,7 @@
  * @return boolean|void Returns true on success, false upon failure.
  * @throws BadParameterException Thrown if not all parameters have been given in the GET/POST data
  */
-function authsystem_admin_createpassword()
+function authsystem_admin_createpassword(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditAuthsystem')) return;
@@ -42,13 +42,13 @@ function authsystem_admin_createpassword()
      }
      if (!xarModVars::get('roles', 'askpasswordemail')) {
         xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
-                      array('id' => $groupid, 'state' => $state)));
+                      array('id' => $groupid, 'state' => $state)), null, $context);
         return true;
     }
     else {
 
         xarSession::setVar('tmppass',$pass);
         xarController::redirect(xarController::URL('roles', 'admin', 'asknotification',
-        array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)));
+        array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)), null, $context);
     }
 }

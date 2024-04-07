@@ -12,7 +12,7 @@
  * Show users of this role
  * @return array<mixed>|void data for the template display
  */
-function roles_admin_showusers()
+function roles_admin_showusers(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;

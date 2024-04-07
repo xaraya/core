@@ -16,7 +16,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return array<mixed> containing the search and replace items
  */
-function mail_adminapi_replace(Array $args=array())
+function mail_adminapi_replace(array $args = [], $context = null)
 {
     extract($args);
 

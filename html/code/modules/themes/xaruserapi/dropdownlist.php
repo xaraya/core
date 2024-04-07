@@ -46,7 +46,7 @@
  *        string   $args['orderBy'] the order type of the list
  * @return array<mixed> of theme information arrays
  */
-function themes_userapi_dropdownlist(Array $args=array())
+function themes_userapi_dropdownlist(array $args = [], $context = null)
 {
     $options = array();
 

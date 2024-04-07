@@ -8,7 +8,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/1.html
  */
-function modules_adminapi_countitems(Array $args=array())
+function modules_adminapi_countitems(array $args = [], $context = null)
 {
     extract($args);
     

@@ -15,7 +15,7 @@
  * Takes no parameters
  * @return array<mixed>|void data for the template display
  */
-function privileges_admin_new()
+function privileges_admin_new(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AddPrivileges')) return;

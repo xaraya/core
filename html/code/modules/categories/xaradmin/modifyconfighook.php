@@ -20,7 +20,7 @@
  * @return string Returns display string
  * @throws BadParameterException Thrown if modid was not found
  */
-function categories_admin_modifyconfighook($args)
+function categories_admin_modifyconfighook(array $args = [], $context = null)
 {
     extract($args);
 
@@ -118,5 +118,6 @@ function categories_admin_modifyconfighook($args)
     $data['modname'] = $modname;
     $data['itemtype'] = $extrainfo['itemtype'];
 
+    $data['context'] ??= $context;
     return xarTpl::module('categories','admin','modifyconfighook', $data);
 }

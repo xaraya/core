@@ -18,7 +18,7 @@
  * @param array<string, mixed> $args
  * @return array<mixed>|void Returns an array in the following format $array[$modid][$itemtype] = array('items' => $numitems,'cats' => $numcats,'links' => $numlinks);
  */
-function categories_userapi_getmodules($args)
+function categories_userapi_getmodules(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

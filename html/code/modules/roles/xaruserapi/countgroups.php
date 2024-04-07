@@ -16,7 +16,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return integer the number of items held by this module
  */
-function roles_userapi_countgroups()
+function roles_userapi_countgroups(array $args = [], $context = null)
 {
     return count(xarMod::apiFunc('roles','user','getallgroups'));
 }

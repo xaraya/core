@@ -21,7 +21,7 @@
  * @return array<mixed> Returns extrainfo array.
  * @throws BadParameterException Thrown if invalid parameters have been given.
  */
-function categories_adminapi_updatehook($args)
+function categories_adminapi_updatehook(array $args = [], $context = null)
 {
     extract($args);
 

@@ -15,7 +15,7 @@
  * deletePrivilege - delete a privilege
  * prompts for confirmation
  */
-function privileges_admin_deleteprivilege()
+function privileges_admin_deleteprivilege(array $args = [], $context = null)
 {
     if (!xarVar::fetch('id',          'isset', $id,          NULL, xarVar::DONT_SET)) return;
     if (!xarVar::fetch('confirmation', 'isset', $confirmation, NULL, xarVar::DONT_SET)) return;
@@ -26,7 +26,7 @@ function privileges_admin_deleteprivilege()
 //Call the Privileges class and get the privilege to be deleted
     sys::import('modules.privileges.class.privileges');
     $priv = xarPrivileges::getprivilege($id);
-    if (empty($priv)) return xarResponse::NotFound();
+    if (empty($priv)) return xarController::notFound(null, $context);
     $name = $priv->getName();
 
     // Security
@@ -51,7 +51,7 @@ function privileges_admin_deleteprivilege()
 
 // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
 //Try to remove the privilege and bail if an error was thrown
@@ -63,6 +63,6 @@ function privileges_admin_deleteprivilege()
                     'privileges'));
 
 // redirect to the next page
-    xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'), null, $context);
     return true;
 }

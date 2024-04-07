@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|string|void Returns display template data on success else an output string will be returned.
  */
-function authsystem_admin_modifyconfig()
+function authsystem_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminAuthsystem')) return;
@@ -42,7 +42,7 @@ function authsystem_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code. AJAX calls ignore this
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
@@ -61,7 +61,7 @@ function authsystem_admin_modifyconfig()
             
             // If this is an AJAX call, end here
             xarController::getRequest()->exitAjax();
-            xarController::redirect(xarServer::getCurrentURL());
+            xarController::redirect(xarServer::getCurrentURL(), null, $context);
             return true;
     }
     return $data;

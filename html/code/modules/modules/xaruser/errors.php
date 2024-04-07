@@ -15,7 +15,7 @@
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-function modules_user_errors($args)
+function modules_user_errors(array $args = [], $context = null)
 {
     if(!xarSecurity::check('EditModules')) return;
     $data['layout'] = 'general';

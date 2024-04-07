@@ -16,7 +16,7 @@
  * 
  * @return array<mixed>|string|void data for the template display
  */
-function base_admin_release()
+function base_admin_release(array $args = [], $context = null)
 {
     /**
      * Pending
@@ -54,7 +54,7 @@ function base_admin_release()
                                         'refresh' => 604800,
                                         'extension' => '.xml'));
     } catch (Exception $e) {
-        return xarResponse::NotFound(xarML('No release feed is currently available'));
+        return xarController::notFound(xarML('No release feed is currently available'), $context);
     }
 
     if (!$feeddata) return;
@@ -89,7 +89,7 @@ function base_admin_release()
       $data['chanlink']   =   $info['channel']['link'];
       $data['chandesc']   =   $info['channel']['description'];
     } else {
-        return xarResponse::NotFound(xarML('No release feed is currently available'));
+        return xarController::notFound(xarML('No release feed is currently available'), $context);
     }
     $data['releasenumber']=$releasenumber;
     $data['feedcontent'] = $feedcontent;

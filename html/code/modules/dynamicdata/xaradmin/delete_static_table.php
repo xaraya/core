@@ -12,7 +12,7 @@
  */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function dynamicdata_admin_delete_static_table()
+function dynamicdata_admin_delete_static_table(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminDynamicData')) {
@@ -38,7 +38,7 @@ function dynamicdata_admin_delete_static_table()
         $dbconn->Execute($query);
 
         // Jump to the next page
-        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static'));
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static'), null, $context);
         return true;
     }
     return $data;

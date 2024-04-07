@@ -20,7 +20,7 @@
  * @throws BadParameterException
  * @throws DuplicateException
  */
-function blocks_typesapi_createitem(Array $args=array())
+function blocks_typesapi_createitem(array $args = [], $context = null)
 {
     extract($args);
     

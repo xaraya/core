@@ -18,7 +18,7 @@
  *        integer  $args['state'] state that we are deleting.
  * @return boolean|string|void true on success, false on failure
  */
-function roles_adminapi_purge(Array $args=array())
+function roles_adminapi_purge(array $args = [], $context = null)
 {
     // Get arguments
     extract($args);

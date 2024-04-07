@@ -12,7 +12,7 @@
  * @return array<mixed>|string|bool|void data for the template display
  */
 
-    function privileges_admin_assignprivileges()
+    function privileges_admin_assignprivileges(array $args = [], $context = null)
     {
         // Security
         if (!xarSecurity::check('ManagePrivileges')) return;
@@ -54,7 +54,7 @@
             case 'update':
                 // Confirm authorisation code
                 if (!xarSec::confirmAuthKey()) {
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarController::badRequest('bad_author', $context);
                 }        
                 if (!xarVar::fetch('role', 'int', $role_id, 0, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
                 if (!xarVar::fetch('rolename', 'str', $rolename, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
@@ -83,7 +83,8 @@
                     }
                 }
 
-                xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',
+                    array('tabmodule' => $tabmodule, 'tab' => $data['tab'])), null, $context);
                 return true;
 
             case 'remove':
@@ -98,7 +99,8 @@
                     $dbconn->Execute($query,$bindvars);
                 }
 
-                xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',
+                    array('tabmodule' => $tabmodule, 'tab' => $data['tab'])), null, $context);
                 return true;
         }
         $data['moduletabs'] = $moduletabs;

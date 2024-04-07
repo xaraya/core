@@ -123,8 +123,11 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         xarLog::message("xarLog in displayInvalids function", xarLog::LEVEL_INFO);
 
-        $invalids = $this->getInvalids($args);
-        return xarTpl::module('dynamicdata', 'user', 'displayinvalids', ['invalids' => $invalids]);
+        $data = [
+            'invalids' => $this->getInvalids($args),
+            'context' => $this->getContext(),
+        ];
+        return xarTpl::module('dynamicdata', 'user', 'displayinvalids', $data);
     }
 
     public function clearInvalids()
@@ -303,6 +306,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
+        // Pass along the object context for xarTpl::object()
         $args['context'] = $this->getContext();
         return xarTpl::object($args['tplmodule'], $args['template'], 'showform', $args);
     }
@@ -367,6 +371,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
+        // Pass along the object context for xarTpl::object()
         $args['context'] = $this->getContext();
         return xarTpl::object($args['tplmodule'], $args['template'], 'showdisplay', $args);
     }

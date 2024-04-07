@@ -17,7 +17,7 @@
  *        string   $args['role_id'] id of a role
  * @return  boolean
  */
-function roles_userapi_checkprivilege(Array $args=array())
+function roles_userapi_checkprivilege(array $args = [], $context = null)
 {
     extract($args);
 

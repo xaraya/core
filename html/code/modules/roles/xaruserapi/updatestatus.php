@@ -18,7 +18,7 @@
  *        string   $args['state'] is the new state for the user
  * returns bool
  */
-function roles_userapi_updatestatus(Array $args=array())
+function roles_userapi_updatestatus(array $args = [], $context = null)
 {
     extract($args);
 

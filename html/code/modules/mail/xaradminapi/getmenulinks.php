@@ -17,7 +17,7 @@
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @return array<mixed> the menulinks for the admin menu items of this module.
  */
-function mail_adminapi_getmenulinks()
+function mail_adminapi_getmenulinks(array $args = [], $context = null)
 {
     if (xarMod::isAvailable('scheduler')) {
         $menulinks[] = array('url' => xarController::URL('mail','admin','viewq'),

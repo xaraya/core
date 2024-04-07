@@ -14,7 +14,7 @@
  *
  * prompts for confirmation
  */
-function roles_admin_delete()
+function roles_admin_delete(array $args = [], $context = null)
 {
     if (!xarVar::fetch('id', 'id', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('itemid', 'id', $itemid, NULL, xarVar::DONT_SET)) return;
@@ -27,7 +27,7 @@ function roles_admin_delete()
     sys::import('modules.roles.class.roles');
     // get the role to be deleted
     $role = xarRoles::get($id);
-    if (empty($role)) return xarResponse::NotFound();
+    if (empty($role)) return xarController::notFound(null, $context);
     $itemtype = $role->getType();
 
     // get the array of parents of this role
@@ -75,7 +75,7 @@ function roles_admin_delete()
         return $data;
     } else {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         }        
         // Check to make sure the user is not active on the site.
         $check = xarMod::apiFunc('roles',
@@ -99,9 +99,9 @@ function roles_admin_delete()
         }
         // redirect to the next page
         if (empty($returnurl)) {
-            xarController::redirect(xarController::URL('roles', 'admin', 'showusers'));
+            xarController::redirect(xarController::URL('roles', 'admin', 'showusers'), null, $context);
         } else {
-            xarController::redirect($returnurl);
+            xarController::redirect($returnurl, null, $context);
         }
         return true;
     }

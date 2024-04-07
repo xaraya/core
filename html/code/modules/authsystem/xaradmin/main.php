@@ -21,7 +21,7 @@
  * 
  * @return string|boolean|void If the page redirects true is returned, else a display string.
  */
-function authsystem_admin_main()
+function authsystem_admin_main(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditAuthsystem')) return;
@@ -29,9 +29,10 @@ function authsystem_admin_main()
     $samemodule = xarController::isRefererSameModule();
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTpl::module('authsystem','admin','overview');
+        $data = ['context' => $context];
+        return xarTpl::module('authsystem','admin','overview', $data);
     } else {
-        xarController::redirect(xarController::URL('authsystem', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('authsystem', 'admin', 'modifyconfig'), null, $context);
         return true;
     }
 }

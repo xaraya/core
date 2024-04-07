@@ -14,7 +14,7 @@
  * @author Xaraya Development Team
  * @return boolean|void null on exceptions, true on sucess to update
  */
-function modules_adminapi_checkversion()
+function modules_adminapi_checkversion(array $args = [], $context = null)
 {
     static $check = false;
 

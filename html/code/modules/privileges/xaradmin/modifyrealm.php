@@ -17,7 +17,7 @@
  * @param int id of the realm to be modified
  * @return array<mixed>|string|void data for the template display
  */
-function privileges_admin_modifyrealm()
+function privileges_admin_modifyrealm(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditPrivileges',0,'Realm')) return;
@@ -42,7 +42,7 @@ function privileges_admin_modifyrealm()
     } else {
         if (!xarVar::fetch('newname',   'str:1.20',$newname, '',xarVar::NOT_REQUIRED)) {return;}
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         }        
 
         $bindvars = array();
@@ -66,7 +66,7 @@ function privileges_admin_modifyrealm()
         $bindvars[] = $id;
         $result = $stmt->executeQuery($bindvars);
 
-        xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'));
+        xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'), null, $context);
     }
 
     $data['id'] = $id;

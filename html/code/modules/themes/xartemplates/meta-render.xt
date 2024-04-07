@@ -14,7 +14,7 @@
                     <!-- Ignore tags with no content -->
                     <xar:if condition="empty($tag) or empty($tag['content'])">
                     <!-- Ignore tags with a language different than that of the current locale -->
-                    <xar:elseif condition="!empty($tag['lang']) AND ($lang != $tag['lang'])"/>
+                    <xar:elseif condition="!empty($tag['lang']) AND ($lang ne $tag['lang'])"/>
                     <xar:elseif condition="$tag['type'] eq 'name'"/>
                         <meta name="#$tag['value']#" content="#$tag['content']#" lang="#$tag['lang']#" xml:lang="#$tag['lang']#" dir="#$tag['dir']#" scheme="#$tag['scheme']#"/>
                     <xar:elseif condition="$tag['type'] eq 'http-equiv'"/>

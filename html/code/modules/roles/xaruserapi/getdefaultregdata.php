@@ -19,7 +19,7 @@
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
  */
-function roles_userapi_getdefaultregdata()
+function roles_userapi_getdefaultregdata(array $args = [], $context = null)
 {
     $defaultregdata      = array();
     $defaultregmodname   = '';

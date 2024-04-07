@@ -19,7 +19,7 @@
  * @return array<mixed>|string|void data for the template display
  * @todo some facelift
  */
-function themes_admin_themesinfo()
+function themes_admin_themesinfo(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditThemes')) return; 
@@ -29,7 +29,7 @@ function themes_admin_themesinfo()
     if (!xarVar::fetch('id', 'int:1:', $themeid, 0, xarVar::NOT_REQUIRED)) return; 
     if (!xarVar::fetch('exit', 'isset', $exit, NULL, xarVar::DONT_SET)) {return;}
     if (!xarVar::fetch('confirm', 'isset', $confirm, NULL, xarVar::DONT_SET)) {return;}
-    if (empty($themeid)) return xarResponse::notFound();
+    if (empty($themeid)) return xarController::notFound(null, $context);
 
     // obtain maximum information about a theme
     $info = xarTheme::getInfo($themeid);
@@ -53,6 +53,7 @@ function themes_admin_themesinfo()
         $isvalid = $data['theme']->properties['configuration']->checkInput();
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
+            $data['context'] ??= $context;
             return xarTpl::module('themes','admin','themesinfo', $data);        
         } else {
             // Good data: create the item
@@ -60,9 +61,10 @@ function themes_admin_themesinfo()
             
             // Jump to the next page
             if ($exit) {
-                xarController::redirect(xarController::URL('themes','admin','view'));
+                xarController::redirect(xarController::URL('themes','admin','view'), null, $context);
             } else {
-                xarController::redirect(xarController::URL('themes','admin','themesinfo',array('id' => $themeid)));
+                xarController::redirect(xarController::URL('themes','admin','themesinfo',
+                    array('id' => $themeid)), null, $context);
             }
             return true;
         }

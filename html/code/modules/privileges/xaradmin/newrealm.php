@@ -16,7 +16,7 @@
  * addRealm - create a new realm
  * @return array<mixed>|string|void data for the template display
  */
-function privileges_admin_newrealm()
+function privileges_admin_newrealm(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AddPrivileges',0,'Realm')) return;
@@ -28,7 +28,7 @@ function privileges_admin_newrealm()
 
     if ($confirmed) {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         }        
 
         $dbconn = xarDB::getConn();
@@ -55,7 +55,7 @@ function privileges_admin_newrealm()
         $result = $stmt->executeQuery($bindvars);
 
         //Redirect to view page
-        xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'));
+        xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'), null, $context);
     }
 
     $data['authid'] = xarSec::genAuthKey();

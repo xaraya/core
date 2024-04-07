@@ -13,7 +13,7 @@
  */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function themes_admin_delete_config()
+function themes_admin_delete_config(array $args = [], $context = null)
 {
     $data = [];
     if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
@@ -24,7 +24,7 @@ function themes_admin_delete_config()
     
     // Security
     if (!$data['object']->checkAccess('delete'))
-        return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $data['object']->label));
+        return xarController::forbidden(xarML('Delete #(1) is forbidden', $data['object']->label), $context);
 
     if ($data['confirm']) {
     
@@ -35,7 +35,7 @@ function themes_admin_delete_config()
         $item = $data['object']->deleteItem();
             
         // Jump to the next page
-        xarController::redirect(xarController::URL('themes','admin','view_configs'));
+        xarController::redirect(xarController::URL('themes','admin','view_configs'), null, $context);
         return true;
     }
     return $data;

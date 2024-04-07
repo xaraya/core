@@ -17,7 +17,7 @@
  *
  * @return string[] Array containing output and message.
 */
-function base_adminapi_waitingcontent()
+function base_adminapi_waitingcontent(array $args = [], $context = null)
 {
 
     // Hooks (we specify that we want the ones for adminpanels here)

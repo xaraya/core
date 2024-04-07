@@ -16,7 +16,7 @@
  * viewRealms - view the defined realms
  * @return array<mixed>|string|void data for the template display
  */
-function privileges_admin_viewrealms()
+function privileges_admin_viewrealms(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminPrivileges',0,'Realm')) return;

@@ -18,7 +18,7 @@
  *        integer  $args['gid'] group id
  * @return boolean true on succes, false on failure
  */
-function roles_adminapi_addmember(Array $args=array())
+function roles_adminapi_addmember(array $args = [], $context = null)
 {
     return xarMod::apiFunc('roles','user','addmember',$args);
 }

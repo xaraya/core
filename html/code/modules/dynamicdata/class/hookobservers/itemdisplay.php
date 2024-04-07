@@ -67,7 +67,8 @@ class ItemDisplay extends DataObjectHookObserver
             'dynamicdata',
             'user',
             'displayhook',
-            ['properties' => & $object->properties],
+            ['properties' => & $object->properties,
+            'context' => $object->getContext()],
             $template
         );
     }

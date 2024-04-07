@@ -22,14 +22,14 @@
  * @access  public
  * @return  mixed
  */
-function privileges_admin_addmember()
+function privileges_admin_addmember(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AddPrivileges')) return; 
     
 // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     if(!xarVar::fetch('ppid',   'isset', $id   , NULL, xarVar::DONT_SET)) {return;}
@@ -39,7 +39,7 @@ function privileges_admin_addmember()
         xarController::redirect(xarController::URL('privileges',
                                       'admin',
                                       'modifyprivilege',
-                                      array('id'=>$id)));
+                                      array('id'=>$id)), null, $context);
         return true;
     }
 
@@ -71,6 +71,6 @@ function privileges_admin_addmember()
     xarController::redirect(xarController::URL('privileges',
                              'admin',
                              'modifyprivilege',
-                             array('id'=>$id)));
+                             array('id'=>$id)), null, $context);
     return true;
 }

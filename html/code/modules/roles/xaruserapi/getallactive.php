@@ -17,7 +17,7 @@
  *        boolean  $args['include_anonymous'] whether or not to include anonymous user
  * @return mixed array of users, or false on failure
  */
-function roles_userapi_getallactive(Array $args=array())
+function roles_userapi_getallactive(array $args = [], $context = null)
 {
     // Security Check
     if(!xarSecurity::check('ViewRoles')) return;
@@ -65,7 +65,7 @@ function roles_userapi_getallactive(Array $args=array())
     $bindvars[] = xarRoles::ROLES_USERTYPE;
     $stmt = $dbconn->prepareStatement($query);
 
-    // cfr. xarcachemanager - this approach might change later
+    // cfr. cachemanager - this approach might change later
     $expire = xarModVars::get('roles','cache.userapi.getallactive');
 
     if($startnum > 0) {

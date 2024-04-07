@@ -134,6 +134,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
         } else {
             $template = null;
         }
+        $data['context'] ??= $object->getContext();
         return xarTpl::module('dynamicdata', 'admin', 'modifyconfighook', $data, $template);
     }
 }

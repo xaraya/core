@@ -21,7 +21,7 @@ use xarVar;
 use xarMLS;
 use xarMod;
 use xarModVars;
-use xarResponse;
+use xarController;
 use xarTpl;
 use xarDDObject;
 use DataObjectFactory;
@@ -198,7 +198,8 @@ class DefaultHandler extends xarObject implements ContextInterface
                 $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
             }
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
 
             if (empty($this->tplmodule)) {
@@ -217,21 +218,22 @@ class DefaultHandler extends xarObject implements ContextInterface
         // Pre-fetch item(s) for some standard dataobject methods
         if (empty($args['itemid']) && $this->method == 'showview') {
             if (!$this->object->checkAccess('view')) {
-                $this->getContext()?->setStatus(403);
-                return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
+                $msg = xarMLS::translate('View #(1) is forbidden', $this->object->label);
+                return xarController::forbidden($msg, $this->getContext());
             }
 
             $this->object->getItems();
         } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform')) {
             if (!$this->object->checkAccess('display')) {
-                $this->getContext()?->setStatus(403);
-                return xarResponse::Forbidden(xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+                $msg = xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
+                return xarController::forbidden($msg, $this->getContext());
             }
 
             // get the requested item
             $itemid = $this->object->getItem();
             if (empty($itemid) || $itemid != $this->object->itemid) {
-                return xarResponse::NotFound(xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+                $msg = xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
+                return xarController::notFound($msg, $this->getContext());
             }
         }
 

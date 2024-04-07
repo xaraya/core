@@ -14,7 +14,7 @@
  * modify configuration
  * @return array<mixed>|string|bool|void data for the template display
  */
-function roles_admin_modifynotice()
+function roles_admin_modifynotice(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminRoles')) return;
@@ -43,7 +43,7 @@ function roles_admin_modifynotice()
             if (!xarVar::fetch('askpasswordemail', 'checkbox', $askpasswordemail, false, xarVar::NOT_REQUIRED)) return;
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             // Update module variables
             xarModVars::set('roles', 'askwelcomeemail', $askwelcomeemail);
@@ -55,7 +55,7 @@ function roles_admin_modifynotice()
             xarModHooks::call('module', 'updateconfig', 'roles',
                 array('module' => 'roles'));
 
-            xarController::redirect(xarController::URL('roles', 'admin', 'modifynotice'));
+            xarController::redirect(xarController::URL('roles', 'admin', 'modifynotice'), null, $context);
             // Return
             return true;
     }

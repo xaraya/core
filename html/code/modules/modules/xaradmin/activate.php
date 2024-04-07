@@ -22,18 +22,18 @@
  * @param int id the module id to activate
  * @return boolean|string|void true on success, false on failure
  */
-function modules_admin_activate()
+function modules_admin_activate(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 
     
     // Security and sanity checks
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
     if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
         $return_url, '', xarVar::NOT_REQUIRED)) return;
         
@@ -51,6 +51,6 @@ function modules_admin_activate()
     if (empty($return_url))
         $return_url = xarController::URL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
         
-    xarController::redirect($return_url);
+    xarController::redirect($return_url, null, $context);
     return true;
 }

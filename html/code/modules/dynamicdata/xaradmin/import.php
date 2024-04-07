@@ -69,7 +69,7 @@ function dynamicdata_admin_import(array $args = [], $context = null)
 
     if (empty($refresh) && (!empty($import) || !empty($xml))) {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+            return xarController::badRequest('bad_author', $context);
         }
 
         if (empty($keepitemid)) {
@@ -128,7 +128,7 @@ function dynamicdata_admin_import(array $args = [], $context = null)
             'admin',
             'modifyprop',
             ['itemid' => $objectid]
-        ));
+        ), null, $context);
         return true;
     }
 

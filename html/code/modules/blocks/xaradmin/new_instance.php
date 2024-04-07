@@ -19,7 +19,7 @@
  * 
  * @return array<mixed>|string|void Data display array
 */
-function blocks_admin_new_instance()
+function blocks_admin_new_instance(array $args = [], $context = null)
 {
     // @checkme: Add here vs Manage elsewhere ?
     // @checkme: Instance mask still relevent with anon masks in play?
@@ -100,7 +100,7 @@ function blocks_admin_new_instance()
     if ($phase == 'update') {
         // validations
         if (!xarSec::confirmAuthKey())
-            return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         // groups, optional, if supplied must be valid block groups
         // validated here because createitem has no knowledge of them
         if (!empty($data['groups'])) {
@@ -179,7 +179,7 @@ function blocks_admin_new_instance()
             if (empty($return_url))
                 $return_url = xarController::URL('blocks', 'admin', 'modify_instance', 
                     array('block_id' => $block_id));
-            xarController::redirect($return_url);
+            xarController::redirect($return_url, null, $context);
             
         } else {
             // redisplay with invalid messages

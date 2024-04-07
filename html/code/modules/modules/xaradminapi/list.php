@@ -15,7 +15,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return array<mixed>|void the known modules
  */
-function modules_adminapi_list(Array $args=array())
+function modules_adminapi_list(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

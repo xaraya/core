@@ -14,7 +14,7 @@
  * @author Xaraya Development Team
  * @return boolean|void true on success, false on failure
  */
-function modules_adminapi_regenerate()
+function modules_adminapi_regenerate(array $args = [], $context = null)
 {
     // Security Check
     // need to specify the module because this function is called by the installer module

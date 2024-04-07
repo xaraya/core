@@ -162,7 +162,7 @@ function authsystem_user_login(array $args = [], $context = null)
 
         case xarRoles::ROLES_STATE_NOTVALIDATED:
             //User still must validate
-            xarController::redirect(xarController::URL('roles', 'user', 'getvalidation', array('uname' => $uname, 'valcode' => $pass, 'phase' => 'getvalidate')));
+            xarController::redirect(xarController::URL('roles', 'user', 'getvalidation', array('uname' => $uname, 'valcode' => $pass, 'phase' => 'getvalidate')), null, $context);
             break;
 
         case xarRoles::ROLES_STATE_ACTIVE:

@@ -57,7 +57,7 @@
  * - if the left ID of an entry is greater that the right ID + 1 of the previous, then we are going up one or more levels (the number of levels will be the diffence between the current left ID and the previous right ID + 2.
  */
  
-function categories_admin_build_tree()
+function categories_admin_build_tree(array $args = [], $context = null)
 {
     // Security Check
     if (!xarSecurity::check('AdminCategories')) return;

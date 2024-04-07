@@ -85,7 +85,8 @@ class ItemModify extends DataObjectHookObserver
             'dynamicdata',
             'admin',
             'modifyhook',
-            ['properties' => $properties],
+            ['properties' => $properties,
+            'context' => $object->getContext()],
             $template
         );
     }

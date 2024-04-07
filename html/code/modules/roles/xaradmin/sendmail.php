@@ -11,7 +11,7 @@
  * @link http://xaraya.info/index.php/release/27.html
  */
 
-function roles_admin_sendmail()
+function roles_admin_sendmail(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('MailRoles')) return;
@@ -25,7 +25,7 @@ function roles_admin_sendmail()
 
     // Confirm authorisation code.
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
     // Get user information
     // Get the current query
@@ -107,6 +107,6 @@ function roles_admin_sendmail()
     // If it was on, turn it back on
     xarModVars::set('themes','ShowTemplates',$themecomments);
 
-    xarController::redirect(xarController::URL('roles', 'admin', 'createmail'));
+    xarController::redirect(xarController::URL('roles', 'admin', 'createmail'), null, $context);
     return true;
 }

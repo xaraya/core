@@ -24,7 +24,7 @@
  * @return mixed output display string
  */
  
-function base_user_main(Array $args=array())
+function base_user_main(array $args = [], $context = null)
 {
     // Security Check
     if(!xarSecurity::check('ViewBase')) return;
@@ -44,9 +44,17 @@ function base_user_main(Array $args=array())
         }
         xarTpl::setPageTitle(xarML('Welcome'));
     }
-    /* if you want to include different pages in your user-main template
-     * return array('page' => $page);
-     * if you want to use different user-main-<page> templates
+    /**
+     * if you want to include different pages in your user-main template,
+     * return an array of template variables
      */
-    return xarTpl::module('base','user','main',array(),$page);
+    // return ['page' => $page];
+    /**
+     * if you want to use different user-main-<page> templates,
+     * call xarTpl::module() yourself and pass along the context
+     */
+    $data = [];
+    // Pass along the context for xarTpl::module() if needed
+    $data['context'] = $context;
+    return xarTpl::module('base','user','main',$data,$page);
 }

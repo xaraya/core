@@ -17,11 +17,11 @@
  * 
  * @return boolean|string|void Returns true on success, string on security failure
  */
-function categories_admin_create()
+function categories_admin_create(array $args = [], $context = null)
 {
     // Confirm authorisation code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     $data = [];
@@ -30,7 +30,7 @@ function categories_admin_create()
     if (!xarVar::fetch('reassign', 'checkbox',  $reassign, false, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('repeat',   'int:1:100', $data['repeat'],   1,     xarVar::NOT_REQUIRED)) return;
     if ($reassign) {
-        xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])));
+        xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])), null, $context);
         return true;
     }
 
@@ -42,6 +42,7 @@ function categories_admin_create()
 
     if (!$isvalid) {
         $data['authid'] = xarSec::genAuthKey();
+        $data['context'] ??= $context;
         return xarTpl::module('categories','admin','new',$data);
     }
     
@@ -49,7 +50,7 @@ function categories_admin_create()
         $data['objects'][$i]->createItem();
     }
 
-    xarController::redirect(xarController::URL('categories','admin','view'));
-//    xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])));
+    xarController::redirect(xarController::URL('categories','admin','view'), null, $context);
+//    xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])), null, $context);
     return true;
 }

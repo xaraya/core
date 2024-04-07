@@ -21,14 +21,14 @@
  * @param string return_url optional return URL after updating the hooks
  * @return array<mixed>|string|void data for the template display
  */
-function modules_admin_modify(Array $args=array())
+function modules_admin_modify(array $args = [], $context = null)
 {
     
     extract($args);
 
     // xarVar::fetch does validation if not explicitly set to be not required
     if (!xarVar::fetch('id', 'int:1', $id, 0, xarVar::NOT_REQUIRED)) return; 
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
     xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET);
 
     $modInfo = xarMod::getInfo($id);

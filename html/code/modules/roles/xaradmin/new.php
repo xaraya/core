@@ -15,7 +15,7 @@
  * @author Johnny Robeson
  * @return array<mixed>|string|bool|void data for the template display
  */
-function roles_admin_new()
+function roles_admin_new(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AddRoles')) return;
@@ -50,13 +50,14 @@ function roles_admin_new()
 
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
+            $data['context'] ??= $context;
             return xarTpl::module('roles','admin','new', $data);        
         } else {
             // Good data: create the item
             $itemid = $data['object']->createItem();
 
             // Jump to the next page
-            xarController::redirect(xarController::URL('roles','admin','new'));
+            xarController::redirect(xarController::URL('roles','admin','new'), null, $context);
             return true;
         }
     }

@@ -12,7 +12,7 @@
  * @return array<mixed>|bool|void data for the template display
  */
 
-    function privileges_user_errors()
+    function privileges_user_errors(array $args = [], $context = null)
     {
         $data = [];
         if(!xarVar::fetch('layout',   'isset', $data['layout']   , 'default', xarVar::DONT_SET)) {return;}
@@ -23,7 +23,7 @@
             if ($data['redirecturl'] == 'local_halt') {
             	return $data;
             } else {
-				xarController::redirect($data['redirecturl']);
+				xarController::redirect($data['redirecturl'], null, $context);
 				return true;
             }
         }

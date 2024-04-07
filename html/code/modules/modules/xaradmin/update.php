@@ -17,23 +17,19 @@
  * @param string newdescription the new description
  * @return mixed true on success, error message on failure
  */
-function modules_admin_update()
+function modules_admin_update(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditModules')) return; 
     
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // Get parameters
     xarVar::fetch('id','id',$regId);
     // CHECKME: what's this?
     xarVar::fetch('newdisplayname','str::',$newDisplayName); 
-
-    if (!xarSec::confirmAuthKey()) {
-        //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
 
     // update hooks...
     if (!xarVar::fetch('observers', 'array', $observers, array(), xarVar::NOT_REQUIRED)) return;
@@ -47,9 +43,9 @@ function modules_admin_update()
 
     xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET);
     if (!empty($return_url)) {
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     } else {
-        xarController::redirect(xarController::URL('modules', 'admin', 'modify', array('id' => $regId)));
+        xarController::redirect(xarController::URL('modules', 'admin', 'modify', array('id' => $regId)), null, $context);
     }
     
     return true;

@@ -747,7 +747,7 @@ class CelkoPositionProperty extends DataProperty
         $SQLquery .= " GROUP BY P1.id, " . $select_fields . " P1." . $this->initialization_celkoparent_id . ", P1." . $this->initialization_celkoleft_id . ", P1." . $this->initialization_celkoright_id . " ";
         $SQLquery .= " ORDER BY P1." . $this->initialization_celkoleft_id;
 
-    // cfr. xarcachemanager - this approach might change later
+    // cfr. cachemanager - this approach might change later
         $expire = xarModVars::get('categories','cache.userapi.getcat');
         $dbconn = xarDB::getConn();
         if (!empty($expire)){

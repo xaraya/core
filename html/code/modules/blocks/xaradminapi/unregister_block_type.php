@@ -25,7 +25,7 @@
  * @param string   $args['blockType'] the block type
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_unregister_block_type(Array $args=array())
+function blocks_adminapi_unregister_block_type(array $args = [], $context = null)
 {
     return true;
 }

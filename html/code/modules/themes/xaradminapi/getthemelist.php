@@ -24,7 +24,7 @@
  * @return array<mixed> array of theme information arrays
  * @throws BadParameterException
  */
-function themes_adminapi_getthemelist(Array $args=array())
+function themes_adminapi_getthemelist(array $args = [], $context = null)
 {
     extract($args);
     static $validOrderFields = array('name' => 'themes', 'regid' => 'themes',

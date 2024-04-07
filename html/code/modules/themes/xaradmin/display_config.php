@@ -14,7 +14,7 @@
 
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function themes_admin_display_config(Array $args=array())
+function themes_admin_display_config(array $args = [], $context = null)
 {
     $data = [];
     if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
@@ -24,7 +24,7 @@ function themes_admin_display_config(Array $args=array())
 
     if (!isset($data['object'])) return;
     if (!$data['object']->checkAccess('display'))
-        return xarResponse::Forbidden(xarML('Display #(1) is forbidden', $data['object']->label));
+        return xarController::forbidden(xarML('Display #(1) is forbidden', $data['object']->label), $context);
 
     $data['object']->getItem(array('itemid' => $data['itemid']));
     return $data;

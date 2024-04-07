@@ -20,7 +20,7 @@
  *
  * @author Marty Vance
  */
-function themes_admin_modifyconfig()
+function themes_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminThemes')) return;
@@ -88,12 +88,13 @@ function themes_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             $isvalid = $data['module_settings']->checkInput();
             $andvalid = ($data['enable_user_menu'] != false) ? $data['user_themes']->checkInput('user_themes') : true;
           
             if (!$isvalid || !$andvalid) {
+                $data['context'] ??= $context;
                 return xarTpl::module('themes','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();
@@ -153,7 +154,7 @@ function themes_admin_modifyconfig()
                 foreach ($files as $file) unlink($picker->initialization_basedirectory . "/" . $file['id']);
             }
             
-            xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
+            xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'), null, $context);
             return true;
 
         case 'flush':

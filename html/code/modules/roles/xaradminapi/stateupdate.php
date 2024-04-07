@@ -24,7 +24,7 @@
  *       replace with status
  * @param $args['url'] user url
  */
-function roles_adminapi_stateupdate(Array $args=array())
+function roles_adminapi_stateupdate(array $args = [], $context = null)
 {
     extract($args);
     // Argument check - make sure that all required arguments are present,

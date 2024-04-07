@@ -9,14 +9,14 @@
  * @link http://xaraya.info/index.php/release/771.html
  */
 
-function mail_admin_createqdef(Array $args=array())
+function mail_admin_createqdef(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminMail')) return; 
     
     // Are we legitimately here
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // First determine whether we need to look at the name entered, or the object chosen
@@ -29,14 +29,14 @@ function mail_admin_createqdef(Array $args=array())
     case 2:  // Object chosen
         $qdefNew = false;
         if(!xarVar::fetch('qdef_name_choose','int:1:',$qdefObjectId)) return;
-        if (empty($qdefObjectId)) return xarResponse::notFound();
+        if (empty($qdefObjectId)) return xarController::notFound(null, $context);
         // Get the name of the object from dd
         $qdefObject = xarMod::apiFunc('dynamicdata','user','getobject',array('objectid' => $qdefObjectId));
         if(!isset($qdefObject)) return;
         $qdefName = $qdefObject->name;
         break;
     default:
-        return xarResponse::notFound();
+        return xarController::notFound(null, $context);
     }
 
     if($qdefNew) {
@@ -62,6 +62,6 @@ function mail_admin_createqdef(Array $args=array())
         // All went well, we can set the modvar now
         xarModVars::set('mail','queue-definition',$qdefName);
     }
-    xarController::redirect(xarController::URL('mail','admin','view'));
+    xarController::redirect(xarController::URL('mail','admin','view'), null, $context);
     return true;
 }

@@ -20,13 +20,13 @@
  * @access public
  * @return string|void
  */
-function roles_admin_addmember()
+function roles_admin_addmember(array $args = [], $context = null)
 {
     // get parameters
     if (!xarVar::fetch('id',    'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('roleid', 'int:1:', $roleid, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
-    if (empty($roleid)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
+    if (empty($roleid)) return xarController::notFound(null, $context);
     // call the Roles class and get the parent and child objects
     $role   = xarRoles::get($roleid);
     $member = xarRoles::get($id);
@@ -36,7 +36,7 @@ function roles_admin_addmember()
 
     // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // check that this assignment hasn't already been made
@@ -56,6 +56,6 @@ function roles_admin_addmember()
 
     // redirect to the next page
     xarController::redirect(xarController::URL('roles', 'admin', 'modify',
-            array('id' => $id)));
+            array('id' => $id)), null, $context);
     return true;
 }

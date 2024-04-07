@@ -14,7 +14,7 @@
  * @param array<string, mixed> $args Array of optional parameters<br/>
  * @return string Default message
  */
-function base_wsapi_default(Array $args=array())
+function base_wsapi_default(array $args = [], $context = null)
 {
     $result = xarML('This is a default return to a web service call.  ');
     if (!empty($args)) {

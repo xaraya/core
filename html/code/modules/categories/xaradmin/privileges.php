@@ -22,7 +22,7 @@
  * @param array<string, mixed> $args Parameter data array
  * @return array<mixed>|bool|void Return display data array on success, null on failure.
  */
-function categories_admin_privileges($args)
+function categories_admin_privileges(array $args = [], $context = null)
 {
     // Security Check
     if (!xarSecurity::check('AdminCategories')) return;
@@ -111,7 +111,7 @@ function categories_admin_privileges($args)
 
             // redirect to the privilege
             xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
-                                          array('pid' => $pid)));
+                                          array('pid' => $pid)), null, $context);
             return true;
         }
 
@@ -165,9 +165,7 @@ function categories_admin_privileges($args)
         if (!empty($moduleid) && $moduleid == $modid) {
             // Get the list of all item types for this module (if any)
             try {
-                $mytypes = xarMod::apiFunc($modname,'user','getitemtypes',
-                // don't throw an exception if this function doesn't exist
-                array());
+                $mytypes = xarMod::apiFunc($modname,'user','getitemtypes');
             } catch (Exception $e) {
                 $mytypes = [];
             }
@@ -232,7 +230,7 @@ function categories_admin_privileges($args)
 
         // redirect to the privilege
         xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
-                                      array('pid' => $pid)));
+                                      array('pid' => $pid)), null, $context);
         return true;
     }
 

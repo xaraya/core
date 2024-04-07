@@ -16,7 +16,7 @@
  * @param int $itemid whether
  * @return integer id representing the role's primary parent group
  */
-function roles_userapi_getprimaryparent(Array $args=array())
+function roles_userapi_getprimaryparent(array $args = [], $context = null)
 {
     extract($args);
 

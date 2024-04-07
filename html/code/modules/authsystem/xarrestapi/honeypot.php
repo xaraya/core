@@ -15,7 +15,7 @@
  *
  * @return string of info
  */
-function authsystem_restapi_honeypot($args = [])
+function authsystem_restapi_honeypot(array $args = [], $context = null)
 {
     // @checkme handle POSTed args by passing $args['input'] only in handler?
     //extract($args);

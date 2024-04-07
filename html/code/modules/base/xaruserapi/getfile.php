@@ -26,7 +26,7 @@
  *        boolean  $args['superrors'] Indicates whether we want to die without an error shown (for blocks)
  * @return string Content of the file
  */
-function base_userapi_getfile(Array $args=array())
+function base_userapi_getfile(array $args = [], $context = null)
 {
     extract($args);
 

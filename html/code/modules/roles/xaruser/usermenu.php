@@ -15,7 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return string|void output display string
  */
-function roles_user_usermenu(Array $args=array())
+function roles_user_usermenu(array $args = [], $context = null)
 {
     if (!xarSecurity::check('ViewRoles')) return;
     extract($args);
@@ -29,7 +29,7 @@ function roles_user_usermenu(Array $args=array())
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
     if (!xarUser::isLoggedIn()){
-        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform'));
+        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform'), null, $context);
     }
 
     $id = xarUser::getVar('id');
@@ -89,7 +89,7 @@ function roles_user_usermenu(Array $args=array())
 
             if ($isvalid) {
                 if (!xarSec::confirmAuthKey('roles')) {
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarController::badRequest('bad_author', $context);
                 }
 
                 $newpass = $object->properties['password']->value;
@@ -151,7 +151,7 @@ function roles_user_usermenu(Array $args=array())
                 }
                 if (empty($returnurl))
                     $returnurl = xarController::URL('roles', 'user', 'account', array('tab' => 'basic'));
-                return xarController::redirect($returnurl);
+                return xarController::redirect($returnurl, null, $context);
             } else {
                 // invalid, we need to show the form data again
                 $data = array();
@@ -263,6 +263,7 @@ function roles_user_usermenu(Array $args=array())
                     $returnurl = xarController::URL('roles', 'user', 'account', array('tab' => 'basic'));
                 $data['returnurl'] = $returnurl;
                 $data['submitlabel'] = xarML('Update Settings');
+                $data['context'] ??= $context;
                 return xarTpl::module('roles','user','account', $data);
             }
 
@@ -287,13 +288,13 @@ function roles_user_usermenu(Array $args=array())
                     xarMod::apiFunc($moduleload, 'user', 'usermenu', array('phase' => 'updateitem', 'object' => $object));
                 } catch (Exception $e) {
                     if (!xarSec::confirmAuthKey($moduleload)) {
-                        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                        return xarController::badRequest('bad_author', $context);
                     }
                     $object->updateItem();
                 }
                 if (empty($returnurl))
                     $returnurl = xarController::URL('roles', 'user', 'account', array('moduleload' => $moduleload));
-                return xarController::redirect($returnurl);
+                return xarController::redirect($returnurl, null, $context);
             }
 
             // must have invalid data, show the form again
@@ -389,6 +390,7 @@ function roles_user_usermenu(Array $args=array())
             $data['moduleload'] = $moduleload;
             $data['tab'] = '';
             if (empty($message)) $data['message'] = '';
+            $data['context'] ??= $context;
             return xarTpl::module('roles', 'user', 'account', $data);
 
     }

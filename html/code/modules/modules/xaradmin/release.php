@@ -15,7 +15,7 @@
  * @access public
  * @return array<mixed>|void data for the template display
  */
-function modules_admin_release()
+function modules_admin_release(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditModules')) {

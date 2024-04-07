@@ -21,7 +21,7 @@
  * @return string|array<mixed>|null Returns display data array on success null on failure. 
  * If security checks fail an empty string is returned
  */
-function categories_admin_newhook($args)
+function categories_admin_newhook(array $args = [], $context = null)
 {
     extract($args);
 

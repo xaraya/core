@@ -20,7 +20,7 @@
  * @param $args['itemtype'] item type
  * @return int|void Returns the item count
  */
-function categories_userapi_countitems($args)
+function categories_userapi_countitems(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

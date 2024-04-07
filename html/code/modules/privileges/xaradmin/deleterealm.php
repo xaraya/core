@@ -16,7 +16,7 @@
  * deleteRealm - delete a realm
  * prompts for confirmation
  */
-function privileges_admin_deleterealm()
+function privileges_admin_deleterealm(array $args = [], $context = null)
 {
     if (!xarVar::fetch('id',          'isset', $id,          NULL, xarVar::DONT_SET)) return;
     if (!xarVar::fetch('confirmed', 'isset', $confirmed, NULL, xarVar::DONT_SET)) return;
@@ -37,7 +37,7 @@ function privileges_admin_deleterealm()
     }
 
     // Security
-    if (empty($name)) return xarResponse::NotFound();
+    if (empty($name)) return xarController::notFound(null, $context);
     if(!xarSecurity::check('ManagePrivileges',0,'Realm',$name)) return;
 
     if (empty($confirmed)) {
@@ -49,7 +49,7 @@ function privileges_admin_deleterealm()
 
 // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     $bindvars = array();
@@ -62,6 +62,6 @@ function privileges_admin_deleterealm()
 //xarModHooks::call('item', 'delete', $id, '');
 
 // redirect to the next page
-    xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'), null, $context);
     return true;
 }

@@ -15,7 +15,7 @@
  * module
  * @return array<mixed>|void data for the template display
  */
-function dynamicdata_admin_view_propertydefs()
+function dynamicdata_admin_view_propertydefs(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {

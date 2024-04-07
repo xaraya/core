@@ -18,7 +18,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return array<mixed> defaultauthmodulename, defaultlogoutmodname, defaultloginmodname
  */
-function roles_userapi_getdefaultauthdata()
+function roles_userapi_getdefaultauthdata(array $args = [], $context = null)
 {
     $defaultauthdata=array();
 

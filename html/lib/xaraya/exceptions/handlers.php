@@ -77,7 +77,11 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
                 } else {
                     $msg = xarTpl::file(sys::code() . 'modules/base/xartemplates/message-' . $template . '.xt', self::$data);
                 }
-                echo xarTpl::renderPage($msg);
+                if ($e instanceof xarExceptions) {
+                    echo xarTpl::renderPage($msg, null, $e->getContext());
+                } else {
+                    echo xarTpl::renderPage($msg);
+                }
             } else {
                 // Rethrow it, we cant handle it.
                 throw $e;

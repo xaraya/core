@@ -19,7 +19,7 @@
  * 
  * @return array<mixed>|string|void Returns display data array on success, null on failure
  */
-function categories_admin_modify()
+function categories_admin_modify(array $args = [], $context = null)
 {
     $data = [];
     if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}
@@ -35,7 +35,7 @@ function categories_admin_modify()
     
     // Root category cannot be modified except by the site admin
     if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
-        return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
+        return xarController::badRequest('no_privileges', $context);
 
     // Setting up necessary data.
     sys::import('modules.dynamicdata.class.objects.factory');

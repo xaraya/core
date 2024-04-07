@@ -16,13 +16,13 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return array<mixed>|string|void data for the template display
  */
-function roles_admin_showprivileges()
+function roles_admin_showprivileges(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;
     
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
 
     // Call the Roles class and get the role
     $role = xarRoles::get($id);

@@ -19,7 +19,7 @@
  * @return array<mixed>|void Items fetched from API
  * @throws BadParameterException
  */
-function blocks_typesapi_getitems(Array $args=array())
+function blocks_typesapi_getitems(array $args = [], $context = null)
 {
     extract($args);
     

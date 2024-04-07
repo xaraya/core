@@ -25,7 +25,7 @@
  * @param $args['itemid'] item ID
  * @return array<mixed>|boolean Returns category info on success, false on failure.
  */
-function categories_userapi_getitemcats($args)
+function categories_userapi_getitemcats(array $args = [], $context = null)
 {
     /**
      * Pending

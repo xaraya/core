@@ -26,4 +26,5 @@ $themeinfo = array(
     'xar_version'   => '1.0',
     'bl_version'    => '1.0',
     'class'         => 4,
+    'twigtemplates' => false,  // let's keep the installer with blocklayout for now
 );

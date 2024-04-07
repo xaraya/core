@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|void Returns display data array
  */
-function categories_user_main()
+function categories_user_main(array $args = [], $context = null)
 {
     $data = array();
 
@@ -136,9 +136,7 @@ function categories_user_main()
             $modinfo = xarMod::getInfo($modid);
             // Get the list of all item types for this module (if any)
             try {
-                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                // don't throw an exception if this function doesn't exist
-                array());
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes');
             } catch (Exception $e) {
                 $mytypes = [];
             }
@@ -170,7 +168,6 @@ function categories_user_main()
                         $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
                         array('itemtype' => $itemtype,
                               'itemids' => $links[$catid])
-                        // don't throw an exception if this function doesn't exist
                         );
                     } catch (Exception $e) {
                         $itemlinks = [];

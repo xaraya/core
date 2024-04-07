@@ -63,7 +63,7 @@
  * @return boolean true on success
  */
 
-function themes_userapi_register(Array $args=array())
+function themes_userapi_register(array $args = [], $context = null)
 {
     sys::import('modules.themes.class.xarcss');
     $css = xarCSS::getInstance();

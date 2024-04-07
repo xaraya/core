@@ -17,7 +17,7 @@
  * @return array<mixed>|void data for the template display
  * @todo some facelift
  */
-function modules_admin_modinfo()
+function modules_admin_modinfo(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('ViewModules')) return; 
@@ -66,6 +66,18 @@ function modules_admin_modinfo()
     }
     
     $data['namespace'] = $modinfo['namespace'] ?? '';
+    $data['twigtemplates'] = $modinfo['twigtemplates'] ?? false;
+    $data['twigextension'] = $modinfo['twigextension'] ?? '.html.twig';
+    $data['twigenabled'] = false;
+    if (!empty($data['twigtemplates'])) {
+        sys::import('xaraya.bridge.templates.twigtpl');
+        if (xarTwigTpl::hasTwigEnvironment()) {
+            $templatesDir = xarTwigTpl::getTwigTemplatesDir();
+            if (is_dir($templatesDir)) {
+                $data['twigenabled'] = true;
+            }
+        }
+    }
     $modname = $modinfo['name'];
     $hookobservers = xarHooks::getObserverModules($modname);
     if (!empty($hookobservers[$modname]) && !empty($hookobservers[$modname]['scopes'])) {

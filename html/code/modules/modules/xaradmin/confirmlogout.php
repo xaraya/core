@@ -18,7 +18,7 @@
  * @access  public
  * @return array<mixed>|void data for the template display
 */
-function modules_admin_confirmlogout()
+function modules_admin_confirmlogout(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|null Returns display data array on success, null on failure.
  */
-function categories_admin_stats()
+function categories_admin_stats(array $args = [], $context = null)
 {
     // Security Check
     if (!xarSecurity::check('AdminCategories')) return;
@@ -40,7 +40,7 @@ function categories_admin_stats()
         foreach ($modlist as $modid => $itemtypes) {
             $modinfo = xarMod::getInfo($modid);
             // Get the list of all item types for this module (if any)
-            try{
+            try {
                 $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes');
             } catch (Exception $e) {
                 $mytypes = array();
@@ -88,9 +88,7 @@ function categories_admin_stats()
             $data['itemtype'] = $itemtype;
             // Get the list of all item types for this module (if any)
             try {
-                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                // don't throw an exception if this function doesn't exist
-                array());
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes');
             } catch (Exception $e) {
                 $mytypes = [];
             }
@@ -145,7 +143,7 @@ function categories_admin_stats()
             try {
                 $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
                 array('itemtype' => $itemtype,
-                      'itemids' => $itemids)); // don't throw an exception here
+                      'itemids' => $itemids));
             } catch (Exception $e) {
                 $itemlinks = [];
             }

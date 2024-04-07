@@ -41,7 +41,7 @@
  * @return boolean|null Returns true on success, null on failure.
  * @throws BadParameterException Thrown if invalid parameters have been given
  */
-function categories_adminapi_linkcat($args)
+function categories_adminapi_linkcat(array $args = [], $context = null)
 {
     // Argument check
     if (isset($args['clean_first']) && $args['clean_first'] == true)

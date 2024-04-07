@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/771.html
  */
 
-function mail_admin_create(Array $args=array())
+function mail_admin_create(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AddMail')) return; 

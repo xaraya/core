@@ -14,13 +14,13 @@
  * view users
  * @return string|void output display string
  */
-function roles_user_view(Array $args=array())
+function roles_user_view(array $args = [], $context = null)
 {
     if (!xarSecurity::check('ViewRoles')) return;
 
     // members list disabled? only show to roles admins
     if ((bool)xarModVars::get('roles', 'displayrolelist') == false && !xarSecurity::check('AdminRoles', 0)) {
-        xarController::redirect(xarController::URL('roles', 'user', 'main'));
+        xarController::redirect(xarController::URL('roles', 'user', 'main'), null, $context);
     }
 //    extract($args);
 
@@ -67,5 +67,6 @@ function roles_user_view(Array $args=array())
     $data['urltemplate'] = xarController::URL('roles', 'user', 'view', $pagerfilter);
     $data['urlitemmatch'] = '%%';
 
+    $data['context'] ??= $context;
     return xarTpl::module($args['tplmodule'],'user','view',$data,$args['template']);
 }

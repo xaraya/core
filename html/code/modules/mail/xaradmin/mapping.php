@@ -16,7 +16,7 @@
  * based on (simple) rules.
  * @return array<mixed> data for the template display
 */
-function mail_admin_mapping(Array $args=array())
+function mail_admin_mapping(array $args = [], $context = null)
 {
      // Security
     if (!xarSecurity::check('AdminMail')) return;

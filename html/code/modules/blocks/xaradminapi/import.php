@@ -18,7 +18,7 @@
  * @param $args['xml'] XML string containing the object definition
  * @return int|bool block id on success, false on failure
  */
-function blocks_adminapi_import(Array $args=array())
+function blocks_adminapi_import(array $args = [], $context = null)
 {
     extract($args);
 

@@ -15,7 +15,7 @@
  * @author Marty Vance
  * @return array<mixed>|void the known themes
  */
-function themes_adminapi_list()
+function themes_adminapi_list(array $args = [], $context = null)
 {
 // Security Check
     if(!xarSecurity::check('AdminThemes')) return;

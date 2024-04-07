@@ -19,7 +19,7 @@ use xarCache;
 use xarObjectCache;
 use xarMLS;
 use xarMod;
-use xarResponse;
+use xarController;
 use xarTpl;
 use DataObjectFactory;
 use sys;
@@ -76,7 +76,8 @@ class DisplayHandler extends DefaultHandler
             // set context if available in handler
             $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
+                return xarController::notFound($msg, $this->getContext());
             }
 
             if (empty($this->tplmodule)) {
@@ -93,22 +94,23 @@ class DisplayHandler extends DefaultHandler
 
         if (!empty($this->args['itemid'])) {
             if (!$this->object->checkAccess('display')) {
-                $this->getContext()?->setStatus(403);
-                return xarResponse::Forbidden(xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+                $msg = xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
+                return xarController::forbidden($msg, $this->getContext());
             }
 
             // get the requested item
             $itemid = $this->object->getItem();
             if (empty($itemid) || $itemid != $this->object->itemid) {
-                return xarResponse::NotFound(xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+                $msg = xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
+                return xarController::notFound($msg, $this->getContext());
             }
 
             // call item display hooks for this item
             $this->object->callHooks('display');
         } elseif (!empty($this->args['values'])) {
             if (!$this->object->checkAccess('display')) {
-                $this->getContext()?->setStatus(403);
-                return xarResponse::Forbidden(xarMLS::translate('Display #(1) is forbidden', $this->object->label));
+                $msg = xarMLS::translate('Display #(1) is forbidden', $this->object->label);
+                return xarController::forbidden($msg, $this->getContext());
             }
 
             // always set the properties based on the given values !?

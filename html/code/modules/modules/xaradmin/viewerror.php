@@ -16,14 +16,14 @@
  * @param int id the module's registered id
  * @return mixed true on success, error message on failure
  */
-function modules_admin_viewerror()
+function modules_admin_viewerror(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 
     
     // Get parameters
     xarVar::fetch('id', 'int', $regId, 0, xarVar::NOT_REQUIRED);
-    if (empty($regId)) return xarResponse::notFound();
+    if (empty($regId)) return xarController::notFound(null, $context);
 
     //if (!xarSec::confirmAuthKey()) return;
 
@@ -70,5 +70,6 @@ function modules_admin_viewerror()
     }
 
     // Return the template variables to BL
+    $data['context'] ??= $context;
     return xarTpl::module('modules', 'admin', $template, $data);
 }

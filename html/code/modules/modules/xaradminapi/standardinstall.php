@@ -12,7 +12,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  */
 
-function modules_adminapi_standardinstall(Array $args=array())
+function modules_adminapi_standardinstall(array $args = [], $context = null)
 {
     extract($args);
     if (!isset($module)) return false;

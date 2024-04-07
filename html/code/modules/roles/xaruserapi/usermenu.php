@@ -21,20 +21,21 @@
  *        string   $args['object'] user_settings object (default roles_user_settings)
  * @return mixed array on showform, bool on checkinput, invalid = false, valid = true, bool on updateitem, error = false, success = true
  */
-function roles_userapi_usermenu(Array $args=array())
+function roles_userapi_usermenu(array $args = [], $context = null)
 {
     // not logged in?
     if (!xarUser::isLoggedIn()){
         // redirect user to their account page after login
         $redirecturl = xarController::URL('roles', 'user', 'account');
         // @fixme where is this supposed to come from?
-        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform', array('redirecturl' => $redirecturl)));
+        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform',
+            array('redirecturl' => $redirecturl)), null, $context);
     }
 
     // edit account is disabled?
     if ((bool)xarModVars::get('roles', 'usereditaccount') == false) {
         // show the user their profile display
-        xarController::redirect(xarController::URL('roles', 'user', 'account'));
+        xarController::redirect(xarController::URL('roles', 'user', 'account'), null, $context);
     }
 
     // Get arguments from argument array
@@ -153,7 +154,7 @@ function roles_userapi_usermenu(Array $args=array())
             // the default returnurl should be roles user account with a moduleload of current module
             if (empty($returnurl))
                 $returnurl = xarController::URL('roles', 'user', 'account', array('moduleload' => 'roles'));
-            return xarController::redirect($returnurl);
+            return xarController::redirect($returnurl, null, $context);
             */
             // let the calling function know the update was a success
             return true;

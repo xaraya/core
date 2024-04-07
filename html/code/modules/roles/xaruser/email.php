@@ -20,18 +20,18 @@
  * @throws  ForbiddenOperationException
  * @todo    handle empty subject and/or message?
  */
-function roles_user_email(Array $args=array())
+function roles_user_email(array $args = [], $context = null)
 {
     // we can only send emails to other members if we are logged in
     if(!xarUser::isLoggedIn())
     {
-        throw new ForbiddenOperationException(null,'You are not logged in, sending emails is not allowed');
+        throw new ForbiddenOperationException(null,'You are not logged in, sending emails is not allowed', $context);
     }
 
     extract($args);
 
     if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
 
     if (!xarVar::fetch('phase', 'enum:modify:confirm', $phase, 'modify', xarVar::NOT_REQUIRED)) return;
 
@@ -82,7 +82,7 @@ function roles_user_email(Array $args=array())
 
             // Confirm authorisation code.
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
 
             // Security Check
@@ -116,7 +116,7 @@ function roles_user_email(Array $args=array())
             )) return;
 
             // lets update status and display updated configuration
-            xarController::redirect(xarController::URL('roles', 'user', 'viewlist'));
+            xarController::redirect(xarController::URL('roles', 'user', 'viewlist'), null, $context);
 
             break;
     }

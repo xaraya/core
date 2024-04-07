@@ -52,6 +52,7 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:if>
+                <!-- @todo why are we using this here instead of changing showoutput above? -->
                 <xsl:text>),'label');</xsl:text>
               </xsl:otherwise>
             </xsl:choose>

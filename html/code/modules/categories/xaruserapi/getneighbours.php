@@ -22,7 +22,7 @@
  * @param $args['parent'] parent id (optional)
  * @return array<mixed>|bool|void Returns array containing neighbours info
  */
-function categories_userapi_getneighbours($args)
+function categories_userapi_getneighbours(array $args = [], $context = null)
 {
     extract($args);
 

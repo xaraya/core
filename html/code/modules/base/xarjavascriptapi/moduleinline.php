@@ -22,7 +22,7 @@
  * 
  * @return boolean|void Returns true on success, false on failure
  */
-function base_javascriptapi_moduleinline(Array $args=array())
+function base_javascriptapi_moduleinline(array $args = [], $context = null)
 {
     extract($args);
 

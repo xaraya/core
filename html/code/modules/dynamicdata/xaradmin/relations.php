@@ -136,7 +136,8 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
         // set context if available in function
         $object->setContext($context);
         if (!$object->checkAccess('config')) {
-            return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
+            $msg = xarML('Configure #(1) is forbidden', $object->label);
+            return xarController::forbidden($msg, $context);
         }
         $data['object'] = $object;
         $data['fields'] = $object->properties;
@@ -294,7 +295,7 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
         }
         if (!empty($confirm)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+                return xarController::badRequest('bad_author', $context);
             }
             /* no longer in use (for now ?)
             if (!empty($value)) {
@@ -318,12 +319,12 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
                 'admin',
                 'relations',
                 ['objectid' => $objectid]
-            ));
+            ), null, $context);
             return true;
 
         } elseif (!empty($delete) && !empty($what)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+                return xarController::badRequest('bad_author', $context);
             }
             // remove selected link(s)
             foreach ($what as $link_id => $val) {
@@ -337,7 +338,7 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
                 'admin',
                 'relations',
                 ['objectid' => $objectid]
-            ));
+            ), null, $context);
             return true;
 
         } elseif (!empty($update)) {
@@ -370,7 +371,8 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
             $context
         );
         if (!$object->checkAccess('config')) {
-            return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
+            $msg = xarML('Configure #(1) is forbidden', $object->label);
+            return xarController::forbidden($msg, $context);
         }
         $data['fields'] = $object->properties;
 
@@ -401,7 +403,7 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
         }
         if (!empty($confirm)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+                return xarController::badRequest('bad_author', $context);
             }
             /* no longer in use (for now ?)
             if (!empty($value)) {
@@ -425,12 +427,12 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
                 'admin',
                 'relations',
                 ['table' => $table]
-            ));
+            ), null, $context);
             return true;
 
         } elseif (!empty($delete) && !empty($what)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+                return xarController::badRequest('bad_author', $context);
             }
             // remove selected link(s)
             foreach ($what as $link_id => $val) {
@@ -444,7 +446,7 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
                 'admin',
                 'relations',
                 ['table' => $table]
-            ));
+            ), null, $context);
             return true;
         }
 
@@ -454,7 +456,7 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
             'user',
             'getproperty',
             ['type' => 'fieldtype',
-                                              'name' => 'dummy']
+            'name' => 'dummy']
         );
 
     } elseif (!empty($module_id)) {
@@ -465,7 +467,8 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
             'util',
             'getrelations',
             ['module_id' => $module_id,
-            'itemtype' => $itemtype]
+            'itemtype' => $itemtype],
+            $context
         );
     } else {
         xarTpl::setPageTitle(xarML('Links'));
@@ -480,7 +483,7 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
     return $data;
 }
 
-function dynamicdata_sync_relations()
+function dynamicdata_sync_relations(array $args = [], $context = null)
 {
     /*
         // add foreign keys to table links

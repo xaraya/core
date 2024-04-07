@@ -17,7 +17,7 @@
  * @param array<string, mixed> $args with $args['id']
  * @return string|void output display string
  */
-function roles_user_display(Array $args=array())
+function roles_user_display(array $args = [], $context = null)
 {
     extract($args);
 
@@ -39,7 +39,7 @@ function roles_user_display(Array $args=array())
 
         $currentid = xarUser::getVar('id');
         if ($currentid == $id) {
-            xarController::redirect(xarController::URL('roles', 'user', 'account'));
+            xarController::redirect(xarController::URL('roles', 'user', 'account'), null, $context);
         }
 
         $name = $role->getName();
@@ -82,5 +82,6 @@ function roles_user_display(Array $args=array())
     $data['itemtypename'] = $types[$itemtype]['label'];
     $data['layout'] = $args['layout'];
 
+    $data['context'] ??= $context;
     return xarTpl::module($args['tplmodule'],'user','display',$data,$args['template']);
 }

@@ -20,7 +20,7 @@
  * @throws BadParameterException
  * @throws DataNotFoundException
  */
-function blocks_blocksapi_getinfo(Array $args=array())
+function blocks_blocksapi_getinfo(array $args = [], $context = null)
 {
     // must have at least type or instance 
     if (empty($args['instance']) && empty($args['type'])) {

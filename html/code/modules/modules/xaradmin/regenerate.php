@@ -20,13 +20,13 @@
  * @return boolean|string|void true on success, false on failure
  * 
  */
-function modules_admin_regenerate()
+function modules_admin_regenerate(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 
     
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // Regenerate modules
@@ -35,7 +35,7 @@ function modules_admin_regenerate()
     if (!isset($regenerated)) return;
 
     // Redirect
-    xarController::redirect(xarController::URL('modules', 'admin', 'list'));
+    xarController::redirect(xarController::URL('modules', 'admin', 'list'), null, $context);
 
     return true;
 }

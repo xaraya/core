@@ -14,7 +14,7 @@
  * modifyprivilege - modify privilege details
  * @return array<mixed>|void data for the template display
  */
-function privileges_admin_modifyprivilege()
+function privileges_admin_modifyprivilege(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditPrivileges')) return;

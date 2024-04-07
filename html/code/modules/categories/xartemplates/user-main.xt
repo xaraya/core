@@ -58,7 +58,7 @@
 
     <xar:if condition="!empty($moditems) and count($moditems) gt 0">
       <xar:foreach in="$moditems" value="$moditem">
-        &#x2022; <a href="#$moditem['link']#">#$moditem['name']#</a> (#$moditem['numitems']#)
+        &#8226; <a href="#$moditem['link']#">#$moditem['name']#</a> (#$moditem['numitems']#)
         <ul>
         <xar:if condition="!empty($moditem['items'])">
         <xar:foreach in="$moditem['items']" value="$item">

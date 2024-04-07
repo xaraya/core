@@ -17,7 +17,7 @@
  * This function redirects to the view categories function
  * @return bool|array<mixed>|void Returns true on success, false on failure
  */
-function categories_admin_main()
+function categories_admin_main(array $args = [], $context = null)
 {
     // Security check
     if(!xarSecurity::check('EditCategories')) return;
@@ -27,7 +27,7 @@ function categories_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return array();
     } else {
-        xarController::redirect(xarController::URL('categories', 'admin', 'view'));
+        xarController::redirect(xarController::URL('categories', 'admin', 'view'), null, $context);
     }
 
     return true;

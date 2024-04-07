@@ -24,7 +24,7 @@
  * @param array<string, mixed> $args Parameter data array
  * @return array<mixed> List of available block types
  */
-function blocks_typesapi_getfiles(Array $args=array())
+function blocks_typesapi_getfiles(array $args = [], $context = null)
 {
     static $types = array();
     

@@ -10,7 +10,7 @@
  * @link http://xaraya.info/index.php/release/70.html
  */
 
-function themes_adminapi_getitems(Array $args=array())
+function themes_adminapi_getitems(array $args = [], $context = null)
 {
     extract($args);
 

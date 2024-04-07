@@ -19,7 +19,7 @@
  *
  * @return mixed output display string or boolean true if redirected
  */
-function roles_admin_main()
+function roles_admin_main(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;
@@ -27,9 +27,10 @@ function roles_admin_main()
     $samemodule = xarController::isRefererSameModule();
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTpl::module('roles','admin','overview');
+        $data = ['context' => $context];
+        return xarTpl::module('roles','admin','overview', $data);
     } else {
-        xarController::redirect(xarController::URL('roles', 'admin', 'showusers'));
+        xarController::redirect(xarController::URL('roles', 'admin', 'showusers'), null, $context);
         return true;
     }
 }

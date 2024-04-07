@@ -14,7 +14,7 @@
  * Update users from roles_admin_showusers
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
-function roles_admin_asknotification(Array $args=array())
+function roles_admin_asknotification(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;
@@ -67,7 +67,7 @@ function roles_admin_asknotification(Array $args=array())
         case 'notify' :
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             if (!xarVar::fetch('subject', 'str:1:', $data['subject'], NULL, xarVar::NOT_REQUIRED)) return;
             if (!xarVar::fetch('message', 'str:1:', $data['message'], NULL, xarVar::NOT_REQUIRED)) return;
@@ -86,7 +86,7 @@ function roles_admin_asknotification(Array $args=array())
                 return xarTpl::module('roles','user','errors',array('layout'=> 'mail_failed')); 
             }
             xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
-                              array('id' => $data['groupid'], 'state' => $data['state'])));
+                              array('id' => $data['groupid'], 'state' => $data['state'])), null, $context);
             return true;
     }
 }

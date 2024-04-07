@@ -17,8 +17,8 @@
  * @todo  finish cleanup, styles, filters and sort orders
  * @return array<mixed>|bool data for the template display
  */
-function modules_admin_list()
+function modules_admin_list(array $args = [], $context = null)
 {
-    xarController::redirect(xarController::URL('modules', 'admin', 'view'));
+    xarController::redirect(xarController::URL('modules', 'admin', 'view'), null, $context);
     return true;
 }

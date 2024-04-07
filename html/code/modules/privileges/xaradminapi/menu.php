@@ -13,7 +13,7 @@
 /**
  * generate the common admin menu configuration
  */
-function privileges_adminapi_menu()
+function privileges_adminapi_menu(array $args = [], $context = null)
 {
     // Initialise the array that will hold the menu configuration
     $menu = array();

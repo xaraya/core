@@ -64,7 +64,7 @@ function dynamicdata_admin_update(array $args = [], $context = null)
     }
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+        return xarController::badRequest('bad_author', $context);
     }
 
     // set context if available in function
@@ -120,6 +120,7 @@ function dynamicdata_admin_update(array $args = [], $context = null)
                     $data['label'] = $myobject->label;
                     xarTpl::setPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
                 }
+                $data['context'] ??= $myobject->getContext();
                 return xarTpl::module($tplmodule, 'admin', 'modify', $data);
             }
 
@@ -161,7 +162,7 @@ function dynamicdata_admin_update(array $args = [], $context = null)
             $adminaccess = xarSecurity::check('', 0, 'All', $myobject->objectid . ":" . $myobject->name . ":" . "All", '', '', 0, 800);
 
             if (!$adminaccess) {
-                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'no_privileges']);
+                return xarController::badRequest('no_privileges', $context);
             }
 
             $name = $myobject->properties['name']->getValue();
@@ -207,19 +208,19 @@ function dynamicdata_admin_update(array $args = [], $context = null)
                 'admin',
                 'modify',
                 ['itemid' => $newitemid]
-            ));
+            ), null, $context);
             return true;
     }
 
     if (!empty($return_url)) {
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     } elseif ($myobject->objectid == 1) { // for dynamic objects, return to modify
         xarController::redirect(xarController::URL(
             'dynamicdata',
             'admin',
             'modify',
             ['itemid' => $itemid]
-        ));
+        ), null, $context);
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
         $objectid = $myobject->properties['objectid']->value;
         xarController::redirect(xarController::URL(
@@ -227,14 +228,14 @@ function dynamicdata_admin_update(array $args = [], $context = null)
             'admin',
             'modifyprop',
             ['itemid' => $objectid]
-        ));
+        ), null, $context);
     } elseif (!empty($table)) {
         xarController::redirect(xarController::URL(
             'dynamicdata',
             'admin',
             'view',
             ['table' => $table]
-        ));
+        ), null, $context);
     } else {
         xarController::redirect(xarController::URL(
             'dynamicdata',
@@ -242,7 +243,7 @@ function dynamicdata_admin_update(array $args = [], $context = null)
             'view',
             ['itemid' => $objectid,
             'tplmodule' => $tplmodule]
-        ));
+        ), null, $context);
     }
     return true;
 }

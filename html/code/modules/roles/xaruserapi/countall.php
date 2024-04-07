@@ -16,7 +16,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return integer|void the number of users matching the selection criteria (cfr. getall)
  */
-function roles_userapi_countall(Array $args=array())
+function roles_userapi_countall(array $args = [], $context = null)
 {
     extract($args);
 
@@ -58,7 +58,7 @@ function roles_userapi_countall(Array $args=array())
     $query .= " AND itemtype = ?";
     $bindvars[] = xarRoles::ROLES_USERTYPE;
 
-// cfr. xarcachemanager - this approach might change later
+// cfr. cachemanager - this approach might change later
     $expire = xarModVars::get('roles','cache.userapi.countall');
     if (!empty($expire)){
         $result = $dbconn->CacheExecute($expire,$query,$bindvars);

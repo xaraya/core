@@ -15,7 +15,7 @@
  *
  * @return boolean|string|void true on success and redirect to modifyprop
  */
-function dynamicdata_admin_updateprop()
+function dynamicdata_admin_updateprop(array $args = [], $context = null)
 {
     if(!xarVar::fetch('objectid', 'isset', $objectid, 1, xarVar::DONT_SET)) {
         return;
@@ -67,7 +67,7 @@ function dynamicdata_admin_updateprop()
     }
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+        return xarController::badRequest('bad_author', $context);
     }
 
     $objectinfo = DataObjectFactory::getObjectInfo(
@@ -111,7 +111,8 @@ function dynamicdata_admin_updateprop()
         ['objectid' => $objectid,
         'moduleid' => $module_id,
         'itemtype' => $itemtype,
-        'allprops' => true]
+        'allprops' => true],
+        $context
     );
 
     $isprimary = 0;
@@ -128,7 +129,8 @@ function dynamicdata_admin_updateprop()
                 'dynamicdata',
                 'admin',
                 'deleteprop',
-                ['id' => $id]
+                ['id' => $id],
+                $context
             )) {
                 return;
             }
@@ -168,7 +170,8 @@ function dynamicdata_admin_updateprop()
                 'translatable'  => $dd_translatable[$id],
                 'source'        => $dd_source[$id],
                 'status'        => $dd_status[$id],
-                'configuration' => $dd_configuration[$id]]
+                'configuration' => $dd_configuration[$id]],
+                $context
             )) {
                 return;
             }
@@ -212,7 +215,8 @@ function dynamicdata_admin_updateprop()
             'defaultvalue' => $dd_defaultvalue[0],
             'source' => $dd_source[0],
             'status' => $dd_status[0],
-            'seq' => $i]
+            'seq' => $i],
+            $context
         );
         if (empty($id)) {
             return;
@@ -245,6 +249,6 @@ function dynamicdata_admin_updateprop()
         'modifyprop',
         ['itemid'    => $objectid,
         'table'    => $table]
-    ));
+    ), null, $context);
     return true;
 }

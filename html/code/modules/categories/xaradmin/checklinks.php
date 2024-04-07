@@ -17,7 +17,7 @@
  * 
  * @return array<mixed>|bool|string|void Returns data array on success, false|null on failure
  */
-function categories_admin_checklinks()
+function categories_admin_checklinks(array $args = [], $context = null)
 {
     // Security Check
     if (!xarSecurity::check('AdminCategories')) return;
@@ -37,9 +37,7 @@ function categories_admin_checklinks()
             $modinfo = xarMod::getInfo($modid);
             // Get the list of all item types for this module (if any)
             try {
-                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                // don't throw an exception if this function doesn't exist
-                array());
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes');
             } catch (Exception $e) {
                 $mytypes = [];
             }
@@ -82,9 +80,7 @@ function categories_admin_checklinks()
             $data['itemtype'] = $itemtype;
             // Get the list of all item types for this module (if any)
             try {
-                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                // don't throw an exception if this function doesn't exist
-                array());
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes');
             } catch (Exception $e) {
                 $mytypes = [];
             }
@@ -122,7 +118,7 @@ function categories_admin_checklinks()
             try {
                 $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
                                             array('itemtype' => $itemtype,
-                                                    'itemids' => $itemids)); // don't throw an exception here
+                                                    'itemids' => $itemids));
             } catch (Exception $e) {
                 $itemlinks = [];
             }
@@ -155,7 +151,7 @@ function categories_admin_checklinks()
         if(!xarVar::fetch('confirm',  'str:1:', $confirm,    '', xarVar::NOT_REQUIRED)) return;
         if (!empty($seencid) && !empty($confirm)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             if (!xarMod::apiFunc('categories','admin','unlinkcids',
                                array('modid' => $modid,
@@ -163,7 +159,7 @@ function categories_admin_checklinks()
                                      'cids' => array_keys($seencid)))) {
                 return;
             }
-            xarController::redirect(xarController::URL('categories', 'admin', 'checklinks'));
+            xarController::redirect(xarController::URL('categories', 'admin', 'checklinks'), null, $context);
             return true;
         }
 

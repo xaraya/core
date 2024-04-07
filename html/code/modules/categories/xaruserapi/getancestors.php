@@ -27,7 +27,7 @@
  * @staticvar array $cached
  * @return boolean|array<mixed>|void Returns array of category info or false on failure
  */
-function categories_userapi_getancestors($args)
+function categories_userapi_getancestors(array $args = [], $context = null)
 {
     /**
      * Pending

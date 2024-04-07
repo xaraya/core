@@ -22,7 +22,7 @@
  * 
  * @checkme: The default module should be the current *template* module, not the *request* module?
  */
-function base_javascriptapi__findfile(Array $args=array())
+function base_javascriptapi__findfile(array $args = [], $context = null)
 {
     extract($args);
 

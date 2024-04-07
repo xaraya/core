@@ -31,6 +31,7 @@ function dynamicdata_userapi_showdisplay(array $args = [], $context = null)
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
+        $args['context'] ??= $context;
         return xarTpl::module(
             'dynamicdata',
             'user',

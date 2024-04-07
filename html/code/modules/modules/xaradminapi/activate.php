@@ -18,7 +18,7 @@
  * @return boolean
  * @throws EmptyParameterException
  */
-function modules_adminapi_activate(Array $args=array())
+function modules_adminapi_activate(array $args = [], $context = null)
 {
     extract($args);
 

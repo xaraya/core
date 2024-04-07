@@ -16,7 +16,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * @return array<mixed>|void Returns data display array
  */
-function blocks_admin_refresh_types(Array $args=array())
+function blocks_admin_refresh_types(array $args = [], $context = null)
 {
     if (!xarSecurity::check('AdminBlocks')) return;
 

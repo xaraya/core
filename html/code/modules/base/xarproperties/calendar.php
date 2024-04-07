@@ -190,6 +190,8 @@ class CalendarProperty extends DataProperty
         if (empty($template)) {
             $template = 'calendar';
         }
+        // Pass along the object context for xarTpl::property()
+        $data['context'] ??= $this->objectref?->getContext();
         return xarTpl::property('base', $template, 'configuration', $data);
     }
 	

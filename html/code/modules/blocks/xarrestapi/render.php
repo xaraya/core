@@ -17,14 +17,14 @@ sys::import('xaraya.blocks');
  *
  * @return string render block output
  */
-function blocks_restapi_render($args = [])
+function blocks_restapi_render($args = [], $context = null)
 {
     // needed to initialize the template cache
     xarTpl::init();
     // not really needed here but why not?
     xarBlock::init();
     try {
-        $result = xarBlock::renderBlock($args);
+        $result = xarBlock::renderBlock($args, $context);
     } catch (Exception $e) {
         $result = "Exception: " . $e->getMessage();
     }

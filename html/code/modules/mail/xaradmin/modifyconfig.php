@@ -20,7 +20,7 @@
  * @access  public
  * @return mixed data array for the template display or output display string if invalid data submitted
 */
-function mail_admin_modifyconfig()
+function mail_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminMail')) return;
@@ -39,6 +39,8 @@ function mail_admin_modifyconfig()
     } else {
         $data['redirectaddress']='';
     }
+
+    $data['library_exists'] = file_exists(sys::lib() . 'PHPMailer');
 
     if (xarMod::isAvailable('scheduler')) {
         $intervals = xarMod::apiFunc('scheduler','user','intervals');
@@ -77,7 +79,7 @@ function mail_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             switch ($data['tab']) {
                 case 'general':
@@ -91,6 +93,7 @@ function mail_admin_modifyconfig()
                     
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
+                        $data['context'] ??= $context;
                         return xarTpl::module('mail','admin','modifyconfig', $data);        
                     } else {
                         $itemid = $data['module_settings']->updateItem();

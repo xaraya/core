@@ -18,7 +18,7 @@
  * 
  * @return array<mixed>|void Display template data array
  */
-function blocks_admin_view_types()
+function blocks_admin_view_types(array $args = [], $context = null)
 {
     // Security - checkme: Edit vs Manage? 
     if (!xarSecurity::check('ManageBlocks')) {return;}

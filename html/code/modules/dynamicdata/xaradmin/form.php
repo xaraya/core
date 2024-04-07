@@ -67,10 +67,12 @@ function dynamicdata_admin_form(array $args = [], $context = null)
 
     // Security
     if (!$myobject->checkAccess('create')) {
-        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
+        $msg = xarML('Create #(1) is forbidden', $myobject->label);
+        return xarController::forbidden($msg, $context);
     }
 
     $data['object'] = & $myobject;
+    $data['context'] ??= $myobject->getContext();
 
     $template = $myobject->name;
     return xarTpl::module('dynamicdata', 'admin', 'form', $data, $template);

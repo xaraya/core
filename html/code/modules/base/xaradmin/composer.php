@@ -14,7 +14,7 @@
  * @author Marc Lutolf
  * 
  */
-function base_admin_composer()
+function base_admin_composer(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('ManageBase')) return;
@@ -48,6 +48,10 @@ function base_admin_composer()
         if (!empty($data['installed'])) {
             $data['composer_file'] = $root . '/composer.json';
         }
+    }
+    $data['writable'] = false;
+    if (!empty($data['composer_file'])) {
+        $data['writable'] = file_exists($data['composer_file']) && is_writable($data['composer_file']);
     }
 
     // Default message is none
@@ -91,7 +95,7 @@ function base_admin_composer()
             $output = shell_exec('rm ' . $setup_path);
             if (!empty($output)) $data['message'][] = $output;
             if (empty($data['message'])) {
-                xarController::redirect(xarServer::getCurrentURL());
+                xarController::redirect(xarServer::getCurrentURL(), null, $context);
             }
         }
     } elseif ($install) {

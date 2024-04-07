@@ -18,13 +18,13 @@
  * @param bool usercapable the whether the module shows a user menu
  * @return mixed true on success, error message on failure
  */
-function modules_admin_updateproperties()
+function modules_admin_updateproperties(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 
     
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // Get parameters
@@ -51,9 +51,9 @@ function modules_admin_updateproperties()
 
     xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET);
     if (!empty($return_url)) {
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     } else {
-        xarController::redirect(xarController::URL('modules', 'admin', 'list'));
+        xarController::redirect(xarController::URL('modules', 'admin', 'list'), null, $context);
     }
 
     return true;

@@ -596,6 +596,7 @@ class DataProperty extends xarObject implements iDataProperty
                 }
             }
         }
+        // Pass along the object context for xarTpl::property()
         $data['context'] ??= $this->objectref?->getContext();
         return xarTpl::property($data['tplmodule'], $data['template'], 'showinput', $data);
     }
@@ -670,6 +671,7 @@ class DataProperty extends xarObject implements iDataProperty
                 }
             }
         }
+        // Pass along the object context for xarTpl::property()
         $data['context'] ??= $this->objectref?->getContext();
         return xarTpl::property($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
@@ -731,6 +733,7 @@ class DataProperty extends xarObject implements iDataProperty
         if(!isset($data['title'])) {
             $data['title']   = $this->display_tooltip;
         }
+        // Pass along the object context for xarTpl::property()
         $data['context'] ??= $this->objectref?->getContext();
         return xarTpl::property($data['tplmodule'], $data['template'], 'label', $data);
     }
@@ -830,6 +833,7 @@ class DataProperty extends xarObject implements iDataProperty
         if(!isset($data['layout'])) {
             $data['layout']   = $this->layout;
         }
+        // Pass along the object context for xarTpl::property()
         $data['context'] ??= $this->objectref?->getContext();
         return xarTpl::property($data['tplmodule'], $data['template'], 'filter', $data);
     }
@@ -890,6 +894,7 @@ class DataProperty extends xarObject implements iDataProperty
             $data['layout']   = $this->layout;
         }
 
+        // Pass along the object context for xarTpl::property()
         $data['context'] ??= $this->objectref?->getContext();
         return xarTpl::property($data['tplmodule'], $data['template'], 'showhidden', $data);
     }
@@ -1054,6 +1059,7 @@ class DataProperty extends xarObject implements iDataProperty
                 $data['validation'][$msgname] = '';
             }
         }
+        // Pass along the object context for xarTpl::property()
         $data['context'] ??= $this->objectref?->getContext();
         return xarTpl::property($data['module'], $data['template'], 'configuration', $data);
     }

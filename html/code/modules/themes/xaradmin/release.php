@@ -17,7 +17,7 @@
  * @return array<mixed>|void data for the template display
  * @todo change feed url once release module is moved
  */
-function themes_admin_release()
+function themes_admin_release(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditThemes')) return;

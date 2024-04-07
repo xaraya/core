@@ -16,7 +16,7 @@
  * @param array<string, mixed> $args Optional set of arguments
  * @return \xarCurl xarCurl Object returned
  */
-function base_userapi_newcurl(Array $args=array())
+function base_userapi_newcurl(array $args = [], $context = null)
 {
     sys::import('modules.base.class.xarCurl');
     return new xarCurl($args);

@@ -56,6 +56,27 @@ final class ContextFactoryTest extends TestCase
         $_GET = [];
     }
 
+    public function testSerialize(): void
+    {
+        $context = new Context([
+            'hello' => 'world',
+            'source' => __METHOD__,
+            // Exception: Serialization of 'ReflectionMethod' is not allowed
+            'twig' => new ReflectionMethod(Context::class, 'getSession'),
+        ]);
+
+        // check that serializing dropped most of the context
+        $serialized = serialize($context);
+        $expected = 'O:22:"Xaraya\Context\Context":1:{s:6:"source";s:35:"Xaraya\Context\Context::__serialize";}';
+        $this->assertEquals($expected, $serialized);
+
+        // check that unserializing doesn't return the same context
+        $unserialized = unserialize($serialized);
+        $this->assertNotEquals($context, $unserialized);
+        $expected = 'Xaraya\Context\Context::__serialize';
+        $this->assertEquals($expected, $unserialized['source']);
+    }
+
     public function testMakeRequest(): void
     {
         $serverVars = $this->getServerVars();

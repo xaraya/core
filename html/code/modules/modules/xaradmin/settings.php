@@ -14,7 +14,7 @@
  *
  * @author Xaraya Development Team
  */
-function modules_admin_settings()
+function modules_admin_settings(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminModules')) return;
@@ -30,6 +30,6 @@ function modules_admin_settings()
     xarModUserVars::set('modules', 'selfilter', $selfilter);
     xarModUserVars::set('modules', 'selsort', $selsort);
     
-    xarController::redirect(xarController::URL('modules', 'admin', 'list', array('regen' => $regen)));
+    xarController::redirect(xarController::URL('modules', 'admin', 'list', array('regen' => $regen)), null, $context);
     return true;
 }

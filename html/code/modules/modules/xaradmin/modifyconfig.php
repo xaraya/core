@@ -21,7 +21,7 @@
  * @access  public
  * @return  mixed data array for the template display or output display string if invalid data submitted
 */
-function modules_admin_modifyconfig()
+function modules_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminModules')) return;
@@ -41,10 +41,11 @@ function modules_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
+                $data['context'] ??= $context;
                 return xarTpl::module('modules','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();

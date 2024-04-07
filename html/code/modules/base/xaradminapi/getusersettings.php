@@ -17,7 +17,7 @@
  * @return object Data object
  * @throws Exception Thrown is module or itemid have not been provided.
  */
-function base_adminapi_getusersettings(Array $args=array())
+function base_adminapi_getusersettings(array $args = [], $context = null)
 {
     if (empty($args['module']))
         throw new Exception(xarML('The getusersettings function requires a module parameter'));

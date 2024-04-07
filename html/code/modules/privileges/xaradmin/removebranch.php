@@ -20,7 +20,7 @@
  * @access  public
  * @return array<mixed>|string|void
  */
-function privileges_admin_removebranch()
+function privileges_admin_removebranch(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditPrivileges')) return; 
@@ -28,8 +28,8 @@ function privileges_admin_removebranch()
 // get input from any view of this page
    if (!xarVar::fetch('childid',  'int', $childid,  NULL, xarVar::NOT_REQUIRED)) {return;}
    if (!xarVar::fetch('parentid', 'int', $parentid, NULL, xarVar::NOT_REQUIRED)) {return;}
-    if (empty($childid)) return xarResponse::notFound();
-    if (empty($parentid)) return xarResponse::notFound();
+    if (empty($childid)) return xarController::notFound(null, $context);
+    if (empty($parentid)) return xarController::notFound(null, $context);
 
 // call the API function
    if(!xarMod::apiFunc('privileges','admin','removemember', array('parentid' => $parentid, 'childid' => $childid))) {
@@ -38,6 +38,6 @@ function privileges_admin_removebranch()
 // redirect to the next page
     xarController::redirect(xarController::URL('privileges',
                              'admin',
-                             'viewprivileges'));
+                             'viewprivileges'), null, $context);
     return true;
 }

@@ -17,7 +17,7 @@
  *       there's no current way this can be included in the property configuration
  *       since property configuration can't be MLed
  */
-function roles_userapi_getstates()
+function roles_userapi_getstates(array $args = [], $context = null)
 {
     sys::import('modules.roles.class.roles');
     return array(

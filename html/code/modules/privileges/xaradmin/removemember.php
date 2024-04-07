@@ -20,14 +20,14 @@
  * @access  public
  * @return array<mixed>|string|void
  */
-function privileges_admin_removemember()
+function privileges_admin_removemember(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditPrivileges')) return; 
     
     // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
 // get input from any view of this page
@@ -42,6 +42,6 @@ function privileges_admin_removemember()
     xarController::redirect(xarController::URL('privileges',
                              'admin',
                              'modifyprivilege',
-                             array('id'=>$childid)));
+                             array('id'=>$childid)), null, $context);
     return true;
 }

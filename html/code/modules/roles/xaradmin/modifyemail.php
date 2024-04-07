@@ -12,7 +12,7 @@
  * Modify the  email for users
  * @return array<mixed>|bool|void data for the template display
  */
-function roles_admin_modifyemail(Array $args=array())
+function roles_admin_modifyemail(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;
@@ -98,7 +98,8 @@ function roles_admin_modifyemail(Array $args=array())
                 $msg = 'The messaging template "#(1)" is not writable or it is not allowed to delete files from #(2)';
                 throw new ConfigurationException(array($filename,$messaginghome),$msg);
             }
-            xarController::redirect(xarController::URL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
+            xarController::redirect(xarController::URL('roles', 'admin', 'modifyemail',
+                array('mailtype' => $data['mailtype'])), null, $context);
             return true;
     }
     return $data;

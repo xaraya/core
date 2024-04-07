@@ -25,6 +25,6 @@ function dynamicdata_admin_utilities(array $args = [], $context = null)
         return;
     }
     xarTpl::setPageTitle(xarVar::prepForDisplay(xarML($data['option'])));
-    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'import'));
+    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'import'), null, $context);
     return true;
 }

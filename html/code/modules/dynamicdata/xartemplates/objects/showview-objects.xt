@@ -53,12 +53,14 @@
                 </xar:if>
             </tr>
             <xar:set name="adminlistserial">xarModVars::get('dynamicdata','administrators')</xar:set>
+            <xar:set name="adminrole">xarModVars::get('roles','admin')</xar:set>
             <xar:if condition="!empty($adminlistserial)">
-                <xar:set name="adminlist">array_merge(unserialize($adminlistserial),[xarUser::getVar('uname',xarModVars::get('roles','admin'))])</xar:set>
+                <xar:set name="adminlist">array_merge(unserialize($adminlistserial),[xarUser::getVar('uname',$adminrole)])</xar:set>
             <xar:else/>
-                <xar:set name="adminlist">[xarUser::getVar('uname',xarModVars::get('roles','admin'))]</xar:set>
+                <xar:set name="adminlist">[xarUser::getVar('uname',$adminrole)]</xar:set>
             </xar:if>
-            <xar:set name="issuperadmin">in_array(xarUser::getVar('uname'),$adminlist)</xar:set>
+            <xar:set name="username">xarUser::getVar('uname')</xar:set>
+            <xar:set name="issuperadmin">in_array($username,$adminlist)</xar:set>
             <xar:set name="item_no">0</xar:set>
             <xar:foreach in="$items" key="$itemid" value="$fields">
                 <xar:if condition="!$issuperadmin AND ($itemid le 3)">

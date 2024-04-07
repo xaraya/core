@@ -20,7 +20,7 @@
  * @access public
  * @return string|void
  */
-function roles_admin_removemember()
+function roles_admin_removemember(array $args = [], $context = null)
 {
     // get input from any view of this page
     if (!xarVar::fetch('parentid', 'int', $parentid, xarVar::NOT_REQUIRED)) return;
@@ -30,13 +30,13 @@ function roles_admin_removemember()
     $member = xarRoles::get($childid);
 
     // Security
-    if (empty($role)) return xarResponse::NotFound();
-    if (empty($member)) return xarResponse::NotFound();
+    if (empty($role)) return xarController::notFound(null, $context);
+    if (empty($member)) return xarController::notFound(null, $context);
     if(!xarSecurity::check('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // remove the child from the parent and bail if an error was thrown
@@ -49,6 +49,7 @@ function roles_admin_removemember()
     xarModHooks::call('item', 'unlink', $parentid, $pargs);
 
     // redirect to the next page
-    xarController::redirect(xarController::URL('roles', 'admin', 'modify',  array('id' => $childid)));
+    xarController::redirect(xarController::URL('roles', 'admin', 'modify',
+        array('id' => $childid)), null, $context);
     return true;
 }

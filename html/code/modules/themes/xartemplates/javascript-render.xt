@@ -16,12 +16,12 @@
                     </xar:if>
                     <xar:foreach in="$scopes" value="$script">
                         <xar:if condition="$script['type'] eq 'lib'">
-                            <script type="text/javascript" src="#$script['url']#"/>
+                            <script type="text/javascript" src="#$script['url']#"><!--Empty tag workaround for script tag--></script>
                             <xar:set name="dummy">1;$libs[] = $script['lib']</xar:set>
                         <xar:elseif condition="$script['type'] eq 'plugin'"/>
                             <!-- Plugins are loaded only if the corresponding library was loaded -->
                             <xar:if condition="in_array($script['lib'], $libs)">
-                                <script type="text/javascript" src="#$script['url']#"/>
+                                <script type="text/javascript" src="#$script['url']#"><!--Empty tag workaround for script tag--></script>
                             <xar:else/>
                                 <xar:ml>
                                     The plugin #(1) cannot be loaded
@@ -29,7 +29,7 @@
                                 </xar:ml>
                             </xar:if>
                         <xar:elseif condition="$script['type'] eq 'src'"/>
-                            <script type="text/javascript" src="#$script['url']#"/>
+                            <script type="text/javascript" src="#$script['url']#"><!--Empty tag workaround for script tag--></script>
                         <xar:elseif condition="$script['type'] eq 'code'"/>
                             <script type="text/javascript">
                                 #$script['code']#

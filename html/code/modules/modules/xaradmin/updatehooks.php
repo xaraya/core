@@ -14,13 +14,13 @@
  *
  * @author Xaraya Development Team
  */
-function modules_admin_updatehooks()
+function modules_admin_updatehooks(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('ManageModules')) {return;}
 
     if (!xarSec::confirmAuthKey()) {
-        //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        //return xarController::badRequest('bad_author', $context);
     }        
     // Curhook contains module name
     if (!xarVar::fetch('curhook', 'str:1:', $curhook)) {return;}
@@ -47,10 +47,10 @@ function modules_admin_updatehooks()
 
     if (!xarVar::fetch('return_url', 'isset', $return_url, '', xarVar::NOT_REQUIRED)) {return;}
     if (!empty($return_url)) {
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     } else {
         xarController::redirect(xarController::URL('modules', 'admin', 'hooks',
-                                      array('hook' => $curhook)));
+                                      array('hook' => $curhook)), null, $context);
     }
     return true;
 }

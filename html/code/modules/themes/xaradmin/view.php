@@ -15,7 +15,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * @return array<mixed>|string|void data for the template display
  */
-function themes_admin_view()
+function themes_admin_view(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminThemes')) return;
@@ -29,7 +29,7 @@ function themes_admin_view()
     // update default themes
     if ($phase == 'update') {
         if (!xarSec::confirmAuthKey()) 
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         $old_user_theme = xarModVars::get('themes', 'default_theme');
         $old_admin_theme = xarModVars::get('themes', 'admin_theme');
         if (!xarVar::fetch('user_theme', 'pre:trim:lower:str:1:',
@@ -74,7 +74,7 @@ function themes_admin_view()
             xarModVars::set('themes', 'admin_theme', $new_admin_theme);
         }
         $return_url = xarController::URL('themes', 'admin', 'view');
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, null, $context);
     }
     
     // display phase     
@@ -157,6 +157,14 @@ function themes_admin_view()
                     array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
             break;
             
+        }
+        // See includes/admin-list-preview
+        if ($data['tab'] == 'preview') {
+            $theme['preview_img'] = false;
+            $preview_img = 'themes/' . $theme['directory'] . '/images/preview.jpg';
+            if (is_file($preview_img)) {
+                $theme['preview_img'] = $preview_img;
+            }
         }
         $themes[$key] = $theme;
     }

@@ -13,7 +13,7 @@
 /**
  * updateprivilege - update a privilege
  */
-function privileges_admin_updateprivilege()
+function privileges_admin_updateprivilege(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditPrivileges')) return; 
@@ -23,7 +23,7 @@ function privileges_admin_updateprivilege()
 
 // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     if(!xarVar::fetch('id',         'isset', $id,        NULL, xarVar::DONT_SET)) {return;}
@@ -82,6 +82,7 @@ function privileges_admin_updateprivilege()
                     'privileges'));
 
 // redirect to the next page
-    xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
+        array('id' => $id)), null, $context);
     return true;
 }

@@ -22,7 +22,7 @@
  * @access  public
  * @return mixed output display string or boolean true if redirected
 */
-function mail_admin_main()
+function mail_admin_main(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditMail')) return;
@@ -30,9 +30,10 @@ function mail_admin_main()
     $samemodule = xarController::isRefererSameModule();
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTpl::module('mail','admin','overview');
+        $data = ['context' => $context];
+        return xarTpl::module('mail','admin','overview', $data);
     } else {
-        xarController::redirect(xarController::URL('mail', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('mail', 'admin', 'modifyconfig'), null, $context);
         return true;
     }
 }

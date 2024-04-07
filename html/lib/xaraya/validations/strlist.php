@@ -48,7 +48,7 @@ class StrListValidation extends ValueValidations
             // @todo error if no separator?
             if (empty($sep)) {
                 $msg = xarML('No separator character(s) provided for validation type "strlist"');
-                throw new BadParameterException($msg);
+                throw new BadParameterException(null, $msg);
             }
 
             // Roll up the remaining validation parameters (noting there

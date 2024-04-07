@@ -9,13 +9,13 @@
  * @link http://xaraya.info/index.php/release/771.html
  */
 
-function mail_admin_createqArray(Array $args=array())
+function mail_admin_createqArray(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminMail')) return;
     
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // What do we need to do
@@ -24,7 +24,7 @@ function mail_admin_createqArray(Array $args=array())
     // Do we have the master ?
     if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         // Redirect to the view page, which offers to create one
-        xarController::redirect(xarController::URL('mail','admin','view'));
+        xarController::redirect(xarController::URL('mail','admin','view'), null, $context);
         return true;
     }
 
@@ -33,6 +33,6 @@ function mail_admin_createqArray(Array $args=array())
     if(!$qData) return; // exception
     
     // Show the status screen again, 
-    xarController::redirect(xarController::URL('mail','admin','qstatus'));
+    xarController::redirect(xarController::URL('mail','admin','qstatus'), null, $context);
     return true;
 }

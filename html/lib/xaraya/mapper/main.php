@@ -44,6 +44,12 @@ class xarController extends xarObject
     public static $buildUri;     // callable for building URIs when using non-standard entrypoints
     /** @var ?callable */
     public static $redirectTo;   // callable for redirecting to when using non-standard entrypoints
+    /** @var ?callable */
+    public static $forbiddenTo;   // callable for forbidden when using non-standard entrypoints
+    /** @var ?callable */
+    public static $notFoundTo;   // callable for not found when using non-standard entrypoints
+    /** @var ?callable */
+    public static $badRequestTo;   // callable for bad request when using non-standard entrypoints
     /** @var ?RequestInterface */
     private static $requestContext = null;
 
@@ -224,6 +230,28 @@ class xarController extends xarObject
     }
 
     /**
+     * Summary of setResponse
+     * @return void
+     */
+    public static function setResponse()
+    {
+        sys::import('xaraya.mapper.response');
+        self::$response = new xarResponse();
+    }
+
+    /**
+     * Summary of getResponse
+     * @return xarResponse
+     */
+    public static function getResponse()
+    {
+        if (empty(self::$response)) {
+            self::setResponse();
+        }
+        return self::$response;
+    }
+
+    /**
      * Find the route for this request
      * @param xarRequest|null $request
      * @return void
@@ -248,15 +276,16 @@ class xarController extends xarObject
      */
     public static function dispatch($request = null)
     {
-        sys::import('xaraya.mapper.response');
-        self::$response = new xarResponse();
+        if (!empty($request)) {
+            self::$request = $request;
+        }
         try {
             do {
                 self::$request->setDispatched(true);
                 if (!self::$request->isDispatched()) {
                     continue;
                 }
-                self::$dispatcher->dispatch(self::$request, self::$response);
+                self::$dispatcher->dispatch(self::$request, self::getResponse());
             } while (!self::$request->isDispatched());
         } catch (Exception $e) {
             throw $e;
@@ -293,6 +322,7 @@ class xarController extends xarObject
 
     /**
      * Carry out a redirect
+     * with context and callback
      *
      * @param string $url the URL to redirect to
      * @param mixed $httpResponse
@@ -326,7 +356,7 @@ class xarController extends xarObject
         if (headers_sent() == true) {
             if (!empty($context)) {
                 $context['redirectURL'] = $redirectURL;
-                $context['status'] = $httpResponse;
+                $context->setResponse(null, $httpResponse);
             }
             if (!empty(self::$redirectTo) && is_callable(self::$redirectTo)) {
                 call_user_func(self::$redirectTo, $redirectURL, $httpResponse, $context);
@@ -347,6 +377,70 @@ class xarController extends xarObject
         // so for now, we exit here explicitly. Besides the end of index.php this should be the only
         // exit point.
         exit();
+    }
+
+    /**
+     * Return a 403 Forbidden header, and fill in the message-forbidden.xt template from the base module
+     * with context and callback
+     *
+     * @uses xarResponse::Forbidden()
+     * @param string $msg the message
+     * @param mixed $context
+     * @param ?string $template override forbidden template
+     * @return string output display string
+     */
+    public static function forbidden($msg = '', $context = null, $template = null)
+    {
+        $context?->setResponse($msg, 403);
+        if (!empty(self::$forbiddenTo) && is_callable(self::$forbiddenTo)) {
+            return call_user_func(self::$forbiddenTo, $msg, $context);
+        }
+        return xarResponse::Forbidden($msg, 'base', 'message', 'forbidden', $template, $context);
+    }
+
+    /**
+     * Return a 404 Not Found header, and fill in the template message-notfound.xt from the base module
+     * with context and callback
+     *
+     * @uses xarResponse::NotFound()
+     * @param string $msg the message
+     * @param mixed $context
+     * @param ?string $template override notfound template
+     * @return string output display string
+     */
+    public static function notFound($msg = '', $context = null, $template = null)
+    {
+        $context?->setResponse($msg, 404);
+        if (!empty(self::$notFoundTo) && is_callable(self::$notFoundTo)) {
+            return call_user_func(self::$notFoundTo, $msg, $context);
+        }
+        return xarResponse::NotFound($msg, 'base', 'message', 'notfound', $template, $context);
+    }
+
+    /**
+     * Return a 400 Bad Request header, and fill in the template user-errors.xt from the privileges module
+     * with context and callback
+     *
+     * @param string $layout default 'bad_author' layout
+     * @param mixed $context
+     * @return string output display string
+     */
+    public static function badRequest($layout = null, $context = null)
+    {
+        $layout ??= 'bad_author';
+        $context?->setResponse($layout, 400);
+        if (!empty(self::$badRequestTo) && is_callable(self::$badRequestTo)) {
+            return call_user_func(self::$badRequestTo, $layout, $context);
+        }
+        xarCache::noCache();
+        if (!headers_sent()) {
+            header('HTTP/1.0 400 Bad Request');
+        }
+        $tplData = [
+            'layout' => $layout,
+            'context' => $context,
+        ];
+        return xarTpl::module('privileges', 'user', 'errors', $tplData);
     }
 
     /**

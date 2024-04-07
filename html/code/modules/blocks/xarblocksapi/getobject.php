@@ -24,7 +24,7 @@
  * @throws ClassNotFoundException
  * @throws FunctionNotFoundException
  */
-function blocks_blocksapi_getobject(Array $args=array())
+function blocks_blocksapi_getobject(array $args = [], $context = null)
 {
         // must have a valid type
         if (empty($args['type']) || !is_string($args['type']))

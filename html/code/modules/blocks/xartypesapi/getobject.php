@@ -18,7 +18,7 @@
  * @param array<string, mixed> $args Parameter data array
  * @return array<mixed> Data array
  */
-function blocks_typesapi_getobject(Array $args=array())
+function blocks_typesapi_getobject(array $args = [], $context = null)
 {
     return xarMod::apiFunc('blocks', 'blocks', 'getobject', $args);    
 }

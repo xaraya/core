@@ -17,7 +17,7 @@
  * 
  * @return array Returns a dropdown array of the databases supported by the middleware
  */
-function base_adminapi_get_supported_dbs($args)
+function base_adminapi_get_supported_dbs(array $args = [], $context = null)
 {
     if (empty($args['database_middleware'])) return array();
     

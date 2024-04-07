@@ -28,7 +28,7 @@
  * @param $args['groupcids'] the number of categories you want items grouped by
  * @return array<mixed>|void Returns item array, or false on failure
  */
-function categories_userapi_getlinks($args)
+function categories_userapi_getlinks(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

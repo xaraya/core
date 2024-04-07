@@ -20,13 +20,13 @@
  * @param string return_url optional return URL after setting the hooks
  * @return array<mixed>|string|void data for the template display
  */
-function modules_admin_modifyproperties(Array $args=array())
+function modules_admin_modifyproperties(array $args = [], $context = null)
 {
     extract($args);
 
     // xarVar::fetch does validation if not explicitly set to be not required
     if (!xarVar::fetch('id', 'int', $id, 0, xarVar::NOT_REQUIRED)) return; 
-    if (empty($id)) return xarResponse::notFound();
+    if (empty($id)) return xarController::notFound(null, $context);
 
     xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET);
     xarVar::fetch('phase', 'pre:trim:str:1', $phase, 'form', xarVar::NOT_REQUIRED);
@@ -64,7 +64,7 @@ function modules_admin_modifyproperties(Array $args=array())
                 if (empty($return_url)) {
                     $return_url = xarController::URL('modules', 'admin', 'modifyproperties', array('id' => $id));
                 }
-                xarController::redirect($return_url);
+                xarController::redirect($return_url, null, $context);
             }
         }
     }

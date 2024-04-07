@@ -37,3 +37,4 @@ $modversion['admin']              = true;
 $modversion['user']               = true;
 $modversion['class']              = 'Core Admin';
 $modversion['category']           = 'System';
+$modversion['twigtemplates']      = true;

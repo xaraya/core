@@ -848,7 +848,7 @@ foreach (array_keys($repos) as $repo) {
 /**
 //$modName = 'dynamicdata';
 //$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/' . $modName . '/';
-//$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/xarcachemanager/';
+//$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/cachemanager/';
 $inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
 //$inDir = dirname(dirname(__DIR__)) . '/vendor/xaraya/modules/';
 $analyzer = new XarayaModuleAnalyzer($inDir);

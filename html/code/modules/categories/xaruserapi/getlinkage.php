@@ -18,7 +18,7 @@
  * @param array<string, mixed> $args Parameter data array
  * @return array<mixed> Linkage data array
  */
-function categories_userapi_getlinkage($args)
+function categories_userapi_getlinkage(array $args = [], $context = null)
 {
     extract($args);
 

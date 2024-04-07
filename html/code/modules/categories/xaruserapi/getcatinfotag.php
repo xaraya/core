@@ -30,7 +30,7 @@
  * @param $args Array containing the form field definition of the module, type, id, base, ...
  * @return string Returns category information tag string or an empty string on failure
  */
-function categories_userapi_getcatinfotag($args)
+function categories_userapi_getcatinfotag(array $args = [], $context = null)
 {
     if (!empty($args['runtime'])) {
         // Runtime mode.
@@ -47,6 +47,8 @@ function categories_userapi_getcatinfotag($args)
         // Return the formatted category array.
         // Pass all the arguments in too, allowing for a 'passthrough' from
         // the original theme tag.
+        // @todo Pass along the context for xarTpl::module() if needed
+        //$data['context'] ??= $context;
         return xarTpl::module(
             'categories', 'user', 'catinfo',
             array_merge($args, array('cats'=>$cats)), $template

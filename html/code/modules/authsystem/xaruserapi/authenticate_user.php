@@ -19,7 +19,7 @@
  *         string   $args['pass'] password of user
  * @return int Returns user id on successful authentication, xarUser::AUTH_FAILED otherwise
  */
-function authsystem_userapi_authenticate_user(Array $args=array())
+function authsystem_userapi_authenticate_user(array $args = [], $context = null)
 {
     /** 
      * Pending

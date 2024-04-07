@@ -18,7 +18,7 @@
  * @author - based on original by Natalie Downe http://blog.natbat.co.uk/archive/2003/Jun/14/time_since
  * @return string Formatted time string
  */
-function base_userapi_timesince(Array $args=array())
+function base_userapi_timesince(array $args = [], $context = null)
 {
     extract($args);
     //expecting a var named $originaltime

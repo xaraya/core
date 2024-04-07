@@ -19,7 +19,7 @@
  * @param $args['cids'] array of category ids to get info
  * @return array<mixed>|bool Returns category info array, or array of cat info arrays, false on failure
  */
-function categories_userapi_getcatinfo($args)
+function categories_userapi_getcatinfo(array $args = [], $context = null)
 {
     extract($args);
 

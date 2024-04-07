@@ -39,7 +39,7 @@
  *        boolean $args['retfiles'] flag that indicates files should be returned (default true)<br/>
  *
  */
-function base_userapi_browse_files(Array $args=array())
+function base_userapi_browse_files(array $args = [], $context = null)
 {
     /**
      * Pending

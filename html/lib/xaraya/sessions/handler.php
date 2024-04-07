@@ -636,7 +636,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     {
         if (!is_array($spared)) {
             $msg = xarML('Not an array: \'$spared\'');
-            throw new BadParameterException($msg);
+            throw new BadParameterException(null, $msg);
         }
 
         $no_spared = empty($spared);

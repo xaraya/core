@@ -24,7 +24,7 @@
  * @param string   $args['direction'] (from or to)
  * @return string $convertedtime (hh:mm:ss or seconds)
  */
-function blocks_userapi_convertseconds(Array $args=array())
+function blocks_userapi_convertseconds(array $args = [], $context = null)
 {
     /**
      * Pending 

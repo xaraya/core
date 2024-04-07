@@ -98,7 +98,7 @@ function dynamicdata_user_filtertag(array $args = [], $context = null)
         xarSession::setVar('DynamicData.Filter.' . $filtername, serialize($q));
 
         // Redirect to the next page
-        xarController::redirect($return_url, 302, $context);
+        xarController::redirect($return_url, null, $context);
         return true;
 
     } else {

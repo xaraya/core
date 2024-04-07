@@ -17,7 +17,7 @@
  * @todo kinda long, no?
  * @return array<mixed>|void data for the template display
  */
-function roles_admin_purge(Array $args=array())
+function roles_admin_purge(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('ManageRoles')) return;

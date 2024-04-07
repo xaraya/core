@@ -21,7 +21,7 @@
  * If security checks fail an empty string is returned
  * @throws BadParameterException Thrown if object ID was not passed to function
  */
-function categories_admin_modifyhook($args)
+function categories_admin_modifyhook(array $args = [], $context = null)
 {
     extract($args);
 

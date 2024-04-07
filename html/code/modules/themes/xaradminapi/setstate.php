@@ -19,7 +19,7 @@
  *        integer  $args['state'] the state
  * @throws EmptyParameterException
  */
-function themes_adminapi_setstate(Array $args=array())
+function themes_adminapi_setstate(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

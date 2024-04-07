@@ -21,7 +21,7 @@
  * @param $args array Containing the form field definition or the type, position, ...
  * @return string an empty string
  */ 
-function base_javascriptapi_handleeventjavascript(Array $args=array())
+function base_javascriptapi_handleeventjavascript(array $args = [], $context = null)
 {
     extract($args);
 

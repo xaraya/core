@@ -21,7 +21,7 @@
  * 
  * @return boolean|array<mixed>|string|void Returns true on success, null on failure.
  */
-function categories_admin_unlink()
+function categories_admin_unlink(array $args = [], $context = null)
 { 
     // Security Check
     if(!xarSecurity::check('AdminCategories')) return;
@@ -47,9 +47,7 @@ function categories_admin_unlink()
             } else {
                 // Get the list of all item types for this module (if any)
                 try {
-                    $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                    // don't throw an exception if this function doesn't exist
-                    array());
+                    $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes');
                 } catch (Exception $e) {
                     $mytypes = array();
                 }
@@ -68,7 +66,7 @@ function categories_admin_unlink()
     } 
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
     // unlink API does not support deleting all category links for all modules
     if (!empty($modid)) {
@@ -82,6 +80,6 @@ function categories_admin_unlink()
         }
         // TODO: support deleting all links for a category too (cfr. checklinks)
     }
-    xarController::redirect(xarController::URL('categories', 'admin', 'stats'));
+    xarController::redirect(xarController::URL('categories', 'admin', 'stats'), null, $context);
     return true;
 }

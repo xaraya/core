@@ -12,7 +12,7 @@
  * @return array<mixed>|void data for the template display
  */
 
-    function modules_admin_aliases(Array $args=array())
+function modules_admin_aliases(array $args = [], $context = null)
     {
     // Security
     if (!xarSecurity::check('AdminModules')) return; 

@@ -10,7 +10,7 @@
  * @link http://xaraya.info/index.php/release/70.html
  */
 
-function themes_adminapi_get_js_libs(Array $args=array())
+function themes_adminapi_get_js_libs(array $args = [], $context = null)
 {
     sys::import('modules.themes.class.xarjs');
     $instance = xarJS::getInstance();

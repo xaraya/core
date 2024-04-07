@@ -16,7 +16,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
-function roles_admin_removeprivilege()
+function roles_admin_removeprivilege(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditRoles')) return;
@@ -63,7 +63,7 @@ function roles_admin_removeprivilege()
     } else {
         // Check for authorization code
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         }        
         // Try to remove the privilege and bail if an error was thrown
         if (!$role->removePrivilege($priv)) return;
@@ -80,7 +80,8 @@ function roles_admin_removeprivilege()
         xarModHooks::call('item', 'update', $roleid, $pargs);
 
         // redirect to the next page
-        xarController::redirect(xarController::URL('roles', 'admin', 'showprivileges', array('id' => $roleid)));
+        xarController::redirect(xarController::URL('roles', 'admin', 'showprivileges',
+            array('id' => $roleid)), null, $context);
         return true;
     }
 }

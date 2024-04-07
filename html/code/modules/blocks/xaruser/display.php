@@ -20,7 +20,7 @@
  * @param array<string, mixed> $args Parameter data array.
  * @return array<mixed>|void Display data array 
  */
-function blocks_user_display(Array $args=array())
+function blocks_user_display(array $args = [], $context = null)
 {
     extract($args);
 

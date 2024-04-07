@@ -18,7 +18,7 @@
  *        string   $args['redirecturl'] page to return user
  * @return array<mixed>|void true if external URL
  */
-function roles_userapi_parseuserhome(Array $args=array())
+function roles_userapi_parseuserhome(array $args = [], $context = null)
 {
     extract($args);
     if(!isset($url) || !isset($truecurrenturl)) {

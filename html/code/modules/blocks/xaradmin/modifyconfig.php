@@ -22,7 +22,7 @@
  *
  * @return boolean|array<mixed>|string|void data array for the template display or output display string if invalid data submitted
  */
-function blocks_admin_modifyconfig()
+function blocks_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminBlocks')) return;
@@ -49,22 +49,23 @@ function blocks_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
                 xarController::getRequest()->msgAjax($data['module_settings']->getInvalids());
+                $data['context'] ??= $context;
                 return xarTpl::module('blocks','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
                 if (!xarVar::fetch('noexceptions', 'int:0:1', $noexceptions, 0, xarVar::NOT_REQUIRED)) return;
                 xarModVars::set('blocks', 'noexceptions', $noexceptions);
-            //    xarController::redirect(xarController::URL('blocks', 'admin', 'modifyconfig'));
+            //    xarController::redirect(xarController::URL('blocks', 'admin', 'modifyconfig'), null, $context);
             //    return true;
             }
             // If this is an AJAX call, end here
             xarController::getRequest()->exitAjax();
-            xarController::redirect(xarServer::getCurrentURL());
+            xarController::redirect(xarServer::getCurrentURL(), null, $context);
             return true;
     }
     return $data;

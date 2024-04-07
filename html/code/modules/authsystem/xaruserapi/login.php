@@ -24,7 +24,7 @@
  *         string    $args['rememberme'] Remember this user (optional)
  * @return boolean Returns true on success, false upon failure
  */
-function authsystem_userapi_login(array $args=[], $context = null)
+function authsystem_userapi_login(array $args = [], $context = null)
 {
     extract($args);
 

@@ -17,7 +17,7 @@
  *        string   $args['id'] role id
  * @return array<mixed>|void array containing name, id of the ancstors
  */
-function roles_userapi_getancestors(Array $args=array())
+function roles_userapi_getancestors(array $args = [], $context = null)
 {
     extract($args);
 

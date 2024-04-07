@@ -10,12 +10,13 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
  */
-/**
- * @return mixed data array for the template display or output display string if invalid data submitted
- */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function dynamicdata_admin_new_static()
+/**
+ * @return mixed data array for the template display or output display string if invalid data submitted
+ * @todo use context
+ */
+function dynamicdata_admin_new_static(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminDynamicData')) {
@@ -37,7 +38,7 @@ function dynamicdata_admin_new_static()
 
         // Check for a valid confirmation key
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+            return xarController::badRequest('bad_author', $context);
         }
 
         // Get the data from the form
@@ -45,6 +46,7 @@ function dynamicdata_admin_new_static()
 
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
+            $data['context'] ??= $context;
             return xarTpl::module('dynamicdata', 'admin', 'new_static', $data);
         } else {
             if (empty($data['table'])) {
@@ -75,7 +77,8 @@ function dynamicdata_admin_new_static()
             $dbconn->Execute($query);
 
             // Jump to the next page
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static', ['table' => $data['table']]));
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_static',
+                ['table' => $data['table']]), null, $context);
             return true;
         }
     }

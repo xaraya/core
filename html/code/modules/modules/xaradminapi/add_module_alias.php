@@ -20,7 +20,7 @@
  * @return boolean|void true on success, false on failure
  * @throws EmptyParameterException
  */
-function modules_adminapi_add_module_alias(Array $args=array())
+function modules_adminapi_add_module_alias(array $args = [], $context = null)
 {
     extract($args);
 

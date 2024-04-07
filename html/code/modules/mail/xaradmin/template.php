@@ -13,7 +13,7 @@
  *
  * @return array<mixed>|string|bool|void data for the template display
  */
-function mail_admin_template(Array $args=array())
+function mail_admin_template(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminMail')) return;
@@ -43,7 +43,7 @@ function mail_admin_template(Array $args=array())
             if (!xarVar::fetch('subject', 'str:1:', $subject)) return;
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
 
             if (!xarMod::apiFunc('mail','admin','updatemessagestrings',
@@ -55,7 +55,7 @@ function mail_admin_template(Array $args=array())
             }
 
             xarController::redirect(xarController::URL('mail', 'admin', 'template',
-                                          array('mailtype' => $data['mailtype'])));
+                array('mailtype' => $data['mailtype'])), null, $context);
             return true;
     }
 
@@ -68,9 +68,7 @@ function mail_admin_template(Array $args=array())
             if (!isset($value[0])) {
                 // Get the list of all item types for this module (if any)
                 try {
-                    $mytypes = xarMod::apiFunc($modname,'user','getitemtypes',
-                    // don't throw an exception if this function doesn't exist
-                    array());
+                    $mytypes = xarMod::apiFunc($modname,'user','getitemtypes');
                 } catch (Exception $e) {
                     $mytypes = [];
                 }

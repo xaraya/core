@@ -19,7 +19,7 @@
  *
  * @return mixed data array for the template display or output display string if invalid data submitted
  */
-function privileges_admin_modifyconfig()
+function privileges_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminPrivileges')) return;
@@ -106,7 +106,7 @@ function privileges_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
             switch ($data['tab']) {
                 case 'general':
@@ -116,6 +116,7 @@ function privileges_admin_modifyconfig()
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
+                        $data['context'] ??= $context;
                         return xarTpl::module('privileges','admin','modifyconfig', $data);        
                     } else {
                         $itemid = $data['module_settings']->updateItem();
@@ -150,7 +151,8 @@ function privileges_admin_modifyconfig()
                     if (strcmp($password, $password2) != 0) {
                         $msg = xarML('Last Resort Admin Creation failed! <br />The two password entries are not the same, please try again.');
                         xarSession::setVar('statusmsg', $msg);
-                       xarController::redirect(xarController::URL('privileges', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
+                        xarController::redirect(xarController::URL('privileges', 'admin', 'modifyconfig',
+                            array('tab' => $data['tab'])), null, $context);
                     }
                     $secret = array(
                                 'name' => MD5($name),

@@ -13,7 +13,7 @@
  */
 
 
-function mail_adminapi_createq(Array $args=array())
+function mail_adminapi_createq(array $args = [], $context = null)
 {
     // Security Check
     if (!xarSecurity::check('AdminMail')) return;

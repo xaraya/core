@@ -18,7 +18,7 @@
  *        integer  $args['maindId'] ID of the module to look dependents for
  * @return boolean|void true on dependencies activated, false for not
  */
-function themes_adminapi_install(Array $args=array())
+function themes_adminapi_install(array $args = [], $context = null)
 {
     //    static $installed_ids = array();
     $regid = $args['regid'];

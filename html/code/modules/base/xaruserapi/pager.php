@@ -44,7 +44,7 @@
  *
  * @return string|void Output display string
  */
-function base_userapi_pager(Array $args=array())
+function base_userapi_pager(array $args = [], $context = null)
 {
     extract($args);
     if (empty($startnum) || !is_numeric($startnum))
@@ -76,6 +76,8 @@ function base_userapi_pager(Array $args=array())
 
     if (empty($tplmodule)) $tplmodule = 'base';
     if (empty($template)) $template = 'default';
+    // Pass along the context for xarTpl::module() if needed - from pager tag
+    $blockoptions['context'] ??= $context;
 
     return xarTplPager::getPager($startnum, $total, $urltemplate, $itemsperpage, $blockoptions, $template, $tplmodule);
 }

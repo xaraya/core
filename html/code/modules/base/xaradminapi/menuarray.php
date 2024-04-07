@@ -17,7 +17,7 @@
  * @param array<string, mixed> $args array of optional parameters
  * @return string[] Menulinks for the module
  */
-function base_adminapi_menuarray(Array $args=array())
+function base_adminapi_menuarray(array $args = [], $context = null)
 {
     /**
      * Pending

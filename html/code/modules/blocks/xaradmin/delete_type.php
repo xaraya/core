@@ -20,7 +20,7 @@
  * @throws EmptyParameterException
  * @throws IDNotFoundException
  */
-function blocks_admin_delete_type(Array $args = array())
+function blocks_admin_delete_type(array $args = [], $context = null)
 {
     if (!xarSecurity::check('AdminBlocks')) return;
 
@@ -53,14 +53,14 @@ function blocks_admin_delete_type(Array $args = array())
         
         if ($confirmed) {
             if (!xarSec::confirmAuthKey())
-                return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             if (!xarMod::apiFunc('blocks', 'types', 'deleteitem', 
                 array('type_id' => $type_id))) return;
             if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
                 $return_url, '', xarVar::NOT_REQUIRED)) return;
             if (empty($return_url))
                 $return_url = xarController::URL('blocks', 'admin', 'view_types');
-            xarController::redirect($return_url);                
+            xarController::redirect($return_url, null, $context);                
         }
         
     }

@@ -15,7 +15,7 @@
  * addPrivilege - add a privilege to the repository
  * This is an action page
  */
-function privileges_admin_addprivilege()
+function privileges_admin_addprivilege(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AddPrivileges')) return; 
@@ -42,7 +42,7 @@ function privileges_admin_addprivilege()
 
 // Check for authorization code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     if ($type =="empty") {
@@ -81,6 +81,6 @@ function privileges_admin_addprivilege()
                     'privileges'));
 
 // redirect to the next page
-    xarController::redirect(xarController::URL('privileges', 'admin', 'new'));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'new'), null, $context);
     return true;
 }

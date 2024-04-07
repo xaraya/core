@@ -36,4 +36,5 @@ $modversion = array(
     'user'               => false,
     'class'              => 'Core Admin',
     'category'           => 'System',
+    'twigtemplates'      => false,  // let's keep the installer with blocklayout for now
 );

@@ -23,7 +23,7 @@
  * @TODO jojodee - validation process, duplication of functions and call to registration module needs to be rethought
  *         Rethink to provide cleaner separation between roles, authentication and registration
  */
-function roles_user_getvalidation()
+function roles_user_getvalidation(array $args = [], $context = null)
 {
     // Security check
     if (!xarSecurity::check('ViewRoles')) return;
@@ -32,7 +32,7 @@ function roles_user_getvalidation()
     //We are going to send them to their account.
     if (xarUser::isLoggedIn()) {
        xarController::redirect(xarController::URL('roles', 'user', 'account',
-                                      array('id' => xarUser::getVar('id'))));
+            array('id' => xarUser::getVar('id'))), null, $context);
        return true;
     }
 
@@ -109,7 +109,7 @@ function roles_user_getvalidation()
                 if (!xarMod::apiFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
                                           'state' => xarRoles::ROLES_STATE_ACTIVE))) return;
-                xarController::redirect(xarController::URL('roles', 'user', 'main'));
+                xarController::redirect(xarController::URL('roles', 'user', 'main'), null, $context);
                 
             } elseif  ($pending == 1 && ($status['id'] != xarModVars::get('roles','admin')))  {
                 // This is a new user and the site requires admin approval
@@ -217,7 +217,8 @@ function roles_user_getvalidation()
             $data = xarTpl::module('roles','user', 'getvalidation', $tplvars);
 
             // Redirect
-            xarController::redirect(xarController::URL('roles', 'user', 'getvalidation',array('sent' => 1)));
+            xarController::redirect(xarController::URL('roles', 'user', 'getvalidation',
+                array('sent' => 1)), null, $context);
 
         }
 

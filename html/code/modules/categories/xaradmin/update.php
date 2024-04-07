@@ -17,7 +17,7 @@
  * 
  * @return bool|string|null Returns true on success, null on failure
  */
-function categories_admin_update()
+function categories_admin_update(array $args = [], $context = null)
 {
     $data = [];
     //Checkbox work for submit buttons too
@@ -30,12 +30,12 @@ function categories_admin_update()
 
     // Confirm authorisation code
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
 
     // Root category cannot be modified except by the site admin
     if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
-        return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
+        return xarController::badRequest('no_privileges', $context);
 
     //Reverses the order of cids with the 'last children' option:
     //Look at bug #997
@@ -46,10 +46,11 @@ function categories_admin_update()
 
     if (!$isvalid) {
         $data['authid'] = xarSec::genAuthKey();
+        $data['context'] ??= $context;
         return xarTpl::module('categories','admin','modfiy',$data);
     }
 
     $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
-    xarController::redirect(xarController::URL('categories','admin','view'));
+    xarController::redirect(xarController::URL('categories','admin','view'), null, $context);
     return true;
 }

@@ -60,7 +60,7 @@
                         'menuid' => $menuid,                // pass through the menuid
                         'marker' => $linkmarker,            // pass through the marker
                         'maxlevels' => $maxlevels,          // pass through the maxlevels
-                        'parentactive' => $link['isactive'],// let sublinks know if parent is active
+                        'parentactive' => $link['isactive'] // let sublinks know if parent is active
                     )</xar:set>
                     <!-- pass the subdata to this template, and do the dance again :) -->
                     <xar:template type="module" module="base" file="blocks-menu-menulinks" subdata="$subdata"/>

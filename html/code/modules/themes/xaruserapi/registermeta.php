@@ -27,7 +27,7 @@
  *         string $args[scheme] the scheme used to interpret the content, optional
  * @return bool true on success
 **/ 
-function themes_userapi_registermeta($args)
+function themes_userapi_registermeta(array $args = [], $context = null)
 {
     sys::import('modules.themes.class.xarmeta');
     $meta = xarMeta::getInstance();

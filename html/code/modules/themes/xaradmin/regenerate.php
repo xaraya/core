@@ -22,20 +22,20 @@
  * @access public
  * @return boolean|string|void true on success, false on failure
  */
-function themes_admin_regenerate()
+function themes_admin_regenerate(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminThemes')) return; 
     
     // Security check
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarController::badRequest('bad_author', $context);
     }        
     // Regenerate themes
     $regenerated = xarMod::apiFunc('themes', 'admin', 'regenerate');
 
     if (!isset($regenerated)) return;
     // Redirect
-    xarController::redirect(xarController::URL('themes', 'admin', 'view'));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view'), null, $context);
     return true;
 }

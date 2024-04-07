@@ -17,7 +17,7 @@
  *
  * @return mixed data array for the template display or output display string if invalid data submitted
  */
-function roles_admin_modifyconfig()
+function roles_admin_modifyconfig(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminRoles')) return;
@@ -170,7 +170,7 @@ function roles_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }
             switch ($data['tab']) {
                 case 'general':
@@ -181,6 +181,7 @@ function roles_admin_modifyconfig()
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
+                        $data['context'] ??= $context;
                         return xarTpl::module('roles','admin','modifyconfig', $data);
                     } else {
                         $itemid = $data['module_settings']->updateItem();
@@ -207,6 +208,7 @@ function roles_admin_modifyconfig()
                 case 'duvs':
                     $isvalid = $data['user_settings']->checkInput();
                     if (!$isvalid) {
+                        $data['context'] ??= $context;
                         return xarTpl::module('roles','admin','modifyconfig', $data);
                     } else {
                         $itemid = $data['user_settings']->updateItem();
@@ -232,7 +234,8 @@ function roles_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.User.DebugAdmins', $debugadmins);
                 break;
             }
-            xarController::redirect(xarController::URL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
+            xarController::redirect(xarController::URL('roles','admin','modifyconfig',
+                array('tab' => $data['tab'])), null, $context);
             break;
     }
     return $data;

@@ -15,7 +15,7 @@
  * This is the external entry point to tell MLS use another language
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  */
-function roles_user_changelanguage()
+function roles_user_changelanguage(array $args = [], $context = null)
 {
     if (!xarVar::fetch('locale',     'str:1:', $locale,     xarMLS::getCurrentLocale(), xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('return_url', 'str:1:', $return_url, xarServer::getVar('HTTP_REFERER'), xarVar::NOT_REQUIRED)) return;
@@ -32,6 +32,6 @@ function roles_user_changelanguage()
         // <paul> throw an exception. trap it later if we want it to look nice,
         // that's the whole point of exceptions.
     }
-    xarController::redirect($return_url);
+    xarController::redirect($return_url, null, $context);
     return true;
 }

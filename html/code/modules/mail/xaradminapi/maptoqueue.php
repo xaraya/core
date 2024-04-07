@@ -16,7 +16,7 @@
  *        string   $args['object'] msg_structure parsed out result from the mailparser class
  * @return array<mixed> the queue idents
  */
-function mail_adminapi_maptoqueue(Array $args=array())
+function mail_adminapi_maptoqueue(array $args = [], $context = null)
 {
     extract($args);
     if(!isset($msg_structure)) return;

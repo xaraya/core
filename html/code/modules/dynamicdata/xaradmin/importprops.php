@@ -13,8 +13,9 @@
  */
 /**
  * Import the dynamic properties for a module + itemtype from a static table
+ * @todo use context
  */
-function dynamicdata_admin_importprops()
+function dynamicdata_admin_importprops(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -43,7 +44,7 @@ function dynamicdata_admin_importprops()
     // proceed no further as it is possible that this is an attempt at sending
     // in false data to the system
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+        return xarController::badRequest('bad_author', $context);
     }
 
     if (!xarMod::apiFunc(
@@ -64,5 +65,5 @@ function dynamicdata_admin_importprops()
         'modifyprop',
         ['module_id' => $module_id,
         'itemtype' => $itemtype]
-    ));
+    ), null, $context);
 }

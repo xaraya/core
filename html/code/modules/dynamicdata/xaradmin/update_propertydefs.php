@@ -32,19 +32,19 @@ function dynamicdata_admin_update_propertydefs(array $args = [], $context = null
     }
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+        return xarController::badRequest('bad_author', $context);
     }
 
     if (isset($flushPropertyCache) && ($flushPropertyCache == true)) {
         $args['flush'] = 'true';
         if(xarMod::apiFunc('dynamicdata', 'admin', 'importpropertytypes', $args)) {
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_propertydefs'));
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_propertydefs'), null, $context);
             return true;
         } else {
             return 'Unknown error while clearing and reloading Property Definition Cache.';
         }
     }
 
-    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_propertydefs'));
+    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_propertydefs'), null, $context);
     return true;
 }

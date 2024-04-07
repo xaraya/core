@@ -16,7 +16,7 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @return string|void output display string
  */
-function roles_user_lostpassword()
+function roles_user_lostpassword(array $args = [], $context = null)
 {
     // Security check
     if (!xarSecurity::check('ViewRoles')) return;
@@ -24,7 +24,7 @@ function roles_user_lostpassword()
     //If a user is already logged in, no reason to see this.
     //We are going to send them to their account.
     if (xarUser::isLoggedIn()) {
-        xarController::redirect(xarController::URL('roles', 'user', 'account'));
+        xarController::redirect(xarController::URL('roles', 'user', 'account'), null, $context);
         return true;
     }
 
@@ -46,7 +46,7 @@ function roles_user_lostpassword()
 
             // Confirm authorisation code.
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarController::badRequest('bad_author', $context);
             }        
 
             $data['showmessage'] = 0;    
@@ -85,6 +85,7 @@ function roles_user_lostpassword()
             if (!xarMod::apiFunc('roles', 'admin','senduseremail', array('id' => array($user['id'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
 
             // Let user know that they have an email on the way.
+            $data['context'] ??= $context;
             $data = xarTpl::module('roles','user','requestpwconfirm', $data);
           break;
     }

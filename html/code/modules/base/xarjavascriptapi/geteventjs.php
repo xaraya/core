@@ -35,7 +35,7 @@
  * @param $args[type] the type of event trigger; e.g. 'onload', 'onmouseover'
  * @return string an empty string
  */ 
-function base_javascriptapi_geteventjs(Array $args=array())
+function base_javascriptapi_geteventjs(array $args = [], $context = null)
 {
     extract($args);
 

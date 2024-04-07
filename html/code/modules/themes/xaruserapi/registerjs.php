@@ -29,7 +29,7 @@
  *         string  $args[index] optional index in queue relative to other scripts<br/>
  * @return boolean|void true on success
 **/
-function themes_userapi_registerjs($args)
+function themes_userapi_registerjs(array $args = [], $context = null)
 {
     extract($args);
     

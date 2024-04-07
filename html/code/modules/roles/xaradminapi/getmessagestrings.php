@@ -17,7 +17,7 @@
  *        string   $args['module'] module directory in var/messaging
  * @return array<mixed> of strings of file contents read
  */
-function roles_adminapi_getmessagestrings(Array $args=array())
+function roles_adminapi_getmessagestrings(array $args = [], $context = null)
 {
     extract($args);
     if (!isset($template)) throw new EmptyParameterException('template');

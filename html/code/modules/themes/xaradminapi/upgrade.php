@@ -18,7 +18,7 @@
  * @return boolean|void true on success, false on failure
  * @throws EmptyParameterException
  */
-function themes_adminapi_upgrade(Array $args=array())
+function themes_adminapi_upgrade(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

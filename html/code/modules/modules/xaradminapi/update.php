@@ -16,7 +16,7 @@
  *        string   $args['description'] the new description of the module
  * @return boolean|void true on success, false on failure
  */
-function modules_adminapi_update(Array $args=array())
+function modules_adminapi_update(array $args = [], $context = null)
 {
     // Get arguments from argument array
     extract($args);

@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-function dynamicdata_dataapi_getdatatypeoptions()
+function dynamicdata_dataapi_getdatatypeoptions(array $args = [], $context = null)
 {
     $options['datatypes'] = [
         1 => "varchar(64)",

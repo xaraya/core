@@ -18,7 +18,7 @@
  * 
  * @return array<mixed> containing the contents of the different output buffers
  */
-function base_userapi_get_output_buffer()
+function base_userapi_get_output_buffer(array $args = [], $context = null)
 {
     $pageBuffer = array();
     if (ini_get('output_handler') == 'ob_gzhandler' || ini_get('zlib.output_compression') == TRUE) {
@@ -31,11 +31,11 @@ function base_userapi_get_output_buffer()
             } else {
                 $pageBuffer[] = $contents;
             }
-        } while (@ob_end_clean());
+        } while (ob_get_level() && ob_end_clean());
     } else {
         do {
             $pageBuffer[] = ob_get_contents();
-        } while (@ob_end_clean());
+        } while (ob_get_level() && ob_end_clean());
     }
 
     $buffer = array_reverse($pageBuffer);

@@ -76,9 +76,11 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
         return;
     }
     if (!$parentobject->checkAccess('config')) {
-        return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $parentobject->label));
+        $msg = xarML('Configure #(1) is forbidden', $parentobject->label);
+        return xarController::forbidden($msg, $context);
     }
-    unset($parentobject);
+    // @todo For now, always add a reference to the parent object? - see DataPropertyMaster::addProperty()
+    //unset($parentobject);
 
     // check if the module+itemtype this property belongs to is hooked to the uploads module
     /* FIXME: can we do without this hardwiring? Comment out for now
@@ -100,6 +102,8 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
     $data['id']         = $id;
     // pass the original invalid value here
     $data['invalid']    = !empty($invalid) ? $invalid : '';
+    // @todo For now, always add a reference to the parent object? - see DataPropertyMaster::addProperty()
+    $data['objectref'] = $parentobject;
     $property = DataPropertyMaster::getProperty($data);
     if (empty($property)) {
         return;
@@ -122,7 +126,7 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
                 // store the updated configuration rule back in the value
                 $myobject->properties['configuration']->value = $property->configuration;
                 if (!xarSec::confirmAuthKey()) {
-                    return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+                    return xarController::badRequest('bad_author', $context);
                 }
 
                 $newid = $myobject->updateItem();
@@ -132,7 +136,7 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
 
                 if (empty($exit)) {
                     $return_url = xarController::URL('dynamicdata', 'admin', 'showpropval', ['itemid' => $itemid]);
-                    xarController::redirect($return_url);
+                    xarController::redirect($return_url, null, $context);
                     return true;
                 }
             }
@@ -149,7 +153,7 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
                         ['itemid' => $parentobjectid]
                     );
                 }
-                xarController::redirect($return_url);
+                xarController::redirect($return_url, null, $context);
                 return true;
             }
             // show preview/updated values
@@ -178,6 +182,11 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
     $data['object'] = & $myobject;
 
     xarTpl::setPageTitle(xarML('Configuration for DataProperty #(1)', $itemid));
+    $data['has_overview'] = false;
+    $typename = $data['propertytype']->name;
+    if (file_exists(sys::code() . 'properties/' . $typename . '/xartemplates/includes/overview.xt')) {
+        $data['has_overview'] = true;
+    }
 
     // Return the template variables defined in this function
     return $data;
@@ -225,14 +234,14 @@ function dynamicdata_config_propval($proptype)
             /*
             // CHECKME: allow updating the default configuration for a property type someday ? See
             //          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
-                        if (!empty($confirm)) {
-                            if (!xarSec::confirmAuthKey()) {
-                                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-                            }
+            if (!empty($confirm)) {
+                if (!xarSec::confirmAuthKey()) {
+                    return xarController::badRequest('bad_author', $context);
+                }
             // TODO: we need some method in PropertyRegistration to update a property type ;-)
 
             // TODO: we need some way to avoid overwriting this whenever we flush property types
-                        }
+            }
             */
         } else {
             $data['invalid'] = $property->invalid;
@@ -260,6 +269,11 @@ function dynamicdata_config_propval($proptype)
     $data['propertytype'] = & DataPropertyMaster::getProperty(['type' => $proptype]);
 
     xarTpl::setPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));
+    $data['has_overview'] = false;
+    $typename = $data['propertytype']->name;
+    if (file_exists(sys::code() . 'properties/' . $typename . '/xartemplates/includes/overview.xt')) {
+        $data['has_overview'] = true;
+    }
 
     return $data;
 }

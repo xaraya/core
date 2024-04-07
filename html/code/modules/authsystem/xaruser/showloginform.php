@@ -20,7 +20,7 @@
  * @param array<string, mixed> $args Optional 'redirecturl' parameter
  * @return array<mixed>|bool Returns data for display template.
  */
-function authsystem_user_showloginform(Array $args = array())
+function authsystem_user_showloginform(array $args = [], $context = null)
 {
     extract($args);
     xarVar::fetch('redirecturl', 'str:1:254', $redirecturl, '', xarVar::NOT_REQUIRED);
@@ -35,7 +35,7 @@ function authsystem_user_showloginform(Array $args = array())
     
     // If we don't ask to forward, then forward immediately
     if (!(int)xarModVars::get('authsystem', 'ask_forward') && xarUser::isLoggedIn()) {
-        xarController::redirect($data['redirecturl']);
+        xarController::redirect($data['redirecturl'], null, $context);
         return true;
     }
 

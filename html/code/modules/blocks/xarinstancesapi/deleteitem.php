@@ -20,7 +20,7 @@
  * @throws EmptyParameterException
  * @throws IDNotFoundException
  */
-function blocks_instancesapi_deleteitem(Array $args=array())
+function blocks_instancesapi_deleteitem(array $args = [], $context = null)
 {
     if (empty($args['block_id']) || !is_numeric($args['block_id'])) {
         $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';

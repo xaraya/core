@@ -6,7 +6,7 @@
         <xar:if condition="$object:checkAccess('update')">
             <xar:set name="modifylink">$object->getActionURL('modify', $object->itemid)</xar:set>
         </xar:if>
-        <label>#$object:label#</label>
+        <category>#$object:label#</category>
         <viewlink>#$viewlink#</viewlink>
         <xar:if condition="!empty($modifylink)">
             <modifylink>#$modifylink#</modifylink>

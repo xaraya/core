@@ -307,7 +307,7 @@ class xarCache extends xarObject
 
     /**
      * Get the output cache directory to access stats and items in cache storage even
-     * if output caching is disabled (cfr. xarcachemanager admin stats/view/flushcache)
+     * if output caching is disabled (cfr. cachemanager admin stats/view/flushcache)
      * @return string
      */
     public static function getOutputCacheDir()

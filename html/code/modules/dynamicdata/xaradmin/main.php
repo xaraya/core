@@ -33,9 +33,10 @@ function dynamicdata_admin_main(array $args = [], $context = null)
     $samemodule = xarController::isRefererSameModule();
 
     if (((bool) xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
-        return xarTpl::module('dynamicdata', 'admin', 'overview');
+        $args['context'] ??= $context;
+        return xarTpl::module('dynamicdata', 'admin', 'overview', $args);
     } else {
-        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view'));
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view'), null, $context);
         return true;
     }
 }

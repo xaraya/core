@@ -23,7 +23,7 @@
  * @return boolean|array Returns false on failure data array on success
  * @throws EmptyParameterException
  */
-function blocks_instancesapi_getitem(Array $args=array())
+function blocks_instancesapi_getitem(array $args = [], $context = null)
 {
     if (empty($args)) {
         $msg = 'Missing arguments for #(1) module #(2) function #(3)()';

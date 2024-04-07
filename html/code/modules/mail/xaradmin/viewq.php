@@ -17,7 +17,7 @@
  * @access  public
  * @return array<mixed>|string|void data for the template display
 */
-function mail_admin_viewq(Array $args=array())
+function mail_admin_viewq(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminMail')) return;
@@ -29,7 +29,7 @@ function mail_admin_viewq(Array $args=array())
     if (!empty($action)) {
         // Confirm authorisation code
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarController::badRequest('bad_author', $context);
         }        
 
         switch ($action)
@@ -71,7 +71,7 @@ function mail_admin_viewq(Array $args=array())
                     $serialqueue = serialize($queue);
                     xarModVars::set('mail','queue',$serialqueue);
 
-                    xarController::redirect(xarController::URL('mail', 'admin', 'viewq'));
+                    xarController::redirect(xarController::URL('mail', 'admin', 'viewq'), null, $context);
                     return true;
                 }
                 break;
