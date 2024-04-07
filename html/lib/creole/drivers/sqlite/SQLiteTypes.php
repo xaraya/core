@@ -20,7 +20,11 @@
  * <http://creole.phpdb.org>.
  */
 
-require_once 'creole/CreoleTypes.php';
+/** 
+	This is an intermin solution; see below.
+	THIS IS CURRENTLY NOT BEING USED
+ */
+require_once 'lib/creole/CreoleTypes.php';
 
 /**
  * MySQL types / type map.
@@ -37,33 +41,75 @@ class SQLiteTypes extends CreoleTypes
      * purposes.
      * @var array
      */
+/*
     private static $typeMap = array(
-                                'tinyint' => CreoleTypes::TINYINT,
-                                'smallint' => CreoleTypes::SMALLINT,
-                                'mediumint' => CreoleTypes::SMALLINT,
-                                'int' => CreoleTypes::INTEGER,
-                                'integer' => CreoleTypes::INTEGER,
-                                'bigint' => CreoleTypes::BIGINT,
-                                'int24' => CreoleTypes::BIGINT,
-                                'real' => CreoleTypes::REAL,
-                                'float' => CreoleTypes::FLOAT,
-                                'decimal' => CreoleTypes::DECIMAL,
-                                'numeric' => CreoleTypes::NUMERIC,
-                                'double' => CreoleTypes::DOUBLE,
-                                'char' => CreoleTypes::CHAR,
-                                'varchar' => CreoleTypes::VARCHAR,
-                                'date' => CreoleTypes::DATE,
-                                'time' => CreoleTypes::TIME,
-                                'year' => CreoleTypes::YEAR,
-                                'datetime' => CreoleTypes::TIMESTAMP,
-                                'timestamp' => CreoleTypes::TIMESTAMP,
-                                'tinyblob' => CreoleTypes::BINARY,
-                                'blob' => CreoleTypes::VARBINARY,
+                                'tinyint'    => CreoleTypes::TINYINT,
+                                'smallint'   => CreoleTypes::SMALLINT,
+                                'mediumint'  => CreoleTypes::SMALLINT,
+                                'int'        => CreoleTypes::INTEGER,
+                                'integer'    => CreoleTypes::INTEGER,
+                                'bigint'     => CreoleTypes::BIGINT,
+                                'int24'      => CreoleTypes::BIGINT,
+                                'real'       => CreoleTypes::REAL,
+                                'float'      => CreoleTypes::FLOAT,
+                                'decimal'    => CreoleTypes::DECIMAL,
+                                'numeric'    => CreoleTypes::NUMERIC,
+                                'double'     => CreoleTypes::DOUBLE,
+                                'char'       => CreoleTypes::CHAR,
+                                'varchar'    => CreoleTypes::VARCHAR,
+                                'date'       => CreoleTypes::DATE,
+                                'time'       => CreoleTypes::TIME,
+                                'year'       => CreoleTypes::YEAR,
+                                'datetime'   => CreoleTypes::TIMESTAMP,
+                                'timestamp'  => CreoleTypes::TIMESTAMP,
+                                'tinyblob'   => CreoleTypes::BINARY,
+                                'blob'       => CreoleTypes::VARBINARY,
                                 'mediumblob' => CreoleTypes::VARBINARY,
-                                'longblob' => CreoleTypes::VARBINARY,
-                                'tinytext' => CreoleTypes::VARCHAR,
+                                'longblob'   => CreoleTypes::VARBINARY,
+                                'tinytext'   => CreoleTypes::VARCHAR,
                                 'mediumtext' => CreoleTypes::LONGVARCHAR,
-                                'text' => CreoleTypes::LONGVARCHAR,
+                                'text'       => CreoleTypes::LONGVARCHAR,
+                                );
+*/
+    /** 
+    	This database type uses 9 of the 24 Creole (JDBC) data types.
+    	This is an intermin solution that maps each Creole (JDBC) type to exactly one native type.
+    	This works well for the core and core modules tables, which need only a subset of all types.
+    	1. Over time this map can be extended to include more that one native type per Creole type,
+    	   but then a different approach will be needed.
+    	2. This map should be moved out of Creole to lib/xaraya.
+     */
+    public static $typeMap = array(
+                                'boolean'     => CreoleTypes::BOOLEAN,			// Undefined in this db
+
+                                'tinyint'     => CreoleTypes::TINYINT,
+                                'smallint'    => CreoleTypes::SMALLINT,			// Not currently used
+                                'integer'     => CreoleTypes::INTEGER,
+                                'bigint'      => CreoleTypes::BIGINT,		    // Not currently used
+
+                                'numeric'     => CreoleTypes::NUMERIC,			// Not currently used
+                                'decimal'     => CreoleTypes::DECIMAL,
+                                'real'        => CreoleTypes::REAL,				// Not currently used
+                                'float'       => CreoleTypes::FLOAT,
+                                'double'      => CreoleTypes::DOUBLE,			// Not currently used
+
+                                'char'        => CreoleTypes::CHAR,				// Undefined in this db
+                                'varchar'     => CreoleTypes::VARCHAR,			
+                                'text'        => CreoleTypes::TEXT,
+                                'longtext'    => CreoleTypes::LONGVARCHAR,
+                                'clob'        => CreoleTypes::CLOB,				// Undefined in this db
+
+                                'tinyblob'    => CreoleTypes::BINARY,			// Not currently used
+                                'varbinary'   => CreoleTypes::VARBINARY,		// Undefined in this db
+                                'blob'        => CreoleTypes::BLOB,
+                                'longblob'    => CreoleTypes::LONGVARBINARY,
+
+                                'time'        => CreoleTypes::TIME,				// Not currently used
+                                'timestamp'   => CreoleTypes::TIMESTAMP,		// Undefined in this db
+                                'date'        => CreoleTypes::DATE,				// Not currently used
+                                'year'        => CreoleTypes::YEAR,				// Not currently used
+
+                                'array'       => CreoleTypes::ARR,				// Undefined in this db
                                 );
 
     /** Reverse mapping, created on demand. */

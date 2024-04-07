@@ -118,7 +118,7 @@
       <number size="10" unsigned="true"/>
     </column>
     <column id="dynamic_data.value" name="value" >
-      <medium charset="utf8" default="null"/>
+      <longvarchar charset="utf8" default="null"/>
     </column>
     <constraints>
       <primary name="id">
@@ -152,7 +152,7 @@
       <number size="1" default="null"/>
     </column>
     <column id="dynamic_configurations.configuration" name="configuration" >
-      <medium charset="utf8" default="null"/>
+      <longvarchar charset="utf8" default="null"/>
     </column>
     <constraints>
       <primary name="id">
@@ -189,7 +189,7 @@
       <number size="10" unsigned="true" default="0" />
     </column>
      <column id="dynamic_properties_def.args" name="args" required="true" >
-      <medium charset="utf8" />
+      <longvarchar charset="utf8" />
     </column>
     <column id="dynamic_properties_def.aliases" name="aliases">
       <text size="255" charset="utf8" default="null"/>

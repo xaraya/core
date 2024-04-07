@@ -18,7 +18,7 @@
       <text size="10" charset="utf8"/>
     </column>
     <column id="themes.configuration" name="configuration" required="true"  >
-      <medium charset="utf8"/>
+      <longvarchar charset="utf8"/>
     </column>
     <column id="themes.state" name="state" required="true" >
       <number size="3" default="1" unsigned="true"  />
@@ -52,7 +52,7 @@
       <text size="255" charset="utf8" default=""/>
     </column>
     <column id="themes_configurations.configuration" name="configuration" required="true"  >
-      <medium charset="utf8"/>
+      <longvarchar charset="utf8"/>
     </column>
     <constraints>
       <primary name="id">

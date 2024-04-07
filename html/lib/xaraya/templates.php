@@ -1018,7 +1018,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  * @todo   this is not MLS-aware (never was)
  * @todo   how 'special' should the 'memory' file be, namewise?
  */
-    public static function string($templateCode, &$tplData)
+    public static function string($templateCode, $tplData)
     {
         // Pretend as if the cache is fully operational and we'll be fine
         xarTemplateCache::saveEntry('memory',$templateCode);

@@ -101,7 +101,7 @@
   
   <xsl:template name="columnattributes">
     <xsl:param name="ignoreauto" value="false"/>
-    <!-- @todo move the specific types into their own templates -->
+
     <xsl:choose>
       <xsl:when test="number">
         <xsl:text>INTEGER</xsl:text>
@@ -109,16 +109,13 @@
       <xsl:when test="text">
         <xsl:text>TEXT</xsl:text>
       </xsl:when>
-      <xsl:when test="long">
+      <xsl:when test="longvarchar">
         <xsl:text>TEXT</xsl:text>
       </xsl:when>
-      <xsl:when test="medium">
-        <xsl:text>TEXT</xsl:text>
-      </xsl:when>
-      <xsl:when test="binary">
+      <xsl:when test="varbinary">
         <xsl:text>BLOB</xsl:text>
       </xsl:when>
-      <xsl:when test="binarylong">
+      <xsl:when test="longvarbinary">
         <xsl:text>BLOB</xsl:text>
       </xsl:when>
       <xsl:when test="boolean">

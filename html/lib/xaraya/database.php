@@ -148,8 +148,8 @@ class xarDB
 			case 'pgsql':
 			case 'pdopgsql':
 				$dsn = array('phptype'   => $args['databaseType'],
-							 'hostspec'  => $args['host'],
-							 'port'      => $args['port'],
+							 'hostspec'  => $args['databaseHost'],
+							 'port'      => $args['databasePort'],
 							 'username'  => $args['userName'],
 							 'password'  => $args['password'],
 							 'database'  => $args['databaseName'],
