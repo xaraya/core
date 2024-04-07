@@ -275,8 +275,6 @@ function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[],
     switch($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
-        case 'sqlite3':
-        case 'pdosqlite':
 			$sql = $name;
     		switch($columnType) {
     			case 'text':
@@ -314,6 +312,10 @@ function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[],
 		    		$sql .= " DEFAULT '" . $default . "'";
     			}
     		}
+    	break;
+        case 'sqlite3':
+        case 'pdosqlite':
+        	// Do nothing here. We're letting XSL handle the column definitions
     	break;
         case 'pgsql':
         case 'pdopgsql':
@@ -608,7 +610,7 @@ class xarXMLInstaller extends xarObject
         $queries = explode(';',$sqlCode);
         // The last element is empty: remove it
         array_pop($queries);
-echo "<pre>";var_dump($queries);//exit;
+//echo "<pre>";var_dump($queries);//exit;
         // Execute each of the queries
         $dbconn = xarDB::getConn();
         foreach ($queries as $q) {

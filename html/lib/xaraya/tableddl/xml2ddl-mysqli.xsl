@@ -95,35 +95,6 @@
     <xsl:value-of select="$CR"/>
   </xsl:template>
 
-  <xsl:template name="column_definition">
-	<xsl:processing-instruction name="php">
-	  <xsl:text> echo xarDBCreateColumn(</xsl:text>
-	  
-
-      <!-- Run the following for any children of this column element: there should only be one -->
-      <xsl:for-each select="*">
-
-	  <!-- Get the name of the element -->
-      '<xsl:value-of select="name()"/>',
-
-	  <!-- Get the element's attributes and put them in an array -->
-	    <xsl:call-template name="atts2args">
-	      <xsl:with-param name="nodeset" select="@*"/>
-	    </xsl:call-template>
-	  
-      </xsl:for-each>
-	  <xsl:text>,</xsl:text>
-
-      <!-- Get the args in the (parent) column element -->
-	  <xsl:call-template name="atts2args">
-	    <xsl:with-param name="nodeset" select="@*"/>
-	  </xsl:call-template>
-
-  	<!-- Close the function -->
-	<xsl:text>);</xsl:text>
-	</xsl:processing-instruction>
-  </xsl:template>
-
   <xsl:template name="columnattributes">
     <xsl:param name="ignoreauto" value="false"/>
     <!-- @todo move the specific types into their own templates -->
@@ -131,7 +102,6 @@
 	<xsl:processing-instruction name="php">
 	  <xsl:text> echo xarDBCreateColumn(</xsl:text>
 	  
-
       <!-- Run the following for any children of this column element: there should only be one -->
       <xsl:for-each select="*">
 

@@ -46,7 +46,7 @@
       <number size="10" default="0" unsigned="true"/>
     </column>
     <column id="module_itemvars.value" name="value" >
-      <long charset="utf8"/>
+      <longvarchar charset="utf8"/>
     </column>
     <constraints>
       <primary name="id">

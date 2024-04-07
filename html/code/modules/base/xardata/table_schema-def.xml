@@ -18,7 +18,7 @@
       <number size="10" unsigned="true"/>
     </column>
      <column id="session_info.vars" name="vars" >
-      <binary default="null"/>
+      <blob default="null"/>
     </column>
     <column id="session_info.remember" name="remember" >
       <number size="1" default="null" />
@@ -58,7 +58,7 @@
       <number size="1" default="null"  />
     </column>
     <column id="cache_data.data" name="data" >
-      <binarylong default="null"/>
+      <longvarbinary default="null"/>
     </column>
     <constraints>
       <primary name="id">
@@ -80,7 +80,7 @@
       <text size="64" charset="utf8" />
     </column>
     <column id="module_vars.value" name="value" >
-      <long charset="utf8" default="null" />
+      <longvarchar charset="utf8" default="null" />
     </column>
     <constraints>
       <primary name="id">

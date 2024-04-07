@@ -29,90 +29,97 @@
  */
 abstract class CreoleTypes
 {
-    public const BOOLEAN = 1;
-    public const BIGINT = 2;
-    public const SMALLINT = 3;
-    public const TINYINT = 4;
-    public const INTEGER = 5;
-    public const CHAR = 6;
-    public const VARCHAR = 7;
-    public const TEXT = 17;
-    public const FLOAT = 8;
-    public const DOUBLE = 9;
-    public const DATE = 10;
-    public const TIME = 11;
-    public const TIMESTAMP = 12;
-    public const VARBINARY = 13;
-    public const NUMERIC = 14;
-    public const BLOB = 15;
-    public const CLOB = 16;
-    public const LONGVARCHAR = 17;
-    public const DECIMAL = 18;
-    public const REAL = 19;
-    public const BINARY = 20;
+    public const BOOLEAN       = 1;
+    public const BIGINT        = 2;
+    public const SMALLINT      = 3;
+    public const TINYINT       = 4;
+    public const INTEGER       = 5;
+    public const CHAR          = 6;
+    public const VARCHAR       = 7;
+    public const TEXT          = 17;
+    public const FLOAT         = 8;
+    public const DOUBLE        = 9;
+    public const DATE          = 10;
+    public const TIME          = 11;
+    public const TIMESTAMP     = 12;
+    public const VARBINARY     = 13;
+    public const NUMERIC       = 14;
+    public const BLOB          = 15;
+    public const CLOB          = 16;
+    public const LONGVARCHAR   = 17;
+    public const DECIMAL       = 18;
+    public const REAL          = 19;
+    public const BINARY        = 20;
     public const LONGVARBINARY = 21;
-    public const YEAR = 22;
+    public const YEAR          = 22;
 
     /** this is "ARRAY" from JDBC types */
-    public const ARR = 23;
+    public const ARR           = 23;
 
-    public const OTHER = -1;
+    public const OTHER         = -1;
 
     /** Map of Creole type integers to the setter/getter affix. */
     protected static $affixMap = array(
-            self::BOOLEAN => 'Boolean',
-            self::BIGINT => 'String',
-            self::CHAR => 'String',
-            self::DATE => 'Date',
-            self::DOUBLE => 'String',
-            self::FLOAT => 'String',
-            self::INTEGER => 'Int',
-            self::SMALLINT => 'Int',
-            self::TINYINT => 'Int',
-            self::TIME => 'Time',
-            self::TIMESTAMP => 'Timestamp',
-            self::VARCHAR => 'String',
-            self::VARBINARY => 'Blob',
-            self::NUMERIC => 'String',
-            self::BLOB => 'Blob',
-            self::CLOB => 'Clob',
-            self::LONGVARCHAR => 'String',
-            self::DECIMAL => 'String',
-            self::REAL => 'String',
-            self::BINARY => 'Blob',
+            self::BOOLEAN       => 'Boolean',
+            self::BIGINT        => 'String',
+            self::CHAR          => 'String',
+            self::DATE          => 'Date',
+            self::DOUBLE        => 'String',
+            self::FLOAT         => 'String',
+            self::INTEGER       => 'Int',
+            self::SMALLINT      => 'Int',
+            self::TINYINT       => 'Int',
+            self::TIME          => 'Time',
+            self::TIMESTAMP     => 'Timestamp',
+            self::VARCHAR       => 'String',
+            self::VARBINARY     => 'Blob',
+            self::NUMERIC       => 'String',
+            self::BLOB          => 'Blob',
+            self::CLOB          => 'Clob',
+            self::LONGVARCHAR   => 'String',
+            self::DECIMAL       => 'String',
+            self::REAL          => 'String',
+            self::BINARY        => 'Blob',
             self::LONGVARBINARY => 'Blob',
-            self::YEAR => 'Int',
-            self::ARR => 'Array',
+            self::YEAR          => 'Int',
+            self::ARR           => 'Array',
             self::OTHER => '', // get() and set() for unknown
             );
 
     /** Map of Creole type integers to their textual name. */
-    protected static $creoleTypeMap = array(
-            self::BOOLEAN => 'BOOLEAN',
-            self::BIGINT => 'BIGINT',
-            self::SMALLINT => 'SMALLINT',
-            self::TINYINT => 'TINYINT',
-            self::INTEGER => 'INTEGER',
-            self::NUMERIC => 'NUMERIC',
-            self::DECIMAL => 'DECIMAL',
-            self::REAL => 'REAL',
-            self::FLOAT => 'FLOAT',
-            self::DOUBLE => 'DOUBLE',
-            self::CHAR => 'CHAR',
-            self::VARCHAR => 'VARCHAR',
-            self::TEXT => 'TEXT',
-            self::TIME => 'TIME',
-            self::TIMESTAMP => 'TIMESTAMP',
-            self::DATE => 'DATE',
-            self::YEAR => 'YEAR',
-            self::VARBINARY => 'VARBINARY',
-            self::BLOB => 'BLOB',
-            self::CLOB => 'CLOB',
-            self::LONGVARCHAR => 'LONGVARCHAR',
-            self::BINARY => 'BINARY',
+    public static $creoleTypeMap = array(
+            self::BOOLEAN       => 'BOOLEAN',
+
+            self::TINYINT       => 'TINYINT',
+            self::SMALLINT      => 'SMALLINT',
+            self::INTEGER       => 'INTEGER',
+            self::BIGINT        => 'BIGINT',
+
+            self::NUMERIC       => 'NUMERIC',
+            self::DECIMAL       => 'DECIMAL',
+            self::REAL          => 'REAL',
+            self::FLOAT         => 'FLOAT',
+            self::DOUBLE        => 'DOUBLE',
+
+            self::CHAR          => 'CHAR',
+            self::VARCHAR       => 'VARCHAR',
+            self::TEXT          => 'TEXT',
+            self::CLOB          => 'CLOB',
+            self::LONGVARCHAR   => 'LONGVARCHAR',
+
+            self::BINARY        => 'BINARY',
+            self::VARBINARY     => 'VARBINARY',
+            self::BLOB          => 'BLOB',
             self::LONGVARBINARY => 'LONGVARBINARY',
-            self::ARR => 'ARR',
-            self::OTHER => 'OTHER', // string is "raw" return
+
+            self::TIME          => 'TIME',
+            self::TIMESTAMP     => 'TIMESTAMP',
+            self::DATE          => 'DATE',
+            self::YEAR          => 'YEAR',
+
+            self::ARR           => 'ARR',
+            
+            self::OTHER         => 'OTHER', // string is "raw" return
             );
 
     /**
