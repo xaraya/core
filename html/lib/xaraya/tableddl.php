@@ -30,6 +30,7 @@
  * xarDBAlterTable($tableName, $args, $databaseType = NULL)
  * xarDBCreateIndex($tableName, $index, $databaseType = NULL)
  * xarDBDropIndex($tableName, $databaseType = NULL)
+ * xarDBCreateColumn($columnType, $args1, $args2, $databaseType = NULL)
  *
  */
 
@@ -115,7 +116,8 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
             sys::import('xaraya.tableddl.mysqli');
             $sql = xarDB__mysqlCreateTable($tableName, $fields, $charset);
             break;
-        case 'postgres':
+        case 'pgsql':
+        case 'pdopgsql':
             sys::import('xaraya.tableddl.postgres');
             $sql = xarDB__postgresqlCreateTable($tableName, $fields, $charset);
             break;
@@ -174,11 +176,6 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = xarDB::getType();
     }
-    // set Dbtype to pdosqlite
-    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
-    if ($middleware == 'PDO') {
-        $databaseType = 'pdosqlite';
-    }
 
     // Select the correct database type
     switch($databaseType) {
@@ -186,8 +183,9 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
         case 'pdomysqli':
             sys::import('xaraya.tableddl.mysql');
             $sql = xarDB__mysqlAlterTable($tableName, $args);
-            break;
-        case 'postgres':
+        break;
+        case 'pgsql':
+        case 'pdopgsql':
             sys::import('xaraya.tableddl.postgres');
             $sql = xarDB__postgresqlAlterTable($tableName, $args);
             break;
@@ -195,12 +193,12 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
         case 'oci8po':
             sys::import('xaraya.tableddl.oracle');
             $sql = xarDB__oracleAlterTable($tableName, $args);
-            break;
+        break;
         case 'sqlite3':
         case 'pdosqlite':
             sys::import('xaraya.tableddl.sqlite');
             $sql = xarDB__sqliteAlterTable($tableName, $args);
-            break;
+        break;
         case 'mssql':
         case 'datadict':
             throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
@@ -227,20 +225,20 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = xarDB::getType();
     }
-    // set Dbtype to pdosqlite
 
     switch($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
-        case 'postgres':
+        case 'pgsql':
+        case 'pdopgsql':
             $sql = 'DROP TABLE IF EXISTS '.$tableName;
-            break;
+        break;
         case 'oci8':
         case 'oci8po':
         case 'sqlite3':
         case 'pdosqlite':
             $sql = 'DROP TABLE '.$tableName;
-            break;
+        break;
         case 'mssql':
         case 'datadict':
             throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
@@ -249,7 +247,125 @@ function xarDBDropTable($tableName, $databaseType = NULL)
             throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
     }
     return $sql;
+}
 
+/**
+ * Generate the SQL to create a table column
+ *
+ * @uses xarTableDDL::dropTable()
+ * @param string $tableName the physical table name
+ * @param ?string $databaseType the database type
+ * @return string|false the generated SQL statement, or false on failure
+ * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
+ */
+function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[], $databaseType = NULL)
+{
+	// Special care needs to be taken with this arg, since it could have any numeric or char value
+	$defaultExists = isset($args1['default']);
+	// Make sure all args are present and non-null
+	$params = ['size','unsigned','charset'];
+	foreach ($params as $param) $args1[$param] ??= '';
+	extract($args1);
+	$params = ['id','name','required','auto'];
+	foreach ($params as $param) $args2[$param] ??= '';
+	extract($args2);
+	// Also this one: allow for an override
+	$databaseType ??= xarDB::getType();
+
+    switch($databaseType) {
+        case 'mysqli':
+        case 'pdomysqli':
+        case 'sqlite3':
+        case 'pdosqlite':
+			$sql = $name;
+    		switch($columnType) {
+    			case 'text':
+    				if ($size == '') {
+    					$sql .= " TEXT";
+    				} else {
+    					$sql .= " VARCHAR";
+    				}
+    			break;
+    			case 'number':
+    				if ($size != '' && (int)$size > 3) {
+    					$sql .= " INTEGER";
+    				} else {
+    					$sql .= " TINYINT";
+    				}
+    			break;
+    			default:
+					$nativeType = xarXMLInstaller::getNativeType($columnType);
+					if ($nativeType == false) {
+						$message = "Unknown columnType: $columnType";
+						die($message);
+					}
+					$sql .= " " . $nativeType;
+    			break;
+    		}
+    		if (!empty($size)) $sql .= '(' . $size . ')';
+    		if ((bool)$unsigned) $sql .= ' UNSIGNED';
+    		if (!empty($charset)) $sql .= ' CHARACTER SET ' . $charset;
+    		if ((bool)$required) $sql .= ' NOT NULL';
+			// Special care needs to be taken with this arg, since it could have any numeric or char value
+    		if ($defaultExists) {
+    			if (strtolower($default) == 'null') {
+		    		$sql .= " DEFAULT NULL";
+    			} else {
+		    		$sql .= " DEFAULT '" . $default . "'";
+    			}
+    		}
+    	break;
+        case 'pgsql':
+        case 'pdopgsql':
+			$sql = $name;
+    		switch($columnType) {
+    			case 'text':
+    				if ($size == '') {
+    					$sql .= " TEXT";
+    				} else {
+    					$sql .= " VARCHAR";
+    				}
+    			break;
+    			case 'number':
+    				if ($size != '' && (int)$size > 3) {
+    					$sql .= " INTEGER";
+    				} else {
+    					$sql .= " TINYINT";
+    				}
+    			break;
+    			default:
+						$nativeType = xarXMLInstaller::getNativeType($columnType);
+					if ($nativeType == false) {
+						$message = "Unknown columnType: $columnType";
+						die($message);
+					}
+					$sql .= " " . $nativeType;
+    			break;
+    		}
+    		if (!empty($size)) $sql .= '(' . $size . ')';
+    		if ((bool)$unsigned) $sql .= ' UNSIGNED';
+    		if (!empty($charset)) $sql .= ' CHARACTER SET ' . $charset;
+    		if ((bool)$required) $sql .= ' NOT NULL';
+			// Special care needs to be taken with this arg, since it could have any numeric or char value
+    		if ($defaultExists) {
+    			if (strtolower($default) == 'null') {
+		    		$sql .= " DEFAULT NULL";
+    			} else {
+		    		$sql .= " DEFAULT '" . $default . "'";
+    			}
+    		}
+    	break;
+        case 'oci8':
+        case 'oci8po':
+        break;
+        case 'mssql':
+        case 'datadict':
+            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
+        // Other DBs go here
+        default:
+            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
+    }
+    return $sql;
 }
 
 /**
@@ -294,8 +410,9 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
                 $sql = 'ALTER TABLE '.$tableName.' ADD INDEX '.$index['name'];
             }
             $sql .= ' ('.join(',', $index['fields']).')';
-            break;
+        break;
         case 'postgres':
+        case 'pdopgsql':
         case 'oci8':
         case 'oci8po':
         case 'sqlite3':
@@ -306,7 +423,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
                 $sql = 'CREATE INDEX '.$index['name'].' ON '.$tableName;
             }
             $sql .= ' ('.join(',', $index['fields']).')';
-            break;
+        break;
 
         case 'mssql':
         case 'datadict':
@@ -352,6 +469,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
             $sql = 'ALTER TABLE '.$tableName.' DROP INDEX '.$index['name'];
             break;
         case 'postgres':
+        case 'pdopgsql':
         case 'oci8':
         case 'oci8po':
         case 'sqlite3':
@@ -389,6 +507,10 @@ class xarTableDDL extends xarObject
     public static function dropTable($tableName, $databaseType = NULL)
     {
         return xarDBDropTable($tableName, $databaseType);
+    }
+    static public function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[], $databaseType = NULL)
+    {
+        return xarDBCreateColumn($columnType, $args1, $args2, $databaseType);
     }
     public static function createIndex($tableName, $index, $databaseType = NULL)
     {
@@ -461,9 +583,10 @@ class xarXMLInstaller extends xarObject
         sys::import('creole.CreoleTypes');
         $code = (int)CreoleTypes::getCreoleCode(strtoupper($creoleType));
         if (null == $code) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
-        if (null == $type = CreoleTypes::$creoleTypeMap[$code]) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
+        if (null == $type = strtoupper(MySQLTypes::getNativeType($code))) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
         return $type;
     }
+
     static public function createTable($tablefile, $module)
     {
         if (empty($module))
@@ -476,12 +599,17 @@ class xarXMLInstaller extends xarObject
             $msg = xarML('Could not find the file #(1) to create tables from', $xmlfile);
             throw new BadParameterException($msg);
         }
-//        $code = self::getNativeType('Integer');
-        
-        $sqlCode = self::transform($xmlfile, 'create');
-        $queries = explode(';',$sqlCode);
-        array_pop($queries);
 
+        // Create a query string for table creation from the XML schema passed
+        $sqlCode = self::transform($xmlfile, 'create');
+        // Run the query code to add variable values (there aren't any) and execute any PHP snippets inserted by the transform 
+        $sqlCode = xarTpl::string($sqlCode, []);
+        // Turn the query string into an array of queries
+        $queries = explode(';',$sqlCode);
+        // The last element is empty: remove it
+        array_pop($queries);
+echo "<pre>";var_dump($queries);//exit;
+        // Execute each of the queries
         $dbconn = xarDB::getConn();
         foreach ($queries as $q) {
             xarLog::message('Executing SQL: ' . $q, xarLog::LEVEL_INFO);

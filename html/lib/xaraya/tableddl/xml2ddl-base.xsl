@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
 
   <!-- we are outputting text -->
-  <xsl:output method="text" />
+  <xsl:output method="xml" omit-xml-declaration="yes"/>
 
   <!-- remove all the whitespace -->
   <xsl:strip-space elements="*"/>
@@ -116,7 +116,6 @@
         <xsl:if test="@auto = 'true'">
           <xsl:text> CHANGE COLUMN </xsl:text>
           <xsl:value-of select="@name"/><xsl:text> </xsl:text>
-          <xsl:value-of select="@name"/><xsl:text> </xsl:text>
           <xsl:call-template name="columnattributes">
             <xsl:with-param name="ignoreauto">false</xsl:with-param>
           </xsl:call-template>
@@ -126,6 +125,28 @@
     </xsl:for-each>
     <xsl:text> ADD PRIMARY KEY (</xsl:text><xsl:call-template name="columnrefscsv"/>);
   </xsl:template>
+
+	<!-- This is usually included as part of xar2php.xsl
+		 but we are installing and don't need all that, so just paste it here
+	-->
+	<xsl:template name="atts2args">
+	  <xsl:param name="nodeset"/>
+	  <xsl:text>array(</xsl:text>
+	  <xsl:if test="$nodeset">
+		<xsl:for-each select="$nodeset">
+		  <xsl:text>'</xsl:text><xsl:value-of select="name()"/><xsl:text>'=&gt;</xsl:text>
+		  <xsl:choose>
+			<xsl:when test="starts-with(normalize-space(.),'$') or not(string(number(.))='NaN')">
+			  <xsl:value-of select="."/><xsl:text>,</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+			  <xsl:text>"</xsl:text><xsl:value-of select="."/><xsl:text>",</xsl:text>
+			</xsl:otherwise>
+		  </xsl:choose>
+		</xsl:for-each>
+	  </xsl:if>
+	  <xsl:text>)</xsl:text>
+	</xsl:template>
 
   <xsl:template match="schema/description"/> <!-- @todo : find out if this has a useful thing -->
   <xsl:template match="index/description"/> <!-- @todo : find out if this has a useful thing -->

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE xsl:stylesheet [
+<!ENTITY nl "&#xd;&#xa;">
+]>
+
   <!--
     XSLT to create a DDL fragment which represents the same
     information as the ddl XML
   -->
-  <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
+
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xar="http://xaraya.com/2004/blocklayout"
+    xmlns:php="http://php.net/xsl"
+    exclude-result-prefixes="php xar">
+
     <!--
         Import common templates, we use import instead of include so the
         imported templates get a lower priority than the ones in this file,
@@ -78,8 +88,6 @@
   </xsl:template>
 
   <xsl:template match="column">
-    <xsl:text>  </xsl:text>
-    <xsl:value-of select="@name"/><xsl:text> </xsl:text>
     <xsl:call-template name="columnattributes">
       <xsl:with-param name="ignoreauto">true</xsl:with-param>
     </xsl:call-template>
@@ -87,87 +95,72 @@
     <xsl:value-of select="$CR"/>
   </xsl:template>
 
+  <xsl:template name="column_definition">
+	<xsl:processing-instruction name="php">
+	  <xsl:text> echo xarDBCreateColumn(</xsl:text>
+	  
+
+      <!-- Run the following for any children of this column element: there should only be one -->
+      <xsl:for-each select="*">
+
+	  <!-- Get the name of the element -->
+      '<xsl:value-of select="name()"/>',
+
+	  <!-- Get the element's attributes and put them in an array -->
+	    <xsl:call-template name="atts2args">
+	      <xsl:with-param name="nodeset" select="@*"/>
+	    </xsl:call-template>
+	  
+      </xsl:for-each>
+	  <xsl:text>,</xsl:text>
+
+      <!-- Get the args in the (parent) column element -->
+	  <xsl:call-template name="atts2args">
+	    <xsl:with-param name="nodeset" select="@*"/>
+	  </xsl:call-template>
+
+  	<!-- Close the function -->
+	<xsl:text>);</xsl:text>
+	</xsl:processing-instruction>
+  </xsl:template>
+
   <xsl:template name="columnattributes">
     <xsl:param name="ignoreauto" value="false"/>
     <!-- @todo move the specific types into their own templates -->
-    <xsl:choose>
-      <xsl:when test="number">
-        <xsl:choose>
-          <xsl:when test="*[@size != '']">
-            <xsl:choose>
-              <xsl:when test="*[@size > 3]">
-                <xsl:text>INTEGER</xsl:text>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>TINYINT</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>INTEGER</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:when test="text">
-        <xsl:choose>
-          <xsl:when test="*[@size != '']">
-              <xsl:text>VARCHAR</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>TEXT</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:when test="long">
-        <xsl:text>LONGTEXT</xsl:text>
-      </xsl:when>
-      <xsl:when test="medium">
-        <xsl:text>MEDIUMTEXT</xsl:text>
-      </xsl:when>
-      <xsl:when test="binary">
-        <xsl:text>BLOB</xsl:text>
-      </xsl:when>
-      <xsl:when test="binarylong">
-        <xsl:text>LONGBLOB</xsl:text>
-      </xsl:when>
-      <xsl:when test="boolean">
-        <xsl:text>BOOLEAN</xsl:text>
-      </xsl:when>
-      <xsl:when test="decimal">
-        <xsl:text>DECIMAL</xsl:text>
-      </xsl:when>
-      <xsl:when test="float">
-        <xsl:text>FLOAT</xsl:text>
-      </xsl:when>
-      <!-- @todo add support for time --> 
-      <xsl:otherwise>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="*[@size != '']">(<xsl:value-of select="*/@size"/>)</xsl:if>
-    <xsl:if test="*[@unsigned = 'true']">
-        <xsl:text> UNSIGNED</xsl:text>
-    </xsl:if>
-    <xsl:if test="*[@charset]">
-        <xsl:text> CHARACTER SET </xsl:text>
-        <xsl:value-of select="*/@charset"/>
-    </xsl:if>
-    <xsl:if test="@required = 'true'"> NOT NULL</xsl:if>
-    <!--  @todo this won't work with  the current exported ddl -->
-    <xsl:if test="*[@default]">
-        <xsl:text> DEFAULT</xsl:text>
-        <xsl:choose>
-          <xsl:when test="*/@default = 'null'">
-            <xsl:text> NULL</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text> '</xsl:text>
-            <xsl:value-of select="*/@default"/>
-            <xsl:text>'</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
+
+	<xsl:processing-instruction name="php">
+	  <xsl:text> echo xarDBCreateColumn(</xsl:text>
+	  
+
+      <!-- Run the following for any children of this column element: there should only be one -->
+      <xsl:for-each select="*">
+
+	  <!-- Get the name of the element -->
+      '<xsl:value-of select="name()"/>',
+
+	  <!-- Get the element's attributes and put them in an array -->
+	    <xsl:call-template name="atts2args">
+	      <xsl:with-param name="nodeset" select="@*"/>
+	    </xsl:call-template>
+	  
+      </xsl:for-each>
+	  <xsl:text>,</xsl:text>
+
+      <!-- Get the args in the (parent) column element -->
+	  <xsl:call-template name="atts2args">
+	    <xsl:with-param name="nodeset" select="@*"/>
+	  </xsl:call-template>
+
+  	<!-- Close the function -->
+	<xsl:text>);</xsl:text>
+	</xsl:processing-instruction>
     <xsl:if test="$ignoreauto = 'false'">
       <xsl:if test="@auto ='true'"> AUTO_INCREMENT</xsl:if>
     </xsl:if>
+    
+    <xsl:value-of select="$CR"/>
+	<!-- Let a PHP function do all the hard work -->
+	<!-- <xsl:call-template name="column_definition"/> -->
+
   </xsl:template>
 </xsl:stylesheet>
