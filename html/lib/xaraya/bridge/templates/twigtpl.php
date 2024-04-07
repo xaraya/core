@@ -509,6 +509,7 @@ class xarTwigTpl extends xarTpl
             xarLog::message(__METHOD__ . ": Core module installer does not support twig templates", xarLog::LEVEL_INFO);
             return false;
         }
+        static::getNamespaces();
         $modName = strtolower($modName);
         // make other modules configurable based on fileinfo from xarversion.php
         if (empty(static::$extensions['modules'][$modName])) {
