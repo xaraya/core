@@ -572,19 +572,23 @@ class xarTwigTpl extends xarTpl
         // user templates are now in the top level directory and all others in subdirectories
         if ($modType == 'user') {
             if (!empty($tplName)) {
+                // changed order - with tplName first (theme > module), then generic next (theme > module)
                 $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $funcName . '-' . $tplName . $extension;
-                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $funcName . '-' . $tplName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $funcName . $extension;
+                // @todo do we need/want dynamicdata module as fallback here?
                 if ($modName !== 'dynamicdata') {
+                    // changed order - with tplName first (theme > module), then generic next (theme > module)
                     $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $funcName . '-' . $tplName . $extension;
-                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $funcName . '-' . $tplName . $extension;
+                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $funcName . $extension;
                 }
             } else {
                 $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $funcName . $extension;
+                // @todo do we need/want dynamicdata module as fallback here?
                 if ($modName !== 'dynamicdata') {
                     $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $funcName . $extension;
@@ -592,19 +596,23 @@ class xarTwigTpl extends xarTpl
             }
         } else {
             if (!empty($tplName)) {
+                // changed order - with tplName first (theme > module), then generic next (theme > module)
                 $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
-                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $modType . '/' . $funcName . $extension;
+                // @todo do we need/want dynamicdata module as fallback here?
                 if ($modName !== 'dynamicdata') {
+                    // changed order - with tplName first (theme > module), then generic next (theme > module)
                     $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
-                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $modType . '/' . $funcName . '-' . $tplName . $extension;
+                    $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $modType . '/' . $funcName . $extension;
                 }
             } else {
                 $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/' . $modType . '/' . $funcName . $extension;
                 $templates[] = '@' . $modName . '/' . $modType . '/' . $funcName . $extension;
+                // @todo do we need/want dynamicdata module as fallback here?
                 if ($modName !== 'dynamicdata') {
                     $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/' . $modType . '/' . $funcName . $extension;
                     $templates[] = '@dynamicdata/' . $modType . '/' . $funcName . $extension;
@@ -702,6 +710,11 @@ class xarTwigTpl extends xarTpl
         $templates = [];
         $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/blocks/' . $tplBase . $extension;
         $templates[] = '@' . $modName . '/blocks/' . $tplBase . $extension;
+        // many block templates are actually in the base module
+        if ($modName !== 'base') {
+            $templates[] = '@theme/' . $themeName . '/modules/base/blocks/' . $tplBase . $extension;
+            $templates[] = '@base/blocks/' . $tplBase . $extension;
+        }
 
         $templateName = static::findTwigTemplate($twig, $templates);
         xarCoreCache::setCached('Templates.Twig', $cachename, $templateName);
@@ -787,19 +800,22 @@ class xarTwigTpl extends xarTpl
         if (str_starts_with($tplType, 'ui_')) {
             $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/objects/' . $tplType . $extension;
             $templates[] = '@' . $modName . '/objects/' . $tplType . $extension;
+            // final fallback for object templates is dynamicdata module
             if ($modName !== 'dynamicdata') {
                 $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/objects/' . $tplType . $extension;
                 $templates[] = '@dynamicdata/objects/' . $tplType . $extension;
             }
         } else {
+            // changed order - with objectName first (theme > module), then generic next (theme > module)
             $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/objects/' . $tplType . '-' . $objectName . $extension;
-            $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/objects/' . $tplType . $extension;
             $templates[] = '@' . $modName . '/objects/' . $tplType . '-' . $objectName . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/objects/' . $tplType . $extension;
             $templates[] = '@' . $modName . '/objects/' . $tplType . $extension;
+            // final fallback for object templates is dynamicdata module
             if ($modName !== 'dynamicdata') {
                 $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/objects/' . $tplType . '-' . $objectName . $extension;
-                $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/objects/' . $tplType . $extension;
                 $templates[] = '@dynamicdata/objects/' . $tplType . '-' . $objectName . $extension;
+                $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/objects/' . $tplType . $extension;
                 $templates[] = '@dynamicdata/objects/' . $tplType . $extension;
             }
         }
@@ -891,19 +907,26 @@ class xarTwigTpl extends xarTpl
         if ($modName == 'auto') {
             $templates[] = '@theme/' . $themeName . '/properties/' . $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
             $templates[] = '@theme/' . $themeName . '/properties/' . $propertyName . '/' . $tplType . $extension;
-            $templates[] = '@properties/' .  $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
-            $templates[] = '@properties/' .  $propertyName . '/' . $tplType . $extension;
+            $templates[] = '@property/' .  $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@property/' .  $propertyName . '/' . $tplType . $extension;
         } else {
+            // changed order - with propertyName first (theme > module), then generic next (theme > module)
             $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;
-            $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/properties/' . $tplType . $extension;
-            // @todo many property templates are actually in the base module
             $templates[] = '@' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/properties/' . $tplType . $extension;
             $templates[] = '@' . $modName . '/properties/' . $tplType . $extension;
         }
+        // many property templates are actually in the base module
+        if ($modName !== 'base') {
+            $templates[] = '@theme/' . $themeName . '/modules/base/properties/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@base/properties/' . $tplType . '-' . $propertyName . $extension;
+        }
+        // final fallback for property templates is dynamicdata module
         if ($modName !== 'dynamicdata') {
+            // changed order - with propertyName first (theme > module), then generic next (theme > module)
             $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/properties/' . $tplType . '-' . $propertyName . $extension;
-            $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/properties/' . $tplType . $extension;
             $templates[] = '@dynamicdata/properties/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@theme/' . $themeName . '/modules/dynamicdata/properties/' . $tplType . $extension;
             $templates[] = '@dynamicdata/properties/' . $tplType . $extension;
         }
 
