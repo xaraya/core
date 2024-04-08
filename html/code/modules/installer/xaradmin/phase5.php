@@ -105,24 +105,67 @@ function installer_admin_phase5()
 		break;
 	    case 'mysqli':
         case 'pdomysqli':
-		case 'pgsql':
-		case 'pdopgsql':
 			// Not all Database Servers support selecting the specific database *after* connecting
 			// so let's try connecting with the database name first, and then without if that fails
 			try {
 				$init_args['doConnect'] = true;
+				
+				// Try to connect
 				$dbconn = xarDB::newConn($init_args);
+				
+				// Found a database
 				$dbExists = true;
 			} catch(Exception $e) {
 				// Couldn't connect to the specified dbName
 				// Let's try without db name
 				try {
+					// Set some temporary values
 					$name = $init_args['databaseName'];
 					$init_args['databaseName'] ='';
+					
+					// Try to connect
 					$dbconn = xarDB::newConn($init_args);
+					
+					// Restore the previous values
 					$init_args['databaseName'] = $name;
 				} catch(Exception $e) {
-					// It failed without dbname too
+					// It failed without dbname, too
+					return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
+				}
+			}
+			if ($dbExists) {
+				// We already have a database with this name
+//				return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $init_args['databaseName']));
+			}
+        break;
+		case 'pgsql':
+		case 'pdopgsql':
+			// Postgres needs to connect to a database, so we'll take one of the available default dbs
+			try {
+				$init_args['doConnect'] = true;
+				
+				// Try to connect
+				$dbconn = xarDB::newConn($init_args);
+				// Found a database
+				$dbExists = true;
+			} catch(Exception $e) {
+				// Couldn't connect to the specified dbName
+				// Let's try 'postgres' (guaranteed to exist)
+				try {
+					// Set some temporary values
+					$name = $init_args['databaseName'];
+					$user = $init_args['userName'];
+					
+					// Try to connect
+					$init_args['databaseName'] ='postgres';
+					$init_args['userName'] = '';
+					$dbconn = xarDB::newConn($init_args);
+					
+					// Restore the previous values
+					$init_args['databaseName'] = $name;
+					$init_args['userName'] = $user;
+				} catch(Exception $e) {
+					// It failed with the default dbname, too
 					return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
 				}
 			}
@@ -249,7 +292,6 @@ function installer_admin_phase5()
     // 1. Load base and modules module
     $modules = array('base','modules');
     foreach ($modules as $module) {
-        // @todo it's over for sqlite here because we're missing a specific .xsl transform in tableddl
         try {
        		xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'));
         } catch (Exception $e) {
