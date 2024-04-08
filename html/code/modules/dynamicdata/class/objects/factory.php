@@ -666,6 +666,46 @@ class DataObjectFactory extends xarObject
     }
 
     /**
+     * Apply where clauses to DD table if relevant - @todo see DataObjectLoader for VariableTable
+     * @param DataObjectList $objectlist by reference
+     * @param array<string, mixed> $where list of name => value pairs
+     * @return void
+     */
+    public static function applyObjectFilters(&$objectlist, $where)
+    {
+        if ($objectlist->datastore->getClassName() != 'VariableTableDataStore') {
+            // @todo apply query ;-)
+            return;
+        }
+        $join = '';
+        foreach ($where as $field => $value) {
+            if (is_array($value)) {
+                if (count($value) < 1) {
+                    continue;
+                }
+                array_walk($value, function (&$item, $key) {
+                    if (is_string($item)) {
+                        $item = str_replace("'", "\\'", $item);
+                    }
+                });
+                if (is_numeric($value[0])) {
+                    $clause = "IN (" . implode(", ", $value) . ")";
+                } elseif (is_string($value[0])) {
+                    $clause = "IN ('" . implode("', '", $value) . "')";
+                }
+            } elseif (is_numeric($value)) {
+                $clause = "= " . strval($value);
+            } else {
+                $value = str_replace("'", "\\'", $value);
+                $clause = "= '" . $value . "'";
+            }
+            $objectlist->addWhere($field, $clause, $join);
+            // CHECKME: use AND by default here !
+            $join = 'AND';
+        }
+    }
+
+    /**
      * Get a module's itemtypes
      *
      * @uses Xaraya\DataObject\UserApi::getModuleItemTypes()
