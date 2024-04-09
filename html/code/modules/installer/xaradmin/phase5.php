@@ -135,7 +135,7 @@ function installer_admin_phase5()
 			}
 			if ($dbExists) {
 				// We already have a database with this name
-//				return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $init_args['databaseName']));
+				return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $init_args['databaseName']));
 			}
         break;
 		case 'pgsql':
