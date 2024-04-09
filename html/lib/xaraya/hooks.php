@@ -46,7 +46,7 @@ class xarHooks extends xarEvents
     public static function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'hooksubjects', $func = 'notify')
     {
         // move classname earlier in params list when they're all classes
-        if (in_array(strtolower($classnameOrArea), self::SUPPORTED_AREAS)) {
+        if (in_array(strtolower($classnameOrArea), parent::SUPPORTED_AREAS)) {
             $classname = '';
             $area = $classnameOrArea;
         } else {
@@ -59,7 +59,7 @@ class xarHooks extends xarEvents
     public static function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'hookobservers', $func = 'notify')
     {
         // move classname earlier in params list when they're all classes
-        if (in_array(strtolower($classnameOrArea), self::SUPPORTED_AREAS)) {
+        if (in_array(strtolower($classnameOrArea), parent::SUPPORTED_AREAS)) {
             $classname = '';
             $area = $classnameOrArea;
         } else {

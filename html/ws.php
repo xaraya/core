@@ -1,11 +1,14 @@
 <?php
 /**
+ * Entrypoint for handling legacy & modern web services
+ *
  * Loads the files required for a webservices request
+ * @todo most of these types are no longer supported
  *
  * @package core\entrypoints
  * @subpackage entrypoints
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -298,7 +301,9 @@ function xarWebservicesMain()
                 }
             } else {
                 // TODO: show something nice(r) ?
-                echo '<a href="ws.php?wsdl">WSDL</a><br />
+                echo '<a href="ws.php/webhook">Webhook (path)</a><br />
+<a href="ws.php?type=webhook">Webhook (query)</a><br />
+<a href="ws.php?wsdl">WSDL</a><br />
 <a href="ws.php?type=xmlrpc">XML-RPC Interface</a><br />
 <a href="ws.php?type=trackback">Trackback Interface</a><br />
 <a href="ws.php?type=soap">SOAP Interface</a><br/>
@@ -310,10 +315,70 @@ function xarWebservicesMain()
 }
 
 /**
- * Set up for web services
+ * Entrypoint for handling legacy web services
  */
-xarWSLoader();
+function xarLegacyWebServices()
+{
+    /**
+     * Set up for web services
+     */
+    xarWSLoader();
+    /**
+     * Process the web service request
+     */
+    xarWebservicesMain();
+}
+
 /**
- * Process the web service request
+ * Entrypoint for handling modern web services
+ * @uses \sys::autoload()
  */
-xarWebservicesMain();
+function xarModernWebServices(string $type)
+{
+    require_once dirname(__DIR__).'/vendor/autoload.php';
+    // initialize bootstrap
+    sys::init();
+    // initialize caching - delay until we need results
+    //xarCache::init();
+    // initialize database - delay until caching fails
+    //xarDatabase::init();
+    // initialize modules
+    //xarMod::init();
+    // initialize users
+    //xarUser::init();
+
+    // let whoever we call know this request comes from here ;-)
+    $_SERVER['SERVER_FRAMEWORK'] = 'xaraya';
+
+    switch ($type) {
+        case 'webhook':
+            require_once dirname(__DIR__).'/vendor/xaraya/webhooks/public/index.php';
+            return;
+        default:
+            echo 'Unknown web service type';
+            return;
+    }
+}
+
+// list of "modern" web services relying on composer autoload
+$modernTypes = ['webhook'];
+
+// check path info first, then query type param
+$type = '';
+if (!empty($_SERVER['PATH_INFO'])) {
+    $type = trim($_SERVER['PATH_INFO'], '/');
+    // in case someone gets lost on the wrong path ;-)
+    if (str_contains($type, 'ws.php')) {
+        header('Location: ' . $_SERVER['SCRIPT_NAME']);
+        return;
+    }
+} elseif (!empty($_GET['type'])) {
+    $type = $_GET['type'];
+}
+
+// let the right web service handle it
+if (!empty($type) && in_array($type, $modernTypes)) {
+    xarModernWebServices($type);
+} else {
+    xarLegacyWebServices();
+}
