@@ -202,6 +202,8 @@ class xarTwigTpl extends xarTpl
     {
         // make other modules configurable based on fileinfo from xarversion.php
         $fileModules = xarMod::apiFunc('modules', 'admin', 'getfilemodules');
+        // support templates/twig or vendor/xaraya/twig/html directory for standard templates
+        $twigDir = static::getTwigTemplatesDir();
         foreach ($fileModules as $name => $fileInfo) {
             $name = strtolower($name);
             if (in_array($name, static::$namespaces)) {
@@ -210,7 +212,13 @@ class xarTwigTpl extends xarTpl
             if (empty($fileInfo['twigtemplates'])) {
                 continue;
             }
-            static::$namespaces[$name] = 'code/modules/' . $fileInfo['directory'];
+            // @todo support individual module templates directories too!?
+            $path = 'code/modules/' . $fileInfo['directory'];
+            if (!is_dir($twigDir . '/' . $path)) {
+                xarLog::message(__METHOD__ . ": Invalid path for Twig namespace '$name' $twigDir/$path", xarLog::LEVEL_WARNING);
+                continue;
+            }
+            static::$namespaces[$name] = $path;
             // @todo if a module uses a specific file extension for twig templates, e.g. to create xml feeds
             if (!empty($fileInfo['twigextension']) && $fileInfo['twigextension'] != static::DEFAULT_EXTENSION) {
                 static::$extensions['modules'][$name] = $fileInfo['twigextension'];
