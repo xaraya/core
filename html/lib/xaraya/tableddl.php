@@ -322,6 +322,7 @@ function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[],
 			$sql = $name;
     		switch($columnType) {
     			case 'text':
+    			case 'longvarchar':
     				if ($size == '') {
     					$sql .= " TEXT";
     				} else {
@@ -332,11 +333,14 @@ function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[],
     				if ($size != '' && (int)$size > 3) {
     					$sql .= " INTEGER";
     				} else {
-    					$sql .= " TINYINT";
+    					$sql .= " SMALLINT";
     				}
     			break;
+    			case 'blob':
+    				$sql .= " BYTEA";
+    			break;
     			default:
-						$nativeType = xarXMLInstaller::getNativeType($columnType);
+					$nativeType = xarXMLInstaller::getNativeType($columnType);
 					if ($nativeType == false) {
 						$message = "Unknown columnType: $columnType";
 						die($message);
@@ -344,9 +348,7 @@ function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[],
 					$sql .= " " . $nativeType;
     			break;
     		}
-    		if (!empty($size)) $sql .= '(' . $size . ')';
-    		if ((bool)$unsigned) $sql .= ' UNSIGNED';
-    		if (!empty($charset)) $sql .= ' CHARACTER SET ' . $charset;
+    		if (!empty($size) && ($columnType == 'text')) $sql .= '(' . $size . ')';
     		if ((bool)$required) $sql .= ' NOT NULL';
 			// Special care needs to be taken with this arg, since it could have any numeric or char value
     		if ($defaultExists) {
@@ -413,7 +415,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
             }
             $sql .= ' ('.join(',', $index['fields']).')';
         break;
-        case 'postgres':
+        case 'pgsql':
         case 'pdopgsql':
         case 'oci8':
         case 'oci8po':
@@ -470,7 +472,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         case 'pdomysqli':
             $sql = 'ALTER TABLE '.$tableName.' DROP INDEX '.$index['name'];
             break;
-        case 'postgres':
+        case 'pgsql':
         case 'pdopgsql':
         case 'oci8':
         case 'oci8po':
@@ -526,7 +528,7 @@ class xarTableDDL extends xarObject
 
 class xarXMLInstaller extends xarObject
 {
-    public $tableprefix = '';
+    static private $typesObject;
     
     // No constructor yet. maybe later
     
@@ -536,33 +538,29 @@ class xarXMLInstaller extends xarObject
             throw new BadParameterException(xarML('No file to transform!'));
 
         // Get the database type from the connection
-		switch (xarDB::getType()) {
+		$databaseType = xarDB::getType();
+		switch ($databaseType) {
 			case 'pdosqlite':
 			case 'sqlite3':
-				$dbType = 'sqlite3';
-				// Data types are the same in sqlite3 and pdosqlite
-				sys::import('Creole.drivers.sqlite.SQLiteTypes');
-//				$typemap = SQLiteTypes::$typeMap;
+				sys::import('creole.drivers.sqlite.SQLiteTypes');
+				self::$typesObject = new SQLiteTypes;
 			break;
 			case 'mysqli':
 			case 'pdomysqli':
-				$dbType = 'mysqli';
-				sys::import('Creole.drivers.mysql.MySQLTypes');
-//				$typemap = MySQLTypes::$typeMap;
+				sys::import('creole.drivers.mysql.MySQLTypes');
+				self::$typesObject = new MySQLTypes;
 			break;
 			case 'pgsql':
 			case 'pdopgsql':
-				$dbType = 'pgsql';
-				sys::import('Creole.drivers.pgsql.PgSQLTypes');
-//				$typemap = PgSQLTypes::$typeMap;
+				sys::import('creole.drivers.pgsql.PgSQLTypes');
+				self::$typesObject = new PgSQLTypes;
 			break;
 			default:
-            $dbType = xarDB::getType();
-			throw new Exception(xarML("Unknown database type: '#(1)'", $dbType));
+				throw new Exception(xarML("Unknown database type: '#(1)'", $databaseType));
 		}
         
         if (!isset($xslFile))
-            $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-'. $dbType . '.xsl';
+            $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-'. $databaseType . '.xsl';
         if (!file_exists($xslFile)) {
             $msg = xarML('The file #(1) was not found', $xslFile);
             throw new BadParameterException(null, $msg);
@@ -585,7 +583,7 @@ class xarXMLInstaller extends xarObject
         sys::import('creole.CreoleTypes');
         $code = (int)CreoleTypes::getCreoleCode(strtoupper($creoleType));
         if (null == $code) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
-        if (null == $type = strtoupper(MySQLTypes::getNativeType($code))) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
+        if (null == $type = strtoupper(self::$typesObject::getNativeType($code))) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
         return $type;
     }
 
@@ -610,7 +608,7 @@ class xarXMLInstaller extends xarObject
         $queries = explode(';',$sqlCode);
         // The last element is empty: remove it
         array_pop($queries);
-//echo "<pre>";var_dump($queries);//exit;
+
         // Execute each of the queries
         $dbconn = xarDB::getConn();
         foreach ($queries as $q) {
