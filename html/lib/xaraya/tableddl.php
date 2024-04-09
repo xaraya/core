@@ -540,20 +540,23 @@ class xarXMLInstaller extends xarObject
         // Get the database type from the connection
 		$databaseType = xarDB::getType();
 		switch ($databaseType) {
-			case 'pdosqlite':
 			case 'sqlite3':
+			case 'pdosqlite':
 				sys::import('creole.drivers.sqlite.SQLiteTypes');
 				self::$typesObject = new SQLiteTypes;
+				$databaseType = 'sqlite3';
 			break;
 			case 'mysqli':
 			case 'pdomysqli':
 				sys::import('creole.drivers.mysql.MySQLTypes');
 				self::$typesObject = new MySQLTypes;
+				$databaseType = 'mysqli';
 			break;
 			case 'pgsql':
 			case 'pdopgsql':
 				sys::import('creole.drivers.pgsql.PgSQLTypes');
 				self::$typesObject = new PgSQLTypes;
+				$databaseType = 'pgsql';
 			break;
 			default:
 				throw new Exception(xarML("Unknown database type: '#(1)'", $databaseType));
