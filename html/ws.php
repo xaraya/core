@@ -366,12 +366,14 @@ $modernTypes = ['webhook'];
 // check path info first, then query type param
 $type = '';
 if (!empty($_SERVER['PATH_INFO'])) {
-    $type = trim($_SERVER['PATH_INFO'], '/');
     // in case someone gets lost on the wrong path ;-)
-    if (str_contains($type, 'ws.php')) {
+    if (str_contains($_SERVER['PATH_INFO'], basename($_SERVER['SCRIPT_NAME']))) {
         header('Location: ' . $_SERVER['SCRIPT_NAME']);
         return;
     }
+    // type is the first part in path info, e.g. /webhook/github/...
+    $parts = explode('/', trim($_SERVER['PATH_INFO'], '/'));
+    $type = reset($parts);
 } elseif (!empty($_GET['type'])) {
     $type = $_GET['type'];
 }
