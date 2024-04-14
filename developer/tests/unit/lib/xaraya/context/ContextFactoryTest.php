@@ -101,7 +101,7 @@ final class ContextFactoryTest extends TestCase
         $_GET = array_replace($_GET ?? [], $queryVars);
 
         $request = ContextFactory::makeRequest();
-        $headers = ['x-request-id' => ['req_123']];
+        $headers = ['X-Request-Id' => ['req_123']];
         $allowed = array_flip(array_keys($serverVars));
         $this->assertEquals($serverVars, array_intersect_key($request->getServerParams(), $allowed));
         $this->assertEquals($queryVars, $request->getQueryParams());
