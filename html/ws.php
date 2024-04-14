@@ -352,6 +352,7 @@ function xarModernWebServices(string $type)
 
     switch ($type) {
         case 'webhook':
+        case 'passthru':
             require_once dirname(__DIR__).'/vendor/xaraya/webhooks/public/index.php';
             return;
         default:
@@ -361,7 +362,7 @@ function xarModernWebServices(string $type)
 }
 
 // list of "modern" web services relying on composer autoload
-$modernTypes = ['webhook'];
+$modernTypes = ['webhook', 'passthru'];
 
 // check path info first, then query type param
 $type = '';

@@ -6,3 +6,4 @@ phpstan.neon
 .phpunit.result.cache
 .phpunit.cache
 .vscode/
+var/
