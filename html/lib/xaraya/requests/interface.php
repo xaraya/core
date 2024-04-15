@@ -91,4 +91,10 @@ interface RequestInterface
      * @return array<string, mixed>
      */
     public function getParsedBody();
+
+    /**
+     * Gets the raw body input
+     * @return string|bool
+     */
+    public function getRawInput();
 }
