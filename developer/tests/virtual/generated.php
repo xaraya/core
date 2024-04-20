@@ -5,6 +5,7 @@
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\Generated\Sample;
+use Xaraya\DataObject\Generated\VirtualSample;
 
 // initialize bootstrap
 sys::init();
@@ -222,6 +223,50 @@ function test_generated_clone($itemid = null)
     return count($coll);
 }
 
+function test_virtual_baseline($itemid = null)
+{
+    $coll = new ArrayObject();
+    XarayaProfiler::clear();
+    for ($i = 0; $i < TEST_COUNT; $i++) {
+        $args = ['name' => "Mike $i", 'age' => 20 + $i];
+        $sample = new VirtualSample();
+        if (!empty($itemid)) {
+            $sample->getItem(['itemid' => $itemid]);
+        }
+        $sample->setFieldValues($args);
+        $coll[] = $sample;
+    }
+    echo XarayaProfiler::result();
+    $values = $coll[25]->getFieldValues();
+    echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
+    return count($coll);
+}
+
+function test_virtual_unserialize($itemid = null)
+{
+    $sample = new VirtualSample();
+    $serialized = serialize($sample);
+    $coll = new ArrayObject();
+    for ($i = 0; $i < TEST_COUNT; $i++) {
+        $args = ['name' => "Mike $i", 'age' => 20 + $i];
+        $sample = unserialize($serialized);
+        if (!empty($itemid)) {
+            $sample->getItem(['itemid' => $itemid]);
+        }
+        $sample->setFieldValues($args);
+        $coll[] = $sample;
+    }
+    $values = $coll[25]->getFieldValues();
+    echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
+    return count($coll);
+}
+
+function test_virtual_clone($itemid = null)
+{
+    echo "Not supported for DataObject()\n";
+    return 0;
+}
+
 function run_profile($itemid = null)
 {
     mini_profile("Normal baseline", function ($itemid) { return test_normal_baseline($itemid); }, $itemid);
@@ -230,6 +275,9 @@ function run_profile($itemid = null)
     mini_profile("Generated baseline", function ($itemid) { return test_generated_baseline($itemid); }, $itemid);
     mini_profile("Generated unserialize", function ($itemid) { return test_generated_unserialize($itemid); }, $itemid);
     mini_profile("Generated clone", function ($itemid) { return test_generated_clone($itemid); }, $itemid);
+    mini_profile("Virtual baseline", function ($itemid) { return test_virtual_baseline($itemid); }, $itemid);
+    mini_profile("Virtual unserialize", function ($itemid) { return test_virtual_unserialize($itemid); }, $itemid);
+    mini_profile("Virtual clone", function ($itemid) { return test_virtual_clone($itemid); }, $itemid);
 }
 
 function test_crud()

@@ -9,6 +9,8 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\DataStores\MongoDBDataStore;
 use Xaraya\Context\Context;
+use Xaraya\DataObject\Generated\VirtualSample;
+use Xaraya\DataObject\Generated\VirtualSampleList;
 
 // initialize bootstrap
 sys::init();
@@ -160,6 +162,23 @@ function test_delete_item($lastid = 2)
     echo "Item $itemid\n";
 }
 
+function test_virtual_sample()
+{
+    xarDatabase::init();
+    $context = new Context(['source' => __FUNCTION__]);
+    $sample = new VirtualSample(['itemid' => 1], $context);
+    echo get_class($sample) . "\n";
+    $itemid = $sample->getItem();
+    echo "Item: $itemid\n";
+    echo "Values: " . var_export($sample->getFieldValues(), true) . "\n";
+    echo "Context: " . var_export($sample->getContext(), true) . "\n";
+    $samples = new VirtualSampleList([], $context);
+    echo get_class($samples) . "\n";
+    $items = $samples->getItems();
+    echo "Items: " . var_export($items, true) . "\n";
+}
+
+/**
 //init_online();
 init_offline_cache();
 hooks_register();
@@ -169,3 +188,6 @@ test_get_items();
 test_delete_item($lastid);
 test_get_items();
 //save_offline_cache();
+ */
+
+test_virtual_sample();

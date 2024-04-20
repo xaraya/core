@@ -13,7 +13,7 @@
 
 interface iDataObject
 {
-    public function __construct(DataObjectDescriptor $descriptor);
+    //public function __construct(DataObjectDescriptor $descriptor);
     public function getItem(array $data = []);
     public function checkInput(array $data = []);
     public function showForm(array $data = []);
@@ -39,7 +39,7 @@ interface iDataObject
  */
 interface iDataObjectList
 {
-    public function __construct(DataObjectDescriptor $descriptor);
+    //public function __construct(DataObjectDescriptor $descriptor);
     public function setArguments(array $data = []);
     public function setSort($data);
     public function setWhere($data);
