@@ -472,8 +472,8 @@ class VirtualObjectFactory extends xarObject
      */
     public static function saveCoreCache()
     {
-        xarCoreCache::saveCached('DynamicData', 'PropertyTypes');
-        xarCoreCache::saveCached('DynamicData', 'Configurations');
+        xarCoreCache::saveCached('DynamicData', 'PropertyTypes', __METHOD__);
+        xarCoreCache::saveCached('DynamicData', 'Configurations', __METHOD__);
         // Saved in DD > Utilities > DB Connections = xaradmin/dbconfig.php for all modules - UtilApi::getAllDatabases()
         //xarCoreCache::saveCached('DynamicData', 'Databases');
         //xarCoreCache::saveCached('Mod.Variables.dynamicdata');  // 'databases'
