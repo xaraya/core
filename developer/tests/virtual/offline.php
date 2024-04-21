@@ -4,6 +4,9 @@
  *
  * Needs the following setting in /etc/php[8.x]/cli/php.ini to enable acp(u) for cli:
  * apc.enable_cli=1
+ *
+ * Trying out brick/varexporter
+ * $ composer require --dev brick/varexporter
  */
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
@@ -11,11 +14,13 @@ use Xaraya\DataObject\DataStores\MongoDBDataStore;
 use Xaraya\Context\Context;
 use Xaraya\DataObject\Generated\VirtualSample;
 use Xaraya\DataObject\Generated\VirtualSampleList;
+use Brick\VarExporter\VarExporter;
 
 // initialize bootstrap
 sys::init();
 // initialize caching
 xarCache::init();
+//xarCore::xarInit(xarCore::SYSTEM_MODULES);
 
 function init_online()
 {
@@ -176,6 +181,38 @@ function test_virtual_sample()
     echo get_class($samples) . "\n";
     $items = $samples->getItems();
     echo "Items: " . var_export($items, true) . "\n";
+    foreach (array_keys($sample->properties) as $name) {
+        $sample->properties[$name]->objectref = null;
+        $sample->properties[$name]->descriptor->set('objectref', null);
+    }
+    $sample->datastore->object = null;
+    $sample->setContext(null);
+    //var_dump($sample);
+    //var_export($sample->datastore);
+    //print_r($sample);
+    echo VarExporter::export($sample, VarExporter::ADD_RETURN | VarExporter::ADD_TYPE_HINTS);
+}
+
+function test_normal_sample()
+{
+    xarDatabase::init();
+    $context = new Context(['source' => __FUNCTION__]);
+    $sample = DataObjectFactory::getObject(['name' => 'sample', 'itemid' => 1], $context);
+    echo get_class($sample) . "\n";
+    $itemid = $sample->getItem();
+    echo "Item: $itemid\n";
+    echo "Values: " . var_export($sample->getFieldValues(), true) . "\n";
+    echo "Context: " . var_export($sample->getContext(), true) . "\n";
+    $samples = DataObjectFactory::getObjectList(['name' => 'sample'], $context);
+    echo get_class($samples) . "\n";
+    $items = $samples->getItems();
+    echo "Items: " . var_export($items, true) . "\n";
+
+    DataObjectFactory::unlinkObjectRef($samples);
+    //var_dump($sample);
+    //var_export($sample->datastore);
+    //print_r($samples);
+    echo VarExporter::export($samples, VarExporter::ADD_RETURN | VarExporter::ADD_TYPE_HINTS);
 }
 
 /**
@@ -190,4 +227,5 @@ test_get_items();
 //save_offline_cache();
  */
 
-test_virtual_sample();
+//test_virtual_sample();
+test_normal_sample();
