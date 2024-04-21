@@ -230,4 +230,18 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
         $this->connect();
         return $this->db->getDatabaseInfo();
     }
+
+    public function __serialize()
+    {
+        return $this->getPublicProperties();
+    }
+
+    public function __unserialize(array $data)
+    {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
+        // lazy connection
+        //$this->connect();
+    }
 }

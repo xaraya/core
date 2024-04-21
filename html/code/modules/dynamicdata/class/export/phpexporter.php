@@ -215,41 +215,4 @@ $object = ' . var_export($info, true) . ";\n";
         }
         return $serialized;
     }
-
-    /**
-     * Summary of unlinkObjectRef - currently not used, see tests/virtual
-     * @param DataObject|DataObjectList $object
-     * @return void
-     */
-    public static function unlinkObjectRef(& $object)
-    {
-        $object->datastore->object = '$this';
-        //$object->datastore->db = null;
-        foreach (array_keys($object->properties) as $name) {
-            $object->properties[$name]->descriptor->set('objectref', '$this');
-            $object->properties[$name]->objectref = '$this';
-        }
-    }
-
-    /**
-     * Summary of relinkObjectRef - currently not used, see tests/virtual
-     * @param DataObject|DataObjectList $object
-     * @return void
-     */
-    public static function relinkObjectRef(& $object)
-    {
-        //$object->descriptor->objectref = &$object;
-        //$object->descriptor->set('objectref', &$object);
-        $object->datastore->object = &$object;
-        //$object->datastore->db = null;
-        foreach (array_keys($object->properties) as $name) {
-            $object->properties[$name]->descriptor->set('objectref', $object);
-            $object->properties[$name]->objectref = &$object;
-            if ($object instanceof DataObjectList) {
-                $object->properties[$name]->_items = &$object->items;
-            } else {
-                $object->properties[$name]->_itemid = &$object->itemid;
-            }
-        }
-    }
 }
