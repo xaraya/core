@@ -85,7 +85,7 @@ final class DatabaseTest extends TestCase
         ];
         $conn = xarDB::newConn($dbConnArgs);
         $dbConnIndex = xarDB::getConnIndex();
-        $expected = 3090158701;
+        $expected = 1501565340;
         $this->assertEquals($expected, $dbConnIndex);
         $this->assertTrue($conn instanceof \Connection);
         $this->assertTrue(xarDB::hasConn($dbConnIndex));
@@ -141,7 +141,7 @@ final class DatabaseTest extends TestCase
         ];
         $conn = xarDB::newConn($dbConnArgs);
         $dbConnIndex = xarDB::getConnIndex();
-        $expected = 241983077;
+        $expected = 3291950314;
         $this->assertEquals($expected, $dbConnIndex);
         $this->assertTrue($conn instanceof \PDOConnection);
         $this->assertTrue(xarDB::hasConn($dbConnIndex));

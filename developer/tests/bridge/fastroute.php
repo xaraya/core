@@ -4,6 +4,7 @@
  */
 
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
+chdir(dirname(__DIR__, 3) . '/html');
 
 // use some routing bridge
 use Xaraya\Bridge\Routing\FastRouteBridge;
@@ -13,6 +14,10 @@ use Xaraya\Bridge\Routing\FastRouteBuildTest;
 
 sys::init();
 xarCache::init();
+// try out request context class - can't with PSR-17 ::fromGlobals()
+//xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
+// try out session context class
+xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
 xarCore::xarInit(xarCore::SYSTEM_USER);
 
 // Concatenate and parse string into $_GET: php fastroute.php /object/sample ...
@@ -43,14 +48,16 @@ if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
  */
 
 // or direct use of simple route dispatcher
-//[$result, $context] = FastRouteBridge::dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
+//$bridge = new FastRouteBridge();
+//[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
 //echo $result;
 //echo xarTpl::renderPage($result);
-//FastRouteBridge::run();
+//$bridge->run();
 
 // or direct use of simple route dispatcher
-[$result, $context] = FastRouteBridge::dispatchRequest(xarServer::getVar('REQUEST_METHOD') ?? 'GET', xarServer::getVar('PATH_INFO') ?? '/');
-FastRouteBridge::output($result, $context);
+$bridge = new FastRouteBridge();
+[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD') ?? 'GET', xarServer::getVar('PATH_INFO') ?? '/');
+$bridge->output($result, $context);
 
 /**
 $dispatcher = FastRouteBridge::getSimpleDispatcher();

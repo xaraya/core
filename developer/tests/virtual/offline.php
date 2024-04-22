@@ -190,7 +190,7 @@ function test_virtual_sample()
     //var_dump($sample);
     //var_export($sample->datastore);
     //print_r($sample);
-    echo VarExporter::export($sample, VarExporter::ADD_RETURN | VarExporter::ADD_TYPE_HINTS);
+    //echo VarExporter::export($sample, VarExporter::ADD_RETURN | VarExporter::ADD_TYPE_HINTS);
 }
 
 function test_normal_sample()
@@ -208,11 +208,41 @@ function test_normal_sample()
     $items = $samples->getItems();
     echo "Items: " . var_export($items, true) . "\n";
 
-    DataObjectFactory::unlinkObjectRef($samples);
+    $filepath = sys::varpath() . '/cache/variables/sample-export.php';
+    DataObjectFactory::unlinkObjectRef($sample);
     //var_dump($sample);
     //var_export($sample->datastore);
+    //print_r($sample);
+    $content = '<?php
+';
+    $content .= VarExporter::export($sample, VarExporter::ADD_RETURN | VarExporter::ADD_TYPE_HINTS);
+    file_put_contents($filepath, $content);
+    /**
+    $content = '<?php
+$object = ' . var_export($sample, true) . ';
+return $object;
+';
+    $filepath = sys::varpath() . '/cache/variables/sample-exported.php';
+    file_put_contents($filepath, $content);
+    */
+
+    $filepath = sys::varpath() . '/cache/variables/samplelist-export.php';
+    DataObjectFactory::unlinkObjectRef($samples);
+    //var_dump($samples);
+    //var_export($samples->datastore);
     //print_r($samples);
-    echo VarExporter::export($samples, VarExporter::ADD_RETURN | VarExporter::ADD_TYPE_HINTS);
+    $content = '<?php
+';
+    $content .= VarExporter::export($samples, VarExporter::ADD_RETURN | VarExporter::ADD_TYPE_HINTS);
+    file_put_contents($filepath, $content);
+    /**
+    $content = '<?php
+$object = ' . var_export($samples, true) . ';
+return $object;
+';
+    $filepath = sys::varpath() . '/cache/variables/samplelist-exported.php';
+    file_put_contents($filepath, $content);
+     */
 }
 
 /**

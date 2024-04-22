@@ -31,11 +31,12 @@
  * // $routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
  *
  * // or let the route dispatcher handle the request itself and return the result
- * [$result, $context] = FastRouteBridge::dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/', '/mysite');
- * FastRouteBridge::output($result, $context);
+ * $bridge = new FastRouteBridge();
+ * [$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/', '/mysite');
+ * $bridge->output($result, $context);
  *
  * // or let it really do all the work here...
- * // FastRouteBridge::run('/mysite');
+ * // $bridge->run('/mysite');
  */
 
 namespace Xaraya\Bridge\Routing;
@@ -108,10 +109,8 @@ class TrackRouteCollector extends RouteCollector
  */
 class FastRouteBridge extends BasicBridge
 {
-    /**
-     * Summary of baseUri
-     * @var string
-     */
+    /** @var Dispatcher */
+    public static $dispatcher;
     public static string $baseUri = '';
 
     /**
@@ -153,23 +152,26 @@ class FastRouteBridge extends BasicBridge
      */
     public static function getSimpleDispatcher(string $group = '')
     {
+        if (isset(static::$dispatcher)) {
+            return static::$dispatcher;
+        }
         // override standard routeCollector here
         if (empty($group)) {
-            $dispatcher = simpleDispatcher(function (RouteCollector $r) {
+            static::$dispatcher = simpleDispatcher(function (RouteCollector $r) {
                 static::addRouteCollection($r);
             }, [
                 'routeCollector' => TrackRouteCollector::class,
             ]);
-            return $dispatcher;
+            return static::$dispatcher;
         }
-        $dispatcher = simpleDispatcher(function (RouteCollector $r) use ($group) {
+        static::$dispatcher = simpleDispatcher(function (RouteCollector $r) use ($group) {
             $r->addGroup($group, function (RouteCollector $r) {
                 static::addRouteCollection($r);
             });
         }, [
             'routeCollector' => TrackRouteCollector::class,
         ]);
-        return $dispatcher;
+        return static::$dispatcher;
     }
 
     /**
@@ -179,8 +181,9 @@ class FastRouteBridge extends BasicBridge
      * @param string $group
      * @return array<mixed>
      */
-    public static function dispatchRequest(string $method, string $path, string $group = '')
+    public function dispatchRequest(string $method, string $path, string $group = '')
     {
+        // @todo keep dispatcher static but replace $handler[0] with $this if current class?
         $dispatcher = static::getSimpleDispatcher($group);
         $routeInfo = $dispatcher->dispatch($method, $path);
         switch ($routeInfo[0]) {
@@ -213,9 +216,10 @@ class FastRouteBridge extends BasicBridge
                     [$result, $context] = static::callRestApiHandler($handler, $vars);
                 } elseif (strpos($path, $group . '/graphql') === 0) {
                     // different processing for GraphQL API - see gql.php
-                    [$result, $context] = static::callHandler($handler, $vars);
+                    [$result, $context] = $this->callHandler($handler, $vars);
                 } else {
-                    [$result, $context] = static::callHandler($handler, $vars);
+                    // @todo keep dispatcher static but replace $handler[0] with $this if current class?
+                    [$result, $context] = $this->callHandler($handler, $vars);
                 }
                 return [$result, $context];
         }
@@ -227,11 +231,11 @@ class FastRouteBridge extends BasicBridge
      * @param string $group
      * @return void
      */
-    public static function run(string $group = '')
+    public function run(string $group = '')
     {
         $method = static::getMethod();
         $path = static::getPathInfo();
-        [$result, $context] = static::dispatchRequest($method, $path, $group);
+        [$result, $context] = $this->dispatchRequest($method, $path, $group);
         if (strpos($path, $group . '/restapi/') === 0) {
             // different processing for REST API - see rst.php
             DataObjectRESTHandler::output($result, 200, $context);
@@ -239,7 +243,7 @@ class FastRouteBridge extends BasicBridge
             // different processing for GraphQL API - see gql.php
             xarGraphQL::output($result, $context);
         } else {
-            static::output($result, $context);
+            $this->output($result, $context);
         }
     }
 
@@ -249,7 +253,7 @@ class FastRouteBridge extends BasicBridge
      * @param mixed $context
      * @return void
      */
-    public static function output($result, $context = null)
+    public function output($result, $context = null)
     {
         if (http_response_code() !== 200 && php_sapi_name() !== 'cli') {
             return;
@@ -280,17 +284,57 @@ class FastRouteBridge extends BasicBridge
     }
 
     /**
+     * Summary of getHandler
+     * @param mixed $handler
+     * @return mixed
+     */
+    public function getHandler($handler)
+    {
+        if (!is_array($handler)) {
+            // @todo handle first class callable syntax $this->method(...)
+            return $handler;
+        }
+        if (is_string($handler[0])) {
+            if ($handler[0] == static::class) {
+                // replace with $this - see webhooks fastroute endpoint
+                $handler[0] = $this;
+            } elseif (is_subclass_of($handler[0], static::class)) {
+                // @todo instantiate handler[0] for subclasses like FastRouteApiBridge?
+                $handler[0] = new $handler[0]();
+            } else {
+                // leave it for someone else to take care of...
+            }
+            return $handler;
+        }
+        if (is_object($handler[0])) {
+            if ($handler[0]::class == static::class) {
+                // @todo replace with $this? - see DD rest handler
+                $handler[0] = $this;
+            } elseif (is_subclass_of($handler[0], static::class)) {
+                // @todo clone handler[0] here? - see DD rest handler
+                $handler[0] = clone $handler[0];
+            } else {
+                // leave it for someone else to take care of...
+            }
+            return $handler;
+        }
+        return $handler;
+    }
+
+    /**
      * Summary of callHandler
      * @param mixed $handler
      * @param array<string, mixed> $vars
      * @param mixed $request
      * @return mixed
      */
-    public static function callHandler($handler, $vars, &$request = null)
+    public function callHandler($handler, $vars, &$request = null)
     {
         if (empty($vars)) {
             $vars = [];
         }
+        // fix handler if needed
+        $handler = $this->getHandler($handler);
         // don't use call_user_func here anymore because $request is passed by reference
         $result = $handler($vars, $request);
         return $result;
@@ -325,7 +369,7 @@ class FastRouteBridge extends BasicBridge
      * @param mixed $request
      * @return array<mixed>
      */
-    public static function handleObjectRequest($vars, &$request = null)
+    public function handleObjectRequest($vars, &$request = null)
     {
         // if coming from module request handler, convert to object request
         if (empty($vars['object']) && $vars['module'] == 'object') {
@@ -371,7 +415,7 @@ class FastRouteBridge extends BasicBridge
         static::prepareController('object', static::$baseUri . '/object');
         $context['module'] = 'object';
 
-        $result = static::runObjectRequest($params, $context);
+        $result = $this->runObjectRequest($params, $context);
         return [$result, $context];
     }
 
@@ -381,7 +425,7 @@ class FastRouteBridge extends BasicBridge
      * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runObjectRequest($params, $context = null)
+    public function runObjectRequest($params, $context = null)
     {
         return DataObjectRequest::runDataObjectGuiRequest($params, $context);
     }
@@ -392,13 +436,13 @@ class FastRouteBridge extends BasicBridge
      * @param mixed $request
      * @return array<mixed>
      */
-    public static function handleModuleRequest($vars, &$request = null)
+    public function handleModuleRequest($vars, &$request = null)
     {
         // path = /
         $vars['module'] ??= 'base';
         // path = /object[/...]
         if ($vars['module'] == 'object') {
-            return static::handleObjectRequest($vars, $request);
+            return $this->handleObjectRequest($vars, $request);
         }
         // path = /{module}/{func}
         if (empty($vars['type']) && !empty($vars['func'])) {
@@ -426,7 +470,7 @@ class FastRouteBridge extends BasicBridge
         static::prepareController($vars['module'], static::$baseUri);
         $context['module'] = $vars['module'];
 
-        $result = static::runModuleRequest($vars, $params, $context);
+        $result = $this->runModuleRequest($vars, $params, $context);
         return [$result, $context];
     }
 
@@ -437,7 +481,7 @@ class FastRouteBridge extends BasicBridge
      * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runModuleRequest($vars, $query, $context = null)
+    public function runModuleRequest($vars, $query, $context = null)
     {
         return ModuleRequest::runModuleGuiRequest($vars, $query, $context);
     }
@@ -448,7 +492,7 @@ class FastRouteBridge extends BasicBridge
      * @param mixed $request
      * @return array<mixed>
      */
-    public static function handleBlockRequest($vars, &$request = null)
+    public function handleBlockRequest($vars, &$request = null)
     {
         // @checkme limited to renderBlock() or getinfo() for now, so no query params or body params taken into account yet
         // dispatcher doesn't provide query params by default
@@ -462,7 +506,7 @@ class FastRouteBridge extends BasicBridge
         static::prepareController($vars['module'] ?? 'base', static::$baseUri);
         $context['module'] = $vars['module'] ?? 'base';
 
-        $result = static::runBlockRequest($vars, $query, $context);
+        $result = $this->runBlockRequest($vars, $query, $context);
         return [$result, $context];
     }
 
@@ -473,7 +517,7 @@ class FastRouteBridge extends BasicBridge
      * @param ?Context<string, mixed> $context
      * @return string
      */
-    public static function runBlockRequest($vars, $query = null, $context = null)
+    public function runBlockRequest($vars, $query = null, $context = null)
     {
         return BlockRequest::runBlockGuiRequest($vars, $query, $context);
     }
@@ -484,7 +528,7 @@ class FastRouteBridge extends BasicBridge
      * @param mixed $request
      * @return array<mixed>
      */
-    public static function handleRoutesRequest($vars, &$request = null)
+    public function handleRoutesRequest($vars, &$request = null)
     {
         $result = "<ul>";
         foreach (TrackRouteCollector::getRoutes() as $info) {
@@ -542,7 +586,7 @@ class FastRouteApiBridge extends FastRouteBridge
      * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runObjectRequest($params, $context = null)
+    public function runObjectRequest($params, $context = null)
     {
         return DataObjectRequest::runDataObjectApiRequest($params, $context);
     }
@@ -554,7 +598,7 @@ class FastRouteApiBridge extends FastRouteBridge
      * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runModuleRequest($vars, $query, $context = null)
+    public function runModuleRequest($vars, $query, $context = null)
     {
         return ModuleRequest::runModuleApiRequest($vars, $query, $context);
     }
@@ -566,7 +610,7 @@ class FastRouteApiBridge extends FastRouteBridge
      * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runBlockRequest($vars, $query = null, $context = null)
+    public function runBlockRequest($vars, $query = null, $context = null)
     {
         return BlockRequest::runBlockApiRequest($vars, $query, $context);
     }
@@ -644,12 +688,16 @@ class FastRouteStaticBridge extends FastRouteBridge
      * @param mixed $request
      * @return array<mixed>
      */
-    public static function handleThemeFileRequest($vars, &$request = null)
+    public function handleThemeFileRequest($vars, &$request = null)
     {
         // path = /themes/{source}/{folder}/{file:.+}
         $path = StaticFileRequest::getThemeFileRequest($vars);
         $vars['path'] = $path;
         $vars['static'] = 'theme';
+        if (file_exists($path)) {
+            $vars['size'] = filesize($path);
+            $vars['mtime'] = filemtime($path);
+        }
         //if (!empty($request)) {
         //    $request = $request->withAttribute('mediaType', '...');
         //}
@@ -663,12 +711,16 @@ class FastRouteStaticBridge extends FastRouteBridge
      * @param mixed $request
      * @return array<mixed>
      */
-    public static function handleModuleFileRequest($vars, &$request = null)
+    public function handleModuleFileRequest($vars, &$request = null)
     {
         // path = /code/modules/{source}/{folder}/{file:.+}
         $path = StaticFileRequest::getModuleFileRequest($vars);
         $vars['path'] = $path;
         $vars['static'] = 'module';
+        if (file_exists($path)) {
+            $vars['size'] = filesize($path);
+            $vars['mtime'] = filemtime($path);
+        }
         //if (!empty($request)) {
         //    $request = $request->withAttribute('mediaType', '...');
         //}
@@ -682,12 +734,16 @@ class FastRouteStaticBridge extends FastRouteBridge
      * @param mixed $request
      * @return array<mixed>
      */
-    public static function handleVarFileRequest($vars, &$request = null)
+    public function handleVarFileRequest($vars, &$request = null)
     {
         // path = /var/{source}/{folder}/{file:.+}
         $path = StaticFileRequest::getVarFileRequest($vars);
         $vars['path'] = $path;
         $vars['static'] = 'var';
+        if (file_exists($path)) {
+            $vars['size'] = filesize($path);
+            $vars['mtime'] = filemtime($path);
+        }
         //if (!empty($request)) {
         //    $request = $request->withAttribute('mediaType', '...');
         //}

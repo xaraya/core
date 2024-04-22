@@ -148,11 +148,12 @@ use xarServer;
 // $routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
 
 // or let the route dispatcher handle the request itself and return the result
-[$result, $context] = FastRouteBridge::dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/', '/mysite');
-FastRouteBridge::output($result, $context);
+$bridge = new FastRouteBridge();
+[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/', '/mysite');
+$bridge->output($result, $context);
 
 // or let it really do all the work here...
-// FastRouteBridge::run('/mysite');
+// $bridge->run('/mysite');
 ```
 
 ## HTTP Server Request (PSR-7)
@@ -252,7 +253,7 @@ $stack = [
 
 // dispatch the request
 $response = Dispatcher::run($stack, $request);
-// emit the respone
+// emit the response
 ResponseUtil::emitResponse($response);
 ```
 
@@ -272,7 +273,6 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
 use Xaraya\Bridge\Middleware\FastRouteHandler;
-use Xaraya\Bridge\Middleware\ResponseUtil;
 
 // get server request from somewhere
 $psr17Factory = new Psr17Factory();
@@ -285,8 +285,8 @@ $fastrouted = new FastRouteHandler($psr17Factory);
 // handle the request directly, or use as middleware
 $response = $fastrouted->handle($request);
 
-// emit the respone
-ResponseUtil::emitResponse($response);
+// emit the response
+$fastrouted->emitResponse($response);
 ```
 
 ## Non-blocking HTTP Server (ReactPHP)

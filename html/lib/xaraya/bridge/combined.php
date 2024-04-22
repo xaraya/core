@@ -28,7 +28,7 @@
  * $response = $fastrouted->handle($request);
  *
  * //echo $response->getBody();
- * ResponseUtil::emitResponse($response);
+ * $fastrouted->emitResponse($response);
  */
 
 namespace Xaraya\Bridge\Middleware;
@@ -62,6 +62,10 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
     protected $responseUtil;
     /** @var FastRouter */
     protected $router;
+    /** @var FastRouteBridge */
+    protected $bridge;
+    /** @var FastRouteApiBridge */
+    protected $apibridge;
 
     /**
      * Initialize the middleware with response factory (or container, ...) and options
@@ -70,6 +74,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
     public function __construct(?ResponseFactoryInterface $responseFactory = null, ?FastRouter $router = null, array $options = [])
     {
         $this->responseUtil = new ResponseUtil($responseFactory, $options);
+        $this->bridge = new FastRouteBridge();
         if (empty($router)) {
             $router = $this->getRouter();
         }
@@ -81,9 +86,10 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
         // override standard routeCollector here
         $router = simpleDispatcher(function (RouteCollector $r) {
             $r->addGroup('/api', function (RouteCollector $r) {
+                // @todo do we want to instantiate apibridge too?
                 FastRouteApiBridge::addRouteCollection($r);
             });
-            FastRouteBridge::addRouteCollection($r);
+            $this->bridge->addRouteCollection($r);
         }, [
             'routeCollector' => TrackRouteCollector::class,
         ]);
@@ -119,6 +125,16 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
             $request = $request->withAttribute('status', $status);
         };
         xarController::$redirectTo = $callback;
+    }
+
+    /**
+     * See FastRouteBridge::getHandler()
+     * @param mixed $handler
+     * @return mixed
+     */
+    public function getHandler($handler)
+    {
+        return $this->bridge->getHandler($handler);
     }
 
     /**
@@ -171,10 +187,10 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                         [$result, $context] = DataObjectRESTHandler::callHandler($handler, $vars, $request);
                     } elseif (strpos($path, '/graphql') === 0) {
                         // different processing for GraphQL API - see gql.php
-                        [$result, $context] = $handler($vars, $request);
+                        [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
                         $numeric = false;
                     } else {
-                        [$result, $context] = $handler($vars, $request);
+                        [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
                     }
                     $redirectURL = $request->getAttribute('redirectURL');
                     if (!empty($redirectURL)) {
@@ -208,5 +224,10 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 $result = "Unknown result from FastRoute Dispatcher: " . var_export($routeInfo, true);
                 return $this->responseUtil->createResponse($result);
         }
+    }
+
+    public function emitResponse(ResponseInterface $response): void
+    {
+        $this->responseUtil->emitResponse($response);
     }
 }

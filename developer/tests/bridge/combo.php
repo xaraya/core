@@ -5,13 +5,13 @@
  * Note: see also lib/xaraya/bridge/reactphp.php for an example with ReactPHP (not fully functional with links)
  */
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
+chdir(dirname(__DIR__, 3) . '/html');
 
 // use some PSR-7 factory and PSR-15 dispatcher
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
 use Xaraya\Bridge\Middleware\FastRouteHandler;
-use Xaraya\Bridge\Middleware\ResponseUtil;
 use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
 
@@ -22,11 +22,15 @@ class LocalTimer implements TimerInterface
 }
 
 LocalTimer::$enableTimer = true;
-LocalTimer::setTimer('autoload');
+//LocalTimer::setTimer('autoload');
 sys::init();
 LocalTimer::setTimer('sys');
 xarCache::init();
 LocalTimer::setTimer('cache');
+// try out request context class - can't with PSR-17 ::fromGlobals()
+//xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
+// try out session context class
+xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
 xarCore::xarInit(xarCore::SYSTEM_USER);
 LocalTimer::setTimer('core');
 
@@ -57,7 +61,7 @@ $fastrouted = new FastRouteHandler($psr17Factory);
 // handle the request directly, or use as middleware
 $response = $fastrouted->handle($request);
 LocalTimer::setTimer('run');
-ResponseUtil::emitResponse($response);
+$fastrouted->emitResponse($response);
 LocalTimer::setTimer('emit');
 
 if (php_sapi_name() === 'cli') {

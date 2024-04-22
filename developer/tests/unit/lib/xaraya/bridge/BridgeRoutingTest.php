@@ -33,9 +33,10 @@ final class BridgeRoutingTest extends TestCase
      */
     public function testDispatchRequest(string $method = 'GET', string $path = '/', array $query = [], string $output = ''): void
     {
+        $bridge = new FastRouteBridge();
         $expected = $output;
         $_GET = $query;
-        [$result, $context] = FastRouteBridge::dispatchRequest($method, $path);
+        [$result, $context] = $bridge->dispatchRequest($method, $path);
         $this->assertStringContainsString($expected, $result);
         //var_dump($context);
         $_GET = [];
