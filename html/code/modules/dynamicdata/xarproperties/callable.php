@@ -600,6 +600,20 @@ class CallableProperty extends DataProperty
         return $value;
     }
 
+    public function __serialize()
+    {
+        return $this->getPublicProperties();
+    }
+
+    public function __unserialize(array $data)
+    {
+        foreach ($data as $name => $value) {
+            $this->{$name} = $value;
+        }
+        // reset callable_* properties
+        $this->parseConfiguration($this->configuration);
+    }
+
     /**
      * Summary of log_trace
      * @return void

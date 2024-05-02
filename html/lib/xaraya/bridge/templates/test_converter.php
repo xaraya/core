@@ -5,6 +5,8 @@
 
 namespace Xaraya\Bridge\TemplateEngine;
 
+use xarCache;
+use xarDatabase;
 use xarTwigTpl;
 use sys;
 
@@ -15,9 +17,13 @@ if (php_sapi_name() !== 'cli') {
 
 $baseDir = dirname(__DIR__, 5);
 require_once $baseDir . '/vendor/autoload.php';
+chdir($baseDir . '/html');
 
 // initialize bootstrap
 sys::init();
+// initialize database to call xarMod::apiFunc() for namespaces
+xarCache::init();
+xarDatabase::init();
 
 // convert all test_*.xt templates from workflow includes directory
 /**

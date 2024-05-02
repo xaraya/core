@@ -102,7 +102,7 @@ class UtilApi implements DatabaseInterface
         }
         if (json_encode($old_databases) != json_encode($all_databases)) {
             xarCoreCache::setCached('DynamicData', 'Databases', $all_databases);
-            xarCoreCache::saveCached('DynamicData', 'Databases');
+            xarCoreCache::saveCached('DynamicData', 'Databases', __METHOD__);
         }
         return $all_databases;
     }

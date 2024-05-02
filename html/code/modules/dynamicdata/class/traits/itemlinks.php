@@ -101,9 +101,11 @@ trait ItemLinksTrait
         $itemtypes = [];
         foreach ($objects as $name => $objectinfo) {
             $itemtypes[$objectinfo['itemtype']] = [
-                'label' => xarVar::prepForDisplay($objectinfo['label']),
-                'title' => xarVar::prepForDisplay(xarML('View #(1)', $objectinfo['label'])),
-                'url'   => xarServer::getObjectURL($objectinfo['name'], 'view'),
+                'objectid' => $objectinfo['objectid'],
+                'name'     => $objectinfo['name'],
+                'label'    => xarVar::prepForDisplay($objectinfo['label']),
+                'title'    => xarVar::prepForDisplay(xarML('View #(1)', $objectinfo['label'])),
+                'url'      => xarServer::getObjectURL($objectinfo['name'], 'view'),
             ];
         }
         return $itemtypes;
@@ -181,9 +183,12 @@ trait ItemLinksTrait
             }
             // $object->getActionURL('display', $itemid)
             $itemlinks[$itemid] = [
-                'url'   => xarServer::getObjectURL($object->name, 'display', ['itemid' => $itemid]),
-                'title' => xarML('Display Item'),
-                'label' => $label,
+                'objectid' => $object->objectid,
+                'name'     => $object->name,
+                'itemid'   => $itemid,
+                'url'      => xarServer::getObjectURL($object->name, 'display', ['itemid' => $itemid]),
+                'title'    => xarML('Display Item'),
+                'label'    => $label,
             ];
         }
         return $itemlinks;

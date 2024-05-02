@@ -472,10 +472,48 @@ class VirtualObjectFactory extends xarObject
      */
     public static function saveCoreCache()
     {
-        xarCoreCache::saveCached('DynamicData', 'PropertyTypes');
-        xarCoreCache::saveCached('DynamicData', 'Configurations');
+        xarCoreCache::saveCached('DynamicData', 'PropertyTypes', __METHOD__);
+        xarCoreCache::saveCached('DynamicData', 'Configurations', __METHOD__);
         // Saved in DD > Utilities > DB Connections = xaradmin/dbconfig.php for all modules - UtilApi::getAllDatabases()
         //xarCoreCache::saveCached('DynamicData', 'Databases');
         //xarCoreCache::saveCached('Mod.Variables.dynamicdata');  // 'databases'
+    }
+}
+
+/**
+ * For use in virtual dataobjects (experimental)
+ *
+ * ```
+ * class VirtualSample extends DataObject
+ * {
+ *     use VirtualDescriptorTrait;
+ *     protected static string $configFile = 'sample-def.php';
+ *
+ *     public function __construct(array $params = [], $context = null)
+ *     {
+ *         $descriptor = $this->getVirtualDescriptor($params, $context);
+ *         parent::__construct($descriptor);
+ *     }
+ * }
+ * ```
+ */
+trait VirtualDescriptorTrait
+{
+    /**
+     * Get virtual descriptor based on static::$configFile
+     * @param array<string, mixed> $params extra params to pass to descriptor/object
+     * @param mixed $context optional context for the DataObject (default = none)
+     */
+    public function getVirtualDescriptor(array $params = [], $context = null)
+    {
+        $args = include sys::varpath() . '/cache/variables/' . static::$configFile;
+        if (!empty($params)) {
+            $args = array_replace($args, $params);
+        }
+        $descriptor = VirtualObjectFactory::getObjectDescriptor($args, true);
+        if (!empty($context)) {
+            $descriptor->setArgs(['context' => $context]);
+        }
+        return $descriptor;
     }
 }

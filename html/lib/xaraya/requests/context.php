@@ -206,6 +206,18 @@ class RequestContext implements ContextInterface, RequestInterface
     }
 
     /**
+     * Gets the raw body input
+     * @return string|bool
+     */
+    public function getRawInput()
+    {
+        if (!$this->getContext()->offsetExists('input')) {
+            return false;
+        }
+        return $this->getContext()->offsetGet('input');
+    }
+
+    /**
      * Gets all cookie variables
      * @return array<string, mixed>
      */

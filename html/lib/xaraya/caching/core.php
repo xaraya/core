@@ -211,10 +211,12 @@ class xarCoreCache extends xarObject
      *
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param ?string $name  the name of the variable in that particular scope
+     * @param ?string $source the source requester for saving this scope and name
      * @return boolean
     **/
-    public static function saveCached($scope, $name = null)
+    public static function saveCached($scope, $name = null, $source = null)
     {
+        $source ??= __METHOD__;
         if (isset($name)) {
             if (!self::isCached($scope, $name)) {
                 return false;
@@ -222,6 +224,9 @@ class xarCoreCache extends xarObject
             $filepath = sys::varpath() . '/cache/core/' . $scope . '.' . $name . '.php';
             $value = self::$cacheCollection[$scope][$name];
             $info = '<?php
+/**
+ * Exported by ' . $source . '
+ */
 $value = ' . var_export($value, true) . ';
 return $value;
 ';
@@ -234,6 +239,9 @@ return $value;
         $filepath = sys::varpath() . '/cache/core/' . $scope . '.php';
         $values = self::$cacheCollection[$scope];
         $info = '<?php
+/**
+ * Exported by ' . $source . '
+ */
 $values = ' . var_export($values, true) . ';
 return $values;
 ';

@@ -666,6 +666,110 @@ class DataObjectFactory extends xarObject
     }
 
     /**
+     * Apply where clauses to DD table if relevant - @todo see DataObjectLoader for VariableTable
+     * @param DataObjectList $objectlist by reference
+     * @param array<string, mixed> $where list of name => value pairs
+     * @return void
+     */
+    public static function applyObjectFilters(&$objectlist, $where)
+    {
+        if ($objectlist->datastore->getClassName() != 'VariableTableDataStore') {
+            // @todo apply query ;-)
+            return;
+        }
+        $join = '';
+        foreach ($where as $field => $value) {
+            if (is_array($value)) {
+                if (count($value) < 1) {
+                    continue;
+                }
+                array_walk($value, function (&$item, $key) {
+                    if (is_string($item)) {
+                        $item = str_replace("'", "\\'", $item);
+                    }
+                });
+                if (is_numeric($value[0])) {
+                    $clause = "IN (" . implode(", ", $value) . ")";
+                } elseif (is_string($value[0])) {
+                    $clause = "IN ('" . implode("', '", $value) . "')";
+                }
+            } elseif (is_numeric($value)) {
+                $clause = "= " . strval($value);
+            } else {
+                $value = str_replace("'", "\\'", $value);
+                $clause = "= '" . $value . "'";
+            }
+            $objectlist->addWhere($field, $clause, $join);
+            // CHECKME: use AND by default here !
+            $join = 'AND';
+        }
+    }
+
+    /**
+     * Unlink object references before serializing/sleeping/cloning/...
+     * @param DataObject|DataObjectList $objectref
+     * @return void
+     */
+    public static function unlinkObjectRef(&$objectref)
+    {
+        // @see DataPropertyMaster::addProperty()
+        foreach (array_keys($objectref->properties) as $name) {
+            $objectref->properties[$name]->objectref = null;
+            $objectref->properties[$name]->descriptor->set('objectref', null);
+            if (method_exists($objectref, 'getItems')) {
+                // for dynamic object lists, put a reference to the $items array in the property
+                $objectref->properties[$name]->_items = [];
+            } elseif (method_exists($objectref, 'getItem')) {
+                // for dynamic objects, put a reference to the $itemid value in the property
+                $objectref->properties[$name]->_itemid = 0;
+            }
+            $objectref->properties[$name]->objectconfiguration = [];
+        }
+        // @see DataObjectMaster::addDatastore()
+        $objectref->datastore->object = null;
+        if ($objectref instanceof DataObjectList) {
+            $objectref->datastore->_itemids = [];
+        }
+        // @see Xaraya\Core\Traits\ContextTrait::__clone()
+        $objectref->setContext(null);
+    }
+
+    /**
+     * Relink object references after unserializing/waking/cloning/...
+     * @param DataObject|DataObjectList $objectref
+     * @return void
+     */
+    public static function relinkObjectRef(&$objectref)
+    {
+        // @see DataPropertyMaster::addProperty()
+        foreach (array_keys($objectref->properties) as $name) {
+            // clone the property here first
+            $objectref->properties[$name] = clone $objectref->properties[$name];
+            $objectref->properties[$name]->objectref = $objectref;
+            $objectref->properties[$name]->descriptor->set('objectref', $objectref);
+            if (method_exists($objectref, 'getItems')) {
+                // for dynamic object lists, put a reference to the $items array in the property
+                $objectref->properties[$name]->_items = &$objectref->items;
+            } elseif (method_exists($objectref, 'getItem')) {
+                // for dynamic objects, put a reference to the $itemid value in the property
+                $objectref->properties[$name]->_itemid = &$objectref->itemid;
+            }
+            $objectref->properties[$name]->objectconfiguration = &$objectref->configuration;
+        }
+        // @see DataObjectMaster::assembleQuery()
+        if (isset($objectref->dataquery)) {
+            $objectref->dataquery = clone $objectref->dataquery;
+        }
+        // @see DataObjectMaster::addDatastore()
+        $objectref->datastore->object = $objectref;
+        if ($objectref instanceof DataObjectList) {
+            $objectref->datastore->_itemids = &$objectref->itemids;
+        }
+        // @todo set context after relinking
+        //$objectref->setContext($context);
+    }
+
+    /**
      * Get a module's itemtypes
      *
      * @uses Xaraya\DataObject\UserApi::getModuleItemTypes()

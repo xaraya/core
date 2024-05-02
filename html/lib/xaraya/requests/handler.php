@@ -155,6 +155,15 @@ class RequestHandler implements RequestInterface
     }
 
     /**
+     * Gets the raw body input
+     * @return string|bool
+     */
+    public function getRawInput()
+    {
+        return file_get_contents('php://input');
+    }
+
+    /**
      * @return mixed
      */
     public function getContext()

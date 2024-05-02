@@ -244,11 +244,13 @@ class ExternalDatabase implements DatabaseInterface
                 break;
             case 'dbal':
                 // we really need sys::autoload() here
+                sys::autoload();
                 sys::import('xaraya.database.drivers.dbal');
                 $conn = Drivers\DbalDriver::getConnection($dsn, $flags);
                 break;
             case 'mongodb':
                 // we really need sys::autoload() here
+                sys::autoload();
                 sys::import('xaraya.database.drivers.mongodb');
                 $conn = Drivers\MongoDBDriver::getConnection($dsn, $flags);
                 break;

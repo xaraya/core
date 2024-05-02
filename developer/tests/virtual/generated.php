@@ -5,6 +5,8 @@
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\Generated\Sample;
+use Xaraya\DataObject\Generated\VirtualSample;
+use Brick\VarExporter\VarExporter;
 
 // initialize bootstrap
 sys::init();
@@ -17,6 +19,7 @@ xarDatabase::init();
 //xarMod::init();
 // for showOutput
 //xarTpl::init();
+//xarCore::xarInit(xarCore::SYSTEM_MODULES);
 
 const TEST_COUNT = 5000;
 
@@ -158,8 +161,49 @@ function test_normal_unserialize($itemid = null)
 
 function test_normal_clone($itemid = null)
 {
-    echo "Not supported for DataObject()\n";
-    return 0;
+    $base = DataObjectFactory::getObject(['name' => 'sample']);
+    DataObjectFactory::unlinkObjectRef($base);
+    $coll = new ArrayObject();
+    for ($i = 0; $i < TEST_COUNT; $i++) {
+        $args = ['name' => "Mike $i", 'age' => 20 + $i];
+        $sample = clone $base;
+        DataObjectFactory::relinkObjectRef($sample);
+        if (!empty($itemid)) {
+            $sample->getItem(['itemid' => $itemid]);
+        }
+        $sample->setFieldValues($args);
+        $coll[] = $sample;
+    }
+    $values = $coll[25]->getFieldValues();
+    echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
+    return count($coll);
+}
+
+function test_normal_export($itemid = null)
+{
+    $filepath = sys::varpath() . '/cache/variables/sample-export.php';
+    if (!file_exists($filepath)) {
+        $sample = DataObjectFactory::getObject(['name' => 'sample']);
+        DataObjectFactory::unlinkObjectRef($sample);
+        $content = '<?php
+';
+        $content .= VarExporter::export($sample, VarExporter::ADD_RETURN | VarExporter::ADD_TYPE_HINTS);
+        file_put_contents($filepath, $content);
+    }
+    $coll = new ArrayObject();
+    for ($i = 0; $i < TEST_COUNT; $i++) {
+        $args = ['name' => "Mike $i", 'age' => 20 + $i];
+        $sample = require $filepath;
+        DataObjectFactory::relinkObjectRef($sample);
+        if (!empty($itemid)) {
+            $sample->getItem(['itemid' => $itemid]);
+        }
+        $sample->setFieldValues($args);
+        $coll[] = $sample;
+    }
+    $values = $coll[25]->getFieldValues();
+    echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
+    return count($coll);
 }
 
 function test_generated_baseline($itemid = null)
@@ -222,14 +266,76 @@ function test_generated_clone($itemid = null)
     return count($coll);
 }
 
+function test_virtual_baseline($itemid = null)
+{
+    $coll = new ArrayObject();
+    XarayaProfiler::clear();
+    for ($i = 0; $i < TEST_COUNT; $i++) {
+        $args = ['name' => "Mike $i", 'age' => 20 + $i];
+        $sample = new VirtualSample();
+        if (!empty($itemid)) {
+            $sample->getItem(['itemid' => $itemid]);
+        }
+        $sample->setFieldValues($args);
+        $coll[] = $sample;
+    }
+    echo XarayaProfiler::result();
+    $values = $coll[25]->getFieldValues();
+    echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
+    return count($coll);
+}
+
+function test_virtual_unserialize($itemid = null)
+{
+    $sample = new VirtualSample();
+    $serialized = serialize($sample);
+    $coll = new ArrayObject();
+    for ($i = 0; $i < TEST_COUNT; $i++) {
+        $args = ['name' => "Mike $i", 'age' => 20 + $i];
+        $sample = unserialize($serialized);
+        if (!empty($itemid)) {
+            $sample->getItem(['itemid' => $itemid]);
+        }
+        $sample->setFieldValues($args);
+        $coll[] = $sample;
+    }
+    $values = $coll[25]->getFieldValues();
+    echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
+    return count($coll);
+}
+
+function test_virtual_clone($itemid = null)
+{
+    $base = new VirtualSample();
+    DataObjectFactory::unlinkObjectRef($base);
+    $coll = new ArrayObject();
+    for ($i = 0; $i < TEST_COUNT; $i++) {
+        $args = ['name' => "Mike $i", 'age' => 20 + $i];
+        $sample = clone $base;
+        DataObjectFactory::relinkObjectRef($sample);
+        if (!empty($itemid)) {
+            $sample->getItem(['itemid' => $itemid]);
+        }
+        $sample->setFieldValues($args);
+        $coll[] = $sample;
+    }
+    $values = $coll[25]->getFieldValues();
+    echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
+    return count($coll);
+}
+
 function run_profile($itemid = null)
 {
     mini_profile("Normal baseline", function ($itemid) { return test_normal_baseline($itemid); }, $itemid);
     mini_profile("Normal unserialize", function ($itemid) { return test_normal_unserialize($itemid); }, $itemid);
     mini_profile("Normal clone", function ($itemid) { return test_normal_clone($itemid); }, $itemid);
+    mini_profile("Normal export", function ($itemid) { return test_normal_export($itemid); }, $itemid);
     mini_profile("Generated baseline", function ($itemid) { return test_generated_baseline($itemid); }, $itemid);
     mini_profile("Generated unserialize", function ($itemid) { return test_generated_unserialize($itemid); }, $itemid);
     mini_profile("Generated clone", function ($itemid) { return test_generated_clone($itemid); }, $itemid);
+    mini_profile("Virtual baseline", function ($itemid) { return test_virtual_baseline($itemid); }, $itemid);
+    mini_profile("Virtual unserialize", function ($itemid) { return test_virtual_unserialize($itemid); }, $itemid);
+    mini_profile("Virtual clone", function ($itemid) { return test_virtual_clone($itemid); }, $itemid);
 }
 
 function test_crud()

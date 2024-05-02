@@ -44,7 +44,7 @@ class PhpExporter extends JsonExporter
         $info = $this->addObjectDef($info, $objectdef);
 
         if ($this->tofile) {
-            $filepath = dirname(__DIR__) . '/generated/' . ucwords($objectdef->name, '_') . '.php';
+            $filepath = sys::varpath() . '/cache/variables/' . ucwords($objectdef->name, '_') . '.php';
             file_put_contents($filepath, $info);
             VirtualObjectFactory::saveCoreCache();
         }
@@ -73,11 +73,14 @@ class PhpExporter extends JsonExporter
 
     public function addObjectDef($info, $objectdef)
     {
+        $source = __CLASS__;
         $filepath = sys::varpath() . '/cache/variables/' . $objectdef->name . '-def.php';
         static::exportDefinition($objectdef->descriptor, $filepath);
 
         $info .= '<?php
-
+/**
+ * See ' . $source . ' (experimental)
+ */
 namespace Xaraya\DataObject\Generated;
 
 ';
@@ -165,6 +168,7 @@ class ' . $classname . ' extends GeneratedClass
      */
     public static function exportDefinition($descriptor, $filepath)
     {
+        $source = __METHOD__;
         $info = $descriptor->getArgs();
         $propertyargs = $info['propertyargs'];
         unset($info['propertyargs']);
@@ -174,7 +178,11 @@ class ' . $classname . ' extends GeneratedClass
                 $info[$name] = static::tryUnserialize($info[$name]);
             }
         }
-        $output = "<?php\n\n\$object = " . var_export($info, true) . ";\n";
+        $output = '<?php
+/**
+ * Exported by ' . $source . '
+ */
+$object = ' . var_export($info, true) . ";\n";
         $output .= "\$properties = array();\n";
         foreach ($propertyargs as $propertyarg) {
             $propertyarg = array_filter($propertyarg, function ($key) {
@@ -206,42 +214,5 @@ class ' . $classname . ' extends GeneratedClass
         } catch (Throwable $e) {
         }
         return $serialized;
-    }
-
-    /**
-     * Summary of unlinkObjectRef - currently not used, see tests/virtual
-     * @param DataObject|DataObjectList $object
-     * @return void
-     */
-    public static function unlinkObjectRef(& $object)
-    {
-        $object->datastore->object = '$this';
-        //$object->datastore->db = null;
-        foreach (array_keys($object->properties) as $name) {
-            $object->properties[$name]->descriptor->set('objectref', '$this');
-            $object->properties[$name]->objectref = '$this';
-        }
-    }
-
-    /**
-     * Summary of relinkObjectRef - currently not used, see tests/virtual
-     * @param DataObject|DataObjectList $object
-     * @return void
-     */
-    public static function relinkObjectRef(& $object)
-    {
-        //$object->descriptor->objectref = &$object;
-        //$object->descriptor->set('objectref', &$object);
-        $object->datastore->object = &$object;
-        //$object->datastore->db = null;
-        foreach (array_keys($object->properties) as $name) {
-            $object->properties[$name]->descriptor->set('objectref', $object);
-            $object->properties[$name]->objectref = &$object;
-            if ($object instanceof DataObjectList) {
-                $object->properties[$name]->_items = &$object->items;
-            } else {
-                $object->properties[$name]->_itemid = &$object->itemid;
-            }
-        }
     }
 }
