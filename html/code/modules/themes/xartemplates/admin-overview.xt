@@ -177,24 +177,6 @@
     
             <h3>Available Hooks</h3>
             <p>The Themes module has no hooks</p>
-    
-            <!--
-            <h3>Further Information</h3>
-            <p>Further information on the Themes module can be found at</p>
-            <ul>
-                <li>Themes Module Extension page at
-                <xar:var name="label">Themes Module - Xaraya Extension 70</xar:var>
-                <a title="#$label#" href="http://www.xaraya.com/index.php/release/70.html">Xaraya Extension and
-                Releases</a>. Click on Version History tab at the bottom to get the latest release
-                information.</li>
-                <li>Related tutorials and documentation on Themes module found at
-                <xar:var name="label">Related documentation on Themes</xar:var>
-                <a href="http://www.xaraya.com/index.php/keywords/themes/" title="#$label#">Xaraya Documentation.</a></li>
-            </ul>
-            <p class="xar-sub">
-            <strong>&#160;Themes Module Overview</strong>
-            <br />&#160;Version 1.7.1&#160; 2006-02-10</p>
-            -->
-        </div>
+            </div>
     </div>
 </xar:template>

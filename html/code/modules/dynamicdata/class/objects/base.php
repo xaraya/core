@@ -18,7 +18,7 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
 class DataObject extends DataObjectMaster implements iDataObject
 {
     public $itemid;
-    public $missingfields  = []; // reference to fields not found by checkInput
+    public $missingfields  = []; // holds the names of properties expected but not found by checkInput
 
     /**
      * Inherits from DataObjectMaster and sets the requested item id

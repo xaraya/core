@@ -147,26 +147,6 @@
             <h3>Available Hooks</h3>
             <p>The Privileges module has no hooks</p>
     
-            <!--
-            <h3>Further Information</h3>
-            <p>Further information on the Privileges module can be found at:</p>
-            <ul>
-                <li>Privileges Module Extension page at 
-                <xar:var name="label">Privileges Module - Xaraya Extension 1098</xar:var>
-                <a title="#$label#" href="http://www.xaraya.com/index.php/release/1098.html">Xaraya Extension and
-                Releases</a>. Click on Version History tab at the bottom to get the latest release
-                information.</li>
-                <li>Related tutorials and documentation on Privileges module at 
-                <xar:var name="label">Related documentation on Privileges</xar:var>
-                <a href="http://www.xaraya.com/index.php/keywords/privileges/" title="#$label#">Xaraya Documentation.</a></li>
-                <li>Extended information for Developers at 
-                <xar:var name="label">RFC 30</xar:var>
-                <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html" title="#$label#">Xaraya RFC-30</a></li>
-            </ul>
-            <p class="xar-sub">
-            <strong>&#160;Privileges Module Overview</strong>
-            <br />&#160;Version 1.0.0&#160; 2006-05-03</p>
-            -->
         </div>
     </div>
 </xar:template>

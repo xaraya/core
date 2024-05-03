@@ -44,7 +44,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
     public const PROPTYPE_ID_ITEMTYPE      = 20;
     public const PROPTYPE_ID_ITEMID        = 21;
 
-    public $descriptor  = null;      // descriptor object of this class
+    public $descriptor  = null;         // descriptor object of this class
 
     public $objectid    = null;         // system id of the object in this installation
     public $name        = null;         // name of the object

@@ -56,25 +56,6 @@
             <h3>Available Hooks</h3>
             <p>The Authsystem module has no hooks</p>
     
-            <!--
-            <h3>Further Information</h3>
-            <p>Further information on the Authsystem Authentication module can be found at:</p>
-            <ul>
-                <li>Authsystem Module Extension page at 
-                <xar:var name="label">Authsystem Module - Xaraya Extension 42</xar:var>
-                <a title="#$label#"
-                href="http://www.xaraya.info/index.php/release/42.html">Xaraya Extension and
-                Releases</a>. Click on Version History tab at the bottom to get the latest release
-                information.</li>
-                <li>Related tutorials and documentation on Authsystem module at 
-                <xar:var name="label">Related documentation on Authsystem</xar:var>
-                <a href="http://www.xaraya.info/index.php/keywords/authsystem/"
-                title="#$label#">Xaraya Documentation.</a></li>
-            </ul>
-            <p class="xar-sub">
-            <strong>&#160;Authentication Module - Overview</strong>
-            <br />&#160;Version 1.0.0&#160; 2006-02-04</p>
-            -->
         </div>
     </div>
 </xar:template>
