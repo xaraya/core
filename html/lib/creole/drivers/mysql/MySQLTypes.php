@@ -71,7 +71,7 @@ class MySQLTypes extends CreoleTypes
 
     /** 
     	This database type uses 9 of the 24 Creole (JDBC) data types.
-    	This is an intermin solution that maps each Creole (JDBC) type to exactly one native type.
+    	This is an interim solution that maps each Creole (JDBC) type to exactly one native type.
     	This works well for the core and core modules tables, which need only a subset of all types.
     	1. Over time this map can be extended to include more that one native type per Creole type,
     	   but then a different approach will be needed.

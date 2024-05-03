@@ -20,7 +20,10 @@
  * <http://creole.phpdb.org>.
  */
 
-require_once 'creole/CreoleTypes.php';
+/** 
+	This is an intermin solution; see below.
+ */
+require_once 'lib/creole/CreoleTypes.php';
 
 /**
  * PostgreSQL types / type map.
@@ -32,6 +35,7 @@ require_once 'creole/CreoleTypes.php';
 class PgSQLTypes extends CreoleTypes
 {
     /** Map PostgreSQL native types to Creole (JDBC) types. */
+/*
     private static $typeMap = array(
                 "int2"        => CreoleTypes::SMALLINT,
                 "int4"        => CreoleTypes::INTEGER,
@@ -76,6 +80,46 @@ class PgSQLTypes extends CreoleTypes
                 "_numeric"    => CreoleTypes::ARR,
                 "_bytea"      => CreoleTypes::ARR,
             );
+*/
+    /** 
+    	This is an interim solution that maps each Creole (JDBC) type to exactly one native type.
+    	This works well for the core and core modules tables, which need only a subset of all types.
+    	1. Over time this map can be extended to include more that one native type per Creole type,
+    	   but then a different approach will be needed.
+    	2. This map should be moved out of Creole to lib/xaraya.
+     */
+    public static $typeMap = array(
+                                'boolean'     => CreoleTypes::BOOLEAN,			    
+
+                                'tinyint'     => CreoleTypes::TINYINT,		    // Undefined in this db
+                                'smallint'    => CreoleTypes::SMALLINT,			
+                                'integer'     => CreoleTypes::INTEGER,
+                                'bigint'      => CreoleTypes::BIGINT,		    
+
+                                'numeric'     => CreoleTypes::NUMERIC,			// Not currently used
+                                'decimal'     => CreoleTypes::DECIMAL,
+                                'real'        => CreoleTypes::REAL,				// Not currently used
+                                'float'       => CreoleTypes::FLOAT,
+                                'double'      => CreoleTypes::DOUBLE,			// Not currently used
+
+                                'char'        => CreoleTypes::CHAR,				// Not currently used
+                                'varchar'     => CreoleTypes::VARCHAR,			
+                                'text'        => CreoleTypes::TEXT,
+                                'longtext'    => CreoleTypes::LONGVARCHAR,		// Undefined in this db
+                                'clob'        => CreoleTypes::CLOB,				// Undefined in this db
+
+                                'tinyblob'    => CreoleTypes::BINARY,			// Undefined in this db
+                                'varbinary'   => CreoleTypes::VARBINARY,		// Undefined in this db
+                                'blob'        => CreoleTypes::BLOB,				// Undefined in this db
+                                'bytea'       => CreoleTypes::LONGVARBINARY,
+
+                                'time'        => CreoleTypes::TIME,				// Not currently used
+                                'timestamp'   => CreoleTypes::TIMESTAMP,		// Undefined in this db
+                                'date'        => CreoleTypes::DATE,				// Not currently used
+                                'year'        => CreoleTypes::YEAR,				// Not currently used
+
+                                'array'       => CreoleTypes::ARR,				// Undefined in this db
+                                );
 
     /** Reverse lookup map, created on demand. */
     private static $reverseMap = null;

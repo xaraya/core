@@ -116,7 +116,7 @@
         <xsl:if test="@auto = 'true'">
           <xsl:text> CHANGE COLUMN </xsl:text>
           <xsl:value-of select="@name"/><xsl:text> </xsl:text>
-          <xsl:call-template name="columnattributes">
+          <xsl:call-template name="columndefinition">
             <xsl:with-param name="ignoreauto">false</xsl:with-param>
           </xsl:call-template>
           <xsl:text>, </xsl:text>

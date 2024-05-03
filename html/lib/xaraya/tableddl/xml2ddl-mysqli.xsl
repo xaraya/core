@@ -88,14 +88,14 @@
   </xsl:template>
 
   <xsl:template match="column">
-    <xsl:call-template name="columnattributes">
+    <xsl:call-template name="columndefinition">
       <xsl:with-param name="ignoreauto">true</xsl:with-param>
     </xsl:call-template>
     <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
     <xsl:value-of select="$CR"/>
   </xsl:template>
 
-  <xsl:template name="columnattributes">
+  <xsl:template name="columndefinition">
     <xsl:param name="ignoreauto" value="false"/>
     <!-- @todo move the specific types into their own templates -->
 
@@ -129,8 +129,6 @@
     </xsl:if>
     
     <xsl:value-of select="$CR"/>
-	<!-- Let a PHP function do all the hard work -->
-	<!-- <xsl:call-template name="column_definition"/> -->
 
   </xsl:template>
 </xsl:stylesheet>
