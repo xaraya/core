@@ -33,7 +33,7 @@
                                     #$config['datastore']# (#$config['dbConnIndex']#) #$config['dbConnArgs']#
                                 </li>
                             </xar:foreach>
-                            <xar:set name="dbname">$module . '.*' . $name</xar:set>
+                            <xar:set name="dbname">$module . '.*'</xar:set>
                             <li><a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['obj' => $dbname])#">Configure other objects</a></li>
                         </ul>
                     </li>

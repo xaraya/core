@@ -203,9 +203,11 @@ trait DatabaseTrait
             if (!empty($allDatabases[static::$moduleName])) {
                 static::$_databases = $allDatabases[static::$moduleName];
             } else {
-                static::$_databases = unserialize(xarModVars::get(static::$moduleName, 'databases'));
-                if (empty(static::$_databases)) {
+                $databases = unserialize(xarModVars::get(static::$moduleName, 'databases') ?? '');
+                if (empty($databases)) {
                     static::$_databases = [];
+                } else {
+                    static::$_databases = $databases;
                 }
                 $allDatabases[static::$moduleName] = static::$_databases;
                 xarCoreCache::setCached('DynamicData', 'Databases', $allDatabases);
