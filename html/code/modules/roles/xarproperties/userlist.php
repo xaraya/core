@@ -62,7 +62,7 @@ class UserListProperty extends SelectProperty
 //            $users = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
             // FIXME: this function needs to be reviewed
             $users = array();
-            // Loop for each user retrived and populate the options array.
+            // Loop for each user retrieved and populate the options array.
             if (empty($this->display_showfields)) {
                 // Simple case (default) -
                 foreach ($users as $user) {
@@ -158,17 +158,16 @@ class UserListProperty extends SelectProperty
     public function getOptions()
     {
         $select_options = array();
-        /*
-        if (!empty($this->validation_ancestorgroup_list)) {
-            $select_options['ancestor'] = $this->validation_ancestorgroup_list;
-        }
-        if (!empty($this->validation_parentgroup_list)) {
-            $select_options['parent'] = $this->validation_parentgroup_list;
-        }
-        */
         $select_options['state'] = $this->initialization_userlist_user_state;
+        
         if (!empty($this->initialization_userlist_group_list)) {
             $select_options['grouplist'] = $this->initialization_userlist_group_list;
+        }
+        
+        // TODO: the names here (group, grouplist, group_list) need to be simplified
+        // This comes from a property call on (usually in the template) and overrides the initialization
+        if (!empty($this->validation_userlist_group_list)) {
+            $select_options['grouplist'] = $this->validation_userlist_group_list;
         }
 
         // Get the candidates

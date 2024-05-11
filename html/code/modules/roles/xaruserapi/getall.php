@@ -76,7 +76,7 @@ function roles_userapi_getall(array $args = [], $context = null)
 
     # --------------------------------------------------------
     #
-    # Filter by single group (see grouplist below)
+    # Filter by one or more groups (see grouplist below)
     #
     if (isset($group)) {
         $groups = explode(',', $group);
