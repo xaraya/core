@@ -32,7 +32,7 @@ function mail_admin_modifyconfig(array $args = [], $context = null)
     // Get encoding
     $data['encoding'] = xarModVars::get('mail', 'encoding');
 
-    //redirect address - ensure it's set
+    // Redirect address - ensure it's set
     $address = trim(xarModVars::get('mail', 'redirectaddress') ?? '');
     if (isset($address) && !empty($address)){
         $data['redirectaddress']=xarVar::prepForDisplay($address);

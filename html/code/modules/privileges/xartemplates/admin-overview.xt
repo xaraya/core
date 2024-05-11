@@ -147,6 +147,10 @@
             <h3>Available Hooks</h3>
             <p>The Privileges module has no hooks</p>
     
+            <!--
+            
+            &#160;Version 1.0&#160;
+            -->
         </div>
     </div>
 </xar:template>
