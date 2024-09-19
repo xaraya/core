@@ -112,6 +112,7 @@ class FastRouteBridge extends BasicBridge
     /** @var Dispatcher */
     public static $dispatcher;
     public static string $baseUri = '';
+    public bool $wrapPage = false;
 
     /**
      * Summary of addRouteCollection
@@ -251,9 +252,10 @@ class FastRouteBridge extends BasicBridge
      * Summary of output
      * @param mixed $result
      * @param mixed $context
+     * @param mixed $wrapPage
      * @return void
      */
-    public function output($result, $context = null)
+    public function output($result, $context = null, $wrapPage = null)
     {
         if (http_response_code() !== 200 && php_sapi_name() !== 'cli') {
             return;
@@ -266,7 +268,13 @@ class FastRouteBridge extends BasicBridge
             } else {
                 header('Content-Type: text/html; charset=utf-8');
             }
-            echo $result;
+            // use default if not defined
+            $wrapPage ??= $this->wrapPage;
+            if ($wrapPage) {
+                echo static::wrapOutputInPage($result, $context);
+            } else {
+                echo $result;
+            }
         } else {
             if (!empty(xarServer::getVar('HTTP_ORIGIN'))) {
                 header('Access-Control-Allow-Origin: *');

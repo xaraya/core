@@ -7,9 +7,9 @@
         "nikic/fast-route": "dev-master",
         "nyholm/psr7": "^1.8",
         "nyholm/psr7-server": "^1.1",
-        "phpdocumentor/reflection": "5.x-dev",
-        "webonyx/graphql-php": "dev-master",
-        "xaraya/modules": "^2.4@dev"
+        "phpdocumentor/reflection": "^6.0",
+        "webonyx/graphql-php": "^15.14",
+        "xaraya/modules": "^2.5"
     },
     "suggest": {
         "phpstan/phpstan": "PHP Static Analysis Tool - discover bugs in your code without running it",
@@ -30,10 +30,13 @@
             "xaraya/properties": "source"
         },
         "allow-plugins": {
-            "xaraya/*": true
+            "xaraya/*": true,
+            "symfony/flex": false,
+            "symfony/runtime": false
         }
     },
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "classmap": [
             "html/bootstrap.php",

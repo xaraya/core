@@ -15,6 +15,7 @@ namespace Xaraya\Bridge\Requests;
 use xarController;
 use xarServer;
 use xarSystemVars;
+use xarTpl;
 use sys;
 
 sys::import('xaraya.bridge.requests.module');
@@ -26,6 +27,7 @@ use Xaraya\Bridge\Requests\ModuleRequest;
 interface BasicBridgeInterface
 {
     public static function prepareController(string $module = 'base', string $baseUri = ''): void;
+    public static function wrapOutputInPage(string $body, $context = null): string;
 }
 
 /**
@@ -54,5 +56,17 @@ trait BasicBridgeTrait
         //xarController::$buildUri = [static::class, 'buildUri'];
         xarController::$buildUri = [ModuleRequest::class, 'buildModulePath'];
         //xarController::$redirectTo = [ModuleRequest::class, 'redirectTo'];
+    }
+
+    /**
+     * Summary of wrapOutputInPage
+     * @param string $body
+     * @param mixed $context
+     * @return string
+     */
+    public static function wrapOutputInPage(string $body, $context = null): string
+    {
+        // Render page with the output - see index.php
+        return xarTpl::renderPage($body, null, $context);
     }
 }
