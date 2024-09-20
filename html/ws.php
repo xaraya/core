@@ -355,6 +355,20 @@ function xarModernWebServices(string $type)
         case 'passthru':
             require_once dirname(__DIR__).'/vendor/xaraya/webhooks/public/index.php';
             return;
+        case 'htmx':
+            xarCache::init();
+            // try out request context class - can't with PSR-17 ::fromGlobals()
+            //xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
+            // try out session context class
+            //xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
+            //xarCore::xarInit(xarCore::SYSTEM_USER);
+            xarCore::xarInit();
+            //xarServer::setBaseURL(xarServer::getBaseURL());
+            $htmx = new \Xaraya\Bridge\Routing\HtmxHandler('/htmx');
+            //$request = xarServer::getInstance();
+            $request = null;
+            $htmx->run($request);
+            return;
         default:
             echo 'Unknown web service type';
             return;
@@ -362,7 +376,7 @@ function xarModernWebServices(string $type)
 }
 
 // list of "modern" web services relying on composer autoload
-$modernTypes = ['webhook', 'passthru'];
+$modernTypes = ['webhook', 'passthru', 'htmx'];
 
 // check path info first, then query type param
 $type = '';

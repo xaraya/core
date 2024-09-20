@@ -30,7 +30,9 @@
                             <xar:var name="SiteSlogan" scope="module" module="themes"/>
                         </p>
                     </div>
-                    <xar:module id="modulespace"/>
+                    <div id="main-module-output">
+                        <xar:module id="modulespace"/>
+                    </div>
                 </div>
                 <div id="sideInfo1" class="sideInfo">
                     #$leftgroup#
