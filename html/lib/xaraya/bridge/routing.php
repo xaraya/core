@@ -112,6 +112,7 @@ class FastRouteBridge extends BasicBridge
     /** @var Dispatcher */
     public static $dispatcher;
     public static string $baseUri = '';
+    public static string $prefix = '';
     public bool $wrapPage = false;
 
     /**
@@ -126,6 +127,7 @@ class FastRouteBridge extends BasicBridge
         $r->addGroup('/object', function (RouteCollector $r) {
             $r->addRoute(['GET', 'POST'], '/{object}', [static::class, 'handleObjectRequest']);
             $r->addRoute(['GET', 'POST'], '/{object}/{itemid:\d+}[/{method}]', [static::class, 'handleObjectRequest']);
+            $r->addRoute(['GET', 'POST'], '/{object}/{itemid:[0-9a-f]{24}}[/{method}]', [static::class, 'handleObjectRequest']);
             $r->addRoute(['GET', 'POST'], '/{object}/{method}', [static::class, 'handleObjectRequest']);
             //$r->addRoute('GET', '/', [static::class, 'handleObjectRequest']);
         });
@@ -153,9 +155,10 @@ class FastRouteBridge extends BasicBridge
      */
     public static function getSimpleDispatcher(string $group = '')
     {
-        if (isset(static::$dispatcher)) {
+        if (isset(static::$dispatcher) && static::$prefix == $group) {
             return static::$dispatcher;
         }
+        static::$prefix = $group;
         // override standard routeCollector here
         if (empty($group)) {
             static::$dispatcher = simpleDispatcher(function (RouteCollector $r) {
@@ -176,13 +179,33 @@ class FastRouteBridge extends BasicBridge
     }
 
     /**
+     * Basic route builder for module requests e.g. in response output or templates - assuming short url format here
+     * @param ?string $module
+     * @param ?string $type
+     * @param string|int|null $func
+     * @param array<string, mixed> $extra
+     * @return string
+     */
+    public static function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
+    {
+        $prefix = static::$baseUri;
+        return ModuleRequest::buildModulePath($module, $type, $func, $extra, $prefix);
+    }
+
+    public function __construct(bool $wrapPage = false)
+    {
+        $this->wrapPage = $wrapPage;
+    }
+
+    /**
      * Summary of dispatchRequest
      * @param string $method
      * @param string $path
      * @param string $group
+     * @param mixed $request
      * @return array<mixed>
      */
-    public function dispatchRequest(string $method, string $path, string $group = '')
+    public function dispatchRequest(string $method, string $path, string $group = '', &$request = null)
     {
         // @todo keep dispatcher static but replace $handler[0] with $this if current class?
         $dispatcher = static::getSimpleDispatcher($group);
@@ -214,13 +237,13 @@ class FastRouteBridge extends BasicBridge
                 if (strpos($path, $group . '/restapi/') === 0) {
                     // different processing for REST API - see rst.php
                     DataObjectRESTHandler::$endpoint = static::getBaseUri() . $group . '/restapi';
-                    [$result, $context] = static::callRestApiHandler($handler, $vars);
+                    [$result, $context] = static::callRestApiHandler($handler, $vars, $request);
                 } elseif (strpos($path, $group . '/graphql') === 0) {
                     // different processing for GraphQL API - see gql.php
-                    [$result, $context] = $this->callHandler($handler, $vars);
+                    [$result, $context] = $this->callHandler($handler, $vars, $request);
                 } else {
                     // @todo keep dispatcher static but replace $handler[0] with $this if current class?
-                    [$result, $context] = $this->callHandler($handler, $vars);
+                    [$result, $context] = $this->callHandler($handler, $vars, $request);
                 }
                 return [$result, $context];
         }
@@ -230,13 +253,14 @@ class FastRouteBridge extends BasicBridge
     /**
      * Summary of run
      * @param string $group
+     * @param mixed $request
      * @return void
      */
-    public function run(string $group = '')
+    public function run(string $group = '', &$request = null)
     {
-        $method = static::getMethod();
-        $path = static::getPathInfo();
-        [$result, $context] = $this->dispatchRequest($method, $path, $group);
+        $method = static::getMethod($request);
+        $path = static::getPathInfo($request);
+        [$result, $context] = $this->dispatchRequest($method, $path, $group, $request);
         if (strpos($path, $group . '/restapi/') === 0) {
             // different processing for REST API - see rst.php
             DataObjectRESTHandler::output($result, 200, $context);
@@ -252,10 +276,10 @@ class FastRouteBridge extends BasicBridge
      * Summary of output
      * @param mixed $result
      * @param mixed $context
-     * @param mixed $wrapPage
+     * @param mixed $transform
      * @return void
      */
-    public function output($result, $context = null, $wrapPage = null)
+    public function output($result, $context = null, $transform = null)
     {
         if (http_response_code() !== 200 && php_sapi_name() !== 'cli') {
             return;
@@ -268,9 +292,18 @@ class FastRouteBridge extends BasicBridge
             } else {
                 header('Content-Type: text/html; charset=utf-8');
             }
-            // use default if not defined
-            $wrapPage ??= $this->wrapPage;
-            if ($wrapPage) {
+            // transform output
+            if ($transform) {
+                // wrap output in page
+                if ($this->wrapPage) {
+                    echo $transform(static::wrapOutputInPage($result, $context));
+                } else {
+                    echo $transform($result);
+                }
+                return;
+            }
+            // wrap output in page
+            if ($this->wrapPage) {
                 echo static::wrapOutputInPage($result, $context);
             } else {
                 echo $result;
@@ -417,7 +450,7 @@ class FastRouteBridge extends BasicBridge
 
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
-        static::$baseUri = static::getBaseUri($request);
+        static::$baseUri = static::getBaseUri($request) . static::$prefix;
         $context['baseuri'] = static::$baseUri;
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController('object', static::$baseUri . '/object');
@@ -472,7 +505,7 @@ class FastRouteBridge extends BasicBridge
 
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
-        static::$baseUri = static::getBaseUri($request);
+        static::$baseUri = static::getBaseUri($request) . static::$prefix;
         $context['baseuri'] = static::$baseUri;
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'], static::$baseUri);
@@ -508,7 +541,7 @@ class FastRouteBridge extends BasicBridge
 
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
-        static::$baseUri = static::getBaseUri($request);
+        static::$baseUri = static::getBaseUri($request) . static::$prefix;
         $context['baseuri'] = static::$baseUri;
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'] ?? 'base', static::$baseUri);
@@ -578,6 +611,7 @@ class FastRouteApiBridge extends FastRouteBridge
         $r->addGroup('/object', function (RouteCollector $r) {
             $r->addRoute(['GET', 'POST'], '/{object}', [static::class, 'handleObjectRequest']);
             $r->addRoute(['GET', 'POST'], '/{object}/{itemid:\d+}[/{method}]', [static::class, 'handleObjectRequest']);
+            $r->addRoute(['GET', 'POST'], '/{object}/{itemid:[0-9a-f]{24}}[/{method}]', [static::class, 'handleObjectRequest']);
             $r->addRoute(['GET', 'POST'], '/{object}/{method}', [static::class, 'handleObjectRequest']);
             //$r->addRoute(['GET', 'POST'], '/', [static::class, 'handleObjectRequest']);
         });

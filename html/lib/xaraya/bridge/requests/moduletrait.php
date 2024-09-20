@@ -112,7 +112,8 @@ trait ModuleBridgeTrait
             $itemid = $extra['itemid'] ?? null;
             unset($extra['itemid']);
             // see DataObjectBridgeTrait with prefix /object
-            return DataObjectRequest::buildDataObjectPath($type, $func, $itemid, $extra, '/object');
+            $prefix .= '/object';
+            return DataObjectRequest::buildDataObjectPath($type, $func, $itemid, $extra, $prefix);
         }
         // see xarServer::getModuleURL()
         $uri = $prefix;

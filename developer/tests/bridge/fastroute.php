@@ -55,10 +55,10 @@ if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
 //$bridge->run();
 
 // or direct use of simple route dispatcher
-$bridge = new FastRouteBridge();
-[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD') ?? 'GET', xarServer::getVar('PATH_INFO') ?? '/');
 $wrapPage = false;
-$bridge->output($result, $context, $wrapPage);
+$bridge = new FastRouteBridge($wrapPage);
+[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD') ?? 'GET', xarServer::getVar('PATH_INFO') ?? '/');
+$bridge->output($result, $context);
 
 /**
 $dispatcher = FastRouteBridge::getSimpleDispatcher();

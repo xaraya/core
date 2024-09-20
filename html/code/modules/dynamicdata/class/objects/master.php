@@ -89,7 +89,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
     public $linktype = 'user';          // optional link type for use in getActionURL() (defaults to 'user' for module URLs, 'object' for object URLs, 'other' for middleware)
     /** @var string|callable */
     public $linkfunc = 'display';       // optional link function for use in getActionURL() (defaults to 'display', unused for object URLs, callable for middleware)
-    private $cached_urls  = [];    // cached URLs for use in getActionURL()
+    protected $cached_urls  = [];    // cached URLs for use in getActionURL()
 
     public $primary = null;             // primary key is item id (or objectid in the case of the objects object)
     public $secondary = null;           // secondary key could be item type (e.g. for articles)
