@@ -4,11 +4,11 @@
     "type": "project",
     "require-dev": {
         "middlewares/utils": "^4.0",
-        "nikic/fast-route": "dev-master",
+        "nikic/fast-route": "2.0.0-beta1",
         "nyholm/psr7": "^1.8",
         "nyholm/psr7-server": "^1.1",
         "phpdocumentor/reflection": "^6.0",
-        "webonyx/graphql-php": "^15.14",
+        "webonyx/graphql-php": "^15.18",
         "xaraya/modules": "^2.5"
     },
     "suggest": {

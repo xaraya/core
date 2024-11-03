@@ -946,7 +946,7 @@ if (!function_exists('xarML')) {
     /**
      * Summary of xarML
      * @param mixed $rawstring
-     * @param array<mixed> $args
+     * @param mixed $args
      * @return mixed
      */
     function xarML($rawstring, ...$args)

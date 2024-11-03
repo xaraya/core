@@ -54,7 +54,7 @@ class xarLogger_sql extends xarLogger
 
     /**
      * Pointer holding the database connection to be used.
-     * @var string
+     * @var object
      */
     private $dbconn;
 
