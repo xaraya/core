@@ -156,7 +156,7 @@ class TwigConverter
         }
         try {
             file_put_contents($toPath, $content);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $toDir = dirname($toPath);
             if (!is_dir($toDir)) {
                 mkdir($toDir);

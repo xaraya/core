@@ -90,7 +90,7 @@ class EventListenerProvider implements ListenerProviderInterface
             } elseif (property_exists($callable[0], 'module')) {
                 $key = ($callable[0])->module;
             } else {
-                $key = get_class($callable[0]);
+                $key = $callable[0]::class;
             }
         } elseif (is_string($callable)) {
             $key = $callable;
@@ -191,22 +191,14 @@ class EventListenerProvider implements ListenerProviderInterface
             }
             $obsmod = xarMod::getName($obs['module_id']);
             $obs['module'] = $obsmod;
-            switch (strtolower($obs['area'])) {
+            $obsclass = match (strtolower($obs['area'])) {
+                // wrap api function in apiclass observer
+                'api' => "ApiEventObserver",
+                // wrap gui function in guiclass observer
+                'gui' => "GuiEventObserver",
                 // support namespaces in modules (and core someday) - we may use $obs['classname'] here
-                case 'class':
-                default:
-                    // use the defined class for the observer
-                    $obsclass = $obs['classname'] ?: ucfirst($obsmod) . $obs['event'] . "Observer";
-                    break;
-                case 'api':
-                    // wrap api function in apiclass observer
-                    $obsclass = "ApiEventObserver";
-                    break;
-                case 'gui':
-                    // wrap gui function in guiclass observer
-                    $obsclass = "GuiEventObserver";
-                    break;
-            }
+                default => $obs['classname'] ?: ucfirst($obsmod) . $obs['event'] . "Observer",
+            };
             // @checkme make sure we refer to global namespace here
             $obsclass = "\\" . $obsclass;
             // attach observer to subject + pass along $obs to constructor here too

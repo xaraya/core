@@ -33,14 +33,14 @@ class ModuleTagExtension extends XarayaTwigExtension
              * Image tags
              */
             // <xar:image-resize src="$preview_img" label="$img_alt" width="250px" height="187px" constrain="true" class="xar-alt-outline"/>
-            new TwigFunction('xar_image_resize', [$this, 'xar_image_resize'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_image_resize', $this->xar_image_resize(...), ['is_safe' => ['html']]),
 
             /**
              * Workflow tags
              */
             // <xar:workflow-actions name="actions" config="$config" item="$item" title="$item['marking']" template="$item['marking']"/>
             // @todo replace array with fixed order of params
-            new TwigFunction('xar_workflow_actions', [$this, 'xar_workflow_actions'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_workflow_actions', $this->xar_workflow_actions(...), ['is_safe' => ['html']]),
         ];
     }
 

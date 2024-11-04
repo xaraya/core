@@ -152,11 +152,11 @@ trait CommonRequestTrait
             return $requestPath;
         }
         // {request_uri} = {/baseurl/script.php}{/path_info}?{query_string}
-        if (!empty($server['SCRIPT_NAME']) && strpos($requestPath, $server['SCRIPT_NAME']) === 0) {
+        if (!empty($server['SCRIPT_NAME']) && str_starts_with($requestPath, $server['SCRIPT_NAME'])) {
             return $server['SCRIPT_NAME'];
         }
         // {request_uri} = {/otherurl}{/path_info}?{query_string} = mod_rewrite possibly unrelated to {/baseurl/script.php}
-        if (!empty($server['PATH_INFO']) && strpos($requestPath, $server['PATH_INFO']) !== false) {
+        if (!empty($server['PATH_INFO']) && str_contains($requestPath, $server['PATH_INFO'])) {
             return substr($requestPath, 0, strlen($requestPath) - strlen($server['PATH_INFO']));
         }
         // {request_uri} = {/otherurl}?{query_string} = mod_rewrite possibly unrelated to {/baseurl/script.php}

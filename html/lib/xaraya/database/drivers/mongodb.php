@@ -97,7 +97,7 @@ class MongoDBDriver
             $item = $document->getArrayCopy();
             foreach ($item as $key => $value) {
                 if (is_object($value)) {
-                    $result[$key] = 'mongodb_bson (' . get_class($value) . ')';
+                    $result[$key] = 'mongodb_bson (' . $value::class . ')';
                 } elseif (is_string($value) && strlen($value) > 200) {
                     $result[$key] = 'text';
                 } else {

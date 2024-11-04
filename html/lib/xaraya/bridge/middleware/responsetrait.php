@@ -76,7 +76,7 @@ trait DefaultResponseTrait
 
     public function createResponse(string $body, string $mediaType = 'text/html; charset=utf-8'): ResponseInterface
     {
-        if (strpos($mediaType, '; charset=') === false) {
+        if (!str_contains($mediaType, '; charset=')) {
             $mediaType .= '; charset=utf-8';
         }
         $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', $mediaType);
@@ -86,7 +86,7 @@ trait DefaultResponseTrait
 
     public function createJsonResponse(mixed $result, string $mediaType = 'application/json; charset=utf-8', bool $numeric = true): ResponseInterface
     {
-        if (strpos($mediaType, '; charset=') === false) {
+        if (!str_contains($mediaType, '; charset=')) {
             $mediaType .= '; charset=utf-8';
         }
         $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', $mediaType);
@@ -154,7 +154,7 @@ trait DefaultResponseTrait
     public function createFileResponse(string $path, ?string $mediaType = null): ResponseInterface
     {
         if (!empty($mediaType)) {
-            if (strpos($mediaType, '; charset=') === false) {
+            if (!str_contains($mediaType, '; charset=')) {
                 $mediaType .= '; charset=utf-8';
             }
             $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', $mediaType);
@@ -199,7 +199,7 @@ trait DefaultResponseTrait
     public static function wrapResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface
     {
         // Render page with the output - see index.php
-        return static::cleanResponse($response, $factory, [static::class, 'wrapOutputInPage']);
+        return static::cleanResponse($response, $factory, static::wrapOutputInPage(...));
     }
 
     public static function wrapOutputInPage(string $body, $context = null): string

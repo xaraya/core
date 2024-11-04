@@ -254,7 +254,7 @@ class MongoDBDataStore extends ExternalDataStore
         //$cursor = $collection->find(array_combine($where, $params));
         if (!empty($itemids)) {
             // map to objectid or int
-            $itemids = array_map([$this, 'getObjectId'], $itemids);
+            $itemids = array_map($this->getObjectId(...), $itemids);
             $cursor = $collection->find(['_id' => ['$in' => $itemids]], $options);
         } elseif (!empty($where)) {
             $cursor = $collection->find($where, $options);
@@ -479,7 +479,7 @@ class MongoDBDataStore extends ExternalDataStore
             $result = $collection->estimatedDocumentCount();
         } elseif (!empty($itemids)) {
             // map to objectid or int
-            $itemids = array_map([$this, 'getObjectId'], $itemids);
+            $itemids = array_map($this->getObjectId(...), $itemids);
             $result = $collection->countDocuments(['_id' => ['$in' => $itemids]]);
         } elseif (!empty($where)) {
             //$result = $collection->countDocuments(array_combine($where, $params));

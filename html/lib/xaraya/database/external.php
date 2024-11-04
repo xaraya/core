@@ -144,7 +144,7 @@ class ExternalDatabase implements DatabaseInterface
             return 'xaraya';
         }
         $conn = static::getConn($index);
-        switch (get_class($conn)) {
+        switch ($conn::class) {
             case 'Doctrine\DBAL\Connection':
                 return 'dbal';
             case 'MongoDB\Database':
@@ -152,7 +152,7 @@ class ExternalDatabase implements DatabaseInterface
             case 'PDO':
                 return 'pdo';
             default:
-                throw new \Exception('Unknown database driver ' . get_class($conn));
+                throw new \Exception('Unknown database driver ' . $conn::class);
         }
     }
 

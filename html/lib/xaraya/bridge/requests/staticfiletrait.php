@@ -69,7 +69,7 @@ trait StaticFileBridgeTrait
     public static function parseStaticFilePath(string $path = '/', array $query = [], string $prefix = '', string $type = 'theme'): array
     {
         $params = [];
-        if (strlen($path) > strlen($prefix) && strpos($path, $prefix . '/') === 0) {
+        if (strlen($path) > strlen($prefix) && str_starts_with($path, $prefix . '/')) {
             // max. 3 pieces here - file will contain remaining / if any
             $pieces = explode('/', substr($path, strlen($prefix) + 1), 3);
             if (count($pieces) < 3) {
@@ -213,18 +213,13 @@ trait StaticFileBridgeTrait
             throw new Exception("Missing file parameter");
         }
         // return filepath, stream, ... ?
-        switch ($params['static']) {
-            case 'module':
-                return static::getModuleFileRequest($params);
-            case 'theme':
-                return static::getThemeFileRequest($params);
-            case 'var':
-                return static::getVarFileRequest($params);
-            case 'other':
-                return static::getOtherFileRequest($params);
-            default:
-                throw new Exception("Invalid static parameter");
-        }
+        return match ($params['static']) {
+            'module' => static::getModuleFileRequest($params),
+            'theme' => static::getThemeFileRequest($params),
+            'var' => static::getVarFileRequest($params),
+            'other' => static::getOtherFileRequest($params),
+            default => throw new Exception("Invalid static parameter"),
+        };
     }
 
     /**
@@ -246,7 +241,7 @@ trait StaticFileBridgeTrait
             throw new Exception("Invalid file extension");
         }
         $module = realpath(sys::code() . 'modules/' . $params['source'] . '/');
-        if (empty($module) || strpos($real, $module) !== 0) {
+        if (empty($module) || !str_starts_with($real, $module)) {
             throw new Exception("Invalid file path");
         }
         return $real;
@@ -271,7 +266,7 @@ trait StaticFileBridgeTrait
             throw new Exception("Invalid file extension");
         }
         $theme = realpath(sys::web() . 'themes/' . $params['source'] . '/');
-        if (empty($theme) || strpos($real, $theme) !== 0) {
+        if (empty($theme) || !str_starts_with($real, $theme)) {
             throw new Exception("Invalid file path");
         }
         return $real;
@@ -296,7 +291,7 @@ trait StaticFileBridgeTrait
             throw new Exception("Invalid file extension");
         }
         $theme = realpath(sys::varpath() . '/' . $params['source'] . '/');
-        if (empty($theme) || strpos($real, $theme) !== 0) {
+        if (empty($theme) || !str_starts_with($real, $theme)) {
             throw new Exception("Invalid file path");
         }
         return $real;

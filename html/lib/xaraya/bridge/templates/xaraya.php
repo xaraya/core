@@ -60,33 +60,33 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('xar_guifunc', [$this, 'xar_guifunc'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_apifunc', [$this, 'xar_apifunc']),
-            new TwigFunction('xar_moduleurl', [$this, 'xar_moduleurl']),
-            new TwigFunction('xar_objecturl', [$this, 'xar_objecturl']),
-            new TwigFunction('xar_currenturl', [$this, 'xar_currenturl']),
-            new TwigFunction('xar_baseurl', [$this, 'xar_baseurl']),
-            new TwigFunction('xar_baseuri', [$this, 'xar_baseuri']),
+            new TwigFunction('xar_guifunc', $this->xar_guifunc(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_apifunc', $this->xar_apifunc(...)),
+            new TwigFunction('xar_moduleurl', $this->xar_moduleurl(...)),
+            new TwigFunction('xar_objecturl', $this->xar_objecturl(...)),
+            new TwigFunction('xar_currenturl', $this->xar_currenturl(...)),
+            new TwigFunction('xar_baseurl', $this->xar_baseurl(...)),
+            new TwigFunction('xar_baseuri', $this->xar_baseuri(...)),
             // we need to mark this as safe for html
-            new TwigFunction('xar_imageurl', [$this, 'xar_imageurl'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_fileurl', [$this, 'xar_fileurl'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_username', [$this, 'xar_username']),
-            new TwigFunction('xar_uservar', [$this, 'xar_uservar']),
-            new TwigFunction('xar_configvar', [$this, 'xar_configvar']),
-            new TwigFunction('xar_modulevar', [$this, 'xar_modulevar']),
-            new TwigFunction('xar_moduleid', [$this, 'xar_moduleid']),
-            new TwigFunction('xar_var', [$this, 'xar_var']),
-            new TwigFunction('xar_userid', [$this, 'xar_userid']),
-            new TwigFunction('xar_modname', [$this, 'xar_modname']),
-            new TwigFunction('xar_request', [$this, 'xar_request']),
-            new TwigFunction('xar_translate', [$this, 'xar_translate']),
-            new TwigFunction('xar_localedate', [$this, 'xar_localedate']),
+            new TwigFunction('xar_imageurl', $this->xar_imageurl(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_fileurl', $this->xar_fileurl(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_username', $this->xar_username(...)),
+            new TwigFunction('xar_uservar', $this->xar_uservar(...)),
+            new TwigFunction('xar_configvar', $this->xar_configvar(...)),
+            new TwigFunction('xar_modulevar', $this->xar_modulevar(...)),
+            new TwigFunction('xar_moduleid', $this->xar_moduleid(...)),
+            new TwigFunction('xar_var', $this->xar_var(...)),
+            new TwigFunction('xar_userid', $this->xar_userid(...)),
+            new TwigFunction('xar_modname', $this->xar_modname(...)),
+            new TwigFunction('xar_request', $this->xar_request(...)),
+            new TwigFunction('xar_translate', $this->xar_translate(...)),
+            new TwigFunction('xar_localedate', $this->xar_localedate(...)),
             // <xar:sec mask="..." catch="false">
-            new TwigFunction('xar_security_check', [$this, 'xar_security_check']),
-            new TwigFunction('xar_security_authkey', [$this, 'xar_security_authkey']),
+            new TwigFunction('xar_security_check', $this->xar_security_check(...)),
+            new TwigFunction('xar_security_authkey', $this->xar_security_authkey(...)),
             // {% set infolink = attribute('xarServer', 'getObjectURL', ['workflow_tracker', 'display', {'itemid': item['id']}]) %}
             // @todo placeholder until corresponding functions have been added
-            new TwigFunction('xar_coremethod', [$this, 'xar_coremethod']),
+            new TwigFunction('xar_coremethod', $this->xar_coremethod(...)),
         ];
     }
 

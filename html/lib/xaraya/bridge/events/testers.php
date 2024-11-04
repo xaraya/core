@@ -145,7 +145,7 @@ class TestEventListeners extends EventListenerProvider
 
     public function dump()
     {
-        echo "Provider: " . get_class($this) . "\n";
+        echo "Provider: " . static::class . "\n";
         $events = $this->getEventList();
         //echo var_export($events, true);
         $attached = $this->getEventSubjects();
@@ -161,7 +161,7 @@ class TestEventListeners extends EventListenerProvider
             // fake an event subject relevant to the subject module
             $subject = $this->createEventSubject($event, $info);
             //echo "Subject: " . var_export($subject, true) . "\n";
-            echo "Subject: " . get_class($subject) . "\n";
+            echo "Subject: " . $subject::class . "\n";
             if (!empty($attached[$info['scope']]) && !empty($attached[$info['scope']][$event])) {
                 $subjects = $attached[$info['scope']][$event];
                 echo "Attached: " . var_export($subjects, true) . "\n";
@@ -255,7 +255,7 @@ class TestHookListeners extends HookListenerProvider
 
     public function dump()
     {
-        echo "Provider: " . get_class($this) . "\n";
+        echo "Provider: " . static::class . "\n";
         $events = $this->getEventList();
         //echo var_export($events, true);
         $attached = $this->getEventSubjects();
@@ -272,7 +272,7 @@ class TestHookListeners extends HookListenerProvider
                 // fake an event subject relevant to the subject module
                 $subject = $this->createEventSubject($event, 'base', 0, $info);
                 //echo "Subject: " . var_export($subject, true) . "\n";
-                echo "Subject: " . get_class($subject) . "\n";
+                echo "Subject: " . $subject::class . "\n";
                 $listeners = $this->getListenersForEvent($subject);
                 echo "Listeners: " . var_export($listeners, true) . "\n";
                 echo "\n";
@@ -285,7 +285,7 @@ class TestHookListeners extends HookListenerProvider
                     // fake an event subject relevant to the subject module
                     $subject = $this->createEventSubject($event, $modname, $itemtype, $info);
                     //echo "Subject: $modname $itemtype " . var_export($subject, true) . "\n";
-                    echo "Subject: $modname $itemtype " . get_class($subject) . "\n";
+                    echo "Subject: $modname $itemtype " . $subject::class . "\n";
                     echo "Hooked: " . var_export($hooked, true) . "\n";
                     // itemtype 0 will also apply to all other itemtypes
                     if ($itemtype != 0 && !empty($itemtypes[0])) {

@@ -77,7 +77,7 @@ trait DataObjectBridgeTrait
     public static function parseDataObjectPath(string $path = '/', array $query = [], string $prefix = ''): array
     {
         $params = [];
-        if (strlen($path) > strlen($prefix) && strpos($path, $prefix . '/') === 0) {
+        if (strlen($path) > strlen($prefix) && str_starts_with($path, $prefix . '/')) {
             $pieces = explode('/', substr($path, strlen($prefix) + 1));
             // {prefix}/{object} = view
             $params['object'] = $pieces[0];

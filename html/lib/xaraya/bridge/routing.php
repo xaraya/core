@@ -42,7 +42,10 @@
 namespace Xaraya\Bridge\Routing;
 
 // use the FastRoute library here - see https://github.com/nikic/FastRoute
+use FastRoute\ConfigureRoutes;
 use FastRoute\Dispatcher;
+use FastRoute\FastRoute;
+use FastRoute\GenerateUri;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser;
 // use some Xaraya classes
@@ -72,6 +75,7 @@ use function FastRoute\simpleDispatcher;
 /**
  * Keep track of collected routes - see https://github.com/nikic/FastRoute/blob/master/src/RouteCollector.php
  * @todo RouteCollector will become @final in v2.x - call processedRoutes() instead?
+ * @deprecated 2.0.0 not available with new API
  */
 class TrackRouteCollector extends RouteCollector
 {
@@ -235,11 +239,11 @@ class FastRouteBridge extends BasicBridge
                 $vars = $routeInfo[2];
                 $context = null;
                 // ... call $handler with $vars
-                if (strpos($path, $group . '/restapi/') === 0) {
+                if (str_starts_with($path, $group . '/restapi/')) {
                     // different processing for REST API - see rst.php
                     DataObjectRESTHandler::$endpoint = static::getBaseUri() . $group . '/restapi';
                     [$result, $context] = static::callRestApiHandler($handler, $vars, $request);
-                } elseif (strpos($path, $group . '/graphql') === 0) {
+                } elseif (str_starts_with($path, $group . '/graphql')) {
                     // different processing for GraphQL API - see gql.php
                     [$result, $context] = $this->callHandler($handler, $vars, $request);
                 } else {
@@ -262,10 +266,10 @@ class FastRouteBridge extends BasicBridge
         $method = static::getMethod($request);
         $path = static::getPathInfo($request);
         [$result, $context] = $this->dispatchRequest($method, $path, $group, $request);
-        if (strpos($path, $group . '/restapi/') === 0) {
+        if (str_starts_with($path, $group . '/restapi/')) {
             // different processing for REST API - see rst.php
             DataObjectRESTHandler::output($result, 200, $context);
-        } elseif (strpos($path, $group . '/graphql') === 0) {
+        } elseif (str_starts_with($path, $group . '/graphql')) {
             // different processing for GraphQL API - see gql.php
             xarGraphQL::output($result, $context);
         } else {
@@ -288,7 +292,7 @@ class FastRouteBridge extends BasicBridge
         if (is_string($result)) {
             if (!empty($context) && !empty($context['mediatype'])) {
                 header('Content-Type: ' . $context['mediatype'] . '; charset=utf-8');
-            } elseif (substr($result, 0, 5) === '<?xml') {
+            } elseif (str_starts_with($result, '<?xml')) {
                 header('Content-Type: application/xml; charset=utf-8');
             } else {
                 header('Content-Type: text/html; charset=utf-8');
@@ -578,16 +582,11 @@ class FastRouteBridge extends BasicBridge
                 $result .= "<li>" . $info[0] . " [" . implode(', ', $info[1]) . "]</li>";
                 continue;
             }
-            switch ($info[1]) {
-                case TrackRouteCollector::$groupStarted:
-                    $result .= "<li>" . $info[0] . "<ul>";
-                    break;
-                case TrackRouteCollector::$groupStopped:
-                    $result .= "</ul></li>";
-                    break;
-                default:
-                    $result .= "<li>" . $info[0] . " [" . $info[1] . "]</li>";
-            }
+            match ($info[1]) {
+                TrackRouteCollector::$groupStarted => $result .= "<li>" . $info[0] . "<ul>",
+                TrackRouteCollector::$groupStopped => $result .= "</ul></li>",
+                default => $result .= "<li>" . $info[0] . " [" . $info[1] . "]</li>",
+            };
         }
         $result .= "</ul>";
         return [$result, null];
@@ -882,6 +881,7 @@ class FastRouteBuildTest
     /**
      * Get available routes, optionally by handler method and/or handler class
      * @phpstan-import-type ParsedRoutes from RouteParser
+     * @deprecated 2.0.0 not available with new API
      * @return array<mixed>
      */
     public static function getRoutes(?string $handlerMethod = null, ?string $handlerClass = null)

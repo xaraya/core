@@ -31,7 +31,7 @@ sys::import('xaraya.database.external');
  * do*() methods below to use the native methods for that connection type
  * @uses \sys::autoload()
  */
-abstract class ExternalDataStore extends SQLDataStore
+abstract class ExternalDataStore extends SQLDataStore implements \Stringable
 {
     /** @var string */
     private static $_deferred_property = 'DeferredItemProperty';
@@ -58,7 +58,7 @@ abstract class ExternalDataStore extends SQLDataStore
      * Summary of __toString
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return "external";
     }
@@ -738,19 +738,12 @@ abstract class ExternalDataStore extends SQLDataStore
             $driver = $dbConnArgs['external'];
             $dbConnIndex = '';
         }
-        switch ($driver) {
-            case 'dbal':
-                $datastore = new DbalDataStore($name, $dbConnIndex, $dbConnArgs);
-                break;
-            case 'mongodb':
-                $datastore = new MongoDBDataStore($name, $dbConnIndex, $dbConnArgs);
-                break;
-            case 'pdo':
-                $datastore = new PdoDataStore($name, $dbConnIndex, $dbConnArgs);
-                break;
-            default:
-                throw new \Exception('Unknown database driver ' . $driver);
-        }
+        $datastore = match ($driver) {
+            'dbal' => new DbalDataStore($name, $dbConnIndex, $dbConnArgs),
+            'mongodb' => new MongoDBDataStore($name, $dbConnIndex, $dbConnArgs),
+            'pdo' => new PdoDataStore($name, $dbConnIndex, $dbConnArgs),
+            default => throw new \Exception('Unknown database driver ' . $driver),
+        };
         return $datastore;
     }
 }

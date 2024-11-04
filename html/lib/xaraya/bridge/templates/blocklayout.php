@@ -34,39 +34,39 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
     {
         return [
             // <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
-            new TwigFunction('xar_twig_header', [$this, 'xar_twig_header']),
-            new TwigFunction('xar_twig_block', [$this, 'xar_twig_block'], [
+            new TwigFunction('xar_twig_header', $this->xar_twig_header(...)),
+            new TwigFunction('xar_twig_block', $this->xar_twig_block(...), [
                 'needs_environment' => true,
                 'needs_context' => true,
                 'is_safe' => ['html'],
             ]),
-            new TwigFunction('xar_blockgroup', [$this, 'xar_blockgroup'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_block', [$this, 'xar_block'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_blockgroup', $this->xar_blockgroup(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_block', $this->xar_block(...), ['is_safe' => ['html']]),
             // <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
-            new TwigFunction('xar_pager', [$this, 'xar_pager'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_pager', $this->xar_pager(...), ['is_safe' => ['html']]),
             // <xar:javascript scope="theme" filename="checkall.js" position="head"/>
-            new TwigFunction('xar_javascript', [$this, 'xar_javascript']),
+            new TwigFunction('xar_javascript', $this->xar_javascript(...)),
             // <xar:place-javascript position="body"/>
-            new TwigFunction('xar_place_javascript', [$this, 'xar_place_javascript'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_place_javascript', $this->xar_place_javascript(...), ['is_safe' => ['html']]),
             // <xar:style scope="module" module="base" file="tabs"/>
             // @todo replace array with fixed order of params
-            new TwigFunction('xar_style', [$this, 'xar_style']),
+            new TwigFunction('xar_style', $this->xar_style(...)),
             // <xar:place-css />
-            new TwigFunction('xar_place_css', [$this, 'xar_place_css'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_meta', [$this, 'xar_meta']),
+            new TwigFunction('xar_place_css', $this->xar_place_css(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_meta', $this->xar_meta(...)),
             // <xar:place-meta/>
-            new TwigFunction('xar_place_meta', [$this, 'xar_place_meta'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_place_meta', $this->xar_place_meta(...), ['is_safe' => ['html']]),
             // <xar:img scope="theme" file="icons/info.png" class="xar-icon" alt="info"/>
             // @todo replace array with fixed order of params?
             // we need to mark this as safe for html
-            new TwigFunction('xar_image', [$this, 'xar_image'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_image', $this->xar_image(...), ['is_safe' => ['html']]),
             // <xar:button type="link" name="$name" target="$runlink" label="$label"/>
             // @todo replace array with fixed order of params?
-            new TwigFunction('xar_button', [$this, 'xar_button'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_button', $this->xar_button(...), ['is_safe' => ['html']]),
             // @todo do we even want this with autoescape enabled?
-            new TwigFunction('xar_prep_display', [$this, 'xar_prep_display'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_prep_display', $this->xar_prep_display(...), ['is_safe' => ['html']]),
             // @todo do we even want this with autoescape enabled?
-            new TwigFunction('xar_prep_html', [$this, 'xar_prep_html'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_prep_html', $this->xar_prep_html(...), ['is_safe' => ['html']]),
         ];
     }
 

@@ -39,9 +39,9 @@ use xarEvents;
  */
 class SessionMiddleware implements MiddlewareInterface
 {
-    private string $cookieName;
-    private string $prefix;
-    private int $anonId;
+    private readonly string $cookieName;
+    private readonly string $prefix;
+    private readonly int $anonId;
     private int $length = 32;
     /** @var array<string, mixed> */
     private array $config;
@@ -71,8 +71,8 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function registerCallbackEvents(): void
     {
-        xarEvents::registerCallback('UserLogin', [$this, 'callbackUserLogin']);
-        xarEvents::registerCallback('UserLogout', [$this, 'callbackUserLogout']);
+        xarEvents::registerCallback('UserLogin', $this->callbackUserLogin(...));
+        xarEvents::registerCallback('UserLogout', $this->callbackUserLogout(...));
     }
 
     /**
@@ -85,8 +85,8 @@ class SessionMiddleware implements MiddlewareInterface
         $callbackList ??= [];
         $callbackList['UserLogin'] ??= [];
         $callbackList['UserLogout'] ??= [];
-        array_push($callbackList['UserLogin'], [$this, 'callbackUserLogin']);
-        array_push($callbackList['UserLogout'], [$this, 'callbackUserLogout']);
+        array_push($callbackList['UserLogin'], $this->callbackUserLogin(...));
+        array_push($callbackList['UserLogout'], $this->callbackUserLogout(...));
         $request = $request->withAttribute('EventCallback', $callbackList);
     }
 
@@ -190,19 +190,19 @@ class SessionMiddleware implements MiddlewareInterface
             $session = null;
         }
         $isLogin = false;
-        if (strpos($request->getRequestTarget(), '/authsystem/login') !== false) {
+        if (str_contains($request->getRequestTarget(), '/authsystem/login')) {
             $isLogin = true;
         }
         $isAuthSystem = false;
         $requestId = null;
-        if (strpos($request->getRequestTarget(), '/authsystem/') !== false) {
+        if (str_contains($request->getRequestTarget(), '/authsystem/')) {
             $requestId = ContextFactory::makeRequestId($request);
             echo "Adding callback request ($requestId) " . $request->getRequestTarget() . "\n";
             $this->addCallbackRequest($request, $requestId);
             $isAuthSystem = true;
         }
         $isAuthToken = false;
-        if (strpos($request->getRequestTarget(), '/restapi/token') !== false && $request->getMethod() == 'POST') {
+        if (str_contains($request->getRequestTarget(), '/restapi/token') && $request->getMethod() == 'POST') {
             $isAuthToken = true;
         }
         $isAuthKey = false;
@@ -255,7 +255,7 @@ class SessionMiddleware implements MiddlewareInterface
             $this->storage->register($session);
             $sendCookie = false;
         } elseif ($isAuthKey && isset($session)) {
-            $session->vars['rand'] = rand();
+            $session->vars['rand'] = random_int(0, mt_getrandmax());
             $this->storage->update($session);
         }
         if (session_status() === PHP_SESSION_ACTIVE) {
@@ -263,7 +263,7 @@ class SessionMiddleware implements MiddlewareInterface
             session_write_close();
             $userId = 0;
             foreach (array_keys($_SESSION) as $key) {
-                if (strpos($key, $this->prefix) === 0) {
+                if (str_starts_with($key, $this->prefix)) {
                     //$session->vars[$key] = $_SESSION[$key];
                     // @checkme successful login without a previous sessionId?
                     //if ($isLogin && $key === $this->prefix . 'role_id') {

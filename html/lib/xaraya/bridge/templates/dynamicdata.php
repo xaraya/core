@@ -46,23 +46,23 @@ class DynamicDataTagExtension extends XarayaTwigExtension
     {
         return [
              // <xar:data-view object="$object" newlink=""/>
-            new TwigFunction('xar_data_view', [$this, 'xar_data_view'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_data_view', $this->xar_data_view(...), ['is_safe' => ['html']]),
             // <xar:data-display object="$object"/>
-            new TwigFunction('xar_data_display', [$this, 'xar_data_display'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_data_form', [$this, 'xar_data_form'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_data_filterform', [$this, 'xar_data_filterform'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_data_display', $this->xar_data_display(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_data_form', $this->xar_data_form(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_data_filterform', $this->xar_data_filterform(...), ['is_safe' => ['html']]),
             // <xar:data-label property="$properties[$name]"/>
-            new TwigFunction('xar_data_label', [$this, 'xar_data_label'], ['is_safe' => ['html']]),
+            new TwigFunction('xar_data_label', $this->xar_data_label(...), ['is_safe' => ['html']]),
             // <xar:data-output property="$properties[$name]" _itemid="$itemid" value="$fields[$name]"/>
-            new TwigFunction('xar_data_output', [$this, 'xar_data_output'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_data_input', [$this, 'xar_data_input'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_data_filter', [$this, 'xar_data_filter'], ['is_safe' => ['html']]),
-            new TwigFunction('xar_data_getitems', [$this, 'xar_data_getitems']),
-            new TwigFunction('xar_data_getitem', [$this, 'xar_data_getitem']),
-            new TwigFunction('xar_data_objectlist', [$this, 'xar_data_objectlist']),
-            new TwigFunction('xar_data_object', [$this, 'xar_data_object']),
-            new TwigFunction('xar_data_property', [$this, 'xar_data_property']),
-            new TwigFunction('xar_access', [$this, 'xar_access']),
+            new TwigFunction('xar_data_output', $this->xar_data_output(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_data_input', $this->xar_data_input(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_data_filter', $this->xar_data_filter(...), ['is_safe' => ['html']]),
+            new TwigFunction('xar_data_getitems', $this->xar_data_getitems(...)),
+            new TwigFunction('xar_data_getitem', $this->xar_data_getitem(...)),
+            new TwigFunction('xar_data_objectlist', $this->xar_data_objectlist(...)),
+            new TwigFunction('xar_data_object', $this->xar_data_object(...)),
+            new TwigFunction('xar_data_property', $this->xar_data_property(...)),
+            new TwigFunction('xar_access', $this->xar_access(...)),
         ];
     }
 

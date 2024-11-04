@@ -87,7 +87,7 @@ class DbalDriver
     {
         /** @var \Doctrine\DBAL\Connection $dbconn */
         //return 'DBAL TODO';
-        return get_class($dbconn->getDriver());
+        return $dbconn->getDriver()::class;
     }
 
     /**

@@ -182,10 +182,10 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     // @checkme we need to somehow update $request here to do any good!?
                     $this->prepareRequestCallback($request);
                     // don't use call_user_func here anymore because $request is passed by reference
-                    if (strpos($path, '/restapi/') === 0) {
+                    if (str_starts_with($path, '/restapi/')) {
                         // different processing for REST API - see rst.php
                         [$result, $context] = DataObjectRESTHandler::callHandler($handler, $vars, $request);
-                    } elseif (strpos($path, '/graphql') === 0) {
+                    } elseif (str_starts_with($path, '/graphql')) {
                         // different processing for GraphQL API - see gql.php
                         [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
                         $numeric = false;
@@ -204,9 +204,9 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                         //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
                         //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
                     }
-                } catch (UnauthorizedOperationException $e) {
+                } catch (UnauthorizedOperationException) {
                     return $this->responseUtil->createUnauthorizedResponse();
-                } catch (ForbiddenOperationException $e) {
+                } catch (ForbiddenOperationException) {
                     return $this->responseUtil->createForbiddenResponse();
                 } catch (Throwable $e) {
                     return $this->responseUtil->createExceptionResponse($e);
