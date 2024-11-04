@@ -187,7 +187,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             $item = array_intersect_key($item, $allowed);
             foreach ($deferred as $key) {
                 $data = $objectlist->properties[$key]->getDeferredData(['value' => $item[$key] ?? null, '_itemid' => $itemid]);
-                if ($data['value'] && in_array(get_class($objectlist->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty']) && is_array($data['value'])) {
+                if ($data['value'] && in_array($objectlist->properties[$key]::class, ['DeferredListProperty', 'DeferredManyProperty']) && is_array($data['value'])) {
                     $item[$key] = array_values($data['value']);
                 } else {
                     $item[$key] = $data['value'];
@@ -259,7 +259,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             if (!empty($objectitem->properties[$key]) && method_exists($objectitem->properties[$key], 'getDeferredData')) {
                 // @checkme take value and itemid directly from the property here, to set deferred data if needed
                 $data = $objectitem->properties[$key]->getDeferredData();
-                if ($data['value'] && in_array(get_class($objectitem->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty'])) {
+                if ($data['value'] && in_array($objectitem->properties[$key]::class, ['DeferredListProperty', 'DeferredManyProperty'])) {
                     $item[$key] = array_values($data['value']);
                 } else {
                     $item[$key] = $data['value'];
@@ -1117,10 +1117,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             uasort($apilist, function ($a, $b) {
                 $lena = strlen($a['path']);
                 $lenb = strlen($b['path']);
-                if ($lena == $lenb) {
-                    return 0;
-                }
-                return ($lena < $lenb) ? 1 : -1;
+                return $lenb <=> $lena;
             });
         }
         foreach ($apilist as $api => $item) {
@@ -1155,11 +1152,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                     if (empty($path_param)) {
                         continue;
                     }
-                    if (substr($path_param, 0, 1) !== '{' && substr($path_param, -1) !== '}') {
+                    if (!str_starts_with($path_param, '{') && !str_ends_with($path_param, '}')) {
                         // @checkme how do we keep track of fixed parts of the path here?
                         continue;
                     }
-                    if (substr($path_param, 0, 1) !== '{' || substr($path_param, -1) !== '}') {
+                    if (!str_starts_with($path_param, '{') || !str_ends_with($path_param, '}')) {
                         throw new Exception('Invalid path parameter in ' . $item['path']);
                     }
                     $path_param = substr($path_param, 1, -1);
@@ -1297,7 +1294,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         xarCache::init();
         self::loadConfig();
         $tryCachedResult = false;
-        if (is_array($handler) && is_string($handler[0]) && $handler[0] === "DataObjectRESTHandler" && substr($handler[1], 0, 3) === "get") {
+        if (is_array($handler) && is_string($handler[0]) && $handler[0] === "DataObjectRESTHandler" && str_starts_with($handler[1], "get")) {
             $tryCachedResult = true;
         }
         if ($tryCachedResult && self::$enableCache) {
@@ -1345,10 +1342,10 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         try {
             $result = call_user_func($handler, $params, $context);
-        } catch (UnauthorizedOperationException $e) {
+        } catch (UnauthorizedOperationException) {
             self::setTimer('unauthorized');
             throw new UnauthorizedOperationException();
-        } catch (ForbiddenOperationException $e) {
+        } catch (ForbiddenOperationException) {
             self::setTimer('forbidden');
             throw new ForbiddenOperationException();
             //} catch (Throwable $e) {
@@ -1395,7 +1392,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (is_string($result)) {
             if (!empty($context) && !empty($context['mediatype'])) {
                 header('Content-Type: ' . $context['mediatype'] . '; charset=utf-8');
-            } elseif (substr($result, 0, 5) === '<?xml') {
+            } elseif (str_starts_with($result, '<?xml')) {
                 header('Content-Type: application/xml; charset=utf-8');
             } else {
                 header('Content-Type: text/html; charset=utf-8');

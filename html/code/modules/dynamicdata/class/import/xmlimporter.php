@@ -67,7 +67,7 @@ class XmlImporter extends DataObjectImporter
             throw new EmptyParameterException('xml or file');
         } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/', $file))) {
             // check if we tried to load a file using an old path
-            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true && strpos($file, 'modules/') === 0) {
+            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true && str_starts_with($file, 'modules/')) {
                 $file = sys::code() . $file;
                 if (!file_exists($file)) {
                     throw new BadParameterException($file, 'Invalid importfile "#(1)"');
@@ -146,10 +146,10 @@ class XmlImporter extends DataObjectImporter
                 $value = (string) $xmlobject->{$property}[0];
                 try {
                     $this->boolean->validate($value, []);
-                } catch (Exception $e) {
+                } catch (Exception) {
                     try {
                         $this->integer->validate($value, []);
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                     }
                 }
 
@@ -225,10 +225,10 @@ class XmlImporter extends DataObjectImporter
                     $value = (string) $property->{$prop}[0];
                     try {
                         $this->boolean->validate($value, []);
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         try {
                             $this->integer->validate($value, []);
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                         }
                     }
                     $propertyargs[$prop] = $value;
@@ -384,10 +384,10 @@ class XmlImporter extends DataObjectImporter
                     //                    $value = (string)$child->$propertyname;
                     try {
                         $this->boolean->validate($value, []);
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         try {
                             $this->integer->validate($value, []);
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                         }
                     }
                     $object->properties[$propertyname]->value = $value;

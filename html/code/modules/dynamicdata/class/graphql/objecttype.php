@@ -107,7 +107,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             '_objectref' => [
                 'type' => Type::string(),
                 'resolve' => function ($object, $args) {
-                    return get_class($object['_objectref']);
+                    return $object['_objectref']::class;
                 },
             ],
             //'category' => static::_xar_get_deferred_field('category', 'category'),

@@ -591,7 +591,7 @@ class DataObjectLoader implements ContextInterface
             $params['sort'] = [];
             $sorted = array_filter(explode(',', $this->order));
             foreach ($sorted as $sortme) {
-                if (substr($sortme, 0, 1) === '-') {
+                if (str_starts_with($sortme, '-')) {
                     $params['sort'][] = substr($sortme, 1) . ' DESC';
                     continue;
                 }

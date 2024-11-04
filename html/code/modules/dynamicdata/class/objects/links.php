@@ -47,7 +47,7 @@ class DataObjectLinks extends xarObject
         $linklist = null;
         try {
             $linklist = DataObjectFactory::getObjectList(['name' => 'dynamic_object_links']);
-        } catch (Exception $e) {
+        } catch (Exception) {
             if (empty($linklist) || empty($linklist->objectid)) {
                 $def_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-def.xml';
                 $dat_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-dat.xml';
@@ -577,7 +577,7 @@ class DataObjectLinks extends xarObject
         );
         $properties->getItems();
         foreach ($properties->items as $item) {
-            if (strpos($item['source'], '.') !== false) {
+            if (str_contains($item['source'], '.')) {
                 [$store, $name] = explode('.', $item['source']);
             } elseif ($item['source'] == 'dynamic_data') {
                 $store = $xartables['dynamic_data'];

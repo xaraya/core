@@ -93,7 +93,7 @@ trait UserApiTrait
             try {
                 // @todo create an adaptor class for procedural getitemtypes in modules
                 $types = xarMod::apiFunc($module, 'user', 'getitemtypes', []);
-            } catch (FunctionNotFoundException $e) {
+            } catch (FunctionNotFoundException) {
                 // No worries
             }
         }

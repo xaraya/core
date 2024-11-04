@@ -120,7 +120,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
     **/
     public static function __set_state($args)
     {
-        $var = get_called_class();
+        $var = static::class;
         $c = new $var($args['args']);
         return $c;
     }

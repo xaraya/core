@@ -80,7 +80,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         foreach($this->properties as $property) {
             try {
                 $property->value = $property->castType($property->value);
-            } catch(Exception $e) {
+            } catch(Exception) {
             }
         }
 

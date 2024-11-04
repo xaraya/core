@@ -85,7 +85,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
 
         // @checkme pass along buildUri() as link function to DD
         $params['linktype'] = 'other';
-        $params['linkfunc'] = [static::class, 'buildUri'];
+        $params['linkfunc'] = static::buildUri(...);
 
         $response = $this->run($params, $context);
 

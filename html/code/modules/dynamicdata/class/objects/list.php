@@ -126,7 +126,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     $this->dataquery->regex($this->properties[$name]->source, $value);
                     break;
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
         return true;
@@ -335,7 +335,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/i', $criteria, $matches)) {
                 $criteria = trim($matches[1]);
                 $sortorder = strtoupper($matches[2]);
-            } elseif (substr($criteria, 0, 1) === '-') {
+            } elseif (str_starts_with($criteria, '-')) {
                 // reverse sort order if criteria starts with '-'
                 $criteria = substr($criteria, 1);
                 $sortorder = 'DESC';
@@ -416,7 +416,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (!empty($this->filters) && is_string($this->filters)) {
             try {
                 $this->filters = unserialize($this->filters);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 $this->filters = null;
             }
         }
@@ -449,18 +449,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     $filter[2] = str_replace("'", "\\'", $filter[2]);
                     $filter[2] = "'" . $filter[2] . "'";
                 }
-                switch ($filter[1]) {
-                    case 'in':
-                        $whereclause = ' IN (' . $filter[2] . ')';
-                        break;
-                    case 'eq':
-                    case 'gt':
-                    case 'lt':
-                    case 'ne':
-                    default:
-                        $whereclause = ' ' . $filter[1] . ' ' . $filter[2];
-                        break;
-                }
+                $whereclause = match ($filter[1]) {
+                    'in' => ' IN (' . $filter[2] . ')',
+                    default => ' ' . $filter[1] . ' ' . $filter[2],
+                };
                 if (!empty($this->where)) {
                     // CHECKME: how about when $this->where is an array ?
                     $this->where .= ' and ' . $filter[0] . $whereclause;
@@ -485,7 +477,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // If it fails, just ignore it
             try {
                 $this->dataquery->addgroup($this->properties[$name]->source);
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
         }
     }
@@ -583,7 +575,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     foreach ($this->items as $key => $value) {
                         try {
                             $this->items[$key][$fieldname] = $this->properties[$fieldname]->getItemValue($key);
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                             $this->items[$key][$fieldname] = null;
                         }
                     }

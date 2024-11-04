@@ -366,7 +366,7 @@ class DataObjectFactory extends xarObject
         // The info method calls an entry for each of the object's properties. We only need one
         $current = current($info);
         foreach ($current as $key => $value) {
-            if (strpos($key, 'object_') === 0) {
+            if (str_starts_with($key, 'object_')) {
                 $data[substr($key, 7)] = $value;
             }
         }
@@ -462,7 +462,7 @@ class DataObjectFactory extends xarObject
         // The info method calls an entry for each of the object's properties. We only need one
         $current = current($info);
         foreach ($current as $key => $value) {
-            if (strpos($key, 'object_') === 0) {
+            if (str_starts_with($key, 'object_')) {
                 $data[substr($key, 7)] = $value;
             }
         }
@@ -596,7 +596,7 @@ class DataObjectFactory extends xarObject
         // Create specific part
         $descriptor = new DataObjectDescriptor($args);
         $objectid = $object->createItem($descriptor->getArgs());
-        $classname = get_class($object);
+        $classname = $object !== null ? $object::class : self::class;
         xarLog::message("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype'], xarLog::LEVEL_INFO);
         unset($object);
         return $objectid;

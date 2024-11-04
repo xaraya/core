@@ -207,7 +207,7 @@ class PropertyRegistration extends DataContainer
                 // TODO: this returns a serialized array of objects, does that hurt?
                 try {
                     $property['aliases']        = unserialize($aliases);
-                } catch(Exception $e) {
+                } catch(Exception) {
                     $property['aliases']        = [];
                 }
                 $proptypes[$id] = $property;
@@ -284,7 +284,7 @@ class PropertyRegistration extends DataContainer
                         $data = ['file' => $dat_file];
                         try {
                             $objectid = xarMod::apiFunc('dynamicdata', 'util', 'import', $data);
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                         }
                     }
                 }
@@ -328,7 +328,7 @@ class PropertyRegistration extends DataContainer
                         $dp = str_replace('/', '.', substr($PropertiesDir . "/" . basename($file), 0, -4));
                         try {
                             sys::import($dp);
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                             throw new Exception(xarMLS::translate('The file #(1) could not be loaded<br/>', $dp . '.php'));
                             // echo $e->getMessage();exit;
                         }
@@ -365,7 +365,7 @@ class PropertyRegistration extends DataContainer
                     $dp = str_replace('/', '.', 'properties/' . basename($file) . "/main");
                     try {
                         sys::import($dp);
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         // Die silently for now
                         $debugadmins = xarConfigVars::get(null, 'Site.User.DebugAdmins');
                         if (xarModVars::get('dynamicdata', 'debugmode') && in_array(xarUser::getVar('id'), $debugadmins)) {
@@ -398,7 +398,7 @@ class PropertyRegistration extends DataContainer
                 }
 
                 // Ignore installer classes of properties (they are extensions)
-                if (substr($thisclass, -7) == 'Install') {
+                if (str_ends_with($thisclass, 'Install')) {
                     continue;
                 }
 

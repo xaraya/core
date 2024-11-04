@@ -193,7 +193,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                     }
                 }
                 $this->configuration = $configargs;
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
         }
 
@@ -246,7 +246,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         // Explode the access rules
         try {
             $this->access_rules = unserialize($this->access);
-        } catch (Exception $e) {
+        } catch (Exception) {
         }
 
         return true;
@@ -364,7 +364,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         if (!is_array($fieldlist)) {
             try {
                 $fieldlist = explode(',', $fieldlist);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 throw new Exception(xarML('Badly formed fieldlist attribute'));
             }
         }
@@ -518,7 +518,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                 [$module, $dbname] = explode('.', $this->dbConnArgs['databaseConfig']);
                 $args = Xaraya\DataObject\UtilApi::getDatabaseDSN($dbname, $module);
                 $this->dbConnArgs = $args;
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // allow database connection failure later on when it's actually needed
                 xarLog::message("DataObjectMaster::parseDbConnArgs: Invalid dbConnArgs - unable to create new db connection", xarLog::LEVEL_WARNING);
                 return null;
@@ -552,7 +552,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                     // FIXME: this needs a better design
                     $name = trim(substr($firstproperty->source, 17));
                     $this->addDataStore($name, 'modulevars');
-                } catch (Exception $e) {
+                } catch (Exception) {
                     throw new Exception(xarML('Did not find a first property for module variable datastore'));
                 }
                 break;
@@ -987,7 +987,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         $url = xarDDObject::getActionURL($this, $action, $itemid, $extra);
 
         // cache the URL if the itemid is in there
-        if (!empty($itemid) && empty($extra) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {
+        if (!empty($itemid) && empty($extra) && str_contains($url, $this->urlparam . '=' . $itemid)) {
             $this->cached_urls[$action] = str_replace($this->urlparam . '=' . $itemid, $this->urlparam . '=<itemid>', $url);
         }
 
@@ -1157,7 +1157,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                         }
                     }
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 echo xarML('Found sources: ');
                 var_dump($sources);
                 echo xarML('<br/>Error reading object sources');
@@ -1230,7 +1230,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                         }
                     }
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 throw new Exception(xarML('Error reading object relations'));
             }
         }
@@ -1262,8 +1262,8 @@ class DataObjectMaster extends xarObject implements ContextInterface
                             continue;
                         }
 
-                        if ((strpos($left, 'this') === false) && (strpos($right, 'this') === false)
-                        && (strpos($left, $object->name) === false) && (strpos($right, $object->name) === false)
+                        if ((!str_contains($left, 'this')) && (!str_contains($right, 'this'))
+                        && (!str_contains($left, $object->name)) && (!str_contains($right, $object->name))
                         ) {
                             echo 'One of the links must be of a property of ' . $object->name . '<br />';
                         }
@@ -1274,7 +1274,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                         }
                         try {
                             $rightside = $object->propertysource($right, $object, $prefix);
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                             echo 'Cannot translate ' . $right . ' to a valid datasource<br />';
                         }
                         $this->dataquery->leftjoin($leftside, $rightside);
@@ -1286,7 +1286,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                         //                    $this->dataquery->setorder($table . ".id");
                     }
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 if (isset($left)) {
                     echo 'Bad object relation: ' . $left . ' or ' . $right;
                 } else {
@@ -1378,7 +1378,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         // unserialize access levels if necessary
         try {
             $access_rules = unserialize($this->access_rules['access'] ?? '');
-        } catch (Exception $e) {
+        } catch (Exception) {
             $access_rules = [];
         }
         // use context to get roleid if needed

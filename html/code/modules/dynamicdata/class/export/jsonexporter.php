@@ -63,7 +63,7 @@ class JsonExporter extends DataObjectExporter
                 if (!empty($value)) {
                     try {
                         $info[$name] = unserialize($value);
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         $info[$name] = $value;
                     }
                 } else {
@@ -106,7 +106,7 @@ class JsonExporter extends DataObjectExporter
                     if (!empty($val)) {
                         try {
                             $propinfo[$key] = unserialize($val);
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                             $propinfo[$key] = $val;
                         }
                     } else {

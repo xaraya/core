@@ -637,7 +637,7 @@ class DataObjectRESTBuilder extends xarObject
                     continue;
                 }
                 if (is_object($value)) {
-                    $propinfo[$name] = get_class($value);
+                    $propinfo[$name] = $value::class;
                 } else {
                     $propinfo[$name] = $value;
                 }
@@ -1116,7 +1116,7 @@ class DataObjectRESTBuilder extends xarObject
             self::$paths[$path][$item['method']]['parameters'] = $parameters;
         }
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-        if (strpos($item['path'], '{') !== false) {
+        if (str_contains($item['path'], '{')) {
             $found = preg_match_all('/\{([^}]+)\}/', $item['path'], $matches);
             if (empty($found)) {
                 throw new Exception('Invalid path parameter in path ' . $item['path'] . ' for rest api ' . $api . ' in module ' . $module);
@@ -1300,7 +1300,7 @@ class DataObjectRESTBuilder extends xarObject
         $moduleList = ['dynamicdata'];
         $allowed = [];
         foreach ($selectedList as $item) {
-            if (strpos($item, '.') === false) {
+            if (!str_contains($item, '.')) {
                 continue;
             }
             [$module, $api] = explode('.', $item);
@@ -1321,7 +1321,7 @@ class DataObjectRESTBuilder extends xarObject
             ];
             try {
                 $apiList = xarMod::apiFunc($module, 'rest', 'getlist');
-            } catch (Exception $e) {
+            } catch (Exception) {
                 $apiList = self::find_default_api_functions($module);
             }
             foreach ($apiList as $api => $info) {
@@ -1468,70 +1468,19 @@ class DataObjectRESTBuilder extends xarObject
             $typename = 'documentid';
         }
         //$typename = $property->basetype;
-        switch ($typename) {
-            case 'integerbox':
-            case 'itemid':
-            case 'itemtype':
-            case 'userlist':
-            case 'username':
-                //case 'integer':
-                $datatype = ['type' => 'integer'];
-                break;
-            case 'floatbox':
-                $datatype = ['type' => 'number', 'format' => 'float'];
-                break;
-            case 'documentid':
-            case 'static':
-            case 'textbox':
-            case 'textarea':
-            case 'textarea_medium':
-            case 'textarea_large':
-            case 'objectref':
-            case 'propertyref':
-            case 'object':
-            case 'module':
-            case 'categories':
-            case 'fieldtype':
-            case 'datasource':
-            case 'fieldstatus':
-            case 'dropdown':
-            case 'crontab':
-            case 'workflows':
-                //case 'string':
-                $datatype = ['type' => 'string'];
-                break;
-            case 'mongodb_bson':
-                // @todo customize later
-                $datatype = ['type' => 'string'];
-                break;
-            case 'mapper':
-            case 'queued':
-            case 'callable':
-            case 'deferitem':
-                $datatype = ['type' => 'object'];
-                break;
-            case 'array':
-            case 'configuration':
-                $datatype = ['type' => 'array', 'items' => ['type' => 'string']];
-                break;
-            case 'defermany':
-            case 'deferlist':
-                $datatype = ['type' => 'array', 'items' => ['type' => 'object']];
-                break;
-            case 'datetime':
-            case 'calendar':
-                $datatype = ['type' => 'string', 'format' => 'date-time'];
-                break;
-            case 'url':
-            case 'image':
-                $datatype = ['type' => 'string', 'format' => 'uri'];
-                break;
-            case 'checkbox':
-                $datatype = ['type' => 'boolean'];
-                break;
-            default:
-                throw new Exception('Unsupported property type ' . $property->type . '=' . self::$proptype_names[$property->type] . ' (' . $property->basetype . ')');
-        }
+        $datatype = match ($typename) {
+            'integerbox', 'itemid', 'itemtype', 'userlist', 'username' => ['type' => 'integer'],
+            'floatbox' => ['type' => 'number', 'format' => 'float'],
+            'documentid', 'static', 'textbox', 'textarea', 'textarea_medium', 'textarea_large', 'objectref', 'propertyref', 'object', 'module', 'categories', 'fieldtype', 'datasource', 'fieldstatus', 'dropdown', 'crontab', 'workflows' => ['type' => 'string'],
+            'mongodb_bson' => ['type' => 'string'],
+            'mapper', 'queued', 'callable', 'deferitem' => ['type' => 'object'],
+            'array', 'configuration' => ['type' => 'array', 'items' => ['type' => 'string']],
+            'defermany', 'deferlist' => ['type' => 'array', 'items' => ['type' => 'object']],
+            'datetime', 'calendar' => ['type' => 'string', 'format' => 'date-time'],
+            'url', 'image' => ['type' => 'string', 'format' => 'uri'],
+            'checkbox' => ['type' => 'boolean'],
+            default => throw new Exception('Unsupported property type ' . $property->type . '=' . self::$proptype_names[$property->type] . ' (' . $property->basetype . ')'),
+        };
         return $datatype;
     }
 }

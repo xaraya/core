@@ -79,7 +79,7 @@ trait xarGraphQLQueriesTrait
         if (empty($kind) || is_numeric($kind)) {
             $lname = strtolower($name);
             $ext = '_page';
-            if (substr($lname, -strlen($ext)) === $ext) {
+            if (str_ends_with($lname, $ext)) {
                 $kind = 'page';
             } elseif ($lname === static::$_xar_object) {
                 $kind = 'list';
@@ -87,16 +87,12 @@ trait xarGraphQLQueriesTrait
                 $kind = 'item';
             }
         }
-        switch ($kind) {
-            case 'page':
-                return static::_xar_get_page_query($name, static::$_xar_type, static::$_xar_object);
-            case 'list':
-                return static::_xar_get_list_query($name, static::$_xar_type, static::$_xar_object);
-            case 'item':
-                return static::_xar_get_item_query($name, static::$_xar_type, static::$_xar_object);
-            default:
-                throw new Exception("Unknown '$kind' query '$name'");
-        }
+        return match ($kind) {
+            'page' => static::_xar_get_page_query($name, static::$_xar_type, static::$_xar_object),
+            'list' => static::_xar_get_list_query($name, static::$_xar_type, static::$_xar_object),
+            'item' => static::_xar_get_item_query($name, static::$_xar_type, static::$_xar_object),
+            default => throw new Exception("Unknown '$kind' query '$name'"),
+        };
     }
 
     /**
@@ -114,7 +110,7 @@ trait xarGraphQLQueriesTrait
             // @todo check if type class corresponding to fieldname has overridden _xar_*_query_resolver
             $name = strtolower($info->fieldName);
             $page_ext = '_page';
-            if (substr($name, -strlen($page_ext)) === $page_ext) {
+            if (str_ends_with($name, $page_ext)) {
                 $type = substr($name, 0, strlen($name) - strlen($page_ext));
                 // @checkme do we want to use singular type here?
                 $type = xarGraphQLInflector::singularize($type);

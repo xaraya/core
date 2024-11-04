@@ -69,14 +69,11 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
      */
     public static function _xar_get_mutation_field($name, $kind = 'token')
     {
-        switch ($name) {
-            case 'getToken':
-                return static::_xar_get_create_mutation($name);
-            case 'deleteToken':
-                return static::_xar_get_delete_mutation($name);
-            default:
-                throw new Exception("Unknown '$kind' mutation '$name'");
-        }
+        return match ($name) {
+            'getToken' => static::_xar_get_create_mutation($name),
+            'deleteToken' => static::_xar_get_delete_mutation($name),
+            default => throw new Exception("Unknown '$kind' mutation '$name'"),
+        };
     }
 
     /**

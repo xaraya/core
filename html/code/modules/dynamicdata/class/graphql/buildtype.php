@@ -619,10 +619,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
                 return;
             }
             if (is_array($values)) {
-                if (isset($values[$fieldname])) {
-                    return $values[$fieldname];
-                }
-                return array_keys($values);
+                return $values[$fieldname] ?? array_keys($values);
             }
             if (is_object($values)) {
                 if (property_exists($values, $fieldname)) {
@@ -787,7 +784,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             // default typename
             '*' => [
                 // default fieldname
-                '*' => [Executor::class, 'defaultFieldResolver'],
+                '*' => Executor::defaultFieldResolver(...),
             ],
         ];
         static $type_checked = [];
@@ -830,7 +827,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
 
         // use standard default field resolver for _page types: order, offset, ..., [list items]
         $page_ext = '_page';
-        if (substr($typename, -strlen($page_ext)) === $page_ext) {
+        if (str_ends_with($typename, $page_ext)) {
             $field_resolver = $field_resolvers['*']['*'];
             $field_resolvers[$typename]['*'] = $field_resolver;
             xarGraphQL::$paths[] = "use default field resolver for page type $typename";
@@ -885,7 +882,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         $object = xarGraphQLInflector::pluralize($typename);
         try {
             $fieldspecs = self::find_object_fieldspecs($object);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $field_resolver = $field_resolvers['*']['*'];
             $field_resolvers[$typename]['*'] = $field_resolver;
             xarGraphQL::$paths[] = "Unknown object $object - use default field resolver for type $typename";
@@ -928,13 +925,13 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             // @checkme use standard default field resolver here?
             $field_resolver = self::basetype_field_resolver($typename, $fieldname);
             // this field contains a _ which typically means it refers to another field
-        } elseif (empty($fieldtype) && strpos($fieldname, '_') !== false) {
+        } elseif (empty($fieldtype) && str_contains($fieldname, '_')) {
             // fieldname starts with _
-            if (substr($fieldname, 0, 1) === '_' && !empty($fieldspecs[substr($fieldname, 1)])) {
+            if (str_starts_with($fieldname, '_') && !empty($fieldspecs[substr($fieldname, 1)])) {
                 $fieldalias = substr($fieldname, 1);
                 $field_resolver = self::alias_field_resolver($typename, $fieldname, $fieldalias);
                 // fieldname ends with _kv
-            } elseif (substr($fieldname, -3) === '_kv' && !empty($fieldspecs[substr($fieldname, 0, -3)])) {
+            } elseif (str_ends_with($fieldname, '_kv') && !empty($fieldspecs[substr($fieldname, 0, -3)])) {
                 $fieldalias = substr($fieldname, 0, -3);
                 $field_resolver = self::keyval_field_resolver($typename, $fieldname, $fieldalias);
             } else {

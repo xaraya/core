@@ -52,7 +52,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                     if (!property_exists($property, 'keys')) {
                         //print_r("set property keys for " . $property->name);
                         $property->keys = array_filter(array_keys($property->descriptor->getArgs()), function ($k) {
-                            return strpos($k, 'object_') !== 0;
+                            return !str_starts_with($k, 'object_');
                         });
                     }
                     return $property->keys;

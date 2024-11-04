@@ -113,7 +113,7 @@ trait xarGraphQLQueryItemTrait
                 //$values = $objectitem->getFieldValues();
                 // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
                 $values = $objectitem->getFieldValues([], 1);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 //print_r($e->getMessage());
                 $values = ['id' => $args['id']];
             }

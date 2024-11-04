@@ -110,10 +110,10 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
                 $item['paging'] ??= false;
                 // @todo parse optional response - and how to match with result type, e.g. DD getobjects -> ['object']
                 $item['result'] = $item['response'] ?? 'mixed';
-                if (strpos($item['path'], '/') !== false) {
+                if (str_contains($item['path'], '/')) {
                     $name = $module . '_' . $api;
                     // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-                    if (strpos($item['path'], '{') !== false) {
+                    if (str_contains($item['path'], '{')) {
                         $found = preg_match_all('/\{([^}]+)\}/', $item['path'], $matches);
                         if (empty($found)) {
                             throw new Exception('Invalid path parameter in path ' . $item['path'] . ' for rest api ' . $api . ' in module ' . $module);

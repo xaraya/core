@@ -144,7 +144,7 @@ class UtilApi implements DatabaseInterface
         }
 
         // Note: not supported for other database types
-        if ($dbtype == 'mysqli' && $db == $dbname && !empty($table) && strpos($table, '.') !== false) {
+        if ($dbtype == 'mysqli' && $db == $dbname && !empty($table) && str_contains($table, '.')) {
             [$db, $table] = explode('.', $table);
         }
 

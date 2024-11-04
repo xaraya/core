@@ -289,11 +289,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         }
         //self::$paths[] = ['load_lazy_type', $name];
         $page_ext = '_page';
-        if (substr($name, -strlen($page_ext)) === $page_ext) {
+        if (str_ends_with($name, $page_ext)) {
             return self::get_page_type(substr($name, 0, strlen($name) - strlen($page_ext)));
         }
         $input_ext = '_input';
-        if (substr($name, -strlen($input_ext)) === $input_ext) {
+        if (str_ends_with($name, $input_ext)) {
             return self::get_input_type(substr($name, 0, strlen($name) - strlen($input_ext)));
         }
         // make Object Type from BuildType for extra dynamicdata object types
@@ -651,7 +651,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
             // @checkme GraphQL playground doesn't like JSON_NUMERIC_CHECK for introspection, e.g. default value for offset = 0 instead of "0"
             //$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
             $data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $data = json_last_error_msg();
         }
         header('Access-Control-Allow-Origin: *');
@@ -961,7 +961,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         $extraTypes = [];
         if (!empty($objectNames)) {
             foreach ($objectNames as $name) {
-                if (strpos($name, '.') !== false) {
+                if (str_contains($name, '.')) {
                     continue;
                 }
                 $type = xarGraphQLInflector::singularize($name);

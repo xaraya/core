@@ -73,7 +73,7 @@ class PhpExporter extends JsonExporter
 
     public function addObjectDef($info, $objectdef)
     {
-        $source = __CLASS__;
+        $source = self::class;
         $filepath = sys::varpath() . '/cache/variables/' . $objectdef->name . '-def.php';
         static::exportDefinition($objectdef->descriptor, $filepath);
 
@@ -86,7 +86,7 @@ namespace Xaraya\DataObject\Generated;
 ';
         $seen = [];
         foreach ($objectdef->properties as $name => $property) {
-            $classname = get_class($property);
+            $classname = $property::class;
             if (!empty($seen[$classname])) {
                 continue;
             }
@@ -211,7 +211,7 @@ $object = ' . var_export($info, true) . ";\n";
             if ($value !== false) {
                 $serialized = $value;
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
         }
         return $serialized;
     }

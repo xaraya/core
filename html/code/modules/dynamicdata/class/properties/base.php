@@ -160,7 +160,7 @@ class DataProperty extends xarObject implements iDataProperty
             // but don't yet have the full configuration
             try {
                 $this->setValue($this->defaultvalue);
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
         } else {
             $this->setValue($args['value']);
@@ -169,7 +169,7 @@ class DataProperty extends xarObject implements iDataProperty
         if (!empty($this->args) && is_string($this->args)) {
             try {
                 $this->args = unserialize($this->args);
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
         }
     }
@@ -313,7 +313,7 @@ class DataProperty extends xarObject implements iDataProperty
     {
         try {
             $this->setValue($this->defaultvalue);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $this->value = null;
         }
     }
@@ -956,7 +956,7 @@ class DataProperty extends xarObject implements iDataProperty
         } else {
             try {
                 $fields = unserialize($configuration);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // if the configuration is malformed just return an empty configuration
                 return [];
             }

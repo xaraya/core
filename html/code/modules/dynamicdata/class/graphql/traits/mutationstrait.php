@@ -81,16 +81,12 @@ trait xarGraphQLMutationsTrait
         if (empty($kind) || is_numeric($kind)) {
             $kind = strtolower(substr($name, 0, 6));
         }
-        switch ($kind) {
-            case 'create':
-                return static::_xar_get_create_mutation($name, static::$_xar_type, static::$_xar_object);
-            case 'update':
-                return static::_xar_get_update_mutation($name, static::$_xar_type, static::$_xar_object);
-            case 'delete':
-                return static::_xar_get_delete_mutation($name, static::$_xar_type, static::$_xar_object);
-            default:
-                throw new Exception("Unknown '$kind' mutation '$name'");
-        }
+        return match ($kind) {
+            'create' => static::_xar_get_create_mutation($name, static::$_xar_type, static::$_xar_object),
+            'update' => static::_xar_get_update_mutation($name, static::$_xar_type, static::$_xar_object),
+            'delete' => static::_xar_get_delete_mutation($name, static::$_xar_type, static::$_xar_object),
+            default => throw new Exception("Unknown '$kind' mutation '$name'"),
+        };
     }
 
     /**

@@ -60,7 +60,7 @@ class xarGraphQLInflector
         $value = strtolower($value);
         $extensions = ['_page', '_input'];
         foreach ($extensions as $ext) {
-            if (substr($value, -strlen($ext)) === $ext) {
+            if (str_ends_with($value, $ext)) {
                 $value = substr($value, 0, strlen($value) - strlen($ext));
             }
         }
@@ -76,7 +76,7 @@ class xarGraphQLInflector
     public static function pluralize($type)
     {
         $type = self::normalize($type);
-        if (substr($type, -1) === "y") {
+        if (str_ends_with($type, "y")) {
             $object = substr($type, 0, strlen($type) - 1) . "ies";
         } elseif ($type === "user") {
             $object = "roles_users";
@@ -101,9 +101,9 @@ class xarGraphQLInflector
             $type = $name;
         } elseif ($name === "roles_users") {
             $type = "user";
-        } elseif (substr($name, -3) === "ies") {
+        } elseif (str_ends_with($name, "ies")) {
             $type = substr($name, 0, strlen($name) - 3) . "y";
-        } elseif (substr($name, -1) === "s") {
+        } elseif (str_ends_with($name, "s")) {
             $type = substr($name, 0, strlen($name) - 1);
         } else {
             $type = $name;

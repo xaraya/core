@@ -278,7 +278,7 @@ class DataStoreLinks extends xarObject
         );
         $properties->getItems();
         foreach ($properties->items as $item) {
-            if (strpos($item['source'], '.') !== false) {
+            if (str_contains($item['source'], '.')) {
                 [$store, $name] = explode('.', $item['source']);
             } elseif ($item['source'] == 'dynamic_data') {
                 $store = $xartables['dynamic_data'];
@@ -318,7 +318,7 @@ class DataStoreLinks extends xarObject
         );
         $properties->getItems();
         foreach ($properties->items as $item) {
-            if (strpos($item['source'], '.') !== false) {
+            if (str_contains($item['source'], '.')) {
                 // keep track of where each source field is used
                 $sourcemapping[$item['source']] = $item;
             } elseif ($item['source'] == 'dynamic_data') {

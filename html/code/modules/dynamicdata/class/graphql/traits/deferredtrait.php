@@ -118,7 +118,7 @@ trait xarGraphQLDeferredTrait
             }
             /** @var DeferredItemProperty $property */
             $property = (xarGraphQL::$object_ref[$object])->properties[$fieldname];
-            if (get_class($property) === 'DeferredManyProperty') {
+            if ($property::class === 'DeferredManyProperty') {
                 // $fieldname = 'id';
                 if (empty($values['id'])) {
                     throw new Exception('Unknown item id for deferred property ' . $fieldname);
@@ -182,6 +182,7 @@ trait xarGraphQLDeferredTrait
      * @param mixed $typename
      * @param mixed $fieldname
      * @param mixed $object
+     * @phpstan-type Executor callable(): mixed
      * @return callable
      */
     public static function _xar_deferred_field_resolver($typename, $fieldname, $object = null): callable
