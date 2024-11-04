@@ -27,7 +27,8 @@ function roles_userapi_usermenu(array $args = [], $context = null)
     if (!xarUser::isLoggedIn()){
         // redirect user to their account page after login
         $redirecturl = xarController::URL('roles', 'user', 'account');
-        // @fixme where is this supposed to come from?
+        $defaultauthdata = xarMod::apiFunc('roles','user','getdefaultauthdata');
+        $defaultloginmodname = $defaultauthdata['defaultloginmodname'];
         xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform',
             array('redirecturl' => $redirecturl)), null, $context);
     }

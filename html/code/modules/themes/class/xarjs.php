@@ -952,6 +952,8 @@ class xarJS extends xarObject
         
         // Sort the libraries by descending version and origin
         if (!empty($candidates)) {
+            $tempversion = [];
+            $temporigin = [];
             foreach ($candidates as $key => $row) {
                 $tempversion[$key] = $row['version'];
                 $temporigin[$key]  = $row['origin'];
@@ -1014,6 +1016,8 @@ class xarJS extends xarObject
         
         // Sort the libraries by descending version and origin
         if (!empty($candidates)) {
+            $tempversion = [];
+            $temporigin = [];
             foreach ($candidates as $key => $row) {
                 $tempversion[$key] = $row['version'];
                 $temporigin[$key]  = $row['origin'];

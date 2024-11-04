@@ -32,7 +32,7 @@ function sql_220_14()
         $dbconn->Execute($query);        
         $dbconn->commit();
         
-    } catch (Exception $e) { throw($e);
+    } catch (Exception $e) {
         // Damn
         $dbconn->rollback();
         $data['success'] = false;

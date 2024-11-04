@@ -9,6 +9,10 @@
  * @link http://www.xaraya.info
  */
 
+if (!function_exists('apc_fetch')) {
+    return;
+}
+
 /**
  * Cache data using APC [http://pecl.php.net/apc/]
  * @deprecated

@@ -8,6 +8,11 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+
+if (!function_exists('mmcache_get')) {
+    return;
+}
+
 /**
  * Cache data using Turck MMCache [http://turck-mmcache.sourceforge.net/]
  * @deprecated

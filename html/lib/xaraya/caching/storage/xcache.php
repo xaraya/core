@@ -8,6 +8,11 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+
+if (!function_exists('xcache_isset')) {
+    return;
+}
+
 /**
  * Cache data using XCache [http://xcache.lighttpd.net/]
  * @deprecated

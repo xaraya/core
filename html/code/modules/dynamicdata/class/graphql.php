@@ -45,6 +45,7 @@ use Xaraya\Context\Context;
 
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
+use GraphQL\Type\SchemaConfig;
 use GraphQL\Error\DebugFlag;
 use GraphQL\Language\Parser;
 use GraphQL\Utils\AST;
@@ -126,6 +127,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      * Get GraphQL Schema with Query type and typeLoader
      * @param ?array<string> $extraTypes
      * @param bool $validate
+     * @phpstan-import-type SchemaConfigOptions from SchemaConfig
      * @return Schema
      */
     public static function get_schema($extraTypes = null, $validate = false)

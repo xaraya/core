@@ -8,6 +8,11 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+
+if (!class_exists('Memcache')) {
+    return;
+}
+
 /**
  * Cache data using the PHP Memcache extension [http://www.php.net/memcache]
  * and one or more memcached server(s) [http://www.danga.com/memcached/]

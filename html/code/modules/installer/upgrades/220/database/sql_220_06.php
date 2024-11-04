@@ -44,7 +44,7 @@ function sql_220_06()
         }
 
         $result->close();
-    } catch (Exception $e) { throw($e);
+    } catch (Exception $e) {
         // Damn
         $data['success'] = false;
         $data['reply'] = xarML("

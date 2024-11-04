@@ -57,6 +57,15 @@ class Installer extends xarObject
         return self::$instance;
     }
     
+    /**
+     * Summary of getModuleStack
+     * @return Stack
+     */
+    public function getModuleStack()
+    {
+        return $this->modulestack;
+    }
+
     public function checkformissing()
     {
         if ($this->dependencieschecked) {return true;}

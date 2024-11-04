@@ -26,7 +26,7 @@
  * @param   string $uname
  * @return  bool
  */
-function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname); }
+//function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname); }
 
 /**
  * xarMakeUser: create an entry in the database for a user
@@ -45,10 +45,10 @@ function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname
  * @param  int $authModule
  * @return boolean
  */
-function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule= 0)
-{
-    return xarRoles::makeUser($name,$uname,$email,$pass,$dateReg,$valCode,$state,$authModule);
-}
+//function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule= 0)
+//{
+//    return xarRoles::makeUser($name,$uname,$email,$pass,$dateReg,$valCode,$state,$authModule);
+//}
 
 /**
  * xarMakeRoleMemberByName: create a parent-child relationship in the database between two roles

@@ -32,7 +32,7 @@ class Base_FincludeBlockDisplay extends Base_FincludeBlock implements iBlock
             if (!file_exists($this->url)) {
                 $data['url'] = xarML('Warning: File to include does not exist. Check file definition in finclude block instance.');
             } else {
-                $data['url'] = implode(file($this->url), '');
+                $data['url'] = file_get_contents($this->url);
             }
         }
         return $data;

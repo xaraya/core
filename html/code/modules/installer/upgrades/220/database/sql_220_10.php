@@ -26,6 +26,7 @@ function sql_220_10()
         xarModVars::delete('dynamicdata','debugusers');
     } catch (Exception $e) {
         // Damn
+        $dbconn = xarDB::getConn();
         $dbconn->rollback();
         $data['success'] = false;
         $data['reply'] = xarML("

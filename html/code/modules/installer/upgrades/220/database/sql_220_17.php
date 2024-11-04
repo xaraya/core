@@ -61,7 +61,7 @@ INSERT INTO `xar_dynamic_configurations` VALUES(150, 'display_maximum_rows', 'Th
         ";
         $dbconn->Execute($data['sql']);
         $dbconn->commit();
-    } catch (Exception $e) { throw($e);
+    } catch (Exception $e) {
         // Damn
         $dbconn->rollback();
         $data['success'] = false;

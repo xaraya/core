@@ -177,6 +177,8 @@ function xarWebservicesMain()
  */
         case 'soap' :
             if (!extension_loaded('soap')) {
+                echo xarMLS::translate('Could not load SOAP server');
+                return;
             }
             if(xarMod::isAvailable('soapserver')) {
                 $server = xarMod::apiFunc('soapserver','user','initsoapserver');

@@ -286,7 +286,7 @@ function sql_230_07()
         }
         
         $dbconn->commit();     
-    } catch (Exception $e) { throw($e);
+    } catch (Exception $e) {
         // Damn
         $dbconn->rollback();
         $data['success'] = false;

@@ -16,10 +16,12 @@
  * Find the correct point of insertion for a node in Celko�s model for
  * hierarchical SQL Trees.
  *
- * @param string $args['inorout'] Where the new category should be: IN or OUT
- * @param string $args['rightorleft'] Where the new category should be: RIGHT or LEFT
- * @param int $args['right'] The right value of the reference category
- * @param int $args['left'] The left value of the reference category
+ * @param array<mixed> $args
+ * with
+ *     string $args['inorout'] Where the new category should be: IN or OUT
+ *     string $args['rightorleft'] Where the new category should be: RIGHT or LEFT
+ *     int $args['right'] The right value of the reference category
+ *     int $args['left'] The left value of the reference category
  * @return int Returns the point of insertion value
  * @throws BadParameterException Thrown if parameters contain invalid values
  */

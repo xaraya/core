@@ -97,6 +97,7 @@ trait xarGraphQLDeferredTrait
      * @param mixed $fieldname
      * @param mixed $object
      * @throws \Exception
+     * @phpstan-type Executor callable(): mixed
      * @return callable
      */
     public static function _xar_deferred_property_resolver($typename, $fieldname, $object): callable

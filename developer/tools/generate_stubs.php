@@ -122,7 +122,7 @@ use PhpParser\Error;
 use PhpParser\ParserFactory;
 use Symfony\Component\Finder\Finder;
 
-$parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+$parser = (new ParserFactory())->createForHostVersion();
 //$prettyPrinter = new PrettyPrinter\Standard;
 $prettyPrinter = new Stub();
 $finder = Finder::create()

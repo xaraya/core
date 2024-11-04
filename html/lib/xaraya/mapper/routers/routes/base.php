@@ -54,14 +54,14 @@ class xarRoute extends xarObject implements iRoute
     {
         // @todo these are actually never updated
         if (null !== $this->request) {
-            if ($this->request->moduleKey) {
-                $this->moduleKey   = $this->request->moduleKey;
+            if ($this->request->getModuleKey()) {
+                $this->moduleKey   = $this->request->getModuleKey();
             }
-            if ($this->request->typeKey) {
-                $this->typeKey       = $this->request->typeKey;
+            if ($this->request->getTypeKey()) {
+                $this->typeKey       = $this->request->getTypeKey();
             }
-            if ($this->request->funcKey) {
-                $this->funcKey       = $this->request->funcKey;
+            if ($this->request->getFunctionKey()) {
+                $this->funcKey       = $this->request->getFunctionKey();
             }
         }
 

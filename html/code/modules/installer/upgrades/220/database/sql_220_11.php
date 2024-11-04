@@ -25,6 +25,7 @@ function sql_220_11()
         xarConfigVars::set(null, 'Site.Core.SecureServerPort', 443);
     } catch (Exception $e) {
         // Damn
+        $dbconn = xarDB::getConn();
         $dbconn->rollback();
         $data['success'] = false;
         $data['reply'] = xarML("

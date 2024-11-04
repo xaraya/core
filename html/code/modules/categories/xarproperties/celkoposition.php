@@ -871,7 +871,7 @@ class CelkoPositionProperty extends DataProperty
         
         $this->setCelkoValues($itemid, $params[0]);
                 
-        return $parent_id;
+        //return $parent_id;
     }
     
 	/**

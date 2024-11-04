@@ -17,8 +17,10 @@
  * and passes the data to the template.
  *
  * @author Xaraya Development Team
- * @param int id registered module id
- * @param string return_url optional return URL after updating the hooks
+ * @param array<mixed> $args
+ * with
+ *     int id registered module id
+ *     string return_url optional return URL after updating the hooks
  * @return array<mixed>|string|void data for the template display
  */
 function modules_admin_modify(array $args = [], $context = null)

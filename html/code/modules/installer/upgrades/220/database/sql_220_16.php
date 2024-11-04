@@ -60,7 +60,7 @@ function sql_220_16()
 
         $dbconn->commit();
         
-    } catch (Exception $e) { throw($e);
+    } catch (Exception $e) {
         // Damn
         $dbconn->rollback();
         $data['success'] = false;

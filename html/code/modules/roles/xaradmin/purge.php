@@ -12,8 +12,10 @@
  */
 /**
  * purge users by status
- * @param 'status' the status we are purging
- * @param 'confirmation' confirmation that this item can be purge
+ * @param array<mixed> $args
+ * with
+ *     'status' the status we are purging
+ *     'confirmation' confirmation that this item can be purge
  * @todo kinda long, no?
  * @return array<mixed>|void data for the template display
  */

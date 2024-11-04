@@ -44,6 +44,7 @@ namespace Xaraya\Bridge\Routing;
 // use the FastRoute library here - see https://github.com/nikic/FastRoute
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use FastRoute\RouteParser;
 // use some Xaraya classes
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
@@ -880,6 +881,7 @@ class FastRouteBuildTest
 
     /**
      * Get available routes, optionally by handler method and/or handler class
+     * @phpstan-import-type ParsedRoutes from RouteParser
      * @return array<mixed>
      */
     public static function getRoutes(?string $handlerMethod = null, ?string $handlerClass = null)
@@ -902,7 +904,7 @@ class FastRouteBuildTest
             }
             // @checkme re-using routeParser here - why not call it the first time?
             [$route, $method, $handler] = $info;
-            $routeDatas = $parser->parse($route);
+            $routeDatas = (array) $parser->parse($route);
             // from longest to shortest routes here for optional variables
             foreach (array_reverse($routeDatas) as $routeData) {
                 $path = '';

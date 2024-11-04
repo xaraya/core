@@ -8,6 +8,10 @@ use Xaraya\DataObject\Generated\Sample;
 use Xaraya\DataObject\Generated\VirtualSample;
 use Brick\VarExporter\VarExporter;
 
+if (!class_exists('\Brick\VarExporter\VarExporter')) {
+    return;
+}
+
 // initialize bootstrap
 sys::init();
 // initialize caching
