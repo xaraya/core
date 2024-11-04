@@ -96,7 +96,7 @@ function getFiles($path)
             // is dir, is writable, not . or .. or _MTN, get files
             getFiles($item->getPathName());
         } elseif ($item->isFile() &&
-            strpos($item->current(), '.') !== 0 &&
+            !str_starts_with($item->current(), '.') &&
             $item->isWritable() &&
             in_array(pathinfo($item, PATHINFO_EXTENSION), $exts)) {
             // is file, valid extension, not beginning with . (hidden) and is writable, add file
@@ -134,7 +134,7 @@ function convertFile($path)
     // template specific conversions
     if ($ext == 'xt' || $ext == 'xd') {
         // wrap templates in <xar:template /> tags and add xml declarations
-        if (strpos($path, '/themes/') === false && strpos($path, '/pages/') === false) {
+        if (!str_contains($path, '/themes/') && !str_contains($path, '/pages/')) {
             $str = xarTemplates($str);
         }
         // replace BL tags
@@ -251,7 +251,7 @@ function xarFunctions($str)
 function xarPHP($str)
 {
     // Check if php file and xarTplPager is in use
-    if (stripos($str, 'xarTplPager') !== false && strpos($str, '<?php') !== false) {
+    if (stripos($str, 'xarTplPager') !== false && str_contains($str, '<?php')) {
         // Check if pager class is already included
         $pgr_re = '!sys::import\(\s*["|\']+modules\.base\.class\.pager["|\']+\s*\);!';
         if (!preg_match($pgr_re, $str)) {
@@ -302,7 +302,7 @@ function xarTemplates($str)
          . "<xar:template xmlns:xar=\"http://xaraya.com/2004/blocklayout\">\n"
          . $str;
     // add closing template tag
-    if (strpos($str, '</xar:template>') === false) {
+    if (!str_contains($str, '</xar:template>')) {
         $str .= "\n</xar:template>";
     }
     return $str;
@@ -325,7 +325,7 @@ function xarBLTags($str)
     $aruba = ['<xar:set name="$', '<xar:base-include-javascript', '<xar:base-render-javascript', '<xar:additional-styles', ' && '];
     $jamaica = ['<xar:set name="', '<xar:javascript', '<xar:place-javascript', '<xar:place-css', ' and '];
     // Only remove <xar:mlstring> tags in templates with no <xar:ml>...</xar:ml> constructs
-    if (strpos($str, '<xar:ml>') === false) {
+    if (!str_contains($str, '<xar:ml>')) {
         $aruba += ['<xar:mlstring>', '</xar:mlstring>'];
         $jamaica += ['', ''];
     }

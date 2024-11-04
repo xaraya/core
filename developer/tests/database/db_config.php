@@ -25,7 +25,7 @@ function get_xaraya_config()
             $userName = base64_decode($userName);
             $password  = base64_decode($password);
         }
-    } catch(VariableNotFoundException $e) {
+    } catch(VariableNotFoundException) {
         // doesnt matter, we assume not encoded
     }
 

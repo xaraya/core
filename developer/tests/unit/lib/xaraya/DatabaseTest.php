@@ -7,10 +7,9 @@ use Xaraya\Database\ExternalDatabase;
  * We need to run each test in a separate process here to switch databases
  * and disable preserving global state to avoid phpunit serialize issues
  * https://docs.phpunit.de/en/9.6/annotations.html#appendixes-annotations-preserveglobalstate
- *
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
  */
+#[\PHPUnit\Framework\Attributes\PreserveGlobalState(false)]
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 final class DatabaseTest extends TestCase
 {
     public static function setUpBeforeClass(): void
@@ -93,7 +92,7 @@ final class DatabaseTest extends TestCase
         // use connection to other database
         $conn = xarDB::getConn($dbConnIndex);
         $expected = 'PdoSQLiteConnection';
-        $this->assertEquals($expected, get_class($conn));
+        $this->assertEquals($expected, $conn::class);
         $dbInfo = $conn->getDatabaseInfo();
         $tables = $dbInfo->getTables();
         $expected = 0;
@@ -189,7 +188,7 @@ final class DatabaseTest extends TestCase
         // use native methods on connection and succeed
         $expected = 'Doctrine\DBAL\Driver\SQLite3\Driver';
         $driver = $conn->getDriver();
-        $this->assertEquals($expected, get_class($driver));
+        $this->assertEquals($expected, $driver::class);
 
         // try static method on external database and fail
         $this->expectException(BadMethodCallException::class);

@@ -28,9 +28,7 @@ final class BridgeRoutingTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getRequestProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRequestProvider')]
     public function testDispatchRequest(string $method = 'GET', string $path = '/', array $query = [], string $output = ''): void
     {
         $bridge = new FastRouteBridge();

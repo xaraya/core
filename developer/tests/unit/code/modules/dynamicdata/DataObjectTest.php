@@ -93,9 +93,7 @@ final class DataObjectTest extends TestCase
         $this->assertEquals($expected, xarSession::getAnonId());
     }
 
-    /**
-     * @depends testPrepareOutput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testPrepareOutput')]
     public function testShowView(): void
     {
         $params = ['name' => 'sample', 'fieldlist' => null];
@@ -110,9 +108,7 @@ final class DataObjectTest extends TestCase
         $this->assertEquals($expected, strlen($output));
     }
 
-    /**
-     * @depends testPrepareOutput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testPrepareOutput')]
     public function testObjectInterface(): void
     {
         $params = ['object' => 'sample'];

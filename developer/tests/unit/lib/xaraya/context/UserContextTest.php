@@ -8,9 +8,8 @@ use Xaraya\Sessions\VirtualSession;
 
 /**
  * We need to run each test in a separate process here to avoid session issues
- *
- * @runTestsInSeparateProcesses
  */
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 final class UserContextTest extends TestCase
 {
     protected function setUp(): void
@@ -53,7 +52,7 @@ final class UserContextTest extends TestCase
         $userId = $context->getUserId();
         $this->assertEquals($expected, $userId);
         $expected = VirtualSession::class;
-        $this->assertEquals($expected, get_class($context->getSession()));
+        $this->assertEquals($expected, $context->getSession()::class);
 
         xarSystemVars::set(sys::CONFIG, 'Auth.RemoteUser', null);
         xarCoreCache::delCached('Testing:' . sys::CONFIG, 'Auth.RemoteUser');
@@ -75,7 +74,7 @@ final class UserContextTest extends TestCase
         $userId = $context->getUserId();
         $this->assertEquals($expected, $userId);
         $expected = VirtualSession::class;
-        $this->assertEquals($expected, get_class($context->getSession()));
+        $this->assertEquals($expected, $context->getSession()::class);
 
         //xarSystemVars::set(sys::CONFIG, 'Auth.AuthToken', null);
         xarCoreCache::delCached('Testing:' . sys::CONFIG, 'Auth.AuthToken');
@@ -131,7 +130,7 @@ final class UserContextTest extends TestCase
         $userId = $context->getUserId();
         $this->assertEquals($expected, $userId);
         $expected = VirtualSession::class;
-        $this->assertEquals($expected, get_class($context->getSession()));
+        $this->assertEquals($expected, $context->getSession()::class);
 
         // verify that we have the same sessionId
         $expected = $sessionInfo['id'];

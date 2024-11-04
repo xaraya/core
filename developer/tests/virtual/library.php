@@ -61,7 +61,7 @@ echo var_export($items, true) . "\n";
 //echo "Connection: " . $booklist->dbConnIndex . "\n";
 //$dbName = xarDB::getConn($booklist->dbConnIndex)->getDatabaseInfo()->getName();
 //echo "Database: $dbName\n";
-echo "Datastore: " . get_class($booklist->datastore) . "\n";
+echo "Datastore: " . $booklist->datastore::class . "\n";
 
 //$bookitem = new LibraryObject($descriptor);
 $bookitem = VirtualObjectFactory::getObject(['name' => 'lb_' . $table]);
@@ -71,7 +71,7 @@ $bookitem = VirtualObjectFactory::getObject(['name' => 'lb_' . $table]);
 
 $itemid = $bookitem->getItem(['itemid' => 2]);
 echo var_export($itemid, true) . "\n";
-echo "Datastore: " . get_class($bookitem->datastore) . "\n";
+echo "Datastore: " . $bookitem->datastore::class . "\n";
 $values = $bookitem->getFieldValues();
 echo var_export($values, true) . "\n";
 // fix data object loader to retrieve linked object from external too!?

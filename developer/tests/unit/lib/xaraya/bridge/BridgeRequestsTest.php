@@ -120,9 +120,7 @@ final class BridgeRequestsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getDataObjectProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDataObjectProvider')]
     public function testParseDataObjectPath(
         string $path = '/',
         array $query = [],
@@ -134,9 +132,7 @@ final class BridgeRequestsTest extends TestCase
         $this->assertEquals($expected, DataObjectRequest::parseDataObjectPath($path, $query, $prefix));
     }
 
-    /**
-     * @dataProvider getDataObjectProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDataObjectProvider')]
     public function testBuildDataObjectPath(
         string $path = '/',
         array $extra = [],
@@ -178,9 +174,7 @@ final class BridgeRequestsTest extends TestCase
         return dirname(__DIR__, 3) . '/code/modules/dynamicdata/fixtures/' . $name;
     }
 
-    /**
-     * @depends testPrepareOutput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testPrepareOutput')]
     public function testRunDataObjectGuiRequest()
     {
         // should be the same output as DataObjectTest::testObjectInterface()

@@ -117,7 +117,7 @@ class GraphQLTest extends TestCase
     /**
      * Data provider for testQueryFiles
      */
-    public function provideQueryFiles()
+    public static function provideQueryFiles()
     {
         return [
             "Get schema" => [],
@@ -130,8 +130,8 @@ class GraphQLTest extends TestCase
 
     /**
      * Test case for query files
-     * @dataProvider provideQueryFiles
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideQueryFiles')]
     public function testQueryFiles($queryFile = "", $bodyFile = "", $resultFile = "", $authToken = false)
     {
         // TODO: implement

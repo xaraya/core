@@ -4,9 +4,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * We need to run each test in a separate process here to avoid session issues
- *
- * @runTestsInSeparateProcesses
  */
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 final class EndpointTest extends TestCase
 {
     public function testGqlGet(): void

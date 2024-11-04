@@ -107,7 +107,7 @@ class RestAPITest extends TestCase
     /**
      * Data provider for testRequestFiles
      */
-    public function provideRequestFiles()
+    public static function provideRequestFiles()
     {
         return [
             // "Get schema" => [],
@@ -120,8 +120,8 @@ class RestAPITest extends TestCase
 
     /**
      * Test case for request files
-     * @dataProvider provideRequestFiles
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideRequestFiles')]
     public function testRequestFiles($operationId = "", $requestFile = "", $resultFile = "", $authToken = false)
     {
         $operation = self::$operations[$operationId];

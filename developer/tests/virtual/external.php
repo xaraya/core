@@ -32,7 +32,7 @@ function get_xaraya_config()
             $userName = base64_decode($userName);
             $password  = base64_decode($password);
         }
-    } catch(VariableNotFoundException $e) {
+    } catch(VariableNotFoundException) {
         // doesnt matter, we assume not encoded
     }
 
@@ -68,14 +68,14 @@ function get_descriptor($external = null)
 
 function get_objectitem($external = null)
 {
-    $descriptor = get_descriptor($external);
+    $descriptor = get_descriptor();
     $objectitem = new DataObject($descriptor);
     return $objectitem;
 }
 
 function get_objectlist($external = null)
 {
-    $descriptor = get_descriptor($external);
+    $descriptor = get_descriptor();
     $objectlist = new DataObjectList($descriptor);
     return $objectlist;
 }
@@ -83,7 +83,7 @@ function get_objectlist($external = null)
 function test_create_item($external = null)
 {
     $objectitem = get_objectitem($external);
-    echo "Datastore: " . get_class($objectitem->datastore) . "\n";
+    echo "Datastore: " . $objectitem->datastore::class . "\n";
     $data = [
         'type' => 'test',
         'cache_key' => 'test',
@@ -99,10 +99,10 @@ function test_create_item($external = null)
     return $itemid;
 }
 
-function test_update_item($external = null, $itemid)
+function test_update_item($itemid, $external = null)
 {
     $objectitem = get_objectitem($external);
-    echo "Datastore: " . get_class($objectitem->datastore) . "\n";
+    echo "Datastore: " . $objectitem->datastore::class . "\n";
     $itemid = $objectitem->getItem(['itemid' => $itemid]);
     $data = [
         'data' => 'goodbye',
@@ -114,10 +114,10 @@ function test_update_item($external = null, $itemid)
     return $itemid;
 }
 
-function test_delete_item($external = null, $itemid)
+function test_delete_item($itemid, $external = null)
 {
     $objectitem = get_objectitem($external);
-    echo "Datastore: " . get_class($objectitem->datastore) . "\n";
+    echo "Datastore: " . $objectitem->datastore::class . "\n";
     // @checkme avoid last stand protection in deleteItem()
     $objectitem->objectid = time();
     $itemid = $objectitem->deleteItem(['itemid' => $itemid]);
@@ -125,10 +125,10 @@ function test_delete_item($external = null, $itemid)
     return $itemid;
 }
 
-function test_get_item($external = null, $itemid)
+function test_get_item($itemid, $external = null)
 {
     $objectitem = get_objectitem($external);
-    echo "Datastore: " . get_class($objectitem->datastore) . "\n";
+    echo "Datastore: " . $objectitem->datastore::class . "\n";
     $itemid = $objectitem->getItem(['itemid' => $itemid]);
     $item = $objectitem->getFieldValues();
     return $item;
@@ -137,7 +137,7 @@ function test_get_item($external = null, $itemid)
 function test_get_items($external = null)
 {
     $objectlist = get_objectlist($external);
-    echo "Datastore: " . get_class($objectlist->datastore) . "\n";
+    echo "Datastore: " . $objectlist->datastore::class . "\n";
     //$items = $objectlist->getItems(['where' => ['type eq "test"'], 'fieldlist' => ['type', 'cache_key', 'time', 'data']]);
     $items = $objectlist->getItems(['where' => ["type = 'test'"], 'fieldlist' => ['type', 'cache_key', 'time', 'data']]);
     foreach ($items as $itemid => $item) {
@@ -149,7 +149,7 @@ function test_get_items($external = null)
 function test_count_items($external = null)
 {
     $objectlist = get_objectlist($external);
-    echo "Datastore: " . get_class($objectlist->datastore) . "\n";
+    echo "Datastore: " . $objectlist->datastore::class . "\n";
     //$items = $objectlist->getItems(['where' => ['type eq "test"'], 'fieldlist' => ['type', 'cache_key', 'time', 'data']]);
     $numitems = $objectlist->countItems(['where' => ["type = 'test'"]]);
     echo "Count: $numitems\n";
@@ -158,7 +158,7 @@ function test_count_items($external = null)
 
 function test_descriptor($external = null)
 {
-    $descriptor = get_descriptor($external);
+    $descriptor = get_descriptor();
     echo var_export($descriptor->get('propertyargs'), true);
 }
 
@@ -169,13 +169,13 @@ foreach ($drivers as $driver) {
     echo "Itemids: " . implode(", ", $itemids) . "\n";
     $itemid = array_shift($itemids);
     echo "Deleting $itemid\n";
-    $itemid = test_delete_item($driver, $itemid);
+    $itemid = test_delete_item($itemid, $driver);
     echo "Deleted $itemid\n";
     $itemid = test_create_item($driver);
-    $item = test_get_item($driver, $itemid);
+    $item = test_get_item($itemid, $driver);
     echo "Item: " . var_export($item, true) . "\n";
-    $itemid = test_update_item($driver, $itemid);
-    $item = test_get_item($driver, $itemid);
+    $itemid = test_update_item($itemid, $driver);
+    $item = test_get_item($itemid, $driver);
     echo "Item: " . var_export($item, true) . "\n";
     test_count_items($driver);
 }

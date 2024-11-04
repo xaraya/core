@@ -62,12 +62,12 @@ function check_dbal_columns($datastore)
             $info['typename'] = \Doctrine\DBAL\Types\Type::lookupName($info['type']);
             $types[$info['typename']] ??= 0;
             $types[$info['typename']] += 1;
-            $info['type'] = get_class($info['type']);
+            $info['type'] = $info['type']::class;
             $dump[$name][] = $info;
         }
     }
     echo json_encode($dump, JSON_PRETTY_PRINT) . "\n";
-    echo get_class($datastore->getConnection()->getDriver()) . "\n";
+    echo $datastore->getConnection()->getDriver()::class . "\n";
     echo json_encode($types, JSON_PRETTY_PRINT) . "\n";
     //echo implode(', ', $table->getPrimaryKey()->getColumns());
     //$datastore->object = (object) ['properties' => [1,2,3], 'primary' => 'id', 'name' => 'eventsystem'];

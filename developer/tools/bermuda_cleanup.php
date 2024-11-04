@@ -14,7 +14,7 @@
  * to avoid Reflection error finding the file for that function, when updating core files
  *
  */
-require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
+require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 //use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
 
 
@@ -224,7 +224,7 @@ class XarayaCodeAnalyzer
         $lines = array_slice(explode("\n", $file->getSource()), $line - 1);
         //echo implode("\n", $lines);
         foreach ($lines as $line) {
-            if (strpos($line, ' return ') !== false) {
+            if (str_contains($line, ' return ')) {
                 return $line;
             }
         }
@@ -294,8 +294,8 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
 
     public function load_core_files()
     {
-        $inDir = dirname(dirname(__DIR__)) . '/html/lib/xaraya';
-        $extraFiles = [dirname(dirname(__DIR__)) . '/html/bootstrap.php'];
+        $inDir = dirname(__DIR__, 2) . '/html/lib/xaraya';
+        $extraFiles = [dirname(__DIR__, 2) . '/html/bootstrap.php'];
         $this->load_project($inDir, $extraFiles);
         $this->parse_project();
     }
@@ -592,7 +592,7 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
                 continue;
             }
             // actual namespace class
-            if (strpos($class['parent'], '\\', 1) !== false) {
+            if (str_contains(substr($class['parent'], 1), '\\')) {
                 $this->log('Other: ' . $class['name'] . ' - ' . $class['parent'] . ' ' . $class['file'], true);
                 $node = $this->classroot->get($class['parent']);
                 $node->add($class['node']);
@@ -675,15 +675,15 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
                 if (!preg_match_all($pattern, $contents, $matches)) {
                     continue;
                 }
-                if (strpos($file->getPathName(), '/legacy/') !== false) {
+                if (str_contains($file->getPathName(), '/legacy/')) {
                     $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
                     continue;
                 }
-                if (strpos($file->getPathName(), 'xarayatesting/tests/core/') !== false) {
+                if (str_contains($file->getPathName(), 'xarayatesting/tests/core/')) {
                     $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
                     continue;
                 }
-                if (strpos($file->getPathName(), '/vendor/composer/') !== false) {
+                if (str_contains($file->getPathName(), '/vendor/composer/')) {
                     $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
                     continue;
                 }
@@ -699,7 +699,7 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
             $this->log('Set $fixMe = true; to fix', true);
             return;
         }
-        if (strpos($inDir, '/lib/xaraya/') !== false) {
+        if (str_contains($inDir, '/lib/xaraya/')) {
             $this->log('Sorry, this cannot be used to clean lib/xaraya', true);
             return;
         }
@@ -813,8 +813,8 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
 
 $refresh = false;
 if ($refresh || !file_exists('core_functions.json') || !file_exists('core_constants.json') || !file_exists('core_classes.json')) {
-    $inDir = dirname(dirname(__DIR__)) . '/html/lib/xaraya';
-    $extraFiles = [dirname(dirname(__DIR__)) . '/html/bootstrap.php'];
+    $inDir = dirname(__DIR__, 2) . '/html/lib/xaraya';
+    $extraFiles = [dirname(__DIR__, 2) . '/html/bootstrap.php'];
     $analyzer = new XarayaCoreAnalyzer();
     $analyzer->verbose = true;
     $analyzer->parse_core_files($inDir, $extraFiles);
@@ -826,7 +826,7 @@ if ($refresh || !file_exists('core_functions.json') || !file_exists('core_consta
  */
 $fixMe = false;
 //$inDir = dirname(dirname(__DIR__)) . '/html/lib/';  // don't fixMe this - use only for verification
-$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
+$inDir = dirname(__DIR__, 2) . '/html/code/modules/';
 //$inDir = dirname(dirname(__DIR__)) . '/html/code/';
 //$inDir = dirname(dirname(__DIR__)).'/html/themes/';
 //$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/';

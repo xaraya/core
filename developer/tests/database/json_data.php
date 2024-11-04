@@ -33,7 +33,7 @@ function create_json_table($conn, $name = 'xar_dynamic_json')
         //$sql = $platform->getCreateTableSQL($table, $platform::CREATE_INDEXES | $platform::CREATE_FOREIGNKEYS);
         $sql = $platform->getCreateTableSQL($table);
         print_r($sql);
-    } catch (\Doctrine\DBAL\Schema\Exception\TableDoesNotExist $e) {
+    } catch (\Doctrine\DBAL\Schema\Exception\TableDoesNotExist) {
         $schema = new \Doctrine\DBAL\Schema\Schema();
         $myTable = $schema->createTable($name);
         $myTable->addColumn("id", "integer", ["unsigned" => true, "autoincrement" => true]);
@@ -295,7 +295,7 @@ function copy_xaraya_database($dbName, $dbConnIndex, $client, $drop = true)
                             $value = array_filter($value);
                         }
                         $items[$key][$field] = $value;
-                    } catch (Throwable $e) {
+                    } catch (Throwable) {
                     }
                 }
             }
