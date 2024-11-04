@@ -7,9 +7,9 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 chdir(dirname(__DIR__, 3) . '/html');
 
 // use some routing bridge
-use Xaraya\Bridge\Routing\FastRouteBridge;
-use Xaraya\Bridge\Routing\FastRouteApiBridge;
-use Xaraya\Bridge\Routing\FastRouteStaticBridge;
+use Xaraya\Bridge\Routing\RoutingBridge;
+use Xaraya\Bridge\Routing\RoutingApiBridge;
+use Xaraya\Bridge\Routing\RoutingStaticBridge;
 use Xaraya\Bridge\Routing\FastRouteBuildTest;
 
 sys::init();
@@ -33,9 +33,9 @@ if (php_sapi_name() === 'cli') {
 // add route collection to your own dispatcher
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     // ...
-    // FastRouteBridge::addRouteCollection($r);
+    // RoutingBridge::addRouteCollection($r);
     $r->addGroup('/xaraya', function (FastRoute\RouteCollector $r) {
-        FastRouteBridge::addRouteCollection($r);
+        RoutingBridge::addRouteCollection($r);
     });
 });
 $routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
@@ -48,7 +48,7 @@ if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
  */
 
 // or direct use of simple route dispatcher
-//$bridge = new FastRouteBridge();
+//$bridge = new RoutingBridge();
 //[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
 //echo $result;
 //echo xarTpl::renderPage($result);
@@ -56,12 +56,12 @@ if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
 
 // or direct use of simple route dispatcher
 $wrapPage = false;
-$bridge = new FastRouteBridge($wrapPage);
+$bridge = new RoutingBridge($wrapPage);
 [$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD') ?? 'GET', xarServer::getVar('PATH_INFO') ?? '/');
 $bridge->output($result, $context);
 
 /**
-$dispatcher = FastRouteBridge::getSimpleDispatcher();
+$dispatcher = RoutingBridge::getSimpleDispatcher();
 //$routes = FastRouteBuildTest::getRoutes();
 //echo var_export($routes, true);
 $params = ['object' => 'sample', 'method' => 'update', 'itemid' => 4];

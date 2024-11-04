@@ -126,29 +126,15 @@ $ composer require nikic/fastroute
 Usage:
 ```php
 // use some routing bridge
-use Xaraya\Bridge\Routing\FastRouteBridge;
+use Xaraya\Bridge\Routing\RoutingBridge;
 use xarServer;
 
-// add route collection to your own dispatcher
-// @todo use FastRoute::recommendedSettings() in v2.x
-// $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-//     $r->addGroup('/mysite', function (FastRoute\RouteCollector $r) {
-//         FastRouteBridge::addRouteCollection($r);
-//     });
-// });
-// $routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
-// if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
-//     $handler = $routeInfo[1];
-//     $vars = $routeInfo[2];
-//     // ... call $handler with $vars
-// }
+// get a simple router to work with yourself, possibly in a group
+// $router = RoutingBridge::getSimpleRouter('/mysite');
+// [$handler, $params] = $router->match(xarServer::getVar('PATH_INFO') ?? '/', xarServer::getVar('REQUEST_METHOD'));
 
-// or get a route dispatcher to work with yourself, possibly in a group
-// $dispatcher = FastRouteBridge::getSimpleDispatcher('/mysite');
-// $routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
-
-// or let the route dispatcher handle the request itself and return the result
-$bridge = new FastRouteBridge();
+// or let the routing bridge handle the request itself and return the result
+$bridge = new RoutingBridge();
 [$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/', '/mysite');
 $bridge->output($result, $context);
 

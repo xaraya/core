@@ -784,7 +784,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             // default typename
             '*' => [
                 // default fieldname
-                '*' => Executor::defaultFieldResolver(...),
+                '*' => [Executor::class, 'defaultFieldResolver'],
             ],
         ];
         static $type_checked = [];

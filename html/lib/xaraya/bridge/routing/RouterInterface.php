@@ -1,0 +1,41 @@
+<?php
+/**
+ * Common router interface for FastRouter and Symfony Routing
+ */
+
+namespace Xaraya\Routing;
+
+/**
+ * Common router interface for FastRouter and Symfony Routing
+ */
+interface RouterInterface
+{
+    /**
+     * Summary of __construct
+     * @param callable $callable get array of name => [method(s), path, handler, options = []]
+     * @param string $cacheFile leave empty to disable router cache
+     */
+    public function __construct($callable, $cacheFile = '');
+
+    /**
+     * Match path with optional method
+     * @param string $path
+     * @param ?string $method
+     * @return array<mixed> array of [handler, path params] or [null, ['status' => 40x]] if not found
+     */
+    public function match($path, $method = null);
+
+    /**
+     * Generate URL path for route name and params
+     * @param string $name
+     * @param array<mixed> $params
+     * @return string|null
+     */
+    public function generate($name, $params);
+
+    /**
+     * Get list of loaded routes
+     * @return array<mixed>
+     */
+    public function getRoutes();
+}

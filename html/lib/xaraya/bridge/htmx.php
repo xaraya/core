@@ -16,7 +16,7 @@ class HtmxHandler
     protected $target;
     /** @var string */
     protected $script;
-    /** @var FastRouteBridge */
+    /** @var RoutingBridge */
     protected $bridge;
 
     public function __construct(string $prefix = '')
@@ -24,7 +24,7 @@ class HtmxHandler
         $this->prefix = $prefix;
         $this->target = 'main-module-output';
         $this->script = '<script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>';
-        $this->bridge = new FastRouteBridge();
+        $this->bridge = new RoutingBridge();
     }
 
     /**

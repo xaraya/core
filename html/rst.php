@@ -12,15 +12,17 @@
  * require_once dirname(__DIR__).'/vendor/autoload.php';
  * ...
  *
- * https://github.com/nikic/FastRoute
+ * @see https://github.com/nikic/FastRoute
+ * @see https://github.com/symfony/routing
  * @uses \sys::autoload()
  */
-require_once dirname(__DIR__).'/vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-// use the FastRoute library here
-//use FastRoute\Dispatcher;
-//use FastRoute\RouteCollector;
-//use function FastRoute\simpleDispatcher;
+// use the nikic FastRoute library here
+use Xaraya\Routing\FastRouter;
+// use the Symfony Routing component here
+use Xaraya\Routing\Routing;
+use Xaraya\Routing\RouterInterface;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     DataObjectRESTHandler::sendCORSOptions();
@@ -64,66 +66,65 @@ function send_openapi($restHandler)
 }
 
 /**
- * Summary of get_dispatcher
+ * Summary of get_router
  * @param mixed $restHandler
- * @return FastRoute\Dispatcher
+ * @return RouterInterface
  */
-function get_dispatcher($restHandler)
+function get_router($restHandler)
 {
+    //$cacheFile = sys::varpath() . '/cache/api/restapi_fastroute.php';
     // @todo move away from static methods for context
-    // @todo use FastRoute::recommendedSettings() in v2.x
-    $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) use ($restHandler) {
-        $r->addGroup('/v1', function (FastRoute\RouteCollector $r) use ($restHandler) {
-            $restHandler::registerRoutes($r, $restHandler);
-        });
-    });
-    return $dispatcher;
+    $router = new FastRouter($restHandler::getRoutes(...));
+    //$cacheFile = sys::varpath() . '/cache/api/url_matching_routes.php';
+    // @todo move away from static methods for context
+    //$router = new Routing($restHandler::getRoutes(...));
+    return $router;
 }
 
 /**
- * Summary of dispatch_request
+ * Summary of handle_request
  * @param string $method
  * @param string $path
- * @param FastRoute\Dispatcher $dispatcher
+ * @param RouterInterface $router
  * @param mixed $restHandler
  * @return void
  */
-function dispatch_request($method, $path, $dispatcher, $restHandler)
+function handle_request($method, $path, $router, $restHandler)
 {
     // $restHandler::setTimer('register');
-    $routeInfo = $dispatcher->dispatch($method, $path);
-    // $restHandler::setTimer('dispatch');
-    switch ($routeInfo[0]) {
-        case FastRoute\Dispatcher::NOT_FOUND:
-            // ... 404 Not Found
-            http_response_code(404);
-            break;
-        case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-            $allowedMethods = $routeInfo[1];
-            // ... 405 Method Not Allowed
-            header('Allow: ' . implode(', ', $allowedMethods));
-            http_response_code(405);
-            break;
-        case FastRoute\Dispatcher::FOUND:
-            $handler = $routeInfo[1];
-            $vars = $routeInfo[2];
-            // ... call $handler with $vars
-            try {
-                [$result, $context] = $restHandler::callHandler($handler, $vars);
-                $restHandler::output($result, 200, $context);
-            } catch (UnauthorizedOperationException $e) {
-                $restHandler::output('This operation is unauthorized, please authenticate.', 401);
-            } catch (ForbiddenOperationException $e) {
-                $restHandler::output('This operation is forbidden.', 403);
-            } catch (Throwable $e) {
-                $result = "Exception: " . $e->getMessage();
-                if ($e->getPrevious() !== null) {
-                    $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
+    [$handler, $vars] = $router->match($path, $method);
+    if (empty($handler)) {
+        switch ((string) $vars['status']) {
+            case '404':
+                // ... 404 Not Found
+                http_response_code(404);
+                break;
+            case '405':
+                // ... 405 Method Not Allowed
+                if (!empty($vars['methods'])) {
+                    header('Allow: ' . implode(', ', $vars['methods']));
                 }
-                $result .= "\nTrace:\n" . $e->getTraceAsString();
-                $restHandler::output($result, 422);
-            }
-            break;
+                http_response_code(405);
+                break;
+        }
+        return;
+    }
+    // $restHandler::setTimer('dispatch');
+    // ... call $handler with $vars
+    try {
+        [$result, $context] = $restHandler::callHandler($handler, $vars);
+        $restHandler::output($result, 200, $context);
+    } catch (UnauthorizedOperationException $e) {
+        $restHandler::output('This operation is unauthorized, please authenticate.', 401);
+    } catch (ForbiddenOperationException $e) {
+        $restHandler::output('This operation is forbidden.', 403);
+    } catch (Throwable $e) {
+        $result = "Exception: " . $e->getMessage();
+        if ($e->getPrevious() !== null) {
+            $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
+        }
+        $result .= "\nTrace:\n" . $e->getTraceAsString();
+        $restHandler::output($result, 422);
     }
 }
 
@@ -139,8 +140,8 @@ function try_handler($restHandler)
     } else {
         // $restHandler::$enableTimer = true;
         // $restHandler::setTimer('start');
-        $dispatcher = get_dispatcher($restHandler);
-        dispatch_request(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO'), $dispatcher, $restHandler);
+        $router = get_router($restHandler);
+        handle_request(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO'), $router, $restHandler);
     }
 }
 

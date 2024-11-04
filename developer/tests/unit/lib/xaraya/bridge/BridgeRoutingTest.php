@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Xaraya\Bridge\Routing\FastRouteBridge;
+use Xaraya\Bridge\Routing\RoutingBridge;
 use Xaraya\Context\SessionContext;
 use Xaraya\Requests\RequestHandler;
 
@@ -31,7 +31,7 @@ final class BridgeRoutingTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getRequestProvider')]
     public function testDispatchRequest(string $method = 'GET', string $path = '/', array $query = [], string $output = ''): void
     {
-        $bridge = new FastRouteBridge();
+        $bridge = new RoutingBridge();
         $expected = $output;
         $_GET = $query;
         [$result, $context] = $bridge->dispatchRequest($method, $path);

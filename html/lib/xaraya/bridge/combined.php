@@ -1,6 +1,6 @@
 <?php
 /**
- * Make use of the FastRouteBridge in routing.php for an all-in-one PSR-15 middleware + requesthandler
+ * Make use of the RoutingBridge in routing.php for an all-in-one PSR-15 middleware + requesthandler
  *
  * Note: see also lib/xaraya/bridge/reactphp.php for an example with ReactPHP (not fully functional with links)
  *
@@ -45,58 +45,50 @@ use xarController;
 use sys;
 
 sys::import('xaraya.bridge.routing');
-use Xaraya\Bridge\Routing\FastRouteBridge;
-use Xaraya\Bridge\Routing\FastRouteApiBridge;
-use Xaraya\Bridge\Routing\TrackRouteCollector;
+use Xaraya\Bridge\Routing\RoutingBridge;
+use Xaraya\Bridge\Routing\RoutingApiBridge;
+use Xaraya\Routing\RouterInterface;
+use Xaraya\Routing\FastRouter;
+use Xaraya\Routing\Routing;
 use DataObjectRESTHandler;
-// @checkme rename FastRoute dispatcher as router here to avoid confusion with PSR-15 naming
-use FastRoute\Dispatcher as FastRouter;
-use FastRoute\RouteCollector;
-
-// @todo use FastRoute::recommendedSettings() in v2.x
-use function FastRoute\simpleDispatcher;
 
 class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
 {
     /** @var ResponseUtil */
     protected $responseUtil;
-    /** @var FastRouter */
+    /** @var RouterInterface */
     protected $router;
-    /** @var FastRouteBridge */
+    /** @var RoutingBridge */
     protected $bridge;
-    /** @var FastRouteApiBridge */
+    /** @var RoutingApiBridge */
     protected $apibridge;
 
     /**
      * Initialize the middleware with response factory (or container, ...) and options
      * @param array<string, mixed> $options
      */
-    public function __construct(?ResponseFactoryInterface $responseFactory = null, ?FastRouter $router = null, array $options = [])
+    public function __construct(?ResponseFactoryInterface $responseFactory = null, ?RouterInterface $router = null, array $options = [])
     {
         $this->responseUtil = new ResponseUtil($responseFactory, $options);
-        $this->bridge = new FastRouteBridge();
+        $this->bridge = new RoutingBridge();
         if (empty($router)) {
             $router = $this->getRouter();
         }
         $this->setRouter($router);
     }
 
-    public function getRouter(): FastRouter
+    public function getRouter(): RouterInterface
     {
-        // override standard routeCollector here
-        $router = simpleDispatcher(function (RouteCollector $r) {
-            $r->addGroup('/api', function (RouteCollector $r) {
-                // @todo do we want to instantiate apibridge too?
-                FastRouteApiBridge::addRouteCollection($r);
-            });
-            $this->bridge->addRouteCollection($r);
-        }, [
-            'routeCollector' => TrackRouteCollector::class,
-        ]);
+        // get normal routes
+        $routes = $this->bridge::getRoutes();
+        // add api routes (with default /api prefix)
+        $routes = array_replace($routes, RoutingApiBridge::getRoutes());
+        // get router for all routes
+        $router = $this->bridge->getRouter($routes);
         return $router;
     }
 
-    public function setRouter(FastRouter $router): void
+    public function setRouter(RouterInterface $router): void
     {
         $this->router = $router;
     }
@@ -128,7 +120,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
     }
 
     /**
-     * See FastRouteBridge::getHandler()
+     * See RoutingBridge::getHandler()
      * @param mixed $handler
      * @return mixed
      */
@@ -149,81 +141,79 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
         // @checkme see https://github.com/middlewares/fast-route/blob/master/src/FastRoute.php on using rawurldecode() here
         $path = $request->getUri()->getPath();
 
-        // Let FastRoute identify the right handler and match the path variables
-        $routeInfo = $this->router->dispatch($method, $path);
-        switch ($routeInfo[0]) {
-            case FastRouter::NOT_FOUND:
-                // ... 404 Not Found - pass along to the next handler or return 404 error here
-                if (!empty($next)) {
-                    return $next->handle($request);
-                }
-                return $this->responseUtil->createNotFoundResponse($path);
+        // Let Router identify the right handler and match the path variables
+        [$handler, $vars] = $this->router->match($path, $method);
+        if (empty($handler)) {
+            switch ((string) $vars['status']) {
+                case '404':
+                    // ... 404 Not Found - pass along to the next handler or return 404 error here
+                    if (!empty($next)) {
+                        return $next->handle($request);
+                    }
+                    return $this->responseUtil->createNotFoundResponse($path);
 
-            case FastRouter::METHOD_NOT_ALLOWED:
-                $allowedMethods = $routeInfo[1];
-                // ... 405 Method Not Allowed
-                $response = $this->responseUtil->getResponseFactory()->createResponse();
-                $response = $response->withStatus(405)->withHeader('Allow', implode(', ', $allowedMethods));
-                $response->getBody()->write('Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path));
-                return $response;
-
-            case FastRouter::FOUND:
-                $handler = $routeInfo[1];
-                $vars = $routeInfo[2];
-                foreach ($vars as $key => $value) {
-                    $request = $request->withAttribute($key, $value);
-                }
-                //return $routeInfo[1]($request)
-                //return $next->handle($request);
-                // ... call $handler with $vars
-                $numeric = true;
-                $context = null;
-                try {
-                    // @checkme we need to somehow update $request here to do any good!?
-                    $this->prepareRequestCallback($request);
-                    // don't use call_user_func here anymore because $request is passed by reference
-                    if (str_starts_with($path, '/restapi/')) {
-                        // different processing for REST API - see rst.php
-                        [$result, $context] = DataObjectRESTHandler::callHandler($handler, $vars, $request);
-                    } elseif (str_starts_with($path, '/graphql')) {
-                        // different processing for GraphQL API - see gql.php
-                        [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
-                        $numeric = false;
+                case '405':
+                    // ... 405 Method Not Allowed
+                    $response = $this->responseUtil->getResponseFactory()->createResponse();
+                    if (!empty($vars['methods'])) {
+                        $response = $response->withStatus(405)->withHeader('Allow', implode(', ', $vars['methods']));
                     } else {
-                        [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
+                        $response = $response->withStatus(405);
                     }
-                    $redirectURL = $request->getAttribute('redirectURL');
-                    if (!empty($redirectURL)) {
-                        echo "Location: " . $redirectURL . "\n";
-                        return $this->responseUtil->createRedirectResponse($redirectURL, $request->getAttribute('status', 302));
-                    }
-                    // @checkme can't really handle REST API differently here yet
-                    if ($handler[1] === 'getOpenAPI') {
-                        //header('Access-Control-Allow-Origin: *');
-                        // @checkme set server url to current path here
-                        //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
-                        //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
-                    }
-                } catch (UnauthorizedOperationException) {
-                    return $this->responseUtil->createUnauthorizedResponse();
-                } catch (ForbiddenOperationException) {
-                    return $this->responseUtil->createForbiddenResponse();
-                } catch (Throwable $e) {
-                    return $this->responseUtil->createExceptionResponse($e);
-                }
-                if (!empty($context) && !empty($context['mediatype'])) {
-                    return $this->responseUtil->createResponse($result, $context['mediatype']);
-                }
-                if (is_string($result)) {
-                    $mediaType = $request->getAttribute('mediaType', 'text/html');
-                    return $this->responseUtil->createResponse($result, $mediaType);
-                }
-                return $this->responseUtil->createJsonResponse($result, 'application/json', $numeric);
-
-            default:
-                $result = "Unknown result from FastRoute Dispatcher: " . var_export($routeInfo, true);
-                return $this->responseUtil->createResponse($result);
+                    $response->getBody()->write('Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path));
+                    return $response;
+            }
         }
+
+        foreach ($vars as $key => $value) {
+            $request = $request->withAttribute($key, $value);
+        }
+        //return $routeInfo[1]($request)
+        //return $next->handle($request);
+        // ... call $handler with $vars
+        $numeric = true;
+        $context = null;
+        try {
+            // @checkme we need to somehow update $request here to do any good!?
+            $this->prepareRequestCallback($request);
+            // don't use call_user_func here anymore because $request is passed by reference
+            if (str_starts_with($path, '/restapi/')) {
+                // different processing for REST API - see rst.php
+                [$result, $context] = DataObjectRESTHandler::callHandler($handler, $vars, $request);
+            } elseif (str_starts_with($path, '/graphql')) {
+                // different processing for GraphQL API - see gql.php
+                [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
+                $numeric = false;
+            } else {
+                [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
+            }
+            $redirectURL = $request->getAttribute('redirectURL');
+            if (!empty($redirectURL)) {
+                echo "Location: " . $redirectURL . "\n";
+                return $this->responseUtil->createRedirectResponse($redirectURL, $request->getAttribute('status', 302));
+            }
+            // @checkme can't really handle REST API differently here yet
+            if ($handler[1] === 'getOpenAPI') {
+                //header('Access-Control-Allow-Origin: *');
+                // @checkme set server url to current path here
+                //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
+                //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
+            }
+        } catch (UnauthorizedOperationException) {
+            return $this->responseUtil->createUnauthorizedResponse();
+        } catch (ForbiddenOperationException) {
+            return $this->responseUtil->createForbiddenResponse();
+        } catch (Throwable $e) {
+            return $this->responseUtil->createExceptionResponse($e);
+        }
+        if (!empty($context) && !empty($context['mediatype'])) {
+            return $this->responseUtil->createResponse($result, $context['mediatype']);
+        }
+        if (is_string($result)) {
+            $mediaType = $request->getAttribute('mediaType', 'text/html');
+            return $this->responseUtil->createResponse($result, $mediaType);
+        }
+        return $this->responseUtil->createJsonResponse($result, 'application/json', $numeric);
     }
 
     public function emitResponse(ResponseInterface $response): void

@@ -8,30 +8,15 @@
  * xarCore::xarInit(xarCore::SYSTEM_USER);
  *
  * // use some routing bridge
- * use Xaraya\Bridge\Routing\FastRouteBridge;
+ * use Xaraya\Bridge\Routing\RoutingBridge;
  * use xarServer;
  *
- * // add route collection to your own dispatcher
- * // $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
- * //     // ...
- * //     // FastRouteBridge::addRouteCollection($r);
- * //     $r->addGroup('/mysite', function (FastRoute\RouteCollector $r) {
- * //         FastRouteBridge::addRouteCollection($r);
- * //     });
- * // });
- * // $routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
- * // if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
- * //     $handler = $routeInfo[1];
- * //     $vars = $routeInfo[2];
- * //     // ... call $handler with $vars
- * // }
+ * // get a simple router to work with yourself, possibly in a group
+ * // $router = RoutingBridge::getSimpleRouter('/mysite');
+ * // [$handler, $params] = $router->match(xarServer::getVar('PATH_INFO') ?? '/', xarServer::getVar('REQUEST_METHOD'));
  *
- * // or get a route dispatcher to work with yourself, possibly in a group
- * // $dispatcher = FastRouteBridge::getSimpleDispatcher('/mysite');
- * // $routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
- *
- * // or let the route dispatcher handle the request itself and return the result
- * $bridge = new FastRouteBridge();
+ * // or let the routing bridge handle the request itself and return the result
+ * $bridge = new RoutingBridge();
  * [$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/', '/mysite');
  * $bridge->output($result, $context);
  *
@@ -42,18 +27,15 @@
 namespace Xaraya\Bridge\Routing;
 
 // use the FastRoute library here - see https://github.com/nikic/FastRoute
-use FastRoute\ConfigureRoutes;
-use FastRoute\Dispatcher;
-use FastRoute\FastRoute;
-use FastRoute\GenerateUri;
-use FastRoute\RouteCollector;
-use FastRoute\RouteParser;
+use Xaraya\Routing\FastRouter;
+// use the Symfony Routing component here - see https://github.com/symfony/routing
+use Xaraya\Routing\Routing;
+use Xaraya\Routing\RouterInterface;
 // use some Xaraya classes
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
 use xarServer;
 use sys;
-use Exception;
 use JsonException;
 
 sys::import('xaraya.bridge.requests.bridge');
@@ -69,118 +51,151 @@ use Xaraya\Bridge\Requests\StaticFileRequest;
 use DataObjectRESTHandler;
 use xarGraphQL;
 
-// @todo use FastRoute::recommendedSettings() in v2.x
-use function FastRoute\simpleDispatcher;
-
 /**
- * Keep track of collected routes - see https://github.com/nikic/FastRoute/blob/master/src/RouteCollector.php
- * @todo RouteCollector will become @final in v2.x - call processedRoutes() instead?
- * @deprecated 2.0.0 not available with new API
+ * Routing bridge to handle Xaraya object, module and block GUI calls + REST API and GraphQL API requests
+ * @phpstan-type ExtraParameters array<string, string|int|bool|float>
  */
-class TrackRouteCollector extends RouteCollector
+class RoutingBridge extends BasicBridge
 {
-    /** @var array<mixed> */
-    public static array $trackRoutes = [];
-    public static string $groupStarted = 'GROUP STARTED';
-    public static string $groupStopped = 'GROUP STOPPED';
-    //protected string $currentGroupPrefix = '';
+    public const ROUTING_CACHE_FILE = 'fastroute_cache.php';
 
-    public function addRoute($httpMethod, string $route, mixed $handler, array $extraParameters = []): void
-    {
-        static::$trackRoutes[] = [$this->currentGroupPrefix . $route, $httpMethod, $handler];
-        //$route = $this->currentGroupPrefix . $route;
-        //$routeDatas = $this->routeParser->parse($route);
-        parent::addRoute($httpMethod, $route, $handler, $extraParameters);
-    }
-
-    public function addGroup(string $prefix, callable $callback): void
-    {
-        static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStarted, null];
-        parent::addGroup($prefix, $callback);
-        static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStopped, null];
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public static function getRoutes(): array
-    {
-        return static::$trackRoutes;
-    }
-}
-
-/**
- * FastRoute bridge to handle Xaraya object, module and block GUI calls + REST API and GraphQL API requests
- */
-class FastRouteBridge extends BasicBridge
-{
-    /** @var Dispatcher */
-    public static $dispatcher;
+    public static string $routerClass = FastRouter::class;
+    //protected static string $routerClass = Routing::class;
+    /** @var RouterInterface|null */
+    public static $router = null;
     public static string $baseUri = '';
     public static string $prefix = '';
     public bool $wrapPage = false;
 
     /**
-     * Summary of addRouteCollection
-     * @param RouteCollector $r
-     * @return void
+     * Summary of getRouter
+     * @param ?array<mixed> $routes with pre-defined routes (optional)
+     * @return RouterInterface
      */
-    public static function addRouteCollection(RouteCollector $r)
+    public static function getRouter($routes = null)
     {
-        // @todo move away from static methods for context
-        $restHandler = DataObjectRESTHandler::class;
-        $r->addGroup('/object', function (RouteCollector $r) {
-            $r->addRoute(['GET', 'POST'], '/{object}', [static::class, 'handleObjectRequest']);
-            $r->addRoute(['GET', 'POST'], '/{object}/{itemid:\d+}[/{method}]', [static::class, 'handleObjectRequest']);
-            $r->addRoute(['GET', 'POST'], '/{object}/{itemid:[0-9a-f]{24}}[/{method}]', [static::class, 'handleObjectRequest']);
-            $r->addRoute(['GET', 'POST'], '/{object}/{method}', [static::class, 'handleObjectRequest']);
-            //$r->addRoute('GET', '/', [static::class, 'handleObjectRequest']);
-        });
-        $r->addGroup('/block', function (RouteCollector $r) {
-            $r->addRoute('GET', '/{instance}', [static::class, 'handleBlockRequest']);
-        });
-        $r->addGroup('/restapi', function (RouteCollector $r) use ($restHandler) {
-            DataObjectRESTHandler::registerRoutes($r, $restHandler);
-            $r->addRoute('GET', '/', [DataObjectRESTHandler::class, 'getOpenAPI']);
-        });
-        $r->addRoute(['GET', 'POST'], '/graphql', [xarGraphQL::class, 'handleRequest']);
-        $r->addRoute('GET', '/routes', [static::class, 'handleRoutesRequest']);
-        $r->addRoute(['GET', 'POST'], '/{module}', [static::class, 'handleModuleRequest']);
-        $r->addRoute(['GET', 'POST'], '/{module}/{func}', [static::class, 'handleModuleRequest']);
-        $r->addRoute(['GET', 'POST'], '/{module}/{type}/{func}', [static::class, 'handleModuleRequest']);
-        $r->addRoute('GET', '/', [static::class, 'handleModuleRequest']);
-        $r->addRoute('OPTIONS', '*', [DataObjectRESTHandler::class, 'sendCORSOptions']);
+        if (!empty($routes)) {
+            // create router with pre-defined routes - see combined FastRouteHandler::getRouter()
+            static::$router = new (static::$routerClass)(function () use ($routes) {
+                return $routes;
+            });
+            return static::$router;
+        }
+        if (isset(static::$router)) {
+            return static::$router;
+        }
+        $cacheKey = __DIR__ . '/' . static::ROUTING_CACHE_FILE;
+        static::$router = new (static::$routerClass)(static::getRoutes(...), $cacheKey);
+        return static::$router;
     }
 
     /**
-     * Summary of getSimpleDispatcher
-     * @todo use FastRoute::recommendedSettings() in v2.x
-     * @param string $group
-     * @return Dispatcher
+     * Summary of setRouter
+     * @param RouterInterface $router
+     * @return RouterInterface
      */
-    public static function getSimpleDispatcher(string $group = '')
+    public static function setRouter($router)
     {
-        if (isset(static::$dispatcher) && static::$prefix == $group) {
-            return static::$dispatcher;
+        static::$router = $router;
+        return static::$router;
+    }
+
+    /**
+     * Summary of getRoutes
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @return array<mixed>
+     */
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = '')
+    {
+        $routes = [];
+        $extra = [];
+
+        $path = $pathPrefix . '/object/{object}';
+        $name = $namePrefix . 'object';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:\d+}[/{method}]';
+        $name = $namePrefix . 'object-item';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}[/{method}]';
+        $name = $namePrefix . 'object-document';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{method}';
+        $name = $namePrefix . 'object-method';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        //$path = $pathPrefix . '/object/';
+        //$name = $namePrefix . 'object-root';
+        //$routes[$name] = ['GET', $path, [static::class, 'handleObjectRequest']);
+
+        $path = $pathPrefix . '/block/{instance}';
+        $name = $namePrefix . 'block';
+        $routes[$name] = ['GET', $path, [static::class, 'handleBlockRequest'], $extra];
+
+        // @todo move away from static methods for context
+        $path = $pathPrefix . '/restapi';
+        $name = $namePrefix . 'restapi-';
+        $restHandler = DataObjectRESTHandler::class;
+        $routes = array_replace($routes, DataObjectRESTHandler::getRoutes($path, $name, $restHandler));
+
+        $path = $pathPrefix . '/restapi/';
+        $name = $namePrefix . 'restapi';
+        $routes[$name] = ['GET', $path, [DataObjectRESTHandler::class, 'getOpenAPI'], $extra];
+
+        $path = $pathPrefix . '/graphql';
+        $name = $namePrefix . 'graphql';
+        $routes[$name] = [['GET', 'POST'], $path, [xarGraphQL::class, 'handleRequest'], $extra];
+
+        $path = $pathPrefix . '/routes';
+        $name = $namePrefix . 'routes';
+        $routes[$name] = ['GET', $path, [static::class, 'handleRoutesRequest'], $extra];
+
+        $path = $pathPrefix . '/{module}';
+        $name = $namePrefix . 'module';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
+
+        $path = $pathPrefix . '/{module}/{func}';
+        $name = $namePrefix . 'module-func';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
+
+        $path = $pathPrefix . '/{module}/{type}/{func}';
+        $name = $namePrefix . 'module-type-func';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
+
+        $path = $pathPrefix . '/';
+        $name = $namePrefix . 'root';
+        $routes[$name] = ['GET', $path, [static::class, 'handleModuleRequest'], $extra];
+
+        // @todo do we want/need to add pathPrefix here too?
+        $path = '*';
+        $name = $namePrefix . 'cors';
+        $routes[$name] = ['OPTIONS', $path, [DataObjectRESTHandler::class, 'sendCORSOptions'], $extra];
+
+        return $routes;
+    }
+
+    /**
+     * Summary of getSimpleRouter
+     * @param string $group
+     * @return RouterInterface
+     */
+    public static function getSimpleRouter(string $group = '')
+    {
+        if (isset(static::$router) && static::$prefix == $group) {
+            return static::$router;
         }
+        // @todo remove/add prefix in match/generate (see cache) or add to route (combo)?
         static::$prefix = $group;
         // override standard routeCollector here
         if (empty($group)) {
-            static::$dispatcher = simpleDispatcher(function (RouteCollector $r) {
-                static::addRouteCollection($r);
-            }, [
-                'routeCollector' => TrackRouteCollector::class,
-            ]);
-            return static::$dispatcher;
+            return static::getRouter();
         }
-        static::$dispatcher = simpleDispatcher(function (RouteCollector $r) use ($group) {
-            $r->addGroup($group, function (RouteCollector $r) {
-                static::addRouteCollection($r);
-            });
-        }, [
-            'routeCollector' => TrackRouteCollector::class,
-        ]);
-        return static::$dispatcher;
+        // @todo or reset router with new prefix here?
+        static::$router = null;
+        return static::getRouter();
     }
 
     /**
@@ -213,46 +228,47 @@ class FastRouteBridge extends BasicBridge
     public function dispatchRequest(string $method, string $path, string $group = '', &$request = null)
     {
         // @todo keep dispatcher static but replace $handler[0] with $this if current class?
-        $dispatcher = static::getSimpleDispatcher($group);
-        $routeInfo = $dispatcher->dispatch($method, $path);
-        switch ($routeInfo[0]) {
-            case Dispatcher::NOT_FOUND:
-                // ... 404 Not Found
-                http_response_code(404);
-                if (!empty($group)) {
-                    $result = 'Nothing to see here at ' . htmlspecialchars($path) . ' with prefix ' . htmlspecialchars($group);
+        //$dispatcher = static::getSimpleDispatcher($group);
+        $router = static::getRouter();
+        // @todo remove $group prefix from path here? - see /htmx
+        [$handler, $vars] = $router->match($path, $method);
+        if (empty($handler)) {
+            switch ((string) $vars['status']) {
+                case '404':
+                    // ... 404 Not Found
+                    http_response_code(404);
+                    if (!empty($group)) {
+                        $result = 'Nothing to see here at ' . htmlspecialchars($path) . ' with prefix ' . htmlspecialchars($group);
+                        return [$result, null];
+                    }
+                    $result = 'Nothing to see here at ' . htmlspecialchars($path);
                     return [$result, null];
-                }
-                $result = 'Nothing to see here at ' . htmlspecialchars($path);
-                return [$result, null];
 
-            case Dispatcher::METHOD_NOT_ALLOWED:
-                $allowedMethods = $routeInfo[1];
-                // ... 405 Method Not Allowed
-                header('Allow: ' . implode(', ', $allowedMethods));
-                http_response_code(405);
-                $result = 'Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path);
-                return [$result, null];
-
-            case Dispatcher::FOUND:
-                $handler = $routeInfo[1];
-                $vars = $routeInfo[2];
-                $context = null;
-                // ... call $handler with $vars
-                if (str_starts_with($path, $group . '/restapi/')) {
-                    // different processing for REST API - see rst.php
-                    DataObjectRESTHandler::$endpoint = static::getBaseUri() . $group . '/restapi';
-                    [$result, $context] = static::callRestApiHandler($handler, $vars, $request);
-                } elseif (str_starts_with($path, $group . '/graphql')) {
-                    // different processing for GraphQL API - see gql.php
-                    [$result, $context] = $this->callHandler($handler, $vars, $request);
-                } else {
-                    // @todo keep dispatcher static but replace $handler[0] with $this if current class?
-                    [$result, $context] = $this->callHandler($handler, $vars, $request);
-                }
-                return [$result, $context];
+                case '405':
+                    // ... 405 Method Not Allowed
+                    if (!empty($vars['methods'])) {
+                        header('Allow: ' . implode(', ', $vars['methods']));
+                    }
+                    http_response_code(405);
+                    $result = 'Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path);
+                    return [$result, null];
+            }
         }
-        throw new Exception('Invalid routeInfo[0] after dispatch');
+
+        $context = null;
+        // ... call $handler with $vars
+        if (str_starts_with($path, $group . '/restapi/')) {
+            // different processing for REST API - see rst.php
+            DataObjectRESTHandler::$endpoint = static::getBaseUri() . $group . '/restapi';
+            [$result, $context] = static::callRestApiHandler($handler, $vars, $request);
+        } elseif (str_starts_with($path, $group . '/graphql')) {
+            // different processing for GraphQL API - see gql.php
+            [$result, $context] = $this->callHandler($handler, $vars, $request);
+        } else {
+            // @todo keep dispatcher static but replace $handler[0] with $this if current class?
+            [$result, $context] = $this->callHandler($handler, $vars, $request);
+        }
+        return [$result, $context];
     }
 
     /**
@@ -345,7 +361,7 @@ class FastRouteBridge extends BasicBridge
                 // replace with $this - see webhooks fastroute endpoint
                 $handler[0] = $this;
             } elseif (is_subclass_of($handler[0], static::class)) {
-                // @todo instantiate handler[0] for subclasses like FastRouteApiBridge?
+                // @todo instantiate handler[0] for subclasses like RoutingApiBridge?
                 $handler[0] = new $handler[0]();
             } else {
                 // leave it for someone else to take care of...
@@ -577,16 +593,8 @@ class FastRouteBridge extends BasicBridge
     public function handleRoutesRequest($vars, &$request = null)
     {
         $result = "<ul>";
-        foreach (TrackRouteCollector::getRoutes() as $info) {
-            if (is_array($info[1])) {
-                $result .= "<li>" . $info[0] . " [" . implode(', ', $info[1]) . "]</li>";
-                continue;
-            }
-            match ($info[1]) {
-                TrackRouteCollector::$groupStarted => $result .= "<li>" . $info[0] . "<ul>",
-                TrackRouteCollector::$groupStopped => $result .= "</ul></li>",
-                default => $result .= "<li>" . $info[0] . " [" . $info[1] . "]</li>",
-            };
+        foreach (static::getRouter()->getRoutes() as $name => $route) {
+            $result .= "<li>" . $name . " [" . json_encode($route, JSON_UNESCAPED_SLASHES) . "]</li>";
         }
         $result .= "</ul>";
         return [$result, null];
@@ -594,32 +602,60 @@ class FastRouteBridge extends BasicBridge
 }
 
 /**
- * Same as FastRouteBridge but runs API calls instead of GUI calls
+ * Same as RoutingBridge but runs API calls instead of GUI calls
  *
  * Note: if you really want to use APIs for DataObject please have a look at the REST API or GraphQL API instead
  * They can be configured via the admin Back End > Dynamic Data > Utilities > Test APIs
+ * @phpstan-type ExtraParameters array<string, string|int|bool|float>
  */
-class FastRouteApiBridge extends FastRouteBridge
+class RoutingApiBridge extends RoutingBridge
 {
+    public const ROUTING_CACHE_FILE = 'fastroute_api_cache.php';
+
     /**
-     * Summary of addRouteCollection
-     * @param RouteCollector $r
-     * @return void
+     * Summary of getRoutes
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @return array<mixed>
      */
-    public static function addRouteCollection(RouteCollector $r)
+    public static function getRoutes(string $pathPrefix = '/api', string $namePrefix = 'api-')
     {
-        $r->addGroup('/object', function (RouteCollector $r) {
-            $r->addRoute(['GET', 'POST'], '/{object}', [static::class, 'handleObjectRequest']);
-            $r->addRoute(['GET', 'POST'], '/{object}/{itemid:\d+}[/{method}]', [static::class, 'handleObjectRequest']);
-            $r->addRoute(['GET', 'POST'], '/{object}/{itemid:[0-9a-f]{24}}[/{method}]', [static::class, 'handleObjectRequest']);
-            $r->addRoute(['GET', 'POST'], '/{object}/{method}', [static::class, 'handleObjectRequest']);
-            //$r->addRoute(['GET', 'POST'], '/', [static::class, 'handleObjectRequest']);
-        });
-        $r->addGroup('/block', function (RouteCollector $r) {
-            $r->addRoute('GET', '/{instance}', [static::class, 'handleBlockRequest']);
-        });
-        $r->addRoute(['GET', 'POST'], '/{module}[/{type}[/{func}]]', [static::class, 'handleModuleRequest']);
-        $r->addRoute(['GET', 'POST'], '/', [static::class, 'handleModuleRequest']);
+        $routes = [];
+        $extra = [];
+
+        $path = $pathPrefix . '/object/{object}';
+        $name = $namePrefix . 'object';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:\d+}[/{method}]';
+        $name = $namePrefix . 'object-item';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}[/{method}]';
+        $name = $namePrefix . 'object-document';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{method}';
+        $name = $namePrefix . 'object-method';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        //$path = $pathPrefix . '/object/';
+        //$name = $namePrefix . 'object-root';
+        //$routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/block/{instance}';
+        $name = $namePrefix . 'block';
+        $routes[$name] = ['GET', $path, [static::class, 'handleBlockRequest'], $extra];
+
+        $path = $pathPrefix . '/{module}[/{type}[/{func}]]';
+        $name = $namePrefix . 'module';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
+
+        $path = $pathPrefix . '/';
+        $name = $namePrefix . 'root';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
+
+        return $routes;
     }
 
     /**
@@ -659,69 +695,88 @@ class FastRouteApiBridge extends FastRouteBridge
 }
 
 /**
- * Same as FastRouteBridge but handles static files too
+ * Same as RoutingBridge but handles static files too
  *
  * Note: static files should really be handled by a web server or reverse proxy in front of the application
+ * @phpstan-type ExtraParameters array<string, string|int|bool|float>
  */
-class FastRouteStaticBridge extends FastRouteBridge
+class RoutingStaticBridge extends RoutingBridge
 {
+    public const ROUTING_CACHE_FILE = 'fastroute_static_cache.php';
+
     /**
-     * Summary of addRouteCollection
-     * @param RouteCollector $r
+     * Summary of getRoutes
+     * @param string $pathPrefix
      * @param string $staticFiles
-     * @return void
+     * @param string $namePrefix
+     * @return array<mixed>
      */
-    public static function addRouteCollection(RouteCollector $r, string $staticFiles = '')
+    public static function getRoutes(string $pathPrefix = '', string $staticFiles = '', string $namePrefix = 'static-')
     {
+        $routes = [];
+
         // @checkme use this as group e.g. everything under /static
-        if (!empty($staticFiles)) {
-            $r->addGroup($staticFiles, function (RouteCollector $r) {
-                static::addModuleFileRoutes($r);
-                static::addThemeFileRoutes($r);
-                static::addVarFileRoutes($r);
-            });
-        } else {
-            static::addModuleFileRoutes($r);
-            static::addThemeFileRoutes($r);
-            static::addVarFileRoutes($r);
-        }
-        parent::addRouteCollection($r);
+        $path = $pathPrefix . $staticFiles;
+        $routes = array_replace($routes, static::addModuleFileRoutes($path, $namePrefix));
+        $routes = array_replace($routes, static::addThemeFileRoutes($path, $namePrefix));
+        $routes = array_replace($routes, static::addVarFileRoutes($path, $namePrefix));
+
+        // add parent route collection = RoutingBridge::getRoutes()
+        // @todo strip one level of prefix and pass along here?
+        $routes = array_replace($routes, parent::getRoutes($pathPrefix));
+
+        return $routes;
     }
 
     /**
      * Summary of addThemeFileRoutes
-     * @param RouteCollector $r
-     * @return void
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @return array<mixed>
      */
-    public static function addThemeFileRoutes(RouteCollector $r)
+    public static function addThemeFileRoutes(string $pathPrefix, string $namePrefix = '')
     {
-        $r->addGroup('/themes', function (RouteCollector $r) {
-            $r->addRoute('GET', '/{source}/{folder}/{file:.+}', [static::class, 'handleThemeFileRequest']);
-        });
+        $routes = [];
+        $extra = [];
+
+        $path = $pathPrefix . '/themes/{source}/{folder}/{file:.+}';
+        $name = $namePrefix . 'theme-file';
+        $routes[$name] = ['GET', $path, [static::class, 'handleThemeFileRequest'], $extra];
+        return $routes;
     }
 
     /**
      * Summary of addModuleFileRoutes
-     * @param RouteCollector $r
-     * @return void
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @return array<mixed>
      */
-    public static function addModuleFileRoutes(RouteCollector $r)
+    public static function addModuleFileRoutes(string $pathPrefix, string $namePrefix = '')
     {
-        $r->addGroup('/code/modules', function (RouteCollector $r) {
-            $r->addRoute('GET', '/{source}/{folder}/{file:.+}', [static::class, 'handleModuleFileRequest']);
-        });
+        $routes = [];
+        $extra = [];
+
+        $path = $pathPrefix . '/code/modules/{source}/{folder}/{file:.+}';
+        $name = $namePrefix . 'module-file';
+        $routes[$name] = ['GET', $path, [static::class, 'handleModuleFileRequest'], $extra];
+        return $routes;
     }
 
     /**
      * Summary of addVarFileRoutes
-     * @param RouteCollector $r
-     * @return void
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @return array<mixed>
      */
-    public static function addVarFileRoutes(RouteCollector $r)
+    public static function addVarFileRoutes(string $pathPrefix, string $namePrefix = '')
     {
-        $r->addGroup('/var', function (RouteCollector $r) {
-            $r->addRoute('GET', '/{source}/{folder}/{file:.+}', [static::class, 'handleVarFileRequest']);
-        });
+        $routes = [];
+        $extra = [];
+
+        $path = $pathPrefix . '/var/{source}/{folder}/{file:.+}';
+        $name = $namePrefix . 'var-file';
+        $routes[$name] = ['GET', $path, [static::class, 'handleVarFileRequest'], $extra];
+        return $routes;
     }
 
     /**
@@ -880,45 +935,32 @@ class FastRouteBuildTest
 
     /**
      * Get available routes, optionally by handler method and/or handler class
-     * @phpstan-import-type ParsedRoutes from RouteParser
-     * @deprecated 2.0.0 not available with new API
      * @return array<mixed>
      */
     public static function getRoutes(?string $handlerMethod = null, ?string $handlerClass = null)
     {
-        //if (empty($handlerMethod) && empty($handlerClass)) {
-        //    return TrackRouteCollector::$trackRoutes;
-        //}
-        $parser = new \FastRoute\RouteParser\Std();
+        $router = RoutingBridge::getRouter();
         $routes = [];
-        foreach (TrackRouteCollector::getRoutes() as $info) {
-            if (!is_array($info[2]) || count($info[2]) < 2) {
+        foreach ($router->getRoutes() as $name => $route) {
+            // add extra options if needed
+            $route[] = [];
+            /** @var array<string, string|int|bool|float> $options */
+            [$methods, $path, $handler, $options] = $route;
+            if (!is_array($handler) || count($handler) < 2) {
                 continue;
             }
-            [$class, $method] = $info[2];
+            [$class, $method] = $handler;
             if (!empty($handlerMethod) && $method !== $handlerMethod) {
                 continue;
             }
             if (!empty($handlerClass) && $class !== $handlerClass) {
                 continue;
             }
+            // @todo parse variables from path (again)?
+            $variables = [];
+            $routes[] = [$path, $methods, $handler, $variables];
             // @checkme re-using routeParser here - why not call it the first time?
-            [$route, $method, $handler] = $info;
-            $routeDatas = (array) $parser->parse($route);
-            // from longest to shortest routes here for optional variables
-            foreach (array_reverse($routeDatas) as $routeData) {
-                $path = '';
-                $variables = [];
-                foreach ($routeData as $data) {
-                    if (is_string($data)) {
-                        $path .= $data;
-                        continue;
-                    }
-                    $path .= '{' . $data[0] . '}';
-                    $variables[] = $data[0];
-                }
-                $routes[] = [$path, $method, $handler, $variables];
-            }
+            //$routeDatas = (array) $parser->parse($route);
         }
         return $routes;
     }
