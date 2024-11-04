@@ -4,7 +4,7 @@ This contains various bridges between Xaraya and other PHP packages or framework
 
 - [Logging (PSR-3)](#logging-psr-3)
 - [Event Dispatcher (Symfony)](#event-dispatcher-symfony)
-- [Routing Library (FastRoute)](#routing-library-fastroute)
+- [Routing Library (FastRoute or Symfony)](#routing-library-fastroute-or-symfony)
 - [HTTP Server Request (PSR-7)](#http-server-request-psr-7)
 - [Middleware and Request Handler (PSR-15)](#middleware-and-request-handler-psr-15)
 - [Middleware and Routing Combined](#middleware-and-routing-combined)
@@ -114,13 +114,13 @@ Requirement: some package providing PSR-14 [psr/event-dispatcher-implementation]
 $ composer require psr/event-dispatcher
 ```
 
-## Routing Library (FastRoute)
+## Routing Library (FastRoute or Symfony)
 
-Use a routing library like [nikic/FastRoute](https://github.com/nikic/FastRoute) as request mapper to Xaraya module GUI functions, data object UI methods, the REST API and GraphQL API.
+Use a routing library like [nikic/fast-route](https://github.com/nikic/FastRoute) or [symfony/routing](https://github.com/symfony/routing) as request mapper to Xaraya module GUI functions, data object UI methods, the REST API and GraphQL API.
 
 Requirement: (already required for Xaraya REST API)
 ```shell
-$ composer require nikic/fastroute
+$ composer require nikic/fast-route
 ```
 
 Usage:
@@ -129,13 +129,17 @@ Usage:
 use Xaraya\Bridge\Routing\RoutingBridge;
 use xarServer;
 
+$path = xarServer::getVar('PATH_INFO') ?? '/';
+$method = xarServer::getVar('REQUEST_METHOD');
+
 // get a simple router to work with yourself, possibly in a group
 // $router = RoutingBridge::getSimpleRouter('/mysite');
-// [$handler, $params] = $router->match(xarServer::getVar('PATH_INFO') ?? '/', xarServer::getVar('REQUEST_METHOD'));
+// [$handler, $params] = $router->match($path, $method);
+// ... adapt handler and call with params ...
 
 // or let the routing bridge handle the request itself and return the result
 $bridge = new RoutingBridge();
-[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/', '/mysite');
+[$result, $context] = $bridge->dispatchRequest($method, $path, '/mysite');
 $bridge->output($result, $context);
 
 // or let it really do all the work here...

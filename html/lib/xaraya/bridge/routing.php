@@ -11,13 +11,17 @@
  * use Xaraya\Bridge\Routing\RoutingBridge;
  * use xarServer;
  *
+ * $path = xarServer::getVar('PATH_INFO') ?? '/';
+ * $method = xarServer::getVar('REQUEST_METHOD');
+ *
  * // get a simple router to work with yourself, possibly in a group
  * // $router = RoutingBridge::getSimpleRouter('/mysite');
- * // [$handler, $params] = $router->match(xarServer::getVar('PATH_INFO') ?? '/', xarServer::getVar('REQUEST_METHOD'));
+ * // [$handler, $params] = $router->match($path, $method);
+ * // ... adapt handler and call with params ...
  *
  * // or let the routing bridge handle the request itself and return the result
  * $bridge = new RoutingBridge();
- * [$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/', '/mysite');
+ * [$result, $context] = $bridge->dispatchRequest($method, $path, '/mysite');
  * $bridge->output($result, $context);
  *
  * // or let it really do all the work here...
