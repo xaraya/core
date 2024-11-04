@@ -84,7 +84,7 @@ class RoutingBridge extends BasicBridge
         if (isset(static::$router)) {
             return static::$router;
         }
-        $cacheKey = __DIR__ . '/' . static::ROUTING_CACHE_FILE;
+        $cacheKey = sys::varpath() . '/cache/api/' . static::ROUTING_CACHE_FILE;
         static::$router = new (static::$routerClass)(static::getRoutes(...), $cacheKey);
         return static::$router;
     }
@@ -231,6 +231,9 @@ class RoutingBridge extends BasicBridge
         //$dispatcher = static::getSimpleDispatcher($group);
         $router = static::getRouter();
         // @todo remove $group prefix from path here? - see /htmx
+        if (!empty($group) && str_starts_with($path, $group . '/')) {
+            $path = substr($path, strlen($group));
+        }
         [$handler, $vars] = $router->match($path, $method);
         if (empty($handler)) {
             switch ((string) $vars['status']) {
