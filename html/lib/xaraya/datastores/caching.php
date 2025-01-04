@@ -52,7 +52,7 @@ class CachingDataStore extends BasicDataStore
         }
         $value = $this->getCacheStorage()->getCached($itemid);
         //echo "Getting item $itemid: $value";
-        $item = unserialize($value);
+        $item = unserialize((string) $value);
         if (!empty($this->object->primary) && $this->object->primary !== 'itemid') {
             $item[$this->object->primary] = $itemid;
         }
@@ -79,7 +79,7 @@ class CachingDataStore extends BasicDataStore
         $fieldlist = $this->object->getFieldList();
         foreach ($itemids as $itemid) {
             $value = $this->getCacheStorage()->getCached($itemid);
-            $item = unserialize($value);
+            $item = unserialize((string) $value);
             if (!empty($this->object->primary) && $this->object->primary !== 'itemid') {
                 $item[$this->object->primary] = $itemid;
             }

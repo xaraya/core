@@ -57,7 +57,7 @@ class xarGraphQLAccessType extends ObjectType
                     return array_keys($object);
                 }
                 if ($info->fieldName == 'access' && !empty($object['access']) && is_string($object['access'])) {
-                    $values = @unserialize($object[$info->fieldName]);
+                    $values = @unserialize((string) $object[$info->fieldName]);
                     return $values;
                     /**
                     $access = array();

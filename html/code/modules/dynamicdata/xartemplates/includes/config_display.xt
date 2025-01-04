@@ -3,7 +3,7 @@
     <div class="xar-row">
         <div class="xar-col" style="padding-bottom: 10px;">
             <xar:set name="value">
-                implode(',',unserialize(xarModVars::get('dynamicdata', 'administrators')))
+                implode(',',unserialize((string) xarModVars::get('dynamicdata', 'administrators')))
             </xar:set>
             Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
             <xar:var name="label">These users have full access to the dynamicdata module</xar:var>

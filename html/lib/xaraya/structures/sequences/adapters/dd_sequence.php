@@ -52,7 +52,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
         // And get the data, we do this explicitly because the 'data' field might be very big
         // so it is not included in the items property for this object by default.
         $item = xarMod::apiFunc('dynamicdata','user','getitems',$params);
-        $item = $item[$this->items[$position]['id']]['data'];
+        $item = $item[$this->items[$position]['id']]['data'] ?? '';
         $item = unserialize(base64_decode($item));
         return $item;
     }

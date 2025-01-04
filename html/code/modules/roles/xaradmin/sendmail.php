@@ -31,7 +31,7 @@ function roles_admin_sendmail(array $args = [], $context = null)
     // Get the current query
     sys::import('xaraya.structures.query');
     $q = new Query();
-    $q = unserialize(xarSession::getVar('rolesquery'));
+    $q = unserialize((string) xarSession::getVar('rolesquery'));
 
     // only need the id, name and email fields
     $q->clearfields();

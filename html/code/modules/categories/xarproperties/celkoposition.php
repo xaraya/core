@@ -208,7 +208,7 @@ class CelkoPositionProperty extends DataProperty
                 if (empty($this->itemsknown)) $this->offset = ($this->countItems() - 1) * 2;
                 
                 // Unpack the values of this property
-                $params = unserialize($this->value);
+                $params = unserialize((string) $this->value);
                 // Add this item to the list of known items for subsequent rounds
                 $this->itemindices[$params[0]] = $params;
                 $this->itemsknown[$params[0]] = $itemid;
@@ -854,7 +854,7 @@ class CelkoPositionProperty extends DataProperty
     {
         try {
             // Unpack the values of this property
-            $params = unserialize($this->value);
+            $params = unserialize((string) $this->value);
             // Add this item to the list of known items for subsequent rounds
             $this->itemindices[$params[0]] = $params;
             $this->itemsknown[$params[0]] = $itemid;

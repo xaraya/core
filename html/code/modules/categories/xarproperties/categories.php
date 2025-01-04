@@ -200,7 +200,7 @@ class CategoriesProperty extends DataProperty
         }
 
         // Make sure the categories are in the form of an array
-        if (!is_array($this->categories)) $this->categories = unserialize($this->categories);
+        if (!is_array($this->categories)) $this->categories = unserialize((string) $this->categories);
 
         foreach ($this->basecategories as $key => $basecategory) {
             foreach ($this->categories[$key] as $category) {
@@ -464,7 +464,7 @@ class CategoriesProperty extends DataProperty
 	 */	 
     public function getValue()
     {    
-        $unpacked = unserialize($this->value);
+        $unpacked = unserialize((string) $this->value);
         return $unpacked;
     }
 
@@ -551,7 +551,7 @@ class CategoriesProperty extends DataProperty
         $arrayprop->checkInput($this->propertyprefix . $this->id . '["initialization_basecategories"]');
 
         // Assign the value to this configuration property for update
-        $data['configuration']['initialization_basecategories'] = unserialize($arrayprop->value);
+        $data['configuration']['initialization_basecategories'] = unserialize((string) $arrayprop->value);
 
         // The other configuration properties need no special treatment
         return parent::updateConfiguration($data);
@@ -674,7 +674,7 @@ class CategoriesProperty extends DataProperty
         $previous_cats = array_keys($links);
         
         // Make sure the categories are in the form of an array
-        if (!is_array($this->categories)) $this->categories = unserialize($this->categories);
+        if (!is_array($this->categories)) $this->categories = unserialize((string) $this->categories);
 
         $current_cats  = array_keys($this->categories);
         $todelete = array_diff($previous_cats,$current_cats);

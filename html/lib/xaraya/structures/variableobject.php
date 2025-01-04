@@ -57,14 +57,14 @@ abstract class xarVariableObject extends xarObject
         if (!isset(static::$instance)) {
             switch (static::$scope) {
                 case 'module':
-                    static::$instance = @unserialize(xarModVars::get(static::$module, static::$variable));
+                    static::$instance = @unserialize((string) xarModVars::get(static::$module, static::$variable));
                     break;
                 case 'user':
                     $role_id = isset($role_id) ? $role_id : xarSession::getVar('role_id');
-                    static::$instance = @unserialize(xarModUserVars::get(static::$module, static::$variable, $role_id));
+                    static::$instance = @unserialize((string) xarModUserVars::get(static::$module, static::$variable, $role_id));
                     break;
                 case 'session':
-                    static::$instance = @unserialize(xarSession::getVar(static::$variable));
+                    static::$instance = @unserialize((string) xarSession::getVar(static::$variable));
                     break;
             }
             // NOTE: if the object unserialized successfully 

@@ -62,7 +62,7 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
                 //sys::import('xaraya.autoload');
                 //xarAutoload::initialize();
             }
-            $value = @unserialize($value['_xcache_value_']);
+            $value = @unserialize((string) $value['_xcache_value_']);
         }
         if ($output) {
             // output the value directly to the browser

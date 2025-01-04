@@ -231,7 +231,7 @@ function blocks_instancesapi_getitems(array $args = [], $context = null)
             switch ($key) {
                 case 'content':
                 case 'type_info':
-                    $value = @unserialize($value);                                      
+                    $value = @unserialize((string) $value);
                     $item[$key] = $value;
                 break;
                 case 'classname':

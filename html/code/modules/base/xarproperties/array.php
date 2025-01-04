@@ -96,7 +96,7 @@ class ArrayProperty extends DataProperty
             }
             
             // Support both arrays and serialized strings
-            if (!is_array($displayconfig)) $displayconfig = unserialize($displayconfig);
+            if (!is_array($displayconfig)) $displayconfig = unserialize((string) $displayconfig);
             
             $columncount = isset($displayconfig) ? count($displayconfig) : 0;
             if (!xarVar::fetch($name,    'array', $elements, array(), xarVar::NOT_REQUIRED)) return false;
@@ -328,7 +328,7 @@ class ArrayProperty extends DataProperty
         } else {
             // We are adding data to an item
             try {
-                if (isset($data['column_configuration'])) $this->display_column_definition = unserialize($data['column_configuration']);
+                if (isset($data['column_configuration'])) $this->display_column_definition = unserialize((string) $data['column_configuration']);
                 $displayconfig = $this->display_column_definition;
 
                 // Remove this line once legacy code no longer needed

@@ -201,7 +201,7 @@ class PropertyRegistration extends DataContainer
                 $property['format']         = $format;
                 $property['configuration']  = $configuration;
                 $property['source']         = $source;
-                $property['dependancies']   = unserialize($reqfiles);
+                $property['dependancies']   = unserialize((string) $reqfiles);
                 $property['requiresmodule'] = $modname;
                 $property['args']           = $args;
                 // TODO: this returns a serialized array of objects, does that hurt?

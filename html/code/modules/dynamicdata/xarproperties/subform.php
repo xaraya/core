@@ -707,7 +707,7 @@ class SubFormProperty extends DataProperty
                 if (empty($value)) {
                     $value = [];
                 } elseif (!is_array($value)) {
-                    $out = @unserialize($value);
+                    $out = @unserialize((string) $value);
                     if (!empty($out) && is_array($out)) {
                         $value = $out;
                     } else {
@@ -760,7 +760,7 @@ class SubFormProperty extends DataProperty
         if (is_array($configuration)) {
             $fields = $configuration;
         } else {
-            $fields = unserialize($configuration);
+            $fields = unserialize((string) $configuration);
         }
         if (!empty($fields) && is_array($fields)) {
             foreach ($this->arguments as $item) {

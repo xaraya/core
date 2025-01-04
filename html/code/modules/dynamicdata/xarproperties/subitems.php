@@ -539,7 +539,7 @@ class SubItemsProperty extends DataProperty
             die(xarML('No datasource for sublinks of #(1) defined', $this->objectref->name));
         }
 
-        $objectarray = unserialize($this->objectref->objects);
+        $objectarray = unserialize((string) $this->objectref->objects);
         foreach ($objectarray as $value) {
             $valueparts = explode('.', $value[1]);
             if ($valueparts[0] == $this->initialization_refobject) {

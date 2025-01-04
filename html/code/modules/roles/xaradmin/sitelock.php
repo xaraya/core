@@ -27,7 +27,7 @@ function roles_admin_sitelock(array $args = [], $context = null)
 # --------------------------------------------------------
 # Get the configuration from the modvar
 #
-	$lockvars = unserialize(xarModVars::get('roles','lockdata'));
+	$lockvars = unserialize((string) xarModVars::get('roles','lockdata'));
 	$toggle = $lockvars['locked'];
 	$roles = $lockvars['roles'];
 	$lockedoutmsg = (!isset($lockvars['message']) || $lockvars['message'] == '') ? xarML('The site is currently locked. Thank you for your patience.') : $lockvars['message'];
@@ -117,7 +117,7 @@ function roles_admin_sitelock(array $args = [], $context = null)
             $toggle = (int)$toggle ? 0 : 1;
 
             // Get the roles
-            $lockdata = unserialize(xarModVars::get('roles', 'lockdata'));
+            $lockdata = unserialize((string) xarModVars::get('roles', 'lockdata'));
             var_dump($lockdata);
             $rolesarray = $lockdata['roles'];
 			foreach($rolesarray as $thisrole) {
@@ -173,7 +173,7 @@ function roles_admin_sitelock(array $args = [], $context = null)
             }
 
             // Save the locked value
-            $lockdata = unserialize(xarModVars::get('roles', 'lockdata'));
+            $lockdata = unserialize((string) xarModVars::get('roles', 'lockdata'));
             $lockdata['locked'] = $toggle;
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
 

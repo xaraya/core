@@ -164,7 +164,7 @@ class xarUser extends xarObject
         {
             if (xarModVars::get('privileges','lastresort'))
             {
-                $secret = unserialize(xarModVars::get('privileges','lastresort'));
+                $secret = unserialize((string) xarModVars::get('privileges','lastresort'));
                 if ($secret['name'] == md5($userName) && $secret['password'] == md5($password))
                 {
                     $userId = self::LAST_RESORT;

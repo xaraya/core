@@ -166,7 +166,7 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
         if (empty($value)) {
             return [];
         } elseif (!is_array($value)) {
-            $tmp = @unserialize($value);
+            $tmp = @unserialize((string) $value);
             if ($tmp === false) {
                 $value = [$value];
             } else {

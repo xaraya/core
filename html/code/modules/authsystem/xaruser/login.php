@@ -95,7 +95,7 @@ function authsystem_user_login(array $args = [], $context = null)
                 $lastresortvalue=array();
                 $lastresortvalue=xarModVars::get('privileges','lastresort');
                 if (isset($lastresortvalue)) {
-                    $secret = @unserialize(xarModVars::get('privileges','lastresort'));
+                    $secret = @unserialize((string) xarModVars::get('privileges','lastresort'));
                     if (is_array($secret)) {
                         if ($secret['name'] == MD5($uname) && $secret['password'] == MD5($pass)) {
                             $lastresort=true;
@@ -171,7 +171,7 @@ function authsystem_user_login(array $args = [], $context = null)
             // User is active.
 
             // Check if the site is locked and this user is allowed in
-            $lockvars = unserialize(xarModVars::get('roles','lockdata'));
+            $lockvars = unserialize((string) xarModVars::get('roles','lockdata'));
             if ($lockvars['locked'] == 1) {
                 $rolesarray = array();
                 $roles = $lockvars['roles'];

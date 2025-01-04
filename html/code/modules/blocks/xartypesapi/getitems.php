@@ -152,7 +152,7 @@ function blocks_typesapi_getitems(array $args = [], $context = null)
             switch ($field) {
                 case 'type_info':
                     // normalize content
-                    $val = @unserialize($val);
+                    $val = @unserialize((string) $val);
                     $item[$field] = $val;
                     $item['content'] = $val;
                 break;

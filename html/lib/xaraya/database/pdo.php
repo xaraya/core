@@ -1128,7 +1128,7 @@ class PDOResultSet extends xarObject implements ResultSetInterface
         if (null === $col = $this->checkColGet($column)) {
         	return null;
         }
-        return (array) unserialize($this->fields[$col]);
+        return (array) unserialize((string) $this->fields[$col]);
     }
     public function getBoolean($column=null)
     {

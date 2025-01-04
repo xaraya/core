@@ -88,7 +88,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:set name="value">@unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'))</xar:set>
+                        <xar:set name="value">@unserialize((string) xarSystemVars::get(sys::CONFIG, 'Log.Level'))</xar:set>
                         <xar:data-input type="checkboxlist" name="loglevel" value="$value" options="$levels"/>
                     </div>
                 </div>

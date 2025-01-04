@@ -198,7 +198,7 @@ class MultiSelectProperty extends SelectProperty
         if (empty($value)) {
             return array();
         } elseif (!is_array($value)) {
-            $tmp = @unserialize($value);
+            $tmp = @unserialize((string) $value);
             if ($tmp === false) {
                 $value = array($value);
             } else {

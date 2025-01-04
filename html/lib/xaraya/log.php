@@ -106,7 +106,7 @@ class xarLog extends xarObject
             //should be able to have a way to get error messages back => installation?!
             $logFile = self::fallbackFile();
             if ($logFile) {
-                $levels = @unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'));
+                $levels = @unserialize((string) xarSystemVars::get(sys::CONFIG, 'Log.Level'));
 
                 self::$config[] = array(
                     'type'          => 'simple',

@@ -124,7 +124,7 @@ class xarConfigVars extends xarVars implements IxarVars
         if($result->next()) {
             // Found it, retrieve and cache it
             $value = $result->get(2);
-            $value = unserialize($value);
+            $value = unserialize((string) $value);
             xarCoreCache::setCached(self::$KEY, $result->getString(1), $value);
             $result->close();
             return $value;

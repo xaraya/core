@@ -255,7 +255,7 @@ class xarObjectCache extends xarObject
         // we're done with this cacheKey
         self::$cacheKey = null;
 
-        $content = unserialize($value);
+        $content = unserialize((string) $value);
         if (!empty($content['title']) && is_array($content['title'])) {
             xarTpl::setPageTitle($content['title'][0], $content['title'][1]);
         }
