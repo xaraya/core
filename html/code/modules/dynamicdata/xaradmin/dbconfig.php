@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -19,7 +20,7 @@ use Xaraya\DataObject\UtilApi;
 function dynamicdata_admin_dbconfig(array $args = [], $context = null)
 {
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) {
+    if (!xarSecurity::check('AdminDynamicData')) {
         return;
     }
 
@@ -33,6 +34,7 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
     }
 
     $data = [];
+    $utilapi = new UtilApi();
 
     if (!empty($db)) {
         if ($db === 'default') {
@@ -40,7 +42,7 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
             return $data;
         }
         [$module, $dbname] = explode('.', $db . '.');
-        $databases = UtilApi::getDatabases($module);
+        $databases = $utilapi->getDatabases($module);
         if ($dbname !== '*' && empty($databases[$dbname])) {
             return $data;
         }
@@ -54,12 +56,12 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
                     unset($databases[$dbname]);
                 }
                 $databases[$config['name']] = $config;
-                UtilApi::saveDatabases($databases, $module);
+                $utilapi->saveDatabases($databases, $module);
                 $dbname = $config['name'];
             } elseif ($dbname !== '*') {
                 // delete database config
                 unset($databases[$dbname]);
-                UtilApi::saveDatabases($databases, $module);
+                $utilapi->saveDatabases($databases, $module);
                 $dbname = '*';
             }
             xarController::redirect(xarController::URL(
@@ -97,7 +99,7 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
         $data['obj'] = $obj;
         $data['module'] = $module;
         if ($objectname !== '*') {
-            $configuration = UtilApi::getObjectConfig($objectname);
+            $configuration = $utilapi->getObjectConfig($objectname);
         } else {
             $configuration = [
                 'name' => $objectname,
@@ -125,7 +127,7 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
             'method' => 'getDbConnArgs',
         ];
         $data['config']['objectid'] ??= 0;
-        $data['databases'] = UtilApi::getDatabases($module);
+        $data['databases'] = $utilapi->getDatabases($module);
         $data['config']['dbconfig'] ??= '';
         return $data;
     }
@@ -133,7 +135,7 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
     $data['dbconfigs'] = [];
 
     // find any modules with module variable 'databases'
-    $all_databases = UtilApi::getAllDatabases();
+    $all_databases = $utilapi->getAllDatabases();
     foreach ($all_databases as $modname => $databases) {
         $data['dbconfigs'][$modname] ??= ['objects' => [], 'databases' => []];
         $data['dbconfigs'][$modname]['databases'] = $databases;

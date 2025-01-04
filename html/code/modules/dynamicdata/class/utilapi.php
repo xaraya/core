@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.5.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -39,7 +40,7 @@ class UtilApi implements DatabaseInterface
 {
     use DatabaseTrait;
 
-    protected static string $moduleName = 'dynamicdata';
+    protected string $moduleName = 'dynamicdata';
     /** @var array<string, int> */
     protected static array $propTypeIds = [];
 
@@ -49,7 +50,7 @@ class UtilApi implements DatabaseInterface
      * @param ?array<string, mixed> $item
      * @return array<string, mixed>
      */
-    public static function getObjectConfig($objectname, $item = null)
+    public function getObjectConfig($objectname, $item = null)
     {
         $item ??= DataObjectFactory::getObjectInfo(['name' => $objectname]);
         if (empty($item) || $item['name'] !== $objectname) {
@@ -82,7 +83,7 @@ class UtilApi implements DatabaseInterface
      * Summary of getObjectConfig
      * @return array<string, mixed>
      */
-    public static function getAllDatabases()
+    public function getAllDatabases()
     {
         // find any modules with module variable 'databases'
         $all_modules = xarMod::apiFunc('modules', 'admin', 'getitems');
@@ -116,7 +117,7 @@ class UtilApi implements DatabaseInterface
      * @param array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB (optional)
      * @return array<string, array<string, mixed>>|void of field definitions, or null on failure
      */
-    public static function getMeta($table, $db = null, $dbConnIndex = 0, $dbConnArgs = [])
+    public function getMeta($table, $db = null, $dbConnIndex = 0, $dbConnArgs = [])
     {
         /** @var array<string, array<string, mixed>> */
         static $propertybag = [];
@@ -130,7 +131,7 @@ class UtilApi implements DatabaseInterface
         $dbConnIndex = ExternalDatabase::checkDbConnection($dbConnIndex, $dbConnArgs);
         // use external database connection
         if (ExternalDatabase::isIndexExternal($dbConnIndex)) {
-            return static::getExternalMeta($table, $dbConnIndex);
+            return $this->getExternalMeta($table, $dbConnIndex);
         }
         $dbconn = xarDB::getConn($dbConnIndex);
         // dbInfo holds the meta information about the database
@@ -175,7 +176,7 @@ class UtilApi implements DatabaseInterface
                 continue;
             }
 
-            $metadata[$curtable] = static::getTableInfo($curtable, $tblInfo);
+            $metadata[$curtable] = $this->getTableInfo($curtable, $tblInfo);
             $propertybag[$curtable] = $metadata[$curtable];
         }
 
@@ -193,7 +194,7 @@ class UtilApi implements DatabaseInterface
      * @param \TableInfo|\PDOTable $tblInfo
      * @return array<string, array<string, mixed>>
      */
-    public static function getTableInfo($curtable, $tblInfo)
+    public function getTableInfo($curtable, $tblInfo)
     {
         // Get the columns and the primary keys
         $fields = $tblInfo->getColumns();
@@ -222,13 +223,13 @@ class UtilApi implements DatabaseInterface
 
             // try to figure out if it's the item id
             // @todo xarPDO middleware only returns primary_key column, not columns for multiple keys
-            if(is_object($keyInfo) && $name == $keyInfo->getName() && count($keyInfo->getColumns()) < 2) {
+            if (is_object($keyInfo) && $name == $keyInfo->getName() && count($keyInfo->getColumns()) < 2) {
                 // CHECKME: how are multiple tuples handled here?
                 // not allowed to modify primary key !
                 $datatype = 'itemid';
             }
 
-            [$proptype, $configuration, $status] = static::mapPropertyType($datatype, $size);
+            [$proptype, $configuration, $status] = $this->mapPropertyType($datatype, $size);
 
             // JDJ: added 'primary' and 'autoincrement' fields.
             // If this causes a problem, it could be made optional.
@@ -268,7 +269,7 @@ class UtilApi implements DatabaseInterface
      * @param string $dbConnIndex connection index of the database if different from Xaraya DB (required)
      * @return array<string, array<string, mixed>>|void of field definitions, or null on failure
      */
-    public static function getExternalMeta($table, $dbConnIndex = '')
+    public function getExternalMeta($table, $dbConnIndex = '')
     {
         /** @var array<string, array<string, array<string, mixed>>> */
         static $propertybag = [];
@@ -299,7 +300,7 @@ class UtilApi implements DatabaseInterface
             if ($datatype == 'itemid' || $datatype == 'documentid') {
                 $primary = $name;
             }
-            [$proptype, $configuration, $status] = static::mapPropertyType($datatype);
+            [$proptype, $configuration, $status] = $this->mapPropertyType($datatype);
             $metadata[$table][$name] = [
                 'name' => $name,
                 'label' => $label,
@@ -328,12 +329,12 @@ class UtilApi implements DatabaseInterface
      * @param string|int $size
      * @return array{0: int, 1: string, 2: int}
      */
-    public static function mapPropertyType($datatype, $size = 0)
+    public function mapPropertyType($datatype, $size = 0)
     {
         $proptype = '';
         $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
 
-        $proptypeid = static::getPropTypeIds();
+        $proptypeid = $this->getPropTypeIds();
 
         // assign some default validation for now
         $configuration = $datatype;
@@ -440,7 +441,7 @@ class UtilApi implements DatabaseInterface
      * Summary of getPropTypeIds
      * @return array<string, int>
      */
-    public static function getPropTypeIds()
+    public function getPropTypeIds()
     {
         if (count(static::$propTypeIds) > 0) {
             return static::$propTypeIds;
@@ -462,7 +463,7 @@ class UtilApi implements DatabaseInterface
      * @param mixed $dbConnIndex corresponding db connection index (relational or external)
      * @return string
      */
-    public static function importTables($checklist, $dbConfigName, $dbConnIndex = 0)
+    public function importTables($checklist, $dbConfigName, $dbConnIndex = 0)
     {
         $result = '';
         if (empty($checklist)) {
@@ -472,19 +473,19 @@ class UtilApi implements DatabaseInterface
         // create db connection based on database configuration if needed
         if (empty($dbConnIndex)) {
             [$module, $dbname] = explode('.', $dbConfigName . '.');
-            $databases = static::getDatabases($module);
+            $databases = $this->getDatabases($module);
             if (empty($databases[$dbname])) {
                 $result .= "Invalid database configuration $dbConfigName to import tables\n";
                 return $result;
             }
-            $dbConnIndex = static::connectDatabase($dbname);
+            $dbConnIndex = $this->connectDatabase($dbname);
             if (empty($dbConnIndex)) {
                 $result .= "Invalid db connection for database configuration $dbConfigName to import tables\n";
                 return $result;
             }
         }
         // check existing tables and objects
-        $tables = static::getMeta('', null, $dbConnIndex);
+        $tables = $this->getMeta('', null, $dbConnIndex);
         $objects = DataObjectFactory::getObjects();
         $objectnames = [];
         foreach ($objects as $objectinfo) {

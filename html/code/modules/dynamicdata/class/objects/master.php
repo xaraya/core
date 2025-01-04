@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -161,7 +162,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
 
         // use the object name as default template override (*-*-[template].x*)
-        if(empty($this->template) && !empty($this->name)) {
+        if (empty($this->template) && !empty($this->name)) {
             $this->template = $this->name;
         }
 
@@ -297,7 +298,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         }
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview'])) {
+        if (!empty($args['preview'])) {
             $this->checkInput();
         }
 
@@ -308,19 +309,19 @@ class DataObjectMaster extends xarObject implements ContextInterface
             }
         }
 
-        if(count($args['fieldlist']) > 0) {
+        if (count($args['fieldlist']) > 0) {
             $fields = $args['fieldlist'];
         } else {
             $fields = array_keys($this->properties);
         }
 
         $args['properties'] = [];
-        foreach($fields as $name) {
-            if(!isset($this->properties[$name])) {
+        foreach ($fields as $name) {
+            if (!isset($this->properties[$name])) {
                 continue;
             }
 
-            if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            if (($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) {
                 continue;
@@ -374,18 +375,18 @@ class DataObjectMaster extends xarObject implements ContextInterface
             if (!is_array($status)) {
                 $status = [$status];
             }
-            foreach($fieldlist as $field) {
+            foreach ($fieldlist as $field) {
                 $field = trim($field);
                 // Ignore those disabled AND those that don't exist
-                if(isset($this->properties[$field]) && in_array($this->properties[$field]->getDisplayStatus(), $status)) {
+                if (isset($this->properties[$field]) && in_array($this->properties[$field]->getDisplayStatus(), $status)) {
                     $this->fieldlist[$this->properties[$field]->id] = $this->properties[$field]->name;
                 }
             }
         } else {
-            foreach($fieldlist as $field) {
+            foreach ($fieldlist as $field) {
                 $field = trim($field);
                 // Ignore those disabled AND those that don't exist
-                if(isset($this->properties[$field]) && ($this->properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)) {
+                if (isset($this->properties[$field]) && ($this->properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)) {
                     $this->fieldlist[$this->properties[$field]->id] = $this->properties[$field]->name;
                 }
             }
@@ -408,14 +409,14 @@ class DataObjectMaster extends xarObject implements ContextInterface
     private function setupFieldList($fieldlist = [], $status = [])
     {
         $fields = [];
-        if(!empty($fieldlist)) {
+        if (!empty($fieldlist)) {
             if (!is_array($fieldlist)) {
                 $fieldlist = explode(',', $fieldlist);
             }
             // Note: we already filter out field subsets in ui_handler view and display (and elsewhere?)
-            foreach($fieldlist as $field) {
+            foreach ($fieldlist as $field) {
                 // Ignore those disabled AND those that don't exist
-                if(isset($this->properties[$field]) && ($this->properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)) {
+                if (isset($this->properties[$field]) && ($this->properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)) {
                     $fields[$this->properties[$field]->id] = $this->properties[$field]->name;
                 }
             }
@@ -426,8 +427,8 @@ class DataObjectMaster extends xarObject implements ContextInterface
                     $status = [$status];
                 }
                 // we have a status: filter on it
-                foreach($this->properties as $property) {
-                    if(in_array($property->getDisplayStatus(), $status)) {
+                foreach ($this->properties as $property) {
+                    if (in_array($property->getDisplayStatus(), $status)) {
                         $fields[$property->id] = $property->name;
                     }
                 }
@@ -441,8 +442,8 @@ class DataObjectMaster extends xarObject implements ContextInterface
                     $not_allowed_state = DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY;
                 }
                 // Filter out properties with the state chosen above, and also the disabled properties
-                foreach($this->properties as $property) {
-                    if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED &&
+                foreach ($this->properties as $property) {
+                    if ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED &&
                        $property->getDisplayStatus() != $not_allowed_state) {
                         $fields[$property->id] = $property->name;
                     }
@@ -457,10 +458,10 @@ class DataObjectMaster extends xarObject implements ContextInterface
      */
     public function setDisplayStatus($fieldlist = [], $status = 1)
     {
-        if(!empty($fieldlist)) {
-            foreach($fieldlist as $field) {
+        if (!empty($fieldlist)) {
+            foreach ($fieldlist as $field) {
                 // Ignore those disabled AND those that don't exist
-                if(isset($this->properties[$field])) {
+                if (isset($this->properties[$field])) {
                     $this->properties[$field]->setDisplayStatus($status);
                 }
             }
@@ -506,6 +507,15 @@ class DataObjectMaster extends xarObject implements ContextInterface
         if (is_string($this->dbConnArgs)) {
             $this->dbConnArgs = json_decode($this->dbConnArgs, true);
         }
+        if (is_array($this->dbConnArgs) && is_string($this->dbConnArgs[0])) {
+            // instantiate UserApi class here!?
+            sys::import('xaraya.traits.databasetrait');
+            if (class_exists($this->dbConnArgs[0]) && is_subclass_of($this->dbConnArgs[0], Xaraya\Core\Traits\DatabaseInterface::class)) {
+                // @todo avoid calling xarMod::getName() with xaraya db connection here - see virtual library offline
+                $modname = xarMod::getName($this->moduleid);
+                $this->dbConnArgs[0] = new $this->dbConnArgs[0]($modname);
+            }
+        }
         // Note: this assumes the class is (auto-)loaded
         if (is_callable($this->dbConnArgs)) {
             // we pass the current object as argument here, just in case...
@@ -513,10 +523,11 @@ class DataObjectMaster extends xarObject implements ContextInterface
             $this->dbConnArgs = $args;
         } elseif (!empty($this->dbConnArgs['databaseConfig'])) {
             sys::import('modules.dynamicdata.class.utilapi');
+            $utilapi = new Xaraya\DataObject\UtilApi();
             // get existing database config
             try {
                 [$module, $dbname] = explode('.', $this->dbConnArgs['databaseConfig']);
-                $args = Xaraya\DataObject\UtilApi::getDatabaseDSN($dbname, $module);
+                $args = $utilapi->getDatabaseDSN($dbname, $module);
                 $this->dbConnArgs = $args;
             } catch (Exception) {
                 // allow database connection failure later on when it's actually needed
@@ -593,7 +604,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         $this->datastore->object = $this;
 
         // for dynamic object lists, put a reference to the $itemids array in the data store
-        if($this instanceof DataObjectList) {
+        if ($this instanceof DataObjectList) {
             $this->datastore->_itemids = & $this->itemids;
         }
     }
@@ -605,13 +616,13 @@ class DataObjectMaster extends xarObject implements ContextInterface
     public function &getProperties($args = [])
     {
         $fields = [];
-        if(!empty($args['fieldlist'])) {
+        if (!empty($args['fieldlist'])) {
             $fields = $this->getFieldList();
             $this->setFieldList($args['fieldlist']);
         }
 
         $properties = [];
-        foreach($this->getFieldList() as $name) {
+        foreach ($this->getFieldList() as $name) {
             if (isset($this->properties[$name])) {
                 // Filter for state if one is passed
                 if (!empty($args['status'])) {
@@ -637,7 +648,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
             }
         }
 
-        if(!empty($args['fieldlist'])) {
+        if (!empty($args['fieldlist'])) {
             $this->setFieldList($fields);
         }
         return $properties;
@@ -664,7 +675,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
     public function addProperty(array $args = [])
     {
         // TODO: find some way to have unique IDs across all objects if necessary
-        if(!isset($args['id'])) {
+        if (!isset($args['id'])) {
             $args['id'] = count($this->properties) + 1;
         }
         sys::import('modules.dynamicdata.class.properties.master');
@@ -932,7 +943,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
     {
         $displayvalues = [];
         $properties = $this->getProperties($args);
-        foreach($properties as $property) {
+        foreach ($properties as $property) {
             $label = xarVar::prepForDisplay($property->label);
             $displayvalues[$label] = $property->showOutput();
         }
@@ -1021,7 +1032,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         } else {
             // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
             $modname = xarMod::getName($this->moduleid);
-            if($modname == 'articles' || $modname == 'roles') {
+            if ($modname == 'articles' || $modname == 'roles') {
                 return;
             }
         }
@@ -1045,13 +1056,13 @@ class DataObjectMaster extends xarObject implements ContextInterface
             }
             $this->hookvalues['transform'] = [];
 
-            foreach($fields as $name) {
+            foreach ($fields as $name) {
                 // TODO: this is exactly the same as in the dataobject display function, consolidate it ?
-                if(!isset($this->properties[$name])) {
+                if (!isset($this->properties[$name])) {
                     continue;
                 }
 
-                if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                if (($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) {
                     continue;
@@ -1066,7 +1077,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
             }
             $this->hooktransform = $this->hookvalues['transform'];
         } else {
-            foreach(array_keys($this->properties) as $name) {
+            foreach (array_keys($this->properties) as $name) {
                 $this->hookvalues[$name] = $this->properties[$name]->value;
             }
             $this->hooktransform = [];
@@ -1326,7 +1337,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         }
 
         // default actions supported by dynamic objects
-        switch($action) {
+        switch ($action) {
             case 'admin':
                 // require admin access to the module here
                 return xarSecurity::check('AdminDynamicData', 0);

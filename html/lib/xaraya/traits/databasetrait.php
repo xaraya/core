@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Trait to handle module- or object-specific database connections.
  * See https://github.com/xaraya-modules/library module for an example connecting to sqlite3 databases
@@ -29,13 +30,14 @@
  *
  * If you support more than 1 database (besides the Xaraya DB), you can set the current DB for the user with:
  * ```
- * UserApi::setCurrentDatabase($name)
+ * $userapi = xarMod::getAPI('library');
+ * $userapi->setCurrentDatabase($name)
  * ```
  *
  * @package core\traits
  * @subpackage traits
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.5.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -71,14 +73,14 @@ interface DatabaseInterface
      * @param string $moduleName
      * @return void
      */
-    public static function setModuleName($moduleName);
+    public function setModuleName($moduleName);
 
     /**
      * Summary of getDatabases
      * @param ?string $moduleName
      * @return array<string, mixed>
      */
-    public static function getDatabases($moduleName = null);
+    public function getDatabases($moduleName = null);
 
     /**
      * Summary of addDatabase
@@ -87,7 +89,7 @@ interface DatabaseInterface
      * @param bool $save save changes to module vars (default false)
      * @return void
      */
-    public static function addDatabase($name, $database, $save = false);
+    public function addDatabase($name, $database, $save = false);
 
     /**
      * Summary of saveDatabases
@@ -95,14 +97,14 @@ interface DatabaseInterface
      * @param ?string $moduleName
      * @return void
      */
-    public static function saveDatabases($databases = null, $moduleName = null);
+    public function saveDatabases($databases = null, $moduleName = null);
 
     /**
      * Summary of connectDatabase
      * @param string $name
      * @return int|null
      */
-    public static function connectDatabase($name);
+    public function connectDatabase($name);
 
     /**
      * Callable specified in object config to get dbConnArgs for DataObjectMaster
@@ -110,7 +112,7 @@ interface DatabaseInterface
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function getDbConnArgs($object = null);
+    public function getDbConnArgs($object = null);
 
     /**
      * Summary of getDatabaseDSN
@@ -118,14 +120,14 @@ interface DatabaseInterface
      * @throws BadParameterException
      * @return array<string, mixed>
      */
-    public static function getDatabaseDSN($name);
+    public function getDatabaseDSN($name);
 
     /**
      * Summary of getCurrentDatabase
      * @param mixed $context
      * @return string|null
      */
-    public static function getCurrentDatabase($context = null);
+    public function getCurrentDatabase($context = null);
 
     /**
      * Summary of setCurrentDatabase
@@ -133,14 +135,14 @@ interface DatabaseInterface
      * @param mixed $context
      * @return void
      */
-    public static function setCurrentDatabase($name = '', $context = null);
+    public function setCurrentDatabase($name = '', $context = null);
 
     /**
      * Summary of getDatabaseTables
      * @param string $name
      * @return array<mixed>
      */
-    public static function getDatabaseTables($name);
+    public function getDatabaseTables($name);
 }
 
 /**
@@ -159,13 +161,11 @@ interface DatabaseInterface
  * class UserApi implements DatabaseInterface
  * {
  *     use DatabaseTrait;
- *     protected static string $moduleName = 'library';
  * }
  * ```
  */
 trait DatabaseTrait
 {
-    //protected static string $moduleName = 'OVERRIDE';
     /** @var array<string, mixed> */
     protected static array $_databases = [];
     /** @var array<string, mixed> */
@@ -176,13 +176,13 @@ trait DatabaseTrait
      * @param string $moduleName
      * @return void
      */
-    public static function setModuleName($moduleName)
+    public function setModuleName($moduleName)
     {
         // reset list of databases in DatabaseTrait
-        if ($moduleName !== static::$moduleName) {
+        if ($moduleName !== $this->moduleName) {
             static::$_databases = [];
         }
-        static::$moduleName = $moduleName;
+        $this->moduleName = $moduleName;
     }
 
     /**
@@ -190,26 +190,26 @@ trait DatabaseTrait
      * @param ?string $moduleName
      * @return array<string, mixed>
      */
-    public static function getDatabases($moduleName = null)
+    public function getDatabases($moduleName = null)
     {
         if (!empty($moduleName)) {
-            static::setModuleName($moduleName);
+            $this->setModuleName($moduleName);
         }
         if (empty(static::$_databases)) {
             $allDatabases = [];
             if (xarCoreCache::isCached('DynamicData', 'Databases')) {
                 $allDatabases = xarCoreCache::getCached('DynamicData', 'Databases');
             }
-            if (!empty($allDatabases[static::$moduleName])) {
-                static::$_databases = $allDatabases[static::$moduleName];
+            if (!empty($allDatabases[$this->moduleName])) {
+                static::$_databases = $allDatabases[$this->moduleName];
             } else {
-                $databases = unserialize(xarModVars::get(static::$moduleName, 'databases') ?? '');
+                $databases = unserialize(xarModVars::get($this->moduleName, 'databases') ?? '');
                 if (empty($databases)) {
                     static::$_databases = [];
                 } else {
                     static::$_databases = $databases;
                 }
-                $allDatabases[static::$moduleName] = static::$_databases;
+                $allDatabases[$this->moduleName] = static::$_databases;
                 xarCoreCache::setCached('DynamicData', 'Databases', $allDatabases);
             }
         }
@@ -223,7 +223,7 @@ trait DatabaseTrait
      * @param bool $save save changes to module vars (default false)
      * @return void
      */
-    public static function addDatabase($name, $database, $save = false)
+    public function addDatabase($name, $database, $save = false)
     {
         // allow starting with un-initialized $_databases = before calling getDatabases()
         static::$_databases ??= [];
@@ -235,7 +235,7 @@ trait DatabaseTrait
             static::$_databases[$name] = $database;
         }
         if ($save) {
-            static::saveDatabases();
+            $this->saveDatabases();
         }
     }
 
@@ -245,10 +245,10 @@ trait DatabaseTrait
      * @param ?string $moduleName
      * @return void
      */
-    public static function saveDatabases($databases = null, $moduleName = null)
+    public function saveDatabases($databases = null, $moduleName = null)
     {
         $databases ??= static::$_databases;
-        $moduleName ??= static::$moduleName;
+        $moduleName ??= $this->moduleName;
         xarModVars::set($moduleName, 'databases', serialize($databases));
         $allDatabases = [];
         if (xarCoreCache::isCached('DynamicData', 'Databases')) {
@@ -265,13 +265,13 @@ trait DatabaseTrait
      * @param string $name
      * @return int|string|null
      */
-    public static function connectDatabase($name)
+    public function connectDatabase($name)
     {
         if (!empty(static::$_connections[$name])) {
             return static::$_connections[$name];
         }
         try {
-            $args = static::getDatabaseDSN($name);
+            $args = $this->getDatabaseDSN($name);
         } catch (BadParameterException $e) {
             return null;
         }
@@ -287,17 +287,17 @@ trait DatabaseTrait
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function getDbConnArgs($object = null)
+    public function getDbConnArgs($object = null)
     {
         $context = null;
         if (is_object($object) && method_exists($object, 'getContext')) {
             $context = $object->getContext();
         }
-        $name = static::getCurrentDatabase($context);
+        $name = $this->getCurrentDatabase($context);
         if (!isset($name)) {
             $name = 'memory';
         }
-        return static::getDatabaseDSN($name);
+        return $this->getDatabaseDSN($name);
     }
 
     /**
@@ -307,12 +307,12 @@ trait DatabaseTrait
      * @throws BadParameterException
      * @return array<string, mixed>
      */
-    public static function getDatabaseDSN($name, $moduleName = null)
+    public function getDatabaseDSN($name, $moduleName = null)
     {
         if ($name == 'memory') {
             return ['databaseType' => 'sqlite3', 'databaseName' => ':memory:'];
         }
-        $databases = static::getDatabases($moduleName);
+        $databases = $this->getDatabases($moduleName);
         if (!isset($databases[$name])) {
             throw new BadParameterException($name, 'Invalid database name #(1)');
         }
@@ -327,10 +327,10 @@ trait DatabaseTrait
      * @param mixed $context
      * @return string|null
      */
-    public static function getCurrentDatabase($context = null)
+    public function getCurrentDatabase($context = null)
     {
         // if we only have one database, return its name
-        if (count(static::getDatabases()) === 1) {
+        if (count($this->getDatabases()) === 1) {
             return array_key_first(static::$_databases);
         }
         // we need 'module_itemvars' and/or 'module_vars' tables below
@@ -341,18 +341,18 @@ trait DatabaseTrait
             $userId = $context->getUserId();
             if (!empty($userId)) {
                 // @todo use user context?
-                $name = xarModUserVars::get(static::$moduleName, 'dbName', $userId);
+                $name = xarModUserVars::get($this->moduleName, 'dbName', $userId);
             } else {
                 // @todo use session context?
-                $name = xarSession::getVar(static::$moduleName . ':dbName');
+                $name = xarSession::getVar($this->moduleName . ':dbName');
             }
         } elseif (xarUser::isLoggedIn()) {
-            $name = xarModUserVars::get(static::$moduleName, 'dbName');
+            $name = xarModUserVars::get($this->moduleName, 'dbName');
         } else {
-            $name = xarSession::getVar(static::$moduleName . ':dbName');
+            $name = xarSession::getVar($this->moduleName . ':dbName');
         }
         if (!isset($name)) {
-            $name = xarModVars::get(static::$moduleName, 'dbName');
+            $name = xarModVars::get($this->moduleName, 'dbName');
         }
         return $name;
     }
@@ -363,21 +363,21 @@ trait DatabaseTrait
      * @param mixed $context
      * @return void
      */
-    public static function setCurrentDatabase($name = '', $context = null)
+    public function setCurrentDatabase($name = '', $context = null)
     {
         if (!empty($context)) {
             $userId = $context->getUserId();
             if (!empty($userId)) {
                 // @todo use user context?
-                xarModUserVars::set(static::$moduleName, 'dbName', $name, $userId);
+                xarModUserVars::set($this->moduleName, 'dbName', $name, $userId);
             } else {
                 // @todo use session context?
-                xarSession::setVar(static::$moduleName . ':dbName', $name);
+                xarSession::setVar($this->moduleName . ':dbName', $name);
             }
         } elseif (xarUser::isLoggedIn()) {
-            xarModUserVars::set(static::$moduleName, 'dbName', $name);
+            xarModUserVars::set($this->moduleName, 'dbName', $name);
         } else {
-            xarSession::setVar(static::$moduleName . ':dbName', $name);
+            xarSession::setVar($this->moduleName . ':dbName', $name);
         }
     }
 
@@ -386,10 +386,10 @@ trait DatabaseTrait
      * @param string $name
      * @return array<mixed>
      */
-    public static function getDatabaseTables($name)
+    public function getDatabaseTables($name)
     {
         $result = [];
-        $dbConnIndex = static::connectDatabase($name);
+        $dbConnIndex = $this->connectDatabase($name);
         if (!isset($dbConnIndex)) {
             return $result;
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -42,6 +43,7 @@ function dynamicdata_utilapi_getmeta(array $args = [], $context = null)
     if (empty($dbConnArgs)) {
         $dbConnArgs = [];
     }
+    $utilapi = new UtilApi();
 
-    return UtilApi::getMeta($table, $db, $dbConnIndex, $dbConnArgs);
+    return $utilapi->getMeta($table, $db, $dbConnIndex, $dbConnArgs);
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -19,7 +20,7 @@ use Xaraya\DataObject\UtilApi;
 function dynamicdata_admin_meta(array $args = [], $context = null)
 {
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) {
+    if (!xarSecurity::check('AdminDynamicData')) {
         return;
     }
 
@@ -45,6 +46,7 @@ function dynamicdata_admin_meta(array $args = [], $context = null)
     }
 
     $data = [];
+    $utilapi = new UtilApi();
 
     $dbconn = xarDB::getConn();
     $dbname = xarDB::getName();
@@ -66,9 +68,9 @@ function dynamicdata_admin_meta(array $args = [], $context = null)
         if (strpos($data['db'], '.') !== false) {
             // see dbconfig
             [$module, $dbname] = explode('.', $db . '.');
-            $databases = UtilApi::getDatabases($module);
+            $databases = $utilapi->getDatabases($module);
             if (!empty($databases[$dbname])) {
-                $data['dbConnIndex'] = UtilApi::connectDatabase($dbname);
+                $data['dbConnIndex'] = $utilapi->connectDatabase($dbname);
                 $connArgs = $databases[$dbname];
                 $data['dbtype'] = $connArgs['databaseType'] ?? $connArgs['external'];
                 $data['dbConnArgs'] = $connArgs;
@@ -100,14 +102,14 @@ function dynamicdata_admin_meta(array $args = [], $context = null)
         'util',
         'getmeta',
         ['db' => $db,
-        'table' => $table,
-        'dbConnIndex' => $data['dbConnIndex']],
+            'table' => $table,
+            'dbConnIndex' => $data['dbConnIndex']],
         $context
     );
 
     $data['result'] = '';
     if (!empty($create) && !empty($data['dbConnIndex'])) {
-        $data['result'] = UtilApi::importTables($create, $db, $data['dbConnIndex']);
+        $data['result'] = $utilapi->importTables($create, $db, $data['dbConnIndex']);
         $table = '';
     }
 

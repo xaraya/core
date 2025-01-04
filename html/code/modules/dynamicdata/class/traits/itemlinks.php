@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.5.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -20,6 +21,8 @@ use xarServer;
 use xarVar;
 use sys;
 
+use function xarML;
+
 sys::import('modules.dynamicdata.class.objects.factory');
 
 /**
@@ -31,7 +34,7 @@ interface ItemLinksInterface
      * Utility function to retrieve the DD objects of this module (if any).
      * @return array<string, mixed>
      */
-    public static function getItemLinkObjects(): array;
+    public function getItemLinkObjects(): array;
 
     /**
      * Utility function to retrieve the list of itemtypes of this module (if any).
@@ -39,7 +42,7 @@ interface ItemLinksInterface
      * @param mixed $context
      * @return array<mixed> the itemtypes of this module and their description
      */
-    public static function getItemTypes(array $args = [], $context = null): array;
+    public function getItemTypes(array $args = [], $context = null): array;
 
     /**
      * Utility function to pass individual item links to whoever
@@ -49,7 +52,7 @@ interface ItemLinksInterface
      * @param mixed $context
      * @return array<mixed> containing the itemlink(s) for the item(s).
      */
-    public static function getItemLinks(array $args = [], $context = null): array;
+    public function getItemLinks(array $args = [], $context = null): array;
 }
 
 /**
@@ -58,16 +61,15 @@ interface ItemLinksInterface
  */
 trait ItemLinksTrait
 {
-    //protected static int $moduleId = 123456;
-    //protected static int $itemtype = 0;
     /** @var array<string, mixed> */
     protected static array $_itemlinkObjects = [];
 
     /**
      * Utility function to retrieve the DD objects of this module (if any).
+     * @todo check use of static::$_itemlinkObjects
      * @return array<string, array<string, mixed>>
      */
-    public static function getItemLinkObjects(): array
+    public function getItemLinkObjects(): array
     {
         if (!empty(static::$_itemlinkObjects)) {
             return static::$_itemlinkObjects;
@@ -76,12 +78,12 @@ trait ItemLinksTrait
         static::$_itemlinkObjects = [];
         foreach ($objects as $objectid => $objectinfo) {
             /** @var array<string, mixed> $objectinfo */
-            if (intval($objectinfo['moduleid']) !== static::$moduleId) {
+            if (intval($objectinfo['moduleid']) !== $this->moduleId) {
                 continue;
             }
             if (property_exists(static::class, 'itemtype')) {
-                if (intval($objectinfo['itemtype']) > static::$itemtype) {
-                    static::$itemtype = intval($objectinfo['itemtype']);
+                if (intval($objectinfo['itemtype']) > $this->itemtype) {
+                    $this->itemtype = intval($objectinfo['itemtype']);
                 }
             }
             static::$_itemlinkObjects[$objectinfo['name']] = $objectinfo;
@@ -95,9 +97,9 @@ trait ItemLinksTrait
      * @param mixed $context
      * @return array<mixed> the itemtypes of this module and their description
      */
-    public static function getItemTypes(array $args = [], $context = null): array
+    public function getItemTypes(array $args = [], $context = null): array
     {
-        $objects = static::getItemLinkObjects();
+        $objects = $this->getItemLinkObjects();
         $itemtypes = [];
         foreach ($objects as $name => $objectinfo) {
             $itemtypes[$objectinfo['itemtype']] = [
@@ -119,7 +121,7 @@ trait ItemLinksTrait
      * @param mixed $context
      * @return array<mixed> containing the itemlink(s) for the item(s).
      */
-    public static function getItemLinks(array $args = [], $context = null): array
+    public function getItemLinks(array $args = [], $context = null): array
     {
         extract($args);
 
@@ -132,8 +134,8 @@ trait ItemLinksTrait
         }
 
         // for items managed by library itself only
-        $args = DataObjectDescriptor::getObjectID(['moduleid'  => static::$moduleId,
-                                        'itemtype'  => $itemtype]);
+        $args = DataObjectDescriptor::getObjectID(['moduleid'  => $this->moduleId,
+            'itemtype'  => $itemtype]);
         if (empty($args['objectid'])) {
             return $itemlinks;
         }
@@ -141,8 +143,8 @@ trait ItemLinksTrait
         // set context if available in method
         $object = DataObjectFactory::getObjectList(
             ['objectid'  => $args['objectid'],
-            'itemids' => $itemids,
-            'status' => $status],
+                'itemids' => $itemids,
+                'status' => $status],
             $context
         );
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {

@@ -39,13 +39,20 @@ VirtualObjectFactory::isOffline($offline);
 $table = 'books';
 //$descriptor = get_descriptor($table, $offline);
 
+// try out session context class
+$session = new \Xaraya\Context\SessionContext();
+//xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
+//xarSession::init();
+
+/** @var UserApi $userapi */
+$userapi = xarMod::getAPI('library');
 // set current database before we get to dbConnArgs - this uses xarSession (not initialized) = $_SESSION
-UserApi::setCurrentDatabase('test');
+$userapi->setCurrentDatabase('test');
 if ($offline or true) {
     // add database before we get to dbConnArgs - this avoids using xarModVars (not initialized)
     $filepath = dirname(__DIR__, 3) . '/html/code/modules/library/xardata/metadata.db';
-    //UserApi::addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath], false);
-    UserApi::addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath, 'external' => 'dbal'], false);
+    //$userapi->addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath], false);
+    $userapi->addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath, 'external' => 'dbal'], false);
 }
 
 //$booklist = new LibraryObjectList($descriptor);

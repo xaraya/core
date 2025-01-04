@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.5.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -13,34 +14,23 @@
 
 namespace Xaraya\DataObject\Traits;
 
-use xarController;
-use xarDB;
-use xarMod;
-use FunctionNotFoundException;
+use Xaraya\Core\Traits\UserApiInterface as CoreApiInterface;
+use Xaraya\Core\Traits\UserApiTrait as CoreApiTrait;
 use sys;
 
+sys::import('xaraya.traits.userapitrait');
 sys::import('modules.dynamicdata.class.traits.itemlinks');
 
 /**
  * For documentation purposes only - available via UserApiTrait
  */
-interface UserApiInterface extends ItemLinksInterface
+interface UserApiInterface extends CoreApiInterface, ItemLinksInterface
 {
     /**
      * Utility function to retrieve the DD objects of this module (if any).
      * @return array<string, mixed>
      */
-    public static function getModuleObjects(): array;
-
-    /**
-     * Get a module's itemtypes
-     *
-     * @param int $moduleId
-     * @param bool $native
-     * @param bool $extensions
-     * @return array<mixed>
-     */
-    public static function getModuleItemTypes($moduleId, $native = false, $extensions = true): array;
+    public function getModuleObjects(): array;
 }
 
 /**
@@ -61,75 +51,19 @@ interface UserApiInterface extends ItemLinksInterface
  *     protected static int $itemtype = 0;
  * }
  * ```
+ * @todo replace with instance methods
  */
 trait UserApiTrait
 {
+    use CoreApiTrait;
     use ItemLinksTrait;
 
     /**
      * Utility function to retrieve the DD objects of this module (if any).
      * @return array<string, mixed>
      */
-    public static function getModuleObjects(): array
+    public function getModuleObjects(): array
     {
-        return static::getItemLinkObjects();
-    }
-
-    /**
-     * Get a module's itemtypes
-     *
-     * @param int $moduleId
-     * @param bool $native
-     * @param bool $extensions
-     * @return array<mixed>
-     */
-    public static function getModuleItemTypes($moduleId, $native = false, $extensions = true): array
-    {
-        $module = xarMod::getName($moduleId);
-
-        $types = [];
-        if ($native) {
-            // Try to get the itemtypes
-            try {
-                // @todo create an adaptor class for procedural getitemtypes in modules
-                $types = xarMod::apiFunc($module, 'user', 'getitemtypes', []);
-            } catch (FunctionNotFoundException) {
-                // No worries
-            }
-        }
-        // @todo combine with getItemTypes()
-        if ($extensions) {
-            // Get all the objects at once
-            xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-            $xartable =  xarDB::getTables();
-
-            $dynamicobjects = $xartable['dynamic_objects'];
-
-            $bindvars = [];
-            $query = "SELECT id AS objectid,
-                             name AS objectname,
-                             label AS objectlabel,
-                             module_id AS moduleid,
-                             itemtype AS itemtype
-                      FROM $dynamicobjects ";
-
-            $query .= " WHERE module_id = ? ";
-            $bindvars[] = (int) $moduleId;
-
-            $dbconn = xarDB::getConn();
-            $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
-
-            // put in itemtype as key for easier manipulation
-            while ($result->next()) {
-                $row = $result->fields;
-                $types [$row['itemtype']] = [
-                    'label' => $row['objectlabel'],
-                    'title' => xarML('View #(1)', $row['objectlabel']),
-                    'url' => xarController::URL('dynamicdata', 'user', 'view', ['itemtype' => $row['itemtype']]),
-                ];
-            }
-        }
-        return $types;
+        return $this->getItemLinkObjects();
     }
 }

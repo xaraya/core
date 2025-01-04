@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Trait to add context in other classes
  *

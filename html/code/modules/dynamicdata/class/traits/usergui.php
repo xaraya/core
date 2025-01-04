@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.5.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -13,13 +14,16 @@
 
 namespace Xaraya\DataObject\Traits;
 
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Core\Traits\UserGuiInterface as CoreGuiInterface;
+use Xaraya\Core\Traits\UserGuiTrait as CoreGuiTrait;
+use sys;
+
+sys::import('xaraya.traits.userguitrait');
 
 /**
  * For documentation purposes only - available via UserGuiTrait
  */
-interface UserGuiInterface extends ContextInterface
+interface UserGuiInterface extends CoreGuiInterface
 {
     /**
      * Summary of init
@@ -55,7 +59,10 @@ interface UserGuiInterface extends ContextInterface
  */
 trait UserGuiTrait
 {
-    use ContextTrait;
+    use CoreGuiTrait;
+
+    /** @var UserApiInterface */
+    protected $api;
 
     /**
      * Summary of init

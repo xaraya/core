@@ -6,6 +6,7 @@ This contains core utility traits that can be used in your PHP classes:
 - [Timer Trait](#timer-trait)
 - [Database Trait](#database-trait)
 - [Context Trait](#context-trait)
+- [Module Traits](#module-traits)
 
 ## Cache Trait
 
@@ -122,7 +123,8 @@ $descriptor->set('config', serialize($config));
 
 If you support more than 1 database (besides the Xaraya DB), you can set the current DB for the user with:
 ```
-UserApi::setCurrentDatabase($name)
+$userapi = xarMod::getAPI('library');
+$userapi->setCurrentDatabase($name)
 ```
 
 Usage:
@@ -138,7 +140,6 @@ sys::import('xaraya.traits.databasetrait');
 class UserApi implements DatabaseInterface
 {
     use DatabaseTrait;
-    protected static string $moduleName = 'library';
 }
 ```
 
@@ -163,6 +164,80 @@ class myFancyClass implements ContextInterface
         // ... update current context ...
         $this->setContext($context);
     }
+}
+```
+
+## Module Traits
+
+Trait to get module classes via xarMod::getModule(), and associated traits for user/admin api/gui classes.
+
+Usage:
+```
+// class/module.php
+namespace Xaraya\Modules\MyFancyModule;
+
+use Xaraya\Core\Traits\ModuleInterface;
+use Xaraya\Core\Traits\ModuleTrait;
+
+class Module implements ModuleInterface
+{
+    use ModuleTrait;
+}
+
+// class/userapi.php
+namespace Xaraya\Modules\MyFancyModule;
+
+use Xaraya\Core\Traits\UserApiInterface;
+use Xaraya\Core\Traits\UserApiTrait;
+
+class UserApi implements UserApiInterface
+{
+    use UserApiTrait;
+
+    public function get($args = []) {
+        // get single module item
+        return $args;
+    }
+}
+
+// class/usergui.php
+namespace Xaraya\Modules\MyFancyModule;
+
+use Xaraya\Core\Traits\UserGuiInterface;
+use Xaraya\Core\Traits\UserGuiTrait;
+
+class UserGui implements UserGuiInterface
+{
+    use UserGuiTrait;
+
+    public function main($args = []) {
+        // get main module overview
+        return $args;
+    }
+}
+
+// xaruser/main.php or xaruser.php
+function myfancymodule_user_main($args = [], $context = null) {
+    // get module class instance first
+    //$module = xarMod::getModule('myfancymodule');
+    //$module->setContext($context);
+    //return $module->getGUI()->main($args);
+    // or get module gui directly
+    $usergui = xarMod::getGUI('myfancymodule');
+    $usergui->setContext($context);
+    return $usergui->main($args);
+}
+
+// xaruserapi/get.php or xaruserapi.php
+function myfancymodule_userapi_get($args = [], $context = null) {
+    // get module class instance first
+    //$module = xarMod::getModule('myfancymodule');
+    //$module->setContext($context);
+    //return $module->getAPI()->get($args);
+    // or get module api directly
+    $userapi = xarMod::getAPI('myfancymodule');
+    $userapi->setContext($context);
+    return $userapi->get($args);
 }
 ```
 

@@ -95,13 +95,13 @@ In practice, we don't want to store all this configuration for each DD object, e
 
 So the best approach for now is to specify an existing database configuration (see [External database connections](#external-database-connections)), or use a `callable` function as `dbConnArgs`, something like:
 ```
-// specify existing database configuration
+// specify existing database configuration as <module>.<dbname>
 $dbConnArgs = ['databaseConfig' => 'dynamicdata.testdb'];
 
 // or specify callable to get database parameters
 $dbConnArgs = [ UserApi::class, 'getDbConnArgs' ];
 
-// this will call $dbConnArgs = UserApi::getDbConnArgs($object) for each DD object on demand
+// DD will instantiate UserApi() and call $dbConnArgs = $userapi->getDbConnArgs($object) for each DD object on demand
 ```
 
 That way, you can have specific database connections for all DD objects in your module, or for individual objects as you prefer, without storing the database credentials. And you have the possibility of switching databases as needed, e.g. for the current database per user.
@@ -137,7 +137,6 @@ sys::import('xaraya.traits.databasetrait');
 class UserApi implements DatabaseInterface
 {
     use DatabaseTrait;
-    protected static string $moduleName = 'library';
 }
 ```
 

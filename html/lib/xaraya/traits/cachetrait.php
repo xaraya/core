@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Trait to cache variables in other classes
  *

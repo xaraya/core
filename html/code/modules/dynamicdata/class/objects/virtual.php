@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -189,8 +190,9 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
     public function addTable(string $table, array $fields = [], int|string $dbConnIndex = 0, array $dbConnArgs = [])
     {
         if (empty($fields)) {
+            $utilapi = new UtilApi();
             /** @var array<string, array<string, array<string, mixed>>> $meta */
-            $meta = UtilApi::getMeta($table, null, $dbConnIndex, $dbConnArgs);
+            $meta = $utilapi->getMeta($table, null, $dbConnIndex, $dbConnArgs);
             if (empty($meta[$table])) {
                 throw new Exception("Unknown table $table");
             }

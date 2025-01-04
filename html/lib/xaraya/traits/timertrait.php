@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Trait to trace time and record steps taken
  *
