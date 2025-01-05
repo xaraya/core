@@ -94,7 +94,6 @@ class xarBlock extends xarObject implements ixarBlock
             return xarBlockCache::getCached($cacheKey);
         } 
         if (!isset($context)) {
-            //$context = ContextFactory::fromGlobals(__METHOD__);
             $context = new Context(['source' => __METHOD__]);
         }
         
@@ -421,7 +420,6 @@ class xarBlock extends xarObject implements ixarBlock
             $args['state'] = array(xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN);
         $args['type_state'] = array(xarBlock::TYPE_STATE_ACTIVE); // valid block type states
         if (!isset($context)) {
-            //$context = ContextFactory::fromGlobals(__METHOD__);
             $context = new Context(['source' => __METHOD__]);
         }
         // get block info
@@ -459,7 +457,6 @@ class xarBlock extends xarObject implements ixarBlock
     {
         if (empty($groupname)) throw new EmptyParameterException('groupname');
         if (!isset($context)) {
-            //$context = ContextFactory::fromGlobals(__METHOD__);
             $context = new Context(['source' => __METHOD__]);
         }
         return self::renderBlock(array('instance' => $groupname, 'box_template' => $template), $context);

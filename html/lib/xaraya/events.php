@@ -150,7 +150,6 @@ class xarEvents extends xarObject implements ixarEvents
             // file load takes care of validation for us 
             if (!self::fileLoad($info)) return; 
             if (!isset($context)) {
-                //$context = ContextFactory::fromGlobals(__METHOD__);
                 $context = new Context(['source' => __METHOD__]);
             }
             $module = $info['module'];

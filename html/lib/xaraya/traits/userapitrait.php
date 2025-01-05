@@ -70,7 +70,13 @@ trait UserApiTrait
     public function __construct(string $moduleName)
     {
         $this->moduleName = $moduleName;
+        $this->loadModule();
         $this->moduleId = $this->getModuleId();
+    }
+
+    protected function loadModule(): void
+    {
+        \xarMod::apiLoad($this->moduleName, 'user');
     }
 
     /**

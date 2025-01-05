@@ -48,12 +48,15 @@ use xarMod;
 interface ModuleInterface extends ContextInterface
 {
     public function getName(): string;
-    public function getAPI(): object;
-    public function getGUI(): object;
-    public function getAdminAPI(): object;
-    public function getAdminGUI(): object;
-    public function getHooks(): object;
-    public function getInstaller(): object;
+    public function getInfo(): array;
+    public function getComponent(string $type): object|null;
+    public function hasComponent(string $type): bool;
+    public function getAPI(): UserApiInterface|null;
+    public function getGUI(): UserGuiInterface|null;
+    public function getAdminAPI(): AdminApiInterface|null;
+    public function getAdminGUI(): AdminGuiInterface|null;
+    public function getHooks(): object|null;
+    public function getInstaller(): object|null;
 }
 
 /**
@@ -66,7 +69,7 @@ trait ModuleTrait
     use ContextTrait;
 
     protected string $moduleName;          // set in constructor by xarMod::getModule()
-    /** @var array<string, object> */
+    /** @var array<string, object|null> */
     private array $components = [];
 
     public function __construct(string $moduleName)
@@ -77,8 +80,14 @@ trait ModuleTrait
     protected function createComponent(string $type): object
     {
         // this assumes that the class is in the same namespace as the module
-        $class = $this->getNamespace() . '\\' . $type;
+        $class = $this->getClassName($type);
         return new $class($this->moduleName);
+    }
+
+    protected function getClassName(string $type): string
+    {
+        // this assumes that the class is in the same namespace as the module
+        return $this->getNamespace() . '\\' . $type;
     }
 
     protected function getNamespace(): string
@@ -86,22 +95,34 @@ trait ModuleTrait
         return substr($this::class, 0, strrpos($this::class, '\\'));
     }
 
-    protected function getComponent(string $type): object
+    public function getComponent(string $type): object|null
     {
-        if (!isset($this->components[$type])) {
-            // @todo do we need to call xarMod::load() and/or xarMod::apiLoad() here?
-            $this->components[$type] = $this->createComponent($type);
-            if ($this->context !== null) {
-                $this->components[$type]->setContext($this->context);
+        if (!array_key_exists($type, $this->components)) {
+            try {
+                $this->components[$type] = $this->createComponent($type);
+                if ($this->context !== null) {
+                    $this->components[$type]->setContext($this->context);
+                }
+            } catch (\Throwable $e) {
+                $this->components[$type] = null;
             }
         }
         return $this->components[$type];
+    }
+
+    public function hasComponent(string $type): bool
+    {
+        $className = $this->getClassName($type);
+        return class_exists($className);
     }
 
     public function setContext($context)
     {
         $this->context = $context;
         foreach ($this->components as $component) {
+            if (is_null($component)) {
+                continue;
+            }
             if (method_exists($component, 'setContext')) {
                 $component->setContext($context);
             }
@@ -146,33 +167,41 @@ trait ModuleTrait
         return xarMod::guiFunc($this->moduleName, $type, $func, $args, $this->getContext());
     }
 
-    public function getAPI(): object
+    public function getAPI(): UserApiInterface|null
     {
         return $this->getComponent('UserApi');
     }
 
-    public function getGUI(): object
+    public function getGUI(): UserGuiInterface|null
     {
         return $this->getComponent('UserGui');
     }
 
-    public function getAdminAPI(): object
+    public function getAdminAPI(): AdminApiInterface|null
     {
         return $this->getComponent('AdminApi');
     }
 
-    public function getAdminGUI(): object
+    public function getAdminGUI(): AdminGuiInterface|null
     {
         return $this->getComponent('AdminGui');
     }
 
-    public function getHooks(): object
+    public function getHooks(): object|null
     {
         return $this->getComponent('Hooks');
     }
 
-    public function getInstaller(): object
+    public function getInstaller(): object|null
     {
         return $this->getComponent('Installer');
     }
+}
+
+/**
+ * Summary of DefaultModule
+ */
+class DefaultModule implements ModuleInterface
+{
+    use ModuleTrait;
 }

@@ -43,4 +43,9 @@ interface AdminApiInterface extends UserApiInterface
 trait AdminApiTrait
 {
     use UserApiTrait;
+
+    protected function loadModule(): void
+    {
+        \xarMod::apiLoad($this->moduleName, 'admin');
+    }
 }

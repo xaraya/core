@@ -577,9 +577,6 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         // DocumentValidator::addRule(new Rules\DisableIntrospection());
 
         $rootValue = ['prefix' => 'You said: message='];
-        //$context ??= ['server' => $_SERVER, 'cookie' => $_COOKIE];
-        // $fieldResolver = null;
-        $validationRules = null;
         $validationRules = [];
         // $validationRules = array_merge(
         //     GraphQL::getStandardValidationRules(),

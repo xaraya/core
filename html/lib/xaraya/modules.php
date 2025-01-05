@@ -791,7 +791,6 @@ class xarMod extends xarObject implements IxarMod
             return xarModuleCache::getCached($cacheKey);
         }
         if (!isset($context)) {
-            //$context = ContextFactory::fromGlobals(__METHOD__);
             $context = new Context(['source' => __METHOD__]);
         }
         // @todo call module gui class method directly if available
@@ -847,7 +846,6 @@ class xarMod extends xarObject implements IxarMod
             throw new EmptyParameterException('modName');
         }
         if (!isset($context)) {
-            //$context = ContextFactory::fromGlobals(__METHOD__);
             $context = new Context(['source' => __METHOD__]);
         }
         // @todo call module api class method directly if available
@@ -1059,13 +1057,16 @@ class xarMod extends xarObject implements IxarMod
      */
     public static function getModule($modName)
     {
-        if (!isset(self::$moduleClasses[$modName])) {
+        if (!array_key_exists($modName, self::$moduleClasses)) {
             sys::autoload();
-            // @todo do we need to call xarMod::load() and/or xarMod::apiLoad() here?
             $modInfo = self::getFileInfo($modName);
             $namespace = $modInfo['namespace'] ?? 'Xaraya\\Modules\\' . ucfirst($modName);
             $class = $namespace . '\\Module';
-            self::$moduleClasses[$modName] = new $class($modName);
+            try {
+                self::$moduleClasses[$modName] = new $class($modName);
+            } catch (Exception $e) {
+                self::$moduleClasses[$modName] = new \Xaraya\Core\Traits\DefaultModule($modName);
+            }
         }
         return self::$moduleClasses[$modName];
     }
@@ -1073,7 +1074,7 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Summary of getAPI (WIP)
      * @param string $modName
-     * @return object
+     * @return \Xaraya\Core\Traits\UserApiInterface|null
      */
     public static function getAPI($modName)
     {
@@ -1083,7 +1084,7 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Summary of getGUI (WIP)
      * @param string $modName
-     * @return object
+     * @return \Xaraya\Core\Traits\UserGuiInterface|null
      */
     public static function getGUI($modName)
     {

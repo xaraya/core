@@ -43,4 +43,9 @@ interface AdminGuiInterface extends UserGuiInterface
 trait AdminGuiTrait
 {
     use UserGuiTrait;
+
+    protected function loadModule(): void
+    {
+        \xarMod::load($this->moduleName, 'admin');
+    }
 }

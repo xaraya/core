@@ -94,7 +94,6 @@ class xarTwigTpl extends xarTpl
 
         // get $context from GUI/API function call or DataObject
         if (!isset($context)) {
-            //$context = ContextFactory::fromGlobals(__METHOD__);
             $context = new Context(['source' => __METHOD__]);
         }
 

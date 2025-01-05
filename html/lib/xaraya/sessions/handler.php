@@ -669,7 +669,6 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     public function setContext($context)
     {
         // not used in default session handler
-        //$context['session'] = new VirtualSession($this->getId(), $this->getUserId(), $this->ipAddress, xarSession::saveTime(), ['rand' => $this->getVar('rand')]);
         $context['session'] = new VirtualSession($this->getId(), $this->getUserId(), $this->ipAddress, xarSession::saveTime(), $this->getVars());
         $context['session']->isNew = $this->isNew();
     }

@@ -15,7 +15,6 @@
 
 sys::import("xaraya.context.context");
 use Xaraya\Context\Context;
-//use Xaraya\Context\ContextFactory;
 
 /**
  * Interface declaration for xarDDObject
@@ -63,7 +62,6 @@ class xarDDObject extends xarObject implements IxarDDObject
         $args['object'] = $objectName;
         $args['method'] = $methodName;
         if (!isset($context)) {
-            //$context = ContextFactory::fromGlobals(__METHOD__);
             $context = new Context(['source' => __METHOD__]);
         }
 
@@ -99,7 +97,6 @@ class xarDDObject extends xarObject implements IxarDDObject
         // Pass the object name to the object class
         $args['name'] = $objectName;
         if (!isset($context)) {
-            //$context = ContextFactory::fromGlobals(__METHOD__);
             $context = new Context(['source' => __METHOD__]);
         }
 
@@ -191,7 +188,6 @@ class xarDDObject extends xarObject implements IxarDDObject
         $args['name'] = $objectName;
         $args['method'] = $methodName;
         if (!isset($context)) {
-            //$context = ContextFactory::fromGlobals(__METHOD__);
             $context = new Context(['source' => __METHOD__]);
         }
 

@@ -97,6 +97,12 @@ trait UserGuiTrait
     public function __construct(string $moduleName)
     {
         $this->moduleName = $moduleName;
+        $this->loadModule();
+    }
+
+    protected function loadModule(): void
+    {
+        \xarMod::load($this->moduleName, 'user');
     }
 
     /**
