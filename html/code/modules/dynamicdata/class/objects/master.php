@@ -507,7 +507,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         if (is_string($this->dbConnArgs)) {
             $this->dbConnArgs = json_decode($this->dbConnArgs, true);
         }
-        if (is_array($this->dbConnArgs) && is_string($this->dbConnArgs[0])) {
+        if (is_array($this->dbConnArgs) && count($this->dbConnArgs) == 2 && is_string($this->dbConnArgs[0] ?? null)) {
             // instantiate UserApi class here!?
             sys::import('xaraya.traits.databasetrait');
             if (class_exists($this->dbConnArgs[0]) && is_subclass_of($this->dbConnArgs[0], Xaraya\Core\Traits\DatabaseInterface::class)) {

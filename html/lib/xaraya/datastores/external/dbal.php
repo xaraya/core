@@ -49,7 +49,7 @@ class DbalDataStore extends ExternalDataStore
     {
         $this->connect();
         $qb = $this->db->createQueryBuilder()
-            ->add('select', $queryfields)  // can't use ->select() here with array of fields
+            ->select(...$queryfields)  // can't use ->select() here with array of fields
             ->from($tablename)
             ->where($wherefield . ' = ?');
         $sql = $qb->getSQL();

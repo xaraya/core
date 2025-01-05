@@ -80,6 +80,7 @@ $handler = function (ServerRequestInterface $request) use ($fastrouted, $serverV
     return $fastrouted->handle($request);
 };
 
+// @todo adapt for 3.x
 $http = new React\Http\HttpServer(
     $logger,
     $static,
