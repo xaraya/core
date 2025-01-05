@@ -61,6 +61,12 @@
 
 namespace Xaraya\Core\Traits;
 
+use xarMod;
+use xarSecurity;
+use sys;
+
+sys::import('xaraya.traits.hookstrait');
+
 /**
  * For documentation purposes only - available via UserGuiTrait
  */
@@ -102,7 +108,7 @@ trait UserGuiTrait
 
     protected function loadModule(): void
     {
-        \xarMod::load($this->moduleName, 'user');
+        xarMod::load($this->moduleName, 'user');
     }
 
     /**
@@ -111,7 +117,7 @@ trait UserGuiTrait
      */
     protected function getAPI()
     {
-        $this->api ??= \xarMod::getModule($this->moduleName)->getAPI();
+        $this->api ??= xarMod::getModule($this->moduleName)->getAPI();
         return $this->api;
     }
 
@@ -148,5 +154,10 @@ trait UserGuiTrait
         // Pass along the context for xarTpl::module() if needed
         $data['context'] ??= $this->getContext();
         return $data;
+    }
+
+    protected function checkAccess(string $mask): bool
+    {
+        return xarSecurity::check($mask) ? true : false;
     }
 }

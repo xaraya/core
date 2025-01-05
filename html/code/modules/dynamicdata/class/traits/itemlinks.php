@@ -96,19 +96,44 @@ trait ItemLinksTrait
     /**
      * Utility function to retrieve the list of itemtypes of this module (if any).
      * @param array<string, mixed> $args array of optional parameters
+     *        string   $args['linktype'] link type (optional)
+     *        string   $args['linkfunc'] link func (optional)
+     *        string   $args['tplmodule'] tpl module (optional)
      * @return array<mixed> the itemtypes of this module and their description
      */
     public function getItemTypes(array $args = []): array
     {
+        extract($args);
+
+        if (empty($linktype)) {
+            $linktype = 'object';
+        }
+        if (empty($linkfunc)) {
+            $linkfunc = 'view';
+        }
+        if (empty($tplmodule)) {
+            $tplmodule = 'dynamicdata';
+        }
+
         $objects = $this->getItemLinkObjects();
         $itemtypes = [];
         foreach ($objects as $name => $objectinfo) {
+            // skip the "internal" DD objects
+            //if ($objectinfo['objectid'] < 3) {
+            //    continue;
+            //}
+            if ($linktype == 'object') {
+                $url = xarServer::getObjectURL($objectinfo['name'], $linkfunc);
+            } else {
+                // adapted from xarMod::apiFunc('dynamicdata', 'user', 'getitemtypes')
+                $url = xarServer::getModuleURL($tplmodule, $linktype, $linkfunc, ['itemtype' => $object['itemtype']]);
+            }
             $itemtypes[$objectinfo['itemtype']] = [
                 'objectid' => $objectinfo['objectid'],
                 'name'     => $objectinfo['name'],
                 'label'    => xarVar::prepForDisplay($objectinfo['label']),
                 'title'    => xarVar::prepForDisplay(xarML('View #(1)', $objectinfo['label'])),
-                'url'      => xarServer::getObjectURL($objectinfo['name'], 'view'),
+                'url'      => $url,
             ];
         }
         return $itemtypes;
@@ -119,6 +144,9 @@ trait ItemLinksTrait
      * @param array<string, mixed> $args array of optional parameters
      *        string   $args['itemtype'] item type (optional)
      *        array    $args['itemids'] array of item ids to get
+     *        string   $args['linktype'] link type (optional)
+     *        string   $args['linkfunc'] link func (optional)
+     *        string   $args['tplmodule'] tpl module (optional)
      * @return array<mixed> containing the itemlink(s) for the item(s).
      */
     public function getItemLinks(array $args = []): array
@@ -132,8 +160,17 @@ trait ItemLinksTrait
         if (empty($itemids)) {
             $itemids = null;
         }
+        if (empty($linktype)) {
+            $linktype = 'object';
+        }
+        if (empty($linkfunc)) {
+            $linkfunc = 'display';
+        }
+        if (empty($tplmodule)) {
+            $tplmodule = 'dynamicdata';
+        }
 
-        // for items managed by library itself only
+        // for items managed by this module itself only
         $args = DataObjectDescriptor::getObjectID(['moduleid'  => $this->moduleId,
             'itemtype'  => $itemtype]);
         if (empty($args['objectid'])) {
@@ -184,11 +221,17 @@ trait ItemLinksTrait
                 $label = xarML('Item #(1)', $itemid);
             }
             // $object->getActionURL('display', $itemid)
+            if ($linktype == 'object') {
+                $url = xarServer::getObjectURL($object->name, $linkfunc, ['itemid' => $itemid]);
+            } else {
+                // adapted from xarMod::apiFunc('dynamicdata', 'user', 'getitemlinks')
+                $url = xarServer::getModuleURL($tplmodule, $linktype, $linkfunc, ['name' => $args['name'], 'itemid' => $itemid]);
+            }
             $itemlinks[$itemid] = [
                 'objectid' => $object->objectid,
                 'name'     => $object->name,
                 'itemid'   => $itemid,
-                'url'      => xarServer::getObjectURL($object->name, 'display', ['itemid' => $itemid]),
+                'url'      => $url,
                 'title'    => xarML('Display Item'),
                 'label'    => $label,
             ];

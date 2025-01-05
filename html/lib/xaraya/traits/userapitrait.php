@@ -47,6 +47,11 @@
 
 namespace Xaraya\Core\Traits;
 
+use xarMod;
+use sys;
+
+sys::import('xaraya.traits.hookstrait');
+
 /**
  * For documentation purposes only - available via UserApiTrait
  */
@@ -76,7 +81,7 @@ trait UserApiTrait
 
     protected function loadModule(): void
     {
-        \xarMod::apiLoad($this->moduleName, 'user');
+        xarMod::apiLoad($this->moduleName, 'user');
     }
 
     /**
@@ -87,7 +92,7 @@ trait UserApiTrait
     {
         // avoid getting module id from xarMod::getRegID() here
         //return xarMod::getRegId($this->moduleName);
-        $fileInfo = \xarMod::getFileInfo($this->moduleName);
+        $fileInfo = xarMod::getFileInfo($this->moduleName);
         return $fileInfo['regid'];
     }
 }

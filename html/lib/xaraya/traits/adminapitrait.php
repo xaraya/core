@@ -29,6 +29,11 @@
 
 namespace Xaraya\Core\Traits;
 
+use xarMod;
+use sys;
+
+sys::import('xaraya.traits.userapitrait');
+
 /**
  * For documentation purposes only - available via AdminApiTrait
  */
@@ -46,6 +51,6 @@ trait AdminApiTrait
 
     protected function loadModule(): void
     {
-        \xarMod::apiLoad($this->moduleName, 'admin');
+        xarMod::apiLoad($this->moduleName, 'admin');
     }
 }
