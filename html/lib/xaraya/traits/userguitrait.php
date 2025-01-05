@@ -64,7 +64,7 @@ namespace Xaraya\Core\Traits;
 /**
  * For documentation purposes only - available via UserGuiTrait
  */
-interface UserGuiInterface extends ContextInterface
+interface UserGuiInterface extends ContextInterface, HooksInterface
 {
     /**
      * Summary of init
@@ -87,6 +87,7 @@ interface UserGuiInterface extends ContextInterface
 trait UserGuiTrait
 {
     use ContextTrait;
+    use HooksTrait;
 
     protected string $moduleName;          // set in constructor by xarMod::getModule()
     protected int $itemtype = 0;

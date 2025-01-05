@@ -50,7 +50,7 @@ namespace Xaraya\Core\Traits;
 /**
  * For documentation purposes only - available via UserApiTrait
  */
-interface UserApiInterface extends ContextInterface
+interface UserApiInterface extends ContextInterface, HooksInterface
 {
     // ...
 }
@@ -61,6 +61,7 @@ interface UserApiInterface extends ContextInterface
 trait UserApiTrait
 {
     use ContextTrait;
+    use HooksTrait;
 
     protected string $moduleName;          // set in constructor by xarMod::getModule()
     protected int $moduleId;
