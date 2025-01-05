@@ -14,6 +14,8 @@
 
 namespace Xaraya\DataObject\Traits;
 
+use Xaraya\Core\Traits\ContextInterface;
+use Xaraya\Core\Traits\ContextTrait;
 use DataObjectDescriptor;
 use DataObjectFactory;
 use DataPropertyMaster;
@@ -28,7 +30,7 @@ sys::import('modules.dynamicdata.class.objects.factory');
 /**
  * For documentation purposes only - available via ItemLinksTrait
  */
-interface ItemLinksInterface
+interface ItemLinksInterface extends ContextInterface
 {
     /**
      * Utility function to retrieve the DD objects of this module (if any).
@@ -39,20 +41,18 @@ interface ItemLinksInterface
     /**
      * Utility function to retrieve the list of itemtypes of this module (if any).
      * @param array<string, mixed> $args array of optional parameters
-     * @param mixed $context
      * @return array<mixed> the itemtypes of this module and their description
      */
-    public function getItemTypes(array $args = [], $context = null): array;
+    public function getItemTypes(array $args = []): array;
 
     /**
      * Utility function to pass individual item links to whoever
      * @param array<string, mixed> $args array of optional parameters
      *        string   $args['itemtype'] item type (optional)
      *        array    $args['itemids'] array of item ids to get
-     * @param mixed $context
      * @return array<mixed> containing the itemlink(s) for the item(s).
      */
-    public function getItemLinks(array $args = [], $context = null): array;
+    public function getItemLinks(array $args = []): array;
 }
 
 /**
@@ -61,6 +61,8 @@ interface ItemLinksInterface
  */
 trait ItemLinksTrait
 {
+    use ContextTrait;
+
     /** @var array<string, mixed> */
     protected static array $_itemlinkObjects = [];
 
@@ -94,10 +96,9 @@ trait ItemLinksTrait
     /**
      * Utility function to retrieve the list of itemtypes of this module (if any).
      * @param array<string, mixed> $args array of optional parameters
-     * @param mixed $context
      * @return array<mixed> the itemtypes of this module and their description
      */
-    public function getItemTypes(array $args = [], $context = null): array
+    public function getItemTypes(array $args = []): array
     {
         $objects = $this->getItemLinkObjects();
         $itemtypes = [];
@@ -118,10 +119,9 @@ trait ItemLinksTrait
      * @param array<string, mixed> $args array of optional parameters
      *        string   $args['itemtype'] item type (optional)
      *        array    $args['itemids'] array of item ids to get
-     * @param mixed $context
      * @return array<mixed> containing the itemlink(s) for the item(s).
      */
-    public function getItemLinks(array $args = [], $context = null): array
+    public function getItemLinks(array $args = []): array
     {
         extract($args);
 
@@ -145,7 +145,7 @@ trait ItemLinksTrait
             ['objectid'  => $args['objectid'],
                 'itemids' => $itemids,
                 'status' => $status],
-            $context
+            $this->getContext()
         );
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
             return $itemlinks;
