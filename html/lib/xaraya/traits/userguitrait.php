@@ -161,3 +161,11 @@ trait UserGuiTrait
         return xarSecurity::check($mask) ? true : false;
     }
 }
+
+/**
+ * Summary of DefaultUserGui
+ */
+class DefaultUserGui implements UserGuiInterface
+{
+    use UserGuiTrait;
+}

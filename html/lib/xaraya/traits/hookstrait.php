@@ -79,3 +79,11 @@ trait HooksTrait
         return xarHooks::notify($event, $info, $this->getContext());
     }
 }
+
+/**
+ * Summary of DefaultHooks
+ */
+class DefaultHooks implements HooksInterface
+{
+    use HooksTrait;
+}

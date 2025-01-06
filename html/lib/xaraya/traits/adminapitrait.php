@@ -54,3 +54,11 @@ trait AdminApiTrait
         xarMod::apiLoad($this->moduleName, 'admin');
     }
 }
+
+/**
+ * Summary of DefaultAdminApi
+ */
+class DefaultAdminApi implements AdminApiInterface
+{
+    use AdminApiTrait;
+}

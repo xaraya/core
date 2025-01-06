@@ -96,3 +96,11 @@ trait UserApiTrait
         return $fileInfo['regid'];
     }
 }
+
+/**
+ * Summary of DefaultUserApi
+ */
+class DefaultUserApi implements UserApiInterface
+{
+    use UserApiTrait;
+}

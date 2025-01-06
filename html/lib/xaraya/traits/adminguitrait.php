@@ -54,3 +54,11 @@ trait AdminGuiTrait
         xarMod::load($this->moduleName, 'admin');
     }
 }
+
+/**
+ * Summary of DefaultAdminGui
+ */
+class DefaultAdminGui implements AdminGuiInterface
+{
+    use AdminGuiTrait;
+}
