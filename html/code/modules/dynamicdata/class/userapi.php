@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -14,8 +14,6 @@
 
 namespace Xaraya\DataObject;
 
-//use Xaraya\Database\DatabaseInterface;
-//use Xaraya\Database\DatabaseTrait;
 use Xaraya\DataObject\Traits\UserApiInterface;
 use Xaraya\DataObject\Traits\UserApiTrait;
 use xarController;
@@ -26,15 +24,14 @@ use sys;
 
 use function xarML;
 
-//sys::import('xaraya.database.databasetrait');
 sys::import('modules.dynamicdata.class.traits.userapi');
 
 /**
- * Class to handle the dynamicdata user API (static for now)
+ * Handle (traditional) DD user api functions via module class
+ * Note: this does not replace the direct use of object methods
  */
-class UserApi implements UserApiInterface  //, DatabaseInterface
+class UserApi implements UserApiInterface
 {
-    //use DatabaseTrait;
     use UserApiTrait;
 
     /**

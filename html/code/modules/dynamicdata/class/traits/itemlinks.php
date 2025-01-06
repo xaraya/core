@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -73,11 +73,11 @@ trait ItemLinksTrait
      */
     public function getItemLinkObjects(): array
     {
-        if (!empty(static::$_itemlinkObjects)) {
-            return static::$_itemlinkObjects;
+        if (!empty(static::$_itemlinkObjects[$this->moduleName])) {
+            return static::$_itemlinkObjects[$this->moduleName];
         }
         $objects = DataObjectFactory::getObjects();
-        static::$_itemlinkObjects = [];
+        static::$_itemlinkObjects[$this->moduleName] = [];
         foreach ($objects as $objectid => $objectinfo) {
             /** @var array<string, mixed> $objectinfo */
             if (intval($objectinfo['moduleid']) !== $this->moduleId) {
@@ -88,9 +88,9 @@ trait ItemLinksTrait
                     $this->itemtype = intval($objectinfo['itemtype']);
                 }
             }
-            static::$_itemlinkObjects[$objectinfo['name']] = $objectinfo;
+            static::$_itemlinkObjects[$this->moduleName][$objectinfo['name']] = $objectinfo;
         }
-        return static::$_itemlinkObjects;
+        return static::$_itemlinkObjects[$this->moduleName];
     }
 
     /**
@@ -119,14 +119,14 @@ trait ItemLinksTrait
         $itemtypes = [];
         foreach ($objects as $name => $objectinfo) {
             // skip the "internal" DD objects
-            //if ($objectinfo['objectid'] < 3) {
-            //    continue;
-            //}
+            if ($objectinfo['objectid'] < 4) {
+                continue;
+            }
             if ($linktype == 'object') {
                 $url = xarServer::getObjectURL($objectinfo['name'], $linkfunc);
             } else {
                 // adapted from xarMod::apiFunc('dynamicdata', 'user', 'getitemtypes')
-                $url = xarServer::getModuleURL($tplmodule, $linktype, $linkfunc, ['itemtype' => $object['itemtype']]);
+                $url = xarServer::getModuleURL($tplmodule, $linktype, $linkfunc, ['itemtype' => $objectinfo['itemtype']]);
             }
             $itemtypes[$objectinfo['itemtype']] = [
                 'objectid' => $objectinfo['objectid'],

@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -47,11 +47,8 @@ interface UserApiInterface extends CoreApiInterface, ItemLinksInterface
  * class MyClassApi implements UserApiInterface
  * {
  *     use UserApiTrait;
- *     protected static int $moduleId = 18252;
- *     protected static int $itemtype = 0;
  * }
  * ```
- * @todo replace with instance methods
  */
 trait UserApiTrait
 {

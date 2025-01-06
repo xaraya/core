@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -78,8 +78,7 @@ trait UserGuiTrait
      */
     public function main(array $args = [])
     {
-        // Pass along the context for xarTpl::module() if needed
-        $args['context'] ??= $this->getContext();
-        return $args;
+        // Add standard template variables (module, itemtype and context)
+        return $this->prepareOutput($args);
     }
 }

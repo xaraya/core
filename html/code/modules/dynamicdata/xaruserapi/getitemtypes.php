@@ -31,7 +31,7 @@ function dynamicdata_userapi_getitemtypes(array $args = [], $context = null)
             continue;
         }
         // skip the "internal" DD objects
-        if ($object['objectid'] < 3) {
+        if ($object['objectid'] < 4) {
             continue;
         }
         $itemtypes[$object['itemtype']] = [

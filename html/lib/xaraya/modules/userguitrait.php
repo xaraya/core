@@ -144,7 +144,7 @@ trait UserGuiTrait
     }
 
     /**
-     * Summary of prepareOutput
+     * Add standard template variables (module, itemtype and context)
      * @param array<string, mixed> $data
      * @return array<mixed>
      */
