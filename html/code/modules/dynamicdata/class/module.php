@@ -14,8 +14,8 @@
 
 namespace Xaraya\DataObject;
 
-use Xaraya\Core\Traits\ModuleInterface;
-use Xaraya\Core\Traits\ModuleTrait;
+use Xaraya\Modules\ModuleInterface;
+use Xaraya\Modules\ModuleTrait;
 
 /**
  * Get dynamicdata module classes via xarMod::getModule()

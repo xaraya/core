@@ -14,11 +14,11 @@
 
 namespace Xaraya\DataObject\Traits;
 
-use Xaraya\Core\Traits\UserApiInterface as CoreApiInterface;
-use Xaraya\Core\Traits\UserApiTrait as CoreApiTrait;
+use Xaraya\Modules\UserApiInterface as CoreApiInterface;
+use Xaraya\Modules\UserApiTrait as CoreApiTrait;
 use sys;
 
-sys::import('xaraya.traits.userapitrait');
+sys::import('xaraya.modules.userapitrait');
 sys::import('modules.dynamicdata.class.traits.itemlinks');
 
 /**

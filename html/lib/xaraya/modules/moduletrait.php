@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Trait to get module classes via xarMod::getModule()
+ * Handle module classes via xarMod::getModule()
  *
  * Usage:
  * ```
  * // class/module.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Core\Traits\ModuleInterface;
- * use Xaraya\Core\Traits\ModuleTrait;
+ * use Xaraya\Modules\ModuleInterface;
+ * use Xaraya\Modules\ModuleTrait;
  *
  * class Module implements ModuleInterface
  * {
@@ -27,10 +27,10 @@
  * }
  * ```
  *
- * @package core\traits
- * @subpackage traits
+ * @package core\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -38,8 +38,10 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Modules;
 
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use xarMod;
 
 /**
@@ -196,12 +198,4 @@ trait ModuleTrait
     {
         return $this->getComponent('Installer');
     }
-}
-
-/**
- * Summary of DefaultModule
- */
-class DefaultModule implements ModuleInterface
-{
-    use ModuleTrait;
 }

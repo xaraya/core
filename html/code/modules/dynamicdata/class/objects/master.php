@@ -21,11 +21,11 @@
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.datastores.factory');
-sys::import('xaraya.traits.contexttrait');
+sys::import('xaraya.context.contexttrait');
 use Xaraya\DataObject\DataStores\DataStoreFactory;
 use Xaraya\DataObject\DataStores\IBasicDataStore;
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
 
 class DataObjectMaster extends xarObject implements ContextInterface
@@ -509,8 +509,8 @@ class DataObjectMaster extends xarObject implements ContextInterface
         }
         if (is_array($this->dbConnArgs) && count($this->dbConnArgs) == 2 && is_string($this->dbConnArgs[0] ?? null)) {
             // instantiate UserApi class here!?
-            sys::import('xaraya.traits.databasetrait');
-            if (class_exists($this->dbConnArgs[0]) && is_subclass_of($this->dbConnArgs[0], Xaraya\Core\Traits\DatabaseInterface::class)) {
+            sys::import('xaraya.database.databasetrait');
+            if (class_exists($this->dbConnArgs[0]) && is_subclass_of($this->dbConnArgs[0], Xaraya\Database\DatabaseInterface::class)) {
                 // @todo avoid calling xarMod::getName() with xaraya db connection here - see virtual library offline
                 $modname = xarMod::getName($this->moduleid);
                 $this->dbConnArgs[0] = new $this->dbConnArgs[0]($modname);

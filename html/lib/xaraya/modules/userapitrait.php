@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Trait to handle user api functions
+ * Handle module user api functions
  *
  * Usage:
  * ```
  * // class/userapi.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Core\Traits\UserApiInterface;
- * use Xaraya\Core\Traits\UserApiTrait;
+ * use Xaraya\Modules\UserApiInterface;
+ * use Xaraya\Modules\UserApiTrait;
  *
  * class UserApi implements UserApiInterface
  * {
@@ -34,10 +34,10 @@
  * }
  * ```
  *
- * @package core\traits
- * @subpackage traits
+ * @package core\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -45,12 +45,14 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Modules;
 
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use xarMod;
 use sys;
 
-sys::import('xaraya.traits.hookstrait');
+sys::import('xaraya.modules.hookstrait');
 
 /**
  * For documentation purposes only - available via UserApiTrait
@@ -95,12 +97,4 @@ trait UserApiTrait
         $fileInfo = xarMod::getFileInfo($this->moduleName);
         return $fileInfo['regid'];
     }
-}
-
-/**
- * Summary of DefaultUserApi
- */
-class DefaultUserApi implements UserApiInterface
-{
-    use UserApiTrait;
 }

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Trait to handle admin gui functions
+ * Handle module admin gui functions
  *
  * Usage:
  * ```
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Core\Traits\AdminGuiInterface;
- * use Xaraya\Core\Traits\AdminGuiTrait;
+ * use Xaraya\Modules\AdminGuiInterface;
+ * use Xaraya\Modules\AdminGuiTrait;
  *
  * class AdminGui implements AdminGuiInterface
  * {
@@ -16,10 +16,10 @@
  * }
  * ```
  *
- * @package core\traits
- * @subpackage traits
+ * @package core\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -27,12 +27,12 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Modules;
 
 use xarMod;
 use sys;
 
-sys::import('xaraya.traits.userguitrait');
+sys::import('xaraya.modules.userguitrait');
 
 /**
  * For documentation purposes only - available via AdminGuiTrait
@@ -53,12 +53,4 @@ trait AdminGuiTrait
     {
         xarMod::load($this->moduleName, 'admin');
     }
-}
-
-/**
- * Summary of DefaultAdminGui
- */
-class DefaultAdminGui implements AdminGuiInterface
-{
-    use AdminGuiTrait;
 }

@@ -41,13 +41,13 @@ namespace Xaraya\Bridge\TemplateEngine;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
 use xarConst;
 use sys;
 
-sys::import('xaraya.traits.contexttrait');
+sys::import('xaraya.context.contexttrait');
 sys::import("xaraya.context.context");
 
 /**

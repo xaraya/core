@@ -14,8 +14,8 @@ Trait to cache variables in other classes
 
 Usage:
 ```
-use Xaraya\Core\Traits\CacheInterface;
-use Xaraya\Core\Traits\CacheTrait;
+use Xaraya\Caching\CacheInterface;
+use Xaraya\Caching\CacheTrait;
 
 class myFancyClass implements CacheInterface
 {
@@ -58,8 +58,8 @@ Trait to trace time and record steps taken
 
 Usage:
 ```
-use Xaraya\Core\Traits\TimerInterface;
-use Xaraya\Core\Traits\TimerTrait;
+use Xaraya\Tools\TimerInterface;
+use Xaraya\Tools\TimerTrait;
 
 class myFancyClass implements TimerInterface
 {
@@ -131,11 +131,11 @@ Usage:
 ```
 namespace Xaraya\Modules\Library;
 
-use Xaraya\Core\Traits\DatabaseInterface;
-use Xaraya\Core\Traits\DatabaseTrait;
+use Xaraya\Database\DatabaseInterface;
+use Xaraya\Database\DatabaseTrait;
 use sys;
 
-sys::import('xaraya.traits.databasetrait');
+sys::import('xaraya.database.databasetrait');
 
 class UserApi implements DatabaseInterface
 {
@@ -149,8 +149,8 @@ Trait to add context in other classes
 
 Usage:
 ```
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 
 class myFancyClass implements ContextInterface
 {
@@ -176,8 +176,8 @@ Usage:
 // class/module.php
 namespace Xaraya\Modules\MyFancyModule;
 
-use Xaraya\Core\Traits\ModuleInterface;
-use Xaraya\Core\Traits\ModuleTrait;
+use Xaraya\Modules\ModuleInterface;
+use Xaraya\Modules\ModuleTrait;
 
 class Module implements ModuleInterface
 {
@@ -187,8 +187,8 @@ class Module implements ModuleInterface
 // class/userapi.php
 namespace Xaraya\Modules\MyFancyModule;
 
-use Xaraya\Core\Traits\UserApiInterface;
-use Xaraya\Core\Traits\UserApiTrait;
+use Xaraya\Modules\UserApiInterface;
+use Xaraya\Modules\UserApiTrait;
 
 class UserApi implements UserApiInterface
 {
@@ -203,8 +203,8 @@ class UserApi implements UserApiInterface
 // class/usergui.php
 namespace Xaraya\Modules\MyFancyModule;
 
-use Xaraya\Core\Traits\UserGuiInterface;
-use Xaraya\Core\Traits\UserGuiTrait;
+use Xaraya\Modules\UserGuiInterface;
+use Xaraya\Modules\UserGuiTrait;
 
 class UserGui implements UserGuiInterface
 {

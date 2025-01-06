@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Trait to handle admin api functions
+ * Handle module admin api functions
  *
  * Usage:
  * ```
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Core\Traits\AdminApiInterface;
- * use Xaraya\Core\Traits\AdminApiTrait;
+ * use Xaraya\Modules\AdminApiInterface;
+ * use Xaraya\Modules\AdminApiTrait;
  *
  * class AdminApi implements AdminApiInterface
  * {
@@ -16,10 +16,10 @@
  * }
  * ```
  *
- * @package core\traits
- * @subpackage traits
+ * @package core\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -27,12 +27,12 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Modules;
 
 use xarMod;
 use sys;
 
-sys::import('xaraya.traits.userapitrait');
+sys::import('xaraya.modules.userapitrait');
 
 /**
  * For documentation purposes only - available via AdminApiTrait
@@ -53,12 +53,4 @@ trait AdminApiTrait
     {
         xarMod::apiLoad($this->moduleName, 'admin');
     }
-}
-
-/**
- * Summary of DefaultAdminApi
- */
-class DefaultAdminApi implements AdminApiInterface
-{
-    use AdminApiTrait;
 }

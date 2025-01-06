@@ -17,9 +17,9 @@
  *
 **/
 sys::import('xaraya.structures.containers.blocks.blocktype');
-sys::import('xaraya.traits.contexttrait');
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+sys::import('xaraya.context.contexttrait');
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 
 interface iBlock extends iBlockType, ContextInterface
 {

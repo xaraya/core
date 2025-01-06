@@ -14,8 +14,8 @@
 
 namespace Xaraya\DataObject;
 
-//use Xaraya\Core\Traits\DatabaseInterface;
-//use Xaraya\Core\Traits\DatabaseTrait;
+//use Xaraya\Database\DatabaseInterface;
+//use Xaraya\Database\DatabaseTrait;
 use Xaraya\DataObject\Traits\UserApiInterface;
 use Xaraya\DataObject\Traits\UserApiTrait;
 use xarController;
@@ -26,7 +26,7 @@ use sys;
 
 use function xarML;
 
-//sys::import('xaraya.traits.databasetrait');
+//sys::import('xaraya.database.databasetrait');
 sys::import('modules.dynamicdata.class.traits.userapi');
 
 /**

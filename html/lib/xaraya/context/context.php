@@ -26,7 +26,7 @@ sys::import('xaraya.context.user');
  * @template TValue of mixed
  * @extends ArrayObject<TKey, TValue>
  */
-class Context extends ArrayObject implements ContextInterface
+class Context extends ArrayObject implements ContextObjectInterface
 {
     /**
      * Get current requestId

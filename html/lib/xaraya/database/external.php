@@ -28,7 +28,7 @@ use sys;
  * If you do want to return a compatible connection, you'll need to extend the
  * ExternalConnection class and override/implement the abstract methods below...
  */
-class ExternalDatabase implements DatabaseInterface
+class ExternalDatabase implements xarDB_Interface
 {
     public const INDEX_PREFIX = 'ext_';
     public const ERROR_MSG = 'Not available as static method for ExternalDatabase - use the native methods of the database connection or $datastore->getDatabaseInfo() to get this';

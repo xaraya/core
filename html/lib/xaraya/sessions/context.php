@@ -11,8 +11,8 @@
 
 namespace Xaraya\Context;
 
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use Xaraya\Sessions\SessionInterface;
 use Xaraya\Sessions\VirtualSession;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
@@ -23,7 +23,7 @@ use sys;
 sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.virtual');
 sys::import('xaraya.sessions.storage');
-sys::import('xaraya.traits.contexttrait');
+sys::import('xaraya.context.contexttrait');
 
 /**
  * Session instance with context for use with xarSession::setInstance()

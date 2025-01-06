@@ -71,11 +71,13 @@ function installer_adminapi_initialise(Array $args=array())
     $modInitFile = sys::code() . 'modules/'. $osDirectory. '/xarinit.php';
 
 
+    // @todo support installer class in the future - see Xaraya\Modules\InstallerTrait
     if(!file_exists($modInitFile)) throw new FileNotFoundException($modInitFile);
     sys::import('modules.'.$osDirectory.'.xarinit');
 
     // Run the function, check for existence
 
+    // @todo support namespaces in the future - see modules_adminapi_executeinitfunction()
     $modInitFunc = $osDirectory.'_'.$initfunc;
     if (function_exists($modInitFunc)) {
         $res = $modInitFunc();

@@ -41,6 +41,7 @@ function modules_adminapi_executeinitfunction(array $args = [], $context = null)
     // Get module database info, they might be needed in the function to be called
     xarMod::loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
 
+    // @todo support installer class in the future - see Xaraya\Modules\InstallerTrait
     $xarinitfile = '';
     if (file_exists(sys::code() . 'modules/'. $modInfo['osdirectory'] .'/xarinit.php')) {
         $xarinitfile = sys::code() . 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';

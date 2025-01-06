@@ -14,8 +14,8 @@
 
 namespace Xaraya\DataObject\Traits;
 
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use DataObjectDescriptor;
 use DataObjectFactory;
 use DataPropertyMaster;

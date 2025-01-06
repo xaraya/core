@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Trait to handle user gui functions
+ * Handle module user gui functions
  *
  * Usage:
  * ```
  * // class/usergui.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Core\Traits\UserGuiInterface;
- * use Xaraya\Core\Traits\UserGuiTrait;
+ * use Xaraya\Modules\UserGuiInterface;
+ * use Xaraya\Modules\UserGuiTrait;
  *
  * class UserGui implements UserGuiInterface
  * {
@@ -48,10 +48,10 @@
  * }
  * ```
  *
- * @package core\traits
- * @subpackage traits
+ * @package core\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -59,13 +59,15 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Modules;
 
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use xarMod;
 use xarSecurity;
 use sys;
 
-sys::import('xaraya.traits.hookstrait');
+sys::import('xaraya.modules.hookstrait');
 
 /**
  * For documentation purposes only - available via UserGuiTrait
@@ -160,12 +162,4 @@ trait UserGuiTrait
     {
         return xarSecurity::check($mask) ? true : false;
     }
-}
-
-/**
- * Summary of DefaultUserGui
- */
-class DefaultUserGui implements UserGuiInterface
-{
-    use UserGuiTrait;
 }

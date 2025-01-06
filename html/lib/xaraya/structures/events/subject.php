@@ -11,9 +11,9 @@
  **/
 
 
-sys::import('xaraya.traits.contexttrait');
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+sys::import('xaraya.context.contexttrait');
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
  
 interface ixarEventSubject extends ContextInterface
 {

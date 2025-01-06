@@ -2,8 +2,8 @@
 
 namespace Xaraya\DataObject\Generated;
 
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use DataContainer;
 use DataObjectDescriptor;
 use DataObject;

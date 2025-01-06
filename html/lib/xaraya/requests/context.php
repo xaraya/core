@@ -11,14 +11,14 @@
 
 namespace Xaraya\Context;
 
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use Xaraya\Requests\RequestInterface;
 use xarServer;
 use sys;
 
 sys::import('xaraya.server');
-sys::import('xaraya.traits.contexttrait');
+sys::import('xaraya.context.contexttrait');
 
 /**
  * Request instance with context for use with xarServer::setInstance() etc.

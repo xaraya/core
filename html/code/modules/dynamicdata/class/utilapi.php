@@ -14,8 +14,8 @@
 
 namespace Xaraya\DataObject;
 
-use Xaraya\Core\Traits\DatabaseInterface;
-use Xaraya\Core\Traits\DatabaseTrait;
+use Xaraya\Database\DatabaseInterface;
+use Xaraya\Database\DatabaseTrait;
 use Xaraya\Database\ExternalDatabase;
 use Xaraya\DataObject\Import\PhpImporter;
 use DataObjectFactory;
@@ -29,7 +29,7 @@ use xarMod;
 use xarModVars;
 use sys;
 
-sys::import('xaraya.traits.databasetrait');
+sys::import('xaraya.database.databasetrait');
 sys::import('modules.dynamicdata.class.objects.virtual');
 sys::import('modules.dynamicdata.class.import.generic');
 

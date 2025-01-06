@@ -14,11 +14,11 @@
 
 namespace Xaraya\DataObject\Traits;
 
-use Xaraya\Core\Traits\UserGuiInterface as CoreGuiInterface;
-use Xaraya\Core\Traits\UserGuiTrait as CoreGuiTrait;
+use Xaraya\Modules\UserGuiInterface as CoreGuiInterface;
+use Xaraya\Modules\UserGuiTrait as CoreGuiTrait;
 use sys;
 
-sys::import('xaraya.traits.userguitrait');
+sys::import('xaraya.modules.userguitrait');
 
 /**
  * For documentation purposes only - available via UserGuiTrait

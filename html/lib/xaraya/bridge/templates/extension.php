@@ -6,8 +6,8 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\Extension\AbstractExtension;
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
 
 /**

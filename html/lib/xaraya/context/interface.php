@@ -11,7 +11,7 @@
 
 namespace Xaraya\Context;
 
-interface ContextInterface
+interface ContextObjectInterface
 {
     /**
      * Get current requestId

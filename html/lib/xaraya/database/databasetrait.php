@@ -34,10 +34,10 @@
  * $userapi->setCurrentDatabase($name)
  * ```
  *
- * @package core\traits
- * @subpackage traits
+ * @package core/database
+ * @subpackage database
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -45,7 +45,7 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Database;
 
 use Xaraya\Database\ExternalDatabase;
 use Connection;
@@ -152,11 +152,11 @@ interface DatabaseInterface
  * ```
  * namespace Xaraya\Modules\Library;
  *
- * use Xaraya\Core\Traits\DatabaseInterface;
- * use Xaraya\Core\Traits\DatabaseTrait;
+ * use Xaraya\Database\DatabaseInterface;
+ * use Xaraya\Database\DatabaseTrait;
  * use sys;
  *
- * sys::import('xaraya.traits.databasetrait');
+ * sys::import('xaraya.database.databasetrait');
  *
  * class UserApi implements DatabaseInterface
  * {

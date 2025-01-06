@@ -12,8 +12,8 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
 use Xaraya\Bridge\Middleware\FastRouteHandler;
-use Xaraya\Core\Traits\TimerInterface;
-use Xaraya\Core\Traits\TimerTrait;
+use Xaraya\Tools\TimerInterface;
+use Xaraya\Tools\TimerTrait;
 
 class LocalTimer implements TimerInterface
 {

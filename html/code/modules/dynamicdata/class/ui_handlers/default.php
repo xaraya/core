@@ -14,8 +14,8 @@
 
 namespace Xaraya\DataObject\Handlers;
 
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use xarObject;
 use xarVar;
 use xarMLS;
@@ -30,7 +30,7 @@ use DataObject;
 use sys;
 
 sys::import('xaraya.objects');
-sys::import('xaraya.traits.contexttrait');
+sys::import('xaraya.context.contexttrait');
 
 /**
  * Dynamic Object User Interface Handler

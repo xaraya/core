@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Trait to handle installer functions
+ * Handle module installer functions
  *
- * @package core\traits
- * @subpackage traits
+ * @package core\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -14,7 +14,7 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Modules;
 
 use xarMod;
 use xarModVars;
@@ -114,12 +114,4 @@ trait InstallerTrait
         $module = $this->moduleName;
         return xarMod::apiFunc('modules', 'admin', 'standarddeinstall', ['module' => $module]);
     }
-}
-
-/**
- * Summary of DefaultInstaller
- */
-class DefaultInstaller implements InstallerInterface
-{
-    use InstallerTrait;
 }

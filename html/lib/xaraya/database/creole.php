@@ -18,9 +18,9 @@
  */
 sys::import('xaraya.database.interface');
 sys::import('creole.Creole');
-use Xaraya\Database\DatabaseInterface;
+use Xaraya\Database\xarDB_Interface;
 
-class xarDB_Creole extends xarObject implements DatabaseInterface
+class xarDB_Creole extends xarObject implements xarDB_Interface
 {
     /**
      * Map of built-in drivers.

@@ -18,8 +18,8 @@ use Xaraya\Bridge\Middleware\DataObjectApiMiddleware;
 use Xaraya\Bridge\Middleware\ModuleMiddleware;
 use Xaraya\Bridge\Middleware\ModuleApiMiddleware;
 use Xaraya\Bridge\Middleware\ResponseUtil;
-use Xaraya\Core\Traits\TimerInterface;
-use Xaraya\Core\Traits\TimerTrait;
+use Xaraya\Tools\TimerInterface;
+use Xaraya\Tools\TimerTrait;
 
 class LocalTimer implements TimerInterface
 {

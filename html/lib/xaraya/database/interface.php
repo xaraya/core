@@ -13,10 +13,10 @@ namespace Xaraya\Database;
 
 /**
  * Aligned with xarDB_Creole and xarDB_PDO
- * @todo review DatabaseInterface, as it was common between xarDB and ExternalDatabase,
+ * @todo review xarDB_Interface, as it was common between xarDB and ExternalDatabase,
  * but xarDB extended xarDB_Creole or xarDB_PDO before the DB refactoring by @xaraya
  */
-interface DatabaseInterface
+interface xarDB_Interface
 {
     /**
      * Summary of getPrefix

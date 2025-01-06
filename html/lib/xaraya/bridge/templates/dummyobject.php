@@ -5,8 +5,8 @@
 
 namespace Xaraya\Bridge\TemplateEngine;
 
-use Xaraya\Core\Traits\ContextInterface;
-use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 
 /**
  * Dummy object with context for use in Twig functions

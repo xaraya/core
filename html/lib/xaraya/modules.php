@@ -1053,7 +1053,7 @@ class xarMod extends xarObject implements IxarMod
      * Get module class for modName (WIP)
      * @uses \sys::autoload()
      * @param string $modName
-     * @return \Xaraya\Core\Traits\ModuleInterface
+     * @return \Xaraya\Modules\ModuleInterface
      */
     public static function getModule($modName)
     {
@@ -1065,7 +1065,7 @@ class xarMod extends xarObject implements IxarMod
             try {
                 self::$moduleClasses[$modName] = new $class($modName);
             } catch (Exception $e) {
-                self::$moduleClasses[$modName] = new \Xaraya\Core\Traits\DefaultModule($modName);
+                self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName);
             }
         }
         return self::$moduleClasses[$modName];
@@ -1074,7 +1074,7 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Summary of getAPI (WIP)
      * @param string $modName
-     * @return \Xaraya\Core\Traits\UserApiInterface|null
+     * @return \Xaraya\Modules\UserApiInterface|null
      */
     public static function getAPI($modName)
     {
@@ -1084,7 +1084,7 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Summary of getGUI (WIP)
      * @param string $modName
-     * @return \Xaraya\Core\Traits\UserGuiInterface|null
+     * @return \Xaraya\Modules\UserGuiInterface|null
      */
     public static function getGUI($modName)
     {

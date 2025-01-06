@@ -5,8 +5,8 @@
  *
  * Usage:
  * ```
- * use Xaraya\Core\Traits\CacheInterface;
- * use Xaraya\Core\Traits\CacheTrait;
+ * use Xaraya\Caching\CacheInterface;
+ * use Xaraya\Caching\CacheTrait;
  *
  * class myFancyClass implements CacheInterface
  * {
@@ -43,10 +43,10 @@
  * }
  * ```
  *
- * @package core\traits
- * @subpackage traits
+ * @package core\caching
+ * @subpackage caching
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -54,7 +54,7 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Caching;
 
 use xarCache;
 use xarVariableCache;

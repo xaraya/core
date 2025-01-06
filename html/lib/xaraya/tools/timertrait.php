@@ -5,8 +5,8 @@
  *
  * Usage:
  * ```
- * use Xaraya\Core\Traits\TimerInterface;
- * use Xaraya\Core\Traits\TimerTrait;
+ * use Xaraya\Tools\TimerInterface;
+ * use Xaraya\Tools\TimerTrait;
  *
  * class myFancyClass implements TimerInterface
  * {
@@ -35,10 +35,10 @@
  *     }
  * }
  * ```
- * @package core\traits
- * @subpackage traits
+ * @package core\tools
+ * @subpackage tools
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -46,7 +46,7 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Tools;
 
 use xarServer;
 

@@ -19,13 +19,13 @@
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
 sys::import('xaraya.database.interface');
-use Xaraya\Database\DatabaseInterface;
+use Xaraya\Database\xarDB_Interface;
 use Xaraya\Database\ConnectionInterface;
 use Xaraya\Database\StatementInterface;
 use Xaraya\Database\ResultSetInterface;
 
 
-class xarDB_PDO extends xarObject implements DatabaseInterface
+class xarDB_PDO extends xarObject implements xarDB_Interface
 {
    /**
      * Map of built-in drivers.

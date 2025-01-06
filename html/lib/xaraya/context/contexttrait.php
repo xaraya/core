@@ -5,8 +5,8 @@
  *
  * Usage:
  * ```
- * use Xaraya\Core\Traits\ContextInterface;
- * use Xaraya\Core\Traits\ContextTrait;
+ * use Xaraya\Context\ContextInterface;
+ * use Xaraya\Context\ContextTrait;
  *
  * class myFancyClass implements ContextInterface
  * {
@@ -23,10 +23,10 @@
  * }
  * ```
  *
- * @package core\traits
- * @subpackage traits
+ * @package core\context
+ * @subpackage context
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.5.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -34,7 +34,7 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-namespace Xaraya\Core\Traits;
+namespace Xaraya\Context;
 
 use Xaraya\Context\Context;
 use sys;
