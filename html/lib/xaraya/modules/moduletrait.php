@@ -59,8 +59,8 @@ interface ModuleInterface extends ContextInterface
     public function getAdminGUI(): AdminGuiInterface|null;
     public function getHooks(): object|null;
     public function getInstaller(): object|null;
-    public function getClassType(string $type): string|null;
-    public function getCallableMethod(string $type, string $func): callable|null;
+    public function getClassType(string $modType): string|null;
+    public function getCallableMethod(string $modType, string $funcName): callable|null;
 }
 
 /**
@@ -201,7 +201,10 @@ trait ModuleTrait
         return $this->getComponent('Installer');
     }
 
-    public function getClassType(string $type): string|null
+    /**
+     * @see \xarMod::privateLoad()
+     */
+    public function getClassType(string $modType): string|null
     {
         $mapping = [
             // common types
@@ -218,15 +221,18 @@ trait ModuleTrait
             'schedulerapi' => 'SchedulerApi',
             'utilapi' => 'UtilApi',
         ];
-        if (isset($mapping[$type])) {
-            return $mapping[$type];
+        if (isset($mapping[$modType])) {
+            return $mapping[$modType];
         }
         return null;
     }
 
-    public function getCallableMethod(string $type, string $func): callable|null
+    /**
+     * @see \xarMod::getModuleClassMethod()
+     */
+    public function getCallableMethod(string $modType, string $funcName): callable|null
     {
-        $classType = $this->getClassType($type);
+        $classType = $this->getClassType($modType);
         if (!isset($classType)) {
             return null;
         }
@@ -234,9 +240,9 @@ trait ModuleTrait
         if (!isset($component)) {
             return null;
         }
-        if (method_exists($component, $func)) {
+        if (method_exists($component, $funcName)) {
             // use array format instead of first-class callable syntax to allow setting the context
-            return [$component, $func];
+            return [$component, $funcName];
         }
         return null;
     }

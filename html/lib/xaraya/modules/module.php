@@ -51,7 +51,19 @@ class DefaultModule implements ModuleInterface
 {
     use ModuleTrait;
 
-    public function getCallableMethod(string $type, string $func): callable|null
+    /**
+     * @see \xarMod::privateLoad()
+     */
+    public function getClassType(string $modType): string|null
+    {
+        // no class types available here
+        return null;
+    }
+
+    /**
+     * @see \xarMod::getModuleClassMethod()
+     */
+    public function getCallableMethod(string $modType, string $funcName): callable|null
     {
         // no callable methods available here
         return null;

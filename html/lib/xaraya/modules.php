@@ -22,7 +22,9 @@
  * @todo the double headed theme/module stuff needs to go, a theme is not a module
  */
 
+sys::import("xaraya.context.contexttrait");
 sys::import("xaraya.context.context");
+use Xaraya\Context\ContextInterface;
 use Xaraya\Context\Context;
 
 /**
@@ -889,7 +891,7 @@ class xarMod extends xarObject implements IxarMod
         $isLoaded = true;
         $msg = '';
         if (!function_exists($modFunc)) {
-            // attempt to load the module's api
+            // attempt to load the module's api - this will load xaruserapi.php or xaruser.php etc. if they exist
             if ($funcType == 'api') {
                 xarMod::apiLoad($modName, $modType);
             } else {
@@ -907,6 +909,15 @@ class xarMod extends xarObject implements IxarMod
                 // Q: who are we kidding with this? osdirectory == modName always, no?
                 $funcFile = sys::code() . 'modules/' . $modBaseInfo['osdirectory'] . '/xar' . $modType . $funcType . '/' . strtolower($funcName) . '.php';
                 if (!file_exists($funcFile)) {
+                    // @todo cache this if we ever get here again
+                    $callable = self::getModuleClassMethod($modName, $modType . $funcType, $funcName);
+                    if (!empty($callable)) {
+                        if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
+                            $callable[0]->setContext($context);
+                        }
+                        $funcResult = $callable($args);
+                        return $funcResult;
+                    }
                     // Valid syntax, but the function doesn't exist
                     if ($funcType == "api") {
                         throw new FunctionNotFoundException($modFunc);
@@ -1029,8 +1040,17 @@ class xarMod extends xarObject implements IxarMod
             // this is OK too - do nothing
             $loadedModuleCache[$cacheKey] = true;
         } else {
-            // this is (not really) OK too - do nothing
-            $loadedModuleCache[$cacheKey] = false;
+            // Do we have a module class handling this modType
+            $instance = self::getModule($modName);
+            // returns null for DefaultModule() = no suitable class type
+            $classType = $instance->getClassType($modType);
+            if (isset($classType)) {
+                // this is OK too - do nothing
+                $loadedModuleCache[$cacheKey] = true;
+            } else {
+                // this is (not really) OK too - do nothing
+                $loadedModuleCache[$cacheKey] = false;
+            }
         }
 
         // Load the module translations files (common functions, uncut functions etc.)
@@ -1062,11 +1082,16 @@ class xarMod extends xarObject implements IxarMod
         if (!array_key_exists($modName, self::$moduleClasses)) {
             sys::autoload();
             $modInfo = self::getFileInfo($modName);
-            $namespace = $modInfo['namespace'] ?? 'Xaraya\\Modules\\' . ucfirst($modName);
+            $namespace = $modInfo['namespace'] ?: 'Xaraya\\Modules\\' . ucfirst($modName);
             $class = $namespace . '\\Module';
-            try {
-                self::$moduleClasses[$modName] = new $class($modName);
-            } catch (Exception $e) {
+            if (class_exists($class)) {
+                try {
+                    self::$moduleClasses[$modName] = new $class($modName);
+                } catch (Throwable $e) {
+                    self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName);
+                    xarLog::message("xarMod::getModule: Error loading $class for module $modName", xarLog::LEVEL_WARNING);
+                }
+            } else {
                 self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName);
             }
         }
@@ -1112,6 +1137,7 @@ class xarMod extends xarObject implements IxarMod
         $key = "$modName:$modType:$funcName";
         if (!array_key_exists($key, $methods_cache)) {
             $instance = self::getModule($modName);
+            // returns null for DefaultModule() = no suitable class method
             $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName);
             if (!isset($methods_cache[$key])) {
                 xarLog::message("xarMod::getModuleClassMethod: Missing method for $key", xarLog::LEVEL_INFO);
