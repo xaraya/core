@@ -769,6 +769,8 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Call a module GUI function.
      *
+     * Ex: modName_modType_funcName($args, $context);
+     *
      * @param string $modName registered name of module
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
@@ -831,7 +833,7 @@ class xarMod extends xarObject implements IxarMod
      * builds a function name by joining them together
      * and using the optional arguments as parameters
      * like so:
-     * Ex: modName_modTypeapi_modFunc($args);
+     * Ex: modName_modTypeapi_funcName($args, $context);
      *
      * @param string $modName registered name of module
      * @param string $modType type of function to run
@@ -1050,7 +1052,7 @@ class xarMod extends xarObject implements IxarMod
     }
 
     /**
-     * Get module class for modName (WIP)
+     * Get module class for modName based on defined namespace or ucfirst($modName)
      * @uses \sys::autoload()
      * @param string $modName
      * @return \Xaraya\Modules\ModuleInterface
@@ -1072,7 +1074,7 @@ class xarMod extends xarObject implements IxarMod
     }
 
     /**
-     * Summary of getAPI (WIP)
+     * Get module class handling user api functions
      * @param string $modName
      * @return \Xaraya\Modules\UserApiInterface|null
      */
@@ -1082,13 +1084,40 @@ class xarMod extends xarObject implements IxarMod
     }
 
     /**
-     * Summary of getGUI (WIP)
+     * Get module class handling user gui functions
      * @param string $modName
      * @return \Xaraya\Modules\UserGuiInterface|null
      */
     public static function getGUI($modName)
     {
         return self::getModule($modName)->getGUI();
+    }
+
+    /**
+     * Check if a particular module class method exists, or return null
+     *
+     * This looks for a module class in $modName handling $modType methods for method $funcName
+     * and returns a callable to that method if it exists
+     * Ex: [$instance, $funcName] => \Xaraya\Modules\$ModName\$ClassType()->$funcName($args);
+     *
+     * @param string $modName registered name of module -> used to define namespace
+     * @param string $modType type of function to run -> will be mapped to class type
+     * @param string $funcName specific function to run -> find corresponding method
+     * @return callable|null
+     */
+    public static function getModuleClassMethod($modName, $modType, $funcName)
+    {
+        static $methods_cache = [];
+
+        $key = "$modName:$modType:$funcName";
+        if (!array_key_exists($key, $methods_cache)) {
+            $instance = self::getModule($modName);
+            $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName);
+            if (!isset($methods_cache[$key])) {
+                xarLog::message("xarMod::getModuleClassMethod: Missing method for $key", xarLog::LEVEL_INFO);
+            }
+        }
+        return $methods_cache[$key];
     }
 
     /**

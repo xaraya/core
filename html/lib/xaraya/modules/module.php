@@ -50,4 +50,10 @@ sys::import('xaraya.modules.moduletrait');
 class DefaultModule implements ModuleInterface
 {
     use ModuleTrait;
+
+    public function getCallableMethod(string $type, string $func): callable|null
+    {
+        // no callable methods available here
+        return null;
+    }
 }

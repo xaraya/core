@@ -59,6 +59,8 @@ interface ModuleInterface extends ContextInterface
     public function getAdminGUI(): AdminGuiInterface|null;
     public function getHooks(): object|null;
     public function getInstaller(): object|null;
+    public function getClassType(string $type): string|null;
+    public function getCallableMethod(string $type, string $func): callable|null;
 }
 
 /**
@@ -189,13 +191,53 @@ trait ModuleTrait
         return $this->getComponent('AdminGui');
     }
 
-    public function getHooks(): object|null
+    public function getHooks(): HooksInterface|null
     {
         return $this->getComponent('Hooks');
     }
 
-    public function getInstaller(): object|null
+    public function getInstaller(): InstallerInterface|null
     {
         return $this->getComponent('Installer');
+    }
+
+    public function getClassType(string $type): string|null
+    {
+        $mapping = [
+            // common types
+            'userapi' => 'UserApi',
+            'user' => 'UserGui',
+            'adminapi' => 'AdminApi',
+            'admin' => 'AdminGui',
+            // special types
+            'hooks' => 'Hooks',
+            'installer' => 'Installer',
+            // other types
+            'dataapi' => 'DataApi',
+            'restapi' => 'RestApi',
+            'schedulerapi' => 'SchedulerApi',
+            'utilapi' => 'UtilApi',
+        ];
+        if (isset($mapping[$type])) {
+            return $mapping[$type];
+        }
+        return null;
+    }
+
+    public function getCallableMethod(string $type, string $func): callable|null
+    {
+        $classType = $this->getClassType($type);
+        if (!isset($classType)) {
+            return null;
+        }
+        $component = $this->getComponent($classType);
+        if (!isset($component)) {
+            return null;
+        }
+        if (method_exists($component, $func)) {
+            // use array format instead of first-class callable syntax to allow setting the context
+            return [$component, $func];
+        }
+        return null;
     }
 }

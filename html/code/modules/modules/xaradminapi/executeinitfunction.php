@@ -3,13 +3,13 @@
  * @package modules\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.5.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/1.html
  */
 /**
- * Loads xarinit or pninit and executes the given function
+ * Loads xarinit.php file or module installer class and executes the given function
  *
  * @author Xaraya Development Team
  * @param array<string, mixed> $args array of optional parameters<br/>
@@ -41,10 +41,16 @@ function modules_adminapi_executeinitfunction(array $args = [], $context = null)
     // Get module database info, they might be needed in the function to be called
     xarMod::loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
 
-    // @todo support installer class in the future - see Xaraya\Modules\InstallerTrait
     $xarinitfile = '';
     if (file_exists(sys::code() . 'modules/'. $modInfo['osdirectory'] .'/xarinit.php')) {
         $xarinitfile = sys::code() . 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
+    } else {
+        // use modType = 'installer' here to get the module Installer class (if available)
+        $func = xarMod::getModuleClassMethod($modInfo['name'], 'installer', $args['function']);
+        if (!empty($func)) {
+            modules_adminapi_run_callable($func, $args, $modInfo);
+            return true;
+        }
     }
     // If there is no xarinit file, there is apparently nothing to init.
     // TODO: we migh consider making it required.
@@ -67,20 +73,25 @@ function modules_adminapi_executeinitfunction(array $args = [], $context = null)
         $func = $modInfo['namespace'] . '\\' . $func;
     }
     if (function_exists($func)) {
-        if ($args['function'] == 'upgrade') {
-            // pass the old version as argument to the upgrade function
-            $result = $func($modInfo['version']);
-        } else {
-            $result = $func();
-        }
-
-        if ($result === false) {
-            $msg = xarML('While changing state of the #(1) module, the function #(2) returned a false value when executed.', $modInfo['name'], $func);
-            throw new Exception($msg);
-        } elseif ($result != true) {
-            $msg = xarML('An error ocurred while changing state of the #(1) module, executing function #(2)', $modInfo['name'], $func);
-            throw new Exception($msg);
-        }
+        modules_adminapi_run_callable($func, $args, $modInfo);
     }
     return true;
+}
+
+function modules_adminapi_run_callable($func, $args, $modInfo)
+{
+    if ($args['function'] == 'upgrade') {
+        // pass the old version as argument to the upgrade function
+        $result = $func($modInfo['version']);
+    } else {
+        $result = $func();
+    }
+
+    if ($result === false) {
+        $msg = xarML('While changing state of the #(1) module, the function #(2) returned a false value when executed.', $modInfo['name'], $func);
+        throw new Exception($msg);
+    } elseif ($result != true) {
+        $msg = xarML('An error ocurred while changing state of the #(1) module, executing function #(2)', $modInfo['name'], $func);
+        throw new Exception($msg);
+    }
 }
