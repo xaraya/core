@@ -5,14 +5,17 @@
  *
  * Usage:
  * ```
+ * # class/admingui.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Modules\AdminGuiInterface;
- * use Xaraya\Modules\AdminGuiTrait;
+ * use Xaraya\Modules\AdminGuiClass;
  *
- * class AdminGui implements AdminGuiInterface
+ * class AdminGui extends AdminGuiClass
  * {
- *     use AdminGuiTrait;
+ *     public function main($args = []) {
+ *         // get main admin overview
+ *         return $args;
+ *     }
  * }
  * ```
  *
@@ -34,9 +37,9 @@ use sys;
 sys::import('xaraya.modules.adminguitrait');
 
 /**
- * Summary of AdminGui
+ * Handle module admin gui functions
  */
-class AdminGui implements AdminGuiInterface
+class AdminGuiClass implements AdminGuiInterface
 {
     use AdminGuiTrait;
 }

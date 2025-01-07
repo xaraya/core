@@ -38,7 +38,7 @@ trait HooksTrait
 {
     use ContextTrait;
 
-    protected string $moduleName;          // set in constructor by xarMod::getModule()
+    protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     protected int $itemtype = 0;
 
     /**

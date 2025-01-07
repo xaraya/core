@@ -5,7 +5,7 @@
  *
  * Usage:
  * ```
- * // class/userapi.php
+ * # class/userapi.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
  * use Xaraya\Modules\UserApiInterface;
@@ -21,7 +21,7 @@
  *     }
  * }
  *
- * // xaruserapi/get.php or xaruserapi.php
+ * # xaruserapi/get.php or xaruserapi.php (migration)
  * function myfancymodule_userapi_get($args = [], $context = null) {
  *     // get module class instance first
  *     //$module = xarMod::getModule('myfancymodule');
@@ -47,17 +47,15 @@
 
 namespace Xaraya\Modules;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.hookstrait');
+sys::import('xaraya.modules.methodstrait');
 
 /**
  * For documentation purposes only - available via UserApiTrait
  */
-interface UserApiInterface extends ContextInterface, HooksInterface
+interface UserApiInterface extends MethodsInterface
 {
     // ...
 }
@@ -67,10 +65,9 @@ interface UserApiInterface extends ContextInterface, HooksInterface
  */
 trait UserApiTrait
 {
-    use ContextTrait;
-    use HooksTrait;
+    use MethodsTrait;
 
-    protected string $moduleName;          // set in constructor by xarMod::getModule()
+    protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     protected int $moduleId;
     protected int $itemtype = 0;
 

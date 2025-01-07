@@ -5,6 +5,7 @@
  *
  * Usage:
  * ```
+ * # class/adminapi.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
  * use Xaraya\Modules\AdminApiInterface;
@@ -13,6 +14,11 @@
  * class AdminApi implements AdminApiInterface
  * {
  *     use AdminApiTrait;
+ *
+ *     public function create($args = []) {
+ *         // create module item
+ *         return $args;
+ *     }
  * }
  * ```
  *

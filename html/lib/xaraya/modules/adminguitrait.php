@@ -5,6 +5,7 @@
  *
  * Usage:
  * ```
+ * # class/admingui.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
  * use Xaraya\Modules\AdminGuiInterface;
@@ -13,6 +14,11 @@
  * class AdminGui implements AdminGuiInterface
  * {
  *     use AdminGuiTrait;
+ *
+ *     public function main($args = []) {
+ *         // get main admin overview
+ *         return $args;
+ *     }
  * }
  * ```
  *

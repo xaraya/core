@@ -5,7 +5,7 @@
  *
  * Usage:
  * ```
- * // class/module.php
+ * # class/module.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
  * use Xaraya\Modules\ModuleInterface;
@@ -16,7 +16,7 @@
  *     use ModuleTrait;
  * }
  *
- * // xaruser/main.php or xaruser.php
+ * # xaruser/main.php or xaruser.php (migration)
  * function myfancymodule_user_main($args = [], $context = null) {
  *     // get module class instance first
  *     $module = xarMod::getModule('myfancymodule');
@@ -91,11 +91,13 @@ trait ModuleTrait
     protected function getClassName(string $type): string
     {
         // this assumes that the class is in the same namespace as the module
+        // Xaraya\Modules\MyFancyModule\AdminGui
         return $this->getNamespace() . '\\' . $type;
     }
 
     protected function getNamespace(): string
     {
+        // Xaraya\Modules\MyFancyModule
         return substr($this::class, 0, strrpos($this::class, '\\'));
     }
 
@@ -240,7 +242,7 @@ trait ModuleTrait
         if (!isset($component)) {
             return null;
         }
-        if (method_exists($component, $funcName)) {
+        if ($component->hasMethod($funcName)) {
             // use array format instead of first-class callable syntax to allow setting the context
             return [$component, $funcName];
         }

@@ -5,14 +5,17 @@
  *
  * Usage:
  * ```
+ * # class/adminapi.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Modules\AdminApiInterface;
- * use Xaraya\Modules\AdminApiTrait;
+ * use Xaraya\Modules\AdminApiClass;
  *
- * class AdminApi implements AdminApiInterface
+ * class AdminApi extends AdminApiClass
  * {
- *     use AdminApiTrait;
+ *     public function create($args = []) {
+ *         // create module item
+ *         return $args;
+ *     }
  * }
  * ```
  *
@@ -36,7 +39,7 @@ sys::import('xaraya.modules.adminapitrait');
 /**
  * Summary of AdminApi
  */
-class AdminApi implements AdminApiInterface
+class ModuleAdminApi implements AdminApiInterface
 {
     use AdminApiTrait;
 }

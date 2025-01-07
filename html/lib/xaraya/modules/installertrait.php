@@ -3,6 +3,23 @@
 /**
  * Handle module installer functions
  *
+ * Usage:
+ * ```
+ * # class/installer.php
+ * namespace Xaraya\Modules\MyFancyModule;
+ *
+ * use Xaraya\Modules\InstallerInterface;
+ * use Xaraya\Modules\InstallerTrait;
+ * use sys;
+ *
+ * sys::import('xaraya.modules.installertrait');
+ *
+ * class Installer implements InstallerInterface
+ * {
+ *     use InstallerTrait;
+ * }
+ * ```
+ *
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
@@ -45,7 +62,7 @@ interface InstallerInterface
  */
 trait InstallerTrait
 {
-    protected string $moduleName;          // set in constructor by xarMod::getModule()
+    protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     /** @var array<string> */
     protected $objects;                    // set in configure() - override this method
     /** @var array<string, mixed> */

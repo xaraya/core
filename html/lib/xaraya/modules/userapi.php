@@ -5,32 +5,17 @@
  *
  * Usage:
  * ```
- * // class/userapi.php
+ * # class/userapi.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Modules\UserApiInterface;
- * use Xaraya\Modules\UserApiTrait;
+ * use Xaraya\Modules\UserApiClass;
  *
- * class UserApi implements UserApiInterface
+ * class UserApi extends UserApiClass
  * {
- *     use UserApiTrait;
- *
  *     public function get($args = []) {
  *         // get single module item
  *         return $args;
  *     }
- * }
- *
- * // xaruserapi/get.php or xaruserapi.php
- * function myfancymodule_userapi_get($args = [], $context = null) {
- *     // get module class instance first
- *     //$module = xarMod::getModule('myfancymodule');
- *     //$module->setContext($context);
- *     //return $module->getAPI()->get($args);
- *     // or get module api directly
- *     $userapi = xarMod::getAPI('myfancymodule');
- *     $userapi->setContext($context);
- *     return $userapi->get($args);
  * }
  * ```
  *
@@ -52,9 +37,9 @@ use sys;
 sys::import('xaraya.modules.userapitrait');
 
 /**
- * Summary of UserApi
+ * Handle module user api functions
  */
-class UserApi implements UserApiInterface
+class UserApiClass implements UserApiInterface
 {
     use UserApiTrait;
 }

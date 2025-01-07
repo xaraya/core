@@ -21,9 +21,9 @@ use sys;
 sys::import('xaraya.modules.hookstrait');
 
 /**
- * Summary of Hooks
+ * Handle module hook calls
  */
-class Hooks implements HooksInterface
+class HooksClass implements HooksInterface
 {
     use HooksTrait;
 }

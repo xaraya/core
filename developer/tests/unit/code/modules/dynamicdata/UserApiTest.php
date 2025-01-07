@@ -38,6 +38,10 @@ final class UserApiTest extends TestCase
         $userapi = xarMod::getAPI('dynamicdata');
         $this->assertEquals($expected, $userapi::class);
 
+        // the method "exists" as inherited class method (case-insensitive)
+        $result = $userapi->hasMethod('getitemtypes');
+        $this->assertTrue($result);
+
         $expected = [
             'objectid' => '4',
             'name' => 'sample',
@@ -63,10 +67,38 @@ final class UserApiTest extends TestCase
         $this->assertEquals($expected, $itemlinks[1]);
     }
 
+    public function testUserApiTestCall(): void
+    {
+        $context = new Context(['source' => __METHOD__]);
+        $userapi = xarMod::getAPI(modName: 'dynamicdata');
+        $userapi->setContext($context);
+
+        // we have the right component class
+        $expected = UserApi::class;
+        $this->assertEquals($expected, $userapi::class);
+
+        // the method "exists" even as single-method class file (converted to PascalCase)
+        $result = $userapi->hasMethod('test_call');
+        $this->assertTrue($result);
+
+        $args = ['hello' => 'world'];
+        $expected = array_merge($args, [
+            'context' => $context,
+            'handled' => true,
+        ]);
+        $result = $userapi->test_call($args);
+        $this->assertEquals($expected, $result);
+    }
+
     public function testXarModApiFunc(): void
     {
         // initialize modules
         //xarMod::init();
+
+        // the method "exists" as inherited class method (case-insensitive)
+        $callable = xarMod::getModuleClassMethod('dynamicdata', 'userapi', 'getitemtypes');
+        $this->assertTrue(is_callable($callable));
+
         $expected = [
             'objectid' => '4',
             'name' => 'sample',
@@ -90,6 +122,25 @@ final class UserApiTest extends TestCase
         $result = xarMod::apiFunc('dynamicdata', 'user', 'getitemlinks', $args);
         $this->assertCount(3, $result);
         $this->assertEquals($expected, $result[1]);
+    }
+
+    public function testXarModApiFuncTestCall(): void
+    {
+        // initialize modules
+        //xarMod::init();
+
+        // the method "exists" even as single-method class file (converted to PascalCase)
+        $callable = xarMod::getModuleClassMethod('dynamicdata', 'userapi', 'test_call');
+        $this->assertTrue(is_callable($callable));
+
+        $context = new Context(['source' => __METHOD__]);
+        $args = ['hello' => 'world'];
+        $expected = array_merge($args, [
+            'context' => $context,
+            'handled' => true,
+        ]);
+        $result = xarMod::apiFunc('dynamicdata', 'user', 'test_call', $args, $context);
+        $this->assertEquals($expected, $result);
     }
 
     public function testXarModApiFuncInvalidName(): void

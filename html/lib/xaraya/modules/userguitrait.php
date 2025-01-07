@@ -5,7 +5,7 @@
  *
  * Usage:
  * ```
- * // class/usergui.php
+ * # class/usergui.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
  * use Xaraya\Modules\UserGuiInterface;
@@ -16,26 +16,12 @@
  *     use UserGuiTrait;
  *
  *     public function main($args = []) {
- *         // get main module overview
+ *         // get main user overview
  *         return $args;
  *     }
  * }
  *
- * // xaruser/main.php or xaruser.php
- * function myfancymodule_user_main($args = [], $context = null) {
- *     // get module class instance first
- *     //$module = xarMod::getModule('myfancymodule');
- *     //$module->setContext($context);
- *     //return $module->getGUI()->main($args);
- *     // or get module gui directly
- *     $usergui = xarMod::getGUI('myfancymodule');
- *     $usergui->setContext($context);
- *     return $usergui->main($args);
- * }
- * ```
- * }
- *
- * // xaruser.php
+ * # xaruser/main.php or xaruser.php (migration)
  * function myfancymodule_user_main($args = [], $context = null) {
  *     // get module class instance first
  *     //$module = xarMod::getModule('myfancymodule');
@@ -61,18 +47,16 @@
 
 namespace Xaraya\Modules;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
 use xarMod;
 use xarSecurity;
 use sys;
 
-sys::import('xaraya.modules.hookstrait');
+sys::import('xaraya.modules.methodstrait');
 
 /**
  * For documentation purposes only - available via UserGuiTrait
  */
-interface UserGuiInterface extends ContextInterface, HooksInterface
+interface UserGuiInterface extends MethodsInterface
 {
     /**
      * Summary of init
@@ -94,10 +78,9 @@ interface UserGuiInterface extends ContextInterface, HooksInterface
  */
 trait UserGuiTrait
 {
-    use ContextTrait;
-    use HooksTrait;
+    use MethodsTrait;
 
-    protected string $moduleName;          // set in constructor by xarMod::getModule()
+    protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     protected int $itemtype = 0;
     /** @var UserApiInterface */
     protected $api;

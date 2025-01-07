@@ -5,46 +5,17 @@
  *
  * Usage:
  * ```
- * // class/usergui.php
+ * # class/usergui.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Modules\UserGuiInterface;
- * use Xaraya\Modules\UserGuiTrait;
+ * use Xaraya\Modules\UserGuiClass;
  *
- * class UserGui implements UserGuiInterface
+ * class UserGui extends UserGuiClass
  * {
- *     use UserGuiTrait;
- *
  *     public function main($args = []) {
- *         // get main module overview
+ *         // get main user overview
  *         return $args;
  *     }
- * }
- *
- * // xaruser/main.php or xaruser.php
- * function myfancymodule_user_main($args = [], $context = null) {
- *     // get module class instance first
- *     //$module = xarMod::getModule('myfancymodule');
- *     //$module->setContext($context);
- *     //return $module->getGUI()->main($args);
- *     // or get module gui directly
- *     $usergui = xarMod::getGUI('myfancymodule');
- *     $usergui->setContext($context);
- *     return $usergui->main($args);
- * }
- * ```
- * }
- *
- * // xaruser.php
- * function myfancymodule_user_main($args = [], $context = null) {
- *     // get module class instance first
- *     //$module = xarMod::getModule('myfancymodule');
- *     //$module->setContext($context);
- *     //return $module->getGUI()->main($args);
- *     // or get module gui directly
- *     $usergui = xarMod::getGUI('myfancymodule');
- *     $usergui->setContext($context);
- *     return $usergui->main($args);
  * }
  * ```
  *
@@ -66,9 +37,9 @@ use sys;
 sys::import('xaraya.modules.userguitrait');
 
 /**
- * Summary of UserGui
+ * Handle module user gui functions
  */
-class UserGui implements UserGuiInterface
+class UserGuiClass implements UserGuiInterface
 {
     use UserGuiTrait;
 }

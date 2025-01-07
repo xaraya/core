@@ -5,18 +5,19 @@
  *
  * Usage:
  * ```
- * // class/module.php
+ * # class/module.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
- * use Xaraya\Modules\ModuleInterface;
- * use Xaraya\Modules\ModuleTrait;
+ * use Xaraya\Modules\ModuleClass;
+ * use sys;
  *
- * class Module implements ModuleInterface
+ * sys::import('xaraya.modules.module');
+ *
+ * class Module extends ModuleClass
  * {
- *     use ModuleTrait;
  * }
  *
- * // xaruser/main.php or xaruser.php
+ * # xaruser/main.php or xaruser.php (migration)
  * function myfancymodule_user_main($args = [], $context = null) {
  *     // get module class instance first
  *     $module = xarMod::getModule('myfancymodule');
@@ -30,7 +31,7 @@
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.4
+ * @version 2.5.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -45,27 +46,9 @@ use sys;
 sys::import('xaraya.modules.moduletrait');
 
 /**
- * Summary of DefaultModule
+ * Handle module classes via xarMod::getModule()
  */
-class DefaultModule implements ModuleInterface
+class ModuleClass implements ModuleInterface
 {
     use ModuleTrait;
-
-    /**
-     * @see \xarMod::privateLoad()
-     */
-    public function getClassType(string $modType): string|null
-    {
-        // no class types available here
-        return null;
-    }
-
-    /**
-     * @see \xarMod::getModuleClassMethod()
-     */
-    public function getCallableMethod(string $modType, string $funcName): callable|null
-    {
-        // no callable methods available here
-        return null;
-    }
 }

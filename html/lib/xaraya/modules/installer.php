@@ -3,6 +3,21 @@
 /**
  * Handle module installer functions
  *
+ * Usage:
+ * ```
+ * # class/installer.php
+ * namespace Xaraya\Modules\MyFancyModule;
+ *
+ * use Xaraya\Modules\InstallerClass;
+ * use sys;
+ *
+ * sys::import('xaraya.modules.installer');
+ *
+ * class Installer extends InstallerClass
+ * {
+ * }
+ * ```
+ *
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
@@ -23,7 +38,7 @@ sys::import('xaraya.modules.installertrait');
 /**
  * Handle module installer functions
  */
-class Installer implements InstallerInterface
+class InstallerClass implements InstallerInterface
 {
     use InstallerTrait;
 
