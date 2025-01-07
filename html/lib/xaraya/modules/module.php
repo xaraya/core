@@ -15,6 +15,13 @@
  *
  * class Module extends ModuleClass
  * {
+ *     public function setClassTypes(): void
+ *     {
+ *          parent::setClassTypes();
+ *          // add import class types for this module
+ *          $this->classtypes['import'] = 'Import';
+ *          $this->classtypes['importapi'] = 'ImportApi';
+ *     }
  * }
  *
  * # xaruser/main.php or xaruser.php (migration)

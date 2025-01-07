@@ -39,13 +39,13 @@ class SQLiteDatabaseInfo extends DatabaseInfo
         include_once 'creole/drivers/sqlite/metadata/SQLiteTableInfo.php';
 
         $sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
-        $result = sqlite_query($this->dblink, $sql);
+        $result = $this->dblink->query($sql);
 
         if (!$result) {
             throw new SQLException("Could not list tables", sqlite_last_error($this->dblink));
         }
 
-        while ($row = sqlite_fetch_array($result)) {
+        while ($row = $result->fetchArray()) {
             $this->tables[strtoupper($row[0])] = new SQLiteTableInfo($this, $row[0]);
         }
     }

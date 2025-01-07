@@ -31,6 +31,8 @@ sys::import('xaraya.modules.hookstrait');
 interface MethodsInterface extends ContextInterface, HooksInterface
 {
     public function hasMethod(string $funcName): bool;
+    public function checkAccess(string $mask, string $action = ''): bool;
+    public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING);
 }
 
 /**
@@ -41,11 +43,16 @@ trait MethodsTrait
     use ContextTrait;
     use HooksTrait;
 
+    /** @var array<string> */
+    protected array $internal = ['hasmethod', 'getclassname', 'getnamespace', 'checkaccess', 'fetchvar'];
     /** @var array<string, object|null> */
     private array $methods = [];
 
     public function hasMethod(string $funcName): bool
     {
+        if (in_array(strtolower($funcName), $this->internal)) {
+            return false;
+        }
         // support regular class method or single-method class in namespace
         return method_exists($this, $funcName) || class_exists($this->getClassName($funcName));
     }
@@ -96,7 +103,7 @@ trait MethodsTrait
 
     /** Wrap some frequently used static method calls here */
 
-    protected function checkAccess(string $mask, string $action = ''): bool
+    public function checkAccess(string $mask, string $action = ''): bool
     {
         if (empty($mask) && !empty($action)) {
             return xarMod::checkAccess($this->moduleName, $action) ? true : false;
@@ -105,7 +112,7 @@ trait MethodsTrait
         return xarSecurity::check($mask) ? true : false;
     }
 
-    protected function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING)
+    public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING)
     {
         return xarVar::fetch($name, $validation, $value, $defaultValue, $flags, $prep);
     }

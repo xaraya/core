@@ -62,6 +62,7 @@ interface ModuleInterface extends ContextInterface
     public function getAdminGUI(): AdminGuiInterface|null;
     public function getHooks(): HooksInterface|null;
     public function getInstaller(): InstallerInterface|null;
+    public function setClassTypes(): void;
     public function getClassType(string $modType): string|null;
     public function getCallableMethod(string $modType, string $funcName): callable|null;
 }
@@ -76,12 +77,15 @@ trait ModuleTrait
     use ContextTrait;
 
     protected string $moduleName;          // set in constructor by xarMod::getModule()
+    /** @var array<string, string> */
+    protected array $classtypes = [];
     /** @var array<string, object|null> */
     private array $components = [];
 
     public function __construct(string $moduleName)
     {
         $this->moduleName = $moduleName;
+        $this->setClassTypes();
     }
 
     protected function createComponent(string $type): MethodsInterface
@@ -207,11 +211,11 @@ trait ModuleTrait
     }
 
     /**
-     * @see \xarMod::privateLoad()
+     * Use this to override or add class types if extended - see library
      */
-    public function getClassType(string $modType): string|null
+    public function setClassTypes(): void
     {
-        $mapping = [
+        $this->classtypes = [
             // common types
             'userapi' => 'UserApi',
             'user' => 'UserGui',
@@ -226,8 +230,15 @@ trait ModuleTrait
             'schedulerapi' => 'SchedulerApi',
             'utilapi' => 'UtilApi',
         ];
-        if (isset($mapping[$modType])) {
-            return $mapping[$modType];
+    }
+
+    /**
+     * @see \xarMod::privateLoad()
+     */
+    public function getClassType(string $modType): string|null
+    {
+        if (isset($this->classtypes[$modType])) {
+            return $this->classtypes[$modType];
         }
         return null;
     }

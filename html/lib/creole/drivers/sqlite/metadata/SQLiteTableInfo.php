@@ -38,29 +38,29 @@ class SQLiteTableInfo extends TableInfo
     {
         $sql = "PRAGMA table_info('".$this->name."')";
 
-        $this->resource = sqlite_query($this->conn->getResource(), $sql);
+        $this->resource = $this->conn->getResource()->query($sql);
     }
 
     protected function getRow()
     {
-        return sqlite_fetch_array($this->resource, SQLITE_ASSOC);
+        return $this->resource->fetchArray(SQLITE3_ASSOC);
     }
 
     protected function prepIndex1()
     {
         $sql = "PRAGMA index_list('".$this->name."')";
 
-        $this->resource = sqlite_query($this->conn->getResource(), $sql);
+        $this->resource = $this->conn->getResource()->query($sql);
     }
 
     protected function prepIndex2($name)
     {
-        $this->i2resource = sqlite_query($this->conn->getResource(), "PRAGMA index_info('$name')");
+        $this->i2resource = $this->conn->getResource()->query("PRAGMA index_info('$name')");
     }
 
     protected function getI2Row()
     {
-        return sqlite_fetch_array($this->i2resource, SQLITE_ASSOC);
+        return $this->i2resource->fetchArray(SQLITE3_ASSOC);
     }
 
     /** Loads the columns for this table. */

@@ -66,7 +66,7 @@ class MethodClass implements ContextInterface, HooksInterface
 
     /** Wrap some frequently used static method calls here */
 
-    protected function checkAccess(string $mask, string $action = ''): bool
+    public function checkAccess(string $mask, string $action = ''): bool
     {
         if (empty($mask) && !empty($action)) {
             return xarMod::checkAccess($this->moduleName, $action) ? true : false;
@@ -75,7 +75,7 @@ class MethodClass implements ContextInterface, HooksInterface
         return xarSecurity::check($mask) ? true : false;
     }
 
-    protected function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING)
+    public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING)
     {
         return xarVar::fetch($name, $validation, $value, $defaultValue, $flags, $prep);
     }
