@@ -48,7 +48,6 @@
 namespace Xaraya\Modules;
 
 use xarMod;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.methodstrait');
@@ -139,10 +138,5 @@ trait UserGuiTrait
         // Pass along the context for xarTpl::module() if needed
         $data['context'] ??= $this->getContext();
         return $data;
-    }
-
-    protected function checkAccess(string $mask): bool
-    {
-        return xarSecurity::check($mask) ? true : false;
     }
 }

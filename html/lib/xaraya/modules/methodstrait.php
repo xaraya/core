@@ -18,6 +18,9 @@ namespace Xaraya\Modules;
 
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
+use xarMod;
+use xarSecurity;
+use xarVar;
 use sys;
 
 sys::import('xaraya.modules.hookstrait');
@@ -89,5 +92,21 @@ trait MethodsTrait
     {
         // Xaraya\Modules\MyFancyModule\UserApi
         return $this::class;
+    }
+
+    /** Wrap some frequently used static method calls here */
+
+    protected function checkAccess(string $mask, string $action = ''): bool
+    {
+        if (empty($mask) && !empty($action)) {
+            return xarMod::checkAccess($this->moduleName, $action) ? true : false;
+        }
+        // @todo use $action for something here, and/or pass moduleName?
+        return xarSecurity::check($mask) ? true : false;
+    }
+
+    protected function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING)
+    {
+        return xarVar::fetch($name, $validation, $value, $defaultValue, $flags, $prep);
     }
 }

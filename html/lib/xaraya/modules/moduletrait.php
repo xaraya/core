@@ -43,6 +43,9 @@ namespace Xaraya\Modules;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use xarMod;
+use sys;
+
+sys::import('xaraya.modules.methodstrait');
 
 /**
  * For documentation purposes only - available via ModuleTrait
@@ -51,14 +54,14 @@ interface ModuleInterface extends ContextInterface
 {
     public function getName(): string;
     public function getInfo(): array;
-    public function getComponent(string $type): object|null;
+    public function getComponent(string $type): MethodsInterface|null;
     public function hasComponent(string $type): bool;
     public function getAPI(): UserApiInterface|null;
     public function getGUI(): UserGuiInterface|null;
     public function getAdminAPI(): AdminApiInterface|null;
     public function getAdminGUI(): AdminGuiInterface|null;
-    public function getHooks(): object|null;
-    public function getInstaller(): object|null;
+    public function getHooks(): HooksInterface|null;
+    public function getInstaller(): InstallerInterface|null;
     public function getClassType(string $modType): string|null;
     public function getCallableMethod(string $modType, string $funcName): callable|null;
 }
@@ -81,7 +84,7 @@ trait ModuleTrait
         $this->moduleName = $moduleName;
     }
 
-    protected function createComponent(string $type): object
+    protected function createComponent(string $type): MethodsInterface
     {
         // this assumes that the class is in the same namespace as the module
         $class = $this->getClassName($type);
@@ -101,7 +104,7 @@ trait ModuleTrait
         return substr($this::class, 0, strrpos($this::class, '\\'));
     }
 
-    public function getComponent(string $type): object|null
+    public function getComponent(string $type): MethodsInterface|null
     {
         if (!array_key_exists($type, $this->components)) {
             try {

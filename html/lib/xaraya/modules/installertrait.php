@@ -35,11 +35,14 @@ namespace Xaraya\Modules;
 
 use xarMod;
 use xarModVars;
+use sys;
+
+sys::import('xaraya.modules.methodstrait');
 
 /**
  * For documentation purposes only - available via InstallerTrait
  */
-interface InstallerInterface
+interface InstallerInterface extends MethodsInterface
 {
     /**
      * Configure this module - override this method
@@ -62,6 +65,8 @@ interface InstallerInterface
  */
 trait InstallerTrait
 {
+    use MethodsTrait;
+
     protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     /** @var array<string> */
     protected $objects;                    // set in configure() - override this method
