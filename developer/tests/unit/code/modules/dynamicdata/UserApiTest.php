@@ -9,8 +9,6 @@ use Xaraya\DataObject\UserApi;
 
 final class UserApiTest extends TestCase
 {
-    protected static $oldDir;
-
     public static function setUpBeforeClass(): void
     {
         // initialize bootstrap
@@ -26,16 +24,9 @@ final class UserApiTest extends TestCase
         // initialize users
         //xarUser::init();
         xarSession::setSessionClass(SessionContext::class);
-
-        // file paths are relative to parent directory
-        static::$oldDir = getcwd();
-        chdir(dirname(__DIR__));
     }
 
-    public static function tearDownAfterClass(): void
-    {
-        chdir(static::$oldDir);
-    }
+    public static function tearDownAfterClass(): void {}
 
     protected function setUp(): void {}
 
