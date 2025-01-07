@@ -5,14 +5,13 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.5.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
  *
  * @author random <mfl@netspan.ch>
 */
-sys::import('modules.dynamicdata.class.userapi');
 /**
  * get the next itemtype of objects pertaining to a given module
  *
@@ -28,7 +27,10 @@ function dynamicdata_adminapi_getnextitemtype($args = [], $context = null)
     if (empty($module_id)) {
         $module_id = 182;
     }
-    $types = Xaraya\DataObject\UserApi::getModuleItemTypes($module_id);
+    /** @var Xaraya\DataObject\UserApi $userapi */
+    $userapi = xarMod::getAPI('dynamicdata');
+    $userapi->setContext($context);
+    $types = $userapi::getModuleItemTypes($module_id);
     $ids = array_keys($types);
     sort($ids);
     $lastid = array_pop($ids);

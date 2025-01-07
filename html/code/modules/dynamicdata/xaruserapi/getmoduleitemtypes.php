@@ -5,14 +5,13 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.5.5
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.dynamicdata.class.userapi');
 /**
  * utility function to retrieve the list of item types of a module (if any)
  *
@@ -32,5 +31,8 @@ function dynamicdata_userapi_getmoduleitemtypes(array $args = [], $context = nul
     $native ??= true;
     $extensions ??= true;
 
-    return Xaraya\DataObject\UserApi::getModuleItemTypes($moduleid, $native, $extensions);
+    /** @var Xaraya\DataObject\UserApi $userapi */
+    $userapi = xarMod::getAPI('dynamicdata');
+    $userapi->setContext($context);
+    return $userapi::getModuleItemTypes($moduleid, $native, $extensions);
 }

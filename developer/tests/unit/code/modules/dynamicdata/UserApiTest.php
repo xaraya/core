@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Xaraya\Context\Context;
 use Xaraya\Context\SessionContext;
+use Xaraya\DataObject\UserApi;
 
 //use Xaraya\Sessions\SessionHandler;
 
@@ -42,10 +43,33 @@ final class UserApiTest extends TestCase
 
     public function testUserApi(): void
     {
-        $expected = 12;
+        $expected = UserApi::class;
         $userapi = xarMod::getAPI('dynamicdata');
+        $this->assertEquals($expected, $userapi::class);
+
+        $expected = [
+            'objectid' => '4',
+            'name' => 'sample',
+            'label' => 'Sample Object',
+            'title' => 'View Sample Object',
+            'url' => 'http://localhost/index.php?object=sample&amp;method=view',
+        ];
         $itemtypes = $userapi->getItemTypes();
-        $this->assertCount($expected, $itemtypes);
+        //$this->assertCount(12, $itemtypes);
+        $this->assertEquals($expected, $itemtypes[3]);
+
+        $expected = [
+            'objectid' => 4,
+            'name' => 'sample',
+            'itemid' => 1,
+            'url' => 'http://localhost/index.php?object=sample&amp;method=display&amp;itemid=1',
+            'title' => 'Display Item',
+            'label' => 'Johnny',
+        ];
+        $args = ['itemtype' => 3];
+        $itemlinks = $userapi->getItemLinks($args);
+        $this->assertCount(3, $itemlinks);
+        $this->assertEquals($expected, $itemlinks[1]);
     }
 
     public function testXarModApiFunc(): void
@@ -53,12 +77,28 @@ final class UserApiTest extends TestCase
         // initialize modules
         //xarMod::init();
         $expected = [
+            'objectid' => '4',
+            'name' => 'sample',
             'label' => 'Sample Object',
             'title' => 'View Sample Object',
             'url' => 'http://localhost/index.php?module=dynamicdata&amp;type=user&amp;func=view&amp;itemtype=3',
         ];
         $result = xarMod::apiFunc('dynamicdata', 'user', 'getitemtypes');
+        //$this->assertCount(12, $result);
         $this->assertEquals($expected, $result[3]);
+
+        $expected = [
+            'objectid' => 4,
+            'name' => 'sample',
+            'itemid' => 1,
+            'label' => 'Johnny',
+            'title' => 'Display Item',
+            'url' => 'http://localhost/index.php?module=dynamicdata&amp;type=user&amp;func=display&amp;name=sample&amp;itemid=1',
+        ];
+        $args = ['itemtype' => 3];
+        $result = xarMod::apiFunc('dynamicdata', 'user', 'getitemlinks', $args);
+        $this->assertCount(3, $result);
+        $this->assertEquals($expected, $result[1]);
     }
 
     public function testXarModApiFuncInvalidName(): void
