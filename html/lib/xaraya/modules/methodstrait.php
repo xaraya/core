@@ -44,12 +44,19 @@ trait MethodsTrait
     use HooksTrait;
 
     /** @var array<string> */
+    protected array $allowed = [];
+    /** @var array<string> */
     protected array $internal = ['hasmethod', 'getclassname', 'getnamespace', 'checkaccess', 'fetchvar'];
     /** @var array<string, object|null> */
     private array $methods = [];
 
     public function hasMethod(string $funcName): bool
     {
+        // whitelist methods (if defined)
+        if (!empty($this->allowed) && !in_array(strtolower($funcName), $this->allowed)) {
+            return false;
+        }
+        // blacklist methods (always)
         if (in_array(strtolower($funcName), $this->internal)) {
             return false;
         }
@@ -59,6 +66,7 @@ trait MethodsTrait
 
     public function __call(string $funcName, array $arguments = [])
     {
+        // call any single-method class that exists in the component namespace
         if (!array_key_exists($funcName, $this->methods)) {
             $className = $this->getClassName($funcName);
             if (class_exists($className)) {
