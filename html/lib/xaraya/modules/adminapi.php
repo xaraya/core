@@ -40,7 +40,7 @@ sys::import('xaraya.modules.adminapitrait');
 /**
  * Summary of AdminApi
  */
-class ModuleAdminApi implements AdminApiInterface
+class AdminApiClass implements AdminApiInterface
 {
     use AdminApiTrait;
 }

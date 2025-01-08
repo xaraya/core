@@ -68,7 +68,7 @@ interface UserGuiInterface extends GuiMethodsInterface
     /**
      * Summary of main
      * @param array<string, mixed> $args
-     * @return array<mixed>
+     * @return array<mixed>|string|void
      */
     public function main(array $args = []);
 }
@@ -82,8 +82,6 @@ trait UserGuiTrait
 
     protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     protected int $itemtype = 0;
-    /** @var UserApiInterface */
-    protected $api;
 
     public function __construct(string $moduleName)
     {
@@ -97,16 +95,6 @@ trait UserGuiTrait
     }
 
     /**
-     * Summary of getAPI
-     * @return UserApiInterface
-     */
-    protected function getAPI()
-    {
-        $this->api ??= xarMod::getModule($this->moduleName)->getAPI();
-        return $this->api;
-    }
-
-    /**
      * Summary of init
      * @param array<string, mixed> $args
      * @return void
@@ -116,7 +104,7 @@ trait UserGuiTrait
     /**
      * Summary of main
      * @param array<string, mixed> $args
-     * @return array<mixed>
+     * @return array<mixed>|string|void
      */
     public function main(array $args = [])
     {

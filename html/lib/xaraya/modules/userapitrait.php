@@ -69,30 +69,16 @@ trait UserApiTrait
     use MethodsTrait;
 
     protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
-    protected int $moduleId;
     protected int $itemtype = 0;
 
     public function __construct(string $moduleName)
     {
         $this->moduleName = $moduleName;
         $this->loadModule();
-        $this->moduleId = $this->getModuleId();
     }
 
     protected function loadModule(): void
     {
         xarMod::apiLoad($this->moduleName, 'user');
-    }
-
-    /**
-     * Get module registry ID by name
-     * @return int
-     */
-    protected function getModuleId(): int
-    {
-        // avoid getting module id from xarMod::getRegID() here
-        //return xarMod::getRegId($this->moduleName);
-        $fileInfo = xarMod::getFileInfo($this->moduleName);
-        return $fileInfo['regid'];
     }
 }

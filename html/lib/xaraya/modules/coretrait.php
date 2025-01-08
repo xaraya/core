@@ -33,8 +33,10 @@ use xarVar;
 interface CoreInterface
 {
     public function checkAccess(string $mask, string $action = ''): bool;
-    public function getVar($name, $scope = 'module');
-    public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING);
+    public function getAPI(): UserApiInterface|null;
+    public function getModuleId(): int;
+    public function getVar($name, $scope = 'module'): mixed;
+    public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): mixed;
     public function genAuthKey(): string;
     public function confirmAuthKey(string $name = 'authid'): bool;
 }
@@ -53,7 +55,24 @@ trait CoreTrait
         return xarSecurity::check($mask) ? true : false;
     }
 
-    public function getVar($name, $scope = 'module')
+    public function getAPI(): UserApiInterface|null
+    {
+        return xarMod::getModule($this->moduleName)->getAPI();
+    }
+
+    /**
+     * Get module registry ID by name
+     * @return int
+     */
+    public function getModuleId(): int
+    {
+        // avoid getting module id from xarMod::getRegID() here
+        //return xarMod::getRegId($this->moduleName);
+        $fileInfo = xarMod::getFileInfo($this->moduleName);
+        return $fileInfo['regid'];
+    }
+
+    public function getVar($name, $scope = 'module'): mixed
     {
         return match ($scope) {
             //'local' => $name,
@@ -66,7 +85,7 @@ trait CoreTrait
         };
     }
 
-    public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING)
+    public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): mixed
     {
         // Note: this should be restricted to GuiMethodsInterface
         return xarVar::fetch($name, $validation, $value, $defaultValue, $flags, $prep);

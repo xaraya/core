@@ -65,6 +65,8 @@ trait MethodsTrait
         'setcontext',
         // CoreTrait
         'checkaccess',
+        'getapi',
+        'getmoduleid',
         'getvar',
         'fetchvar',
         'genauthkey',
@@ -76,6 +78,11 @@ trait MethodsTrait
         'hasmethod',
         'getclassname',
         'getnamespace',
+        // UserApiTrait
+        'loadmodule',
+        // UserGuiTrait
+        'init',
+        'prepareoutput',
         // @todo add new internal methods here + find a better way to do this
     ];
     /** @var array<string, object|null> */
@@ -117,7 +124,7 @@ trait MethodsTrait
         if (!array_key_exists($funcName, $this->methods)) {
             $className = $this->getClassName($funcName);
             if (class_exists($className)) {
-                $this->methods[$funcName] = new $className($this->moduleName);
+                $this->methods[$funcName] = new $className($this->moduleName, $this->itemtype);
             } else {
                 $this->methods[$funcName] = null;
             }
@@ -140,7 +147,7 @@ trait MethodsTrait
      * will become Xaraya\Modules\MyFancyModule\UserApi\TestCallMethod
      *
      * @param string $funcName
-     * @return string
+     * @return class-string<MethodClass>
      */
     protected function getClassName(string $funcName): string
     {

@@ -76,11 +76,12 @@ trait ItemLinksTrait
         if (!empty(static::$_itemlinkObjects[$this->moduleName])) {
             return static::$_itemlinkObjects[$this->moduleName];
         }
+        $moduleId = $this->getModuleId();
         $objects = DataObjectFactory::getObjects();
         static::$_itemlinkObjects[$this->moduleName] = [];
         foreach ($objects as $objectid => $objectinfo) {
             /** @var array<string, mixed> $objectinfo */
-            if (intval($objectinfo['moduleid']) !== $this->moduleId) {
+            if (intval($objectinfo['moduleid']) !== $moduleId) {
                 continue;
             }
             if (property_exists(static::class, 'itemtype')) {
@@ -171,8 +172,11 @@ trait ItemLinksTrait
         }
 
         // for items managed by this module itself only
-        $args = DataObjectDescriptor::getObjectID(['moduleid'  => $this->moduleId,
-            'itemtype'  => $itemtype]);
+        $moduleId = $this->getModuleId();
+        $args = DataObjectDescriptor::getObjectID([
+            'moduleid'  => $moduleId,
+            'itemtype'  => $itemtype,
+        ]);
         if (empty($args['objectid'])) {
             return $itemlinks;
         }
