@@ -15,6 +15,9 @@ html/code/modules/myfancymodule
 - xaradminapi.php -> myfancymodule_adminapi_\*($args, $context)
 - xaruser.php -> myfancymodule_user_\*($args, $context)
 - xaruserapi.php -> myfancymodule_userapi_\*($args, $context)
+- xarinit.php -> myfancymodule_\*(*) [1]
+
+[1] called by modules_adminapi_executeinitfunction() in modules admin gui
 
 For larger modules, functions will be in separate files by type and name:
 
@@ -31,6 +34,9 @@ html/code/modules/myfancymodule
 - xaruserapi
   * get.php -> myfancymodule_userapi_get($args, $context)
   * getall.php
+- xarinit.php -> myfancymodule_\*(*) [1]
+
+Module functions use a naming convention for the function type: '' for gui functions and 'api' for api functions.
 
 ## Module Methods (object-oriented)
 
@@ -48,6 +54,7 @@ html/code/modules/myfancymodule/class
 - adminapi.php -> Xaraya\Modules\MyFancyModule\AdminApi()->\*($args)
 - usergui.php -> Xaraya\Modules\MyFancyModule\UserGui()->\*($args)
 - userapi.php -> Xaraya\Modules\MyFancyModule\UserApi()->\*($args)
+- installer.php -> Xaraya\Modules\MyFancyModule\Installer()->\*(*) [1]
 
 For larger modules, methods will be in separate class files by type and name:
 
@@ -57,6 +64,7 @@ html/code/modules/myfancymodule/class
 - adminapi.php -> Xaraya\Modules\MyFancyModule\AdminApi()
 - usergui.php -> Xaraya\Modules\MyFancyModule\UserGui()
 - userapi.php -> Xaraya\Modules\MyFancyModule\UserApi()
+- installer.php -> Xaraya\Modules\MyFancyModule\Installer()->\*(*) [1]
 - admingui
   * main.php -> Xaraya\Modules\MyFancyModule\AdminGui\MainMethod($args)
   * modifyconfig.php
@@ -70,7 +78,9 @@ html/code/modules/myfancymodule/class
   * get.php -> Xaraya\Modules\MyFancyModule\UserApi\GetMethod($args)
   * getall.php
 
-Note: the `$context` is handled by the class itself, and does not need to be passed to the method call.
+Module methods rely on component class interfaces for the function type: `GuiMethodsInterface` for gui methods and `ApiMethodsInterface` for api methods. Api methods cannot be called as gui functions via `xarMod::guiFunc()`.
+
+Note: the `$context` is handled by the class itself, and does not need to be passed to the method call here.
 
 ## Implementation Details
 
@@ -83,24 +93,28 @@ Module developers can use the traits and classes in `html/lib/xaraya/modules/` t
 
 namespace Xaraya\Modules\MyFancyModule;
 
-use Xaraya\Modules\ModuleInterface;
-use Xaraya\Modules\ModuleTrait;
+use Xaraya\Modules\ModuleClass;
 use sys;
 
-sys::import('xaraya.modules.moduletrait');
+sys::import('xaraya.modules.module');
 
 /**
  * Get myfancymodule module classes via xarMod::getModule()
  */
-class Module implements ModuleInterface
+class Module extends ModuleClass
 {
-    use ModuleTrait;
+    public function setClassTypes(): void
+    {
+         parent::setClassTypes();
+         // add 'import' class type for this module
+         $this->classtypes['import'] = 'Import';
+    }
 }
 ```
 
 ### Component Classes
 
-If you want to start from scratch, you can use basic component traits here:
+If you want to start from scratch, you can use basic component traits and interfaces here:
 
 ```php
 # class/userapi.php
@@ -119,6 +133,23 @@ sys::import('xaraya.modules.userapitrait');
 class UserApi implements UserApiInterface
 {
     use UserApiTrait;
+}
+```
+
+Component classes can also extend `UserApiClass` etc. instead of implementing `UserApiInterface` and using `UserApiTrait`:
+
+```php
+# class/userapi.php
+namespace Xaraya\Modules\MyFancyModule;
+
+use Xaraya\Modules\UserApiClass;
+use sys;
+
+sys::import('xaraya.modules.userapi');
+
+class UserApi extends UserApiClass
+{
+    // ...
 }
 ```
 
@@ -152,13 +183,13 @@ Module methods can be added directly in the component class:
 
 // ...
 
-class UserApi implements UserApiInterface
+class UserApi extends UserApiClass
 {
     // ...
 
     public function get(array $args = [])
     {
-        // ...
+        // get single module item
         // $context = $this->getContext();
         return $data;
     }
@@ -184,7 +215,7 @@ class GetMethod extends MethodClass
 {
     public function __invoke(array $args = [])
     {
-        // ...
+        // get single module item
         // $context = $this->getContext();
         return $data;
     }

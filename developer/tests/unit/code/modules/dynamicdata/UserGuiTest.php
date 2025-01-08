@@ -45,6 +45,14 @@ final class UserGuiTest extends TestCase
         $usergui = xarMod::getGUI('dynamicdata');
         $usergui->setContext($context);
 
+        // the method "exists" as inherited class method (case-insensitive)
+        $result = $usergui->hasMethod('main', '');
+        $this->assertTrue($result);
+
+        // the method does still "exist" if called as an api function = different from api methods
+        $result = $usergui->hasMethod('main', 'api');
+        $this->assertTrue($result);
+
         $args = ['hello' => 'world'];
         $data = $usergui->main($args);
 

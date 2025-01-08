@@ -59,8 +59,7 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
             // Note: this will call __autoload or any spl_autoload_functions() if they are registered
             if (!class_exists($classname)) {
                 // FIXME: do something like this in core ?
-                //sys::import('xaraya.autoload');
-                //xarAutoload::initialize();
+                sys::autoload();
             }
             $value = @unserialize((string) $value['_xcache_value_']);
         }

@@ -3,7 +3,7 @@
  * @package modules\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.5
+ * @version 2.5.7
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/1.html
@@ -46,7 +46,7 @@ function modules_adminapi_executeinitfunction(array $args = [], $context = null)
         $xarinitfile = sys::code() . 'modules/'. $modInfo['osdirectory'] .'/xarinit.php';
     } else {
         // use modType = 'installer' here to get the module Installer class (if available)
-        $func = xarMod::getModuleClassMethod($modInfo['name'], 'installer', $args['function']);
+        $func = xarMod::getModuleClassMethod($modInfo['name'], 'installer', $args['function'], 'api');
         if (!empty($func)) {
             modules_adminapi_run_callable($func, $args, $modInfo);
             return true;

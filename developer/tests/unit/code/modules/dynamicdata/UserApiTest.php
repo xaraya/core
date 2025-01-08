@@ -42,6 +42,10 @@ final class UserApiTest extends TestCase
         $result = $userapi->hasMethod('getitemtypes');
         $this->assertTrue($result);
 
+        // the method does not "exist" if called as a non-api function = different from gui methods
+        $result = $userapi->hasMethod('getitemtypes', 'other');
+        $this->assertFalse($result);
+
         $expected = [
             'objectid' => '4',
             'name' => 'sample',
@@ -80,6 +84,10 @@ final class UserApiTest extends TestCase
         // the method "exists" even as single-method class file (converted to PascalCase)
         $result = $userapi->hasMethod('test_call');
         $this->assertTrue($result);
+
+        // the method does not "exist" if called as a non-api function
+        $result = $userapi->hasMethod('test_call', 'other');
+        $this->assertFalse($result);
 
         $args = ['hello' => 'world'];
         $expected = array_merge($args, [

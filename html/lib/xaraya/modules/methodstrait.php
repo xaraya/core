@@ -6,7 +6,7 @@
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.5
+ * @version 2.5.7
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -18,21 +18,33 @@ namespace Xaraya\Modules;
 
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
-use xarMod;
-use xarSecurity;
-use xarVar;
 use sys;
 
+sys::import('xaraya.modules.coretrait');
 sys::import('xaraya.modules.hookstrait');
 
 /**
  * For documentation purposes only - available via MethodsTrait
  */
-interface MethodsInterface extends ContextInterface, HooksInterface
+interface MethodsInterface extends ContextInterface, CoreInterface, HooksInterface
 {
-    public function hasMethod(string $funcName): bool;
-    public function checkAccess(string $mask, string $action = ''): bool;
-    public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING);
+    public function hasMethod(string $funcName, string $funcType = 'api'): bool;
+}
+
+/**
+ * Module class supports api methods
+ */
+interface ApiMethodsInterface extends MethodsInterface
+{
+    // ...
+}
+
+/**
+ * Module class supports gui methods
+ */
+interface GuiMethodsInterface extends MethodsInterface
+{
+    // ...
 }
 
 /**
@@ -41,26 +53,61 @@ interface MethodsInterface extends ContextInterface, HooksInterface
 trait MethodsTrait
 {
     use ContextTrait;
+    use CoreTrait;
     use HooksTrait;
 
     /** @var array<string> */
     protected array $allowed = [];
     /** @var array<string> */
-    protected array $internal = ['hasmethod', 'getclassname', 'getnamespace', 'checkaccess', 'fetchvar'];
+    protected array $internal = [
+        // ContextTrait
+        'getcontext',
+        'setcontext',
+        // CoreTrait
+        'checkaccess',
+        'getvar',
+        'fetchvar',
+        'genauthkey',
+        'confirmauthkey',
+        // HooksTrait
+        'callhooks',
+        'notifyhooks',
+        // MethodsTrait
+        'hasmethod',
+        'getclassname',
+        'getnamespace',
+        // @todo add new internal methods here + find a better way to do this
+    ];
     /** @var array<string, object|null> */
     private array $methods = [];
 
-    public function hasMethod(string $funcName): bool
+    public function hasMethod(string $funcName, string $funcType = 'api'): bool
     {
+        // restrict any internal _* methods (including magic methods)
+        if (str_starts_with($funcName, '_')) {
+            return false;
+        }
+        // @todo should we check $funcType on component level or method level - do we allow mix of both in class?
+        // don't allow api methods to be called as gui functions
+        if ($funcType != 'api' && $this instanceof ApiMethodsInterface) {
+            return false;
+        }
+        // Note: non-api methods can still be called as api functions here if needed
+        //if ($funcType == 'api' && !($this instanceof ApiMethodsInterface)) {
+        //    return false;
+        //}
+        // normalize for case-insensitive + conversion from snake_case to PascalCase
+        $normalized = strtolower(str_replace('_', '', $funcName));
         // whitelist methods (if defined)
-        if (!empty($this->allowed) && !in_array(strtolower($funcName), $this->allowed)) {
+        if (!empty($this->allowed) && !in_array($normalized, $this->allowed)) {
             return false;
         }
         // blacklist methods (always)
-        if (in_array(strtolower($funcName), $this->internal)) {
+        if (in_array($normalized, $this->internal)) {
             return false;
         }
-        // support regular class method or single-method class in namespace
+        // Note: we cannot use is_callable() here, because due to the presence of __call it will accept anything
+        // support regular class method (case-insensitive) or single-method class in namespace (converted to PascalCase)
         return method_exists($this, $funcName) || class_exists($this->getClassName($funcName));
     }
 
@@ -107,21 +154,5 @@ trait MethodsTrait
     {
         // Xaraya\Modules\MyFancyModule\UserApi
         return $this::class;
-    }
-
-    /** Wrap some frequently used static method calls here */
-
-    public function checkAccess(string $mask, string $action = ''): bool
-    {
-        if (empty($mask) && !empty($action)) {
-            return xarMod::checkAccess($this->moduleName, $action) ? true : false;
-        }
-        // @todo use $action for something here, and/or pass moduleName?
-        return xarSecurity::check($mask) ? true : false;
-    }
-
-    public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING)
-    {
-        return xarVar::fetch($name, $validation, $value, $defaultValue, $flags, $prep);
     }
 }

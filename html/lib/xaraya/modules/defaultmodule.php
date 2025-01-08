@@ -6,7 +6,7 @@
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.5
+ * @version 2.5.7
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -39,7 +39,7 @@ class DefaultModule implements ModuleInterface
     /**
      * @see \xarMod::getModuleClassMethod()
      */
-    public function getCallableMethod(string $modType, string $funcName): callable|null
+    public function getCallableMethod(string $modType, string $funcName, string $funcType = 'api'): callable|null
     {
         // no callable methods available here
         return null;

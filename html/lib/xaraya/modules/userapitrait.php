@@ -17,7 +17,8 @@
  *
  *     public function get($args = []) {
  *         // get single module item
- *         return $args;
+ *         // $context = $this->getContext();
+ *         return $data;
  *     }
  * }
  *
@@ -37,7 +38,7 @@
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.4
+ * @version 2.5.7
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -53,9 +54,9 @@ use sys;
 sys::import('xaraya.modules.methodstrait');
 
 /**
- * For documentation purposes only - available via UserApiTrait
+ * Module class supports user api methods - available via UserApiTrait
  */
-interface UserApiInterface extends MethodsInterface
+interface UserApiInterface extends ApiMethodsInterface
 {
     // ...
 }

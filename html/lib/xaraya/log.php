@@ -258,9 +258,6 @@ class xarLog extends xarObject
 **/
 function xarLog__shutdown_handler()
 {
-     if (class_exists('xarAutoload')) {
-         xarAutoload::$shutdown = true;
-     }
      xarLog::message("xarLog: Running the shutdown handler", xarLog::LEVEL_NOTICE);
      if (!method_exists('xarSession', 'getId') || !method_exists('xarUser', 'getVar')) {
          xarLog::message("xarLog: Leaving session unexpectedly before session and user were defined", xarLog::LEVEL_NOTICE);

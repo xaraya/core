@@ -30,7 +30,7 @@
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.4
+ * @version 2.5.7
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -64,7 +64,7 @@ interface ModuleInterface extends ContextInterface
     public function getInstaller(): InstallerInterface|null;
     public function setClassTypes(): void;
     public function getClassType(string $modType): string|null;
-    public function getCallableMethod(string $modType, string $funcName): callable|null;
+    public function getCallableMethod(string $modType, string $funcName, string $funcType = 'api'): callable|null;
 }
 
 /**
@@ -246,8 +246,9 @@ trait ModuleTrait
     /**
      * @see \xarMod::getModuleClassMethod()
      */
-    public function getCallableMethod(string $modType, string $funcName): callable|null
+    public function getCallableMethod(string $modType, string $funcName, string $funcType = 'api'): callable|null
     {
+        // $modType already includes $funcType here, e.g. userapi or installer
         $classType = $this->getClassType($modType);
         if (!isset($classType)) {
             return null;
@@ -256,7 +257,8 @@ trait ModuleTrait
         if (!isset($component)) {
             return null;
         }
-        if ($component->hasMethod($funcName)) {
+        // @todo should we check $funcType on component level or method level - do we allow mix of both in class?
+        if ($component->hasMethod($funcName, $funcType)) {
             // use array format instead of first-class callable syntax to allow setting the context
             return [$component, $funcName];
         }

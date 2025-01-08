@@ -23,7 +23,7 @@
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.5
+ * @version 2.5.7
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -40,9 +40,9 @@ use sys;
 sys::import('xaraya.modules.methodstrait');
 
 /**
- * For documentation purposes only - available via InstallerTrait
+ * Module class supports installer (api) methods - available via InstallerTrait
  */
-interface InstallerInterface extends MethodsInterface
+interface InstallerInterface extends ApiMethodsInterface
 {
     /**
      * Configure this module - override this method

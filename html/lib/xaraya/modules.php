@@ -11,7 +11,7 @@
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.3
+ * @version 2.5.7
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -910,7 +910,7 @@ class xarMod extends xarObject implements IxarMod
                 $funcFile = sys::code() . 'modules/' . $modBaseInfo['osdirectory'] . '/xar' . $modType . $funcType . '/' . strtolower($funcName) . '.php';
                 if (!file_exists($funcFile)) {
                     // @todo cache this if we ever get here again
-                    $callable = self::getModuleClassMethod($modName, $modType . $funcType, $funcName);
+                    $callable = self::getModuleClassMethod($modName, $modType . $funcType, $funcName, $funcType);
                     if (!empty($callable)) {
                         if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
                             $callable[0]->setContext($context);
@@ -1126,19 +1126,20 @@ class xarMod extends xarObject implements IxarMod
      * Ex: [$instance, $funcName] => \Xaraya\Modules\$ModName\$ClassType()->$funcName($args);
      *
      * @param string $modName registered name of module -> used to define namespace
-     * @param string $modType type of function to run -> will be mapped to class type
+     * @param string $modType type of function to run (incl. funcType) -> will be mapped to class type
      * @param string $funcName specific function to run -> find corresponding method
+     * @param string $funcType is this called as an api function or not -> check against module class
      * @return callable|null
      */
-    public static function getModuleClassMethod($modName, $modType, $funcName)
+    public static function getModuleClassMethod($modName, $modType, $funcName, $funcType = 'api')
     {
         static $methods_cache = [];
 
-        $key = "$modName:$modType:$funcName";
+        $key = "$modName:$modType:$funcName:$funcType";
         if (!array_key_exists($key, $methods_cache)) {
             $instance = self::getModule($modName);
             // returns null for DefaultModule() = no suitable class method
-            $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName);
+            $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName, $funcType);
             if (!isset($methods_cache[$key])) {
                 xarLog::message("xarMod::getModuleClassMethod: Missing method for $key", xarLog::LEVEL_INFO);
             }
