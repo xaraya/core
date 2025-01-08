@@ -81,7 +81,7 @@ trait MethodsTrait
         // UserApiTrait
         'loadmodule',
         // UserGuiTrait
-        'init',
+        //'init',  // @todo used by Installer
         'prepareoutput',
         // @todo add new internal methods here + find a better way to do this
     ];

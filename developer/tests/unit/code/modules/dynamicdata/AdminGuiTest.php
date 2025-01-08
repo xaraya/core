@@ -73,7 +73,7 @@ final class AdminGuiTest extends TestCase
         return $gui;
     }
 
-    public function testWithAccess(): void
+    public function testClassWithAccess(): void
     {
         $context = null;
         /** @var AdminGui $admingui */
@@ -90,5 +90,18 @@ final class AdminGuiTest extends TestCase
             'context' => $context,
         ];
         $this->assertEquals(array_keys($expected), array_keys($data));
+    }
+
+    public function testMethodWithAccess()
+    {
+        $this->markTestSkipped('No method class file with checkAccess() yet - see mime module');
+        //$context = null;
+        ///** @var SomeMethod $method */
+        //$method = $this->createMockClassWithAccess('dynamicdata', SomeMethod::class);
+        //$method->setContext($context);
+
+        // use __invoke() here
+        //$args = ['hello' => 'world'];
+        //$data = $method($args);
     }
 }
