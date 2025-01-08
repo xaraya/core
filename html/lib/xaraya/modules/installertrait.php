@@ -67,19 +67,12 @@ trait InstallerTrait
 {
     use MethodsTrait;
 
-    protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     /** @var array<string> */
     protected $objects;                    // set in configure() - override this method
     /** @var array<string, mixed> */
     protected $variables;                  // set in configure() - override this method
     /** @var string */
     protected $oldversion;                 // set in configure() - override this method
-
-    public function __construct(string $moduleName)
-    {
-        $this->moduleName = $moduleName;
-        $this->configure();
-    }
 
     /**
      * Configure this module - override this method

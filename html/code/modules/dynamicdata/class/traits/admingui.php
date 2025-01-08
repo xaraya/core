@@ -48,7 +48,4 @@ interface AdminGuiInterface extends CoreGuiInterface
 trait AdminGuiTrait
 {
     use CoreGuiTrait;
-
-    /** @var AdminApiInterface */
-    protected $api;
 }

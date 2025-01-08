@@ -26,16 +26,9 @@ sys::import('xaraya.modules.userguitrait');
 interface UserGuiInterface extends CoreGuiInterface
 {
     /**
-     * Summary of init
-     * @param array<string, mixed> $args
-     * @return void
-     */
-    public function init(array $args = []);
-
-    /**
      * Summary of main
      * @param array<string, mixed> $args
-     * @return array<mixed>
+     * @return array<mixed>|string|void
      */
     public function main(array $args = []);
 }
@@ -61,20 +54,10 @@ trait UserGuiTrait
 {
     use CoreGuiTrait;
 
-    /** @var UserApiInterface */
-    protected $api;
-
-    /**
-     * Summary of init
-     * @param array<string, mixed> $args
-     * @return void
-     */
-    public function init(array $args = []) {}
-
     /**
      * Summary of main
      * @param array<string, mixed> $args
-     * @return array<mixed>
+     * @return array<mixed>|string|void
      */
     public function main(array $args = [])
     {

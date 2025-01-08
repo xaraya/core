@@ -59,13 +59,6 @@ sys::import('xaraya.modules.methodstrait');
 interface UserGuiInterface extends GuiMethodsInterface
 {
     /**
-     * Summary of init
-     * @param array<string, mixed> $args
-     * @return void
-     */
-    public function init(array $args = []);
-
-    /**
      * Summary of main
      * @param array<string, mixed> $args
      * @return array<mixed>|string|void
@@ -80,26 +73,10 @@ trait UserGuiTrait
 {
     use MethodsTrait;
 
-    protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
-    protected int $itemtype = 0;
-
-    public function __construct(string $moduleName)
-    {
-        $this->moduleName = $moduleName;
-        $this->loadModule();
-    }
-
-    protected function loadModule(): void
+    public function configure()
     {
         xarMod::load($this->moduleName, 'user');
     }
-
-    /**
-     * Summary of init
-     * @param array<string, mixed> $args
-     * @return void
-     */
-    public function init(array $args = []) {}
 
     /**
      * Summary of main

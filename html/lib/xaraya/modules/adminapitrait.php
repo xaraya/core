@@ -56,7 +56,7 @@ trait AdminApiTrait
 {
     use UserApiTrait;
 
-    protected function loadModule(): void
+    public function configure()
     {
         xarMod::apiLoad($this->moduleName, 'admin');
     }

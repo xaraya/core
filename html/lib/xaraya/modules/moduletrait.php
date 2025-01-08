@@ -52,6 +52,8 @@ sys::import('xaraya.modules.methodstrait');
  */
 interface ModuleInterface extends ContextInterface
 {
+    public function __construct(string $moduleName);
+    public function configure();
     public function getName(): string;
     public function getInfo(): array;
     public function getComponent(string $type): MethodsInterface|null;
@@ -77,6 +79,7 @@ trait ModuleTrait
     use ContextTrait;
 
     protected string $moduleName;          // set in constructor by xarMod::getModule()
+
     /** @var array<string, string> */
     protected array $classtypes = [];
     /** @var array<string, object|null> */
@@ -85,16 +88,26 @@ trait ModuleTrait
     public function __construct(string $moduleName)
     {
         $this->moduleName = $moduleName;
+        $this->configure();
+    }
+
+    public function configure()
+    {
         $this->setClassTypes();
     }
 
     protected function createComponent(string $type): MethodsInterface
     {
         // this assumes that the class is in the same namespace as the module
-        $class = $this->getClassName($type);
-        return new $class($this->moduleName);
+        $className = $this->getClassName($type);
+        return new $className($this->moduleName, $this);
     }
 
+    /**
+     * Summary of getClassName
+     * @param string $type
+     * @return class-string<MethodsInterface>
+     */
     protected function getClassName(string $type): string
     {
         // this assumes that the class is in the same namespace as the module

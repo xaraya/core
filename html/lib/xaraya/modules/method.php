@@ -55,16 +55,24 @@ class MethodClass implements ContextInterface, CoreInterface, HooksInterface
 
     protected string $moduleName;          // set in constructor by MethodsTrait::__call()
     protected int $itemtype = 0;
+    protected ?MethodsInterface $parent;
 
     public function __invoke(array $args = [])
     {
         return $args;
     }
 
-    public function __construct(string $moduleName, int $itemtype = 0)
+    public function __construct(string $moduleName, int $itemtype = 0, ?MethodsInterface $parent = null)
     {
         $this->moduleName = $moduleName;
         // pass along itemtype from module class - @todo is this useful/relevant?
         $this->itemtype = $itemtype;
+        $this->parent = $parent;
+        $this->configure();
+    }
+
+    public function configure(): void
+    {
+        // ...
     }
 }

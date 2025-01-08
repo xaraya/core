@@ -28,6 +28,8 @@ sys::import('xaraya.modules.hookstrait');
  */
 interface MethodsInterface extends ContextInterface, CoreInterface, HooksInterface
 {
+    public function __construct(string $moduleName, ?ModuleInterface $parent = null);
+    public function configure();
     public function hasMethod(string $funcName, string $funcType = 'api'): bool;
 }
 
@@ -56,6 +58,10 @@ trait MethodsTrait
     use CoreTrait;
     use HooksTrait;
 
+    protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
+    protected int $itemtype = 0;
+    protected ?ModuleInterface $parent;
+
     /** @var array<string> */
     protected array $allowed = [];
     /** @var array<string> */
@@ -75,18 +81,28 @@ trait MethodsTrait
         'callhooks',
         'notifyhooks',
         // MethodsTrait
+        'configure',
         'hasmethod',
         'getclassname',
         'getnamespace',
-        // UserApiTrait
-        'loadmodule',
         // UserGuiTrait
-        //'init',  // @todo used by Installer
         'prepareoutput',
         // @todo add new internal methods here + find a better way to do this
     ];
     /** @var array<string, object|null> */
     private array $methods = [];
+
+    public function __construct(string $moduleName, ?ModuleInterface $parent = null)
+    {
+        $this->moduleName = $moduleName;
+        $this->parent = $parent;
+        $this->configure();
+    }
+
+    public function configure()
+    {
+        // ...
+    }
 
     public function hasMethod(string $funcName, string $funcType = 'api'): bool
     {
@@ -124,7 +140,7 @@ trait MethodsTrait
         if (!array_key_exists($funcName, $this->methods)) {
             $className = $this->getClassName($funcName);
             if (class_exists($className)) {
-                $this->methods[$funcName] = new $className($this->moduleName, $this->itemtype);
+                $this->methods[$funcName] = new $className($this->moduleName, $this->itemtype, $this);
             } else {
                 $this->methods[$funcName] = null;
             }

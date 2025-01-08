@@ -56,7 +56,7 @@ trait AdminGuiTrait
 {
     use UserGuiTrait;
 
-    protected function loadModule(): void
+    public function configure()
     {
         xarMod::load($this->moduleName, 'admin');
     }

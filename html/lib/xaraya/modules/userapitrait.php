@@ -68,16 +68,7 @@ trait UserApiTrait
 {
     use MethodsTrait;
 
-    protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
-    protected int $itemtype = 0;
-
-    public function __construct(string $moduleName)
-    {
-        $this->moduleName = $moduleName;
-        $this->loadModule();
-    }
-
-    protected function loadModule(): void
+    public function configure()
     {
         xarMod::apiLoad($this->moduleName, 'user');
     }
