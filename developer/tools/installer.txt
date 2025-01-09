@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * Handle module installer functions
+ *
+ * @package modules\skeleton
+ * @category Xaraya Web Applications Framework
+ * @version 2.5.7
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Skeleton;
+
+use Xaraya\Modules\InstallerClass;
+use sys;
+use Exception;
+
+sys::import('xaraya.modules.installer');
+
+/**
+ * Handle module installer functions
+ *
+ * @todo add extra use ...; statements above as needed
+ * @todo replaced skeleton_*() function calls with $this->*() calls
+ */
+class Installer extends InstallerClass
+{
+    /**
+     * Configure this module - override this method
+     *
+     * @todo use this instead of init() etc. for standard installation
+     * @return void
+     */
+    public function configure()
+    {
+        $this->objects = [
+            // add your DD objects here
+            //'skeleton_object',
+        ];
+        $this->variables = [
+            // add your module variables here
+            'hello' => 'world',
+        ];
+        $this->oldversion = '2.4.1';
+    }
+
