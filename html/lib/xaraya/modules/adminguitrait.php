@@ -58,6 +58,7 @@ trait AdminGuiTrait
 
     public function configure()
     {
-        xarMod::load($this->moduleName, 'admin');
+        $this->moduleType = 'admin';
+        xarMod::load($this->moduleName, $this->moduleType);
     }
 }

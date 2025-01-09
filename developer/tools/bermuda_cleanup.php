@@ -28,19 +28,23 @@ class XarayaCodeAnalyzer
     public $classes = [];
     public $totals = [];
     public $inDir = null;
+    public $skipVendor = false;
     public $fileExt = null;
     public $verbose = false;
     public $refresh = false;
 
-    public function __construct($inDir = null, $fileExt = self::PHP_EXT)
+    public function __construct($inDir = null, $skipVendor = false, $fileExt = self::PHP_EXT)
     {
-        $this->initialize($inDir, $fileExt);
+        $this->initialize($inDir, $skipVendor, $fileExt);
     }
 
-    public function initialize($inDir, $fileExt)
+    public function initialize($inDir, $skipVendor, $fileExt)
     {
         if (!empty($inDir)) {
             $this->inDir = $inDir;
+        }
+        if (!empty($skipVendor)) {
+            $this->skipVendor = $skipVendor;
         }
         if (!empty($fileExt)) {
             $this->fileExt = $fileExt;
@@ -75,9 +79,9 @@ class XarayaCodeAnalyzer
     }
 
     // See https://github.com/nikic/PHP-Parser/blob/master/doc/2_Usage_of_basic_components.markdown
-    public function load_project($inDir = null, $extraFiles = [], $fileExt = self::PHP_EXT)
+    public function load_project($inDir = null, $extraFiles = [], $skipVendor = false, $fileExt = self::PHP_EXT)
     {
-        $this->initialize($inDir, $fileExt);
+        $this->initialize($inDir, $skipVendor, $fileExt);
 
         // iterate over all .php files in the directory
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->inDir));
@@ -86,6 +90,16 @@ class XarayaCodeAnalyzer
         $factory = \phpDocumentor\Reflection\Php\ProjectFactory::createInstance();
         $localFiles = [];
         foreach ($files as $file) {
+            // skip var cache for symfony et al.
+            $relativePath = substr($file->getPathName(), strlen($this->inDir) - 1);
+            if (preg_match('#/(var|src|tests|app|database)/#', $relativePath)) {
+                continue;
+            }
+            if ($this->skipVendor) {
+                if (str_contains($relativePath, '/vendor/')) {
+                    continue;
+                }
+            }
             try {
                 //echo $file->getPathName() . "\n";
                 $localFiles[] = new \phpDocumentor\Reflection\File\LocalFile($file->getPathName());
@@ -145,13 +159,16 @@ class XarayaCodeAnalyzer
 
     public function add_function($function, $fpath)
     {
-        $name = $function->getName();
+        //$name = $function->getName();
+        $name = substr((string) $function->getFqsen(), 1);
+        $name = str_replace('()', '', $name);
         $lname = strtolower($name);
         if (array_key_exists($lname, $this->functions)) {
             $this->log('Function Conflict: ' . $name, true);
         }
         $args = $this->get_arguments($function);
         $this->functions[$lname] = ['file' => $fpath, 'name' => $name, 'args' => $args];
+        $this->functions[$lname]['namespace'] = substr($name, 0, strlen($name) - strlen($function->getName()));
         $this->functions[$lname]['line'] = $function->getLocation()->getLineNumber();
         $uses = $this->get_docblock_uses($function);
         if (!empty($uses)) {
@@ -172,34 +189,36 @@ class XarayaCodeAnalyzer
     {
         $docblock = $func_or_meth->getDocBlock();
         if (!empty($docblock) && $docblock->hasTag('uses')) {
-            $tags = $docblock->getTagsByName('uses');
-            return str_replace('\\', '', implode(', ', $tags));
+            $tags = array_map(function ($tag) {
+                return substr($tag, 1);
+            }, $docblock->getTagsByName('uses'));
+            return implode(', ', $tags);
         }
         return null;
     }
 
     public function add_constant($constant, $fpath)
     {
-        $name = $constant->getName();
+        //$name = $constant->getName();
+        $name = substr((string) $constant->getFqsen(), 1);
         $lname = strtolower($name);
         if (array_key_exists(strtolower($lname), $this->constants)) {
             $this->log('Constant Conflict: ' . $name, true);
         }
         $this->constants[$lname] = ['file' => $fpath, 'name' => $name, 'value' => $constant->getValue()];
+        $this->constants[$lname]['namespace'] = substr($name, 0, strlen($name) - strlen($constant->getName()));
     }
 
     public function add_class($class, $fpath)
     {
-        $name = $class->getName();
+        //$name = $class->getName();
+        $name = substr((string) $class->getFqsen(), 1);
         $lname = strtolower($name);
         if (array_key_exists(strtolower($lname), $this->classes)) {
             $this->log('Class Conflict: ' . $name, true);
         }
         $this->classes[$lname] = ['file' => $fpath, 'name' => $name, 'methods' => [], 'const' => []];
-        $fqsen = (string) $class->getFqsen();
-        if ($fqsen !== '\\' . $name) {
-            $this->classes[$lname]['namespace'] = substr($fqsen, 0, strlen($fqsen) - strlen('\\' . $name));
-        }
+        $this->classes[$lname]['namespace'] = substr($name, 0, strlen($name) - strlen($class->getName()));
         $this->classes[$lname]['parent'] = (string) $class->getParent();
         $this->classes[$lname]['line'] = $class->getLocation()->getLineNumber();
         foreach ($class->getMethods() as $method) {
@@ -407,7 +426,7 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
         }
         $this->log($function['name'] . ' TODO: ' . $function['line'] . ' ' . $function['file']);
         $line = $this->get_next_return($function['file'], $function['line']);
-        if (!empty($line) && preg_match('/ return (\w+)::(\w+)\(([^\)]*)/', $line, $matches)) {
+        if (!empty($line) && preg_match('/ return (\w+)::(\w+)\(([^\)]*)/', $line, $matches) && $matches[1] != 'self') {
             $this->log($function['name'] . ' FOUND ' . $matches[1] . '::' . $matches[2] . ' ' . $function['file']);
             $this->functions[$lname]['class'] = $matches[1];
             $this->functions[$lname]['method'] = $matches[2];
@@ -565,7 +584,7 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
         $this->find_core_classes();
         $this->find_core_functions();
         $this->find_core_constants();
-        $this->find_core_replaced();
+        //$this->find_core_replaced();
     }
 
     public function get_class_tree()
@@ -576,11 +595,7 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
         $this->classroot = new xarNode('root');
         foreach (array_keys($this->classes) as $lname) {
             if (!array_key_exists('node', $this->classes[$lname])) {
-                if (!empty($this->classes[$lname]['namespace'])) {
-                    $this->classes[$lname]['node'] = new xarNode($this->classes[$lname]['namespace'] . '\\' . $this->classes[$lname]['name']);
-                } else {
-                    $this->classes[$lname]['node'] = new xarNode($this->classes[$lname]['name']);
-                }
+                $this->classes[$lname]['node'] = new xarNode($this->classes[$lname]['name']);
             }
             $class = $this->classes[$lname];
             // base class
@@ -669,10 +684,21 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
         $todo = [];
         $found = 0;
         foreach ($files as $file) {
+            // skip var cache for symfony et al.
+            $relativePath = substr($file->getPathName(), strlen($this->inDir) - 1);
+            if (preg_match('#/(lib|var|src|tests|app|database)/#', $relativePath)) {
+                continue;
+            }
+            if ($this->skipVendor) {
+                if (str_contains($relativePath, '/vendor/')) {
+                    continue;
+                }
+            }
             try {
                 $found += 1;
                 $contents = file_get_contents($file->getPathName());
                 if (!preg_match_all($pattern, $contents, $matches)) {
+                    //$this->log($file->getPathName() . ' - ' . count($matches[0]) . ' DONE');
                     continue;
                 }
                 if (str_contains($file->getPathName(), '/legacy/')) {
@@ -729,7 +755,7 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
             $this->log($function['name'] . ' USES ' . $matches[1] . '::' . $matches[2] . '()');
             return 1;
         }
-        if (!preg_match('/^(\w+)_(\w+)_(\w+)$/', $function['name'], $matches)) {
+        if (!preg_match('/^([a-z]+)_([a-z]+)_(\w+)$/', $function['name'], $matches)) {
             $this->log($function['name'] . ' SKIP ' . $function['file']);
             return 0;
         }
@@ -809,6 +835,56 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
         }
         return $count;
     }
+
+    public function find_installer_functions()
+    {
+        $found = 0;
+        foreach (array_keys($this->functions) as $lname) {
+            $found += $this->match_installer_function($lname);
+        }
+        $this->log('Found Functions: ' . $found, true);
+    }
+
+    public function match_installer_function($lname)
+    {
+        $function = $this->functions[$lname];
+        if (!str_ends_with($function['file'], 'xarinit.php')) {
+            return 0;
+        }
+        if (!preg_match('/^([a-z]+)_([a-z]+)$/i', $function['name'], $matches)) {
+            $this->log($function['name'] . ' SKIP ' . $function['file']);
+            return 0;
+        }
+        $this->log($function['name'] . ' FOUND ' . $matches[1] . '_' . $matches[2] . ' ' . $function['file']);
+        $this->functions[$lname]['module'] = $matches[1];
+        $this->functions[$lname]['type'] = 'installer';
+        $this->functions[$lname]['func'] = $matches[2];
+        return 1;
+    }
+
+    public function find_installer_classes()
+    {
+        $found = 0;
+        foreach (array_keys($this->classes) as $lname) {
+            $found += $this->match_installer_class($lname);
+        }
+        $this->log('Found Class Methods: ' . $found, true);
+    }
+
+    public function match_installer_class($lname)
+    {
+        $class = $this->classes[$lname];
+        if (!str_ends_with($class['file'], 'installer.php')) {
+            return 0;
+        }
+        $count = 0;
+        foreach (array_keys($class['methods']) as $mname) {
+            $method = $class['methods'][$mname];
+            $this->log($class['name'] . '::' . $method['name'] . ' FOUND ' . $class['file']);
+            $count += 1;
+        }
+        return $count;
+    }
 }
 
 $refresh = false;
@@ -846,23 +922,28 @@ foreach (array_keys($repos) as $repo) {
  */
 
 /**
+ */
 //$modName = 'dynamicdata';
 //$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/' . $modName . '/';
 //$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/cachemanager/';
-$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
-//$inDir = dirname(dirname(__DIR__)) . '/vendor/xaraya/modules/';
-$analyzer = new XarayaModuleAnalyzer($inDir);
-//$analyzer->verbose = true;
+//$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
+$inDir = dirname(dirname(__DIR__)) . '/vendor/xaraya/library';
+$analyzer = new XarayaModuleAnalyzer($inDir, true);
+$analyzer->verbose = true;
 $analyzer->load_project();
 $analyzer->parse_project();
-echo $analyzer->to_json($analyzer->totals);
-echo $analyzer->to_json(array_keys($analyzer->functions));
+//echo $analyzer->to_json($analyzer->totals);
+//echo $analyzer->to_json(array_keys($analyzer->functions));
 // @todo
 //$analyzer->find_module_functions();
 //$analyzer->find_module_classes();
+$analyzer->find_installer_functions();
+//$analyzer->find_installer_classes();
 //ksort($analyzer->classes);
+//echo $analyzer->to_json($analyzer->classes);
 //file_put_contents('module_classes.json', $analyzer->to_json($analyzer->classes));
 //$analyzer->get_class_tree();
 //$analyzer->show_class_tree();
-$analyzer->show_class_tree('dataproperty');
+//$analyzer->show_class_tree('dataproperty');
+/**
  */

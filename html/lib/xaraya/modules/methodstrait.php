@@ -87,6 +87,7 @@ trait MethodsTrait
         'getnamespace',
         // UserGuiTrait
         'prepareoutput',
+        'rendertemplate',
         // @todo add new internal methods here + find a better way to do this
     ];
     /** @var array<string, object|null> */

@@ -49,6 +49,7 @@
 namespace Xaraya\Modules;
 
 use xarMod;
+use xarTpl;
 use sys;
 
 sys::import('xaraya.modules.methodstrait');
@@ -73,9 +74,12 @@ trait UserGuiTrait
 {
     use MethodsTrait;
 
+    protected string $moduleType;
+
     public function configure()
     {
-        xarMod::load($this->moduleName, 'user');
+        $this->moduleType = 'user';
+        xarMod::load($this->moduleName, $this->moduleType);
     }
 
     /**
@@ -104,5 +108,20 @@ trait UserGuiTrait
         // Pass along the context for xarTpl::module() if needed
         $data['context'] ??= $this->getContext();
         return $data;
+    }
+
+    protected function renderTemplate(string $funcName, array $data)
+    {
+        // Add standard template variables (module, itemtype and context)
+        $data = $this->prepareOutput($data);
+
+        // See if we have a special template to apply
+        $templateName = null;
+        if (isset($data['_bl_template'])) {
+            $templateName = $data['_bl_template'];
+        }
+
+        // Create the output.
+        return xarTpl::module($this->moduleName, $this->moduleType, $funcName, $data, $templateName);
     }
 }

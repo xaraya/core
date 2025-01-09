@@ -2,12 +2,14 @@
     "_xar_id_unregistered": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
         "name": "_XAR_ID_UNREGISTERED",
-        "value": "xarSession::getAnonId()"
+        "value": "xarSession::getAnonId()",
+        "namespace": ""
     },
     "convert_tables_dir": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/transforms/xarCharset.php",
         "name": "CONVERT_TABLES_DIR",
         "value": "\\sys::lib() . 'xaraya/transforms/convtables/'",
+        "namespace": "",
         "class": "CONVERT",
         "check": "TABLES_DIR"
     },
@@ -15,6 +17,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
         "name": "XARMOD_LOAD_ANYSTATE",
         "value": 2,
+        "namespace": "",
         "class": "XARMOD",
         "check": "LOAD_ANYSTATE"
     },
@@ -22,6 +25,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
         "name": "XARMOD_LOAD_ONLYACTIVE",
         "value": 1,
+        "namespace": "",
         "class": "XARMOD",
         "check": "LOAD_ONLYACTIVE"
     },
@@ -29,6 +33,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ACTIVE",
         "value": 3,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_ACTIVE",
         "const": "STATE_ACTIVE"
@@ -37,6 +42,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ANY",
         "value": 0,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_ANY",
         "const": "STATE_ANY"
@@ -45,6 +51,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ERROR_ACTIVE",
         "value": 12,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_ERROR_ACTIVE",
         "const": "STATE_ERROR_ACTIVE"
@@ -53,6 +60,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ERROR_INACTIVE",
         "value": 11,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_ERROR_INACTIVE",
         "const": "STATE_ERROR_INACTIVE"
@@ -61,6 +69,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ERROR_UNINITIALISED",
         "value": 10,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_ERROR_UNINITIALISED",
         "const": "STATE_ERROR_UNINITIALISED"
@@ -69,6 +78,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ERROR_UPGRADED",
         "value": 13,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_ERROR_UPGRADED",
         "const": "STATE_ERROR_UPGRADED"
@@ -77,6 +87,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_INACTIVE",
         "value": 2,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_INACTIVE",
         "const": "STATE_INACTIVE"
@@ -85,6 +96,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_INSTALLED",
         "value": 6,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_INSTALLED",
         "const": "STATE_INSTALLED"
@@ -93,6 +105,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_MISSING_FROM_ACTIVE",
         "value": 8,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_MISSING_FROM_ACTIVE",
         "const": "STATE_MISSING_FROM_ACTIVE"
@@ -101,6 +114,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_MISSING_FROM_INACTIVE",
         "value": 7,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_MISSING_FROM_INACTIVE",
         "const": "STATE_MISSING_FROM_INACTIVE"
@@ -109,6 +123,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_MISSING_FROM_UNINITIALISED",
         "value": 4,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_MISSING_FROM_UNINITIALISED",
         "const": "STATE_MISSING_FROM_UNINITIALISED"
@@ -117,6 +132,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_MISSING_FROM_UPGRADED",
         "value": 9,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_MISSING_FROM_UPGRADED",
         "const": "STATE_MISSING_FROM_UPGRADED"
@@ -125,6 +141,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_UNINITIALISED",
         "value": 1,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_UNINITIALISED",
         "const": "STATE_UNINITIALISED"
@@ -133,6 +150,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_UPGRADED",
         "value": 5,
+        "namespace": "",
         "class": "xarMod",
         "check": "STATE_UPGRADED",
         "const": "STATE_UPGRADED"
@@ -141,6 +159,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_ACTIVE",
         "value": 3,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_ACTIVE",
         "const": "STATE_ACTIVE"
@@ -149,6 +168,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_ANY",
         "value": 0,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_ANY",
         "const": "STATE_ANY"
@@ -157,6 +177,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_INACTIVE",
         "value": 2,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_INACTIVE",
         "const": "STATE_INACTIVE"
@@ -165,6 +186,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_INSTALLED",
         "value": 6,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_INSTALLED",
         "const": "STATE_INSTALLED"
@@ -173,6 +195,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_MISSING_FROM_ACTIVE",
         "value": 8,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_MISSING_FROM_ACTIVE",
         "const": "STATE_MISSING_FROM_ACTIVE"
@@ -181,6 +204,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_MISSING_FROM_INACTIVE",
         "value": 7,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_MISSING_FROM_INACTIVE",
         "const": "STATE_MISSING_FROM_INACTIVE"
@@ -189,6 +213,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_MISSING_FROM_UNINITIALISED",
         "value": 4,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_MISSING_FROM_UNINITIALISED",
         "const": "STATE_MISSING_FROM_UNINITIALISED"
@@ -197,6 +222,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_MISSING_FROM_UPGRADED",
         "value": 9,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_MISSING_FROM_UPGRADED",
         "const": "STATE_MISSING_FROM_UPGRADED"
@@ -205,6 +231,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_UNINITIALISED",
         "value": 1,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_UNINITIALISED",
         "const": "STATE_UNINITIALISED"
@@ -213,6 +240,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_UPGRADED",
         "value": 5,
+        "namespace": "",
         "class": "xarTheme",
         "check": "STATE_UPGRADED",
         "const": "STATE_UPGRADED"
@@ -221,6 +249,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
         "name": "XARUSER_AUTH_AUTHENTICATION",
         "value": 1,
+        "namespace": "",
         "class": "XARUSER",
         "check": "AUTH_AUTHENTICATION"
     },
@@ -228,6 +257,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
         "name": "XARUSER_AUTH_DENIED",
         "value": -2,
+        "namespace": "",
         "class": "xarUser",
         "check": "AUTH_DENIED",
         "const": "AUTH_DENIED"
@@ -236,6 +266,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
         "name": "XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER",
         "value": 2,
+        "namespace": "",
         "class": "XARUSER",
         "check": "AUTH_DYNAMIC_USER_DATA_HANDLER"
     },
@@ -243,6 +274,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
         "name": "XARUSER_AUTH_FAILED",
         "value": -1,
+        "namespace": "",
         "class": "xarUser",
         "check": "AUTH_FAILED",
         "const": "AUTH_FAILED"
@@ -251,6 +283,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
         "name": "XARUSER_AUTH_PERMISSIONS_OVERRIDER",
         "value": 16,
+        "namespace": "",
         "class": "XARUSER",
         "check": "AUTH_PERMISSIONS_OVERRIDER"
     },
@@ -258,6 +291,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
         "name": "XARUSER_AUTH_USER_CREATEABLE",
         "value": 32,
+        "namespace": "",
         "class": "XARUSER",
         "check": "AUTH_USER_CREATEABLE"
     },
@@ -265,6 +299,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
         "name": "XARUSER_AUTH_USER_DELETEABLE",
         "value": 64,
+        "namespace": "",
         "class": "XARUSER",
         "check": "AUTH_USER_DELETEABLE"
     },
@@ -272,6 +307,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
         "name": "XARUSER_AUTH_USER_ENUMERABLE",
         "value": 128,
+        "namespace": "",
         "class": "XARUSER",
         "check": "AUTH_USER_ENUMERABLE"
     },
@@ -279,6 +315,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
         "name": "XARUSER_LAST_RESORT",
         "value": -3,
+        "namespace": "",
         "class": "xarUser",
         "check": "LAST_RESORT",
         "const": "LAST_RESORT"
@@ -287,6 +324,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_ALLOW",
         "value": 2,
+        "namespace": "",
         "class": "xarVar",
         "check": "ALLOW",
         "const": "ALLOW"
@@ -295,6 +333,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_ALLOW_NO_ATTRIBS",
         "value": 1,
+        "namespace": "",
         "class": "xarVar",
         "check": "ALLOW_NO_ATTRIBS",
         "const": "ALLOW_NO_ATTRIBS"
@@ -303,6 +342,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_DONT_REUSE",
         "value": 256,
+        "namespace": "",
         "class": "xarVar",
         "check": "DONT_REUSE",
         "const": "DONT_REUSE"
@@ -311,6 +351,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_DONT_SET",
         "value": 128,
+        "namespace": "",
         "class": "xarVar",
         "check": "DONT_SET",
         "const": "DONT_SET"
@@ -319,6 +360,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_GET_ONLY",
         "value": 2,
+        "namespace": "",
         "class": "xarVar",
         "check": "GET_ONLY",
         "const": "GET_ONLY"
@@ -327,6 +369,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_GET_OR_POST",
         "value": 0,
+        "namespace": "",
         "class": "xarVar",
         "check": "GET_OR_POST",
         "const": "GET_OR_POST"
@@ -335,6 +378,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_NOT_REQUIRED",
         "value": 64,
+        "namespace": "",
         "class": "xarVar",
         "check": "NOT_REQUIRED",
         "const": "NOT_REQUIRED"
@@ -343,6 +387,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_POST_ONLY",
         "value": 4,
+        "namespace": "",
         "class": "xarVar",
         "check": "POST_ONLY",
         "const": "POST_ONLY"
@@ -351,6 +396,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_FOR_DISPLAY",
         "value": 1,
+        "namespace": "",
         "class": "xarVar",
         "check": "PREP_FOR_DISPLAY",
         "const": "PREP_FOR_DISPLAY"
@@ -359,6 +405,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_FOR_HTML",
         "value": 2,
+        "namespace": "",
         "class": "xarVar",
         "check": "PREP_FOR_HTML",
         "const": "PREP_FOR_HTML"
@@ -367,6 +414,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_FOR_NOTHING",
         "value": 0,
+        "namespace": "",
         "class": "xarVar",
         "check": "PREP_FOR_NOTHING",
         "const": "PREP_FOR_NOTHING"
@@ -375,6 +423,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_FOR_STORE",
         "value": 4,
+        "namespace": "",
         "class": "xarVar",
         "check": "PREP_FOR_STORE",
         "const": "PREP_FOR_STORE"
@@ -383,6 +432,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_TRIM",
         "value": 8,
+        "namespace": "",
         "class": "xarVar",
         "check": "PREP_TRIM",
         "const": "PREP_TRIM"

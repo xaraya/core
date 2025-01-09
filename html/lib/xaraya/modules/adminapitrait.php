@@ -58,6 +58,7 @@ trait AdminApiTrait
 
     public function configure()
     {
-        xarMod::apiLoad($this->moduleName, 'admin');
+        $this->moduleType = 'admin';
+        xarMod::apiLoad($this->moduleName, $this->moduleType);
     }
 }
