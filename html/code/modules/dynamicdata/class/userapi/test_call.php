@@ -14,6 +14,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
+use Xaraya\DataObject\UserApi;
 use Xaraya\Modules\MethodClass;
 use sys;
 
@@ -28,6 +29,10 @@ class TestCallMethod extends MethodClass
     {
         $args['context'] ??= $this->getContext();
         $args['handled'] = true;
+        $args['parent'] = $this->parent::class;
+        // call other methods from the UserApi() class via ->parent here
+        assert($this->parent instanceof UserApi);
+        $args['other'] = $this->parent->other();
         return $args;
     }
 }

@@ -93,6 +93,11 @@ final class UserApiTest extends TestCase
         $expected = array_merge($args, [
             'context' => $context,
             'handled' => true,
+            'parent' => 'Xaraya\DataObject\UserApi',
+            'other' => [
+                'handled' => 'other',
+                'parent' => 'Xaraya\DataObject\Module',
+            ],
         ]);
         $result = $userapi->test_call($args);
         $this->assertEquals($expected, $result);
@@ -146,6 +151,11 @@ final class UserApiTest extends TestCase
         $expected = array_merge($args, [
             'context' => $context,
             'handled' => true,
+            'parent' => 'Xaraya\DataObject\UserApi',
+            'other' => [
+                'handled' => 'other',
+                'parent' => 'Xaraya\DataObject\Module',
+            ],
         ]);
         $result = xarMod::apiFunc('dynamicdata', 'user', 'test_call', $args, $context);
         $this->assertEquals($expected, $result);

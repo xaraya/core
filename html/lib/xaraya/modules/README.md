@@ -105,9 +105,9 @@ class Module extends ModuleClass
 {
     public function setClassTypes(): void
     {
-         parent::setClassTypes();
-         // add 'import' class type for this module
-         $this->classtypes['import'] = 'Import';
+        parent::setClassTypes();
+        // add 'import' class type for this module
+        $this->classtypes['import'] = 'Import';
     }
 }
 ```
@@ -217,6 +217,8 @@ class GetMethod extends MethodClass
     {
         // get single module item
         // $context = $this->getContext();
+        // call other methods from the UserApi() class via ->parent here
+        // $other = $this->parent->other();
         return $data;
     }
 }

@@ -34,6 +34,14 @@ class UserApi implements UserApiInterface
 {
     use UserApiTrait;
 
+    public function other(array $args = [])
+    {
+        $args['handled'] = 'other';
+        // call other methods from the Module() class via ->parent here
+        $args['parent'] = $this->parent::class;
+        return $args;
+    }
+
     /**
      * Get a module's itemtypes
      *
