@@ -13,6 +13,10 @@
  *
  * sys::import('xaraya.modules.installer');
  *
+ * /**
+ *  * Handle module installer functions
+ *  * @extends InstallerClass<Module>
+ *  *\/
  * class Installer extends InstallerClass
  * {
  * }
@@ -37,9 +41,11 @@ sys::import('xaraya.modules.installertrait');
 
 /**
  * Handle module installer functions
+ * @template TModule of ModuleInterface|null
  */
 class InstallerClass implements InstallerInterface
 {
+    /** @use InstallerTrait<TModule> */
     use InstallerTrait;
 
     /**

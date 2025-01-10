@@ -10,6 +10,10 @@
  *
  * use Xaraya\Modules\UserApiClass;
  *
+ * /**
+ *  * Handle module user api functions
+ *  * @extends UserApiClass<Module>
+ *  *\/
  * class UserApi extends UserApiClass
  * {
  *     public function get($args = []) {
@@ -39,8 +43,10 @@ sys::import('xaraya.modules.userapitrait');
 
 /**
  * Handle module user api functions
+ * @template TModule of ModuleInterface|null
  */
 class UserApiClass implements UserApiInterface
 {
+    /** @use UserApiTrait<TModule> */
     use UserApiTrait;
 }

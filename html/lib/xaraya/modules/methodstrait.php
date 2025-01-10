@@ -29,8 +29,10 @@ sys::import('xaraya.modules.hookstrait');
 interface MethodsInterface extends ContextInterface, CoreInterface, HooksInterface
 {
     public function __construct(string $moduleName, ?ModuleInterface $parent = null);
+    /** @return void */
     public function configure();
     public function hasMethod(string $funcName, string $funcType = 'api'): bool;
+    public function getModule(): ModuleInterface|null;
 }
 
 /**
@@ -51,6 +53,8 @@ interface GuiMethodsInterface extends MethodsInterface
 
 /**
  * Trait to handle module functions as methods
+ * @see https://phpstan.org/blog/generics-in-php-using-phpdocs
+ * @template TModule of ModuleInterface|null
  */
 trait MethodsTrait
 {
@@ -83,6 +87,8 @@ trait MethodsTrait
         // MethodsTrait
         'configure',
         'hasmethod',
+        'getmodule',
+        'getmethodclass',
         'getclassname',
         'getnamespace',
         // UserGuiTrait
@@ -90,9 +96,14 @@ trait MethodsTrait
         'rendertemplate',
         // @todo add new internal methods here + find a better way to do this
     ];
-    /** @var array<string, object|null> */
+    /** @var array<string, MethodInterface|null> */
     private array $methods = [];
 
+    /**
+     * Summary of __construct
+     * @param string $moduleName
+     * @param TModule $parent
+     */
     public function __construct(string $moduleName, ?ModuleInterface $parent = null)
     {
         $this->moduleName = $moduleName;
@@ -100,11 +111,21 @@ trait MethodsTrait
         $this->configure();
     }
 
+    /**
+     * Summary of configure
+     * @return void
+     */
     public function configure()
     {
         // ...
     }
 
+    /**
+     * Summary of hasMethod
+     * @param string $funcName
+     * @param string $funcType
+     * @return bool
+     */
     public function hasMethod(string $funcName, string $funcType = 'api'): bool
     {
         // restrict any internal _* methods (including magic methods)
@@ -135,13 +156,28 @@ trait MethodsTrait
         return method_exists($this, $funcName) || class_exists($this->getClassName($funcName));
     }
 
+    /**
+     * Summary of getModule
+     * @return TModule
+     */
+    public function getModule(): ModuleInterface|null
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Summary of __call
+     * @param string $funcName
+     * @param array<mixed> $arguments
+     * @return mixed
+     */
     public function __call(string $funcName, array $arguments = [])
     {
         // call any single-method class that exists in the component namespace
         if (!array_key_exists($funcName, $this->methods)) {
             $className = $this->getClassName($funcName);
             if (class_exists($className)) {
-                $this->methods[$funcName] = new $className($this->moduleName, $this->itemtype, $this);
+                $this->methods[$funcName] = $this->getMethodClass($className);
             } else {
                 $this->methods[$funcName] = null;
             }
@@ -157,6 +193,18 @@ trait MethodsTrait
     }
 
     /**
+     * Get single-method class for module function by class name
+     * @see https://phpstan.org/blog/generics-by-examples
+     * @template TMethodClass of MethodInterface
+     * @param class-string<TMethodClass> $className
+     * @return TMethodClass
+     */
+    protected function getMethodClass(string $className): MethodInterface
+    {
+        return new $className($this->moduleName, $this->itemtype, $this);
+    }
+
+    /**
      * Get single-method class name for module function with
      * conversion from snake_case to PascalCase . 'Method'
      * Example:
@@ -164,7 +212,7 @@ trait MethodsTrait
      * will become Xaraya\Modules\MyFancyModule\UserApi\TestCallMethod
      *
      * @param string $funcName
-     * @return class-string<MethodClass>
+     * @return class-string<MethodClass<static>>
      */
     protected function getClassName(string $funcName): string
     {
@@ -174,6 +222,10 @@ trait MethodsTrait
         return $this->getNamespace() . '\\' . $methodName . 'Method';
     }
 
+    /**
+     * Summary of getNamespace
+     * @return string
+     */
     protected function getNamespace(): string
     {
         // Xaraya\Modules\MyFancyModule\UserApi

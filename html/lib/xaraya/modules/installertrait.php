@@ -16,6 +16,7 @@
  *
  * class Installer implements InstallerInterface
  * {
+ *     /** @use InstallerTrait<Module> *\/
  *     use InstallerTrait;
  * }
  * ```
@@ -62,9 +63,11 @@ interface InstallerInterface extends ApiMethodsInterface
 
 /**
  * Trait to handle installer functions
+ * @template TModule of ModuleInterface|null
  */
 trait InstallerTrait
 {
+    /** @use MethodsTrait<TModule> */
     use MethodsTrait;
 
     /** @var array<string> */

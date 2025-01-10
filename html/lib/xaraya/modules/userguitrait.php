@@ -13,6 +13,7 @@
  *
  * class UserGui implements UserGuiInterface
  * {
+ *     /** @use UserGuiTrait<Module> *\/
  *     use UserGuiTrait;
  *
  *     public function main($args = []) {
@@ -69,13 +70,19 @@ interface UserGuiInterface extends GuiMethodsInterface
 
 /**
  * Trait to handle user gui functions
+ * @template TModule of ModuleInterface|null
  */
 trait UserGuiTrait
 {
+    /** @use MethodsTrait<TModule> */
     use MethodsTrait;
 
     protected string $moduleType;
 
+    /**
+     * Summary of configure
+     * @return void
+     */
     public function configure()
     {
         $this->moduleType = 'user';
@@ -98,7 +105,7 @@ trait UserGuiTrait
     /**
      * Add standard template variables (module, itemtype and context)
      * @param array<string, mixed> $data
-     * @return array<mixed>
+     * @return array<string, mixed>
      */
     protected function prepareOutput(array $data): array
     {
@@ -110,7 +117,13 @@ trait UserGuiTrait
         return $data;
     }
 
-    protected function renderTemplate(string $funcName, array $data)
+    /**
+     * Summary of renderTemplate
+     * @param string $funcName
+     * @param array<string, mixed> $data
+     * @return string
+     */
+    protected function renderTemplate(string $funcName, array $data): string
     {
         // Add standard template variables (module, itemtype and context)
         $data = $this->prepareOutput($data);

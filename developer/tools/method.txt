@@ -19,6 +19,7 @@ sys::import('xaraya.modules.method');
 
 /**
  * skeleton userapi get function
+ * @extends MethodClass<Xaraya\Modules\Skeleton\UserApi>
  */
 class GetMethod extends MethodClass
 {

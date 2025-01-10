@@ -19,6 +19,7 @@ sys::import('modules.skeleton.class.adminapi');
 
 /**
  * Handle the skeleton admin GUI
+ * @extends AdminGuiClass<Module>
  */
 class AdminGui extends AdminGuiClass
 {

@@ -27,7 +27,22 @@ use xarHooks;
  */
 interface HooksInterface extends ContextInterface
 {
+    /**
+     * Wrapper for xarModHooks::call() - only for migration
+     * @param mixed $scope
+     * @param mixed $action
+     * @param mixed $itemid
+     * @param mixed $extraInfo
+     * @return mixed output from hooks, or null if there are no hooks
+     */
     public function callHooks($scope, $action, $itemid, $extraInfo): mixed;
+
+    /**
+     * Wrapper for xarHooks::notify() - only for migration
+     * @param string $event
+     * @param mixed $info
+     * @return mixed output from hooks, or null if there are no hooks
+     */
     public function notifyHooks($event, $info = []): mixed;
 }
 

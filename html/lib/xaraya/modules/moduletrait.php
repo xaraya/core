@@ -53,8 +53,10 @@ sys::import('xaraya.modules.methodstrait');
 interface ModuleInterface extends ContextInterface
 {
     public function __construct(string $moduleName);
+    /** @return void */
     public function configure();
     public function getName(): string;
+    /** @return array<string, mixed> */
     public function getInfo(): array;
     public function getComponent(string $type): MethodsInterface|null;
     public function hasComponent(string $type): bool;
@@ -62,7 +64,6 @@ interface ModuleInterface extends ContextInterface
     public function getGUI(): UserGuiInterface|null;
     public function getAdminAPI(): AdminApiInterface|null;
     public function getAdminGUI(): AdminGuiInterface|null;
-    public function getHooks(): HooksInterface|null;
     public function getInstaller(): InstallerInterface|null;
     public function setClassTypes(): void;
     public function getClassType(string $modType): string|null;
@@ -82,7 +83,7 @@ trait ModuleTrait
 
     /** @var array<string, string> */
     protected array $classtypes = [];
-    /** @var array<string, object|null> */
+    /** @var array<string, MethodsInterface|null> */
     private array $components = [];
 
     public function __construct(string $moduleName)
@@ -91,15 +92,24 @@ trait ModuleTrait
         $this->configure();
     }
 
+    /**
+     * Summary of configure
+     * @return void
+     */
     public function configure()
     {
         $this->setClassTypes();
     }
 
-    protected function createComponent(string $type): MethodsInterface
+    /**
+     * Summary of createComponent
+     * @see https://phpstan.org/blog/generics-by-examples
+     * @template TComponent of MethodsInterface
+     * @param class-string<TComponent> $className
+     * @return TComponent
+     */
+    protected function createComponent(string $className): MethodsInterface
     {
-        // this assumes that the class is in the same namespace as the module
-        $className = $this->getClassName($type);
         return new $className($this->moduleName, $this);
     }
 
@@ -125,7 +135,9 @@ trait ModuleTrait
     {
         if (!array_key_exists($type, $this->components)) {
             try {
-                $this->components[$type] = $this->createComponent($type);
+                // this assumes that the class is in the same namespace as the module
+                $className = $this->getClassName($type);
+                $this->components[$type] = $this->createComponent($className);
                 if ($this->context !== null) {
                     $this->components[$type]->setContext($this->context);
                 }
@@ -195,32 +207,37 @@ trait ModuleTrait
 
     public function getAPI(): UserApiInterface|null
     {
-        return $this->getComponent('UserApi');
+        $component = $this->getComponent('UserApi');
+        assert($component instanceof UserApiInterface);
+        return $component;
     }
 
     public function getGUI(): UserGuiInterface|null
     {
-        return $this->getComponent('UserGui');
+        $component = $this->getComponent('UserGui');
+        assert($component instanceof UserGuiInterface);
+        return $component;
     }
 
     public function getAdminAPI(): AdminApiInterface|null
     {
-        return $this->getComponent('AdminApi');
+        $component = $this->getComponent('AdminApi');
+        assert($component instanceof AdminApiInterface);
+        return $component;
     }
 
     public function getAdminGUI(): AdminGuiInterface|null
     {
-        return $this->getComponent('AdminGui');
-    }
-
-    public function getHooks(): HooksInterface|null
-    {
-        return $this->getComponent('Hooks');
+        $component = $this->getComponent('AdminGui');
+        assert($component instanceof AdminGuiInterface);
+        return $component;
     }
 
     public function getInstaller(): InstallerInterface|null
     {
-        return $this->getComponent('Installer');
+        $component = $this->getComponent('Installer');
+        assert($component instanceof InstallerInterface);
+        return $component;
     }
 
     /**

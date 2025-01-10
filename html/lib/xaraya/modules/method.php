@@ -45,9 +45,24 @@ sys::import('xaraya.modules.coretrait');
 sys::import('xaraya.modules.hookstrait');
 
 /**
- * Handle single module function as method
+ * For documentation purposes only - available via MethodClass
  */
-class MethodClass implements ContextInterface, CoreInterface, HooksInterface
+interface MethodInterface extends ContextInterface, CoreInterface, HooksInterface
+{
+    /**
+     * Summary of __invoke
+     * @param array<mixed> $args
+     * @return mixed
+     */
+    public function __invoke(array $args = []);
+}
+
+/**
+ * Handle single module function as method
+ * @see https://phpstan.org/blog/generics-by-examples
+ * @template TComponent of MethodsInterface|null
+ */
+class MethodClass implements MethodInterface
 {
     use ContextTrait;
     use CoreTrait;
@@ -55,13 +70,25 @@ class MethodClass implements ContextInterface, CoreInterface, HooksInterface
 
     protected string $moduleName;          // set in constructor by MethodsTrait::__call()
     protected int $itemtype = 0;
+    /** @var TComponent */
     protected ?MethodsInterface $parent;
 
+    /**
+     * Summary of __invoke
+     * @param array<mixed> $args
+     * @return mixed
+     */
     public function __invoke(array $args = [])
     {
         return $args;
     }
 
+    /**
+     * Summary of __construct
+     * @param string $moduleName
+     * @param int $itemtype
+     * @param TComponent $parent
+     */
     public function __construct(string $moduleName, int $itemtype = 0, ?MethodsInterface $parent = null)
     {
         $this->moduleName = $moduleName;
@@ -74,5 +101,13 @@ class MethodClass implements ContextInterface, CoreInterface, HooksInterface
     public function configure(): void
     {
         // ...
+    }
+
+    /**
+     * @return TComponent
+     */
+    public function getParent(): MethodsInterface|null
+    {
+        return $this->parent;
     }
 }

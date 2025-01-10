@@ -16,6 +16,7 @@ namespace Xaraya\DataObject\Traits;
 
 use Xaraya\Modules\AdminApiInterface as CoreApiInterface;
 use Xaraya\Modules\AdminApiTrait as CoreApiTrait;
+use Xaraya\Modules\ModuleInterface;
 use sys;
 
 sys::import('xaraya.modules.adminapitrait');
@@ -44,8 +45,10 @@ interface AdminApiInterface extends CoreApiInterface
  *     use AdminApiTrait;
  * }
  * ```
+ * @template TModule of ModuleInterface|null
  */
 trait AdminApiTrait
 {
+    /** @use CoreApiTrait<TModule> */
     use CoreApiTrait;
 }

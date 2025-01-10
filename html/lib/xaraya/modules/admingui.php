@@ -10,6 +10,10 @@
  *
  * use Xaraya\Modules\AdminGuiClass;
  *
+ * /**
+ *  * Handle module admin gui functions
+ *  * @extends AdminGuiClass<Module>
+ *  *\/
  * class AdminGui extends AdminGuiClass
  * {
  *     public function main($args = []) {
@@ -39,8 +43,10 @@ sys::import('xaraya.modules.adminguitrait');
 
 /**
  * Handle module admin gui functions
+ * @template TModule of ModuleInterface|null
  */
 class AdminGuiClass implements AdminGuiInterface
 {
+    /** @use AdminGuiTrait<TModule> */
     use AdminGuiTrait;
 }

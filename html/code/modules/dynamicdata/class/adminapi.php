@@ -26,5 +26,6 @@ sys::import('modules.dynamicdata.class.traits.adminapi');
  */
 class AdminApi implements AdminApiInterface
 {
+    /** @use AdminApiTrait<Module> */
     use AdminApiTrait;
 }

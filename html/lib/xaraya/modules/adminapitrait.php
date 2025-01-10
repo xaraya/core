@@ -13,6 +13,7 @@
  *
  * class AdminApi implements AdminApiInterface
  * {
+ *     /** @use AdminApiTrait<Module> *\/
  *     use AdminApiTrait;
  *
  *     public function create($args = []) {
@@ -51,11 +52,17 @@ interface AdminApiInterface extends UserApiInterface
 
 /**
  * Trait to handle admin api functions
+ * @template TModule of ModuleInterface|null
  */
 trait AdminApiTrait
 {
+    /** @use UserApiTrait<TModule> */
     use UserApiTrait;
 
+    /**
+     * Summary of configure
+     * @return void
+     */
     public function configure()
     {
         $this->moduleType = 'admin';

@@ -26,6 +26,7 @@ sys::import('modules.dynamicdata.class.traits.admingui');
  */
 class AdminGui implements AdminGuiInterface
 {
+    /** @use AdminGuiTrait<Module> */
     use AdminGuiTrait;
 
     /**

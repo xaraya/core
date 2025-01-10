@@ -16,6 +16,7 @@ namespace Xaraya\DataObject\Traits;
 
 use Xaraya\Modules\UserGuiInterface as CoreGuiInterface;
 use Xaraya\Modules\UserGuiTrait as CoreGuiTrait;
+use Xaraya\Modules\ModuleInterface;
 use sys;
 
 sys::import('xaraya.modules.userguitrait');
@@ -49,9 +50,11 @@ interface UserGuiInterface extends CoreGuiInterface
  *     use UserGuiTrait;
  * }
  * ```
+ * @template TModule of ModuleInterface|null
  */
 trait UserGuiTrait
 {
+    /** @use CoreGuiTrait<TModule> */
     use CoreGuiTrait;
 
     /**

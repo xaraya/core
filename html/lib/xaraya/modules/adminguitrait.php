@@ -13,6 +13,7 @@
  *
  * class AdminGui implements AdminGuiInterface
  * {
+ *     /** @use AdminGuiTrait<Module> *\/
  *     use AdminGuiTrait;
  *
  *     public function main($args = []) {
@@ -51,11 +52,17 @@ interface AdminGuiInterface extends UserGuiInterface
 
 /**
  * Trait to handle admin gui functions
+ * @template TModule of ModuleInterface|null
  */
 trait AdminGuiTrait
 {
+    /** @use UserGuiTrait<TModule> */
     use UserGuiTrait;
 
+    /**
+     * Summary of configure
+     * @return void
+     */
     public function configure()
     {
         $this->moduleType = 'admin';

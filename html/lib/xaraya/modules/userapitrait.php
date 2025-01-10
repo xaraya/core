@@ -13,6 +13,7 @@
  *
  * class UserApi implements UserApiInterface
  * {
+ *     /** @use UserApiTrait<Module> *\/
  *     use UserApiTrait;
  *
  *     public function get($args = []) {
@@ -63,13 +64,19 @@ interface UserApiInterface extends ApiMethodsInterface
 
 /**
  * Trait to handle user api functions
+ * @template TModule of ModuleInterface|null
  */
 trait UserApiTrait
 {
+    /** @use MethodsTrait<TModule> */
     use MethodsTrait;
 
     protected string $moduleType;
 
+    /**
+     * Summary of configure
+     * @return void
+     */
     public function configure()
     {
         $this->moduleType = 'user';

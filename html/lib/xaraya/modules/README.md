@@ -132,6 +132,7 @@ sys::import('xaraya.modules.userapitrait');
  */
 class UserApi implements UserApiInterface
 {
+    /** @use UserApiTrait<Module> */
     use UserApiTrait;
 }
 ```
@@ -147,6 +148,10 @@ use sys;
 
 sys::import('xaraya.modules.userapi');
 
+/**
+ * Handle module user api functions
+ * @extends UserApiClass<Module>
+ */
 class UserApi extends UserApiClass
 {
     // ...
@@ -172,6 +177,7 @@ sys::import('modules.dynamicdata.class.traits.userapi');
  */
 class UserApi implements UserApiInterface
 {
+    /** @use UserApiTrait<Module> */
     use UserApiTrait;
 }
 ```
@@ -211,14 +217,18 @@ use sys;
 
 sys::import('xaraya.modules.method');
 
+/**
+ * myfancymodule userapi get function
+ * @extends MethodClass<Xaraya\Modules\MyFancyModule\UserApi>
+ */
 class GetMethod extends MethodClass
 {
     public function __invoke(array $args = [])
     {
         // get single module item
         // $context = $this->getContext();
-        // call other methods from the UserApi() class via ->parent here
-        // $other = $this->parent->other();
+        // call other methods from the UserApi() class via ->getParent() here
+        // $other = $this->getParent()->other();
         return $data;
     }
 }
@@ -226,4 +236,18 @@ class GetMethod extends MethodClass
 
 ## Migrating Existing Modules
 
-TODO
+The `developer/tools/bermuda_cleanup.php` tool has a new `XarayaModuleMigrator()` class to create the module classes and help migrate the installer and all standard module functions.
+
+```php
+$inDir = dirname(__DIR__, 2) . '/vendor/xaraya/';
+$migrator = new XarayaModuleMigrator($inDir, true);
+$migrator->verbose = true;
+$migrator->load_project();
+$migrator->parse_project();
+$refresh = false;
+$migrator->migrate_installer_functions($refresh);
+$migrator->migrate_module_functions('userapi', $refresh);
+// ...
+```
+
+You will still need to verify any errors in your IDE for missing use ... statements etc., but it does the heavy lifting for you...

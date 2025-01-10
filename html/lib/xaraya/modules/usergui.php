@@ -10,6 +10,10 @@
  *
  * use Xaraya\Modules\UserGuiClass;
  *
+ * /**
+ *  * Handle module user gui functions
+ *  * @extends UserGuiClass<Module>
+ *  *\/
  * class UserGui extends UserGuiClass
  * {
  *     public function main($args = []) {
@@ -39,8 +43,10 @@ sys::import('xaraya.modules.userguitrait');
 
 /**
  * Handle module user gui functions
+ * @template TModule of ModuleInterface|null
  */
 class UserGuiClass implements UserGuiInterface
 {
+    /** @use UserGuiTrait<TModule> */
     use UserGuiTrait;
 }

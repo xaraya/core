@@ -35,7 +35,17 @@ interface CoreInterface
     public function checkAccess(string $mask, string $action = ''): bool;
     public function getAPI(): UserApiInterface|null;
     public function getModuleId(): int;
-    public function getVar($name, $scope = 'module'): mixed;
+    public function getVar(string $name, string $scope = 'module'): mixed;
+    /**
+     * Summary of fetchVar
+     * @param string $name the variable name
+     * @param string $validation the validation to be performed
+     * @param mixed $value contains the converted value of fetched variable
+     * @param mixed $defaultValue the default value
+     * @param integer $flags bitmask which modify the behaviour of function
+     * @param integer $prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
+     * @return mixed
+     */
     public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): mixed;
     public function genAuthKey(): string;
     public function confirmAuthKey(string $name = 'authid'): bool;
@@ -57,7 +67,9 @@ trait CoreTrait
 
     public function getAPI(): UserApiInterface|null
     {
-        return xarMod::getModule($this->moduleName)->getAPI();
+        $component = xarMod::getModule($this->moduleName)->getAPI();
+        assert($component instanceof UserApiInterface);
+        return $component;
     }
 
     /**
@@ -72,7 +84,7 @@ trait CoreTrait
         return $fileInfo['regid'];
     }
 
-    public function getVar($name, $scope = 'module'): mixed
+    public function getVar(string $name, string $scope = 'module'): mixed
     {
         return match ($scope) {
             //'local' => $name,
@@ -85,6 +97,16 @@ trait CoreTrait
         };
     }
 
+    /**
+     * Summary of fetchVar
+     * @param string $name the variable name
+     * @param string $validation the validation to be performed
+     * @param mixed $value contains the converted value of fetched variable
+     * @param mixed $defaultValue the default value
+     * @param integer $flags bitmask which modify the behaviour of function
+     * @param integer $prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
+     * @return mixed
+     */
     public function fetchVar($name, $validation, &$value, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): mixed
     {
         // Note: this should be restricted to GuiMethodsInterface

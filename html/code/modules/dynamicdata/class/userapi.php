@@ -32,13 +32,19 @@ sys::import('modules.dynamicdata.class.traits.userapi');
  */
 class UserApi implements UserApiInterface
 {
+    /** @use UserApiTrait<Module> */
     use UserApiTrait;
 
+    /**
+     * Summary of other
+     * @param array<mixed> $args
+     * @return mixed
+     */
     public function other(array $args = [])
     {
         $args['handled'] = 'other';
-        // call other methods from the Module() class via ->parent here
-        $args['parent'] = $this->parent::class;
+        // call other methods from the Module() class via ->getModule() here
+        $args['parent'] = $this->getModule()::class;
         return $args;
     }
 

@@ -10,6 +10,10 @@
  *
  * use Xaraya\Modules\AdminApiClass;
  *
+ * /**
+ *  * Handle module admin api functions
+ *  * @extends AdminApiClass<Module>
+ *  *\/
  * class AdminApi extends AdminApiClass
  * {
  *     public function create($args = []) {
@@ -39,8 +43,10 @@ sys::import('xaraya.modules.adminapitrait');
 
 /**
  * Summary of AdminApi
+ * @template TModule of ModuleInterface|null
  */
 class AdminApiClass implements AdminApiInterface
 {
+    /** @use AdminApiTrait<TModule> */
     use AdminApiTrait;
 }

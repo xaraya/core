@@ -22,6 +22,7 @@ sys::import('xaraya.modules.method');
 
 /**
  * Test handling module function in separate file
+ * @extends MethodClass<UserApi>
  */
 class TestCallMethod extends MethodClass
 {
@@ -29,10 +30,10 @@ class TestCallMethod extends MethodClass
     {
         $args['context'] ??= $this->getContext();
         $args['handled'] = true;
-        $args['parent'] = $this->parent::class;
-        // call other methods from the UserApi() class via ->parent here
-        assert($this->parent instanceof UserApi);
-        $args['other'] = $this->parent->other();
+        $args['parent'] = $this->getParent()::class;
+        // call other methods from the UserApi() class via ->getParent() here
+        assert($this->getParent() instanceof UserApi);
+        $args['other'] = $this->getParent()->other();
         return $args;
     }
 }

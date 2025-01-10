@@ -16,6 +16,7 @@ namespace Xaraya\DataObject\Traits;
 
 use Xaraya\Modules\AdminGuiInterface as CoreGuiInterface;
 use Xaraya\Modules\AdminGuiTrait as CoreGuiTrait;
+use Xaraya\Modules\ModuleInterface;
 use sys;
 
 sys::import('xaraya.modules.adminguitrait');
@@ -44,8 +45,10 @@ interface AdminGuiInterface extends CoreGuiInterface
  *     use AdminGuiTrait;
  * }
  * ```
+ * @template TModule of ModuleInterface|null
  */
 trait AdminGuiTrait
 {
+    /** @use CoreGuiTrait<TModule> */
     use CoreGuiTrait;
 }

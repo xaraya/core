@@ -16,6 +16,7 @@ namespace Xaraya\DataObject\Traits;
 
 use Xaraya\Modules\UserApiInterface as CoreApiInterface;
 use Xaraya\Modules\UserApiTrait as CoreApiTrait;
+use Xaraya\Modules\ModuleInterface;
 use sys;
 
 sys::import('xaraya.modules.userapitrait');
@@ -49,9 +50,11 @@ interface UserApiInterface extends CoreApiInterface, ItemLinksInterface
  *     use UserApiTrait;
  * }
  * ```
+ * @template TModule of ModuleInterface|null
  */
 trait UserApiTrait
 {
+    /** @use CoreApiTrait<TModule> */
     use CoreApiTrait;
     use ItemLinksTrait;
 

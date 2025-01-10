@@ -939,6 +939,8 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
 
 class XarayaModuleMigrator extends XarayaModuleAnalyzer
 {
+    protected $todo = [];
+
     public function migrate_installer_functions($refresh = false)
     {
         $found = $this->find_installer_functions();
@@ -996,8 +998,11 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
     {
         $module = basename(dirname($modulefile, 2));
         if (file_exists($modulefile)) {
-            //$gitfile = '/home/mikespub/modules/' . $module . '/class/module.php';
-            //copy($modulefile, $gitfile);
+            if (empty($this->todo[$modulefile])) {
+                //$gitfile = '/home/mikespub/modules/' . $module . '/class/module.php';
+                //copy($modulefile, $gitfile);
+                $this->todo[$modulefile] = true;
+            }
             $this->log('Module file for module ' . $module . ' exists - SKIP ' . $modulefile);
             return;
         }
@@ -1043,11 +1048,11 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
                 $this->log('Invalid file for module ' . $module . ' - SKIP ' . $fpath, true);
                 continue;
             }
-            $this->check_type_class($typefile);
             if ($split) {
                 // @todo each function will have its own method file
                 continue;
             }
+            $this->check_type_class($typefile);
             // primary function will be replaced by __invoke and helper functions renamed
             $funcName = str_replace('.php', '', basename($fpath));
             if (str_starts_with($funcName, '_')) {
@@ -1081,6 +1086,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
                     '/function \&/',
                     '/function ' . $module . '_' . $modType . '_' . $funcName . '\(/i',
                     '/function ' . $module . '_' . $modType . '_(\w+)\(/i',
+                    '/\b' . $module . '_' . $modType . '_' . $funcName . '\(/i',
                     '/\b' . $module . '_' . $modType . '_(\w+)\(/i',
                     '/, \$context = null/',
                     '/\$context/',
@@ -1089,7 +1095,10 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
                     'function ',
                     'public function __invoke(',
                     'public function $1(',
-                    '\$this->$1(',
+                    // @todo for files with recursive function calls, use __invoke instead?
+                    '\$this->__invoke(',
+                    // @todo for files with only 1 function, use $this->parent->$1 instead?
+                    (count($functions) > 1) ? '\$this->$1(' : '\$this->parent->$1(',
                     '',
                     '\$this->getContext()',
                 ];
@@ -1110,9 +1119,12 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         $module = basename(dirname($typefile, 2));
         $typename = basename($typefile);
         if (file_exists($typefile)) {
-            $gitfile = '/home/mikespub/modules/' . $module . '/class/' . $typename;
-            if (!file_exists($gitfile)) {
-                copy($typefile, $gitfile);
+            if (empty($this->todo[$typefile])) {
+                $gitfile = '/home/mikespub/modules/' . $module . '/class/' . $typename;
+                if (!file_exists($gitfile)) {
+                    copy($typefile, $gitfile);
+                }
+                $this->todo[$typefile] = true;
             }
             $this->log('Class file for module ' . $module . ' exists - SKIP ' . $typefile);
             return;

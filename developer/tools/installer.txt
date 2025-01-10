@@ -24,6 +24,7 @@ sys::import('xaraya.modules.installer');
  *
  * @todo add extra use ...; statements above as needed
  * @todo replaced skeleton_*() function calls with $this->*() calls
+ * @extends InstallerClass<Module>
  */
 class Installer extends InstallerClass
 {
