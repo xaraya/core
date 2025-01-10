@@ -752,11 +752,11 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
         }
     }
 
-    public function find_module_functions()
+    public function find_module_functions($type = '')
     {
         $found = [];
         foreach (array_keys($this->functions) as $lname) {
-            $match = $this->match_module_function($lname);
+            $match = $this->match_module_function($lname, $type);
             if (empty($match)) {
                 continue;
             }
@@ -766,11 +766,20 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
         return $found;
     }
 
-    public function match_module_function($lname)
+    public function match_module_function($lname, $type)
     {
         $function = $this->functions[$lname];
+        if (!empty($type) && !str_contains($function['file'], '/xar' . $type . '/') && !str_ends_with($function['file'], '/xar' . $type . '.php')) {
+            // skip this for now until it needs to be migrated
+            return null;
+        }
         if (!preg_match('/^([a-z]+)_([a-z]+)_(\w+)$/', $function['name'], $matches)) {
-            $this->log($function['name'] . ' SKIP ' . $function['file']);
+            $this->log($function['name'] . ' SKIP format ' . $function['file']);
+            // skip this for now until it needs to be migrated
+            return null;
+        }
+        if (!str_contains($function['file'], '/' . $matches[1] . '/xar' . $matches[2])) {
+            $this->log($function['name'] . ' SKIP module ' . $function['file']);
             // skip this for now until it needs to be migrated
             return null;
         }
@@ -943,15 +952,18 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         foreach ($files as $fpath => $functions) {
             $installer = str_replace('/xarinit.php', '/class/installer.php', $fpath);
             $module = basename(dirname($fpath));
+            $modulefile = str_replace('/class/installer.php', '/class/module.php', $installer);
+            $this->check_module_class($modulefile);
             if (file_exists($installer) && !$refresh) {
                 //$gitfile = '/home/mikespub/modules/' . $module . '/class/installer.php';
                 //copy($installer, $gitfile);
-                $this->log('Installer file for module ' . $module . ' exists - SKIP ' . $installer, true);
+                $this->log('Installer file for module ' . $module . ' exists - SKIP ' . $installer);
                 continue;
             }
             $output = file_get_contents(__DIR__ . '/installer.txt');
             $output = str_replace('skeleton', $module, $output);
-            $namespace = $this->get_module_namespace($fpath);
+            $xarversion = str_replace('/xarinit.php', '/xarversion.php', $fpath);
+            $namespace = $this->get_module_namespace($xarversion);
             $output = str_replace('Xaraya\Modules\Skeleton', $namespace, $output);
             $uses = $this->get_namespace_uses($fpath);
             if (!empty($uses)) {
@@ -980,10 +992,143 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         }
     }
 
-    public function get_module_namespace($fpath)
+    public function check_module_class($modulefile)
     {
-        $module = basename(dirname($fpath));
-        $xarversion = str_replace('/xarinit.php', '/xarversion.php', $fpath);
+        $module = basename(dirname($modulefile, 2));
+        if (file_exists($modulefile)) {
+            //$gitfile = '/home/mikespub/modules/' . $module . '/class/module.php';
+            //copy($modulefile, $gitfile);
+            $this->log('Module file for module ' . $module . ' exists - SKIP ' . $modulefile);
+            return;
+        }
+        $output = file_get_contents(__DIR__ . '/module.txt');
+        $output = str_replace('skeleton', $module, $output);
+        $xarversion = str_replace('/class/module.php', '/xarversion.php', $modulefile);
+        $namespace = $this->get_module_namespace($xarversion);
+        $output = str_replace('Xaraya\Modules\Skeleton', $namespace, $output);
+        $this->log('Module file for module ' . $module . ' exists - CREATE ' . $modulefile, true);
+        file_put_contents($modulefile, $output);
+    }
+
+    public function migrate_module_functions($modType = 'userapi', $refresh = false)
+    {
+        $found = $this->find_module_functions($modType);
+        if (count($found) < 1) {
+            return;
+        }
+        if (in_array($modType, ['user', 'admin'])) {
+            $classname = ucfirst($modType) . 'Gui';
+            $classtype = $modType . 'gui';
+        } else {
+            $classname = str_replace('api', 'Api', ucfirst($modType));
+            $classtype = $modType;
+        }
+        $files = [];
+        foreach ($found as $lname) {
+            $fpath = $this->functions[$lname]['file'];
+            $files[$fpath] ??= [];
+            $files[$fpath][] = $lname;
+        }
+        $this->log('Files to migrate: ' . $this->to_json($files), true);
+        foreach ($files as $fpath => $functions) {
+            if (str_contains($fpath, '/xar' . $modType . '/')) {
+                $typefile = dirname($fpath, 2) . '/class/' . $classtype . '.php';
+                $module = basename(dirname($fpath, 2));
+                $split = false;
+            } elseif (str_ends_with($fpath, '/xar' . $modType . '.php')) {
+                $typefile = dirname($fpath) . '/class/' . $classtype . '.php';
+                $module = basename(dirname($fpath));
+                $split = true;
+            } else {
+                $this->log('Invalid file for module ' . $module . ' - SKIP ' . $fpath, true);
+                continue;
+            }
+            $this->check_type_class($typefile);
+            if ($split) {
+                // @todo each function will have its own method file
+                continue;
+            }
+            // primary function will be replaced by __invoke and helper functions renamed
+            $funcName = str_replace('.php', '', basename($fpath));
+            if (str_starts_with($funcName, '_')) {
+                $this->log('Invalid file for module ' . $module . ' - SKIP ' . $fpath, true);
+                continue;
+            }
+            $methodfile = str_replace('.php', '/', $typefile) . $funcName . '.php';
+            if (file_exists($methodfile) && !$refresh) {
+                //$gitfile = '/home/mikespub/modules/' . $module . '/class/' . $classtype . '/' . $funcName . '.php';
+                //copy($installer, $gitfile);
+                $this->log('Method file for module ' . $module . ' exists - SKIP ' . $methodfile);
+                continue;
+            }
+            $output = file_get_contents(__DIR__ . '/method.txt');
+            $output = str_replace('skeleton', $module, $output);
+            $xarversion = str_replace('/class/' . $classtype . '.php', '/xarversion.php', $typefile);
+            $namespace = $this->get_module_namespace($xarversion);
+            $output = str_replace('Xaraya\Modules\Skeleton\UserApi', $namespace . '\\' . $classname, $output);
+            $output = str_replace(' userapi get ', " $modType $funcName ", $output);
+            // see MethodTrait::getClassName()
+            $methodName = str_replace('_', '', ucwords($funcName, '_'));
+            $output = str_replace('GetMethod', ' ' . $methodName . 'Method', $output);
+            $uses = $this->get_namespace_uses($fpath);
+            if (!empty($uses)) {
+                $output = str_replace('use sys;', $uses . 'use sys;', $output);
+            }
+            $output .= '    /** functions imported by bermuda_cleanup */';
+            foreach ($functions as $lname) {
+                $function = $this->functions[$lname];
+                $search = [
+                    '/function \&/',
+                    '/function ' . $module . '_' . $modType . '_' . $funcName . '\(/i',
+                    '/function ' . $module . '_' . $modType . '_(\w+)\(/i',
+                    '/\b' . $module . '_' . $modType . '_(\w+)\(/i',
+                    '/, \$context = null/',
+                    '/\$context/',
+                ];
+                $replace = [
+                    'function ',
+                    'public function __invoke(',
+                    'public function $1(',
+                    '\$this->$1(',
+                    '',
+                    '\$this->getContext()',
+                ];
+                $output .= "\n";
+                $output .= $this->output_function($function, $search, $replace);
+            }
+            $output .= "\n}\n\n";
+            if (!is_dir(dirname($methodfile))) {
+                mkdir(dirname($methodfile));
+            }
+            $this->log('Method file for module ' . $module . ' exists - CREATE ' . $methodfile, true);
+            file_put_contents($methodfile, $output);
+        }
+    }
+
+    public function check_type_class($typefile)
+    {
+        $module = basename(dirname($typefile, 2));
+        $typename = basename($typefile);
+        if (file_exists($typefile)) {
+            $gitfile = '/home/mikespub/modules/' . $module . '/class/' . $typename;
+            if (!file_exists($gitfile)) {
+                copy($typefile, $gitfile);
+            }
+            $this->log('Class file for module ' . $module . ' exists - SKIP ' . $typefile);
+            return;
+        }
+        $output = file_get_contents(__DIR__ . '/' . str_replace('.php', '.txt', $typename));
+        $output = str_replace('skeleton', $module, $output);
+        $xarversion = str_replace('/class/' . $typename, '/xarversion.php', $typefile);
+        $namespace = $this->get_module_namespace($xarversion);
+        $output = str_replace('Xaraya\Modules\Skeleton', $namespace, $output);
+        $this->log('Class file for module ' . $module . ' exists - CREATE ' . $typefile, true);
+        file_put_contents($typefile, $output);
+    }
+
+    public function get_module_namespace($xarversion)
+    {
+        $module = basename(dirname($xarversion));
         include $xarversion;
         return $modversion['namespace'] ?? 'Xaraya\\Modules\\' . ucfirst($module);
     }
@@ -1094,6 +1239,8 @@ $migrator->verbose = true;
 $migrator->load_project();
 $migrator->parse_project();
 $refresh = false;
-$migrator->migrate_installer_functions($refresh);
+//$migrator->migrate_installer_functions($refresh);
+//$migrator->find_installer_classes();
+$migrator->migrate_module_functions('admin', $refresh);
 /**
  */
