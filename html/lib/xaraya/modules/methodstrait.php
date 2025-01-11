@@ -31,7 +31,7 @@ interface MethodsInterface extends ContextInterface, CoreInterface, HooksInterfa
     public function __construct(string $moduleName, ?ModuleInterface $parent = null);
     /** @return void */
     public function configure();
-    public function hasMethod(string $funcName, string $funcType = 'api'): bool;
+    public function hasMethod(string $funcName, string $callType = 'api'): bool;
     public function getModule(): ModuleInterface|null;
 }
 
@@ -123,22 +123,22 @@ trait MethodsTrait
     /**
      * Summary of hasMethod
      * @param string $funcName
-     * @param string $funcType
+     * @param string $callType is this for an api call or not?
      * @return bool
      */
-    public function hasMethod(string $funcName, string $funcType = 'api'): bool
+    public function hasMethod(string $funcName, string $callType = 'api'): bool
     {
         // restrict any internal _* methods (including magic methods)
         if (str_starts_with($funcName, '_')) {
             return false;
         }
-        // @todo should we check $funcType on component level or method level - do we allow mix of both in class?
+        // @todo should we check $callType on component level or method level - do we allow mix of both in class?
         // don't allow api methods to be called as gui functions
-        if ($funcType != 'api' && $this instanceof ApiMethodsInterface) {
+        if ($callType != 'api' && $this instanceof ApiMethodsInterface) {
             return false;
         }
         // Note: non-api methods can still be called as api functions here if needed
-        //if ($funcType == 'api' && !($this instanceof ApiMethodsInterface)) {
+        //if ($callType == 'api' && !($this instanceof ApiMethodsInterface)) {
         //    return false;
         //}
         // normalize for case-insensitive + conversion from snake_case to PascalCase

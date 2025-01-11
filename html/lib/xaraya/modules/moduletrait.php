@@ -44,6 +44,7 @@ use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use xarMod;
 use sys;
+use Exception;
 
 sys::import('xaraya.modules.methodstrait');
 
@@ -58,6 +59,8 @@ interface ModuleInterface extends ContextInterface
     public function getName(): string;
     /** @return array<string, mixed> */
     public function getInfo(): array;
+    /** @return array<string, mixed> */
+    public function getTables(): array;
     public function getComponent(string $type): MethodsInterface|null;
     public function hasComponent(string $type): bool;
     public function getAPI(): UserApiInterface|null;
@@ -67,7 +70,7 @@ interface ModuleInterface extends ContextInterface
     public function getInstaller(): InstallerInterface|null;
     public function setClassTypes(): void;
     public function getClassType(string $modType): string|null;
-    public function getCallableMethod(string $modType, string $funcName, string $funcType = 'api'): callable|null;
+    public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): callable|null;
 }
 
 /**
@@ -182,6 +185,26 @@ trait ModuleTrait
     }
 
     /**
+     * Get tables from xartables.php
+     * @return array<string, mixed>
+     */
+    public function getTables(): array
+    {
+        // Load the database definition if required
+        try {
+            sys::import('modules.' . $this->moduleName . '.xartables');
+        } catch (Exception $e) {
+            return [];
+        }
+        $tablefunc = $this->moduleName . '_' . 'xartables';
+        if (function_exists($tablefunc)) {
+            // xarDB::importTables($tablefunc());
+            return $tablefunc();
+        }
+        return [];
+    }
+
+    /**
      * Wrapper for xarMod::apiFunc() - only for migration
      * @param mixed $type
      * @param mixed $func
@@ -276,7 +299,7 @@ trait ModuleTrait
     /**
      * @see \xarMod::getModuleClassMethod()
      */
-    public function getCallableMethod(string $modType, string $funcName, string $funcType = 'api'): callable|null
+    public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): callable|null
     {
         // $modType already includes $funcType here, e.g. userapi or installer
         $classType = $this->getClassType($modType);
@@ -287,8 +310,8 @@ trait ModuleTrait
         if (!isset($component)) {
             return null;
         }
-        // @todo should we check $funcType on component level or method level - do we allow mix of both in class?
-        if ($component->hasMethod($funcName, $funcType)) {
+        // @todo should we check $callType on component level or method level - do we allow mix of both in class?
+        if ($component->hasMethod($funcName, $callType)) {
             // use array format instead of first-class callable syntax to allow setting the context
             return [$component, $funcName];
         }
