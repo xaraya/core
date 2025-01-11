@@ -127,6 +127,12 @@ interface ixarCache_Storage
     public function doGarbageCollection($expire = 0);
 
     /**
+     * Get the cache storage type
+     * @return string
+     */
+    public function getCacheType();
+
+    /**
      * Get information about the cache (not supported by all storage)
      * @return array<string, mixed>
      */

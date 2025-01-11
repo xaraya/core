@@ -413,6 +413,15 @@ class xarCache_Storage extends xarObject
     }
 
     /**
+     * Get the cache storage type
+     * @return string
+     */
+    public function getCacheType()
+    {
+        return $this->storage;
+    }
+
+    /**
      * Get information about the cache (not supported by all storage)
      * @return array<string, mixed>
      */
