@@ -555,11 +555,23 @@ class xarEvents extends xarObject implements ixarEvents
                 } catch (Exception $e) {
                     // fall back to generic type file (eg /module/xaruserapi.php)
                     // we don't catch any exception here 
-                    sys::import("modules.{$module}.xar{$type}");
+                    try {
+                        sys::import("modules.{$module}.xar{$type}");
+                    } catch (Exception $e) {
+                        $instance = xarMod::getModule($module);
+                        // let's fall through until we find the function (or not)
+                    }
                 }
                 // check function exists
-                if (!function_exists($func))
-                    throw new FunctionNotFoundException($func);
+                if (!function_exists($func)) {
+                    // see xarMod::callFunc() - pass modType . funcType as modType here for module classes
+                    $type = $area != 'gui' ? $type : $type . $area;
+                    // old-style module_type_func() hook function called via module class
+                    $callable = xarMod::getModuleClassMethod($module, $type, $filename, 'api');
+                    if (empty($callable)) {
+                        throw new FunctionNotFoundException($func);
+                    }
+                }
                 // one function file loaded :) 
                 $loaded = true;
             break;
