@@ -146,11 +146,12 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             // Note that E_ALL is already a summed bitmask value (2047) while E_STRICT is *NOT* (2048)
             // MrB: if there are actually E_STRICT errors, this is known to break *some* installs ( mine ;-) )
             $errThreshold = E_STRICT + E_ALL;
+            // @todo E_STRICT is deprecated in PHP 8.4+
         }
         // Only continue rendering if:
-        // 1. the level was not 0 (either explicitly set or due to an @ on the line causing the error)
+        // 1. the level was not 0 or equivalent for PHP 8.0+ (either explicitly set or due to an @ on the line causing the error)
         // 2. the raised Errorlevel is included in the threshold bitmask
-        if ( ($oldLevel == 0) or ($errorRaised & $errThreshold != $errorRaised )) {
+        if ( ($oldLevel == 0) or !(error_reporting() & $errorRaised) or ($errorRaised & $errThreshold != $errorRaised )) {
             // Log the message so it is not lost.
             // TODO: make this message available to calling functions that suppress errors through '@'.
             $msg = "PHP error code $errorRaised at line $line of $file: $errorString";
