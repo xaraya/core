@@ -37,8 +37,6 @@
 
 namespace Xaraya\Modules;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
 use sys;
 
 sys::import('xaraya.modules.coretrait');
@@ -47,7 +45,7 @@ sys::import('xaraya.modules.hookstrait');
 /**
  * For documentation purposes only - available via MethodClass
  */
-interface MethodInterface extends ContextInterface, CoreInterface, HooksInterface
+interface MethodInterface extends CoreInterface, HooksInterface
 {
     /**
      * Summary of __invoke
@@ -64,7 +62,6 @@ interface MethodInterface extends ContextInterface, CoreInterface, HooksInterfac
  */
 class MethodClass implements MethodInterface
 {
-    use ContextTrait;
     use CoreTrait;
     use HooksTrait;
 

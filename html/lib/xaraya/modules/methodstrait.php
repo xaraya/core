@@ -16,8 +16,6 @@
 
 namespace Xaraya\Modules;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
 use sys;
 
 sys::import('xaraya.modules.coretrait');
@@ -26,7 +24,7 @@ sys::import('xaraya.modules.hookstrait');
 /**
  * For documentation purposes only - available via MethodsTrait
  */
-interface MethodsInterface extends ContextInterface, CoreInterface, HooksInterface
+interface MethodsInterface extends CoreInterface, HooksInterface
 {
     public function __construct(string $moduleName, ?ModuleInterface $parent = null);
     /** @return void */
@@ -58,7 +56,6 @@ interface GuiMethodsInterface extends MethodsInterface
  */
 trait MethodsTrait
 {
-    use ContextTrait;
     use CoreTrait;
     use HooksTrait;
 
@@ -77,10 +74,15 @@ trait MethodsTrait
         'checkaccess',
         'getapi',
         'getmoduleid',
-        'getvar',
-        'fetchvar',
+        'getmodvar',
+        //'getvar',
+        'fetch',
         'genauthkey',
         'confirmauthkey',
+        'geturl',
+        'redirect',
+        'translate',
+        'exit',
         // HooksTrait
         'callhooks',
         'notifyhooks',
