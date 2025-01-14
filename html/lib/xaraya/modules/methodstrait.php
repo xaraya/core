@@ -26,9 +26,11 @@ sys::import('xaraya.modules.hookstrait');
  */
 interface MethodsInterface extends CoreInterface, HooksInterface
 {
-    public function __construct(string $moduleName, ?ModuleInterface $parent = null);
+    public function __construct(string $modName, ?ModuleInterface $parent = null);
     /** @return void */
     public function configure();
+    public function getModType(): string;
+    public function setModType(string $modType): void;
     public function hasMethod(string $funcName, string $callType = 'api'): bool;
     public function getModule(): ModuleInterface|null;
 }
@@ -60,6 +62,7 @@ trait MethodsTrait
     use HooksTrait;
 
     protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
+    protected string $moduleType;          // set in configure() by user/admin gui/api traits
     protected int $itemtype = 0;
     protected ?ModuleInterface $parent;
 
@@ -73,9 +76,12 @@ trait MethodsTrait
         // CoreTrait
         'checkaccess',
         'getapi',
-        'getmoduleid',
+        'getmodname',
+        'setmodname',
+        'getitemtype',
+        'setitemtype',
+        'getmodid',
         'getmodvar',
-        //'getvar',
         'fetch',
         'genauthkey',
         'confirmauthkey',
@@ -88,6 +94,8 @@ trait MethodsTrait
         'notifyhooks',
         // MethodsTrait
         'configure',
+        'getmodtype',
+        'setmodtype',
         'hasmethod',
         'getmodule',
         'getmethodclass',
@@ -95,7 +103,7 @@ trait MethodsTrait
         'getnamespace',
         // UserGuiTrait
         'prepareoutput',
-        'rendertemplate',
+        'tplmodule',
         // @todo add new internal methods here + find a better way to do this
     ];
     /** @var array<string, MethodInterface|null> */
@@ -103,23 +111,38 @@ trait MethodsTrait
 
     /**
      * Summary of __construct
-     * @param string $moduleName
      * @param TModule $parent
      */
-    public function __construct(string $moduleName, ?ModuleInterface $parent = null)
+    public function __construct(string $modName, ?ModuleInterface $parent = null)
     {
-        $this->moduleName = $moduleName;
-        $this->parent = $parent;
+        $this->setModName($modName);
+        $this->setModule($parent);
         $this->configure();
     }
 
     /**
-     * Summary of configure
+     * Configure this module class - override if needed
      * @return void
      */
     public function configure()
     {
         // ...
+    }
+
+    /**
+     * Get module type of this module class
+     */
+    public function getModType(): string
+    {
+        return $this->moduleType;
+    }
+
+    /**
+     * Set module type for this module class
+     */
+    public function setModType(string $modType): void
+    {
+        $this->moduleType = $modType;
     }
 
     /**
@@ -159,12 +182,21 @@ trait MethodsTrait
     }
 
     /**
-     * Summary of getModule
+     * Get parent module to access other module classes
      * @return TModule
      */
     public function getModule(): ModuleInterface|null
     {
         return $this->parent;
+    }
+
+    /**
+     * Set parent module for this module class
+     * @param TModule $parent
+     */
+    public function setModule(?ModuleInterface $parent): void
+    {
+        $this->parent = $parent;
     }
 
     /**
@@ -203,7 +235,7 @@ trait MethodsTrait
      */
     protected function getMethodClass(string $className): MethodInterface
     {
-        return new $className($this->moduleName, $this->itemtype, $this);
+        return new $className($this->getModName(), $this->getItemType(), $this);
     }
 
     /**

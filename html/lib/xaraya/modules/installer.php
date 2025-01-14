@@ -55,6 +55,7 @@ class InstallerClass implements InstallerInterface
      */
     public function configure()
     {
+        //$this->setModType('installer');
         $this->objects = [
             // add your DD objects here
             //'sample_object',

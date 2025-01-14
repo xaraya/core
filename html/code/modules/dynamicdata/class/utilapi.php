@@ -40,9 +40,18 @@ class UtilApi implements DatabaseInterface
 {
     use DatabaseTrait;
 
-    protected string $moduleName = 'dynamicdata';
+    protected string $moduleName;          // set in constructor by default
     /** @var array<string, int> */
     protected static array $propTypeIds = [];
+
+    /**
+     * Summary of __construct
+     * @param string $modName
+     */
+    public function __construct(string $modName = 'dynamicdata')
+    {
+        $this->setDbModName($modName);
+    }
 
     /**
      * Summary of getObjectConfig

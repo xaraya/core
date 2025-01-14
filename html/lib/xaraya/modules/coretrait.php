@@ -38,10 +38,14 @@ sys::import('xaraya.context.contexttrait');
  */
 interface CoreInterface extends ContextInterface
 {
-    public function checkAccess(string $mask, string $action = ''): bool;
+    public function checkAccess(string $mask, string|int $action = ''): bool;
     public function getAPI(): UserApiInterface|null;
-    public function getModuleId(): int;
-    public function getModVar(string $name): mixed;
+    public function getModName(): string;
+    public function setModName(string $modName): void;
+    public function getItemType(): int;
+    public function setItemType(int $itemtype = 0): void;
+    public function getModId(): int;
+    public function getModVar(string $varName): mixed;
     //public function getVar(string $name, string $scope = 'module'): mixed;
     /**
      * Summary of fetchVar
@@ -78,10 +82,13 @@ trait CoreTrait
 {
     use ContextTrait;
 
+    /**
+     * Check access based on security mask or module action
+     */
     public function checkAccess(string $mask, string|int $action = ''): bool
     {
-        if (empty($mask) && !empty($action)) {
-            return xarMod::checkAccess($this->moduleName, $action) ? true : false;
+        if (empty($mask) && !empty($action) && is_string($action)) {
+            return xarMod::checkAccess($this->getModName(), $action) ? true : false;
         }
         // @todo use $action for something here, and/or pass moduleName?
         if (is_int($action) && $action === 0) {
@@ -91,44 +98,65 @@ trait CoreTrait
         return xarSecurity::check($mask) ? true : false;
     }
 
+    /**
+     * Get module user API class for this module
+     */
     public function getAPI(): UserApiInterface|null
     {
-        $component = xarMod::getModule($this->moduleName)->getAPI();
+        $component = xarMod::getModule($this->getModName())->getAPI();
         assert($component instanceof UserApiInterface);
         return $component;
     }
 
     /**
-     * Get module registry ID by name
-     * @return int
+     * Get name for this module in module class or method
      */
-    public function getModuleId(): int
+    public function getModName(): string
     {
-        // avoid getting module id from xarMod::getRegID() here
-        //return xarMod::getRegId($this->moduleName);
-        $fileInfo = xarMod::getFileInfo($this->moduleName);
-        return $fileInfo['regid'];
-    }
-
-    public function getModVar(string $name): mixed
-    {
-        return xarModVars::get($this->moduleName, $name);
+        return $this->moduleName;
     }
 
     /**
-     * @todo remove this for the future
+     * Set name for this module in module class or method
      */
-    private function getVar(string $name, string $scope = 'module'): mixed
+    public function setModName(string $modName): void
     {
-        return match ($scope) {
-            //'local' => $name,
-            'module' => xarModVars::get($this->moduleName, $name),
-            'user' => xarUser::getVar($name),
-            'config' => xarConfigVars::get(null, $name),
-            'session' => xarSession::getVar($name),
-            'request' => xarController::getVar($name),
-            default => throw new BadParameterException([$scope], 'Unknown scope #(1)'),
-        };
+        $this->moduleName = $modName;
+    }
+
+    /**
+     * Get item type in this module class
+     */
+    public function getItemType(): int
+    {
+        return $this->itemtype;
+    }
+
+    /**
+     * Set item type in this module class
+     */
+    public function setItemType(int $itemtype = 0): void
+    {
+        $this->itemtype = $itemtype;
+    }
+
+    /**
+     * Get module registry ID for this module
+     */
+    public function getModId(): int
+    {
+        // avoid getting module id from xarMod::getRegID() here
+        //return xarMod::getRegId($this->getModName());
+        $fileInfo = xarMod::getFileInfo($this->getModName());
+        return $fileInfo['regid'];
+    }
+
+    /**
+     * Get module variable for this module
+     */
+    public function getModVar(string $varName): mixed
+    {
+        return xarModVars::get($this->getModName(), $varName);
     }
 
     /**
@@ -147,16 +175,22 @@ trait CoreTrait
         return xarVar::fetch($name, $validation, $value, $defaultValue, $flags, $prep);
     }
 
+    /**
+     * Generate authorisation key for this module
+     */
     public function genAuthKey(): string
     {
         // Note: this should be restricted to GuiMethodsInterface
-        return xarSec::genAuthKey($this->moduleName);
+        return xarSec::genAuthKey($this->getModName());
     }
 
+    /**
+     * Confirm authorisation key for this module
+     */
     public function confirmAuthKey(string $name = 'authid'): bool
     {
         // Note: this should be restricted to GuiMethodsInterface
-        return xarSec::confirmAuthKey($this->moduleName, $name);
+        return xarSec::confirmAuthKey($this->getModName(), $name);
     }
 
     /**
@@ -165,11 +199,11 @@ trait CoreTrait
      */
     public function getUrl(string $modType = 'user', string $funcName = 'main', array $args = []): string
     {
-        return xarController::URL($this->moduleName, $modType, $funcName, $args);
+        return xarController::URL($this->getModName(), $modType, $funcName, $args);
     }
 
     /**
-     * Summary of redirect
+     * Send redirect to url and exit
      * @return bool|never
      */
     public function redirect(string $url, ?int $httpResponse = null)
@@ -178,7 +212,7 @@ trait CoreTrait
     }
 
     /**
-     * Summary of translate
+     * Translate string with optional arguments
      * @param string $rawstring
      * @param mixed ...$args
      */

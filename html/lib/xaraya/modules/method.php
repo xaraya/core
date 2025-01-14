@@ -82,16 +82,16 @@ class MethodClass implements MethodInterface
 
     /**
      * Summary of __construct
-     * @param string $moduleName
+     * @param string $modName
      * @param int $itemtype
      * @param TComponent $parent
      */
-    public function __construct(string $moduleName, int $itemtype = 0, ?MethodsInterface $parent = null)
+    public function __construct(string $modName, int $itemtype = 0, ?MethodsInterface $parent = null)
     {
-        $this->moduleName = $moduleName;
+        $this->setModName($modName);
         // pass along itemtype from module class - @todo is this useful/relevant?
-        $this->itemtype = $itemtype;
-        $this->parent = $parent;
+        $this->setItemType($itemtype);
+        $this->setParent($parent);
         $this->configure();
     }
 
@@ -106,5 +106,13 @@ class MethodClass implements MethodInterface
     public function getParent(): MethodsInterface|null
     {
         return $this->parent;
+    }
+
+    /**
+     * @param TComponent $parent
+     */
+    public function setParent(?MethodsInterface $parent): void
+    {
+        $this->parent = $parent;
     }
 }

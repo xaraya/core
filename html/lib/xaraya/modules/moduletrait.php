@@ -53,7 +53,7 @@ sys::import('xaraya.modules.methodstrait');
  */
 interface ModuleInterface extends ContextInterface
 {
-    public function __construct(string $moduleName);
+    public function __construct(string $modName);
     /** @return void */
     public function configure();
     public function getName(): string;
@@ -89,19 +89,29 @@ trait ModuleTrait
     /** @var array<string, MethodsInterface|null> */
     private array $components = [];
 
-    public function __construct(string $moduleName)
+    public function __construct(string $modName)
     {
-        $this->moduleName = $moduleName;
+        $this->setModName($modName);
         $this->configure();
     }
 
     /**
-     * Summary of configure
+     * Configure module class types - override if needed
      * @return void
      */
     public function configure()
     {
         $this->setClassTypes();
+    }
+
+    public function getModName(): string
+    {
+        return $this->moduleName;
+    }
+
+    public function setModName(string $modName): void
+    {
+        $this->moduleName = $modName;
     }
 
     /**
@@ -113,7 +123,7 @@ trait ModuleTrait
      */
     protected function createComponent(string $className): MethodsInterface
     {
-        return new $className($this->moduleName, $this);
+        return new $className($this->getModName(), $this);
     }
 
     /**
@@ -172,7 +182,7 @@ trait ModuleTrait
 
     public function getName(): string
     {
-        return $this->moduleName;
+        return $this->getModName();
     }
 
     /**
@@ -181,7 +191,7 @@ trait ModuleTrait
      */
     public function getInfo(): array
     {
-        return xarMod::getFileInfo($this->moduleName);
+        return xarMod::getFileInfo($this->getModName());
     }
 
     /**
@@ -192,11 +202,11 @@ trait ModuleTrait
     {
         // Load the database definition if required
         try {
-            sys::import('modules.' . $this->moduleName . '.xartables');
+            sys::import('modules.' . $this->getModName() . '.xartables');
         } catch (Exception $e) {
             return [];
         }
-        $tablefunc = $this->moduleName . '_' . 'xartables';
+        $tablefunc = $this->getModName() . '_' . 'xartables';
         if (function_exists($tablefunc)) {
             // xarDB::importTables($tablefunc());
             return $tablefunc();
@@ -213,7 +223,7 @@ trait ModuleTrait
      */
     public function callAPI($type, $func, $args = [])
     {
-        return xarMod::apiFunc($this->moduleName, $type, $func, $args, $this->getContext());
+        return xarMod::apiFunc($this->getModName(), $type, $func, $args, $this->getContext());
     }
 
     /**
@@ -225,7 +235,7 @@ trait ModuleTrait
      */
     public function callGUI($type, $func, $args = [])
     {
-        return xarMod::guiFunc($this->moduleName, $type, $func, $args, $this->getContext());
+        return xarMod::guiFunc($this->getModName(), $type, $func, $args, $this->getContext());
     }
 
     public function getAPI(): UserApiInterface|null

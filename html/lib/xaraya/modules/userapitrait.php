@@ -71,15 +71,13 @@ trait UserApiTrait
     /** @use MethodsTrait<TModule> */
     use MethodsTrait;
 
-    protected string $moduleType;
-
     /**
      * Summary of configure
      * @return void
      */
     public function configure()
     {
-        $this->moduleType = 'user';
-        xarMod::apiLoad($this->moduleName, $this->moduleType);
+        $this->setModType('user');
+        xarMod::apiLoad($this->getModName(), $this->getModType());
     }
 }

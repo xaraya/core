@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Handle module hook calls
+ * Handle module hook calls - @todo does this make sense?
  *
  * @package core\modules
  * @subpackage modules

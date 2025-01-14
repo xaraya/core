@@ -73,25 +73,25 @@ trait ItemLinksTrait
      */
     public function getItemLinkObjects(): array
     {
-        if (!empty(static::$_itemlinkObjects[$this->moduleName])) {
-            return static::$_itemlinkObjects[$this->moduleName];
+        if (!empty(static::$_itemlinkObjects[$this->getModName()])) {
+            return static::$_itemlinkObjects[$this->getModName()];
         }
-        $moduleId = $this->getModuleId();
+        $moduleId = $this->getModId();
         $objects = DataObjectFactory::getObjects();
-        static::$_itemlinkObjects[$this->moduleName] = [];
+        static::$_itemlinkObjects[$this->getModName()] = [];
         foreach ($objects as $objectid => $objectinfo) {
             /** @var array<string, mixed> $objectinfo */
             if (intval($objectinfo['moduleid']) !== $moduleId) {
                 continue;
             }
-            if (property_exists(static::class, 'itemtype')) {
-                if (intval($objectinfo['itemtype']) > $this->itemtype) {
-                    $this->itemtype = intval($objectinfo['itemtype']);
+            if (method_exists(static::class, 'getItemType')) {
+                if (intval($objectinfo['itemtype']) > $this->getItemType()) {
+                    $this->setItemType(intval($objectinfo['itemtype']));
                 }
             }
-            static::$_itemlinkObjects[$this->moduleName][$objectinfo['name']] = $objectinfo;
+            static::$_itemlinkObjects[$this->getModName()][$objectinfo['name']] = $objectinfo;
         }
-        return static::$_itemlinkObjects[$this->moduleName];
+        return static::$_itemlinkObjects[$this->getModName()];
     }
 
     /**
@@ -172,7 +172,7 @@ trait ItemLinksTrait
         }
 
         // for items managed by this module itself only
-        $moduleId = $this->getModuleId();
+        $moduleId = $this->getModId();
         $args = DataObjectDescriptor::getObjectID([
             'moduleid'  => $moduleId,
             'itemtype'  => $itemtype,

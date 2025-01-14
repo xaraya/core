@@ -77,16 +77,14 @@ trait UserGuiTrait
     /** @use MethodsTrait<TModule> */
     use MethodsTrait;
 
-    protected string $moduleType;
-
     /**
      * Summary of configure
      * @return void
      */
     public function configure()
     {
-        $this->moduleType = 'user';
-        xarMod::load($this->moduleName, $this->moduleType);
+        $this->setModType('user');
+        xarMod::load($this->getModName(), $this->getModType());
     }
 
     /**
@@ -96,6 +94,10 @@ trait UserGuiTrait
      */
     public function main(array $args = [])
     {
+        // use main method class if it exists
+        if (class_exists($this->getClassName('main'))) {
+            return $this->__call('main', [$args]);
+        }
         $output = [
             'args' => $args,
         ];
@@ -110,20 +112,20 @@ trait UserGuiTrait
     protected function prepareOutput(array $data): array
     {
         // Add standard template variables
-        $data['module'] ??= $this->moduleName ?? '';
-        $data['itemtype'] ??= $this->itemtype ?? 0;
+        $data['module'] ??= $this->getModName();
+        $data['itemtype'] ??= $this->getItemType();
         // Pass along the context for xarTpl::module() if needed
         $data['context'] ??= $this->getContext();
         return $data;
     }
 
     /**
-     * Summary of renderTemplate
+     * Summary of tplModule
      * @param string $funcName
      * @param array<string, mixed> $data
      * @return string
      */
-    protected function renderTemplate(string $funcName, array $data): string
+    protected function tplModule(string $funcName, array $data): string
     {
         // Add standard template variables (module, itemtype and context)
         $data = $this->prepareOutput($data);
@@ -135,6 +137,6 @@ trait UserGuiTrait
         }
 
         // Create the output.
-        return xarTpl::module($this->moduleName, $this->moduleType, $funcName, $data, $templateName);
+        return xarTpl::module($this->getModName(), $this->getModType(), $funcName, $data, $templateName);
     }
 }

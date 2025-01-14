@@ -6,7 +6,7 @@
  *
  * In modules, you can specify the database(s) by setting module vars:
  * ```
- * $moduleName = 'library';
+ * $modName = 'library';
  * $databases = [
  *     'test' => [
  *         'name' => 'test',
@@ -16,8 +16,8 @@
  *         // ...other DB params for mysql/mariadb
  *     ],
  * ];
- * xarModVars::set($moduleName, 'databases', serialize($databases));
- * xarModVars::set($moduleName, 'dbName', 'test');
+ * xarModVars::set($modName, 'databases', serialize($databases));
+ * xarModVars::set($modName, 'dbName', 'test');
  * ```
  *
  * In objects, you can specify the DB connection args by setting config: (work in progress)
@@ -69,18 +69,24 @@ sys::import('xaraya.database.external');
 interface DatabaseInterface
 {
     /**
-     * Summary of setModuleName
-     * @param string $moduleName
+     * Summary of getDbModName
+     * @return string
+     */
+    public function getDbModName(): string;
+
+    /**
+     * Summary of setDbModName
+     * @param string $modName
      * @return void
      */
-    public function setModuleName($moduleName);
+    public function setDbModName(string $modName): void;
 
     /**
      * Summary of getDatabases
-     * @param ?string $moduleName
+     * @param ?string $modName
      * @return array<string, mixed>
      */
-    public function getDatabases($moduleName = null);
+    public function getDatabases(?string $modName = null): array;
 
     /**
      * Summary of addDatabase
@@ -89,38 +95,39 @@ interface DatabaseInterface
      * @param bool $save save changes to module vars (default false)
      * @return void
      */
-    public function addDatabase($name, $database, $save = false);
+    public function addDatabase(string $name, ?array $database, bool $save = false): void;
 
     /**
      * Summary of saveDatabases
      * @param ?array<string, mixed> $databases
-     * @param ?string $moduleName
+     * @param ?string $modName
      * @return void
      */
-    public function saveDatabases($databases = null, $moduleName = null);
+    public function saveDatabases(?array $databases = null, ?string $modName = null): void;
 
     /**
      * Summary of connectDatabase
      * @param string $name
-     * @return int|null
+     * @return int|string|null
      */
-    public function connectDatabase($name);
+    public function connectDatabase(string $name): int|string|null;
 
     /**
      * Callable specified in object config to get dbConnArgs for DataObjectMaster
      * Change this if you want to use object-specific database connections
-     * @param mixed $object
+     * @param ?object $object
      * @return array<string, mixed>
      */
-    public function getDbConnArgs($object = null);
+    public function getDbConnArgs(?object $object = null): array;
 
     /**
      * Summary of getDatabaseDSN
      * @param string $name
+     * @param ?string $modName
      * @throws BadParameterException
      * @return array<string, mixed>
      */
-    public function getDatabaseDSN($name);
+    public function getDatabaseDSN(string $name, ?string $modName = null): array;
 
     /**
      * Summary of getCurrentDatabase
@@ -140,9 +147,9 @@ interface DatabaseInterface
     /**
      * Summary of getDatabaseTables
      * @param string $name
-     * @return array<mixed>
+     * @return array<string>
      */
-    public function getDatabaseTables($name);
+    public function getDatabaseTables(string $name): array;
 }
 
 /**
@@ -172,44 +179,66 @@ trait DatabaseTrait
     protected static array $_connections = [];
 
     /**
+     * Summary of getDbModName
+     * @return string
+     */
+    public function getDbModName(): string
+    {
+        // @todo we rely on the same property as Xaraya\Modules\CoreTrait here (on purpose)
+        return $this->moduleName;
+    }
+
+    /**
+     * Summary of setDbModName
+     * @param string $modName
+     * @return void
+     */
+    public function setDbModName(string $modName): void
+    {
+        $this->moduleName ??= $modName;
+        // reset list of databases in DatabaseTrait
+        if ($modName !== $this->moduleName) {
+            static::$_databases = [];
+        }
+        $this->moduleName = $modName;
+    }
+
+    /**
      * Summary of setModuleName
      * @param string $moduleName
+     * @deprecated 2.6.0 use setDbModName() instead
      * @return void
      */
     public function setModuleName($moduleName)
     {
-        // reset list of databases in DatabaseTrait
-        if ($moduleName !== $this->moduleName) {
-            static::$_databases = [];
-        }
-        $this->moduleName = $moduleName;
+        $this->setDbModName($moduleName);
     }
 
     /**
      * Summary of getDatabases
-     * @param ?string $moduleName
+     * @param ?string $modName
      * @return array<string, mixed>
      */
-    public function getDatabases($moduleName = null)
+    public function getDatabases(?string $modName = null): array
     {
-        if (!empty($moduleName)) {
-            $this->setModuleName($moduleName);
+        if (!empty($modName)) {
+            $this->setDbModName($modName);
         }
         if (empty(static::$_databases)) {
             $allDatabases = [];
             if (xarCoreCache::isCached('DynamicData', 'Databases')) {
                 $allDatabases = xarCoreCache::getCached('DynamicData', 'Databases');
             }
-            if (!empty($allDatabases[$this->moduleName])) {
-                static::$_databases = $allDatabases[$this->moduleName];
+            if (!empty($allDatabases[$this->getDbModName()])) {
+                static::$_databases = $allDatabases[$this->getDbModName()];
             } else {
-                $databases = unserialize(xarModVars::get($this->moduleName, 'databases') ?? '');
+                $databases = unserialize(xarModVars::get($this->getDbModName(), 'databases') ?? '');
                 if (empty($databases)) {
                     static::$_databases = [];
                 } else {
                     static::$_databases = $databases;
                 }
-                $allDatabases[$this->moduleName] = static::$_databases;
+                $allDatabases[$this->getDbModName()] = static::$_databases;
                 xarCoreCache::setCached('DynamicData', 'Databases', $allDatabases);
             }
         }
@@ -223,7 +252,7 @@ trait DatabaseTrait
      * @param bool $save save changes to module vars (default false)
      * @return void
      */
-    public function addDatabase($name, $database, $save = false)
+    public function addDatabase(string $name, ?array $database = null, bool $save = false): void
     {
         // allow starting with un-initialized $_databases = before calling getDatabases()
         static::$_databases ??= [];
@@ -242,19 +271,19 @@ trait DatabaseTrait
     /**
      * Summary of saveDatabases
      * @param ?array<string, mixed> $databases
-     * @param ?string $moduleName
+     * @param ?string $modName
      * @return void
      */
-    public function saveDatabases($databases = null, $moduleName = null)
+    public function saveDatabases(?array $databases = null, ?string $modName = null): void
     {
         $databases ??= static::$_databases;
-        $moduleName ??= $this->moduleName;
-        xarModVars::set($moduleName, 'databases', serialize($databases));
+        $modName ??= $this->getDbModName();
+        xarModVars::set($modName, 'databases', serialize($databases));
         $allDatabases = [];
         if (xarCoreCache::isCached('DynamicData', 'Databases')) {
             $allDatabases = xarCoreCache::getCached('DynamicData', 'Databases');
         }
-        $allDatabases[$moduleName] = $databases;
+        $allDatabases[$modName] = $databases;
         xarCoreCache::setCached('DynamicData', 'Databases', $allDatabases);
         // Saved in DD > Utilities > DB Connections = xaradmin/dbconfig.php for all modules - UtilApi::getAllDatabases()
         //xarCoreCache::saveCached('DynamicData', 'Databases');
@@ -265,7 +294,7 @@ trait DatabaseTrait
      * @param string $name
      * @return int|string|null
      */
-    public function connectDatabase($name)
+    public function connectDatabase(string $name): int|string|null
     {
         if (!empty(static::$_connections[$name])) {
             return static::$_connections[$name];
@@ -284,10 +313,10 @@ trait DatabaseTrait
     /**
      * Callable specified in object config to get dbConnArgs for DataObjectMaster
      * Change this if you want to use object-specific database connections
-     * @param mixed $object
+     * @param ?object $object
      * @return array<string, mixed>
      */
-    public function getDbConnArgs($object = null)
+    public function getDbConnArgs(?object $object = null): array
     {
         $context = null;
         if (is_object($object) && method_exists($object, 'getContext')) {
@@ -303,16 +332,16 @@ trait DatabaseTrait
     /**
      * Summary of getDatabaseDSN
      * @param string $name
-     * @param ?string $moduleName
+     * @param ?string $modName
      * @throws BadParameterException
      * @return array<string, mixed>
      */
-    public function getDatabaseDSN($name, $moduleName = null)
+    public function getDatabaseDSN(string $name, ?string $modName = null): array
     {
         if ($name == 'memory') {
             return ['databaseType' => 'sqlite3', 'databaseName' => ':memory:'];
         }
-        $databases = $this->getDatabases($moduleName);
+        $databases = $this->getDatabases($modName);
         if (!isset($databases[$name])) {
             throw new BadParameterException($name, 'Invalid database name #(1)');
         }
@@ -341,18 +370,18 @@ trait DatabaseTrait
             $userId = $context->getUserId();
             if (!empty($userId)) {
                 // @todo use user context?
-                $name = xarModUserVars::get($this->moduleName, 'dbName', $userId);
+                $name = xarModUserVars::get($this->getDbModName(), 'dbName', $userId);
             } else {
                 // @todo use session context?
-                $name = xarSession::getVar($this->moduleName . ':dbName');
+                $name = xarSession::getVar($this->getDbModName() . ':dbName');
             }
         } elseif (xarUser::isLoggedIn()) {
-            $name = xarModUserVars::get($this->moduleName, 'dbName');
+            $name = xarModUserVars::get($this->getDbModName(), 'dbName');
         } else {
-            $name = xarSession::getVar($this->moduleName . ':dbName');
+            $name = xarSession::getVar($this->getDbModName() . ':dbName');
         }
         if (!isset($name)) {
-            $name = xarModVars::get($this->moduleName, 'dbName');
+            $name = xarModVars::get($this->getDbModName(), 'dbName');
         }
         return $name;
     }
@@ -369,24 +398,24 @@ trait DatabaseTrait
             $userId = $context->getUserId();
             if (!empty($userId)) {
                 // @todo use user context?
-                xarModUserVars::set($this->moduleName, 'dbName', $name, $userId);
+                xarModUserVars::set($this->getDbModName(), 'dbName', $name, $userId);
             } else {
                 // @todo use session context?
-                xarSession::setVar($this->moduleName . ':dbName', $name);
+                xarSession::setVar($this->getDbModName() . ':dbName', $name);
             }
         } elseif (xarUser::isLoggedIn()) {
-            xarModUserVars::set($this->moduleName, 'dbName', $name);
+            xarModUserVars::set($this->getDbModName(), 'dbName', $name);
         } else {
-            xarSession::setVar($this->moduleName . ':dbName', $name);
+            xarSession::setVar($this->getDbModName() . ':dbName', $name);
         }
     }
 
     /**
      * Summary of getDatabaseTables
      * @param string $name
-     * @return array<mixed>
+     * @return array<string>
      */
-    public function getDatabaseTables($name)
+    public function getDatabaseTables(string $name): array
     {
         $result = [];
         $dbConnIndex = $this->connectDatabase($name);

@@ -84,6 +84,7 @@ trait InstallerTrait
      */
     public function configure()
     {
+        //$this->setModType('installer');
         $this->objects = [
             // add your DD objects here
             //'sample_object',
@@ -123,7 +124,7 @@ trait InstallerTrait
      */
     public function init()
     {
-        $module = $this->moduleName;
+        $module = $this->getModName();
         $objects = $this->objects ?? [];
         if (!xarMod::apiFunc('modules', 'admin', 'standardinstall', ['module' => $module, 'objects' => $objects])) {
             return false;
@@ -169,7 +170,7 @@ trait InstallerTrait
      */
     public function delete()
     {
-        $module = $this->moduleName;
+        $module = $this->getModName();
         return xarMod::apiFunc('modules', 'admin', 'standarddeinstall', ['module' => $module]);
     }
 }

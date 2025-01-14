@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Handle module hook calls
+ * Handle module hook calls - @todo does this make sense?
  *
  * @package core\modules
  * @subpackage modules
@@ -58,6 +58,7 @@ trait HooksTrait
 
     /**
      * Wrapper for xarModHooks::call() - only for migration
+     * @see xarHooks::call()
      * @param mixed $scope
      * @param mixed $action
      * @param mixed $itemid
@@ -66,13 +67,13 @@ trait HooksTrait
      */
     public function callHooks($scope, $action, $itemid, $extraInfo = null): mixed
     {
-        //return xarModHooks::call($scope, $action, $itemid, $extraInfo, $this->moduleName, $this->itemtype, $this->getContext());
+        //return xarModHooks::call($scope, $action, $itemid, $extraInfo, $this->getModName(), $this->getItemType(), $this->getContext());
         // scope and action are concatenated to form the name of the hook event
         $event = ucfirst($scope) . ucfirst($action);
         $extraInfo ??= [];
         $extraInfo['itemid'] ??= $itemid;
-        $extraInfo['module'] ??= $this->moduleName;
-        $extraInfo['itemtype'] ??= $this->itemtype;
+        $extraInfo['module'] ??= $this->getModName();
+        $extraInfo['itemtype'] ??= $this->getItemType();
         // skip legacy format here - handled by HookSubject if needed
         //$args = [
         //    'objectid' => $itemid,
@@ -84,6 +85,7 @@ trait HooksTrait
 
     /**
      * Wrapper for xarHooks::notify() - only for migration
+     * @see xarHooks::notify()
      * @param string $event
      * @param mixed $info
      * @return mixed output from hooks, or null if there are no hooks
@@ -91,8 +93,8 @@ trait HooksTrait
     public function notifyHooks($event, $info = []): mixed
     {
         $info['itemid'] ??= null;
-        $info['module'] ??= $this->moduleName;
-        $info['itemtype'] ??= $this->itemtype;
+        $info['module'] ??= $this->getModName();
+        $info['itemtype'] ??= $this->getItemType();
         return xarHooks::notify($event, $info, $this->getContext());
     }
 }
