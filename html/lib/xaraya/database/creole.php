@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Creole wrapper class
  * @todo stop extending Creole for xarDB_Creole class
@@ -24,26 +25,38 @@ class xarDB_Creole extends xarObject implements xarDB_Interface
 {
     /**
      * Map of built-in drivers.
-     * @var array Hash mapping phptype => driver class (in dot-path notation, e.g. 'mysql' => 'creole.drivers.mysql.MySQLConnection').
+     * @var array<string, string> Hash mapping phptype => driver class (in dot-path notation, e.g. 'mysql' => 'creole.drivers.mysql.MySQLConnection').
      */
-    public static $driverMap = array(   'mysql'      => 'creole.drivers.mysql.MySQLConnection',
-                                        'mysqli'     => 'creole.drivers.mysqli.MySQLiConnection',
-                                        'pgsql'      => 'creole.drivers.pgsql.PgSQLConnection',
-                                        'sqlite'     => 'creole.drivers.sqlite.SQLiteConnection',
-                                        'oracle'     => 'creole.drivers.oracle.OCI8Connection',
-                                        'mssql'      => 'creole.drivers.mssql.MSSQLConnection',
-                                        'odbc'       => 'creole.drivers.odbc.ODBCConnection',
-                                        'pdosqlite'  => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
-                                        'pdosqlite2' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
-                                        'sqlite3'    => 'creole.drivers.sqlite.SQLiteConnection',
-                                       );
+    public static $driverMap = [
+        'mysql'      => 'creole.drivers.mysql.MySQLConnection',
+        'mysqli'     => 'creole.drivers.mysqli.MySQLiConnection',
+        'pgsql'      => 'creole.drivers.pgsql.PgSQLConnection',
+        'sqlite'     => 'creole.drivers.sqlite.SQLiteConnection',
+        'oracle'     => 'creole.drivers.oracle.OCI8Connection',
+        'mssql'      => 'creole.drivers.mssql.MSSQLConnection',
+        'odbc'       => 'creole.drivers.odbc.ODBCConnection',
+        'pdosqlite'  => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+        'pdosqlite2' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+        'sqlite3'    => 'creole.drivers.sqlite.SQLiteConnection',
+    ];
 
+    /**
+     * Summary of getDrivers
+     * @return array<string, string>
+     */
     public static function getDrivers()
     {
-    	return self::$driverMap;
+        return self::$driverMap;
     }
 
     // CHECKME: Do we need this? I don't think so...
+    /**
+     * Summary of configure
+     * @param array<mixed> $dsn
+     * @param ?int $flags
+     * @param string $prefix
+     * @return void
+     */
     public static function configure($dsn, $flags = Creole::COMPAT_ASSOC_LOWER, $prefix = 'xar')
     {
         $persistent = !empty($dsn['persistent']) ? true : false;
@@ -56,6 +69,11 @@ class xarDB_Creole extends xarObject implements xarDB_Interface
         //self::setPrefix($prefix);
     }
 
+    /**
+     * Summary of isIndexExternal
+     * @param mixed $index
+     * @return bool
+     */
     public static function isIndexExternal($index = 0)
     {
         return false;
@@ -63,18 +81,20 @@ class xarDB_Creole extends xarObject implements xarDB_Interface
 
     /**
      * Get the flags in a proper form for this middleware
+     * @param array<mixed> $args
+     * @return mixed
      */
-    public static function getFlags(Array $args=array())
-     {
+    public static function getFlags(array $args = [])
+    {
         $flags = 0;
         if (isset($args['persistent']) && ! empty($args['persistent'])) {
             $flags |= Creole::PERSISTENT;
         }
-/*
+        /*
         if (isset($args['compat_assoc_lower']) && ! empty($args['compat_assoc_lower'])) {
             $flags |= Creole::COMPAT_ASSOC_LOWER;
         }
-*/
+        */
         if (isset($args['compat_rtrim_string']) && ! empty($args['compat_rtrim_string'])) {
             $flags |= Creole::COMPAT_RTRIM_STRING;
         }
@@ -87,15 +107,18 @@ class xarDB_Creole extends xarObject implements xarDB_Interface
         //         in creating the database schema case sensitive in the first
         //         place. Unfortunately, that is just not portable.
         $flags |= Creole::COMPAT_ASSOC_LOWER;
-        
+
         return $flags;
-     }
-     
+    }
+
     /**
      * Get the middleware's connection based on dsn and flags
+     * @param array<mixed> $dsn
+     * @param mixed $flags
+     * @throws \SQLException
+     * @return Connection
      */
-
-    public static function getConnection(Array $dsn, $flags = 0)
+    public static function getConnection(array $dsn, $flags = 0)
     {
         // support "catchall" drivers which will themselves handle the details of connecting
         // using the proper RDBMS driver.
@@ -120,13 +143,13 @@ class xarDB_Creole extends xarObject implements xarDB_Interface
 
         try {
             $connection->connect($dsn, $flags);
-        } catch(SQLException $sqle) {
+        } catch (SQLException $sqle) {
             $sqle->setUserInfo($dsn);
             throw $sqle;
         }
         return $connection;
     }
-    
+
     /**
      * Include once a file specified in DOT notation.
      * Package notation is expected to be relative to a location
@@ -167,7 +190,7 @@ class xarDB_Creole extends xarObject implements xarDB_Interface
     public static function getTypeMap()
     {
         sys::import('creole.CreoleTypes');
-        return array(
+        return [
             CreoleTypes::getCreoleCode('BOOLEAN')       => 'boolean',
             CreoleTypes::getCreoleCode('VARCHAR')       => 'text',
             CreoleTypes::getCreoleCode('LONGVARCHAR')   => 'text',
@@ -190,7 +213,7 @@ class xarDB_Creole extends xarObject implements xarDB_Interface
             CreoleTypes::getCreoleCode('VARBINARY')     => 'binary',
             CreoleTypes::getCreoleCode('BLOB')          => 'binary',
             CreoleTypes::getCreoleCode('BINARY')        => 'binary',
-            CreoleTypes::getCreoleCode('LONGVARBINARY') => 'binary'
-        );
+            CreoleTypes::getCreoleCode('LONGVARBINARY') => 'binary',
+        ];
     }
 }

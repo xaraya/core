@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Provide an external database connection via MongoDB PHP Library
  *
@@ -94,6 +95,7 @@ class MongoDBDriver
         //$document = $collection->findOne([], ['sort' => ['_id' => -1]]);
         $result = [];
         if (!empty($document)) {
+            assert($document instanceof \ArrayObject);
             $item = $document->getArrayCopy();
             foreach ($item as $key => $value) {
                 if (is_object($value)) {

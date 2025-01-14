@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Provide an external database connection to something via PDO/DBAL/... DB driver
  *
@@ -39,30 +40,55 @@ class ExternalDatabase implements xarDB_Interface
     // if we want to extend this class per DB extension someday + override $connectionClass
     public static string $connectionClass = "ExternalConnection";
 
+    /**
+     * Summary of getPrefix
+     * @return string
+     */
     public static function getPrefix()
     {
         // not relevant here?
         return static::$prefix;
     }
 
+    /**
+     * Summary of setPrefix
+     * @param mixed $prefix
+     * @return void
+     */
     public static function setPrefix($prefix)
     {
         // not relevant here?
         static::$prefix = $prefix;
     }
 
+    /**
+     * Summary of newConn
+     * @param array<mixed> $args
+     * @return object
+     */
     public static function newConn(array $args = null)
     {
         $conn = static::getConnection($args);
         return $conn;
     }
 
+    /**
+     * Summary of getTables
+     * @throws \BadMethodCallException
+     * @return never
+     */
     public static function &getTables()
     {
         // this will need to come from the native connection
         throw new \BadMethodCallException(static::ERROR_MSG);
     }
 
+    /**
+     * Summary of importTables
+     * @param array<mixed> $tables
+     * @throws \BadMethodCallException
+     * @return never
+     */
     public static function importTables(array $tables = [])
     {
         // not relevant here
@@ -189,6 +215,12 @@ class ExternalDatabase implements xarDB_Interface
     //public static function configure($dsn, $flags = -1, $prefix = 'xar');
     //private static function setFirstDSN($dsn = null);
     //private static function setFirstFlags($flags = null);
+    /**
+     * Summary of getConn
+     * @param mixed $index
+     * @throws \Exception
+     * @return object|\Connection|\PDOConnection
+     */
     public static function &getConn($index = '')
     {
         if (is_numeric($index)) {
@@ -200,6 +232,11 @@ class ExternalDatabase implements xarDB_Interface
         throw new \Exception('Invalid db connection index ' . $index);
     }
 
+    /**
+     * Summary of hasConn
+     * @param mixed $index
+     * @return bool
+     */
     public static function hasConn($index = '')
     {
         if (is_numeric($index)) {
@@ -211,12 +248,21 @@ class ExternalDatabase implements xarDB_Interface
         return false;
     }
 
+    /**
+     * Summary of getConnIndex
+     * @return string
+     */
     public static function getConnIndex()
     {
         // index of the latest connection
         return self::$latest;
     }
 
+    /**
+     * Summary of isIndexExternal
+     * @param mixed $index
+     * @return bool
+     */
     public static function isIndexExternal($index = '')
     {
         if (!is_numeric($index) && str_starts_with($index, static::INDEX_PREFIX)) {
@@ -227,12 +273,12 @@ class ExternalDatabase implements xarDB_Interface
 
     /**
      * Summary of getConnection
-     * @param mixed $dsn
+     * @param array<mixed> $dsn
      * @param mixed $flags
      * @uses \sys::autoload()
      * @return object
      */
-    public static function getConnection($dsn, $flags = [])
+    public static function getConnection(array $dsn, $flags = [])
     {
         // if we want to extend this class per DB extension someday + override $connectionClass
         $dsn['external'] ??= 'default';
@@ -266,6 +312,11 @@ class ExternalDatabase implements xarDB_Interface
         return $conn;
     }
 
+    /**
+     * Summary of getTypeMap
+     * @throws \BadMethodCallException
+     * @return never
+     */
     public static function getTypeMap()
     {
         // this will need to come from the native connection
@@ -395,10 +446,10 @@ abstract class ExternalResultSet implements ResultSetInterface
     abstract public function getRow(?int $fetchmode = null);
     abstract public function getRecordCount();
     abstract public function close();
-    abstract public function get($column=null);
-    abstract public function getArray($column=null);
-    abstract public function getBoolean($column=null);
-    abstract public function getFloat($column=null);
-    abstract public function getInt($column=null);
-    abstract public function getString($column=null);
+    abstract public function get($column = null);
+    abstract public function getArray($column = null);
+    abstract public function getBoolean($column = null);
+    abstract public function getFloat($column = null);
+    abstract public function getInt($column = null);
+    abstract public function getString($column = null);
 }

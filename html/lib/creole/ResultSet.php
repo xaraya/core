@@ -275,7 +275,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * The value of the column is unserialized & returned as an array.  The generic case of this function is
      * very PHP-specific.  Other drivers (e.g. Postgres) will format values into their native array format.
      * @param mixed $column Column name (string) or index (int) starting with 1 (if ResultSet::FETCHMODE_NUM was used).
-     * @return array<mixed> value or null if database returned null.
+     * @return array<mixed>|null value or null if database returned null.
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
 	// XARAYA MODIFICATION
@@ -286,7 +286,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Returns value translated to boolean.
      * Default is to map 0 => false, 1 => true, but some database drivers may override this behavior.
      * @param mixed $column Column name (string) or index (int) starting with 1 (if ResultSet::FETCHMODE_NUM was used).
-     * @return boolean value or null if database returned null.
+     * @return boolean|null value or null if database returned null.
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
 	// XARAYA MODIFICATION
@@ -297,7 +297,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Returns Blob with contents of column value.
      *
      * @param mixed $column Column name (string) or index (int) starting with 1 (if ResultSet::FETCHMODE_NUM was used).
-     * @return Blob New Blob with data from column or null if database returned null.
+     * @return Blob|null New Blob with data from column or null if database returned null.
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
     public function getBlob($column);
@@ -306,7 +306,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Returns Clob with contents of column value.
      *
      * @param mixed $column Column name (string) or index (int) starting with 1 (if ResultSet::FETCHMODE_NUM was used).
-     * @return Clob New Clob object with data from column or null if database returned null.
+     * @return Clob|null New Clob object with data from column or null if database returned null.
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
     public function getClob($column);
@@ -330,7 +330,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Returns value cast as a float (in PHP this is same as double).
      *
      * @param mixed $column Column name (string) or index (int) starting with 1 (if ResultSet::FETCHMODE_NUM was used).
-     * @return float value or null if database returned null
+     * @return float|null value or null if database returned null
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
 	// XARAYA MODIFICATION
@@ -341,7 +341,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Returns value cast as integer.
      *
      * @param mixed $column Column name (string) or index (int) starting with 1 (if ResultSet::FETCHMODE_NUM was used).
-     * @return int value or null if database returned null
+     * @return int|null value or null if database returned null
      * @see getInteger()
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
@@ -353,7 +353,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Returns value cast as string.
      *
      * @param mixed $column Column name (string) or index (int) starting with 1 (if ResultSet::FETCHMODE_NUM was used).
-     * @return string value or null if database returned null
+     * @return string|null value or null if database returned null
      * @see get()
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */

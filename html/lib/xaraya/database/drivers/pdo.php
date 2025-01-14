@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Provide an external database connection via PHP PDO
  *
