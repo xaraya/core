@@ -38,7 +38,7 @@ sys::import('xaraya.context.contexttrait');
  */
 interface CoreInterface extends ContextInterface
 {
-    public function checkAccess(string $mask, string|int $action = ''): bool;
+    public function checkAccess(string $mask, string|int $action = '', mixed $instance = null): bool;
     public function getAPI(): UserApiInterface|null;
     public function getModName(): string;
     public function setModName(string $modName): void;
@@ -46,6 +46,7 @@ interface CoreInterface extends ContextInterface
     public function setItemType(int $itemtype = 0): void;
     public function getModId(): int;
     public function getModVar(string $varName): mixed;
+    public function setModVar(string $varName, mixed $value): bool;
     //public function getVar(string $name, string $scope = 'module'): mixed;
     /**
      * Summary of fetchVar
@@ -85,16 +86,23 @@ trait CoreTrait
     /**
      * Check access based on security mask or module action
      */
-    public function checkAccess(string $mask, string|int $action = ''): bool
+    public function checkAccess(string $mask, string|int $action = '', mixed $instance = null): bool
     {
+        // if the mask is empty, use xarMod::checkAccess() - currently not used
         if (empty($mask) && !empty($action) && is_string($action)) {
             return xarMod::checkAccess($this->getModName(), $action) ? true : false;
         }
-        // @todo use $action for something here, and/or pass moduleName?
+        // @todo mainly legacy hook module - remove 2nd argument in call later?
         if (is_int($action) && $action === 0) {
-            // we want to generate an exception here
+            // we don't want to redirect here
             return xarSecurity::check($mask, 0) ? true : false;
         }
+        // xarSecurity::check('ReadHitcountItem', 1, 'Item', "$modname:$itemtype:$objectid") etc.
+        //if (is_string($action)) {
+        //    // @todo how do we deal with $catch here? we have both 0 and 1 in modules
+        //    return xarSecurity::check($mask, 1, $action, $instance) ? true : false;
+        //}
+        // @todo use $action for something here, and/or pass moduleName?
         return xarSecurity::check($mask) ? true : false;
     }
 
@@ -157,6 +165,14 @@ trait CoreTrait
     public function getModVar(string $varName): mixed
     {
         return xarModVars::get($this->getModName(), $varName);
+    }
+
+    /**
+     * Set module variable for this module
+     */
+    public function setModVar(string $varName, mixed $value): bool
+    {
+        return xarModVars::set($this->getModName(), $varName, $value);
     }
 
     /**

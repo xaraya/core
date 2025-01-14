@@ -303,6 +303,13 @@ trait ModuleTrait
         if (isset($this->classtypes[$modType])) {
             return $this->classtypes[$modType];
         }
+        // fall back to finding module class in same namespace,
+        // e.g. renderer -> Xaraya\Modules\MyFancyModule\Renderer
+        $classType = ucfirst($modType);
+        if ($this->hasComponent($classType)) {
+            $this->classtypes[$modType] = $classType;
+            return $this->classtypes[$modType];
+        }
         return null;
     }
 
