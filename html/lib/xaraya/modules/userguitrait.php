@@ -109,7 +109,7 @@ trait UserGuiTrait
      * @param array<string, mixed> $data
      * @return array<string, mixed>
      */
-    protected function prepareOutput(array $data): array
+    protected function prepareOutput(array $data = []): array
     {
         // Add standard template variables
         $data['module'] ??= $this->getModName();
@@ -125,7 +125,7 @@ trait UserGuiTrait
      * @param array<string, mixed> $data
      * @return string
      */
-    protected function tplModule(string $funcName, array $data): string
+    protected function tplModule(string $funcName, array $data = []): string
     {
         // Add standard template variables (module, itemtype and context)
         $data = $this->prepareOutput($data);

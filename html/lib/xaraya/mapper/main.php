@@ -352,15 +352,18 @@ class xarController extends xarObject
             $httpResponse = 302;
         }
 
-        // Pass along redirectURL and bail out if we already sent headers
-        if (headers_sent() == true) {
+        // Pass along redirectURL and bail out if we have a callback
+        if (!empty(self::$redirectTo) && is_callable(self::$redirectTo)) {
             if (!empty($context)) {
                 $context['redirectURL'] = $redirectURL;
                 $context->setResponse(null, $httpResponse);
             }
-            if (!empty(self::$redirectTo) && is_callable(self::$redirectTo)) {
-                call_user_func(self::$redirectTo, $redirectURL, $httpResponse, $context);
-            }
+            call_user_func(self::$redirectTo, $redirectURL, $httpResponse, $context);
+            return false;
+        }
+
+        // Bail out if we already sent headers
+        if (headers_sent() == true) {
             return false;
         }
 
@@ -477,6 +480,33 @@ class xarController extends xarObject
             self::$dispatcher = new xarDispatcher();
         }
         return self::$dispatcher;
+    }
+
+    /**
+     * Summary of setCallback
+     * @param string $name
+     * @param ?callable $callable
+     * @return void
+     */
+    public static function setCallback($name, $callable)
+    {
+        if (!in_array($name, ['buildUri', 'redirectTo', 'forbiddenTo', 'notFoundTo', 'badRequestTo'])) {
+            return;
+        }
+        self::${$name} = $callable;
+    }
+
+    /**
+     * Summary of getCallback
+     * @param string $name
+     * @return callable|null
+     */
+    public static function getCallback($name)
+    {
+        if (!in_array($name, ['buildUri', 'redirectTo', 'forbiddenTo', 'notFoundTo', 'badRequestTo'])) {
+            return;
+        }
+        return self::${$name};
     }
 
     /**

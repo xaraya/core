@@ -1,37 +1,12 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-use Xaraya\Context\Context;
-use Xaraya\Context\SessionContext;
+use Xaraya\Modules\TestHelper;
 use Xaraya\DataObject\UserApi;
 
 //use Xaraya\Sessions\SessionHandler;
 
-final class UserApiTest extends TestCase
+final class UserApiTest extends TestHelper
 {
-    public static function setUpBeforeClass(): void
-    {
-        // initialize bootstrap
-        sys::init();
-        // initialize caching - delay until we need results
-        xarCache::init();
-        // initialize loggers
-        xarLog::init();
-        // initialize database - delay until caching fails
-        xarDatabase::init();
-        // initialize modules
-        //xarMod::init();
-        // initialize users
-        //xarUser::init();
-        xarSession::setSessionClass(SessionContext::class);
-    }
-
-    public static function tearDownAfterClass(): void {}
-
-    protected function setUp(): void {}
-
-    protected function tearDown(): void {}
-
     public function testUserApi(): void
     {
         $expected = UserApi::class;
@@ -73,7 +48,7 @@ final class UserApiTest extends TestCase
 
     public function testUserApiTestCall(): void
     {
-        $context = new Context(['source' => __METHOD__]);
+        $context = $this->createContext(['source' => __METHOD__]);
         $userapi = xarMod::getAPI(modName: 'dynamicdata');
         $userapi->setContext($context);
 
@@ -146,7 +121,7 @@ final class UserApiTest extends TestCase
         $callable = xarMod::getModuleClassMethod('dynamicdata', 'userapi', 'test_call');
         $this->assertTrue(is_callable($callable));
 
-        $context = new Context(['source' => __METHOD__]);
+        $context = $this->createContext(['source' => __METHOD__]);
         $args = ['hello' => 'world'];
         $expected = array_merge($args, [
             'context' => $context,

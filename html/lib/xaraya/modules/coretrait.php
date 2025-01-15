@@ -39,7 +39,6 @@ sys::import('xaraya.context.contexttrait');
 interface CoreInterface extends ContextInterface
 {
     public function checkAccess(string $mask, string|int $action = '', mixed $instance = null): bool;
-    public function getAPI(): UserApiInterface|null;
     public function getModName(): string;
     public function setModName(string $modName): void;
     public function getItemType(): int;
@@ -95,25 +94,26 @@ trait CoreTrait
         // @todo mainly legacy hook module - remove 2nd argument in call later?
         if (is_int($action) && $action === 0) {
             // we don't want to redirect here
-            return xarSecurity::check($mask, 0) ? true : false;
+            return $this->callSecurityCheck($mask, 0);
         }
         // xarSecurity::check('ReadHitcountItem', 1, 'Item', "$modname:$itemtype:$objectid") etc.
         //if (is_string($action)) {
         //    // @todo how do we deal with $catch here? we have both 0 and 1 in modules
-        //    return xarSecurity::check($mask, 1, $action, $instance) ? true : false;
+        //    return $this->callSecurityCheck($mask, 1, $action, $instance);
         //}
-        // @todo use $action for something here, and/or pass moduleName?
-        return xarSecurity::check($mask) ? true : false;
+        return $this->callSecurityCheck($mask);
     }
 
     /**
-     * Get module user API class for this module
+     * Call xarSecurity::check()
+     * @param string $mask
+     * @param int $catch
+     * @return bool|never
      */
-    public function getAPI(): UserApiInterface|null
+    protected function callSecurityCheck(string $mask, int $catch = 1, string $component = '', string $instance = '')
     {
-        $component = xarMod::getModule($this->getModName())->getAPI();
-        assert($component instanceof UserApiInterface);
-        return $component;
+        // @todo handle redirect() + exit() in case of failure
+        return xarSecurity::check($mask, $catch, $component, $instance) ? true : false;
     }
 
     /**
@@ -238,7 +238,7 @@ trait CoreTrait
     }
 
     /**
-     * Override exit() for non-blocking servers, php unit tests or elsewhere
+     * Call exit() - override for non-blocking servers, php unit tests or elsewhere
      * @return void|never
      */
     public function exit(int|string $status = 0)

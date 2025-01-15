@@ -54,6 +54,24 @@ sys::import('xaraya.modules.moduletrait');
 
 /**
  * Handle module classes via xarMod::getModule()
+ *
+ * Module methods:
+ * - ... all other module functions implemented here
+ * - getName() Get module name
+ * - getInfo() Get info from xarversion.php
+ * - getTables() Get tables from xartables.php
+ *
+ * Available methods:
+ * - configure() Configure module class types - override if needed
+ * - getAPI() Get module class for user api functions
+ * - getGUI() Get module class for user gui functions
+ * - getAdminAPI() Get module class for admin api functions
+ * - getAdminGUI() Get module class for admin gui functions
+ * - getInstaller() Get module class for installer functions
+ * - setClassTypes() Set module class type for all supported modTypes (user, userapi, admin, ...)
+ * - getClassType($modType) Is there a module class type for this modType
+ * - getCallableMethod($modType, $funcName, $callType = 'api') Get callable method for this modType & funcName
+ *
  */
 class ModuleClass implements ModuleInterface
 {

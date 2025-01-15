@@ -28,18 +28,4 @@ class AdminGui implements AdminGuiInterface
 {
     /** @use AdminGuiTrait<Module> */
     use AdminGuiTrait;
-
-    /**
-     * Test method to verify that we can override checkAccess()
-     * @param array<string, mixed> $args
-     * @return array<mixed>|void
-     */
-    public function test_with_access(array $args = [])
-    {
-        // Security
-        if (!$this->checkAccess('EditDynamicData')) {
-            return;
-        }
-        return $this->main($args);
-    }
 }

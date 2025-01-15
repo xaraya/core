@@ -53,11 +53,44 @@ interface MethodInterface extends CoreInterface, HooksInterface
      * @return mixed
      */
     public function __invoke(array $args = []);
+    public function configure(): void;
+    public function getParent(): MethodsInterface|null;
 }
 
 /**
- * Handle single module function as method
- * @see https://phpstan.org/blog/generics-by-examples
+ * Handle single module function as method from api/gui module class
+ *
+ * The instance will be created by the api/gui module class
+ * and configured with the right module, itemtype and parent
+ *
+ * Available methods:
+ * - __invoke(array $args = []) This contains the actual method code
+ * - configure() Provide additional method configuration when created
+ * - getParent() Get parent api/gui module class to call other methods
+ *   or access other api/gui module classes from this instance
+ *
+ * Inherited methods:
+ * - Module:
+ *   - getModName() Get name for this module in module class or method
+ *   - getModId() Get module registry ID for this module
+ *   - getItemType() Get item type in this module class
+ *   - setItemType($itemtype = 0) Set item type in this module class
+ *   - getModVar($varName) Get module variable for this module
+ *   - setModVar($varName, $value) Set module variable for this module
+ * - Security:
+ *   - checkAccess($mask, $action = '', $instance = null) Check access based on security mask or module action
+ *   - genAuthKey() Generate authorisation key for this module
+ *   - confirmAuthKey($name = 'authid') Confirm authorisation key for this module
+ * - Variable:
+ *   - fetch($name, $validation, &$value, $defaultValue = null, $flags, $prep) Fetch variable by name, with validation, default, flags and prep
+ * - Controller:
+ *   - getUrl($modType = 'user', $funcName = 'main', $args = []) Get url for this module type function
+ *   - redirect($url, $httpResponse = null) Send redirect to url and exit
+ * - Multi-language:
+ *   - translate($rawstring, ...$args) Translate string with optional arguments
+ * - System:
+ *   - exit($status = 0) Call exit() - override for non-blocking servers, php unit tests or elsewhere
+ *
  * @template TComponent of MethodsInterface|null
  */
 class MethodClass implements MethodInterface

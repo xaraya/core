@@ -33,6 +33,7 @@ interface MethodsInterface extends CoreInterface, HooksInterface
     public function setModType(string $modType): void;
     public function hasMethod(string $funcName, string $callType = 'api'): bool;
     public function getModule(): ModuleInterface|null;
+    public function getAPI(): UserApiInterface|null;
 }
 
 /**
@@ -75,13 +76,13 @@ trait MethodsTrait
         'setcontext',
         // CoreTrait
         'checkaccess',
-        'getapi',
         'getmodname',
         'setmodname',
         'getitemtype',
         'setitemtype',
         'getmodid',
         'getmodvar',
+        'setmodvar',
         'fetch',
         'genauthkey',
         'confirmauthkey',
@@ -98,9 +99,11 @@ trait MethodsTrait
         'setmodtype',
         'hasmethod',
         'getmodule',
+        'setmodule',
         'getmethodclass',
         'getclassname',
         'getnamespace',
+        'getapi',
         // UserGuiTrait
         'prepareoutput',
         'tplmodule',
@@ -130,7 +133,7 @@ trait MethodsTrait
     }
 
     /**
-     * Get module type of this module class
+     * Get module type of this module class (user, admin, ...)
      */
     public function getModType(): string
     {
@@ -138,7 +141,7 @@ trait MethodsTrait
     }
 
     /**
-     * Set module type for this module class
+     * Set module type for this module class (user, admin, ...)
      */
     public function setModType(string $modType): void
     {
@@ -197,6 +200,16 @@ trait MethodsTrait
     public function setModule(?ModuleInterface $parent): void
     {
         $this->parent = $parent;
+    }
+
+    /**
+     * Get module user API class for this module
+     */
+    public function getAPI(): UserApiInterface|null
+    {
+        $component = $this->getModule()->getAPI();
+        assert($component instanceof UserApiInterface);
+        return $component;
     }
 
     /**

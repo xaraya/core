@@ -15,6 +15,7 @@
 namespace Xaraya\DataObject;
 
 use Xaraya\Modules\ModuleClass;
+use Xaraya\Modules\AdminGuiInterface;
 
 /**
  * Get dynamicdata module classes via xarMod::getModule()
@@ -25,6 +26,14 @@ class Module extends ModuleClass
     {
         parent::setClassTypes();
         // add other class types for this module
+        $this->classtypes['testgui'] = 'TestGui';
         //$this->classtypes['utilapi'] = 'UtilApi';
+    }
+
+    public function getTestGUI(): AdminGuiInterface
+    {
+        $component = $this->getComponent('TestGui');
+        assert($component instanceof AdminGuiInterface);
+        return $component;
     }
 }

@@ -1,0 +1,248 @@
+<?php
+
+namespace Xaraya\Modules;
+
+use PHPUnit\Framework\TestCase;
+use Xaraya\Context\Context;
+use Xaraya\Context\RequestContext;
+use Xaraya\Requests\RequestHandler;
+use Xaraya\Context\SessionContext;
+use Xaraya\Sessions\SessionHandler;
+use xarCache;
+use xarController;
+use xarDatabase;
+use xarLog;
+use xarMod;
+use xarSecurity;
+use xarServer;
+use xarSession;
+use xarUser;
+use sys;
+use LogicException;
+use UnauthorizedOperationException;
+
+/**
+ * TestHelper for unit testing module class & method class
+ */
+class TestHelper extends TestCase
+{
+    protected static string $oldDir;
+    /** @var ?callable */
+    protected $callback = null;
+
+    public static function setUpBeforeClass(): void
+    {
+        // initialize bootstrap
+        sys::init();
+        // initialize caching - delay until we need results
+        xarCache::init();
+        // initialize loggers
+        xarLog::init();
+        // initialize database - delay until caching fails
+        xarDatabase::init();
+        // initialize modules
+        xarMod::init();
+        // initialize users
+        xarUser::init();
+        // use RequestContext as request handler
+        xarServer::setRequestClass(RequestContext::class);
+        // use SessionContext as session handler
+        xarSession::setSessionClass(SessionContext::class);
+
+        // file paths are relative to parent directory
+        static::$oldDir = (string) getcwd();
+        chdir(dirname(__DIR__));
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        // reset redirectTo callback in xarController
+        xarController::setCallback('redirectTo', null);
+        // use default request handler
+        xarServer::setRequestClass(RequestHandler::class);
+        // use default session handler
+        xarSession::setSessionClass(SessionHandler::class);
+
+        chdir(static::$oldDir);
+    }
+
+    protected function setUp(): void {}
+
+    protected function tearDown(): void {}
+
+    /**
+     * Create context with optional arguments
+     * @param array<mixed> $args
+     * @return Context<string, mixed>
+     */
+    protected function createContext(array $args = [])
+    {
+        if (empty($args)) {
+            $args = ['source' => __METHOD__];
+        }
+        return new Context($args);
+    }
+
+    /**
+     * Create module for a module class
+     * @param string $modName
+     * @param class-string<MethodsInterface> $className
+     * @return ModuleInterface
+     */
+    protected function createModule(string $modName, string $className)
+    {
+        // Xaraya\Modules\MyFancyModule\UserApi
+        $parts = explode('\\', $className);
+        array_pop($parts);
+        // Xaraya\Modules\MyFancyModule\Module
+        $moduleName = implode('\\', $parts) . '\Module';
+        assert(is_subclass_of($moduleName, ModuleInterface::class));
+        return new $moduleName($modName);
+    }
+
+    /**
+     * Create parent for a method class
+     * @param string $modName
+     * @param class-string<MethodInterface> $className
+     * @return MethodsInterface
+     */
+    protected function createParent(string $modName, string $className)
+    {
+        // Xaraya\Modules\MyFancyModule\UserApi\ViewMethod
+        $parts = explode('\\', $className);
+        array_pop($parts);
+        // Xaraya\Modules\MyFancyModule\UserApi
+        $parentName = implode('\\', $parts);
+        assert(is_subclass_of($parentName, MethodsInterface::class));
+        return new $parentName($modName);
+    }
+
+    /**
+     * Get parent class or module class
+     * @param string $modName
+     * @param class-string<MethodsInterface|MethodInterface> $className
+     * @return MethodsInterface|ModuleInterface|null
+     */
+    protected function getParent(string $modName, string $className)
+    {
+        if (is_subclass_of($className, MethodInterface::class)) {
+            return $this->createParent($modName, $className);
+        }
+        if (is_subclass_of($className, MethodsInterface::class)) {
+            return $this->createModule($modName, $className);
+        }
+        return null;
+    }
+
+    /**
+     * Override checkAccess() method to return true + check if called $count times
+     * @param string $modName
+     * @param class-string<MethodsInterface|MethodInterface> $className
+     * @param int $count
+     * @return MethodsInterface|MethodInterface
+     */
+    protected function createMockWithAccess(string $modName, string $className, int $count = 1): object
+    {
+        $parent = $this->getParent($modName, $className);
+        $mock = $this->getMockBuilder($className)
+            ->setConstructorArgs([$modName, $parent])
+            ->onlyMethods(['checkAccess'])
+            ->getMock();
+        // override checkAccess() method to return true + check if called $count times
+        $constraint = $this->exactly($count);
+        $mock->expects($constraint)
+            ->method('checkAccess')
+            ->willReturn(true);
+        return $mock;
+    }
+
+    /**
+     * Override callSecurityCheck() method to intercept redirect + check if called $count times
+     * @param string $modName
+     * @param class-string<MethodsInterface|MethodInterface> $className
+     * @param int $count
+     * @return MethodsInterface|MethodInterface
+     */
+    protected function createMockWithoutAccess(string $modName, string $className, int $count = 1): object
+    {
+        $parent = $this->getParent($modName, $className);
+        $mock = $this->getMockBuilder($className)
+            ->setConstructorArgs([$modName, $parent])
+            ->onlyMethods(['callSecurityCheck'])
+            ->getMock();
+        // override callSecurityCheck() method to intercept redirect + check if called $count times
+        $constraint = $this->exactly($count);
+        $mock->expects($constraint)
+            ->method('callSecurityCheck')
+            ->willReturnCallback(function ($mask, $catch = 1, $component = '', $instance = '') {
+                $this->callback = xarController::getCallback('redirectTo');
+                xarController::setCallback('redirectTo', [$this, 'sendRedirectToCallback']);
+                $result = xarSecurity::check($mask, $catch, $component, $instance) ? true : false;
+                xarController::setCallback('redirectTo', $this->callback);
+                return $result;
+            });
+        return $mock;
+    }
+
+    /**
+     * Send redirect to callback in xarController::redirect()
+     * @param string $redirectURL
+     * @param mixed $httpResponse
+     * @param mixed $context
+     * @throws \UnauthorizedOperationException
+     * @return never
+     */
+    public function sendRedirectToCallback($redirectURL, $httpResponse, $context)
+    {
+        xarController::setCallback('redirectTo', $this->callback);
+        throw new UnauthorizedOperationException('Called redirectToCallback() for ' . $redirectURL);
+    }
+
+    /**
+     * Override redirect() method to throw exception + check if called $count times
+     * @param string $modName
+     * @param class-string<MethodsInterface|MethodInterface> $className
+     * @param int $count
+     * @return MethodsInterface|MethodInterface
+     */
+    protected function createMockWithoutRedirect(string $modName, string $className, int $count = 1): object
+    {
+        $parent = $this->getParent($modName, $className);
+        $mock = $this->getMockBuilder($className)
+            ->setConstructorArgs([$modName, $parent])
+            ->onlyMethods(['redirect'])
+            ->getMock();
+        // override redirect() method to throw exception + check if called $count times
+        $constraint = $this->exactly($count);
+        $mock->expects($constraint)
+            ->method('redirect')
+            ->willReturnCallback(function ($url) {
+                throw new LogicException("Called redirect('$url')");
+            });
+        return $mock;
+    }
+
+    /**
+     * Override exit() method to throw exception + check if called $count times
+     * @param string $modName
+     * @param class-string<MethodsInterface|MethodInterface> $className
+     * @param int $count
+     * @return MethodsInterface|MethodInterface
+     */
+    protected function createMockWithoutExit(string $modName, string $className, int $count = 1): object
+    {
+        $parent = $this->getParent($modName, $className);
+        $mock = $this->getMockBuilder($className)
+            ->setConstructorArgs([$modName, $parent])
+            ->onlyMethods(['exit'])
+            ->getMock();
+        // override exit() method to throw exception + check if called $count times
+        $constraint = $this->exactly($count);
+        $mock->expects($constraint)
+            ->method('exit')
+            ->willReturnCallback(function ($status = 0) {
+                throw new LogicException("Called exit('$status')");
+            });
+        return $mock;
+    }
+}
