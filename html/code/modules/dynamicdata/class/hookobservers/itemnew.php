@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Select dynamicdata for a new item
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -28,21 +29,15 @@ class ItemNew extends DataObjectHookObserver
     /**
      * select dynamicdata for a new item - hook for ('item','new','GUI')
      *
-     * @param array<string, mixed> $args
-     * with
-     *     $args['objectid'] ID of the object
-     *     $args['extrainfo'] extra information
+     * @param array<string, mixed> $extrainfo extra information
      * @return string|void output display string
      */
-    public static function run(array $args = [], $context = null)
+    public function run(array $extrainfo = [])
     {
         // Security
         if (!xarSecurity::check('AddDynamicData')) {
             return;
         }
-
-        extract($args);
-        $extrainfo ??= [];
 
         // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
         $modname = $extrainfo['module'];
@@ -55,11 +50,15 @@ class ItemNew extends DataObjectHookObserver
             return '';
         }
 
-        $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
-                                           'itemtype'  => $itemtype]);
-        sys::import('modules.dynamicdata.class.objects.factory');
+        $descriptorargs = DataObjectDescriptor::getObjectID([
+            'moduleid'  => $module_id,
+            'itemtype'  => $itemtype,
+        ]);
         // set context if available in hook call
-        $object = DataObjectFactory::getObject(['name' => $descriptorargs['name']], $context);
+        $object = DataObjectFactory::getObject([
+            'name' => $descriptorargs['name'],
+        ], $this->getContext());
+
         if (!isset($object) || empty($object->objectid)) {
             return;
         }
@@ -83,8 +82,10 @@ class ItemNew extends DataObjectHookObserver
             'dynamicdata',
             'admin',
             'newhook',
-            ['properties' => $properties,
-            'context' => $object->getContext()],
+            [
+                'properties' => $properties,
+                'context' => $object->getContext(),
+            ],
             $template
         );
     }

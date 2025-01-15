@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -14,8 +15,10 @@
 namespace Xaraya\DataObject\HookObservers;
 
 use xarMod;
-use BadParameterException;
+use DataObjectDescriptor;
+use DataObjectFactory;
 use sys;
+use BadParameterException;
 
 sys::import('modules.dynamicdata.class.hookobservers.generic');
 
@@ -24,17 +27,12 @@ class ItemDelete extends DataObjectHookObserver
     /**
      * delete fields for an item - hook for ('item','delete','API')
      *
-     * @param array<string, mixed> $args array of optional parameters<br/>
-     *        integer  $args['objectid'] ID of the object<br/>
-     *        string   $args['extrainfo'] extra information
+     * @param array<string, mixed> $extrainfo extra information
      * @return array<mixed> true on success, false on failure
      * @throws BadParameterException
      */
-    public static function run(array $args = [], $context = null)
+    public function run(array $extrainfo = [])
     {
-        extract($args);
-        $extrainfo ??= [];
-
         // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
         $modname = $extrainfo['module'];
         $itemtype = $extrainfo['itemtype'];
@@ -52,17 +50,28 @@ class ItemDelete extends DataObjectHookObserver
             throw new BadParameterException($vars, $msg);
         }
 
-        if (!xarMod::apiFunc(
-            'dynamicdata',
-            'admin',
-            'delete',
-            ['module_id'    => $module_id,
-            'itemtype' => $itemtype,
-            'itemid'   => $itemid],
-            $context
-        )) {
+        $descriptorargs = DataObjectDescriptor::getObjectID([
+            'moduleid'  => $module_id,
+            'itemtype'  => $itemtype,
+        ]);
+        // set context if available in hook call
+        $object = DataObjectFactory::getObject([
+            'name' => $descriptorargs['name'],
+            'itemid'   => $itemid,
+        ], $this->getContext());
+
+        // If no object returned, bail and pass the extrainfo to the next hook
+        if (!isset($object) || empty($object->objectid)) {
             return $extrainfo;
         }
+
+        if (!$object->checkAccess('delete')) {
+            return $extrainfo;
+        }
+
+        $object->getItem();
+        $itemid = $object->deleteItem();
+
         return $extrainfo;
     }
 }

@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Modify configuration for a module
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -32,61 +33,38 @@ class ModuleModifyconfig extends DataObjectHookObserver
     /**
      * modify configuration for a module - hook for ('module','modifyconfig','GUI')
      *
-     * @param array<string, mixed> $args
-     * with
-     *     int $args['objectid'] ID of the object
-     *     array $args['extrainfo'] extra information
+     * @param array<string, mixed> $extrainfo extra information
      * @return string|void output display string
      * @throws EmptyParameterException
      * @throws BadParameterException
      */
-    public static function run(array $args = [], $context = null)
+    public function run(array $extrainfo = [])
     {
         // Security
-        if(!xarSecurity::check('AdminDynamicData')) {
+        if (!xarSecurity::check('AdminDynamicData')) {
             return;
         }
 
-        extract($args);
-
-        if (!isset($extrainfo)) {
-            throw new EmptyParameterException('extrainfo');
-        }
-
-        // When called via hooks, the module name may be empty, so we get it from
-        // the current module
-        if (empty($extrainfo['module'])) {
-            $modname = xarMod::getName();
-        } else {
-            $modname = $extrainfo['module'];
-        }
+        // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
+        $modname = $extrainfo['module'];
+        $itemtype = $extrainfo['itemtype'];
+        $module_id = $extrainfo['module_id'];
 
         // don't allow hooking to yourself in DD
         if ($modname == 'dynamicdata') {
             return '';
         }
 
-        $module_id = xarMod::getRegID($modname);
-        if (empty($module_id)) {
-            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-            $vars = ['module name', 'admin', 'modifyconfighook', 'dynamicdata'];
-            throw new BadParameterException($vars, $msg);
-        }
-
-        if (!empty($extrainfo['itemtype'])) {
-            $itemtype = $extrainfo['itemtype'];
-        } else {
-            $itemtype = null;
-        }
-
         if (!xarMod::apiLoad('dynamicdata', 'user')) {
             return;
         }
 
-        sys::import('modules.dynamicdata.class.objects.factory');
-        $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
-                                           'itemtype'  => $itemtype]);
+        $args = DataObjectDescriptor::getObjectID([
+            'moduleid'  => $module_id,
+            'itemtype'  => $itemtype,
+        ]);
 
+        // @todo move to object method here too
         $fields = xarMod::apiFunc(
             'dynamicdata',
             'user',
@@ -117,13 +95,15 @@ class ModuleModifyconfig extends DataObjectHookObserver
             'admin',
             'modifyprop',
             ['module_id' => $module_id,
-            'itemtype' => $itemtype]
+                'itemtype' => $itemtype]
         );
         $data['fields'] = $fields;
         $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(['type' => 'fieldtype']);
 
         // set context if available in hook call
-        $object = DataObjectFactory::getObject(['name' => $args['name']], $context);
+        $object = DataObjectFactory::getObject([
+            'name' => $args['name'],
+        ], $this->getContext());
 
         if (!empty($object)) {
             if (!empty($object->template)) {
@@ -131,10 +111,17 @@ class ModuleModifyconfig extends DataObjectHookObserver
             } else {
                 $template = $object->name;
             }
+            $data['context'] = $object->getContext();
         } else {
             $template = null;
+            $data['context'] = $this->getContext();
         }
-        $data['context'] ??= $object->getContext();
-        return xarTpl::module('dynamicdata', 'admin', 'modifyconfighook', $data, $template);
+        return xarTpl::module(
+            'dynamicdata',
+            'admin',
+            'modifyconfighook',
+            $data,
+            $template
+        );
     }
 }

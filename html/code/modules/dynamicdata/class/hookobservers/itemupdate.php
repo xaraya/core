@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -23,26 +24,21 @@ sys::import('modules.dynamicdata.class.hookobservers.generic');
 
 class ItemUpdate extends DataObjectHookObserver
 {
+    public bool $update = true;
+
     /**
      * update fields for an item - hook for ('item','update','API')
      * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
      *
-     * @param array<string, mixed> $args array of optional parameters<br/>
-     *        integer  $args['objectid'] ID of the object<br/>
-     *        string   $args['extrainfo'] extra information
+     * @param array<string, mixed> $extrainfo extra information
      * @return array<mixed> true on success, false on failure
      * @throws BadParameterException
      */
-    public static function run(array $args = [], $context = null)
+    public function run(array $extrainfo = [])
     {
-        $verbose = false;
+        $verbose = $extrainfo['verbose'] ?? false;
 
-        extract($args);
-        $extrainfo ??= [];
-
-        if (!isset($dd_function) || $dd_function != 'createhook') {
-            $dd_function = 'updatehook';
-        }
+        $dd_function = $this->update ? 'updatehook' : 'createhook';
 
         // We can exit immediately if the status flag is set because we are just updating
         // the status in the articles or other content module that works on that principle
@@ -68,24 +64,25 @@ class ItemUpdate extends DataObjectHookObserver
             throw new BadParameterException($vars, $msg);
         }
 
-        $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
-                                           'itemtype'  => $itemtype]);
+        $descriptorargs = DataObjectDescriptor::getObjectID([
+            'moduleid'  => $module_id,
+            'itemtype'  => $itemtype,
+        ]);
         // set context if available in hook call
-        $myobject = DataObjectFactory::getObject(
-            ['name' => $descriptorargs['name'],
-            'itemid'   => $itemid],
-            $context
-        );
+        $object = DataObjectFactory::getObject([
+            'name' => $descriptorargs['name'],
+            'itemid'   => $itemid,
+        ], $this->getContext());
 
         // If no object returned, bail and pass the extrainfo to the next hook
-        if (!isset($myobject) || empty($myobject->objectid)) {
+        if (!isset($object) || empty($object->objectid)) {
             return $extrainfo;
         }
 
-        $myobject->getItem();
+        $object->getItem();
 
         // use the values passed via $extrainfo if available
-        $isvalid = $myobject->checkInput($extrainfo);
+        $isvalid = $object->checkInput($extrainfo);
         if (!$isvalid) {
             $vars = [];
             if ($verbose) {
@@ -94,7 +91,7 @@ class ItemUpdate extends DataObjectHookObserver
                 // Note : we can't use templating here
                 $msg .= ' : ';
                 $i = 5;
-                foreach ($myobject->properties as $property) {
+                foreach ($object->properties as $property) {
                     if (!empty($property->invalid)) {
                         $msg .= "#(" . $i++ . ") = invalid #(" . $i++ . ") - ";
                         $vars[] = $property->label;
@@ -103,22 +100,19 @@ class ItemUpdate extends DataObjectHookObserver
                 }
             } else {
                 $msg = '';
-                foreach ($myobject->properties as $property) {
+                foreach ($object->properties as $property) {
                     if (!empty($property->invalid)) {
                         $msg .= $property->invalid . ' ';
                     }
                 }
             }
             throw new BadParameterException($vars, $msg);
-            // we *must* return $extrainfo for now, or the next hook will fail
-            // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-            //return $extrainfo;
         }
 
         if ($dd_function == 'createhook') {
-            $itemid = $myobject->createItem();
+            $itemid = $object->createItem();
         } else {
-            $itemid = $myobject->updateItem();
+            $itemid = $object->updateItem();
         }
 
         if (empty($itemid)) {

@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Delete all dynamicdata fields for a module
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -14,6 +15,8 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
+use Xaraya\Database\ConnectionInterface;
+use Xaraya\Database\StatementInterface;
 use xarDB;
 use xarMod;
 use xarSecurity;
@@ -22,65 +25,44 @@ use SQLException;
 use sys;
 
 sys::import('modules.dynamicdata.class.hookobservers.generic');
+sys::import('xaraya.database.interface');
 
 class ModuleRemove extends DataObjectHookObserver
 {
     /**
      * delete all dynamicdata fields for a module - hook for ('module','remove','API')
      *
-     * @param array<string, mixed> $args array of optional parameters<br/>
-     *        integer  $args['objectid'] ID of the object (must be the module name here !!)<br/>
-     *        string   $args['extrainfo'] extra information
+     * @param array<string, mixed> $extrainfo extra information
      * @return array<mixed> true on success, false on failure
      * @throws BadParameterException
      */
-    public static function run(array $args = [], $context = null)
+    public function run(array $extrainfo = [])
     {
-        extract($args);
-
-        if (!isset($extrainfo)) {
-            $extrainfo = [];
-        }
-
-        // When called via hooks, we should get the real module name from objectid
-        // here, because the current module is probably going to be 'modules' !!!
-        if (!isset($objectid) || !is_string($objectid)) {
-            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-            $vars = ['object ID (= module name)', 'admin', 'removehook', 'dynamicdata'];
-            throw new BadParameterException($vars, $msg);
-            // we *must* return $extrainfo for now, or the next hook will fail
-            // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-            //return $extrainfo;
-        }
+        // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
+        $modname = $extrainfo['module'];
+        $itemtype = $extrainfo['itemtype'];
+        $module_id = $extrainfo['module_id'];
 
         // don't allow hooking to yourself in DD
-        if ($objectid == 'dynamicdata') {
+        if ($modname == 'dynamicdata') {
             return $extrainfo;
         }
 
-        $module_id = xarMod::getRegID($objectid);
-        if (empty($module_id)) {
+        if (!xarSecurity::check('DeleteDynamicDataItem', 0, 'Item', "$module_id:All:All")) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-            $vars = ['module ID', 'admin', 'removehook', 'dynamicdata'];
+            $vars = ['security check', 'admin', 'moduleremove', 'dynamicdata'];
             throw new BadParameterException($vars, $msg);
-            // we *must* return $extrainfo for now, or the next hook will fail
-            // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-            //return $extrainfo;
-        }
-
-        if(!xarSecurity::check('DeleteDynamicDataItem', 0, 'Item', "$module_id:All:All")) {
-            // we *must* return $extrainfo for now, or the next hook will fail
-            // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-            //return $extrainfo;
         }
 
         // Get database setup
+        /** @var ConnectionInterface $dbconn */
         $dbconn = xarDB::getConn();
         $xartable =  xarDB::getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 
         $sql = "SELECT id FROM $dynamicprop WHERE moduleid = ?";
+        /** @var StatementInterface $stmt */
         $stmt = $dbconn->prepareStatement($sql);
         $result = $stmt->executeQuery([$module_id]);
 
@@ -106,15 +88,17 @@ class ModuleRemove extends DataObjectHookObserver
             // Delete the item fields
             $bindmarkers = '?' . str_repeat(',?', count($ids) - 1);
             $sql = "DELETE FROM $dynamicdata WHERE property_id IN ($bindmarkers)";
+            /** @var StatementInterface $stmt */
             $stmt = $dbconn->prepareStatement($sql);
             $stmt->executeUpdate($ids);
 
             // Delete the properties
             $sql = "DELETE FROM $dynamicprop WHERE id IN ($bindmarkers)";
+            /** @var StatementInterface $stmt */
             $stmt = $dbconn->prepareStatement($sql);
             $stmt->executeUpdate($ids);
             $dbconn->commit();
-        } catch(SQLException $e) {
+        } catch (SQLException $e) {
             $dbconn->rollback();
             throw $e;
         }
