@@ -324,11 +324,6 @@ class VariableTableDataStore extends SQLDataStore
         } else {
             $itemids = [];
         }
-        // @deprecated not actually used in datastores
-        // check if it's set here - could be 0 (= empty) too
-        if (isset($args['cache'])) {
-            $this->cache = $args['cache'];
-        }
 
         // @todo start filtering properties again at some point :-)
         $fieldlist = $this->object->getFieldList();
@@ -1046,11 +1041,6 @@ class VariableTableDataStore extends SQLDataStore
             $itemids = $this->_itemids;
         } else {
             $itemids = [];
-        }
-        // @deprecated not actually used in datastores
-        // check if it's set here - could be 0 (= empty) too
-        if (isset($args['cache'])) {
-            $this->cache = $args['cache'];
         }
 
         // easy case where we already know the items we want

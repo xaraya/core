@@ -474,11 +474,6 @@ class RelationalDataStore extends SQLDataStore
         } else {
             $itemids = [];
         }
-        // @deprecated not actually used in datastores
-        // check if it's set here - could be 0 (= empty) too
-        if (isset($args['cache'])) {
-            $this->cache = $args['cache'];
-        }
 
         $isgrouped = 0;
         if (count($this->groupby) > 0) {
@@ -755,11 +750,6 @@ class RelationalDataStore extends SQLDataStore
             $itemids = $this->_itemids;
         } else {
             $itemids = [];
-        }
-        // @deprecated not actually used in datastores
-        // check if it's set here - could be 0 (= empty) too
-        if (isset($args['cache'])) {
-            $this->cache = $args['cache'];
         }
 
         //Make sure we have a primary field

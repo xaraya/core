@@ -291,11 +291,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // make sure we don't have some left-over group by fields
             $this->datastore->cleanGroupBy();
         }
-        // @deprecated not actually used in datastores
-        if(isset($args['cache'])) {
-            // pass the cache value to the datastores
-            $this->datastore->cache = $args['cache'];
-        }
         $this->setSort($this->sort);
         // add content filters before setWhere()
         $this->addFilters();
@@ -1048,32 +1043,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $this->fieldsummarylabel = $label;
         }
         return $item;
-    }
-
-    /**
-     * Get items one at a time, instead of storing everything in $this->items
-     *
-     * @return integer
-     * @deprecated 2.2.0 relies on old datastore fields instead of object properties
-     */
-    public function getNext(array $args = [])
-    {
-        static $start = true;
-
-        if($start) {
-            // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
-            $this->setArguments($args);
-
-            if(empty($args['numitems'])) {
-                $args['numitems'] = $this->numitems;
-            }
-            if(empty($args['startnum'])) {
-                $args['startnum'] = $this->startnum;
-            }
-        }
-
-        $itemid = $this->datastore->getNext($args);
-        return $itemid;
     }
 
     private function runPreList()

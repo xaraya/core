@@ -216,68 +216,6 @@ class DataProperty extends xarObject implements iDataProperty
     }
 
     /**
-     * Find the datastore name and type corresponding to the data source of a property
-     * @return array<string>
-     * @deprecated 2.4.0 outdated source format
-     */
-    public function getDataStore()
-    {
-        // Get the module name if we are looking at modvar storage
-        $nameparts = explode(': ', $this->source);
-        if (isset($nameparts[1])) {
-            $modvarmodule = $nameparts[1];
-            $source = 'module variable';
-        } else {
-            $modvarmodule = '';
-            $source = $this->source;
-        }
-        switch($source) {
-            case 'dynamic_data':
-                // Variable table storage method, aka 'usual dd'
-                $storename = '_dynamic_data_';
-                $storetype = 'data';
-                break;
-            case 'hook module':
-                // data managed by a hook/utility module
-                $storename = '_hooks_';
-                $storetype = 'hook';
-                break;
-            case 'user function':
-                // data managed by some user function (specified in configuration for now)
-                $storename = '_functions_';
-                $storetype = 'function';
-                break;
-            case 'module variable':
-                // data available in module variables
-                // we'll keep a separate data store per module/itemtype here for now
-                // TODO: (don't) integrate module variable handling with DD
-                $storename = $modvarmodule . '__' . $this->name;
-                $storetype = 'modulevars';
-                break;
-            case 'none':
-                // no data storage
-                $storename = '_none_';
-                $storetype = 'none';
-                break;
-            default:
-                // Nothing specific, perhaps a table?
-                if(preg_match('/^(.+)\.(\w+)$/', $source, $matches)) {
-                    // data field coming from some static table : [database.]table.field
-                    $table = $matches[1];
-                    $field = $matches[2];
-                    $storename = $table;
-                    $storetype = 'table';
-                    break;
-                }
-                // Must be on the todo list then.
-                // TODO: extend with LDAP, file, ...
-                $storename = '_todo_';
-                $storetype = 'todo';
-        }
-        return [$storename, $storetype];
-    }
-
-    /**
      * Get the value of this property (= for a particular object item)
      *
      * @return mixed the value for the property
@@ -1108,42 +1046,6 @@ class DataProperty extends xarObject implements iDataProperty
             $valid = true;
         }
         return $valid;
-    }
-
-    /**
-     * Deprecated methods
-     */
-
-    /**
-     * Summary of parseValidation
-     * @param mixed $configuration
-     * @return mixed
-     * @deprecated 2.4.0 use parseConfiguration() instead
-     */
-    public function parseValidation($configuration = '')
-    {
-        return $this->parseConfiguration($configuration);
-    }
-    /**
-     * Summary of showValidation
-     * @param array<string, mixed> $data
-     * @return string
-     * @deprecated 2.4.0 use showConfiguration() instead
-     */
-    public function showValidation(array $data = [])
-    {
-        return $this->showConfiguration($data);
-    }
-
-    /**
-     * Summary of updateValidation
-     * @param array<string, mixed> $data
-     * @return bool
-     * @deprecated 2.4.0 use updateConfiguration() instead
-     */
-    public function updateValidation(array $data = [])
-    {
-        return $this->updateConfiguration($data);
     }
 
     /**

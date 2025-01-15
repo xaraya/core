@@ -768,31 +768,4 @@ class DataObjectFactory extends xarObject
         // @todo set context after relinking
         //$objectref->setContext($context);
     }
-
-    /**
-     * Get a module's itemtypes
-     *
-     * @uses Xaraya\DataObject\UserApi::getModuleItemTypes()
-     * @param array<string, mixed> $args
-     * with
-     *     int    args[moduleid]
-     *     bool   args[native]
-     *     bool   args[extensions]
-     * @deprecated 2.4.1 use Xaraya\DataObject\UserApi::getModuleItemTypes() instead
-     * @return array<mixed>
-     */
-    public static function getModuleItemTypes(array $args = [])
-    {
-        sys::import('modules.dynamicdata.class.userapi');
-        extract($args);
-        /** @var int $moduleid */
-        // Argument checks
-        if (empty($moduleid)) {
-            throw new BadParameterException('moduleid');
-        }
-        $native ??= true;
-        $extensions ??= true;
-
-        return Xaraya\DataObject\UserApi::getModuleItemTypes($moduleid, $native, $extensions);
-    }
 }
