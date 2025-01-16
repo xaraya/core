@@ -158,10 +158,9 @@ sys::import('xaraya.caching.core');
  * It is called with each page request and loads the functionality required to process the request.
  *
  * @package core\core
- * @todo change xarCore:: calls to xarCoreCache:: and put other core stuff here ?
  * @todo clean up duplicate const between xarCore:: and xarConst::
 **/
-class xarCore extends xarCoreCache
+class xarCore extends xarObject
 {
     const GENERATION           = 2;
     
