@@ -22,6 +22,7 @@ use xarMod;
 use xarController;
 use xarTpl;
 use DataObjectFactory;
+use DataObject;
 use DataPropertyMaster;
 use sys;
 
@@ -52,28 +53,28 @@ class SearchHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        if (!xarVar::fetch('catid', 'isset', $args['catid'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('catid', $args['catid'])) {
             return;
         }
-        if (!xarVar::fetch('sort', 'isset', $args['sort'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('sort', $args['sort'])) {
             return;
         }
-        if (!xarVar::fetch('where', 'isset', $args['where'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('where', $args['where'])) {
             return;
         }
-        if (!xarVar::fetch('startnum', 'isset', $args['startnum'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('startnum', $args['startnum'])) {
             return;
         }
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        if (!xarVar::fetch('q', 'isset', $args['q'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('q', $args['q'])) {
             return;
         }
-        if (!xarVar::fetch('field', 'isset', $args['field'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('field', $args['field'])) {
             return;
         }
-        if (!xarVar::fetch('match', 'isset', $args['match'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('match', $args['match'])) {
             return;
         }
 
@@ -139,27 +140,28 @@ class SearchHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
+            $this->object = $this->xData()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
-                $modname = xarMod::getName($this->object->moduleid);
-                $this->tplmodule = $modname;
+                // set in DataObjectDescriptor::getObjectID()
+                $this->tplmodule = $this->object->tplmodule;
             }
         } else {
             // set context if available in handler
             $this->object->setContext($this->getContext());
         }
+        assert($this->object instanceof DataObject);
 
-        $title = xarMLS::translate('Search #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
+        $title = $this->xMls()->translate('Search #(1)', $this->object->label);
+        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = xarMLS::translate('Search #(1) is forbidden', $this->object->label);
-            return xarController::forbidden($msg, $this->getContext());
+            $msg = $this->xMls()->translate('Search #(1) is forbidden', $this->object->label);
+            return $this->xCtl()->forbidden($msg);
         }
 
         if (empty($search['field']) || count($search['field']) < 1) {
@@ -193,10 +195,10 @@ class SearchHandler extends DefaultHandler
         } else {
             // get result list
             // set context if available in handler
-            $result = DataObjectFactory::getObjectList($this->args, $this->getContext());
+            $result = $this->xData()->getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
@@ -231,7 +233,7 @@ class SearchHandler extends DefaultHandler
 
         // prepare for output
         if (isset($search['q']) && $search['q'] !== '') {
-            $search['q'] = xarVar::prepForDisplay($search['q']);
+            $search['q'] = $this->xVar()->prep($search['q']);
         }
         $search['options'] = ['like'  => '',
                               'start' => 'starts with',
@@ -251,9 +253,7 @@ class SearchHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        return xarTpl::object(
-            $this->tplmodule,
-            $this->object->template,
+        return $this->xTpl()->object(
             'ui_search',
             $data
         );
@@ -292,27 +292,28 @@ class SearchHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
+            $this->object = $this->xData()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
-                $modname = xarMod::getName($this->object->moduleid);
-                $this->tplmodule = $modname;
+                // set in DataObjectDescriptor::getObjectID()
+                $this->tplmodule = $this->object->tplmodule;
             }
         } else {
             // set context if available in handler
             $this->object->setContext($this->getContext());
         }
+        assert($this->object instanceof DataObject);
 
-        $title = xarMLS::translate('Query #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
+        $title = $this->xMls()->translate('Query #(1)', $this->object->label);
+        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = xarMLS::translate('Query #(1) is forbidden', $this->object->label);
-            return xarController::forbidden($msg, $this->getContext());
+            $msg = $this->xMls()->translate('Query #(1) is forbidden', $this->object->label);
+            return $this->xCtl()->forbidden($msg);
         }
 
         // get where clauses
@@ -359,10 +360,10 @@ class SearchHandler extends DefaultHandler
         } else {
             // get result list
             // set context if available in handler
-            $result = DataObjectFactory::getObjectList($this->args, $this->getContext());
+            $result = $this->xData()->getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
@@ -403,7 +404,7 @@ class SearchHandler extends DefaultHandler
         foreach (array_keys($query['field']) as $field) {
             if (isset($query['field'][$field]) && $query['field'][$field] !== '') {
                 if (!is_array($query['field'][$field])) {
-                    $query['field'][$field] = xarVar::prepForDisplay($query['field'][$field]);
+                    $query['field'][$field] = $this->xVar()->prep($query['field'][$field]);
                 }
             }
         }
@@ -416,7 +417,7 @@ class SearchHandler extends DefaultHandler
                              'lt'    => 'less than',
                              'ne'    => 'not equal to'];
         // get the property types in case we want to do more than check the parent class
-        $query['proptypes'] = DataPropertyMaster::getPropertyTypes();
+        $query['proptypes'] = $this->xData()->getPropertyTypes();
 
         // add data to original method args
         $data = array_replace($args, [
@@ -427,9 +428,7 @@ class SearchHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        return xarTpl::object(
-            $this->tplmodule,
-            $this->object->template,
+        return $this->xTpl()->object(
             'ui_query',
             $data
         );

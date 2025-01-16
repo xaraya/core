@@ -599,7 +599,7 @@ class xarMod extends xarObject implements IxarMod
      *
      * @param string $modOsDir the module's directory
      * @param string $type determines theme or module
-     * @return array<mixed>|void an array of module file information
+     * @return array<string, mixed>|void an array of module file information
      * @throws EmptyParameterException
      * @throws BadParameterException
      * @todo <marco> #1 FIXME: admin or admin capable?

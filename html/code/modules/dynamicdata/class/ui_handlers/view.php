@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -23,6 +23,7 @@ use xarController;
 use xarDB;
 use xarTpl;
 use DataObjectFactory;
+use DataObjectList;
 use sys;
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -49,16 +50,16 @@ class ViewHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        if (!xarVar::fetch('catid', 'isset', $args['catid'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('catid', $args['catid'])) {
             return;
         }
-        if (!xarVar::fetch('sort', 'isset', $args['sort'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('sort', $args['sort'])) {
             return;
         }
-        if (!xarVar::fetch('where', 'isset', $args['where'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('where', $args['where'])) {
             return;
         }
-        if (!xarVar::fetch('startnum', 'isset', $args['startnum'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('startnum', $args['startnum'])) {
             return;
         }
 
@@ -86,27 +87,28 @@ class ViewHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
+            $this->object = $this->xData()->getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
-                $modname = xarMod::getName($this->object->moduleid);
-                $this->tplmodule = $modname;
+                // set in DataObjectDescriptor::getObjectID()
+                $this->tplmodule = $this->object->tplmodule;
             }
         } else {
             // set context if available in handler
             $this->object->setContext($this->getContext());
         }
+        assert($this->object instanceof DataObjectList);
 
-        $title = xarMLS::translate('View #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
+        $title = $this->xMls()->translate('View #(1)', $this->object->label);
+        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = xarMLS::translate('View #(1) is forbidden', $this->object->label);
-            return xarController::forbidden($msg, $this->getContext());
+            $msg = $this->xMls()->translate('View #(1) is forbidden', $this->object->label);
+            return $this->xCtl()->forbidden($msg);
         }
 
         if (!empty($this->args['where']) && is_array($this->args['where']) && is_object($this->object->datastore)) {
@@ -158,9 +160,7 @@ class ViewHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        $output = xarTpl::object(
-            $this->tplmodule,
-            $this->object->template,
+        $output = $this->xTpl()->object(
             'ui_view',
             $data
         );

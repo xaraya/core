@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -21,6 +21,7 @@ use xarController;
 use xarSec;
 use xarTpl;
 use DataObjectFactory;
+use DataObject;
 use sys;
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -47,16 +48,16 @@ class CreateHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        if (!xarVar::fetch('preview', 'isset', $args['preview'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('preview', $args['preview'])) {
             return;
         }
-        if (!xarVar::fetch('confirm', 'isset', $args['confirm'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('confirm', $args['confirm'])) {
             return;
         }
-        if (!xarVar::fetch('values', 'isset', $args['values'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('values', $args['values'])) {
             return;
         }
-        if (!xarVar::fetch('return_url', 'isset', $args['return_url'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('return_url', $args['return_url'])) {
             return;
         }
 
@@ -66,23 +67,25 @@ class CreateHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
+            $this->object = $this->xData()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
-                $modname = xarMod::getName($this->object->moduleid);
-                $this->tplmodule = $modname;
+                // set in DataObjectDescriptor::getObjectID()
+                $this->tplmodule = $this->object->tplmodule;
             }
         } else {
             // set context if available in handler
             $this->object->setContext($this->getContext());
         }
+        assert($this->object instanceof DataObject);
+
         if (!$this->object->checkAccess('create')) {
-            $msg = xarMLS::translate('Create #(1) is forbidden', $this->object->label);
-            return xarController::forbidden($msg, $this->getContext());
+            $msg = $this->xMls()->translate('Create #(1) is forbidden', $this->object->label);
+            return $this->xCtl()->forbidden($msg);
         }
 
         // there's no item to get here yet
@@ -96,8 +99,8 @@ class CreateHandler extends DefaultHandler
         }
 
         if (!empty($args['preview']) || !empty($args['confirm'])) {
-            if (!empty($args['confirm']) && !xarSec::confirmAuthKey()) {
-                return xarController::badRequest('bad_author', $this->getContext());
+            if (!empty($args['confirm']) && !$this->xSec()->confirmAuthKey()) {
+                return $this->xCtl()->badRequest('bad_author');
             }
 
             $isvalid = $this->object->checkInput($args);
@@ -113,15 +116,15 @@ class CreateHandler extends DefaultHandler
                     $args['return_url'] = $this->getReturnURL();
                 }
 
-                xarController::redirect($args['return_url'], null, $this->getContext());
+                $this->xCtl()->redirect($args['return_url']);
                 // Return
                 return true;
             }
             $args['preview'] = true;
         }
 
-        $title = xarMLS::translate('New #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
+        $title = $this->xMls()->translate('New #(1)', $this->object->label);
+        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
 
         // call item new hooks for this item
         $this->object->callHooks('new');
@@ -131,15 +134,13 @@ class CreateHandler extends DefaultHandler
             'object'  => $this->object,
             'context' => $this->getContext(),
             'preview' => $args['preview'],
-            'authid'  => xarSec::genAuthKey(),
+            'authid'  => $this->xSec()->genAuthKey(),
             'hooks'   => $this->object->hookoutput,
             'tpltitle' => $this->tpltitle,
             'return_url' => $args['return_url'],
         ]);
 
-        return xarTpl::object(
-            $this->tplmodule,
-            $this->object->template,
+        return $this->xTpl()->object(
             'ui_create',
             $data
         );

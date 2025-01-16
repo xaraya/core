@@ -520,7 +520,7 @@ class xarController extends xarObject
      * @param ?bool $generateXMLURL
      * @param string|array<string, mixed> $entrypoint array of arguments for different entrypoint than index.php
      * @param ?string $route
-     * @return mixed absolute URL for call, or false on failure
+     * @return string absolute URL for call, or false on failure
      * @todo allow for an alternative entry point (e.g. stream.php) without affecting the other parameters
      */
     public static function URL($modName = null, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = null, $fragment = null, $entrypoint = array(), $route = null)

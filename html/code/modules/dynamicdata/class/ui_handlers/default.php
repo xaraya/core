@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -14,8 +14,6 @@
 
 namespace Xaraya\DataObject\Handlers;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
 use xarObject;
 use xarVar;
 use xarMLS;
@@ -30,15 +28,16 @@ use DataObject;
 use sys;
 
 sys::import('xaraya.objects');
-sys::import('xaraya.context.contexttrait');
+sys::import('modules.dynamicdata.class.ui_handlers.servicestrait');
 
 /**
  * Dynamic Object User Interface Handler
  *
  */
-class DefaultHandler extends xarObject implements ContextInterface
+class DefaultHandler extends xarObject implements HandlerServicesInterface
 {
-    use ContextTrait;
+    /** @use HandlerServicesTrait<self> */
+    use HandlerServicesTrait;
 
     public string $method = 'overridden in child classes';
 
@@ -74,6 +73,9 @@ class DefaultHandler extends xarObject implements ContextInterface
      */
     public function __construct(array $args = [])
     {
+        // set core services for access via methods
+        $this->setCoreServices();
+
         // set a specific GUI module for now
         if (!empty($args['tplmodule'])) {
             $this->tplmodule = $args['tplmodule'];
@@ -97,39 +99,39 @@ class DefaultHandler extends xarObject implements ContextInterface
             $this->tpltitle = $args['tpltitle'];
         }
         if (empty($this->tpltitle)) {
-            $this->tpltitle = xarMLS::translate('Dynamic Data Object Interface');
+            $this->tpltitle = $this->xMls()->translate('Dynamic Data Object Interface');
         }
 
         // get some common URL parameters
-        if (!xarVar::fetch('object', 'isset', $args['object'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('object', $args['object'])) {
             return;
         }
-        if (!xarVar::fetch('name', 'isset', $args['name'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('name', $args['name'])) {
             return;
         }
-        if (!xarVar::fetch('module', 'isset', $args['module'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('module', $args['module'])) {
             return;
         }
-        if (!xarVar::fetch('itemtype', 'isset', $args['itemtype'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('itemtype', $args['itemtype'])) {
             return;
         }
-        if (!xarVar::fetch('table', 'isset', $args['table'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('table', $args['table'])) {
             return;
         }
-        if (!xarVar::fetch('layout', 'isset', $args['layout'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('layout', $args['layout'])) {
             return;
         }
-        if (!xarVar::fetch('template', 'isset', $args['template'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('template', $args['template'])) {
             return;
         }
-        if (!xarVar::fetch('startnum', 'isset', $args['startnum'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('startnum', $args['startnum'])) {
             return;
         }
-        if (!xarVar::fetch('numitems', 'isset', $args['numitems'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('numitems', $args['numitems'])) {
             return;
         }
 
-        if (!xarVar::fetch('fieldlist', 'isset', $fieldlist, null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('fieldlist', $fieldlist)) {
             return;
         }
         // make fieldlist an array,
@@ -140,7 +142,7 @@ class DefaultHandler extends xarObject implements ContextInterface
 
         // Default number of items per page in object view
         if (!isset($args['numitems']) && $args['object'] != 'objects') {
-            $args['numitems'] = xarModVars::get('dynamicdata', 'items_per_page');
+            $args['numitems'] = $this->xMod()->getVar('items_per_page');
         }
 
         // support name=... parameter for DD if no object=... is found
@@ -152,14 +154,15 @@ class DefaultHandler extends xarObject implements ContextInterface
 
         // retrieve the object information for this object
         if (!empty($args['object'])) {
-            $info = DataObjectFactory::getObjectInfo(
+            $info = $this->xData()->getObjectInfo(
                 ['name' => $args['object']]
             );
             if (!empty($info)) {
                 $args = array_merge($args, $info);
             }
         } elseif (!empty($args['module']) && empty($args['moduleid'])) {
-            $args['moduleid'] = xarMod::getRegID($args['module']);
+            // @todo is this still actually needed here?
+            $args['moduleid'] = $this->xMod()->getRegID($args['module']);
         }
 
         if (empty($args['layout'])) {
@@ -193,18 +196,18 @@ class DefaultHandler extends xarObject implements ContextInterface
         if (!isset($this->object)) {
             // set context if available in handler
             if (!empty($this->args['itemid'])) {
-                $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
+                $this->object = $this->xData()->getObject($this->args);
             } else {
-                $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
+                $this->object = $this->xData()->getObjectList($this->args);
             }
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
-                $modname = xarMod::getName($this->object->moduleid);
-                $this->tplmodule = $modname;
+                // set in DataObjectDescriptor::getObjectID()
+                $this->tplmodule = $this->object->tplmodule;
             }
         } else {
             // set context if available in handler
@@ -212,33 +215,33 @@ class DefaultHandler extends xarObject implements ContextInterface
         }
 
         if (!method_exists($this->object, $this->method)) {
-            return xarMLS::translate('Unknown method #(1) for #(2)', xarVar::prepForDisplay($this->method), $this->object->label);
+            return $this->xMls()->translate('Unknown method #(1) for #(2)', $this->xVar()->prep($this->method), $this->object->label);
         }
 
         // Pre-fetch item(s) for some standard dataobject methods
-        if (empty($args['itemid']) && $this->method == 'showview') {
+        if (empty($args['itemid']) && $this->method == 'showview' && assert($this->object instanceof DataObjectList)) {
             if (!$this->object->checkAccess('view')) {
-                $msg = xarMLS::translate('View #(1) is forbidden', $this->object->label);
-                return xarController::forbidden($msg, $this->getContext());
+                $msg = $this->xMls()->translate('View #(1) is forbidden', $this->object->label);
+                return $this->xCtl()->forbidden($msg);
             }
 
             $this->object->getItems();
-        } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform')) {
+        } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform') && assert($this->object instanceof DataObject)) {
             if (!$this->object->checkAccess('display')) {
-                $msg = xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
-                return xarController::forbidden($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
+                return $this->xCtl()->forbidden($msg);
             }
 
             // get the requested item
             $itemid = $this->object->getItem();
             if (empty($itemid) || $itemid != $this->object->itemid) {
-                $msg = xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
+                return $this->xCtl()->notFound($msg);
             }
         }
 
         $title = $this->object->label;
-        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
+        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
 
         // Here we try to run the requested method directly
         $output = $this->object->{$this->method}($this->args);
@@ -253,9 +256,7 @@ class DefaultHandler extends xarObject implements ContextInterface
             'tpltitle' => $this->tpltitle,
         ]);
 
-        return xarTpl::object(
-            $this->tplmodule,
-            $this->object->template,
+        return $this->xTpl()->object(
             'ui_default',
             $data
         );

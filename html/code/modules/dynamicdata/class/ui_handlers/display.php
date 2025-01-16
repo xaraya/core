@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -22,6 +22,7 @@ use xarMod;
 use xarController;
 use xarTpl;
 use DataObjectFactory;
+use DataObject;
 use sys;
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -47,11 +48,11 @@ class DisplayHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        if (!xarVar::fetch('preview', 'isset', $args['preview'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('preview', $args['preview'])) {
             return;
         }
 
-        if (!xarVar::fetch('values', 'isset', $args['values'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('values', $args['values'])) {
             return;
         }
 
@@ -74,43 +75,44 @@ class DisplayHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
+            $this->object = $this->xData()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
-                $modname = xarMod::getName($this->object->moduleid);
-                $this->tplmodule = $modname;
+                // set in DataObjectDescriptor::getObjectID()
+                $this->tplmodule = $this->object->tplmodule;
             }
         } else {
             // set context if available in handler
             $this->object->setContext($this->getContext());
         }
+        assert($this->object instanceof DataObject);
 
-        $title = xarMLS::translate('Display #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
+        $title = $this->xMls()->translate('Display #(1)', $this->object->label);
+        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
 
         if (!empty($this->args['itemid'])) {
             if (!$this->object->checkAccess('display')) {
-                $msg = xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
-                return xarController::forbidden($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
+                return $this->xCtl()->forbidden($msg);
             }
 
             // get the requested item
             $itemid = $this->object->getItem();
             if (empty($itemid) || $itemid != $this->object->itemid) {
-                $msg = xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
+                return $this->xCtl()->notFound($msg);
             }
 
             // call item display hooks for this item
             $this->object->callHooks('display');
         } elseif (!empty($this->args['values'])) {
             if (!$this->object->checkAccess('display')) {
-                $msg = xarMLS::translate('Display #(1) is forbidden', $this->object->label);
-                return xarController::forbidden($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Display #(1) is forbidden', $this->object->label);
+                return $this->xCtl()->forbidden($msg);
             }
 
             // always set the properties based on the given values !?
@@ -129,9 +131,7 @@ class DisplayHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        $output = xarTpl::object(
-            $this->tplmodule,
-            $this->object->template,
+        $output = $this->xTpl()->object(
             'ui_display',
             $data
         );

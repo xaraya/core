@@ -423,7 +423,7 @@ class xarServer extends xarObject
      * @param ?bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
      * @param ?string $fragment document fragment target (e.g. somesite.com/index.php?foo=bar#target)
      * @param string|array<string, mixed> $entrypoint array of arguments for different entrypoint than index.php
-     * @return mixed absolute URL for call, or false on failure
+     * @return string absolute URL for call, or false on failure
      */
     public static function getObjectURL($objectName = null, $methodName = 'view', $args = [], $generateXMLURL = null, $fragment = null, $entrypoint = [])
     {

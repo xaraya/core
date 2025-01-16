@@ -139,4 +139,14 @@ trait UserGuiTrait
         // Create the output.
         return xarTpl::module($this->getModName(), $this->getModType(), $funcName, $data, $templateName);
     }
+
+    /**
+     * Set page title
+     * @param string $title
+     * @return bool
+     */
+    public function setPageTitle(string $title): bool
+    {
+        return xarTpl::setPageTitle($title, $this->getModName());
+    }
 }

@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -24,6 +24,7 @@ use xarController;
 use xarServer;
 use xarTpl;
 use DataObjectFactory;
+use DataObjectList;
 use DataPropertyMaster;
 use sys;
 
@@ -51,31 +52,31 @@ class StatsHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        if (!xarVar::fetch('catid', 'isset', $args['catid'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('catid', $args['catid'])) {
             return;
         }
-        if (!xarVar::fetch('sort', 'isset', $args['sort'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('sort', $args['sort'])) {
             return;
         }
-        if (!xarVar::fetch('where', 'isset', $args['where'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('where', $args['where'])) {
             return;
         }
-        if (!xarVar::fetch('startnum', 'isset', $args['startnum'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('startnum', $args['startnum'])) {
             return;
         }
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        if (!xarVar::fetch('group', 'isset', $args['group'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('group', $args['group'])) {
             return;
         }
-        if (!xarVar::fetch('field', 'isset', $args['field'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('field', $args['field'])) {
             return;
         }
-        if (!xarVar::fetch('match', 'isset', $args['match'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('match', $args['match'])) {
             return;
         }
-        if (!xarVar::fetch('report', 'isset', $args['report'], null, xarVar::DONT_SET)) {
+        if (!$this->xVar()->get('report', $args['report'])) {
             return;
         }
 
@@ -152,40 +153,32 @@ class StatsHandler extends DefaultHandler
             $stats['report'] = 'Default Report';
         }
         // prepare for output now
-        $stats['report'] = xarVar::prepForDisplay($stats['report']);
+        $stats['report'] = $this->xVar()->prep($stats['report']);
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
+            $this->object = $this->xData()->getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
-                $modname = xarMod::getName($this->object->moduleid);
-                $this->tplmodule = $modname;
+                // set in DataObjectDescriptor::getObjectID()
+                $this->tplmodule = $this->object->tplmodule;
             }
         } else {
             // set context if available in handler
             $this->object->setContext($this->getContext());
         }
+        assert($this->object instanceof DataObjectList);
 
-        $title = xarMLS::translate('Statistics for #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
-        /**
-        // Set page template
-        if (xarTpl::getPageTemplateName() == 'default') {
-            // Use the admin-$modName.xt page if available when $modType is admin
-            // falling back on admin.xt if the former isn't available
-            if (!xarTpl::setPageTemplateName('admin-'.$this->tplmodule)) {
-                xarTpl::setPageTemplateName('admin');
-            }
-        }
-        */
+        $title = $this->xMls()->translate('Statistics for #(1)', $this->object->label);
+        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
+
         if (!$this->object->checkAccess('view')) {
-            $msg = xarMLS::translate('View #(1) is forbidden', $this->object->label);
-            return xarController::forbidden($msg, $this->getContext());
+            $msg = $this->xMls()->translate('View #(1) is forbidden', $this->object->label);
+            return $this->xCtl()->forbidden($msg);
         }
 
         // load previously defined report if available
@@ -197,7 +190,7 @@ class StatsHandler extends DefaultHandler
         }
 
         // get the property types in case we want to do more than check the type
-        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $proptypes = $this->xData()->getPropertyTypes();
 
         $stats['grouplist'] = [];
         foreach ($this->object->properties as $name => $property) {
@@ -304,7 +297,8 @@ class StatsHandler extends DefaultHandler
                  'sort'      => $sort];
 
         // check if we need to save this report
-        if (!xarVar::fetch('save', 'isset', $save, null, xarVar::DONT_SET)) {
+        $save = null;
+        if (!$this->xVar()->get('save', $save)) {
             return false;
         }
 
@@ -315,8 +309,10 @@ class StatsHandler extends DefaultHandler
             // save the report and redirect
         } elseif (!empty($save) && !empty($stats['report']) && $this->object->checkAccess('config')) {
             $this->saveReport($stats['report'], $stats, $info);
-            xarController::redirect(xarServer::getObjectURL($this->object->name, 'report',
-                ['report' => $stats['report']]), null, $this->getContext());
+            $this->xCtl()->redirect($this->xCtl()->getObjectUrl(
+                $this->object->name,
+                'report',
+                ['report' => $stats['report']]));
             return true;
 
             // get the result
@@ -344,9 +340,7 @@ class StatsHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        $output = xarTpl::object(
-            $this->tplmodule,
-            $this->object->template,
+        $output = $this->xTpl()->object(
             'ui_stats',
             $data
         );
@@ -377,31 +371,32 @@ class StatsHandler extends DefaultHandler
             $report['report'] = 'Default Report';
         }
         // prepare for output now
-        $report['report'] = xarVar::prepForDisplay($report['report']);
+        $report['report'] = $this->xVar()->prep($report['report']);
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
+            $this->object = $this->xData()->getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']);
-                return xarController::notFound($msg, $this->getContext());
+                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->xCtl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
-                $modname = xarMod::getName($this->object->moduleid);
-                $this->tplmodule = $modname;
+                // set in DataObjectDescriptor::getObjectID()
+                $this->tplmodule = $this->object->tplmodule;
             }
         } else {
             // set context if available in handler
             $this->object->setContext($this->getContext());
         }
+        assert($this->object instanceof DataObjectList);
 
-        $title = xarMLS::translate('Report for #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
+        $title = $this->xMls()->translate('Report for #(1)', $this->object->label);
+        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = xarMLS::translate('View #(1) is forbidden', $this->object->label);
-            return xarController::forbidden($msg, $this->getContext());
+            $msg = $this->xMls()->translate('View #(1) is forbidden', $this->object->label);
+            return $this->xCtl()->forbidden($msg);
         }
 
         $report['reportlist'] = $this->getReportList();
@@ -430,9 +425,7 @@ class StatsHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        $output = xarTpl::object(
-            $this->tplmodule,
-            $this->object->template,
+        $output = $this->xTpl()->object(
             'ui_report',
             $data
         );
@@ -484,7 +477,7 @@ class StatsHandler extends DefaultHandler
      */
     public function getReportList()
     {
-        $serialreports = xarModVars::get('dynamicdata', 'reportlist.' . $this->object->name);
+        $serialreports = $this->xMod()->getVar('reportlist.' . $this->object->name);
         if (!empty($serialreports)) {
             $reportlist = unserialize($serialreports);
         } else {
@@ -504,7 +497,7 @@ class StatsHandler extends DefaultHandler
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
-        $serialinfo = xarModVars::get('dynamicdata', $key);
+        $serialinfo = $this->xMod()->getVar($key);
         if (!empty($serialinfo)) {
             $info = unserialize($serialinfo);
         } else {
@@ -531,7 +524,7 @@ class StatsHandler extends DefaultHandler
             }
             // add the new report at the front of the list
             array_unshift($reportlist, $report);
-            xarModVars::set('dynamicdata', 'reportlist.' . $this->object->name, serialize($reportlist));
+            $this->xMod()->setVar('reportlist.' . $this->object->name, serialize($reportlist));
         }
         // add stats to info so we can edit it afterwards
         $info['stats'] = $stats;
@@ -539,7 +532,7 @@ class StatsHandler extends DefaultHandler
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
-        xarModVars::set('dynamicdata', $key, serialize($info));
+        $this->xMod()->setVar($key, serialize($info));
     }
 
     /**
@@ -553,6 +546,6 @@ class StatsHandler extends DefaultHandler
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
-        xarModVars::delete('dynamicdata', $key);
+        $this->xMod()->setVar($key, null);
     }
 }
