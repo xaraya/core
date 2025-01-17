@@ -75,6 +75,7 @@ interface CoreInterface extends ContextInterface
 
 /**
  * Core functions available via methods
+ * @deprecated 2.6.1 use core services instead
  */
 trait CoreTrait
 {
@@ -82,6 +83,7 @@ trait CoreTrait
 
     /**
      * Check access based on security mask or module action
+     * @deprecated 2.6.1 use $this->sec()->checkAccess() instead
      */
     public function checkAccess(string $mask, string|int $action = '', mixed $instance = null): bool
     {
@@ -148,6 +150,7 @@ trait CoreTrait
 
     /**
      * Get module registry ID for this module
+     * @deprecated 2.6.1 use $this->mod()->getRegId() instead
      */
     public function getModId(): int
     {
@@ -159,6 +162,7 @@ trait CoreTrait
 
     /**
      * Get module variable for this module
+     * @deprecated 2.6.1 use $this->mod()->getVar() instead
      */
     public function getModVar(string $varName): mixed
     {
@@ -167,6 +171,7 @@ trait CoreTrait
 
     /**
      * Set module variable for this module
+     * @deprecated 2.6.1 use $this->mod()->setVar() instead
      */
     public function setModVar(string $varName, mixed $value): bool
     {
@@ -175,6 +180,7 @@ trait CoreTrait
 
     /**
      * Fetch variable by name, with validation, default, flags and prep
+     * @deprecated 2.6.1 use $this->var()->fetch() etc. instead
      * @param string $name the variable name
      * @param string $validation the validation to be performed
      * @param mixed $value contains the converted value of fetched variable
@@ -191,6 +197,7 @@ trait CoreTrait
 
     /**
      * Generate authorisation key for this module
+     * @deprecated 2.6.1 use $this->sec()->genAuthKey() instead
      */
     public function genAuthKey(): string
     {
@@ -200,6 +207,7 @@ trait CoreTrait
 
     /**
      * Confirm authorisation key for this module
+     * @deprecated 2.6.1 use $this->sec()->confirmAuthKey() instead
      */
     public function confirmAuthKey(string $name = 'authid'): bool
     {
@@ -209,6 +217,7 @@ trait CoreTrait
 
     /**
      * Get url for this module type function
+     * @deprecated 2.6.1 use $this->ctl()->getURL() instead
      * @param array<mixed> $args
      */
     public function getUrl(string $modType = 'user', string $funcName = 'main', array $args = []): string
@@ -218,6 +227,7 @@ trait CoreTrait
 
     /**
      * Send redirect to url and exit
+     * @deprecated 2.6.1 use $this->ctl()->redirect() instead
      * @return bool|never
      */
     public function redirect(string $url, ?int $httpResponse = null)
@@ -227,6 +237,7 @@ trait CoreTrait
 
     /**
      * Translate string with optional arguments
+     * @deprecated 2.6.1 use $this->mls()->translate() instead
      * @param string $rawstring
      * @param mixed ...$args
      */

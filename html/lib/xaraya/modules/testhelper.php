@@ -8,6 +8,7 @@ use Xaraya\Context\RequestContext;
 use Xaraya\Requests\RequestHandler;
 use Xaraya\Context\SessionContext;
 use Xaraya\Sessions\SessionHandler;
+use Xaraya\Services\TestHelper as ServicesHelper;
 use xarCache;
 use xarController;
 use xarDatabase;
@@ -84,7 +85,7 @@ class TestHelper extends TestCase
     }
 
     /**
-     * Create module for a module class
+     * Create parent module for a module class
      * @param string $modName
      * @param class-string<MethodsInterface> $className
      * @return ModuleInterface
@@ -101,12 +102,12 @@ class TestHelper extends TestCase
     }
 
     /**
-     * Create parent for a method class
+     * Create parent component for a method class
      * @param string $modName
      * @param class-string<MethodInterface> $className
      * @return MethodsInterface
      */
-    protected function createParent(string $modName, string $className)
+    protected function createComponent(string $modName, string $className)
     {
         // Xaraya\Modules\MyFancyModule\UserApi\ViewMethod
         $parts = explode('\\', $className);
@@ -127,7 +128,7 @@ class TestHelper extends TestCase
     {
         if (is_subclass_of($className, MethodInterface::class)) {
             $itemtype = 0;
-            $parent = $this->createParent($modName, $className);
+            $parent = $this->createComponent($modName, $className);
             return [$modName, $itemtype, $parent];
         }
         if (is_subclass_of($className, MethodsInterface::class)) {
@@ -146,16 +147,20 @@ class TestHelper extends TestCase
      */
     protected function createMockWithAccess(string $modName, string $className, int $count = 1): object
     {
+        // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
         $mock = $this->getMockBuilder($className)
             ->setConstructorArgs($args)
             ->onlyMethods(['checkAccess'])
             ->getMock();
         // override checkAccess() method to return true + check if called $count times
-        $constraint = $this->exactly($count);
+        $constraint = $this->atMost($count);
         $mock->expects($constraint)
             ->method('checkAccess')
             ->willReturn(true);
+        // override core security service class with mock too
+        $helper = new ServicesHelper();
+        $helper->createMockSecurityWithAccess($mock, $count);
         return $mock;
     }
 
@@ -168,13 +173,14 @@ class TestHelper extends TestCase
      */
     protected function createMockWithoutAccess(string $modName, string $className, int $count = 1): object
     {
+        // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
         $mock = $this->getMockBuilder($className)
             ->setConstructorArgs($args)
             ->onlyMethods(['callSecurityCheck'])
             ->getMock();
         // override callSecurityCheck() method to intercept redirect + check if called $count times
-        $constraint = $this->exactly($count);
+        $constraint = $this->atMost($count);
         $mock->expects($constraint)
             ->method('callSecurityCheck')
             ->willReturnCallback(function ($mask, $catch = 1, $component = '', $instance = '') {
@@ -184,6 +190,9 @@ class TestHelper extends TestCase
                 xarController::setCallback('redirectTo', $this->callback);
                 return $result;
             });
+        // override core security service class with mock too
+        $helper = new ServicesHelper();
+        $helper->createMockSecurityWithoutAccess($mock, $count);
         return $mock;
     }
 
@@ -210,18 +219,22 @@ class TestHelper extends TestCase
      */
     protected function createMockWithoutRedirect(string $modName, string $className, int $count = 1): object
     {
+        // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
         $mock = $this->getMockBuilder($className)
             ->setConstructorArgs($args)
             ->onlyMethods(['redirect'])
             ->getMock();
         // override redirect() method to throw exception + check if called $count times
-        $constraint = $this->exactly($count);
+        $constraint = $this->atMost($count);
         $mock->expects($constraint)
             ->method('redirect')
             ->willReturnCallback(function ($url) {
                 throw new LogicException("Called redirect('$url')");
             });
+        // override core controller service class with mock too
+        $helper = new ServicesHelper();
+        $helper->createMockControllerWithoutRedirect($mock, $count);
         return $mock;
     }
 
@@ -234,18 +247,22 @@ class TestHelper extends TestCase
      */
     protected function createMockWithoutExit(string $modName, string $className, int $count = 1): object
     {
+        // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
         $mock = $this->getMockBuilder($className)
             ->setConstructorArgs($args)
             ->onlyMethods(['exit'])
             ->getMock();
         // override exit() method to throw exception + check if called $count times
-        $constraint = $this->exactly($count);
+        $constraint = $this->atMost($count);
         $mock->expects($constraint)
             ->method('exit')
             ->willReturnCallback(function ($status = 0) {
                 throw new LogicException("Called exit('$status')");
             });
+        // override core exit service class with callable too
+        $helper = new ServicesHelper();
+        $helper->createMockServicesWithoutExit($mock, $count);
         return $mock;
     }
 }

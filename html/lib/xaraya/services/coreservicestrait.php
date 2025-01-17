@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -19,6 +19,7 @@ namespace Xaraya\Services;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use sys;
+use Exception;
 
 sys::import('xaraya.context.contexttrait');
 sys::import('xaraya.services.controllertrait');
@@ -37,7 +38,8 @@ sys::import('xaraya.objects');
  */
 interface CoreServicesInterface extends ContextInterface
 {
-    public function setCoreServices(): void;
+    /** @param array<string, mixed> $args */
+    public function setCoreServices(array $args = []): void;
     public function ctl(): ControllerService;
     public function log(): LoggerService;
     public function mls(): MultiLanguageService;
@@ -83,13 +85,26 @@ trait CoreServicesTrait
     protected $xarData;
     /** @var ?CachingService<TParent> */
     protected $xarCache;
+    /** @var ?callable */
+    protected $xarExit;
 
     /**
      * Set core services for access via methods
+     * @param array<string, mixed> $args array of name => service to replace default ones
      */
-    public function setCoreServices(): void
+    public function setCoreServices(array $args = []): void
     {
-        // ...
+        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'data', 'cache', 'exit'];
+        foreach ($args as $name => $service) {
+            if (!in_array($name, $supported)) {
+                throw new Exception('Unsupported service ' . $name);
+            }
+            $varName = 'xar' . ucfirst($name);
+            if (!property_exists($this, $varName)) {
+                throw new Exception('Unsupported property ' . $varName);
+            }
+            $this->{$varName} = $service;
+        }
     }
 
     /**
@@ -289,7 +304,9 @@ trait CoreServicesTrait
      */
     public function exit(int|string $status = 0)
     {
-        exit($status);
+        $this->xarExit ??= $this->getExitService();
+        // call exit service :-)
+        call_user_func($this->xarExit, $status);
     }
 
     /**
@@ -371,5 +388,16 @@ trait CoreServicesTrait
     protected function getCachingService(): CachingService
     {
         return new CachingService($this);
+    }
+
+    /**
+     * Summary of getExitService
+     * @return callable
+     */
+    protected function getExitService(): callable
+    {
+        return function (int|string $status = 0): never {
+            exit($status);
+        };
     }
 }

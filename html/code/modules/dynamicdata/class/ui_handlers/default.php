@@ -65,8 +65,8 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
      */
     public function __construct(array $args = [])
     {
-        // set core services for access via methods
-        $this->setCoreServices();
+        // set core services for access via methods - nothing to do here
+        //$this->setCoreServices();
 
         // set a specific GUI module for now
         if (!empty($args['tplmodule'])) {
