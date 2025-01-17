@@ -633,7 +633,7 @@ class xarTpl extends xarObject
         if ($debug) {
             foreach ($paths as $path) {
             	$path = preg_replace('%\/\/+%','/',$path);
-                echo xarML('Possible location: ') . $path . "<br/>";                
+                echo xarMLS::translate('Possible location: ') . $path . "<br/>";                
             }
         }
 
@@ -648,7 +648,7 @@ class xarTpl extends xarObject
 
                 // Debug display
                 if ($debug) {
-                    echo "<b>" . xarML('Chosen: ') . $sourceFileName . "</b><br/>";
+                    echo "<b>" . xarMLS::translate('Chosen: ') . $sourceFileName . "</b><br/>";
                 }
                 break;
             }

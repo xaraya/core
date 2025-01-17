@@ -13,6 +13,7 @@ namespace Xaraya\DataObject\DataStores;
 
 use Xaraya\Database\ExternalDatabase;
 use xarDB;
+use xarMLS;
 use xarObject;
 use DataObject;
 use SimpleXMLElement;
@@ -233,10 +234,10 @@ class DataStoreFactory extends xarObject
     public static function &getDataSources($object = null)
     {
         $sources = [];
-        $sources[] = ['id' => '', 'name' => xarML('None')];
+        $sources[] = ['id' => '', 'name' => xarMLS::translate('None')];
 
         if (empty($object)) {
-            $sources[] = ['id' => 'dynamicdata', 'name' => xarML('DynamicData')];
+            $sources[] = ['id' => 'dynamicdata', 'name' => xarMLS::translate('DynamicData')];
             return $sources;
         }
 
@@ -247,7 +248,7 @@ class DataStoreFactory extends xarObject
             }
         }
         if (empty($object->datasources)) {
-            $sources[] = ['id' => 'dynamicdata', 'name' => xarML('DynamicData')];
+            $sources[] = ['id' => 'dynamicdata', 'name' => xarMLS::translate('DynamicData')];
             return $sources;
         }
 
@@ -279,7 +280,7 @@ class DataStoreFactory extends xarObject
             }
             // Bail if we don't have an object
             if (!is_object($tableobject)) {
-                $message = xarML("'#(1)' is not a valid table name. Go back and change it.", $tablename);
+                $message = xarMLS::translate("'#(1)' is not a valid table name. Go back and change it.", $tablename);
                 throw new Exception($message);
             }
 
@@ -301,7 +302,7 @@ class DataStoreFactory extends xarObject
     public static function &getExternalDataSources($datasources = [], $dbConnIndex = '')
     {
         $sources = [];
-        $sources[] = ['id' => '', 'name' => xarML('None')];
+        $sources[] = ['id' => '', 'name' => xarMLS::translate('None')];
 
         // try to get the meta table definition
         foreach ($datasources as $key => $value) {

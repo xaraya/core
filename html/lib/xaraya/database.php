@@ -156,7 +156,7 @@ class xarDB
 							 'encoding'  => $args['databaseCharset']);
 			break;
 			default:
-			throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
+			throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $args['databaseType']));
         }
 
 		// Get the flags
@@ -464,7 +464,7 @@ class xarDatabase extends xarObject
 			break;
 			
 			default:
-			throw new Exception(xarML("Unknown database type: '#(1)'", $databaseType));
+			throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $databaseType));
         }
         $systemArgs = array('databaseHost'    => $host,
                             'databasePort'    => $port,

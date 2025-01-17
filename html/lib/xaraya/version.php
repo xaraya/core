@@ -45,7 +45,7 @@ class xarVersion extends xarObject
  */
     public static function parse($version='')
     {
-        if (empty($version)) throw new Exception(xarML('Missing a version parameter'));
+        if (empty($version)) throw new Exception(xarMLS::translate('Missing a version parameter'));
 
         $filter = '/^([1-9]\d*|0)\.([1-9]\d*|0)\.([1-9]\d*|0)(-(a|b|rc)([1-9]\d*))?$/';
         if (!preg_match($filter,$version,$matches)) return false;

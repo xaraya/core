@@ -87,7 +87,7 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
         		return true;
         	} else {
         		// Not supposed to happen
-				echo xarML('seek() returned an unknown result');
+				echo 'seek() returned an unknown result';
 				exit;
         	}
         } else {

@@ -201,7 +201,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modInfo['displayname'])) {
             $modInfo['displayname'] = $modName;
         }
-        return xarML($modInfo['displayname']);
+        return xarMLS::translate($modInfo['displayname']);
     }
 
     /**
@@ -223,7 +223,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modInfo['displaydescription'])) {
             $modInfo['displaydescription'] = $modName;
         }
-        return xarML($modInfo['displaydescription']);
+        return xarMLS::translate($modInfo['displaydescription']);
     }
 
     /**
@@ -453,9 +453,9 @@ class xarMod extends xarObject implements IxarMod
         if (!isset($modFileInfo)) {
             // We couldn't get file info, fill in unknowns.
             // The exception for this is logged in getFileInfo
-            $unknown = xarML('Unknown');
+            $unknown = xarMLS::translate('Unknown');
             $modFileInfo['class'] = $unknown;
-            $modFileInfo['description'] = xarML('This module is not installed properly. Not all info could be retrieved');
+            $modFileInfo['description'] = xarMLS::translate('This module is not installed properly. Not all info could be retrieved');
             $modFileInfo['category'] = $unknown;
             $modFileInfo['displayname'] = $unknown;
             $modFileInfo['displaydescription'] = $unknown;

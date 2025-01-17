@@ -107,7 +107,7 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- No start with #, just copy it -->
-        <xsl:text>xarML('</xsl:text>
+        <xsl:text>xarMLS::translate('</xsl:text>
         <xsl:call-template name="replace">
           <xsl:with-param name="source" select="normalize-space(.)"/>
         </xsl:call-template>

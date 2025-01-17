@@ -19,6 +19,7 @@ use DataObjectFactory;
 use DataProperty;
 use DataPropertyMaster;
 use Query;
+use xarMLS;
 use BadParameterException;
 use Exception;
 use sys;
@@ -96,7 +97,7 @@ class RelationalDataStore extends SQLDataStore
 
         // Make sure we have a primary field
         if (empty($this->object->primary)) {
-            throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
+            throw new Exception(xarMLS::translate('The object #(1) has no primary key', $this->object->name));
         }
 
         $q = $this->object->dataquery;
@@ -105,7 +106,7 @@ class RelationalDataStore extends SQLDataStore
 
         // Run it
         if (!$q->run()) {
-            throw new Exception(xarML('Query failed'));
+            throw new Exception(xarMLS::translate('Query failed'));
         }
         $result = $q->output();
         return !empty($result);
@@ -125,7 +126,7 @@ class RelationalDataStore extends SQLDataStore
 
         //Make sure we have a primary field
         if (empty($this->object->primary)) {
-            throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
+            throw new Exception(xarMLS::translate('The object #(1) has no primary key', $this->object->name));
         }
 
         // Bail if the object has no properties
@@ -153,7 +154,7 @@ class RelationalDataStore extends SQLDataStore
 
         // Run it
         if (!$q->run()) {
-            throw new Exception(xarML('Query failed'));
+            throw new Exception(xarMLS::translate('Query failed'));
         }
         $result = $q->output();
         if (empty($result)) {
@@ -202,7 +203,7 @@ class RelationalDataStore extends SQLDataStore
 
         //Make sure we have a primary field
         if (empty($this->object->primary)) {
-            throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
+            throw new Exception(xarMLS::translate('The object #(1) has no primary key', $this->object->name));
         }
 
         // Bail if the object has no properties
@@ -263,9 +264,9 @@ class RelationalDataStore extends SQLDataStore
         try {
             $q->run();
         } catch (Exception $e) {
-            $message = xarML('The following notional query failed:<br/>');
+            $message = xarMLS::translate('The following notional query failed:<br/>');
             $message .= $q->tostring();
-            $message .= xarML('<br/>The specific message was:<br/>');
+            $message .= xarMLS::translate('<br/>The specific message was:<br/>');
             $message .= $e->getMessage();
             throw new Exception($message);
         }
@@ -294,7 +295,7 @@ class RelationalDataStore extends SQLDataStore
 
         //Make sure we have a primary field
         if (empty($this->object->primary)) {
-            throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
+            throw new Exception(xarMLS::translate('The object #(1) has no primary key', $this->object->name));
         }
 
         // Bail if the object has no properties
@@ -353,9 +354,9 @@ class RelationalDataStore extends SQLDataStore
         try {
             $q->run();
         } catch (Exception $e) {
-            $message = xarML('The following notional query failed:<br/>');
+            $message = xarMLS::translate('The following notional query failed:<br/>');
             $message .= $q->tostring();
-            $message .= xarML('<br/>The specific message was:<br/>');
+            $message .= xarMLS::translate('<br/>The specific message was:<br/>');
             $message .= $e->getMessage();
             throw new Exception($message);
         }
@@ -377,7 +378,7 @@ class RelationalDataStore extends SQLDataStore
 
         //Make sure we have a primary field
         if (empty($this->object->primary)) {
-            throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
+            throw new Exception(xarMLS::translate('The object #(1) has no primary key', $this->object->name));
         }
 
         // Complete the dataquery
@@ -392,7 +393,7 @@ class RelationalDataStore extends SQLDataStore
         $q->eq($this->object->properties[$this->object->primary]->source, $itemid);
         // Run it
         if (!$q->run()) {
-            throw new Exception(xarML('Query failed'));
+            throw new Exception(xarMLS::translate('Query failed'));
         }
 
         return $itemid;
@@ -491,7 +492,7 @@ class RelationalDataStore extends SQLDataStore
         }
 
         // Make sure we have a primary field
-        //        if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
+        //        if (empty($this->object->primary)) throw new Exception(xarMLS::translate('The object #(1) has no primary key', $this->object->name));
 
         // Complete the dataquery
         $q = $this->object->dataquery;
@@ -543,7 +544,7 @@ class RelationalDataStore extends SQLDataStore
 
         // Run the query
         if (!$q->run()) {
-            throw new Exception(xarML('Query failed'));
+            throw new Exception(xarMLS::translate('Query failed'));
         }
 
         // Restore the query back to its state before selecting on itemids
@@ -634,7 +635,7 @@ class RelationalDataStore extends SQLDataStore
             try {
                 $this->object->properties[$field]->value = $value[$this->object->properties[$field]->name];
             } catch(Exception $e) {
-                throw new Exception(xarML('Could not assign a value to field #(1). Its source may overlap with another field.', $field));
+                throw new Exception(xarMLS::translate('Could not assign a value to field #(1). Its source may overlap with another field.', $field));
             }
         }
     }
@@ -665,7 +666,7 @@ class RelationalDataStore extends SQLDataStore
             /** @var DataObject|DataObjectList $subitemsobject */
             $subitemsobject = $object->properties[$field]->subitemsobject;
             if (!is_object($subitemsobject)) {
-                throw new Exception(xarML('The property #(1) has no valid subitems object. Value is: #(2)', $field, $subitemsobject));
+                throw new Exception(xarMLS::translate('The property #(1) has no valid subitems object. Value is: #(2)', $field, $subitemsobject));
             }
             if ($row[$subitemsobjectname . "_" . $subitemsobject->primary] == null) {
                 return;
@@ -753,7 +754,7 @@ class RelationalDataStore extends SQLDataStore
         }
 
         //Make sure we have a primary field
-        //        if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
+        //        if (empty($this->object->primary)) throw new Exception(xarMLS::translate('The object #(1) has no primary key', $this->object->name));
 
         // Create the query
         $q = clone $this->object->dataquery;
@@ -763,7 +764,7 @@ class RelationalDataStore extends SQLDataStore
 
         // Run the query
         if (!$q->run()) {
-            throw new Exception(xarML('Query failed'));
+            throw new Exception(xarMLS::translate('Query failed'));
         }
         $result = $q->row();
         if (empty($result)) {

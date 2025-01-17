@@ -68,7 +68,7 @@ class xarResponse extends xarObject
      * Usage in GUI functions etc.:
      *
      *    if (something not found, e.g. item $id) {
-     *        $msg = xarML("Sorry, item #(1) is not available right now", $id);
+     *        $msg = xarMLS::translate("Sorry, item #(1) is not available right now", $id);
      *        return xarResponse::NotFound($msg);
      *    }
      *    ...
@@ -103,7 +103,7 @@ class xarResponse extends xarObject
      * Usage in GUI functions etc.:
      *
      *    if (something not allowed, e.g. edit item $id) {
-     *        $msg = xarML("Sorry, you are not allowed to edit item #(1)", $id);
+     *        $msg = xarMLS::translate("Sorry, you are not allowed to edit item #(1)", $id);
      *        return xarResponse::Forbidden($msg);
      *    }
      *    ...

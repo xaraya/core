@@ -131,8 +131,9 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         $fp = fopen($fileName, 'r');
 
         while ($data = fread($fp, 4096)) {
-                if ($charset != 'utf-8' && $currentcharset == 'utf-8') {
-                    $data = utf8_encode($data);
+                if ($charset != 'utf-8' && $currentcharset == 'utf-8' && function_exists('mb_convert_encoding')) {
+                    // @todo not sure we can rely on $charset to identify the source encoding here
+                    $data = mb_convert_encoding($data, $currentcharset, $charset);
                 }
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 // NOTE: <marco> Of course don't use xarML here!

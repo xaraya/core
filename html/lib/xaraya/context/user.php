@@ -149,6 +149,6 @@ class UserContext
         xarSession::init();
         $serverVars = $this->context['server'] ?? [];
         $ipAddress = $serverVars['REMOTE_ADDR'] ?? '-';
-        xarSession::getInstance()->startSession($this->context, $sessionId, $userId, $ipAddress);
+        xarSession::getInstance()?->startSession($this->context, $sessionId, $userId, $ipAddress);
     }
 }

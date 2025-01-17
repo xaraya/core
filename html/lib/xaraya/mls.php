@@ -119,14 +119,6 @@ class xarMLS extends xarObject
         //xarEvents::register('MLSMissingTranslationKey');
         //xarEvents::register('MLSMissingTranslationDomain');
     
-        // TODO: reminder for if/when we drop the legacy functions or switch to namespaces someday
-        //if (!function_exists('xarML')) {
-        //    function xarML($rawstring/*, ...*/)
-        //    {
-        //        return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
-        //    }
-        //}
-
         // FIXME: this was previously conditional on User subsystem initialisation,
         // but in the 2.x flow we need it earlier apparently, so made this unconditional
         // *AND* commented out the assertion on running this once per request lower
@@ -753,7 +745,7 @@ class xarMLS extends xarObject
                 	$madeDir = mkdir($path, 0700);
 	                return $madeDir;
                 } catch (Exception $e) {
-                    $msg = xarML("Could not create directory #(1). The directories under #(2) must be writeable by PHP.", $path, $next_path);
+                    $msg = xarMLS::translate("Could not create directory #(1). The directories under #(2) must be writeable by PHP.", $path, $next_path);
                     xarLog::message($msg, xarLog::LEVEL_ERROR);
                     die($msg);
                     // throw new PermissionException?

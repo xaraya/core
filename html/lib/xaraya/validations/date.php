@@ -11,6 +11,9 @@
  * @link http://www.xaraya.info
 */
 
+sys::import('xaraya.tools.strftim');
+use function Xaraya\Tools\strftime;
+
 /**
  * Date Validation Class
  *

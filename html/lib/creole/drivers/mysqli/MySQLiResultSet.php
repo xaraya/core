@@ -75,7 +75,7 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
 			return false;
 		} else {
 			// Not supposed to happen
-			echo xarML('seek() returned an unknown result');
+			echo 'seek() returned an unknown result';
 			exit;
 		}
 		// END XARAYA MODIFICATION

@@ -37,14 +37,14 @@ class HookObserver extends EventObserver implements ixarHookObserver
     {
         // Check whether a valid array was passed
         if (!isset($extrainfo) || !is_array($extrainfo)) {
-            $msg = xarML('Invalid #(1) in function #(2)() in module #(3)',
+            $msg = xarMLS::translate('Invalid #(1) in function #(2)() in module #(3)',
                          'extrainfo', 'updatehook', 'pubsub');
             throw new Exception($msg);
         }
 
         // We can use hooks via module/itemtype or object
         if (!isset($extrainfo['module']) && !isset($extrainfo['object'])) {
-            $msg = xarML('Missing #(1) in function #(2)() in module #(3)',
+            $msg = xarMLS::translate('Missing #(1) in function #(2)() in module #(3)',
                          'module or object', 'updatehook', 'pubsub');
             throw new Exception($msg);
         }

@@ -13,6 +13,7 @@ namespace Xaraya\Sessions;
 use xarCore;
 use xarDB;
 use xarEvents;
+use xarMLS;
 use xarObject;
 use xarServer;
 use xarSession;
@@ -635,7 +636,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     public function clear($spared = [])
     {
         if (!is_array($spared)) {
-            $msg = xarML('Not an array: \'$spared\'');
+            $msg = xarMLS::translate('Not an array: \'$spared\'');
             throw new BadParameterException(null, $msg);
         }
 

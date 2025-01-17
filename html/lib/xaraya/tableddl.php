@@ -535,7 +535,7 @@ class xarXMLInstaller extends xarObject
     static private function transform($xmlFile, $xslAction='display', $xslFile=null)
     {
         if (!isset($xmlFile))
-            throw new BadParameterException(xarML('No file to transform!'));
+            throw new BadParameterException(xarMLS::translate('No file to transform!'));
 
         // Get the database type from the connection
 		$databaseType = xarDB::getType();
@@ -559,13 +559,13 @@ class xarXMLInstaller extends xarObject
 				$databaseType = 'pgsql';
 			break;
 			default:
-				throw new Exception(xarML("Unknown database type: '#(1)'", $databaseType));
+				throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $databaseType));
 		}
         
         if (!isset($xslFile))
             $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-'. $databaseType . '.xsl';
         if (!file_exists($xslFile)) {
-            $msg = xarML('The file #(1) was not found', $xslFile);
+            $msg = xarMLS::translate('The file #(1) was not found', $xslFile);
             throw new BadParameterException(null, $msg);
         }
         sys::import('xaraya.tableddl.xslprocessor');
@@ -585,8 +585,8 @@ class xarXMLInstaller extends xarObject
     {
         sys::import('creole.CreoleTypes');
         $code = (int)CreoleTypes::getCreoleCode(strtoupper($creoleType));
-        if (null == $code) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
-        if (null == $type = strtoupper(self::$typesObject::getNativeType($code))) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
+        if (null == $code) die(xarMLS::translate("Unknown Creole type: '#(1)'", $creoleType));
+        if (null == $type = strtoupper(self::$typesObject::getNativeType($code))) die(xarMLS::translate("Unknown Creole type: '#(1)'", $creoleType));
         return $type;
     }
 
@@ -599,7 +599,7 @@ class xarXMLInstaller extends xarObject
             
         $xmlfile = sys::code() . 'modules/' . $module . '/xardata/' . $tablefile . '.xml';
         if (!file_exists($xmlfile)) {
-            $msg = xarML('Could not find the file #(1) to create tables from', $xmlfile);
+            $msg = xarMLS::translate('Could not find the file #(1) to create tables from', $xmlfile);
             throw new BadParameterException(null, $msg);
         }
 

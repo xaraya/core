@@ -365,7 +365,7 @@ class xarPageCache extends xarObject
             !(self::$cacheStorage->sizeLimitReached())) {
             // if request, modify the end of the file with a time stamp
             if (self::$cacheShowTime == 1) {
-                $now = xarML(
+                $now = xarMLS::translate(
                     'Last updated on #(1)',
                     date(DATE_RFC7231)
                 );
