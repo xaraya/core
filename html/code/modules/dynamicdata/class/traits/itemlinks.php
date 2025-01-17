@@ -23,8 +23,6 @@ use xarServer;
 use xarVar;
 use sys;
 
-use function xarML;
-
 sys::import('modules.dynamicdata.class.objects.factory');
 
 /**
@@ -76,7 +74,7 @@ trait ItemLinksTrait
         if (!empty(static::$_itemlinkObjects[$this->getModName()])) {
             return static::$_itemlinkObjects[$this->getModName()];
         }
-        $moduleId = $this->getModId();
+        $moduleId = $this->mod()->getRegId();
         $objects = DataObjectFactory::getObjects();
         static::$_itemlinkObjects[$this->getModName()] = [];
         foreach ($objects as $objectid => $objectinfo) {
@@ -133,7 +131,7 @@ trait ItemLinksTrait
                 'objectid' => $objectinfo['objectid'],
                 'name'     => $objectinfo['name'],
                 'label'    => xarVar::prepForDisplay($objectinfo['label']),
-                'title'    => xarVar::prepForDisplay(xarML('View #(1)', $objectinfo['label'])),
+                'title'    => xarVar::prepForDisplay($this->mls()->translate('View #(1)', $objectinfo['label'])),
                 'url'      => $url,
             ];
         }
@@ -172,7 +170,7 @@ trait ItemLinksTrait
         }
 
         // for items managed by this module itself only
-        $moduleId = $this->getModId();
+        $moduleId = $this->mod()->getRegId();
         $args = DataObjectDescriptor::getObjectID([
             'moduleid'  => $moduleId,
             'itemtype'  => $itemtype,
@@ -222,7 +220,7 @@ trait ItemLinksTrait
             if (!empty($titlefield) && isset($items[$itemid][$titlefield])) {
                 $label = $items[$itemid][$titlefield];
             } else {
-                $label = xarML('Item #(1)', $itemid);
+                $label = $this->mls()->translate('Item #(1)', $itemid);
             }
             // $object->getActionURL('display', $itemid)
             if ($linktype == 'object') {
@@ -236,7 +234,7 @@ trait ItemLinksTrait
                 'name'     => $object->name,
                 'itemid'   => $itemid,
                 'url'      => $url,
-                'title'    => xarML('Display Item'),
+                'title'    => $this->mls()->translate('Display Item'),
                 'label'    => $label,
             ];
         }

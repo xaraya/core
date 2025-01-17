@@ -18,11 +18,10 @@ use Xaraya\DataObject\Traits\UserApiInterface;
 use Xaraya\DataObject\Traits\UserApiTrait;
 use xarController;
 use xarDB;
+use xarMLS;
 use xarMod;
 use FunctionNotFoundException;
 use sys;
-
-use function xarML;
 
 sys::import('modules.dynamicdata.class.traits.userapi');
 
@@ -98,7 +97,7 @@ class UserApi implements UserApiInterface
                 $row = $result->fields;
                 $types [$row['itemtype']] = [
                     'label' => $row['objectlabel'],
-                    'title' => xarML('View #(1)', $row['objectlabel']),
+                    'title' => xarMLS::translate('View #(1)', $row['objectlabel']),
                     'url' => xarController::URL('dynamicdata', 'user', 'view', ['itemtype' => $row['itemtype']]),
                 ];
             }

@@ -43,8 +43,8 @@ function themes_admin_view(array $args = [], $context = null)
                 if ($info['class'] != 2) {
                     $new_user_theme = $old_user_theme;
                 } else {
-                    if (xarCore::isCached('Mod.Variables.themes', 'default_theme')) 
-                        xarCore::delCached('Mod.Variables.themes', 'default_theme');
+                    if (xarCoreCache::isCached('Mod.Variables.themes', 'default_theme')) 
+                        xarCoreCache::delCached('Mod.Variables.themes', 'default_theme');
                     if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$themeid)))
                         $new_user_theme = $old_user_theme;
                 }
@@ -60,8 +60,8 @@ function themes_admin_view(array $args = [], $context = null)
                 if ($info['class'] != 2) {
                     $new_admin_theme = $old_admin_theme;
                 } else {
-                    if (xarCore::isCached('Mod.Variables.themes', 'admin_theme')) 
-                        xarCore::delCached('Mod.Variables.themes', 'admin_theme');
+                    if (xarCoreCache::isCached('Mod.Variables.themes', 'admin_theme')) 
+                        xarCoreCache::delCached('Mod.Variables.themes', 'admin_theme');
                     if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$themeid)))
                         $new_admin_theme = $old_admin_theme;
                 }
