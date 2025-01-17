@@ -14,18 +14,9 @@
 
 namespace Xaraya\DataObject\Handlers;
 
-use xarVar;
 use xarCache;
 use xarObjectCache;
-use xarMLS;
-use xarMod;
-use xarModVars;
-use xarController;
-use xarServer;
-use xarTpl;
-use DataObjectFactory;
 use DataObjectList;
-use DataPropertyMaster;
 use sys;
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -48,35 +39,35 @@ class StatsHandler extends DefaultHandler
      *     $args['sort'] optional sort for the view
      *     $args['where'] optional where clause(s) for the view
      *     $args['startnum'] optional start number for the view
-     * @return string|void output of xarTpl::object() using 'ui_stats'
+     * @return string|void output of tpl()->object() using 'ui_stats'
      */
     public function run(array $args = [])
     {
-        if (!$this->xVar()->get('catid', $args['catid'])) {
+        if (!$this->var()->check('catid', $args['catid'])) {
             return;
         }
-        if (!$this->xVar()->get('sort', $args['sort'])) {
+        if (!$this->var()->check('sort', $args['sort'])) {
             return;
         }
-        if (!$this->xVar()->get('where', $args['where'])) {
+        if (!$this->var()->check('where', $args['where'])) {
             return;
         }
-        if (!$this->xVar()->get('startnum', $args['startnum'])) {
+        if (!$this->var()->check('startnum', $args['startnum'])) {
             return;
         }
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        if (!$this->xVar()->get('group', $args['group'])) {
+        if (!$this->var()->check('group', $args['group'])) {
             return;
         }
-        if (!$this->xVar()->get('field', $args['field'])) {
+        if (!$this->var()->check('field', $args['field'])) {
             return;
         }
-        if (!$this->xVar()->get('match', $args['match'])) {
+        if (!$this->var()->check('match', $args['match'])) {
             return;
         }
-        if (!$this->xVar()->get('report', $args['report'])) {
+        if (!$this->var()->check('report', $args['report'])) {
             return;
         }
 
@@ -87,13 +78,14 @@ class StatsHandler extends DefaultHandler
         // override numitems for groups !?
         $this->args['numitems'] = 0;
 
+        $cacheKey = null;
         if (!empty($this->args['object']) && !empty($this->args['method'])) {
             // Get a cache key for this object method if it's suitable for object caching
-            $cacheKey = xarCache::getObjectKey($this->args['object'], $this->args['method'], $this->args);
+            $cacheKey = $this->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
             // Check if the object method is cached
-            if (!empty($cacheKey) && xarObjectCache::isCached($cacheKey)) {
+            if ($this->cache()->hasObject($cacheKey)) {
                 // Return the cached object method output
-                return xarObjectCache::getCached($cacheKey);
+                return $this->cache()->getObject($cacheKey);
             }
         }
 
@@ -104,9 +96,7 @@ class StatsHandler extends DefaultHandler
         }
 
         // Set the output of the object method in cache
-        if (!empty($cacheKey)) {
-            xarObjectCache::setCached($cacheKey, $output);
-        }
+        $this->cache()->setObject($cacheKey, $output);
         return $output;
     }
 
@@ -153,14 +143,14 @@ class StatsHandler extends DefaultHandler
             $stats['report'] = 'Default Report';
         }
         // prepare for output now
-        $stats['report'] = $this->xVar()->prep($stats['report']);
+        $stats['report'] = $this->var()->prep($stats['report']);
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->xData()->getObjectList($this->args);
+            $this->object = $this->data()->getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->xCtl()->notFound($msg);
+                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -173,12 +163,12 @@ class StatsHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObjectList);
 
-        $title = $this->xMls()->translate('Statistics for #(1)', $this->object->label);
-        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
+        $title = $this->mls()->translate('Statistics for #(1)', $this->object->label);
+        $this->tpl()->setPageTitle($this->var()->prep($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->xMls()->translate('View #(1) is forbidden', $this->object->label);
-            return $this->xCtl()->forbidden($msg);
+            $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);
+            return $this->ctl()->forbidden($msg);
         }
 
         // load previously defined report if available
@@ -190,7 +180,7 @@ class StatsHandler extends DefaultHandler
         }
 
         // get the property types in case we want to do more than check the type
-        $proptypes = $this->xData()->getPropertyTypes();
+        $proptypes = $this->data()->getPropertyTypes();
 
         $stats['grouplist'] = [];
         foreach ($this->object->properties as $name => $property) {
@@ -298,7 +288,7 @@ class StatsHandler extends DefaultHandler
 
         // check if we need to save this report
         $save = null;
-        if (!$this->xVar()->get('save', $save)) {
+        if (!$this->var()->check('save', $save)) {
             return false;
         }
 
@@ -309,7 +299,7 @@ class StatsHandler extends DefaultHandler
             // save the report and redirect
         } elseif (!empty($save) && !empty($stats['report']) && $this->object->checkAccess('config')) {
             $this->saveReport($stats['report'], $stats, $info);
-            $this->xCtl()->redirect($this->xCtl()->getObjectUrl(
+            $this->ctl()->redirect($this->ctl()->getObjectUrl(
                 $this->object->name,
                 'report',
                 ['report' => $stats['report']]));
@@ -340,7 +330,7 @@ class StatsHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        $output = $this->xTpl()->object(
+        $output = $this->tpl()->object(
             'ui_stats',
             $data
         );
@@ -371,14 +361,14 @@ class StatsHandler extends DefaultHandler
             $report['report'] = 'Default Report';
         }
         // prepare for output now
-        $report['report'] = $this->xVar()->prep($report['report']);
+        $report['report'] = $this->var()->prep($report['report']);
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->xData()->getObjectList($this->args);
+            $this->object = $this->data()->getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->xCtl()->notFound($msg);
+                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -391,12 +381,12 @@ class StatsHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObjectList);
 
-        $title = $this->xMls()->translate('Report for #(1)', $this->object->label);
-        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
+        $title = $this->mls()->translate('Report for #(1)', $this->object->label);
+        $this->tpl()->setPageTitle($this->var()->prep($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->xMls()->translate('View #(1) is forbidden', $this->object->label);
-            return $this->xCtl()->forbidden($msg);
+            $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);
+            return $this->ctl()->forbidden($msg);
         }
 
         $report['reportlist'] = $this->getReportList();
@@ -425,7 +415,7 @@ class StatsHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        $output = $this->xTpl()->object(
+        $output = $this->tpl()->object(
             'ui_report',
             $data
         );
@@ -477,7 +467,7 @@ class StatsHandler extends DefaultHandler
      */
     public function getReportList()
     {
-        $serialreports = $this->xMod()->getVar('reportlist.' . $this->object->name);
+        $serialreports = $this->mod()->getVar('reportlist.' . $this->object->name);
         if (!empty($serialreports)) {
             $reportlist = unserialize($serialreports);
         } else {
@@ -497,7 +487,7 @@ class StatsHandler extends DefaultHandler
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
-        $serialinfo = $this->xMod()->getVar($key);
+        $serialinfo = $this->mod()->getVar($key);
         if (!empty($serialinfo)) {
             $info = unserialize($serialinfo);
         } else {
@@ -524,7 +514,7 @@ class StatsHandler extends DefaultHandler
             }
             // add the new report at the front of the list
             array_unshift($reportlist, $report);
-            $this->xMod()->setVar('reportlist.' . $this->object->name, serialize($reportlist));
+            $this->mod()->setVar('reportlist.' . $this->object->name, serialize($reportlist));
         }
         // add stats to info so we can edit it afterwards
         $info['stats'] = $stats;
@@ -532,7 +522,7 @@ class StatsHandler extends DefaultHandler
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
-        $this->xMod()->setVar($key, serialize($info));
+        $this->mod()->setVar($key, serialize($info));
     }
 
     /**
@@ -546,6 +536,6 @@ class StatsHandler extends DefaultHandler
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
-        $this->xMod()->setVar($key, null);
+        $this->mod()->setVar($key, null);
     }
 }

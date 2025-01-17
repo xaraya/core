@@ -144,9 +144,9 @@ trait TemplatingTrait
  *
  * Required methods in parent:
  * - getModName()
- * - getItemType() for xTpl()->prepare()
- * - getModType() for xTpl()->module()
- * - getObject() for xTpl()->object()
+ * - getItemType() for tpl()->prepare()
+ * - getModType() for tpl()->module()
+ * - getObject() for tpl()->object()
  *
  * @template TParent of ServicesInterface
  */

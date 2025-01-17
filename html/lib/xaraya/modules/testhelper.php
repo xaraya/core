@@ -121,17 +121,20 @@ class TestHelper extends TestCase
      * Get parent class or module class
      * @param string $modName
      * @param class-string<MethodsInterface|MethodInterface> $className
-     * @return MethodsInterface|ModuleInterface|null
+     * @return array<mixed>
      */
-    protected function getParent(string $modName, string $className)
+    protected function getConstructorArgs(string $modName, string $className)
     {
         if (is_subclass_of($className, MethodInterface::class)) {
-            return $this->createParent($modName, $className);
+            $itemtype = 0;
+            $parent = $this->createParent($modName, $className);
+            return [$modName, $itemtype, $parent];
         }
         if (is_subclass_of($className, MethodsInterface::class)) {
-            return $this->createModule($modName, $className);
+            $parent = $this->createModule($modName, $className);
+            return [$modName, $parent];
         }
-        return null;
+        return [];
     }
 
     /**
@@ -143,9 +146,9 @@ class TestHelper extends TestCase
      */
     protected function createMockWithAccess(string $modName, string $className, int $count = 1): object
     {
-        $parent = $this->getParent($modName, $className);
+        $args = $this->getConstructorArgs($modName, $className);
         $mock = $this->getMockBuilder($className)
-            ->setConstructorArgs([$modName, $parent])
+            ->setConstructorArgs($args)
             ->onlyMethods(['checkAccess'])
             ->getMock();
         // override checkAccess() method to return true + check if called $count times
@@ -165,9 +168,9 @@ class TestHelper extends TestCase
      */
     protected function createMockWithoutAccess(string $modName, string $className, int $count = 1): object
     {
-        $parent = $this->getParent($modName, $className);
+        $args = $this->getConstructorArgs($modName, $className);
         $mock = $this->getMockBuilder($className)
-            ->setConstructorArgs([$modName, $parent])
+            ->setConstructorArgs($args)
             ->onlyMethods(['callSecurityCheck'])
             ->getMock();
         // override callSecurityCheck() method to intercept redirect + check if called $count times
@@ -207,9 +210,9 @@ class TestHelper extends TestCase
      */
     protected function createMockWithoutRedirect(string $modName, string $className, int $count = 1): object
     {
-        $parent = $this->getParent($modName, $className);
+        $args = $this->getConstructorArgs($modName, $className);
         $mock = $this->getMockBuilder($className)
-            ->setConstructorArgs([$modName, $parent])
+            ->setConstructorArgs($args)
             ->onlyMethods(['redirect'])
             ->getMock();
         // override redirect() method to throw exception + check if called $count times
@@ -231,9 +234,9 @@ class TestHelper extends TestCase
      */
     protected function createMockWithoutExit(string $modName, string $className, int $count = 1): object
     {
-        $parent = $this->getParent($modName, $className);
+        $args = $this->getConstructorArgs($modName, $className);
         $mock = $this->getMockBuilder($className)
-            ->setConstructorArgs([$modName, $parent])
+            ->setConstructorArgs($args)
             ->onlyMethods(['exit'])
             ->getMock();
         // override exit() method to throw exception + check if called $count times

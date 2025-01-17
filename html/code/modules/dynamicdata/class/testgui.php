@@ -58,4 +58,16 @@ class TestGui extends AdminGui
         $status = $args['status'] ?? 'Done.';
         $this->exit($status);
     }
+
+    /**
+     * Test method to verify that we can use core services
+     * @param array<string, mixed> $args
+     * @return array<mixed>|void
+     */
+    public function test_with_services(array $args = [])
+    {
+        $args['method'] = __METHOD__;
+        $args['return_url'] = $this->ctl()->getURL('test', 'other', $args);
+        return $this->tpl()->prepare($args);
+    }
 }

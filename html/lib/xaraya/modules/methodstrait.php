@@ -16,15 +16,19 @@
 
 namespace Xaraya\Modules;
 
+use Xaraya\Services\ServicesInterface;
+use Xaraya\Services\CoreServicesTrait;
+use xarMod;
 use sys;
 
 sys::import('xaraya.modules.coretrait');
 sys::import('xaraya.modules.hookstrait');
+sys::import('xaraya.services.servicestrait');
 
 /**
  * For documentation purposes only - available via MethodsTrait
  */
-interface MethodsInterface extends CoreInterface, HooksInterface
+interface MethodsInterface extends CoreInterface, HooksInterface, ServicesInterface
 {
     public function __construct(string $modName, ?ModuleInterface $parent = null);
     /** @return void */
@@ -61,6 +65,8 @@ trait MethodsTrait
 {
     use CoreTrait;
     use HooksTrait;
+    /** @use CoreServicesTrait<static> */
+    use CoreServicesTrait;
 
     protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     protected string $moduleType;          // set in configure() by user/admin gui/api traits
@@ -89,6 +95,16 @@ trait MethodsTrait
         'geturl',
         'redirect',
         'translate',
+        // CoreServicesTrait
+        'ctl',
+        'log',
+        'mls',
+        'mod',
+        'sec',
+        'tpl',
+        'var',
+        'data',
+        'cache',
         'exit',
         // HooksTrait
         'callhooks',
@@ -190,6 +206,7 @@ trait MethodsTrait
      */
     public function getModule(): ModuleInterface|null
     {
+        $this->parent ??= xarMod::getModule($this->getModName());
         return $this->parent;
     }
 
@@ -207,7 +224,7 @@ trait MethodsTrait
      */
     public function getAPI(): UserApiInterface|null
     {
-        $component = $this->getModule()->getAPI();
+        $component = $this->getModule()?->getAPI();
         assert($component instanceof UserApiInterface);
         return $component;
     }
@@ -277,5 +294,13 @@ trait MethodsTrait
     {
         // Xaraya\Modules\MyFancyModule\UserApi
         return $this::class;
+    }
+
+    /**
+     * Dummy method for MethodsInterface extends ServicesInterface
+     */
+    public function getObject(): null
+    {
+        return null;
     }
 }

@@ -15,14 +15,6 @@
 namespace Xaraya\DataObject\Handlers;
 
 use xarObject;
-use xarVar;
-use xarMLS;
-use xarMod;
-use xarModVars;
-use xarController;
-use xarTpl;
-use xarDDObject;
-use DataObjectFactory;
 use DataObjectList;
 use DataObject;
 use sys;
@@ -99,39 +91,39 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
             $this->tpltitle = $args['tpltitle'];
         }
         if (empty($this->tpltitle)) {
-            $this->tpltitle = $this->xMls()->translate('Dynamic Data Object Interface');
+            $this->tpltitle = $this->mls()->translate('Dynamic Data Object Interface');
         }
 
         // get some common URL parameters
-        if (!$this->xVar()->get('object', $args['object'])) {
+        if (!$this->var()->check('object', $args['object'])) {
             return;
         }
-        if (!$this->xVar()->get('name', $args['name'])) {
+        if (!$this->var()->check('name', $args['name'])) {
             return;
         }
-        if (!$this->xVar()->get('module', $args['module'])) {
+        if (!$this->var()->check('module', $args['module'])) {
             return;
         }
-        if (!$this->xVar()->get('itemtype', $args['itemtype'])) {
+        if (!$this->var()->check('itemtype', $args['itemtype'])) {
             return;
         }
-        if (!$this->xVar()->get('table', $args['table'])) {
+        if (!$this->var()->check('table', $args['table'])) {
             return;
         }
-        if (!$this->xVar()->get('layout', $args['layout'])) {
+        if (!$this->var()->check('layout', $args['layout'])) {
             return;
         }
-        if (!$this->xVar()->get('template', $args['template'])) {
+        if (!$this->var()->check('template', $args['template'])) {
             return;
         }
-        if (!$this->xVar()->get('startnum', $args['startnum'])) {
+        if (!$this->var()->check('startnum', $args['startnum'])) {
             return;
         }
-        if (!$this->xVar()->get('numitems', $args['numitems'])) {
+        if (!$this->var()->check('numitems', $args['numitems'])) {
             return;
         }
 
-        if (!$this->xVar()->get('fieldlist', $fieldlist)) {
+        if (!$this->var()->check('fieldlist', $fieldlist)) {
             return;
         }
         // make fieldlist an array,
@@ -142,7 +134,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
 
         // Default number of items per page in object view
         if (!isset($args['numitems']) && $args['object'] != 'objects') {
-            $args['numitems'] = $this->xMod()->getVar('items_per_page');
+            $args['numitems'] = $this->mod()->getVar('items_per_page');
         }
 
         // support name=... parameter for DD if no object=... is found
@@ -154,7 +146,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
 
         // retrieve the object information for this object
         if (!empty($args['object'])) {
-            $info = $this->xData()->getObjectInfo(
+            $info = $this->data()->getObjectInfo(
                 ['name' => $args['object']]
             );
             if (!empty($info)) {
@@ -162,7 +154,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
             }
         } elseif (!empty($args['module']) && empty($args['moduleid'])) {
             // @todo is this still actually needed here?
-            $args['moduleid'] = $this->xMod()->getRegID($args['module']);
+            $args['moduleid'] = $this->mod()->getRegID($args['module']);
         }
 
         if (empty($args['layout'])) {
@@ -181,7 +173,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
      *     $args['method'] the ui method we are handling here
      *     $args['itemid'] item id of the object to call the method for, if the method needs it
      *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList()
-     * @return string|void output of xarTpl::object() using 'ui_default'
+     * @return string|void output of tpl()->object() using 'ui_default'
      */
     public function run(array $args = [])
     {
@@ -196,13 +188,13 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         if (!isset($this->object)) {
             // set context if available in handler
             if (!empty($this->args['itemid'])) {
-                $this->object = $this->xData()->getObject($this->args);
+                $this->object = $this->data()->getObject($this->args);
             } else {
-                $this->object = $this->xData()->getObjectList($this->args);
+                $this->object = $this->data()->getObjectList($this->args);
             }
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->xCtl()->notFound($msg);
+                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -215,33 +207,33 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         }
 
         if (!method_exists($this->object, $this->method)) {
-            return $this->xMls()->translate('Unknown method #(1) for #(2)', $this->xVar()->prep($this->method), $this->object->label);
+            return $this->mls()->translate('Unknown method #(1) for #(2)', $this->var()->prep($this->method), $this->object->label);
         }
 
         // Pre-fetch item(s) for some standard dataobject methods
         if (empty($args['itemid']) && $this->method == 'showview' && assert($this->object instanceof DataObjectList)) {
             if (!$this->object->checkAccess('view')) {
-                $msg = $this->xMls()->translate('View #(1) is forbidden', $this->object->label);
-                return $this->xCtl()->forbidden($msg);
+                $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);
+                return $this->ctl()->forbidden($msg);
             }
 
             $this->object->getItems();
         } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform') && assert($this->object instanceof DataObject)) {
             if (!$this->object->checkAccess('display')) {
-                $msg = $this->xMls()->translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
-                return $this->xCtl()->forbidden($msg);
+                $msg = $this->mls()->translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label);
+                return $this->ctl()->forbidden($msg);
             }
 
             // get the requested item
             $itemid = $this->object->getItem();
             if (empty($itemid) || $itemid != $this->object->itemid) {
-                $msg = $this->xMls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
-                return $this->xCtl()->notFound($msg);
+                $msg = $this->mls()->translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label);
+                return $this->ctl()->notFound($msg);
             }
         }
 
         $title = $this->object->label;
-        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
+        $this->tpl()->setPageTitle($this->var()->prep($title));
 
         // Here we try to run the requested method directly
         $output = $this->object->{$this->method}($this->args);
@@ -256,7 +248,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
             'tpltitle' => $this->tpltitle,
         ]);
 
-        return $this->xTpl()->object(
+        return $this->tpl()->object(
             'ui_default',
             $data
         );
@@ -304,9 +296,9 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         }
 
         if (isset($this->object->itemid)) {
-            $return_url = xarDDObject::getActionURL($this->object, $this->nextmethod, $this->object->itemid);
+            $return_url = $this->ctl()->getObjectURL(null, $this->nextmethod, ['itemid' => $this->object->itemid]);
         } else {
-            $return_url = xarDDObject::getActionURL($this->object, $this->nextmethod);
+            $return_url = $this->ctl()->getObjectURL(null, $this->nextmethod);
         }
 
         return $return_url;

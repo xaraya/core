@@ -71,8 +71,6 @@ interface CoreInterface extends ContextInterface
      * @return string
      */
     public function translate($rawstring, ...$args): string;
-    /** @return void|never */
-    public function exit(int|string $status = 0);
 }
 
 /**
@@ -235,14 +233,5 @@ trait CoreTrait
     public function translate($rawstring, ...$args): string
     {
         return xarMLS::translate($rawstring, ...$args);
-    }
-
-    /**
-     * Call exit() - override for non-blocking servers, php unit tests or elsewhere
-     * @return void|never
-     */
-    public function exit(int|string $status = 0)
-    {
-        exit($status);
     }
 }

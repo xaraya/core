@@ -90,7 +90,7 @@ trait ControllerTrait
      */
     public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = []): string
     {
-        $objectName ??= $this->getObject()?->name ?? null;
+        $objectName ??= $this->getObject()?->name;
         return xarServer::getObjectURL($objectName, $methodName, $args);
     }
 
@@ -145,8 +145,8 @@ trait ControllerTrait
  * - ...
  *
  * Required methods in parent:
- * - getModName() for xCtl()->getURL()
- * - getObject() for xCtl()->getObjectURL()
+ * - getModName() for ctl()->getURL()
+ * - getObject() for ctl()->getObjectURL()
  *
  * @template TParent of ServicesInterface
  */

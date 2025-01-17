@@ -14,15 +14,9 @@
 
 namespace Xaraya\DataObject\Handlers;
 
-use xarVar;
 use xarCache;
 use xarObjectCache;
-use xarMLS;
-use xarMod;
-use xarController;
 use xarDB;
-use xarTpl;
-use DataObjectFactory;
 use DataObjectList;
 use sys;
 
@@ -46,20 +40,20 @@ class ViewHandler extends DefaultHandler
      *     $args['sort'] optional sort for the view
      *     $args['where'] optional where clause(s) for the view
      *     $args['startnum'] optional start number for the view
-     * @return string|void output of xarTpl::object() using 'ui_view'
+     * @return string|void output of tpl()->object() using 'ui_view'
      */
     public function run(array $args = [])
     {
-        if (!$this->xVar()->get('catid', $args['catid'])) {
+        if (!$this->var()->check('catid', $args['catid'])) {
             return;
         }
-        if (!$this->xVar()->get('sort', $args['sort'])) {
+        if (!$this->var()->check('sort', $args['sort'])) {
             return;
         }
-        if (!$this->xVar()->get('where', $args['where'])) {
+        if (!$this->var()->check('where', $args['where'])) {
             return;
         }
-        if (!$this->xVar()->get('startnum', $args['startnum'])) {
+        if (!$this->var()->check('startnum', $args['startnum'])) {
             return;
         }
 
@@ -72,13 +66,14 @@ class ViewHandler extends DefaultHandler
             $this->args = array_merge($this->args, $args);
         }
 
+        $cacheKey = null;
         if (!empty($this->args['object']) && !empty($this->args['method'])) {
             // Get a cache key for this object method if it's suitable for object caching
-            $cacheKey = xarCache::getObjectKey($this->args['object'], $this->args['method'], $this->args);
+            $cacheKey = $this->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
             // Check if the object method is cached
-            if (!empty($cacheKey) && xarObjectCache::isCached($cacheKey)) {
+            if ($this->cache()->hasObject($cacheKey)) {
                 // Return the cached object method output
-                return xarObjectCache::getCached($cacheKey);
+                return $this->cache()->getObject($cacheKey);
             }
         }
 
@@ -87,10 +82,10 @@ class ViewHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->xData()->getObjectList($this->args);
+            $this->object = $this->data()->getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->xCtl()->notFound($msg);
+                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -103,12 +98,12 @@ class ViewHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObjectList);
 
-        $title = $this->xMls()->translate('View #(1)', $this->object->label);
-        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
+        $title = $this->mls()->translate('View #(1)', $this->object->label);
+        $this->tpl()->setPageTitle($this->var()->prep($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->xMls()->translate('View #(1) is forbidden', $this->object->label);
-            return $this->xCtl()->forbidden($msg);
+            $msg = $this->mls()->translate('View #(1) is forbidden', $this->object->label);
+            return $this->ctl()->forbidden($msg);
         }
 
         if (!empty($this->args['where']) && is_array($this->args['where']) && is_object($this->object->datastore)) {
@@ -160,15 +155,13 @@ class ViewHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        $output = $this->xTpl()->object(
+        $output = $this->tpl()->object(
             'ui_view',
             $data
         );
 
         // Set the output of the object method in cache
-        if (!empty($cacheKey)) {
-            xarObjectCache::setCached($cacheKey, $output);
-        }
+        $this->cache()->setObject($cacheKey, $output);
         return $output;
     }
 }

@@ -32,6 +32,44 @@ final class TestGuiTest extends TestHelper
         $this->assertEquals($expected, $data);
     }
 
+    public function testWithServices(): void
+    {
+        $context = $this->createContext();
+        $testgui = xarMod::getModule('dynamicdata')->getTestGUI();
+        $testgui->setContext($context);
+
+        $args = ['hello' => 'world'];
+        $data = $testgui->test_with_services($args);
+
+        $expected = array_merge($args, [
+            'method' => 'Xaraya\DataObject\TestGui::test_with_services',
+            'return_url' => 'http://localhost/index.php?module=dynamicdata&amp;type=test&amp;func=other&amp;hello=world',
+            'module' => 'dynamicdata',
+            'itemtype' => 0,
+            'context' => $context,
+        ]);
+        $this->assertEquals($expected, $data);
+    }
+
+    public function testServicesMethod(): void
+    {
+        $context = $this->createContext();
+        $testgui = xarMod::getModule('dynamicdata')->getTestGUI();
+        $testgui->setContext($context);
+
+        $args = ['hello' => 'world'];
+        $data = $testgui->test_services($args);
+
+        $expected = array_merge($args, [
+            'method' => 'Xaraya\DataObject\TestGui\TestServicesMethod::__invoke',
+            'return_url' => 'http://localhost/index.php?module=dynamicdata&amp;type=test&amp;func=other&amp;hello=world',
+            'module' => 'dynamicdata',
+            'itemtype' => 0,
+            'context' => $context,
+        ]);
+        $this->assertEquals($expected, $data);
+    }
+
     public function testClassWithAccess(): void
     {
         $context = $this->createContext();
@@ -78,6 +116,10 @@ final class TestGuiTest extends TestHelper
         // use __invoke() here
         //$args = ['hello' => 'world'];
         //$data = $method($args);
+
+        // Note: if you try to test this from a mock parent module class,
+        // it will return null because it's trying to find something like
+        // MockObject_TestGui_62c03933\ViewMethod as method class to __call
     }
 
     public function testClassWithoutRedirect(): void

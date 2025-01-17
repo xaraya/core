@@ -109,26 +109,32 @@ trait ModulesTrait
 
     /**
      * Wrapper for xarMod::apiFunc() - only for migration
-     * @param string $type
-     * @param string $func
+     * @param ?string $modName
+     * @param ?string $modType
+     * @param string $funcName
      * @param array<string, mixed> $args
      * @return mixed
      */
-    public function callAPI($type, $func, $args = [])
+    public function apiFunc($modName, $modType, $funcName, $args = [])
     {
-        return xarMod::apiFunc($this->getModName(), $type, $func, $args, $this->getContext());
+        $modName ??= $this->getModName();
+        $modType ??= $this->getModType();
+        return xarMod::apiFunc($modName, $modType, $funcName, $args, $this->getContext());
     }
 
     /**
      * Wrapper for xarMod::guiFunc() - only for migration
-     * @param string $type
-     * @param string $func
+     * @param ?string $modName
+     * @param ?string $modType
+     * @param string $funcName
      * @param array<string, mixed> $args
      * @return mixed
      */
-    public function callGUI($type, $func, $args = [])
+    public function guiFunc($modName, $modType, $funcName, $args = [])
     {
-        return xarMod::guiFunc($this->getModName(), $type, $func, $args, $this->getContext());
+        $modName ??= $this->getModName();
+        $modType ??= $this->getModType();
+        return xarMod::guiFunc($modName, $modType, $funcName, $args, $this->getContext());
     }
 }
 
@@ -138,12 +144,15 @@ trait ModulesTrait
  * Available methods:
  * - getVar()
  * - setVar()
+ * - getRegId()
+ * - getInfo()
+ * - getTables()
  * - ...
  *
  * Required methods in parent:
  * - getModName()
- * - getItemType() for xMod()->module()
- * - getModType() for xMod()->module()
+ * - getItemType() for mod()->module()
+ * - getModType() for mod()->module()
  *
  * @template TParent of ServicesInterface
  */

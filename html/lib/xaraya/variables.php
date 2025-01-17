@@ -346,6 +346,7 @@ class xarVar extends xarObject
      * @param mixed $validation the validation to be performed
      * @param string $subject the subject on which the validation must be performed, will be where the validated value will be returned
      * @throws EmptyParameterException
+     * @throws VariableValidationException
      * @return boolean true if the $subject validates correctly, false otherwise
      */
     public static function validate($validation, &$subject, $supress = false, $name = '')

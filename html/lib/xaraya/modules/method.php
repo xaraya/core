@@ -37,15 +37,18 @@
 
 namespace Xaraya\Modules;
 
+use Xaraya\Services\ParentServicesInterface;
+use Xaraya\Services\ParentServicesTrait;
 use sys;
 
 sys::import('xaraya.modules.coretrait');
 sys::import('xaraya.modules.hookstrait');
+sys::import('xaraya.services.parentservicestrait');
 
 /**
  * For documentation purposes only - available via MethodClass
  */
-interface MethodInterface extends CoreInterface, HooksInterface
+interface MethodInterface extends CoreInterface, HooksInterface, ParentServicesInterface
 {
     /**
      * Summary of __invoke
@@ -54,7 +57,7 @@ interface MethodInterface extends CoreInterface, HooksInterface
      */
     public function __invoke(array $args = []);
     public function configure(): void;
-    public function getParent(): MethodsInterface|null;
+    public function getParent(): MethodsInterface;
 }
 
 /**
@@ -88,20 +91,33 @@ interface MethodInterface extends CoreInterface, HooksInterface
  *   - redirect($url, $httpResponse = null) Send redirect to url and exit
  * - Multi-language:
  *   - translate($rawstring, ...$args) Translate string with optional arguments
- * - System:
- *   - exit($status = 0) Call exit() - override for non-blocking servers, php unit tests or elsewhere
  *
- * @template TComponent of MethodsInterface|null
+ * Available services:
+ * - $this->ctl() = xarController::* Main Controller (getURL, redirect, ...)
+ * - $this->log() = xarLog::* Logger (message, variable, ...)
+ * - $this->mls() = xarMLS::* Multi-Language System (translate, ...)
+ * - $this->mod() = xarMod*::* Modules (getVar, setVar, ...)
+ * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
+ * - $this->tpl() = xarTpl::* Templating (module, setPageTitle, ...)
+ * - $this->var() = xarVar::* Variables (fetch, check, ...)
+ * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
+ * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
+ * - ...
+ * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
+ *
+ * @template TComponent of MethodsInterface
  */
 class MethodClass implements MethodInterface
 {
     use CoreTrait;
     use HooksTrait;
+    /** @use ParentServicesTrait<TComponent> */
+    use ParentServicesTrait;
 
     protected string $moduleName;          // set in constructor by MethodsTrait::__call()
     protected int $itemtype = 0;
     /** @var TComponent */
-    protected ?MethodsInterface $parent;
+    protected MethodsInterface $parent;
 
     /**
      * Summary of __invoke
@@ -121,6 +137,8 @@ class MethodClass implements MethodInterface
      */
     public function __construct(string $modName, int $itemtype = 0, ?MethodsInterface $parent = null)
     {
+        // make parent mandatory to comply with parent requirement of services
+        assert($parent instanceof MethodsInterface);
         $this->setModName($modName);
         // pass along itemtype from module class - @todo is this useful/relevant?
         $this->setItemType($itemtype);
@@ -136,7 +154,7 @@ class MethodClass implements MethodInterface
     /**
      * @return TComponent
      */
-    public function getParent(): MethodsInterface|null
+    public function getParent(): MethodsInterface
     {
         return $this->parent;
     }
@@ -144,7 +162,7 @@ class MethodClass implements MethodInterface
     /**
      * @param TComponent $parent
      */
-    public function setParent(?MethodsInterface $parent): void
+    public function setParent(MethodsInterface $parent): void
     {
         $this->parent = $parent;
     }

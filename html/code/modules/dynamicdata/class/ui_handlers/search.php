@@ -14,16 +14,9 @@
 
 namespace Xaraya\DataObject\Handlers;
 
-use xarVar;
 use xarCache;
 use xarObjectCache;
-use xarMLS;
-use xarMod;
-use xarController;
-use xarTpl;
-use DataObjectFactory;
 use DataObject;
-use DataPropertyMaster;
 use sys;
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -49,32 +42,32 @@ class SearchHandler extends DefaultHandler
      *     $args['q'] optional query string for the search
      *     $args['field'] optional field selection for the search
      *     $args['match'] optional match type for the search
-     * @return string|void output of xarTpl::object() using 'ui_search'
+     * @return string|void output of tpl()->object() using 'ui_search'
      */
     public function run(array $args = [])
     {
-        if (!$this->xVar()->get('catid', $args['catid'])) {
+        if (!$this->var()->check('catid', $args['catid'])) {
             return;
         }
-        if (!$this->xVar()->get('sort', $args['sort'])) {
+        if (!$this->var()->check('sort', $args['sort'])) {
             return;
         }
-        if (!$this->xVar()->get('where', $args['where'])) {
+        if (!$this->var()->check('where', $args['where'])) {
             return;
         }
-        if (!$this->xVar()->get('startnum', $args['startnum'])) {
+        if (!$this->var()->check('startnum', $args['startnum'])) {
             return;
         }
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        if (!$this->xVar()->get('q', $args['q'])) {
+        if (!$this->var()->check('q', $args['q'])) {
             return;
         }
-        if (!$this->xVar()->get('field', $args['field'])) {
+        if (!$this->var()->check('field', $args['field'])) {
             return;
         }
-        if (!$this->xVar()->get('match', $args['match'])) {
+        if (!$this->var()->check('match', $args['match'])) {
             return;
         }
 
@@ -82,13 +75,14 @@ class SearchHandler extends DefaultHandler
             $this->args = array_merge($this->args, $args);
         }
 
+        $cacheKey = null;
         if (!empty($this->args['object']) && !empty($this->args['method'])) {
             // Get a cache key for this object method if it's suitable for object caching
-            $cacheKey = xarCache::getObjectKey($this->args['object'], $this->args['method'], $this->args);
+            $cacheKey = $this->cache()->getObjectKey($this->args['object'], $this->args['method'], $this->args);
             // Check if the object method is cached
-            if (!empty($cacheKey) && xarObjectCache::isCached($cacheKey)) {
+            if ($this->cache()->hasObject($cacheKey)) {
                 // Return the cached object method output
-                return xarObjectCache::getCached($cacheKey);
+                return $this->cache()->getObject($cacheKey);
             }
         }
 
@@ -99,9 +93,7 @@ class SearchHandler extends DefaultHandler
         }
 
         // Set the output of the object method in cache
-        if (!empty($cacheKey)) {
-            xarObjectCache::setCached($cacheKey, $output);
-        }
+        $this->cache()->setObject($cacheKey, $output);
         return $output;
     }
 
@@ -140,10 +132,10 @@ class SearchHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->xData()->getObject($this->args);
+            $this->object = $this->data()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->xCtl()->notFound($msg);
+                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -156,12 +148,12 @@ class SearchHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObject);
 
-        $title = $this->xMls()->translate('Search #(1)', $this->object->label);
-        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
+        $title = $this->mls()->translate('Search #(1)', $this->object->label);
+        $this->tpl()->setPageTitle($this->var()->prep($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->xMls()->translate('Search #(1) is forbidden', $this->object->label);
-            return $this->xCtl()->forbidden($msg);
+            $msg = $this->mls()->translate('Search #(1) is forbidden', $this->object->label);
+            return $this->ctl()->forbidden($msg);
         }
 
         if (empty($search['field']) || count($search['field']) < 1) {
@@ -195,10 +187,10 @@ class SearchHandler extends DefaultHandler
         } else {
             // get result list
             // set context if available in handler
-            $result = $this->xData()->getObjectList($this->args);
+            $result = $this->data()->getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->xCtl()->notFound($msg);
+                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->ctl()->notFound($msg);
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
@@ -233,7 +225,7 @@ class SearchHandler extends DefaultHandler
 
         // prepare for output
         if (isset($search['q']) && $search['q'] !== '') {
-            $search['q'] = $this->xVar()->prep($search['q']);
+            $search['q'] = $this->var()->prep($search['q']);
         }
         $search['options'] = ['like'  => '',
                               'start' => 'starts with',
@@ -253,7 +245,7 @@ class SearchHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        return $this->xTpl()->object(
+        return $this->tpl()->object(
             'ui_search',
             $data
         );
@@ -292,10 +284,10 @@ class SearchHandler extends DefaultHandler
 
         if (!isset($this->object)) {
             // set context if available in handler
-            $this->object = $this->xData()->getObject($this->args);
+            $this->object = $this->data()->getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->xCtl()->notFound($msg);
+                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->ctl()->notFound($msg);
             }
 
             if (empty($this->tplmodule)) {
@@ -308,12 +300,12 @@ class SearchHandler extends DefaultHandler
         }
         assert($this->object instanceof DataObject);
 
-        $title = $this->xMls()->translate('Query #(1)', $this->object->label);
-        $this->xTpl()->setPageTitle($this->xVar()->prep($title));
+        $title = $this->mls()->translate('Query #(1)', $this->object->label);
+        $this->tpl()->setPageTitle($this->var()->prep($title));
 
         if (!$this->object->checkAccess('view')) {
-            $msg = $this->xMls()->translate('Query #(1) is forbidden', $this->object->label);
-            return $this->xCtl()->forbidden($msg);
+            $msg = $this->mls()->translate('Query #(1) is forbidden', $this->object->label);
+            return $this->ctl()->forbidden($msg);
         }
 
         // get where clauses
@@ -360,10 +352,10 @@ class SearchHandler extends DefaultHandler
         } else {
             // get result list
             // set context if available in handler
-            $result = $this->xData()->getObjectList($this->args);
+            $result = $this->data()->getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                $msg = $this->xMls()->translate('Object #(1) seems to be unknown', $this->args['object']);
-                return $this->xCtl()->notFound($msg);
+                $msg = $this->mls()->translate('Object #(1) seems to be unknown', $this->args['object']);
+                return $this->ctl()->notFound($msg);
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
@@ -404,7 +396,7 @@ class SearchHandler extends DefaultHandler
         foreach (array_keys($query['field']) as $field) {
             if (isset($query['field'][$field]) && $query['field'][$field] !== '') {
                 if (!is_array($query['field'][$field])) {
-                    $query['field'][$field] = $this->xVar()->prep($query['field'][$field]);
+                    $query['field'][$field] = $this->var()->prep($query['field'][$field]);
                 }
             }
         }
@@ -417,7 +409,7 @@ class SearchHandler extends DefaultHandler
                              'lt'    => 'less than',
                              'ne'    => 'not equal to'];
         // get the property types in case we want to do more than check the parent class
-        $query['proptypes'] = $this->xData()->getPropertyTypes();
+        $query['proptypes'] = $this->data()->getPropertyTypes();
 
         // add data to original method args
         $data = array_replace($args, [
@@ -428,7 +420,7 @@ class SearchHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        return $this->xTpl()->object(
+        return $this->tpl()->object(
             'ui_query',
             $data
         );
