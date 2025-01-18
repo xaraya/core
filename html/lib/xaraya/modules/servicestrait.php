@@ -26,9 +26,9 @@ sys::import('xaraya.modules.hookstrait');
 sys::import('xaraya.services.servicestrait');
 
 /**
- * For documentation purposes only - available via MethodsTrait
+ * For documentation purposes only - available via ModuleServicesTrait
  */
-interface MethodsInterface extends CoreInterface, HooksInterface, ServicesInterface
+interface ModuleServicesInterface extends ServicesInterface, HooksInterface  // CoreInterface
 {
     public function __construct(string $modName, ?ModuleInterface $parent = null);
     /** @return void */
@@ -43,7 +43,7 @@ interface MethodsInterface extends CoreInterface, HooksInterface, ServicesInterf
 /**
  * Module class supports api methods
  */
-interface ApiMethodsInterface extends MethodsInterface
+interface ApiModuleServicesInterface extends ModuleServicesInterface
 {
     // ...
 }
@@ -51,7 +51,7 @@ interface ApiMethodsInterface extends MethodsInterface
 /**
  * Module class supports gui methods
  */
-interface GuiMethodsInterface extends MethodsInterface
+interface GuiModuleServicesInterface extends ModuleServicesInterface
 {
     // ...
 }
@@ -61,12 +61,12 @@ interface GuiMethodsInterface extends MethodsInterface
  * @see https://phpstan.org/blog/generics-in-php-using-phpdocs
  * @template TModule of ModuleInterface|null
  */
-trait MethodsTrait
+trait ModuleServicesTrait
 {
-    use CoreTrait;
-    use HooksTrait;
     /** @use CoreServicesTrait<static> */
     use CoreServicesTrait;
+    //use CoreTrait;
+    use HooksTrait;
 
     protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     protected string $moduleType;          // set in configure() by user/admin gui/api traits
@@ -109,7 +109,7 @@ trait MethodsTrait
         // HooksTrait
         'callhooks',
         'notifyhooks',
-        // MethodsTrait
+        // ModuleServicesTrait
         'configure',
         'getmodtype',
         'setmodtype',
@@ -125,7 +125,7 @@ trait MethodsTrait
         'tplmodule',
         // @todo add new internal methods here + find a better way to do this
     ];
-    /** @var array<string, MethodInterface|null> */
+    /** @var array<string, MethodServicesInterface|null> */
     private array $methods = [];
 
     /**
@@ -178,11 +178,11 @@ trait MethodsTrait
         }
         // @todo should we check $callType on component level or method level - do we allow mix of both in class?
         // don't allow api methods to be called as gui functions
-        if ($callType != 'api' && $this instanceof ApiMethodsInterface) {
+        if ($callType != 'api' && $this instanceof ApiModuleServicesInterface) {
             return false;
         }
         // Note: non-api methods can still be called as api functions here if needed
-        //if ($callType == 'api' && !($this instanceof ApiMethodsInterface)) {
+        //if ($callType == 'api' && !($this instanceof ApiModuleServicesInterface)) {
         //    return false;
         //}
         // normalize for case-insensitive + conversion from snake_case to PascalCase
@@ -259,11 +259,11 @@ trait MethodsTrait
     /**
      * Get single-method class for module function by class name
      * @see https://phpstan.org/blog/generics-by-examples
-     * @template TMethodClass of MethodInterface
+     * @template TMethodClass of MethodServicesInterface
      * @param class-string<TMethodClass> $className
      * @return TMethodClass
      */
-    protected function getMethodClass(string $className): MethodInterface
+    protected function getMethodClass(string $className): MethodServicesInterface
     {
         return new $className($this->getModName(), $this->getItemType(), $this);
     }
@@ -297,7 +297,39 @@ trait MethodsTrait
     }
 
     /**
-     * Dummy method for MethodsInterface extends ServicesInterface
+     * Get name for this module in module class or method
+     */
+    public function getModName(): string
+    {
+        return $this->moduleName;
+    }
+
+    /**
+     * Set name for this module in module class or method
+     */
+    public function setModName(string $modName): void
+    {
+        $this->moduleName = $modName;
+    }
+
+    /**
+     * Get item type in module class or method
+     */
+    public function getItemType(): int
+    {
+        return $this->itemtype;
+    }
+
+    /**
+     * Set item type in module class or method
+     */
+    public function setItemType(int $itemtype = 0): void
+    {
+        $this->itemtype = $itemtype;
+    }
+
+    /**
+     * Dummy method for ModuleServicesInterface extends ServicesInterface
      */
     public function getBlockType(): string
     {
@@ -305,7 +337,7 @@ trait MethodsTrait
     }
 
     /**
-     * Dummy method for MethodsInterface extends ServicesInterface
+     * Dummy method for ModuleServicesInterface extends ServicesInterface
      */
     public function getObject(): null
     {
@@ -313,7 +345,7 @@ trait MethodsTrait
     }
 
     /**
-     * Dummy method for MethodsInterface extends ServicesInterface
+     * Dummy method for ModuleServicesInterface extends ServicesInterface
      */
     public function getProperty(): null
     {

@@ -53,12 +53,12 @@ use xarMod;
 use xarTpl;
 use sys;
 
-sys::import('xaraya.modules.methodstrait');
+sys::import('xaraya.modules.servicestrait');
 
 /**
  * Module class supports user gui methods - available via UserGuiTrait
  */
-interface UserGuiInterface extends GuiMethodsInterface
+interface UserGuiInterface extends GuiModuleServicesInterface
 {
     /**
      * Summary of main
@@ -74,8 +74,8 @@ interface UserGuiInterface extends GuiMethodsInterface
  */
 trait UserGuiTrait
 {
-    /** @use MethodsTrait<TModule> */
-    use MethodsTrait;
+    /** @use ModuleServicesTrait<TModule> */
+    use ModuleServicesTrait;
 
     /**
      * Summary of configure

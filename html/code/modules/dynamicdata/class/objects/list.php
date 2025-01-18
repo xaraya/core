@@ -7,7 +7,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -205,7 +205,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $unchanged = true;
             foreach ($items_to_update[$key] as $field_key => $field_value) {
                 if (!isset($db_item[$field_key])) {
-                    $msg = xarML("The property '#(1)' could not be updated", $field_key);
+                    $msg = $this->ml("The property '#(1)' could not be updated", $field_key);
                     throw new Exception($msg);
                 }
                 if ($db_item[$field_key] != $field_value) {
@@ -676,7 +676,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $args['linkfunc'] = $this->linkfunc;
         }
         if(empty($args['linklabel'])) {
-            $args['linklabel'] = xarML('Display');
+            $args['linklabel'] = $this->ml('Display');
         }
         if(empty($args['param'])) {
             $args['param'] = $this->urlparam;
@@ -866,13 +866,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $modname = xarMod::getName();
         if ($modname == 'dynamicdata' || $modname == 'object') {
             if ($allow_read) {
-                $options['display'] = ['otitle' => xarML('Display'),
+                $options['display'] = ['otitle' => $this->ml('Display'),
                                             'oicon'  => 'display.png',
                                             'olink'  => $this->getActionURL('display', $itemid),
                                             'ojoin'  => ''];
             }
             if ($allow_edit) {
-                $options['modify'] = ['otitle' => xarML('Edit'),
+                $options['modify'] = ['otitle' => $this->ml('Edit'),
                                            'oicon'  => 'modify.png',
                                            'olink'  => $this->getActionURL('modify', $itemid),
                                            'ojoin'  => '|'];
@@ -880,15 +880,15 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // extra options when showing the dynamic objects themselves
             if ($allow_edit && $this->objectid == 1) {
                 // CHECKME: access should be based on the objects themselves here (but probably too heavy) ?
-                $options['modifyprops'] = ['otitle' => xarML('Properties'),
+                $options['modifyprops'] = ['otitle' => $this->ml('Properties'),
                                                 'oicon'  => 'modify-config.png',
                                                 'olink'  => $this->getActionURL('modifyprop', $itemid),
                                                 'ojoin'  => '|'];
-                $options['access'] = ['otitle' => xarML('Access'),
+                $options['access'] = ['otitle' => $this->ml('Access'),
                                                 'oicon'  => 'privileges.png',
                                                 'olink'  => $this->getActionURL('access', $itemid),
                                                 'ojoin'  => '|'];
-                $options['viewitems'] = ['otitle' => xarML('Items'),
+                $options['viewitems'] = ['otitle' => $this->ml('Items'),
                                               'oicon'  => 'item-list.png',
                                               'olink'  => $this->getActionURL('viewitems', $itemid),
                                               'ojoin'  => '|',
@@ -900,13 +900,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // CHECKME: allow cloning only for the dynamic objects themselves ?
             if ($allow_add && $this->objectid == 1) {
                 // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
-                $options['clone'] = ['otitle' => xarML('Clone'),
+                $options['clone'] = ['otitle' => $this->ml('Clone'),
                                            'oicon'  => 'add.png',
                                            'olink'  => $this->getActionURL('modify', $itemid, ['tab' => 'clone']),
                                            'ojoin'  => '|'];
             }
             if ($allow_delete) {
-                $options['delete'] = ['otitle' => xarML('Delete'),
+                $options['delete'] = ['otitle' => $this->ml('Delete'),
                                            'oicon'  => 'delete.png',
                                            'olink'  => $this->getActionURL('delete', $itemid),
                                            'ojoin'  => '|'];
@@ -1009,32 +1009,32 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // fill in the summary item
         $item = [];
-        $label = xarML('Summary');
+        $label = $this->ml('Summary');
         foreach ($this->fieldsummary as $field => $operation) {
             switch ($operation) {
                 case 'AVG':
                     if (isset($fieldvalues[$field]) && !empty($fieldcount[$field])) {
                         $item[$field] = $fieldvalues[$field] / $fieldcount[$field];
                     }
-                    $label = xarML('Current Average');
+                    $label = $this->ml('Current Average');
                     break;
                 case 'SUM':
                     if (isset($fieldvalues[$field])) {
                         $item[$field] = $fieldvalues[$field];
                     }
-                    $label = xarML('Current Total');
+                    $label = $this->ml('Current Total');
                     break;
                 case 'MAX':
                     if (isset($fieldvalues[$field])) {
                         $item[$field] = $fieldvalues[$field];
                     }
-                    $label = xarML('Current Maximum');
+                    $label = $this->ml('Current Maximum');
                     break;
                 case 'MIN':
                     if (isset($fieldvalues[$field])) {
                         $item[$field] = $fieldvalues[$field];
                     }
-                    $label = xarML('Current Minimum');
+                    $label = $this->ml('Current Minimum');
                     break;
             }
         }

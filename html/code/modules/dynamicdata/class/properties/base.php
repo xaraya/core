@@ -3,7 +3,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -11,14 +11,20 @@
 
 sys::import('modules.dynamicdata.class.properties.master');
 sys::import('modules.dynamicdata.class.properties.interfaces');
+sys::import('modules.dynamicdata.class.properties.servicestrait');
+use Xaraya\DataProperty\DataPropertyServicesInterface;
+use Xaraya\DataProperty\DataPropertyServicesTrait;
 
 /**
  * Base Class for Dynamic Properties
  *
  * @todo the visibility of most of the attributes can probably be protected
  */
-class DataProperty extends xarObject implements iDataProperty
+class DataProperty extends xarObject implements iDataProperty, DataPropertyServicesInterface
 {
+    /** @use DataPropertyServicesTrait */
+    use DataPropertyServicesTrait;
+
     // Attributes for registration
     /** @var int */
     public $id             = 0;
@@ -151,7 +157,7 @@ class DataProperty extends xarObject implements iDataProperty
                         $this->defaultvalue = null;
                     }
                 } catch (Exception $e) {
-                    //$message = xarML("Bad default value for property '#(1)'<br/>", $this->name);
+                    //$message = $this->ml("Bad default value for property '#(1)'<br/>", $this->name);
                     //echo $message;
                     throw new BadParameterException([$this->name, $e->getMessage()], "Bad default value for property '#(1)': #(2)");
                 }
@@ -225,7 +231,7 @@ class DataProperty extends xarObject implements iDataProperty
         // If we are set up to do so, translate this value
         if ($this->translatable && xarMod::isAvailable('translations')) {
             xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $this->objectref->name, $this->name);
-            $value = xarML($this->value);
+            $value = $this->ml($this->value);
         } else {
             $value = $this->value;
         }
@@ -327,27 +333,27 @@ class DataProperty extends xarObject implements iDataProperty
 
         if ($this->validation_notequals != null && $value == $this->validation_notequals) {
             if (!empty($this->validation_notequals_invalid)) {
-                $this->invalid = xarML($this->validation_notequals_invalid);
+                $this->invalid = $this->ml($this->validation_notequals_invalid);
             } else {
-                $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name, $this->validation_notequals);
+                $this->invalid = $this->ml('#(1) cannot have the value #(2)', $this->name, $this->validation_notequals);
             }
             xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif ($this->validation_equals != null && $value != $this->validation_equals) {
             if (!empty($this->validation_equals_invalid)) {
-                $this->invalid = xarML($this->validation_equals_invalid);
+                $this->invalid = $this->ml($this->validation_equals_invalid);
             } else {
-                $this->invalid = xarML('#(1) must have the value #(2)', $this->name, $this->validation_notequals);
+                $this->invalid = $this->ml('#(1) must have the value #(2)', $this->name, $this->validation_notequals);
             }
             xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif ($this->validation_allowempty != null && !$this->validation_allowempty && empty($value)) {
             if (!empty($this->validation_allowempty_invalid)) {
-                $this->invalid = xarML($this->validation_allowempty_invalid);
+                $this->invalid = $this->ml($this->validation_allowempty_invalid);
             } else {
-                $this->invalid = xarML('#(1) cannot be empty', $this->name);
+                $this->invalid = $this->ml('#(1) cannot be empty', $this->name);
             }
             xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
@@ -515,7 +521,7 @@ class DataProperty extends xarObject implements iDataProperty
             $data['value']    = $this->value;
         }
         if (!empty($this->invalid)) {
-            $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : xarML($this->invalid);
+            $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->ml($this->invalid);
         } else {
             $data['invalid']  = '';
         }
@@ -576,7 +582,7 @@ class DataProperty extends xarObject implements iDataProperty
         // If we are set up to do so, translate this value
         if ($this->translatable && xarMod::isAvailable('translations')) {
             xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $this->objectref->name, $this->name);
-            $data['value'] = xarML($data['value']);
+            $data['value'] = $this->ml($data['value']);
         }
 
         // If this is set, pass only allowed HTML tags
@@ -704,18 +710,18 @@ class DataProperty extends xarObject implements iDataProperty
 
         // This is the array of all possible filter options
         $filteroptions = [
-                            ''        => ['id' => '', 'name' => xarML('not used')],
-                            '='       => ['id' => 'eq', 'name' => xarML('equals')],
-                            '!='      => ['id' => 'ne', 'name' => xarML('not equals')],
-                            '>'       => ['id' => 'gt', 'name' => xarML('greater than')],
-                            '>='      => ['id' => 'ge', 'name' => xarML('greater than or equal')],
-                            '<'       => ['id' => 'lt', 'name' => xarML('less than')],
-                            '<='      => ['id' => 'le', 'name' => xarML('less than or equal')],
-                            'like'    => ['id' => 'like', 'name' => xarML('like')],
-                            'notlike' => ['id' => 'notlike', 'name' => xarML('not like')],
-                            'null'    => ['id' => 'null', 'name' => xarML('is null')],
-                            'notnull' => ['id' => 'notnull', 'name' => xarML('is not null')],
-                            'regex'   => ['id' => 'regex', 'name' => xarML('regular expression')],
+                            ''        => ['id' => '', 'name' => $this->ml('not used')],
+                            '='       => ['id' => 'eq', 'name' => $this->ml('equals')],
+                            '!='      => ['id' => 'ne', 'name' => $this->ml('not equals')],
+                            '>'       => ['id' => 'gt', 'name' => $this->ml('greater than')],
+                            '>='      => ['id' => 'ge', 'name' => $this->ml('greater than or equal')],
+                            '<'       => ['id' => 'lt', 'name' => $this->ml('less than')],
+                            '<='      => ['id' => 'le', 'name' => $this->ml('less than or equal')],
+                            'like'    => ['id' => 'like', 'name' => $this->ml('like')],
+                            'notlike' => ['id' => 'notlike', 'name' => $this->ml('not like')],
+                            'null'    => ['id' => 'null', 'name' => $this->ml('is null')],
+                            'notnull' => ['id' => 'notnull', 'name' => $this->ml('is not null')],
+                            'regex'   => ['id' => 'regex', 'name' => $this->ml('regular expression')],
                         ];
 
         $data['filters'] ??= [];
@@ -736,7 +742,7 @@ class DataProperty extends xarObject implements iDataProperty
         } elseif (in_array($this->basetype, ['dropdown'])) {
             $data['filters'] = ['='];
         } else {
-            die(xarML('The property type #(1) is not among those currently supported in filters'));
+            $this->exit($this->ml('The property type #(1) is not among those currently supported in filters'));
         }
 
         // Add a blank to any of the arrays to indicate unused operations
@@ -959,7 +965,7 @@ class DataProperty extends xarObject implements iDataProperty
             $data['tabindex'] = 0;
         }
         if (!isset($this->invalid)) {
-            $data['invalid'] = xarML('Invalid #(1)', $this->invalid);
+            $data['invalid'] = $this->ml('Invalid #(1)', $this->invalid);
         } else {
             $data['invalid'] = '';
         }

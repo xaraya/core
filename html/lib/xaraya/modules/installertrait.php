@@ -38,12 +38,12 @@ use xarMod;
 use xarModVars;
 use sys;
 
-sys::import('xaraya.modules.methodstrait');
+sys::import('xaraya.modules.servicestrait');
 
 /**
  * Module class supports installer (api) methods - available via InstallerTrait
  */
-interface InstallerInterface extends ApiMethodsInterface
+interface InstallerInterface extends ApiModuleServicesInterface
 {
     /**
      * Configure this module - override this method
@@ -67,8 +67,8 @@ interface InstallerInterface extends ApiMethodsInterface
  */
 trait InstallerTrait
 {
-    /** @use MethodsTrait<TModule> */
-    use MethodsTrait;
+    /** @use ModuleServicesTrait<TModule> */
+    use ModuleServicesTrait;
 
     /** @var array<string> */
     protected $objects;                    // set in configure() - override this method

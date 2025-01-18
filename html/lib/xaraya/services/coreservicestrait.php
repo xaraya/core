@@ -18,6 +18,7 @@ namespace Xaraya\Services;
 
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
+use xarLog;
 use sys;
 use Exception;
 
@@ -384,6 +385,7 @@ trait CoreServicesTrait
      */
     protected function getControllerService(): ControllerService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new ControllerService($this);
     }
 
@@ -393,6 +395,7 @@ trait CoreServicesTrait
      */
     protected function getLoggerService(): LoggerService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new LoggerService($this);
     }
 
@@ -402,6 +405,7 @@ trait CoreServicesTrait
      */
     protected function getMultiLanguageService(): MultiLanguageService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new MultiLanguageService($this);
     }
 
@@ -411,6 +415,7 @@ trait CoreServicesTrait
      */
     protected function getModulesService(): ModulesService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new ModulesService($this);
     }
 
@@ -420,6 +425,7 @@ trait CoreServicesTrait
      */
     protected function getSecurityService(): SecurityService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new SecurityService($this);
     }
 
@@ -429,6 +435,7 @@ trait CoreServicesTrait
      */
     protected function getTemplatingService(): TemplatingService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new TemplatingService($this);
     }
 
@@ -438,7 +445,9 @@ trait CoreServicesTrait
      */
     protected function getVariablesService(): VariablesService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new VariablesService($this);
+        //return ServicesContainer::getInstance(VariablesService::class, $this);
     }
 
     /**
@@ -447,6 +456,7 @@ trait CoreServicesTrait
      */
     protected function getBlocksService(): BlocksService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new BlocksService($this);
     }
 
@@ -456,6 +466,7 @@ trait CoreServicesTrait
      */
     protected function getDataObjectService(): DataObjectService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new DataObjectService($this);
     }
 
@@ -465,6 +476,7 @@ trait CoreServicesTrait
      */
     protected function getDataPropertyService(): DataPropertyService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new DataPropertyService($this);
     }
 
@@ -474,6 +486,7 @@ trait CoreServicesTrait
      */
     protected function getCachingService(): CachingService
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return new CachingService($this);
         //return CachingService::getInstance($this);
     }
@@ -484,6 +497,7 @@ trait CoreServicesTrait
      */
     protected function getExitService(): callable
     {
+        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
         return function (int|string $status = 0): never {
             exit($status);
         };

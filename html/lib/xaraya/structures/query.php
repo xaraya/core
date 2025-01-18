@@ -796,6 +796,12 @@ class Query
 /*
 // ------ Private methods --------------------------------------------------------
 */
+    /**
+     * Summary of _getbinding
+     * @deprecated no longer used?
+     * @param mixed $key
+     * @return string
+     */
     private function _getbinding($key)
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
@@ -1026,6 +1032,11 @@ class Query
         return $st;
     }
 
+    /**
+     * Summary of assembledaliases
+     * @deprecated no longer used?
+     * @return string
+     */
     private function assembledaliases()
     {
         $t = '';
@@ -1505,7 +1516,7 @@ class Query
      *
      * This will return something like "foo.bar AS bar1"
      *
-     * @param array representation of a field
+     * @param array<string, mixed> $field representation of a field
      * @return string representation of a field
      */
     private function _reconstructfield($field)

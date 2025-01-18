@@ -35,6 +35,7 @@ sys::import('xaraya.context.contexttrait');
 
 /**
  * For documentation purposes only - available via CoreTrait
+ * @deprecated 2.6.1 use core services instead
  */
 interface CoreInterface extends ContextInterface
 {

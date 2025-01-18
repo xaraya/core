@@ -16,8 +16,10 @@
 
 namespace Xaraya\Services;
 
+use Xaraya\Context\ContextTrait;
 use sys;
 
+sys::import('xaraya.context.contexttrait');
 sys::import('xaraya.services.servicestrait');
 
 /**
@@ -49,6 +51,8 @@ interface ParentServicesInterface extends CoreServicesInterface
  */
 trait ParentServicesTrait
 {
+    use ContextTrait;
+
     /**
      * Set core services for access via methods
      * @param array<string, mixed> $args array of name => service to replace default ones

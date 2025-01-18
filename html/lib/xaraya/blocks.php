@@ -30,7 +30,7 @@ interface ixarBlock
     public static function render(array $data = [], $context = null);
     public static function renderBlock(array $args = [], $context = null);
     public static function renderGroup($groupname, $template = null, $context = null);
-    public static function hasMethod(iBlock $block, $method, $strict = false);
+    public static function hasMethod(iBlockType $block, $method, $strict = false);
     public static function guiMethod(iBlock $block, $method);
     public static function checkAccess(iBlock $block, $action, $roleid = null);
 
@@ -370,12 +370,12 @@ class xarBlock extends xarObject implements ixarBlock
  *
  * @author Chris Powis 
  * 
- * @param  BasicBlock $block the block instance supplying the method
+ * @param  BlockType $block the block instance supplying the method
  * @param  string $method, name of the method to check
  * @param  bool $strict, flag to indicate if the block must have declared the method
  * @return bool
  */ 
-    public static function hasMethod(iBlock $block, $method, $strict=false)
+    public static function hasMethod(iBlockType $block, $method, $strict=false)
     {
         $hasMethod = method_exists($block, $method);
         // if not strict or method not exist, return

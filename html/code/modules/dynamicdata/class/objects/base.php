@@ -3,7 +3,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -412,7 +412,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // Sanity check: do we have a primary field?
         if (empty($this->primary)) {
-            $msg = xarML('The object #(1) has no primary key', $this->name);
+            $msg = $this->ml('The object #(1) has no primary key', $this->name);
             die($msg);
         }
 
@@ -659,7 +659,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         foreach ($this->properties as $name => $property) {
             $nameparts = explode(': ', $this->properties[$name]->source);
             if (empty($nameparts[1])) {
-                throw new Exception(xarML('Incorrect source: #(1)', $this->properties[$name]->source));
+                throw new Exception($this->ml('Incorrect source: #(1)', $this->properties[$name]->source));
             }
             $test = xarModVars::get($nameparts[1], $this->properties[$name]->name);
             if ($test === null) {

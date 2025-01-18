@@ -133,7 +133,7 @@ trait ServicesTrait
      */
     public function getProperty(): DataProperty|null
     {
-        return null;
+        return $this->property;
     }
 }
 
@@ -150,4 +150,6 @@ class ServicesClass implements ServicesInterface
     public int $itemtype = 0;
     /** @var DataObject|DataObjectList */
     public $object;
+    /** @var DataProperty */
+    public $property;
 }

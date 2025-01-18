@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -21,16 +21,17 @@
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.datastores.factory');
-sys::import('xaraya.context.contexttrait');
+sys::import('modules.dynamicdata.class.objects.servicestrait');
 use Xaraya\DataObject\DataStores\DataStoreFactory;
 use Xaraya\DataObject\DataStores\IBasicDataStore;
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
+use Xaraya\DataObject\DataObjectServicesInterface;
+use Xaraya\DataObject\DataObjectServicesTrait;
 
-class DataObjectMaster extends xarObject implements ContextInterface
+class DataObjectMaster extends xarObject implements DataObjectServicesInterface
 {
-    use ContextTrait;
+    /** @use DataObjectServicesTrait<static> */
+    use DataObjectServicesTrait;
 
     /**
      * These constants are added for convenience. They are currently not being used
@@ -257,7 +258,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
     {
         $parts = explode('.', $sourcestring);
         if (!isset($parts[1])) {
-            throw new Exception(xarML('Bad property definition'));
+            throw new Exception($this->ml('Bad property definition'));
         }
         $parts[0] = trim($parts[0]);
         if ($parts[0] == 'this' || $parts[0] == $object->name) {
@@ -273,7 +274,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
             $foreignparts = explode('.', $foreignstore);
             $foreignconfiguration = $foreignobject->datasources;
             if (!isset($foreignconfiguration[$foreignparts[0]])) {
-                throw new Exception(xarML('Bad foreign datasource'));
+                throw new Exception($this->ml('Bad foreign datasource'));
             }
             $foreigntable = $foreignconfiguration[$foreignparts[0]];
             // Support simple array form
@@ -366,7 +367,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
             try {
                 $fieldlist = explode(',', $fieldlist);
             } catch (Exception) {
-                throw new Exception(xarML('Badly formed fieldlist attribute'));
+                throw new Exception($this->ml('Badly formed fieldlist attribute'));
             }
         }
         $this->fieldlist = [];
@@ -564,7 +565,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                     $name = trim(substr($firstproperty->source, 17));
                     $this->addDataStore($name, 'modulevars');
                 } catch (Exception) {
-                    throw new Exception(xarML('Did not find a first property for module variable datastore'));
+                    throw new Exception($this->ml('Did not find a first property for module variable datastore'));
                 }
                 break;
                 /**
@@ -697,13 +698,13 @@ class DataObjectMaster extends xarObject implements ContextInterface
             if (isset($this->properties[$property])) {
                 $property = & $this->properties[$property];
             } else {
-                $msg = xarML('Bad property name parameter for modifyProperty');
+                $msg = $this->ml('Bad property name parameter for modifyProperty');
                 throw new Exception($msg);
             }
         } else {
             // Check if this object is a property of this dataobject
             if (!isset($this->properties[$property->name])) {
-                $msg = xarML('Bad property object parameter for modifyProperty');
+                $msg = $this->ml('Bad property object parameter for modifyProperty');
                 throw new Exception($msg);
             }
         }
@@ -972,9 +973,9 @@ class DataObjectMaster extends xarObject implements ContextInterface
                     }
                 }
             } catch (Exception) {
-                echo xarML('Found sources: ');
+                echo $this->ml('Found sources: ');
                 var_dump($sources);
-                echo xarML('<br/>Error reading object sources');
+                echo $this->ml('<br/>Error reading object sources');
             }
         }
 
@@ -1045,7 +1046,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                     }
                 }
             } catch (Exception) {
-                throw new Exception(xarML('Error reading object relations'));
+                throw new Exception($this->ml('Error reading object relations'));
             }
         }
 
@@ -1393,7 +1394,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                         }
                     }
                     if (!$consistent) {
-                        throw new Exception(xarML('Inconsistent conjunctions in a clause'));
+                        throw new Exception($this->ml('Inconsistent conjunctions in a clause'));
                     }
                     if ($this_conjunction == 'or') {
                         $clause = $this->conditions->qor($values);
@@ -1422,7 +1423,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         $parts = explode(' ', $string);
         // Make sure we have enough arguments. We need to have something like "foo = 17" or "foo = 'bar'"
         if (count($parts) < 3) {
-            throw new Exception(xarML('Incorrect relation "#(1)"', $string));
+            throw new Exception($this->ml('Incorrect relation "#(1)"', $string));
         }
 
         // Remove any parens from strings here. They will be added automatically if needed

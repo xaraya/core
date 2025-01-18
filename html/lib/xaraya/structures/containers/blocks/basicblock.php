@@ -3,7 +3,7 @@
  * @package core\blocks
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -17,11 +17,11 @@
  *
 **/
 sys::import('xaraya.structures.containers.blocks.blocktype');
-sys::import('xaraya.context.contexttrait');
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+sys::import('xaraya.structures.containers.blocks.servicestrait');
+use Xaraya\Blocks\BlockServicesInterface;
+use Xaraya\Blocks\BlockServicesTrait;
 
-interface iBlock extends iBlockType, ContextInterface
+interface iBlock extends iBlockType, BlockServicesInterface
 {
     public function getInfo();
     public function getInit();
@@ -52,7 +52,8 @@ interface iBlockDelete extends iBlock
 }
 abstract class BasicBlock extends BlockType implements iBlock
 {
-    use ContextTrait;
+    /** @use BlockServicesTrait<static> */
+    use BlockServicesTrait;
 
     // File Information, supplied by developer, never changes during a versions lifetime, required
     protected $type = 'basicblock';

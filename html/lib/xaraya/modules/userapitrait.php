@@ -52,12 +52,12 @@ namespace Xaraya\Modules;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.methodstrait');
+sys::import('xaraya.modules.servicestrait');
 
 /**
  * Module class supports user api methods - available via UserApiTrait
  */
-interface UserApiInterface extends ApiMethodsInterface
+interface UserApiInterface extends ApiModuleServicesInterface
 {
     // ...
 }
@@ -68,8 +68,8 @@ interface UserApiInterface extends ApiMethodsInterface
  */
 trait UserApiTrait
 {
-    /** @use MethodsTrait<TModule> */
-    use MethodsTrait;
+    /** @use ModuleServicesTrait<TModule> */
+    use ModuleServicesTrait;
 
     /**
      * Summary of configure

@@ -48,7 +48,7 @@ sys::import('xaraya.services.parentservicestrait');
 /**
  * For documentation purposes only - available via MethodClass
  */
-interface MethodInterface extends CoreInterface, HooksInterface, ParentServicesInterface
+interface MethodServicesInterface extends ParentServicesInterface
 {
     /**
      * Summary of __invoke
@@ -56,8 +56,14 @@ interface MethodInterface extends CoreInterface, HooksInterface, ParentServicesI
      * @return mixed
      */
     public function __invoke(array $args = []);
+    public function __construct(string $modName, int $itemtype = 0, ?ModuleServicesInterface $parent = null);
     public function configure(): void;
-    public function getParent(): MethodsInterface;
+    public function getParent(): ModuleServicesInterface;
+    public function setParent(ModuleServicesInterface $parent): void;
+    public function getModName(): string;
+    public function setModName(string $modName): void;
+    public function getItemType(): int;
+    public function setItemType(int $itemtype = 0): void;
 }
 
 /**
@@ -66,58 +72,12 @@ interface MethodInterface extends CoreInterface, HooksInterface, ParentServicesI
  * The instance will be created by the api/gui module class
  * and configured with the right module, itemtype and parent
  *
- * Available methods:
- * - __invoke(array $args = []) This contains the actual method code
- * - configure() Provide additional method configuration when created
- * - getParent() Get parent api/gui module class to call other methods
- *   or access other api/gui module classes from this instance
- *
- * Inherited methods:
- * - Module:
- *   - getModName() Get name for this module in module class or method
- *   - getModId() Get module registry ID for this module
- *   - getItemType() Get item type in this module class
- *   - setItemType($itemtype = 0) Set item type in this module class
- *   - getModVar($varName) Get module variable for this module
- *   - setModVar($varName, $value) Set module variable for this module
- * - Security:
- *   - checkAccess($mask, $action = '', $instance = null) Check access based on security mask or module action
- *   - genAuthKey() Generate authorisation key for this module
- *   - confirmAuthKey($name = 'authid') Confirm authorisation key for this module
- * - Variable:
- *   - fetch($name, $validation, &$value, $defaultValue = null, $flags, $prep) Fetch variable by name, with validation, default, flags and prep
- * - Controller:
- *   - getUrl($modType = 'user', $funcName = 'main', $args = []) Get url for this module type function
- *   - redirect($url, $httpResponse = null) Send redirect to url and exit
- * - Multi-language:
- *   - translate($rawstring, ...$args) Translate string with optional arguments
- *
- * Available services:
- * - $this->ctl() = xarController::* Main Controller (getURL, redirect, ...)
- * - $this->log() = xarLog::* Logger (message, variable, ...)
- * - $this->mls() = xarMLS::* Multi-Language System (translate, ...)
- * - $this->mod() = xarMod*::* Modules (getVar, setVar, ...)
- * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
- * - $this->tpl() = xarTpl::* Templating (module, setPageTitle, ...)
- * - $this->var() = xarVar::* Variables (fetch, check, ...)
- * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
- * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
- * - ...
- * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
- *
- * @template TComponent of MethodsInterface
+ * @template TComponent of ModuleServicesInterface
  */
-class MethodClass implements MethodInterface
+trait MethodServicesTrait
 {
-    use CoreTrait;
-    use HooksTrait;
     /** @use ParentServicesTrait<TComponent> */
     use ParentServicesTrait;
-
-    protected string $moduleName;          // set in constructor by MethodsTrait::__call()
-    protected int $itemtype = 0;
-    /** @var TComponent */
-    protected MethodsInterface $parent;
 
     /**
      * Summary of __invoke
@@ -135,10 +95,10 @@ class MethodClass implements MethodInterface
      * @param int $itemtype
      * @param TComponent $parent
      */
-    public function __construct(string $modName, int $itemtype = 0, ?MethodsInterface $parent = null)
+    public function __construct(string $modName, int $itemtype = 0, ?ModuleServicesInterface $parent = null)
     {
         // make parent mandatory to comply with parent requirement of services
-        assert($parent instanceof MethodsInterface);
+        assert($parent instanceof ModuleServicesInterface);
         $this->setModName($modName);
         // pass along itemtype from module class - @todo is this useful/relevant?
         $this->setItemType($itemtype);
@@ -154,7 +114,7 @@ class MethodClass implements MethodInterface
     /**
      * @return TComponent
      */
-    public function getParent(): MethodsInterface
+    public function getParent(): ModuleServicesInterface
     {
         return $this->parent;
     }
@@ -162,8 +122,107 @@ class MethodClass implements MethodInterface
     /**
      * @param TComponent $parent
      */
-    public function setParent(MethodsInterface $parent): void
+    public function setParent(ModuleServicesInterface $parent): void
     {
         $this->parent = $parent;
     }
+
+    /**
+     * Get name for this module in module class or method
+     */
+    public function getModName(): string
+    {
+        return $this->moduleName;
+    }
+
+    /**
+     * Set name for this module in module class or method
+     */
+    public function setModName(string $modName): void
+    {
+        $this->moduleName = $modName;
+    }
+
+    /**
+     * Get item type in module class or method
+     */
+    public function getItemType(): int
+    {
+        return $this->itemtype;
+    }
+
+    /**
+     * Set item type in module class or method
+     */
+    public function setItemType(int $itemtype = 0): void
+    {
+        $this->itemtype = $itemtype;
+    }
+
+    /**
+     * Dummy method for ModuleServicesInterface extends ServicesInterface
+     */
+    public function getBlockType(): string
+    {
+        return 'TODO';
+    }
+
+    /**
+     * Dummy method for ModuleServicesInterface extends ServicesInterface
+     */
+    public function getObject(): null
+    {
+        return null;
+    }
+
+    /**
+     * Dummy method for ModuleServicesInterface extends ServicesInterface
+     */
+    public function getProperty(): null
+    {
+        return null;
+    }
+}
+
+/**
+ * Handle single module function as method from api/gui module class
+ *
+ * The instance will be created by the api/gui module class
+ * and configured with the right module, itemtype and parent
+ *
+ * Available methods:
+ * - __invoke(array $args = []) This contains the actual method code
+ * - configure() Provide additional method configuration when created
+ * - getParent() Get parent api/gui module class to call other methods
+ *   or access other api/gui module classes from this instance
+ *
+ * Available services:
+ * - $this->ctl() = xarController::* Main Controller (getURL, redirect, ...)
+ * - $this->log() = xarLog::* Logger (message, variable, ...)
+ * - $this->mls() = xarMLS::* Multi-Language System (translate, ...)
+ * - $this->mod() = xarMod*::* Modules (getVar, setVar, ...)
+ * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
+ * - $this->tpl() = xarTpl::* Templating (module, setPageTitle, ...)
+ * - $this->var() = xarVar::* Variables (fetch, check, ...)
+ * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
+ * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
+ * - ...
+ * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
+ * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
+ *
+ * @template TComponent of ModuleServicesInterface
+ */
+class MethodClass implements MethodServicesInterface, HooksInterface  // , CoreInterface, 
+{
+    /** @use MethodServicesTrait<TComponent> */
+    use MethodServicesTrait;
+    //use CoreTrait;
+    use HooksTrait;
+
+    protected string $moduleName;          // set in constructor by MethodsTrait::__call()
+    protected int $itemtype = 0;
+    /** @var TComponent */
+    protected ModuleServicesInterface $parent;
+
+    // ...
 }

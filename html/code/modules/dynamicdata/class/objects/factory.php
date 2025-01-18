@@ -80,7 +80,7 @@ class DataObjectFactory extends xarObject
     public static function getObjectInfo(array $args = [])
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
-            throw new Exception(xarML('Cannot get object information without an objectid or a name'));
+            throw new Exception(xarMLS::translate('Cannot get object information without an objectid or a name'));
         }
 
         $cacheKey = 'DynamicData.ObjectInfo';
@@ -176,7 +176,7 @@ class DataObjectFactory extends xarObject
     protected static function _getObjectInfo(array $args = [])
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
-            throw new Exception(xarML('Cannot get object information without an objectid or a name'));
+            throw new Exception(xarMLS::translate('Cannot get object information without an objectid or a name'));
         }
 
         $cacheKey = 'DynamicData._ObjectInfo';
@@ -297,10 +297,10 @@ class DataObjectFactory extends xarObject
             return;
         }
         if (empty($scope)) {
-            throw new Exception(xarML('Cannot get variable cache key without a scope'));
+            throw new Exception(xarMLS::translate('Cannot get variable cache key without a scope'));
         }
         if (empty($args['objectid']) && empty($args['name'])) {
-            throw new Exception(xarML('Cannot get object information without an objectid or a name'));
+            throw new Exception(xarMLS::translate('Cannot get object information without an objectid or a name'));
         }
         $name = '';
         if (!empty($args['name'])) {
@@ -451,12 +451,12 @@ class DataObjectFactory extends xarObject
         if (empty($info)) {
             $identifier = '';
             if (isset($args['name'])) {
-                $identifier = xarML("the name is '#(1)'", $args['name']);
+                $identifier = xarMLS::translate("the name is '#(1)'", $args['name']);
             }
             if (isset($args['objectid'])) {
-                $identifier = xarML('the objectid is #(1)', $args['objectid']);
+                $identifier = xarMLS::translate('the objectid is #(1)', $args['objectid']);
             }
-            throw new Exception(xarML('Unable to create an object where #(1)', $identifier));
+            throw new Exception(xarMLS::translate('Unable to create an object where #(1)', $identifier));
         }
         $data = [];
         // The info method calls an entry for each of the object's properties. We only need one

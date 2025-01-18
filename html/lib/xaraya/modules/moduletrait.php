@@ -46,7 +46,7 @@ use xarMod;
 use sys;
 use Exception;
 
-sys::import('xaraya.modules.methodstrait');
+sys::import('xaraya.modules.servicestrait');
 
 /**
  * For documentation purposes only - available via ModuleTrait
@@ -61,7 +61,7 @@ interface ModuleInterface extends ContextInterface
     public function getInfo(): array;
     /** @return array<string, mixed> */
     public function getTables(): array;
-    public function getComponent(string $type): MethodsInterface|null;
+    public function getComponent(string $type): ModuleServicesInterface|null;
     public function hasComponent(string $type): bool;
     public function getAPI(): UserApiInterface|null;
     public function getGUI(): UserGuiInterface|null;
@@ -86,7 +86,7 @@ trait ModuleTrait
 
     /** @var array<string, string> */
     protected array $classtypes = [];
-    /** @var array<string, MethodsInterface|null> */
+    /** @var array<string, ModuleServicesInterface|null> */
     private array $components = [];
 
     public function __construct(string $modName)
@@ -117,11 +117,11 @@ trait ModuleTrait
     /**
      * Summary of createComponent
      * @see https://phpstan.org/blog/generics-by-examples
-     * @template TComponent of MethodsInterface
+     * @template TComponent of ModuleServicesInterface
      * @param class-string<TComponent> $className
      * @return TComponent
      */
-    protected function createComponent(string $className): MethodsInterface
+    protected function createComponent(string $className): ModuleServicesInterface
     {
         return new $className($this->getModName(), $this);
     }
@@ -129,7 +129,7 @@ trait ModuleTrait
     /**
      * Summary of getClassName
      * @param string $type
-     * @return class-string<MethodsInterface>
+     * @return class-string<ModuleServicesInterface>
      */
     protected function getClassName(string $type): string
     {
@@ -144,7 +144,7 @@ trait ModuleTrait
         return substr($this::class, 0, strrpos($this::class, '\\'));
     }
 
-    public function getComponent(string $type): MethodsInterface|null
+    public function getComponent(string $type): ModuleServicesInterface|null
     {
         if (!array_key_exists($type, $this->components)) {
             try {
