@@ -253,10 +253,11 @@ trait CoreServicesTrait
      * Access xarVar::* Variables methods (fetch, get, prep, ...)
      *
      * Available methods:
-     * - fetch()
-     * - check()
-     * - find()
-     * - update()
+     * - fetch() - original xarVar::fetch() with different order of params than below
+     * - get() - xarVar::GET_OR_POST = Get required variable by name: set the value if there is one, and validate the variable or throw excception
+     * - check() - xarVar::DONT_SET = Check existing variable by name: use current value or get it by name if it is not already set, and validate the variable
+     * - find() - xarVar::NOT_REQUIRED = Find optional variable by name: set the value if there is one, and validate the variable
+     * - update() - xarVar::DONT_REUSE = Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
      * - validate()
      * - prep()
      * - prepHTML()

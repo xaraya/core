@@ -43,7 +43,19 @@ interface VariablesInterface extends ServiceInterface
     public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): mixed;
 
     /**
-     * Check variable by name: use existing value or get it by name if it is not already set, and validate the variable
+     * Get required variable by name: set the value if there is one, and validate the variable or throw excception
+     *
+     * @uses xarVar::fetch()
+     * @param string $name the variable name
+     * @param mixed $variable contains the converted value of fetched variable by reference
+     * @param string $validation the validation to be performed (required here)
+     * @param mixed $defaultValue the default value
+     * @return mixed
+     */
+    public function get($name, &$variable, $validation, $defaultValue = null): mixed;
+
+    /**
+     * Check existing variable by name: use current value or get it by name if it is not already set, and validate the variable
      *
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
@@ -54,7 +66,7 @@ interface VariablesInterface extends ServiceInterface
     public function check($name, &$variable, $validation = 'isset', $defaultValue = null): mixed;
 
     /**
-     * Find variable by name: set the value if there is one, and validate the variable
+     * Find optional variable by name: set the value if there is one, and validate the variable
      *
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
@@ -65,7 +77,7 @@ interface VariablesInterface extends ServiceInterface
     public function find($name, &$variable, $validation = 'isset', $defaultValue = null): mixed;
 
     /**
-     * Update variable by name: set the value if there is one or reset it, and validate the variable or throw exception
+     * Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
      *
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
@@ -145,7 +157,29 @@ trait VariablesTrait
     }
 
     /**
-     * Check variable by name: use existing value or get it by name if it is not already set, and validate the variable
+     * Get required variable by name: set the value if there is one, and validate the variable or throw excception
+     *
+     * ```
+     * $this->var()->get($name, $variable, $validation, $defaultValue=null)
+     * ```
+     * with flags = xarVar::GET_OR_POST - the variable must be in GET or POST
+     * and prep = xarVar::PREP_FOR_NOTHING
+     *
+     * @uses xarVar::fetch()
+     * @param string $name the variable name
+     * @param mixed $variable contains the converted value of fetched variable by reference
+     * @param string $validation the validation to be performed (required here)
+     * @param mixed $defaultValue the default value (default null)
+     * @return mixed
+     */
+    public function get($name, &$variable, $validation, $defaultValue = null): mixed
+    {
+        // Note: this should be restricted to gui methods
+        return xarVar::fetch($name, $validation, $variable, $defaultValue);
+    }
+
+    /**
+     * Check existing variable by name: use current value or get it by name if it is not already set, and validate the variable
      *
      * ```
      * $this->var()->check($name, $variable, $validation='isset', $defaultValue=null)
@@ -157,7 +191,7 @@ trait VariablesTrait
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
-     * @param mixed $defaultValue the default value
+     * @param mixed $defaultValue the default value (default null)
      * @return mixed
      */
     public function check($name, &$variable, $validation = 'isset', $defaultValue = null): mixed
@@ -167,7 +201,7 @@ trait VariablesTrait
     }
 
     /**
-     * Find variable by name: set the value if there is one, and validate the variable
+     * Find optional variable by name: set the value if there is one, and validate the variable
      *
      * ```
      * $this->var()->find($name, $variable, $validation='isset', $defaultValue=null)
@@ -179,7 +213,7 @@ trait VariablesTrait
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
-     * @param mixed $defaultValue the default value
+     * @param mixed $defaultValue the default value (default null)
      * @return mixed
      */
     public function find($name, &$variable, $validation = 'isset', $defaultValue = null): mixed
@@ -189,7 +223,7 @@ trait VariablesTrait
     }
 
     /**
-     * Update variable by name: set the value if there is one or reset it, and validate the variable or throw exception
+     * Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
      *
      * ```
      * $this->var()->update($name, $variable, $validation='isset', $defaultValue=null)
@@ -201,7 +235,7 @@ trait VariablesTrait
      * @param string $name the variable name
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
-     * @param mixed $defaultValue the default value
+     * @param mixed $defaultValue the default value (default null)
      * @return mixed
      */
     public function update($name, &$variable, $validation = 'isset', $defaultValue = null): mixed
@@ -274,6 +308,7 @@ trait VariablesTrait
  *
  * Available methods:
  * - fetch()
+ * - get()
  * - check()
  * - find()
  * - update()
