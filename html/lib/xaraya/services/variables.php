@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use xarVar;
+use xarCoreCache;
 use sys;
 use EmptyParameterException;
 use VariableValidationException;
@@ -102,6 +103,11 @@ interface VariablesInterface extends ServiceInterface
      * @return mixed
      */
     public function prepHTML(...$args);
+
+    public static function isCached(string $scope, string $name): bool;
+    public static function getCached(string $scope, string $name): mixed;
+    public static function setCached(string $scope, string $name, mixed $value): void;
+    public static function delCached(string $scope, string $name): void;
 }
 
 /**
@@ -240,6 +246,26 @@ trait VariablesTrait
     public function prepHTML(...$args)
     {
         return xarVar::prepHTMLDisplay(...$args);
+    }
+
+    public static function isCached(string $scope, string $name): bool
+    {
+        return xarCoreCache::isCached($scope, $name);
+    }
+
+    public static function getCached(string $scope, string $name): mixed
+    {
+        return xarCoreCache::getCached($scope, $name);
+    }
+
+    public static function setCached(string $scope, string $name, mixed $value): void
+    {
+        xarCoreCache::setCached($scope, $name, $value);
+    }
+
+    public static function delCached(string $scope, string $name): void
+    {
+        xarCoreCache::delCached($scope, $name);
     }
 }
 

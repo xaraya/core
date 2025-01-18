@@ -31,17 +31,17 @@ interface SecurityInterface extends ServiceInterface
     /**
      * Check access based on security mask or module action
      */
-    public function checkAccess(string $mask, string|int $action = '', mixed $instance = null): bool;
+    public function checkAccess(string $mask, string|int $action = '', mixed $instance = null, ?string $modName = null): bool;
 
     /**
      * Generate authorisation key for this module
      */
-    public function genAuthKey(): string;
+    public function genAuthKey(?string $modName = null): string;
 
     /**
-     * Confirm authorisation key for this module
+     * Confirm authorisation key by name for this module
      */
-    public function confirmAuthKey(string $name = 'authid'): bool;
+    public function confirmAuthKey(string $name = 'authid', ?string $modName = null): bool;
 }
 
 /**
@@ -56,11 +56,12 @@ trait SecurityTrait
     /**
      * Check access based on security mask or module action
      */
-    public function checkAccess(string $mask, string|int $action = '', mixed $instance = null): bool
+    public function checkAccess(string $mask, string|int $action = '', mixed $instance = null, ?string $modName = null): bool
     {
         // if the mask is empty, use xarMod::checkAccess() - currently not used
         if (empty($mask) && !empty($action) && is_string($action)) {
-            return xarMod::checkAccess($this->getModName(), $action) ? true : false;
+            $modName ??= $this->getModName();
+            return xarMod::checkAccess($modName, $action) ? true : false;
         }
         // @todo mainly legacy hook module - remove 2nd argument in call later?
         if (is_int($action) && $action === 0) {
@@ -90,19 +91,21 @@ trait SecurityTrait
     /**
      * Generate authorisation key for this module
      */
-    public function genAuthKey(): string
+    public function genAuthKey(?string $modName = null): string
     {
+        $modName ??= $this->getModName();
         // Note: this should be restricted to gui methods
-        return xarSec::genAuthKey($this->getModName());
+        return xarSec::genAuthKey($modName);
     }
 
     /**
      * Confirm authorisation key for this module
      */
-    public function confirmAuthKey(string $name = 'authid'): bool
+    public function confirmAuthKey(string $name = 'authid', ?string $modName = null): bool
     {
+        $modName ??= $this->getModName();
         // Note: this should be restricted to gui methods
-        return xarSec::confirmAuthKey($this->getModName(), $name);
+        return xarSec::confirmAuthKey($modName, $name);
     }
 }
 

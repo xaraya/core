@@ -18,6 +18,7 @@ namespace Xaraya\Services;
 
 use DataObjectList;
 use DataObject;
+use DataProperty;
 use sys;
 
 sys::import('xaraya.services.coreservicestrait');
@@ -44,9 +45,19 @@ interface ServicesInterface extends CoreServicesInterface
     public function getModType(): string;
 
     /**
+     * Get block type from here - override if needed
+     */
+    public function getBlockType(): string;
+
+    /**
      * Get data object or objectlist - override if needed
      */
     public function getObject(): DataObjectList|DataObject|null;
+
+    /**
+     * @todo Get data property from here - override if needed
+     */
+    public function getProperty(): DataProperty|null;
 }
 
 /**
@@ -66,6 +77,7 @@ interface ServicesInterface extends CoreServicesInterface
  * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
  * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
  * - ...
+ * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
  * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
  *
  * @template TParent of ServicesInterface
@@ -101,11 +113,27 @@ trait ServicesTrait
     }
 
     /**
+     * @todo Get block type from here - override if needed
+     */
+    public function getBlockType(): string
+    {
+        return 'TODO';
+    }
+
+    /**
      * Get data object or objectlist from here - override if needed
      */
     public function getObject(): DataObjectList|DataObject|null
     {
         return $this->object;
+    }
+
+    /**
+     * @todo Get data property from here - override if needed
+     */
+    public function getProperty(): DataProperty|null
+    {
+        return null;
     }
 }
 

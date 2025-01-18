@@ -293,7 +293,7 @@ class xarMod extends xarObject implements IxarMod
      * @static $modAvailableCache array
      * @param string $modName registered name of module
      * @param string $type determines theme or module
-     * @return mixed true if the module is available
+     * @return bool true if the module is available
      */
     public static function isAvailable($modName, $type = 'module')
     {

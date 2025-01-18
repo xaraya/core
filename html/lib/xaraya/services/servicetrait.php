@@ -29,6 +29,7 @@ sys::import('xaraya.context.context');
  */
 interface ServiceInterface extends ContextInterface
 {
+    public function __construct(object $parent);
     public function getParent(): ServicesInterface;
 }
 
@@ -40,6 +41,8 @@ trait ServiceTrait
 {
     use ContextTrait;
 
+    /** @var ?static<TParent> */
+    protected static $instance = null;
     /** @var TParent */
     public object $parent;
 
@@ -68,6 +71,17 @@ trait ServiceTrait
     public function getContext()
     {
         return $this->getParent()->getContext();
+    }
+
+    /**
+     * Summary of getInstance
+     * @param TParent $parent
+     * @return static<TParent>
+     */
+    public static function getInstance($parent)
+    {
+        static::$instance ??= new static($parent);
+        return static::$instance;
     }
 }
 

@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -38,7 +38,7 @@ class DisplayHandler extends DefaultHandler
      *     $args['itemid'] item id of the object to display, and/or
      *     $args['preview'] true if you want dd to call checkInput() = standard dd preview using GET/POST params, or
      *     $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
-     * @return string|void output of tpl()->object() using 'ui_display'
+     * @return string|void output of data()->template() using 'ui_display'
      */
     public function run(array $args = [])
     {
@@ -126,7 +126,7 @@ class DisplayHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        $output = $this->tpl()->object(
+        $output = $this->data()->template(
             'ui_display',
             $data
         );

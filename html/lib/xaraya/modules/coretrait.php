@@ -217,7 +217,7 @@ trait CoreTrait
 
     /**
      * Get url for this module type function
-     * @deprecated 2.6.1 use $this->ctl()->getURL() instead
+     * @deprecated 2.6.1 use $this->mod()->getURL() instead
      * @param array<mixed> $args
      */
     public function getUrl(string $modType = 'user', string $funcName = 'main', array $args = []): string
@@ -237,7 +237,7 @@ trait CoreTrait
 
     /**
      * Translate string with optional arguments
-     * @deprecated 2.6.1 use $this->mls()->translate() instead
+     * @deprecated 2.6.1 use $this->mls()->translate() or $this->ml() short-hand version instead
      * @param string $rawstring
      * @param mixed ...$args
      */

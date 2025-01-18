@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.5.5
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -122,16 +122,16 @@ trait ItemLinksTrait
                 continue;
             }
             if ($linktype == 'object') {
-                $url = xarServer::getObjectURL($objectinfo['name'], $linkfunc);
+                $url = $this->ctl()->getObjectURL($objectinfo['name'], $linkfunc);
             } else {
                 // adapted from xarMod::apiFunc('dynamicdata', 'user', 'getitemtypes')
-                $url = xarServer::getModuleURL($tplmodule, $linktype, $linkfunc, ['itemtype' => $objectinfo['itemtype']]);
+                $url = $this->ctl()->getModuleURL($tplmodule, $linktype, $linkfunc, ['itemtype' => $objectinfo['itemtype']]);
             }
             $itemtypes[$objectinfo['itemtype']] = [
                 'objectid' => $objectinfo['objectid'],
                 'name'     => $objectinfo['name'],
-                'label'    => xarVar::prepForDisplay($objectinfo['label']),
-                'title'    => xarVar::prepForDisplay($this->mls()->translate('View #(1)', $objectinfo['label'])),
+                'label'    => $this->var()->prep($objectinfo['label']),
+                'title'    => $this->var()->prep($this->mls()->translate('View #(1)', $objectinfo['label'])),
                 'url'      => $url,
             ];
         }
@@ -171,7 +171,7 @@ trait ItemLinksTrait
 
         // for items managed by this module itself only
         $moduleId = $this->mod()->getRegId();
-        $args = DataObjectDescriptor::getObjectID([
+        $args = $this->data()->getObjectID([
             'moduleid'  => $moduleId,
             'itemtype'  => $itemtype,
         ]);
@@ -180,11 +180,10 @@ trait ItemLinksTrait
         }
         $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
         // set context if available in method
-        $object = DataObjectFactory::getObjectList(
+        $object = $this->data()->getObjectList(
             ['objectid'  => $args['objectid'],
-                'itemids' => $itemids,
-                'status' => $status],
-            $this->getContext()
+            'itemids' => $itemids,
+            'status' => $status],
         );
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
             return $itemlinks;
@@ -224,10 +223,10 @@ trait ItemLinksTrait
             }
             // $object->getActionURL('display', $itemid)
             if ($linktype == 'object') {
-                $url = xarServer::getObjectURL($object->name, $linkfunc, ['itemid' => $itemid]);
+                $url = $this->ctl()->getObjectURL($object->name, $linkfunc, ['itemid' => $itemid]);
             } else {
                 // adapted from xarMod::apiFunc('dynamicdata', 'user', 'getitemlinks')
-                $url = xarServer::getModuleURL($tplmodule, $linktype, $linkfunc, ['name' => $args['name'], 'itemid' => $itemid]);
+                $url = $this->ctl()->getModuleURL($tplmodule, $linktype, $linkfunc, ['name' => $args['name'], 'itemid' => $itemid]);
             }
             $itemlinks[$itemid] = [
                 'objectid' => $object->objectid,

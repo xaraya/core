@@ -5,7 +5,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -15,11 +15,6 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
-use xarSecurity;
-use xarTpl;
-use xarVar;
-use DataObjectDescriptor;
-use DataObjectFactory;
 use sys;
 
 sys::import('modules.dynamicdata.class.hookobservers.generic');
@@ -35,7 +30,7 @@ class ItemNew extends DataObjectHookObserver
     public function run(array $extrainfo = [])
     {
         // Security
-        if (!xarSecurity::check('AddDynamicData')) {
+        if (!$this->sec()->checkAccess('AddDynamicData')) {
             return;
         }
 
@@ -50,21 +45,21 @@ class ItemNew extends DataObjectHookObserver
             return '';
         }
 
-        $descriptorargs = DataObjectDescriptor::getObjectID([
+        $descriptorargs = $this->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
         // set context if available in hook call
-        $object = DataObjectFactory::getObject([
+        $object = $this->data()->getObject([
             'name' => $descriptorargs['name'],
-        ], $this->getContext());
+        ]);
 
         if (!isset($object) || empty($object->objectid)) {
             return;
         }
 
         // if we are in preview mode, we need to check for any preview values
-        if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('preview', $preview)) {
             return;
         }
         if (!empty($preview)) {
@@ -78,9 +73,7 @@ class ItemNew extends DataObjectHookObserver
         }
 
         $properties = $object->getProperties();
-        return xarTpl::module(
-            'dynamicdata',
-            'admin',
+        return $this->mod()->template(
             'newhook',
             [
                 'properties' => $properties,

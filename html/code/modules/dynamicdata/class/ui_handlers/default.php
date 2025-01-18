@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -173,7 +173,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
      *     $args['method'] the ui method we are handling here
      *     $args['itemid'] item id of the object to call the method for, if the method needs it
      *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList()
-     * @return string|void output of tpl()->object() using 'ui_default'
+     * @return string|void output of data()->template() using 'ui_default'
      */
     public function run(array $args = [])
     {
@@ -248,7 +248,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
             'tpltitle' => $this->tpltitle,
         ]);
 
-        return $this->tpl()->object(
+        return $this->data()->template(
             'ui_default',
             $data
         );

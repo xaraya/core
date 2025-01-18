@@ -42,6 +42,7 @@ interface ParentServicesInterface extends CoreServicesInterface
  * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
  * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
  * - ...
+ * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
  * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
  *
  * @template TParent of ServicesInterface
@@ -58,20 +59,16 @@ trait ParentServicesTrait
     }
 
     /**
-     * Access xarController::* Main Controller methods (getURL, redirect, ...)
+     * Access xarController::* Main Controller methods (URL, redirect, ...)
      *
      * Available methods:
-     * - getURL()
+     * - URL() - or use mod()->getURL() for current module
+     * - getObjectURL() - or use data()->getURL() for current object
      * - redirect()
      * - forbidden()
      * - notFound()
      * - badRequest()
-     * - getObjectURL()
      * - ...
-     *
-     * Required methods in parent:
-     * - getModName() for ctl()->getURL()
-     * - getObject() for ctl()->getObjectUrl()
      *
      * @return ControllerService<TParent>
      */
@@ -123,6 +120,7 @@ trait ParentServicesTrait
      * Available methods:
      * - getVar()
      * - setVar()
+     * - getURL() for current module - or use ctl()->URL() with modName
      * - getRegId()
      * - getInfo()
      * - getTables()
@@ -130,8 +128,9 @@ trait ParentServicesTrait
      *
      * Required methods in parent:
      * - getModName()
-     * - getItemType() for mod()->module()
-     * - getModType() for mod()->module()
+     *
+     * Optional methods in parent:
+     * - getModType() for mod()->apiFunc(null, null, ...) - only for migration
      *
      * @return ModulesService<TParent>
      */
@@ -201,9 +200,29 @@ trait ParentServicesTrait
     }
 
     /**
+     * Access xarBlock*::* Blocks methods (template, ...)
+     *
+     * Available methods:
+     * - template() for current block type - or use tpl()->block() in general with modName blockType
+     * - prepare()
+     * - ...
+     *
+     * Required methods in parent:
+     * - getModName()
+     * - getBlockType() for block()->template()
+     *
+     * @return BlocksService<TParent>
+     */
+    public function block(): BlocksService
+    {
+        return $this->getParent()->block();
+    }
+
+    /**
      * Access DataObjectFactory::* methods with context (getObject, getObjectList, ...)
      *
      * Available methods:
+     * - getURL() for current object - or use ctl()->getObjectURL() in general with objectName
      * - getObject()
      * - getObjectList()
      * - getObjectInfo()
@@ -212,11 +231,33 @@ trait ParentServicesTrait
      * - getPropertyTypes()
      * - ...
      *
+     * Required methods in parent:
+     * - getObjectName() for data()->getURL()
+     *
      * @return DataObjectService<TParent>
      */
     public function data(): DataObjectService
     {
         return $this->getParent()->data();
+    }
+
+    /**
+     * Access DataProperty*::* methods with context (getProperty, template, ...)
+     *
+     * Available methods:
+     * - template() for current property - or use tpl()->property() in general with modName propertyName
+     * - getPropertyTypes()
+     * - getProperty()
+     * - ...
+     *
+     * Required methods in parent:
+     * - getPropertyName() for prop()->template()
+     *
+     * @return DataPropertyService<TParent>
+     */
+    public function prop(): DataPropertyService
+    {
+        return $this->getParent()->prop();
     }
 
     /**
@@ -246,6 +287,17 @@ trait ParentServicesTrait
     public function exit(int|string $status = 0)
     {
         $this->getParent()->exit($status);
+    }
+
+    /**
+     * Translate string with optional arguments
+     * = short-hand version for $this->mls()->translate()
+     * @param string $rawstring
+     * @param mixed ...$args
+     */
+    public function ml($rawstring, ...$args): string
+    {
+        return $this->getParent()->ml($rawstring, ...$args);
     }
 
     /**

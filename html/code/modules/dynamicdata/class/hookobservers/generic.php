@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -14,26 +14,29 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
+use Xaraya\Services\ServicesInterface;
+use Xaraya\Services\ServicesTrait;
 use HookObserver;
 use ixarEventSubject;
 use ixarHookSubject;
 use sys;
 
 sys::import('xaraya.structures.hooks.observer');
-sys::import('xaraya.context.contexttrait');
+sys::import('xaraya.services.servicestrait');
 
 /**
  * DataObject Hook Observer for Item* and Module* ixarHookSubject events
  * Notified if DD module is hooked to a particular module, itemtype and/or scope
  */
-class DataObjectHookObserver extends HookObserver implements ContextInterface
+class DataObjectHookObserver extends HookObserver implements ServicesInterface
 {
-    use ContextTrait;
+    /** @use ServicesTrait<static> */
+    use ServicesTrait;
 
     /** @var string */
     public $module = 'dynamicdata';
+    /** @var string */
+    public $section = 'admin';
 
     /**
      * Get name for this module in hook observer
@@ -41,6 +44,14 @@ class DataObjectHookObserver extends HookObserver implements ContextInterface
     public function getModName(): string
     {
         return $this->module;
+    }
+
+    /**
+     * Get module type (user, admin, ...) from here
+     */
+    public function getModType(): string
+    {
+        return $this->section;
     }
 
     /**

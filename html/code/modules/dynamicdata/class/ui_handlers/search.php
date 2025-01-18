@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -14,8 +14,6 @@
 
 namespace Xaraya\DataObject\Handlers;
 
-use xarCache;
-use xarObjectCache;
 use DataObject;
 use sys;
 
@@ -42,7 +40,7 @@ class SearchHandler extends DefaultHandler
      *     $args['q'] optional query string for the search
      *     $args['field'] optional field selection for the search
      *     $args['match'] optional match type for the search
-     * @return string|void output of tpl()->object() using 'ui_search'
+     * @return string|void output of data()->template() using 'ui_search'
      */
     public function run(array $args = [])
     {
@@ -245,7 +243,7 @@ class SearchHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        return $this->tpl()->object(
+        return $this->data()->template(
             'ui_search',
             $data
         );
@@ -420,7 +418,7 @@ class SearchHandler extends DefaultHandler
             'tpltitle' => $this->tpltitle,
         ]);
 
-        return $this->tpl()->object(
+        return $this->data()->template(
             'ui_query',
             $data
         );

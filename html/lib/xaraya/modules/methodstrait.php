@@ -299,7 +299,23 @@ trait MethodsTrait
     /**
      * Dummy method for MethodsInterface extends ServicesInterface
      */
+    public function getBlockType(): string
+    {
+        return 'TODO';
+    }
+
+    /**
+     * Dummy method for MethodsInterface extends ServicesInterface
+     */
     public function getObject(): null
+    {
+        return null;
+    }
+
+    /**
+     * Dummy method for MethodsInterface extends ServicesInterface
+     */
+    public function getProperty(): null
     {
         return null;
     }

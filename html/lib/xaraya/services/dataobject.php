@@ -21,6 +21,9 @@ use DataObjectFactory;
 use DataObject;
 use DataObjectList;
 use DataPropertyMaster;
+use DataProperty;
+use xarServer;
+use xarTpl;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -31,6 +34,18 @@ sys::import('modules.dynamicdata.class.objects.factory');
  */
 interface DataObjectInterface extends ServiceInterface
 {
+    /**
+     * Get url for this object method
+     * @param array<string, mixed> $args
+     */
+    public function getURL(string $methodName = 'view', array $args = [], ?string $objectName = null): string;
+
+    /**
+     * Render output with object template
+     * @param array<mixed> $tplData
+     */
+    public function template(string $tplType, array $tplData = []): string;
+
     /**
      * Get data object
      * @param array<string, mixed> $args
@@ -68,6 +83,12 @@ interface DataObjectInterface extends ServiceInterface
      * @return array<int, mixed>
      */
     public function getPropertyTypes(): array;
+
+    /**
+     * Get data property of the right type
+     * @param array<string, mixed> $args with ['type' => '...']
+     */
+    public function getProperty(array $args = []): DataProperty;
 }
 
 /**
@@ -78,6 +99,41 @@ trait DataObjectTrait
 {
     /** @use ServiceTrait<TParent> */
     use ServiceTrait;
+
+    /**
+     * Get url for this object method
+     * @param array<string, mixed> $args
+     */
+    public function getURL(string $methodName = 'view', array $args = [], ?string $objectName = null): string
+    {
+        $objectName ??= $this->getObjectName();
+        return xarServer::getObjectURL($objectName, $methodName, $args);
+    }
+
+    /**
+     * Render output with object template
+     * @uses xarTpl::object()
+     * @param string $tplType
+     * @param array<mixed> $tplData
+     * @return string
+     */
+    public function template(string $tplType, array $tplData = []): string
+    {
+        // Add standard template variables (module, itemtype and context)
+        // @todo $tplData = $this->prepare($tplData);
+        $tplData['context'] ??= $this->getContext();
+
+        $modName = $this->getModName();
+        $objecTemplate = $this->getObjectTemplate();
+    
+        // Create the output.
+        return xarTpl::object(
+            $modName,
+            $objecTemplate,
+            $tplType,
+            $tplData
+        );
+    }
 
     /**
      * Get data object
@@ -134,12 +190,23 @@ trait DataObjectTrait
     {
         return DataPropertyMaster::getPropertyTypes();
     }
+
+    /**
+     * Get data property of the right type
+     * @param array<string, mixed> $args array with ['type' => '...']
+     */
+    public function getProperty(array $args = []): DataProperty
+    {
+        return DataPropertyMaster::getProperty($args);
+    }
 }
 
 /**
  * Access DataObject*::* methods with context (getObject, getObjectList, ...)
  *
  * Available methods:
+ * - getURL() for current object - or use ctl()->getObjectURL() in general with objectName
+ * - template() for current object - or use tpl()->object() in general with modName objectTemplate
  * - getObject()
  * - getObjectList()
  * - getObjectInfo()
@@ -147,6 +214,11 @@ trait DataObjectTrait
  * - getObjectDescriptor()
  * - getPropertyTypes()
  * - ...
+ *
+ * Required methods in parent:
+ * - getObjectName() for data()->getURL()
+ * - getModName() for data()->template()
+ * - getObjectTemplate() for data()->template()
  *
  * @todo do something with getParent()->getObject() + simplify methods by name or objectid?
  *
@@ -156,4 +228,28 @@ class DataObjectService implements DataObjectInterface
 {
     /** @use DataObjectTrait<TParent> */
     use DataObjectTrait;
+
+    /**
+     * Get name of the object from parent getObject()
+     */
+    public function getObjectName(): string
+    {
+        return $this->getParent()->getObject()?->name;
+    }
+
+    /**
+     * Get name of the module from parent getObject()
+     */
+    public function getModName(): string
+    {
+        return $this->getParent()->getObject()?->tplmodule;
+    }
+
+    /**
+     * Get template of the object from parent getObject()
+     */
+    public function getObjectTemplate(): string
+    {
+        return $this->getParent()->getObject()?->template;
+    }
 }

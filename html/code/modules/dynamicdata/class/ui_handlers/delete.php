@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -37,7 +37,7 @@ class DeleteHandler extends DefaultHandler
      *     $args['cancel'] true if the user cancels
      *     $args['confirm'] true if the user confirms
      *     $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string|bool|void output of tpl()->object() using 'ui_delete'
+     * @return string|bool|void output of data()->template() using 'ui_delete'
      */
     public function run(array $args = [])
     {
@@ -125,7 +125,7 @@ class DeleteHandler extends DefaultHandler
             'return_url' => $args['return_url'],
         ]);
 
-        return $this->tpl()->object(
+        return $this->data()->template(
             'ui_delete',
             $data
         );

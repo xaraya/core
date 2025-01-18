@@ -30,16 +30,16 @@ sys::import('xaraya.services.servicetrait');
 interface ControllerInterface extends ServiceInterface
 {
     /**
-     * Get url for this module type function
+     * Get url for some module type function
      * @param array<string, mixed> $args
      */
-    public function getURL(string $modType = 'user', string $funcName = 'main', array $args = []): string;
+    public function getModuleURL(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): string;
 
     /**
-     * Get url for that object method
+     * Get url for some object method
      * @param array<string, mixed> $args
      */
-    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = []): string;
+    public function getObjectURL(string $objectName, string $methodName = 'view', array $args = []): string;
 
     /**
      * Send redirect to url and exit
@@ -76,21 +76,20 @@ trait ControllerTrait
     use ServiceTrait;
 
     /**
-     * Get url for this module type function
+     * Get url for a module type function
      * @param array<string, mixed> $args
      */
-    public function getURL(string $modType = 'user', string $funcName = 'main', array $args = []): string
+    public function getModuleURL(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): string
     {
-        return xarController::URL($this->getModName(), $modType, $funcName, $args);
+        return xarController::URL($modName, $modType, $funcName, $args);
     }
 
     /**
-     * Get url for that object method
+     * Get url for an object method
      * @param array<string, mixed> $args
      */
-    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = []): string
+    public function getObjectURL(string $objectName, string $methodName = 'view', array $args = []): string
     {
-        $objectName ??= $this->getObject()?->name;
         return xarServer::getObjectURL($objectName, $methodName, $args);
     }
 
@@ -133,20 +132,16 @@ trait ControllerTrait
 }
 
 /**
- * Access xarController::* Main Controller methods (getURL, redirect, ...)
+ * Access xarController::* Main Controller methods (URL, redirect, ...)
  *
  * Available methods:
- * - getURL()
+ * - URL() - or use mod()->getURL() for current module
+ * - getObjectURL() - or use data()->getURL() for current object
  * - redirect()
  * - forbidden()
  * - notFound()
  * - badRequest()
- * - getObjectURL()
  * - ...
- *
- * Required methods in parent:
- * - getModName() for ctl()->getURL()
- * - getObject() for ctl()->getObjectURL()
  *
  * @template TParent of ServicesInterface
  */
@@ -154,20 +149,4 @@ class ControllerService implements ControllerInterface
 {
     /** @use ControllerTrait<TParent> */
     use ControllerTrait;
-
-    /**
-     * Get name of the module from parent
-     */
-    public function getModName(): string
-    {
-        return $this->getParent()->getModName();
-    }
-
-    /**
-     * Get data object or objectlist from parent
-     */
-    public function getObject(): DataObjectList|DataObject|null
-    {
-        return $this->getParent()->getObject();
-    }
 }

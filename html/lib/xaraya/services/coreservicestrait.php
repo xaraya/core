@@ -22,15 +22,17 @@ use sys;
 use Exception;
 
 sys::import('xaraya.context.contexttrait');
-sys::import('xaraya.services.controllertrait');
-sys::import('xaraya.services.loggertrait');
-sys::import('xaraya.services.multilanguagetrait');
-sys::import('xaraya.services.modulestrait');
-sys::import('xaraya.services.securitytrait');
-sys::import('xaraya.services.templatingtrait');
-sys::import('xaraya.services.variablestrait');
-sys::import('xaraya.services.dataobjecttrait');
-sys::import('xaraya.services.cachingtrait');
+sys::import('xaraya.services.controller');
+sys::import('xaraya.services.logger');
+sys::import('xaraya.services.multilanguage');
+sys::import('xaraya.services.modules');
+sys::import('xaraya.services.security');
+sys::import('xaraya.services.templating');
+sys::import('xaraya.services.variables');
+sys::import('xaraya.services.blocks');
+sys::import('xaraya.services.dataobject');
+sys::import('xaraya.services.dataproperty');
+sys::import('xaraya.services.caching');
 sys::import('xaraya.objects');
 
 /**
@@ -47,13 +49,22 @@ interface CoreServicesInterface extends ContextInterface
     public function sec(): SecurityService;
     public function tpl(): TemplatingService;
     public function var(): VariablesService;
-    public function cache(): CachingService;
+    public function block(): BlocksService;
     public function data(): DataObjectService;
+    public function prop(): DataPropertyService;
+    public function cache(): CachingService;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
      * @return void|never
      */
     public function exit(int|string $status = 0);
+    /**
+     * Translate string with optional arguments
+     * = short-hand version for $this->mls()->translate()
+     * @param string $rawstring
+     * @param mixed ...$args
+     */
+    public function ml($rawstring, ...$args): string;
 }
 
 /**
@@ -81,8 +92,12 @@ trait CoreServicesTrait
     protected $xarTpl;
     /** @var ?VariablesService<TParent> */
     protected $xarVar;
+    /** @var ?BlocksService<TParent> */
+    protected $xarBlock;
     /** @var ?DataObjectService<TParent> */
     protected $xarData;
+    /** @var ?DataPropertyService<TParent> */
+    protected $xarProp;
     /** @var ?CachingService<TParent> */
     protected $xarCache;
     /** @var ?callable */
@@ -108,20 +123,16 @@ trait CoreServicesTrait
     }
 
     /**
-     * Access xarController::* Main Controller methods (getURL, redirect, ...)
+     * Access xarController::* Main Controller methods (URL, redirect, ...)
      *
      * Available methods:
-     * - getURL()
+     * - URL() - or use mod()->getURL() for current module
+     * - getObjectURL() - or use data()->getURL() for current object
      * - redirect()
      * - forbidden()
      * - notFound()
      * - badRequest()
-     * - getObjectURL()
      * - ...
-     *
-     * Required methods in parent:
-     * - getModName() for ctl()->getURL()
-     * - getObject() for ctl()->getObjectUrl()
      *
      * @return ControllerService<TParent>
      */
@@ -176,6 +187,7 @@ trait CoreServicesTrait
      * Available methods:
      * - getVar()
      * - setVar()
+     * - getURL() for current module - or use ctl()->URL() with modName
      * - getRegId()
      * - getInfo()
      * - getTables()
@@ -183,8 +195,9 @@ trait CoreServicesTrait
      *
      * Required methods in parent:
      * - getModName()
-     * - getItemType() for mod()->module()
-     * - getModType() for mod()->module()
+     *
+     * Optional methods in parent:
+     * - getModType() for mod()->apiFunc(null, null, ...) - only for migration
      *
      * @return ModulesService<TParent>
      */
@@ -258,9 +271,30 @@ trait CoreServicesTrait
     }
 
     /**
+     * Access xarBlock*::* Blocks methods (template, ...)
+     *
+     * Available methods:
+     * - template() for current block type - or use tpl()->block() in general with modName blockType
+     * - prepare()
+     * - ...
+     *
+     * Required methods in parent:
+     * - getModName()
+     * - getBlockType() for block()->template()
+     *
+     * @return BlocksService<TParent>
+     */
+    public function block(): BlocksService
+    {
+    $this->xarBlock ??= $this->getBlocksService();
+    return $this->xarBlock;
+    }
+
+    /**
      * Access DataObjectFactory::* methods with context (getObject, getObjectList, ...)
      *
      * Available methods:
+     * - getURL() for current object - or use ctl()->getObjectURL() in general with objectName
      * - getObject()
      * - getObjectList()
      * - getObjectInfo()
@@ -269,12 +303,35 @@ trait CoreServicesTrait
      * - getPropertyTypes()
      * - ...
      *
+     * Required methods in parent:
+     * - getObjectName() for data()->getURL()
+     *
      * @return DataObjectService<TParent>
      */
     public function data(): DataObjectService
     {
         $this->xarData ??= $this->getDataObjectService();
         return $this->xarData;
+    }
+
+    /**
+     * Access DataProperty*::* methods with context (getProperty, template, ...)
+     *
+     * Available methods:
+     * - template() for current property - or use tpl()->property() in general with modName propertyName
+     * - getPropertyTypes()
+     * - getProperty()
+     * - ...
+     *
+     * Required methods in parent:
+     * - getPropertyName() for prop()->template()
+     *
+     * @return DataPropertyService<TParent>
+     */
+    public function prop(): DataPropertyService
+    {
+        $this->xarProp ??= $this->getDataPropertyService();
+        return $this->xarProp;
     }
 
     /**
@@ -307,6 +364,17 @@ trait CoreServicesTrait
         $this->xarExit ??= $this->getExitService();
         // call exit service :-)
         call_user_func($this->xarExit, $status);
+    }
+
+    /**
+     * Translate string with optional arguments
+     * = short-hand version for $this->mls()->translate()
+     * @param string $rawstring
+     * @param mixed ...$args
+     */
+    public function ml($rawstring, ...$args): string
+    {
+        return $this->mls()->translate($rawstring, ...$args);
     }
 
     /**
@@ -373,6 +441,15 @@ trait CoreServicesTrait
     }
 
     /**
+     * Summary of getBlocksService
+     * @return BlocksService<TParent>
+     */
+    protected function getBlocksService(): BlocksService
+    {
+        return new BlocksService($this);
+    }
+
+    /**
      * Summary of getDataObjectService
      * @return DataObjectService<TParent>
      */
@@ -382,12 +459,22 @@ trait CoreServicesTrait
     }
 
     /**
+     * Summary of getDataPropertyService
+     * @return DataPropertyService<TParent>
+     */
+    protected function getDataPropertyService(): DataPropertyService
+    {
+        return new DataPropertyService($this);
+    }
+
+    /**
      * Summary of getCachingService
      * @return CachingService<TParent>
      */
     protected function getCachingService(): CachingService
     {
         return new CachingService($this);
+        //return CachingService::getInstance($this);
     }
 
     /**

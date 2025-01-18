@@ -29,17 +29,10 @@ sys::import('xaraya.services.servicetrait');
 interface TemplatingInterface extends ServiceInterface
 {
     /** @param array<string, mixed> $tplData */
-    public function module(string $funcName, array $tplData = []): string;
+    public function module(string $modName, string $modType, string $funcName, array $tplData = [], ?string $templateName = null): string;
 
     /** @param array<string, mixed> $tplData */
-    public function object(string $tplType, array $tplData = []): string;
-
-    /**
-     * Add standard template variables (module, itemtype and context)
-     * @param array<string, mixed> $tplData
-     * @return array<string, mixed>
-     */
-    public function prepare(array $tplData = []): array;
+    public function object(string $modName, string $objectName, string $tplType, array $tplData = []): string;
 
     public function setPageTitle(string $title, ?string $modName = null): bool;
 }
@@ -56,25 +49,28 @@ trait TemplatingTrait
     /**
      * Render output with module template
      * @uses xarTpl::module()
+     * @param string $modName
+     * @param string $modType
      * @param string $funcName
      * @param array<string, mixed> $tplData
+     * @param ?string $templateName
      * @return string
      */
-    public function module(string $funcName, array $tplData = []): string
+    public function module(string $modName, string $modType, string $funcName, array $tplData = [], ?string $templateName = null): string
     {
         // Add standard template variables (module, itemtype and context)
-        $tplData = $this->prepare($tplData);
+        // @todo $tplData = $this->prepare($tplData);
+        $tplData['context'] ??= $this->getContext();
 
         // See if we have a special template to apply
-        $templateName = null;
-        if (isset($tplData['_bl_template'])) {
+        if (!isset($templateName) && isset($tplData['_bl_template'])) {
             $templateName = (string) $tplData['_bl_template'];
         }
 
         // Create the output.
         return xarTpl::module(
-            $this->getModName(),
-            $this->getModType(),
+            $modName,
+            $modType,
             $funcName,
             $tplData,
             $templateName
@@ -84,11 +80,13 @@ trait TemplatingTrait
     /**
      * Render output with object template
      * @uses xarTpl::object()
+     * @param string $modName
+     * @param string $objectName
      * @param string $tplType
      * @param array<mixed> $tplData
      * @return string
      */
-    public function object(string $tplType, array $tplData = []): string
+    public function object(string $modName, string $objectName, string $tplType, array $tplData = []): string
     {
         // Add standard template variables (module, itemtype and context)
         // @todo $tplData = $this->prepare($tplData);
@@ -96,26 +94,11 @@ trait TemplatingTrait
 
         // Create the output.
         return xarTpl::object(
-            $this->getModName(),
-            $this->getObject()?->template,
+            $modName,
+            $objectName,
             $tplType,
             $tplData
         );
-    }
-
-    /**
-     * Add standard template variables (module, itemtype and context)
-     * @param array<string, mixed> $tplData
-     * @return array<string, mixed>
-     */
-    public function prepare(array $tplData = []): array
-    {
-        // Add standard template variables
-        $tplData['module'] ??= $this->getModName();
-        $tplData['itemtype'] ??= $this->getItemType();
-        // Pass along the context for xarTpl::module() if needed
-        $tplData['context'] ??= $this->getContext();
-        return $tplData;
     }
 
     /**
@@ -136,17 +119,13 @@ trait TemplatingTrait
  * Access xarTpl::* Templating methods (module, setPageTitle, ...)
  *
  * Available methods:
- * - module()
- * - object()
- * - prepare()
+ * - module() - or use mod()->template() for current module
+ * - object() - or use data()->template() for current object
  * - setPageTitle()
  * - ...
  *
- * Required methods in parent:
- * - getModName()
- * - getItemType() for tpl()->prepare()
- * - getModType() for tpl()->module()
- * - getObject() for tpl()->object()
+ * Optional methods in parent:
+ * - getModName() for tpl()->setPageTitle()
  *
  * @template TParent of ServicesInterface
  */
@@ -161,29 +140,5 @@ class TemplatingService implements TemplatingInterface
     public function getModName(): string
     {
         return $this->getParent()->getModName();
-    }
-
-    /**
-     * Get item type from parent
-     */
-    public function getItemType(): int
-    {
-        return $this->getParent()->getItemType();
-    }
-
-    /**
-     * Get module type (user, admin, ...) from parent
-     */
-    public function getModType(): string
-    {
-        return $this->getParent()->getModType();
-    }
-
-    /**
-     * Get data object or objectlist from parent
-     */
-    public function getObject(): DataObjectList|DataObject|null
-    {
-        return $this->getParent()->getObject();
     }
 }

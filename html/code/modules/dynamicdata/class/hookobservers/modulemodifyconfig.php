@@ -5,7 +5,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -41,7 +41,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
     public function run(array $extrainfo = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
@@ -55,17 +55,17 @@ class ModuleModifyconfig extends DataObjectHookObserver
             return '';
         }
 
-        if (!xarMod::apiLoad('dynamicdata', 'user')) {
+        if (!$this->mod()->apiLoad('dynamicdata', 'user')) {
             return;
         }
 
-        $args = DataObjectDescriptor::getObjectID([
+        $args = $this->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
 
         // @todo move to object method here too
-        $fields = xarMod::apiFunc(
+        $fields = $this->mod()->apiFunc(
             'dynamicdata',
             'user',
             'getprop',
@@ -76,34 +76,33 @@ class ModuleModifyconfig extends DataObjectHookObserver
         }
 
         $labels = [
-            'id' => xarML('ID'),
-            'name' => xarML('Name'),
-            'label' => xarML('Label'),
-            'type' => xarML('Field Format'),
-            'defaultvalue' => xarML('Default'),
-            'source' => xarML('Data Source'),
-            'configuration' => xarML('Configuration'),
+            'id' => $this->ml('ID'),
+            'name' => $this->ml('Name'),
+            'label' => $this->ml('Label'),
+            'type' => $this->ml('Field Format'),
+            'defaultvalue' => $this->ml('Default'),
+            'source' => $this->ml('Data Source'),
+            'configuration' => $this->ml('Configuration'),
         ];
 
-        $labels['dynamicdata'] = xarML('Dynamic Data Fields');
-        $labels['config'] = xarML('modify');
+        $labels['dynamicdata'] = $this->ml('Dynamic Data Fields');
+        $labels['config'] = $this->ml('modify');
 
         $data = [];
         $data['labels'] = $labels;
-        $data['link'] = xarController::URL(
-            'dynamicdata',
+        $data['link'] = $this->mod()->getURL(
             'admin',
             'modifyprop',
             ['module_id' => $module_id,
                 'itemtype' => $itemtype]
         );
         $data['fields'] = $fields;
-        $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(['type' => 'fieldtype']);
+        $data['fieldtypeprop'] = $this->data()->getProperty(['type' => 'fieldtype']);
 
         // set context if available in hook call
-        $object = DataObjectFactory::getObject([
+        $object = $this->data()->getObject([
             'name' => $args['name'],
-        ], $this->getContext());
+        ]);
 
         if (!empty($object)) {
             if (!empty($object->template)) {
@@ -116,9 +115,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
             $template = null;
             $data['context'] = $this->getContext();
         }
-        return xarTpl::module(
-            'dynamicdata',
-            'admin',
+        return $this->mod()->template(
             'modifyconfighook',
             $data,
             $template

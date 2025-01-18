@@ -1,0 +1,130 @@
+<?php
+
+/**
+ * Blocks available via methods (TODO)
+ *
+ * @package core\services
+ * @subpackage services
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ * @author mikespub <mikespub@xaraya.com>
+**/
+
+namespace Xaraya\Services;
+
+use xarBlock;
+use xarMod;
+use xarModVars;
+use xarTpl;
+use sys;
+
+sys::import('xaraya.services.servicetrait');
+
+/**
+ * For documentation purposes only - available via BlocksTrait
+ */
+interface BlocksInterface extends ServiceInterface
+{
+    /** @param array<string, mixed> $tplData */
+    public function template(string $funcName, array $tplData = [], ?string $templateName = null): string;
+    /**
+     * @param array<string, mixed> $tplData
+     * @return array<string, mixed>
+     */
+    public function prepare(array $tplData = []): array;
+}
+
+/**
+ * Blocks available via methods
+ * @template TParent of ServicesInterface
+ */
+trait BlocksTrait
+{
+    /** @use ServiceTrait<TParent> */
+    use ServiceTrait;
+
+    /**
+     * Render output with block template
+     * @uses xarTpl::block()
+     * @param string $funcName
+     * @param array<string, mixed> $tplData
+     * @param ?string $templateName
+     * @return string
+     */
+    public function template(string $funcName, array $tplData = [], ?string $templateName = null): string
+    {
+        // Add standard template variables (module, itemtype and context)
+        $tplData = $this->prepare($tplData);
+
+        // See if we have a special template to apply
+        if (!isset($templateName) && isset($tplData['_bl_template'])) {
+            $templateName = (string) $tplData['_bl_template'];
+        }
+
+        $modName = $this->getModName();
+        $blockType = $this->getBlockType();
+
+        // Create the output.
+        return xarTpl::block(
+            $modName,
+            $blockType,
+            $tplData,
+            $templateName
+        );
+    }
+
+    /**
+     * Add standard template variables (module, itemtype and context)
+     * @param array<string, mixed> $tplData
+     * @return array<string, mixed>
+     */
+    public function prepare(array $tplData = []): array
+    {
+        // Add standard template variables
+        $tplData['module'] ??= $this->getModName();
+        //@todo $tplData['blocktype'] ??= $this->getBlockType();
+        // Pass along the context for xarTpl::module() if needed
+        $tplData['context'] ??= $this->getContext();
+        return $tplData;
+    }
+}
+
+/**
+ * Access xarBlock*::* Blocks methods (template, ...)
+ *
+ * Available methods:
+ * - template() for current block type - or use tpl()->block() in general with modName blockType
+ * - prepare()
+ * - ...
+ *
+ * Required methods in parent:
+ * - getModName()
+ * - getBlockType() for block()->template()
+ *
+ * @template TParent of ServicesInterface
+ */
+class BlocksService implements BlocksInterface
+{
+    /** @use BlocksTrait<TParent> */
+    use BlocksTrait;
+
+    /**
+     * Get name of the module from parent
+     */
+    public function getModName(): string
+    {
+        return $this->getParent()->getModName();
+    }
+
+    /**
+     * Get block type from parent
+     */
+    public function getBlockType(): string
+    {
+        return $this->getParent()->getBlockType();
+    }
+}

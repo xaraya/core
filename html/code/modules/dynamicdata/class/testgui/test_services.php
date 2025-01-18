@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.5.6
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -29,7 +29,7 @@ class TestServicesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $args['method'] = __METHOD__;
-        $args['return_url'] = $this->ctl()->getURL('test', 'other', $args);
-        return $this->tpl()->prepare($args);
+        $args['return_url'] = $this->mod()->getURL('test', 'other', $args);
+        return $this->mod()->prepare($args);
     }
 }

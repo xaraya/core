@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -37,7 +37,7 @@ class CreateHandler extends DefaultHandler
      *     $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
      *     $args['confirm'] true if the user confirms
      *     $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string|bool|void output of tpl()->object() using 'ui_create'
+     * @return string|bool|void output of data()->template() using 'ui_create'
      */
     public function run(array $args = [])
     {
@@ -133,7 +133,7 @@ class CreateHandler extends DefaultHandler
             'return_url' => $args['return_url'],
         ]);
 
-        return $this->tpl()->object(
+        return $this->data()->template(
             'ui_create',
             $data
         );

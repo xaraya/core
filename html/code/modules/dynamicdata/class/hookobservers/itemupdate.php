@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -15,8 +15,6 @@
 namespace Xaraya\DataObject\HookObservers;
 
 use xarVar;
-use DataObjectDescriptor;
-use DataObjectFactory;
 use BadParameterException;
 use sys;
 
@@ -43,7 +41,7 @@ class ItemUpdate extends DataObjectHookObserver
         // We can exit immediately if the status flag is set because we are just updating
         // the status in the articles or other content module that works on that principle
         // Bug 1960 and 3161
-        if (xarVar::isCached('Hooks.all', 'noupdate') || !empty($extrainfo['statusflag'])) {
+        if ($this->var()->isCached('Hooks.all', 'noupdate') || !empty($extrainfo['statusflag'])) {
             return $extrainfo;
         }
 
@@ -64,15 +62,15 @@ class ItemUpdate extends DataObjectHookObserver
             throw new BadParameterException($vars, $msg);
         }
 
-        $descriptorargs = DataObjectDescriptor::getObjectID([
+        $descriptorargs = $this->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
         // set context if available in hook call
-        $object = DataObjectFactory::getObject([
+        $object = $this->data()->getObject([
             'name' => $descriptorargs['name'],
             'itemid'   => $itemid,
-        ], $this->getContext());
+        ]);
 
         // If no object returned, bail and pass the extrainfo to the next hook
         if (!isset($object) || empty($object->objectid)) {

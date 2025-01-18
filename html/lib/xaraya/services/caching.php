@@ -17,7 +17,6 @@
 namespace Xaraya\Services;
 
 use xarCache;
-use xarCoreCache;
 use xarModuleCache;
 use xarObjectCache;
 use sys;
@@ -34,7 +33,7 @@ interface CachingInterface extends ServiceInterface
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Object, or null if not applicable
      */
-    public function getObjectKey(?string $objectName = null, string $methodName = 'view', array $args = []): string|null;
+    public function getObjectKey(string $objectName, string $methodName = 'view', array $args = []): string|null;
 
     /**
      * Check if the output of an object method is cached
@@ -66,9 +65,8 @@ trait CachingTrait
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Object, or null if not applicable
      */
-    public function getObjectKey(?string $objectName = null, string $methodName = 'view', array $args = []): string|null
+    public function getObjectKey(string $objectName, string $methodName = 'view', array $args = []): string|null
     {
-        $objectName ??= $this->getObjectName();
         if (empty($objectName)) {
             return null;
         }
@@ -111,13 +109,10 @@ trait CachingTrait
  *
  * Available methods:
  * - getObjectKey()
- * - hasCachedObject()
- * - getCachedObject()
- * - setCachedObject()
+ * - hasObject()
+ * - getObject()
+ * - setObject()
  * - ...
- *
- * Required methods in parent:
- * - getObject() for cache()->getObjecKey(null, '...')
  *
  * @template TParent of ServicesInterface
  */
@@ -125,12 +120,4 @@ class CachingService implements CachingInterface
 {
     /** @use CachingTrait<TParent> */
     use CachingTrait;
-
-    /**
-     * Get name of data object or objectlist from parent
-     */
-    public function getObjectName(): string|null
-    {
-        return $this->getParent()->getObject()?->name;
-    }
 }

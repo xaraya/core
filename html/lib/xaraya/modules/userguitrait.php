@@ -101,11 +101,12 @@ trait UserGuiTrait
         $output = [
             'args' => $args,
         ];
-        return $this->prepareOutput($output);
+        return $this->mod()->prepare($output);
     }
 
     /**
      * Add standard template variables (module, itemtype and context)
+     * @deprecated 2.6.1 use $this->mod()->prepare() instead
      * @param array<string, mixed> $data
      * @return array<string, mixed>
      */
@@ -121,6 +122,7 @@ trait UserGuiTrait
 
     /**
      * Summary of tplModule
+     * @deprecated 2.6.1 use $this->mod()->template() instead
      * @param string $funcName
      * @param array<string, mixed> $data
      * @return string
@@ -142,6 +144,7 @@ trait UserGuiTrait
 
     /**
      * Set page title
+     * @deprecated 2.6.1 use $this->tpl()->setPageTitle() instead
      * @param string $title
      * @return bool
      */

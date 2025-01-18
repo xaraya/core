@@ -4,7 +4,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -14,15 +14,15 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
-use xarTpl;
-use DataObjectDescriptor;
-use DataObjectFactory;
 use sys;
 
 sys::import('modules.dynamicdata.class.hookobservers.generic');
 
 class ItemDisplay extends DataObjectHookObserver
 {
+    /** @var string */
+    public $section = 'user';
+
     /**
      *
      * @param array<string, mixed> $extrainfo extra information
@@ -36,21 +36,21 @@ class ItemDisplay extends DataObjectHookObserver
         $itemid = $extrainfo['itemid'];
         $module_id = $extrainfo['module_id'];
 
-        $descriptorargs = DataObjectDescriptor::getObjectID([
+        $descriptorargs = $this->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
         // set context if available in hook call
-        $object = DataObjectFactory::getObject([
+        $object = $this->data()->getObject([
             'name' => $descriptorargs['name'],
             'itemid'   => $itemid,
-        ], $this->getContext());
+        ]);
 
         if (!isset($object) || empty($object->objectid)) {
             return;
         }
         if (!$object->checkAccess('display')) {
-            return xarML('Display #(1) is forbidden', $object->label);
+            return $this->ml('Display #(1) is forbidden', $object->label);
         }
 
         $object->getItem();
@@ -60,9 +60,7 @@ class ItemDisplay extends DataObjectHookObserver
         } else {
             $template = $object->name;
         }
-        return xarTpl::module(
-            'dynamicdata',
-            'user',
+        return $this->mod()->template(
             'displayhook',
             [
                 'properties' => & $object->properties,
