@@ -129,7 +129,8 @@ class BlockLayoutXSLTProcessor extends xarObject
         if (!$this->xslProc->importStyleSheet($xslDoc)) {
             $halt = xarMLS::translate('Could not load the stylesheet #(1)', $xslDoc->saveXML());
             echo $halt;
-            exit;
+            xarCore::exit();
+            return;
         }
         xarLog::message("XSL: The stylesheet was successfully imported", xarLog::LEVEL_DEBUG);
     }

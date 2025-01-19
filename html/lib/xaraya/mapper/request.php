@@ -517,7 +517,7 @@ class xarRequest extends xarObject
     public function exitAjax()
     {
         if ($this->isAjax()) {
-            exit;
+            xarCore::exit();
         }
     }
 
@@ -539,7 +539,7 @@ class xarRequest extends xarObject
             } else {
                 echo $msg;
             }
-            exit;
+            xarCore::exit();
         }
     }
 }

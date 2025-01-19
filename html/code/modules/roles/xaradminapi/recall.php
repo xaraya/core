@@ -34,7 +34,7 @@ function roles_adminapi_recall(array $args = [], $context = null)
     $role = xarRoles::get($id);
     $uname = explode($deleted,$role->getUser());
     $email = explode($deleted,$role->getEmail());
-//            echo $uname[0];exit;
+
     $query = "UPDATE $rolestable
               SET uname = ?, email = ?, state = ?
               WHERE id = ?";

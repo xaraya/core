@@ -37,7 +37,8 @@ function modules_adminapi_initialise(array $args = [], $context = null)
     if (!$installer->verifydependency($regid)) {
         //TODO: Add description of the dependencies
         $msg = xarML('The dependencies to initialise the module "#(1)" were not met.', $modInfo['displayname']);
-        die($msg);
+        xarCore::exit($msg);
+        return;
     }
 
     // Module deletion function

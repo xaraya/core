@@ -30,9 +30,10 @@ function authsystem_userapi_login(array $args = [], $context = null)
 
     // FIXME: this should be removed as far as possible
     if (isset($passwd) && !isset($pass)) {
-        die("authsystem_userapi_login: authsystem_userapi_login prototype has changed, " .
+        xarCore::exit("authsystem_userapi_login: authsystem_userapi_login prototype has changed, " .
             "you should use pass instead of passwd to " .
             "avoid this message being displayed");
+        return false;
     }
 
     if (!isset($rememberme)) {

@@ -54,7 +54,6 @@ function roles_admin_sitelock(array $args = [], $context = null)
         	if (isset($notify[$role['id']])) $roles[$key]['notify'] = true;
         	else $roles[$key]['notify'] = false;
         }
-//var_dump($roles);exit;
 # --------------------------------------------------------
 # We are deleting a user from the list of exceptions
 #

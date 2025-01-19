@@ -60,8 +60,6 @@ class xarLogger_syslog extends xarLogger
      *
      * @param array<string, mixed> $conf               Configuration options for the specific driver.
      *
-     * 
-     * @return boolean
      */
     public function __construct(Array $conf)
     {
@@ -77,7 +75,8 @@ class xarLogger_syslog extends xarLogger
                 $facility ??= LOG_USER;
 				$this->facility = $facility;
         	} catch (Exception $e) {
-        		die("The value " . $conf['facility'] . " does not correspond to a recognized constant and will be ignored.");
+        		xarCore::exit("The value " . $conf['facility'] . " does not correspond to a recognized constant and will be ignored.");
+                return;
         	}
         }
 
@@ -91,7 +90,8 @@ class xarLogger_syslog extends xarLogger
                 $options ??= LOG_PID;
 				$this->options = $options;
         	} catch (Exception $e) {
-        		die("The value " . $conf['options'] . " does not correspond to an expression of recognized constants and will be ignored.");
+        		xarCore::exit("The value " . $conf['options'] . " does not correspond to an expression of recognized constants and will be ignored.");
+                return;
         	}
         }
     }

@@ -299,7 +299,10 @@ class CategoryWorker extends xarObject
     public function getcatbases($args)
     {
         // Sanity check
-        if ($this->table != $this->cattable) die("This method (getcatbases) can only be used in a categories context");
+        if ($this->table != $this->cattable) {
+            xarCore::exit("This method (getcatbases) can only be used in a categories context");
+            return;
+        }
         
         extract($args);
         if (isset($object)) {
@@ -392,12 +395,14 @@ class CategoryWorker extends xarObject
         // Sanity check: abort immediately if the tree has more than one root
         if (count($result) > 1) {
             $msg = xarML('This tree has more than one root entry');
-            die($msg);
+            xarCore::exit($msg);
+            return;
         }
         // Or if it has no root
         if (count($result) < 1) {
             $msg = xarML('This tree has no root entry');
-            die($msg);
+            xarCore::exit($msg);
+            return;
         }
           
         // We have a single root (which is correct). Get it.

@@ -1368,7 +1368,6 @@ class Query
                                 $this->bindvars[] = $field['value'];
                             } else {
                                 if (!is_numeric($field['value']) && (substr($field['value'],0,1) != '&')) {
-                                    //echo substr($field['value'],0,1);exit;
                                     $sqlfield = $this->dbconn->qstr($field['value']);
                                 } else {
                                     if(substr($field['value'],0,1) == '&') {
@@ -1455,7 +1454,8 @@ class Query
             }
             else {
                 $result = xarMLS::translate('Incorrect HAVING clause');
-                die($result);
+                xarCore::exit($result);
+                return;
             }
         }
         return $s;

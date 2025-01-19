@@ -95,7 +95,8 @@ class CompiledTemplate extends xarObject
                     $res = include($this->fileName);
                 } catch (Exception $e) {
                     echo $e->getMessage();
-                    exit;
+                    xarCore::exit();
+                    return false;
                 }
             }
 

@@ -87,7 +87,8 @@ class xarSessionLessCache extends xarObject
                 }
 
                 // we're done here !
-                exit;
+                xarCore::exit();
+                return;
             } else {
                 // tell xarPageCache::setCached() that we want to save another copy here
                 self::setCached();

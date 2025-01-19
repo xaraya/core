@@ -97,7 +97,8 @@ function blocks_adminapi_import(array $args = [], $context = null)
                     $args[$field] = $value;
                 }
             } else {
-                die(xarML('Missing #(1) field', $field));
+                xarCore::exit(xarML('Missing #(1) field', $field));
+                return false;
             }
         }
 
@@ -110,7 +111,6 @@ function blocks_adminapi_import(array $args = [], $context = null)
         $q->addfield('type_id', (int)$args['type_id']);
         $q->addfield('state', (int)$args['state']);
         $q->addfield('content', $args['content']);
-//        $q->qecho();exit;
         $q->run();
         $block_id = $q->lastid($tables['block_instances'], 'id');
         return $block_id;

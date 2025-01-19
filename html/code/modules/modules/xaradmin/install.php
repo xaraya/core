@@ -81,7 +81,6 @@ function modules_admin_install(array $args = [], $context = null)
     if (!$command && (!empty($data['moduledependencies']['unsatisfiable']) || !empty($data['propdependencies']['unsatisfiable']))) {
         //Let's make a nice GUI to show the user the options
         $data['id'] = $id;
-//        echo "<pre>";var_dump($data);exit;
         //They come in 3 arrays: satisfied, satisfiable and unsatisfiable
         //First 2 have $modInfo under them for each module,
         //3rd has only 'regid' key with the ID of the module

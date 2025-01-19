@@ -946,7 +946,6 @@ class xarCSSLib extends xarObject
                     if(!$valid) continue;
                     
                     $subpath = $path . "/" . $version;
-//                echo "<pre>";var_dump($subpath);//exit;
                     $files = xarCSS::getFiles($subpath);
                     if (empty($files)) continue;
                     foreach ($files as $folder => $items) {

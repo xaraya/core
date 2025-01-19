@@ -217,13 +217,15 @@ class xarPageCache extends xarObject
             // so this only works once per cached page
             header('HTTP/1.1 304 Not Modified');
             header("Cache-Control: public, must-revalidate");
-            exit;
+            xarCore::exit();
+            return;
         } else {
             $since = $_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? null;
             if (!empty($since) && strtotime($since) >= $modtime) {
                 header('HTTP/1.1 304 Not Modified');
                 header("Cache-Control: public, must-revalidate");
-                exit;
+                xarCore::exit();
+                return;
                 // jsb: according to RFC 2616, if $match isn't empty but is
                 // not equal to the ETag we should send a 412 response
                 // But browser behavior seems inconsistant with the doc and

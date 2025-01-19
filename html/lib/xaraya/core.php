@@ -582,6 +582,16 @@ class xarCore extends xarObject
 
         return (isset($disabled[$funcName]) ? true : false);
     }
+
+    /**
+     * This should be the only place where we actually exit or die
+     * @param mixed $status
+     * @return never|void
+     */
+    public static function exit($status = 0)
+    {
+        exit($status);
+    }
 }
 
 /**

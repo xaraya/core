@@ -295,7 +295,8 @@ function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[],
 					$nativeType = xarXMLInstaller::getNativeType($columnType);
 					if ($nativeType == false) {
 						$message = "Unknown columnType: $columnType";
-						die($message);
+						xarCore::exit($message);
+                        return false;
 					}
 					$sql .= " " . $nativeType;
     			break;
@@ -343,7 +344,8 @@ function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[],
 					$nativeType = xarXMLInstaller::getNativeType($columnType);
 					if ($nativeType == false) {
 						$message = "Unknown columnType: $columnType";
-						die($message);
+						xarCore::exit($message);
+                        return false;
 					}
 					$sql .= " " . $nativeType;
     			break;
@@ -585,8 +587,14 @@ class xarXMLInstaller extends xarObject
     {
         sys::import('creole.CreoleTypes');
         $code = (int)CreoleTypes::getCreoleCode(strtoupper($creoleType));
-        if (null == $code) die(xarMLS::translate("Unknown Creole type: '#(1)'", $creoleType));
-        if (null == $type = strtoupper(self::$typesObject::getNativeType($code))) die(xarMLS::translate("Unknown Creole type: '#(1)'", $creoleType));
+        if (null == $code) {
+            xarCore::exit(xarMLS::translate("Unknown Creole type: '#(1)'", $creoleType));
+            return;
+        }
+        if (null == $type = strtoupper(self::$typesObject::getNativeType($code))) {
+            xarCore::exit(xarMLS::translate("Unknown Creole type: '#(1)'", $creoleType));
+            return;
+        }
         return $type;
     }
 

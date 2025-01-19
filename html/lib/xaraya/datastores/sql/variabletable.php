@@ -678,7 +678,7 @@ class VariableTableDataStore extends SQLDataStore
 
         if (count($this->object->sort) > 0) {
             $query .= " ORDER BY ";
-            $join = '';//var_dump($this->object->sort);exit;
+            $join = '';
             foreach ($this->object->sort as $sortitem) {
                 if (empty($sortitem)) continue;
                 $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];

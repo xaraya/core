@@ -466,7 +466,7 @@ class SubItemsProperty extends DataProperty
         // The postings of the leftover old IDs need to be deleted
         $this->todelete = $old_ids;
 
-        $this->setItemsData($args);//echo "<pre>";var_dump($this->todelete);exit;
+        $this->setItemsData($args);
     }
 
     // FIXME: _getitemsdata and _setitemsdata should operate as opposites
@@ -536,7 +536,7 @@ class SubItemsProperty extends DataProperty
         // Get the link properties of both the parent and the subobject for use in creates and deletes
         // Bail if we don't have links
         if (!isset($this->objectref->objects)) {
-            die(xarML('No datasource for sublinks of #(1) defined', $this->objectref->name));
+            $this->exit($this->ml('No datasource for sublinks of #(1) defined', $this->objectref->name));
         }
 
         $objectarray = unserialize((string) $this->objectref->objects);

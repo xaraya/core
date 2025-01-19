@@ -83,7 +83,8 @@ function installer_admin_phase5()
 				$db = new SQLite3($dbpath);
 			} catch(Exception $e){
 				 echo $e->getMessage(); 
-				 exit;
+				 xarCore::exit();
+                 return;
 			}
 		}
     }

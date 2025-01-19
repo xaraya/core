@@ -409,7 +409,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Sanity check: do we have a primary field?
         if (empty($this->primary)) {
             $msg = $this->ml('The object #(1) has no primary key', $this->name);
-            die($msg);
+            $this->exit($msg);
         }
 
         //  The id of the item to be created is

@@ -379,7 +379,8 @@ class xarController extends xarObject
         // NOTE: we *could* return for pure '1 exit point' but then we'd have to keep track of more,
         // so for now, we exit here explicitly. Besides the end of index.php this should be the only
         // exit point.
-        exit();
+        xarCore::exit();
+        return false;
     }
 
     /**

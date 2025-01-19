@@ -503,8 +503,8 @@ trait CoreServicesTrait
     protected function getExitService(): callable
     {
         xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return function (int|string $status = 0): never {
-            exit($status);
+        return function (int|string $status = 0) {
+            \xarCore::exit($status);
         };
     }
 }

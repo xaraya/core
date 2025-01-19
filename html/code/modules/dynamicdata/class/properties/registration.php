@@ -330,7 +330,6 @@ class PropertyRegistration extends DataContainer
                             sys::import($dp);
                         } catch (Exception) {
                             throw new Exception(xarMLS::translate('The file #(1) could not be loaded<br/>', $dp . '.php'));
-                            // echo $e->getMessage();exit;
                         }
                         $loaded[$file] = true;
                     }
@@ -371,7 +370,6 @@ class PropertyRegistration extends DataContainer
                         if (xarModVars::get('dynamicdata', 'debugmode') && in_array(xarUser::getVar('id'), $debugadmins)) {
                             echo xarMLS::translate('The file #(1) could not be loaded<br/>', $dp . '.php');
                         }
-                        // echo $e->getMessage();exit;
                     }
                     $loaded[$file] = true;
                 }

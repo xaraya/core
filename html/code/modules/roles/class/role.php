@@ -405,7 +405,6 @@ class Role extends DataObject
                           LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   WHERE   p.id = acl.privilege_id AND
                           acl.role_id = ?";
-//                          echo $query;exit;
         if(!isset($stmt)) {
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);

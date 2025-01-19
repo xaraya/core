@@ -567,7 +567,6 @@ class xarMLS extends xarObject
         xarLog::message("MLS: Loading translations for the path: $path", xarLog::LEVEL_DEBUG);
         if(!file_exists($path)) {
             xarLog::message("MLS: Failed loading translations for a non-existing path ($path)", xarLog::LEVEL_WARNING);
-            //die($path);
             return true;
         }
     
@@ -747,8 +746,9 @@ class xarMLS extends xarObject
                 } catch (Exception $e) {
                     $msg = xarMLS::translate("Could not create directory #(1). The directories under #(2) must be writeable by PHP.", $path, $next_path);
                     xarLog::message($msg, xarLog::LEVEL_ERROR);
-                    die($msg);
+                    xarCore::exit($msg);
                     // throw new PermissionException?
+                    return false;
                 }
             }
         }
@@ -912,7 +912,10 @@ class xarMLSContext extends xarObject
             if ($domain['context_type_prefix'] == $parts[0]) continue;
             $good = true;
         }
-        if (!$good) die("Incorrect context prefix " . $parts[0]);
+        if (!$good) {
+            xarCore::exit("Incorrect context prefix " . $parts[0]);
+            return;
+        }
         
         // Remove any empty chars in the directory
         $parts[1] = trim($parts[1]);

@@ -144,9 +144,9 @@ class Installer extends xarObject
                 if (xarVersion::compare($conditions['minversion'], $dbMods[$module_id]['version']) > 0) {
                     $msg = xarML('Stopped installation of module #(1). ',$extInfo['name']);
                     $msg .= xarML('The current version of the module #(1) is #(2). The required version is #(3).',$dbMods[$module_id]['name'],$dbMods[$module_id]['version'],$conditions['minversion']);
-                    die($msg);
+                    xarCore::exit($msg);
                     //Need to add some info for the user
-                    //return false; // 1st version is bigger
+                    return false; // 1st version is bigger
                 }
 
                //Not to be checked, at least not for now

@@ -1023,7 +1023,8 @@ class xarMod extends xarObject implements IxarMod
 
         // Not the correct version - throw exception unless we are upgrading
         if (!self::checkVersion($modName) && !xarVar::getCached('Upgrade', 'upgrading') && $modName != 'modules') {
-            die('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
+            xarCore::exit('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
+            return false;
         }
 
         // Load the module files

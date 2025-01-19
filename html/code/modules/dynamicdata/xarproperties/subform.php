@@ -636,8 +636,6 @@ class SubFormProperty extends DataProperty
                 for ($i = 0;$i < $repeats;$i++) {
                     $objects[] = $myobject;
                 }
-                //                var_dump($this->link);exit;
-                //                $data['repeats'] = $this->repeat;
                 if (!empty($this->link) && !empty($value)) {
                     if (is_numeric($value)) {
                         $where = $this->link . ' eq ' . $value;

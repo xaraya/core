@@ -138,7 +138,7 @@ class TestEventListeners extends EventListenerProvider
         $subject = $this->getEventSubject($event, $args);
         if (empty($subject)) {
             echo "Subject: $event OOPS\n";
-            exit;
+            \xarCore::exit();
         }
         return $subject;
     }
@@ -248,7 +248,8 @@ class TestHookListeners extends HookListenerProvider
         $subject = $this->getEventSubject($event, $args);
         if (empty($subject)) {
             echo "Subject: $event for $modname $itemtype OOPS\n";
-            exit;
+            \xarCore::exit();
+            return;
         }
         return $subject;
     }

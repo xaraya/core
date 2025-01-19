@@ -88,7 +88,8 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
         	} else {
         		// Not supposed to happen
 				echo 'seek() returned an unknown result';
-				exit;
+                xarCore::exit();
+                return;
         	}
         } else {
 			throw new SQLException("SQLite3 does not support a seek method");
