@@ -12,7 +12,6 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 sys::import('modules.dynamicdata.class.utilapi');
-use Xaraya\DataObject\UtilApi;
 
 /**
  * Database configurations used by modules and objects
@@ -34,7 +33,7 @@ function dynamicdata_admin_dbconfig(array $args = [], $context = null)
     }
 
     $data = [];
-    $utilapi = new UtilApi();
+    $utilapi = new \Xaraya\DataObject\UtilApi();
 
     if (!empty($db)) {
         if ($db === 'default') {

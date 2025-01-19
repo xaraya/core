@@ -5,7 +5,7 @@
  *
  * @package modules\skeleton
  * @category Xaraya Web Applications Framework
- * @version 2.5.7
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -15,15 +15,13 @@ namespace Xaraya\Modules\Skeleton;
 
 use Xaraya\Modules\InstallerClass;
 use sys;
-use Exception;
 
 sys::import('xaraya.modules.installer');
 
 /**
  * Handle module installer functions
  *
- * @todo add extra use ...; statements above as needed
- * @todo replaced skeleton_*() function calls with $this->*() calls
+ * @internal replaced skeleton_*() function calls with $this->*() calls
  * @extends InstallerClass<Module>
  */
 class Installer extends InstallerClass

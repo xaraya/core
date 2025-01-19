@@ -10,11 +10,11 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+sys::import('modules.dynamicdata.class.objects.factory');
+
 /**
  * Export an object definition or an object item to XML
  */
-sys::import('modules.dynamicdata.class.objects.factory');
-
 function dynamicdata_admin_export(array $args = [], $context = null)
 {
     // Security

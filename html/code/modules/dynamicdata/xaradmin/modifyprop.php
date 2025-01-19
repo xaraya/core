@@ -12,7 +12,6 @@
  */
 
 sys::import('xaraya.datastores.factory');
-use Xaraya\DataObject\DataStores\DataStoreFactory;
 
 /**
  * Modify the dynamic properties for a module + itemtype
@@ -129,7 +128,7 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
     }
 
     try {
-        $data['sources'] = DataStoreFactory::getDataSources($object);
+        $data['sources'] = \Xaraya\DataObject\DataStores\DataStoreFactory::getDataSources($object);
     } catch (Exception $e) {
         $msg = $e->getMessage();
         return xarController::notFound($msg, $context);

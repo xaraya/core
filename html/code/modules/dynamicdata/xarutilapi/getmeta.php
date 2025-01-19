@@ -13,7 +13,6 @@
  */
 
 sys::import('modules.dynamicdata.class.utilapi');
-use Xaraya\DataObject\UtilApi;
 
 /**
  * (try to) get the "meta" properties of tables via db abstraction layer
@@ -43,7 +42,7 @@ function dynamicdata_utilapi_getmeta(array $args = [], $context = null)
     if (empty($dbConnArgs)) {
         $dbConnArgs = [];
     }
-    $utilapi = new UtilApi();
+    $utilapi = new \Xaraya\DataObject\UtilApi();
 
     return $utilapi->getMeta($table, $db, $dbConnIndex, $dbConnArgs);
 }

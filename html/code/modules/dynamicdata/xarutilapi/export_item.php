@@ -12,7 +12,6 @@
  */
 
 sys::import('modules.dynamicdata.class.export.generic');
-use Xaraya\DataObject\Export\DataObjectExporter;
 
 /**
  * Export a single object item for an object id and item id to XML
@@ -42,5 +41,5 @@ function dynamicdata_utilapi_export_item(array $args = [], $context = null)
         $tofile = false;
     }
 
-    return DataObjectExporter::export($objectid, $itemid, $format, $tofile);
+    return \Xaraya\DataObject\Export\DataObjectExporter::export($objectid, $itemid, $format, $tofile);
 }

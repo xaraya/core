@@ -17,10 +17,10 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the skeleton user API
+ * Handle the skeleton rest API
  * @extends UserApiClass<Module>
  */
-class UserApi extends UserApiClass
+class RestApi extends UserApiClass
 {
     // ...
 }

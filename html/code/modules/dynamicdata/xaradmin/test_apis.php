@@ -61,7 +61,7 @@ function dynamicdata_admin_test_apis(array $args = [], $context = null)
             if (!empty($match) && $match == $etag) {
                 header('HTTP/1.1 304 Not Modified');
                 header("Cache-Control: public, must-revalidate");
-                exit;
+                exit();
             }
             //header("Expires: " .
             //       gmdate("D, d M Y H:i:s", $modtime + xarPageCache::$cacheTime) .
@@ -76,7 +76,7 @@ function dynamicdata_admin_test_apis(array $args = [], $context = null)
             // send the content of the file to the browser
             @readfile($apiFile);
             // we're done here !
-            exit;
+            exit();
         }
     }
     xarVar::fetch('restapi', 'array', $restapi, [], xarVar::NOT_REQUIRED);

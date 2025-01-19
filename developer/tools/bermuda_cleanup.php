@@ -762,7 +762,7 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
             }
             $found[] = $match;
         }
-        $this->log('Found Functions: ' . count($found), true);
+        $this->log('Found Functions: ' . count($found) . ' for type "' . $type . '"', true);
         return $found;
     }
 
@@ -1050,6 +1050,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             }
             if ($split) {
                 // @todo each function will have its own method file
+                $this->log('Combined file for module ' . $module . ' - TODO ' . $fpath, true);
                 continue;
             }
             $this->check_type_class($typefile);
@@ -1071,6 +1072,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             $xarversion = str_replace('/class/' . $classtype . '.php', '/xarversion.php', $typefile);
             $namespace = $this->get_module_namespace($xarversion);
             $output = str_replace('Xaraya\Modules\Skeleton\UserApi', $namespace . '\\' . $classname, $output);
+            $output = str_replace('<UserApi>', '<' . $classname . '>', $output);
             $output = str_replace(' userapi get ', " $modType $funcName ", $output);
             // see MethodTrait::getClassName()
             $methodName = str_replace('_', '', ucwords($funcName, '_'));
@@ -1082,6 +1084,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             $output .= '    /** functions imported by bermuda_cleanup */';
             foreach ($functions as $lname) {
                 $function = $this->functions[$lname];
+                // @todo add replacement of core services
                 $search = [
                     '/function \&/',
                     '/function ' . $module . '_' . $modType . '_' . $funcName . '\(/i',
@@ -1120,10 +1123,10 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         $typename = basename($typefile);
         if (file_exists($typefile)) {
             if (empty($this->todo[$typefile])) {
-                $gitfile = '/home/mikespub/modules/' . $module . '/class/' . $typename;
-                if (!file_exists($gitfile)) {
-                    copy($typefile, $gitfile);
-                }
+                //$gitfile = '/home/mikespub/modules/' . $module . '/class/' . $typename;
+                //if (!file_exists($gitfile)) {
+                //    copy($typefile, $gitfile);
+                //}
                 $this->todo[$typefile] = true;
             }
             $this->log('Class file for module ' . $module . ' exists - SKIP ' . $typefile);
@@ -1148,16 +1151,30 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
     public function get_namespace_uses($fpath)
     {
         $uses = '';
-        $pattern = '/(xar[A-Z]\w+)::(\w+)\(/';
-        $contents = file_get_contents($fpath);
-        $matches = [];
-        if (!preg_match_all($pattern, $contents, $matches)) {
-            return $uses;
-        }
         $todo = [];
-        foreach ($matches[1] as $use) {
-            $todo[$use] = true;
+        $contents = file_get_contents($fpath);
+        $pattern = '/((xar|Data|Property|Creole|PDO)[A-Z]\w+)::(\$?\w+)/';
+        $matches = [];
+        if (preg_match_all($pattern, $contents, $matches)) {
+            foreach ($matches[1] as $use) {
+                $todo[$use] = true;
+            }
         }
+        $pattern = '/new (\w+)\(/';
+        $matches = [];
+        if (preg_match_all($pattern, $contents, $matches)) {
+            foreach ($matches[1] as $use) {
+                $todo[$use] = true;
+            }
+        }
+        $pattern = '/(\w*Exception)/';
+        $matches = [];
+        if (preg_match_all($pattern, $contents, $matches)) {
+            foreach ($matches[1] as $use) {
+                $todo[$use] = true;
+            }
+        }
+        ksort($todo);
         foreach (array_keys($todo) as $use) {
             $uses .= "use $use;\n";
         }
@@ -1193,7 +1210,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $output;
     }
 
-    public function find_class_dependencies($module = '', $type = '')
+    public function find_class_dependencies($module = '', $type = '', $path = '')
     {
         $found = [];
         $total = 0;
@@ -1203,6 +1220,9 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
                 continue;
             }
             if (!empty($type) && !str_contains($class['file'], '/class/' . $type)) {
+                continue;
+            }
+            if (!empty($path) && !str_contains($class['file'], $path)) {
                 continue;
             }
             $methods = $this->find_method_dependencies($lname);
@@ -1253,34 +1273,48 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $calls;
     }
 
-    public function find_called_dependencies($module = '', $type = '')
+    public function find_called_dependencies($module = '', $type = '', $path = '')
     {
-        $found = $this->find_class_dependencies($module, $type);
+        $found = $this->find_class_dependencies($module, $type, $path);
         $called = [];
+        $summary = [];
         foreach ($found as $fpath => $classes) {
             foreach ($classes as $cname => $methods) {
                 foreach ($methods as $mname => $calls) {
                     foreach ($calls as $class => $call) {
                         $called[$class] ??= [];
+                        $summary[$class] ??= [];
                         foreach ($call as $method => $args) {
                             $called[$class][$method] ??= [];
+                            $summary[$class][$method] ??= ['total' => 0, 'classes' => []];
                             foreach ($args as $params) {
                                 $this->log($class . '::' . $method . ' [' . $params . ']');
                                 $called[$class][$method][] = ['class' => $cname, 'method' => $mname, 'params' => $params];
+                                $summary[$class][$method]['total'] += 1;
+                                $summary[$class][$method]['classes'][$cname] = true;
                             }
                         }
                     }
                 }
             }
         }
-        return $called;
+        foreach ($summary as $class => $methods) {
+            foreach ($methods as $method => $calls) {
+                $summary[$class][$method]['classes'] = count($summary[$class][$method]['classes']);
+            }
+        }
+        return [$called, $summary];
     }
 
-    public function find_called_modules($module = '', $type = '')
+    public function find_called_modules($module = '', $type = '', $path = '')
     {
-        $called = $this->find_called_dependencies($module, $type);
+        [$called, $summary] = $this->find_called_dependencies($module, $type, $path);
+        $called['xarMod'] ??= [];
         $modules = [];
         $internal = 0;
+        $inmodule = 0;
+        $external = 0;
+        $called['xarMod']['apiFunc'] ??= [];
         foreach ($called['xarMod']['apiFunc'] as $call) {
             $params = array_map(function ($param) {
                 return trim($param, " \n'");
@@ -1289,18 +1323,29 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
                 $this->log(implode(' - ', $params) . ' - MISSING', true);
                 continue;
             }
+            [$modName, $modType, $funcName] = $params;
             $call['params'] = implode(',', array_slice($params, 3)) ?: '[...]';
-            if (str_contains($call['class'], 'xaraya\\modules\\' . $params[0] . '\\' . $params[1]  . 'api\\')) {
+            if ($modName == 'dynamicdata') {
+                $modClass = 'xaraya\\dataobject';
+            } else {
+                $modClass = 'xaraya\\modules\\' . $modName;
+            }
+            if (str_contains($call['class'], $modClass . '\\' . $modType  . 'api\\')) {
                 $call['internal'] = true;
                 $internal += 1;
+            } elseif (str_contains($call['class'], $modClass . '\\')) {
+                $call['inmodule'] = true;
+                $inmodule += 1;
             } else {
-                $call['internal'] = false;
+                $call['external'] = true;
+                $external += 1;
             }
-            $modules[$params[0]] ??= [];
-            $modules[$params[0]][$params[1] . 'api'] ??= [];
-            $modules[$params[0]][$params[1] . 'api'][$params[2]] ??= [];
-            $modules[$params[0]][$params[1] . 'api'][$params[2]][] = $call;
+            $modules[$modName] ??= [];
+            $modules[$modName][$modType . 'api'] ??= [];
+            $modules[$modName][$modType . 'api'][$funcName] ??= [];
+            $modules[$modName][$modType . 'api'][$funcName][] = $call;
         }
+        $called['xarMod']['guiFunc'] ??= [];
         foreach ($called['xarMod']['guiFunc'] as $call) {
             $params = array_map(function ($param) {
                 return trim($param, " \n'");
@@ -1309,19 +1354,30 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
                 $this->log(implode(' - ', $params) . ' - MISSING', true);
                 continue;
             }
+            [$modName, $modType, $funcName] = $params;
             $call['params'] = implode(',', array_slice($params, 3)) ?: '[...]';
-            if (str_contains($call['class'], 'xaraya\\modules\\' . $params[0] . '\\' . $params[1]  . 'gui\\')) {
+            if ($modName == 'dynamicdata') {
+                $modClass = 'xaraya\\dataobject';
+            } else {
+                $modClass = 'xaraya\\modules\\' . $modName;
+            }
+            if (str_contains($call['class'], $modClass . '\\' . $modType  . 'gui\\')) {
                 $call['internal'] = true;
                 $internal += 1;
+            } elseif (str_contains($call['class'], $modClass . '\\')) {
+                $call['inmodule'] = true;
+                $inmodule += 1;
             } else {
-                $call['internal'] = false;
+                $call['external'] = true;
+                $external += 1;
+                //continue;
             }
-            $modules[$params[0]] ??= [];
-            $modules[$params[0]][$params[1]] ??= [];
-            $modules[$params[0]][$params[1]][$params[2]] ??= [];
-            $modules[$params[0]][$params[1]][$params[2]][] = $call;
+            $modules[$modName] ??= [];
+            $modules[$modName][$modType] ??= [];
+            $modules[$modName][$modType][$funcName] ??= [];
+            $modules[$modName][$modType][$funcName][] = $call;
         }
-        $this->log('Internal module calls found ' . $internal, true);
+        $this->log('Internal/in-module/external module calls found: ' . $internal . ' / ' . $inmodule . ' / ' . $external, true);
         return $modules;
     }
 
@@ -1332,8 +1388,80 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         echo $this->to_json($modules);
     }
 
+    public function find_module_methods($module = '', $type = '', $path = '')
+    {
+        $found = [];
+        $total = 0;
+        foreach (array_keys($this->classes) as $lname) {
+            $class = $this->classes[$lname];
+            if (!str_ends_with($class['name'], 'Method')) {
+                $this->log('Class method ' . $class['name'] . ' - SKIP');
+                continue;
+            }
+            if (!empty($module) && !str_contains($class['file'], '/' . $module . '/class/')) {
+                $this->log('Class method ' . $class['name'] . ' - SKIP');
+                continue;
+            }
+            if (!empty($type) && !str_contains($class['file'], '/class/' . $type)) {
+                $this->log('Class method ' . $class['name'] . ' - SKIP');
+                continue;
+            }
+            if (!empty($path) && !str_contains($class['file'], $path)) {
+                continue;
+            }
+            $pieces = explode('\\', $class['name']);
+            $methodName = array_pop($pieces);
+            $methodName = lcfirst(substr($methodName, 0, strlen($methodName) - strlen('Method')));
+            $this->log('Class method ' . $class['name'] . ' - FOUND: ' . $methodName);
+            //if ($methodName == 'main') {
+            //    continue;
+            //}
+            $namespace = implode('\\', $pieces);
+            $found[$namespace] ??= [];
+            if (array_key_exists($methodName, $found[$namespace])) {
+                $this->log('Duplicate Class method ' . $class['name'] . ' - FATAL: ' . $methodName, true);
+                exit;
+            }
+            $found[$namespace][$methodName] = $lname;
+            $total += 1;
+        }
+        $this->log('Found Class Methods: ' . $total . ' in ' . count($found) . ' Classes', true);
+        ksort($found);
+        foreach (array_keys($found) as $namespace) {
+            ksort($found[$namespace]);
+        }
+        return $found;
+    }
+
+    public function get_invoke_method($fpath)
+    {
+        $file = $this->project->getFiles()[$fpath];
+        foreach ($file->getClasses() as $class) {
+            foreach ($class->getMethods() as $method) {
+                if ($method->getName() == '__invoke') {
+                    return $method;
+                }
+            }
+        }
+        return null;
+    }
+
+    public function get_docblock_vars($func_or_meth)
+    {
+        $docblock = $func_or_meth->getDocBlock();
+        if (!empty($docblock) && $docblock->hasTag('var')) {
+            //$tags = array_map(function ($tag) {
+            //    return str_replace(['$args', '[', ']', "'"], [], $tag);
+            //}, $docblock->getTagsByName('var'));
+            //return implode(', ', $tags);
+            return $docblock->getTagsByName('var');
+        }
+        return null;
+    }
+
     public function document_module_methods($module = '', $type = '', $replace = false)
     {
+        // @todo re-use find_module_methods above
         $found = [];
         $total = 0;
         foreach (array_keys($this->classes) as $lname) {
@@ -1359,19 +1487,60 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             //}
             $classFile = dirname($class['file']) . '.php';
             $found[$classFile] ??= [];
-            $found[$classFile][] = $methodName;
+            $summary = '';
+            $vars = [];
+            $method = $this->get_invoke_method($class['file']);
+            if (!empty($method)) {
+                $summary = $method->getDocBlock()?->getSummary() ?? '';
+                $vars = $this->get_docblock_vars($method);
+            }
+            if (str_starts_with($summary, 'Summary of ')) {
+                $text = $methodName . '(array $args)';
+            } else {
+                $text = $methodName . '(array $args) ' . str_replace("\n", ' - ', $summary);
+            }
+            $shape = '';
+            $count = 0;
+            if (!empty($vars)) {
+                $args = [];
+                foreach ($vars as $var) {
+                    $vname = (string) $var->getVariableName();
+                    $vtype = (string) $var->getType();
+                    $vdesc = (string) $var->getDescription();
+                    if (str_contains($vname, 'args[')) {
+                        $vname = str_replace(['args[', ']', "'"], [], $vname);
+                    }
+                    if (str_contains(strtolower($vdesc), 'optional')) {
+                        $args[] = $vname . '?: ' . $vtype;
+                    } else {
+                        $args[] = $vname . ': ' . $vtype;
+                        $count += 1;
+                    }
+                }
+                $shape = "\n *  array{" . implode(', ', $args) . "}";
+            }
+            if ($count > 0) {
+                $text = $methodName . '(array $args)';
+            } else {
+                $text = $methodName . '(array $args = [])';
+            }
+            if (!str_starts_with($summary, 'Summary of ') && !str_starts_with($summary, 'functions imported by')) {
+                $text .= ' ' . str_replace("\n", ' - ', $summary);
+            }
+            $found[$classFile][] = $text . $shape;
             $total += 1;
         }
         $this->log('Found Class Methods: ' . $total, true);
         ksort($found);
         $prefix = "\n * @method mixed ";
-        $postfix = "(array \$args)";
+        //$postfix = "(array \$args)";
+        $postfix = "";
         foreach (array_keys($found) as $classFile) {
             sort($found[$classFile]);
             $contents = file_get_contents($classFile);
-            $this->log('Class methods for ' . $classFile . ': ' . implode(', ', $found[$classFile]));
+            //$this->log('Class methods for ' . $classFile . ': ' . implode(', ', $found[$classFile]));
             $extra = implode($postfix . $prefix, $found[$classFile]);
-            $contents = str_replace(" * @extends ", " *" . $prefix . $extra . $postfix . "\n * @extends ", $contents);
+            $contents = str_replace(" * @extends", " *" . $prefix . $extra . $postfix . "\n * @extends", $contents);
             if (!str_contains($contents, '@extends')) {
                 $this->log('Missing @extends in class file ' . $classFile, true);
                 $this->log(" *" . $prefix . $extra . $postfix);
@@ -1379,9 +1548,79 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             }
             if ($replace) {
                 file_put_contents($classFile, $contents);
+            } else {
+                $this->log('Classfile ' . $classFile);
+                $this->log(" *" . $prefix . $extra . $postfix);
+                $this->log('');
             }
         }
         return $found;
+    }
+
+    public function replace_core_services($module = '', $type = '', $replace = false)
+    {
+        $found = $this->find_module_methods($module, $type);
+        // @todo add replacement of core services
+        $search = [
+            '/xarML\(/',
+            '/xarMLS::translate\(/',
+            // @todo differentiate based on xarLog::* level
+            '/xarLog::message\(/',
+            '/xarLog::variable\(/',
+            // @todo differentiate based on xarVar::* flags
+            '/xarVar::fetch\(/',
+            '/xarVar::prepForDisplay\(/',
+            '/\bexit;/',
+            '/\bexit\(/',
+            '/\bdie\(/',
+        ];
+        $replace = [
+            '\$this->ml(',
+            '\$this->ml(',
+            // @todo differentiate based on xarLog::* level
+            '/\$this->log()->message(/',
+            '/\$this->log()->variable(/',
+            // @todo differentiate based on xarVar::* flags
+            '/\$this->var()->fetch(/',
+            '/\$this->var()->prep(/',
+            '\$this->exit();',
+            '\$this->exit(',
+            '\$this->exit(',
+        ];
+        return $found;
+    }
+
+    public function replace_internal_methods($module = '', $type = '', $replace = false)
+    {
+        $modules = $this->find_called_modules($module, $type);
+        // @todo check for internal methods calls and replace
+        $summary = [];
+        foreach ($modules as $modName => $types) {
+            if (!empty($module) && $modName != $module) {
+                continue;
+            }
+            $summary[$modName] = [
+                'internal' => 0,
+                'inmodule' => 0,
+                'external' => 0,
+            ];
+            foreach ($types as $modType => $funcs) {
+                foreach ($funcs as $funcName => $calls) {
+                    foreach ($calls as $call) {
+                        if (!empty($call['internal'])) {
+                            $summary[$modName]['internal'] += 1;
+                            // @todo replace
+                            $this->log($modName . '_' . $modType . '_' . $funcName . ': ' . $call['class'] . ' ' . $call['method'] . ' - TODO', true);
+                        } elseif (!empty($call['inmodule'])) {
+                            $summary[$modName]['inmodule'] += 1;
+                        } else {
+                            $summary[$modName]['external'] += 1;
+                        }
+                    }
+                }
+            }
+        }
+        echo $this->to_json($summary);
     }
 }
 
@@ -1437,6 +1676,7 @@ $analyzer->find_installer_functions();
 /**
  */
 $inDir = dirname(__DIR__, 2) . '/vendor/xaraya/';
+$inDir = dirname(__DIR__, 2) . '/html/code/modules/dynamicdata/';
 $migrator = new XarayaModuleMigrator($inDir, true);
 $migrator->verbose = false;
 $migrator->load_project();
@@ -1444,9 +1684,17 @@ $migrator->parse_project();
 $refresh = false;
 //$migrator->migrate_installer_functions($refresh);
 //$migrator->find_installer_classes();
-//$migrator->migrate_module_functions('admin', $refresh);
+//$types = ['user', 'userapi', 'admin', 'adminapi', 'utilapi', 'restapi', 'dataapi'];
+//foreach ($types as $type) {
+//    $migrator->migrate_module_functions($type, $refresh);
+//}
 //$migrator->check_method_casing();
 $replace = false;
-$migrator->document_module_methods('', '', $replace);
+//$migrator->document_module_methods('dynamicdata', '', $replace);
+$found = $migrator->replace_core_services();
+echo $migrator->to_json($found);
+//$migrator->replace_internal_methods('dynamicdata', '', $replace);
+//[$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '');
+//file_put_contents('call_dependencies.json', $migrator->to_json($summary));
 /**
  */

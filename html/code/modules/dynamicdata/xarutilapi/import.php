@@ -12,7 +12,6 @@
  */
 
 sys::import('modules.dynamicdata.class.import.generic');
-use Xaraya\DataObject\Import\DataObjectImporter;
 
 /**
  * Import an object definition or an object item from XML
@@ -36,5 +35,5 @@ function dynamicdata_utilapi_import(array $args = [], $context = null)
     $args['prefix'] ??= xarDB::getPrefix();
     $args['overwrite'] ??= false;
     $args['keepitemid'] ??= false;
-    return DataObjectImporter::import($args['file'], $args['xml'], $args['format'], $args['prefix'], $args['overwrite'], $args['keepitemid']);
+    return \Xaraya\DataObject\Import\DataObjectImporter::import($args['file'], $args['xml'], $args['format'], $args['prefix'], $args['overwrite'], $args['keepitemid']);
 }

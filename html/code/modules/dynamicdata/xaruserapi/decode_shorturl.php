@@ -18,7 +18,7 @@
  * @return array<mixed>|void containing func the function to be called and args the query
  *         string arguments, or empty if it failed
  */
-function dynamicdata_userapi_decode_shorturl($params)
+function dynamicdata_userapi_decode_shorturl(array $params = [])
 {
     static $objectcache = [];
 

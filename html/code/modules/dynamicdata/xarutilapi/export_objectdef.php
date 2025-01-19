@@ -12,7 +12,6 @@
  */
 
 sys::import('modules.dynamicdata.class.export.generic');
-use Xaraya\DataObject\Export\DataObjectExporter;
 
 /**
  * Export an object definition to XML
@@ -41,5 +40,5 @@ function dynamicdata_utilapi_export_objectdef(array $args = [], $context = null)
         $tofile = false;
     }
 
-    return DataObjectExporter::export($objectid, null, $format, $tofile);
+    return \Xaraya\DataObject\Export\DataObjectExporter::export($objectid, null, $format, $tofile);
 }

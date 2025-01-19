@@ -12,7 +12,6 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 sys::import('modules.dynamicdata.class.utilapi');
-use Xaraya\DataObject\UtilApi;
 
 /**
  * Return meta data (test only)
@@ -46,7 +45,7 @@ function dynamicdata_admin_meta(array $args = [], $context = null)
     }
 
     $data = [];
-    $utilapi = new UtilApi();
+    $utilapi = new \Xaraya\DataObject\UtilApi();
 
     $dbconn = xarDB::getConn();
     $dbname = xarDB::getName();
