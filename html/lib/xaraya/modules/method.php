@@ -60,6 +60,10 @@ interface MethodServicesInterface extends ParentServicesInterface
     public function configure(): void;
     public function getParent(): ModuleServicesInterface;
     public function setParent(ModuleServicesInterface $parent): void;
+    public function userapi(): UserApiInterface|null;
+    public function usergui(): UserGuiInterface|null;
+    public function adminapi(): AdminApiInterface|null;
+    public function admingui(): AdminGuiInterface|null;
     public function getModName(): string;
     public function setModName(string $modName): void;
     public function getItemType(): int;
@@ -125,6 +129,39 @@ trait MethodServicesTrait
     public function setParent(ModuleServicesInterface $parent): void
     {
         $this->parent = $parent;
+    }
+
+
+    /**
+     * Get module user API class for this module
+     */
+    public function userapi(): UserApiInterface|null
+    {
+        return $this->getParent()->userapi();
+    }
+
+    /**
+     * Get module user GUI class for this module
+     */
+    public function usergui(): UserGuiInterface|null
+    {
+        return $this->getParent()->usergui();
+    }
+
+    /**
+     * Get module admin API class for this module
+     */
+    public function adminapi(): AdminApiInterface|null
+    {
+        return $this->getParent()->adminapi();
+    }
+
+    /**
+     * Get module admin GUI class for this module
+     */
+    public function admingui(): AdminGuiInterface|null
+    {
+        return $this->getParent()->admingui();
     }
 
     /**
@@ -193,6 +230,10 @@ trait MethodServicesTrait
  * Available methods:
  * - __invoke(array $args = []) This contains the actual method code
  * - configure() Provide additional method configuration when created
+ * - userapi() Get module user API class for this module
+ * - usergui) Get module user GUI class for this module
+ * - adminapi() Get module admin API class for this module
+ * - admingui() Get module admin GUI class for this module
  * - getParent() Get parent api/gui module class to call other methods
  *   or access other api/gui module classes from this instance
  *

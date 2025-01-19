@@ -38,6 +38,10 @@ interface ModuleServicesInterface extends ServicesInterface, HooksInterface  // 
     public function hasMethod(string $funcName, string $callType = 'api'): bool;
     public function getModule(): ModuleInterface|null;
     public function getAPI(): UserApiInterface|null;
+    public function userapi(): UserApiInterface|null;
+    public function usergui(): UserGuiInterface|null;
+    public function adminapi(): AdminApiInterface|null;
+    public function admingui(): AdminGuiInterface|null;
 }
 
 /**
@@ -103,7 +107,9 @@ trait ModuleServicesTrait
         'sec',
         'tpl',
         'var',
+        'block',
         'data',
+        'prop',
         'cache',
         'exit',
         // HooksTrait
@@ -120,6 +126,10 @@ trait ModuleServicesTrait
         'getclassname',
         'getnamespace',
         'getapi',
+        'userapi',
+        'usergui',
+        'adminapi',
+        'admingui',
         // UserGuiTrait
         'prepareoutput',
         'tplmodule',
@@ -226,6 +236,46 @@ trait ModuleServicesTrait
     {
         $component = $this->getModule()?->getAPI();
         assert($component instanceof UserApiInterface);
+        return $component;
+    }
+
+    /**
+     * Get module user API class for this module
+     */
+    public function userapi(): UserApiInterface|null
+    {
+        $component = $this->getModule()?->getAPI();
+        assert($component instanceof UserApiInterface);
+        return $component;
+    }
+
+    /**
+     * Get module user GUI class for this module
+     */
+    public function usergui(): UserGuiInterface|null
+    {
+        $component = $this->getModule()?->getGUI();
+        assert($component instanceof UserGuiInterface);
+        return $component;
+    }
+
+    /**
+     * Get module admin API class for this module
+     */
+    public function adminapi(): AdminApiInterface|null
+    {
+        $component = $this->getModule()?->getAdminAPI();
+        assert($component instanceof AdminApiInterface);
+        return $component;
+    }
+
+    /**
+     * Get module admin GUI class for this module
+     */
+    public function admingui(): AdminGuiInterface|null
+    {
+        $component = $this->getModule()?->getAdminGUI();
+        assert($component instanceof AdminGuiInterface);
         return $component;
     }
 

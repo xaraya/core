@@ -49,31 +49,30 @@ sys::import('xaraya.modules.userapitrait');
  *
  * Available methods:
  * - configure() Provide additional api/gui configuration when created
+ * - getModName() Get name for this module in module class or method
  * - getModType() Get module type of this module class (user, admin, ...)
+ * - getItemType() Get item type in this module class
+ * - setItemType($itemtype = 0) Set item type in this module class
+ * - userapi() Get module user API class for this module
+ * - usergui) Get module user GUI class for this module
+ * - adminapi() Get module admin API class for this module
+ * - admingui() Get module admin GUI class for this module
  * - getModule() Access other api/gui module classes from this instance
  * - hasMethod($funcName, $callType = 'api') Does this module class implement this method
  *
- * Inherited methods:
- * - Module:
- *   - getModName() Get name for this module in module class or method
- *   - getModId() Get module registry ID for this module
- *   - getItemType() Get item type in this module class
- *   - setItemType($itemtype = 0) Set item type in this module class
- *   - getModVar($varName) Get module variable for this module
- *   - setModVar($varName, $value) Set module variable for this module
- * - Security:
- *   - checkAccess($mask, $action = '', $instance = null) Check access based on security mask or module action
- *   - genAuthKey() Generate authorisation key for this module
- *   - confirmAuthKey($name = 'authid') Confirm authorisation key for this module
- * - Variable:
- *   - fetch($name, $validation, &$value, $defaultValue = null, $flags, $prep) Fetch variable by name, with validation, default, flags and prep
- * - Controller:
- *   - getUrl($modType = 'user', $funcName = 'main', $args = []) Get url for this module type function
- *   - redirect($url, $httpResponse = null) Send redirect to url and exit
- * - Multi-language:
- *   - translate($rawstring, ...$args) Translate string with optional arguments
- * - System:
- *   - exit($status = 0) Call exit() - override for non-blocking servers, php unit tests or elsewhere
+ * Available services:
+ * - $this->ctl() = xarController::* Main Controller (getURL, redirect, ...)
+ * - $this->log() = xarLog::* Logger (message, variable, ...)
+ * - $this->mls() = xarMLS::* Multi-Language System (translate, ...)
+ * - $this->mod() = xarMod*::* Modules (getVar, setVar, ...)
+ * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
+ * - $this->tpl() = xarTpl::* Templating (module, setPageTitle, ...)
+ * - $this->var() = xarVar::* Variables (fetch, check, ...)
+ * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
+ * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
+ * - ...
+ * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
+ * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
  *
  * @template TModule of ModuleInterface|null
  */

@@ -29,6 +29,28 @@ sys::import('xaraya.services.servicetrait');
 interface CachingInterface extends ServiceInterface
 {
     /**
+     * Get a cache key for module output caching
+     * @param array<string, mixed> $args optional parameters
+     * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Module, or null if not applicable
+     */
+    public function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): string|null;
+
+    /**
+     * Check if the output of an module function is cached
+     */
+    public function hasModule(?string $cacheKey): bool;
+
+    /**
+     * Get the output of the module function from cache
+     */
+    public function getModule(string $cacheKey): string;
+
+    /**
+     * Set the output of the module function in cache
+     */
+    public function setModule(?string $cacheKey, string $value): void;
+
+    /**
      * Get a cache key for object output caching
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Object, or null if not applicable
@@ -59,6 +81,49 @@ trait CachingTrait
 {
     /** @use ServiceTrait<TParent> */
     use ServiceTrait;
+
+    /**
+     * Get a cache key for module output caching
+     * @param array<string, mixed> $args optional parameters
+     * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Module, or null if not applicable
+     */
+    public function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): string|null
+    {
+        if (empty($modName)) {
+            return null;
+        }
+        return xarCache::getModuleKey($modName, $modType, $funcName, $args);
+    }
+
+    /**
+     * Check if the output of an module function is cached
+     */
+    public function hasModule(?string $cacheKey): bool
+    {
+        if (empty($cacheKey)) {
+            return false;
+        }
+        return xarModuleCache::isCached($cacheKey);
+    }
+
+    /**
+     * Get the output of the module function from cache
+     */
+    public function getModule(string $cacheKey): string
+    {
+        return xarModuleCache::getCached($cacheKey);
+    }
+
+    /**
+     * Set the output of the module function in cache
+     */
+    public function setModule(?string $cacheKey, string $value): void
+    {
+        if (empty($cacheKey)) {
+            return;
+        }
+        xarModuleCache::setCached($cacheKey, $value);
+    }
 
     /**
      * Get a cache key for object output caching
@@ -108,6 +173,10 @@ trait CachingTrait
  * Access xar*Cache::* Caching methods (getModuleKey, getObjectKey, ...)
  *
  * Available methods:
+ * - getModuleKey()
+ * - hasModule()
+ * - getModule()
+ * - setModule()
  * - getObjectKey()
  * - hasObject()
  * - getObject()
