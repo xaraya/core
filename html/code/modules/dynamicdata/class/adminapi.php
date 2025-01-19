@@ -23,6 +23,23 @@ sys::import('modules.dynamicdata.class.traits.adminapi');
 /**
  * Handle (traditional) DD admin api functions via module class
  * Note: this does not replace the direct use of object methods
+ *
+ * @method mixed browse(array $args = [])
+ * @method mixed create(array $args = []) create a new item (the whole item or some dynamic data fields for it)
+ * @method mixed createobject(array $args = []) create a new dynamic object
+ * @method mixed createproperty(array $args = []) create a new property field for an object
+ * @method mixed delete(array $args = []) delete an item (the whole item or the dynamic data fields of it)
+ * @method mixed deleteobject(array $args = []) delete a dynamic object and its properties
+ * @method mixed deleteprop(array $args = []) delete a property field
+ * @method mixed getnextitemtype(array $args = []) get the next itemtype of objects pertaining to a given module
+ * @method mixed importpropertytypes(array $args = []) Check the properties directory for properties and import them into the Property Type table.
+ * @method mixed menu(array $args = []) generate the common admin menu configuration
+ * @method mixed showfilterform(array $args = []) Show an input form in a template
+ * @method mixed showform(array $args = []) Show an input form in a template
+ * @method mixed showinput(array $args = []) show some predefined form input field in a template
+ * @method mixed update(array $args = []) update an item (the whole item or the dynamic data fields of it)
+ * @method mixed updateprop(array $args = []) update a property field
+ * @extends
  */
 class AdminApi implements AdminApiInterface
 {

@@ -1,0 +1,175 @@
+<?php
+
+/**
+ * @package modules\dynamicdata
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\DataObject\AdminGui;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\AdminGui;
+use BadParameterException;
+use DataObjectFactory;
+use xarController;
+use xarMod;
+use xarSec;
+use xarSecurity;
+use xarVar;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * dynamicdata admin orderprops function
+ * @extends MethodClass<AdminGui>
+ */
+class OrderpropsMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * Re-order the dynamic properties for a module + itemtype
+     * @return bool|void true on success and redirect to modifyprop
+     */
+    public function __invoke(array $args = [])
+    {
+        // Security
+        if (!xarSecurity::check('EditDynamicData')) {
+            return;
+        }
+
+        // Get parameters from whatever input we need.  All arguments to this
+        // function should be obtained from $this->var()->fetch()
+        if (!$this->var()->fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!$this->var()->fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!$this->var()->fetch('itemtype', 'int:1:', $itemtype, 0, xarVar::DONT_SET)) {
+            return;
+        }
+
+        if (!$this->var()->fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!$this->var()->fetch('direction', 'isset', $direction, null, xarVar::DONT_SET)) {
+            return;
+        }
+
+        if (empty($direction)) {
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            $vars = ['direction', 'admin', 'orderprops', 'dynamicdata'];
+            throw new BadParameterException($vars, $msg);
+        }
+
+        if (empty($itemid)) {
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            $vars = ['itemid', 'admin', 'orderprops', 'dynamicdata'];
+            throw new BadParameterException($vars, $msg);
+        }
+
+        // @todo presumably this was removed for Ajax calls? But confirmAuthKey() already skips them
+        if (!$this->sec()->confirmAuthKey()) {
+            //return $this->ctl()->badRequest('bad_author');
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            $vars = ['authid', 'admin', 'orderprops', 'dynamicdata'];
+            throw new BadParameterException($vars, $msg);
+        }
+
+        $objectinfo = DataObjectFactory::getObjectInfo(
+            ['objectid' => $objectid]
+        );
+
+        $objectid = $objectinfo['objectid'];
+        $module_id = $objectinfo['moduleid'];
+        $itemtype = $objectinfo['itemtype'];
+
+        if (empty($module_id)) {
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            $vars = ['module id', 'admin', 'updateprop', 'dynamicdata'];
+            throw new BadParameterException($vars, $msg);
+        }
+
+        $fields = xarMod::apiFunc(
+            'dynamicdata',
+            'user',
+            'getprop',
+            ['objectid' => $objectid,
+                'module_id' => $module_id,
+                'itemtype' => $itemtype,
+                'allprops' => true]
+        );
+        $orders = [];
+        $currentpos = null;
+        $move_prop = '';
+        foreach ($fields as $fname => $field) {
+            if ($field['id'] == $itemid) {
+                $move_prop = $fname;
+                $currentpos = $field['seq'];
+            }
+            $orders[] = $fname;
+        }
+        $i = 0;
+        $swappos = null;
+        $swapwith = '';
+        foreach ($fields as $name => $field) {
+            if ($field['seq'] == $currentpos && $direction == 'up' && isset($orders[$i - 1])) {
+                $swapwith = $orders[$i - 1];
+                $swappos = $i;
+                $currentpos = $i + 1;
+            } elseif ($field['seq'] == $currentpos && $direction == 'down' && isset($orders[$i + 1])) {
+                $swapwith = $orders[$i + 1];
+                $swappos = $i;
+                $currentpos = $i + 1;
+            }
+            if (isset($swappos)) {
+                break;
+            }
+            $i++;
+        }
+
+        if (isset($swappos)) {
+            if (!xarMod::apiFunc(
+                'dynamicdata',
+                'admin',
+                'updateprop',
+                ['id' => $itemid,
+                    'label' => $fields[$move_prop]['label'],
+                    'type' => $fields[$move_prop]['type'],
+                    'seq' => $fields[$swapwith]['seq']]
+            )) {
+                return;
+            }
+
+            if (!xarMod::apiFunc(
+                'dynamicdata',
+                'admin',
+                'updateprop',
+                ['id' => $fields[$swapwith]['id'],
+                    'label' => $fields[$swapwith]['label'],
+                    'type' => $fields[$swapwith]['type'],
+                    'seq' => $fields[$move_prop]['seq']]
+            )) {
+                return;
+            }
+        }
+
+        $this->ctl()->redirect(xarController::URL(
+            'dynamicdata',
+            'admin',
+            'modifyprop',
+            ['module_id'    => $module_id,
+                'itemtype' => $itemtype]
+        ));
+
+
+        // Return
+        return true;
+    }
+}

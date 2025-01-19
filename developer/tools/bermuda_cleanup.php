@@ -1425,7 +1425,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             $found[$namespace][$methodName] = $lname;
             $total += 1;
         }
-        $this->log('Found Class Methods: ' . $total . ' in ' . count($found) . ' Classes', true);
+        $this->log('Found Class Methods: ' . $total . ' in ' . count($found) . ' classes', true);
         ksort($found);
         foreach (array_keys($found) as $namespace) {
             ksort($found[$namespace]);
@@ -1557,7 +1557,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $found;
     }
 
-    public function replace_core_services($module = '', $type = '', $replace = false)
+    public function replace_core_services($module = '', $type = '', $update = false)
     {
         $found = $this->find_module_methods($module, $type);
         // @todo add replacement of core services
@@ -1570,23 +1570,66 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             // @todo differentiate based on xarVar::* flags
             '/xarVar::fetch\(/',
             '/xarVar::prepForDisplay\(/',
-            '/\bexit;/',
-            '/\bexit\(/',
-            '/\bdie\(/',
+            // @todo handle xarSecurity::check()
+            '/xarSec::genAuthKey\(/',
+            '/xarSec::confirmAuthKey\(/',
+            // @todo handle xarController::URL()
+            '/xarController::redirect\(/',
+            '/xarController::forbidden\(/',
+            '/xarController::badRequest\(/',
+            '/xarController::notFound\(/',
+            // @todo we need to drop extra , null, $this->getContext() here
+            '/,\s*\n*\s*null,\s*\n*\s*\$this->getContext\(\)\s*\n*\s*\)/',
+            // @todo handle xarMod*::*
+            '/ exit;/',
+            '/ exit\(/',
+            '/ die\(/',
         ];
         $replace = [
             '\$this->ml(',
             '\$this->ml(',
             // @todo differentiate based on xarLog::* level
-            '/\$this->log()->message(/',
-            '/\$this->log()->variable(/',
+            '\$this->log()->message(',
+            '\$this->log()->variable(',
             // @todo differentiate based on xarVar::* flags
-            '/\$this->var()->fetch(/',
-            '/\$this->var()->prep(/',
-            '\$this->exit();',
-            '\$this->exit(',
-            '\$this->exit(',
+            '\$this->var()->fetch(',
+            '\$this->var()->prep(',
+            // @todo handle xarSecurity::check()
+            '\$this->sec()->genAuthKey(',
+            '\$this->sec()->confirmAuthKey(',
+            // @todo handle xarController::URL()
+            '\$this->ctl()->redirect(',
+            '\$this->ctl()->forbidden(',
+            '\$this->ctl()->badRequest(',
+            '\$this->ctl()->notFound(',
+            // @todo we need to drop extra , null, $this->getContext() here
+            ')',
+            // @todo handle xarMod*::*
+            ' \$this->exit();',
+            ' \$this->exit(',
+            ' \$this->exit(',
         ];
+        $files = 0;
+        $total = 0;
+        foreach ($found as $namespace => $methods) {
+            foreach ($methods as $methodName => $lname) {
+                $class = $this->classes[$lname];
+                $this->log('Class Method in ' . $namespace . ': ' . $methodName . ' - FOUND ' . $class['file']);
+                $contents = file_get_contents($class['file']);
+                $count = 0;
+                $contents = preg_replace($search, $replace, $contents, -1, $count);
+                if ($update && !empty($contents)) {
+                    file_put_contents($class['file'], $contents);
+                }
+                //if ($count > 0) {
+                //    $this->log('Still replacements in ' . $class['file'], true);
+                //}
+                $files += 1;
+                $total += $count;
+            }
+        }
+        $this->log('Found Class Methods: ' . $files . ' with ' . $total . ' replacements', true);
+        $this->log('Check for un-needed $this->getContext() in replaced calls ' . ' - TODO', true);
         return $found;
     }
 
@@ -1691,10 +1734,9 @@ $refresh = false;
 //$migrator->check_method_casing();
 $replace = false;
 //$migrator->document_module_methods('dynamicdata', '', $replace);
-$found = $migrator->replace_core_services();
-echo $migrator->to_json($found);
+//$found = $migrator->replace_core_services('dynamicdata', '', $replace);
 //$migrator->replace_internal_methods('dynamicdata', '', $replace);
-//[$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '');
-//file_put_contents('call_dependencies.json', $migrator->to_json($summary));
+[$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '/class/');
+file_put_contents('call_dependencies.json', $migrator->to_json($summary));
 /**
  */

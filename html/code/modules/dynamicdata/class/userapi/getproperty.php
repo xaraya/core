@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @package modules\dynamicdata
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\DataObject\UserApi;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\UserApi;
+use DataPropertyMaster;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * dynamicdata userapi getproperty function
+ * @extends MethodClass<UserApi>
+ */
+class GetpropertyMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * get a dynamic property
+     * @author the DynamicData module development team
+     * @param array<string,mixed> $args array of optional parameters<br/>
+     * string   $args['type'] type of property (required)<br/>
+     * string   $args['name'] name for the property (optional)<br/>
+     * string   $args['label'] label for the property (optional)<br/>
+     * string   $args['defaultvalue'] default for the property (optional)<br/>
+     * string   $args['source'] data source for the property (optional)<br/>
+     * string   $args['configuration'] configuration for the property (optional)
+     * @return object|null a particular DataProperty
+     */
+    public function __invoke(array $args = [])
+    {
+        if (empty($args['type'])) {
+            $result = null;
+            return $result;
+        }
+        return DataPropertyMaster::getProperty($args);
+    }
+}

@@ -35,8 +35,23 @@ sys::import('modules.dynamicdata.class.import.generic');
 
 /**
  * Class to handle the dynamicdata util API
+ *
+ * @method mixed export(array $args = []) Export an object definition or an object item to XML
+ * @method mixed exportItem(array $args = []) Export a single object item for an object id and item id to XML
+ * @method mixed exportItems(array $args = []) Export all object items for an object id to XML
+ * @method mixed exportObjectdef(array $args = []) Export an object definition to XML
+ * @method mixed getinfo(array $args = []) Get misc. information for dropdown lists
+ * @method mixed getmeta(array $args = []) (try to) get the "meta" properties of tables via db abstraction layer
+ * @method mixed getrelations(array $args = []) (try to) get the relationships between a particular module and others (e.g. hooks) - // TODO: allow other kinds of relationships than hooks - // TODO: allow modules to specify their own relationships
+ * @method mixed getstatic(array $args = []) (try to) get the "static" properties, corresponding to fields in dedicated - tables for this module + item type
+ * @method mixed import(array $args = []) Import an object definition or an object item from XML
+ * @method mixed importproperties(array $args = []) import property fields from a static table
+ * @method mixed maketable(array $args = []) Create a flat table corresponding to some dynamic object definition, e.g.
+ * @method mixed migrate(array $args = []) Migrate module items
+ * @method mixed updatehooks(array $args = []) Update hooks when migrating module items
+ * @extends
  */
-class UtilApi implements DatabaseInterface
+class UtilApi extends UserApi implements DatabaseInterface
 {
     use DatabaseTrait;
 
@@ -48,9 +63,12 @@ class UtilApi implements DatabaseInterface
      * Summary of __construct
      * @param string $modName
      */
-    public function __construct(string $modName = 'dynamicdata')
+    public function __construct(string $modName = 'dynamicdata', mixed $parent = null)
     {
         $this->setDbModName($modName);
+        // we extend from UserApi now
+        $parent ??= xarMod::getModule($modName);
+        parent::__construct($modName, $parent);
     }
 
     /**

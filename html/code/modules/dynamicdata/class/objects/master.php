@@ -524,7 +524,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             $this->dbConnArgs = $args;
         } elseif (!empty($this->dbConnArgs['databaseConfig'])) {
             sys::import('modules.dynamicdata.class.utilapi');
-            $utilapi = new Xaraya\DataObject\UtilApi();
+            $utilapi = new \Xaraya\DataObject\UtilApi();
             // get existing database config
             try {
                 [$module, $dbname] = explode('.', $this->dbConnArgs['databaseConfig']);

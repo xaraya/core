@@ -1,0 +1,693 @@
+<?php
+
+/**
+ * @package modules\dynamicdata
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\DataObject\UtilApi;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\UtilApi;
+use BadParameterException;
+use Exception;
+use xarMod;
+use xarSecurity;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * dynamicdata utilapi migrate function
+ * @extends MethodClass<UtilApi>
+ */
+class MigrateMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * Migrate module items
+     * @author the DynamicData module development team
+     * @param array<string,mixed> $args
+     * with
+     *     $args['from'] the module id, itemtype and itemid(s) for the original item
+     *     $args['to'] the module id, itemtype and itemid preserve flag for the new item
+     *     $args['fieldmap'] the field mapping
+     *     $args['hookmap'] the hook mapping
+     *     $args['debug'] don't actually update anything :-)
+     * @return mixed true or debug string on success, null on failure
+     * @throws \BadParameterException
+     */
+    public function __invoke(array $args = [])
+    {
+        extract($args);
+
+        $invalid = [];
+        /** @var array<string, mixed> $from */
+        if (empty($from)) {
+            $invalid[] = 'from array';
+        } else {
+            if (empty($from['module']) || !is_numeric($from['module'])) {
+                $invalid[] = 'from module';
+            }
+            if (!isset($from['itemtype']) || !is_numeric($from['itemtype'])) {
+                $invalid[] = 'from itemtype';
+            }
+            if (empty($from['itemid'])) {
+                $invalid[] = 'from itemid';
+            }
+        }
+        /** @var array<string, mixed> $to */
+        if (empty($to)) {
+            $invalid[] = 'to array';
+        } else {
+            if (empty($to['module']) || !is_numeric($to['module'])) {
+                $invalid[] = 'to module';
+            }
+            if (!isset($to['itemtype']) || !is_numeric($to['itemtype'])) {
+                $invalid[] = 'to itemtype';
+            }
+            // itemid can be empty or not empty here
+        }
+        /** @var array<string, mixed> $fieldmap */
+        /** @var array<string, mixed> $hookmap */
+        if (empty($fieldmap)) {
+            $invalid[] = 'fieldmap';
+        }
+        if (count($invalid) > 0) {
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            $vars = [join(', ', $invalid), 'admin', 'migrate', 'DynamicData'];
+            throw new BadParameterException($vars, $msg);
+        }
+
+        // Security check - important to do this as early on as possible to
+        // avoid potential security holes or just too much wasted processing
+        if (!xarSecurity::check('AdminDynamicData')) {
+            return;
+        }
+
+        if (is_array($from['itemid'])) {
+            $itemids = $from['itemid'];
+        } else {
+            $itemids = explode(',', $from['itemid']);
+        }
+
+        $modinfo = xarMod::getInfo($from['module']);
+        if (empty($modinfo)) {
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            $vars = ['from module', 'admin', 'migrate', 'DynamicData'];
+            throw new BadParameterException($vars, $msg);
+        }
+        $modulefrom = $modinfo['name'];
+
+        $modinfo = xarMod::getInfo($to['module']);
+        if (empty($modinfo)) {
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            $vars = ['to module', 'admin', 'migrate', 'DynamicData'];
+            throw new BadParameterException($vars, $msg);
+        }
+        $moduleto = $modinfo['name'];
+
+        // TODO: find some easier way to handle migration to/from other modules
+
+        $items = [];
+        switch ($modulefrom) {
+            case 'articles':
+                $articles = xarMod::apiFunc(
+                    'articles',
+                    'user',
+                    'getall',
+                    ['aids' => $itemids,
+                        // get the categories and dynamicdata fields too
+                        'extra' => ['cids','dynamicdata']]
+                );
+                if (!isset($articles)) {
+                    return;
+                }
+                // re-assign by itemid
+                foreach ($articles as $article) {
+                    $items[$article['aid']] = $article;
+                }
+                unset($articles);
+                break;
+
+            case 'dynamicdata':
+                $items = xarMod::apiFunc(
+                    'dynamicdata',
+                    'user',
+                    'getitems',
+                    ['module_id' => $from['module'],
+                        'itemtype' => $from['itemtype'],
+                        'itemids' => $itemids],
+                    $this->getContext()
+                );
+                if (!isset($items)) {
+                    return;
+                }
+                break;
+
+            case 'xarbb':
+                $topics = xarMod::apiFunc(
+                    'xarbb',
+                    'user',
+                    'getalltopics',
+                    ['tids' => $itemids]
+                );
+                if (!isset($topics)) {
+                    return;
+                }
+                // re-assign by itemid
+                foreach ($topics as $topic) {
+                    $items[$topic['tid']] = $topic;
+                }
+                unset($topics);
+                // Note: although xarbb is normally not hooked to comments,
+                // we'll want to move the original replies for the topic too
+                if ($moduleto != 'xarbb') {
+                    $hookmap['comments'] = 'comments';
+                }
+                break;
+
+            case 'xarpages':
+                $items = xarMod::apiFunc(
+                    'xarpages',
+                    'user',
+                    'getpages',
+                    ['itemtype' => $from['itemtype'],
+                        'pids'     => $itemids,
+                        'key'      => 'pid',
+                        'dd_flag'  => false]
+                );
+                if (!isset($items)) {
+                    return;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        if (empty($items)) {
+            // we're done here
+            return true;
+        }
+
+        // get the list of fields for this module+itemtype
+        try {
+            $fields = xarMod::apiFunc(
+                $moduleto,
+                'user',
+                'getitemfields',
+                ['itemtype' => $to['itemtype']]
+            );
+        } catch (Exception $e) {
+            $fields = [];
+        }
+        if (empty($fields)) {
+            // we're done here
+            return true;
+        }
+        $fieldlist = array_keys($fields);
+
+        if (!empty($debug)) {
+            //echo "Arguments :\n";
+            //echo var_dump($args);
+            //echo "Items :\n";
+            //echo var_dump($items);
+            //echo "Fields :\n";
+            //echo var_dump($fields);
+        }
+
+        $sameid = false;
+        $newitemids = [];
+        switch ($moduleto) {
+            case 'articles':
+                if ($modulefrom == 'articles') { // only allow updates within articles atm, not copies
+                    $sameid = true;
+                    foreach ($items as $itemid => $item) {
+                        $article = ['aid' => $itemid];
+                        if ($from['itemtype'] != $to['itemtype']) {
+                            $article['ptid'] = $to['itemtype'];
+                        }
+                        foreach ($fieldmap as $fromfield => $tofield) {
+                            if (empty($fromfield) || empty($tofield)) {
+                                continue;
+                            }
+                            if (!isset($item[$fromfield])) {
+                                continue;
+                            }
+                            // we only need to pass title + updated fields to the articles update function
+                            if ($fromfield == $tofield && $tofield != 'title') {
+                                continue;
+                            }
+                            // Note: this will also set any DD fields for the update hooks
+                            $article[$tofield] = $item[$fromfield];
+                        }
+                        if (count($article) < 2) {
+                            continue;
+                        }
+                        if (empty($debug)) {
+                            if (!xarMod::apiFunc('articles', 'admin', 'update', $article)) {
+                                return;
+                            }
+                        } else {
+                            $debug .= $this->ml('Updating article #(1) :', $itemid);
+                            $debug .= "\n";
+                            foreach ($article as $field => $value) {
+                                $debug .= "$field = $value\n";
+                            }
+                        }
+                        $newitemids[$itemid] = $itemid;
+                    }
+                } else {
+                    foreach ($items as $itemid => $item) {
+                        $article = [];
+                        $article['ptid'] = $to['itemtype'];
+                        foreach ($fieldmap as $fromfield => $tofield) {
+                            if (empty($fromfield) || empty($tofield)) {
+                                continue;
+                            }
+                            if (!isset($item[$fromfield])) {
+                                continue;
+                            }
+                            // Note: this will also set any DD fields for the create hooks
+                            $article[$tofield] = $item[$fromfield];
+                        }
+                        if (count($article) < 2) {
+                            continue;
+                        }
+                        if (!empty($to['itemid'])) {
+                            $article['aid'] = $itemid; // this may give us trouble with create hooks
+                        }
+                        if (empty($debug)) {
+                            $newid = xarMod::apiFunc('articles', 'admin', 'create', $article);
+                            if (empty($newid)) {
+                                return;
+                            }
+                        } else {
+                            $newid = -$itemid; // simulate some new itemid :-)
+                            $debug .= $this->ml('Creating article #(1) :', $newid);
+                            $debug .= "\n";
+                            foreach ($article as $field => $value) {
+                                $debug .= "$field = $value\n";
+                            }
+                        }
+                        $newitemids[$itemid] = $newid;
+                    }
+                }
+                break;
+
+            case 'dynamicdata':
+                foreach ($items as $itemid => $item) {
+                    $values = [];
+                    foreach ($fieldmap as $fromfield => $tofield) {
+                        if (empty($fromfield) || empty($tofield)) {
+                            continue;
+                        }
+                        if (!isset($item[$fromfield])) {
+                            continue;
+                        }
+                        // Note: this will also set any DD fields for the update hooks
+                        $values[$tofield] = $item[$fromfield];
+                    }
+                    if (empty($values)) {
+                        continue;
+                    }
+                    if (empty($debug)) {
+                        $newid = xarMod::apiFunc(
+                            'dynamicdata',
+                            'admin',
+                            'create',
+                            ['module_id'    => $to['module'],
+                                'itemtype' => $to['itemtype'],
+                                // try to preset the itemid if necessary
+                                'itemid'   => !empty($to['itemid']) ? $itemid : 0,
+                                'values'   => $values],
+                            $this->getContext()
+                        );
+                    } else {
+                        $newid = -$itemid; // simulate some new itemid :-)
+                        $debug .= $this->ml('Creating DD item #(1) :', $newid);
+                        $debug .= "\n";
+                        foreach ($values as $field => $value) {
+                            $debug .= "$field = $value\n";
+                        }
+                    }
+                    $newitemids[$itemid] = $newid;
+                }
+                break;
+
+            case 'xarbb':
+                if ($modulefrom == 'xarbb') { // only allow updates within xarbb atm, not copies
+                    $sameid = true;
+                    foreach ($items as $itemid => $item) {
+                        $topic = ['tid' => $itemid];
+                        if ($from['itemtype'] != $to['itemtype']) {
+                            $topic['fid'] = $to['itemtype'];
+                        }
+                        foreach ($fieldmap as $fromfield => $tofield) {
+                            if (empty($fromfield) || empty($tofield)) {
+                                continue;
+                            }
+                            if (!isset($item[$fromfield])) {
+                                continue;
+                            }
+                            // we only need to pass updated fields to the xarbb updatetopic function
+                            if ($fromfield == $tofield) {
+                                continue;
+                            }
+                            // Note: this will also set any DD fields for the update hooks
+                            $topic[$tofield] = $item[$fromfield];
+                        }
+                        if (count($topic) < 2) {
+                            continue;
+                        }
+                        // fix inconsistency in field names between get/create and update
+                        if (isset($topic['ttime'])) {
+                            $topic['time'] = $topic['ttime'];
+                        }
+                        if (empty($debug)) {
+                            if (!xarMod::apiFunc('xarbb', 'user', 'updatetopic', $topic)) {
+                                return;
+                            }
+                        } else {
+                            $debug .= $this->ml('Updating topic #(1) :', $itemid);
+                            $debug .= "\n";
+                            foreach ($topic as $field => $value) {
+                                $debug .= "$field = $value\n";
+                            }
+                        }
+                        // Note: updatetopic will also remap comments if necessary,
+                        // so we don't need to do it twice (in case comments was hooked)
+                        if (isset($hookmap['comments'])) {
+                            unset($hookmap['comments']);
+                        }
+                        $newitemids[$itemid] = $itemid;
+                    }
+                } else {
+                    foreach ($items as $itemid => $item) {
+                        $topic = [];
+                        $topic['fid'] = $to['itemtype'];
+                        foreach ($fieldmap as $fromfield => $tofield) {
+                            if (empty($fromfield) || empty($tofield)) {
+                                continue;
+                            }
+                            if (!isset($item[$fromfield])) {
+                                continue;
+                            }
+                            // Note: this will also set any DD fields for the create hooks
+                            $topic[$tofield] = $item[$fromfield];
+                        }
+                        if (count($article) < 2) {
+                            continue;
+                        }
+                        if (!empty($to['itemid'])) {
+                            $topic['tid'] = $itemid; // this may give us trouble with create hooks
+                        }
+                        if (empty($debug)) {
+                            $newid = xarMod::apiFunc('xarbb', 'user', 'createtopic', $topic);
+                            if (empty($newid)) {
+                                return;
+                            }
+                        } else {
+                            $newid = -$itemid; // simulate some new itemid :-)
+                            $debug .= $this->ml('Creating topic #(1) :', $newid);
+                            $debug .= "\n";
+                            foreach ($topic as $field => $value) {
+                                $debug .= "$field = $value\n";
+                            }
+                        }
+                        // Note: although xarbb is normally not hooked to comments,
+                        // we'll want to move the original comments to the topic too
+                        if (isset($hookmap['comments'])) {
+                            $hookmap['comments'] = 'comments';
+                        }
+                        // Note: xarbb topics are not assigned directly to categories
+                        if (isset($hookmap['categories'])) {
+                            unset($hookmap['categories']);
+                        }
+                        $newitemids[$itemid] = $newid;
+                    }
+                }
+                break;
+
+            case 'xarpages':
+                if ($modulefrom == 'xarpages') { // only allow updates within xarpages atm, not copies
+                    $sameid = true;
+                    foreach ($items as $itemid => $item) {
+                        $page = ['pid' => $itemid];
+                        if ($from['itemtype'] != $to['itemtype']) {
+                            // FIXME: changing itemtype is not supported by xarpages updatepage yet !
+                            $page['itemtype'] = $to['itemtype'];
+                        }
+                        foreach ($fieldmap as $fromfield => $tofield) {
+                            if (empty($fromfield) || empty($tofield)) {
+                                continue;
+                            }
+                            if (!isset($item[$fromfield])) {
+                                continue;
+                            }
+                            // we only need to pass updated fields to the xarpages updatepage function
+                            if ($fromfield == $tofield) {
+                                continue;
+                            }
+                            // Note: this will also set any DD fields for the update hooks
+                            $page[$tofield] = $item[$fromfield];
+                        }
+                        if (count($page) < 2) {
+                            continue;
+                        }
+                        if (empty($debug)) {
+                            if (!xarMod::apiFunc('xarpages', 'admin', 'updatepage', $page)) {
+                                return;
+                            }
+                        } else {
+                            $debug .= $this->ml('Updating page #(1) :', $itemid);
+                            $debug .= "\n";
+                            foreach ($page as $field => $value) {
+                                $debug .= "$field = $value\n";
+                            }
+                        }
+                        $newitemids[$itemid] = $itemid;
+                    }
+                } else {
+                    foreach ($items as $itemid => $item) {
+                        $page = [];
+                        $page['itemtype'] = $to['itemtype'];
+                        foreach ($fieldmap as $fromfield => $tofield) {
+                            if (empty($fromfield) || empty($tofield)) {
+                                continue;
+                            }
+                            if (!isset($item[$fromfield])) {
+                                continue;
+                            }
+                            // Note: this will also set any DD fields for the create hooks
+                            $page[$tofield] = $item[$fromfield];
+                        }
+                        if (count($page) < 2) {
+                            continue;
+                        }
+                        if (!empty($to['itemid'])) {
+                            // FIXME: specifying pid is not supported by xarpages createpage yet !
+                            $page['pid'] = $itemid; // this may give us trouble with create hooks
+                        }
+                        if (empty($debug)) {
+                            $newid = xarMod::apiFunc('xarpages', 'admin', 'createpage', $page);
+                            if (empty($newid)) {
+                                return;
+                            }
+                        } else {
+                            $newid = -$itemid; // simulate some new itemid :-)
+                            $debug .= $this->ml('Creating page #(1) :', $newid);
+                            $debug .= "\n";
+                            foreach ($page as $field => $value) {
+                                $debug .= "$field = $value\n";
+                            }
+                        }
+                        $newitemids[$itemid] = $newid;
+                    }
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        // update hook modules
+        $result = xarMod::apiFunc(
+            'dynamicdata',
+            'util',
+            'updatehooks',
+            ['from'    => $from,
+                'to'      => $to,
+                'hookmap' => $hookmap,
+                'itemids' => $newitemids,
+                'debug'   => empty($debug) ? '' : $debug],
+            $this->getContext()
+        );
+        if (!$result) {
+            return;
+        }
+        if (!empty($debug)) {
+            $debug = $result;
+        }
+
+        // delete old items now
+        foreach ($newitemids as $itemid => $newid) {
+            if (empty($itemid) || empty($newid)) {
+                continue;
+            }
+            if ($from['module'] == $to['module'] && $newid == $itemid &&
+                ($moduleto == 'articles' || $moduleto == 'xarbb' || $moduleto == 'xarpages')) {
+                // don't delete articles or topics when moving itemtypes
+                continue;
+            } elseif ($from['module'] == $to['module'] && $from['itemtype'] == $to['itemtype'] && $newid == $itemid) {
+                // don't delete identical items either
+                continue;
+            }
+            // TODO: check itemtype difference for non-articles et al. ?
+            switch ($modulefrom) {
+                case 'articles':
+                    if (empty($debug)) {
+                        if (!xarMod::apiFunc(
+                            'articles',
+                            'admin',
+                            'delete',
+                            ['ptid' => $from['itemtype'],
+                                'aid'  => $itemid]
+                        )) {
+                            return;
+                        }
+                    } else {
+                        $debug .= $this->ml(
+                            'Deleting article #(1) from pubtype #(2)',
+                            $itemid,
+                            $from['itemtype']
+                        );
+                        $debug .= "\n";
+                    }
+                    break;
+
+                case 'dynamicdata':
+                    if (empty($debug)) {
+                        if (!xarMod::apiFunc(
+                            'dynamicdata',
+                            'admin',
+                            'delete',
+                            ['module_id'    => $from['module'],
+                                'itemtype' => $from['itemtype'],
+                                'itemid'   => $itemid]
+                        )) {
+                            return;
+                        }
+                    } else {
+                        $debug .= $this->ml(
+                            'Deleting DD item #(1) from module #(2) itemtype #(3)',
+                            $itemid,
+                            $from['module'],
+                            $from['itemtype']
+                        );
+                        $debug .= "\n";
+                    }
+                    break;
+
+                case 'xarbb':
+                    if (empty($debug)) {
+                        if (!xarMod::apiFunc(
+                            'xarbb',
+                            'admin',
+                            'deletetopics',
+                            ['tid'  => $itemid]
+                        )) {
+                            return;
+                        }
+                    } else {
+                        $debug .= $this->ml(
+                            'Deleting topic #(1) from forum #(2)',
+                            $itemid,
+                            $from['itemtype']
+                        );
+                        $debug .= "\n";
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        if ($modulefrom == 'xarbb') {
+            if (empty($debug)) {
+                // re-sync original forum
+                if (!xarMod::apiFunc(
+                    'xarbb',
+                    'admin',
+                    'sync',
+                    ['fid' => $from['itemtype']]
+                )) {
+                    return;
+                }
+            } else {
+                $debug .= $this->ml(
+                    'Re-synchronizing forum #(1)',
+                    $from['itemtype']
+                );
+                $debug .= "\n";
+            }
+        }
+        if ($moduleto == 'xarbb' && ($modulefrom != 'xarbb' || $from['itemtype'] != $to['itemtype'])) {
+            if (empty($debug)) {
+                foreach ($newitemids as $itemid => $newid) {
+                    if (empty($itemid) || empty($newid)) {
+                        continue;
+                    }
+                    if (!xarMod::apiFunc(
+                        'xarbb',
+                        'user',
+                        'updatetopicsview',
+                        ['tid' => $newid]
+                    )) {
+                        return;
+                    }
+                }
+                // re-sync new forum
+                if (!xarMod::apiFunc(
+                    'xarbb',
+                    'admin',
+                    'sync',
+                    ['fid' => $to['itemtype']]
+                )) {
+                    return;
+                }
+            } else {
+                $itemlist = [];
+                foreach ($newitemids as $itemid => $newid) {
+                    if (empty($itemid) || empty($newid)) {
+                        continue;
+                    }
+                    $itemlist[] = $newid;
+                }
+                $debug .= $this->ml(
+                    'Updating topic view for items #(1)',
+                    join(',', $itemlist)
+                );
+                $debug .= "\n";
+                $debug .= $this->ml(
+                    'Re-synchronizing forum #(1)',
+                    $to['itemtype']
+                );
+                $debug .= "\n";
+            }
+        }
+
+        if (!empty($debug)) {
+            return $debug;
+        } else {
+            return true;
+        }
+    }
+}

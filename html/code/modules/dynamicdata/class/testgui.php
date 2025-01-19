@@ -20,6 +20,9 @@ sys::import('modules.dynamicdata.class.admingui');
 
 /**
  * Handle (traditional) DD test gui functions via module class
+ *
+ * @method mixed testServices(array $args = [])
+ * @extends
  */
 class TestGui extends AdminGui
 {
