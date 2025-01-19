@@ -39,7 +39,7 @@ class ViewPropertydefsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 

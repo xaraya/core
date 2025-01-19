@@ -56,7 +56,7 @@ class MaketableMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // restricted to DD Admins
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 

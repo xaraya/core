@@ -41,45 +41,45 @@ class ViewMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Old-style arguments
-        if (!$this->var()->fetch('objectid', 'int', $objectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid, 'int')) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'int', $module_id, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $module_id, 'int')) {
             return;
         }
-        if (!$this->var()->fetch('moduleid', 'int', $moduleid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('moduleid', $moduleid, 'int')) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'int', $itemtype, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype, 'int')) {
             return;
         }
         // New-style arguments
-        if (!$this->var()->fetch('itemid', 'int', $itemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid, 'int')) {
             return;
         }
-        if (!$this->var()->fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('name', $name)) {
             return;
         }
 
-        if (!$this->var()->fetch('startnum', 'int', $startnum, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('startnum', $startnum, 'int')) {
             return;
         }
-        if (!$this->var()->fetch('numitems', 'int', $numitems, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('numitems', $numitems, 'int')) {
             return;
         }
-        if (!$this->var()->fetch('sort', 'isset', $sort, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('sort', $sort)) {
             return;
         }
-        if (!$this->var()->fetch('catid', 'isset', $catid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('catid', $catid)) {
             return;
         }
-        if (!$this->var()->fetch('layout', 'str:1', $layout, 'default', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('layout', $layout, 'str:1', 'default')) {
             return;
         }
-        if (!$this->var()->fetch('tplmodule', 'isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('tplmodule', $tplmodule, 'isset', 'dynamicdata')) {
             return;
         }
-        if (!$this->var()->fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('template', $template)) {
             return;
         }
 
@@ -102,7 +102,7 @@ class ViewMethod extends MethodClass
 
         // Default number of items per page in user view
         if (empty($numitems)) {
-            $numitems = xarModVars::get('dynamicdata', 'items_per_page');
+            $numitems = $this->mod()->getVar('items_per_page');
         }
 
         // Note: we need to pass all relevant arguments ourselves here
@@ -146,13 +146,13 @@ class ViewMethod extends MethodClass
         $data['catid'] = $catid;
         $data['context'] ??= $object->getContext();
 
-        xarTpl::setPageTitle($this->ml('View #(1)', $object->label));
+        $this->tpl()->setPageTitle($this->ml('View #(1)', $object->label));
 
         if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view.xt') ||
             file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
-            return xarTpl::module($data['tplmodule'], 'user', 'view', $data, $data['template']);
+            return $this->tpl()->module($data['tplmodule'], 'user', 'view', $data, $data['template']);
         } else {
-            return xarTpl::module('dynamicdata', 'user', 'view', $data, $args['template']);
+            return $this->tpl()->module('dynamicdata', 'user', 'view', $data, $args['template']);
         }
     }
 }

@@ -44,7 +44,7 @@ class BrowseMethod extends MethodClass
         }
 
         // Security check - we require OVERVIEW rights here for now...
-        if (!xarSecurity::check('ViewDynamicData')) {
+        if (!$this->sec()->checkAccess('ViewDynamicData')) {
             return;
         }
 

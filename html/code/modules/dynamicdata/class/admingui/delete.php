@@ -44,38 +44,38 @@ class DeleteMethod extends MethodClass
     {
         extract($args);
 
-        if (!$this->var()->fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid)) {
             return;
         }
-        if (!$this->var()->fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('name', $name)) {
             return;
         }
-        if (!$this->var()->fetch('itemid', 'int:1:', $itemid, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('itemid', $itemid, 'int:1:', 0)) {
             return;
         }
         if (empty($itemid)) {
             $msg = $this->ml('Data object not found');
             return $this->ctl()->notFound($msg);
         }
-        if (!$this->var()->fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('confirm', $confirm)) {
             return;
         }
-        if (!$this->var()->fetch('noconfirm', 'isset', $noconfirm, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('noconfirm', $noconfirm)) {
             return;
         }
-        if (!$this->var()->fetch('join', 'isset', $join, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('join', $join)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table)) {
             return;
         }
-        if (!$this->var()->fetch('tplmodule', 'isset', $tplmodule, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('tplmodule', $tplmodule)) {
             return;
         }
-        if (!$this->var()->fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('template', $template)) {
             return;
         }
-        if (!$this->var()->fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('return_url', $return_url)) {
             return;
         }
 
@@ -175,13 +175,13 @@ class DeleteMethod extends MethodClass
             $data['authid'] = $this->sec()->genAuthKey();
             $data['context'] ??= $myobject->getContext();
 
-            xarTpl::setPageTitle($this->ml('Delete Item #(1) in #(2)', $data['itemid'], $myobject->label));
+            $this->tpl()->setPageTitle($this->ml('Delete Item #(1) in #(2)', $data['itemid'], $myobject->label));
 
             if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete.xt') ||
                 file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete-' . $data['template'] . '.xt')) {
-                return xarTpl::module($data['tplmodule'], 'admin', 'delete', $data, $data['template']);
+                return $this->tpl()->module($data['tplmodule'], 'admin', 'delete', $data, $data['template']);
             } else {
-                return xarTpl::module('dynamicdata', 'admin', 'delete', $data, $data['template']);
+                return $this->tpl()->module('dynamicdata', 'admin', 'delete', $data, $data['template']);
             }
         }
 

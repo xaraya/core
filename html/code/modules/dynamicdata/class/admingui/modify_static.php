@@ -42,21 +42,21 @@ class ModifyStaticMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditDynamicData')) {
+        if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
         }
 
         $data = ['table' => '', 'field' => '', 'oldname' => '', 'confirm' => false];
-        if (!$this->var()->fetch('table', 'str:1', $data['table'], '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('table', $data['table'], 'str:1', '')) {
             return;
         }
-        if (!$this->var()->fetch('field', 'str:1', $data['field'], '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('field', $data['field'], 'str:1', '')) {
             return;
         }
-        if (!$this->var()->fetch('oldname', 'str:1', $data['oldname'], '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('oldname', $data['oldname'], 'str:1', '')) {
             return;
         }
-        if (!$this->var()->fetch('confirm', 'bool', $data['confirm'], false, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('confirm', $data['confirm'], 'bool', false)) {
             return;
         }
 
@@ -76,7 +76,7 @@ class ModifyStaticMethod extends MethodClass
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
                 $data['context'] ??= $this->getContext();
-                return xarTpl::module('dynamicdata', 'admin', 'modify_static', $data);
+                return $this->tpl()->module('dynamicdata', 'admin', 'modify_static', $data);
             } else {
                 if (empty($data['table'])) {
                     throw new Exception($this->ml('Table name missing'));

@@ -40,22 +40,22 @@ class DisplayMethod extends MethodClass
     {
         extract($args);
 
-        if (!$this->var()->fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid)) {
             return;
         }
-        if (!$this->var()->fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('name', $name)) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'isset', $moduleid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $moduleid)) {
             return;
         }
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid)) {
             return;
         }
-        if (!$this->var()->fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('template', $template)) {
             return;
         }
-        if (!$this->var()->fetch('tplmodule', 'isset', $tplmodule, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('tplmodule', $tplmodule)) {
             return;
         }
 
@@ -90,14 +90,14 @@ class DisplayMethod extends MethodClass
         $data['hooks'] = $myobject->hookoutput;
         $data['context'] ??= $myobject->getContext();
 
-        xarTpl::setPageTitle($myobject->label);
+        $this->tpl()->setPageTitle($myobject->label);
 
         // Return the template variables defined in this function
         if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display.xt') ||
             file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xt')) {
-            return xarTpl::module($args['tplmodule'], 'user', 'display', $data, $args['template']);
+            return $this->tpl()->module($args['tplmodule'], 'user', 'display', $data, $args['template']);
         } else {
-            return xarTpl::module('dynamicdata', 'user', 'display', $data, $args['template']);
+            return $this->tpl()->module('dynamicdata', 'user', 'display', $data, $args['template']);
         }
     }
 }

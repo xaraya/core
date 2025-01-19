@@ -86,7 +86,7 @@ class MigrateMethod extends MethodClass
 
         // Security check - important to do this as early on as possible to
         // avoid potential security holes or just too much wasted processing
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 

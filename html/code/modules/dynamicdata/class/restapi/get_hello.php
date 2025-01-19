@@ -36,7 +36,7 @@ class GetHelloMethod extends MethodClass
         // @checkme pass all args from handler here?
         //extract($args);
         $result = 'World';
-        //$this->var()->fetch('name', 'isset', $name, null, xarVar::NOT_REQUIRED);
+        //$this->var()->find('name', $name);
         return !empty($args['name']) ? $args['name'] : $result;
     }
 }

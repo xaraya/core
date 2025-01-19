@@ -42,16 +42,16 @@ class UtilitiesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditDynamicData')) {
+        if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
         }
 
         extract($args);
         $data ??= [];
-        if (!$this->var()->fetch('q', 'str', $data['option'], 'query', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('q', $data['option'], 'str', 'query')) {
             return;
         }
-        xarTpl::setPageTitle($this->var()->prep($this->ml($data['option'])));
+        $this->tpl()->setPageTitle($this->var()->prep($this->ml($data['option'])));
         $this->ctl()->redirect(xarController::URL('dynamicdata', 'admin', 'import'));
         return true;
     }

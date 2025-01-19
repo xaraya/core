@@ -37,26 +37,26 @@ class ViewStaticMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
-        if (!$this->var()->fetch('module', 'isset', $module, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module', $module)) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $module_id)) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, '', xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table, 'isset', '')) {
             return;
         }
-        if (!$this->var()->fetch('newtable', 'isset', $newtable, '', xarVar::DONT_SET)) {
+        if (!$this->var()->check('newtable', $newtable, 'isset', '')) {
             return;
         }
-        if (!$this->var()->fetch('export', 'isset', $export, 0, xarVar::DONT_SET)) {
+        if (!$this->var()->check('export', $export, 'isset', 0)) {
             return;
         }
 

@@ -35,6 +35,8 @@ interface TemplatingInterface extends ServiceInterface
     public function object(string $modName, string $objectName, string $tplType, array $tplData = []): string;
 
     public function setPageTitle(string $title, ?string $modName = null): bool;
+
+    public function setPageTemplateName(string $templateName): bool;
 }
 
 /**
@@ -113,6 +115,17 @@ trait TemplatingTrait
         $modName ??= $this->getModName();
         return xarTpl::setPageTitle($title, $modName);
     }
+
+    /**
+     * Set page template name
+     * @uses xarTpl::setPageTemplateName()
+     * @param  string $templateName Name of the page template
+     * @return bool
+     */
+    public function setPageTemplateName(string $templateName): bool
+    {
+        return xarTpl::setPageTemplateName($templateName);
+    }
 }
 
 /**
@@ -122,6 +135,7 @@ trait TemplatingTrait
  * - module() - or use mod()->template() for current module
  * - object() - or use data()->template() for current object
  * - setPageTitle()
+ * - setPageTemplateName()
  * - ...
  *
  * Optional methods in parent:

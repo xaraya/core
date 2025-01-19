@@ -44,13 +44,13 @@ class TestApisMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditDynamicData')) {
+        if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
         }
 
         extract($args);
 
-        $this->var()->fetch('tab', 'isset', $tab, null, xarVar::NOT_REQUIRED);
+        $this->var()->find('tab', $tab);
         if (!empty($tab) && in_array($tab, ['swagger-ui', 'datatables', 'playground'])) {
             $testDir = dirname(__DIR__) . '/xartests/';
             $testFile = $testDir . $tab . '.html';
@@ -105,89 +105,89 @@ class TestApisMethod extends MethodClass
                 $this->exit();
             }
         }
-        $this->var()->fetch('restapi', 'array', $restapi, [], xarVar::NOT_REQUIRED);
-        $this->var()->fetch('graphql', 'array', $graphql, [], xarVar::NOT_REQUIRED);
-        $this->var()->fetch('object_new', 'isset', $object_new, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('restapi', $restapi, 'array', []);
+        $this->var()->find('graphql', $graphql, 'array', []);
+        $this->var()->find('object_new', $object_new, 'isset', '');
         if (!empty($object_new)) {
-            $this->var()->fetch('restapi_new', 'isset', $restapi_new, '', xarVar::NOT_REQUIRED);
+            $this->var()->find('restapi_new', $restapi_new, 'isset', '');
             if (!empty($restapi_new)) {
                 $restapi[$object_new] = 'on';
             }
-            $this->var()->fetch('graphql_new', 'isset', $graphql_new, '', xarVar::NOT_REQUIRED);
+            $this->var()->find('graphql_new', $graphql_new, 'isset', '');
             if (!empty($graphql_new)) {
                 $graphql[$object_new] = 'on';
             }
         }
-        $this->var()->fetch('module_new', 'isset', $module_new, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('module_new', $module_new, 'isset', '');
         if (!empty($module_new)) {
-            $this->var()->fetch('restapi_module', 'isset', $restapi_module, '', xarVar::NOT_REQUIRED);
+            $this->var()->find('restapi_module', $restapi_module, 'isset', '');
             if (!empty($restapi_module)) {
                 $restapi[$module_new] = 'on';
             }
-            $this->var()->fetch('graphql_module', 'isset', $graphql_module, '', xarVar::NOT_REQUIRED);
+            $this->var()->find('graphql_module', $graphql_module, 'isset', '');
             if (!empty($graphql_module)) {
                 $graphql[$module_new] = 'on';
             }
         }
-        $this->var()->fetch('tokenstorage', 'isset', $storageType, 'database', xarVar::NOT_REQUIRED);
-        $this->var()->fetch('tokenexpires', 'isset', $tokenExpires, '12:00:00', xarVar::NOT_REQUIRED);
+        $this->var()->find('tokenstorage', $storageType, 'isset', 'database');
+        $this->var()->find('tokenexpires', $tokenExpires, 'isset', '12:00:00');
         if (!empty($tokenExpires)) {
             [$hour, $min, $sec] = explode(':', $tokenExpires);
             $tokenExpires = (((intval($hour) * 60) + intval($min)) * 60) + intval($sec);
         } else {
             $tokenExpires = 12 * 60 * 60;  // 12 hours
         }
-        $this->var()->fetch('querycomplexity', 'isset', $queryComplexity, 0, xarVar::NOT_REQUIRED);
-        $this->var()->fetch('querydepth', 'isset', $queryDepth, 0, xarVar::NOT_REQUIRED);
-        $this->var()->fetch('enabletimer', 'isset', $enableTimer, false, xarVar::NOT_REQUIRED);
-        $this->var()->fetch('tracepath', 'isset', $tracePath, false, xarVar::NOT_REQUIRED);
-        $this->var()->fetch('enablecache', 'isset', $enableCache, false, xarVar::NOT_REQUIRED);
-        $this->var()->fetch('cacheplan', 'isset', $cachePlan, false, xarVar::NOT_REQUIRED);
-        $this->var()->fetch('cachedata', 'isset', $cacheData, false, xarVar::NOT_REQUIRED);
-        $this->var()->fetch('cacheoperation', 'isset', $cacheOperation, false, xarVar::NOT_REQUIRED);
+        $this->var()->find('querycomplexity', $queryComplexity, 'isset', 0);
+        $this->var()->find('querydepth', $queryDepth, 'isset', 0);
+        $this->var()->find('enabletimer', $enableTimer, 'isset', false);
+        $this->var()->find('tracepath', $tracePath, 'isset', false);
+        $this->var()->find('enablecache', $enableCache, 'isset', false);
+        $this->var()->find('cacheplan', $cachePlan, 'isset', false);
+        $this->var()->find('cachedata', $cacheData, 'isset', false);
+        $this->var()->find('cacheoperation', $cacheOperation, 'isset', false);
         $restapilist = [];
         $graphqllist = [];
         if (!empty($restapi) && !empty($graphql) && $this->sec()->confirmAuthKey()) {
             $restapilist = array_keys($restapi);
-            xarModVars::set('dynamicdata', 'restapi_object_list', serialize($restapilist));
+            $this->mod()->setVar('restapi_object_list', serialize($restapilist));
             $graphqllist = array_keys($graphql);
-            xarModVars::set('dynamicdata', 'graphql_object_list', serialize($graphqllist));
-            xarModVars::set('dynamicdata', 'restapi_token_storage', $storageType);
-            xarModVars::set('dynamicdata', 'restapi_token_expires', intval($tokenExpires));
-            xarModVars::set('dynamicdata', 'graphql_query_complexity', intval($queryComplexity));
-            xarModVars::set('dynamicdata', 'graphql_query_depth', intval($queryDepth));
-            xarModVars::set('dynamicdata', 'graphql_enable_timer', !empty($enableTimer) ? true : false);
-            xarModVars::set('dynamicdata', 'graphql_trace_path', !empty($tracePath) ? true : false);
-            xarModVars::set('dynamicdata', 'graphql_enable_cache', !empty($enableCache) ? true : false);
-            xarModVars::set('dynamicdata', 'graphql_cache_plan', !empty($cachePlan) ? true : false);
-            xarModVars::set('dynamicdata', 'graphql_cache_data', !empty($cacheData) ? true : false);
-            xarModVars::set('dynamicdata', 'graphql_cache_operation', !empty($cacheOperation) ? true : false);
+            $this->mod()->setVar('graphql_object_list', serialize($graphqllist));
+            $this->mod()->setVar('restapi_token_storage', $storageType);
+            $this->mod()->setVar('restapi_token_expires', intval($tokenExpires));
+            $this->mod()->setVar('graphql_query_complexity', intval($queryComplexity));
+            $this->mod()->setVar('graphql_query_depth', intval($queryDepth));
+            $this->mod()->setVar('graphql_enable_timer', !empty($enableTimer) ? true : false);
+            $this->mod()->setVar('graphql_trace_path', !empty($tracePath) ? true : false);
+            $this->mod()->setVar('graphql_enable_cache', !empty($enableCache) ? true : false);
+            $this->mod()->setVar('graphql_cache_plan', !empty($cachePlan) ? true : false);
+            $this->mod()->setVar('graphql_cache_data', !empty($cacheData) ? true : false);
+            $this->mod()->setVar('graphql_cache_operation', !empty($cacheOperation) ? true : false);
             // save to cache if enabled
             xarModVars::cache('dynamicdata');
         } else {
-            $restapiserial = xarModVars::get('dynamicdata', 'restapi_object_list');
+            $restapiserial = $this->mod()->getVar('restapi_object_list');
             if (!empty($restapiserial)) {
                 $restapilist = unserialize($restapiserial);
             }
             $graphqllist = [];
-            $graphqlserial = xarModVars::get('dynamicdata', 'graphql_object_list');
+            $graphqlserial = $this->mod()->getVar('graphql_object_list');
             if (!empty($graphqlserial)) {
                 $graphqllist = unserialize($graphqlserial);
             }
-            $storageType = xarModVars::get('dynamicdata', 'restapi_token_storage');
-            $tokenExpires = xarModVars::get('dynamicdata', 'restapi_token_expires');
-            $queryComplexity = xarModVars::get('dynamicdata', 'graphql_query_complexity');
-            $queryDepth = xarModVars::get('dynamicdata', 'graphql_query_depth');
-            $enableTimer = xarModVars::get('dynamicdata', 'graphql_enable_timer');
-            $tracePath = xarModVars::get('dynamicdata', 'graphql_trace_path');
-            $enableCache = xarModVars::get('dynamicdata', 'graphql_enable_cache');
-            $cachePlan = xarModVars::get('dynamicdata', 'graphql_cache_plan');
-            $cacheData = xarModVars::get('dynamicdata', 'graphql_cache_data');
-            $cacheOperation = xarModVars::get('dynamicdata', 'graphql_cache_operation');
+            $storageType = $this->mod()->getVar('restapi_token_storage');
+            $tokenExpires = $this->mod()->getVar('restapi_token_expires');
+            $queryComplexity = $this->mod()->getVar('graphql_query_complexity');
+            $queryDepth = $this->mod()->getVar('graphql_query_depth');
+            $enableTimer = $this->mod()->getVar('graphql_enable_timer');
+            $tracePath = $this->mod()->getVar('graphql_trace_path');
+            $enableCache = $this->mod()->getVar('graphql_enable_cache');
+            $cachePlan = $this->mod()->getVar('graphql_cache_plan');
+            $cacheData = $this->mod()->getVar('graphql_cache_data');
+            $cacheOperation = $this->mod()->getVar('graphql_cache_operation');
         }
 
         DataObjectRESTBuilder::init();
-        if (!$this->var()->fetch('create_rst', 'notempty', $create_rst, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('create_rst', $create_rst, 'notempty', 0)) {
             return;
         }
         if (!empty($create_rst)) {
@@ -195,7 +195,7 @@ class TestApisMethod extends MethodClass
             $this->ctl()->redirect(xarServer::getCurrentURL(['create_rst' => null]));
             return true;
         }
-        if (!$this->var()->fetch('create_gql', 'notempty', $create_gql, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('create_gql', $create_gql, 'notempty', 0)) {
             return;
         }
         if (!empty($create_gql)) {

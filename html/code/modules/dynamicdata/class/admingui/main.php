@@ -39,7 +39,7 @@ class MainMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditDynamicData')) {
+        if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
         }
 
@@ -48,7 +48,7 @@ class MainMethod extends MethodClass
 
         if (((bool) xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
             $args['context'] ??= $this->getContext();
-            return xarTpl::module('dynamicdata', 'admin', 'overview', $args);
+            return $this->tpl()->module('dynamicdata', 'admin', 'overview', $args);
         } else {
             $this->ctl()->redirect(xarController::URL('dynamicdata', 'admin', 'view'));
             return true;

@@ -42,15 +42,15 @@ class NewStaticMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         $data = ['table' => '', 'confirm' => false];
-        if (!$this->var()->fetch('table', 'str:1', $data['table'], '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('table', $data['table'], 'str:1', '')) {
             return;
         }
-        if (!$this->var()->fetch('confirm', 'bool', $data['confirm'], false, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('confirm', $data['confirm'], 'bool', false)) {
             return;
         }
 
@@ -70,7 +70,7 @@ class NewStaticMethod extends MethodClass
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
                 $data['context'] ??= $this->getContext();
-                return xarTpl::module('dynamicdata', 'admin', 'new_static', $data);
+                return $this->tpl()->module('dynamicdata', 'admin', 'new_static', $data);
             } else {
                 if (empty($data['table'])) {
                     throw new Exception($this->ml('Table name missing'));

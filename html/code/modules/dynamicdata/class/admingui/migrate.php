@@ -40,58 +40,58 @@ class MigrateMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         extract($args);
 
         // the actual from-to mapping
-        if (!$this->var()->fetch('from', 'isset', $from, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('from', $from)) {
             return;
         }
-        if (!$this->var()->fetch('to', 'isset', $to, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('to', $to)) {
             return;
         }
-        if (!$this->var()->fetch('fieldmap', 'isset', $fieldmap, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('fieldmap', $fieldmap)) {
             return;
         }
-        if (!$this->var()->fetch('hookmap', 'isset', $hookmap, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('hookmap', $hookmap)) {
             return;
         }
 
         // support for the Back and Finish buttons
-        if (!$this->var()->fetch('step', 'int', $step, 0, xarVar::DONT_SET)) {
+        if (!$this->var()->check('step', $step, 'int', 0)) {
             return;
         }
-        if (!$this->var()->fetch('back', 'str', $back, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('back', $back, 'str')) {
             return;
         }
-        if (!$this->var()->fetch('test', 'str', $test, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('test', $test, 'str')) {
             return;
         }
-        if (!$this->var()->fetch('confirm', 'str', $confirm, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('confirm', $confirm, 'str')) {
             return;
         }
 
         // support for loading/saving mappings
-        if (!$this->var()->fetch('load', 'str', $load, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('load', $load, 'str')) {
             return;
         }
-        if (!$this->var()->fetch('save', 'str', $save, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('save', $save, 'str')) {
             return;
         }
-        if (!$this->var()->fetch('map', 'str', $map, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('map', $map, 'str')) {
             return;
         }
 
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         // retrieve past steps and recover if necessary
-        if (!xarModVars::get('dynamicdata', 'migratesteps')) {
-            xarModVars::set('dynamicdata', 'migratesteps', serialize([]));
+        if (!$this->mod()->getVar('migratesteps')) {
+            $this->mod()->setVar('migratesteps', serialize([]));
         }
         if (empty($from) && empty($to)) {
             $steps = [];
@@ -114,9 +114,9 @@ class MigrateMethod extends MethodClass
         }
 
         // retrieve existing mappings and recover if necessary
-        $maps = xarModVars::get('dynamicdata', 'migratemaps');
+        $maps = $this->mod()->getVar('migratemaps');
         if (empty($maps)) {
-            xarModVars::set('dynamicdata', 'migratemaps', serialize([]));
+            $this->mod()->setVar('migratemaps', serialize([]));
             $maps = [];
         } else {
             $maps = unserialize($maps);
@@ -464,7 +464,7 @@ class MigrateMethod extends MethodClass
 
         // save current map
         if (!empty($save)) {
-            if (!$this->var()->fetch('newmap', 'str', $newmap, null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('newmap', $newmap, 'str')) {
                 return;
             }
             if (!empty($newmap)) {
@@ -477,7 +477,7 @@ class MigrateMethod extends MethodClass
                     'fieldmap' => $data['fieldmap'],
                     'hookmap' => $data['hookmap'],
                 ];
-                xarModVars::set('dynamicdata', 'migratemaps', serialize($maps));
+                $this->mod()->setVar('migratemaps', serialize($maps));
             }
         }
 

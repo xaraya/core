@@ -46,10 +46,10 @@ class PropertyMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!$this->var()->fetch('prop', 'str', $property, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('prop', $property, 'str', '')) {
             return;
         }
-        if (!$this->var()->fetch('act', 'str', $act, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('act', $act, 'str', '')) {
             return;
         }
         if (empty($property) || empty($act)) {
@@ -63,7 +63,7 @@ class PropertyMethod extends MethodClass
             $function();
             return true;
         } catch (Exception $e) {
-            if (xarModVars::get('dynamicdata', 'debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            if ($this->mod()->getVar('debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
                 echo "<pre>";
                 print($e->__toString());
             } else {

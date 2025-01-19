@@ -41,34 +41,34 @@ class ExportMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         extract($args);
 
-        if (!$this->var()->fetch('objectid', 'isset', $objectid, 1, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid, 'isset', 1)) {
             return;
         }
-        if (!$this->var()->fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('name', $name)) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'isset', $moduleid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $moduleid)) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype)) {
             return;
         }
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid)) {
             return;
         }
-        if (!$this->var()->fetch('tofile', 'isset', $tofile, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('tofile', $tofile)) {
             return;
         }
-        if (!$this->var()->fetch('convert', 'isset', $convert, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('convert', $convert)) {
             return;
         }
-        if (!$this->var()->fetch('format', 'isset', $format, 'xml', xarVar::DONT_SET)) {
+        if (!$this->var()->check('format', $format, 'isset', 'xml')) {
             return;
         }
 

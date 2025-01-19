@@ -54,28 +54,28 @@ class CreateMethod extends MethodClass
         // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
         //        or relies on $myobject or other stuff like that...
 
-        if (!$this->var()->fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid)) {
             return;
         }
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('itemid', $itemid, 'isset', 0)) {
             return;
         }
-        if (!$this->var()->fetch('preview', 'isset', $preview, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('preview', $preview, 'isset', 0)) {
             return;
         }
-        if (!$this->var()->fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('return_url', $return_url)) {
             return;
         }
-        if (!$this->var()->fetch('join', 'isset', $join, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('join', $join)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table)) {
             return;
         }
-        if (!$this->var()->fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('template', $template)) {
             return;
         }
-        if (!$this->var()->fetch('tplmodule', 'isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('tplmodule', $tplmodule, 'isset', 'dynamicdata')) {
             return;
         }
 
@@ -125,7 +125,7 @@ class CreateMethod extends MethodClass
             if (!isset($template)) {
                 $template = $myobject->name;
             }
-            return xarTpl::module($tplmodule, 'admin', 'new', $data, $template);
+            return $this->tpl()->module($tplmodule, 'admin', 'new', $data, $template);
         }
 
         $itemid = $myobject->createItem();

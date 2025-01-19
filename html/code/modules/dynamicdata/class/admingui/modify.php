@@ -49,43 +49,43 @@ class ModifyMethod extends MethodClass
     {
         extract($args);
 
-        if (!$this->var()->fetch('objectid', 'id', $objectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid, 'id')) {
             return;
         }
-        if (!$this->var()->fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('name', $name)) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $module_id)) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype)) {
             return;
         }
-        if (!$this->var()->fetch('join', 'isset', $join, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('join', $join)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table)) {
             return;
         }
-        if (!$this->var()->fetch('notfresh', 'isset', $notfresh, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('notfresh', $notfresh)) {
             return;
         }
-        if (!$this->var()->fetch('tplmodule', 'isset', $tplmodule, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('tplmodule', $tplmodule)) {
             return;
         }
 
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid)) {
             return;
         }
-        if (!$this->var()->fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('template', $template)) {
             return;
         }
-        if (!$this->var()->fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('preview', $preview)) {
             return;
         }
 
         $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
-        if (!$this->var()->fetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1', 'edit')) {
             return;
         }
 
@@ -177,10 +177,10 @@ class ModifyMethod extends MethodClass
 
                 if ($object->objectid == 1) {
                     $data['label'] = $object->properties['label']->value;
-                    xarTpl::setPageTitle($this->ml('Modify DataObject #(1)', $data['label']));
+                    $this->tpl()->setPageTitle($this->ml('Modify DataObject #(1)', $data['label']));
                 } else {
                     $data['label'] = $object->label;
-                    xarTpl::setPageTitle($this->ml('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+                    $this->tpl()->setPageTitle($this->ml('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
                 }
 
                 break;
@@ -191,10 +191,10 @@ class ModifyMethod extends MethodClass
                 $data['name'] = $object->properties['name']->value;
                 if ($object->objectid == 1) {
                     $data['label'] = $object->properties['label']->value;
-                    xarTpl::setPageTitle($this->ml('Clone DataObject #(1)', $data['label']));
+                    $this->tpl()->setPageTitle($this->ml('Clone DataObject #(1)', $data['label']));
                 } else {
                     $data['label'] = $object->label;
-                    xarTpl::setPageTitle($this->ml('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+                    $this->tpl()->setPageTitle($this->ml('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
                 }
                 break;
         }
@@ -206,9 +206,9 @@ class ModifyMethod extends MethodClass
 
         if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
             file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
-            return xarTpl::module($args['tplmodule'], 'admin', 'modify', $data, $args['template']);
+            return $this->tpl()->module($args['tplmodule'], 'admin', 'modify', $data, $args['template']);
         } else {
-            return xarTpl::module('dynamicdata', 'admin', 'modify', $data, $args['template']);
+            return $this->tpl()->module('dynamicdata', 'admin', 'modify', $data, $args['template']);
         }
     }
 }

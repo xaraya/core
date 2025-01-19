@@ -34,18 +34,18 @@ class DeleteStaticMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         //Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         $data = ['table' => '', 'field' => '', 'confirm' => false];
-        if (!$this->var()->fetch('table', 'str:1', $data['table'], '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('table', $data['table'], 'str:1', '')) {
             return;
         }
-        if (!$this->var()->fetch('field', 'str:1', $data['field'], '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('field', $data['field'], 'str:1', '')) {
             return;
         }
-        if (!$this->var()->fetch('confirm', 'bool', $data['confirm'], false, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('confirm', $data['confirm'], 'bool', false)) {
             return;
         }
 

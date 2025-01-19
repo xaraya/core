@@ -55,34 +55,34 @@ class UpdateMethod extends MethodClass
         extract($args);
         $data ??= [];
 
-        if (!$this->var()->fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid)) {
             return;
         }
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid)) {
             return;
         }
-        if (!$this->var()->fetch('join', 'isset', $join, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('join', $join)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table)) {
             return;
         }
-        if (!$this->var()->fetch('tplmodule', 'isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('tplmodule', $tplmodule, 'isset', 'dynamicdata')) {
             return;
         }
-        if (!$this->var()->fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('return_url', $return_url)) {
             return;
         }
-        if (!$this->var()->fetch('preview', 'isset', $preview, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('preview', $preview, 'isset', 0)) {
             return;
         }
 
-        if (!$this->var()->fetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1', 'edit')) {
             return;
         }
 
         // Security
-        if (!xarSecurity::check('EditDynamicData')) {
+        if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
         }
 
@@ -138,13 +138,13 @@ class UpdateMethod extends MethodClass
 
                     if ($myobject->objectid == 1) {
                         $data['label'] = $myobject->properties['label']->value;
-                        xarTpl::setPageTitle($this->ml('Modify DataObject #(1)', $data['label']));
+                        $this->tpl()->setPageTitle($this->ml('Modify DataObject #(1)', $data['label']));
                     } else {
                         $data['label'] = $myobject->label;
-                        xarTpl::setPageTitle($this->ml('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+                        $this->tpl()->setPageTitle($this->ml('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
                     }
                     $data['context'] ??= $myobject->getContext();
-                    return xarTpl::module($tplmodule, 'admin', 'modify', $data);
+                    return $this->tpl()->module($tplmodule, 'admin', 'modify', $data);
                 }
 
                 // Valid and not previewing, update the object
@@ -190,7 +190,7 @@ class UpdateMethod extends MethodClass
 
                 $name = $myobject->properties['name']->getValue();
                 $myobject->properties['name']->setValue();
-                if (!$this->var()->fetch('newname', 'str', $newname, "", xarVar::NOT_REQUIRED)) {
+                if (!$this->var()->find('newname', $newname, 'str', "")) {
                     return;
                 }
                 if (empty($newname)) {
@@ -202,7 +202,7 @@ class UpdateMethod extends MethodClass
                 try {
                     $testobject = DataObjectFactory::getObject(['name' => $newname]);
                 } catch (Exception $e) {
-                    return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $newname]);
+                    return $this->tpl()->module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $newname]);
                 }
 
                 $itemtype = $myobject->getNextItemtype(['moduleid' => $myobject->properties['module_id']->getValue()]);

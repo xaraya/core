@@ -41,37 +41,37 @@ class NewMethod extends MethodClass
     {
         extract($args);
 
-        if (!$this->var()->fetch('objectid', 'id', $objectid, 1, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid, 'id', 1)) {
             return;
         }
-        if (!$this->var()->fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('name', $name)) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'id', $module_id, 182, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $module_id, 'id', 182)) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'id', $itemtype, 0, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype, 'id', 0)) {
             return;
         }
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, 0, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid, 'isset', 0)) {
             return;
         }
-        if (!$this->var()->fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('preview', $preview)) {
             return;
         }
-        if (!$this->var()->fetch('join', 'isset', $join, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('join', $join)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table)) {
             return;
         }
-        if (!$this->var()->fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('template', $template)) {
             return;
         }
-        if (!$this->var()->fetch('notfresh', 'isset', $notfresh, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('notfresh', $notfresh)) {
             return;
         }
-        if (!$this->var()->fetch('tplmodule', 'str', $tplmodule, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('tplmodule', $tplmodule, 'str')) {
             return;
         }
 
@@ -114,13 +114,13 @@ class NewMethod extends MethodClass
         $data['hooks'] = $myobject->hookoutput;
         $data['context'] ??= $myobject->getContext();
 
-        xarTpl::setPageTitle($this->ml('Manage - Create New Item in #(1)', $myobject->label));
+        $this->tpl()->setPageTitle($this->ml('Manage - Create New Item in #(1)', $myobject->label));
 
         if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xt') ||
             file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xt')) {
-            return xarTpl::module($args['tplmodule'], 'admin', 'new', $data, $args['template']);
+            return $this->tpl()->module($args['tplmodule'], 'admin', 'new', $data, $args['template']);
         } else {
-            return xarTpl::module('dynamicdata', 'admin', 'new', $data, $args['template']);
+            return $this->tpl()->module('dynamicdata', 'admin', 'new', $data, $args['template']);
         }
     }
 }

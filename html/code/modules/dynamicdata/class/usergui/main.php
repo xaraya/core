@@ -42,7 +42,7 @@ class MainMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $redirect = xarModVars::get('dynamicdata', 'frontend_page');
+        $redirect = $this->mod()->getVar('frontend_page');
         if (!empty($redirect)) {
             $truecurrenturl = xarServer::getCurrentURL([], false);
             $urldata = xarMod::apiFunc(
@@ -58,7 +58,7 @@ class MainMethod extends MethodClass
         }
 
         // get the list of main objects
-        $startserial = xarModVars::get('dynamicdata', 'starter_object_list');
+        $startserial = $this->mod()->getVar('starter_object_list');
         if (!empty($startserial)) {
             $startlist = unserialize($startserial);
         } else {
@@ -66,13 +66,13 @@ class MainMethod extends MethodClass
         }
 
         // define the list of main objects
-        $this->var()->fetch('update', 'isset', $update, null, xarVar::NOT_REQUIRED);
+        $this->var()->find('update', $update);
         if ((empty($startlist) || !empty($update)) &&
-            xarSecurity::check('AdminDynamicData', 0)) {
-            $this->var()->fetch('starter', 'array', $starter, [], xarVar::NOT_REQUIRED);
+            $this->sec()->checkAccess('AdminDynamicData', 0)) {
+            $this->var()->find('starter', $starter, 'array', []);
             if (is_array($starter) && $this->sec()->confirmAuthKey()) {
                 $startlist = array_keys($starter);
-                xarModVars::set('dynamicdata', 'starter_object_list', serialize($startlist));
+                $this->mod()->setVar('starter_object_list', serialize($startlist));
                 $this->ctl()->redirect(xarServer::getCurrentURL(['update' => null]));
                 return true;
             }

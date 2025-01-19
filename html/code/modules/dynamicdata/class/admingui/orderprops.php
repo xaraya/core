@@ -39,26 +39,26 @@ class OrderpropsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditDynamicData')) {
+        if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
         }
 
         // Get parameters from whatever input we need.  All arguments to this
         // function should be obtained from $this->var()->fetch()
-        if (!$this->var()->fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid)) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $module_id)) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'int:1:', $itemtype, 0, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype, 'int:1:', 0)) {
             return;
         }
 
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid)) {
             return;
         }
-        if (!$this->var()->fetch('direction', 'isset', $direction, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('direction', $direction)) {
             return;
         }
 

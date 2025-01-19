@@ -49,62 +49,62 @@ class RelationsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
-        if (!$this->var()->fetch('module', 'isset', $module, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module', $module)) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $module_id)) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype)) {
             return;
         }
-        if (!$this->var()->fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table)) {
             return;
         }
-        if (!$this->var()->fetch('field', 'isset', $field, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('field', $field)) {
             return;
         }
-        if (!$this->var()->fetch('value', 'isset', $value, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('value', $value)) {
             return;
         }
-        if (!$this->var()->fetch('relation', 'isset', $relation, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('relation', $relation)) {
             return;
         }
-        if (!$this->var()->fetch('direction', 'isset', $direction, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('direction', $direction)) {
             return;
         }
-        if (!$this->var()->fetch('withobjectid', 'isset', $withobjectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('withobjectid', $withobjectid)) {
             return;
         }
-        if (!$this->var()->fetch('withtable', 'isset', $withtable, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('withtable', $withtable)) {
             return;
         }
-        if (!$this->var()->fetch('withfield', 'isset', $withfield, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('withfield', $withfield)) {
             return;
         }
-        if (!$this->var()->fetch('withvalue', 'isset', $withvalue, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('withvalue', $withvalue)) {
             return;
         }
-        if (!$this->var()->fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('confirm', $confirm)) {
             return;
         }
-        if (!$this->var()->fetch('update', 'isset', $update, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('update', $update)) {
             return;
         }
-        if (!$this->var()->fetch('delete', 'isset', $delete, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('delete', $delete)) {
             return;
         }
-        if (!$this->var()->fetch('what', 'isset', $what, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('what', $what)) {
             return;
         }
-        if (!$this->var()->fetch('extra', 'isset', $extra, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('extra', $extra)) {
             return;
         }
 
@@ -174,7 +174,7 @@ class RelationsMethod extends MethodClass
             $data['object'] = $object;
             $data['fields'] = $object->properties;
 
-            xarTpl::setPageTitle($this->ml('Links for #(1)', $object->label));
+            $this->tpl()->setPageTitle($this->ml('Links for #(1)', $object->label));
 
             // get all links, including 'info' for reverse one-way information
             $links = DataObjectLinks::getLinks($object, 'all');
@@ -184,7 +184,7 @@ class RelationsMethod extends MethodClass
                 $data['relations'] = [];
             }
             // FIXME: remove initialization of modvar after next release
-            xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
+            $this->mod()->setVar('getlinkedobjects', 0);
 
             $data['yumlspec'] = '';
             $data['yumlpath'] = '';
@@ -374,7 +374,7 @@ class RelationsMethod extends MethodClass
                 return true;
 
             } elseif (!empty($update)) {
-                if (!$this->var()->fetch('getlinkedobjects', 'isset', $getlinkedobjects, null, xarVar::DONT_SET)) {
+                if (!$this->var()->check('getlinkedobjects', $getlinkedobjects)) {
                     return;
                 }
                 if (!empty($getlinkedobjects)) {
@@ -408,7 +408,7 @@ class RelationsMethod extends MethodClass
             }
             $data['fields'] = $object->properties;
 
-            xarTpl::setPageTitle($this->ml('Links for #(1)', $object->label));
+            $this->tpl()->setPageTitle($this->ml('Links for #(1)', $object->label));
 
             sys::import('modules.dynamicdata.class.datastores.links');
 
@@ -503,7 +503,7 @@ class RelationsMethod extends MethodClass
                 $this->getContext()
             );
         } else {
-            xarTpl::setPageTitle($this->ml('Links'));
+            $this->tpl()->setPageTitle($this->ml('Links'));
         }
 
         if (!isset($data['relations']) || $data['relations'] == false) {

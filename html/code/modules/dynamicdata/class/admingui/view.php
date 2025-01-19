@@ -41,35 +41,35 @@ class ViewMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditDynamicData')) {
+        if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
         }
 
-        if (!$this->var()->fetch('itemid', 'int', $itemid, 1, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid, 'int', 1)) {
             return;
         }
-        if (!$this->var()->fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('name', $name)) {
             return;
         }
-        if (!$this->var()->fetch('startnum', 'int', $startnum, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('startnum', $startnum, 'int')) {
             return;
         }
-        if (!$this->var()->fetch('numitems', 'int', $numitems, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('numitems', $numitems, 'int')) {
             return;
         }
-        if (!$this->var()->fetch('sort', 'isset', $sort, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('sort', $sort)) {
             return;
         }
-        if (!$this->var()->fetch('catid', 'isset', $catid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('catid', $catid)) {
             return;
         }
-        if (!$this->var()->fetch('layout', 'str:1', $layout, 'default', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('layout', $layout, 'str:1', 'default')) {
             return;
         }
-        if (!$this->var()->fetch('tplmodule', 'isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('tplmodule', $tplmodule, 'isset', 'dynamicdata')) {
             return;
         }
-        if (!$this->var()->fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('template', $template)) {
             return;
         }
 
@@ -78,7 +78,7 @@ class ViewMethod extends MethodClass
 
         // Default number of items per page in user view
         if (empty($numitems)) {
-            $numitems = xarModVars::get('dynamicdata', 'items_per_page');
+            $numitems = $this->mod()->getVar('items_per_page');
         }
 
         // Note: we need to pass all relevant arguments ourselves here
@@ -133,7 +133,7 @@ class ViewMethod extends MethodClass
         // TODO: is this needed?
         $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
 
-        if (xarSecurity::check('AdminDynamicData', 0)) {
+        if ($this->sec()->checkAccess('AdminDynamicData', 0)) {
             if (!empty($data['table'])) {
                 $data['querylink'] = xarController::URL(
                     'dynamicdata',
@@ -159,13 +159,13 @@ class ViewMethod extends MethodClass
             }
         }
 
-        xarTpl::setPageTitle($this->ml('Manage - View #(1)', $data['label']));
+        $this->tpl()->setPageTitle($this->ml('Manage - View #(1)', $data['label']));
 
         if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view.xt') ||
             file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view-' . $data['template'] . '.xt')) {
-            return xarTpl::module($data['tplmodule'], 'admin', 'view', $data, $data['template']);
+            return $this->tpl()->module($data['tplmodule'], 'admin', 'view', $data, $data['template']);
         } else {
-            return xarTpl::module('dynamicdata', 'admin', 'view', $data);
+            return $this->tpl()->module('dynamicdata', 'admin', 'view', $data);
         }
     }
 }

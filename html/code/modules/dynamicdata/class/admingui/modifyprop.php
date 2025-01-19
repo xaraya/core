@@ -54,22 +54,22 @@ class ModifypropMethod extends MethodClass
         extract($args);
         $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
 
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid)) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $module_id)) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table)) {
             return;
         }
-        if (!$this->var()->fetch('details', 'isset', $details, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('details', $details)) {
             return;
         }
-        if (!$this->var()->fetch('layout', 'str:1', $layout, 'default', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('layout', $layout, 'str:1', 'default')) {
             return;
         }
 
@@ -106,7 +106,7 @@ class ModifypropMethod extends MethodClass
             unset($tmpobject);
         } else {
             // Security
-            if (!xarSecurity::check('AdminDynamicData')) {
+            if (!$this->sec()->checkAccess('AdminDynamicData')) {
                 return;
             }
             $objectid = null;
@@ -135,7 +135,7 @@ class ModifypropMethod extends MethodClass
             }
         }
         $data['itemid'] = $data['objectid'];
-        xarTpl::setPageTitle($this->ml('Modify DataProperties #(1)', $data['label']));
+        $this->tpl()->setPageTitle($this->ml('Modify DataProperties #(1)', $data['label']));
 
         $data['fields'] = xarMod::apiFunc(
             'dynamicdata',

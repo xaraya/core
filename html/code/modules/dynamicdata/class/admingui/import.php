@@ -41,30 +41,30 @@ class ImportMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         $data = ['prefix' => null];
-        if (!$this->var()->fetch('basedir', 'isset', $basedir, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('basedir', $basedir)) {
             return;
         }
-        if (!$this->var()->fetch('import', 'isset', $import, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('import', $import)) {
             return;
         }
-        if (!$this->var()->fetch('xml', 'isset', $xml, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('xml', $xml)) {
             return;
         }
-        if (!$this->var()->fetch('refresh', 'isset', $refresh, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('refresh', $refresh)) {
             return;
         }
-        if (!$this->var()->fetch('keepitemid', 'isset', $keepitemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('keepitemid', $keepitemid)) {
             return;
         }
-        if (!$this->var()->fetch('overwrite', 'checkbox', $overwrite, false, xarVar::DONT_SET)) {
+        if (!$this->var()->check('overwrite', $overwrite, 'checkbox', false)) {
             return;
         }
-        if (!$this->var()->fetch('prefix', 'isset', $data['prefix'], xarDB::getPrefix(), xarVar::DONT_SET)) {
+        if (!$this->var()->check('prefix', $data['prefix'], 'isset', xarDB::getPrefix())) {
             return;
         }
 
@@ -123,9 +123,9 @@ class ImportMethod extends MethodClass
                             'prefix' => $data['prefix']]
                     );
                 } catch (DuplicateException $e) {
-                    return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $e->getMessage()]);
+                    return $this->tpl()->module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $e->getMessage()]);
                 } catch (Exception $e) {
-                    return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'bad_definition', 'name' => $e->getMessage()]);
+                    return $this->tpl()->module('dynamicdata', 'user', 'errors', ['layout' => 'bad_definition', 'name' => $e->getMessage()]);
                 }
             } else {
                 try {
@@ -139,9 +139,9 @@ class ImportMethod extends MethodClass
                             'prefix' => $data['prefix']]
                     );
                 } catch (DuplicateException $e) {
-                    return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $e->getMessage()]);
+                    return $this->tpl()->module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $e->getMessage()]);
                 } catch (Exception $e) {
-                    return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'bad_definition', 'name' => $e->getMessage()]);
+                    return $this->tpl()->module('dynamicdata', 'user', 'errors', ['layout' => 'bad_definition', 'name' => $e->getMessage()]);
                 }
             }
             if (empty($objectid)) {

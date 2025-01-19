@@ -40,25 +40,25 @@ class FormMethod extends MethodClass
     {
         extract($args);
 
-        if (!$this->var()->fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid)) {
             return;
         }
-        if (!$this->var()->fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $module_id)) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype)) {
             return;
         }
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid)) {
             return;
         }
-        if (!$this->var()->fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('preview', $preview)) {
             return;
         }
-        if (!$this->var()->fetch('join', 'isset', $join, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('join', $join)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table)) {
             return;
         }
 
@@ -95,6 +95,6 @@ class FormMethod extends MethodClass
         $data['context'] ??= $myobject->getContext();
 
         $template = $myobject->name;
-        return xarTpl::module('dynamicdata', 'admin', 'form', $data, $template);
+        return $this->tpl()->module('dynamicdata', 'admin', 'form', $data, $template);
     }
 }

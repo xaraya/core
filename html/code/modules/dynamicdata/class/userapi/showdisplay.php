@@ -49,7 +49,7 @@ class ShowdisplayMethod extends MethodClass
         // we got everything via template parameters
         if (isset($fields) && is_array($fields) && count($fields) > 0) {
             $args['context'] ??= $this->getContext();
-            return xarTpl::module(
+            return $this->tpl()->module(
                 'dynamicdata',
                 'user',
                 'showdisplay',
@@ -82,7 +82,7 @@ class ShowdisplayMethod extends MethodClass
             $object->getItem();
         }
         // if we are in preview mode, we need to check for any preview values
-        //if (!$this->var()->fetch('preview', 'isset', $preview,  NULL, xarVar::DONT_SET)) {return;}
+        //if (!$this->var()->check('preview', $preview, 'isset',  NULL)) {return;}
         if (!empty($preview)) {
             $object->checkInput();
         }

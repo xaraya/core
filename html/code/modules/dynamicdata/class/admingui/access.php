@@ -47,26 +47,26 @@ class AccessMethod extends MethodClass
     {
         extract($args);
 
-        if (!$this->var()->fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $itemid)) {
             return;
         }
         if (empty($itemid)) {
             $msg = $this->ml('Data object not found');
             return $this->ctl()->notFound($msg);
         }
-        if (!$this->var()->fetch('name', 'isset', $name, 'objects', xarVar::DONT_SET)) {
+        if (!$this->var()->check('name', $name, 'isset', 'objects')) {
             return;
         }
-        if (!$this->var()->fetch('tplmodule', 'isset', $tplmodule, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('tplmodule', $tplmodule)) {
             return;
         }
-        if (!$this->var()->fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('template', $template)) {
             return;
         }
-        if (!$this->var()->fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('preview', $preview)) {
             return;
         }
-        if (!$this->var()->fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('confirm', $confirm)) {
             return;
         }
 
@@ -83,14 +83,14 @@ class AccessMethod extends MethodClass
         $data['template'] = $object->template;
         $data['itemid'] = $object->itemid;
         $data['label'] = $object->properties['label']->value;
-        xarTpl::setPageTitle($this->ml('Manage Access Rules for #(1)', $data['label']));
+        $this->tpl()->setPageTitle($this->ml('Manage Access Rules for #(1)', $data['label']));
 
         // check security of the parent object ... or DD Admin as fail-safe here
         // set context if available in function
         $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid], $this->getContext());
 
         // Security
-        if (!$tmpobject->checkAccess('config') && !xarSecurity::check('AdminDynamicData', 0)) {
+        if (!$tmpobject->checkAccess('config') && !$this->sec()->checkAccess('AdminDynamicData', 0)) {
             $msg = $this->ml('Configure #(1) is forbidden', $tmpobject->label);
             return $this->ctl()->forbidden($msg);
         }
@@ -145,14 +145,14 @@ class AccessMethod extends MethodClass
                         $objectaccess['access'][$level] = $accessproperty->value;
                     }
             */
-            if (!$this->var()->fetch('do_access', 'isset', $do_access, null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('do_access', $do_access)) {
                 return;
             }
 
             // define the new access list for each level
             $accesslist = [];
             if (!empty($do_access)) {
-                if (!$this->var()->fetch('access', 'isset', $access, [], xarVar::DONT_SET)) {
+                if (!$this->var()->check('access', $access, 'isset', [])) {
                     return;
                 }
 
@@ -180,7 +180,7 @@ class AccessMethod extends MethodClass
 
             // define the new filter list
             $filterlist = [];
-            if (!$this->var()->fetch('filters', 'isset', $filters, [], xarVar::DONT_SET)) {
+            if (!$this->var()->check('filters', $filters, 'isset', [])) {
                 return;
             }
             foreach ($filters as $filterid => $filterinfo) {
@@ -204,7 +204,7 @@ class AccessMethod extends MethodClass
             $accessstring = serialize($objectaccess);
             $itemid = $object->updateItem(['access' => $accessstring]);
 
-            if (!$this->var()->fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('return_url', $return_url)) {
                 return;
             }
             if (!empty($return_url)) {
@@ -301,9 +301,9 @@ class AccessMethod extends MethodClass
 
         if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access.xt') ||
             file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access-' . $data['template'] . '.xt')) {
-            return xarTpl::module($data['tplmodule'], 'admin', 'access', $data, $data['template']);
+            return $this->tpl()->module($data['tplmodule'], 'admin', 'access', $data, $data['template']);
         } else {
-            return xarTpl::module('dynamicdata', 'admin', 'access', $data, $data['template']);
+            return $this->tpl()->module('dynamicdata', 'admin', 'access', $data, $data['template']);
         }
     }
 }

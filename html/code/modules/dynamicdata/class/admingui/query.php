@@ -41,67 +41,67 @@ class QueryMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         extract($args);
 
-        if (!$this->var()->fetch('query', 'str', $query, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('query', $query, 'str', '')) {
             return;
         }
-        if (!$this->var()->fetch('oldquery', 'str', $oldquery, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('oldquery', $oldquery, 'str', '')) {
             return;
         }
-        if (!$this->var()->fetch('newquery', 'str', $newquery, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('newquery', $newquery, 'str', '')) {
             return;
         }
-        if (!$this->var()->fetch('table', 'str', $table, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('table', $table, 'str', '')) {
             return;
         }
-        if (!$this->var()->fetch('oldtable', 'str', $oldtable, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('oldtable', $oldtable, 'str', '')) {
             return;
         }
-        if (!$this->var()->fetch('itemid', 'int', $itemid, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('itemid', $itemid, 'int', 0)) {
             return;
         }
-        if (!$this->var()->fetch('olditemid', 'int', $olditemid, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('olditemid', $olditemid, 'int', 0)) {
             return;
         }
-        if (!$this->var()->fetch('join', 'str', $join, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('join', $join, 'str', '')) {
             return;
         }
-        if (!$this->var()->fetch('oldjoin', 'str', $oldjoin, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-
-        if (!$this->var()->fetch('field', 'isset', $field, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!$this->var()->fetch('where', 'isset', $where, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!$this->var()->fetch('value', 'isset', $value, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!$this->var()->fetch('sort', 'isset', $sort, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!$this->var()->fetch('numitems', 'isset', $numitems, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!$this->var()->fetch('startnum', 'isset', $startnum, null, xarVar::DONT_SET)) {
+        if (!$this->var()->find('oldjoin', $oldjoin, 'str', '')) {
             return;
         }
 
-        if (!$this->var()->fetch('groupby', 'isset', $groupby, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('field', $field)) {
             return;
         }
-        if (!$this->var()->fetch('operation', 'isset', $operation, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('where', $where)) {
+            return;
+        }
+        if (!$this->var()->check('value', $value)) {
+            return;
+        }
+        if (!$this->var()->check('sort', $sort)) {
+            return;
+        }
+        if (!$this->var()->check('numitems', $numitems)) {
+            return;
+        }
+        if (!$this->var()->check('startnum', $startnum)) {
             return;
         }
 
-        if (!$this->var()->fetch('cache', 'int', $cache, 0, xarVar::DONT_SET)) {
+        if (!$this->var()->check('groupby', $groupby)) {
+            return;
+        }
+        if (!$this->var()->check('operation', $operation)) {
+            return;
+        }
+
+        if (!$this->var()->check('cache', $cache, 'int', 0)) {
             return;
         }
 
@@ -180,7 +180,7 @@ class QueryMethod extends MethodClass
         }
 
         if (!empty($query) && $query == $newquery) {
-            $queryinfo = xarModVars::get('dynamicdata', 'query.' . $query);
+            $queryinfo = $this->mod()->getVar('query.' . $query);
             if (!empty($queryinfo)) {
                 $queryvars = unserialize($queryinfo);
                 if ($reset) {
@@ -201,7 +201,7 @@ class QueryMethod extends MethodClass
         $data = [];
         $data['query'] = $query;
         $data['oldquery'] = $query;
-        $querylist = xarModVars::get('dynamicdata', 'querylist');
+        $querylist = $this->mod()->getVar('querylist');
         if (!empty($querylist)) {
             $data['queries'] = unserialize($querylist);
         } else {
@@ -513,14 +513,14 @@ class QueryMethod extends MethodClass
             if (count($data['queries']) >= 20) {
                 $dropquery = array_pop($data['queries']);
                 if (!empty($dropquery)) {
-                    xarModVars::delete('dynamicdata', 'query.' . $dropquery);
+                    $this->mod()->setVar('query.' . $dropquery, null);
                 }
-                xarModVars::set('dynamicdata', 'querylist', serialize($data['queries']));
+                $this->mod()->setVar('querylist', serialize($data['queries']));
             }
-            xarModVars::set('dynamicdata', 'query.' . $newquery, serialize($queryvars));
+            $this->mod()->setVar('query.' . $newquery, serialize($queryvars));
             if (count($data['queries']) == 0 || !in_array($newquery, $data['queries'])) {
                 array_unshift($data['queries'], $newquery);
-                xarModVars::set('dynamicdata', 'querylist', serialize($data['queries']));
+                $this->mod()->setVar('querylist', serialize($data['queries']));
             }
             $data['query'] = $newquery;
             $data['oldquery'] = $newquery;

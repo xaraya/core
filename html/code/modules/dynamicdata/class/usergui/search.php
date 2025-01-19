@@ -45,22 +45,22 @@ class SearchMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security Check
-        if (!xarSecurity::check('ViewDynamicData')) {
+        if (!$this->sec()->checkAccess('ViewDynamicData')) {
             return;
         }
 
         $data = [];
 
-        if (!$this->var()->fetch('q', 'isset', $q, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('q', $q)) {
             return;
         }
-        if (!$this->var()->fetch('dd_check', 'isset', $dd_check, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('dd_check', $dd_check)) {
             return;
         }
-        if (!$this->var()->fetch('startnum', 'int:0', $startnum, null, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('startnum', $startnum, 'int:0')) {
             return;
         }
-        if (!$this->var()->fetch('numitems', 'int:0', $numitems, null, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('numitems', $numitems, 'int:0')) {
             return;
         }
         if (empty($dd_check)) {
@@ -74,10 +74,10 @@ class SearchMethod extends MethodClass
             $data['ishooked'] = 0;
             $data['q'] = isset($q) ? $this->var()->prep($q) : null;
 
-            if (!$this->var()->fetch('module_id', 'int', $module_id, null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('module_id', $module_id, 'int')) {
                 return;
             }
-            if (!$this->var()->fetch('itemtype', 'int', $itemtype, null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('itemtype', $itemtype, 'int')) {
                 return;
             }
             if (empty($module_id) && empty($itemtype)) {
@@ -118,7 +118,7 @@ class SearchMethod extends MethodClass
         }
 
         if (empty($data['ishooked'])) {
-            xarTpl::setPageTitle($this->ml('Search #(1)', $label));
+            $this->tpl()->setPageTitle($this->ml('Search #(1)', $label));
         }
 
         $data['items'] = [];

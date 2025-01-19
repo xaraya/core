@@ -336,9 +336,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        // Pass along the object context for xarTpl::object()
-        $args['context'] = $this->getContext();
-        return xarTpl::object($args['tplmodule'], $args['template'], 'showfilterform', $args);
+        return $this->tpl()->object($args['tplmodule'], $args['template'], 'showfilterform', $args);
     }
 
     /**
@@ -532,14 +530,14 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
                 $this->dbConnArgs = $args;
             } catch (Exception) {
                 // allow database connection failure later on when it's actually needed
-                xarLog::message("DataObjectMaster::parseDbConnArgs: Invalid dbConnArgs - unable to create new db connection", xarLog::LEVEL_WARNING);
+                $this->log()->warning("DataObjectMaster::parseDbConnArgs: Invalid dbConnArgs - unable to create new db connection");
                 return null;
             }
         } elseif (array_key_exists('databaseType', $this->dbConnArgs) || array_key_exists('external', $this->dbConnArgs)) {
             $args = $this->dbConnArgs;
         } else {
             // allow database connection failure later on when it's actually needed
-            xarLog::message("DataObjectMaster::checkDbConnection: Invalid dbConnArgs - unable to create new db connection", xarLog::LEVEL_WARNING);
+            $this->log()->warning("DataObjectMaster::checkDbConnection: Invalid dbConnArgs - unable to create new db connection");
             return null;
         }
         // if we have an external db connection argument, the datastore is external
@@ -775,7 +773,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         $displayvalues = [];
         $properties = $this->getProperties($args);
         foreach ($properties as $property) {
-            $label = xarVar::prepForDisplay($property->label);
+            $label = $this->var()->prep($property->label);
             $displayvalues[$label] = $property->showOutput();
         }
         return $displayvalues;
@@ -1144,7 +1142,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         switch ($action) {
             case 'admin':
                 // require admin access to the module here
-                return xarSecurity::check('AdminDynamicData', 0);
+                return $this->sec()->checkAccess('AdminDynamicData', 0);
 
             case 'config':
             case 'access':

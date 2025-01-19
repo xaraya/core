@@ -40,12 +40,12 @@ class UpdatePropertydefsMethod extends MethodClass
     {
         extract($args);
 
-        if (!$this->var()->fetch('flushPropertyCache', 'isset', $flushPropertyCache, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('flushPropertyCache', $flushPropertyCache)) {
             return;
         }
 
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 

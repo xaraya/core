@@ -147,17 +147,17 @@ trait CoreServicesTrait
      * Access xarLog::* Logger methods (message, variable, ...)
      *
      * Available methods:
-     * - message()
-     * - variable()
-     * - emergency()
-     * - alert()
-     * - critical()
-     * - error()
-     * - warning()
-     * - notice()
-     * - info()
-     * - debug()
-     * - log()
+     * - emergency($message, $var = [])
+     * - alert($message, $var = [])
+     * - critical($message, $var = [])
+     * - error($message, $var = [])
+     * - warning($message, $var = [])
+     * - notice($message, $var = [])
+     * - info($message, $var = [])
+     * - debug($message, $var = [])
+     * - log($message, $var = [])
+     * - message($message, $level = xarLog::LEVEL_DEBUG) - original xarLog::message() using $level param
+     * - variable($message, $var, $level = xarLog::LEVEL_DEBUG) - original xarLog::variable() using $level param
      *
      * @return LoggerService<TParent>
      */
@@ -235,6 +235,7 @@ trait CoreServicesTrait
      * - module()
      * - object()
      * - setPageTitle()
+     * - setPageTemplateName()
      * - ...
      *
      * Required methods in parent:
@@ -254,11 +255,11 @@ trait CoreServicesTrait
      * Access xarVar::* Variables methods (fetch, get, prep, ...)
      *
      * Available methods:
-     * - fetch() - original xarVar::fetch() with different order of params than below
      * - get() - xarVar::GET_OR_POST = Get required variable by name: set the value if there is one, and validate the variable or throw excception
      * - check() - xarVar::DONT_SET = Check existing variable by name: use current value or get it by name if it is not already set, and validate the variable
      * - find() - xarVar::NOT_REQUIRED = Find optional variable by name: set the value if there is one, and validate the variable
      * - update() - xarVar::DONT_REUSE = Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
+     * - fetch() - original xarVar::fetch() with different order of params than above
      * - validate()
      * - prep()
      * - prepHTML()

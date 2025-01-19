@@ -143,11 +143,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
     public function checkInput(array $args = [], $suppress = 0)
     {
-        xarLog::message("DataObjectList::checkInput: Checking items of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObjectList::checkInput: Checking items of object " . $this->name);
 
         $data = ['id' => []];  // = $args; // @checkme is that what we want here?
         // First get the itemids
-        if (!xarVar::fetch($this->primary, 'array', $data['id'], [], xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find($this->primary, $data['id'], 'array', [])) {
             return;
         }
         if (empty($data['id'])) {
@@ -182,7 +182,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
     public function updateItems(array $args = [])
     {
-        xarLog::message("DataObjectList::updateItems: Updating items of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObjectList::updateItems: Updating items of object " . $this->name);
 
         // Get the items to be updated
         if (isset($args['items'])) {
@@ -532,7 +532,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function &getItems(array $args = [])
     {
-        xarLog::message("DataObjectList::getItems: Retrieving items of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObjectList::getItems: Retrieving items of object " . $this->name);
 
         // Set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
@@ -607,7 +607,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function showView(array $args = [])
     {
-        xarLog::message("DataObjectList::showView: Listing items of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObjectList::showView: Listing items of object " . $this->name);
 
         $args = $this->toArray($args);
         // Note: we do NOT retrieve the items again here
@@ -787,9 +787,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         $args['object'] = $this;
-        // Pass along the object context for xarTpl::object()
-        $args['context'] = $this->getContext();
-        return xarTpl::object($args['tplmodule'], $args['template'], 'showview', $args);
+        return $this->tpl()->object($args['tplmodule'], $args['template'], 'showview', $args);
     }
 
     public function getSortURL($currenturl = null)
@@ -940,7 +938,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $viewvalues[$itemid] = [];
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
-                    $label = xarVar::prepForDisplay($this->properties[$name]->label);
+                    $label = $this->var()->prep($this->properties[$name]->label);
                     if(isset($this->items[$itemid][$name])) {
                         $value = $this->properties[$name]->showOutput(['value' => $this->items[$itemid][$name]]);
                     } else {

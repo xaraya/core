@@ -42,15 +42,15 @@ class ModifyconfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         $data = ['tab' => 'general'];
-        if (!$this->var()->fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
+        if (!$this->var()->find('phase', $phase, 'str:1:100', 'modify')) {
             return;
         }
-        if (!$this->var()->fetch('tab', 'str:1', $data['tab'], 'general', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('tab', $data['tab'], 'str:1', 'general')) {
             return;
         }
 
@@ -68,27 +68,27 @@ class ModifyconfigMethod extends MethodClass
                 if (!$this->sec()->confirmAuthKey()) {
                     return $this->ctl()->badRequest('bad_author');
                 }
-                if (!$this->var()->fetch('debugmode', 'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), xarVar::NOT_REQUIRED)) {
+                if (!$this->var()->find('debugmode', $debugmode, 'checkbox', $this->mod()->getVar('debugmode'))) {
                     return;
                 }
-                if (!$this->var()->fetch('show_queries', 'checkbox', $show_queries, xarConfigVars::get(null, 'Site.BL.ShowQueries'), xarVar::NOT_REQUIRED)) {
+                if (!$this->var()->find('show_queries', $show_queries, 'checkbox', xarConfigVars::get(null, 'Site.BL.ShowQueries'))) {
                     return;
                 }
-                if (!$this->var()->fetch('suppress_updates', 'checkbox', $suppress_updates, false, xarVar::NOT_REQUIRED)) {
+                if (!$this->var()->find('suppress_updates', $suppress_updates, 'checkbox', false)) {
                     return;
                 }
-                // if (!$this->var()->fetch('administrators', 'str', $administrators, '', xarVar::NOT_REQUIRED)) return;
-                if (!$this->var()->fetch('caching', 'checkbox', $caching, xarModVars::get('dynamicdata', 'caching'), xarVar::NOT_REQUIRED)) {
+                // if (!$this->var()->find('administrators', $administrators, 'str', '')) return;
+                if (!$this->var()->find('caching', $caching, 'checkbox', $this->mod()->getVar('caching'))) {
                     return;
                 }
-                if (!$this->var()->fetch('twig_support', 'checkbox', $twig_support, false, xarVar::NOT_REQUIRED)) {
+                if (!$this->var()->find('twig_support', $twig_support, 'checkbox', false)) {
                     return;
                 }
 
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
                     $data['context'] ??= $this->getContext();
-                    return xarTpl::module('dynamicdata', 'admin', 'modifyconfig', $data);
+                    return $this->tpl()->module('dynamicdata', 'admin', 'modifyconfig', $data);
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                 }
@@ -101,13 +101,13 @@ class ModifyconfigMethod extends MethodClass
                     $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($admin)));
                     if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
                 }
-                xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
+                $this->mod()->setVar('administrators', serialize($validadmins));
                 */
-                xarModVars::set('dynamicdata', 'debugmode', $debugmode);
+                $this->mod()->setVar('debugmode', $debugmode);
                 xarConfigVars::set(null, 'Site.BL.ShowQueries', $show_queries);
-                xarModVars::set('dynamicdata', 'suppress_updates', $suppress_updates);
-                xarModVars::set('dynamicdata', 'caching', $caching);
-                xarModVars::set('dynamicdata', 'twig_support', $twig_support);
+                $this->mod()->setVar('suppress_updates', $suppress_updates);
+                $this->mod()->setVar('caching', $caching);
+                $this->mod()->setVar('twig_support', $twig_support);
                 // save to cache if enabled
                 xarModVars::cache('dynamicdata');
                 break;

@@ -39,27 +39,27 @@ class FiltertagMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!$this->var()->fetch('filter_submitted', 'int:0', $filter_submitted, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('filter_submitted', $filter_submitted, 'int:0', 0)) {
             return;
         }
 
         if ($filter_submitted) {
-            if (!$this->var()->fetch('objectname', 'str', $objectname, '', xarVar::NOT_REQUIRED)) {
+            if (!$this->var()->find('objectname', $objectname, 'str', '')) {
                 return;
             }
-            if (!$this->var()->fetch('filtername', 'str', $filtername, '', xarVar::NOT_REQUIRED)) {
+            if (!$this->var()->find('filtername', $filtername, 'str', '')) {
                 return;
             }
-            if (!$this->var()->fetch('return_url', 'str', $return_url, '', xarVar::NOT_REQUIRED)) {
+            if (!$this->var()->find('return_url', $return_url, 'str', '')) {
                 return;
             }
-            if (!$this->var()->fetch('name', 'array', $names, [], xarVar::NOT_REQUIRED)) {
+            if (!$this->var()->find('name', $names, 'array', [])) {
                 return;
             }
-            if (!$this->var()->fetch('source', 'array', $source, [], xarVar::NOT_REQUIRED)) {
+            if (!$this->var()->find('source', $source, 'array', [])) {
                 return;
             }
-            if (!$this->var()->fetch('op', 'array', $op, [], xarVar::NOT_REQUIRED)) {
+            if (!$this->var()->find('op', $op, 'array', [])) {
                 return;
             }
 

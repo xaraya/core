@@ -1570,9 +1570,12 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             // @todo differentiate based on xarVar::* flags
             '/xarVar::fetch\(/',
             '/xarVar::prepForDisplay\(/',
-            // @todo handle xarSecurity::check()
+            '/xarVar::prepHTMLDisplay\(/',
+            // @todo handle xarSecurity::check() with component & instance
             '/xarSec::genAuthKey\(/',
             '/xarSec::confirmAuthKey\(/',
+            '/xarSecurity::check\(([^,)]+)\)/',
+            '/xarSecurity::check\(([^,)]+),\s*(\d+)\s*\)/',
             // @todo handle xarController::URL()
             '/xarController::redirect\(/',
             '/xarController::forbidden\(/',
@@ -1580,7 +1583,14 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarController::notFound\(/',
             // @todo we need to drop extra , null, $this->getContext() here
             '/,\s*\n*\s*null,\s*\n*\s*\$this->getContext\(\)\s*\n*\s*\)/',
-            // @todo handle xarMod*::*
+            // @todo check xarTpl::module() against current modName modType for mod()->template()
+            '/xarTpl::module\(/',
+            // @todo check xarTpl::object() against current objectName for data()->template()
+            '/xarTpl::object\(/',
+            '/xarTpl::setPageTitle\(/',
+            // @todo handle xarMod*::* - note: this assumes you set $module !
+            '/xarModVars::get\(\'' . $module . '\',\s*\n*\s*/',
+            '/xarModVars::set\(\'' . $module . '\',\s*\n*\s*/',
             '/ exit;/',
             '/ exit\(/',
             '/ die\(/',
@@ -1594,9 +1604,12 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             // @todo differentiate based on xarVar::* flags
             '\$this->var()->fetch(',
             '\$this->var()->prep(',
+            '\$this->var()->prepHTML(',
             // @todo handle xarSecurity::check()
             '\$this->sec()->genAuthKey(',
             '\$this->sec()->confirmAuthKey(',
+            '\$this->sec()->checkAccess($1)',
+            '\$this->sec()->checkAccess($1, $2)',
             // @todo handle xarController::URL()
             '\$this->ctl()->redirect(',
             '\$this->ctl()->forbidden(',
@@ -1604,7 +1617,14 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '\$this->ctl()->notFound(',
             // @todo we need to drop extra , null, $this->getContext() here
             ')',
+            // @todo check xarTpl::module() against current modName modType for mod()->template()
+            '\$this->tpl()->module(',
+            // @todo check xarTpl::object() against current objectName for data()->template()
+            '\$this->tpl()->object(',
+            '\$this->tpl()->setPageTitle(',
             // @todo handle xarMod*::*
+            '\$this->mod()->getVar(',
+            '\$this->mod()->setVar(',
             ' \$this->exit();',
             ' \$this->exit(',
             ' \$this->exit(',
@@ -1618,7 +1638,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
                 $contents = file_get_contents($class['file']);
                 $count = 0;
                 $contents = preg_replace($search, $replace, $contents, -1, $count);
-                if ($update && !empty($contents)) {
+                if ($update && $count > 0 && !empty($contents)) {
                     file_put_contents($class['file'], $contents);
                 }
                 //if ($count > 0) {

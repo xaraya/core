@@ -42,29 +42,29 @@ class ShowpropvalMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         extract($args);
 
         // get the property id
-        if (!$this->var()->fetch('itemid', 'id', $itemid, null, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('itemid', $itemid, 'id')) {
             return;
         }
-        if (!$this->var()->fetch('exit', 'isset', $exit, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('exit', $exit)) {
             return;
         }
-        if (!$this->var()->fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('confirm', $confirm)) {
             return;
         }
-        if (!$this->var()->fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('preview', $preview)) {
             return;
         }
 
         if (empty($itemid)) {
             // get the property type for sample configuration
-            if (!$this->var()->fetch('proptype', 'isset', $proptype, null, xarVar::NOT_REQUIRED)) {
+            if (!$this->var()->find('proptype', $proptype)) {
                 return;
             }
 
@@ -136,7 +136,7 @@ class ShowpropvalMethod extends MethodClass
         $data['propertytype'] = DataPropertyMaster::getProperty(['type' => $data['type']]);
 
         if (!empty($preview) || !empty($confirm) || !empty($exit)) {
-            if (!$this->var()->fetch($data['name'], 'isset', $configuration, null, xarVar::NOT_REQUIRED)) {
+            if (!$this->var()->find($data['name'], $configuration)) {
                 return;
             }
 
@@ -165,7 +165,7 @@ class ShowpropvalMethod extends MethodClass
                     }
                 }
                 if (!empty($exit)) {
-                    if (!$this->var()->fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET)) {
+                    if (!$this->var()->check('return_url', $return_url)) {
                         return;
                     }
                     if (empty($return_url)) {
@@ -205,7 +205,7 @@ class ShowpropvalMethod extends MethodClass
         $data['itemid'] = $itemid;
         $data['object'] = & $myobject;
 
-        xarTpl::setPageTitle($this->ml('Configuration for DataProperty #(1)', $itemid));
+        $this->tpl()->setPageTitle($this->ml('Configuration for DataProperty #(1)', $itemid));
         $data['has_overview'] = false;
         $typename = $data['propertytype']->name;
         if (file_exists(sys::code() . 'properties/' . $typename . '/xartemplates/includes/overview.xt')) {

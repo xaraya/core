@@ -46,7 +46,7 @@ class DataObject extends DataObjectMaster implements iDataObject
     **/
     public function getItem(array $args = [])
     {
-        xarLog::message("DataObject::getItem: Retrieving an item of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObject::getItem: Retrieving an item of object " . $this->name);
 
         if(!empty($args['itemid'])) {
             if($args['itemid'] != $this->itemid) {
@@ -100,7 +100,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function getInvalids(array $args = [])
     {
-        xarLog::message("xarLog in getInvalids function", xarLog::LEVEL_INFO);
+        $this->log()->info("xarLog in getInvalids function");
 
         if (!empty($args['fields'])) {
             $fields = $args['fields'];
@@ -114,25 +114,25 @@ class DataObject extends DataObjectMaster implements iDataObject
                 $invalids[$name] = $this->properties[$name]->invalid;
             }
         }
-        xarLog::variable("printing invalids array in log file: ", $invalids);
+        $this->log()->debug("printing invalids array in log file: ", $invalids);
 
         return $invalids;
     }
 
     public function displayInvalids(array $args = [])
     {
-        xarLog::message("xarLog in displayInvalids function", xarLog::LEVEL_INFO);
+        $this->log()->info("xarLog in displayInvalids function");
 
         $data = [
             'invalids' => $this->getInvalids($args),
             'context' => $this->getContext(),
         ];
-        return xarTpl::module('dynamicdata', 'user', 'displayinvalids', $data);
+        return $this->tpl()->module('dynamicdata', 'user', 'displayinvalids', $data);
     }
 
     public function clearInvalids()
     {
-        xarLog::message("xarLog in clearInvalids function", xarLog::LEVEL_INFO);
+        $this->log()->info("xarLog in clearInvalids function");
 
         foreach(array_keys($this->properties) as $name) {
             $this->properties[$name]->invalid = '';
@@ -145,7 +145,7 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function checkInput(array $args = [], $suppress = 0, $priority = 'dd')
     {
-        xarLog::message("DataObject::checkInput: Checking an item of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObject::checkInput: Checking an item of object " . $this->name);
 
         if(!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
             $this->itemid = $args['itemid'];
@@ -225,13 +225,13 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
         }
         if (!empty($this->missingfields)) {
-            xarLog::variable('Missing properties', $this->missingfields, xarLog::LEVEL_ERROR);
+            $this->log()->error('Missing properties', $this->missingfields);
             if (!$suppress) {
                 throw new VariableNotFoundException([$this->name,implode(', ', $this->missingfields)], 'The following fields were not found: #(1): [#(2)]');
             }
         }
         if (!empty($badnames)) {
-            xarLog::variable('Bad properties', $badnames, xarLog::LEVEL_ERROR);
+            $this->log()->error('Bad properties', $badnames);
             if (xarModVars::get('dynamicdata', 'debugmode') &&
             in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
                 echo "Bad properties: ";
@@ -257,7 +257,7 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function showForm(array $args = [])
     {
-        xarLog::message("DataObject::showForm: Form for object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObject::showForm: Form for object " . $this->name);
 
         $args = $args + $this->getPublicProperties();
         $this->setFieldPrefix($args['fieldprefix']);
@@ -306,9 +306,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        // Pass along the object context for xarTpl::object()
-        $args['context'] = $this->getContext();
-        return xarTpl::object($args['tplmodule'], $args['template'], 'showform', $args);
+        return $this->tpl()->object($args['tplmodule'], $args['template'], 'showform', $args);
     }
 
     /**
@@ -316,7 +314,7 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function showDisplay(array $args = [])
     {
-        xarLog::message("DataObject::showDisplay: Display an item of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObject::showDisplay: Display an item of object " . $this->name);
 
         $args = $this->toArray($args);
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
@@ -371,9 +369,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        // Pass along the object context for xarTpl::object()
-        $args['context'] = $this->getContext();
-        return xarTpl::object($args['tplmodule'], $args['template'], 'showdisplay', $args);
+        return $this->tpl()->object($args['tplmodule'], $args['template'], 'showdisplay', $args);
     }
 
     /**
@@ -403,7 +399,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function createItem(array $args = [])
     {
-        xarLog::message("DataObject::createItem: Creating an item of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObject::createItem: Creating an item of object " . $this->name);
 
         if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarModVars::get('dynamicdata', 'suppress_updates')) {
             // We are testing/debugging: return a zero
@@ -482,7 +478,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function updateItem(array $args = [])
     {
-        xarLog::message("DataObject::updateItem: Updating an item of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObject::updateItem: Updating an item of object " . $this->name);
 
         if(count($args) > 0) {
             if(!empty($args['itemid'])) {
@@ -542,7 +538,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function deleteItem(array $args = [])
     {
-        xarLog::message("DataObject::deleteItem: Deleting an item of object " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataObject::deleteItem: Deleting an item of object " . $this->name);
 
         if(!empty($args['itemid'])) {
             $this->itemid = $args['itemid'];

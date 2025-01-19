@@ -37,16 +37,16 @@ class DbconfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         extract($args);
 
-        if (!$this->var()->fetch('db', 'notempty', $db, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('db', $db, 'notempty', '')) {
             return;
         }
-        if (!$this->var()->fetch('obj', 'notempty', $obj, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('obj', $obj, 'notempty', '')) {
             return;
         }
 
@@ -64,7 +64,7 @@ class DbconfigMethod extends MethodClass
                 return $data;
             }
             $config = null;
-            $this->var()->fetch('config', 'array', $config, [], xarVar::DONT_SET);
+            $this->var()->check('config', $config, 'array', []);
             if (!empty($config) && is_array($config) && $this->sec()->confirmAuthKey('dynamicdata')) {
                 $config = array_filter($config);
                 if (!empty($config['name'])) {
@@ -123,7 +123,7 @@ class DbconfigMethod extends MethodClass
                 ];
             }
             $config = null;
-            $this->var()->fetch('config', 'array', $config, [], xarVar::DONT_SET);
+            $this->var()->check('config', $config, 'array', []);
             if (!empty($config) && is_array($config) && $this->sec()->confirmAuthKey('dynamicdata')) {
                 $config = array_filter($config);
                 echo var_export($config, true);

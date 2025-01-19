@@ -33,32 +33,32 @@ interface LoggerInterface extends ServiceInterface
 
     public function variable(string $name, mixed $var, int $level = 0): void;
 
-    /** @param mixed[] $context */
-    public function emergency(string|\Stringable $message, array $context = []): void;
+    /** @param mixed[] $var */
+    public function emergency(string|\Stringable $message, array $var = []): void;
 
-    /** @param mixed[] $context */
-    public function alert(string|\Stringable $message, array $context = []): void;
+    /** @param mixed[] $var */
+    public function alert(string|\Stringable $message, array $var = []): void;
 
-    /** @param mixed[] $context */
-    public function critical(string|\Stringable $message, array $context = []): void;
+    /** @param mixed[] $var */
+    public function critical(string|\Stringable $message, array $var = []): void;
 
-    /** @param mixed[] $context */
-    public function error(string|\Stringable $message, array $context = []): void;
+    /** @param mixed[] $var */
+    public function error(string|\Stringable $message, array $var = []): void;
 
-    /** @param mixed[] $context */
-    public function warning(string|\Stringable $message, array $context = []): void;
+    /** @param mixed[] $var */
+    public function warning(string|\Stringable $message, array $var = []): void;
 
-    /** @param mixed[] $context */
-    public function notice(string|\Stringable $message, array $context = []): void;
+    /** @param mixed[] $var */
+    public function notice(string|\Stringable $message, array $var = []): void;
 
-    /** @param mixed[] $context */
-    public function info(string|\Stringable $message, array $context = []): void;
+    /** @param mixed[] $var */
+    public function info(string|\Stringable $message, array $var = []): void;
 
-    /** @param mixed[] $context */
-    public function debug(string|\Stringable $message, array $context = []): void;
+    /** @param mixed[] $var */
+    public function debug(string|\Stringable $message, array $var = []): void;
 
-    /** @param mixed[] $context */
-    public function log(mixed $level, string|\Stringable $message, array $context = []): void;
+    /** @param mixed[] $var */
+    public function log(mixed $level, string|\Stringable $message, array $var = []): void;
 }
 
 /**
@@ -98,61 +98,65 @@ trait LoggerTrait
         xarLog::variable($name, $var, $level);
     }
 
-    /** @param mixed[] $context */
-    public function emergency(string|\Stringable $message, array $context = []): void
+    /** @param mixed[] $var */
+    public function emergency(string|\Stringable $message, array $var = []): void
     {
-        xarLog::message($message, xarLog::LEVEL_EMERGENCY);
+        $this->log(xarLog::LEVEL_EMERGENCY, $message, $var);
     }
 
-    /** @param mixed[] $context */
-    public function alert(string|\Stringable $message, array $context = []): void
+    /** @param mixed[] $var */
+    public function alert(string|\Stringable $message, array $var = []): void
     {
-        xarLog::message($message, xarLog::LEVEL_ALERT);
+        $this->log(xarLog::LEVEL_ALERT, $message, $var);
     }
 
-    /** @param mixed[] $context */
-    public function critical(string|\Stringable $message, array $context = []): void
+    /** @param mixed[] $var */
+    public function critical(string|\Stringable $message, array $var = []): void
     {
-        xarLog::message($message, xarLog::LEVEL_CRITICAL);
+        $this->log(xarLog::LEVEL_CRITICAL, $message, $var);
     }
 
-    /** @param mixed[] $context */
-    public function error(string|\Stringable $message, array $context = []): void
+    /** @param mixed[] $var */
+    public function error(string|\Stringable $message, array $var = []): void
     {
-        xarLog::message($message, xarLog::LEVEL_ERROR);
+        $this->log(xarLog::LEVEL_ERROR, $message, $var);
     }
 
-    /** @param mixed[] $context */
-    public function warning(string|\Stringable $message, array $context = []): void
+    /** @param mixed[] $var */
+    public function warning(string|\Stringable $message, array $var = []): void
     {
-        xarLog::message($message, xarLog::LEVEL_WARNING);
+        $this->log(xarLog::LEVEL_WARNING, $message, $var);
     }
 
-    /** @param mixed[] $context */
-    public function notice(string|\Stringable $message, array $context = []): void
+    /** @param mixed[] $var */
+    public function notice(string|\Stringable $message, array $var = []): void
     {
-        xarLog::message($message, xarLog::LEVEL_NOTICE);
+        $this->log(xarLog::LEVEL_NOTICE, $message, $var);
     }
 
-    /** @param mixed[] $context */
-    public function info(string|\Stringable $message, array $context = []): void
+    /** @param mixed[] $var */
+    public function info(string|\Stringable $message, array $var = []): void
     {
-        xarLog::message($message, xarLog::LEVEL_INFO);
+        $this->log(xarLog::LEVEL_INFO, $message, $var);
     }
 
-    /** @param mixed[] $context */
-    public function debug(string|\Stringable $message, array $context = []): void
+    /** @param mixed[] $var */
+    public function debug(string|\Stringable $message, array $var = []): void
     {
-        xarLog::message($message, xarLog::LEVEL_DEBUG);
+        $this->log(xarLog::LEVEL_DEBUG, $message, $var);
     }
 
-    /** @param mixed[] $context */
-    public function log(mixed $level, string|\Stringable $message, array $context = []): void
+    /** @param mixed[] $var */
+    public function log(mixed $level, string|\Stringable $message, array $var = []): void
     {
         if (!is_numeric($level)) {
             $level = $this->mapping[$level] ?? xarLog::LEVEL_ERROR;
         } else {
             $level = (int) $level;
+        }
+        if (!empty($var)) {
+            xarLog::variable($message, $var, $level);
+            return;
         }
         xarLog::message($message, $level);
     }
@@ -162,17 +166,17 @@ trait LoggerTrait
  * Access xarLog::* Logger methods (message, variable, ...)
  *
  * Available methods:
- * - message()
- * - variable()
- * - emergency()
- * - alert()
- * - critical()
- * - error()
- * - warning()
- * - notice()
- * - info()
- * - debug()
- * - log()
+ * - emergency($message, $var = [])
+ * - alert($message, $var = [])
+ * - critical($message, $var = [])
+ * - error($message, $var = [])
+ * - warning($message, $var = [])
+ * - notice($message, $var = [])
+ * - info($message, $var = [])
+ * - debug($message, $var = [])
+ * - log($message, $var = [])
+ * - message($message, $level = xarLog::LEVEL_DEBUG) - original xarLog::message() using $level param
+ * - variable($message, $var, $level = xarLog::LEVEL_DEBUG) - original xarLog::variable() using $level param
  *
  * @template TParent of ServicesInterface
  */

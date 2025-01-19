@@ -59,7 +59,7 @@ class ShowfilterformMethod extends MethodClass
 
         // we got everything via template parameters
         if (isset($fields) && is_array($fields) && count($fields) > 0) {
-            return xarTpl::module(
+            return $this->tpl()->module(
                 'dynamicdata',
                 'admin',
                 'showfilterform',
@@ -72,7 +72,7 @@ class ShowfilterformMethod extends MethodClass
 
         // try getting the item id via input variables if necessary
         if (!isset($itemid) || !is_numeric($itemid)) {
-            if (!$this->var()->fetch('itemid', 'isset', $args['itemid'], null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('itemid', $args['itemid'])) {
                 return;
             }
         }
@@ -106,7 +106,7 @@ class ShowfilterformMethod extends MethodClass
             $object->getItem();
         }
         // if we are in preview mode, we need to check for any preview values
-        //if (!$this->var()->fetch('preview', 'isset', $preview,  NULL, xarVar::DONT_SET)) {return;}
+        //if (!$this->var()->check('preview', $preview)) {return;}
         if (!empty($preview)) {
             $object->checkInput();
         }

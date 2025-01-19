@@ -40,52 +40,52 @@ class UpdatepropMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!$this->var()->fetch('objectid', 'isset', $objectid, 1, xarVar::DONT_SET)) {
+        if (!$this->var()->check('objectid', $objectid, 'isset', 1)) {
             return;
         }
         /** @var int $objectid */
-        if (!$this->var()->fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('module_id', $module_id)) {
             return;
         }
-        if (!$this->var()->fetch('itemtype', 'int:1:', $itemtype, 0, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemtype', $itemtype, 'int:1:', 0)) {
             return;
         }
-        if (!$this->var()->fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('table', $table)) {
             return;
         }
-        if (!$this->var()->fetch('dd_name', 'isset', $dd_name, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('dd_name', $dd_name)) {
             return;
         }
-        if (!$this->var()->fetch('dd_label', 'isset', $dd_label, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('dd_label', $dd_label)) {
             return;
         }
-        if (!$this->var()->fetch('dd_type', 'isset', $dd_type, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('dd_type', $dd_type)) {
             return;
         }
-        if (!$this->var()->fetch('dd_default', 'isset', $dd_defaultvalue, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('dd_default', $dd_defaultvalue)) {
             return;
         }
-        if (!$this->var()->fetch('dd_seq', 'isset', $dd_seq, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('dd_seq', $dd_seq)) {
             return;
         }
-        if (!$this->var()->fetch('dd_translatable', 'isset', $dd_translatable, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('dd_translatable', $dd_translatable)) {
             return;
         }
-        if (!$this->var()->fetch('dd_source', 'isset', $dd_source, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('dd_source', $dd_source)) {
             return;
         }
-        if (!$this->var()->fetch('display_dd_status', 'isset', $display_dd_status, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('display_dd_status', $display_dd_status)) {
             return;
         }
-        if (!$this->var()->fetch('input_dd_status', 'isset', $input_dd_status, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('input_dd_status', $input_dd_status)) {
             return;
         }
-        if (!$this->var()->fetch('dd_configuration', 'isset', $dd_configuration, null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('dd_configuration', $dd_configuration)) {
             return;
         }
 
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 

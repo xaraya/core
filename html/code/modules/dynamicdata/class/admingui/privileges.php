@@ -37,46 +37,46 @@ class PrivilegesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         extract($args);
 
-        if (!$this->var()->fetch('objectid', 'id', $objectid, null, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('objectid', $objectid, 'id')) {
             return;
         }
-        if (!$this->var()->fetch('moduleid', 'str', $moduleid, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('moduleid', $moduleid, 'str', 0)) {
             return;
         } // empty, 'All', numeric or modulename
-        if (!$this->var()->fetch('itemtype', 'str', $itemtype, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('itemtype', $itemtype, 'str', 0)) {
             return;
         } // empty, 'All', numeric
-        if (!$this->var()->fetch('itemid', 'str', $itemid, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('itemid', $itemid, 'str', 0)) {
             return;
         } // empty, 'All', numeric
-        if (!$this->var()->fetch('apply', 'str', $apply, false, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('apply', $apply, 'str', false)) {
             return;
         } // boolean?
-        if (!$this->var()->fetch('extpid', 'str', $extpid, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('extpid', $extpid, 'str', '')) {
             return;
         } // empty, 'All', numeric ?
-        if (!$this->var()->fetch('extname', 'str', $extname, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('extname', $extname, 'str', '')) {
             return;
         } // ?
-        if (!$this->var()->fetch('extrealm', 'str', $extrealm, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('extrealm', $extrealm, 'str', '')) {
             return;
         } // ?
-        if (!$this->var()->fetch('extmodule', 'str', $extmodule, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('extmodule', $extmodule, 'str', '')) {
             return;
         } // ?
-        if (!$this->var()->fetch('extcomponent', 'enum:All:Item:Field:Type', $extcomponent)) {
+        if (!$this->var()->get('extcomponent', $extcomponent, 'enum:All:Item:Field:Type')) {
             return;
         } // FIXME: is 'Type' needed?
-        if (!$this->var()->fetch('extinstance', 'str:1', $extinstance, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('extinstance', $extinstance, 'str:1', '')) {
             return;
         } // somthing:somthing:somthing or empty
-        if (!$this->var()->fetch('extlevel', 'str:1', $extlevel)) {
+        if (!$this->var()->get('extlevel', $extlevel, 'str:1')) {
             return;
         }
 

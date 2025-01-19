@@ -57,7 +57,7 @@ class ShowviewMethod extends MethodClass
         if (isset($items) && is_array($items)) {
             $args['count'] = count($items);
             $args['context'] ??= $this->getContext();
-            return xarTpl::module(
+            return $this->tpl()->module(
                 'dynamicdata',
                 'user',
                 'showview',
@@ -70,25 +70,25 @@ class ShowviewMethod extends MethodClass
         //       used by the xar:data-view tag when no object or items are specified !
 
         if (!isset($itemids)) {
-            if (!$this->var()->fetch('itemids', 'isset', $itemids, null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('itemids', $itemids)) {
                 return;
             }
         }
 
         if (!isset($sort)) {
-            if (!$this->var()->fetch('sort', 'isset', $sort, null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('sort', $sort)) {
                 return;
             }
         }
 
         if (!isset($numitems)) {
-            if (!$this->var()->fetch('numitems', 'isset', $numitems, null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('numitems', $numitems)) {
                 return;
             }
         }
 
         if (!isset($startnum)) {
-            if (!$this->var()->fetch('startnum', 'isset', $startnum, null, xarVar::DONT_SET)) {
+            if (!$this->var()->check('startnum', $startnum)) {
                 return;
             }
         }

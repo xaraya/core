@@ -38,28 +38,28 @@ class MetaMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminDynamicData')) {
+        if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         extract($args);
 
-        if (!$this->var()->fetch('export', 'notempty', $export, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('export', $export, 'notempty', '')) {
             return;
         }
-        if (!$this->var()->fetch('table', 'notempty', $table, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('table', $table, 'notempty', '')) {
             return;
         }
-        if (!$this->var()->fetch('showdb', 'notempty', $showdb, 0, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('showdb', $showdb, 'notempty', 0)) {
             return;
         }
-        if (!$this->var()->fetch('dbtype', 'notempty', $dbtype, xarDB::getType(), xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('dbtype', $dbtype, 'notempty', xarDB::getType())) {
             return;
         }
-        if (!$this->var()->fetch('db', 'notempty', $db, xarDB::getName(), xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('db', $db, 'notempty', xarDB::getName())) {
             return;
         }
-        if (!$this->var()->fetch('create', 'notempty', $create, '', xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find('create', $create, 'notempty', '')) {
             return;
         }
 
