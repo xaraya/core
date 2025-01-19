@@ -18,7 +18,8 @@ namespace Xaraya\DataProperty;
 use Xaraya\Services\ParentServicesInterface;
 use Xaraya\Services\ParentServicesTrait;
 use Xaraya\DataObject\DataObjectServicesInterface;
-//use DataObject;
+use VirtualObjectDescriptor;
+use DataObject;
 //use DataObjectList;
 use DataProperty;
 use sys;
@@ -45,14 +46,32 @@ trait DataPropertyServicesTrait
     /** @use ParentServicesTrait<DataObjectServicesInterface> */
     use ParentServicesTrait;
 
+    /** @var ?DataObject */
+    protected static $dummyObject = null;
+
     protected DataObjectServicesInterface $parent;
 
     /**
-     * @todo check out if we actually need this
+     * Get parent class for access to core services = data object here
      */
     public function getParent(): DataObjectServicesInterface
     {
-        return $this->objectref;
+        return $this->objectref ?? $this->getDummyObject();
+    }
+
+    /**
+     * Get dummy virtual object as parent for stand-alone property
+     * @return DataObject
+     */
+    protected function getDummyObject()
+    {
+        if (!isset(static::$dummyObject)) {
+            $descriptor = new VirtualObjectDescriptor(['name' => 'dummy']);
+            static::$dummyObject = new DataObject($descriptor);
+        }
+        $object = clone static::$dummyObject;
+        $object->setContext($this->getContext());
+        return $object;
     }
 
     /**

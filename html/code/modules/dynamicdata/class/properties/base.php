@@ -229,7 +229,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
     public function getValue()
     {
         // If we are set up to do so, translate this value
-        if ($this->translatable && xarMod::isAvailable('translations')) {
+        if ($this->translatable && $this->mod()->isAvailable('translations')) {
             xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $this->objectref->name, $this->name);
             $value = $this->ml($this->value);
         } else {
@@ -272,7 +272,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
     {
         $found = false;
         $value = null;
-        xarVar::fetch($name, 'isset', $namevalue, null, xarVar::DONT_SET);
+        $this->var()->check($name, $namevalue);
         if(isset($namevalue)) {
             $found = true;
             $value = $namevalue;
@@ -323,7 +323,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         if(!isset($value)) {
             $value = $this->getValue();
@@ -337,7 +337,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             } else {
                 $this->invalid = $this->ml('#(1) cannot have the value #(2)', $this->name, $this->validation_notequals);
             }
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         } elseif ($this->validation_equals != null && $value != $this->validation_equals) {
@@ -346,7 +346,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             } else {
                 $this->invalid = $this->ml('#(1) must have the value #(2)', $this->name, $this->validation_notequals);
             }
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         } elseif ($this->validation_allowempty != null && !$this->validation_allowempty && empty($value)) {
@@ -355,7 +355,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             } else {
                 $this->invalid = $this->ml('#(1) cannot be empty', $this->name);
             }
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         }

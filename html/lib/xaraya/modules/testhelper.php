@@ -178,6 +178,7 @@ class TestHelper extends TestCase
     {
         // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
+        /**
         $mock = $this->getMockBuilder($className)
             ->setConstructorArgs($args)
             ->onlyMethods(['callSecurityCheck'])
@@ -193,6 +194,8 @@ class TestHelper extends TestCase
                 xarController::setCallback('redirectTo', $this->callback);
                 return $result;
             });
+         */
+        $mock = new $className(...$args);
         // override core security service class with mock too
         $helper = new ServicesHelper();
         $helper->createMockSecurityWithoutAccess($mock, $count);
@@ -224,6 +227,7 @@ class TestHelper extends TestCase
     {
         // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
+        /**
         $mock = $this->getMockBuilder($className)
             ->setConstructorArgs($args)
             ->onlyMethods(['redirect'])
@@ -235,6 +239,8 @@ class TestHelper extends TestCase
             ->willReturnCallback(function ($url) {
                 throw new LogicException("Called redirect('$url')");
             });
+         */
+        $mock = new $className(...$args);
         // override core controller service class with mock too
         $helper = new ServicesHelper();
         $helper->createMockControllerWithoutRedirect($mock, $count);

@@ -176,7 +176,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             $property = $args['property'];
             unset($args['property']);
             if (empty($property->objectref)) {
-                $property->objectref = new DummyObject($this->context);
+                $property->objectref = DummyObjectFactory::getDummyObject($this->context);
             }
             return $property->showLabel($args);
         }
@@ -195,7 +195,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             // No prop, get one (the right one, preferably)
             $property = DataPropertyMaster::getProperty($args);
             if (empty($property->objectref)) {
-                $property->objectref = new DummyObject($this->context);
+                $property->objectref = DummyObjectFactory::getDummyObject($this->context);
             }
             // if we have a field attribute, use just that, otherwise use all attributes
             if (!empty($args['field'])) {
@@ -207,7 +207,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         $property = $args['property'];
         unset($args['property']);
         if (empty($property->objectref)) {
-            $property->objectref = new DummyObject($this->context);
+            $property->objectref = DummyObjectFactory::getDummyObject($this->context);
         }
         // if we have a field attribute, use just that, otherwise use all attributes
         if (!empty($args['field'])) {
@@ -226,14 +226,14 @@ class DynamicDataTagExtension extends XarayaTwigExtension
                 // No property, gotta make one
                 $property = DataPropertyMaster::getProperty($params);
                 if (empty($property->objectref)) {
-                    $property->objectref = new DummyObject($this->context);
+                    $property->objectref = DummyObjectFactory::getDummyObject($this->context);
                 }
             } else {
                 // We do have a property in the attribute
                 $property = $args['property'];
                 unset($params['property']);
                 if (empty($property->objectref)) {
-                    $property->objectref = new DummyObject($this->context);
+                    $property->objectref = DummyObjectFactory::getDummyObject($this->context);
                 }
             }
             if (!empty($args['preset']) && !isset($args['value'])) {
@@ -262,14 +262,14 @@ class DynamicDataTagExtension extends XarayaTwigExtension
                 // No property, gotta make one
                 $property = DataPropertyMaster::getProperty($params);
                 if (empty($property->objectref)) {
-                    $property->objectref = new DummyObject($this->context);
+                    $property->objectref = DummyObjectFactory::getDummyObject($this->context);
                 }
             } else {
                 // We do have a property in the attribute
                 $property = $args['property'];
                 unset($params['property']);
                 if (empty($property->objectref)) {
-                    $property->objectref = new DummyObject($this->context);
+                    $property->objectref = DummyObjectFactory::getDummyObject($this->context);
                 }
             }
             if (!empty($args['hidden'])) {
@@ -358,7 +358,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
     public function xar_data_property($args, $objectref = null)
     {
         $property = DataPropertyMaster::getProperty($args);
-        $property->objectref = $objectref ?? new DummyObject($this->context);
+        $property->objectref = $objectref ?? DummyObjectFactory::getDummyObject($this->context);
         return $property;
     }
 
