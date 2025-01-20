@@ -3,7 +3,7 @@
  * @package core\logging
  * @subpackage logging
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -20,6 +20,7 @@
  *
  */
 sys::import('xaraya.log.loggers.xarLogger');
+sys::import('xaraya.services.hasdatabasetrait');
 // Modified from the original by the Xaraya Team
 
 /**
@@ -45,6 +46,8 @@ sys::import('xaraya.log.loggers.xarLogger');
  */
 class xarLogger_sql extends xarLogger
 {
+    use \Xaraya\Services\HasDatabaseTrait;
+
     /**
      * String holding the database table to use.
      * @var string
@@ -82,7 +85,7 @@ class xarLogger_sql extends xarLogger
         parent::close();
 
         // Create the database connection
-        $this->dbconn = xarDB::getConn();
+        $this->dbconn = $this->db()->getConn();
         
         // Write the records to the database and stop logging.
         foreach ($this->buffer as $line) {

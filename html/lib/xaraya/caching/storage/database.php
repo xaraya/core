@@ -3,17 +3,21 @@
  * @package core\caching
  * @subpackage caching
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+
+sys::import('xaraya.services.hasdatabasetrait');
+ 
 /**
  * Cache data in the database using the xar_cache_data table
  */
-
 class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_Storage
 {
+    use \Xaraya\Services\HasDatabaseTrait;
+
     public string $table = '';
     public ?string $lastkey = null;
     public ?int $lastid = null;
@@ -37,8 +41,8 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         if (!empty($this->table)) {
             return $this->table;
         } elseif (class_exists('xarDB')) {
-            $this->dbconn = xarDB::getConn();
-            $this->table = xarDB::GetPrefix() . '_cache_data';
+            $this->dbconn = $this->db()->getConn();
+            $this->table = $this->db()->getPrefix() . '_cache_data';
             return $this->table;
         } else {
             // can't use this storage until the core is loaded !

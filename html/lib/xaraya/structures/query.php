@@ -3,18 +3,22 @@
  * @package core\structures
  * @subpackage structures
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
-  /**
-  * Query class for SQL abstraction
-  * 
-  */
 
+sys::import('xaraya.services.hasdatabasetrait');
+
+/**
+ * Query class for SQL abstraction
+ * 
+ */
 class Query
 {
+    use \Xaraya\Services\HasDatabaseTrait;
+
     public $version             = "3.6";
     public $id;                                 // A unique identifier for this query
     public $type                = 'SELECT';     // Normalized array of tables used in the statement
@@ -110,6 +114,14 @@ class Query
         $this->operatorarray['ge'] = '>=';
     }
 
+    /**
+     * Get database connection for $this->dbConnIndex
+     */
+    protected function &getDbConn(): object
+    {
+        return $this->db()->getConn($this->dbConnIndex);
+    }
+
     public function setDbConnIndex($dbConnIndex = 0)
     {
         $this->dbConnIndex = $dbConnIndex;
@@ -119,7 +131,7 @@ class Query
     {
         if ($this->debugflag) $querystart = microtime(true);
 
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
         if ($this->debugflag && (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO')) {
             $this->dbconn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
@@ -223,7 +235,7 @@ class Query
             } else {
                 if (!$this->israwstatement) {
                     if ($this->fields == array() && $numfields > 0) {
-                        $result->setFetchMode(xarDB::FETCHMODE_ASSOC);
+                        $result->setFetchMode($this->db()->getFetchAssoc());
                         $result->first();
                         for ($i=0;$i< $numfields;$i++) {
                             $tmp = array_slice($result->fields,$i,1);
@@ -231,7 +243,7 @@ class Query
                             $this->fields[$namefield]['name'] = strtolower($namefield ?? '');
                         }
                     }
-					$result->setFetchMode(xarDB::FETCHMODE_NUM);
+					$result->setFetchMode($this->db()->getFetchNum());
                     $result->first();
                     while ($result->next()) {
                         $i=0; $line=array();
@@ -271,7 +283,7 @@ class Query
 
     public function open()
     {
-        $this->openconnection(xarDB::getConn($this->dbConnIndex));
+        $this->openconnection($this->getDbConn());
     }
 
     public function uselimits()
@@ -804,7 +816,7 @@ class Query
      */
     private function _getbinding($key)
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
         $binding = $this->bindings[$key];
         if (!is_numeric($binding['field2']) && !preg_match('/JOIN/i', $binding['op'])) {
             $sqlfield = $this->dbconn->qstr($binding['field2']);
@@ -818,7 +830,7 @@ class Query
 
     private function _getcondition($key)
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
         $condition = $this->conditions[$key];
 
         if (!isset($condition['field2']) || $condition['field2'] === 'NULL') {
@@ -1263,7 +1275,7 @@ class Query
 
     private function assembledfields($type)
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
         $f = "";
         $this->bindstring = "";
         switch ($this->type) {
@@ -1565,7 +1577,7 @@ class Query
     }
     public function bindstatement()
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
         $pieces = explode('?',$this->statement);
         $bound = $pieces[0];
         $limit = count($pieces);
@@ -1642,7 +1654,7 @@ class Query
     }
     public function getconnection()
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
         return $this->dbconn;
     }
     public function getorder($x='')
@@ -1665,7 +1677,7 @@ class Query
         if (isset($this->output) && $this->rowstodo == 0) return count($this->output);
         if ($this->optimize == true) $this->optimize();
         if ($this->type == 'SELECT' && $this->rowstodo != 0 && $this->limits == 1) {
-            if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+            if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
             if ($this->israwstatement) {
                 $temp1 = $this->rowstodo;
                 $temp2 = $this->startat;
@@ -1744,7 +1756,7 @@ class Query
     }
     public function lastid($table="", $id="")
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
         $parts = explode('.',$id);
         $field = isset($parts[1]) ? $parts[1] : $parts[0];
         $table = isset($parts[1]) ? $parts[0] : $table;
@@ -1756,12 +1768,12 @@ class Query
     /** @deprecated 2.2.0 no longer supported - try lastid() after insert if needed */
     public function nextid($table="", $id="")
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
         return $this->dbconn->PO_Insert_ID($table,$id);
     }
     public function openconnection($x = '')
     {
-        if (empty($x)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
+        if (empty($x)) $this->dbconn = $this->getDbConn();
         else $this->dbconn = $x;
     }
     public function qecho($statement='')

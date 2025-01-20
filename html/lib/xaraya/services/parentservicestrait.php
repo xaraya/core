@@ -43,6 +43,7 @@ interface ParentServicesInterface extends CoreServicesInterface
  * - $this->var() = xarVar::* Variables (fetch, check, ...)
  * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
  * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
+ * - $this->db() = xarDB::* Database (getConn, getPrefix, ...)
  * - ...
  * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
  * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
@@ -276,6 +277,24 @@ trait ParentServicesTrait
     public function cache(): CachingInterface
     {
         return $this->getParent()->cache();
+    }
+
+    /**
+     * Access xarDB::* Database methods (getConn, getPrefix, ...)
+     *
+     * Available methods:
+     * - getConn()
+     * - getFetchAssoc()
+     * - getFetchEnum()
+     * - getPrefix()
+     * - getType()
+     * - getTables()
+     * - importTables()
+     * - ...
+     */
+    public function db(): DatabaseInterface
+    {
+        return $this->getParent()->db();
     }
 
     /**

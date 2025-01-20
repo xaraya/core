@@ -11,7 +11,6 @@
 namespace Xaraya\Sessions;
 
 use xarCore;
-use xarDB;
 use xarEvents;
 use xarMLS;
 use xarObject;
@@ -27,6 +26,7 @@ use Xaraya\Database\ConnectionInterface;
 sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.exception');
 sys::import('xaraya.sessions.virtual');
+sys::import('xaraya.services.hasdatabasetrait');
 
 /**
  * Class to model the default session handler
@@ -58,6 +58,8 @@ interface iSessionHandler extends SessionHandlerInterface
  */
 class SessionHandler extends xarObject implements iSessionHandler, SessionInterface
 {
+    use \Xaraya\Services\HasDatabaseTrait;
+
     public const  PREFIX = 'XARSV';     // Reserved by us for our session vars
     public const  COOKIE = 'XARAYASID'; // Our cookiename
     /** @var ConnectionInterface|null */
@@ -79,12 +81,12 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     public function __construct($args)
     {
         // Register tables this subsystem uses
-        $tables = ['session_info' => xarDB::getPrefix() . '_session_info'];
-        xarDB::importTables($tables);
+        $tables = ['session_info' => $this->db()->getPrefix() . '_session_info'];
+        $this->db()->importTables($tables);
 
         // Set up our container.
-        $this->db = xarDB::getConn();
-        $tbls     = xarDB::getTables();
+        $this->db = $this->db()->getConn();
+        $tbls     = $this->db()->getTables();
         $this->tbl = $tbls['session_info'];
 
         // Put a reference to this instance into a static property
@@ -376,7 +378,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     {
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->tbl WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
-        $result = $stmt->executeQuery([$sessionId], xarDB::FETCHMODE_NUM);
+        $result = $stmt->executeQuery([$sessionId], $this->db()->getFetchNum());
 
         if ($result->first()) {
             // Already have this session
@@ -567,8 +569,8 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      */
     public function setUserInfo($userId, $rememberSession)
     {
-        $dbconn   = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn   = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $sessioninfoTable = $xartable['session_info'];
         try {

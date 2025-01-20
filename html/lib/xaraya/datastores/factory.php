@@ -3,7 +3,7 @@
  * @package core\datastores
  * @subpackage datastores
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -12,7 +12,7 @@
 namespace Xaraya\DataObject\DataStores;
 
 use Xaraya\Database\ExternalDatabase;
-use xarDB;
+use Xaraya\Services\ServiceFactory;
 use xarMLS;
 use xarObject;
 use DataObject;
@@ -22,6 +22,7 @@ use Exception;
 use sys;
 
 sys::import('xaraya.datastores.interface');
+sys::import('xaraya.services.servicefactory');
 
 /**
  * Base class for DD objects datastore
@@ -259,7 +260,9 @@ class DataStoreFactory extends xarObject
             return static::getExternalDataSources($object->datasources, $object->dbConnIndex);
         }
 
-        $dbconn = xarDB::getConn($object->dbConnIndex);
+        // @todo make sure this remains singleton - static method
+        $xarDB = ServiceFactory::getDatabaseService();
+        $dbconn = $xarDB->getConn($object->dbConnIndex);
         $dbInfo = $dbconn->getDatabaseInfo();
 
         // TODO: re-evaluate this once we're further along

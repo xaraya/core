@@ -136,8 +136,22 @@ class ServiceFactory
         };
     }
 
-    protected static function log(string $method, ServicesInterface $parent): void
+    /**
+     * Summary of getDatabaseService
+     */
+    public static function getDatabaseService(?object $parent = null): DatabaseInterface
     {
-        xarLog::message($method . ': starting service for ' . $parent::class, xarLog::LEVEL_DEBUG);
+        self::log(__METHOD__, $parent);
+        //return new DatabaseService($parent);
+        return DatabaseService::create($parent);
+    }
+
+    protected static function log(string $method, ?object $parent = null): void
+    {
+        if (!isset($parent)) {
+            xarLog::message($method . ': starting service for <unknown>', xarLog::LEVEL_DEBUG);
+        } else {
+            xarLog::message($method . ': starting service for ' . $parent::class, xarLog::LEVEL_DEBUG);
+        }
     }
 }

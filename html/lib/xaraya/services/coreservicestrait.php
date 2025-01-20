@@ -54,6 +54,7 @@ interface CoreServicesInterface extends ContextInterface
     public function data(): DataObjectInterface;
     public function prop(): DataPropertyInterface;
     public function cache(): CachingInterface;
+    public function db(): DatabaseInterface;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
      * @return void|never
@@ -88,6 +89,7 @@ trait CoreServicesTrait
     protected ?DataObjectInterface $xarData = null;
     protected ?DataPropertyInterface $xarProp = null;
     protected ?CachingInterface $xarCache = null;
+    protected ?DatabaseInterface $xarDB = null;
     /** @var ?callable */
     protected $xarExit = null;
 
@@ -336,6 +338,25 @@ trait CoreServicesTrait
     {
         $this->xarCache ??= ServiceFactory::getCachingService($this);
         return $this->xarCache;
+    }
+
+    /**
+     * Access xarDB::* Database methods (getConn, getPrefix, ...)
+     *
+     * Available methods:
+     * - getConn()
+     * - getFetchAssoc()
+     * - getFetchEnum()
+     * - getPrefix()
+     * - getType()
+     * - getTables()
+     * - importTables()
+     * - ...
+     */
+    public function db(): DatabaseInterface
+    {
+        $this->xarDB ??= ServiceFactory::getDatabaseService($this);
+        return $this->xarDB;
     }
 
     /**

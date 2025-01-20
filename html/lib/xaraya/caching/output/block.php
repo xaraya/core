@@ -127,44 +127,14 @@ class xarBlockCache extends xarObject
 
     /**
      * Get cache settings for the blocks
+     * As of soloblocks each block carries its own settings which we get from blockinfo
+     *
      * @return array<mixed>
      */
-    /* As of soloblocks each block carries its own settings which we get from blockinfo
     public static function getCacheSettings()
     {
-        if (!isset(self::$cacheSettings)) {
-            $settings = array();
-            // We need to get it.
-            $blocksettings = xarDB::getPrefix() . '_cache_blocks';
-            $dbconn = xarDB::getConn();
-            $tables = $dbconn->MetaTables();
-            if (in_array($blocksettings, $tables)) {
-                $query = "SELECT blockinstance_id, nocache,
-                                 page, theuser, expire
-                         FROM $blocksettings";
-                $stmt = $dbconn->prepareStatement($query);
-                $result = $stmt->executeQuery();
-                if ($result) {
-                    while ($result->next()) {
-                        list ($bid,
-                              $noCache,
-                              $pageShared,
-                              $userShared,
-                              $expireTime) = $result->getRow();
-                        $settings[$bid] = array('bid'         => $bid,
-                                                'nocache'     => $noCache,
-                                                'pageshared'  => $pageShared,
-                                                'usershared'  => $userShared,
-                                                'cacheexpire' => $expireTime);
-                    }
-                    $result->close();
-                }
-            }
-            self::$cacheSettings = $settings;
-        }
-        return self::$cacheSettings;
+        return [];
     }
-    */
 
     /**
      * Check if this block is suitable for block caching
@@ -182,31 +152,15 @@ class xarBlockCache extends xarObject
         if (empty($blockInfo['type'])) {
             return false;
         }
-        /* As of soloblocks we can oly rely on type being present
-        if (empty($blockInfo['module']) || empty($blockInfo[''])) {
-            return false;
-        }
-        */
 
         self::$noCache    = null;
         self::$pageShared = null;
         self::$userShared = null;
         self::$expireTime = null;
 
-        /* As of soloblocks each block carries its own settings which we get from blockinfo
-        $settings = self::getCacheSettings();
+        /* As of soloblocks each block carries its own settings which we get from blockinfo */
+        // $settings = self::getCacheSettings();
 
-        $blockid = $blockInfo['bid'];
-
-        if (isset($settings[$blockid])) {
-            self::$noCache    = $settings[$blockid]['nocache'];
-            self::$pageShared = $settings[$blockid]['pageshared'];
-            self::$userShared = $settings[$blockid]['usershared'];
-            self::$expireTime = $settings[$blockid]['cacheexpire'];
-
-        // CHECKME: cfr. bug 4021 Override caching vars with block BL tag
-        } else
-        */
         if (!empty($blockInfo['content']) && is_array($blockInfo['content'])) {
             if (isset($blockInfo['content']['nocache'])) {
                 self::$noCache    = $blockInfo['content']['nocache'];

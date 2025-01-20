@@ -33,6 +33,7 @@ Available services:
 - $this->var() = xarVar::* Variables (fetch, check, ...)
 - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
 - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
+- $this->db() = xarDB::* Database (getConn, getPrefix, ...)
 - ...
 - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
 - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere

@@ -65,6 +65,8 @@ sys::import('xaraya.database.external');
 
 /**
  * For documentation purposes only - available via DatabaseTrait
+ *
+ * @todo rename to avoid confusion with Database Service? (different namespace)
  */
 interface DatabaseInterface
 {
@@ -170,6 +172,8 @@ interface DatabaseInterface
  *     use DatabaseTrait;
  * }
  * ```
+ *
+ * @todo rename to avoid confusion with Database Service? (different namespace)
  */
 trait DatabaseTrait
 {
@@ -425,6 +429,7 @@ trait DatabaseTrait
         if (!is_numeric($dbConnIndex)) {
             return ExternalDatabase::listTableNames($dbConnIndex);
         }
+        // @todo re-use Database Service to get connection here
         /** @var Connection $conn */
         $conn = xarDB::getConn($dbConnIndex);
         $dbInfo = $conn->getDatabaseInfo();

@@ -5,7 +5,7 @@
  * @package core\datastores
  * @subpackage datastores
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -13,11 +13,11 @@
 
 namespace Xaraya\DataObject\DataStores;
 
-use xarDB;
 use DataProperty;
 use sys;
 
 sys::import('xaraya.datastores.basic');
+sys::import('xaraya.services.hasdatabasetrait');
 
 /**
  * Base class for SQL Data Stores
@@ -25,6 +25,8 @@ sys::import('xaraya.datastores.basic');
 **/
 class SQLDataStore extends OrderedDataStore implements ISQLDataStore
 {
+    use \Xaraya\Services\HasDatabaseTrait;
+
     /** @var mixed */
     protected $db     = null;
     //protected $tables = null;
@@ -50,8 +52,6 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
         parent::__construct($name);
         $this->dbConnIndex = $dbConnIndex;
         // lazy connection
-        //$this->db     = xarDB::getConn($dbConnIndex);
-        //$this->tables = xarDB::getTables(); // Is this scopy enough? i.e. would all tables be there already?
     }
 
     /**
@@ -173,7 +173,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     {
         // Note: the only reason we keep this variable is for getLastId()
         if (empty($this->db)) {
-            $this->db = xarDB::getConn($this->dbConnIndex);
+            $this->db = $this->db()->getConn($this->dbConnIndex);
         }
     }
 
@@ -184,7 +184,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      */
     protected function getTable($name)
     {
-        $tables = xarDB::getTables();
+        $tables = $this->db()->getTables();
         if (!empty($tables[$name])) {
             return $tables[$name];
         }
@@ -196,7 +196,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      */
     protected function getType()
     {
-        return xarDB::getType();
+        return $this->db()->getType();
     }
 
     /**

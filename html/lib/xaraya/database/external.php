@@ -1,7 +1,9 @@
 <?php
 
 /**
- * Provide an external database connection to something via PDO/DBAL/... DB driver
+ * Provide an external database connection to something via PDO/DBAL/MongoDB/... DB driver
+ *
+ * @todo add support/combine with Database Service
  *
  * @package core/database
  * @subpackage database
