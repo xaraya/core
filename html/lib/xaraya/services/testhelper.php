@@ -50,6 +50,10 @@ class TestHelper extends TestCase
      */
     public function createMockSecurityWithAccess(object $parent, int $count = 1): object
     {
+        // we need the parent actually using the core services here
+        if ($parent instanceof ParentServicesInterface) {
+            $parent = $parent->getParent();
+        }
         $mock = $this->getMockBuilder(SecurityService::class)
             ->setConstructorArgs([$parent])
             ->onlyMethods(['checkAccess'])
@@ -71,6 +75,10 @@ class TestHelper extends TestCase
      */
     public function createMockSecurityWithoutAccess(object $parent, int $count = 1): object
     {
+        // we need the parent actually using the core services here
+        if ($parent instanceof ParentServicesInterface) {
+            $parent = $parent->getParent();
+        }
         $mock = $this->getMockBuilder(SecurityService::class)
             ->setConstructorArgs([$parent])
             ->onlyMethods(['callSecurityCheck'])
@@ -113,6 +121,10 @@ class TestHelper extends TestCase
      */
     public function createMockControllerWithoutRedirect(object $parent, int $count = 1): object
     {
+        // we need the parent actually using the core services here
+        if ($parent instanceof ParentServicesInterface) {
+            $parent = $parent->getParent();
+        }
         $mock = $this->getMockBuilder(ControllerService::class)
             ->setConstructorArgs([$parent])
             ->onlyMethods(['redirect'])

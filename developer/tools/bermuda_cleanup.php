@@ -1561,74 +1561,54 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
     {
         $found = $this->find_module_methods($module, $type);
         // @todo add replacement of core services
-        $search = [
-            '/xarML\(/',
-            '/xarMLS::translate\(/',
+        $mapping = [
+            '/xarML\(/' => '\$this->ml(',
+            '/xarMLS::translate\(/' => '\$this->ml(',
             // @todo differentiate based on xarLog::* level
-            '/xarLog::message\(/',
-            '/xarLog::variable\(/',
+            '/xarLog::message\(/' => '\$this->log()->message(',
+            '/xarLog::variable\(/' => '\$this->log()->variable(',
             // @todo differentiate based on xarVar::* flags
-            '/xarVar::fetch\(/',
-            '/xarVar::prepForDisplay\(/',
-            '/xarVar::prepHTMLDisplay\(/',
+            '/xarVar::fetch\(/' => '\$this->var()->fetch(',
+            '/xarVar::prepForDisplay\(/' => '\$this->var()->prep(',
+            '/xarVar::prepHTMLDisplay\(/' => '\$this->var()->prepHTML(',
             // @todo handle xarSecurity::check() with component & instance
-            '/xarSec::genAuthKey\(/',
-            '/xarSec::confirmAuthKey\(/',
-            '/xarSecurity::check\(([^,)]+)\)/',
-            '/xarSecurity::check\(([^,)]+),\s*(\d+)\s*\)/',
+            '/xarSec::genAuthKey\(/' => '\$this->sec()->genAuthKey(',
+            '/xarSec::confirmAuthKey\(/' => '\$this->sec()->confirmAuthKey(',
+            '/xarSecurity::check\(([^,)]+)\)/' => '\$this->sec()->checkAccess($1)',
+            '/xarSecurity::check\(([^,)]+),\s*(\d+)\s*\)/' => '\$this->sec()->checkAccess($1, $2)',
             // @todo handle xarController::URL()
-            '/xarController::redirect\(/',
-            '/xarController::forbidden\(/',
-            '/xarController::badRequest\(/',
-            '/xarController::notFound\(/',
+            '/xarController::redirect\(/' => '\$this->ctl()->redirect(',
+            '/xarController::forbidden\(/' => '\$this->ctl()->forbidden(',
+            '/xarController::badRequest\(/' => '\$this->ctl()->badRequest(',
+            '/xarController::notFound\(/' => '\$this->ctl()->notFound(',
             // @todo we need to drop extra , null, $this->getContext() here
-            '/,\s*\n*\s*null,\s*\n*\s*\$this->getContext\(\)\s*\n*\s*\)/',
+            '/,\s*\n*\s*null,\s*\n*\s*\$this->getContext\(\)\s*\n*\s*\)/' => ')',
             // @todo check xarTpl::module() against current modName modType for mod()->template()
-            '/xarTpl::module\(/',
+            '/xarTpl::module\(/' => '\$this->tpl()->module(',
             // @todo check xarTpl::object() against current objectName for data()->template()
-            '/xarTpl::object\(/',
-            '/xarTpl::setPageTitle\(/',
+            '/xarTpl::object\(/' => '\$this->tpl()->object(',
+            '/xarTpl::setPageTitle\(/' => '\$this->tpl()->setPageTitle(',
+            '/xarTpl::setPageTemplateName\(/' => '\$this->tpl()->setPageTemplateName(',
             // @todo handle xarMod*::* - note: this assumes you set $module !
-            '/xarModVars::get\(\'' . $module . '\',\s*\n*\s*/',
-            '/xarModVars::set\(\'' . $module . '\',\s*\n*\s*/',
-            '/ exit;/',
-            '/ exit\(/',
-            '/ die\(/',
+            '/xarModVars::get\(\'dynamicdata\',\s*\n*\s*/' => '\$this->mod()->getVar(',
+            '/xarModVars::set\(\'dynamicdata\',\s*\n*\s*/' => '\$this->mod()->setVar(',
+            // @todo handle xarDB*::* - note: excl. meta and newConn
+            '/xarDB::getConn\(/' => '\$this->db()->getConn(',
+            '/xarDB::getName\(/' => '\$this->db()->getName(',
+            '/xarDB::getPrefix\(/' => '\$this->db()->getPrefix(',
+            '/xarDB::getType\(/' => '\$this->db()->getType(',
+            '/xarDB::getTables\(/' => '\$this->db()->getTables(',
+            '/xarDB::importTables\(/' => '\$this->db()->importTables(',
+            '/xarDB::FETCHMODE_ASSOC/' => '\$this->db()->getFetchAssoc()',
+            '/xarDB::FETCHMODE_NUM/' => '\$this->db()->getFetchNum()',
+            '/ exit;/' => ' \$this->exit();',
+            '/ exit\(/' => ' \$this->exit(',
+            '/ die\(/' => ' \$this->exit(',
+            '/xarCore::exit\(/' => ' \$this->exit(',
         ];
-        $replace = [
-            '\$this->ml(',
-            '\$this->ml(',
-            // @todo differentiate based on xarLog::* level
-            '\$this->log()->message(',
-            '\$this->log()->variable(',
-            // @todo differentiate based on xarVar::* flags
-            '\$this->var()->fetch(',
-            '\$this->var()->prep(',
-            '\$this->var()->prepHTML(',
-            // @todo handle xarSecurity::check()
-            '\$this->sec()->genAuthKey(',
-            '\$this->sec()->confirmAuthKey(',
-            '\$this->sec()->checkAccess($1)',
-            '\$this->sec()->checkAccess($1, $2)',
-            // @todo handle xarController::URL()
-            '\$this->ctl()->redirect(',
-            '\$this->ctl()->forbidden(',
-            '\$this->ctl()->badRequest(',
-            '\$this->ctl()->notFound(',
-            // @todo we need to drop extra , null, $this->getContext() here
-            ')',
-            // @todo check xarTpl::module() against current modName modType for mod()->template()
-            '\$this->tpl()->module(',
-            // @todo check xarTpl::object() against current objectName for data()->template()
-            '\$this->tpl()->object(',
-            '\$this->tpl()->setPageTitle(',
-            // @todo handle xarMod*::*
-            '\$this->mod()->getVar(',
-            '\$this->mod()->setVar(',
-            ' \$this->exit();',
-            ' \$this->exit(',
-            ' \$this->exit(',
-        ];
+        //file_put_contents('core_services.json', $this->to_json($mapping));
+        $search = array_keys($mapping);
+        $replace = array_values($mapping);
         $files = 0;
         $total = 0;
         foreach ($found as $namespace => $methods) {
@@ -1760,3 +1740,24 @@ $replace = false;
 file_put_contents('call_dependencies.json', $migrator->to_json($summary));
 /**
  */
+$modules = [
+    'apischemas', 'cachemanager', 'calendar', 'changelog', 'ckeditor', 'comments',
+    'hitcount', 'images', 'keywords', 'library', 'logconfig', 'messages', 'mime',
+    'publications', 'ratings', 'scheduler', 'skeleton', 'uploads', 'webhooks', 'workflow',
+];
+$replace = false;
+foreach ($modules as $module) {
+    echo "\nModule $module\n";
+    $inDir = dirname(__DIR__, 2) . '/html/code/modules/' . $module . '/';
+    $migrator = new XarayaModuleMigrator($inDir, true);
+    $migrator->verbose = false;
+    try {
+        $migrator->load_project();
+    } catch (Exception $e) {
+        echo $e->getMessage() . ': ' . $e->getTraceAsString() .  "\n";
+        echo "for module $module\n";
+        continue;
+    }
+    $migrator->parse_project();
+    $found = $migrator->replace_core_services($module, '', $replace);
+}
