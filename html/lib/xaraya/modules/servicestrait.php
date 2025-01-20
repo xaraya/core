@@ -67,7 +67,6 @@ interface GuiModuleServicesInterface extends ModuleServicesInterface
  */
 trait ModuleServicesTrait
 {
-    /** @use CoreServicesTrait<static> */
     use CoreServicesTrait;
     //use CoreTrait;
     use HooksTrait;
@@ -135,7 +134,7 @@ trait ModuleServicesTrait
         'tplmodule',
         // @todo add new internal methods here + find a better way to do this
     ];
-    /** @var array<string, MethodServicesInterface|null> */
+    /** @var array<string, MethodServicesInterface<ModuleServicesInterface>|null> */
     private array $methods = [];
 
     /**
@@ -309,7 +308,7 @@ trait ModuleServicesTrait
     /**
      * Get single-method class for module function by class name
      * @see https://phpstan.org/blog/generics-by-examples
-     * @template TMethodClass of MethodServicesInterface
+     * @template TMethodClass of MethodServicesInterface<ModuleServicesInterface>
      * @param class-string<TMethodClass> $className
      * @return TMethodClass
      */
@@ -326,7 +325,7 @@ trait ModuleServicesTrait
      * will become Xaraya\Modules\MyFancyModule\UserApi\TestCallMethod
      *
      * @param string $funcName
-     * @return class-string<MethodClass<static>>
+     * @return class-string<MethodClass<ModuleServicesInterface>>
      */
     protected function getClassName(string $funcName): string
     {

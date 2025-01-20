@@ -22,7 +22,6 @@ use Xaraya\DataProperty\DataPropertyServicesTrait;
  */
 class DataProperty extends xarObject implements iDataProperty, DataPropertyServicesInterface
 {
-    /** @use DataPropertyServicesTrait */
     use DataPropertyServicesTrait;
 
     // Attributes for registration

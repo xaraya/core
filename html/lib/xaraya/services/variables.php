@@ -124,11 +124,9 @@ interface VariablesInterface extends ServiceInterface
 
 /**
  * Variables available via methods
- * @template TParent of ServicesInterface
  */
 trait VariablesTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -317,10 +315,8 @@ trait VariablesTrait
  * - prepHTML()
  * - ...
  *
- * @template TParent of ServicesInterface
  */
 class VariablesService implements VariablesInterface
 {
-    /** @use VariablesTrait<TParent> */
     use VariablesTrait;
 }

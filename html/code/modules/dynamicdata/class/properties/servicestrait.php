@@ -38,12 +38,9 @@ interface DataPropertyServicesInterface extends ParentServicesInterface
 /**
  * Child class using services from parent class
  * e.g. method -> module or property -> object
- *
- * @todo don't use TParent template here
  */
 trait DataPropertyServicesTrait
 {
-    /** @use ParentServicesTrait<DataObjectServicesInterface> */
     use ParentServicesTrait;
 
     /** @var ?DataObject */

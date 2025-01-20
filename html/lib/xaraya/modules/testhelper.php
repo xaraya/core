@@ -104,7 +104,7 @@ class TestHelper extends TestCase
     /**
      * Create parent component for a method class
      * @param string $modName
-     * @param class-string<MethodServicesInterface> $className
+     * @param class-string<MethodServicesInterface<ModuleServicesInterface>> $className
      * @return ModuleServicesInterface
      */
     protected function createComponent(string $modName, string $className)
@@ -121,7 +121,7 @@ class TestHelper extends TestCase
     /**
      * Get parent class or module class
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface> $className
+     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
      * @return array<mixed>
      */
     protected function getConstructorArgs(string $modName, string $className)
@@ -141,9 +141,9 @@ class TestHelper extends TestCase
     /**
      * Override checkAccess() method to return true + check if called $count times
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface> $className
+     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
      * @param int $count
-     * @return ModuleServicesInterface|MethodServicesInterface
+     * @return ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>
      */
     protected function createMockWithAccess(string $modName, string $className, int $count = 1): object
     {
@@ -170,9 +170,9 @@ class TestHelper extends TestCase
     /**
      * Override callSecurityCheck() method to intercept redirect + check if called $count times
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface> $className
+     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
      * @param int $count
-     * @return ModuleServicesInterface|MethodServicesInterface
+     * @return ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>
      */
     protected function createMockWithoutAccess(string $modName, string $className, int $count = 1): object
     {
@@ -219,9 +219,9 @@ class TestHelper extends TestCase
     /**
      * Override redirect() method to throw exception + check if called $count times
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface> $className
+     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
      * @param int $count
-     * @return ModuleServicesInterface|MethodServicesInterface
+     * @return ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>
      */
     protected function createMockWithoutRedirect(string $modName, string $className, int $count = 1): object
     {
@@ -250,9 +250,9 @@ class TestHelper extends TestCase
     /**
      * Override exit() method to throw exception + check if called $count times
      * @param string $modName
-     * @param class-string<ModuleServicesInterface|MethodServicesInterface> $className
+     * @param class-string<ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>> $className
      * @param int $count
-     * @return ModuleServicesInterface|MethodServicesInterface
+     * @return ModuleServicesInterface|MethodServicesInterface<ModuleServicesInterface>
      */
     protected function createMockWithoutExit(string $modName, string $className, int $count = 1): object
     {

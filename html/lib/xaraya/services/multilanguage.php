@@ -36,11 +36,9 @@ interface MultiLanguageInterface extends ServiceInterface
 
 /**
  * MultiLanguage available via methods
- * @template TParent of ServicesInterface
  */
 trait MultiLanguageTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -62,10 +60,8 @@ trait MultiLanguageTrait
  * - translate()
  * - ...
  *
- * @template TParent of ServicesInterface
  */
 class MultiLanguageService implements MultiLanguageInterface
 {
-    /** @use MultiLanguageTrait<TParent> */
     use MultiLanguageTrait;
 }

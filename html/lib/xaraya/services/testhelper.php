@@ -21,7 +21,8 @@ class TestHelper extends TestCase
 
     public static function tearDownAfterClass(): void {}
 
-    public function __construct($name = 'services') {
+    public function __construct($name = 'services')
+    {
         parent::__construct($name);
     }
 

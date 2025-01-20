@@ -33,12 +33,9 @@ interface HandlerServicesInterface extends ServicesInterface
  *
  * This defines where to get modName, itemType, modType and object
  * from the parent ui handler class for use by the service classes
- *
- * @template TParent of ServicesInterface
  */
 trait HandlerServicesTrait
 {
-    /** @use ServicesTrait<TParent> */
     use ServicesTrait;
 
     /**

@@ -17,8 +17,6 @@
 namespace Xaraya\Services;
 
 use xarTpl;
-use DataObject;
-use DataObjectList;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -41,11 +39,9 @@ interface TemplatingInterface extends ServiceInterface
 
 /**
  * Templating available via methods
- * @template TParent of ServicesInterface
  */
 trait TemplatingTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -141,11 +137,9 @@ trait TemplatingTrait
  * Optional methods in parent:
  * - getModName() for tpl()->setPageTitle()
  *
- * @template TParent of ServicesInterface
  */
 class TemplatingService implements TemplatingInterface
 {
-    /** @use TemplatingTrait<TParent> */
     use TemplatingTrait;
 
     /**

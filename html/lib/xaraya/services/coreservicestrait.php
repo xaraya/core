@@ -43,17 +43,17 @@ interface CoreServicesInterface extends ContextInterface
 {
     /** @param array<string, mixed> $args */
     public function setCoreServices(array $args = []): void;
-    public function ctl(): ControllerService;
-    public function log(): LoggerService;
-    public function mls(): MultiLanguageService;
-    public function mod(): ModulesService;
-    public function sec(): SecurityService;
-    public function tpl(): TemplatingService;
-    public function var(): VariablesService;
-    public function block(): BlocksService;
-    public function data(): DataObjectService;
-    public function prop(): DataPropertyService;
-    public function cache(): CachingService;
+    public function ctl(): ControllerInterface;
+    public function log(): LoggerInterface;
+    public function mls(): MultiLanguageInterface;
+    public function mod(): ModulesInterface;
+    public function sec(): SecurityInterface;
+    public function tpl(): TemplatingInterface;
+    public function var(): VariablesInterface;
+    public function block(): BlocksInterface;
+    public function data(): DataObjectInterface;
+    public function prop(): DataPropertyInterface;
+    public function cache(): CachingInterface;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
      * @return void|never
@@ -72,37 +72,24 @@ interface CoreServicesInterface extends ContextInterface
  * Core Services trait for classes
  *
  * This defines the core services available to the parent class
- *
- * @template TParent of ServicesInterface
  */
 trait CoreServicesTrait
 {
     use ContextTrait;
 
-    /** @var ?ControllerService<TParent> */
-    protected $xarCtl;
-    /** @var ?LoggerService<TParent> */
-    protected $xarLog;
-    /** @var ?MultiLanguageService<TParent> */
-    protected $xarMls;
-    /** @var ?ModulesService<TParent> */
-    protected $xarMod;
-    /** @var ?SecurityService<TParent> */
-    protected $xarSec;
-    /** @var ?TemplatingService<TParent> */
-    protected $xarTpl;
-    /** @var ?VariablesService<TParent> */
-    protected $xarVar;
-    /** @var ?BlocksService<TParent> */
-    protected $xarBlock;
-    /** @var ?DataObjectService<TParent> */
-    protected $xarData;
-    /** @var ?DataPropertyService<TParent> */
-    protected $xarProp;
-    /** @var ?CachingService<TParent> */
-    protected $xarCache;
+    protected ?ControllerInterface $xarCtl = null;
+    protected ?LoggerInterface $xarLog = null;
+    protected ?MultiLanguageInterface $xarMls = null;
+    protected ?ModulesInterface $xarMod = null;
+    protected ?SecurityInterface $xarSec = null;
+    protected ?TemplatingInterface $xarTpl = null;
+    protected ?VariablesInterface $xarVar = null;
+    protected ?BlocksInterface $xarBlock = null;
+    protected ?DataObjectInterface $xarData = null;
+    protected ?DataPropertyInterface $xarProp = null;
+    protected ?CachingInterface $xarCache = null;
     /** @var ?callable */
-    protected $xarExit;
+    protected $xarExit = null;
 
     /**
      * Set core services for access via methods
@@ -135,11 +122,10 @@ trait CoreServicesTrait
      * - badRequest()
      * - ...
      *
-     * @return ControllerService<TParent>
      */
-    public function ctl(): ControllerService
+    public function ctl(): ControllerInterface
     {
-        $this->xarCtl ??= $this->getControllerService();
+        $this->xarCtl ??= ServiceFactory::getControllerService($this);
         return $this->xarCtl;
     }
 
@@ -159,11 +145,10 @@ trait CoreServicesTrait
      * - message($message, $level = xarLog::LEVEL_DEBUG) - original xarLog::message() using $level param
      * - variable($message, $var, $level = xarLog::LEVEL_DEBUG) - original xarLog::variable() using $level param
      *
-     * @return LoggerService<TParent>
      */
-    public function log(): LoggerService
+    public function log(): LoggerInterface
     {
-        $this->xarLog ??= $this->getLoggerService();
+        $this->xarLog ??= ServiceFactory::getLoggerService($this);
         return $this->xarLog;
     }
 
@@ -174,11 +159,10 @@ trait CoreServicesTrait
      * - translate()
      * - ...
      *
-     * @return MultiLanguageService<TParent>
      */
-    public function mls(): MultiLanguageService
+    public function mls(): MultiLanguageInterface
     {
-        $this->xarMls ??= $this->getMultiLanguageService();
+        $this->xarMls ??= ServiceFactory::getMultiLanguageService($this);
         return $this->xarMls;
     }
 
@@ -200,11 +184,10 @@ trait CoreServicesTrait
      * Optional methods in parent:
      * - getModType() for mod()->apiFunc(null, null, ...) - only for migration
      *
-     * @return ModulesService<TParent>
      */
-    public function mod(): ModulesService
+    public function mod(): ModulesInterface
     {
-        $this->xarMod ??= $this->getModulesService();
+        $this->xarMod ??= ServiceFactory::getModulesService($this);
         return $this->xarMod;
     }
 
@@ -220,11 +203,10 @@ trait CoreServicesTrait
      * Required methods in parent:
      * - getModName()
      *
-     * @return SecurityService<TParent>
      */
-    public function sec(): SecurityService
+    public function sec(): SecurityInterface
     {
-        $this->xarSec ??= $this->getSecurityService();
+        $this->xarSec ??= ServiceFactory::getSecurityService($this);
         return $this->xarSec;
     }
 
@@ -243,11 +225,10 @@ trait CoreServicesTrait
      * - getModType() for tpl()->module()
      * - getObject() for tpl()->object()
      *
-     * @return TemplatingService<TParent>
      */
-    public function tpl(): TemplatingService
+    public function tpl(): TemplatingInterface
     {
-        $this->xarTpl ??= $this->getTemplatingService();
+        $this->xarTpl ??= ServiceFactory::getTemplatingService($this);
         return $this->xarTpl;
     }
 
@@ -265,11 +246,10 @@ trait CoreServicesTrait
      * - prepHTML()
      * - ...
      *
-     * @return VariablesService<TParent>
      */
-    public function var(): VariablesService
+    public function var(): VariablesInterface
     {
-        $this->xarVar ??= $this->getVariablesService();
+        $this->xarVar ??= ServiceFactory::getVariablesService($this);
         return $this->xarVar;
     }
 
@@ -285,12 +265,11 @@ trait CoreServicesTrait
      * - getModName()
      * - getBlockType() for block()->template()
      *
-     * @return BlocksService<TParent>
      */
-    public function block(): BlocksService
+    public function block(): BlocksInterface
     {
-    $this->xarBlock ??= $this->getBlocksService();
-    return $this->xarBlock;
+        $this->xarBlock ??= ServiceFactory::getBlocksService($this);
+        return $this->xarBlock;
     }
 
     /**
@@ -309,11 +288,10 @@ trait CoreServicesTrait
      * Required methods in parent:
      * - getObjectName() for data()->getURL()
      *
-     * @return DataObjectService<TParent>
      */
-    public function data(): DataObjectService
+    public function data(): DataObjectInterface
     {
-        $this->xarData ??= $this->getDataObjectService();
+        $this->xarData ??= ServiceFactory::getDataObjectService($this);
         return $this->xarData;
     }
 
@@ -329,11 +307,10 @@ trait CoreServicesTrait
      * Required methods in parent:
      * - getPropertyName() for prop()->template()
      *
-     * @return DataPropertyService<TParent>
      */
-    public function prop(): DataPropertyService
+    public function prop(): DataPropertyInterface
     {
-        $this->xarProp ??= $this->getDataPropertyService();
+        $this->xarProp ??= ServiceFactory::getDataPropertyService($this);
         return $this->xarProp;
     }
 
@@ -354,11 +331,10 @@ trait CoreServicesTrait
      * Required methods in parent:
      * - getObject() for cache()->getObjecKey(null, '...')
      *
-     * @return CachingService<TParent>
      */
-    public function cache(): CachingService
+    public function cache(): CachingInterface
     {
-        $this->xarCache ??= $this->getCachingService();
+        $this->xarCache ??= ServiceFactory::getCachingService($this);
         return $this->xarCache;
     }
 
@@ -368,8 +344,8 @@ trait CoreServicesTrait
      */
     public function exit(int|string $status = 0)
     {
-        $this->xarExit ??= $this->getExitService();
-        // call exit service :-)
+        $this->xarExit ??= ServiceFactory::getExitCallable($this);
+        // call exit callable :-)
         call_user_func($this->xarExit, $status);
     }
 
@@ -382,129 +358,5 @@ trait CoreServicesTrait
     public function ml($rawstring, ...$args): string
     {
         return $this->mls()->translate($rawstring, ...$args);
-    }
-
-    /**
-     * Summary of getControllerService
-     * @return ControllerService<TParent>
-     */
-    protected function getControllerService(): ControllerService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new ControllerService($this);
-    }
-
-    /**
-     * Summary of getLoggerService
-     * @return LoggerService<TParent>
-     */
-    protected function getLoggerService(): LoggerService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new LoggerService($this);
-    }
-
-    /**
-     * Summary of getMultiLanguageService
-     * @return MultiLanguageService<TParent>
-     */
-    protected function getMultiLanguageService(): MultiLanguageService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new MultiLanguageService($this);
-    }
-
-    /**
-     * Summary of getModulesService
-     * @return ModulesService<TParent>
-     */
-    protected function getModulesService(): ModulesService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new ModulesService($this);
-    }
-
-    /**
-     * Summary of getSecurityService
-     * @return SecurityService<TParent>
-     */
-    protected function getSecurityService(): SecurityService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new SecurityService($this);
-    }
-
-    /**
-     * Summary of getTemplatingService
-     * @return TemplatingService<TParent>
-     */
-    protected function getTemplatingService(): TemplatingService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new TemplatingService($this);
-    }
-
-    /**
-     * Summary of getVariablesService
-     * @return VariablesService<TParent>
-     */
-    protected function getVariablesService(): VariablesService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new VariablesService($this);
-        //return ServicesContainer::getInstance(VariablesService::class, $this);
-    }
-
-    /**
-     * Summary of getBlocksService
-     * @return BlocksService<TParent>
-     */
-    protected function getBlocksService(): BlocksService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new BlocksService($this);
-    }
-
-    /**
-     * Summary of getDataObjectService
-     * @return DataObjectService<TParent>
-     */
-    protected function getDataObjectService(): DataObjectService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new DataObjectService($this);
-    }
-
-    /**
-     * Summary of getDataPropertyService
-     * @return DataPropertyService<TParent>
-     */
-    protected function getDataPropertyService(): DataPropertyService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new DataPropertyService($this);
-    }
-
-    /**
-     * Summary of getCachingService
-     * @return CachingService<TParent>
-     */
-    protected function getCachingService(): CachingService
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return new CachingService($this);
-        //return CachingService::getInstance($this);
-    }
-
-    /**
-     * Summary of getExitService
-     * @return callable
-     */
-    protected function getExitService(): callable
-    {
-        xarLog::message(__METHOD__ . ': starting service', xarLog::LEVEL_DEBUG);
-        return function (int|string $status = 0) {
-            \xarCore::exit($status);
-        };
     }
 }

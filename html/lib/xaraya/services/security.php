@@ -46,11 +46,9 @@ interface SecurityInterface extends ServiceInterface
 
 /**
  * Security available via methods
- * @template TParent of ServicesInterface
  */
 trait SecurityTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -121,11 +119,9 @@ trait SecurityTrait
  * Required methods in parent:
  * - getModName()
  *
- * @template TParent of ServicesInterface
  */
 class SecurityService implements SecurityInterface
 {
-    /** @use SecurityTrait<TParent> */
     use SecurityTrait;
 
     /**

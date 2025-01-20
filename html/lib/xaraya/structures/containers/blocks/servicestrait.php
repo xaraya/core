@@ -30,13 +30,10 @@ interface BlockServicesInterface extends ServicesInterface
  * Services trait for block classes
  *
  * This defines where to get modName, itemType, modType and object
- * from the parent data object class for use by the service classes
- *
- * @template TParent of ServicesInterface
+ * from the actual block class for use by the service classes
  */
 trait BlockServicesTrait
 {
-    /** @use ServicesTrait<TParent> */
     use ServicesTrait;
 
     /**

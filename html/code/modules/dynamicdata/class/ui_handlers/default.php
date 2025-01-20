@@ -28,7 +28,6 @@ sys::import('modules.dynamicdata.class.ui_handlers.servicestrait');
  */
 class DefaultHandler extends xarObject implements HandlerServicesInterface
 {
-    /** @use HandlerServicesTrait<self> */
     use HandlerServicesTrait;
 
     public string $method = 'overridden in child classes';

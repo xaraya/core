@@ -47,6 +47,7 @@ sys::import('xaraya.services.parentservicestrait');
 
 /**
  * For documentation purposes only - available via MethodClass
+ * @template TComponent of ModuleServicesInterface
  */
 interface MethodServicesInterface extends ParentServicesInterface
 {
@@ -56,9 +57,12 @@ interface MethodServicesInterface extends ParentServicesInterface
      * @return mixed
      */
     public function __invoke(array $args = []);
+    /** @param TComponent|null $parent */
     public function __construct(string $modName, int $itemtype = 0, ?ModuleServicesInterface $parent = null);
     public function configure(): void;
+    /** @return TComponent */
     public function getParent(): ModuleServicesInterface;
+    /** @param TComponent $parent */
     public function setParent(ModuleServicesInterface $parent): void;
     public function userapi(): UserApiInterface|null;
     public function usergui(): UserGuiInterface|null;
@@ -80,11 +84,10 @@ interface MethodServicesInterface extends ParentServicesInterface
  */
 trait MethodServicesTrait
 {
-    /** @use ParentServicesTrait<TComponent> */
     use ParentServicesTrait;
 
     /**
-     * Summary of __invoke
+     * Invoke this module function and return result
      * @param array<mixed> $args
      * @return mixed
      */
@@ -94,10 +97,8 @@ trait MethodServicesTrait
     }
 
     /**
-     * Summary of __construct
-     * @param string $modName
-     * @param int $itemtype
-     * @param TComponent $parent
+     * Create method class instance with modName, itemtype and parent
+     * @param TComponent|null $parent
      */
     public function __construct(string $modName, int $itemtype = 0, ?ModuleServicesInterface $parent = null)
     {
@@ -110,12 +111,16 @@ trait MethodServicesTrait
         $this->configure();
     }
 
+    /**
+     * Configure method class if needed - called in constructor
+     */
     public function configure(): void
     {
         // ...
     }
 
     /**
+     * Get parent module class for core services
      * @return TComponent
      */
     public function getParent(): ModuleServicesInterface
@@ -124,6 +129,7 @@ trait MethodServicesTrait
     }
 
     /**
+     * Set parent module class for core services
      * @param TComponent $parent
      */
     public function setParent(ModuleServicesInterface $parent): void
@@ -252,8 +258,9 @@ trait MethodServicesTrait
  * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
  *
  * @template TComponent of ModuleServicesInterface
+ * @implements MethodServicesInterface<TComponent>
  */
-class MethodClass implements MethodServicesInterface, HooksInterface  // , CoreInterface, 
+class MethodClass implements MethodServicesInterface, HooksInterface  // , CoreInterface,
 {
     /** @use MethodServicesTrait<TComponent> */
     use MethodServicesTrait;

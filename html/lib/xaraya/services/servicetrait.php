@@ -29,35 +29,29 @@ sys::import('xaraya.context.context');
  */
 interface ServiceInterface extends ContextInterface
 {
-    public function __construct(object $parent);
+    public function __construct(ServicesInterface $parent);
     public function getParent(): ServicesInterface;
 }
 
 /**
  * Service available via methods
- * @template TParent of ServicesInterface
  */
 trait ServiceTrait
 {
     use ContextTrait;
 
-    /** @var ?static<TParent> */
-    protected static $instance = null;
-    /** @var TParent */
-    public object $parent;
+    public ServicesInterface $parent;
 
     /**
      * Create service class for parent
-     * @param TParent $parent
      */
-    public function __construct(object $parent)
+    public function __construct(ServicesInterface $parent)
     {
         $this->parent = $parent;
     }
 
     /**
      * Get parent of service class
-     * @return TParent
      */
     public function getParent(): ServicesInterface
     {
@@ -74,24 +68,19 @@ trait ServiceTrait
     }
 
     /**
-     * Summary of getInstance
-     * @param TParent $parent
-     * @return static<TParent>
+     * Summary of create
+     * @todo could be called from ServiceFactory - currently not used
      */
-    public static function getInstance($parent)
+    public static function create(ServicesInterface $parent): static
     {
-        static::$instance ??= new static($parent);
-        return static::$instance;
+        return new static($parent);
     }
 }
 
 /**
  * Access xar*::* service methods
- *
- * @template TParent of ServicesInterface
  */
 class ServiceClass implements ServiceInterface
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 }

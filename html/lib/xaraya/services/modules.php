@@ -51,11 +51,9 @@ interface ModulesInterface extends ServiceInterface
 
 /**
  * Modules available via methods
- * @template TParent of ServicesInterface
  */
 trait ModulesTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -267,11 +265,9 @@ trait ModulesTrait
  * - getItemType() for mod()->prepare()
  * - getModType() for mod()->template()
  *
- * @template TParent of ServicesInterface
  */
 class ModulesService implements ModulesInterface
 {
-    /** @use ModulesTrait<TParent> */
     use ModulesTrait;
 
     /**

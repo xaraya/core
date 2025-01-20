@@ -93,11 +93,9 @@ interface DataObjectInterface extends ServiceInterface
 
 /**
  * DataObjectFactory available via methods
- * @template TParent of ServicesInterface
  */
 trait DataObjectTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -125,7 +123,7 @@ trait DataObjectTrait
 
         $modName = $this->getModName();
         $objecTemplate = $this->getObjectTemplate();
-    
+
         // Create the output.
         return xarTpl::object(
             $modName,
@@ -222,11 +220,9 @@ trait DataObjectTrait
  *
  * @todo do something with getParent()->getObject() + simplify methods by name or objectid?
  *
- * @template TParent of ServicesInterface
  */
 class DataObjectService implements DataObjectInterface
 {
-    /** @use DataObjectTrait<TParent> */
     use DataObjectTrait;
 
     /**

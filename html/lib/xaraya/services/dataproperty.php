@@ -50,11 +50,9 @@ interface DataPropertyInterface extends ServiceInterface
 
 /**
  * DataPropertyMaster available via methods
- * @template TParent of ServicesInterface
  */
 trait DataPropertyTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -73,7 +71,7 @@ trait DataPropertyTrait
 
         $modName = $this->getModName();
         $propertyName = $this->getPropertyTemplate();
-    
+
         // Create the output.
         return xarTpl::property(
             $modName,
@@ -117,11 +115,9 @@ trait DataPropertyTrait
  *
  * @todo do something with getParent()->getProperty() + simplify methods by name or propid?
  *
- * @template TParent of ServicesInterface
  */
 class DataPropertyService implements DataPropertyInterface
 {
-    /** @use DataPropertyTrait<TParent> */
     use DataPropertyTrait;
 
     /**

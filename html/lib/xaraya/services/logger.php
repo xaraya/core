@@ -63,11 +63,9 @@ interface LoggerInterface extends ServiceInterface
 
 /**
  * Logger available via methods
- * @template TParent of ServicesInterface
  */
 trait LoggerTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /** @var array<string, int> */
@@ -178,10 +176,8 @@ trait LoggerTrait
  * - message($message, $level = xarLog::LEVEL_DEBUG) - original xarLog::message() using $level param
  * - variable($message, $var, $level = xarLog::LEVEL_DEBUG) - original xarLog::variable() using $level param
  *
- * @template TParent of ServicesInterface
  */
 class LoggerService implements LoggerInterface
 {
-    /** @use LoggerTrait<TParent> */
     use LoggerTrait;
 }

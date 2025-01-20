@@ -75,11 +75,9 @@ interface CachingInterface extends ServiceInterface
 
 /**
  * Caching available via methods
- * @template TParent of ServicesInterface
  */
 trait CachingTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -183,10 +181,8 @@ trait CachingTrait
  * - setObject()
  * - ...
  *
- * @template TParent of ServicesInterface
  */
 class CachingService implements CachingInterface
 {
-    /** @use CachingTrait<TParent> */
     use CachingTrait;
 }

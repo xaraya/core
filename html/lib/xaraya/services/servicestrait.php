@@ -80,12 +80,9 @@ interface ServicesInterface extends CoreServicesInterface
  * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
  * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
  *
- * @template TParent of ServicesInterface
  */
 trait ServicesTrait
 {
-    // @todo phpstan complains when using static or self here!?
-    /** @use CoreServicesTrait<$this> */
     use CoreServicesTrait;
 
     /**
@@ -142,7 +139,6 @@ trait ServicesTrait
  */
 class ServicesClass implements ServicesInterface
 {
-    /** @use ServicesTrait<$this> */
     use ServicesTrait;
 
     public string $moduleName;

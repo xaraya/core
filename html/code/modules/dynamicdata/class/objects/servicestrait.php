@@ -33,12 +33,9 @@ interface DataObjectServicesInterface extends ServicesInterface
  *
  * This defines where to get modName, itemType, modType and object
  * from the parent data object class for use by the service classes
- *
- * @template TParent of ServicesInterface
  */
 trait DataObjectServicesTrait
 {
-    /** @use ServicesTrait<TParent> */
     use ServicesTrait;
 
     /**

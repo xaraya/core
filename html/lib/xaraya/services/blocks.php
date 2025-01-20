@@ -40,11 +40,9 @@ interface BlocksInterface extends ServiceInterface
 
 /**
  * Blocks available via methods
- * @template TParent of ServicesInterface
  */
 trait BlocksTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -105,11 +103,9 @@ trait BlocksTrait
  * - getModName()
  * - getBlockType() for block()->template()
  *
- * @template TParent of ServicesInterface
  */
 class BlocksService implements BlocksInterface
 {
-    /** @use BlocksTrait<TParent> */
     use BlocksTrait;
 
     /**

@@ -30,7 +30,6 @@ use Xaraya\DataObject\DataObjectServicesTrait;
 
 class DataObjectMaster extends xarObject implements DataObjectServicesInterface
 {
-    /** @use DataObjectServicesTrait<static> */
     use DataObjectServicesTrait;
 
     /**

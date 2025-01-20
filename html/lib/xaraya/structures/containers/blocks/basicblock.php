@@ -52,7 +52,6 @@ interface iBlockDelete extends iBlock
 }
 abstract class BasicBlock extends BlockType implements iBlock
 {
-    /** @use BlockServicesTrait<static> */
     use BlockServicesTrait;
 
     // File Information, supplied by developer, never changes during a versions lifetime, required

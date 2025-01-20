@@ -30,7 +30,6 @@ sys::import('xaraya.services.servicestrait');
  */
 class DataObjectHookObserver extends HookObserver implements ServicesInterface
 {
-    /** @use ServicesTrait<static> */
     use ServicesTrait;
 
     /** @var string */

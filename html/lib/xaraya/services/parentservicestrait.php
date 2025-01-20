@@ -47,7 +47,6 @@ interface ParentServicesInterface extends CoreServicesInterface
  * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
  * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
  *
- * @template TParent of ServicesInterface
  */
 trait ParentServicesTrait
 {
@@ -74,9 +73,8 @@ trait ParentServicesTrait
      * - badRequest()
      * - ...
      *
-     * @return ControllerService<TParent>
      */
-    public function ctl(): ControllerService
+    public function ctl(): ControllerInterface
     {
         return $this->getParent()->ctl();
     }
@@ -97,9 +95,8 @@ trait ParentServicesTrait
      * - message($message, $level = xarLog::LEVEL_DEBUG) - original xarLog::message() using $level param
      * - variable($message, $var, $level = xarLog::LEVEL_DEBUG) - original xarLog::variable() using $level param
      *
-     * @return LoggerService<TParent>
      */
-    public function log(): LoggerService
+    public function log(): LoggerInterface
     {
         return $this->getParent()->log();
     }
@@ -111,9 +108,8 @@ trait ParentServicesTrait
      * - translate()
      * - ...
      *
-     * @return MultiLanguageService<TParent>
      */
-    public function mls(): MultiLanguageService
+    public function mls(): MultiLanguageInterface
     {
         return $this->getParent()->mls();
     }
@@ -136,9 +132,8 @@ trait ParentServicesTrait
      * Optional methods in parent:
      * - getModType() for mod()->apiFunc(null, null, ...) - only for migration
      *
-     * @return ModulesService<TParent>
      */
-    public function mod(): ModulesService
+    public function mod(): ModulesInterface
     {
         return $this->getParent()->mod();
     }
@@ -155,9 +150,8 @@ trait ParentServicesTrait
      * Required methods in parent:
      * - getModName()
      *
-     * @return SecurityService<TParent>
      */
-    public function sec(): SecurityService
+    public function sec(): SecurityInterface
     {
         return $this->getParent()->sec();
     }
@@ -177,9 +171,8 @@ trait ParentServicesTrait
      * - getModType() for tpl()->module()
      * - getObject() for tpl()->object()
      *
-     * @return TemplatingService<TParent>
      */
-    public function tpl(): TemplatingService
+    public function tpl(): TemplatingInterface
     {
         return $this->getParent()->tpl();
     }
@@ -198,9 +191,8 @@ trait ParentServicesTrait
      * - prepHTML()
      * - ...
      *
-     * @return VariablesService<TParent>
      */
-    public function var(): VariablesService
+    public function var(): VariablesInterface
     {
         return $this->getParent()->var();
     }
@@ -217,9 +209,8 @@ trait ParentServicesTrait
      * - getModName()
      * - getBlockType() for block()->template()
      *
-     * @return BlocksService<TParent>
      */
-    public function block(): BlocksService
+    public function block(): BlocksInterface
     {
         return $this->getParent()->block();
     }
@@ -240,9 +231,8 @@ trait ParentServicesTrait
      * Required methods in parent:
      * - getObjectName() for data()->getURL()
      *
-     * @return DataObjectService<TParent>
      */
-    public function data(): DataObjectService
+    public function data(): DataObjectInterface
     {
         return $this->getParent()->data();
     }
@@ -259,9 +249,8 @@ trait ParentServicesTrait
      * Required methods in parent:
      * - getPropertyName() for prop()->template()
      *
-     * @return DataPropertyService<TParent>
      */
-    public function prop(): DataPropertyService
+    public function prop(): DataPropertyInterface
     {
         return $this->getParent()->prop();
     }
@@ -283,9 +272,8 @@ trait ParentServicesTrait
      * Required methods in parent:
      * - getObject() for cache()->getObjecKey(null, '...')
      *
-     * @return CachingService<TParent>
      */
-    public function cache(): CachingService
+    public function cache(): CachingInterface
     {
         return $this->getParent()->cache();
     }
@@ -310,9 +298,6 @@ trait ParentServicesTrait
         return $this->getParent()->ml($rawstring, ...$args);
     }
 
-    /**
-     * @return TParent
-     */
     public function getParent(): ServicesInterface
     {
         return $this->parent;
@@ -330,14 +315,10 @@ class ParentServicesClass extends ServicesClass
 /**
  * Child class using services from parent class
  * e.g. method -> module or property -> object
- *
- * @template TParent of ServicesInterface
  */
-class ChildServicesClass
+class ChildServicesClass implements ParentServicesInterface
 {
-    /** @use ParentServicesTrait<TParent> */
     use ParentServicesTrait;
 
-    /** @var TParent */
     protected ServicesInterface $parent;
 }

@@ -18,8 +18,6 @@ namespace Xaraya\Services;
 
 use xarController;
 use xarServer;
-use DataObject;
-use DataObjectList;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -68,11 +66,9 @@ interface ControllerInterface extends ServiceInterface
 
 /**
  * Controller available via methods
- * @template TParent of ServicesInterface
  */
 trait ControllerTrait
 {
-    /** @use ServiceTrait<TParent> */
     use ServiceTrait;
 
     /**
@@ -143,10 +139,8 @@ trait ControllerTrait
  * - badRequest()
  * - ...
  *
- * @template TParent of ServicesInterface
  */
 class ControllerService implements ControllerInterface
 {
-    /** @use ControllerTrait<TParent> */
     use ControllerTrait;
 }
