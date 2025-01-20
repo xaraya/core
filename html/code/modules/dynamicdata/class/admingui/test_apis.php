@@ -64,7 +64,7 @@ class TestApisMethod extends MethodClass
                     $contents = str_replace('../../../../', './', $contents);
                 }
                 // use 'passthru' page template to output the contents as is here
-                xarTpl::setPageTemplateName('passthru');
+                $this->tpl()->setPageTemplateName('passthru');
                 return $contents;
             }
         }
@@ -74,7 +74,7 @@ class TestApisMethod extends MethodClass
             if (file_exists($apiFile)) {
                 //$contents = file_get_contents($apiFile);
                 // use 'passthru' page template to output the contents as is here
-                //xarTpl::setPageTemplateName('passthru');
+                //$this->tpl()->setPageTemplateName('passthru');
                 //return $contents;
                 // see session-less page caching
                 //sys::import('xaraya.caching.output.page');
@@ -272,7 +272,7 @@ class TestApisMethod extends MethodClass
         $data['cachedata'] = $cacheData;
         $data['cacheoperation'] = $cacheOperation;
 
-        xarTpl::setPageTemplateName('admin');
+        $this->tpl()->setPageTemplateName('admin');
 
         return $data;
     }

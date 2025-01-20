@@ -60,7 +60,7 @@ class DeleteStaticMethod extends MethodClass
             //            if(!$this->sec()->confirmAuthKey()) return;
 
             $query = 'ALTER TABLE ' . $data['table'] . ' DROP COLUMN ' . $data['field'];
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $dbconn->Execute($query);
 
             // Jump to the next page

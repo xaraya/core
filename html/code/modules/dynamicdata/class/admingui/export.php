@@ -97,7 +97,7 @@ class ExportMethod extends MethodClass
 
         $proptypes = DataPropertyMaster::getPropertyTypes();
 
-        $prefix = xarDB::getPrefix();
+        $prefix = $this->db()->getPrefix();
         $prefix .= '_';
 
         $xml = '';
@@ -216,7 +216,7 @@ class ExportMethod extends MethodClass
         $data['xml'] = $this->var()->prep($xml);
         $data['format'] = $format;
 
-        xarTpl::setPageTemplateName('admin');
+        $this->tpl()->setPageTemplateName('admin');
 
         return $data;
     }

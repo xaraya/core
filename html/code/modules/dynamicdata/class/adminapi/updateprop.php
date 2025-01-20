@@ -68,12 +68,12 @@ class UpdatepropMethod extends MethodClass
 
         // TODO: security check on object level
 
-        // Get database setup - note that xarDB::getConn()
+        // Get database setup - note that $this->db()->getConn()
         // returns an array but we handle it differently.
-        // For xarDB::getConn() we want to keep the entire
+        // For $this->db()->getConn() we want to keep the entire
         // tables array together for easy reference later on
-        $dbconn = xarDB::getConn();
-        $xartable =  xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable =  $this->db()->getTables();
 
         // It's good practice to name the table and column definitions you
         // are getting - $table and $column don't cut it in more complex

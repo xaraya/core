@@ -161,13 +161,13 @@ class UtilApi extends UserApi implements DatabaseInterface
         if (ExternalDatabase::isIndexExternal($dbConnIndex)) {
             return $this->getExternalMeta($table, $dbConnIndex);
         }
-        $dbconn = xarDB::getConn($dbConnIndex);
+        $dbconn = $this->db()->getConn($dbConnIndex);
         // dbInfo holds the meta information about the database
         $dbInfo = $dbconn->getDatabaseInfo();
 
         // Note: not applicable for dbConnIndex > 0
-        $dbtype = xarDB::getType();
-        $dbname = xarDB::getName();
+        $dbtype = $this->db()->getType();
+        $dbname = $this->db()->getName();
         if (empty($db)) {
             $db = $dbname;
         }

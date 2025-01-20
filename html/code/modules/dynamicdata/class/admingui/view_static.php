@@ -66,7 +66,7 @@ class ViewStaticMethod extends MethodClass
             $query = "CREATE TABLE " . $newtable . " (
               id integer unsigned NOT NULL auto_increment,
               PRIMARY KEY  (id))";
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $dbconn->Execute($query);
             $table = $newtable;
         }
@@ -115,7 +115,7 @@ class ViewStaticMethod extends MethodClass
         $data['itemtype'] = $itemtype;
         $data['authid'] = $this->sec()->genAuthKey();
 
-        xarTpl::setPageTemplateName('admin');
+        $this->tpl()->setPageTemplateName('admin');
 
         return $data;
     }

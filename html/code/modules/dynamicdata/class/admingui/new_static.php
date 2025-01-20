@@ -96,7 +96,7 @@ class NewStaticMethod extends MethodClass
                         $query .= 'default "' . $data['object']->properties['default']->value . '"';
                     }
                 }
-                $dbconn = xarDB::getConn();
+                $dbconn = $this->db()->getConn();
                 $dbconn->Execute($query);
 
                 // Jump to the next page

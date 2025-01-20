@@ -67,7 +67,7 @@ class Installer extends InstallerClass
      */
     public function init()
     {
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
             sys::import('xaraya.tableddl');
@@ -79,8 +79,8 @@ class Installer extends InstallerClass
             throw $e;
         }
 
-        $xartable =  xarDB::getTables();
-        $prefix = xarDB::getPrefix();
+        $xartable =  $this->db()->getTables();
+        $prefix = $this->db()->getPrefix();
 
         $dynamic_objects = $xartable['dynamic_objects'];
         $dynamic_properties = $xartable['dynamic_properties'];

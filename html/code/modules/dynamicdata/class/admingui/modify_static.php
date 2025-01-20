@@ -105,7 +105,7 @@ class ModifyStaticMethod extends MethodClass
                         $query .= 'default "' . $data['object']->properties['default']->value . '"';
                     }
                 }
-                $dbconn = xarDB::getConn();
+                $dbconn = $this->db()->getConn();
                 $dbconn->Execute($query);
 
                 // Jump to the next page
@@ -118,7 +118,7 @@ class ModifyStaticMethod extends MethodClass
                 return true;
             }
         } else {
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $dbInfo = $dbconn->getDatabaseInfo();
             $tableinfo = $dbInfo->getTable($data['table']);
             $fieldinfo = $tableinfo->getColumn($data['field']);

@@ -45,7 +45,7 @@ class GetinfoMethod extends MethodClass
 
         switch ($args['type']) {
             case 'datastores':
-                $dbconn = xarDB::getConn();
+                $dbconn = $this->db()->getConn();
                 $dbInfo = $dbconn->getDatabaseInfo();
                 $tables = $dbInfo->getTables();
                 foreach ($tables as $tblInfo) {

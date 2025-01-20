@@ -45,7 +45,7 @@ class ImportMethod extends MethodClass
         $args['file'] ??= null;
         $args['xml'] ??= null;
         $args['format'] ??= 'xml';
-        $args['prefix'] ??= xarDB::getPrefix();
+        $args['prefix'] ??= $this->db()->getPrefix();
         $args['overwrite'] ??= false;
         $args['keepitemid'] ??= false;
         return \Xaraya\DataObject\Import\DataObjectImporter::import($args['file'], $args['xml'], $args['format'], $args['prefix'], $args['overwrite'], $args['keepitemid']);

@@ -94,7 +94,7 @@ class UpdatehooksMethod extends MethodClass
             }
         }
 
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         foreach ($hookmap as $fromhook => $tohook) {
             if (empty($fromhook) || empty($tohook)) {
                 continue;
@@ -110,7 +110,7 @@ class UpdatehooksMethod extends MethodClass
                 case 'categories':
                     // load table definitions et al.
                     xarMod::apiLoad('categories', 'user');
-                    $xartable =  xarDB::getTables();
+                    $xartable =  $this->db()->getTables();
                     if (empty($xartable['categories_linkage'])) {
                         break;
                     }
@@ -127,7 +127,7 @@ class UpdatehooksMethod extends MethodClass
                 case 'xlink':
                     // load table definitions et al.
                     xarMod::apiLoad($tohook, 'user');
-                    $xartable =  xarDB::getTables();
+                    $xartable =  $this->db()->getTables();
                     if (empty($xartable[$tohook])) {
                         break;
                     }
@@ -140,7 +140,7 @@ class UpdatehooksMethod extends MethodClass
                 case 'comments':
                     // load table definitions et al.
                     xarMod::apiLoad('comments', 'user');
-                    $xartable =  xarDB::getTables();
+                    $xartable =  $this->db()->getTables();
                     if (empty($xartable['comments'])) {
                         break;
                     }
@@ -157,7 +157,7 @@ class UpdatehooksMethod extends MethodClass
                 case 'polls':
                     // load table definitions et al.
                     xarMod::apiLoad('polls', 'user');
-                    $xartable =  xarDB::getTables();
+                    $xartable =  $this->db()->getTables();
                     if (empty($xartable['polls'])) {
                         break;
                     }
@@ -176,7 +176,7 @@ class UpdatehooksMethod extends MethodClass
                 case 'uploads':
                     // load table definitions et al.
                     xarMod::apiLoad('uploads', 'user');
-                    $xartable =  xarDB::getTables();
+                    $xartable =  $this->db()->getTables();
                     if (empty($xartable['file_associations'])) {
                         break;
                     }

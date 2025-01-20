@@ -53,10 +53,10 @@ class MetaMethod extends MethodClass
         if (!$this->var()->find('showdb', $showdb, 'notempty', 0)) {
             return;
         }
-        if (!$this->var()->find('dbtype', $dbtype, 'notempty', xarDB::getType())) {
+        if (!$this->var()->find('dbtype', $dbtype, 'notempty', $this->db()->getType())) {
             return;
         }
-        if (!$this->var()->find('db', $db, 'notempty', xarDB::getName())) {
+        if (!$this->var()->find('db', $db, 'notempty', $this->db()->getName())) {
             return;
         }
         if (!$this->var()->find('create', $create, 'notempty', '')) {
@@ -66,8 +66,8 @@ class MetaMethod extends MethodClass
         $data = [];
         $utilapi = new \Xaraya\DataObject\UtilApi();
 
-        $dbconn = xarDB::getConn();
-        $dbname = xarDB::getName();
+        $dbconn = $this->db()->getConn();
+        $dbname = $this->db()->getName();
 
         if ($db != $dbname) {
             $data['db'] = $db;
@@ -157,7 +157,7 @@ class MetaMethod extends MethodClass
         }
         $data['proptypes'] = $proptypenames;
 
-        xarTpl::setPageTemplateName('admin');
+        $this->tpl()->setPageTemplateName('admin');
 
         return $data;
     }

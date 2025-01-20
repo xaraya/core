@@ -62,8 +62,8 @@ class DeletepropMethod extends MethodClass
 
         // TODO: security check on object level
 
-        $dbconn = xarDB::getConn();
-        $xartable =  xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable =  $this->db()->getTables();
         // It's good practice to name the table and column definitions you
         // are getting - $table and $column don't cut it in more complex
         // modules

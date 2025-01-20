@@ -52,7 +52,7 @@ class DeleteStaticTableMethod extends MethodClass
         if ($data['confirm']) {
 
             $query = 'DROP TABLE ' . $data['table'];
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $dbconn->Execute($query);
 
             // Jump to the next page

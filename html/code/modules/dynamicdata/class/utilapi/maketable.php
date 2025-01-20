@@ -99,10 +99,10 @@ class MaketableMethod extends MethodClass
 
         $proptypes = DataPropertyMaster::getPropertyTypes();
 
-        $prefix = xarDB::getPrefix();
+        $prefix = $this->db()->getPrefix();
         $prefix .= '_';
 
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
 
         //Load Table Maintenance API
         sys::import('xaraya.tableddl');

@@ -212,7 +212,7 @@ class QueryMethod extends MethodClass
         $data['olditemid'] = $itemid;
         $data['objects'] = DataObjectFactory::getObjects();
 
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         $data['table'] = $table;
         $data['oldtable'] = $table;
         $data['tables'] = $dbconn->MetaTables();
@@ -351,7 +351,7 @@ class QueryMethod extends MethodClass
             $grouplist = null;
         }
 
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
 
         // TODO: clean up passing of where clauses
         $whereclause = '';

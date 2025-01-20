@@ -64,7 +64,7 @@ class ImportMethod extends MethodClass
         if (!$this->var()->check('overwrite', $overwrite, 'checkbox', false)) {
             return;
         }
-        if (!$this->var()->check('prefix', $data['prefix'], 'isset', xarDB::getPrefix())) {
+        if (!$this->var()->check('prefix', $data['prefix'], 'isset', $this->db()->getPrefix())) {
             return;
         }
 
@@ -166,7 +166,7 @@ class ImportMethod extends MethodClass
             ];
         }
 
-        xarTpl::setPageTemplateName('admin');
+        $this->tpl()->setPageTemplateName('admin');
 
         return $data;
     }

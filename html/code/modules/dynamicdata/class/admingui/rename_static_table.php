@@ -62,7 +62,7 @@ class RenameStaticTableMethod extends MethodClass
                 ));
             }
             $query = 'RENAME TABLE ' . $data['table'] . ' TO ' . $data['newtable'];
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $dbconn->Execute($query);
 
             // Jump to the next page

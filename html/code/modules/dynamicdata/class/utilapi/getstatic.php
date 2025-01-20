@@ -85,8 +85,8 @@ class GetstaticMethod extends MethodClass
             $dbConnIndex = 0;
         }
 
-        $dbconn = xarDB::getConn($dbConnIndex);
-        $xartable =  xarDB::getTables();
+        $dbconn = $this->db()->getConn($dbConnIndex);
+        $xartable =  $this->db()->getTables();
 
         $dbInfo = $dbconn->getDatabaseInfo();
         $dbTables = [];
@@ -99,7 +99,7 @@ class GetstaticMethod extends MethodClass
             // load the database info for this module
             xarMod::loadDbInfo($modinfo['name'], $modinfo['directory']);
             // try to find any table that approximately matches the module
-            $tables =  xarDB::getTables();
+            $tables =  $this->db()->getTables();
             foreach ($tables as $curname => $curtable) {
                 // name starts with the modulename, and table is a string (cfr. _column definitions in articles)
                 if (preg_match('/^' . $modinfo['name'] . '/', $curname) && is_string($curtable)) {

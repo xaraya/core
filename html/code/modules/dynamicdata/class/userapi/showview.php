@@ -94,7 +94,7 @@ class ShowviewMethod extends MethodClass
         }
 
         if (isset($table)) {
-            $table = xarDB::getPrefix() . '_' . $table;
+            $table = $this->db()->getPrefix() . '_' . $table;
         } else {
             $table = '';
         }

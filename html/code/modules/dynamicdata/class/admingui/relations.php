@@ -109,7 +109,7 @@ class RelationsMethod extends MethodClass
         }
 
         // filter out invalid tables
-        $xartables =  xarDB::getTables();
+        $xartables =  $this->db()->getTables();
         if (!empty($table)) {
             if ($table == 'dummy' || substr($table, 0, 15) == 'module variable') {
                 $table = null;
@@ -145,7 +145,7 @@ class RelationsMethod extends MethodClass
         $data['linktypes'] = DataObjectLinks::$linktypes;
 
         // get tables
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         $dbInfo = $dbconn->getDatabaseInfo();
         // Pass the full info object to the template, let them figure out how and what
         $data['tables'] = $dbInfo->getTables();
@@ -510,7 +510,7 @@ class RelationsMethod extends MethodClass
             $data['relations'] = [];
         }
 
-        xarTpl::setPageTemplateName('admin');
+        $this->tpl()->setPageTemplateName('admin');
 
         return $data;
     }
