@@ -23,14 +23,14 @@
     </xar:if>
     
 
-<!--
+<xar:comment><!--
 FIXME:  The target="" needs to be replaced by something that works in xhtml.
     <xar:if condition="!empty($linkurl)">
         #$value# [ <a href="#$linkurl#" target="#$preview#">#$profile#</a> ]
     <xar:else />
         #$value#
     </xar:if>
--->
+--></xar:comment>
     <input type="text" name="#$name#" id="#$id#" value="#$value#" style="#$style#" size="#$size#" maxlength="#$maxlength#" tabindex="#$tabindex#" class="#$class#" onfocus="#$onfocus#"/>
     <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

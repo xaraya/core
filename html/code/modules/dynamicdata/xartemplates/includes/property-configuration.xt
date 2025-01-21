@@ -88,10 +88,10 @@
                     <xar:button type="submit" label="$label" name="preview"/>
                 </div>
             </div>
-<!-- See CHECKME in showpropval
+<xar:comment><!-- See CHECKME in showpropval
                 <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                 <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled"/>
--->
+--></xar:comment>
         </form>
 
     <xar:else/>

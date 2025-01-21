@@ -111,7 +111,7 @@
             </xar:if>
             <br />
         </xar:if>
-        <!--
+        <xar:comment><!--
   <xar:if condition="!empty($object)">
     <table class="xar-table xar-norm">
         <xar:if condition="$repeat">
@@ -138,7 +138,7 @@
         <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist"/>
     </div>
   </xar:if>
--->
+--></xar:comment>
         <xar:elseif condition="$style eq 'itemid'"/>
         <xar:if condition="!empty($object)">
             <div style="clear:both">&#160;</div>

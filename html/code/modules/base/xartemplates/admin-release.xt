@@ -129,7 +129,7 @@
                     </td>
                 </tr>
             </table>
-    <!--
+    <xar:comment><!--
         <h2>Last #$releasenumber# Xaraya Extension Releases</h2>
         <xar:if condition="empty($warning)">
             <xar:if condition="!empty($feedcontent)">
@@ -150,6 +150,6 @@
         <xar:else />
             <p>#$warning#</p>
         </xar:if>
-        -->
+        --></xar:comment>
     </div>
 </xar:template>

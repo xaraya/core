@@ -90,7 +90,7 @@
             </div>
         </div>
     </fieldset>
-    <!-- General place to put extra module data and code. Hide it for now as it's not used
+    <xar:comment><!-- General place to put extra module data and code. Hide it for now as it's not used
     <fieldset>
         <legend>
             Module Data Path
@@ -110,7 +110,7 @@
             </div>
         </div>
    </fieldset>
-   -->
+   --></xar:comment>
     <fieldset>
         <legend>URL Scheme</legend>
         <div class="xar-row">

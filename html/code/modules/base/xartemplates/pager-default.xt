@@ -51,11 +51,11 @@
             <span class="xar-page">
                 <a href="#$pageurl#" title="#$pageurllabel#">#$pagenumber#</a>
             </span>
-                <!-- &#160;&#160;<a href="#$pageurl#">[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#]</a> -->
+                <xar:comment><!-- &#160;&#160;<a href="#$pageurl#">[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#]</a> --></xar:comment>
             <xar:else />
                 <xar:set name="pageurllabel">xarML('Page #(1)',$pagenumber)</xar:set>
                 <span class="xar-page-current" title="#$pageurllabel#">#$pagenumber#</span>
-                <!-- &#160;&#160;[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#] -->
+                <xar:comment><!-- &#160;&#160;[#$middleitemsfrom[$pagenumber]#-#$middleitemsto[$pagenumber]#] --></xar:comment>
             </xar:if>
         </xar:foreach>
         <!-- Display next-page link if there is just one block -->

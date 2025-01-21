@@ -17,7 +17,7 @@
         <xar:set name="$index">0</xar:set>
         <xar:set name="prefix">$object->getFieldPrefix()</xar:set>
         <xar:foreach in="$items" key="$key" value="$item">
-            <!-- xar:set name="$index">$$index+1</xar:set> -->
+            <xar:comment><!-- xar:set name="$index">$$index+1</xar:set> --></xar:comment>
             <xar:set name="$index">$key</xar:set>
             <xar:set name="dummy">$object->setFieldPrefix($$index . '_' . $prefix)</xar:set>
             <xar:set name="dummy">$object->setFieldValues($item)</xar:set>

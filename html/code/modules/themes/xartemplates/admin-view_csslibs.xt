@@ -42,13 +42,13 @@
                                         <xar:set name="id">'dd_seq_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['seq']" value="$value['seq']"/>
                                     </td>
-                                    <!-- 
+                                    <xar:comment><!-- 
                                     <td>
                                         <xar:set name="name">'dd_type[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_type_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['type']" value="$value['type']"/>
                                     </td>
-                                    -->
+                                    --></xar:comment>
                                     <td>
                                         <xar:set name="name">'dd_lib[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_lib_' . $value['id']</xar:set>
@@ -110,12 +110,12 @@
                 <h2>
                     Local CSS Stylesheets
                 </h2>
-	        <!--
+	        <xar:comment><!--
             <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
 	            <xar:var name="label">Refresh</xar:var>
                 <xar:button type="submit" name="refresh" label="$label"/>
             </form>
-            -->
+            --></xar:comment>
                 <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
                     <table class="table xar-table">
                         <tr>
@@ -146,13 +146,13 @@
                                         <xar:set name="id">'dd_seq_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['seq']" value="$value['seq']"/>
                                     </td>
-                                    <!-- 
+                                    <xar:comment><!-- 
                                     <td>
                                         <xar:set name="name">'dd_type[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_type_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['type']" value="$value['type']"/>
                                     </td>
-                                    -->
+                                    --></xar:comment>
                                     <td>
                                         <xar:set name="name">'dd_lib[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_lib_' . $value['id']</xar:set>
@@ -232,17 +232,17 @@
                                         <xar:set name="name">'dd_id[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_id_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['id']" value="$value['id']" hidden="hidden"/>
-                                      <!-- <xar:set name="name">'dd_seq[' . $value['id'] . ']'</xar:set>
+                                      <xar:comment><!-- <xar:set name="name">'dd_seq[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_seq_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['seq']" value="$value['seq']"/>
-                                    --> </td>
-                                    <!-- 
+                                    --></xar:comment> </td>
+                                    <xar:comment><!-- 
                                     <td>
                                         <xar:set name="name">'dd_type[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_type_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['type']" value="$value['type']" style="width: 100px"/>
                                     </td>
-                                    -->
+                                    --></xar:comment>
                                     <td>
                                         <xar:set name="name">'dd_lib[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_lib_' . $value['id']</xar:set>
@@ -291,7 +291,7 @@
                                 <td>
                                     &#160;
                                 </td>
-                                    <!-- 
+                                    <xar:comment><!-- 
                                 <td>
                                     <xar:set name="name">'new_type'</xar:set>
                                     <xar:set name="id">'new_type'</xar:set>
@@ -302,7 +302,7 @@
                                     </xar:set>
                                     <xar:data-input name="$name" id="$id" type="dropdown" options="$options" style="width: 100px"/>
                                 </td>
-                                -->
+                                --></xar:comment>
                                 <td>
                                     <xar:set name="name">'new_lib'</xar:set>
                                     <xar:set name="id">'new_lib'</xar:set>

@@ -71,7 +71,7 @@
                             <xar:set name="property">DataPropertyMaster::getProperty(['type'=>$column_types[$k]])</xar:set>
                         </xar:if>
                         <td>
-                            <!-- row #$i# column #$k# -->
+                            <!-- row $i column $k -->
                             <span style="display: #$index_display#">#$prop_name#</span>
                             <xar:if condition="isset($value[$i][$k])">
                                 <xar:if condition="isset($column_configurations[$k])">
@@ -221,7 +221,7 @@
     </script>   
 <!-- Here we store config options for unbound properties, so checkInput knows what to do -->
 <!-- Should we support this? It's not generally supported -->
-<!--
+<xar:comment><!--
     <input type="hidden" name="#$name#[settings][lastrow]" id="#$name#_lastrow" value="#$lastrow#"/>
     <input type="hidden" name="#$name#[settings][associative_array]" id="#$name#_associative_array" value="#$associative_array#"/> 
---></xar:template>
+--></xar:comment></xar:template>

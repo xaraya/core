@@ -20,7 +20,7 @@
                 <xar:img scope="theme" file="icons/view-refresh.png" class="xar-icon" alt="reset"/>
             </a>&#160;
             <a href="#$statslink#&amp;report=#$report['report']#" title="Edit Report">
-                <!-- img src="#xarTpl::getImage('icons/accessories-calculator.png', 'base')#" width="16" height="16" alt="stats"/-->
+                <xar:comment><!-- img src="#xarTpl::getImage('icons/accessories-calculator.png', 'base')#" width="16" height="16" alt="stats"/--></xar:comment>
                 <xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="stats"/>
             </a>
         </h2>

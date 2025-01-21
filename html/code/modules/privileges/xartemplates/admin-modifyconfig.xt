@@ -36,7 +36,7 @@
                         <div class="xar-col dummy">
                             A logged in user will see the exception error message that can be changed with a base module override template (message-NO_PRIVILEGES.xt).
                         </div>
-                        <!--
+                        <xar:comment><!--
                         <div class="xar-row">
                             <div class="xar-col">
                                 <xar:var name="label">Enable or disable inheritance of deny privileges</xar:var>
@@ -50,7 +50,7 @@
                             Warning: This setting affects the way privileges work on your site. If changed you should retest all the privileges on your site.
                             </div>
                         </div>
-                        -->
+                        --></xar:comment>
                     </fieldset>
                     <fieldset>
                         <legend>Last Resort</legend>

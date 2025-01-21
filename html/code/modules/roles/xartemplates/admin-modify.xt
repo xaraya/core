@@ -152,7 +152,7 @@
                                     </div>
                                 </div>
                             </xar:if>
-                            <!-- revisit in php5.3.0
+                            <xar:comment><!-- revisit in php5.3.0
                             <xar:if condition="in_array('usertimezone',$settings)">
                                 <div class="xar-row">
                                     <div class="xar-col">
@@ -168,7 +168,7 @@
                                     </div>
                                 </div>
                             </xar:if>
-                            -->
+                            --></xar:comment>
                             <xar:if condition="(bool)xarModVars::get('roles', 'allowemail')">
                                 <div class="xar-row">
                                     <div class="xar-col">

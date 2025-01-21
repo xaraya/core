@@ -139,12 +139,12 @@
                 </div>
             </div>
         </fieldset>
-        <!--
+        <xar:comment><!--
         <br class="xar-clearboth"/>
         <fieldset>
             <legend>The Components of '#$pname#':</legend>
                   <xar:data-input type="privilegestree" show="All"/> 
         </fieldset>
-        -->
+        --></xar:comment>
     </div>
 </xar:template>

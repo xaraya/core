@@ -59,7 +59,7 @@
             </li>
         </ul>
     </xar:if>
-    <!-- DO NOT UNCOMMENT - EXAMPLE!
+    <xar:comment><!-- DO NOT UNCOMMENT - EXAMPLE!
 
          Below is a typical (simplified) example of nested unordered list that we process in this template:
 
@@ -119,5 +119,5 @@
             - a link can be either real or 'empty' (named anchors) depending on its *-current* status
             - this built-in implementation of vertical menus uses empty links as means of providing visual feedback in all browsers, including those that dont support :hover state on anything except links (surprise: IE/Win) 
 
-    -->
+    --></xar:comment>
 </xar:template>

@@ -212,11 +212,11 @@
                         using the $user_settings object and specifying the fieldlist of
                         your properties, see example below
                     -->
-                    <!--
+                    <xar:comment><!--
                         <xar:set name="mylist">['foo','bar']</xar:set>
                         <h4>More Settings</h4>
                         <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="default" fieldlist="$mylist"/>
-                    -->
+                    --></xar:comment>
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <xar:template file="update-button" module="base" />
                 </form>

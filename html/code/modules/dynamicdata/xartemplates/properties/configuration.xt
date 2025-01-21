@@ -55,7 +55,7 @@
                             <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
                         </div>
                     </div>
-                    <!-- #$key# -->
+                    <xar:comment><!-- #$key# --></xar:comment>
                     <div class="xar-row">
                         <div class="xar-col">
                             <label for="#$invalidid#" title="An optional error message for #$init['label']#" class="xar-form-label">

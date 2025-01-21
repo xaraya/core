@@ -89,11 +89,11 @@
                                     <li>
                                         Missing a module #$modInfo#. 
                                         <br />Install this module first, then try this installation again. 
-                                        <!--
+                                        <xar:comment><!--
                                         <a href="http://www.php.net/manual-lookup.php?pattern=#$modInfo#">
                                             Get Information for the missing PHP extension #$modInfo#
                                         </a>
-                                        -->
+                                        --></xar:comment>
                                     </li>
                                 </xar:if>
                             </xar:foreach>

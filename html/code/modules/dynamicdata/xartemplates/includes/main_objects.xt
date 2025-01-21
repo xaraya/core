@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-    <!--
+    <xar:comment><!--
         Template variables from user-main.xt passed to xarobject/main.php
         $startlist = list of main objects to show
         $update = flag to indicate we want to update
@@ -11,7 +11,7 @@
         $object = current object list
         $context = current context
         $tpltitle = generic template title
-    -->
+    --></xar:comment>
 
     <!-- define the list of main objects -->
     <xar:if condition="(empty($startlist) or !empty($update)) and xarSecurity::check('AdminDynamicData', 0)">

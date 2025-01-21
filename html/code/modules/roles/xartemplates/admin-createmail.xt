@@ -138,12 +138,12 @@
             </table>
         </form>
         <xar:if condition="$modstatus">
-            <!--
+            <xar:comment><!--
                 lets display latest status ?? this contains very strange values, so let's not :-)
             <p>
                 #$modstatus#
             </p>
-            -->
+            --></xar:comment>
         </xar:if>
         <fieldset>
             <legend>Users</legend>
@@ -250,7 +250,7 @@
                         <input type="hidden" name="id" id="id" value="#$id#"/>
                         <input type="hidden" name="state" id="state" value="#$state#"/>
                         <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#"/>
-                        <!--<input type="hidden" name="ids" id="ids" value="#$ids#"/>-->
+                        <xar:comment><!--<input type="hidden" name="ids" id="ids" value="#$ids#"/>--></xar:comment>
                         <xar:var name="label">Cancel</xar:var>
                         <input type="button" value="#$label#" onclick="history.back(-1);" class="xar-margin-thickright"/>&#160;
                         <xar:var name="label">Send</xar:var>

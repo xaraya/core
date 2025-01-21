@@ -4,7 +4,7 @@
         'navigation-' . $propertytemplate;
     </xar:set>
     <xar:template file="$filename"/>
-<!--
+<xar:comment><!--
     <xar:if condition="$layout eq 'prevnext'">
       <xar:template file="navigation-prevnext"/>
     <xar:elseif condition="$layout eq 'trails'"/>
@@ -14,5 +14,5 @@
     <xar:else />
       <xar:template file="navigation-tree"/>
     </xar:if>
--->
+--></xar:comment>
 </xar:template>

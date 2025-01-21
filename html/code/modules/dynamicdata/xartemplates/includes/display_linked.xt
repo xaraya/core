@@ -168,14 +168,14 @@
             <div id="children-page-#$tabid#" style="display: none">
                 <!-- you can customize the create new link for children here if you want -->
                 <xar:set name="newlink">''</xar:set>
-                <!-- e.g. if the parent is a single numeric value, pass along its value when creating a new child
+                <xar:comment><!-- e.g. if the parent is a single numeric value, pass along its value when creating a new child
                 <xar:set name="fromprop">#$link.from_prop#</xar:set>
                 <xar:set name="fromvalue">#$object:properties.$fromprop:value#</xar:set>
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:if condition="!empty($fromvalue) and is_numeric($fromvalue)">
                     <xar:set name="newlink">xarServer::getObjectURL($link['list']->name, 'create', ['values['.$toprop.']' => $fromvalue])</xar:set>
                 </xar:if>
-                -->
+                --></xar:comment>
                 <xar:if condition="!empty($link.list:itemids)">
                     <!-- you can specify the layout and linkfield here or in the object configuration -->
                     <xar:set name="args">['linktype' => 'object', 'newlink' => $newlink]</xar:set>

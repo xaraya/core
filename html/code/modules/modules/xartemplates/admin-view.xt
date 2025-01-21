@@ -27,7 +27,7 @@
                             </td>
                             <td>
                                 <xar:var name="applyLabel">Apply Filter</xar:var>
-                                <!-- <xar:button type="submit" name="apply" id="apply" label="$applyLabel"/> -->
+                                <xar:comment><!-- <xar:button type="submit" name="apply" id="apply" label="$applyLabel"/> --></xar:comment>
                             </td>
                         </tr>
                     </tbody>

@@ -71,9 +71,9 @@
                             <strong>#$numlinks#</strong>
                         </td>
                         <td align="center" valign="center" width="15%">
-                            <!-- not supported by unlink API at the moment
+                            <xar:comment><!-- not supported by unlink API at the moment
                             <a href="#$delete#">Delete All</a>
-                            -->
+                            --></xar:comment>
                         </td>
                     </tr>
                 </xar:if>
@@ -92,11 +92,11 @@
         <xar:else/>
             <h3><xar:ml><xar:mlstring>Module #(1)</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar></xar:ml></h3>
     
-                <!--
+                <xar:comment><!--
                 <xar:if condition="empty($catid)">
                     <a href="#xarController::URL('categories','admin','checklinks',['modid' => $modid, 'itemtype' => $itemtype])#">Check Orphan Links</a><br/>
                 </xar:if>
-                -->
+                --></xar:comment>
     
                 <xar:set name="urlextra">['modid' => $modid]</xar:set>
                 <xar:data-output type="categorynavigation" module="$module" itemtype="$itemtype" catid="$catid" urlmodule="categories" urltype="admin" urlfunc="stats" urlextra="$urlextra" showcatcount="2"/>

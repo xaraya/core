@@ -153,7 +153,7 @@
                                         </xar:if>
                                     </xar:foreach>
                                 </select>
-                                <!-- check class: #get_class($property)# (#get_parent_class($property)#) -->
+                                <xar:comment><!-- check class: #get_class($property)# (#get_parent_class($property)#) --></xar:comment>
                             </xar:if>
                         </div>
                     </div>

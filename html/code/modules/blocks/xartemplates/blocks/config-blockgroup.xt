@@ -29,7 +29,7 @@
                 <tr>
                     <td>#$instance.name#</td>
                     <td>#$instance.type#</td>
-                    <!--
+                    <xar:comment><!--
                     <td>
                         <xar:if condition="$instance['template'] ne NULL">
                             #$instance.template#
@@ -41,7 +41,7 @@
                             </xar:if>
                         </xar:if>
                     </td>
-                    -->
+                    --></xar:comment>
                     <td>#$state_desc[$instance['state']]['name']#</td>
                     <td class="xar-align-right">
                         <a href="#$instance['modifyurl']#" title="#$imgmodifytitle#" class="xar-icon">

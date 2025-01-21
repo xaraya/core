@@ -83,10 +83,10 @@
                             <td class="xar-align-center">
                                 <a href="#$curlink#&amp;export=ddl">
                             Export DDL</a>
-                            <!--
+                            <xar:comment><!--
                                 | <a href="#xarController::URL('dynamicdata','admin','relations',['table'=>$curtable])#">
                             Add Relation</a>
-                            -->
+                            --></xar:comment>
                            </td>
                         </tr>
                     </xar:foreach>
@@ -131,10 +131,10 @@
                 Export Object</a>| 
                     <a href="#$tablelink#&amp;export=ddl">
                 Export DDL</a>
-                <!--
+                <xar:comment><!--
                 | <a href="#xarController::URL('dynamicdata','admin','relations',['table'=>$table])#">Add
                 Relation</a>
-                -->
+                --></xar:comment>
                 </p>
                 <table class="xar-table">
                     <tr>
@@ -228,7 +228,7 @@
                         </div>
                         <div class="xar-col">
                                     <xar:if condition="$export eq 'ddl'">
-                                    <!-- xar:template file="exportddl"/ -->
+                                    <xar:comment><!-- xar:template file="exportddl"/ --></xar:comment>
                                     <textarea name="xml" id="xml" class="xar-form-textarealarge">
                                         #htmlspecialchars($xml)#
                                     </textarea>

@@ -56,7 +56,7 @@
                         </xar:for>
                     </div>
                 </div>
-<!--
+<xar:comment><!--
                 <div class="xar-row">
                     <div class="xar-col">
                         Operation
@@ -110,7 +110,7 @@
                         </table>
                     </div>
                 </div>
--->
+--></xar:comment>
                 <div class="xar-row">
                     <div class="xar-col">
                         <label class="xar-form-label-short" for="field" title="Select the operation you want to apply to each property">Operation</label>

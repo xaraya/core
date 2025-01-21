@@ -14,7 +14,7 @@
         <h2>
             <a href="#xarController::URL('roles','admin','showusers')#">Member List</a>: Send #$mailtype# notification
         </h2>
-        <!-- Contextual text 
+        <xar:comment><!-- Contextual text 
         <xar:if condition="$mailtype eq 'validation'">
             <xar:var name="explanation">
                 This email will be sent to users when they re-validate their account (IE, change email address)
@@ -44,7 +44,7 @@
                 This email will be sent to users when an administrator change their password
             </xar:var>
         </xar:if>
-        -->
+        --></xar:comment>
         <p>
             The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the <a href="#xarController::URL('roles','admin','showusers',['state'=>$state,'id'=>$groupid])#">members list</a>.
         </p>

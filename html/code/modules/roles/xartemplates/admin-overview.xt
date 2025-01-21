@@ -191,7 +191,7 @@
                 </li>
             </ul>
     
-            <!--
+            <xar:comment><!--
             <h3>Further Information</h3>
             <p>Further information on the Roles module can be found at:</p>
            <ul>
@@ -210,7 +210,7 @@
             <p class="xar-sub">
             <strong>&#160;Roles Module Overview</strong>
             <br />&#160;Version 1.1.2&#160; 2006-04-30</p>
-            -->
+            --></xar:comment>
         </div>
    	</div>
 </xar:template>

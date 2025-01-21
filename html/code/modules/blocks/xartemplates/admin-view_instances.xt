@@ -22,7 +22,7 @@
         </div>
 
     </div>
-<!--
+<xar:comment><!--
     <div class="xar-mod-body">
         <div class="xar-mod-page-head">
             <h2>View Blocks</h2>
@@ -40,5 +40,5 @@
             </xar:if>
         </div>
        </div>
--->
+--></xar:comment>
 </xar:template>

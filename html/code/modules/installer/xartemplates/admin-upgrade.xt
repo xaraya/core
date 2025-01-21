@@ -172,16 +172,16 @@
                 <br/>
                 <h4>The next page will check the database for correct structure and consistency.</h4>
                 <p class="center">
-                    <!--
+                    <xar:comment><!--
                     <xar:var name="label">Back</xar:var>
                     <xar:button type="cancel" label="$label"/>&#160;
-                    -->
-                    <!--
+                    --></xar:comment>
+                    <xar:comment><!--
                     <xar:if condition="empty($upgrade['errormessage'])">
                         <xar:var name="label">Continue</xar:var>
                         <xar:button type="submit" label="$label"/>
                     </xar:if>
-                    -->
+                    --></xar:comment>
                     <xar:var name="label">Continue</xar:var>
                     <xar:button type="submit" label="$label"/>
                 </p>
@@ -227,12 +227,12 @@
                 <p class="center">
                     <xar:var name="label">Back</xar:var>
                     <xar:button type="cancel" label="$label"/>&#160;
-                    <!--
+                    <xar:comment><!--
                     <xar:if condition="empty($check['errormessage'])">
                         <xar:var name="label">Continue</xar:var>
                         <xar:button type="submit" label="$label"/>
                     </xar:if>
-                    -->
+                    --></xar:comment>
                     <xar:var name="label">Continue</xar:var>
                     <xar:button type="submit" label="$label"/>
                 </p>
@@ -264,9 +264,9 @@
             <xar:elseif condition="xarCore::VERSION_NUM eq '2.2.0'"/>
                 <xar:template file="notes-220"/>
             <xar:elseif condition="xarCore::VERSION_NUM eq '2.3.0'"/>
-            <!-- No notes yet
+            <xar:comment><!-- No notes yet
                 <xar:template file="notes-230"/>
-            -->
+            --></xar:comment>
                 No notes available
             <xar:elseif condition="xarCore::VERSION_NUM eq '2.3.1'"/>
                 No notes available

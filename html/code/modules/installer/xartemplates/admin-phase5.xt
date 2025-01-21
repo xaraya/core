@@ -59,7 +59,7 @@
                                 <input type="hidden" name="install_database_type" id="dbType" value="#$dbType#"/>
                                 <input type="hidden" name="install_database_charset" id="dbCharset" value="#$dbCharset#"/>
                                 <input type="hidden" name="confirmDB" id="confirmDB" value="true"/>
-                                <!-- <input type="hidden" name="newDB" id="newDB" value="#$newDB#"/> -->
+                                <xar:comment><!-- <input type="hidden" name="newDB" id="newDB" value="#$newDB#"/> --></xar:comment>
                                 <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
                                 <xar:var name="label">Continue</xar:var>
                                 <xar:button type="submit" label="$label"/>

@@ -114,12 +114,12 @@
                 <h2>
                     Local Javascript Libraries
                 </h2>
-	        <!--
+	        <xar:comment><!--
             <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
 	            <xar:var name="label">Refresh</xar:var>
                 <xar:button type="submit" name="refresh" label="$label"/>
             </form>
-            -->
+            --></xar:comment>
                 <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
                     <table class="table xar-table">
                         <tr>
@@ -190,8 +190,8 @@
                                         #$value['plugins']#
                                         <xar:set name="name">'dd_parent[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_parent_' . $value['id']</xar:set>
-                                        <!-- <xar:data-input name="$name" id="$id" property="$properties['parent']" value="$value['parent']"/>
-                                    --></td>
+                                        <xar:comment><!-- <xar:data-input name="$name" id="$id" property="$properties['parent']" value="$value['parent']"/>
+                                    --></xar:comment></td>
                                     <td>
                                         <xar:set name="name">'dd_load[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_load_' . $value['id']</xar:set>
@@ -241,11 +241,11 @@
                                         <xar:set name="name">'dd_id[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_id_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['id']" value="$value['id']" hidden="hidden"/>
-                                    <!-- <td>
+                                    <xar:comment><!-- <td>
                                       <xar:set name="name">'dd_seq[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_seq_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['seq']" value="$value['seq']"/>
-                                    </td> -->
+                                    </td> --></xar:comment>
                                     <td>
                                         <xar:set name="name">'dd_type[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_type_' . $value['id']</xar:set>

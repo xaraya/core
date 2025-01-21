@@ -31,7 +31,7 @@
                                 </xar:foreach>
                             </div>
                         <xar:elseif condition="!empty($link)"/>
-                            <!-- label title="" style="">#$key#.</label>&#160; -->
+                            <xar:comment><!-- label title="" style="">#$key#.</label>&#160; --></xar:comment>
                             <xar:set name="itemlink">str_replace('[itemid]', $key, $link)</xar:set>
                             <xar:if condition="!empty($val)">
                                 <a href="#$itemlink#">#$val#</a>

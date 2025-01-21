@@ -128,7 +128,7 @@
                     </li>
                 </ul>
     
-                <!--
+                <xar:comment><!--
                 <h3>Further Information</h3>
                 <p>Further information on the DynamicData module can be found at:</p>
                     <ul>
@@ -145,7 +145,7 @@
                 <p class="xar-sub">
                 <strong>&#160;DynamicData Module - Overview</strong>
                 <br />&#160;Version 1.2.1 2005-11-03</p>
-                -->
+                --></xar:comment>
             </div>
     
             <div id="page-2" style="display: none">

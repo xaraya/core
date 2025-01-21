@@ -26,9 +26,9 @@
                         <xar:var name="label">Update</xar:var>
                         <xar:button type="submit" label="$label"/>
                         <input type="hidden" name="creating" id="creating" value="false"/>
-                        <!--
+                        <xar:comment><!--
                             <input type="reset" value="#xarML('Reset')#"/>
-                        -->
+                        --></xar:comment>
                     </div>
                 </div>
             </fieldset>

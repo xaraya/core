@@ -9,8 +9,8 @@
           <strong>#$option['id']#</strong>- #$option['name']#
           <br />
         <xar:else />
-          <!-- #$option['id']# - #$option['name']#
-          <br /> --> 
+          <xar:comment><!-- #$option['id']# - #$option['name']#
+          <br /> --></xar:comment>
         </xar:if>
       </xar:foreach>
     </xar:if>

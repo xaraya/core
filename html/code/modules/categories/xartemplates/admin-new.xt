@@ -53,9 +53,9 @@
                         <div class="xar-form-container-after">
                             <xar:var name="label">Submit</xar:var>
                             <xar:button type="submit" name="reassign" id="reassign" label="$label"/>
-                            <!--
+                            <xar:comment><!--
                                 <input type="reset" value="#xarML('Reset')#"/>
-                            -->
+                            --></xar:comment>
                         </div>
                     </div>
                 </fieldset>

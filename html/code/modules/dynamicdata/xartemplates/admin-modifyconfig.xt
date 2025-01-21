@@ -37,14 +37,14 @@
                         </legend>
                         <xar:template file="config_templating"/>
                     </fieldset>
-                    <!--
+                    <xar:comment><!--
                     <fieldset>
                         <legend>                    
                             Display                    
                         </legend>
                         <xar:template file="config_display"/>
                     </fieldset>
-                    -->
+                    --></xar:comment>
                     <xar:template file="update-button" module="base" />
                 </form>
             <xar:elseif condition="$tab eq 'managehooks'"/>

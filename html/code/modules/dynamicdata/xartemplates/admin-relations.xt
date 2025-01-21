@@ -92,7 +92,7 @@
             <xar:template type="module" file="link-mapping"/>
         </xar:if>
 
-<!-- TODO: re-examine module links
+<xar:comment><!-- TODO: re-examine module links
 
         <form method="get" action="#xarServer::getBaseURL()#">
             <fieldset>
@@ -118,7 +118,7 @@
             <xar:template type="module" file="link-modules"/>
         </xar:if>
 
--->
+--></xar:comment>
 	</div><!--xar-mod-page-body-->
     </div><!--xar-mod-body-->
 </xar:template>

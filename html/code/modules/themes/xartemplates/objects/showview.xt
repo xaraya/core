@@ -17,7 +17,7 @@
                     <xar:else />
                     	<xar:set name="xar_status">''</xar:set>
                     </xar:if>
-                    <!-- <th class="#$xar_status# #$name#"> -->
+                    <xar:comment><!-- <th class="#$xar_status# #$name#"> --></xar:comment>
                     <th>
                         <a href="#$sorturl#=#$name#">
                             <xar:data-label property="$properties[$name]"/>
@@ -41,7 +41,7 @@
                         <xar:else />
                         	<xar:set name="xar_status">''</xar:set>
                         </xar:if>
-                        <!-- <td class="#$xar_status# #$name#"> -->
+                        <xar:comment><!-- <td class="#$xar_status# #$name#"> --></xar:comment>
                         <td>
                             <xar:if condition="empty($fields[$name])">&#160; 
                             <xar:elseif condition="!empty($linkfield) and $linkfield eq $name and !empty($links[$itemid]['display'])"/>

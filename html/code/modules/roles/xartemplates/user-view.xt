@@ -11,13 +11,13 @@
             <xar:else />
                 <table class="xar-table" width="100%" border="1" cellspacing="0" cellpadding="2">
                     <tr>
-                        <!--
+                        <xar:comment><!--
                         <xar:foreach in="$itemlabels" value="$label">
                             <th class="xar-fullwidth">
                                     #$label#
                             </th>
                         </xar:foreach>
-                        -->
+                        --></xar:comment>
                             <th class="xar-fullwidth">
                                 Name
                             </th>

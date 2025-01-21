@@ -96,7 +96,7 @@
 				<xar:button type="cancel" label="$label"/>
 			</div>
 		</div>
-<!--		
+<xar:comment><!--		
         <fieldset>
             <legend>Problem Installing</legend>
             <xar:var name="label">System Message</xar:var>
@@ -129,6 +129,6 @@
                 </div>
             </div>
         </div>
--->
+--></xar:comment>
     </div>
 </xar:template>

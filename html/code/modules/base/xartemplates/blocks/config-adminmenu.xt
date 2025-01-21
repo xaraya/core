@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <!--
+    <xar:comment><!--
     <div class="xar-row">
         <div class="xar-col">
             <label class="xar-form-label" for="showhelp#$bid#" title="#$label#">
@@ -13,7 +13,7 @@
             <xar:var name="label">By checking this box a help link will be shown in the panel instance.</xar:var>
         </div>
     </div>
-    -->
+    --></xar:comment>
     <div class="xar-row">
         <div class="xar-col">
             <xar:var name="label">By checking this box a link to the front end will be shown in the panel instance.</xar:var>

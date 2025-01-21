@@ -92,13 +92,13 @@
                 </div>
                 <!-- jojodee - we already have user hooks in the modifyconfig user hooks sections,
                      so comment out until we know if there is another good reason to have them here as well -->
-                <!--
+                <xar:comment><!--
                 <xar:if condition="!empty($hooks)">
                     <xar:foreach in="$hooks" key="$module" value="$output">
                         #$output#
                     </xar:foreach>
                 </xar:if>
-                -->
+                --></xar:comment>
             </fieldset>
             <div class="xar-form-actions">
                 <div class="xar-row">

@@ -165,7 +165,7 @@
                         </select>
                     </div>
                 </div>
-<!--
+<xar:comment><!--
                 <div class="xar-row">
                     <div class="xar-col">
                         <label for="value" class="xar-form-labelshort">Value:</label>
@@ -175,7 +175,7 @@
                         class="xar-form-textmedium"/>
                     </div>
                 </div>
--->
+--></xar:comment>
             </div>
             <div class="xar-floatleft xar-thirdwidth">
                 <h4>To #$withtable#</h4>
@@ -197,7 +197,7 @@
                         </select>
                     </div>
                 </div>
-<!--
+<xar:comment><!--
                 <div class="xar-row">
                     <div class="xar-col">
                         <label for="withvalue" class="xar-form-labelshort">Value:</label>
@@ -206,7 +206,7 @@
                         <input type="textbox" name="withvalue" id="withvalue" value="#$withvalue#" class="xar-form-textmedium"/>
                     </div>
                 </div>
--->
+--></xar:comment>
             </div>
             <div class="xar-floatleft xar-thirdwidth">
                 <h4>Extra Constraints</h4>

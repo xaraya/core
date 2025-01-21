@@ -48,7 +48,7 @@
 						</xar:for>
 						<xar:if condition="$_position eq 0">
 							<!-- if no relation found (this shall not happen in normal case), shall we reset the position value to default - 2 -->
-							<!-- <xar:set name="_position">2</xar:set> -->
+							<xar:comment><!-- <xar:set name="_position">2</xar:set> --></xar:comment>
 						</xar:if>
 					</select> 
 					<xar:set name="position">$_position</xar:set>

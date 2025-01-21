@@ -129,7 +129,7 @@
             <h3>Available Hooks</h3>
             <p>The Modules module has no hooks</p>
     
-            <!--
+            <xar:comment><!--
             <h3>Further Information</h3>
             <p>Further information on the Modules module can be found at</p>
             <ul>
@@ -146,7 +146,7 @@
             </ul>
             <p class="xar-sub">
             <strong>&#160;Modules Module Overview</strong>
-            -->
+            --></xar:comment>
         </div>
     </div>
 </xar:template>

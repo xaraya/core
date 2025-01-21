@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:comment>
-    <!-- <chris> skipping this for now, since it isn't an option in the menu config
+    <xar:comment><!-- <chris> skipping this for now, since it isn't an option in the menu config
     <xar:if condition="$showhelp eq '1'">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
@@ -16,8 +15,7 @@
             </li>
         </ul>
     </xar:if>
-    -->
-    </xar:comment>
+    --></xar:comment>
     <xar:foreach in="$catmods" key="$catname" value="$cats">
         <!--
             we dont really want to display a category if there are no modules that belong to it,
@@ -73,7 +71,7 @@
             </li>
         </ul>
     </xar:if>
-    <!-- DO NOT UNCOMMENT - EXAMPLE!
+    <xar:comment><!-- DO NOT UNCOMMENT - EXAMPLE!
 
         Below is a typical (simplified) example of nested unordered list that we process in this template:
 
@@ -132,5 +130,5 @@
             - every listitem contains a link
             - a link can be either real or 'empty' (named anchors) depending on its *-current* status
             - this built-in implementation of vertical menus uses empty links as means of providing visual feedback in all browsers, including those that dont support :hover state on anything except links (surprise: IE/Win)
-    -->
+    --></xar:comment>
 </xar:template>

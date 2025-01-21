@@ -84,7 +84,7 @@
                 </table>
             </fieldset>
             <fieldset>
-                <!-- xar:data-view module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
+                <xar:comment><!-- xar:data-view module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / --></xar:comment>
                 <xar:if condition="count($tables) gt 0">
                     <xar:foreach in="$tables" value="$table">
                         <form method="post" action="#xarController::URL('dynamicdata','admin','importprops')#">

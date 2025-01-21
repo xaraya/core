@@ -175,7 +175,7 @@
             </div>
         </div>
     </fieldset>
-    <!--
+    <xar:comment><!--
     <fieldset>
         <legend>Encryption</legend>
         <xar:if condition="extension_loaded('mcrypt')">
@@ -236,5 +236,5 @@
             You need to install the PHP mcrypt extension to access encryption functionality
         </xar:if>
     </fieldset>
-    -->
+    --></xar:comment>
 </xar:template>

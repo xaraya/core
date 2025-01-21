@@ -65,7 +65,7 @@
                             <xar:data-input type="dropdown" id="doctype" name="doctype" value="$value" options="$options" class="xar-form-textlong"/>
                         </div>
                     </div>
-                    <!--
+                    <xar:comment><!--
                     <div class="xar-row">
                         <div class="xar-col">
                             <xar:var name="label">Use the Admin Dashboard to manage all your Admin settings from a single page.</xar:var>
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                     </div>
-                    -->
+                    --></xar:comment>
                     <div class="xar-row">
                         <div class="xar-col">
                             <xar:var name="label">Use submenus in the page for admin functions.</xar:var>

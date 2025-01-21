@@ -169,7 +169,7 @@
                         </select>
                     </div>
                 </div>
-<!--
+<xar:comment><!--
                 <div class="xar-row">
                     <div class="xar-col">
                         <label for="value" class="xar-form-labelshort">Value:</label>
@@ -177,7 +177,7 @@
                         class="xar-form-textmedium"/>
                     </div>
                 </div>
--->
+--></xar:comment>
             </div>
             <div class="xar-floatleft xar-thirdwidth">
                 <h4>To #$withobject:label#</h4>
@@ -197,7 +197,7 @@
                         </select>
                     </div>
                 </div>
-<!--
+<xar:comment><!--
                 <div class="xar-row">
                     <div class="xar-col">
                         <label for="withvalue" class="xar-form-labelshort">Value:</label>
@@ -207,7 +207,7 @@
                         value="#$withvalue#" class="xar-form-textmedium"/>
                     </div>
                 </div>
--->
+--></xar:comment>
             </div>
             <div class="xar-floatleft xar-thirdwidth">
                 <h4>Extra Constraints</h4>
@@ -272,9 +272,9 @@
                 <td>#$property:defaultvalue#</td>
                 <td>#$property:source#</td>
                 <td><a href="#xarController::URL('dynamicdata', 'admin', 'showpropval', ['itemid' => $property->id])#" title="Edit configuration for property #$property:name#"><xar:img scope="theme" file="icons/modify-config.png" class="xar-icon"/></a></td>
-<!--
+<xar:comment><!--
                 <td>#$property:configuration#</td>
--->
+--></xar:comment>
             </tr>
         </xar:foreach>
     </table>

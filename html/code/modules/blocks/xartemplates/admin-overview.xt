@@ -99,7 +99,7 @@
                 <h3>Available Hooks</h3>
                 <p>The Blocks module has no hooks</p>
 
-                <!--
+                <xar:comment><!--
                 <h3>Further Information</h3>
                 <xar:set name="relateddocurl">'http://www.xaraya.info/index.php/keywords/blocks/'</xar:set>
                 <xar:var name="relateddocurltext">Related documentation on Blocks</xar:var>
@@ -117,7 +117,7 @@
                 <p class="xar-sub">
                 <strong>&#160;Blocks Module Overview</strong>
                 <br />&#160;Version 1.1.1&#160; 2006-07-20</p>
-                -->
+                --></xar:comment>
             <!-- Admin Interface -->
             <xar:elseif condition="$tab eq 'admin'"/>
 
@@ -235,9 +235,9 @@
                     <li><strong>Default State</strong> - Int, state of module (required), options are
                     <ul>
                         <li><strong>Hidden</strong> #xarBlock::BLOCK_STATE_HIDDEN#, the block display function will be executed but the block will not be displayed.</li>
-                        <!--
+                        <xar:comment><!--
                         <li><strong>Inactive</strong> #xarBlock::BLOCK_STATE_INACTIVE#, the block is disabled.</li>
-                        -->
+                        --></xar:comment>
                         <li><strong>Visible</strong> #xarBlock::BLOCK_STATE_VISIBLE#, the block will be displayed.</li>
                     </ul>
                     </li>

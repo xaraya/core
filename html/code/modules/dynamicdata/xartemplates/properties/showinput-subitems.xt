@@ -123,7 +123,7 @@
                 return true;
             }
 
-    <!--
+    <xar:comment><!--
     <![CDATA[
                 if (!Array.prototype.indexOf)
                 {
@@ -148,7 +148,7 @@
                   };
                 }
             ]]>
-            -->
+            --></xar:comment>
         </script>
     </xar:if>
 

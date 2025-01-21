@@ -46,7 +46,7 @@
                         <legend>
                             Install a package
                         </legend>
-                        <!--
+                        <xar:comment><!--
                         <div class="xar-row">
                             <div class="xar-col">
                                 <label for="install_dir" title="#xarML('The directory where the package will be installed')#" class="xar-form-label">                                
@@ -67,7 +67,7 @@
                                 <xar:data-input type="textbox" name="package_dir" value="$package_dir"/>
                             </div>
                         </div>
-                        -->
+                        --></xar:comment>
                         <div class="xar-row">
                             <div class="xar-col">
                                 <label for="install_com" title="#xarML('The command to install the package')#" class="xar-form-label">                                

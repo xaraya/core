@@ -120,7 +120,7 @@
                     </td>
                 </tr>
             </table>
-            <!--
+            <xar:comment><!--
             <table class="xar-table" border="0" cellpadding="5">
                 <xar:if condition="!empty($properties)">
                     <tr>
@@ -241,7 +241,7 @@
                     </td>
                 </tr>
             </table>
-     -->
+     --></xar:comment>
             <xar:comment>vertical layout of basically the same table as above (as requested by
             johnny, implemented by andyv) NOTE: if someone ever need the horisontal layout, then
             please implement a GUI switch</xar:comment>
@@ -360,7 +360,7 @@
         </xar:if>
         <xar:if condition="isset($mylist)">
             <xar:if condition="!empty($groupby)">
-                <!-- xar:data-view object="$mylist" layout="list"/-->
+                <xar:comment><!-- xar:data-view object="$mylist" layout="list"/--></xar:comment>
                 <xar:data-view object="$mylist"/>
             <xar:else />
                 <xar:data-view object="$mylist"/>

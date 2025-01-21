@@ -18,11 +18,11 @@
             </xar:set>
             #$level#
         </td>
-        <!--
+        <xar:comment><!--
         <td style="text-align: center;">
             <input type="checkbox" name="#$row['role_id']#" id="#$row['role_id']#"/>
         </td>
-        -->
+        --></xar:comment>
         <td style="text-align: center;">
             <a href="#xarController::URL('privileges','admin','assignprivileges',['phase' => 'remove', 'assignment' => $row['role_id'] . ',' . $row['id']])#">
                 Remove

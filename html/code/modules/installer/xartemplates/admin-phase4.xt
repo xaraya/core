@@ -148,7 +148,7 @@
 						<input type="text" name="install_database_charset" id="install_database_charset" maxlength="10" value="#$database_charset#"/>
 					</div>
 				</div>
-<!--
+<xar:comment><!--
 				<div class="xar-row">
 					<div class="xar-col">
 						<label class="xar-form-label" for="install_create_database">
@@ -168,7 +168,7 @@
 				<strong>not</strong> be able to create the database for you. It will be able to populate
 				an already existing database.
 				</p>
--->
+--></xar:comment>
 				<div class="xar-form-actions">
 					<div class="xar-row">
 						<div class="xar-col"></div>

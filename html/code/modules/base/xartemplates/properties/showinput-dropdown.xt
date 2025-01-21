@@ -40,7 +40,7 @@
                         <option>#$option['name']#</option>
                     </xar:if>
                 </xar:if>
-                <!-- this doesn't work if eg id=1, name=1st
+                <xar:comment><!-- this doesn't work if eg id=1, name=1st
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
                     <xar:if condition="$option['id'] eq $value">
                         <option value="#$option['id']#" selected="selected">#$option['name']#</option>
@@ -52,7 +52,7 @@
                 <xar:else />
                     <option>#$option['id']# #$option['name']#</option>
                 </xar:if>
-                -->
+                --></xar:comment>
             </xar:foreach>
         </select>
     <xar:else />

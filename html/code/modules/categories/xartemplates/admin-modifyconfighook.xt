@@ -8,7 +8,7 @@
         </legend>
         <xar:data-input type="categorypicker" name="basecid"  module="$modname" itemtype="$itemtype"/>
     </fieldset>
-    <!--  TODO: Remove
+    <xar:comment><!--  TODO: Remove
     <fieldset class="formelements xar-norm">
         <legend>
             <strong>
@@ -45,5 +45,5 @@
             </xar:foreach>
         </xar:if>
     </fieldset>
-    -->
+    --></xar:comment>
 </xar:template>

@@ -131,7 +131,7 @@
                 <td>
                     <input type="text" name="filters[#$filterid#][value]" id="filters_#$filterid#_value" value="#$filterinfo.value#" class="xar-form-text-medium"/>
                 </td>
-<!--
+<xar:comment><!--
                 <td>
                     <select name="filters[#$filterid#][level]" id="filters_#$filterid#_level">
                         <option value="">Any</option>
@@ -144,7 +144,7 @@
                         </xar:foreach>
                     </select>
                 </td>
--->
+--></xar:comment>
             </tr>
             </xar:foreach>
         </table>

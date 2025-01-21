@@ -12,14 +12,14 @@
         <td valign="top">
             <xar:loop id="trails" name="$cattrails">
                 <xar:loop id="catitems" name="$loop:trails:item['catitems']">
-    <!--
+    <xar:comment><!--
     The 'baseflag' variable allows you to skip certain categories in the trail :
       #$loop:catitems:item['baseflag']# = 0 : top level
       #$loop:catitems:item['baseflag']# = 1 : above the base category
       #$loop:catitems:item['baseflag']# = 2 : base category
       #$loop:catitems:item['baseflag']# = 3 : below the base category
       #$loop:catitems:item['baseflag']# = 4 : current category
-    -->>
+    -->></xar:comment>
                     #$loop:catitems:item['catjoin']#
                     <xar:if condition="empty($loop:catitems:item['catlink'])">
                         #$loop:catitems:item['catlabel']#

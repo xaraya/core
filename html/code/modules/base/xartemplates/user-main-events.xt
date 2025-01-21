@@ -20,7 +20,7 @@
                     <a href="#xarServer::getCurrentUrl(['tab' => null])#" title="#xarML('Overview')#" class="#$linkclass#">
                     Overview</a>
                 </li>
-                <!--
+                <xar:comment><!--
                 <xar:set name="tabclass">$tab=='functions'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='functions'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
@@ -45,7 +45,7 @@
                     <a href="#xarServer::getCurrentUrl(['tab' => 'examples'])#" title="#xarML('Examples')#" class="#$linkclass#">
                     Examples</a>
                 </li>
-                -->
+                --></xar:comment>
             </ul>
         </div>
         <xar:if condition="empty($tab)">
@@ -267,7 +267,7 @@ xarEvents::registerObserver('MyGUIEvent', 'mymodule', 'gui', 'admin', 'alert');
 <li>in file code/modules/mymodule/xaradmin/alert.php</li>
 <li>falling back to code/modules/mymodule/xaradmin.php</li>
 </ul>
-<!--
+<xar:comment><!--
         <xar:elseif condition="$tab eq 'subjects'"/>
             <h2>Event Subjects</h2>
             <p>Event subjects can be thought of as the definitions of events.</p>
@@ -323,7 +323,7 @@ class EventSubject extends ObjectDescriptor implements ixarEventSubject
             <h3>Examples</h3>
             
         <xar:else/>
--->        
+--></xar:comment>
         </xar:if>                
     </div>
     <div class="xar-mod-foot">

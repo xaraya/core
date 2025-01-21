@@ -113,7 +113,7 @@
                 <td>Make the parent id configurable or not</td>
             </tr>
         </xar:if>
-        <!--  TODO: check this
+        <xar:comment><!--  TODO: check this
   <tr>
     <td>
       Where
@@ -125,7 +125,7 @@
       Additional WHERE clause for the link to item or list of children
     </td>
   </tr>
--->
+--></xar:comment>
         <xar:if condition="!empty($objectid)">
             <tr>
                 <td>Field List</td>

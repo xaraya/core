@@ -92,7 +92,7 @@
         </dl>
     </fieldset>
     <input type="hidden" name="translationsbackend" id="translationsbackend" value="xml2php"/>
-    <!--    
+    <xar:comment><!--    
     <fieldset>
         <legend>
         Translations backend
@@ -128,5 +128,5 @@
             </div>
         </div>
     </fieldset>
-    -->
+    --></xar:comment>
 </xar:template>

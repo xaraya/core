@@ -39,7 +39,7 @@
                         <xar:if condition="$itemcount lt 10 or count($options) lt $itemcount / 2">
                             <xar:data-input type="dropdown" name="where[$name]" options="$options" value="$curvalue"/>
                         <xar:else />
-                            <!-- xar:data-input type="textbox" name="where[$name]" value="$curvalue"/ -->&#160;
+                            <xar:comment><!-- xar:data-input type="textbox" name="where[$name]" value="$curvalue"/ --></xar:comment>&#160;
                         </xar:if>
                     <xar:else />
                         <xar:data-input property="$property" value="$curvalue"/>

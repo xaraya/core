@@ -97,7 +97,7 @@
                             </div>
                         </div>
 	                    <xar:set name="onclick">"this.form.action='" . xarController::URL('privileges','admin','modifyprivilege') ."';this.form.submit()";</xar:set>
-	                    <!-- FIXME: make this dprop support onclick, cause IE6 doesn't do onchange
+	                    <xar:comment><!-- FIXME: make this dprop support onclick, cause IE6 doesn't do onchange
 	                    <div class="xar-col dummy">
 	                        <xar:set name="options">
 	                            array(
@@ -107,7 +107,7 @@
 	                        </xar:set>
 	                        <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick"/>
 	                    </div>
-	                    -->
+	                    --></xar:comment>
 	                    <xar:if condition="$ptype eq 'empty'">
                             <div class="xar-row">
                                 <div class="xar-col">

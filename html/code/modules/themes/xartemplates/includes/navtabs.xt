@@ -9,13 +9,13 @@
     <xar:set name="corecss">'Core'</xar:set>
     <xar:set name="corecssurl">xarController::URL('themes','admin','cssconfig',['component' => 'core'])</xar:set>
     <xar:set name="currentcssurl">xarServer::getCurrentURL()</xar:set>
-    <!--
+    <xar:comment><!--
     <xar:if condition=" eq ">
         <xar:set name="tabclass">' class="active"'</xar:set>
     <xar:else />
         <xar:set name="tabclass">''</xar:set>    
     </xar:if>
-    -->
+    --></xar:comment>
     <ul class="xar-tabs xar-alt xar-norm-outline">
         <xar:var name="title">Component CSS</xar:var>
         <xar:var name="label">Component CSS</xar:var>

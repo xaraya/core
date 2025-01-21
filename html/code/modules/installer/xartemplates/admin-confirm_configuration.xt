@@ -27,7 +27,7 @@
                 <p>
                     Disabling the options above will leave your registered and unregistered users with minimal access. The administrator you created in Step 6 will always have full access to the site.
                 </p>
-                <!--
+                <xar:comment><!--
                 <div class="configuration">
 
                     <h4>
@@ -76,7 +76,7 @@
                 <p>
                 All of the above modules can be installed or removed at any later time in the Modules module.
                 </p>
-            -->
+            --></xar:comment>
             <div class="xar-form-actions" style="margin: 2em 0;">
                 <xar:var name="label">Continue</xar:var>
                 <xar:button type="submit" label="$label" name="create" id="create"/>

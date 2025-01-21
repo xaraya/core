@@ -25,7 +25,7 @@
                 <xar:set name="child_object">$node->child_object</xar:set>
                 <xar:set name="image">$node->image</xar:set>
                 <xar:set name="template">$node->template</xar:set>
-                <!--<xar:set name="map">$node->map</xar:set>-->
+                <xar:comment><!--<xar:set name="map">$node->map</xar:set>--></xar:comment>
                 <xar:set name="level">$node->getLevel()-1</xar:set>
 
                 <xar:if condition="(($displayindex + 1) % 2)">
