@@ -18,6 +18,9 @@ use DeferredItemProperty;
 use DeferredManyProperty;
 use xarVar;
 use Exception;
+use sys;
+
+sys::import('modules.dynamicdata.class.export.generic');
 
 /**
  * DataObject JSON Exporter

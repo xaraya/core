@@ -18,10 +18,10 @@
  * @author Marty Vance
  * @return array<mixed> the registered tables of this module
  */
-function themes_xartables()
+function themes_xartables(?string $prefix = null)
 {
 
-    $prefix = xarDB::getPrefix();
+    $prefix ??= xarDB::getPrefix();
     $tables['themes'] = $prefix . '_themes';
     $tables['themes_configurations'] = $prefix . '_themes_configurations';
     return $tables;

@@ -23,15 +23,16 @@ use BadParameterException;
 use xarDB;
 use sys;
 
-sys::import('modules.dynamicdata.class.export.xmlexporter');
-sys::import('modules.dynamicdata.class.export.jsonexporter');
-sys::import('modules.dynamicdata.class.export.phpexporter');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseTrait;
 
 /**
  * DataObject Exporter
  */
 class DataObjectExporter
 {
+    use HasDatabaseTrait;
+
     /** @var array<string> */
     public array $deferred = [];
     /** @var array<int, mixed> */
@@ -42,7 +43,7 @@ class DataObjectExporter
     {
         $this->proptypes = DataPropertyMaster::getPropertyTypes();
 
-        $this->prefix = xarDB::getPrefix();
+        $this->prefix = $this->db()->getPrefix();
         $this->prefix .= '_';
     }
 
@@ -231,6 +232,9 @@ class DataObjectExporter
      */
     public static function export($objectid, $itemid = null, $format = 'xml', $tofile = false)
     {
+        sys::import('modules.dynamicdata.class.export.xmlexporter');
+        sys::import('modules.dynamicdata.class.export.jsonexporter');
+        sys::import('modules.dynamicdata.class.export.phpexporter');
         $exporter = match ($format) {
             'php' => new PhpExporter($objectid, $tofile),
             'json' => new JsonExporter($objectid, $tofile),

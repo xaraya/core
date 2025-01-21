@@ -137,9 +137,10 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
  * $items = $objectlist->getItems();
  *
  * Or connect to a different database first and use their tables as relational data store
+ * $xarDB = ServiceFactory::getDatabaseService();
  * $args = ['databaseType' => 'sqlite3', 'databaseName' => $filepath];
- * $conn = xarDB::newConn($args);
- * $dbConnIndex = xarDB::getConnIndex();
+ * $conn = $xarDB->newConn($args);
+ * $dbConnIndex = $xarDB->getConnIndex();
  *
  * $descriptor = new TableObjectDescriptor(['table' => 'non_xar_table', 'dbConnIndex' => $dbConnIndex]);
  * $objectlist = new DataObjectList($descriptor);

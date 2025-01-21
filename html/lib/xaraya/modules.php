@@ -765,7 +765,8 @@ class xarMod extends xarObject implements IxarMod
 
         $tablefunc = $modName . '_' . 'xartables';
         if (function_exists($tablefunc)) {
-            self::xarDB()->importTables($tablefunc());
+            // pass along the DB prefix to $tablefunc
+            self::xarDB()->importTables($tablefunc(self::xarDB()->getPrefix()));
         }
 
         $loadedDbInfoCache[$modName] = true;

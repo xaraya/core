@@ -536,17 +536,19 @@ class xarTableDDL extends xarObject
 
 class xarXMLInstaller extends xarObject
 {
-    static private $typesObject;
+    use HasDatabaseStaticTrait;
+
+    private static $typesObject;
     
     // No constructor yet. maybe later
     
-    static private function transform($xmlFile, $xslAction='display', $xslFile=null)
+    private static function transform($xmlFile, $xslAction='display', $xslFile=null)
     {
         if (!isset($xmlFile))
             throw new BadParameterException(xarMLS::translate('No file to transform!'));
 
         // Get the database type from the connection
-		$databaseType = xarDB::getType();
+		$databaseType = self::xarDB()->getType();
 		switch ($databaseType) {
 			case 'sqlite3':
 			case 'pdosqlite':
@@ -579,7 +581,7 @@ class xarXMLInstaller extends xarObject
         sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
-        $xslProc->setParameter('', 'tableprefix', xarDB::getPrefix());
+        $xslProc->setParameter('', 'tableprefix', self::xarDB()->getPrefix());
         return $xslProc->transform($xmlFile);
     }
     
@@ -604,7 +606,7 @@ class xarXMLInstaller extends xarObject
         return $type;
     }
 
-    static public function createTable($tablefile, $module)
+    public static function createTable($tablefile, $module)
     {
         if (empty($module))
             throw new BadParameterException('Missing a module name to create for');
@@ -627,7 +629,7 @@ class xarXMLInstaller extends xarObject
         array_pop($queries);
 
         // Execute each of the queries
-        $dbconn = xarDB::getConn();
+        $dbconn = self::xarDB()->getConn();
         foreach ($queries as $q) {
             xarLog::message('Executing SQL: ' . $q, xarLog::LEVEL_INFO);
             $dbconn->Execute($q);

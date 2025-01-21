@@ -10,12 +10,16 @@
  */
 
 sys::import('modules.dynamicdata.class.objects.factory');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
 
 /**
  * DataObjectLinks class
  */
 class DataObjectLinks extends xarObject
 {
+    use HasDatabaseStaticTrait;
+
     public static $linktypes = [
         'children'   => 'is parent of (one-to-many)',
         'parents'    => 'is child of (many-to-one)',
@@ -565,7 +569,7 @@ class DataObjectLinks extends xarObject
     {
         // load tables for 'dynamic_data'
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartables =  xarDB::getTables();
+        $xartables =  self::xarDB()->getTables();
 
         $mapping = [];
         $properties = xarMod::apiFunc(

@@ -10,12 +10,16 @@
  */
 
 sys::import('xaraya.structures.descriptor');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
 
 /*
  * generate the variables necessary to instantiate a DataObject or DataProperty class
 */
 class DataObjectDescriptor extends ObjectDescriptor
 {
+    use HasDatabaseStaticTrait;
+
     public function __construct(array $args = [])
     {
         $args = self::getObjectID($args);
@@ -112,7 +116,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             return xarCoreCache::getCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype']);
         }
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable = xarDB::getTables();
+        $xartable = self::xarDB()->getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $query = "SELECT id,
@@ -136,9 +140,9 @@ class DataObjectDescriptor extends ObjectDescriptor
             $bindvars[] = (int) $args['itemtype'];
         }
 
-        $dbconn = xarDB::getConn();
+        $dbconn = self::xarDB()->getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
         if (!$result->first()) {
             $row = [];
         } else {

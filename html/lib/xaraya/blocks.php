@@ -71,7 +71,8 @@ class xarBlock extends xarObject implements ixarBlock
     {
         // Blocks Support Tables
         sys::import('modules.blocks.xartables');
-        $tables = blocks_xartables();
+        // pass along the DB prefix to $tablefunc
+        $tables = blocks_xartables(self::xarDB()->getPrefix());
         self::xarDB()->importTables($tables);
         return true;    
     }

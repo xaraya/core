@@ -11,6 +11,8 @@
 
 // this is used in most methods below, so we import it here
 sys::import('modules.dynamicdata.class.objects.descriptor');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
 
 /**
  * Utility Class to manage Dynamic Properties
@@ -18,6 +20,8 @@ sys::import('modules.dynamicdata.class.objects.descriptor');
  */
 class DataPropertyMaster extends xarObject
 {
+    use HasDatabaseStaticTrait;
+
     public const DD_DISPLAYSTATE_DISABLED = 0;
     public const DD_DISPLAYSTATE_ACTIVE = 1;
     public const DD_DISPLAYSTATE_DISPLAYONLY = 2;
@@ -48,9 +52,9 @@ class DataPropertyMaster extends xarObject
         xarLog::message("DataPropertyMaster::getProperties: Getting all properties", xarLog::LEVEL_DEBUG);
         // we can't use our own classes here, because we'd have an endless loop :-)
 
-        $dbconn = xarDB::getConn();
+        $dbconn = self::xarDB()->getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable = xarDB::getTables();
+        $xartable = self::xarDB()->getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 
@@ -332,7 +336,7 @@ class DataPropertyMaster extends xarObject
             return xarCoreCache::getCached('DynamicData', 'Configurations');
         }
         // Can't use DD methods here as we go into a recursion loop
-        $xartable = xarDB::getTables();
+        $xartable = self::xarDB()->getTables();
         $configurations = $xartable['dynamic_configurations'];
 
         $bindvars = [];
@@ -345,9 +349,9 @@ class DataPropertyMaster extends xarObject
                             configuration
                     FROM $configurations ";
 
-        $dbconn = xarDB::getConn();
+        $dbconn = self::xarDB()->getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
 
         $allconfigproperties = [];
         while ($result->next()) {

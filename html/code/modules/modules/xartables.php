@@ -16,9 +16,9 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return array<mixed> the registered tables of this module
  */
-function modules_xartables()
+function modules_xartables(?string $prefix = null)
 {
-    $prefix = xarDB::getPrefix();
+    $prefix ??= xarDB::getPrefix();
     $tables['modules']         = $prefix . '_modules';
     $tables['module_vars']     = $prefix . '_module_vars';
     $tables['module_itemvars'] = $prefix . '_module_itemvars';

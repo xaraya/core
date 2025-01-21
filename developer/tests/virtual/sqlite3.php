@@ -5,6 +5,7 @@
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\Export\PhpExporter;
+use Xaraya\Services\ServiceFactory;
 
 // initialize bootstrap
 sys::init();
@@ -20,8 +21,9 @@ function get_dbconn_index($filepath)
         'databaseType' => 'sqlite3',
         'databaseName' => $filepath,
     ];
-    $conn = xarDB::newConn($args);
-    $dbConnIndex = xarDB::getConnIndex();
+    $xarDB = ServiceFactory::getDatabaseService(__FUNCTION__);
+    $conn = $xarDB->newConn($args);
+    $dbConnIndex = $xarDB->getConnIndex();
 
     $dbinfo = $conn->getDatabaseInfo();
     echo "Connection $dbConnIndex: " . $dbinfo->getName() . "\n";

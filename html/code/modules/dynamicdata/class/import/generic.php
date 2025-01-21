@@ -21,15 +21,16 @@ use xarDB;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('modules.dynamicdata.class.import.xmlimporter');
-sys::import('modules.dynamicdata.class.import.jsonimporter');
-sys::import('modules.dynamicdata.class.import.phpimporter');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
 
 /**
  * DataObject Importer
  */
 class DataObjectImporter
 {
+    use HasDatabaseStaticTrait;
+
     protected static ?DataObject $dataobject = null;
     protected static ?DataObject $dataproperty = null;
     /** @var array<int, mixed> */
@@ -52,7 +53,7 @@ class DataObjectImporter
     {
         $this->proptypes = DataPropertyMaster::getPropertyTypes();
 
-        $this->prefix = $prefix ?? (xarDB::getPrefix() . '_');
+        $this->prefix = $prefix ?? (self::xarDB()->getPrefix() . '_');
         $this->overwrite = $overwrite;
         $this->keepitemid = $keepitemid;
     }
@@ -71,11 +72,14 @@ class DataObjectImporter
      */
     public static function import($file = null, $content = null, $format = 'xml', $prefix = null, $overwrite = false, $keepitemid = false)
     {
+        sys::import('modules.dynamicdata.class.import.xmlimporter');
+        sys::import('modules.dynamicdata.class.import.jsonimporter');
+        sys::import('modules.dynamicdata.class.import.phpimporter');
         if (empty($format)) {
             $format = 'xml';
         }
         if (!isset($prefix)) {
-            $prefix = xarDB::getPrefix();
+            $prefix = self::xarDB()->getPrefix();
         }
         // @todo allow non-prefixed table names someday
         $prefix .= '_';

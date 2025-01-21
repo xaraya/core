@@ -10,12 +10,16 @@
  */
 
 sys::import('xaraya.datastores.factory');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
 
 /**
  * DataStoreLinks class
  */
 class DataStoreLinks extends xarObject
 {
+    use HasDatabaseStaticTrait;
+
     public static $linktypes = [
         'children'   => 'is parent of (one-to-many)',
         'parents'    => 'is child of (many-to-one)',
@@ -266,7 +270,7 @@ class DataStoreLinks extends xarObject
     {
         // load tables for 'dynamic_data'
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartables =  xarDB::getTables();
+        $xartables =  self::xarDB()->getTables();
 
         $mapping = [];
         $properties = xarMod::apiFunc(
@@ -306,7 +310,7 @@ class DataStoreLinks extends xarObject
     {
         // load tables for 'dynamic_data'
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartables =  xarDB::getTables();
+        $xartables =  self::xarDB()->getTables();
 
         $sourcemapping = [];
         $properties = xarMod::apiFunc(
@@ -339,7 +343,7 @@ class DataStoreLinks extends xarObject
     public static function getForeignKeys()
     {
         // get tables
-        $dbconn = xarDB::getConn();
+        $dbconn = self::xarDB()->getConn();
         $dbInfo = $dbconn->getDatabaseInfo();
         $tables = $dbInfo->getTables();
 

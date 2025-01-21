@@ -17,9 +17,9 @@
  * @author mikespub <mikespub@xaraya.com>
  * @return array<mixed> the registered tables of this module
  */
-function dynamicdata_xartables()
+function dynamicdata_xartables(?string $prefix = null)
 {
-    $prefix = xarDB::getPrefix();
+    $prefix ??= xarDB::getPrefix();
     $tables['dynamic_objects']        = $prefix . '_dynamic_objects';
     $tables['dynamic_properties']     = $prefix . '_dynamic_properties';
     $tables['dynamic_data']           = $prefix . '_dynamic_data';

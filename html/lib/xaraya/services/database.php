@@ -28,6 +28,8 @@ use xarDB;
 
 /**
  * For documentation purposes only - available via DatabaseTrait
+ * @todo align with xarDB, xarDB_Interface and ExternalDatabase
+ * (not underlying xarDB_Creole, xarDB_PDO and external drivers)
  */
 interface DatabaseInterface
 {
@@ -58,6 +60,19 @@ interface DatabaseInterface
 
     /** @param array<string, string> $tables */
     public function importTables(array $tables = []): void;
+
+    public function hasConn(int|string $index = 0): bool;
+
+    /** @param array<string, mixed>|null $args */
+    public function newConn(?array $args = null): object;
+
+    public function getConnIndex(): int|string;
+
+    /** @param array<string, mixed> $dsn */
+    public function getConnection(array $dsn, mixed $flags): object;
+
+    /** @return array<mixed> */
+    public function getTypeMap(): array;
 }
 
 /**
@@ -163,6 +178,52 @@ trait DatabaseTrait
     public function importTables(array $tables = []): void
     {
         xarDB::importTables($tables);
+    }
+
+    /**
+     * Do we already have this database connection?
+     */
+    public function hasConn(int|string $index = 0): bool
+    {
+        // @todo support/combine external database as well
+        return xarDB::hasConn($index);
+    }
+
+    /**
+     * Initialise a new db connection
+     * @param array<string, mixed>|null $args
+     */
+    public function newConn(?array $args = null): object
+    {
+        // @todo support/combine external database as well
+        return xarDB::newConn($args);
+    }
+
+    /**
+     * Get latest connection index
+     */
+    public function getConnIndex(): int|string
+    {
+        // @todo support/combine external database as well
+        return xarDB::getConnIndex();
+    }
+
+    /**
+     * Summary of getConnection
+     * @param array<string, mixed> $dsn
+     */
+    public function getConnection(array $dsn, mixed $flags): object
+    {
+        return xarDB::getConnection($dsn, $flags);
+    }
+
+    /**
+     * Summary of getTypeMap
+     * @return array<mixed>
+     */
+    public function getTypeMap(): array
+    {
+        return xarDB::getTypeMap();
     }
 }
 

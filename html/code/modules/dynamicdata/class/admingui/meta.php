@@ -107,8 +107,8 @@ class MetaMethod extends MethodClass
             } elseif ($dbtype == 'sqlite3' && !empty($data['db'])) {
                 $data['dbtype'] = $dbtype;
                 $connArgs = ['databaseType' => $dbtype, 'databaseName' => $data['db']];
-                $conn = xarDB::newConn($connArgs);
-                $data['dbConnIndex'] = xarDB::getConnIndex();
+                $conn = $this->db()->newConn($connArgs);
+                $data['dbConnIndex'] = $this->db()->getConnIndex();
             }
 
             if (empty($data['databases'])) {
@@ -141,7 +141,7 @@ class MetaMethod extends MethodClass
             } else {
                 $data['tables'] = [$dbInfo->getTable($table)];
             }
-            $data['types']  = xarDB::getTypeMap();
+            $data['types']  = $this->db()->getTypeMap();
             $data['xml'] = xarTpl::file(sys::code() . 'modules/dynamicdata/xartemplates/includes/exportddl.xt', $data);
         }
 

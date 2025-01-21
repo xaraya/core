@@ -124,7 +124,6 @@ trait ParentServicesTrait
      * - getURL() for current module - or use ctl()->URL() with modName
      * - getRegId()
      * - getInfo()
-     * - getTables()
      * - ...
      *
      * Required methods in parent:

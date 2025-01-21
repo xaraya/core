@@ -16,9 +16,9 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return array<mixed> the registered tables of this module
  */
-function privileges_xartables()
+function privileges_xartables(?string $prefix = null)
 {
-    $prefix = xarDB::getPrefix();
+    $prefix ??= xarDB::getPrefix();
     $tables['privileges']     = $prefix . '_privileges';
     $tables['privmembers']    = $prefix . '_privmembers';
     $tables['security_acl']   = $prefix . '_security_acl';

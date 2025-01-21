@@ -11,6 +11,9 @@
  * @author mrb <marcel@xaraya.com>
  */
 
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
+
 /**
  * Class to model registration information for a property
  *
@@ -19,6 +22,8 @@
  */
 class PropertyRegistration extends DataContainer
 {
+    use HasDatabaseStaticTrait;
+
     private $stmt;                               // Prepared SQL statement for reuse
 
     public $id         = 0;                      // id of the property, hardcoded to make things easier
@@ -52,9 +57,9 @@ class PropertyRegistration extends DataContainer
 
     public static function clearCache()
     {
-        $dbconn = xarDB::getConn();
+        $dbconn = self::xarDB()->getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $tables =  xarDB::getTables();
+        $tables =  self::xarDB()->getTables();
         $sql = "DELETE FROM $tables[dynamic_properties_def]";
         $res = $dbconn->ExecuteUpdate($sql);
         return $res;
@@ -92,9 +97,9 @@ class PropertyRegistration extends DataContainer
                     if(!xarMod::isAvailable($required))
                         return false;
         */
-        $dbconn = xarDB::getConn();
+        $dbconn = self::xarDB()->getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $tables =  xarDB::getTables();
+        $tables =  self::xarDB()->getTables();
         $propdefTable = $tables['dynamic_properties_def'];
 
         // Make sure the db is the same as in the old days
@@ -165,13 +170,13 @@ class PropertyRegistration extends DataContainer
         if(xarCoreCache::isCached('DynamicData', 'PropertyTypes')) {
             return xarCoreCache::getCached('DynamicData', 'PropertyTypes');
         }
-        $dbconn = xarDB::getConn();
+        $dbconn = self::xarDB()->getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
         // CHECKME: $tables[modules] is defined in xarMod::init()
         if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
             xarMod::loadDbInfo('modules', 'modules');
         }
-        $tables =  xarDB::getTables();
+        $tables =  self::xarDB()->getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
                           p.filepath, p.class,
@@ -231,7 +236,7 @@ class PropertyRegistration extends DataContainer
         xarLog::message('DynamicData: Flushing the property cache', xarLog::LEVEL_NOTICE);
         sys::import('xaraya.structures.relativedirectoryiterator');
 
-        $dbconn = xarDB::getConn(); // Need this for the transaction
+        $dbconn = self::xarDB()->getConn(); // Need this for the transaction
         $propDirs = [];
 
         // We do the whole thing, or not at all (given proper db support)
@@ -251,7 +256,7 @@ class PropertyRegistration extends DataContainer
             } else {
                 if (!xarVar::getCached('installer', 'installing')) {
                     // Repopulate the configurations table
-                    $tables =  xarDB::getTables();
+                    $tables =  self::xarDB()->getTables();
                     $sql = "DELETE FROM $tables[dynamic_configurations]";
                     $res = $dbconn->ExecuteUpdate($sql);
 

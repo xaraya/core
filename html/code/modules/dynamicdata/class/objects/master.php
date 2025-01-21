@@ -474,7 +474,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     public function checkDbConnection()
     {
         // we already have a valid db connection index (internal)
-        if (empty($this->dbConnIndex) || xarDB::hasConn($this->dbConnIndex)) {
+        if (empty($this->dbConnIndex) || $this->db()->hasConn($this->dbConnIndex)) {
             return;
         }
         // we have no db connection arguments to use
@@ -482,8 +482,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             return;
         }
         // create a new db connection and get its index
-        xarDB::newConn($this->dbConnArgs);
-        $this->dbConnIndex = xarDB::getConnIndex();
+        $this->db()->newConn($this->dbConnArgs);
+        $this->dbConnIndex = $this->db()->getConnIndex();
     }
 
     /**

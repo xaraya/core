@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:comment>
     <!-- <chris> skipping this for now, since it isn't an option in the menu config
     <xar:if condition="$showhelp eq '1'">
         <ul class="xar-menu-section">
@@ -16,6 +17,7 @@
         </ul>
     </xar:if>
     -->
+    </xar:comment>
     <xar:foreach in="$catmods" key="$catname" value="$cats">
         <!--
             we dont really want to display a category if there are no modules that belong to it,

@@ -354,7 +354,8 @@ function installer_admin_phase5()
         if (file_exists("code/modules/$module/xartables.php")) {
         	include_once("code/modules/$module/xartables.php");
             $tablefunc = $module . '_xartables';
-            if (function_exists($tablefunc)) xarDB::importTables($tablefunc());
+            // pass along the DB prefix to $tablefunc
+            if (function_exists($tablefunc)) xarDB::importTables($tablefunc($prefix));
         }
         if (!xarInstallAPIFunc('initialise', array('directory' => $module, 'initfunc'  => 'init'))) return;
     }

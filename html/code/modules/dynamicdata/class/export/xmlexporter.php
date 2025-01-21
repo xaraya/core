@@ -17,6 +17,9 @@ use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
 use xarVar;
+use sys;
+
+sys::import('modules.dynamicdata.class.export.generic');
 
 /**
  * DataObject XML Exporter

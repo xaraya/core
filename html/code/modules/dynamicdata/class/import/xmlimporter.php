@@ -30,6 +30,7 @@ use sys;
 
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.validations');
+sys::import('modules.dynamicdata.class.import.generic');
 
 /**
  * DataObject XML Importer

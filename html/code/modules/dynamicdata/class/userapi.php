@@ -24,6 +24,8 @@ use FunctionNotFoundException;
 use sys;
 
 sys::import('modules.dynamicdata.class.traits.userapi');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
 
 /**
  * Handle (traditional) DD user api functions via module class
@@ -58,6 +60,7 @@ class UserApi implements UserApiInterface
 {
     /** @use UserApiTrait<Module> */
     use UserApiTrait;
+    use HasDatabaseStaticTrait;
 
     /**
      * Summary of other
@@ -74,6 +77,8 @@ class UserApi implements UserApiInterface
 
     /**
      * Get a module's itemtypes
+     *
+     * @todo move this elsewhere?
      *
      * @param int $moduleId
      * @param bool $native
@@ -98,7 +103,7 @@ class UserApi implements UserApiInterface
         if ($extensions) {
             // Get all the objects at once
             xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-            $xartable =  xarDB::getTables();
+            $xartable =  self::xarDB()->getTables();
 
             $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -113,9 +118,9 @@ class UserApi implements UserApiInterface
             $query .= " WHERE module_id = ? ";
             $bindvars[] = (int) $moduleId;
 
-            $dbconn = xarDB::getConn();
+            $dbconn = self::xarDB()->getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
 
             // put in itemtype as key for easier manipulation
             while ($result->next()) {

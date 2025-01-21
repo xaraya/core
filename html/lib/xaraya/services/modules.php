@@ -161,6 +161,7 @@ trait ModulesTrait
 
     /**
      * Get tables from xartables.php
+     * @todo pass along the DB prefix to $tablefunc
      * @return array<string, mixed>
      */
     public function getTables(?string $modName = null): array
@@ -175,6 +176,7 @@ trait ModulesTrait
         $tablefunc = $modName . '_' . 'xartables';
         if (function_exists($tablefunc)) {
             // xarDB::importTables($tablefunc());
+            // @todo pass along the DB prefix to $tablefunc
             return $tablefunc();
         }
         return [];
@@ -257,7 +259,6 @@ trait ModulesTrait
  * - prepare() for current module itemtype
  * - getRegId()
  * - getInfo()
- * - getTables()
  * - ...
  *
  * Required methods in parent:

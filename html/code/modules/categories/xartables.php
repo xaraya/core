@@ -16,18 +16,19 @@
 /**
  * Specifies module tables namees
  *
- * @author  Jim McDonald, Fl�vio Botelho <nuncanada@xaraya.com>
+ * @author  Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>
  * @author  mikespub <postnuke@mikespub.net>
  * @return array<mixed> Table information
  */
-function categories_xartables()
+function categories_xartables(?string $prefix = null)
 {
     // Initialise table array
     $xartable = array();
+    $prefix ??= xarDB::getPrefix();
 
     // Set the table name
-    $xartable['categories'] = xarDB::getPrefix() . '_categories';
-    $xartable['categories_linkage'] = xarDB::getPrefix() . '_categories_linkage';
-    $xartable['categories_basecategories'] = xarDB::getPrefix() . '_categories_basecategories';
+    $xartable['categories'] = $prefix . '_categories';
+    $xartable['categories_linkage'] = $prefix . '_categories_linkage';
+    $xartable['categories_basecategories'] = $prefix . '_categories_basecategories';
     return $xartable;
 }

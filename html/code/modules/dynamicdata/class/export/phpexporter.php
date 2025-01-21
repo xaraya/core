@@ -23,6 +23,7 @@ use Throwable;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.virtual');
+sys::import('modules.dynamicdata.class.export.jsonexporter');
 
 /**
  * DataObject PHP Class Exporter (TODO - experimental)
