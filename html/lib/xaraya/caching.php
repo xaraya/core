@@ -290,13 +290,24 @@ class xarCache extends xarObject
         if (xarCoreCache::isCached('User.Variables.'.$currentid, 'parentlist')) {
             return xarCoreCache::getCached('User.Variables.'.$currentid, 'parentlist');
         }
-        $rolemembers = xarDB::getPrefix() . '_rolemembers';
-        $dbconn = xarDB::getConn();
+        $gidlist = [];
+        // load Database Service on demand here for caching
+        try {
+            if (!class_exists('\Xaraya\Services\ServiceFactory')) {
+                sys::import('xaraya.services.servicefactory');
+            }
+            $xarDB = \Xaraya\Services\ServiceFactory::getDatabaseService(__METHOD__);
+        } catch (Throwable $e) {
+            error_log('Unable to load database service in xarCache: ' . $e->getMessage());
+            xarCoreCache::setCached('User.Variables.'.$currentid, 'parentlist', $gidlist);
+            return $gidlist;
+        }
+        $rolemembers = $xarDB->getPrefix() . '_rolemembers';
+        $dbconn = $xarDB->getConn();
         $query = "SELECT parent_id FROM $rolemembers WHERE role_id = ?";
         $stmt   = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery([$currentid]);
 
-        $gidlist = [];
         while ($result->next()) {
             $gidlist[] = $result->getInt(1);
         }

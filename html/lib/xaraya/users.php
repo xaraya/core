@@ -18,6 +18,9 @@
 // IS THIS STILL USED?
 global $installing;
 
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
+
 /**
  * Exception raised by the users subsystem
  *
@@ -51,6 +54,8 @@ define('XARUSER_AUTH_USER_ENUMERABLE'          , 128);
  */
 class xarUser extends xarObject
 {
+    use HasDatabaseStaticTrait;
+
     const AUTH_FAILED = -1;
     const AUTH_DENIED = -2;
     const LAST_RESORT = -3;
@@ -71,7 +76,7 @@ class xarUser extends xarObject
             $args = self::getConfig();
         }
         // User System and Security Service Tables
-        $prefix = xarDB::getPrefix();
+        $prefix = self::xarDB()->getPrefix();
     
         // CHECKME: is this needed?
         $tables = array(
@@ -80,7 +85,7 @@ class xarUser extends xarObject
             'rolemembers' => $prefix . '_rolemembers'
         );
     
-        xarDB::importTables($tables);
+        self::xarDB()->importTables($tables);
     
         self::$authenticationModules = $args['authenticationModules'];
         if (!defined('_XAR_ID_UNREGISTERED')) {
@@ -188,8 +193,8 @@ class xarUser extends xarObject
             return; // throw back
     
         // Set user auth module information
-        $dbconn   = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn   = self::xarDB()->getConn();
+        $xartable = self::xarDB()->getTables();
     
         $rolestable = $xartable['roles'];
     
@@ -401,8 +406,8 @@ class xarUser extends xarObject
                 // Retrieve the item
                 // Rather than use roles_userapi_get, we hard code this unique case
                 // FIXME: Look at this again when we move to PDO
-                $dbconn = xarDB::getConn();
-                $tables = xarDB::getTables();
+                $dbconn = self::xarDB()->getConn();
+                $tables = self::xarDB()->getTables();
                 $rolestable = $tables['roles'];
                 $query = "SELECT * FROM " . $rolestable . " WHERE id = " . $userId;
                 $result = $dbconn->Execute($query);
@@ -410,7 +415,7 @@ class xarUser extends xarObject
                 // We want the result as an associative array
                 // First get the field names
                 $fields = array();
-                $result->setFetchMode(xarDB::FETCHMODE_ASSOC);
+                $result->setFetchMode(self::xarDB()->getFetchAssoc());
 //                $result->next(); $result->previous();
                 $result->first();
                 if (!isset($result->fields)) {
@@ -422,7 +427,7 @@ class xarUser extends xarObject
                     $namefield  = key($tmp);
                     $fields[$namefield]['name'] = strtolower($namefield);
                 }
-                $result->setFetchMode(xarDB::FETCHMODE_NUM);
+                $result->setFetchMode(self::xarDB()->getFetchNum());
                 $result->first();
 //                $result->next(); $result->previous();
                 
@@ -610,8 +615,8 @@ class xarUser extends xarObject
             }
         }
     
-        $dbconn   = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn   = self::xarDB()->getConn();
+        $xartable = self::xarDB()->getTables();
     
         // Get user auth_module name
         $rolestable = $xartable['roles'];
@@ -622,7 +627,7 @@ class xarUser extends xarObject
                   WHERE mods.id = roles.auth_module_id AND
                         roles.id = ?";
         $stmt =& $dbconn->prepareStatement($query);
-        $result =& $stmt->executeQuery(array($userId),xarDB::FETCHMODE_NUM);
+        $result =& $stmt->executeQuery(array($userId),self::xarDB()->getFetchNum());
     
         if (!$result->next()) {
             // That user has never logon, strange, don't you think?

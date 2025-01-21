@@ -1557,9 +1557,8 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $found;
     }
 
-    public function replace_core_services($module = '', $type = '', $update = false)
+    public function load_core_services()
     {
-        $found = $this->find_module_methods($module, $type);
         // @todo add replacement of core services
         $mapping = [
             '/xarML\(/' => '\$this->ml(',
@@ -1607,6 +1606,13 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarCore::exit\(/' => ' \$this->exit(',
         ];
         //file_put_contents('core_services.json', $this->to_json($mapping));
+        return $mapping;
+    }
+
+    public function replace_core_services($module = '', $type = '', $update = false)
+    {
+        $found = $this->find_module_methods($module, $type);
+        $mapping = $this->load_core_services();
         $search = array_keys($mapping);
         $replace = array_values($mapping);
         $files = 0;
@@ -1739,7 +1745,6 @@ $replace = false;
 [$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '/class/');
 file_put_contents('call_dependencies.json', $migrator->to_json($summary));
 /**
- */
 $modules = [
     'apischemas', 'cachemanager', 'calendar', 'changelog', 'ckeditor', 'comments',
     'hitcount', 'images', 'keywords', 'library', 'logconfig', 'messages', 'mime',
@@ -1761,3 +1766,4 @@ foreach ($modules as $module) {
     $migrator->parse_project();
     $found = $migrator->replace_core_services($module, '', $replace);
 }
+ */

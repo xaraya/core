@@ -136,22 +136,25 @@ class ServiceFactory
         };
     }
 
-    /**
-     * Summary of getDatabaseService
-     */
-    public static function getDatabaseService(?object $parent = null): DatabaseInterface
+    public static function getDatabaseService(object|string|null $parent = null): DatabaseInterface
     {
         self::log(__METHOD__, $parent);
         //return new DatabaseService($parent);
         return DatabaseService::create($parent);
     }
 
-    protected static function log(string $method, ?object $parent = null): void
+    protected static function log(string $method, object|string|null $parent = null): void
     {
+        $level = xarLog::LEVEL_DEBUG;
         if (!isset($parent)) {
-            xarLog::message($method . ': starting service for <unknown>', xarLog::LEVEL_DEBUG);
+            xarLog::message($method . ': starting service for <unknown>', $level);
+        } elseif (is_string($parent)) {
+            xarLog::message($method . ': starting service for ' . $parent, $level);
+        } elseif (is_object($parent)) {
+            xarLog::message($method . ': starting service for ' . $parent::class, $level);
         } else {
-            xarLog::message($method . ': starting service for ' . $parent::class, xarLog::LEVEL_DEBUG);
+            // no idea what we got here - let's find out
+            xarLog::message($method . ': starting service for ' . var_export($parent, true), $level);
         }
     }
 }

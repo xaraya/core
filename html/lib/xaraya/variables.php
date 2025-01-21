@@ -79,6 +79,10 @@ interface IxarVars
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
+
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
+
 class xarVars extends xarObject
 {
 
@@ -90,6 +94,8 @@ class xarVars extends xarObject
  */
 class xarVar extends xarObject
 {
+    use HasDatabaseStaticTrait;
+
     const ALLOW_NO_ATTRIBS = 1;
     const ALLOW            = 2;
 
@@ -126,9 +132,9 @@ class xarVar extends xarObject
     public static function init(array $args = array())
     {
         // Configuration init needs to be done first
-        $tables = array('config_vars' => xarDB::getPrefix() . '_module_vars');
+        $tables = array('config_vars' => self::xarDB()->getPrefix() . '_module_vars');
 
-        xarDB::importTables($tables);
+        self::xarDB()->importTables($tables);
 
         // Initialise the variable cache
         sys::import('xaraya.variables.config');
@@ -292,7 +298,7 @@ class xarVar extends xarObject
 
             // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
             if ($prep & self::PREP_FOR_STORE) {
-                $dbconn = xarDB::getConn();
+                $dbconn = self::xarDB()->getConn();
                 $value = $dbconn->qstr($value);
             }
 

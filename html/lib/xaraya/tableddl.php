@@ -21,6 +21,10 @@
  * @todo Document functions
 **/
 
+// @todo move functions to class methods and use Database Service
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
+
 /**
  * Public Functions:
  *
@@ -494,6 +498,8 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
 
 class xarTableDDL extends xarObject
 {
+    use HasDatabaseStaticTrait;
+
     public static function init()
     {
         return true;

@@ -86,6 +86,8 @@ define('XARMOD_LOAD_ANYSTATE', 2);
 */
 sys::import('xaraya.variables.module');
 sys::import('xaraya.variables.moduser');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
 
 /**
  * Interface declaration for xarMod
@@ -101,6 +103,8 @@ interface IxarMod {}
  */
 class xarMod extends xarObject implements IxarMod
 {
+    use HasDatabaseStaticTrait;
+
     public const STATE_UNINITIALISED              = 1;
     public const STATE_INACTIVE                   = 2;
     public const STATE_ACTIVE                     = 3;
@@ -140,7 +144,7 @@ class xarMod extends xarObject implements IxarMod
         //xarEvents::register('ModAPILoad');
 
         // Modules Support Tables
-        $prefix = xarDB::getPrefix();
+        $prefix = self::xarDB()->getPrefix();
 
         // How we want it
         $tables['modules']         = $prefix . '_modules';
@@ -149,7 +153,7 @@ class xarMod extends xarObject implements IxarMod
         $tables['hooks']           = $prefix . '_hooks';
         $tables['themes']          = $prefix . '_themes';
 
-        xarDB::importTables($tables);
+        self::xarDB()->importTables($tables);
         return true;
     }
 
@@ -362,12 +366,12 @@ class xarMod extends xarObject implements IxarMod
         // Log it when it doesn't come from the cache
         xarLog::message("xarMod::getInfo: Getting database info of ID '" . $modRegId . "' (a " . $type . ")", xarLog::LEVEL_DEBUG);
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = self::xarDB()->getConn();
+        $tables = self::xarDB()->getTables();
 
         if (!isset($tables['modules'])) {
             self::loadDbInfo('modules', 'modules');
-            $tables = xarDB::getTables();
+            $tables = self::xarDB()->getTables();
         }
 
         switch ($type) {
@@ -395,7 +399,7 @@ class xarMod extends xarObject implements IxarMod
                 break;
         }
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery([$modRegId], xarDB::FETCHMODE_NUM);
+        $result = $stmt->executeQuery([$modRegId], self::xarDB()->getFetchNum());
 
         if (!$result->next()) {
             $result->close();
@@ -528,13 +532,13 @@ class xarMod extends xarObject implements IxarMod
         // Log it when it doesnt come from the cache
         xarLog::message("xarMod::getBaseInfo: Getting database info of '" . $modName . "' (a " . $type . ")", xarLog::LEVEL_DEBUG);
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = self::xarDB()->getConn();
+        $tables = self::xarDB()->getTables();
 
         // theme+s or module+s
         if (!isset($tables[$type . 's'])) {
             self::loadDbInfo($type . 's', $type . 's');
-            $tables = xarDB::getTables();
+            $tables = self::xarDB()->getTables();
         }
         $table = $tables[$type . 's'];
 
@@ -551,7 +555,7 @@ class xarMod extends xarObject implements IxarMod
         }
         $bindvars = [$modName, $modName];
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_NUM);
+        $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchNum());
 
         if (!$result->next()) {
             $result->close();
@@ -761,7 +765,7 @@ class xarMod extends xarObject implements IxarMod
 
         $tablefunc = $modName . '_' . 'xartables';
         if (function_exists($tablefunc)) {
-            xarDB::importTables($tablefunc());
+            self::xarDB()->importTables($tablefunc());
         }
 
         $loadedDbInfoCache[$modName] = true;

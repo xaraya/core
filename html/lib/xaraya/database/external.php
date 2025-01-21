@@ -19,6 +19,9 @@ namespace Xaraya\Database;
 use xarDB;
 use sys;
 
+// sys::import('xaraya.services.hasdatabasetrait');
+// use Xaraya\Services\HasDatabaseStaticTrait;
+
 /**
  * Provide an external database connection to something via PDO/DBAL/... DB driver
  *
@@ -33,6 +36,8 @@ use sys;
  */
 class ExternalDatabase implements xarDB_Interface
 {
+    // use HasDatabaseStaticTrait;
+
     public const INDEX_PREFIX = 'ext_';
     public const ERROR_MSG = 'Not available as static method for ExternalDatabase - use the native methods of the database connection or $datastore->getDatabaseInfo() to get this';
     public static string $latest = '';

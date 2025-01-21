@@ -12,6 +12,8 @@
  */
 
 sys::import('xaraya.variables');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseStaticTrait;
 
 /**
  * Build upon IxarVars to define interface for ModVars
@@ -27,6 +29,8 @@ interface IxarModVars extends IxarVars
  */
 class xarModVars extends xarVars implements IxarModVars
 {
+    use HasDatabaseStaticTrait;
+
     private static $preloaded = array(); // Keep track of what module vars (per module) we already had
 
     /**
@@ -60,8 +64,8 @@ class xarModVars extends xarVars implements IxarModVars
         $modBaseInfo = xarMod::getBaseInfo($scope);
         if (!isset($modBaseInfo)) return;
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = self::xarDB()->getConn();
+        $tables = self::xarDB()->getTables();
 
         // Retrieve all the variables for this module at once
         $module_varstable = $tables['module_vars'];
@@ -69,7 +73,7 @@ class xarModVars extends xarVars implements IxarModVars
         $bindvars = array((int)$modBaseInfo['systemid'],$name);
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars,xarDB::FETCHMODE_NUM);
+        $result = $stmt->executeQuery($bindvars,self::xarDB()->getFetchNum());
 
         if($result->next())
         {
@@ -102,14 +106,14 @@ class xarModVars extends xarVars implements IxarModVars
         $modBaseInfo = xarMod::getBaseInfo($scope);
         if (!isset($modBaseInfo)) return;
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = self::xarDB()->getConn();
+        $tables = self::xarDB()->getTables();
 
         $module_varstable = $tables['module_vars'];
 
         $query = "SELECT name, value FROM $module_varstable WHERE module_id = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($modBaseInfo['systemid']),xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery(array($modBaseInfo['systemid']),self::xarDB()->getFetchAssoc());
 
         while ($result->next()) {
             xarCoreCache::setCached($cacheScope, $result->getString('name'), $result->get('value'));
@@ -153,8 +157,8 @@ class xarModVars extends xarVars implements IxarModVars
         if (empty($name)) throw new EmptyParameterException('name');
         assert(!is_null($value));
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = self::xarDB()->getConn();
+        $tables = self::xarDB()->getTables();
         $modBaseInfo = xarMod::getBaseInfo($scope);
         $module_varstable = $tables['module_vars'];
         // We need the variable id
@@ -195,8 +199,8 @@ class xarModVars extends xarVars implements IxarModVars
     {
         if (empty($scope)) throw new EmptyParameterException('modName');
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = self::xarDB()->getConn();
+        $tables = self::xarDB()->getTables();
         $modBaseInfo = xarMod::getBaseInfo($scope);
 
         // Delete all the itemvars derived from this var first
@@ -236,8 +240,8 @@ class xarModVars extends xarVars implements IxarModVars
 
         $modBaseInfo = xarMod::getBaseInfo($scope);
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = self::xarDB()->getConn();
+        $tables = self::xarDB()->getTables();
 
         $module_varstable     = $tables['module_vars'];
         $module_itemvarstable = $tables['module_itemvars'];
@@ -247,7 +251,7 @@ class xarModVars extends xarVars implements IxarModVars
         // Select the id's which need to be removed
         $sql="SELECT $module_varstable.id FROM $module_varstable WHERE $module_varstable.module_id = ?";
         $stmt = $dbconn->prepareStatement($sql);
-        $result = $stmt->executeQuery(array($modBaseInfo['systemid']), xarDB::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array($modBaseInfo['systemid']), self::xarDB()->getFetchNum());
 
         // Seems that at least mysql and pgsql support the scalar IN operator
         $idlist = array();
@@ -307,14 +311,14 @@ class xarModVars extends xarVars implements IxarModVars
             return xarCoreCache::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
         }
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = self::xarDB()->getConn();
+        $tables = self::xarDB()->getTables();
 
         $module_varstable = $tables['module_vars'];
 
         $query = "SELECT id FROM $module_varstable WHERE module_id = ? AND name = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),xarDB::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),self::xarDB()->getFetchNum());
         // If there is no such thing, the callee is responsible, return null
         if(!$result->next()) return;
 

@@ -26,7 +26,25 @@ sys::import('xaraya.services.database');
 sys::import('xaraya.services.servicefactory');
 
 /**
- * Make Database Service available via trait
+ * Make Database Service available via trait - $this->db() instance method
+ * aligned with method in Core Services Interface
+ *
+ * ```
+ * sys::import('xaraya.services.hasdatabasetrait');
+ * use Xaraya\Services\HasDatabaseTrait;
+ *
+ * class SomethingInteresting
+ * {
+ *     use HasDatabaseTrait;
+ *
+ *     public function helloWorld():
+ *     {
+ *         $dbconn = $this->db()->getConn();
+ *         $tables = $this->db()->getTables();
+ *         // ...
+ *     }
+ * }
+ * ```
  */
 trait HasDatabaseTrait
 {
@@ -41,5 +59,42 @@ trait HasDatabaseTrait
     {
         $this->xarDB ??= ServiceFactory::getDatabaseService($this);
         return $this->xarDB;
+    }
+}
+
+/**
+ * Make Database Service available via trait - self::xarDB() static method
+ * similar to traditional xarDB::* method calls
+ *
+ * ```
+ * sys::import('xaraya.services.hasdatabasetrait');
+ * use Xaraya\Services\HasDatabaseStaticTrait;
+ *
+ * class SomethingInterestingStatic
+ * {
+ *     use HasDatabaseStaticTrait;
+ *
+ *     public static function helloStaticWorld():
+ *     {
+ *         $dbconn = self::xarDB()->getConn();
+ *         $tables = self::xarDB()->getTables();
+ *         // ...
+ *     }
+ * }
+ * ```
+ */
+trait HasDatabaseStaticTrait
+{
+    /** @var ?DatabaseInterface */
+    protected static $xarDBStatic = null;         // Access database service with static methods
+
+    /**
+     * Access database service
+     * @todo make sure this remains singleton - static method
+     */
+    protected static function xarDB(): DatabaseInterface
+    {
+        self::$xarDBStatic ??= ServiceFactory::getDatabaseService(static::class . '::' . __FUNCTION__);
+        return self::$xarDBStatic;
     }
 }

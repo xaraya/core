@@ -33,11 +33,11 @@ interface DatabaseInterface
 {
     /** Adapted from ServiceInterface to allow any parent here */
 
-    public function __construct(?object $parent = null);
+    public function __construct(mixed $parent = null);
 
-    public function getParent(): object|null;
+    public function getParent(): mixed;
 
-    public static function create(?object $parent = null): DatabaseInterface;
+    public static function create(mixed $parent = null): DatabaseInterface;
 
     /** Service-specific methods */
 
@@ -68,12 +68,12 @@ trait DatabaseTrait
     /** Adapted from ServiceTrait to allow any parent here */
 
     protected static ?DatabaseInterface $xarDB = null;
-    public ?object $parent;
+    public mixed $parent;
 
     /**
      * Create service class for parent
      */
-    public function __construct(?object $parent = null)
+    public function __construct(mixed $parent = null)
     {
         $this->parent = $parent;
     }
@@ -81,7 +81,7 @@ trait DatabaseTrait
     /**
      * Get parent of service class
      */
-    public function getParent(): object|null
+    public function getParent(): mixed
     {
         return $this->parent;
     }
@@ -89,7 +89,7 @@ trait DatabaseTrait
     /**
      * Summary of create
      */
-    public static function create(?object $parent = null): DatabaseInterface
+    public static function create(mixed $parent = null): DatabaseInterface
     {
         // create singleton instance for any parent here
         self::$xarDB ??= new self($parent);
