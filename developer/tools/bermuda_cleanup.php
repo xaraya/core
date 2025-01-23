@@ -1557,7 +1557,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $found;
     }
 
-    public function load_core_services()
+    public function load_core_services($module)
     {
         // @todo add replacement of core services
         $mapping = [
@@ -1589,8 +1589,8 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarTpl::setPageTitle\(/' => '\$this->tpl()->setPageTitle(',
             '/xarTpl::setPageTemplateName\(/' => '\$this->tpl()->setPageTemplateName(',
             // @todo handle xarMod*::* - note: this assumes you set $module !
-            '/xarModVars::get\(\'dynamicdata\',\s*\n*\s*/' => '\$this->mod()->getVar(',
-            '/xarModVars::set\(\'dynamicdata\',\s*\n*\s*/' => '\$this->mod()->setVar(',
+            '/xarModVars::get\(\'' . $module . '\',\s*\n*\s*/' => '\$this->mod()->getVar(',
+            '/xarModVars::set\(\'' . $module . '\',\s*\n*\s*/' => '\$this->mod()->setVar(',
             // @todo handle xarDB*::* - note: excl. meta and newConn
             '/xarDB::getConn\(/' => '\$this->db()->getConn(',
             '/xarDB::getName\(/' => '\$this->db()->getName(',
@@ -1609,10 +1609,10 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $mapping;
     }
 
-    public function replace_core_services($module = '', $type = '', $update = false)
+    public function replace_core_services($module, $type = '', $update = false)
     {
         $found = $this->find_module_methods($module, $type);
-        $mapping = $this->load_core_services();
+        $mapping = $this->load_core_services($module);
         $search = array_keys($mapping);
         $replace = array_values($mapping);
         $files = 0;
@@ -1639,7 +1639,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $found;
     }
 
-    public function replace_internal_methods($module = '', $type = '', $replace = false)
+    public function replace_internal_methods($module, $type = '', $replace = false)
     {
         $modules = $this->find_called_modules($module, $type);
         // @todo check for internal methods calls and replace
@@ -1659,9 +1659,11 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
                         if (!empty($call['internal'])) {
                             $summary[$modName]['internal'] += 1;
                             // @todo replace
-                            $this->log($modName . '_' . $modType . '_' . $funcName . ': ' . $call['class'] . ' ' . $call['method'] . ' - TODO', true);
+                            $this->log($modName . '_' . $modType . '_' . $funcName . ': ' . $call['class'] . ' ' . $call['method'] . ' - TODO');
                         } elseif (!empty($call['inmodule'])) {
                             $summary[$modName]['inmodule'] += 1;
+                            // @todo replace
+                            $this->log($modName . '_' . $modType . '_' . $funcName . ': ' . $call['class'] . ' ' . $call['method'] . ' - TODO');
                         } else {
                             $summary[$modName]['external'] += 1;
                         }

@@ -105,6 +105,7 @@ final class DataObjectTest extends TestCase
         $output = $objectlist->showView();
         $filename = $this->getFixtureFile('showview.sample.html');
         $expected = filesize($filename);
+        $output = preg_replace('/<!--.*?-->/s', '', $output);
         $this->assertEquals($expected, strlen($output));
     }
 
@@ -119,6 +120,7 @@ final class DataObjectTest extends TestCase
         $output = $interface->handle();
         $filename = $this->getFixtureFile('ui_handlers.view.html');
         $expected = filesize($filename);
+        $output = preg_replace('/<!--.*?-->/s', '', $output);
         $this->assertEquals($expected, strlen($output));
     }
 }

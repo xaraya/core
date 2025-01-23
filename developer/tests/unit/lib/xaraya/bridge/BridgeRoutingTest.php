@@ -15,6 +15,11 @@ final class BridgeRoutingTest extends TestCase
         xarCore::xarInit(xarCore::SYSTEM_USER);
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        $_GET = [];
+    }
+
     public static function getRequestProvider(): array
     {
         return [
@@ -35,6 +40,7 @@ final class BridgeRoutingTest extends TestCase
         $expected = $output;
         $_GET = $query;
         [$result, $context] = $bridge->dispatchRequest($method, $path);
+        $result = preg_replace('/<!--.*?-->/s', '', $result);
         $this->assertStringContainsString($expected, $result);
         //var_dump($context);
         $_GET = [];

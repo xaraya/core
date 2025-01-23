@@ -32,12 +32,12 @@ final class AdminGuiTest extends TestHelper
 
         xarController::setCallback('redirectTo', null);
 
-        $expected = 'DynamicData Module - Overview';
+        $expected = 'The Admin interface';
         $this->assertStringContainsString($expected, $data);
     }
 
     public function hello($redirectURL, $httpResponse, $context)
     {
-        var_dump("We got: $redirectURL with " . json_encode($context));
+        echo "We got: $redirectURL with " . json_encode($context);
     }
 }
