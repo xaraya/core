@@ -21,6 +21,7 @@ use sys;
 
 sys::import('xaraya.modules.userapitrait');
 sys::import('modules.dynamicdata.class.traits.itemlinks');
+sys::import('modules.dynamicdata.class.traits.otherapi');
 
 /**
  * For documentation purposes only - available via UserApiTrait
