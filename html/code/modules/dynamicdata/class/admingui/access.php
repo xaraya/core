@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use DataPropertyMaster;
 use Exception;
@@ -42,10 +43,13 @@ class AccessMethod extends MethodClass
      * wishes to modify the access to an object
      * @param array<string,mixed> $args itemid the id of the object to be modified
      * @return string|true|void output display string
+     * @see AdminGui::access()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
 
         if (!$this->var()->check('itemid', $itemid)) {
             return;
@@ -70,9 +74,9 @@ class AccessMethod extends MethodClass
             return;
         }
 
-        $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
+        $data = $adminapi->menu();
 
-        $object = DataObjectFactory::getObject([
+        $object = $this->data()->getObject([
             'name' => $name,
             'itemid'   => $itemid,
             'tplmodule' => $tplmodule]);
@@ -87,7 +91,7 @@ class AccessMethod extends MethodClass
 
         // check security of the parent object ... or DD Admin as fail-safe here
         // set context if available in function
-        $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid], $this->getContext());
+        $tmpobject = $this->data()->getObject(['objectid' => $object->itemid]);
 
         // Security
         if (!$tmpobject->checkAccess('config') && !$this->sec()->checkAccess('AdminDynamicData', 0)) {
@@ -139,7 +143,7 @@ class AccessMethod extends MethodClass
 
             // Get the access information from the template
             /*
-                    $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+                    $accessproperty = $this->prop()->getProperty(array('name' => 'access'));
                     foreach ($data['levels'] as $level => $info) {
                         $isvalid = $accessproperty->checkInput($object->name . '_' . $level);
                         $objectaccess['access'][$level] = $accessproperty->value;
@@ -210,8 +214,7 @@ class AccessMethod extends MethodClass
             if (!empty($return_url)) {
                 $this->ctl()->redirect($return_url);
             } else {
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'access',
                     ['itemid' => $itemid,
@@ -284,7 +287,7 @@ class AccessMethod extends MethodClass
         ]);
 
         // get the properties of the current object
-        $data['properties'] = DataPropertyMaster::getProperties(['objectid' => $object->itemid]);
+        $data['properties'] = $this->prop()->getProperties(['objectid' => $object->itemid]);
         $data['conditions'] = [
             'eq'    => 'equals',
             //'start' => 'starts with',
@@ -297,7 +300,6 @@ class AccessMethod extends MethodClass
         ];
 
         $data['authid'] = $this->sec()->genAuthKey();
-        $data['context'] ??= $this->getContext();
 
         if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access.xt') ||
             file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access-' . $data['template'] . '.xt')) {

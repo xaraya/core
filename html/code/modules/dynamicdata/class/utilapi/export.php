@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
 use xarMod;
 use sys;
@@ -39,9 +39,12 @@ class ExportMethod extends MethodClass
      *     string $args['format'] the export format to use (optional)
      *       bool $args['tofile'] save to file (optional)
      * @return string|void
+     * @see UtilApi::export()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         if (isset($args['objectref'])) {
             $objectid = $args['objectref']->objectid;
             $itemid = null;
@@ -82,10 +85,10 @@ class ExportMethod extends MethodClass
 
         if (!empty($itemid)) {
             if (is_numeric($itemid)) {
-                return xarMod::apiFunc('dynamicdata', 'util', 'export_item', ['objectid' => $objectid, 'itemid' => $itemid, 'format' => $format, 'tofile' => $tofile], $this->getContext());
+                return $utilapi->exportItem(['objectid' => $objectid, 'itemid' => $itemid, 'format' => $format, 'tofile' => $tofile]);
             }
-            return xarMod::apiFunc('dynamicdata', 'util', 'export_items', ['objectid' => $objectid, 'format' => $format, 'tofile' => $tofile], $this->getContext());
+            return $utilapi->exportItems(['objectid' => $objectid, 'format' => $format, 'tofile' => $tofile]);
         }
-        return xarMod::apiFunc('dynamicdata', 'util', 'export_objectdef', ['objectid' => $objectid, 'format' => $format, 'tofile' => $tofile], $this->getContext());
+        return $utilapi->exportObjectdef(['objectid' => $objectid, 'format' => $format, 'tofile' => $tofile]);
     }
 }

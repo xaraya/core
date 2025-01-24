@@ -223,9 +223,9 @@ trait ParentServicesTrait
      * - getObject()
      * - getObjectList()
      * - getObjectInfo()
+     * - getObjects()
      * - getObjectID()
      * - getObjectDescriptor()
-     * - getPropertyTypes()
      * - ...
      *
      * Required methods in parent:
@@ -243,6 +243,7 @@ trait ParentServicesTrait
      * Available methods:
      * - template() for current property - or use tpl()->property() in general with modName propertyName
      * - getPropertyTypes()
+     * - getProperties()
      * - getProperty()
      * - ...
      *

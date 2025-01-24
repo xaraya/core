@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
+use Xaraya\DataObject\AdminApi;
 use BadParameterException;
 use DataObjectFactory;
 use xarMod;
@@ -40,10 +41,15 @@ class ImportpropertiesMethod extends MethodClass
      *        int $args['objectid'] object id to assign these properties to
      * @return bool|void true on success, false on failure
      * @throws \BadParameterException
+     * @see UtilApi::importproperties()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
 
         // Required arguments
         $invalid = [];
@@ -68,7 +74,7 @@ class ImportpropertiesMethod extends MethodClass
 
         // search for an object, or create one
         if (empty($objectid)) {
-            $object = DataObjectFactory::getObjectInfo(
+            $object = $this->data()->getObjectInfo(
                 ['module_id' => $module_id,
                     'itemtype' => $itemtype]
             );
@@ -93,26 +99,16 @@ class ImportpropertiesMethod extends MethodClass
             }
         }
 
-        $fields = xarMod::apiFunc(
-            'dynamicdata',
-            'util',
-            'getstatic',
-            ['module_id' => $module_id,
+        $fields = $utilapi->getstatic(['module_id' => $module_id,
                 'itemtype' => $itemtype,
-                'table' => $table],
-            $this->getContext()
-        );
+                'table' => $table]);
         if (!isset($fields) || !is_array($fields)) {
             return;
         }
 
         // create new properties
         foreach ($fields as $name => $field) {
-            $id = xarMod::apiFunc(
-                'dynamicdata',
-                'admin',
-                'createproperty',
-                ['name'       => $name,
+            $id = $adminapi->createproperty(['name'       => $name,
                     'label'      => $field['label'],
                     'objectid'   => $objectid,
                     'moduleid'   => $module_id,
@@ -122,9 +118,7 @@ class ImportpropertiesMethod extends MethodClass
                     'source'     => $field['source'],
                     'status'     => $field['status'],
                     'seq'      => $field['seq'],
-                    'configuration' => $field['configuration']],
-                $this->getContext()
-            );
+                    'configuration' => $field['configuration']]);
             if (empty($id)) {
                 return;
             }

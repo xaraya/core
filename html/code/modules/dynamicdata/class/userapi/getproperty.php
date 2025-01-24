@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataPropertyMaster;
 use sys;
@@ -20,6 +20,7 @@ sys::import('xaraya.modules.method');
 
 /**
  * dynamicdata userapi getproperty function
+ * @deprecated use $this->prop()->getProperty()
  * @extends MethodClass<UserApi>
  */
 class GetpropertyMethod extends MethodClass
@@ -37,6 +38,7 @@ class GetpropertyMethod extends MethodClass
      * string   $args['source'] data source for the property (optional)<br/>
      * string   $args['configuration'] configuration for the property (optional)
      * @return object|null a particular DataProperty
+     * @see UserApi::getproperty()
      */
     public function __invoke(array $args = [])
     {
@@ -44,6 +46,6 @@ class GetpropertyMethod extends MethodClass
             $result = null;
             return $result;
         }
-        return DataPropertyMaster::getProperty($args);
+        return $this->prop()->getProperty($args);
     }
 }

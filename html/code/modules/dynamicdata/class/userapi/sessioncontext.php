@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use xarSession;
 use sys;
@@ -19,10 +19,10 @@ use sys;
 sys::import('xaraya.modules.method');
 
 /**
- * dynamicdata userapi getcontext function
+ * dynamicdata userapi sessioncontext function (was getcontext)
  * @extends MethodClass<UserApi>
  */
-class GetcontextMethod extends MethodClass
+class SessioncontextMethod extends MethodClass
 {
     /** functions imported by bermuda_cleanup */
 
@@ -32,6 +32,7 @@ class GetcontextMethod extends MethodClass
      * @param array<string,mixed> $args array of optional parameters<br/>
      * string   $module  name of the module dynamicdata is working for
      * @return array of data
+     * @see UserApi::sessioncontext()
      */
     public function __invoke($args = ['module' => 'dynamicdata'])
     {

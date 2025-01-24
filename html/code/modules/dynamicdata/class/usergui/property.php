@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserGui;
 use Exception;
 use xarConfigVars;
@@ -43,6 +43,7 @@ class PropertyMethod extends MethodClass
      * @author Marc Lutolf <mfl@netspan.ch>
      * @param array<string,mixed> $args
      * @return string|bool|void
+     * @see UserGui::property()
      */
     public function __invoke(array $args = [])
     {

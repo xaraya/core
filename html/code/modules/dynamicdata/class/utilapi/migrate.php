@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
+use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\AdminApi;
 use BadParameterException;
 use Exception;
 use xarMod;
@@ -41,10 +43,17 @@ class MigrateMethod extends MethodClass
      *     $args['debug'] don't actually update anything :-)
      * @return mixed true or debug string on success, null on failure
      * @throws \BadParameterException
+     * @see UtilApi::migrate()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
 
         $invalid = [];
         /** @var array<string, mixed> $from */
@@ -136,15 +145,9 @@ class MigrateMethod extends MethodClass
                 break;
 
             case 'dynamicdata':
-                $items = xarMod::apiFunc(
-                    'dynamicdata',
-                    'user',
-                    'getitems',
-                    ['module_id' => $from['module'],
+                $items = $userapi->getitems(['module_id' => $from['module'],
                         'itemtype' => $from['itemtype'],
-                        'itemids' => $itemids],
-                    $this->getContext()
-                );
+                        'itemids' => $itemids]);
                 if (!isset($items)) {
                     return;
                 }
@@ -318,17 +321,13 @@ class MigrateMethod extends MethodClass
                         continue;
                     }
                     if (empty($debug)) {
-                        $newid = xarMod::apiFunc(
-                            'dynamicdata',
-                            'admin',
-                            'create',
-                            ['module_id'    => $to['module'],
-                                'itemtype' => $to['itemtype'],
-                                // try to preset the itemid if necessary
-                                'itemid'   => !empty($to['itemid']) ? $itemid : 0,
-                                'values'   => $values],
-                            $this->getContext()
-                        );
+                        $newid = $adminapi->create([
+                            'module_id'    => $to['module'],
+                            'itemtype' => $to['itemtype'],
+                            // try to preset the itemid if necessary
+                            'itemid'   => !empty($to['itemid']) ? $itemid : 0,
+                            'values'   => $values,
+                        ]);
                     } else {
                         $newid = -$itemid; // simulate some new itemid :-)
                         $debug .= $this->ml('Creating DD item #(1) :', $newid);
@@ -518,17 +517,13 @@ class MigrateMethod extends MethodClass
         }
 
         // update hook modules
-        $result = xarMod::apiFunc(
-            'dynamicdata',
-            'util',
-            'updatehooks',
-            ['from'    => $from,
-                'to'      => $to,
-                'hookmap' => $hookmap,
-                'itemids' => $newitemids,
-                'debug'   => empty($debug) ? '' : $debug],
-            $this->getContext()
-        );
+        $result = $utilapi->updatehooks([
+            'from'    => $from,
+            'to'      => $to,
+            'hookmap' => $hookmap,
+            'itemids' => $newitemids,
+            'debug'   => empty($debug) ? '' : $debug,
+        ]);
         if (!$result) {
             return;
         }
@@ -574,11 +569,7 @@ class MigrateMethod extends MethodClass
 
                 case 'dynamicdata':
                     if (empty($debug)) {
-                        if (!xarMod::apiFunc(
-                            'dynamicdata',
-                            'admin',
-                            'delete',
-                            ['module_id'    => $from['module'],
+                        if (!$adminapi->delete(['module_id'    => $from['module'],
                                 'itemtype' => $from['itemtype'],
                                 'itemid'   => $itemid]
                         )) {

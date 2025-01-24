@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use xarController;
 use xarMod;
@@ -35,10 +36,13 @@ class FormMethod extends MethodClass
      * This is a standard function that is called whenever an administrator
      * wishes to create a new module item
      * @return string|void output display string
+     * @see AdminGui::form()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
 
         if (!$this->var()->check('objectid', $objectid)) {
             return;
@@ -72,17 +76,16 @@ class FormMethod extends MethodClass
             $itemid = 0;
         }
 
-        $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
+        $data = $adminapi->menu();
 
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
                 'moduleid' => $module_id,
                 'itemtype' => $itemtype,
                 'join'     => $join,
                 'table'    => $table,
-                'itemid'   => $itemid],
-            $this->getContext()
+                'itemid'   => $itemid]
         );
 
         // Security

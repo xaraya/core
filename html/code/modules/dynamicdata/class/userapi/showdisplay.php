@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataObjectDescriptor;
 use DataObjectFactory;
@@ -34,6 +34,7 @@ class ShowdisplayMethod extends MethodClass
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @var array<mixed> $args array containing the item or fields to show
      * @return string output display string
+     * @see UserApi::showdisplay()
      */
     public function __invoke(array $args = [])
     {
@@ -48,7 +49,6 @@ class ShowdisplayMethod extends MethodClass
 
         // we got everything via template parameters
         if (isset($fields) && is_array($fields) && count($fields) > 0) {
-            $args['context'] ??= $this->getContext();
             return $this->tpl()->module(
                 'dynamicdata',
                 'user',
@@ -72,7 +72,7 @@ class ShowdisplayMethod extends MethodClass
         }
 
         // set context if available in function
-        $object = DataObjectFactory::getObject($args, $this->getContext());
+        $object = $this->data()->getObject($args);
         if (!$object->checkAccess('display')) {
             return $this->ml('Display #(1) is forbidden', $object->label);
         }

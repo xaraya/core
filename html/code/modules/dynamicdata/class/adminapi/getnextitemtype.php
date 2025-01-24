@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use Xaraya\DataObject\UserApi;
 use DataObject;
@@ -30,11 +30,12 @@ class GetnextitemtypeMethod extends MethodClass
 
     /**
      * get the next itemtype of objects pertaining to a given module
-     * @uses \Xaraya\DataObject\UserApi::getModuleItemTypes()
+     * @uses \Xaraya\DataObject\UserApi::findModuleItemTypes()
      * @author the DynamicData module development team
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return int of object definitions
      * @todo combine this with DataObject::getNextItemType()?
+     * @see AdminApi::getnextitemtype()
      */
     public function __invoke($args = [])
     {
@@ -44,7 +45,7 @@ class GetnextitemtypeMethod extends MethodClass
         }
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        $types = $userapi::getModuleItemTypes($module_id);
+        $types = $userapi::findModuleItemTypes($module_id);
         $ids = array_keys($types);
         sort($ids);
         $lastid = array_pop($ids);

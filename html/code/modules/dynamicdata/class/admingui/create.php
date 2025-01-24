@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use xarController;
 use xarMod;
@@ -34,7 +36,7 @@ class CreateMethod extends MethodClass
 
     /**
      * This is a standard function that is called with the results of the
-     * form supplied by xarMod::guiFunc('dynamicdata','admin','new') to create a new item
+     * form supplied by $admingui->new() to create a new item
      * @param array<string,mixed> $args
      * with
      *     int    objectid
@@ -46,10 +48,17 @@ class CreateMethod extends MethodClass
      *     string template
      *     string tplmodule
      * @return mixed
+     * @see AdminGui::create()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
+        /** @var AdminGui $admingui */
+        $admingui = $this->admingui();
 
         // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
         //        or relies on $myobject or other stuff like that...
@@ -84,12 +93,11 @@ class CreateMethod extends MethodClass
         }
 
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
                 'join'     => $join,
                 'table'    => $table,
-                'itemid'   => $itemid],
-            $this->getContext()
+                'itemid'   => $itemid]
         );
 
         // Security (Bug:
@@ -101,11 +109,11 @@ class CreateMethod extends MethodClass
         $isvalid = $myobject->checkInput();
 
         // recover any session var information
-        $data = xarMod::apiFunc('dynamicdata', 'user', 'getcontext', ['module' => $tplmodule]);
+        $data = $userapi->sessioncontext(['module' => $tplmodule]);
         extract($data);
 
         if (!empty($preview) || !$isvalid) {
-            $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
+            $data = array_merge($data, $adminapi->menu());
 
             $data['object'] = $myobject;
 
@@ -140,15 +148,13 @@ class CreateMethod extends MethodClass
         if (!empty($return_url)) {
             $this->ctl()->redirect($return_url);
         } elseif (!empty($table)) {
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'view',
                 ['table' => $table]
             ));
         } else {
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'view',
                 ['itemid' => $objectid,

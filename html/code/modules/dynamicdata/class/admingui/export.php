@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UtilApi;
 use DataObjectFactory;
 use DataPropertyMaster;
 use RuntimeException;
@@ -37,9 +38,12 @@ class ExportMethod extends MethodClass
 
     /**
      * Export an object definition or an object item to XML
+     * @see AdminGui::export()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -76,12 +80,11 @@ class ExportMethod extends MethodClass
         $data['menutitle'] = $this->ml('Dynamic Data Utilities');
 
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
                 'name'     => $name,
                 'itemid'   => $itemid,
-                'allprops' => true],
-            $this->getContext()
+                'allprops' => true]
         );
 
         if (!isset($myobject) || empty($myobject->label)) {
@@ -95,7 +98,7 @@ class ExportMethod extends MethodClass
             return $this->ctl()->forbidden($msg);
         }
 
-        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $proptypes = $this->prop()->getPropertyTypes();
 
         $prefix = $this->db()->getPrefix();
         $prefix .= '_';
@@ -107,26 +110,22 @@ class ExportMethod extends MethodClass
         if (empty($itemid)) {
             $data['label'] = $this->ml('Export Object Definition for #(1)', $myobject->label);
 
-            $xml = xarMod::apiFunc(
-                'dynamicdata',
-                'util',
-                'export',
-                ['objectref' => &$myobject,
-                    'format' => $format,
-                    'tofile' => $tofile]
-            );
+            $xml = $utilapi->export([
+                'objectref' => &$myobject,
+                'format' => $format,
+                'tofile' => $tofile,
+            ]);
             if ($format != 'php') {
                 $ext = '-def';
             }
 
             /**
             if (!empty($myobject->datastores) && count($myobject->datastores) == 1 && !empty($myobject->datastores['_dynamic_data_'])) {
-                $data['convertlink'] = xarController::URL('dynamicdata','admin','export',
+                $data['convertlink'] = $this->mod()->getURL('admin','export',
                                                  array('objectid' => $myobject->objectid,
                                                        'convert'  => 1));
                 if (!empty($convert)) {
-                    if (!xarMod::apiFunc('dynamicdata','util','maketable',
-                                       array('objectref' => &$myobject))) return;
+                    if (!$utilapi->maketable(array('objectref' => &$myobject))) return;
 
                 }
             }
@@ -136,11 +135,7 @@ class ExportMethod extends MethodClass
         } elseif (is_numeric($itemid)) {
             $data['label'] = $this->ml('Export Data for #(1) # #(2)', $myobject->label, $itemid);
 
-            $xml = xarMod::apiFunc(
-                'dynamicdata',
-                'util',
-                'export_item',
-                ['objectid' => $myobject->objectid,
+            $xml = $utilapi->exportItem(['objectid' => $myobject->objectid,
                     'itemid' => $itemid,
                     'format' => $format]
             );
@@ -150,11 +145,7 @@ class ExportMethod extends MethodClass
         } elseif ($itemid == 'all') {
             $data['label'] = $this->ml('Export Data for all #(1) Items', $myobject->label);
 
-            $xml = xarMod::apiFunc(
-                'dynamicdata',
-                'util',
-                'export_items',
-                ['objectid' => $myobject->objectid,
+            $xml = $utilapi->exportItems(['objectid' => $myobject->objectid,
                     'format' => $format]
             );
             $ext = '-dat';
@@ -164,30 +155,26 @@ class ExportMethod extends MethodClass
             $xml = '';
         }
 
-        $data['formlink'] = xarController::URL(
-            'dynamicdata',
+        $data['formlink'] = $this->mod()->getURL(
             'admin',
             'export',
             ['objectid' => $myobject->objectid,
                 'itemid'   => 'all']
         );
-        $data['filelink'] = xarController::URL(
-            'dynamicdata',
+        $data['filelink'] = $this->mod()->getURL(
             'admin',
             'export',
             ['objectid' => $myobject->objectid,
                 'itemid'   => 'all',
                 'tofile'   => 1]
         );
-        $data['savelink'] = xarController::URL(
-            'dynamicdata',
+        $data['savelink'] = $this->mod()->getURL(
             'admin',
             'export',
             ['objectid' => $myobject->objectid,
                 'tofile'   => 1]
         );
-        $data['generatelink'] = xarController::URL(
-            'dynamicdata',
+        $data['generatelink'] = $this->mod()->getURL(
             'admin',
             'export',
             ['objectid' => $myobject->objectid,

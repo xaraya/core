@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\UtilApi;
 use BadParameterException;
 use DataObjectDescriptor;
 use DataObjectFactory;
@@ -46,15 +47,18 @@ class GetpropMethod extends MethodClass
      *        boolena  $args['static'] include the static properties (= module tables) too (default no)
      * @return mixed value of the field, or false on failure
      * @throws \BadParameterException
+     * @see UserApi::getprop()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         static $propertybag = [];
 
         if (empty($args['objectid']) && empty($args['name'])) {
-            $args = DataObjectDescriptor::getObjectID($args);
+            $args = $this->data()->getObjectID($args);
         }
-        $args = DataObjectFactory::getObjectInfo($args);
+        $args = $this->data()->getObjectInfo($args);
         if (empty($args)) {
             return [];
         }
@@ -127,20 +131,14 @@ class GetpropMethod extends MethodClass
             $objectid = null;
         }
 
-        $fields = DataPropertyMaster::getProperties(['objectid' => $objectid,
+        $fields = $this->prop()->getProperties(['objectid' => $objectid,
             'moduleid' => $module_id,
             'itemtype' => $itemtype,
             'allprops' => $allprops]);
         if (!empty($static)) {
             // get the list of static properties for this module
-            $staticlist = xarMod::apiFunc(
-                'dynamicdata',
-                'util',
-                'getstatic',
-                ['module_id' => $module_id,
-                    'itemtype' => $itemtype],
-                $this->getContext()
-            );
+            $staticlist = $utilapi->getstatic(['module_id' => $module_id,
+                    'itemtype' => $itemtype]);
             // TODO: watch out for conflicting property ids ?
             $fields = array_merge($staticlist, $fields);
         }

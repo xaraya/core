@@ -11,8 +11,11 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\AdminApi;
+use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\UtilApi;
 use DataObjectDescriptor;
 use DataObjectFactory;
 use DataPropertyMaster;
@@ -48,11 +51,18 @@ class ModifypropMethod extends MethodClass
      *     mixed details
      *     string layout (optional)
      * @return array|string|void data for the template display
+     * @see AdminGui::modifyprop()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
-        $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
+        $data = $adminapi->menu();
 
         if (!$this->var()->check('itemid', $itemid)) {
             return;
@@ -73,16 +83,16 @@ class ModifypropMethod extends MethodClass
             return;
         }
 
-        $args = DataObjectDescriptor::getObjectID(
+        $args = $this->data()->getObjectID(
             [
                 'objectid' => $itemid,
                 'moduleid' => $module_id,
                 'itemtype' => $itemtype,
             ]
         );
-        $objectinfo = DataObjectFactory::getObjectInfo($args);
+        $objectinfo = $this->data()->getObjectInfo($args);
         $data['objectinfo'] = $objectinfo;
-        $object = DataObjectFactory::getObject($args);
+        $object = $this->data()->getObject($args);
 
         if (!empty($objectinfo)) {
             $objectid = $objectinfo['objectid'];
@@ -91,7 +101,7 @@ class ModifypropMethod extends MethodClass
             $label =  $objectinfo['label'];
             // check security of the parent object
             // set context if available in function
-            $tmpobject = DataObjectFactory::getObject($objectinfo, $this->getContext());
+            $tmpobject = $this->data()->getObject($objectinfo);
             if (!$tmpobject->checkAccess('config')) {
                 $msg = $this->ml('Configure #(1) is forbidden', $tmpobject->label);
                 return $this->ctl()->forbidden($msg);
@@ -137,11 +147,7 @@ class ModifypropMethod extends MethodClass
         $data['itemid'] = $data['objectid'];
         $this->tpl()->setPageTitle($this->ml('Modify DataProperties #(1)', $data['label']));
 
-        $data['fields'] = xarMod::apiFunc(
-            'dynamicdata',
-            'user',
-            'getprop',
-            ['objectid' => $objectid,
+        $data['fields'] = $userapi->getprop(['objectid' => $objectid,
                 'moduleid' => $module_id,
                 'itemtype' => $itemtype,
                 'allprops' => true]
@@ -181,29 +187,27 @@ class ModifypropMethod extends MethodClass
         }
         $data['hooks'] = $hooks;
 
-        $data['fieldtypeprop']   = & DataPropertyMaster::getProperty(['type' => 'fieldtype']);
-        $data['fieldstatusprop'] = & DataPropertyMaster::getProperty(['type' => 'fieldstatus']);
-        $data['dropdown']        = & DataPropertyMaster::getProperty(['type' => 'dropdown']);
-        $data['checkbox']        = & DataPropertyMaster::getProperty(['type' => 'checkbox']);
+        $data['fieldtypeprop']   = $this->prop()->getProperty(['type' => 'fieldtype']);
+        $data['fieldstatusprop'] = $this->prop()->getProperty(['type' => 'fieldstatus']);
+        $data['dropdown']        = $this->prop()->getProperty(['type' => 'dropdown']);
+        $data['checkbox']        = $this->prop()->getProperty(['type' => 'checkbox']);
 
         // We have to specify this here, the js expects non xml urls and the => makes the template invalied
-        $data['urlform'] = xarController::URL('dynamicdata', 'admin', 'form', ['objectid' => $data['objectid'], 'theme' => 'print'], false);
+        $data['urlform'] = $this->mod()->getURL('admin', 'form', ['objectid' => $data['objectid'], 'theme' => 'print'], false);
         $data['layout'] = $layout;
 
         if (empty($details)) {
             $data['static'] = [];
             $data['relations'] = [];
             if (!empty($objectid)) {
-                $data['detailslink'] = xarController::URL(
-                    'dynamicdata',
+                $data['detailslink'] = $this->mod()->getURL(
                     'admin',
                     'modifyprop',
                     ['itemid' => $objectid,
                         'details' => 1]
                 );
             } else {
-                $data['detailslink'] = xarController::URL(
-                    'dynamicdata',
+                $data['detailslink'] = $this->mod()->getURL(
                     'admin',
                     'modifyprop',
                     ['module_id' => $module_id,
@@ -219,11 +223,7 @@ class ModifypropMethod extends MethodClass
         // TODO: allow modules to specify their own properties
         // (try to) show the "static" properties, corresponding to fields in dedicated
         // tables for this module
-        $data['static'] = xarMod::apiFunc(
-            'dynamicdata',
-            'util',
-            'getstatic',
-            ['module_id' => $module_id,
+        $data['static'] = $utilapi->getstatic(['module_id' => $module_id,
                 'itemtype' => $itemtype]
         );
         if (!isset($data['static']) || $data['static'] == false) {
@@ -243,11 +243,7 @@ class ModifypropMethod extends MethodClass
 
         // TODO: allow other kinds of relationships than hooks
         // (try to) get the relationships between this module and others
-        $data['relations'] = xarMod::apiFunc(
-            'dynamicdata',
-            'util',
-            'getrelations',
-            ['module_id' => $module_id,
+        $data['relations'] = $utilapi->getrelations(['module_id' => $module_id,
                 'itemtype' => $itemtype]
         );
         if (!isset($data['relations']) || $data['relations'] == false) {
@@ -261,15 +257,13 @@ class ModifypropMethod extends MethodClass
         $data['labels']['linkto'] = $this->ml('To');
 
         if (!empty($objectid)) {
-            $data['detailslink'] = xarController::URL(
-                'dynamicdata',
+            $data['detailslink'] = $this->mod()->getURL(
                 'admin',
                 'modifyprop',
                 ['itemid' => $objectid]
             );
         } else {
-            $data['detailslink'] = xarController::URL(
-                'dynamicdata',
+            $data['detailslink'] = $this->mod()->getURL(
                 'admin',
                 'modifyprop',
                 ['module_id' => $module_id,

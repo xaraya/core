@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use DataPropertyMaster;
 use sys;
@@ -31,10 +31,11 @@ class ShowinputMethod extends MethodClass
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @param mixed $args array containing the definition of the field (type, name, value, ...)
      * @return string containing the HTML (or other) text to output in the BL template
+     * @see AdminApi::showinput()
      */
     public function __invoke(array $args = [])
     {
-        $property = & DataPropertyMaster::getProperty($args);
+        $property = & $this->prop()->getProperty($args);
 
         if (!empty($args['preset']) && empty($args['value'])) {
             return $property->_showPreset($args);

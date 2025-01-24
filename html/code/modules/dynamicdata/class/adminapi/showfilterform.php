@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use DataObjectDescriptor;
 use DataObjectFactory;
@@ -33,6 +33,7 @@ class ShowfilterformMethod extends MethodClass
      * Show an input form in a template
      * @param array<string,mixed> $args array of optional parameters containing the item or fields to show
      * @return string|void output display string
+     * @see AdminApi::showfilterform()
      */
     public function __invoke(array $args = [])
     {
@@ -64,8 +65,7 @@ class ShowfilterformMethod extends MethodClass
                 'admin',
                 'showfilterform',
                 ['fields' => $fields,
-                    'layout' => $layout,
-                    'context' => $this->getContext()],
+                    'layout' => $layout],
                 $template
             );
         }
@@ -91,7 +91,7 @@ class ShowfilterformMethod extends MethodClass
         }
 
         // set context if available in function
-        $object = DataObjectFactory::getObject($args, $this->getContext());
+        $object = $this->data()->getObject($args);
         if (empty($itemid)) {
             if (!$object->checkAccess('create')) {
                 return $this->ml('Create #(1) is forbidden', $object->label);

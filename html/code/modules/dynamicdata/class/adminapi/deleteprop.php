@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use BadParameterException;
 use SQLException;
@@ -44,6 +44,7 @@ class DeletepropMethod extends MethodClass
      *        string   $args['configuration'] configuration of the field to delete
      * @return bool true on success, false on failure
      * @throws \BadParameterException
+     * @see AdminApi::deleteprop()
      */
     public function __invoke(array $args = [])
     {

@@ -44,5 +44,5 @@ function dynamicdata_utilapi_getmeta(array $args = [], $context = null)
     }
     $utilapi = new \Xaraya\DataObject\UtilApi();
 
-    return $utilapi->getMeta($table, $db, $dbConnIndex, $dbConnArgs);
+    return $utilapi->getMetaInfo($table, $db, $dbConnIndex, $dbConnArgs);
 }

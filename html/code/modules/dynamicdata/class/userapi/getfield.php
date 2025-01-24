@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use BadParameterException;
 use DataObjectDescriptor;
@@ -41,6 +41,7 @@ class GetfieldMethod extends MethodClass
      * string   $args['name'] name of the field to get<br/>
      * @return mixed value of the field, or false on failure
      * @throws \BadParameterException
+     * @see UserApi::getfield()
      */
     public function __invoke(array $args = [])
     {
@@ -75,17 +76,16 @@ class GetfieldMethod extends MethodClass
             throw new BadParameterException($vars, $msg);
         }
 
-        $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+        $args = $this->data()->getObjectID(['moduleid'  => $module_id,
             'itemtype'  => $itemtype]);
         if (empty($args['objectid'])) {
             return;
         }
         // set context if available in function
-        $object = DataObjectFactory::getObject(
+        $object = $this->data()->getObject(
             ['objectid'  => $args['objectid'],
                 'itemid'    => $itemid,
-                'fieldlist' => [$name]],
-            $this->getContext()
+                'fieldlist' => [$name]]
         );
         if (!isset($object) || empty($object->objectid)) {
             return;

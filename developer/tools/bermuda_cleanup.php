@@ -1580,8 +1580,10 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarController::forbidden\(/' => '\$this->ctl()->forbidden(',
             '/xarController::badRequest\(/' => '\$this->ctl()->badRequest(',
             '/xarController::notFound\(/' => '\$this->ctl()->notFound(',
+            '/xarController::URL\(\s*\n*\s*\'' . $module . '\', */' => '\$this->mod()->getURL(',
+            '/xarController::URL\(/' => '\$this->ctl()->getModuleURL(',
             // @todo we need to drop extra , null, $this->getContext() here
-            '/,\s*\n*\s*null,\s*\n*\s*\$this->getContext\(\)\s*\n*\s*\)/' => ')',
+            '/,\s*null,\s*\$this->getContext\(\)\s*\)/s' => ')',
             // @todo check xarTpl::module() against current modName modType for mod()->template()
             '/xarTpl::module\(/' => '\$this->tpl()->module(',
             // @todo check xarTpl::object() against current objectName for data()->template()
@@ -1589,8 +1591,8 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarTpl::setPageTitle\(/' => '\$this->tpl()->setPageTitle(',
             '/xarTpl::setPageTemplateName\(/' => '\$this->tpl()->setPageTemplateName(',
             // @todo handle xarMod*::* - note: this assumes you set $module !
-            '/xarModVars::get\(\'' . $module . '\',\s*\n*\s*/' => '\$this->mod()->getVar(',
-            '/xarModVars::set\(\'' . $module . '\',\s*\n*\s*/' => '\$this->mod()->setVar(',
+            '/xarModVars::get\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->getVar(',
+            '/xarModVars::set\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->setVar(',
             // @todo handle xarDB*::* - note: excl. meta and newConn
             '/xarDB::getConn\(/' => '\$this->db()->getConn(',
             '/xarDB::getName\(/' => '\$this->db()->getName(',
@@ -1600,6 +1602,15 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarDB::importTables\(/' => '\$this->db()->importTables(',
             '/xarDB::FETCHMODE_ASSOC/' => '\$this->db()->getFetchAssoc()',
             '/xarDB::FETCHMODE_NUM/' => '\$this->db()->getFetchNum()',
+            // @todo do we want/need this in all api/gui functions
+            '/DataObjectDescriptor::getObjectID\(/' => '\$this->data()->getObjectID(',
+            '/DataObjectFactory::getObject\(/' => '\$this->data()->getObject(',
+            '/DataObjectFactory::getObjectList\(/' => '\$this->data()->getObjectList(',
+            '/DataObjectFactory::getObjectInfo\(/' => '\$this->data()->getObjectInfo(',
+            '/DataObjectFactory::getObjects\(/' => '\$this->data()->getObjects(',
+            '/DataPropertyMaster::getPropertyTypes\(/' => '\$this->prop()->getPropertyTypes(',
+            '/DataPropertyMaster::getProperties\(/' => '\$this->prop()->getProperties(',
+            '/DataPropertyMaster::getProperty\(/' => '\$this->prop()->getProperty(',
             '/ exit;/' => ' \$this->exit();',
             '/ exit\(/' => ' \$this->exit(',
             '/ die\(/' => ' \$this->exit(',
@@ -1639,39 +1650,78 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $found;
     }
 
-    public function replace_internal_methods($module, $type = '', $replace = false)
+    public function replace_internal_methods($module, $type = '', $update = false)
     {
-        $modules = $this->find_called_modules($module, $type);
-        // @todo check for internal methods calls and replace
-        $summary = [];
-        foreach ($modules as $modName => $types) {
-            if (!empty($module) && $modName != $module) {
-                continue;
-            }
-            $summary[$modName] = [
-                'internal' => 0,
-                'inmodule' => 0,
-                'external' => 0,
-            ];
-            foreach ($types as $modType => $funcs) {
-                foreach ($funcs as $funcName => $calls) {
-                    foreach ($calls as $call) {
-                        if (!empty($call['internal'])) {
-                            $summary[$modName]['internal'] += 1;
-                            // @todo replace
-                            $this->log($modName . '_' . $modType . '_' . $funcName . ': ' . $call['class'] . ' ' . $call['method'] . ' - TODO');
-                        } elseif (!empty($call['inmodule'])) {
-                            $summary[$modName]['inmodule'] += 1;
-                            // @todo replace
-                            $this->log($modName . '_' . $modType . '_' . $funcName . ': ' . $call['class'] . ' ' . $call['method'] . ' - TODO');
-                        } else {
-                            $summary[$modName]['external'] += 1;
-                        }
-                    }
+        $found = $this->find_module_methods($module, $type);
+        $files = 0;
+        $total = 0;
+        foreach ($found as $namespace => $methods) {
+            $pieces = explode('\\', $namespace);
+            $className = array_pop($pieces);
+            foreach ($methods as $methodName => $lname) {
+                $class = $this->classes[$lname];
+                $this->log('Class Method in ' . $namespace . ': ' . $methodName . ' - FOUND ' . $class['file']);
+                $contents = file_get_contents($class['file']);
+                $replaced = 0;
+                $todo = [];
+                $count = 0;
+                $search = '/xarMod::apiFunc\(\s*\'' . $module . '\',\s*\'(\w+)\',\s*\'(\w+)\'(,\s*(.*?)(,\s*\$this->getContext\(\)\s*|)|)\)/s';
+                $matches = [];
+                if (preg_match_all($search, $contents, $matches, PREG_PATTERN_ORDER)) {
+                    $unique = array_unique($matches[1]);
+                    array_walk($unique, function (&$value) {
+                        $value .= 'api';
+                    });
+                    $todo = array_merge($todo, $unique);
+                    $replace = '\$$1api->$2($4)';
+                    $contents = preg_replace($search, $replace, $contents, -1, $count);
+                    $replaced += $count;
                 }
+                $count = 0;
+                $search = '/xarMod::guiFunc\(\s*\'' . $module . '\',\s*\'(\w+)\',\s*\'(\w+)\'(,\s*(.*?)(,\s*\$this->getContext\(\)\s*|)|)\)/s';
+                $matches = [];
+                if (preg_match_all($search, $contents, $matches, PREG_PATTERN_ORDER)) {
+                    $unique = array_unique($matches[1]);
+                    array_walk($unique, function (&$value) {
+                        $value .= 'gui';
+                    });
+                    $todo = array_merge($todo, $unique);
+                    $replace = '\$$1gui->$2($4)';
+                    $contents = preg_replace($search, $replace, $contents, -1, $count);
+                    $replaced += $count;
+                }
+                if (count($todo) > 0) {
+                    $extra = '';
+                    $uses = '';
+                    foreach ($todo as $api) {
+                        $name = ucfirst(str_replace(['api', 'gui'], ['Api', 'Gui'], $api));
+                        if ($name != $className) {
+                            $uses .= 'use ' . implode('\\', $pieces) . '\\' . $name . ";\n";
+                        }
+                        $extra .= "\n" . '        /** @var ' . $name . ' $' . $api . ' */';
+                        $extra .= "\n" . '        $' . $api . ' = $this->' . $api . '();';
+                    }
+                    $contents = str_replace("use $namespace;\n", "use $namespace;\n" . $uses, $contents);
+                    $contents = preg_replace('/(public function __invoke.*\n\s+{(\n\s+extract\(\$args\);|))/', '$1' . $extra, $contents);
+                }
+                if (!str_contains($contents, ' * @see ')) {
+                    $see = '* @see ' . $className . '::' . $methodName . "()\n     ";
+                    $contents = preg_replace('/(\*\/\n\s+public function __invoke)/', $see . '$1', $contents);
+                    $replaced += 1;
+                }
+                if ($update && $replaced > 0 && !empty($contents)) {
+                    file_put_contents($class['file'], $contents);
+                    $this->log($namespace . ' ' . $class['file'] . ': ' . implode(', ', $todo), true);
+                } elseif ($replaced > 0) {
+                    $this->log($namespace . ' ' . $class['file'] . ': ' . implode(', ', $todo), true);
+                    $this->log($contents);
+                }
+                $files += 1;
+                $total += $replaced;
             }
         }
-        echo $this->to_json($summary);
+        $this->log('Found Class Methods: ' . $files . ' with ' . $total . ' replacements', true);
+        return $found;
     }
 }
 

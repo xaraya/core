@@ -15,7 +15,7 @@
 /**
  * utility function to retrieve the list of item types of a module (if any)
  *
- * @uses Xaraya\DataObject\UserApi::getModuleItemTypes()
+ * @uses Xaraya\DataObject\UserApi::findModuleItemTypes()
  * @todo remove this before it can propagate - too late, sorry
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return array<mixed> containing the item types and their description
@@ -34,5 +34,5 @@ function dynamicdata_userapi_getmoduleitemtypes(array $args = [], $context = nul
     /** @var Xaraya\DataObject\UserApi $userapi */
     $userapi = xarMod::getAPI('dynamicdata');
     $userapi->setContext($context);
-    return $userapi::getModuleItemTypes($moduleid, $native, $extensions);
+    return $userapi::findModuleItemTypes($moduleid, $native, $extensions);
 }

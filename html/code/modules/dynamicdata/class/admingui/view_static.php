@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UtilApi;
 use xarDB;
 use xarMod;
 use xarSec;
@@ -33,9 +34,12 @@ class ViewStaticMethod extends MethodClass
 
     /**
      * Return static table information
+     * @see AdminGui::viewStatic()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -74,18 +78,12 @@ class ViewStaticMethod extends MethodClass
         $data = [];
         $data['menutitle'] = $this->ml('Dynamic Data Utilities');
 
-        $static = xarMod::apiFunc(
-            'dynamicdata',
-            'util',
-            'getstatic',
-            ['module'   => $module,
+        $static = $utilapi->getstatic(['module'   => $module,
                 'module_id'    => $module_id,
                 'itemtype' => $itemtype,
-                'table'    => $table],
-            $this->getContext()
-        );
+                'table'    => $table]);
 
-        $metas = xarMod::apiFunc('dynamicdata', 'util', 'getmeta', [], $this->getContext());
+        $metas = $utilapi->getmeta([]);
         $data['tables'] = [];
         foreach ($metas as $name => $value) {
             $data['tables'][] = ['id' => $name, 'name' => $name];

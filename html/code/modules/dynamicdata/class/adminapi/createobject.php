@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use sys;
@@ -39,6 +39,7 @@ class CreateobjectMethod extends MethodClass
      * integer  $args['objectid'] object id of the object to create (for import only)<br/>
      * integer  $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
      * @return int object ID on success, null on failure
+     * @see AdminApi::createobject()
      */
     public function __invoke(array $args = [])
     {

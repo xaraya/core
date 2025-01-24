@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use BadParameterException;
 use DataObjectDescriptor;
@@ -46,6 +46,7 @@ class GetitemMethod extends MethodClass
      * boolean  $args['preview'] flag indicating if you're previewing an item
      * @return array|\DataObject|null of (name => value), or false on failure
      * @throws \BadParameterException
+     * @see UserApi::getitem()
      */
     public function __invoke(array $args = [])
     {
@@ -110,20 +111,19 @@ class GetitemMethod extends MethodClass
             $table = '';
         }
 
-        $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+        $args = $this->data()->getObjectID(['moduleid'  => $module_id,
             'itemtype'  => $itemtype]);
         if (empty($args['objectid'])) {
             return $nullreturn;
         }
         // set context if available in function
-        $object = DataObjectFactory::getObject(
+        $object = $this->data()->getObject(
             ['objectid'  => $args['objectid'],
                 'itemid'    => $itemid,
                 'fieldlist' => $fieldlist,
                 'join'      => $join,
                 'table'     => $table,
-                'status'    => $status],
-            $this->getContext()
+                'status'    => $status]
         );
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
             return $nullreturn;

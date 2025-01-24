@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use BadParameterException;
 use xarMod;
@@ -21,6 +21,7 @@ sys::import('xaraya.modules.method');
 
 /**
  * dynamicdata userapi getmoduleitemtypes function
+ * @todo overlaps with static method in UserApi
  * @extends MethodClass<UserApi>
  */
 class GetmoduleitemtypesMethod extends MethodClass
@@ -29,10 +30,11 @@ class GetmoduleitemtypesMethod extends MethodClass
 
     /**
      * utility function to retrieve the list of item types of a module (if any)
-     * @uses \Xaraya\DataObject\UserApi::getModuleItemTypes()
+     * @uses \Xaraya\DataObject\UserApi::findModuleItemTypes()
      * @todo remove this before it can propagate - too late, sorry
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return array containing the item types and their description
+     * @see UserApi::getmoduleitemtypes()
      */
     public function __invoke(array $args = [])
     {
@@ -47,6 +49,6 @@ class GetmoduleitemtypesMethod extends MethodClass
 
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        return $userapi::getModuleItemTypes($moduleid, $native, $extensions);
+        return $userapi::findModuleItemTypes($moduleid, $native, $extensions);
     }
 }

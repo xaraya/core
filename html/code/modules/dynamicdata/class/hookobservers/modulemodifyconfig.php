@@ -97,7 +97,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
                 'itemtype' => $itemtype]
         );
         $data['fields'] = $fields;
-        $data['fieldtypeprop'] = $this->data()->getProperty(['type' => 'fieldtype']);
+        $data['fieldtypeprop'] = $this->prop()->getProperty(['type' => 'fieldtype']);
 
         // set context if available in hook call
         $object = $this->data()->getObject([

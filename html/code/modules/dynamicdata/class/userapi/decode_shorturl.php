@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use xarMod;
 use xarModAlias;
@@ -33,13 +33,16 @@ class DecodeShorturlMethod extends MethodClass
      * @param array $params array of optional parameters<br/>
      * @return array|void containing func the function to be called and args the query
      * string arguments, or empty if it failed
+     * @see UserApi::decodeShorturl()
      */
     public function __invoke(array $params = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
         static $objectcache = [];
 
         if (count($objectcache) == 0) {
-            $objects = xarMod::apiFunc('dynamicdata', 'user', 'getobjects');
+            $objects = $userapi->getobjects();
             foreach ($objects as $object) {
                 $objectcache[$object['name']] = ['module_id'    => $object['moduleid'],
                     'itemtype' => $object['itemtype']];

@@ -91,7 +91,7 @@ function dynamicdata_admin_update(array $args = [], $context = null)
             $isvalid = $myobject->checkInput([], 0, 'dd');
 
             // recover any session var information
-            $data = xarMod::apiFunc('dynamicdata', 'user', 'getcontext', ['module' => $tplmodule]);
+            $data = xarMod::apiFunc('dynamicdata', 'user', 'sessioncontext', ['module' => $tplmodule]);
             extract($data);
 
             if (!empty($preview) || !$isvalid) {

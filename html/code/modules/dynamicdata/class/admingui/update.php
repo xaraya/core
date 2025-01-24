@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use Exception;
 use xarController;
@@ -38,7 +40,7 @@ class UpdateMethod extends MethodClass
     /**
      * Update current item
      * This is a standard function that is called with the results of the
-     * form supplied by xarMod::guiFunc('dynamicdata','admin','modify') to update a current item
+     * form supplied by $admingui->modify() to update a current item
      * @param array<string,mixed> $args
      * with
      *     int    objectid
@@ -49,10 +51,17 @@ class UpdateMethod extends MethodClass
      *     bool   preview
      *     string join
      *     string table
+     * @see AdminGui::update()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
+        /** @var AdminGui $admingui */
+        $admingui = $this->admingui();
         $data ??= [];
 
         if (!$this->var()->check('objectid', $objectid)) {
@@ -91,12 +100,11 @@ class UpdateMethod extends MethodClass
         }
 
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
                 'join'     => $join,
                 'table'    => $table,
-                'itemid'   => $itemid],
-            $this->getContext()
+                'itemid'   => $itemid]
         );
 
         $itemid = $myobject->getItem();
@@ -114,11 +122,11 @@ class UpdateMethod extends MethodClass
                 $isvalid = $myobject->checkInput([], 0, 'dd');
 
                 // recover any session var information
-                $data = xarMod::apiFunc('dynamicdata', 'user', 'getcontext', ['module' => $tplmodule]);
+                $data = $userapi->sessioncontext(['module' => $tplmodule]);
                 extract($data);
 
                 if (!empty($preview) || !$isvalid) {
-                    $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
+                    $data = array_merge($data, $adminapi->menu());
                     $data['object'] = & $myobject;
 
                     $data['objectid'] = $myobject->objectid;
@@ -200,7 +208,7 @@ class UpdateMethod extends MethodClass
 
                 // Check if this object already exists
                 try {
-                    $testobject = DataObjectFactory::getObject(['name' => $newname]);
+                    $testobject = $this->data()->getObject(['name' => $newname]);
                 } catch (Exception $e) {
                     return $this->tpl()->module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $newname]);
                 }
@@ -211,7 +219,7 @@ class UpdateMethod extends MethodClass
                 $myobject->properties['itemtype']->setValue($itemtype);
                 $newitemid = $myobject->createItem(['itemid' => 0]);
 
-                $oldobject = DataObjectFactory::getObject(['objectid' => $itemid]);
+                $oldobject = $this->data()->getObject(['objectid' => $itemid]);
                 foreach ($oldobject->properties as $property) {
                     $fields['name'] = $property->name;
                     $fields['label'] = $property->label;
@@ -222,12 +230,11 @@ class UpdateMethod extends MethodClass
                     $fields['status'] = $property->status;
                     $fields['seq'] = $property->seq;
                     $fields['configuration'] = $property->configuration;
-                    xarMod::apiFunc('dynamicdata', 'admin', 'createproperty', $fields);
+                    $adminapi->createproperty($fields);
                 }
 
                 // Got to the object to modify it
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'modify',
                     ['itemid' => $newitemid]
@@ -238,30 +245,26 @@ class UpdateMethod extends MethodClass
         if (!empty($return_url)) {
             $this->ctl()->redirect($return_url);
         } elseif ($myobject->objectid == 1) { // for dynamic objects, return to modify
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'modify',
                 ['itemid' => $itemid]
             ));
         } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
             $objectid = $myobject->properties['objectid']->value;
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'modifyprop',
                 ['itemid' => $objectid]
             ));
         } elseif (!empty($table)) {
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'view',
                 ['table' => $table]
             ));
         } else {
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'view',
                 ['itemid' => $objectid,

@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UtilApi;
 use DataObjectFactory;
 use DataPropertyMaster;
 use xarController;
@@ -37,9 +38,12 @@ class QueryMethod extends MethodClass
     /**
      * query items
      * @return array|void data for the template display
+     * @see AdminGui::query()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -210,7 +214,7 @@ class QueryMethod extends MethodClass
 
         $data['itemid'] = $itemid;
         $data['olditemid'] = $itemid;
-        $data['objects'] = DataObjectFactory::getObjects();
+        $data['objects'] = $this->data()->getObjects();
 
         $dbconn = $this->db()->getConn();
         $data['table'] = $table;
@@ -222,10 +226,9 @@ class QueryMethod extends MethodClass
         $data['jointables'] = '';
 
         if (!empty($itemid)) {
-            $data['object'] = DataObjectFactory::getObjectList(
+            $data['object'] = $this->data()->getObjectList(
                 ['objectid' => $itemid,
-                    'join' => $join],
-                $this->getContext()
+                    'join' => $join]
             );
             if (isset($data['object']) && !empty($data['object']->objectid)) {
                 $data['itemid'] = $data['object']->objectid;
@@ -233,11 +236,7 @@ class QueryMethod extends MethodClass
                 if (!empty($join) || empty($data['object']->primary)) {
                     // (try to) show the "static" properties, corresponding to fields in dedicated
                     // tables for this module
-                    $static = xarMod::apiFunc(
-                        'dynamicdata',
-                        'util',
-                        'getstatic',
-                        ['module_id' => $data['object']->moduleid,
+                    $static = $utilapi->getstatic(['module_id' => $data['object']->moduleid,
                             'itemtype' => $data['object']->itemtype]
                     );
                     $data['jointables'] = [];
@@ -256,9 +255,8 @@ class QueryMethod extends MethodClass
                 return;
             }
         } elseif (!empty($table)) {
-            $data['object'] = DataObjectFactory::getObjectList(
-                ['table' => $table],
-                $this->getContext()
+            $data['object'] = $this->data()->getObjectList(
+                ['table' => $table]
             );
             if (!isset($data['object'])) {
                 return;
@@ -529,23 +527,20 @@ class QueryMethod extends MethodClass
         }
 
         if (!empty($table)) {
-            $data['viewlink'] = xarController::URL(
-                'dynamicdata',
+            $data['viewlink'] = $this->mod()->getURL(
                 'admin',
                 'view',
                 ['table' => $table]
             );
         } elseif (!empty($itemid) && !empty($join)) {
-            $data['viewlink'] = xarController::URL(
-                'dynamicdata',
+            $data['viewlink'] = $this->mod()->getURL(
                 'admin',
                 'view',
                 ['itemid' => $itemid,
                     'join' => $join]
             );
         } elseif (!empty($itemid)) {
-            $data['viewlink'] = xarController::URL(
-                'dynamicdata',
+            $data['viewlink'] = $this->mod()->getURL(
                 'admin',
                 'view',
                 ['itemid' => $itemid]

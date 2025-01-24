@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use Exception;
 use PropertyRegistration;
@@ -33,6 +33,7 @@ class ImportpropertytypesMethod extends MethodClass
      * boolean  $args[flush] flush the property type table before import true/false (optional)<br/>
      * array    $args[dirs]
      * @return array an array of the property types currently available
+     * @see AdminApi::importpropertytypes()
      */
     public function __invoke(array $args = [])
     {

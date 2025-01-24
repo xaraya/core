@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\UserGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserGui;
+use Xaraya\DataObject\UserApi;
 use DataObjectFactory;
 use DataPropertyMaster;
 use xarController;
@@ -41,9 +42,12 @@ class SearchMethod extends MethodClass
      *      array $args['dd_check']
      *        int $args['numitems'] The number of items to get
      * @return array|void output of the items found
+     * @see UserGui::search()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
         // Security Check
         if (!$this->sec()->checkAccess('ViewDynamicData')) {
             return;
@@ -104,7 +108,7 @@ class SearchMethod extends MethodClass
         if (empty($data['ishooked']) && !empty($data['gotobject'])) {
             // get the selected object
             $objects = [];
-            $object = DataObjectFactory::getObjectInfo(
+            $object = $this->data()->getObjectInfo(
                 ['moduleid' => $module_id,
                     'itemtype' => $itemtype]
             );
@@ -114,7 +118,7 @@ class SearchMethod extends MethodClass
             }
         } else {
             // get items from the objects table
-            $objects = DataObjectFactory::getObjects();
+            $objects = $this->data()->getObjects();
         }
 
         if (empty($data['ishooked'])) {
@@ -145,11 +149,7 @@ class SearchMethod extends MethodClass
             }
             $label = $object['label'];
             $itemtype = $object['itemtype'];
-            $fields = xarMod::apiFunc(
-                'dynamicdata',
-                'user',
-                'getprop',
-                ['module_id' => $module_id,
+            $fields = $userapi->getprop(['module_id' => $module_id,
                     'itemtype' => $itemtype]
             );
             $wherelist = [];
@@ -164,8 +164,7 @@ class SearchMethod extends MethodClass
             if (!empty($q) && count($wherelist) > 0) {
                 //$where = join(' or ',$wherelist);
                 $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-                $pagerurl = xarController::URL(
-                    'dynamicdata',
+                $pagerurl = $this->mod()->getURL(
                     'user',
                     'search',
                     ['module_id' => ($module_id == $mymodid) ? null : $module_id,
@@ -175,20 +174,14 @@ class SearchMethod extends MethodClass
                 );
                 // get the object
                 // set context if available in function
-                $object = xarMod::apiFunc(
-                    'dynamicdata',
-                    'user',
-                    'getobjectlist',
-                    ['module_id' => $module_id,
+                $object = $userapi->getobjectlist(['module_id' => $module_id,
                         'itemtype' => $itemtype,
                         //'where' => $where,
                         'startnum' => $startnum,
                         'numitems' => $numitems,
                         //'pagerurl' => $pagerurl,
                         'layout' => 'list',
-                        'status' => $status],
-                    $this->getContext()
-                );
+                        'status' => $status]);
                 if (!$object->checkAccess('view')) {
                     continue;
                 }
@@ -215,8 +208,7 @@ class SearchMethod extends MethodClass
                 $itemtype = null;
             }
             $data['items'][] = [
-                'link'     => xarController::URL(
-                    'dynamicdata',
+                'link'     => $this->mod()->getURL(
                     'user',
                     $myfunc,
                     ['module_id' => $module_id,

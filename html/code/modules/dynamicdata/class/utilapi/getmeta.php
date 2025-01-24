@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
 use sys;
 
@@ -35,6 +35,7 @@ class GetmetaMethod extends MethodClass
      *     $args['dbConnArgs'] connection params of the database if different from Xaraya DB (optional)
      * @return array<string,mixed>|void of field definitions, or null on failure
      * @todo split off the common parts which are also in getstatic.php
+     * @see UtilApi::getmeta()
      */
     public function __invoke(array $args = [])
     {
@@ -54,6 +55,6 @@ class GetmetaMethod extends MethodClass
         }
         $utilapi = new \Xaraya\DataObject\UtilApi();
 
-        return $utilapi->getMeta($table, $db, $dbConnIndex, $dbConnArgs);
+        return $utilapi->getMetaInfo($table, $db, $dbConnIndex, $dbConnArgs);
     }
 }

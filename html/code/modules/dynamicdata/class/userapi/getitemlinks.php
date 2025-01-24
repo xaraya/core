@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use xarMod;
 use sys;
@@ -32,6 +32,7 @@ class GetitemlinksMethod extends MethodClass
      * string   $args['itemtype'] item type (optional)<br/>
      * array    $args['itemids'] array of item ids to get
      * @return array containing the itemlink(s) for the item(s).
+     * @see UserApi::getitemlinks()
      */
     public function __invoke(array $args = [])
     {

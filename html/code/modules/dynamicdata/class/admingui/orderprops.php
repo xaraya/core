@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\AdminApi;
 use BadParameterException;
 use DataObjectFactory;
 use xarController;
@@ -35,9 +37,14 @@ class OrderpropsMethod extends MethodClass
     /**
      * Re-order the dynamic properties for a module + itemtype
      * @return bool|void true on success and redirect to modifyprop
+     * @see AdminGui::orderprops()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
         // Security
         if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
@@ -82,7 +89,7 @@ class OrderpropsMethod extends MethodClass
             throw new BadParameterException($vars, $msg);
         }
 
-        $objectinfo = DataObjectFactory::getObjectInfo(
+        $objectinfo = $this->data()->getObjectInfo(
             ['objectid' => $objectid]
         );
 
@@ -96,11 +103,7 @@ class OrderpropsMethod extends MethodClass
             throw new BadParameterException($vars, $msg);
         }
 
-        $fields = xarMod::apiFunc(
-            'dynamicdata',
-            'user',
-            'getprop',
-            ['objectid' => $objectid,
+        $fields = $userapi->getprop(['objectid' => $objectid,
                 'module_id' => $module_id,
                 'itemtype' => $itemtype,
                 'allprops' => true]
@@ -135,11 +138,7 @@ class OrderpropsMethod extends MethodClass
         }
 
         if (isset($swappos)) {
-            if (!xarMod::apiFunc(
-                'dynamicdata',
-                'admin',
-                'updateprop',
-                ['id' => $itemid,
+            if (!$adminapi->updateprop(['id' => $itemid,
                     'label' => $fields[$move_prop]['label'],
                     'type' => $fields[$move_prop]['type'],
                     'seq' => $fields[$swapwith]['seq']]
@@ -147,11 +146,7 @@ class OrderpropsMethod extends MethodClass
                 return;
             }
 
-            if (!xarMod::apiFunc(
-                'dynamicdata',
-                'admin',
-                'updateprop',
-                ['id' => $fields[$swapwith]['id'],
+            if (!$adminapi->updateprop(['id' => $fields[$swapwith]['id'],
                     'label' => $fields[$swapwith]['label'],
                     'type' => $fields[$swapwith]['type'],
                     'seq' => $fields[$move_prop]['seq']]
@@ -160,8 +155,7 @@ class OrderpropsMethod extends MethodClass
             }
         }
 
-        $this->ctl()->redirect(xarController::URL(
-            'dynamicdata',
+        $this->ctl()->redirect($this->mod()->getURL(
             'admin',
             'modifyprop',
             ['module_id'    => $module_id,

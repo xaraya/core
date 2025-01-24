@@ -80,7 +80,7 @@ function dynamicdata_admin_create(array $args = [], $context = null)
     $isvalid = $myobject->checkInput();
 
     // recover any session var information
-    $data = xarMod::apiFunc('dynamicdata', 'user', 'getcontext', ['module' => $tplmodule]);
+    $data = xarMod::apiFunc('dynamicdata', 'user', 'sessioncontext', ['module' => $tplmodule]);
     extract($data);
 
     if (!empty($preview) || !$isvalid) {

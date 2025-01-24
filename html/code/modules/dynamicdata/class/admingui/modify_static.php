@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\DataApi;
 use DataObjectFactory;
 use Exception;
 use xarController;
@@ -38,9 +39,12 @@ class ModifyStaticMethod extends MethodClass
      *
      * @return mixed data array for the template display or output display string if invalid data submitted
      * @todo use context
+     * @see AdminGui::modifyStatic()
      */
     public function __invoke(array $args = [])
     {
+        /** @var DataApi $dataapi */
+        $dataapi = $this->dataapi();
         // Security
         if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
@@ -60,7 +64,7 @@ class ModifyStaticMethod extends MethodClass
             return;
         }
 
-        $data['object'] = DataObjectFactory::getObject(['name' => 'dynamicdata_tablefields']);
+        $data['object'] = $this->data()->getObject(['name' => 'dynamicdata_tablefields']);
         $data['authid'] = $this->sec()->genAuthKey();
 
         if ($data['confirm']) {
@@ -75,7 +79,6 @@ class ModifyStaticMethod extends MethodClass
 
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                $data['context'] ??= $this->getContext();
                 return $this->tpl()->module('dynamicdata', 'admin', 'modify_static', $data);
             } else {
                 if (empty($data['table'])) {
@@ -86,7 +89,7 @@ class ModifyStaticMethod extends MethodClass
                 }
 
                 // Good data: create the field
-                $options = xarMod::apiFunc('dynamicdata', 'data', 'getdatatypeoptions');
+                $options = $dataapi->getdatatypeoptions();
                 $query = 'ALTER TABLE ' . $data['table'] . ' CHANGE COLUMN `' . $data['oldname'] . '` `';
                 $query .= $data['object']->properties['name']->value . '` ';
                 $query .= $options['datatypes'][$data['object']->properties['type']->value] . ' ';
@@ -109,8 +112,7 @@ class ModifyStaticMethod extends MethodClass
                 $dbconn->Execute($query);
 
                 // Jump to the next page
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'view_static',
                     ['table' => $data['table']]

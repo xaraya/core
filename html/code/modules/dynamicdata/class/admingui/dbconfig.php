@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
 use DataObjectFactory;
 use Exception;
@@ -33,6 +33,7 @@ class DbconfigMethod extends MethodClass
 
     /**
      * Database configurations used by modules and objects
+     * @see AdminGui::dbconfig()
      */
     public function __invoke(array $args = [])
     {
@@ -81,8 +82,7 @@ class DbconfigMethod extends MethodClass
                     $utilapi->saveDatabases($databases, $module);
                     $dbname = '*';
                 }
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'dbconfig',
                 ));
@@ -158,7 +158,7 @@ class DbconfigMethod extends MethodClass
             $data['dbconfigs'][$modname]['databases'] = $databases;
         }
         // find any objects with config containing dbConnIndex and/or dbConnArgs
-        $objectlist = DataObjectFactory::getObjectList(['name' => 'objects', 'fieldlist' => ['name', 'label', 'module_id', 'datastore', 'config']]);
+        $objectlist = $this->data()->getObjectList(['name' => 'objects', 'fieldlist' => ['name', 'label', 'module_id', 'datastore', 'config']]);
         $all_objects = $objectlist->getItems();
         foreach ($all_objects as $item) {
             if (empty($item['config'])) {

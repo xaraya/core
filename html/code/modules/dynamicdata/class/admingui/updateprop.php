@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\AdminApi;
 use BadParameterException;
 use DataObjectFactory;
 use DataPropertyMaster;
@@ -37,9 +39,14 @@ class UpdatepropMethod extends MethodClass
     /**
      * Update the dynamic properties for a module + itemtype
      * @return bool|string|void true on success and redirect to modifyprop
+     * @see AdminGui::updateprop()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
         if (!$this->var()->check('objectid', $objectid, 'isset', 1)) {
             return;
         }
@@ -93,7 +100,7 @@ class UpdatepropMethod extends MethodClass
             return $this->ctl()->badRequest('bad_author');
         }
 
-        $objectinfo = DataObjectFactory::getObjectInfo(
+        $objectinfo = $this->data()->getObjectInfo(
             ['objectid' => $objectid,
                 'moduleid' => $module_id,
                 'itemtype' => $itemtype]
@@ -127,16 +134,10 @@ class UpdatepropMethod extends MethodClass
             throw new BadParameterException($vars, $msg);
         }
 
-        $fields = xarMod::apiFunc(
-            'dynamicdata',
-            'user',
-            'getprop',
-            ['objectid' => $objectid,
+        $fields = $userapi->getprop(['objectid' => $objectid,
                 'moduleid' => $module_id,
                 'itemtype' => $itemtype,
-                'allprops' => true],
-            $this->getContext()
-        );
+                'allprops' => true]);
 
         $isprimary = 0;
         $i = 0;
@@ -145,16 +146,10 @@ class UpdatepropMethod extends MethodClass
             $id = $field['id'];
             $i++;
             if (empty($dd_label[$id])) {
-                $property = DataPropertyMaster::getProperty(['type' => $field['type']]);
+                $property = $this->prop()->getProperty(['type' => $field['type']]);
                 $res = $property->removeFromObject(['object_id' => $objectid]);
                 // delete property (and corresponding data) in xaradminapi.php
-                if (!xarMod::apiFunc(
-                    'dynamicdata',
-                    'admin',
-                    'deleteprop',
-                    ['id' => $id],
-                    $this->getContext()
-                )) {
+                if (!$adminapi->deleteprop(['id' => $id])) {
                     return;
                 }
             } else {
@@ -180,11 +175,7 @@ class UpdatepropMethod extends MethodClass
                 if (!isset($dd_translatable[$id])) {
                     $dd_translatable[$id] = 0;
                 }
-                if (!xarMod::apiFunc(
-                    'dynamicdata',
-                    'admin',
-                    'updateprop',
-                    ['id'            => $id,
+                if (!$adminapi->updateprop(['id'            => $id,
                         'name'          => $dd_name[$id],
                         'label'         => $dd_label[$id],
                         'type'          => $dd_type[$id],
@@ -193,9 +184,7 @@ class UpdatepropMethod extends MethodClass
                         'translatable'  => $dd_translatable[$id],
                         'source'        => $dd_source[$id],
                         'status'        => $dd_status[$id],
-                        'configuration' => $dd_configuration[$id]],
-                    $this->getContext()
-                )) {
+                        'configuration' => $dd_configuration[$id]])) {
                     return;
                 }
                 if (DataPropertyMaster::isPrimaryType($dd_type[$id])) { // item id
@@ -204,9 +193,9 @@ class UpdatepropMethod extends MethodClass
 
                 // If we changed the property type, run the appropriate methods
                 if ($field['type'] != $dd_type[$id]) {
-                    $property = DataPropertyMaster::getProperty(['type' => $field['type']]);
+                    $property = $this->prop()->getProperty(['type' => $field['type']]);
                     $res = $property->removeFromObject(['object_id' => $objectid]);
-                    $property = DataPropertyMaster::getProperty(['type' => $dd_type[$id]]);
+                    $property = $this->prop()->getProperty(['type' => $dd_type[$id]]);
                     $res = $property->addToObject(['object_id' => $objectid]);
                 }
             }
@@ -225,11 +214,7 @@ class UpdatepropMethod extends MethodClass
                 $input_dd_status[0] = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
             }
             $dd_status[0] = $display_dd_status[0] + $input_dd_status[0];
-            $id = xarMod::apiFunc(
-                'dynamicdata',
-                'admin',
-                'createproperty',
-                ['name' => $name,
+            $id = $adminapi->createproperty(['name' => $name,
                     'label' => $dd_label[0],
                     'objectid' => $objectid,
                     // 'moduleid' => $module_id,
@@ -238,9 +223,7 @@ class UpdatepropMethod extends MethodClass
                     'defaultvalue' => $dd_defaultvalue[0],
                     'source' => $dd_source[0],
                     'status' => $dd_status[0],
-                    'seq' => $i],
-                $this->getContext()
-            );
+                    'seq' => $i]);
             if (empty($id)) {
                 return;
             }
@@ -248,7 +231,7 @@ class UpdatepropMethod extends MethodClass
             if (DataPropertyMaster::isPrimaryType($dd_type[0])) { // item id
                 $isprimary = 1;
             }
-            $property = DataPropertyMaster::getProperty(['type' => $dd_type[0]]);
+            $property = $this->prop()->getProperty(['type' => $dd_type[0]]);
             $res = $property->addToObject(['object_id' => $objectid]);
         }
 
@@ -266,8 +249,7 @@ class UpdatepropMethod extends MethodClass
             );
         }
 
-        $this->ctl()->redirect(xarController::URL(
-            'dynamicdata',
+        $this->ctl()->redirect($this->mod()->getURL(
             'admin',
             'modifyprop',
             ['itemid'    => $objectid,

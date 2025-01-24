@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use Exception;
 use xarController;
@@ -37,9 +38,12 @@ class ViewMethod extends MethodClass
     /**
      * View items
      * @return string|void output display string
+     * @see AdminGui::view()
      */
     public function __invoke(array $args = [])
     {
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
         // Security
         if (!$this->sec()->checkAccess('EditDynamicData')) {
             return;
@@ -83,7 +87,7 @@ class ViewMethod extends MethodClass
 
         // Note: we need to pass all relevant arguments ourselves here
         // set context if available in function
-        $object = DataObjectFactory::getObjectList(
+        $object = $this->data()->getObjectList(
             ['objectid'  => $itemid,
                 'name'      => $name,
                 'startnum'  => $startnum,
@@ -93,8 +97,7 @@ class ViewMethod extends MethodClass
                 'layout'    => $layout,
                 'tplmodule' => $tplmodule,
                 'template'  => $template,
-            ],
-            $this->getContext()
+            ]
         );
 
         if (!isset($object) || empty($object->objectid)) {
@@ -131,27 +134,24 @@ class ViewMethod extends MethodClass
         // TODO: another stray
         $data['catid'] = $catid;
         // TODO: is this needed?
-        $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
+        $data = array_merge($data, $adminapi->menu());
 
         if ($this->sec()->checkAccess('AdminDynamicData', 0)) {
             if (!empty($data['table'])) {
-                $data['querylink'] = xarController::URL(
-                    'dynamicdata',
+                $data['querylink'] = $this->mod()->getURL(
                     'admin',
                     'query',
                     ['table' => $data['table']]
                 );
             } elseif (!empty($data['join'])) {
-                $data['querylink'] = xarController::URL(
-                    'dynamicdata',
+                $data['querylink'] = $this->mod()->getURL(
                     'admin',
                     'query',
                     ['itemid' => $data['objectid'],
                         'join' => $data['join']]
                 );
             } else {
-                $data['querylink'] = xarController::URL(
-                    'dynamicdata',
+                $data['querylink'] = $this->mod()->getURL(
                     'admin',
                     'query',
                     ['itemid' => $data['objectid']]

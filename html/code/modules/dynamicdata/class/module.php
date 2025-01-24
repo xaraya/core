@@ -27,7 +27,9 @@ class Module extends ModuleClass
         parent::setClassTypes();
         // add other class types for this module
         $this->classtypes['testgui'] = 'TestGui';
-        //$this->classtypes['utilapi'] = 'UtilApi';
+        $this->classtypes['utilapi'] = 'UtilApi';
+        $this->classtypes['dataapi'] = 'DataApi';
+        $this->classtypes['restapi'] = 'RestApi';
     }
 
     public function getTestGUI(): AdminGuiInterface

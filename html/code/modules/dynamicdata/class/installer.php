@@ -252,7 +252,7 @@ class Installer extends InstallerClass
         $instances = [
             [
                 'header' => 'external', // this keyword indicates an external "wizard"
-                'query'  => xarController::URL('dynamicdata', 'admin', 'privileges'),
+                'query'  => $this->mod()->getURL('admin', 'privileges'),
                 'limit'  => 0,
             ],
         ];

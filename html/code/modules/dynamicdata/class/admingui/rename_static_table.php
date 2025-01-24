@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
 use DataObjectFactory;
 use xarController;
@@ -28,7 +28,8 @@ sys::import('xaraya.modules.method');
  */
 class RenameStaticTableMethod extends MethodClass
 {
-    /** functions imported by bermuda_cleanup */
+    /** functions imported by bermuda_cleanup * @see AdminGui::renameStaticTable()
+     */
 
     public function __invoke(array $args = [])
     {
@@ -48,14 +49,13 @@ class RenameStaticTableMethod extends MethodClass
             return;
         }
 
-        $data['object'] = DataObjectFactory::getObject(['name' => 'dynamicdata_tablefields']);
+        $data['object'] = $this->data()->getObject(['name' => 'dynamicdata_tablefields']);
 
         $data['tplmodule'] = 'dynamicdata';
 
         if ($data['confirm']) {
             if (empty($data['newtable'])) {
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'view_static',
                     ['table' => $data['table']]
@@ -66,8 +66,7 @@ class RenameStaticTableMethod extends MethodClass
             $dbconn->Execute($query);
 
             // Jump to the next page
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'view_static',
                 ['table' => $data['newtable']]

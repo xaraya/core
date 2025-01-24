@@ -292,7 +292,13 @@ trait ModuleServicesTrait
             if (class_exists($className)) {
                 $this->methods[$funcName] = $this->getMethodClass($className);
             } else {
-                $this->methods[$funcName] = null;
+                // $utilapi = $this->utilapi();
+                $classType = $this->getModule()?->getClassType($funcName);
+                if (!empty($classType)) {
+                    $this->methods[$funcName] = $this->getModule()->getComponent($classType);
+                } else {
+                    $this->methods[$funcName] = null;
+                }
             }
         }
         if (!isset($this->methods[$funcName])) {

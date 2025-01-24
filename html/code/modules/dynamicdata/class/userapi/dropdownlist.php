@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use BadParameterException;
 use DataObjectList;
@@ -35,7 +35,7 @@ class DropdownlistMethod extends MethodClass
      * Get an array of DD items (itemid => fieldvalue) for use in dropdown lists
      * E.g. to specify the parent of an item for parent-child relationships,
      * add a dynamic data field of type Dropdown List with the configuration rule
-     * xarMod::apiFunc('dynamicdata','user','dropdownlist',array('field' => 'name','module' => 'dynamicdata','itemtype' => 2))
+     * $userapi->dropdownlist(array('field' => 'name','module' => 'dynamicdata','itemtype' => 2))
      *
      * Note : for additional optional parameters, see the getitems() function
      * @author the DynamicData module development team
@@ -48,9 +48,12 @@ class DropdownlistMethod extends MethodClass
      * string   $args['table'] database table to turn into an object
      * @return array|void of (itemid => fieldvalue), or false on failure
      * @throws \EmptyParameterException
+     * @see UserApi::dropdownlist()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
         if (empty($args['field'])) {
             throw new EmptyParameterException('field');
         }
@@ -63,7 +66,7 @@ class DropdownlistMethod extends MethodClass
         $args['getobject'] = 1;
 
         /** @var DataObjectList|null $object */
-        $object = xarMod::apiFunc('dynamicdata', 'user', 'getitems', $args, $this->getContext());
+        $object = $userapi->getitems($args);
         if (!isset($object)) {
             return;
         }

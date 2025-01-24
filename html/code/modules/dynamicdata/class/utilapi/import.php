@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
 use DataObjectImporter;
 use xarDB;
@@ -39,6 +39,7 @@ class ImportMethod extends MethodClass
      *     $args['keepitemid'] (try to) keep the item id of the different items (default false)
      *     $args['entry'] optional array of external references. (deprecated)
      * @return mixed|void object id on success, null on failure
+     * @see UtilApi::import()
      */
     public function __invoke(array $args = [])
     {

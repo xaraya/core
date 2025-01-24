@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
 use xarController;
 use xarSecurity;
@@ -38,6 +38,7 @@ class UtilitiesMethod extends MethodClass
      * @copyright see the html/credits.html file in this release
      * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
      * @link http://xaraya.info/index.php/release/182.html
+     * @see AdminGui::utilities()
      */
     public function __invoke(array $args = [])
     {
@@ -52,7 +53,7 @@ class UtilitiesMethod extends MethodClass
             return;
         }
         $this->tpl()->setPageTitle($this->var()->prep($this->ml($data['option'])));
-        $this->ctl()->redirect(xarController::URL('dynamicdata', 'admin', 'import'));
+        $this->ctl()->redirect($this->mod()->getURL('admin', 'import'));
         return true;
     }
 }

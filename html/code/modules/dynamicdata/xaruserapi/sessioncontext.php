@@ -9,14 +9,14 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 /**
- * get an array of context data for a module using dynamicdata
+ * get an array of context data for a module using dynamicdata (was getcontext)
  *
  * @author the DynamicData module development team
  * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $module  name of the module dynamicdata is working for
  * @return array<mixed> of data
  */
-function dynamicdata_userapi_getcontext($args = ['module' => 'dynamicdata'], $context = null)
+function dynamicdata_userapi_sessioncontext($args = ['module' => 'dynamicdata'], $context = null)
 {
     // @todo use incoming $context here too?
     extract($args);

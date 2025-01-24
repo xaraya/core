@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataObjectFactory;
 use xarController;
@@ -34,6 +34,7 @@ class EncodeShorturlMethod extends MethodClass
      * @param array<string,mixed> $args array of optional parameters<br/>
      * string   $args the function and arguments passed to xarController::URL
      * @return string|void path to be added to index.php for a short URL, or empty if failed
+     * @see UserApi::encodeShorturl()
      */
     public function __invoke(array $args = [])
     {
@@ -70,7 +71,7 @@ class EncodeShorturlMethod extends MethodClass
         }
 
         if (count($objectcache) == 0) {
-            $objects = DataObjectFactory::getObjects();
+            $objects = $this->data()->getObjects();
             foreach ($objects as $object) {
                 $objectcache[$object['moduleid'] . ':' . $object['itemtype']] = $object['name'];
             }

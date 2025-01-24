@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserGui;
 use DataObjectFactory;
 use xarController;
@@ -35,6 +35,7 @@ class DisplayMethod extends MethodClass
      * available from the module.
      * @param array<string,mixed> $args an array of arguments (if called by other modules)
      * @return string|void output display string
+     * @see UserGui::display()
      */
     public function __invoke(array $args = [])
     {
@@ -60,12 +61,11 @@ class DisplayMethod extends MethodClass
         }
 
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
                 'name' => $name,
                 'itemid'   => $itemid,
-                'tplmodule' => $tplmodule],
-            $this->getContext()
+                'tplmodule' => $tplmodule]
         );
         if (!isset($myobject)) {
             return;

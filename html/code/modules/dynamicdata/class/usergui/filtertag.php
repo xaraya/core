@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserGui;
 use DataObjectFactory;
 use Exception;
@@ -36,6 +36,7 @@ class FiltertagMethod extends MethodClass
      *
      * @param array<string,mixed> $args
      * @return array|bool|void
+     * @see UserGui::filtertag()
      */
     public function __invoke(array $args = [])
     {
@@ -64,7 +65,7 @@ class FiltertagMethod extends MethodClass
             }
 
             // Get an instance of the dataobject so that we can get at the dataproperties' checkInput() method
-            $object = DataObjectFactory::getObject(['name' => $objectname], $this->getContext());
+            $object = $this->data()->getObject(['name' => $objectname]);
 
             sys::import('xaraya.structures.query');
             $q = new Query();
@@ -123,7 +124,7 @@ class FiltertagMethod extends MethodClass
             // Make sure we have a dataobject
             if (!isset($args['object'])) {
                 if (isset($args['objectname'])) {
-                    $args['object'] = DataObjectFactory::getObject(['name' => $args['objectname']], $this->getContext());
+                    $args['object'] = $this->data()->getObject(['name' => $args['objectname']]);
                 } else {
                     throw new Exception('Missing $object for filter tag');
                 }

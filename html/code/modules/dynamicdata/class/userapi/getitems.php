@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use BadParameterException;
 use DataObjectDescriptor;
@@ -51,6 +51,7 @@ class GetitemsMethod extends MethodClass
      * boolean  $args['getobject'] flag indicating if you want to get the whole object back
      * @return array|\DataObjectList|null of (itemid => array of (name => value)), or false on failure
      * @throws \BadParameterException
+     * @see UserApi::getitems()
      */
     public function __invoke(array $args = [])
     {
@@ -135,14 +136,14 @@ class GetitemsMethod extends MethodClass
             $catid = '';
         }
 
-        $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+        $args = $this->data()->getObjectID(['moduleid'  => $module_id,
             'itemtype'  => $itemtype]);
         $emptyarray = [];
         if (empty($args['objectid'])) {
             return $emptyarray;
         }
         // set context if available in function
-        $object = DataObjectFactory::getObjectList(
+        $object = $this->data()->getObjectList(
             ['objectid'  => $args['objectid'],
                 'itemids' => $itemids,
                 'sort' => $sort,
@@ -154,8 +155,7 @@ class GetitemsMethod extends MethodClass
                 'table' => $table,
                 'catid' => $catid,
                 'groupby' => $groupby,
-                'status' => $status],
-            $this->getContext()
+                'status' => $status]
         );
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
             return $nullreturn;

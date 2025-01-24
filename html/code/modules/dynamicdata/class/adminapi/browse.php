@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use EmptyParameterException;
 use xarSecurity;
@@ -30,6 +30,7 @@ class BrowseMethod extends MethodClass
     /**
      *
      * @param array<string,mixed> $args array of optional parameters<br/>
+     * @see AdminApi::browse()
      */
     public function __invoke(array $args = [])
     {

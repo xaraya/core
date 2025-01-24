@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\RestApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\RestApi;
 use xarMod;
 use sys;
@@ -35,6 +35,7 @@ class GetlistMethod extends MethodClass
      * => ['itemtype' => ['type' => 'string'], 'itemids' => ['type' => 'array', 'items' => ['type' => 'integer']]]  // rest
      * @param array<string,mixed> $args
      * @return array of info
+     * @see RestApi::getlist()
      */
     public function __invoke($args = [])
     {

@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use xarController;
 use xarMod;
@@ -36,10 +37,13 @@ class NewMethod extends MethodClass
      * This is a standard function that is called whenever an administrator
      * wishes to create a new module item
      * @return string|void output display string
+     * @see AdminGui::new()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
 
         if (!$this->var()->check('objectid', $objectid, 'id', 1)) {
             return;
@@ -75,10 +79,10 @@ class NewMethod extends MethodClass
             return;
         }
 
-        $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
+        $data = $adminapi->menu();
 
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
                 'name'      => $name,
                 'moduleid'  => $module_id,
@@ -87,8 +91,7 @@ class NewMethod extends MethodClass
                 'table'     => $table,
                 'itemid'    => $itemid,
                 'tplmodule' => $tplmodule,
-                'template'  => $template],
-            $this->getContext()
+                'template'  => $template]
         );
         // Security
         if (empty($myobject)) {

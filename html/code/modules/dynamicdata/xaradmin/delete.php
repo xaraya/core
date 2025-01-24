@@ -81,7 +81,7 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
     $data = $myobject->toArray();
 
     // recover any session var information and remove it from the var
-    $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'user', 'getcontext', ['module' => $tplmodule]));
+    $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'user', 'sessioncontext', ['module' => $tplmodule]));
     xarSession::setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
     extract($data);
 

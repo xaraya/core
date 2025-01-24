@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
 use DataObjectFactory;
 use DataObjectRESTBuilder;
@@ -40,6 +40,7 @@ class TestApisMethod extends MethodClass
     /**
      * Test APIs
      * @uses \sys::autoload()
+     * @see AdminGui::testApis()
      */
     public function __invoke(array $args = [])
     {
@@ -227,7 +228,7 @@ class TestApisMethod extends MethodClass
         foreach ($data['objects'] as $item) {
             array_push($known_objects, $item['name']);
         }
-        $objectlist = DataObjectFactory::getObjectList(['name' => 'objects', 'fieldlist' => ['name', 'label']]);
+        $objectlist = $this->data()->getObjectList(['name' => 'objects', 'fieldlist' => ['name', 'label']]);
         $all_objects = $objectlist->getItems();
         $data['otherlist'] = [];
         foreach ($all_objects as $item) {

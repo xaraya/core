@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use BadParameterException;
 use DataObjectDescriptor;
@@ -42,10 +42,11 @@ class UpdateMethod extends MethodClass
      *        array    $args['fields'] array containing the field definitions and values
      * @return mixed item id on success, null on failure
      * @throws \BadParameterException
+     * @see AdminApi::update()
      */
     public function __invoke(array $args = [])
     {
-        $args = DataObjectDescriptor::getObjectID($args);
+        $args = $this->data()->getObjectID($args);
         extract($args);
         /** @var int $objectid */
 
@@ -82,10 +83,9 @@ class UpdateMethod extends MethodClass
 
         // TODO: test this
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
-                'itemid'   => $itemid],
-            $this->getContext()
+                'itemid'   => $itemid]
         );
         if (empty($myobject)) {
             return;

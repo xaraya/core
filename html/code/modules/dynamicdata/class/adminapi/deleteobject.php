@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use sys;
@@ -32,6 +32,7 @@ class DeleteobjectMethod extends MethodClass
      * @param array<string,mixed> $args array of optional parameters<br/>
      * integer  $args['objectid'] object id of the object to delete
      * @return int|bool object ID on success, null on failure
+     * @see AdminApi::deleteobject()
      */
     public function __invoke(array $args = [])
     {

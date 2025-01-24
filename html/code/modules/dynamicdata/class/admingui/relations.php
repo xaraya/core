@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\UtilApi;
 use BadParameterException;
 use ConfigurationException;
 use DataObjectFactory;
@@ -45,9 +47,14 @@ class RelationsMethod extends MethodClass
 
     /**
      * Return relationship information (test only)
+     * @see AdminGui::relations()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -136,7 +143,7 @@ class RelationsMethod extends MethodClass
         ];
 
         // get objects
-        $data['objects'] = xarMod::apiFunc('dynamicdata', 'user', 'getobjects');
+        $data['objects'] = $userapi->getobjects();
 
         // import the DataObjectLinks class
         sys::import('modules.dynamicdata.class.objects.links');
@@ -158,15 +165,7 @@ class RelationsMethod extends MethodClass
         //dynamicdata_sync_relations();
 
         if (!empty($objectid)) {
-            $object = xarMod::apiFunc(
-                'dynamicdata',
-                'user',
-                'getobject',
-                ['objectid' => $objectid],
-                $this->getContext()
-            );
-            // set context if available in function
-            $object->setContext($this->getContext());
+            $object = $this->data()->getObject(['objectid' => $objectid]);
             if (!$object->checkAccess('config')) {
                 $msg = $this->ml('Configure #(1) is forbidden', $object->label);
                 return $this->ctl()->forbidden($msg);
@@ -192,7 +191,7 @@ class RelationsMethod extends MethodClass
                 $yuml_spec = '[' . $object->label;
 
                 /* Add the properties to the class diagram
-                    $proptypes = DataPropertyMaster::getPropertyTypes();
+                    $proptypes = $this->prop()->getPropertyTypes();
                     $join = '|';
                     foreach ($object->properties as $property) {
                         $yuml_spec .= $join . $property->name . ': ' . $proptypes[$property->type]['name'];
@@ -315,13 +314,7 @@ class RelationsMethod extends MethodClass
             }
 
             if (!empty($withobjectid)) {
-                $withobject = xarMod::apiFunc(
-                    'dynamicdata',
-                    'user',
-                    'getobject',
-                    ['objectid' => $withobjectid],
-                    $this->getContext()
-                );
+                $withobject = $this->data()->getObject(['objectid' => $withobjectid]);
                 $data['withobject'] = $withobject;
                 $data['withfields'] = $withobject->properties;
             }
@@ -346,8 +339,7 @@ class RelationsMethod extends MethodClass
 
                 // add link
                 DataObjectLinks::addLink($objectid, $field, $withobjectid, $withfield, $relation, $direction, $extra);
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'relations',
                     ['objectid' => $objectid]
@@ -365,8 +357,7 @@ class RelationsMethod extends MethodClass
                     }
                     DataObjectLinks::removeLink($link_id);
                 }
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'relations',
                     ['objectid' => $objectid]
@@ -385,23 +376,14 @@ class RelationsMethod extends MethodClass
             }
 
             // get fieldtype property to show object properties
-            $data['prop'] = xarMod::apiFunc(
-                'dynamicdata',
-                'user',
-                'getproperty',
-                ['type' => 'fieldtype',
-                    'name' => 'dummy']
-            );
+            $data['prop'] = $this->prop()->getProperty([
+                'type' => 'fieldtype',
+                'name' => 'dummy',
+            ]);
 
         } elseif (!empty($table)) {
             // set context if available in function
-            $object = xarMod::apiFunc(
-                'dynamicdata',
-                'user',
-                'getobject',
-                ['table' => $table],
-                $this->getContext()
-            );
+            $object = $this->data()->getObject(['table' => $table]);
             if (!$object->checkAccess('config')) {
                 $msg = $this->ml('Configure #(1) is forbidden', $object->label);
                 return $this->ctl()->forbidden($msg);
@@ -424,13 +406,7 @@ class RelationsMethod extends MethodClass
             $data['foreignkeys'] = DataStoreLinks::getForeignKeys();
 
             if (!empty($withtable)) {
-                $withobject = xarMod::apiFunc(
-                    'dynamicdata',
-                    'user',
-                    'getobject',
-                    ['table' => $withtable],
-                    $this->getContext()
-                );
+                $withobject = $this->data()->getObject(['table' => $withtable]);
                 $data['withfields'] = $withobject->properties;
             }
             if (!empty($confirm)) {
@@ -454,8 +430,7 @@ class RelationsMethod extends MethodClass
                 // CHECKME: always bi-directional for tables ?
                 $direction = 'bi';
                 DataStoreLinks::addLink($table, $field, $withtable, $withfield, $relation, $direction, $extra);
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'relations',
                     ['table' => $table]
@@ -473,8 +448,7 @@ class RelationsMethod extends MethodClass
                     }
                     DataStoreLinks::removeLink($link_id);
                 }
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'relations',
                     ['table' => $table]
@@ -483,25 +457,16 @@ class RelationsMethod extends MethodClass
             }
 
             // get fieldtype property to show table fields
-            $data['prop'] = xarMod::apiFunc(
-                'dynamicdata',
-                'user',
-                'getproperty',
-                ['type' => 'fieldtype',
-                    'name' => 'dummy']
-            );
+            $data['prop'] = $this->prop()->getProperty([
+                'type' => 'fieldtype',
+                'name' => 'dummy',
+            ]);
 
         } elseif (!empty($module_id)) {
             $data['module'] = xarMod::getName($module_id);
             // (try to) get the relationships between this module and others
-            $data['relations'] = xarMod::apiFunc(
-                'dynamicdata',
-                'util',
-                'getrelations',
-                ['module_id' => $module_id,
-                    'itemtype' => $itemtype],
-                $this->getContext()
-            );
+            $data['relations'] = $utilapi->getrelations(['module_id' => $module_id,
+                    'itemtype' => $itemtype]);
         } else {
             $this->tpl()->setPageTitle($this->ml('Links'));
         }

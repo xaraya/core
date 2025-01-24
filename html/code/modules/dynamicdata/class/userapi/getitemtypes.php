@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use xarMod;
 use sys;
@@ -30,6 +30,7 @@ class GetitemtypesMethod extends MethodClass
      * Utility function to retrieve the list of itemtypes of this module (if any).
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return array the itemtypes of this module and their description *
+     * @see UserApi::getitemtypes()
      */
     public function __invoke(array $args = [])
     {

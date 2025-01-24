@@ -182,8 +182,8 @@ trait ItemLinksTrait
         // set context if available in method
         $object = $this->data()->getObjectList(
             ['objectid'  => $args['objectid'],
-            'itemids' => $itemids,
-            'status' => $status],
+                'itemids' => $itemids,
+                'status' => $status],
         );
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
             return $itemlinks;

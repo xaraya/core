@@ -15,7 +15,7 @@
 namespace Xaraya\DataObject\TestGui;
 
 use Xaraya\DataObject\TestGui;
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -26,6 +26,12 @@ sys::import('xaraya.modules.method');
  */
 class TestServicesMethod extends MethodClass
 {
+    /**
+     * Summary of __invoke
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     * @see TestGui::testServices()
+     */
     public function __invoke(array $args = [])
     {
         $args['method'] = __METHOD__;

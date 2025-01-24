@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use xarController;
 use xarMod;
@@ -44,10 +45,13 @@ class ModifyMethod extends MethodClass
      *     string join
      *     string table
      * @return string|void output display string
+     * @see AdminGui::modify()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
 
         if (!$this->var()->check('objectid', $objectid, 'id')) {
             return;
@@ -84,7 +88,7 @@ class ModifyMethod extends MethodClass
             return;
         }
 
-        $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
+        $data = $adminapi->menu();
         if (!$this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1', 'edit')) {
             return;
         }
@@ -93,7 +97,7 @@ class ModifyMethod extends MethodClass
             $objectid = 1;
         }
         // set context if available in function
-        $object = DataObjectFactory::getObject(
+        $object = $this->data()->getObject(
             ['objectid' => $objectid,
                 'name' => $name,
                 'moduleid' => $module_id,
@@ -101,8 +105,7 @@ class ModifyMethod extends MethodClass
                 'join'     => $join,
                 'table'    => $table,
                 'itemid'   => $itemid,
-                'tplmodule' => $tplmodule],
-            $this->getContext()
+                'tplmodule' => $tplmodule]
         );
 
         // Security
@@ -133,7 +136,7 @@ class ModifyMethod extends MethodClass
                 if ($object->objectid == 1) {
                     // check security of the parent object
                     // set context if available in function
-                    $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid], $this->getContext());
+                    $tmpobject = $this->data()->getObject(['objectid' => $object->itemid]);
                     if (empty($tmpobject)) {
                         $msg = $this->ml('Data object not found');
                         return $this->ctl()->notFound($msg);
@@ -155,7 +158,7 @@ class ModifyMethod extends MethodClass
                 } elseif ($object->objectid == 2) {
                     // check security of the parent object
                     // set context if available in function
-                    $tmpobject = DataObjectFactory::getObject(['objectid' => $object->properties['objectid']->value], $this->getContext());
+                    $tmpobject = $this->data()->getObject(['objectid' => $object->properties['objectid']->value]);
                     if (!$tmpobject->checkAccess('config')) {
                         $msg = $this->ml('Configure #(1) is forbidden', $tmpobject->label);
                         return $this->ctl()->forbidden($msg);

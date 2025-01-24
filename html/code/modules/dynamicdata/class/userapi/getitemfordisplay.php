@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use xarMod;
 use sys;
@@ -31,11 +31,14 @@ class GetitemfordisplayMethod extends MethodClass
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return array containing a reference to the properties of the item
      * @TODO: move this to some common place in Xaraya (base module ?)
+     * @see UserApi::getitemfordisplay()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
         $args['getobject'] = 1;
-        $object = xarMod::apiFunc('dynamicdata', 'user', 'getitem', $args, $this->getContext());
+        $object = $userapi->getitem($args);
         $properties = [];
         if (isset($object)) {
             $properties = & $object->getProperties();

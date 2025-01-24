@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\UtilApi;
 use DataPropertyMaster;
 use Exception;
 use xarController;
@@ -36,9 +38,14 @@ class MigrateMethod extends MethodClass
 
     /**
      * migrate module items
+     * @see AdminGui::migrate()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -253,14 +260,10 @@ class MigrateMethod extends MethodClass
 
                     // add DD properties to field list
                     if (!empty($data['fromhooklist']['dynamicdata'])) {
-                        $props = xarMod::apiFunc(
-                            'dynamicdata',
-                            'user',
-                            'getprop',
-                            ['module_id'    => $data['from']['module'],
+                        $props = $userapi->getprop(['module_id'    => $data['from']['module'],
                                 'itemtype' => $data['from']['itemtype']]
                         );
-                        $proptypes = DataPropertyMaster::getPropertyTypes();
+                        $proptypes = $this->prop()->getPropertyTypes();
                         foreach ($props as $name => $info) {
                             if (empty($info['label'])) {
                                 continue;
@@ -354,14 +357,10 @@ class MigrateMethod extends MethodClass
 
                     // add DD properties to field list
                     if (!empty($data['tohooklist']['dynamicdata'])) {
-                        $props = xarMod::apiFunc(
-                            'dynamicdata',
-                            'user',
-                            'getprop',
-                            ['module_id'    => $data['to']['module'],
+                        $props = $userapi->getprop(['module_id'    => $data['to']['module'],
                                 'itemtype' => $data['to']['itemtype']]
                         );
-                        $proptypes = DataPropertyMaster::getPropertyTypes();
+                        $proptypes = $this->prop()->getPropertyTypes();
                         foreach ($props as $name => $info) {
                             if (empty($info['label'])) {
                                 continue;
@@ -437,12 +436,7 @@ class MigrateMethod extends MethodClass
             if (!empty($test)) {
                 $data['debug'] = $this->ml('Test Results') . "\n";
             }
-            $result = xarMod::apiFunc(
-                'dynamicdata',
-                'admin',
-                'migrate',
-                $data
-            );
+            $result = $utilapi->migrate($data);
             if (!$result) {
                 return;
             }
@@ -451,8 +445,7 @@ class MigrateMethod extends MethodClass
                 $data['debug'] = $this->var()->prep($result);
             } elseif (!empty($confirm)) {
                 // return and load the same map again
-                $url = xarController::URL(
-                    'dynamicdata',
+                $url = $this->mod()->getURL(
                     'admin',
                     'migrate',
                     ['load' => 1, 'map' => $map]

@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
 use BadParameterException;
 use SQLException;
@@ -42,6 +42,7 @@ class UpdatehooksMethod extends MethodClass
      *     bool $args['debug'] don't actually update anything :-)
      * @return mixed true or debug string on success, null on failure
      * @throws \BadParameterException
+     * @see UtilApi::updatehooks()
      */
     public function __invoke(array $args = [])
     {

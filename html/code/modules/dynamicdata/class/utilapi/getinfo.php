@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
 use DataObjectLinks;
 use DataStoreLinks;
@@ -34,6 +34,7 @@ class GetinfoMethod extends MethodClass
      * with
      *     $args['type'] the type of information you're looking for
      * @return array of info
+     * @see UtilApi::getinfo()
      */
     public function __invoke(array $args = [])
     {

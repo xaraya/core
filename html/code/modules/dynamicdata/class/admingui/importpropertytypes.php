@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\AdminApi;
 use xarMod;
 use xarSecurity;
 use sys;
@@ -38,16 +39,19 @@ class ImportpropertytypesMethod extends MethodClass
      * @link http://xaraya.info/index.php/release/182.html
      * @author mikespub <mikespub@xaraya.com>
      * @return array|void empty array for the template display
+     * @see AdminGui::importpropertytypes()
      */
     public function __invoke(array $args = [])
     {
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
         $args['flush'] = 'false';
-        $success = xarMod::apiFunc('dynamicdata', 'admin', 'importpropertytypes', $args, $this->getContext());
+        $success = $adminapi->importpropertytypes($args);
 
         return [];
     }

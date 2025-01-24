@@ -42,6 +42,13 @@ interface DataPropertyInterface extends ServiceInterface
     public function getPropertyTypes(): array;
 
     /**
+     * Get data properties of a data object
+     * @param array<string, mixed> $args array with ['objectid' => '...']
+     * @return array<string, mixed>
+     */
+    public function getProperties(array $args = []): array;
+
+    /**
      * Get data property of the right type
      * @param array<string, mixed> $args with ['type' => '...']
      */
@@ -92,6 +99,16 @@ trait DataPropertyTrait
     }
 
     /**
+     * Get data properties of a data object
+     * @param array<string, mixed> $args array with ['objectid' => '...']
+     * @return array<string, mixed>
+     */
+    public function getProperties(array $args = []): array
+    {
+        return DataPropertyMaster::getProperties($args);
+    }
+
+    /**
      * Get data property of the right type
      * @param array<string, mixed> $args array with ['type' => '...']
      */
@@ -107,6 +124,7 @@ trait DataPropertyTrait
  * Available methods:
  * - template() for current property - or use tpl()->property() in general with modName propertyName
  * - getPropertyTypes()
+ * - getProperties()
  * - getProperty()
  * - ...
  *

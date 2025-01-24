@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataObjectDescriptor;
 use DataObjectFactory;
@@ -37,13 +37,14 @@ class GetitemfieldsMethod extends MethodClass
      *        integer  $args['moduleid'] module id of the item fields to get +<br/>
      *        string   $args['itemtype'] item type of the item fields to get<br/>
      * @return array containing the item field definitions
+     * @see UserApi::getitemfields()
      */
     public function __invoke(array $args = [])
     {
         if (empty($args['objectid']) && empty($args['name'])) {
-            $args = DataObjectDescriptor::getObjectID($args);
+            $args = $this->data()->getObjectID($args);
         }
-        $object = DataObjectFactory::getObject($args, $this->getContext());
+        $object = $this->data()->getObject($args);
         if (!is_object($object)) {
             return [];
         }

@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataObjectDescriptor;
 use DataObjectFactory;
@@ -36,6 +36,7 @@ class ShowviewMethod extends MethodClass
      * list some items in a template
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return string|void output display string
+     * @see UserApi::showview()
      */
     public function __invoke(array $args = [])
     {
@@ -56,7 +57,6 @@ class ShowviewMethod extends MethodClass
         // we got everything via template parameters
         if (isset($items) && is_array($items)) {
             $args['count'] = count($items);
-            $args['context'] ??= $this->getContext();
             return $this->tpl()->module(
                 'dynamicdata',
                 'user',
@@ -130,7 +130,7 @@ class ShowviewMethod extends MethodClass
         }
 
         // set context if available in function
-        $object = DataObjectFactory::getObjectList(
+        $object = $this->data()->getObjectList(
             ['objectid'  => $args ['objectid'],
                 'itemids' => $itemids,
                 'sort' => $sort,
@@ -141,8 +141,7 @@ class ShowviewMethod extends MethodClass
                 'fieldlist' => $myfieldlist,
                 'catid' => $catid,
                 'groupby' => $groupby,
-                'status' => $status],
-            $this->getContext()
+                'status' => $status]
         );
         if (!isset($object) || empty($object->label)) {
             return;

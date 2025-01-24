@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
 use DataObjectExporter;
 use sys;
@@ -35,6 +35,7 @@ class ExportItemsMethod extends MethodClass
      *  string $args['format'] the export format to use (optional)
      *    bool $args['tofile'] save to file (optional)
      * @return string|void
+     * @see UtilApi::exportItems()
      */
     public function __invoke(array $args = [])
     {

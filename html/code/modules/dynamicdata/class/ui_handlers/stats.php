@@ -180,7 +180,7 @@ class StatsHandler extends DefaultHandler
         }
 
         // get the property types in case we want to do more than check the type
-        $proptypes = $this->data()->getPropertyTypes();
+        $proptypes = $this->prop()->getPropertyTypes();
 
         $stats['grouplist'] = [];
         foreach ($this->object->properties as $name => $property) {

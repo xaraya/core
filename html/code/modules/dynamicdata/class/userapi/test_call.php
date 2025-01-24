@@ -15,7 +15,7 @@
 namespace Xaraya\DataObject\UserApi;
 
 use Xaraya\DataObject\UserApi;
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -26,6 +26,12 @@ sys::import('xaraya.modules.method');
  */
 class TestCallMethod extends MethodClass
 {
+    /**
+     * Summary of __invoke
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     * @see UserApi::testCall()
+     */
     public function __invoke(array $args = [])
     {
         $args['context'] ??= $this->getContext();

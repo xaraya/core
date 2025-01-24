@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\RestApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\RestApi;
 use xarVar;
 use sys;
@@ -30,6 +30,7 @@ class PostHelloMethod extends MethodClass
      * Sample REST API call supported by this module (if any)
      * @param array<string,mixed> $args
      * @return string of info
+     * @see RestApi::postHello()
      */
     public function __invoke($args = [])
     {

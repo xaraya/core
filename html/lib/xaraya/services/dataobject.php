@@ -66,6 +66,13 @@ interface DataObjectInterface extends ServiceInterface
     public function getObjectInfo(array $args = []);
 
     /**
+     * Get info about all data objects
+     * @param array<string, mixed> $args with optional ['moduleid' => '...']
+     * @return array<mixed> containing the objectid => object definition
+     */
+    public function getObjects(array $args = []);
+
+    /**
      * Identify data object via DataObjectDescriptor
      * @param array<string, mixed> $args
      * @return array<mixed> all parts necessary to describe a DataObject
@@ -77,18 +84,6 @@ interface DataObjectInterface extends ServiceInterface
      * @param array<string, mixed> $args
      */
     public function getObjectDescriptor(array $args = []): DataObjectDescriptor;
-
-    /**
-     * List all defined property types
-     * @return array<int, mixed>
-     */
-    public function getPropertyTypes(): array;
-
-    /**
-     * Get data property of the right type
-     * @param array<string, mixed> $args with ['type' => '...']
-     */
-    public function getProperty(array $args = []): DataProperty;
 }
 
 /**
@@ -162,6 +157,16 @@ trait DataObjectTrait
     }
 
     /**
+     * Get info about all data objects
+     * @param array<string, mixed> $args with optional ['moduleid' => '...']
+     * @return array<mixed> containing the objectid => object definition
+     */
+    public function getObjects(array $args = [])
+    {
+        return DataObjectFactory::getObjects($args);
+    }
+
+    /**
      * Identify data object via DataObjectDescriptor
      * @param array<string, mixed> $args
      * @return array<mixed> all parts necessary to describe a DataObject
@@ -179,24 +184,6 @@ trait DataObjectTrait
     {
         return new DataObjectDescriptor($args);
     }
-
-    /**
-     * List all defined property types
-     * @return array<int, mixed>
-     */
-    public function getPropertyTypes(): array
-    {
-        return DataPropertyMaster::getPropertyTypes();
-    }
-
-    /**
-     * Get data property of the right type
-     * @param array<string, mixed> $args array with ['type' => '...']
-     */
-    public function getProperty(array $args = []): DataProperty
-    {
-        return DataPropertyMaster::getProperty($args);
-    }
 }
 
 /**
@@ -208,9 +195,9 @@ trait DataObjectTrait
  * - getObject()
  * - getObjectList()
  * - getObjectInfo()
+ * - getObjects()
  * - getObjectID()
  * - getObjectDescriptor()
- * - getPropertyTypes()
  * - ...
  *
  * Required methods in parent:

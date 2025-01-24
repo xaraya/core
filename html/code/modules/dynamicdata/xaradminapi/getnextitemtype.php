@@ -15,7 +15,7 @@
 /**
  * get the next itemtype of objects pertaining to a given module
  *
- * @uses Xaraya\DataObject\UserApi::getModuleItemTypes()
+ * @uses Xaraya\DataObject\UserApi::findModuleItemTypes()
  * @author the DynamicData module development team
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return int of object definitions
@@ -30,7 +30,7 @@ function dynamicdata_adminapi_getnextitemtype($args = [], $context = null)
     /** @var Xaraya\DataObject\UserApi $userapi */
     $userapi = xarMod::getAPI('dynamicdata');
     $userapi->setContext($context);
-    $types = $userapi::getModuleItemTypes($module_id);
+    $types = $userapi::findModuleItemTypes($module_id);
     $ids = array_keys($types);
     sort($ids);
     $lastid = array_pop($ids);

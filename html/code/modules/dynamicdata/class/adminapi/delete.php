@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use BadParameterException;
 use DataObjectDescriptor;
@@ -40,10 +40,11 @@ class DeleteMethod extends MethodClass
      *        string   $args['itemtype'] item type of the original item
      * @return bool|void true on success, false on failure
      * @throws \BadParameterException
+     * @see AdminApi::delete()
      */
     public function __invoke(array $args = [])
     {
-        $args = DataObjectDescriptor::getObjectID($args);
+        $args = $this->data()->getObjectID($args);
         extract($args);
         /** @var int $objectid */
 
@@ -67,10 +68,9 @@ class DeleteMethod extends MethodClass
         }
 
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
-                'itemid'   => $itemid],
-            $this->getContext()
+                'itemid'   => $itemid]
         );
         if (empty($myobject)) {
             return;

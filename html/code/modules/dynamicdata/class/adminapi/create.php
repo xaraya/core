@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use BadParameterException;
 use DataObjectDescriptor;
@@ -41,10 +41,11 @@ class CreateMethod extends MethodClass
      * string   $args['fields'] array containing the field definitions and values
      * @return int|void item id on success, null on failure
      * @throws \BadParameterException
+     * @see AdminApi::create()
      */
     public function __invoke(array $args = [])
     {
-        $args = DataObjectDescriptor::getObjectID($args);
+        $args = $this->data()->getObjectID($args);
         extract($args);
         /** @var int $objectid */
 
@@ -73,10 +74,9 @@ class CreateMethod extends MethodClass
 
         // TODO: test this
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
-                'itemid'   => $itemid],
-            $this->getContext()
+                'itemid'   => $itemid]
         );
         if (empty($myobject)) {
             return;

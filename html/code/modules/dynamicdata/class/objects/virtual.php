@@ -193,7 +193,7 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
         if (empty($fields)) {
             $utilapi = new UtilApi();
             /** @var array<string, array<string, array<string, mixed>>> $meta */
-            $meta = $utilapi->getMeta($table, null, $dbConnIndex, $dbConnArgs);
+            $meta = $utilapi->getMetaInfo($table, null, $dbConnIndex, $dbConnArgs);
             if (empty($meta[$table])) {
                 throw new Exception("Unknown table $table");
             }

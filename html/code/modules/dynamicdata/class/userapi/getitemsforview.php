@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataPropertyMaster;
 use xarMod;
@@ -32,15 +32,18 @@ class GetitemsforviewMethod extends MethodClass
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return array containing a reference to the properties and a reference to the items
      * @TODO: move this to some common place in Xaraya (base module ?)
+     * @see UserApi::getitemsforview()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
         if (empty($args['fieldlist']) && empty($args['status'])) {
             // get the Active properties only (not those for Display Only)
             $args['status'] = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
         }
         $args['getobject'] = 1;
-        $object =  xarMod::apiFunc('dynamicdata', 'user', 'getitems', $args, $this->getContext());
+        $object =  $userapi->getitems($args);
         if (!isset($object)) {
             return [[], []];
         }

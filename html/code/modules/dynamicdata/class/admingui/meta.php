@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UtilApi;
+use Xaraya\DataObject\UserApi;
 use DataPropertyMaster;
 use Exception;
 use xarDB;
@@ -34,9 +36,14 @@ class MetaMethod extends MethodClass
 
     /**
      * Return meta data (test only)
+     * @see AdminGui::meta()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -115,15 +122,9 @@ class MetaMethod extends MethodClass
                 $data['databases'] = [$db => $db];
             }
         }
-        $data['tables'] = xarMod::apiFunc(
-            'dynamicdata',
-            'util',
-            'getmeta',
-            ['db' => $db,
+        $data['tables'] = $utilapi->getmeta(['db' => $db,
                 'table' => $table,
-                'dbConnIndex' => $data['dbConnIndex']],
-            $this->getContext()
-        );
+                'dbConnIndex' => $data['dbConnIndex']]);
 
         $data['result'] = '';
         if (!empty($create) && !empty($data['dbConnIndex'])) {
@@ -147,10 +148,10 @@ class MetaMethod extends MethodClass
 
         $data['table'] = $table;
         $data['export'] = $export;
-        $data['prop'] = xarMod::apiFunc('dynamicdata', 'user', 'getproperty', ['type' => 'fieldtype', 'name' => 'dummy']);
+        $data['prop'] = $this->prop()->getProperty(['type' => 'fieldtype', 'name' => 'dummy']);
 
         // Get the default property types
-        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $proptypes = $this->prop()->getPropertyTypes();
         $proptypenames = [];
         foreach ($proptypes as $proptype) {
             $proptypenames[$proptype['id']] = $proptype['name'];

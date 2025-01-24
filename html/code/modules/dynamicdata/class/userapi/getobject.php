@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataObjectDescriptor;
 use DataObjectFactory;
@@ -21,6 +21,7 @@ sys::import('xaraya.modules.method');
 
 /**
  * dynamicdata userapi getobject function
+ * @deprecated use $this->data()->getObject()
  * @extends MethodClass<UserApi>
  */
 class GetobjectMethod extends MethodClass
@@ -37,16 +38,17 @@ class GetobjectMethod extends MethodClass
      *        integer  $args['moduleid'] module id of the object to get +<br/>
      *        string   $args['itemtype'] item type of the object to get
      * @return object a particular DataObject
+     * @see UserApi::getobject()
      */
     public function __invoke(array $args = [])
     {
         if (empty($args['objectid']) && empty($args['name'])) {
             sys::import('modules.dynamicdata.class.objects.descriptor');
-            $args = DataObjectDescriptor::getObjectID($args);
+            $args = $this->data()->getObjectID($args);
         }
         sys::import('modules.dynamicdata.class.objects.factory');
         // set context if available in function
-        $object = DataObjectFactory::getObject($args, $this->getContext());
+        $object = $this->data()->getObject($args);
         return $object;
     }
 }

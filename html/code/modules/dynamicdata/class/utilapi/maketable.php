@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
 use DataObject;
 use DataObjectFactory;
@@ -52,9 +52,12 @@ class MaketableMethod extends MethodClass
      * 7. in case of problems, report to http://bugs.xaraya.com/
      * @param array<string,mixed> $args
      * @return bool|void true on succes
+     * @see UtilApi::maketable()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         // restricted to DD Admins
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -80,13 +83,12 @@ class MaketableMethod extends MethodClass
                 $itemid = null;
             }
 
-            $myobject = DataObjectFactory::getObject(
+            $myobject = $this->data()->getObject(
                 ['objectid' => $objectid,
                     'moduleid' => $module_id,
                     'itemtype' => $itemtype,
                     'itemid'   => $itemid,
-                    'allprops' => true],
-                $this->getContext()
+                    'allprops' => true]
             );
         }
 
@@ -95,9 +97,9 @@ class MaketableMethod extends MethodClass
         }
 
         // get the list of properties for a Dynamic Property
-        $property_properties = DataPropertyMaster::getProperties(['objectid' => 2]);
+        $property_properties = $this->prop()->getProperties(['objectid' => 2]);
 
-        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $proptypes = $this->prop()->getPropertyTypes();
 
         $prefix = $this->db()->getPrefix();
         $prefix .= '_';
@@ -110,14 +112,14 @@ class MaketableMethod extends MethodClass
         $table = $prefix . 'dd_' . $myobject->name;
 
         // check if this table already exists
-        $meta = xarMod::apiFunc('dynamicdata', 'util', 'getmeta');
+        $meta = $utilapi->getmeta();
         if (!empty($meta[$table])) {
             return true;
         }
 
         if (!empty($myobject->objectid)) {
             // get the property info directly from the database again to avoid default eval()
-            $properties = DataPropertyMaster::getProperties(['objectid' => $myobject->objectid]);
+            $properties = $this->prop()->getProperties(['objectid' => $myobject->objectid]);
         } else {
             $properties = [];
             foreach (array_keys($myobject->properties) as $name) {
@@ -208,7 +210,7 @@ class MaketableMethod extends MethodClass
         $dbconn->Execute($query);
 
         sys::import('xaraya.structures.query');
-        $objectlist = DataObjectFactory::getObjectList(['name' => $myobject->name]);
+        $objectlist = $this->data()->getObjectList(['name' => $myobject->name]);
         $items = $objectlist->getItems();
         $q = new Query('INSERT', $table);
         foreach ($items as $row) {

@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\AdminApi;
 use DataObjectDescriptor;
 use DataPropertyMaster;
 use FieldTypeProperty;
@@ -35,28 +36,31 @@ class ViewPropertydefsMethod extends MethodClass
      * This is a standard function to modify the configuration parameters of the
      * module
      * @return array|void data for the template display
+     * @see AdminGui::viewPropertydefs()
      */
     public function __invoke(array $args = [])
     {
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
         }
 
-        $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
+        $data = $adminapi->menu();
 
         $data['authid'] = $this->sec()->genAuthKey();
 
         if (!xarMod::apiLoad('dynamicdata', 'user')) {
             return;
         }
-        $data['fields'] = DataPropertyMaster::getPropertyTypes();
+        $data['fields'] = $this->prop()->getPropertyTypes();
         if (!isset($data['fields']) || $data['fields'] == false) {
             $data['fields'] = [];
         }
 
         // FIXME: This may not work when moving property classes around manually !
-        //$data['fieldtypeprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
+        //$data['fieldtypeprop'] =& $this->prop()->getProperty(array('type' => 'fieldtype'));
         sys::import('modules.dynamicdata.xarproperties.fieldtype');
 
         $descriptor = new DataObjectDescriptor(['type' => 'fieldtype']);

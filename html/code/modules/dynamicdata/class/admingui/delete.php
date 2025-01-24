@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UserApi;
+use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use DataPropertyMaster;
 use xarController;
@@ -39,10 +41,15 @@ class DeleteMethod extends MethodClass
      * with
      *     'itemid' the id of the item to be deleted
      *     'confirm' confirm that this item can be deleted
+     * @see AdminGui::delete()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
 
         if (!$this->var()->check('objectid', $objectid)) {
             return;
@@ -80,15 +87,14 @@ class DeleteMethod extends MethodClass
         }
 
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['objectid' => $objectid,
                 'name'       => $name,
                 'join'       => $join,
                 'table'      => $table,
                 'itemid'     => $itemid,
                 'tplmodule'  => $tplmodule,
-                'template'   => $template],
-            $this->getContext()
+                'template'   => $template]
         );
         if (empty($myobject)) {
             return;
@@ -103,7 +109,7 @@ class DeleteMethod extends MethodClass
         $data = $myobject->toArray();
 
         // recover any session var information and remove it from the var
-        $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'user', 'getcontext', ['module' => $tplmodule]));
+        $data = array_merge($data, $userapi->sessioncontext(['module' => $tplmodule]));
         xarSession::setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
         extract($data);
 
@@ -111,16 +117,14 @@ class DeleteMethod extends MethodClass
             if (!empty($return_url)) {
                 $this->ctl()->redirect($return_url);
             } elseif (!empty($table)) {
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'view',
                     ['table'     => $table,
                         'tplmodule' => $data['tplmodule']]
                 ));
             } else {
-                $this->ctl()->redirect(xarController::URL(
-                    'dynamicdata',
+                $this->ctl()->redirect($this->mod()->getURL(
                     'admin',
                     'view',
                     ['itemid'    => $data['objectid'],
@@ -137,7 +141,7 @@ class DeleteMethod extends MethodClass
             if ($myobject->objectid == 1) {
                 // check security of the parent object
                 // set context if available in function
-                $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->itemid], $this->getContext());
+                $tmpobject = $this->data()->getObject(['objectid' => $myobject->itemid]);
                 if (!$tmpobject->checkAccess('config')) {
                     $msg = $this->ml('Configure #(1) is forbidden', $tmpobject->label);
                     return $this->ctl()->forbidden($msg);
@@ -155,7 +159,7 @@ class DeleteMethod extends MethodClass
             } elseif ($myobject->objectid == 2) {
                 // check security of the parent object
                 // set context if available in function
-                $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->properties['objectid']->value], $this->getContext());
+                $tmpobject = $this->data()->getObject(['objectid' => $myobject->properties['objectid']->value]);
                 if (!$tmpobject->checkAccess('config')) {
                     $msg = $this->ml('Configure #(1) is forbidden', $tmpobject->label);
                     return $this->ctl()->forbidden($msg);
@@ -164,10 +168,10 @@ class DeleteMethod extends MethodClass
             }
 
             // TODO: is this needed?
-            $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
+            $data = array_merge($data, $adminapi->menu());
             $data['object'] = $myobject;
             if ($data['objectid'] == 1) {
-                $mylist = DataObjectFactory::getObjectList(['objectid' => $data['itemid']]);
+                $mylist = $this->data()->getObjectList(['objectid' => $data['itemid']]);
                 if (count($mylist->properties) > 0) {
                     $data['related'] = $this->ml('Warning : there are #(1) properties and #(2) items associated with this object !', count($mylist->properties), $mylist->countItems());
                 }
@@ -194,7 +198,7 @@ class DeleteMethod extends MethodClass
         // special case for a dynamic object : delete its properties too // TODO: and items
         // TODO: extend to any parent-child relation ?
         if ($data['objectid'] == 1) {
-            $mylist = DataObjectFactory::getObjectList(['objectid' => $data['itemid']]);
+            $mylist = $this->data()->getObjectList(['objectid' => $data['itemid']]);
             foreach (array_keys($mylist->properties) as $name) {
                 $propid = $mylist->properties[$name]->id;
                 $propid = DataPropertyMaster::deleteProperty(['itemid' => $propid]);
@@ -205,16 +209,14 @@ class DeleteMethod extends MethodClass
         if (!empty($return_url)) {
             $this->ctl()->redirect($return_url);
         } elseif (!empty($table)) {
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'view',
                 ['table'     => $table,
                     'tplmodule' => $tplmodule]
             ));
         } else {
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'view',
                 ['name' => $myobject->name,

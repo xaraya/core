@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UserApi;
 use DataObjectFactory;
 use xarController;
 use xarMod;
@@ -33,9 +34,12 @@ class PrivilegesMethod extends MethodClass
     /**
      * Manage definition of instances for privileges (unfinished)
      * @return array|bool|void data for the template display
+     * @see AdminGui::privileges()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -145,7 +149,7 @@ class PrivilegesMethod extends MethodClass
             }
 
             // redirect to the privilege
-            $this->ctl()->redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'privileges',
                 'admin',
                 'modifyprivilege',
@@ -155,7 +159,7 @@ class PrivilegesMethod extends MethodClass
         }
 
         // Get objects
-        $objects = DataObjectFactory::getObjects();
+        $objects = $this->data()->getObjects();
 
         // TODO: use object list instead of (or in addition to) module + itemtype
 
@@ -180,11 +184,7 @@ class PrivilegesMethod extends MethodClass
             if (!empty($itemid)) {
                 $numitems = $this->ml('probably');
             } elseif (!empty($objectid) || !empty($moduleid)) {
-                $numitems = xarMod::apiFunc(
-                    'dynamicdata',
-                    'user',
-                    'countitems',
-                    ['objectid' => $objectid,
+                $numitems = $userapi->countitems(['objectid' => $objectid,
                         'moduleid' => $moduleid,
                         'itemtype' => $itemtype]
                 );

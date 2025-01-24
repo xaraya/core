@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\UserGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserGui;
+use Xaraya\DataObject\AdminApi;
 use DataObjectFactory;
 use xarController;
 use xarMod;
@@ -37,9 +38,12 @@ class ViewMethod extends MethodClass
      * available from the module.
      * @param array<string,mixed> $args
      * @return string|void output display string
+     * @see UserGui::view()
      */
     public function __invoke(array $args = [])
     {
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
         // Old-style arguments
         if (!$this->var()->check('objectid', $objectid, 'int')) {
             return;
@@ -107,7 +111,7 @@ class ViewMethod extends MethodClass
 
         // Note: we need to pass all relevant arguments ourselves here
         // set context if available in function
-        $object = DataObjectFactory::getObjectList(
+        $object = $this->data()->getObjectList(
             ['objectid'  => $itemid,
                 'name'      => $name,
                 'startnum'  => $startnum,
@@ -117,8 +121,7 @@ class ViewMethod extends MethodClass
                 'layout'    => $layout,
                 'tplmodule' => $tplmodule,
                 'template'  => $template,
-            ],
-            $this->getContext()
+            ]
         );
 
         if (!$object->checkAccess('view')) {
@@ -139,7 +142,7 @@ class ViewMethod extends MethodClass
         $data['object'] = $object;
 
         // TODO: is this needed?
-        $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
+        $data = array_merge($data, $adminapi->menu());
         // TODO: remove this when we turn all the moduleid into module_id
         $data['module_id'] = $data['moduleid'];
         // TODO: another stray

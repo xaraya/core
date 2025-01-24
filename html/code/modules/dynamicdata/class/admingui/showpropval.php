@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
 use BadParameterException;
 use DataObjectFactory;
@@ -38,6 +38,7 @@ class ShowpropvalMethod extends MethodClass
     /**
      * Show configuration of some property
      * @return array|string|bool|void data for the template display
+     * @see AdminGui::showpropval()
      */
     public function __invoke(array $args = [])
     {
@@ -74,10 +75,9 @@ class ShowpropvalMethod extends MethodClass
 
         // get the object corresponding to this dynamic property
         // set context if available in function
-        $myobject = DataObjectFactory::getObject(
+        $myobject = $this->data()->getObject(
             ['name'   => 'properties',
-                'itemid' => $itemid],
-            $this->getContext()
+                'itemid' => $itemid]
         );
         if (empty($myobject)) {
             return;
@@ -95,7 +95,7 @@ class ShowpropvalMethod extends MethodClass
         // check security of the parent object
         $parentobjectid = $myobject->properties['objectid']->value;
         // set context if available in function
-        $parentobject = DataObjectFactory::getObject(['objectid' => $parentobjectid], $this->getContext());
+        $parentobject = $this->data()->getObject(['objectid' => $parentobjectid]);
         if (empty($parentobject)) {
             return;
         }
@@ -128,12 +128,12 @@ class ShowpropvalMethod extends MethodClass
         $data['invalid']    = !empty($invalid) ? $invalid : '';
         // @todo For now, always add a reference to the parent object? - see DataPropertyMaster::addProperty()
         $data['objectref'] = $parentobject;
-        $property = DataPropertyMaster::getProperty($data);
+        $property = $this->prop()->getProperty($data);
         if (empty($property)) {
             return;
         }
 
-        $data['propertytype'] = DataPropertyMaster::getProperty(['type' => $data['type']]);
+        $data['propertytype'] = $this->prop()->getProperty(['type' => $data['type']]);
 
         if (!empty($preview) || !empty($confirm) || !empty($exit)) {
             if (!$this->var()->find($data['name'], $configuration)) {
@@ -159,7 +159,7 @@ class ShowpropvalMethod extends MethodClass
                     }
 
                     if (empty($exit)) {
-                        $return_url = xarController::URL('dynamicdata', 'admin', 'showpropval', ['itemid' => $itemid]);
+                        $return_url = $this->mod()->getURL('admin', 'showpropval', ['itemid' => $itemid]);
                         $this->ctl()->redirect($return_url);
                         return true;
                     }
@@ -170,8 +170,7 @@ class ShowpropvalMethod extends MethodClass
                     }
                     if (empty($return_url)) {
                         // return to modifyprop
-                        $return_url = xarController::URL(
-                            'dynamicdata',
+                        $return_url = $this->mod()->getURL(
                             'admin',
                             'modifyprop',
                             ['itemid' => $parentobjectid]

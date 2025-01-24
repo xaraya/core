@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserGui;
 use xarController;
 use xarMod;
@@ -39,6 +39,7 @@ class MainMethod extends MethodClass
      * The function displays a list of DD's available modules.
      * @param array<string,mixed> $args
      * @return array|bool empty array of data for the template display
+     * @see UserGui::main()
      */
     public function __invoke(array $args = [])
     {

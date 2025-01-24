@@ -407,7 +407,7 @@ class SearchHandler extends DefaultHandler
                              'lt'    => 'less than',
                              'ne'    => 'not equal to'];
         // get the property types in case we want to do more than check the parent class
-        $query['proptypes'] = $this->data()->getPropertyTypes();
+        $query['proptypes'] = $this->prop()->getPropertyTypes();
 
         // add data to original method args
         $data = array_replace($args, [

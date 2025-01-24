@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UtilApi;
 use EmptyParameterException;
 use xarController;
 use xarMod;
@@ -34,9 +35,12 @@ class ImportpropsMethod extends MethodClass
     /**
      * Import the dynamic properties for a module + itemtype from a static table
      * @todo use context
+     * @see AdminGui::importprops()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -67,11 +71,7 @@ class ImportpropsMethod extends MethodClass
             return $this->ctl()->badRequest('bad_author');
         }
 
-        if (!xarMod::apiFunc(
-            'dynamicdata',
-            'util',
-            'importproperties',
-            ['module_id' => $module_id,
+        if (!$utilapi->importproperties(['module_id' => $module_id,
                 'itemtype' => $itemtype,
                 'table' => $table,
                 'objectid' => $objectid]
@@ -79,8 +79,7 @@ class ImportpropsMethod extends MethodClass
             return;
         }
 
-        $this->ctl()->redirect(xarController::URL(
-            'dynamicdata',
+        $this->ctl()->redirect($this->mod()->getURL(
             'admin',
             'modifyprop',
             ['module_id' => $module_id,

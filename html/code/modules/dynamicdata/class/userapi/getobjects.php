@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataObjectFactory;
 use sys;
@@ -31,10 +31,11 @@ class GetobjectsMethod extends MethodClass
      * @author the DynamicData module development team
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return array of object definitions
+     * @see UserApi::getobjects()
      */
     public function __invoke(array $args = [])
     {
-        $objects =  DataObjectFactory::getObjects($args);
+        $objects =  $this->data()->getObjects($args);
         return $objects;
     }
 }

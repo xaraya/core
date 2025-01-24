@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
 use BadParameterException;
 use DataPropertyMaster;
@@ -41,9 +41,12 @@ class GetrelationsMethod extends MethodClass
      *     $args['module_id'] module id of the item field to get
      *     $args['itemtype'] item type of the item field to get
      * @return mixed value of the field, or false on failure
+     * @see UtilApi::getrelations()
      */
     public function __invoke(array $args = [])
     {
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         static $propertybag = [];
 
         extract($args);
@@ -77,14 +80,8 @@ class GetrelationsMethod extends MethodClass
         }
 
         // get the list of static properties for this module
-        $static = xarMod::apiFunc(
-            'dynamicdata',
-            'util',
-            'getstatic',
-            ['module_id' => $module_id,
-                'itemtype' => $itemtype],
-            $this->getContext()
-        );
+        $static = $utilapi->getstatic(['module_id' => $module_id,
+                'itemtype' => $itemtype]);
 
         // get the list of hook modules that are enabled for this module
         // TODO: get all hooks types, not only item display hooks
@@ -112,13 +109,7 @@ class GetrelationsMethod extends MethodClass
             // for each enabled hook module
             foreach ($modlist as $mod => $val) {
                 // get the list of static properties for this hook module
-                $modstatic = xarMod::apiFunc(
-                    'dynamicdata',
-                    'util',
-                    'getstatic',
-                    ['module_id' => xarMod::getRegID($mod)],
-                    $this->getContext()
-                );
+                $modstatic = $utilapi->getstatic(['module_id' => xarMod::getRegID($mod)]);
                 // skip this for now
                 //      'itemtype' => $itemtype));
                 // TODO: automatically find the link(s) on module, item type, item id etc.

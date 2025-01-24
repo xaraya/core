@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
 use xarConfigVars;
 use xarController;
@@ -38,6 +38,7 @@ class ModifyconfigMethod extends MethodClass
      * Standard GUI function to display and update the configuration settings of the module based on input data.
      * @return mixed data array for the template display or output display string if invalid data submitted
      * @todo use context
+     * @see AdminGui::modifyconfig()
      */
     public function __invoke(array $args = [])
     {
@@ -87,7 +88,6 @@ class ModifyconfigMethod extends MethodClass
 
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
-                    $data['context'] ??= $this->getContext();
                     return $this->tpl()->module('dynamicdata', 'admin', 'modifyconfig', $data);
                 } else {
                     $itemid = $data['module_settings']->updateItem();

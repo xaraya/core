@@ -145,7 +145,7 @@ class UtilApi extends UserApi implements DatabaseInterface
      * @param array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB (optional)
      * @return array<string, array<string, mixed>>|void of field definitions, or null on failure
      */
-    public function getMeta($table, $db = null, $dbConnIndex = 0, $dbConnArgs = [])
+    public function getMetaInfo($table, $db = null, $dbConnIndex = 0, $dbConnArgs = [])
     {
         /** @var array<string, array<string, mixed>> */
         static $propertybag = [];
@@ -513,7 +513,7 @@ class UtilApi extends UserApi implements DatabaseInterface
             }
         }
         // check existing tables and objects
-        $tables = $this->getMeta('', null, $dbConnIndex);
+        $tables = $this->getMetaInfo('', null, $dbConnIndex);
         $objects = DataObjectFactory::getObjects();
         $objectnames = [];
         foreach ($objects as $objectinfo) {

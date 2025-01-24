@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\AdminApi;
+use Xaraya\DataObject\UtilApi;
 use DuplicateException;
 use Exception;
 use FileNotFoundException;
@@ -37,9 +39,14 @@ class ImportMethod extends MethodClass
 
     /**
      * Import an object definition or an object item from XML
+     * @see AdminGui::import()
      */
     public function __invoke(array $args = [])
     {
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -80,11 +87,7 @@ class ImportMethod extends MethodClass
         $data['authid'] = $this->sec()->genAuthKey();
 
         $filetype = 'xml';
-        $files = xarMod::apiFunc(
-            'dynamicdata',
-            'admin',
-            'browse',
-            ['basedir' => $basedir,
+        $files = $adminapi->browse(['basedir' => $basedir,
                 'filetype' => $filetype]
         );
         if (!isset($files) || count($files) < 1) {
@@ -113,11 +116,7 @@ class ImportMethod extends MethodClass
                     throw new FileNotFoundException($basedir, 'No files were found to import in directory "#(1)"');
                 }
                 try {
-                    $objectid = xarMod::apiFunc(
-                        'dynamicdata',
-                        'util',
-                        'import',
-                        ['file' => $basedir . '/' . $file,
+                    $objectid = $utilapi->import(['file' => $basedir . '/' . $file,
                             'keepitemid' => $keepitemid,
                             'overwrite' =>  $overwrite,
                             'prefix' => $data['prefix']]
@@ -129,11 +128,7 @@ class ImportMethod extends MethodClass
                 }
             } else {
                 try {
-                    $objectid = xarMod::apiFunc(
-                        'dynamicdata',
-                        'util',
-                        'import',
-                        ['xml' => $xml,
+                    $objectid = $utilapi->import(['xml' => $xml,
                             'keepitemid' => $keepitemid,
                             'overwrite' =>  $overwrite,
                             'prefix' => $data['prefix']]
@@ -148,8 +143,7 @@ class ImportMethod extends MethodClass
                 return;
             }
 
-            $this->ctl()->redirect(xarController::URL(
-                'dynamicdata',
+            $this->ctl()->redirect($this->mod()->getURL(
                 'admin',
                 'modifyprop',
                 ['itemid' => $objectid]

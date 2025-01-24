@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
 use xarController;
 use xarModVars;
@@ -35,6 +35,7 @@ class MainMethod extends MethodClass
      * initiated with only an admin type but no func parameter passed.
      * The function displays the module's overview page, or redirects to another page if overviews are disabled.
      * @return mixed output display string or boolean true if redirected
+     * @see AdminGui::main()
      */
     public function __invoke(array $args = [])
     {
@@ -47,10 +48,9 @@ class MainMethod extends MethodClass
         $samemodule = xarController::isRefererSameModule();
 
         if (((bool) xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
-            $args['context'] ??= $this->getContext();
             return $this->tpl()->module('dynamicdata', 'admin', 'overview', $args);
         } else {
-            $this->ctl()->redirect(xarController::URL('dynamicdata', 'admin', 'view'));
+            $this->ctl()->redirect($this->mod()->getURL('admin', 'view'));
             return true;
         }
     }

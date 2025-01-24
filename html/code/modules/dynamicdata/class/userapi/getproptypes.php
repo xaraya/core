@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataPropertyMaster;
 use sys;
@@ -31,9 +31,10 @@ class GetproptypesMethod extends MethodClass
      * @author the DynamicData module development team
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return array of property types
+     * @see UserApi::getproptypes()
      */
     public function __invoke(array $args = [])
     {
-        return DataPropertyMaster::getPropertyTypes();
+        return $this->prop()->getPropertyTypes();
     }
 }

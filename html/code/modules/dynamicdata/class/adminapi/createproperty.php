@@ -11,8 +11,9 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
+use Xaraya\DataObject\UserApi;
 use BadParameterException;
 use DataObjectFactory;
 use xarMod;
@@ -44,10 +45,13 @@ class CreatepropertyMethod extends MethodClass
      * integer  $args['seq'] order of the property to create<br/>
      * string   $args['configuration'] configuration of the property to create
      * @return int property ID on success, null on failure
+     * @see AdminApi::createproperty()
      */
     public function __invoke(array $args = [])
     {
         extract($args);
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
 
         // Required arguments
         $invalid = [];
@@ -75,11 +79,7 @@ class CreatepropertyMethod extends MethodClass
         // TODO: security check on object level
 
         // get the properties of the 'properties' object
-        $fields = xarMod::apiFunc(
-            'dynamicdata',
-            'user',
-            'getprop',
-            ['objectid' => 2]
+        $fields = $userapi->getprop(['objectid' => 2]
         ); // the properties
 
         $values = [];
@@ -91,7 +91,7 @@ class CreatepropertyMethod extends MethodClass
         }
 
         sys::import('modules.dynamicdata.class.objects.factory');
-        $propertyobject = DataObjectFactory::getObject(['name' => 'properties']);
+        $propertyobject = $this->data()->getObject(['name' => 'properties']);
         $propid = $propertyobject->createItem($values);
         return $propid;
     }

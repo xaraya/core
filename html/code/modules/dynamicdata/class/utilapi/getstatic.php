@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UtilApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UtilApi;
 use BadParameterException;
 use CreoleTypes;
@@ -45,6 +45,7 @@ class GetstaticMethod extends MethodClass
      * @throws \BadParameterException
      * @todo split off the common parts which are also in getmeta
      * @todo mapping of sqlite types to creole types is not correct - use getmeta() for sqlite instead
+     * @see UtilApi::getstatic()
      */
     public function __invoke(array $args = [])
     {
@@ -112,7 +113,7 @@ class GetstaticMethod extends MethodClass
         }
 
         // Get the default property types
-        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $proptypes = $this->prop()->getPropertyTypes();
         $proptypeid = [];
         foreach ($proptypes as $proptype) {
             $proptypeid[$proptype['name']] = $proptype['id'];

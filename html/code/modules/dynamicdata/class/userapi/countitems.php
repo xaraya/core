@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\UserApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\UserApi;
 use DataObjectDescriptor;
 use DataObjectFactory;
@@ -37,13 +37,14 @@ class CountitemsMethod extends MethodClass
      *        integer  $args['moduleid'] module id of the objectlist to get +<br/>
      *        string   $args['itemtype'] item type of the objectlist to get
      * @return int|void number of items held by this module
+     * @see UserApi::countitems()
      */
     public function __invoke(array $args = [])
     {
         if (empty($args['objectid']) && empty($args['name'])) {
-            $args = DataObjectDescriptor::getObjectID($args);
+            $args = $this->data()->getObjectID($args);
         }
-        $mylist = DataObjectFactory::getObjectList($args, $this->getContext());
+        $mylist = $this->data()->getObjectList($args);
         if (!isset($mylist)) {
             return;
         }

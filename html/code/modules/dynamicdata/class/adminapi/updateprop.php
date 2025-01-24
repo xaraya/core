@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminApi;
 use BadParameterException;
 use xarDB;
@@ -41,6 +41,7 @@ class UpdatepropMethod extends MethodClass
      * string   $args['configuration'] configuration of the field to update (optional)
      * @return bool
      * @throws \BadParameterException
+     * @see AdminApi::updateprop()
      */
     public function __invoke(array $args = [])
     {

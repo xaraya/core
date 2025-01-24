@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\DataApi;
 
-use Xaraya\Modules\MethodClass;
+use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\DataApi;
 use sys;
 
@@ -34,6 +34,7 @@ class GetdatatypeoptionsMethod extends MethodClass
      * @copyright see the html/credits.html file in this release
      * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
      * @link http://xaraya.info/index.php/release/182.html
+     * @see DataApi::getdatatypeoptions()
      */
     public function __invoke(array $args = [])
     {
