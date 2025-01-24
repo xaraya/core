@@ -6,9 +6,12 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\Extension\AbstractExtension;
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
+use Xaraya\Services\ServicesInterface;
+use Xaraya\Services\ServicesTrait;
+use DataObjectList;
+use DataObject;
+use DataProperty;
 
 /**
  * Use Twig template engine to generate output in Xaraya
@@ -22,9 +25,17 @@ use Xaraya\Context\Context;
  *
  * @uses \sys::autoload()
  */
-class XarayaTwigExtension extends AbstractExtension implements ContextInterface
+class XarayaTwigExtension extends AbstractExtension implements ServicesInterface
 {
-    use ContextTrait;
+    use ServicesTrait;
+
+    public string $moduleName;
+    public string $moduleType;
+    public int $itemtype = 0;
+    /** @var DataObject|DataObjectList|null */
+    public $object;
+    /** @var DataProperty|null */
+    public $property;
 
     /**
      * @param ?Context<string, mixed> $context

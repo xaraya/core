@@ -83,21 +83,6 @@ trait ModuleServicesTrait
         // ContextTrait
         'getcontext',
         'setcontext',
-        // CoreTrait
-        'checkaccess',
-        'getmodname',
-        'setmodname',
-        'getitemtype',
-        'setitemtype',
-        'getmodid',
-        'getmodvar',
-        'setmodvar',
-        'fetch',
-        'genauthkey',
-        'confirmauthkey',
-        'geturl',
-        'redirect',
-        'translate',
         // CoreServicesTrait
         'ctl',
         'log',
@@ -110,6 +95,8 @@ trait ModuleServicesTrait
         'data',
         'prop',
         'cache',
+        'db',
+        'ml',
         'exit',
         // HooksTrait
         'callhooks',
@@ -129,9 +116,13 @@ trait ModuleServicesTrait
         'usergui',
         'adminapi',
         'admingui',
-        // UserGuiTrait
-        'prepareoutput',
-        'tplmodule',
+        'getmodname',
+        'setmodname',
+        'getitemtype',
+        'setitemtype',
+        'getblocktype',
+        'getobject',
+        'getproperty',
         // @todo add new internal methods here + find a better way to do this
     ];
     /** @var array<string, MethodServicesInterface<ModuleServicesInterface>|null> */
