@@ -45,7 +45,7 @@ class MainMethod extends MethodClass
     {
         $redirect = $this->mod()->getVar('frontend_page');
         if (!empty($redirect)) {
-            $truecurrenturl = xarServer::getCurrentURL([], false);
+            $truecurrenturl = $this->ctl()->getCurrentURL([], false);
             $urldata = xarMod::apiFunc(
                 'roles',
                 'user',
@@ -74,7 +74,7 @@ class MainMethod extends MethodClass
             if (is_array($starter) && $this->sec()->confirmAuthKey()) {
                 $startlist = array_keys($starter);
                 $this->mod()->setVar('starter_object_list', serialize($startlist));
-                $this->ctl()->redirect(xarServer::getCurrentURL(['update' => null]));
+                $this->ctl()->redirect($this->ctl()->getCurrentURL(['update' => null]));
                 return true;
             }
         }

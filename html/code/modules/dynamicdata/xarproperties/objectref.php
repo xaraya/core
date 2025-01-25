@@ -99,11 +99,11 @@ class ObjectRefProperty extends SelectProperty
         if (!empty($this->value) && !isset($data['link'])) {
             // CHECKME: store_prop_is_itemid only gets checked once getOptions() is called later on !
             if (is_numeric($this->value) && $this->store_prop_is_itemid) {
-                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'display', ['itemid' => $this->value]);
+                $data['link'] = $this->ctl()->getObjectURL($this->initialization_refobject, 'display', ['itemid' => $this->value]);
             } elseif (is_string($this->value)) {
-                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'view', ['where' => $this->initialization_display_prop . " = '" . $this->value . "'"]);
+                $data['link'] = $this->ctl()->getObjectURL($this->initialization_refobject, 'view', ['where' => $this->initialization_display_prop . " = '" . $this->value . "'"]);
             } else {
-                echo xarML('Array values for links are currently not supported in the objectref property');
+                echo $this->ml('Array values for links are currently not supported in the objectref property');
                 $this->exit();
             }
         }
@@ -152,9 +152,9 @@ class ObjectRefProperty extends SelectProperty
                                  'config'   => $config,
                                  'isalias'   => $isalias];
             }
-            $object = DataObjectFactory::getObject(['name' => 'objects']);
+            $object = $this->data()->getObject(['name' => 'objects']);
         } else {
-            $object = DataObjectFactory::getObjectList(['name' => $this->initialization_refobject]);
+            $object = $this->data()->getObjectList(['name' => $this->initialization_refobject]);
 
             $items =  $object->getItems(
                 [
@@ -162,7 +162,7 @@ class ObjectRefProperty extends SelectProperty
                                         'fieldlist' => [$this->initialization_display_prop,$this->initialization_store_prop],
                                         'fordisplay' => 1]
             );
-            $object = DataObjectFactory::getObject(['name' => $this->initialization_refobject]);
+            $object = $this->data()->getObject(['name' => $this->initialization_refobject]);
         }
 
         // Make sure the display and store fields are valid properties of this object
@@ -234,7 +234,7 @@ class ObjectRefProperty extends SelectProperty
             $object = $this->objectref;
         } else {
             // Property table is different from the object table
-            $object = DataObjectFactory::getObject(['name' => $this->initialization_refobject]);
+            $object = $this->data()->getObject(['name' => $this->initialization_refobject]);
         }
 
         // We only support relational storage
@@ -252,7 +252,7 @@ class ObjectRefProperty extends SelectProperty
         $relations   = $descriptor->exists("relations") ? unserialize($descriptor->get("relations") ?? 'a:0:{}') : [];
 
         // Debug display
-        if (xarModVars::get('dynamicdata', 'debugmode') &&
+        if ($this->mod()->getVar('debugmode') &&
         in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             echo "Ref Object: " . $this->objectref->name . "<br/>";
             echo "Property: " . $this->name . "<br/>";

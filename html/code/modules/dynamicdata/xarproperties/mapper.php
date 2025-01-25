@@ -116,7 +116,7 @@ class MapperProperty extends QueuedProperty
         $this->objectname = $object;
         $this->fieldlist = $fieldlist;
         // see if we can use a fixed template for display links here
-        $this->displaylink = \xarServer::getObjectURL($object, 'display', ['itemid' => '[itemid]']);
+        $this->displaylink = $this->ctl()->getObjectURL($object, 'display', ['itemid' => '[itemid]']);
         if (strpos($this->displaylink, '[itemid]') === false) {
             // sorry, you'll have to deal with it directly in the template
             $this->displaylink = null;

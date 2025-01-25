@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use xarTpl;
+use xarTplPager;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -41,6 +42,11 @@ interface TemplatingInterface extends ServiceInterface
     public function setPageTitle(string $title, ?string $modName = null): bool;
 
     public function setPageTemplateName(string $templateName): bool;
+
+    public function getImage(string $fileName, ?string $scope = null, ?string $package = null): string|null;
+
+    /** @param int|array<mixed> $blockOptions */
+    public function getPager(int $startNum, int $total, string $urltemplate, int $itemsPerPage = 10, int|array $blockOptions = [], string $template = 'default', string $tplmodule = 'base'): string;
 }
 
 /**
@@ -182,6 +188,35 @@ trait TemplatingTrait
     {
         return xarTpl::setPageTemplateName($templateName);
     }
+
+    /**
+     * Get theme template image for module image
+     * @param string $fileName
+     * @param ?string $scope
+     * @param ?string $package
+     * @return string|null
+     */
+    public function getImage(string $fileName, ?string $scope = null, ?string $package = null): string|null
+    {
+        return xarTpl::getImage($fileName, $scope, $package);
+    }
+
+    /**
+     * Render output with pager template
+     * @uses xarTplPager::getPager()
+     * @param int $startNum
+     * @param int $total
+     * @param string $urltemplate
+     * @param int $itemsPerPage
+     * @param int|array<mixed> $blockOptions
+     * @param string $template
+     * @param string $tplmodule
+     * @return string
+     */
+    public function getPager(int $startNum, int $total, string $urltemplate, int $itemsPerPage = 10, int|array $blockOptions = [], string $template = 'default', string $tplmodule = 'base'): string
+    {
+        return xarTplPager::getPager($startNum, $total, $urltemplate, $itemsPerPage, $blockOptions, $template, $tplmodule);
+    }
 }
 
 /**
@@ -194,6 +229,8 @@ trait TemplatingTrait
  * - property()
  * - setPageTitle()
  * - setPageTemplateName()
+ * - getImage()
+ * - getPager()
  * - ...
  *
  * Optional methods in parent:

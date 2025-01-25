@@ -115,14 +115,14 @@ class DeferredManyProperty extends DeferredItemProperty
             $this->objectname = $object;
             $this->fieldlist = $fieldlist;
             // see if we can use a fixed template for display links here
-            $this->displaylink = xarServer::getObjectURL($object, 'display', ['itemid' => '[itemid]']);
+            $this->displaylink = $this->ctl()->getObjectURL($object, 'display', ['itemid' => '[itemid]']);
             if (strpos($this->displaylink, '[itemid]') === false) {
                 // sorry, you'll have to deal with it directly in the template
                 $this->displaylink = null;
             }
         } else {
-            // $this->displaylink = xarServer::getObjectURL($linkname, 'view', ['where[' . $called_id . ']' => '[itemid]']);
-            $this->displaylink = xarServer::getObjectURL($linkname, 'query', ['field[' . $called_id . ']' => '[itemid]', 'match[' . $called_id . ']' => 'eq']);
+            // $this->displaylink = $this->ctl()->getObjectURL($linkname, 'view', ['where[' . $called_id . ']' => '[itemid]']);
+            $this->displaylink = $this->ctl()->getObjectURL($linkname, 'query', ['field[' . $called_id . ']' => '[itemid]', 'match[' . $called_id . ']' => 'eq']);
         }
         // @checkme don't update links for complete child objects here
         if (!empty($this->targetname) && $this->objectname === $this->linkname) {
@@ -311,7 +311,7 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return xarVar::prepForDisplay($item[$this->name]);
+        // return $this->var()->prep($item[$this->name]);
         // @checkme set the targetLoader to null to avoid retrieving the propname values first - see export_items
         $data = $this->getDeferredData(['value' => $item[$this->name] ?? null, '_itemid' => $itemid]);
         $item[$this->name] = $data['value'];

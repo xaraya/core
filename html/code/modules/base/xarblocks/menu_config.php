@@ -344,14 +344,14 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 $link['url'] = $link['encodedurl'];
                 // Add order links to parent menu items
                 if ($i < $numlinks) {
-                    $link['downurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' =>  $linkid, 'direction' => 'down', 'authid' => $authid, 'this' => '0'));
+                    $link['downurl'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' =>  $linkid, 'direction' => 'down', 'authid' => $authid, 'this' => '0'));
                     /*
                     $link['downurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                     */
                 }
                 if ($i > 1) {
-                    $link['upurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
+                    $link['upurl'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
                     /*
                     $link['upurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
@@ -373,14 +373,14 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
                         // Add order links to child menu items
                         if ($j < $numsublinks) {
-                            $link['downurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
+                            $link['downurl'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
                             /*
                             $sublink['downurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                             */
                         }
                         if ($j > 1) {
-                            $sublink['upurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
+                            $sublink['upurl'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
                             /*
                             $sublink['upurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));

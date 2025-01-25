@@ -73,7 +73,7 @@ class SubItemsProperty extends DataProperty
         // FIXME: properties should not be instantiated when being registered
         // In this case refreshing the property cache causes a failure which we have to catch
         try {
-            $this->subitemsobject = DataObjectFactory::getObject(['name' => $this->initialization_refobject]);
+            $this->subitemsobject = $this->data()->getObject(['name' => $this->initialization_refobject]);
         } catch (Exception $e) {
         }
     }
@@ -91,17 +91,17 @@ class SubItemsProperty extends DataProperty
         $newprefix = empty($oldprefix) ? $this->fieldprefix : $oldprefix . "_" . $this->fieldprefix;
         $this->prefixarray[] = $newprefix;
         // Get the list of item ids, both current and previous
-        if(!xarVar::fetch('subitem_ids_' . $newprefix, 'str', $itemids, '', xarVar::DONT_SET)) {
+        if(!$this->var()->check('subitem_ids_' . $newprefix, $itemids, 'str', '')) {
             return;
         }
-        if(!xarVar::fetch('subitem_previous_ids_' . $newprefix, 'str', $previous_itemids, '', xarVar::DONT_SET)) {
+        if(!$this->var()->check('subitem_previous_ids_' . $newprefix, $previous_itemids, 'str', '')) {
             return;
         }
         $itemids = ('' == $itemids) ? [] : explode(',', $itemids);
         $previous_itemids = ('' == $previous_itemids) ? [] : explode(',', $previous_itemids);
 
         if (empty($this->objectref)) {
-            throw new Exception(xarML('A subitem property must be part of an object'));
+            throw new Exception($this->ml('A subitem property must be part of an object'));
         }
         // Park the current values; they may not be the same as those in the DB
         $fieldvalues = $this->objectref->getFieldValues([], 1);
@@ -326,7 +326,7 @@ class SubItemsProperty extends DataProperty
         if (is_array($this->defaultvalue)) {
             $data['items'] = $data['items'] + $this->defaultvalue;
         }
-        $data['object'] = DataObjectFactory::getObjectList(['name' => $this->subitemsobject->name]);
+        $data['object'] = $this->data()->getObjectList(['name' => $this->subitemsobject->name]);
         $data['object']->items = & $data['items'];
 
         // Fallback to the module that is using this property
@@ -616,7 +616,7 @@ class SubItemsProperty extends DataProperty
                 }
             }
         } catch (Exception $e) {
-            $msg = xarML('Subitem create/update failed: #(1)', $this->name);
+            $msg = $this->ml('Subitem create/update failed: #(1)', $this->name);
             throw new Exception($msg);
         }
         // Delete any items that are no longer present

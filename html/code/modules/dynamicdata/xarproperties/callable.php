@@ -384,7 +384,7 @@ class CallableProperty extends DataProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return xarVar::prepForDisplay($item[$this->name]);
+        // return $this->var()->prep($item[$this->name]);
         // $data = $this->getDeferredData(['value' => $item[$this->name], '_itemid' => $itemid]);
         return parent::exportValue($itemid, $item);
     }

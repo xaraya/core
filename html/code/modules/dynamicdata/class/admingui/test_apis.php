@@ -57,7 +57,7 @@ class TestApisMethod extends MethodClass
             $testFile = $testDir . $tab . '.html';
             if (file_exists($testFile)) {
                 $contents = file_get_contents($testFile);
-                if (strpos(xarServer::getCurrentURL(), '/dynamicdata/admin/test_apis') !== false) {
+                if (strpos($this->ctl()->getCurrentURL(), '/dynamicdata/admin/test_apis') !== false) {
                     // using index.php/dynamicdata/admin/test_apis or similar
                     $contents = str_replace('../../../../', '../../../', $contents);
                 } else {
@@ -193,7 +193,7 @@ class TestApisMethod extends MethodClass
         }
         if (!empty($create_rst)) {
             DataObjectRESTBuilder::create_openapi($restapilist, $storageType, $tokenExpires, $enableTimer, $enableCache);
-            $this->ctl()->redirect(xarServer::getCurrentURL(['create_rst' => null]));
+            $this->ctl()->redirect($this->ctl()->getCurrentURL(['create_rst' => null]));
             return true;
         }
         if (!$this->var()->find('create_gql', $create_gql, 'notempty', 0)) {
@@ -204,7 +204,7 @@ class TestApisMethod extends MethodClass
             sys::import('modules.dynamicdata.class.graphql');
             $extraTypes = xarGraphQL::find_extra_types($graphqllist);
             xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
-            $this->ctl()->redirect(xarServer::getCurrentURL(['create_gql' => null]));
+            $this->ctl()->redirect($this->ctl()->getCurrentURL(['create_gql' => null]));
             return true;
         }
 

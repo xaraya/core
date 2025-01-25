@@ -425,7 +425,7 @@ class xarController extends xarObject
      * Return a 400 Bad Request header, and fill in the template user-errors.xt from the privileges module
      * with context and callback
      *
-     * @param string $layout default 'bad_author' layout
+     * @param ?string $layout default 'bad_author' layout
      * @param mixed $context
      * @return string output display string
      */
@@ -513,7 +513,7 @@ class xarController extends xarObject
     /**
      * Generates a URL that references a module function.
      *
-     * @param string $modName registered name of module
+     * @param ?string $modName registered name of module
      * @param string $modType type of function
      * @param string $funcName module function
      * @param string $fragment document fragment target (e.g. somesite.com/index.php?foo=bar#target)

@@ -181,7 +181,7 @@ class FiltertagMethod extends MethodClass
             }
             // This is the URL we will redirect to when we have submitted
             if (!isset($args['return_url'])) {
-                $args['return_url'] = xarServer::getCurrentURL();
+                $args['return_url'] = $this->ctl()->getCurrentURL();
             }
             // This is the label for the submit button in the template
             if (!isset($args['button'])) {

@@ -89,14 +89,14 @@ class FieldStatusProperty extends SelectProperty
         $display_status = null;
         $input_status = null;
         if (!isset($value)) {
-            if(!xarVar::fetch($displayname, 'isset', $display_status, null, xarVar::DONT_SET)) {
+            if(!$this->var()->check($displayname, $display_status, 'int')) {
                 return;
             }
-            if(!xarVar::fetch($inputname, 'isset', $input_status, null, xarVar::DONT_SET)) {
+            if(!$this->var()->check($inputname, $input_status, 'int')) {
                 return;
             }
         }
-        $value = $display_status + $input_status;
+        $value = intval($display_status) + intval($input_status);
         return $this->validateValue($value);
     }
 
@@ -107,7 +107,7 @@ class FieldStatusProperty extends SelectProperty
     */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
 
         // FIXME: rework the dataproperty so that the output of getOptions has a correct form
         // and we can call the parent method here
@@ -132,18 +132,18 @@ class FieldStatusProperty extends SelectProperty
     public function getOptions()
     {
         $options['display'] = [
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => xarML('All Views')],
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY, 'name' => xarML('List only')],
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => xarML('Display only')],
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => xarML('Hidden')],
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => xarML('Disabled')],
+                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => $this->ml('All Views')],
+                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY, 'name' => $this->ml('List only')],
+                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => $this->ml('Display only')],
+                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => $this->ml('Hidden')],
+                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => $this->ml('Disabled')],
                          ];
         $options['input'] = [
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_IGNORED, 'name' => xarML('Ignored for input')],
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No manual input')],
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_ADD, 'name' => xarML('Can be added')],
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_MODIFY, 'name' => xarML('Can be changed')],
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY, 'name' => xarML('Can be added/changed')],
+                             ['id' => DataPropertyMaster::DD_INPUTSTATE_IGNORED, 'name' => $this->ml('Ignored for input')],
+                             ['id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => $this->ml('No manual input')],
+                             ['id' => DataPropertyMaster::DD_INPUTSTATE_ADD, 'name' => $this->ml('Can be added')],
+                             ['id' => DataPropertyMaster::DD_INPUTSTATE_MODIFY, 'name' => $this->ml('Can be changed')],
+                             ['id' => DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY, 'name' => $this->ml('Can be added/changed')],
                          ];
         return $options;
     }

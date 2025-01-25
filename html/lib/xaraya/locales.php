@@ -75,12 +75,12 @@ function &xarMLSLoadLocaleData($locale = NULL)
     }
 
     // @todo get rid of invalid .php locale files
-    $fileName = sys::varpath() . '/locales/$locale/locale.php';
+    $fileName = sys::varpath() . "/locales/$locale/locale.php";
     if (!$parsedLocale = xarMLS::parseLocaleString($locale)) return false;
     $siteCharset = $parsedLocale['charset'];
     $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
     // @todo get rid of invalid .php locale files
-    $utf8FileName = sys::varpath() . '/locales/$utf8locale/locale.php';
+    $utf8FileName = sys::varpath() . "/locales/$utf8locale/locale.php";
     if (file_exists($fileName) && !(isset($loaded[$fileName]))) {
         // @todo do we need to wrap this in a try/catch construct?
         include $fileName;

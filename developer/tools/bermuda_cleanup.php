@@ -935,6 +935,28 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
         }
         return $lname;
     }
+
+    public function find_class_filter($module = '', $type = '', $path = '', $suffix = '')
+    {
+        $found = [];
+        foreach (array_keys($this->classes) as $lname) {
+            $class = $this->classes[$lname];
+            if (!empty($suffix) && !str_ends_with($class['name'], $suffix)) {
+                continue;
+            }
+            if (!empty($module) && !str_contains($class['file'], '/' . $module . '/')) {
+                continue;
+            }
+            if (!empty($type) && !str_contains($class['file'], '/class/' . $type)) {
+                continue;
+            }
+            if (!empty($path) && !str_contains($class['file'], $path)) {
+                continue;
+            }
+            $found[] = $lname;
+        }
+        return $found;
+    }
 }
 
 class XarayaModuleMigrator extends XarayaModuleAnalyzer
@@ -1210,21 +1232,13 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $output;
     }
 
-    public function find_class_dependencies($module = '', $type = '', $path = '')
+    public function find_class_dependencies($module = '', $type = '', $path = '', $suffix = '')
     {
         $found = [];
         $total = 0;
-        foreach (array_keys($this->classes) as $lname) {
+        $classList = $this->find_class_filter($module, $type, $path, $suffix);
+        foreach ($classList as $lname) {
             $class = $this->classes[$lname];
-            if (!empty($module) && !str_contains($class['file'], '/' . $module . '/')) {
-                continue;
-            }
-            if (!empty($type) && !str_contains($class['file'], '/class/' . $type)) {
-                continue;
-            }
-            if (!empty($path) && !str_contains($class['file'], $path)) {
-                continue;
-            }
             $methods = $this->find_method_dependencies($lname);
             if (empty($methods)) {
                 continue;
@@ -1257,7 +1271,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
     public function get_coreclass_calls($fpath, $lines)
     {
         $calls = [];
-        $pattern = '/(xar[A-Z]\w+)::(\w+)\(([^\[\)]*)/';
+        $pattern = '/((xar|Data|Property|Creole|PDO)[A-Z]\w+)::(\w+)\(([^\[\)]*)/';
         $contents = implode("\n", $this->get_file_lines($fpath, $lines));
         $matches = [];
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
@@ -1267,15 +1281,15 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         $this->log($fpath . ' ' . strlen($contents) . " FOUND " . count($matches));
         foreach ($matches as $match) {
             $calls[$match[1]] ??= [];
-            $calls[$match[1]][$match[2]] ??= [];
-            $calls[$match[1]][$match[2]][] = $match[3];
+            $calls[$match[1]][$match[3]] ??= [];
+            $calls[$match[1]][$match[3]][] = $match[4];
         }
         return $calls;
     }
 
-    public function find_called_dependencies($module = '', $type = '', $path = '')
+    public function find_called_dependencies($module = '', $type = '', $path = '', $suffix = '')
     {
-        $found = $this->find_class_dependencies($module, $type, $path);
+        $found = $this->find_class_dependencies($module, $type, $path, $suffix);
         $called = [];
         $summary = [];
         foreach ($found as $fpath => $classes) {
@@ -1388,27 +1402,13 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         echo $this->to_json($modules);
     }
 
-    public function find_module_methods($module = '', $type = '', $path = '')
+    public function find_module_methods($module = '', $type = '', $path = '', $suffix = 'Method')
     {
         $found = [];
         $total = 0;
-        foreach (array_keys($this->classes) as $lname) {
+        $classList = $this->find_class_filter($module, $type, $path, $suffix);
+        foreach ($classList as $lname) {
             $class = $this->classes[$lname];
-            if (!str_ends_with($class['name'], 'Method')) {
-                $this->log('Class method ' . $class['name'] . ' - SKIP');
-                continue;
-            }
-            if (!empty($module) && !str_contains($class['file'], '/' . $module . '/class/')) {
-                $this->log('Class method ' . $class['name'] . ' - SKIP');
-                continue;
-            }
-            if (!empty($type) && !str_contains($class['file'], '/class/' . $type)) {
-                $this->log('Class method ' . $class['name'] . ' - SKIP');
-                continue;
-            }
-            if (!empty($path) && !str_contains($class['file'], $path)) {
-                continue;
-            }
             $pieces = explode('\\', $class['name']);
             $methodName = array_pop($pieces);
             $methodName = lcfirst(substr($methodName, 0, strlen($methodName) - strlen('Method')));
@@ -1461,74 +1461,63 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
 
     public function document_module_methods($module = '', $type = '', $replace = false)
     {
-        // @todo re-use find_module_methods above
         $found = [];
         $total = 0;
-        foreach (array_keys($this->classes) as $lname) {
-            $class = $this->classes[$lname];
-            if (!str_ends_with($class['name'], 'Method')) {
-                $this->log('Class method ' . $class['name'] . ' - SKIP');
-                continue;
-            }
-            if (!empty($module) && !str_contains($class['file'], '/' . $module . '/class/')) {
-                $this->log('Class method ' . $class['name'] . ' - SKIP');
-                continue;
-            }
-            if (!empty($type) && !str_contains($class['file'], '/class/' . $type)) {
-                $this->log('Class method ' . $class['name'] . ' - SKIP');
-                continue;
-            }
-            $pieces = explode('\\', $class['name']);
-            $methodName = array_pop($pieces);
-            $methodName = lcfirst(substr($methodName, 0, strlen($methodName) - strlen('Method')));
-            $this->log('Class method ' . $class['name'] . ' - FOUND: ' . $methodName);
-            //if ($methodName == 'main') {
-            //    continue;
-            //}
-            $classFile = dirname($class['file']) . '.php';
-            $found[$classFile] ??= [];
-            $summary = '';
-            $vars = [];
-            $method = $this->get_invoke_method($class['file']);
-            if (!empty($method)) {
-                $summary = $method->getDocBlock()?->getSummary() ?? '';
-                $vars = $this->get_docblock_vars($method);
-            }
-            if (str_starts_with($summary, 'Summary of ')) {
-                $text = $methodName . '(array $args)';
-            } else {
-                $text = $methodName . '(array $args) ' . str_replace("\n", ' - ', $summary);
-            }
-            $shape = '';
-            $count = 0;
-            if (!empty($vars)) {
-                $args = [];
-                foreach ($vars as $var) {
-                    $vname = (string) $var->getVariableName();
-                    $vtype = (string) $var->getType();
-                    $vdesc = (string) $var->getDescription();
-                    if (str_contains($vname, 'args[')) {
-                        $vname = str_replace(['args[', ']', "'"], [], $vname);
-                    }
-                    if (str_contains(strtolower($vdesc), 'optional')) {
-                        $args[] = $vname . '?: ' . $vtype;
-                    } else {
-                        $args[] = $vname . ': ' . $vtype;
-                        $count += 1;
-                    }
+        $todo = $this->find_module_methods($module, $type);
+        foreach ($todo as $namespace => $methods) {
+            $pieces = explode('\\', $namespace);
+            $className = array_pop($pieces);
+            foreach ($methods as $methodName => $lname) {
+                $class = $this->classes[$lname];
+                $this->log('Class Method in ' . $namespace . ': ' . $methodName . ' - FOUND ' . $class['file']);
+                //if ($methodName == 'main') {
+                //    continue;
+                //}
+                $classFile = dirname($class['file']) . '.php';
+                $found[$classFile] ??= [];
+                $summary = '';
+                $vars = [];
+                $method = $this->get_invoke_method($class['file']);
+                if (!empty($method)) {
+                    $summary = $method->getDocBlock()?->getSummary() ?? '';
+                    $vars = $this->get_docblock_vars($method);
                 }
-                $shape = "\n *  array{" . implode(', ', $args) . "}";
+                if (str_starts_with($summary, 'Summary of ')) {
+                    $text = $methodName . '(array $args)';
+                } else {
+                    $text = $methodName . '(array $args) ' . str_replace("\n", ' - ', $summary);
+                }
+                $shape = '';
+                $count = 0;
+                if (!empty($vars)) {
+                    $args = [];
+                    foreach ($vars as $var) {
+                        $vname = (string) $var->getVariableName();
+                        $vtype = (string) $var->getType();
+                        $vdesc = (string) $var->getDescription();
+                        if (str_contains($vname, 'args[')) {
+                            $vname = str_replace(['args[', ']', "'"], [], $vname);
+                        }
+                        if (str_contains(strtolower($vdesc), 'optional')) {
+                            $args[] = $vname . '?: ' . $vtype;
+                        } else {
+                            $args[] = $vname . ': ' . $vtype;
+                            $count += 1;
+                        }
+                    }
+                    $shape = "\n *  array{" . implode(', ', $args) . "}";
+                }
+                if ($count > 0) {
+                    $text = $methodName . '(array $args)';
+                } else {
+                    $text = $methodName . '(array $args = [])';
+                }
+                if (!str_starts_with($summary, 'Summary of ') && !str_starts_with($summary, 'functions imported by')) {
+                    $text .= ' ' . str_replace("\n", ' - ', $summary);
+                }
+                $found[$classFile][] = $text . $shape;
+                $total += 1;
             }
-            if ($count > 0) {
-                $text = $methodName . '(array $args)';
-            } else {
-                $text = $methodName . '(array $args = [])';
-            }
-            if (!str_starts_with($summary, 'Summary of ') && !str_starts_with($summary, 'functions imported by')) {
-                $text .= ' ' . str_replace("\n", ' - ', $summary);
-            }
-            $found[$classFile][] = $text . $shape;
-            $total += 1;
         }
         $this->log('Found Class Methods: ' . $total, true);
         ksort($found);
@@ -1570,6 +1559,14 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarVar::fetch\(/' => '\$this->var()->fetch(',
             '/xarVar::prepForDisplay\(/' => '\$this->var()->prep(',
             '/xarVar::prepHTMLDisplay\(/' => '\$this->var()->prepHTML(',
+            '/xarVar::isCached\(/' => '\$this->var()->isCached(',
+            '/xarVar::getCached\(/' => '\$this->var()->getCached(',
+            '/xarVar::setCached\(/' => '\$this->var()->setCached(',
+            '/xarVar::delCached\(/' => '\$this->var()->delCached(',
+            '/xarCoreCache::isCached\(/' => '\$this->var()->isCached(',
+            '/xarCoreCache::getCached\(/' => '\$this->var()->getCached(',
+            '/xarCoreCache::setCached\(/' => '\$this->var()->setCached(',
+            '/xarCoreCache::delCached\(/' => '\$this->var()->delCached(',
             // @todo handle xarSecurity::check() with component & instance
             '/xarSec::genAuthKey\(/' => '\$this->sec()->genAuthKey(',
             '/xarSec::confirmAuthKey\(/' => '\$this->sec()->confirmAuthKey(',
@@ -1584,12 +1581,21 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarController::URL\(/' => '\$this->ctl()->getModuleURL(',
             // @todo we need to drop extra , null, $this->getContext() here
             '/,\s*null,\s*\$this->getContext\(\)\s*\)/s' => ')',
+            '/xarServer::getCurrentURL\(/' => '\$this->ctl()->getCurrentURL(',
+            // @todo or use $this->data()->getURL()
+            '/xarServer::getObjectURL\(/' => '\$this->ctl()->getObjectURL(',
             // @todo check xarTpl::module() against current modName modType for mod()->template()
             '/xarTpl::module\(/' => '\$this->tpl()->module(',
+            // @todo check xarTpl::block() against current modName blockType for block()->template()
+            '/xarTpl::block\(/' => '\$this->tpl()->block(',
             // @todo check xarTpl::object() against current objectName for data()->template()
             '/xarTpl::object\(/' => '\$this->tpl()->object(',
+            // @todo check xarTpl::property() against current propertyName for prop()->template()
+            '/xarTpl::property\(/' => '\$this->tpl()->property(',
             '/xarTpl::setPageTitle\(/' => '\$this->tpl()->setPageTitle(',
             '/xarTpl::setPageTemplateName\(/' => '\$this->tpl()->setPageTemplateName(',
+            '/xarTpl::getImage\(/' => '\$this->tpl()->getImage(',
+            '/xarTplPager::getPager\(/' => '\$this->tpl()->getPager(',
             // @todo handle xarMod*::* - note: this assumes you set $module !
             '/xarModVars::get\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->getVar(',
             '/xarModVars::set\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->setVar(',
@@ -1620,34 +1626,47 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $mapping;
     }
 
-    public function replace_core_services($module, $type = '', $update = false)
+    public function replace_core_services($module, $type = '', $path = '', $suffix = '', $update = false)
     {
-        $found = $this->find_module_methods($module, $type);
         $mapping = $this->load_core_services($module);
         $search = array_keys($mapping);
         $replace = array_values($mapping);
         $files = 0;
         $total = 0;
-        foreach ($found as $namespace => $methods) {
-            foreach ($methods as $methodName => $lname) {
-                $class = $this->classes[$lname];
-                $this->log('Class Method in ' . $namespace . ': ' . $methodName . ' - FOUND ' . $class['file']);
-                $contents = file_get_contents($class['file']);
-                $count = 0;
-                $contents = preg_replace($search, $replace, $contents, -1, $count);
-                if ($update && $count > 0 && !empty($contents)) {
-                    file_put_contents($class['file'], $contents);
-                }
-                //if ($count > 0) {
-                //    $this->log('Still replacements in ' . $class['file'], true);
-                //}
-                $files += 1;
-                $total += $count;
+        $classList = $this->find_class_filter($module, $type, $path, $suffix);
+        foreach ($classList as $lname) {
+            $class = $this->classes[$lname];
+            $this->log('Class method ' . $class['name'] . ' - FOUND');
+            $contents = file_get_contents($class['file']);
+            $count = 0;
+            $contents = preg_replace($search, $replace, $contents, -1, $count);
+            if ($update && $count > 0 && !empty($contents)) {
+                file_put_contents($class['file'], $contents);
             }
+            //if ($count > 0) {
+            //    $this->log('Still replacements in ' . $class['file'], true);
+            //}
+            $files += 1;
+            $total += $count;
         }
         $this->log('Found Class Methods: ' . $files . ' with ' . $total . ' replacements', true);
         $this->log('Check for un-needed $this->getContext() in replaced calls ' . ' - TODO', true);
-        return $found;
+        return $classList;
+    }
+
+    public function replace_method_services($module, $type = '', $replace)
+    {
+        return $this->replace_core_services($module, $type, '/class/', 'Method', $replace);
+    }
+
+    public function replace_property_services($module, $replace)
+    {
+        return $this->replace_core_services($module, '', '/xarproperties/', '', $replace);
+    }
+
+    public function replace_block_services($module, $replace)
+    {
+        return $this->replace_core_services($module, '', '/xarblocks/', '', $replace);
     }
 
     public function replace_internal_methods($module, $type = '', $update = false)
@@ -1792,7 +1811,9 @@ $refresh = false;
 //$migrator->check_method_casing();
 $replace = false;
 //$migrator->document_module_methods('dynamicdata', '', $replace);
-//$found = $migrator->replace_core_services('dynamicdata', '', $replace);
+//$found = $migrator->replace_method_services('dynamicdata', '', $replace);
+//$found = $migrator->replace_property_services('dynamicdata', $replace);
+//$found = $migrator->replace_block_services('dynamicdata', $replace);
 //$migrator->replace_internal_methods('dynamicdata', '', $replace);
 [$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '/class/');
 file_put_contents('call_dependencies.json', $migrator->to_json($summary));
@@ -1816,6 +1837,8 @@ foreach ($modules as $module) {
         continue;
     }
     $migrator->parse_project();
-    $found = $migrator->replace_core_services($module, '', $replace);
+    $found = $migrator->replace_method_services($module, '', $replace);
+    $found = $migrator->replace_property_services($module, $replace);
+    $found = $migrator->replace_block_services($module, $replace);
 }
  */

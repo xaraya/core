@@ -116,8 +116,9 @@ trait CoreServicesTrait
      * Access xarController::* Main Controller methods (URL, redirect, ...)
      *
      * Available methods:
-     * - URL() - or use mod()->getURL() for current module
+     * - getModuleURL() - or use mod()->getURL() for current module
      * - getObjectURL() - or use data()->getURL() for current object
+     * - getCurrentURL()
      * - redirect()
      * - forbidden()
      * - notFound()
@@ -174,7 +175,7 @@ trait CoreServicesTrait
      * Available methods:
      * - getVar()
      * - setVar()
-     * - getURL() for current module - or use ctl()->URL() with modName
+     * - getURL() for current module - or use ctl()->getModuleURL() with modName
      * - getRegId()
      * - getInfo()
      * - ...
@@ -221,6 +222,8 @@ trait CoreServicesTrait
      * - property()
      * - setPageTitle()
      * - setPageTemplateName()
+     * - getImage()
+     * - getPager()
      * - ...
      *
      * Optional methods in parent:

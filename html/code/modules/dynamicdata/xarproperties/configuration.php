@@ -58,13 +58,13 @@ class ConfigurationProperty extends TextAreaProperty
         }
 
         $data['name'] = !empty($name) ? $name : $this->propertyprefix . $this->id;
-        $property = & DataPropertyMaster::getProperty($data);
+        $property = $this->prop()->getProperty($data);
         if (empty($property)) {
             return;
         }
 
         $data['configuration'] = null;
-        if (!xarVar::fetch($data['name'], 'isset', $data['configuration'], null, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find($data['name'], $data['configuration'])) {
             return;
         }
 
@@ -97,7 +97,7 @@ class ConfigurationProperty extends TextAreaProperty
             $data['type'] = $this->proptype;
         }
 
-        $property = & DataPropertyMaster::getProperty($data);
+        $property = $this->prop()->getProperty($data);
         $property->id = $this->id;
         $property->parseConfiguration($this->value);
 
@@ -124,7 +124,7 @@ class ConfigurationProperty extends TextAreaProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return xarVar::prepForDisplay($item[$this->name]);
+        // return $this->var()->prep($item[$this->name]);
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             return serialize($item[$this->name]);
         }

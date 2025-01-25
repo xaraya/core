@@ -17,32 +17,32 @@
                 <xar:set name="tabclass">empty($tab)?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">empty($tab)?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(['tab' => null])#" title="#xarML('Overview')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentURL(['tab' => null])#" title="#xarML('Overview')#" class="#$linkclass#">
                     Overview</a>
                 </li>
                 <xar:comment><!--
                 <xar:set name="tabclass">$tab=='functions'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='functions'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(['tab' => 'functions'])#" title="#xarML('Functions')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentURL(['tab' => 'functions'])#" title="#xarML('Functions')#" class="#$linkclass#">
                     Functions</a>
                 </li>
                 <xar:set name="tabclass">$tab=='subjects'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='subjects'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(['tab' => 'subjects'])#" title="#xarML('Subjects')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentURL(['tab' => 'subjects'])#" title="#xarML('Subjects')#" class="#$linkclass#">
                     Subjects</a>
                 </li>
                 <xar:set name="tabclass">$tab=='observers'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='observers'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(['tab' => 'observers'])#" title="#xarML('Observers')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentURL(['tab' => 'observers'])#" title="#xarML('Observers')#" class="#$linkclass#">
                     Observers</a>
                 </li>
                 <xar:set name="tabclass">$tab=='examples'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='examples'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(['tab' => 'examples'])#" title="#xarML('Examples')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentURL(['tab' => 'examples'])#" title="#xarML('Examples')#" class="#$linkclass#">
                     Examples</a>
                 </li>
                 --></xar:comment>

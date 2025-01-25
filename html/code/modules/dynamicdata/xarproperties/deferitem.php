@@ -103,7 +103,7 @@ class DeferredItemProperty extends DataProperty
         $this->fieldlist = $fieldlist;
         //$this->getDeferredLoader();
         // see if we can use a fixed template for display links here
-        $this->displaylink = xarServer::getObjectURL($object, 'display', ['itemid' => '[itemid]']);
+        $this->displaylink = $this->ctl()->getObjectURL($object, 'display', ['itemid' => '[itemid]']);
         if (strpos($this->displaylink, '[itemid]') === false) {
             // sorry, you'll have to deal with it directly in the template
             $this->displaylink = null;
@@ -277,7 +277,7 @@ class DeferredItemProperty extends DataProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return xarVar::prepForDisplay($item[$this->name]);
+        // return $this->var()->prep($item[$this->name]);
         // $data = $this->getDeferredData(['value' => $item[$this->name], '_itemid' => $itemid]);
         return parent::exportValue($itemid, $item);
     }
@@ -299,7 +299,7 @@ class DeferredItemProperty extends DataProperty
             $this->value = $data['value'];
             return $data;
         }
-        //$data['link'] = xarServer::getObjectURL($this->objectname, 'display', array('itemid' => $value));
+        //$data['link'] = $this->ctl()->getObjectURL($this->objectname, 'display', array('itemid' => $value));
         // see if we can use a fixed template for display links here
         if (!isset($data['link']) && !empty($this->displaylink)) {
             $data['link'] = str_replace('[itemid]', (string) $value, $this->displaylink);

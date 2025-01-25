@@ -112,7 +112,7 @@ class ShowpropvalMethod extends MethodClass
         $itemtype = $myobject->properties['itemtype']->value;
         $modinfo = xarMod::getInfo($module_id);
         if (xarModHooks::isHooked('uploads', $modinfo['name'], $itemtype)) {
-            xarVar::setCached('Hooks.uploads','ishooked',1);
+            $this->var()->setCached('Hooks.uploads','ishooked',1);
         }
         */
 
@@ -256,10 +256,10 @@ class ShowpropvalMethod extends MethodClass
                 $data['configuration'] = $property->configuration;
                 /*
                 // CHECKME: allow updating the default configuration for a property type someday ? See
-                //          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
+                //          also CHECKME in class/properties/master.php $this->prop()->getProperty()
                 if (!empty($confirm)) {
-                    if (!xarSec::confirmAuthKey()) {
-                        return xarController::badRequest('bad_author', $context);
+                    if (!$this->sec()->confirmAuthKey()) {
+                        return $this->ctl()->badRequest('bad_author', $context);
                     }
                 // TODO: we need some method in PropertyRegistration to update a property type ;-)
 

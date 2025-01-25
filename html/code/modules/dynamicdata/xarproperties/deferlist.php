@@ -197,7 +197,7 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return xarVar::prepForDisplay($item[$this->name]);
+        // return $this->var()->prep($item[$this->name]);
         // $data = $this->getDeferredData(['value' => $item[$this->name], '_itemid' => $itemid]);
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             $item[$this->name] = json_encode($item[$this->name], JSON_NUMERIC_CHECK);
@@ -226,7 +226,7 @@ class DeferredListProperty extends DeferredItemProperty
             $this->value = $data['value'];
             return $data;
         }
-        //$data['link'] = xarServer::getObjectURL($this->objectname, 'display', array('itemid' => $value));
+        //$data['link'] = $this->ctl()->getObjectURL($this->objectname, 'display', array('itemid' => $value));
         // see if we can use a fixed template for display links here - replace itemid in template per value in array
         if (!isset($data['link']) && !empty($this->displaylink)) {
             $data['link'] = $this->displaylink;
