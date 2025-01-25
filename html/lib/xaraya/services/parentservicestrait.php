@@ -161,15 +161,15 @@ trait ParentServicesTrait
      *
      * Available methods:
      * - module()
+     * - block()
      * - object()
+     * - property()
      * - setPageTitle()
      * - setPageTemplateName()
      * - ...
      *
-     * Required methods in parent:
-     * - getModName()
-     * - getModType() for tpl()->module()
-     * - getObject() for tpl()->object()
+     * Optional methods in parent:
+     * - getModName() for tpl()->setPageTitle()
      *
      */
     public function tpl(): TemplatingInterface

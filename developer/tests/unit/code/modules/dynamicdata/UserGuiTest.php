@@ -3,8 +3,6 @@
 use Xaraya\Modules\TestHelper;
 use Xaraya\DataObject\UserGui;
 
-//use Xaraya\Sessions\SessionHandler;
-
 final class UserGuiTest extends TestHelper
 {
     public function testUserGui(): void
@@ -16,7 +14,7 @@ final class UserGuiTest extends TestHelper
 
     public function testMain(): void
     {
-        $context = null;
+        $context = $this->createContext(['source' => __METHOD__]);
         $usergui = xarMod::getGUI('dynamicdata');
         $usergui->setContext($context);
 
@@ -31,12 +29,15 @@ final class UserGuiTest extends TestHelper
         $args = ['hello' => 'world'];
         $data = $usergui->main($args);
 
-        $expected = array_merge($args, [
+        $expected = [
+            'startlist' => [],
+            'update' => false,
             'context' => $context,
-            'module' => 'dynamicdata',
-            'itemtype' => 0,
-        ]);
-        $this->assertEquals($expected, $data);
+        ];
+        $this->assertEquals(array_keys($expected), array_keys($data));
+
+        $expected = $usergui->getContext();
+        $this->assertEquals($expected, $context);
     }
 
     public function testXarModGuiFunc(): void

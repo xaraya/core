@@ -26,6 +26,7 @@ use sys;
 
 sys::import('xaraya.services.parentservicestrait');
 sys::import('modules.dynamicdata.class.objects.servicestrait');
+sys::import('modules.dynamicdata.class.objects.virtual');
 
 /**
  * For documentation purposes only - available via DataPropertyServicesTrait

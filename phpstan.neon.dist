@@ -15,5 +15,7 @@ parameters:
         - html/lib/creole/*
         #- html/lib/xaraya/legacy/*
         - developer/tests/*
+    ignoreErrors:
+        - '#Call to deprecated function xarML\(\)#'
     parallel:
         processTimeout: 300.0

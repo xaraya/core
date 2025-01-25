@@ -286,8 +286,10 @@ trait ModuleTrait
         $this->classtypes = [
             // common types
             'userapi' => 'UserApi',
+            'usergui' => 'UserGui',
             'user' => 'UserGui',
             'adminapi' => 'AdminApi',
+            'admingui' => 'AdminGui',
             'admin' => 'AdminGui',
             // special types
             'hooks' => 'Hooks',

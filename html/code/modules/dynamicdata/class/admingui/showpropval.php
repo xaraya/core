@@ -70,7 +70,7 @@ class ShowpropvalMethod extends MethodClass
             }
 
             // show sample configuration for some property type
-            return dynamicdata_config_propval($proptype);
+            return $this->config_propval($proptype);
         }
 
         // get the object corresponding to this dynamic property
@@ -212,6 +212,92 @@ class ShowpropvalMethod extends MethodClass
         }
 
         // Return the template variables defined in this function
+        return $data;
+    }
+
+    /**
+     * Show sample configuration for some property type
+     * @return array<mixed>|void
+     */
+    public function config_propval($proptype)
+    {
+        $data = [];
+        if (empty($proptype)) {
+            $this->tpl()->setPageTitle($this->ml('Sample Configuration for DataProperty Types'));
+            return $data;
+        }
+
+        // get a new property of the right type
+        $data['type'] = $proptype;
+        $data['name'] = 'dd_' . $proptype;
+        $property = $this->prop()->getProperty($data);
+        if (empty($property)) {
+            $this->tpl()->setPageTitle($this->ml('Sample Configuration for DataProperty Types'));
+            return $data;
+        }
+
+        if (!$this->var()->check('preview', $preview)) {
+            return;
+        }
+        if (!$this->var()->check('confirm', $confirm)) {
+            return;
+        }
+        if (!empty($preview) || !empty($confirm)) {
+            if (!$this->var()->find($data['name'], $configuration)) {
+                return;
+            }
+
+            // pass the current value as configuration rule
+            $data['configuration'] = $configuration ?? '';
+
+            $isvalid = $property->updateConfiguration($data);
+
+            if ($isvalid) {
+                $data['configuration'] = $property->configuration;
+                /*
+                // CHECKME: allow updating the default configuration for a property type someday ? See
+                //          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
+                if (!empty($confirm)) {
+                    if (!xarSec::confirmAuthKey()) {
+                        return xarController::badRequest('bad_author', $context);
+                    }
+                // TODO: we need some method in PropertyRegistration to update a property type ;-)
+
+                // TODO: we need some way to avoid overwriting this whenever we flush property types
+                }
+                */
+            } else {
+                $data['invalid'] = $property->invalid;
+            }
+
+            // pass the current value as configuration rule
+        } elseif (!empty($property->configuration)) {
+            $data['configuration'] = $property->configuration;
+
+        } else {
+            $data['configuration'] = null;
+        }
+
+        // pass the id for the input field here
+        $data['id']         = 'dd_' . $proptype;
+        $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
+        $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
+        $data['size']       = !empty($size) ? $size : 50;
+
+        // call its showConfiguration() method and return
+        $data['showval'] = $property->showConfiguration($data);
+        $data['proptype'] = $proptype;
+        //    $data['propertytype'] = $property;
+        $data['propinfo'] = & $property;
+        $data['propertytype'] = $this->prop()->getProperty(['type' => $proptype]);
+
+        $this->tpl()->setPageTitle($this->ml('Sample Configuration for DataProperty Type #(1)', $proptype));
+        $data['has_overview'] = false;
+        $typename = $data['propertytype']->name;
+        if (file_exists(sys::code() . 'properties/' . $typename . '/xartemplates/includes/overview.xt')) {
+            $data['has_overview'] = true;
+        }
+
         return $data;
     }
 }

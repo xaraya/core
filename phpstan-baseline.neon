@@ -1,64 +1,39 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Undefined variable\\: \\$block_groups$#"
+			message: "#^Call to deprecated function xar_legacy_validations_dropdown\\(\\)\\.$#"
 			count: 1
-			path: html/code/modules/blocks/xaradmin/new_instance.php
+			path: html/code/modules/base/xarproperties/dropdown.php
 
 		-
-			message: "#^Undefined variable\\: \\$block_type$#"
-			count: 4
-			path: html/code/modules/blocks/xaradmin/new_instance.php
-
-		-
-			message: "#^Undefined variable\\: \\$instance_states$#"
+			message: "#^Call to deprecated function xar_legacy_validations_dropdown\\(\\)\\.$#"
 			count: 1
-			path: html/code/modules/blocks/xaradmin/new_instance.php
+			path: html/code/modules/base/xarproperties/multiselect.php
 
 		-
-			message: "#^Undefined variable\\: \\$type$#"
-			count: 4
-			path: html/code/modules/blocks/xaradmin/new_instance.php
-
-		-
-			message: "#^Undefined variable\\: \\$parent_id$#"
+			message: "#^Use of constant FILTER_SANITIZE_STRING is deprecated\\.$#"
 			count: 1
-			path: html/code/modules/categories/xarproperties/celkoposition.php
+			path: html/code/modules/base/xarproperties/textbox.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$where\\.$#"
+			message: "#^Undefined variable\\: \\$maxlength$#"
 			count: 1
-			path: html/code/modules/dynamicdata/class/objects/master.php
+			path: html/code/modules/dynamicdata/class/admingui/showpropval.php
+
+		-
+			message: "#^Undefined variable\\: \\$size$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/admingui/showpropval.php
+
+		-
+			message: "#^Undefined variable\\: \\$tabindex$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/admingui/showpropval.php
 
 		-
 			message: "#^Call to an undefined method DataObjectMaster\\:\\:checkInput\\(\\)\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/objects/master.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:checkDbConnection\\(\\)\\.$#"
-			count: 1
-			path: html/code/modules/dynamicdata/class/objects/master.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:setWhere\\(\\)\\.$#"
-			count: 1
-			path: html/code/modules/dynamicdata/class/objects/master.php
-
-		-
-			message: "#^Undefined variable\\: \\$maxlength$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
-
-		-
-			message: "#^Undefined variable\\: \\$size$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
-
-		-
-			message: "#^Undefined variable\\: \\$tabindex$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
 
 		-
 			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:createModuleSymLinks\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
@@ -106,26 +81,6 @@ parameters:
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Undefined variable\\: \\$dbconn$#"
-			count: 1
-			path: html/code/modules/installer/upgrades/220/database/sql_220_10.php
-
-		-
-			message: "#^Undefined variable\\: \\$dbconn$#"
-			count: 1
-			path: html/code/modules/installer/upgrades/220/database/sql_220_11.php
-
-		-
-			message: "#^Function mysql_get_server_info not found\\.$#"
-			count: 1
-			path: html/code/modules/installer/xaradmin/phase5.php
-
-		-
-			message: "#^Undefined variable\\: \\$PHPMAILER_LANG$#"
-			count: 1
-			path: html/code/modules/mail/class/phpmailer.php
-
-		-
 			message: "#^Undefined variable\\: \\$show$#"
 			count: 1
 			path: html/code/modules/privileges/xaradmin/modifyprivilege.php
@@ -136,24 +91,9 @@ parameters:
 			path: html/code/modules/privileges/xaradminapi/getcomponents.php
 
 		-
-			message: "#^Undefined variable\\: \\$defaultloginmodname$#"
+			message: "#^Call to deprecated function xar_legacy_templates_fixLegacy\\(\\)\\.$#"
 			count: 1
-			path: html/code/modules/roles/xaruserapi/usermenu.php
-
-		-
-			message: "#^Undefined variable\\: \\$value$#"
-			count: 1
-			path: html/code/properties/date/main.php
-
-		-
-			message: "#^Instantiated class React\\\\Http\\\\HttpServer not found\\.$#"
-			count: 1
-			path: html/lib/xaraya/bridge/reactphp.php
-
-		-
-			message: "#^Instantiated class React\\\\Socket\\\\SocketServer not found\\.$#"
-			count: 1
-			path: html/lib/xaraya/bridge/reactphp.php
+			path: html/lib/blocklayout/xsltransformer.php
 
 		-
 			message: "#^Function eaccelerator not found\\.$#"
@@ -226,19 +166,14 @@ parameters:
 			path: html/lib/xaraya/encryptor.php
 
 		-
-			message: "#^Call to an undefined static method xarRoles\\:\\:makeGroup\\(\\)\\.$#"
-			count: 1
-			path: html/lib/xaraya/legacy/security.php
-
-		-
-			message: "#^Call to an undefined static method xarRoles\\:\\:makeUser\\(\\)\\.$#"
-			count: 1
-			path: html/lib/xaraya/legacy/security.php
-
-		-
-			message: "#^Undefined variable\\: \\$systemConfiguration$#"
+			message: "#^Call to an undefined method Xaraya\\\\Modules\\\\HooksClass\\:\\:getItemType\\(\\)\\.$#"
 			count: 2
-			path: html/lib/xaraya/log.php
+			path: html/lib/xaraya/modules/hooks.php
+
+		-
+			message: "#^Call to an undefined method Xaraya\\\\Modules\\\\HooksClass\\:\\:getModName\\(\\)\\.$#"
+			count: 2
+			path: html/lib/xaraya/modules/hooks.php
 
 		-
 			message: "#^Instantiated class soap_fault not found\\.$#"

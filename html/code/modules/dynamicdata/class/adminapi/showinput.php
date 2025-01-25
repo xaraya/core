@@ -35,7 +35,7 @@ class ShowinputMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $property = & $this->prop()->getProperty($args);
+        $property = $this->prop()->getProperty($args);
 
         if (!empty($args['preset']) && empty($args['value'])) {
             return $property->_showPreset($args);

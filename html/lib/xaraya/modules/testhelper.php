@@ -12,6 +12,7 @@ use Xaraya\Services\TestHelper as ServicesHelper;
 use xarCache;
 use xarController;
 use xarDatabase;
+use xarEvents;
 use xarLog;
 use xarMod;
 use xarSecurity;
@@ -41,6 +42,8 @@ class TestHelper extends TestCase
         xarLog::init();
         // initialize database - delay until caching fails
         xarDatabase::init();
+        // initialize events
+        xarEvents::init();
         // initialize modules
         xarMod::init();
         // initialize users
@@ -49,6 +52,7 @@ class TestHelper extends TestCase
         xarServer::setRequestClass(RequestContext::class);
         // use SessionContext as session handler
         xarSession::setSessionClass(SessionContext::class);
+        xarSession::init();
 
         // file paths are relative to parent directory
         static::$oldDir = (string) getcwd();
@@ -98,7 +102,8 @@ class TestHelper extends TestCase
         // Xaraya\Modules\MyFancyModule\Module
         $moduleName = implode('\\', $parts) . '\Module';
         assert(is_subclass_of($moduleName, ModuleInterface::class));
-        return new $moduleName($modName);
+        //return new $moduleName($modName);
+        return xarMod::getModule($modName);
     }
 
     /**
@@ -115,7 +120,9 @@ class TestHelper extends TestCase
         // Xaraya\Modules\MyFancyModule\UserApi
         $parentName = implode('\\', $parts);
         assert(is_subclass_of($parentName, ModuleServicesInterface::class));
-        return new $parentName($modName);
+        //return new $parentName($modName);
+        $classType = array_pop($parts);
+        return xarMod::getModule($modName)->getComponent($classType);
     }
 
     /**

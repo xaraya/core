@@ -58,15 +58,4 @@ trait UserGuiTrait
     /** @use CoreGuiTrait<TModule> */
     use CoreGuiTrait;
     use OtherApiTrait;
-
-    /**
-     * Summary of main
-     * @param array<string, mixed> $args
-     * @return array<mixed>|string|void
-     */
-    public function main(array $args = [])
-    {
-        // Add standard template variables (module, itemtype and context)
-        return $this->mod()->prepare($args);
-    }
 }

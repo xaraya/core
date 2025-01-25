@@ -3,8 +3,6 @@
 use Xaraya\Modules\TestHelper;
 use Xaraya\DataObject\TestGui;
 
-//use Xaraya\Sessions\SessionHandler;
-
 final class TestGuiTest extends TestHelper
 {
     public function testTestGui(): void

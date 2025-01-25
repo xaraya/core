@@ -3,8 +3,6 @@
 use Xaraya\Modules\TestHelper;
 use Xaraya\DataObject\UserApi;
 
-//use Xaraya\Sessions\SessionHandler;
-
 final class UserApiTest extends TestHelper
 {
     public function testUserApi(): void
@@ -92,7 +90,7 @@ final class UserApiTest extends TestHelper
             'name' => 'sample',
             'label' => 'Sample Object',
             'title' => 'View Sample Object',
-            'url' => 'http://localhost/index.php?module=dynamicdata&amp;type=user&amp;func=view&amp;itemtype=3',
+            'url' => 'http://localhost/index.php?object=sample&amp;method=view',
         ];
         $result = xarMod::apiFunc('dynamicdata', 'user', 'getitemtypes');
         //$this->assertCount(12, $result);
@@ -104,7 +102,7 @@ final class UserApiTest extends TestHelper
             'itemid' => 1,
             'label' => 'Johnny',
             'title' => 'Display Item',
-            'url' => 'http://localhost/index.php?module=dynamicdata&amp;type=user&amp;func=display&amp;name=sample&amp;itemid=1',
+            'url' => 'http://localhost/index.php?object=sample&amp;method=display&amp;itemid=1',
         ];
         $args = ['itemtype' => 3];
         $result = xarMod::apiFunc('dynamicdata', 'user', 'getitemlinks', $args);

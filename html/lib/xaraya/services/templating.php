@@ -30,7 +30,13 @@ interface TemplatingInterface extends ServiceInterface
     public function module(string $modName, string $modType, string $funcName, array $tplData = [], ?string $templateName = null): string;
 
     /** @param array<string, mixed> $tplData */
+    public function block(string $modName, string $blockType, array $tplData = [], ?string $tplName = null, ?string $tplBase = null, ?string $tplModule = null): string;
+
+    /** @param array<string, mixed> $tplData */
     public function object(string $modName, string $objectName, string $tplType, array $tplData = []): string;
+
+    /** @param array<string, mixed> $tplData */
+    public function property(string $modName, string $propertyName, string $tplType = 'showoutput', array $tplData = [], ?string $tplBase = null): string;
 
     public function setPageTitle(string $title, ?string $modName = null): bool;
 
@@ -77,11 +83,39 @@ trait TemplatingTrait
 
     /**
      * Render output with object template
+     * @uses xarTpl::block()
+     * @param string $modName
+     * @param string $blockType
+     * @param array<string, mixed> $tplData
+     * @param ?string $tplName
+     * @param ?string $tplBase
+     * @param ?string $tplModule - for stand-alone blocks
+     * @return string
+     */
+    public function block(string $modName, string $blockType, array $tplData = [], ?string $tplName = null, ?string $tplBase = null, ?string $tplModule = null): string
+    {
+        // Add standard template variables (module, itemtype and context)
+        // @todo $tplData = $this->prepare($tplData);
+        $tplData['context'] ??= $this->getContext();
+
+        // Create the output.
+        return xarTpl::block(
+            $modName,
+            $blockType,
+            $tplData,
+            $tplName,
+            $tplBase,
+            $tplModule
+        );
+    }
+
+    /**
+     * Render output with object template
      * @uses xarTpl::object()
      * @param string $modName
      * @param string $objectName
      * @param string $tplType
-     * @param array<mixed> $tplData
+     * @param array<string, mixed> $tplData
      * @return string
      */
     public function object(string $modName, string $objectName, string $tplType, array $tplData = []): string
@@ -96,6 +130,32 @@ trait TemplatingTrait
             $objectName,
             $tplType,
             $tplData
+        );
+    }
+
+    /**
+     * Render output with property template
+     * @uses xarTpl::property()
+     * @param string $modName
+     * @param string $propertyName
+     * @param string $tplType
+     * @param array<string, mixed> $tplData
+     * @param ?string $tplBase
+     * @return string
+     */
+    public function property(string $modName, string $propertyName, string $tplType = 'showoutput', array $tplData = [], ?string $tplBase = null): string
+    {
+        // Add standard template variables (module, itemtype and context)
+        // @todo $tplData = $this->prepare($tplData);
+        $tplData['context'] ??= $this->getContext();
+
+        // Create the output.
+        return xarTpl::property(
+            $modName,
+            $propertyName,
+            $tplType,
+            $tplData,
+            $tplBase
         );
     }
 
@@ -129,7 +189,9 @@ trait TemplatingTrait
  *
  * Available methods:
  * - module() - or use mod()->template() for current module
+ * - block()
  * - object() - or use data()->template() for current object
+ * - property()
  * - setPageTitle()
  * - setPageTemplateName()
  * - ...

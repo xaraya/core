@@ -3,8 +3,6 @@
 use Xaraya\Modules\TestHelper;
 use Xaraya\DataObject\AdminGui;
 
-//use Xaraya\Sessions\SessionHandler;
-
 final class AdminGuiTest extends TestHelper
 {
     public function testAdminGui(): void

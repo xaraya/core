@@ -11,7 +11,7 @@
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.7
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -29,14 +29,6 @@ use Xaraya\Context\Context;
 
 /**
  * Exception raised by the modules subsystem
- *
- * @package core\modules
- * @category Xaraya Web Applications Framework
- * @version 2.4.1
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
 **/
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 {
@@ -45,14 +37,6 @@ class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 
 /**
  * Exception raised by the modules subsystem
- *
- * @package core\modules
- * @category Xaraya Web Applications Framework
- * @version 2.4.1
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
 **/
 class ModuleNotFoundException extends NotFoundExceptions
 {
@@ -61,14 +45,7 @@ class ModuleNotFoundException extends NotFoundExceptions
 
 /**
  * Exception raised by the modules subsystem
- *
- * @package core\modules
- * @category Xaraya Web Applications Framework
- * @version 2.4.1
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
+ * @todo during module init(), any GUI hook functions registered will throw this
 **/
 class ModuleNotActiveException extends xarExceptions
 {
@@ -77,9 +54,10 @@ class ModuleNotActiveException extends xarExceptions
 
 /**
  * Flags for loading APIs
+ * @deprecated 2.6.2 moved to class constants
  */
-define('XARMOD_LOAD_ONLYACTIVE', 1);
-define('XARMOD_LOAD_ANYSTATE', 2);
+//define('XARMOD_LOAD_ONLYACTIVE', 1);
+//define('XARMOD_LOAD_ANYSTATE', 2);
 
 /*
     Bring in the module variables to maintain interface compatibility for now
@@ -105,6 +83,9 @@ class xarMod extends xarObject implements IxarMod
 {
     use HasDatabaseStaticTrait;
 
+    public const LOAD_UNDEFINED                   = 0;
+    public const LOAD_ONLYACTIVE                  = 1;
+    public const LOAD_ANYSTATE                    = 2;
     public const STATE_UNINITIALISED              = 1;
     public const STATE_INACTIVE                   = 2;
     public const STATE_ACTIVE                     = 3;
@@ -968,11 +949,12 @@ class xarMod extends xarObject implements IxarMod
      *
      * @param string $modName name of module to load
      * @param string $modType type of functions to load
+     * @param int $flags flags to modify function behaviour (default LOAD_ONLYACTIVE)
      * @return mixed
      */
-    public static function load($modName, $modType = 'user')
+    public static function load($modName, $modType = 'user', $flags = self::LOAD_ONLYACTIVE)
     {
-        return self::privateLoad($modName, $modType);
+        return self::privateLoad($modName, $modType, $flags);
     }
 
     /**
@@ -980,11 +962,12 @@ class xarMod extends xarObject implements IxarMod
      *
      * @param string $modName registered name of the module
      * @param string $modType type of functions to load
+     * @param int $flags flags to modify function behaviour (default LOAD_ANYSTATE)
      * @return mixed true on success
      */
-    public static function apiLoad($modName, $modType = 'user')
+    public static function apiLoad($modName, $modType = 'user', $flags = self::LOAD_ANYSTATE)
     {
-        return self::privateLoad($modName, $modType . 'api', XARMOD_LOAD_ANYSTATE);
+        return self::privateLoad($modName, $modType . 'api', $flags);
     }
 
     /**
@@ -999,7 +982,7 @@ class xarMod extends xarObject implements IxarMod
      * @throws ModuleNotFoundException
      * @throws ModuleNotActiveException
      */
-    private static function privateLoad($modName, $modType, $flags = 0)
+    private static function privateLoad($modName, $modType, $flags = self::LOAD_UNDEFINED)
     {
         static $loadedModuleCache = [];
         if (empty($modName)) {
@@ -1022,7 +1005,7 @@ class xarMod extends xarObject implements IxarMod
         }
 
         // Not a valid module state - throw exception
-        if ($modBaseInfo['state'] != self::STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE)) {
+        if ($modBaseInfo['state'] != self::STATE_ACTIVE && !($flags & self::LOAD_ANYSTATE)) {
             throw new ModuleNotActiveException($modName);
         }
 
@@ -1173,6 +1156,9 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Check if a particular module function exists, or default back to 'dynamicdata'
      *
+     * @param string $tplmodule optional module where the templates reside
+     * @param string $type link type (user, userapi, admin, adminapi, ...)
+     * @param string $func link function (display, getitemtypes, ...)
      * @return string tplmodule or 'dynamicdata'
      */
     public static function checkModuleFunction($tplmodule = 'dynamicdata', $type = 'user', $func = 'display', $defaultmodule = 'dynamicdata')
@@ -1183,6 +1169,18 @@ class xarMod extends xarObject implements IxarMod
         if (!isset($tplmodule_cache[$key])) {
             $file = sys::code() . 'modules/' . $tplmodule . '/xar' . $type . '/' . $func . '.php';
             if (file_exists($file)) {
+                $tplmodule_cache[$key] = $tplmodule;
+                return $tplmodule_cache[$key];
+            }
+            // Note: pass modType . funcType as modType here for module classes, and use callType (api or not)
+            if (str_ends_with($type, 'api')) {
+                $callType = 'api';
+            } else {
+                $callType = 'gui';
+                $type .= 'gui';
+            }
+            $callable = self::getModuleClassMethod($tplmodule, $type, $func, $callType);
+            if (!empty($callable)) {
                 $tplmodule_cache[$key] = $tplmodule;
             } else {
                 $tplmodule_cache[$key] = $defaultmodule;

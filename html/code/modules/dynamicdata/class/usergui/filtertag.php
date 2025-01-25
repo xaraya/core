@@ -157,7 +157,7 @@ class FiltertagMethod extends MethodClass
             if (is_object($filter)) {
                 foreach ($filter->conditions as $condition) {
                     $values[$condition['field1']] = trim($condition['field2'], "%");
-                    $ops[$condition['field1']]    = transform_operator($condition['op']);
+                    $ops[$condition['field1']]    = $this->transform_operator($condition['op']);
                 }
             }
 
@@ -195,5 +195,25 @@ class FiltertagMethod extends MethodClass
             $data['filtername'] = $args['filtername'];
         }
         return $data;
+    }
+
+    /**
+     * Summary of transform_operator
+     * @param string $op
+     * @return string
+     */
+    public function transform_operator($op)
+    {
+        $oparray = [
+            '='        => 'eq',
+            '!='       => 'ne',
+            '>'        => 'gt',
+            '>='       => 'ge',
+            '<'        => 'lt',
+            '<='       => 'le',
+            'LIKE'     => 'like',
+            'NOT LIKE' => 'notlike',
+        ];
+        return $oparray[$op];
     }
 }
