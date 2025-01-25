@@ -35,7 +35,7 @@ class FloatBoxProperty extends NumberBoxProperty
     {
         parent::__construct($descriptor);
         if ($this->value == '') $this->value = $this->defaultvalue;
-        if (!is_numeric($this->value) && !empty($this->value)) throw new Exception(xarML('The default value of a #(1) must be numeric',$this->name));
+        if (!is_numeric($this->value) && !empty($this->value)) throw new Exception($this->ml('The default value of a #(1) must be numeric',$this->name));
     }
 /**
  * Convert an integer or string value to true/false

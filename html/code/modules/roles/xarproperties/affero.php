@@ -31,7 +31,7 @@ class AfferoProperty extends TextBoxProperty
         $this->template = 'affero';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = xarTpl::getImage('contact/affero.png','module','roles');
+            $this->initialization_icon_url = $this->tpl()->getImage('contact/affero.png','module','roles');
         }
     }
 
@@ -46,8 +46,8 @@ class AfferoProperty extends TextBoxProperty
 
         if (!empty($value)) {
             if (!is_string($value)) {
-                $this->invalid = xarML('Affero Name: #(1)', $this->name);
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->invalid = $this->ml('Affero Name: #(1)', $this->name);
+                $this->log()->error($this->invalid);
                 $this->value = null;
                 return false;
             }
@@ -63,13 +63,13 @@ class AfferoProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if(!isset($data['value'])) $data['value'] = $this->value;
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.xarVar::prepForDisplay($data['value']);
+            $data['link'] = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.$this->var()->prep($data['value']);
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
@@ -81,10 +81,10 @@ class AfferoProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-        $data['value'] = xarVar::prepForDisplay($data['value']);
+        $data['value'] = $this->var()->prep($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {

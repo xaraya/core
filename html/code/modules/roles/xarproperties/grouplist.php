@@ -62,7 +62,7 @@ class GroupListProperty extends SelectProperty
         $this->fieldname = $name;
         
         // Get the previous group from the form
-        if (!xarVar::fetch('previous_value_' . $name, 'int', $previous_value, 0, xarVar::NOT_REQUIRED)) return;
+        if (!$this->var()->find('previous_value_' . $name, $previous_value, 'int', 0)) return;
         $this->previous_groupid = $previous_value;
 
         return parent::checkInput();
@@ -89,8 +89,8 @@ class GroupListProperty extends SelectProperty
         } elseif (empty($value)) {
             return true;
         }
-        $this->invalid = xarML('Bad selection: #(1)', $this->name);
-        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+        $this->invalid = $this->ml('Bad selection: #(1)', $this->name);
+        $this->log()->error($this->invalid);
         $this->value = null;
         return false;
     }
@@ -103,38 +103,38 @@ class GroupListProperty extends SelectProperty
      */
     public function createValue($itemid=0)
     {
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         $rolemembers = $xartable['rolemembers'];
         
         if ($this->initialization_update_behavior == 'replace' && $this->previous_groupid) {
             if (!$itemid) {
-                $bindvars = array();
+                $bindvars = [];
                 $query = "DELETE FROM $rolemembers WHERE parent_id = ?";
                 $bindvars[] = $this->previous_groupid;
-                $dbconn = xarDB::getConn();
+                $dbconn = $this->db()->getConn();
                 $stmt = $dbconn->prepareStatement($query);
-                $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+                $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
                 if(!$result) return;
             } else {
-                $bindvars = array();
+                $bindvars = [];
                 $query = "UPDATE FROM $rolemembers SET parent_id = ? WHERE role_id = ? AND parent_id = ?";
                 $bindvars[] = $this->current_groupid;
                 $bindvars[] = $itemid;
                 $bindvars[] = $this->previous_groupid;
-                $dbconn = xarDB::getConn();
+                $dbconn = $this->db()->getConn();
                 $stmt = $dbconn->prepareStatement($query);
-                $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+                $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
                 if(!$result) return;
             }
         } else {
             if (!$itemid) return true;
-            $bindvars = array();
+            $bindvars = [];
             $query = "INSERT INTO $rolemembers (role_id, parent_id) VALUES (?, ?)";
             $bindvars[] = $itemid;
             $bindvars[] = $this->current_groupid;
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
             if(!$result) return;
         }        
         return true;
@@ -173,14 +173,14 @@ class GroupListProperty extends SelectProperty
         $basegroup = xarRoles::get($this->initialization_basegroup);
         if (!empty($basegroup)) {
             xarMod::load('roles');
-            $xartables = xarDB::getTables();
+            $xartables = $this->db()->getTables();
             $rolemembers = $xartables['rolemembers'];
-            $bindvars = array();
+            $bindvars = [];
             $query = "SELECT parent_id FROM $rolemembers WHERE role_id = ?";
             $bindvars[] = $itemid;
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
             if(!$result) return;echo $query;
             foreach ($result->next() as $row) {var_dump($row);echo "X";
                 $candidate = xarRoles::get($row['parent_id']);
@@ -199,7 +199,7 @@ class GroupListProperty extends SelectProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
         // CHECKME: is this needed?
@@ -222,7 +222,7 @@ class GroupListProperty extends SelectProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
         if (isset($data['basegroup'])) $this->validation_group_list = $data['basegroup'];
@@ -250,7 +250,7 @@ class GroupListProperty extends SelectProperty
      */
     public function getOptions()
     {
-        $select_options = array();
+        $select_options = [];
         $select_options['show_top'] = $this->show_top;
         if (!empty($this->validation_ancestorgroup_list)) {
             $select_options['ancestor'] = $this->validation_ancestorgroup_list;

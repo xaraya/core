@@ -60,13 +60,13 @@ class AccessProperty extends DataProperty
     public function checkInput($name = '', $value = null)
     {
         /** @var SelectProperty $dropdown */
-        $dropdown = DataPropertyMaster::getProperty(array('name' => 'dropdown'));        
-        $value = array();
+        $dropdown = $this->prop()->getProperty(array('name' => 'dropdown'));        
+        $value = [];
         
         // Check the group
         if ($this->initialization_group_multiselect) {
             /** @var MultiSelectProperty $multiselect */
-            $multiselect = DataPropertyMaster::getProperty(array('name' => 'multiselect'));        
+            $multiselect = $this->prop()->getProperty(array('name' => 'multiselect'));        
             $multiselect->options = $this->getgroupoptions();
             $multiselect->validation_override = $this->validation_override;
             if (!$multiselect->checkInput($name . '_group')) return false;
@@ -92,7 +92,7 @@ class AccessProperty extends DataProperty
         if (!$dropdown->checkInput($name . '_failure')) return false;
         $value['failure'] = $dropdown->value;
         
-        xarLog::message("DataProperty::validateValue: Skipping validation for " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Skipping validation for " . $this->name);
         $this->setValue($value);
         return true;
     }
@@ -103,7 +103,7 @@ class AccessProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */	
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (isset($data['value'])) {
             $this->setValue($data['value']);
@@ -142,7 +142,7 @@ class AccessProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (isset($data['value'])) {
             $this->setValue($data['value']);
@@ -151,7 +151,7 @@ class AccessProperty extends DataProperty
         }
         $value = $this->getValue();
         if (!isset($data['level'])) $data['level'] = (isset($value['level'])) ? $value['level'] : 800;
-        if (!isset($data['group'])) $data['group'] = (isset($value['group'])) ? $value['group'] : array();
+        if (!isset($data['group'])) $data['group'] = (isset($value['group'])) ? $value['group'] : [];
         if (!isset($data['failure'])) $data['failure'] = (isset($value['failure'])) ? $value['failure'] : 1;
         
         if (!isset($data['group_multiselect'])) {
@@ -182,10 +182,10 @@ class AccessProperty extends DataProperty
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $options = xarRoles::getgroups();
         $firstlines = array(
-            array('id' => 0, 'name' => xarML('No requirement')),
-            array('id' => $this->myself, 'name' => xarML('Current User')),
-            array('id' => $anonID, 'name' => xarML('Users not logged in')),
-            array('id' => -$anonID, 'name' => xarML('Users logged in')),
+            array('id' => 0, 'name' => $this->ml('No requirement')),
+            array('id' => $this->myself, 'name' => $this->ml('Current User')),
+            array('id' => $anonID, 'name' => $this->ml('Users not logged in')),
+            array('id' => -$anonID, 'name' => $this->ml('Users logged in')),
         );
         return array_merge($firstlines, $options);
     }
@@ -200,7 +200,7 @@ class AccessProperty extends DataProperty
         sys::import('modules.privileges.class.securitylevel');
         $accesslevels = SecurityLevel::$displayMap;
         unset($accesslevels[-1]);
-        $options = array();
+        $options = [];
         foreach ($accesslevels as $key => $value) $options[] = array('id' => $key, 'name' => $value);
         return $options;
     }
@@ -213,8 +213,8 @@ class AccessProperty extends DataProperty
     function getfailureoptions()
     {
         $options = array(
-                        array('id' => 0, 'name' => xarML('Fail silently')),
-                        array('id' => 1, 'name' => xarML('Throw exception')),
+                        array('id' => 0, 'name' => $this->ml('Fail silently')),
+                        array('id' => 1, 'name' => $this->ml('Throw exception')),
                     );
         return $options;
     }
@@ -268,7 +268,7 @@ class AccessProperty extends DataProperty
 	 * @param  int exclusive 
 	 * @return bool   Returns access(For group or level) if exclusive, otherwise returns false 
 	 */
-    public function check(Array $data=array(), $exclusive=1)
+    public function check(array $data = [], $exclusive=1)
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
@@ -328,7 +328,7 @@ class AccessProperty extends DataProperty
 	 * @param  int exclusive 
 	 * @return bool   Returns access(For group or level) if exclusive, otherwise returns false 
 	 */
-    public function checkAccessTag(Array $data=array(), $exclusive=1)
+    public function checkAccessTag(array $data = [], $exclusive=1)
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
@@ -339,7 +339,7 @@ class AccessProperty extends DataProperty
         
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
-            $groups = array();
+            $groups = [];
             if (isset($data['group'])) {
                 if (!is_array($data['group'])) {
                     $groupsarray = explode(',', $data['group']);
@@ -387,7 +387,7 @@ class AccessProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return bool   Returns true
 	 */	
-    public function checkRealm(Array $data=array())
+    public function checkRealm(array $data = [])
     {
         // CHECKME
         return true;
@@ -399,7 +399,7 @@ class AccessProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return bool   Returns true or false 
 	 */	
-    public function checkLevel(Array $data=array())
+    public function checkLevel(array $data = [])
     {
         if (isset($data['level']))     $this->level = (int)$data['level'];
         if (isset($data['module']))    $this->module = $data['module'];
@@ -425,7 +425,7 @@ class AccessProperty extends DataProperty
 	 * @param  array groups An array of input parameters
 	 * @return bool   Returns true or false 
 	 */	    
-    public function checkGroup(Array $groups=array())
+    public function checkGroup(array $groups = [])
     {
         if (count($groups) > 1) {
             $this->initialization_group_multiselect = true;
@@ -440,7 +440,7 @@ class AccessProperty extends DataProperty
 	 * @param  array groups An array of input parameters (integers)
 	 * @return bool   Returns true or false 
 	 */	    
-    private function checkGroupArray(Array $groups=array())
+    private function checkGroupArray(array $groups = [])
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $access = false;
@@ -469,7 +469,7 @@ class AccessProperty extends DataProperty
 	 * 
 	 * @param array<string, mixed> $data An array of input parameters
 	 */	   	
-    public function showHidden(Array $data = array())
+    public function showHidden(array $data = [])
     {
         if (isset($data['value'])) {
             $this->setValue($data['value']);
@@ -522,7 +522,7 @@ class AccessPropertyInstall extends AccessProperty implements iDataPropertyInsta
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return bool   Returns true or false 
 	 */	 
-    public function install(Array $data=array())
+    public function install(array $data = [])
     {
         $dat_file = sys::code() . 'modules/privileges/xardata/privileges_access_configurations-dat.xml';
         $data = array('file' => $dat_file);

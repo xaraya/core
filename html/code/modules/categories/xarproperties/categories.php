@@ -55,8 +55,8 @@ class CategoriesProperty extends DataProperty
     public $itemtype       = 0;
     public $property       = 0;
     public $itemid;
-    public $categories     = array();
-    public $basecategories = array();
+    public $categories     = [];
+    public $basecategories = [];
         
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -86,13 +86,13 @@ class CategoriesProperty extends DataProperty
         $this->fieldname = $name;
 
         // Pull in local module and itemtype from the form and store for reuse
-        if (!xarVar::fetch($name . '[itemtype]', 'int', $itemtype, 0, xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch($name . '[module_id]', 'int', $module_id, 182, xarVar::NOT_REQUIRED)) return;
+        if (!$this->var()->find($name . '[itemtype]', $itemtype, 'int', 0)) return;
+        if (!$this->var()->find($name . '[module_id]', $module_id, 'int', 182)) return;
         $this->module_id = $module_id;
         $this->itemtype = $itemtype;
        
         // Get the base categories from the form
-        if (!xarVar::fetch($name . '[base_category]', 'array', $basecats, array(), xarVar::NOT_REQUIRED)) return;
+        if (!$this->var()->find($name . '[base_category]', $basecats, 'array', [])) return;
         $this->basecategories = $basecats;
         // Get the categories from the form
         // Select type of each tree can be different
@@ -101,10 +101,10 @@ class CategoriesProperty extends DataProperty
             $select_type = 3;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
-            if (!xarVar::fetch($name . '[categories]', 'array', $categories, array(), xarVar::NOT_REQUIRED)) return;
+            if (!$this->var()->find($name . '[categories]', $categories, 'array', [])) return;
         }
         */
-        if (!xarVar::fetch($name . '[categories]', 'array', $categories, array(), xarVar::NOT_REQUIRED)) return;
+        if (!$this->var()->find($name . '[categories]', $categories, 'array', [])) return;
         return $this->validateValue($categories);
     }
 
@@ -122,15 +122,15 @@ class CategoriesProperty extends DataProperty
         /**
         if (0) {
             if (count($value) > 0) {
-                $checkcats= array();
+                $checkcats= [];
                 foreach ($value as $category) {
                     if (empty($category)) continue;
                     $catparts = explode('.',$category);
                     $category = (int)$catparts[0];
                     $validcat = xarMod::apiFunc('categories','user','getcatinfo',array('cid' => $category));
                     if (!$validcat) {
-                        $this->invalid = xarML("The category #(1) is not valid", $category);
-                        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                        $this->invalid = $this->ml("The category #(1) is not valid", $category);
+                        $this->log()->error($this->invalid);
                         $this->value = null;
                         return false;
                     }
@@ -145,7 +145,7 @@ class CategoriesProperty extends DataProperty
         // We can only check for more cats than base cats
         /*
         if (count($this->basecategories) < count($value)) {
-            $this->invalid = xarML("The number of categories is greater than base categories");
+            $this->invalid = $this->ml("The number of categories is greater than base categories");
             $this->value = null;
             return false;
         }
@@ -159,7 +159,7 @@ class CategoriesProperty extends DataProperty
         //                      ...
         //                     )
         
-        $this->categories = array();
+        $this->categories = [];
         foreach ($value as $baseid => $categories) {
             foreach ($categories as $category) {
                 $category_id = (int)$category;
@@ -186,7 +186,7 @@ class CategoriesProperty extends DataProperty
         }
         sys::import('xaraya.structures.query');
         xarMod::apiLoad('categories');
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
     
         // This property is standalone
         // For both create and update we remove any existing links and create the new ones
@@ -246,7 +246,7 @@ class CategoriesProperty extends DataProperty
     {
         sys::import('xaraya.structures.query');
         xarMod::apiLoad('categories');
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         
         if (isset($this->objectref)) {
             // This property is bound
@@ -269,7 +269,7 @@ class CategoriesProperty extends DataProperty
      * value: ID value of the category displayed
      *
      */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (isset($data['include_no_line'])) $this->initialization_include_no_cat = $data['include_no_line'];
         if (isset($data['include_all_line'])) $this->initialization_include_all_cats = $data['include_all_line'];
@@ -303,7 +303,7 @@ class CategoriesProperty extends DataProperty
             try {
                 $configuration = unserialize($this->configuration);
             } catch(Exception $e) {
-                $configuration = array();
+                $configuration = [];
             }
         } else {
             $configuration = $this->configuration;
@@ -314,10 +314,10 @@ class CategoriesProperty extends DataProperty
                 // CHECKME: can we remove this excess level?
                 if (isset($configuration['initialization_basecategories'])) 
                     $configuration = $configuration['initialization_basecategories'];
-                $data['tree_name']    = array();
-                $base_categories      = array();
-                $data['include_self'] = array();
-                $data['select_type']  = array();
+                $data['tree_name']    = [];
+                $base_categories      = [];
+                $data['include_self'] = [];
+                $data['select_type']  = [];
                 foreach ($configuration as $row) {
                     $data['tree_name'][]     = $row[0];
                     $base_categories[]       = $row[1];
@@ -345,7 +345,7 @@ class CategoriesProperty extends DataProperty
         );
         // The somewhat convoluted way of getting to the actual base category ids is a consequence of 
         // using the array property (categorypicker) to define them
-        $data['base_category'] = array();
+        $data['base_category'] = [];
         foreach ($base_categories as $key => $trees) {
             // The base category is a single category (no multiselect), so get the category ID
             $tree = is_array($trees) ? reset($trees) : $trees;
@@ -376,9 +376,9 @@ class CategoriesProperty extends DataProperty
             // If we have a value passed, then jump over this next part
             if (!isset($data['value'])) {
                 // If we have no values passed, get an array of values (selected categories) for each tree
-                $data['value'] = array();
+                $data['value'] = [];
                 xarMod::apiLoad('categories');
-                $xartable = xarDB::getTables();
+                $xartable = $this->db()->getTables();
                 sys::import('xaraya.structures.query');
                 foreach ($data['base_category'] as $key => $value) {
                     $q = new Query('SELECT', $xartable['categories_linkage']); 
@@ -390,7 +390,7 @@ class CategoriesProperty extends DataProperty
                     $q->addfield('category_id');
                     $q->run();
                     $result = $q->output();
-                    $categories = array();
+                    $categories = [];
                     foreach ($result as $row) 
                         if (!empty($row['category_id'])) $categories[] = (int)$row['category_id'];
                     $data['value'][$key] = $categories;
@@ -413,7 +413,7 @@ class CategoriesProperty extends DataProperty
      * value: ID value of the category displayed
      *
      */
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!empty($this->source)) {
             $this->tplmodule = 'dynamicdata';
@@ -488,7 +488,7 @@ class CategoriesProperty extends DataProperty
     {    
         sys::import('xaraya.structures.query');
         xarMod::apiLoad('categories');
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         $q = new Query('SELECT'); 
         $q->addtable( $xartable['categories'],'c');
         $q->addtable( $xartable['categories_linkage'],'cl');
@@ -515,12 +515,12 @@ class CategoriesProperty extends DataProperty
     public function getItems($category=0, $object=null)
     {
         if (empty($object)) $object = $this->objectref;
-        if (empty($object)) throw new Exception(xarML('No object found for the getItems method'));
+        if (empty($object)) throw new Exception($this->ml('No object found for the getItems method'));
         if (empty($this->itemid)) $this->itemid = $object->properties[$object->primary]->value;
         $prinaryfield = $object->properties[$object->primary]->source;
         xarMod::load('categories');
         $q = $object->dataquery;
-        $tables = xarDB::getTables();
+        $tables = $this->db()->getTables();
         $q->addtable($tables['categories'],'c');
         $q->addtable($tables['categories_linkage'],'l');
         $q->leftjoin('l.category_id','c.id');
@@ -543,11 +543,11 @@ class CategoriesProperty extends DataProperty
      *
      * @param array<string, mixed> $data An array of input parameters
      */
-    public function updateConfiguration(Array $data = array())
+    public function updateConfiguration(array $data = [])
     {
         // Array properties and their extensions have arrays as values
         // Use the property's checkInput method to get the value
-        $arrayprop = DataPropertyMaster::getProperty(array('name' => 'categorypicker'));
+        $arrayprop = $this->prop()->getProperty(array('name' => 'categorypicker'));
         $arrayprop->checkInput($this->propertyprefix . $this->id . '["initialization_basecategories"]');
 
         // Assign the value to this configuration property for update
@@ -576,7 +576,7 @@ class CategoriesProperty extends DataProperty
 
         // Assemble the links to the object's table
         xarMod::load('categories');
-        $tables = xarDB::getTables();
+        $tables = $this->db()->getTables();
         $q->addTable($tables['categories_linkage'], $tableprefix . 'linkage');
         $q->leftjoin($primary_source, $tableprefix . 'linkage.item_id');
         $q->addTable($tables['categories'], $tableprefix . 'categories');
@@ -586,7 +586,7 @@ class CategoriesProperty extends DataProperty
         // Itemtype & module ID = 0 means the objects listing
         // We want each of the following three conditions to hold, or not exist
         if (!empty($this->module_id) && !empty($this->itemtype)) {
-            $a = array();
+            $a = [];
             $a[] = $q->peq($tableprefix . 'linkage.module_id', $this->module_id);
             $a[] = $q->peq($tableprefix . 'linkage.module_id', 'NULL');
             $q->qor($a);
@@ -607,7 +607,7 @@ class CategoriesProperty extends DataProperty
        
         // Align the display status of this property with that of the name property in he categories object
         // In other words, we can make this field be displayed or not depending on the display status we give it in the DD UI
-        $categories_object = DataObjectFactory::getObject(array('name' => 'categories'));
+        $categories_object = $this->data()->getObject(array('name' => 'categories'));
         $display_status = $categories_object->properties['name']->getDisplayStatus();
         $this->setDisplayStatus($display_status);
         $this->objectref->setFieldList();
@@ -637,13 +637,13 @@ class CategoriesProperty extends DataProperty
     {
         sys::import('xaraya.structures.query');
         xarMod::apiLoad('categories');
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         
         $q = new Query('SELECT', $xartable['categories_linkage']); 
         $q->eq('item_id', (int)$itemid);
         $q->eq('property_id', $this->id);
         $q->run();
-        $links = array();
+        $links = [];
         foreach ($q->output() as $row) 
             $links[(int)$row['category_id'] . "_" . (int)$row['basecategory']] = $row;
         return $links;
@@ -664,7 +664,7 @@ class CategoriesProperty extends DataProperty
     {
         sys::import('xaraya.structures.query');
         xarMod::apiLoad('categories');
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         
         // This property is bound
         // Get the category links of this property and item
@@ -777,7 +777,7 @@ class CategoriesPropertyInstall extends CategoriesProperty implements iDataPrope
      * @param array<string, mixed> $data Parameter data array
      * @return boolean Returns true.
      */
-    public function install(Array $data=array())
+    public function install(array $data = [])
     {
         $files[] = sys::code() . 'modules/categories/xardata/categories_configurations-dat.xml';
         foreach ($files as $file) {

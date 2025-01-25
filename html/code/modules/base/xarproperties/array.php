@@ -46,7 +46,7 @@ class ArrayProperty extends DataProperty
     public $desc       = 'Array';
     public $reqmodules = array('base');
 
-    public $fields = array();
+    public $fields = [];
 
     public $display_minimum_rows         = 1;        // The table displays at least this many rows
     public $display_maximum_rows         = 10;       // The table cannot display more than this many rows
@@ -99,14 +99,14 @@ class ArrayProperty extends DataProperty
             if (!is_array($displayconfig)) $displayconfig = unserialize((string) $displayconfig);
             
             $columncount = isset($displayconfig) ? count($displayconfig) : 0;
-            if (!xarVar::fetch($name,    'array', $elements, array(), xarVar::NOT_REQUIRED)) return false;
+            if (!$this->var()->find($name, $elements,    'array', [])) return false;
             // Get the number of rows we are saving
             $rows = count($elements);
 
-            $value = array();
+            $value = [];
             for ($k=0;$k<$columncount;$k++) {
                 // Get the property type for this column and get the value from the template
-                $property = DataPropertyMaster::getProperty(array('type' => $displayconfig[$k][1]));
+                $property = $this->prop()->getProperty(array('type' => $displayconfig[$k][1]));
                 $property->parseConfiguration($displayconfig[$k][3]);
                 $i=0;
                 foreach ($elements as $row) {
@@ -140,14 +140,14 @@ class ArrayProperty extends DataProperty
 	 */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
 //        if (!parent::validateValue($value)) return false;
 
         // Check if we have an array. We don't really have an error message here
         if (!is_array($value)) {
-            $this->invalid = xarML('The value of this property is not an array');
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->invalid = $this->ml('The value of this property is not an array');
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         }
@@ -163,19 +163,19 @@ class ArrayProperty extends DataProperty
         if ($this->validation_associative_array && $this->source != 'dynamic_objects.sources') {
             $initial_count = count($value[0]);
             $keycol = $value[0];
-            $temp = array();
+            $temp = [];
             foreach($keycol as $keyvalue) $temp[$keyvalue] = 1;
             
             if (count($temp) != $initial_count && $initial_count > 0 && !empty($value[0][0])) {
                 if (!empty($this->validation_associative_array_invalid)) {
-                    $this->invalid = xarML($this->validation_associative_array_invalid);
+                    $this->invalid = $this->ml($this->validation_associative_array_invalid);
                 } else {
-                    $this->invalid = xarML('The key values of the array are not unique');
+                    $this->invalid = $this->ml('The key values of the array are not unique');
                 }
 // This results in the "bad data" (but only the last row of the same key) being displayed
 // Can we do better?
 //                $this->value = null;
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->log()->error($this->invalid);
                 return false;
             }
         }
@@ -191,10 +191,10 @@ class ArrayProperty extends DataProperty
 	 */	 
     function setValue($value=null)
     {
-        if (empty($value)) $value = array();
+        if (empty($value)) $value = [];
         if (!empty($value) && is_array($value)) {
 
-            $temp = array();
+            $temp = [];
             if(!$this->validation_associative_array) {
             /*
                 //Legacy format. remove?
@@ -255,14 +255,14 @@ class ArrayProperty extends DataProperty
         try {
             $value = unserialize($this->value);
         } catch(Exception $e) {
-            $value = array();
+            $value = [];
         }
         if(!$this->validation_associative_array) {
             return $value;
         /*
             //Legacy format. remove?
             $outer = explode(';',$this->value);
-            $value =array();
+            $value = [];
             foreach ($outer as $element) {
                 $inner = explode('%@$#',$element);
                 if (count($inner)>1) $value[] = $inner;
@@ -270,8 +270,8 @@ class ArrayProperty extends DataProperty
             }
         */
         } else {
-            $temp = array();
-            if (empty($value)) $value = array();
+            $temp = [];
+            if (empty($value)) $value = [];
             if (!is_array($value)) {
                 $value = [$value];
             }
@@ -295,7 +295,7 @@ class ArrayProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         // If this is an array definition, load its configuration up front
         // A bound array property contains itself an array property as part of its configuration
@@ -335,10 +335,10 @@ class ArrayProperty extends DataProperty
                 if (isset($displayconfig['value'])) $displayconfig = $displayconfig['value'];
 
                 // New way for configs
-                $titles         = array();
-                $types          = array();
-                $defaults       = array();
-                $configurations = array();
+                $titles         = [];
+                $types          = [];
+                $defaults       = [];
+                $configurations = [];
                 foreach ($displayconfig as $row) {
                     $titles[]         = $row[0];
                     $types[]          = $row[1];
@@ -403,7 +403,7 @@ class ArrayProperty extends DataProperty
         // Now add any missing value rows or columns
         for ($i=0;$i<$data['rows'];$i++) {
             for ($j=0;$j<$titlescount;$j++) {
-                $property = DataPropertyMaster::getProperty(array('type' => $data['column_types'][$j]));
+                $property = $this->prop()->getProperty(array('type' => $data['column_types'][$j]));
                 if (!isset($value[$j][$i])) $value[$j][$i] = $property->defaultvalue;
             }
         }
@@ -427,7 +427,7 @@ class ArrayProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();
@@ -439,10 +439,10 @@ class ArrayProperty extends DataProperty
             if (isset($displayconfig['value'])) $displayconfig = $displayconfig['value'];
 
             // New way for configs
-            $titles         = array();
-            $types          = array();
-            $defaults       = array();
-            $configurations = array();
+            $titles         = [];
+            $types          = [];
+            $defaults       = [];
+            $configurations = [];
             foreach ($displayconfig as $row) {
                 $titles[]         = isset($row[0]) ? $row[0] : '';
                 $types[]          = isset($row[1]) ? $row[1] : 1;
@@ -451,10 +451,10 @@ class ArrayProperty extends DataProperty
             }
         } catch (Exception $e) {
             // Legacy way for configs
-            $titles         = array();
-            $types          = array();
-            $defaults       = array();
-            $configurations = array();
+            $titles         = [];
+            $types          = [];
+            $defaults       = [];
+            $configurations = [];
             foreach ($this->default_column_definition as $row) {
                 $titles[]         = $row[0];
                 $types[]          = $row[1];
@@ -466,10 +466,10 @@ class ArrayProperty extends DataProperty
         $data['rows'] = isset($data['value'][0]) ? count($data['value'][0]) : 0;
         
         // We initialize the required properties here, for reuse in the template
-        $data['column_types'] =array();
+        $data['column_types'] = [];
         sys::import('modules.dynamicdata.class.properties.master');
         foreach($types as $key => $thistype) {
-            $data['column_types'][$key] = DataPropertyMaster::getProperty(array('type' => $thistype));
+            $data['column_types'][$key] = $this->prop()->getProperty(array('type' => $thistype));
         }
         return parent::showOutput($data);
     }
@@ -479,7 +479,7 @@ class ArrayProperty extends DataProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return xarVar::prepForDisplay($item[$this->name]);
+        // return $this->var()->prep($item[$this->name]);
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             return serialize($item[$this->name]);
         }
@@ -492,7 +492,7 @@ class ArrayProperty extends DataProperty
      *
      * @param array<string, mixed> $data An array of input parameters
      */
-    public function updateConfiguration(Array $data = array())
+    public function updateConfiguration(array $data = [])
     {
         if ($this->type == 999) {
             foreach ($data['configuration']['display_column_definition'] as $row => $columns) {

@@ -43,7 +43,7 @@ class CheckboxListProperty extends SelectProperty
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            xarVar::fetch($name, 'isset', $value,  NULL, xarVar::NOT_REQUIRED);
+            $this->var()->find($name, $value);
         }
         return $this->validateValue($value);
     }
@@ -54,7 +54,7 @@ class CheckboxListProperty extends SelectProperty
  */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataProperty::validateValue: Validating property " . $this->name);
 
         if (!isset($value)) $value = '';
         $this->setValue($value);
@@ -67,7 +67,7 @@ class CheckboxListProperty extends SelectProperty
  * @return string     HTML markup to display the property for input on a web page
  */
 	
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (isset($data['value'])) {
             if (is_array($data['value'])) {
@@ -86,7 +86,7 @@ class CheckboxListProperty extends SelectProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for output on a web page
  */
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();
@@ -100,7 +100,7 @@ class CheckboxListProperty extends SelectProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for hidden input on a web page
  */	  
-    public function showHidden(Array $data = array())
+    public function showHidden(array $data = [])
     {
         if (isset($data['value'])) {
             if (is_array($data['value'])) {
@@ -124,7 +124,7 @@ class CheckboxListProperty extends SelectProperty
             if (is_string($this->value) && !empty($this->value)) {
                 $value = explode(',', $this->value);
             } else {
-                $value = array();
+                $value = [];
             }
         } else {
             $value = $this->value;

@@ -21,10 +21,10 @@ class UserListProperty extends SelectProperty
     public $desc       = 'User List';
     public $reqmodules = array('roles');
 
-    public $grouplist = array();
+    public $grouplist = [];
     public $userstate = -1;
-    public $showlist  = array();
-    public $orderlist = array();
+    public $showlist  = [];
+    public $orderlist = [];
     public $showglue  = '; ';
 
     public $initialization_userlist_user_state = xarRoles::ROLES_STATE_ALL; // Select only users of the given state
@@ -57,11 +57,11 @@ class UserListProperty extends SelectProperty
         $this->filepath  = 'modules/roles/xarproperties';
 
         if (count($this->options) == 0) {
-            $select_options = array();
+            $select_options = [];
             if (!empty($this->initialization_orderlist)) $select_options['order'] = explode(',', $this->initialization_orderlist);
 //            $users = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
             // FIXME: this function needs to be reviewed
-            $users = array();
+            $users = [];
             // Loop for each user retrieved and populate the options array.
             if (empty($this->display_showfields)) {
                 // Simple case (default) -
@@ -72,7 +72,7 @@ class UserListProperty extends SelectProperty
                 $showfields = explode(',',$this->display_showfields);
                 // Complex case: allow specific fields to be selected.
                 foreach ($users as $user) {
-                    $namevalue = array();
+                    $namevalue = [];
                     foreach ($showfields as $showfield) {
                         $namevalue[] = $user[$showfield];
                     }
@@ -100,8 +100,8 @@ class UserListProperty extends SelectProperty
         } elseif (empty($value)) {
             return true;
         }
-        $this->invalid = xarML('selection: #(1)', $this->name);
-        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+        $this->invalid = $this->ml('selection: #(1)', $this->name);
+        $this->log()->error($this->invalid);
         $this->value = null;
         return false;
     }
@@ -112,7 +112,7 @@ class UserListProperty extends SelectProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         // CHECKME: Remove this?
         if (isset($data['group_list'])) $this->validation_userlist_group_list = $data['group_list'];
@@ -126,7 +126,7 @@ class UserListProperty extends SelectProperty
     // TODO: format the output according to the 'showfields'.
     // TODO: provide an option to allow admin to decide whether to wrap the user
     // in a link or not.
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
@@ -157,7 +157,7 @@ class UserListProperty extends SelectProperty
      */
     public function getOptions()
     {
-        $select_options = array();
+        $select_options = [];
         $select_options['state'] = $this->initialization_userlist_user_state;
         
         if (!empty($this->initialization_userlist_group_list)) {
@@ -212,7 +212,7 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
  */
 class UserListPropertyInstall extends UserListProperty implements iDataPropertyInstall
 {
-    public function install(Array $data=array())
+    public function install(array $data = [])
     {
         $dat_file = sys::code() . 'modules/roles/xardata/userlist_configurations-dat.xml';
         $data = array('file' => $dat_file);

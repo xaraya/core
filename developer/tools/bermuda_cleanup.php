@@ -1823,6 +1823,10 @@ $modules = [
     'hitcount', 'images', 'keywords', 'library', 'logconfig', 'messages', 'mime',
     'publications', 'ratings', 'scheduler', 'skeleton', 'uploads', 'webhooks', 'workflow',
 ];
+$modules = [
+    'authsystem', 'base', 'blocks', 'categories', 'dynamicdata', 'installer',
+    'mail', 'modules', 'privileges', 'roles', 'themes',
+];
 $replace = false;
 foreach ($modules as $module) {
     echo "\nModule $module\n";
@@ -1837,8 +1841,9 @@ foreach ($modules as $module) {
         continue;
     }
     $migrator->parse_project();
-    $found = $migrator->replace_method_services($module, '', $replace);
+    //$migrator->replace_internal_methods($module, '', $replace);
+    //$found = $migrator->replace_method_services($module, '', $replace);
     $found = $migrator->replace_property_services($module, $replace);
-    $found = $migrator->replace_block_services($module, $replace);
+    //$found = $migrator->replace_block_services($module, $replace);
 }
  */

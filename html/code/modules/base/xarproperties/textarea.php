@@ -47,7 +47,7 @@ class TextAreaProperty extends DataProperty
     function aliases()
     {
         if (get_class($this) !== 'TextAreaProperty') {
-            return array();
+            return [];
 	}
 
         $a1['id']   = 4;
@@ -70,10 +70,10 @@ class TextAreaProperty extends DataProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         // TODO: the way the template is organized now, this only works when an id is set.
-        $data['value'] = isset($data['value']) ? xarVar::prepForDisplay($data['value']) : xarVar::prepForDisplay($this->value);
+        $data['value'] = isset($data['value']) ? $this->var()->prep($data['value']) : $this->var()->prep($this->value);
         if(empty($data['rows'])) $data['rows'] = $this->display_rows;
         if(empty($data['cols'])) $data['cols'] = $this->display_columns;
 

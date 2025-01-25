@@ -23,7 +23,7 @@ class ModuleProperty extends ObjectRefProperty
     public $desc       = 'Module';
     public $reqmodules = array('modules');
 
-    public $filter = array();
+    public $filter = [];
 
     // these correspond to what we actually get from the modules getlist() function below
     public $initialization_refobject    = 'modules';            // The object we want to reference
@@ -42,7 +42,7 @@ class ModuleProperty extends ObjectRefProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    function showInput(Array $data=array())
+    function showInput(array $data = [])
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
         return parent::showInput($data);
@@ -61,7 +61,7 @@ class ModuleProperty extends ObjectRefProperty
             return $this->options;
         }
         
-        $options = array();
+        $options = [];
         $items = xarMod::apiFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
         foreach($items as $item) {
             try {

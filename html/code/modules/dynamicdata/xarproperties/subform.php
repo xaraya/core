@@ -645,7 +645,7 @@ class SubFormProperty extends DataProperty
                     $myobject->getItems(['where' => $where]);
                 } else {
                     // re-initialize the items array
-                    //                    $myobject->items = array();
+                    //                    $myobject->items = [];
                 }
                 break;
 

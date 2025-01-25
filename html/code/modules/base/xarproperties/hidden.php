@@ -34,11 +34,11 @@ class HiddenProperty extends DataProperty
  */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_INFO);
+        $this->log()->info("DataProperty::validateValue: Validating property " . $this->name);
 
         if (isset($value) && $value != $this->value) {
-            $this->invalid = xarML('hidden field');
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->invalid = $this->ml('hidden field');
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         } else {

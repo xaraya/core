@@ -60,7 +60,7 @@ class OrderSelectProperty extends MultiSelectProperty
         if (!isset($order)) $order = $this->order;
         $options = array_keys($this->getOptions());
 
-        $tmp = array();
+        $tmp = [];
         if (empty($order) || strstr($order, ';') === false) {
             foreach ($options as $k => $v) {
                 $tmp[] = $v['id'];
@@ -70,7 +70,7 @@ class OrderSelectProperty extends MultiSelectProperty
         }
 
         if(count(array_diff($options, $tmp)) != 0) {
-            $this->invalid = xarML('incorrect order value: #(1) for #(2)', implode(';', $tmp), $this->name);
+            $this->invalid = $this->ml('incorrect order value: #(1) for #(2)', implode(';', $tmp), $this->name);
             $this->order = null;
             return false;
         }
@@ -83,7 +83,7 @@ class OrderSelectProperty extends MultiSelectProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (empty($data['options'])) $data['options'] = $this->getOptions();
 
@@ -95,7 +95,7 @@ class OrderSelectProperty extends MultiSelectProperty
             }
         } else {
             $tmpval = explode(';', $data['order']);
-            $tmpopts = array();
+            $tmpopts = [];
             foreach($tmpval as $v) {
                 foreach($data['options'] as $k) {
                     if($k['id'] == $v) {
@@ -114,7 +114,7 @@ class OrderSelectProperty extends MultiSelectProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for output on a web page
  */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
         if (!isset($data['options'])) $data['options'] = $this->options;
@@ -127,7 +127,7 @@ class OrderSelectProperty extends MultiSelectProperty
             }
         } else {
             $tmpval = explode(';', $data['order']);
-            $tmpopts = array();
+            $tmpopts = [];
             foreach($tmpval as $v) {
                 foreach($data['options'] as $k) {
                     if($k['id'] == $v) {

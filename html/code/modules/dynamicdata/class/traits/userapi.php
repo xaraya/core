@@ -69,3 +69,13 @@ trait UserApiTrait
         return $this->getItemLinkObjects();
     }
 }
+
+/**
+ * Summary of UserApiClass
+ * @template TModule of ModuleInterface|null
+ */
+class UserApiClass implements UserApiInterface
+{
+    /** @use UserApiTrait<TModule> */
+    use UserApiTrait;
+}

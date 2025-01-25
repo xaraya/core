@@ -35,9 +35,9 @@ class RolesTreeProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
-        if (!isset($data['topid'])) $data['topid'] = (int)xarModVars::get('roles', 'everybody');
+        if (!isset($data['topid'])) $data['topid'] = (int)$this->mod()->getVar('everybody');
         $node = new TreeNode($data['topid']);
         $tree = new RolesTree($node);
         $data['nodes'] = $node->depthfirstenumeration();

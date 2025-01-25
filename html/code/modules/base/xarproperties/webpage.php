@@ -65,8 +65,8 @@ class HTMLPageProperty extends SelectProperty
         } elseif (empty($value)) {
             return true;
         }
-        $this->invalid = xarML('selection: #(1)', $this->name);
-        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+        $this->invalid = $this->ml('selection: #(1)', $this->name);
+        $this->log()->error($this->invalid);
         $this->value = null;
         return false;
     }
@@ -77,7 +77,7 @@ class HTMLPageProperty extends SelectProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
@@ -90,7 +90,7 @@ class HTMLPageProperty extends SelectProperty
                                    array('basedir' => $this->basedir,
                                          'filetype' => $this->filetype));
             if (!isset($files)) {
-                $files = array();
+                $files = [];
             }
             natsort($files);
             array_unshift($files,'');
@@ -110,7 +110,7 @@ class HTMLPageProperty extends SelectProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         extract($data);
 
@@ -146,7 +146,7 @@ class HTMLPageProperty extends SelectProperty
                                    array('basedir' => $this->basedir,
                                          'filetype' => $this->filetype));
             if (!isset($files)) {
-                $files = array();
+                $files = [];
             }
             natsort($files);
             array_unshift($files,'');

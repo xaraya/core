@@ -44,8 +44,8 @@ class TColorPickerProperty extends DataProperty
 
         if (!empty($value)) {
             if (strlen($value) > $this->maxlength || !preg_match('/^\#(([a-f0-9]{3})|([a-f0-9]{6}))$/i', $value)) {
-                $this->invalid = xarML('color must be in the format "#RRGGBB" or "#RGB"');
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->invalid = $this->ml('color must be in the format "#RRGGBB" or "#RGB"');
+                $this->log()->error($this->invalid);
                 $this->value = null;
                 return false;
             }
@@ -58,7 +58,7 @@ class TColorPickerProperty extends DataProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (empty($maxlength) && isset($this->max)) {
             $this->maxlength = $this->max;
@@ -70,7 +70,7 @@ class TColorPickerProperty extends DataProperty
         $data['baseuri']  = xarServer::getBaseURI();
         $data['size']     = $this->size;
         $data['maxlength']= $this->maxlength;
-        $data['value']    = isset($data['value']) ? xarVar::prepForDisplay($data['value']) : xarVar::prepForDisplay($this->value);
+        $data['value']    = isset($data['value']) ? $this->var()->prep($data['value']) : $this->var()->prep($this->value);
 
         return parent::showInput($data);
     }

@@ -52,8 +52,8 @@ sys::import('modules.dynamicdata.class.properties.base');
  */
 class CelkoPositionProperty extends DataProperty
 {
-    private $current_entry    = array();  // The current entry we are saving
-    private $reference_entry  = array();  // The entry relative to which we define the position of this entry
+    private $current_entry    = [];  // The current entry we are saving
+    private $reference_entry  = [];  // The entry relative to which we define the position of this entry
 
     public $id           = 30074;
     public $name         = 'celkoposition';
@@ -68,9 +68,9 @@ class CelkoPositionProperty extends DataProperty
     public $inorout;                      // "in": this item will be a child of the reference entry; "out": this will be a sibling of the reference entry 
 
     public $catexists;
-    public $itemindices      = array();    // helper variable to hold items when importing
-    public $itemsknown       = array();    // helper variable to hold known references: oldkey => newkey
-    public $itemsunresolved  = array();    // helper variable to hold unresolved references: newkey => oldkey
+    public $itemindices      = [];    // helper variable to hold items when importing
+    public $itemsknown       = [];    // helper variable to hold known references: oldkey => newkey
+    public $itemsunresolved  = [];    // helper variable to hold unresolved references: newkey => oldkey
     public $offset           = 0;          // helper variable to hold offsets for left and right ids
     
     public $initialization_celkotable        = 'xar_categories';
@@ -81,8 +81,8 @@ class CelkoPositionProperty extends DataProperty
     public $initialization_celkofilter       = '';
     public $initialization_celkobasecategory = array(array('Celko Dropdown',array(array(1)),false,1));
 
-    public $position_options = array();
-    public $atomic_value     = array();    // The atomic values of this property are left, right and parent
+    public $position_options = [];
+    public $atomic_value     = [];    // The atomic values of this property are left, right and parent
     public $left;
     public $right;
 
@@ -93,10 +93,10 @@ class CelkoPositionProperty extends DataProperty
         $this->filepath  = 'modules/categories/xarproperties';
 
         $this->position_options = array(
-					array('id' => '1', 'name' => xarMLS::translate('Right before, at the same level')),
-					array('id' => '2', 'name' => xarMLS::translate('Right after, at the same level')),
-					array('id' => '4', 'name' => xarMLS::translate('The first child item')),
-					array('id' => '3', 'name' => xarMLS::translate('The last child item')),
+					array('id' => '1', 'name' => $this->ml('Right before, at the same level')),
+					array('id' => '2', 'name' => $this->ml('Right after, at the same level')),
+					array('id' => '4', 'name' => $this->ml('The first child item')),
+					array('id' => '3', 'name' => $this->ml('The last child item')),
 					);
     }
 
@@ -109,8 +109,8 @@ class CelkoPositionProperty extends DataProperty
 	 */
     public function checkInput($name = '', $value = null)
     {
-        if (!xarVar::fetch($name . '_reference_id', 'int:0', $reference_id)) return;
-        if (!xarVar::fetch($name . '_position', 'enum:1:2:3:4', $position)) return;
+        if (!$this->var()->get($name . '_reference_id', $reference_id, 'int:0')) return;
+        if (!$this->var()->get($name . '_position', $position, 'enum:1:2:3:4')) return;
         switch (intval($position)) {
             case 1: // before - same level
                 $this->rightorleft = 'left';
@@ -149,7 +149,7 @@ class CelkoPositionProperty extends DataProperty
         $this->reference_entry = $this->getItem($this->reference_id);
 
         if ($this->reference_entry == false) {
-            $this->invalid = xarMLS::translate('The reference entry does not exist');
+            $this->invalid = $this->ml('The reference entry does not exist');
             $this->value = null;
             return false;
         }
@@ -164,7 +164,7 @@ class CelkoPositionProperty extends DataProperty
            ($this->reference_entry[$this->initialization_celkoleft_id] <= $this->current_entry[$this->initialization_celkoright_id])
           )
         {
-            $this->invalid = xarMLS::translate('The reference entry cannot be the current entry or one of its children');
+            $this->invalid = $this->ml('The reference entry cannot be the current entry or one of its children');
             $this->value = null;
             return false;
         }
@@ -172,7 +172,7 @@ class CelkoPositionProperty extends DataProperty
         // No moving to before or after the root entry
         $isroot = $this->reference_entry[$this->initialization_celkoleft_id] == 1;
         if ($isroot && ($this->inorout == 'out')) {
-            $this->invalid = xarMLS::translate('Cannot move an entry to before or after the root entry');
+            $this->invalid = $this->ml('Cannot move an entry to before or after the root entry');
             $this->value = null;
             return false;
         }
@@ -194,7 +194,7 @@ class CelkoPositionProperty extends DataProperty
 #
 # There is more than one item for this itemid. That's a problem.
 #
-            throw new Exception(xarMLS::translate('More than one item for the itemid value #(1)',$itemid));
+            throw new Exception($this->ml('More than one item for the itemid value #(1)',$itemid));
         } elseif ($n == 1) {
 # --------------------------------------------------------
 #
@@ -292,7 +292,7 @@ class CelkoPositionProperty extends DataProperty
                 $parentItem = $this->getItem($this->reference_id);
                 
                 if ($parentItem == false) {
-                   xarSession::setVar('errormsg', xarMLS::translate('The parent item does not exist'));
+                   xarSession::setVar('errormsg', $this->ml('The parent item does not exist'));
                    return false;
                 }
                 $this->right = $parentItem[$this->initialization_celkoright_id];
@@ -336,7 +336,7 @@ class CelkoPositionProperty extends DataProperty
         $current_entry = $this->getItem($itemid);
 
         if ($current_entry == false) {
-            xarSession::setVar('errormsg', xarMLS::translate('The entry you are updating does not exist'));
+            xarSession::setVar('errormsg', $this->ml('The entry you are updating does not exist'));
             return false;
         }
 
@@ -384,7 +384,7 @@ class CelkoPositionProperty extends DataProperty
                      // the databases we are supporting are complying with it. This can be
                      // broken down in 3 simple UPDATES which shouldnt be a problem with any database
 
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $result = $dbconn->Execute($SQLquery);
             if (!$result) return;
 
@@ -409,7 +409,7 @@ class CelkoPositionProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (!isset($data['position_options'])) $data['position_options'] = $this->position_options;
         if (!isset($data['position'])) $data['position'] = $this->position;
@@ -456,7 +456,7 @@ class CelkoPositionProperty extends DataProperty
 
         // If the current item has no reference item, then find the last such item and make this one the next in line
         if ($data['reference_id'] == 0 && !empty($items)) {
-            $right = array();
+            $right = [];
             foreach ($items as $key => $row) {
                 $right[$key]  = $row['right'];
             }
@@ -481,7 +481,7 @@ class CelkoPositionProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string   Returns true or false 
 	 */
-    public function showHidden(Array $data = array())
+    public function showHidden(array $data = [])
     {
         if (!isset($data['position_options'])) $data['position_options'] = $this->position_options;
         if (!isset($data['position'])) $data['position'] = $this->position;
@@ -506,7 +506,7 @@ class CelkoPositionProperty extends DataProperty
 
         // If the current item has no reference item, then find the last such item and make this one the next in line
         if ($data['reference_id'] == 0 && !empty($items)) {
-            $right = array();
+            $right = [];
             foreach ($items as $key => $row) {
                 $right[$key]  = $row['right'];
             }
@@ -524,10 +524,10 @@ class CelkoPositionProperty extends DataProperty
     // while moving all the links to the left and right apart to make place for the insertion
     function updateposition($itemid=0, $parent=0, $point_of_insertion=1) 
     {
-        $bindvars = array();
-        $bindvars[1] = array();
-        $bindvars[2] = array();
-        $bindvars[3] = array();
+        $bindvars = [];
+        $bindvars[1] = [];
+        $bindvars[2] = [];
+        $bindvars[3] = [];
 
         /* Opening space for the new node */
         $SQLquery[1] = "UPDATE " . $this->initialization_celkotable .
@@ -548,7 +548,7 @@ class CelkoPositionProperty extends DataProperty
                                      WHERE id = ?";
         $bindvars[3] = array($parent, $point_of_insertion, $point_of_insertion + 1,$itemid);
 
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         for ($i=1;$i<4;$i++) if (!$dbconn->Execute($SQLquery[$i],$bindvars[$i])) return;
     }
 
@@ -603,7 +603,7 @@ class CelkoPositionProperty extends DataProperty
         if (!empty($itemid)) {
             $sql .= " WHERE id = " . $itemid;
         }
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         $result = $dbconn->Execute($sql);
         if (!$result) return;
         $result->first();
@@ -668,7 +668,7 @@ class CelkoPositionProperty extends DataProperty
                   break;
 
                   default:
-                    $msg = xarMLS::translate('Valid values: IN or OUT');
+                    $msg = $this->ml('Valid values: IN or OUT');
                     throw new BadParameterException(null, $msg);
                }
             break;
@@ -683,12 +683,12 @@ class CelkoPositionProperty extends DataProperty
                   break;
 
                   default:
-                    $msg = xarMLS::translate('Valid values: IN or OUT');
+                    $msg = $this->ml('Valid values: IN or OUT');
                     throw new BadParameterException(null, $msg);
                }
             break;
             default:
-            $msg = xarMLS::translate('Valid values: RIGHT or LEFT');
+            $msg = $this->ml('Valid values: RIGHT or LEFT');
             throw new BadParameterException(null, $msg);
         }
         return $point_of_insertion;
@@ -712,7 +712,7 @@ class CelkoPositionProperty extends DataProperty
             These are reurned as COUNT(P1...)
             The second WHERE conditions below selects all categories in P1 except the current category and its descendents.
         */
-        $bindvars = array();
+        $bindvars = [];
         $SQLquery = "SELECT COUNT(P2.id) AS indent,
                             P1.id,"
                             . $select_fields .
@@ -729,8 +729,8 @@ class CelkoPositionProperty extends DataProperty
         if (isset($eid) && !is_array($eid) && $eid != false) {
            $ecat = $this->getItem($eid);
            if ($ecat == false) {
-               xarSession::setVar('errormsg', xarMLS::translate('That item does not exist'));
-               return array();
+               xarSession::setVar('errormsg', $this->ml('That item does not exist'));
+               return [];
            }
            //$SQLquery .= " AND P1.left_id
            //               NOT BETWEEN ? AND ? ";
@@ -748,8 +748,8 @@ class CelkoPositionProperty extends DataProperty
         $SQLquery .= " ORDER BY P1." . $this->initialization_celkoleft_id;
 
     // cfr. cachemanager - this approach might change later
-        $expire = xarModVars::get('categories','cache.userapi.getcat');
-        $dbconn = xarDB::getConn();
+        $expire = $this->mod()->getVar('cache.userapi.getcat');
+        $dbconn = $this->db()->getConn();
         if (!empty($expire)){
             $result = $dbconn->CacheExecute($expire,$SQLquery,$bindvars);
         } else {
@@ -799,7 +799,7 @@ class CelkoPositionProperty extends DataProperty
 			
 			if (!$result) return;
 			if ($result->EOF) return Array();
-			$items = array();
+			$items = [];
 			$index = -1;
 			$result->first();
 			while (!$result->EOF) {
@@ -920,7 +920,7 @@ class CelkoPositionProperty extends DataProperty
      *
      * @param array<string, mixed> $data An array of input parameters
      */
-    public function updateConfiguration(Array $data = array())
+    public function updateConfiguration(array $data = [])
     {
         // Removes the empty line for adding a row
         array_pop($data['configuration']['initialization_celkobasecategory']);
@@ -943,7 +943,7 @@ class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDat
      * @param array<string, mixed> $data Parameter data array
      * @return boolean Returns true.
      */
-    public function install(Array $data=array())
+    public function install(array $data = [])
     {
         $dat_file = sys::code() . 'modules/categories/xardata/celkoposition_configurations-dat.xml';
         $data = array('file' => $dat_file);

@@ -40,7 +40,7 @@ class EmailProperty extends TextBoxProperty
 	 */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         if (!isset($value)) $value = "";
 
@@ -49,11 +49,11 @@ class EmailProperty extends TextBoxProperty
                 $value = $value[0];
             } else {
                 if (!empty($this->validation_email_confirm_invalid)) {
-                    $this->invalid = xarML($this->validation_email_confirm_invalid);
+                    $this->invalid = $this->ml($this->validation_email_confirm_invalid);
                 } else {
-                    $this->invalid = xarML('Emails did not match');
+                    $this->invalid = $this->ml('Emails did not match');
                 }
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->log()->error($this->invalid);
                 return false;
             }
         }
@@ -64,14 +64,14 @@ class EmailProperty extends TextBoxProperty
             sys::import('xaraya.validations');
             $boolean = ValueValidations::get('email');
             try {
-                $boolean->validate($value, array());
+                $boolean->validate($value, []);
             } catch (Exception $e) {
                 if (!empty($this->validation_email_invalid)) {
-                    $this->invalid = xarML($this->validation_email_invalid);
+                    $this->invalid = $this->ml($this->validation_email_invalid);
                 } else {
-                    $this->invalid = xarML('The email format is incorrect');
+                    $this->invalid = $this->ml('The email format is incorrect');
                 }
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->log()->error($this->invalid);
                 $this->value = $value;
                 return false;
             }
@@ -87,7 +87,7 @@ class EmailProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (isset($data['confirm'])) $this->validation_email_confirm = $data['confirm'];
         return parent::showInput($data);

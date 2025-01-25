@@ -14,6 +14,8 @@
 sys::import('xaraya.structures.tree');
 sys::import('modules.privileges.class.privileges');
 sys::import('modules.dynamicdata.class.properties.base');
+sys::import('xaraya.services.hasdatabasetrait');
+use Xaraya\Services\HasDatabaseTrait;
 
 /**
  * Handle Privileges Tree property
@@ -48,10 +50,10 @@ class PrivilegesTreeProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */	
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (!isset($data['show'])) $data['show'] = 'assigned';
-        $trees = array();
+        $trees = [];
         foreach ($this->privs->gettoplevelprivileges($data['show']) as $entry) {
             $node = new TreeNode($entry['id']);
             $tree = new PrivilegesTree($node);
@@ -65,7 +67,8 @@ class PrivilegesTreeProperty extends DataProperty
 // ---------------------------------------------------------------
 class PrivilegesTree extends Tree
 {
-	
+	use HasDatabaseTrait;
+
 	/**
 	*  Give privileges to user to create nodes
 	* 
@@ -75,8 +78,8 @@ class PrivilegesTree extends Tree
     function createnodes(TreeNode $node)
     {
         //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $q = new Query('SELECT');
         // Add fields
         $q->addfields("p.id AS id, p.name AS name, p.component AS component, p.instance AS instance, p.level AS level, p. description AS description");
@@ -90,7 +93,7 @@ class PrivilegesTree extends Tree
         $q->addtable($xartable['privmembers'], 'pm');
         $q->leftjoin('p.id', 'pm.privilege_id');
         // Add conditions
-        $q->eq('p.itemtype', xarPrivileges::PRIVILEGES_PRIVILEGETYPE);
+        $q->eq('p.itemtype', xarSecurity::PRIVILEGES_PRIVILEGETYPE);
         // Add ordering
         $q->setorder('p.name');
         $q->run();

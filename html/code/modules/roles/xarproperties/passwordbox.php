@@ -45,7 +45,7 @@ class PassBoxProperty extends TextBoxProperty
     function aliases()
     {
         if (get_class($this) !== 'PassBoxProperty') {
-            return array();
+            return [];
 	}
 
         $a1['id']   = 461;
@@ -72,7 +72,7 @@ class PassBoxProperty extends TextBoxProperty
 	 */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         if (!isset($value)) $value = "";
 
@@ -81,11 +81,11 @@ class PassBoxProperty extends TextBoxProperty
                 $value = $value[0];
             } else {
                 if (!empty($this->validation_password_confirm_invalid)) {
-                    $this->invalid = xarML($this->validation_password_confirm_invalid);
+                    $this->invalid = $this->ml($this->validation_password_confirm_invalid);
                 } else {
-                    $this->invalid = xarML('Passwords did not match');
+                    $this->invalid = $this->ml('Passwords did not match');
                 }
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->log()->error($this->invalid);
                 $this->value = null;
                 return false;
             }
@@ -130,7 +130,7 @@ class PassBoxProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (isset($data['confirm'])) $this->validation_password_confirm = $data['confirm'];
         return parent::showInput($data);
@@ -142,7 +142,7 @@ class PassBoxProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         // We don't want to show the password, but leave open the possibility of displaying some value here
         if (!isset($data['value'])) $data['value'] = ' ';

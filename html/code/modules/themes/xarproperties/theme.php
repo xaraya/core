@@ -25,7 +25,7 @@ class ThemeProperty extends ObjectRefProperty
     public $desc       = 'Theme';
     public $reqmodules = array('themes');
 
-    public $filter = array();
+    public $filter = [];
 
     public $initialization_refobject    = 'themes';            // The object we want to reference
 
@@ -44,7 +44,7 @@ class ThemeProperty extends ObjectRefProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    function showInput(Array $data=array())
+    function showInput(array $data = [])
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
         return parent::showInput($data);
@@ -61,7 +61,7 @@ class ThemeProperty extends ObjectRefProperty
             return $this->options;
         }
         
-        $options = array();
+        $options = [];
         $items = xarMod::apiFunc('themes', 'admin', 'getlist',array('filter' => $this->filter));
         foreach($items as $item) {
             try {

@@ -64,7 +64,7 @@ class MultiSelectProperty extends SelectProperty
     {
         // do NOT call parent validateValue here - it will always fail !!!
         //if (!parent::validateValue($value)) return false;
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         // If we allow values not in the options, accept the current value and return
         if ($this->validation_override) {
@@ -73,7 +73,7 @@ class MultiSelectProperty extends SelectProperty
         }
 
         $value = $this->getSerializedValue($value);
-        $validlist = array();
+        $validlist = [];
         $options = $this->getOptions();
         foreach ($options as $option) {
             array_push($validlist,$option['id']);
@@ -83,11 +83,11 @@ class MultiSelectProperty extends SelectProperty
             foreach ($value as $val) {
                 if (!in_array($val,$validlist)) {
                     if (!empty($this->validation_override_invalid)) {
-                        $this->invalid = xarML($this->validation_override_invalid);
+                        $this->invalid = $this->ml($this->validation_override_invalid);
                     } else {
-                        $this->invalid = xarML('unallowed selection: #(1) for #(2)', $val, $this->name);
+                        $this->invalid = $this->ml('unallowed selection: #(1) for #(2)', $val, $this->name);
                     }
-                    xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                    $this->log()->error($this->invalid);
                     $this->value = null;
                     return false;
                 }
@@ -103,7 +103,7 @@ class MultiSelectProperty extends SelectProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (isset($data['single'])) $this->validation_single = $data['single'];
         if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
@@ -118,7 +118,7 @@ class MultiSelectProperty extends SelectProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
 
@@ -133,7 +133,7 @@ class MultiSelectProperty extends SelectProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string|void   Returns true or false 
 	 */
-    public function showHidden(Array $data = array())
+    public function showHidden(array $data = [])
     {
         if (isset($data['single'])) $this->validation_single = $data['single'];
         if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
@@ -196,7 +196,7 @@ class MultiSelectProperty extends SelectProperty
     public function getSerializedValue($value)
     {
         if (empty($value)) {
-            return array();
+            return [];
         } elseif (!is_array($value)) {
             $tmp = @unserialize((string) $value);
             if ($tmp === false) {

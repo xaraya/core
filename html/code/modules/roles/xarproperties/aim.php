@@ -31,7 +31,7 @@ class AIMProperty extends TextBoxProperty
         $this->template = 'aim';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = xarTpl::getImage('contact/aim.png','module','roles');
+            $this->initialization_icon_url = $this->tpl()->getImage('contact/aim.png','module','roles');
         }
     }
 
@@ -46,8 +46,8 @@ class AIMProperty extends TextBoxProperty
 
         if (!empty($value)) {
             if (!is_string($value)) {
-                $this->invalid = xarML('AIM Address: #(1)', $this->name);
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->invalid = $this->ml('AIM Address: #(1)', $this->name);
+                $this->log()->error($this->invalid);
                 $this->value = null;
                 return false;
             }
@@ -63,13 +63,13 @@ class AIMProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if(!isset($data['value'])) $data['value'] = $this->value;
 
         $data['link'] ='';
         if(!empty($data['value'])) {
-            $data['link'] = 'aim:goim?screenname='.xarVar::prepForDisplay($data['value']).'&message='.xarML('Hello+Are+you+there?');
+            $data['link'] = 'aim:goim?screenname='.$this->var()->prep($data['value']).'&message='.$this->ml('Hello+Are+you+there?');
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
@@ -81,14 +81,14 @@ class AIMProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-        $data['value'] = xarVar::prepForDisplay($data['value']);
+        $data['value'] = $this->var()->prep($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.xarML('Hello+Are+you+there?');
+            $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.$this->ml('Hello+Are+you+there?');
         }
         if (empty($data['image'])) {
             $data['image'] = $this->initialization_icon_url;

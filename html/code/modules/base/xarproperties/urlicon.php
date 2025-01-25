@@ -32,13 +32,13 @@ class URLIconProperty extends URLProperty
         $this->template = 'urlicon';
     }
 
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (empty($data['value'])) $data['value'] = $this->value;
         if (empty($data['link'])) $data['link'] = '';
 
         if (!empty($data['value']) && $data['value'] != 'http://' && empty($data['link'])) {
-            $data['link'] = xarVar::prepForDisplay($data['value']);
+            $data['link'] = $this->var()->prep($data['value']);
         }
         if (empty($data['icon'])) {
             /* We don't have a validated icon to display, use favicon */
@@ -49,7 +49,7 @@ class URLIconProperty extends URLProperty
                                           array('url' => $data['value']));
             if (empty($data['icon'])) {
                 /* we'll have to use the default system icon */
-                $data['icon'] = xarTpl::getImage('icons/go-home.png','theme');
+                $data['icon'] = $this->tpl()->getImage('icons/go-home.png','theme');
             }
         }
         return parent::showOutput($data);

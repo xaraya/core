@@ -38,7 +38,7 @@ class FilePickerProperty extends SelectProperty
     public $validation_matches           = '';
     public $display_fullname             = false;
     
-    public $file_extension_list         = array();      // holds an array of filename extensions
+    public $file_extension_list         = [];      // holds an array of filename extensions
     public $file_extension_regex        = '';           // holds a string of type 'jpg|gif|png'
 
     function __construct(ObjectDescriptor $descriptor)
@@ -90,7 +90,7 @@ class FilePickerProperty extends SelectProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (isset($data['basedir'])) $this->initialization_basedirectory = $this->getThemeDir($data['basedir']);
 
@@ -121,8 +121,8 @@ class FilePickerProperty extends SelectProperty
         } elseif (empty($value)) {
             return true;
         }
-        $this->invalid = xarML('incorrect selection: #(1) for #(2)', $value, $this->name);
-        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+        $this->invalid = $this->ml('incorrect selection: #(1) for #(2)', $value, $this->name);
+        $this->log()->error($this->invalid);
         $this->value = null;
         return false;
     }
@@ -135,20 +135,20 @@ class FilePickerProperty extends SelectProperty
             return $this->options;
         }
         
-        $options = array();
-        if (empty($this->initialization_basedirectory)) return array();
+        $options = [];
+        if (empty($this->initialization_basedirectory)) return [];
 
         // This works with relative directories - but they must be accessible first :-)
         if (!is_dir($this->initialization_basedirectory)) {
             $this->initialization_basedirectory = sys::web() . $this->initialization_basedirectory;
             if (!is_dir($this->initialization_basedirectory)) {
-                return array();
+                return [];
             }
         }
         try {
             $dir = new RelativeDirectoryIterator($this->initialization_basedirectory);
         } catch (DirectoryNotFoundException $e) {
-            return array();
+            return [];
         }
         
         for($dir->rewind();$dir->valid();$dir->next()) {

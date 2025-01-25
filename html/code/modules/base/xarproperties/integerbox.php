@@ -37,7 +37,7 @@ class NumberBoxProperty extends TextBoxProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        if (!is_numeric($this->value) && !empty($this->value)) throw new Exception(xarML('The default value of a #(1) must be numeric',$this->name));
+        if (!is_numeric($this->value) && !empty($this->value)) throw new Exception($this->ml('The default value of a #(1) must be numeric',$this->name));
     }
 
 	/**
@@ -69,33 +69,33 @@ class NumberBoxProperty extends TextBoxProperty
         } elseif (is_numeric($value)) {
             $value = $this->castType($value);
             if (isset($this->validation_min_value) && isset($this->validation_max_value) && ($this->validation_min_value > $value || $this->validation_max_value < $value)) {
-                $this->invalid = xarML('number: allowed range is between #(1) and #(2)',$this->validation_min_value,$this->validation_max_value);
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->invalid = $this->ml('number: allowed range is between #(1) and #(2)',$this->validation_min_value,$this->validation_max_value);
+                $this->log()->error($this->invalid);
                 $this->setValue();
                 return false;
             } elseif (isset($this->validation_min_value) && $this->validation_min_value > $value) {
                 if (!empty($this->validation_min_value_invalid)) {
-                    $this->invalid = xarML($this->validation_min_value_invalid);
+                    $this->invalid = $this->ml($this->validation_min_value_invalid);
                 } else {
-                    $this->invalid = xarML('number: must be #(1) or more',$this->validation_min_value);
+                    $this->invalid = $this->ml('number: must be #(1) or more',$this->validation_min_value);
                 }
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->log()->error($this->invalid);
                 $this->setValue();
                 return false;
             } elseif (isset($this->validation_max_value) && $this->validation_max_value < $value) {
 
                 if (!empty($this->validation_max_value_invalid)) {
-                    $this->invalid = xarML($this->validation_max_value_invalid);
+                    $this->invalid = $this->ml($this->validation_max_value_invalid);
                 } else {
-                    $this->invalid = xarML('number: must be #(1) or less',$this->validation_max_value);
+                    $this->invalid = $this->ml('number: must be #(1) or less',$this->validation_max_value);
                 }
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->log()->error($this->invalid);
                 $this->setValue();
                 return false;
             }
         } else {
-            $this->invalid = xarML('number: #(1) cannot have the value #(2)', $this->name, $value);
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->invalid = $this->ml('number: #(1) cannot have the value #(2)', $this->name, $value);
+            $this->log()->error($this->invalid);
             $this->setValue();
             return false;
         }

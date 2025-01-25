@@ -31,9 +31,9 @@ class CategoryMenuProperty extends CategoryTreeProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string|void     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
-        if(!xarVar::fetch('activetab',    'isset', $data['activetab'],    0, xarVar::NOT_REQUIRED)) {return;}
+        if(!$this->var()->find('activetab', $data['activetab'], 'isset', 0)) {return;}
 
         if (!isset($data['parent'])) $data['parent'] = 0;
         if (!isset($data['levels'])) $data['levels'] = 1;
@@ -48,7 +48,7 @@ class CategoryMenuProperty extends CategoryTreeProperty
         } else {
             // the top level of categories need not have a common parent
             xarMod::loadDbInfo('categories');
-            $xartable = xarDB::getTables();
+            $xartable = $this->db()->getTables();
             sys::import('xaraya.structures.query');
             $q = new Query('SELECT',$xartable['categories']);
             $q->addfield('id');

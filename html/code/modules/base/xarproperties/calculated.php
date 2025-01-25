@@ -57,7 +57,7 @@ class CalculatedProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         $data['value'] = $this->calculateValue($data);
     // CHECKME: see no input status above
@@ -70,7 +70,7 @@ class CalculatedProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */
-    public function showOutput(Array $args = array())
+    public function showOutput(array $args = [])
     {
         // the dummy datastore will use the itemid as value for this property !
         $args['value'] = $this->calculateValue($args);
@@ -83,7 +83,7 @@ class CalculatedProperty extends TextBoxProperty
      * @param float[] $args Holds 'value' parameter
      * @return void|string|float Returns null or string upon failure or a the calculated float
      */
-    private function calculateValue(Array $args=array())
+    private function calculateValue(array $args = [])
     {
         if (empty($this->calculation)) {
             // nothing to calculate
@@ -99,7 +99,7 @@ class CalculatedProperty extends TextBoxProperty
 
         // we're dealing with a single item here, so check the objectref properties
         if (!empty($this->_itemid) && !empty($this->objectref)) {
-            $item = array();
+            $item = [];
             foreach (array_keys($this->objectref->properties) as $name) {
                 $item[$name] = $this->objectref->properties[$name]->value;
             }
@@ -140,7 +140,7 @@ class CalculatedProperty extends TextBoxProperty
         // split on operators, and return the operators too
         $parts = preg_split('/\s+(\+|\-|\*|\/|\%|\(|\))\s+/',$this->calculation,-1,PREG_SPLIT_DELIM_CAPTURE);
 
-        $pieces = array();
+        $pieces = [];
         foreach ($parts as $part) {
             if (in_array($part, $operators)) {
                 // we have an operator

@@ -76,8 +76,8 @@ class URLTitleProperty extends TextBoxProperty
 
                         if ( (!isset($uri['scheme']) || empty($uri['scheme'])) ||
                             (!isset($uri['host']) || empty($uri['host']))) {
-                                $this->invalid = xarML('URL');
-                                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                                $this->invalid = $this->ml('URL');
+                                $this->log()->error($this->invalid);
                                 $this->value = null;
                                 return false;
                         }
@@ -101,7 +101,7 @@ class URLTitleProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (!isset($data['value'])) {
             $value = $this->value;
@@ -134,9 +134,9 @@ class URLTitleProperty extends TextBoxProperty
             $title = '';
         }
 
-        $data['title']    = xarVar::prepForDisplay($title);
-        $data['value']    = isset($value) ? xarVar::prepForDisplay($value) : xarVar::prepForDisplay($this->value);
-        $data['link']     = xarVar::prepForDisplay($link);
+        $data['title']    = $this->var()->prep($title);
+        $data['value']    = isset($value) ? $this->var()->prep($value) : $this->var()->prep($this->value);
+        $data['link']     = $this->var()->prep($link);
 
         return parent::showInput($data);
     }
@@ -147,7 +147,7 @@ class URLTitleProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
@@ -171,11 +171,11 @@ class URLTitleProperty extends TextBoxProperty
             }
         }
 
-        if (!empty($title)) $title = xarVar::prepForDisplay($title);
+        if (!empty($title)) $title = $this->var()->prep($title);
 
         $url_parts = parse_url($link);
         if (!isset($url_parts['host'])) {
-            $truecurrenturl = xarServer::getCurrentURL(array(), false);
+            $truecurrenturl = $this->ctl()->getCurrentURL([], false);
             $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$link,'truecurrenturl'=>$truecurrenturl));
             $link = $urldata['redirecturl'];
         }

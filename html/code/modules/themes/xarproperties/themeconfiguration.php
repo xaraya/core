@@ -51,7 +51,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
     public function checkInput($name = '', $value = null)
     {
         $name = !empty($name) ? $name : $this->propertyprefix . $this->id;
-        if (!xarVar::fetch($name, 'isset', $configuration, null, xarVar::NOT_REQUIRED)) {
+        if (!$this->var()->find($name, $configuration)) {
             return;
         }
         $this->value = serialize($configuration);
@@ -64,7 +64,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
      * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for input on a web page
      */
-    public function showInput(array $data = array())
+    public function showInput(array $data = [])
     {
         // set theme regid the from object reference (= theme_configuration) if possible
         if (!empty($this->objectref) && !empty($this->objectref->properties['regid'])) {
@@ -85,7 +85,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
      * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for output on a web page
      */
-    public function showOutput(array $data = array())
+    public function showOutput(array $data = [])
     {
         // set theme regid the from object reference (= theme_configuration) if possible
         if (!empty($this->objectref) && !empty($this->objectref->properties['regid'])) {
@@ -111,7 +111,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
         if (is_array($configuration)) {
             $fields = $configuration;
         } elseif (empty($configuration)) {
-            $fields = array();
+            $fields = [];
             // try normal serialized configuration
         } else {
             try {
@@ -122,7 +122,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
         }
         // Now match the parsed configurationproperties to those defined in the theme
         $properties = $this->getThemeConfigurations();
-        $this->configuration = array();
+        $this->configuration = [];
         foreach ($properties as $name => $configarg) {
             if (isset($fields[$name])) {
                 $configarg['value'] = $fields[$name];
@@ -141,18 +141,18 @@ class ThemeConfigurationProperty extends TextBoxProperty
     public function getThemeConfigurations()
     {
         // cache configuration for all properties
-        if (xarCoreCache::isCached('Themes', 'Configurations')) {
-            $allconfigurations = xarCoreCache::getCached('Themes', 'Configurations');
+        if ($this->var()->isCached('Themes', 'Configurations')) {
+            $allconfigurations = $this->var()->getCached('Themes', 'Configurations');
         } else {
             sys::import('xaraya.structures.query');
             xarMod::load('themes');
-            $tables =  xarDB::getTables();
+            $tables =  $this->db()->getTables();
             $q = new Query('SELECT', $tables['themes_configurations']);
             $c[] = $q->peq('theme_id', $this->theme_id);
             $c[] = $q->peq('theme_id', 0);
             $q->qor($c);
             $q->run();
-            $allconfigurations = array();
+            $allconfigurations = [];
             foreach ($q->output() as $row) {
                 $row['applies'] = 0;
                 $allconfigurations[$row['name']] = $row;
@@ -188,7 +188,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
                 }
             }
 
-            xarCoreCache::setCached('Themes', 'Configurations', $allconfigurations);
+            $this->var()->setCached('Themes', 'Configurations', $allconfigurations);
         }
         return $allconfigurations;
     }

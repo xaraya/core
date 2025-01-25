@@ -40,17 +40,17 @@ class CategoryTreeProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (empty($data['startnum'])) $data['startnum'] = 1;
-        if (empty($data['items_per_page'])) $data['items_per_page'] = xarModVars::get('categories','items_per_page');
+        if (empty($data['items_per_page'])) $data['items_per_page'] = $this->mod()->getVar('items_per_page');
 
         if (isset($data['options'])) {
             $this->options = $data['options'];
         } else {
             $this->options = xarMod::apiFunc('categories','user','getchildren',array('cid' => 0));
         }
-        $trees = array();
+        $trees = [];
         $totalcount = 0;
         foreach ($this->options as $entry) {
             $node = new CategoryTreeNode($entry['id']);

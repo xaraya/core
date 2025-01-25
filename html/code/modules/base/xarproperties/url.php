@@ -43,8 +43,8 @@ class URLProperty extends TextBoxProperty
            //let's process futher then
            //check it is not invalid eg html tag
             if (preg_match('/[<>"]/',$value)) {
-                $this->invalid = xarML('Invalid URL: #(1)', $value);
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->invalid = $this->ml('Invalid URL: #(1)', $value);
+                $this->log()->error($this->invalid);
                 $this->value = null;
                 return false;
             } else {
@@ -58,8 +58,8 @@ class URLProperty extends TextBoxProperty
                     $uri = parse_url($value);
                     if (empty($uri['scheme'])) $value = 'http://' . $value;
                     if (!filter_var($value, FILTER_VALIDATE_URL)) {
-                        $this->invalid = xarML('Invalid URL: #(1)', $value);
-                        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                        $this->invalid = $this->ml('Invalid URL: #(1)', $value);
+                        $this->log()->error($this->invalid);
                         $this->value = null;
                         return false;
                     } 

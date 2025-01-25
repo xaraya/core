@@ -45,7 +45,7 @@ class UsernameProperty extends TextBoxProperty
 	 */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         // Save the current value of this property for comparison below
         $previousvalue = $this->value;
@@ -68,11 +68,11 @@ class UsernameProperty extends TextBoxProperty
                     if ($previousvalue == $value) break;
 
                     if (!empty($this->validation_existrule_invalid)) {
-                        $this->invalid = xarML($this->validation_existrule_invalid);
+                        $this->invalid = $this->ml($this->validation_existrule_invalid);
                     } else {
-                        $this->invalid = xarML('user #(1) already exists', $value);
+                        $this->invalid = $this->ml('user #(1) already exists', $value);
                     }
-                    xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                    $this->log()->error($this->invalid);
                     return false;
                 }
                 break;
@@ -80,11 +80,11 @@ class UsernameProperty extends TextBoxProperty
                 case 2:
                 if (empty($role)) {
                     if (!empty($this->validation_existrule_invalid)) {
-                        $this->invalid = xarML($this->validation_existrule_invalid);
+                        $this->invalid = $this->ml($this->validation_existrule_invalid);
                     } else {
-                        $this->invalid = xarML('user #(1) does not exist', $value);
+                        $this->invalid = $this->ml('user #(1) does not exist', $value);
                     }
-                    xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                    $this->log()->error($this->invalid);
                     return false;
                 }
                 break;
@@ -103,7 +103,7 @@ class UsernameProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         // The user param is a name
         if (isset($data['user'])) {
@@ -128,7 +128,7 @@ class UsernameProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!empty($data['display_type'])) $this->initialization_display_name = $data['display_type'];
         if (!empty($data['link_url'])) $this->display_linkurl = $data['link_url'];
@@ -166,7 +166,7 @@ class UsernameProperty extends TextBoxProperty
             } else {
                 $textvalue = $this->value;
             }
-            $data['link_url'] = xarController::URL('roles','user','display',array('id' => $this->value));
+            $data['link_url'] = $this->mod()->getURL('user','display',array('id' => $this->value));
         } else {
             $data['link_url'] = "";
         }
@@ -178,7 +178,7 @@ class UsernameProperty extends TextBoxProperty
 	 * 
 	 * @param array<string, mixed> $data An array of input parameters 
 	 */	
-    public function showHidden(Array $data = array())
+    public function showHidden(array $data = [])
     {
         if (empty($data['value'])) {
             $data['value'] = $this->getValue();

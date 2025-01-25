@@ -64,29 +64,29 @@ class TextBoxProperty extends DataProperty
         
         if (isset($this->validation_max_length)  && strlen($value) > $this->display_maxlength) {
             if (!empty($this->validation_max_length_invalid)) {
-                $this->invalid = xarML($this->validation_max_length_invalid);
+                $this->invalid = $this->ml($this->validation_max_length_invalid);
             } else {
-                $this->invalid = xarML('#(1) field #(3): must be less than #(2) characters long', $this->name,$this->validation_max_length + 1, $this->desc);
+                $this->invalid = $this->ml('#(1) field #(3): must be less than #(2) characters long', $this->name,$this->validation_max_length + 1, $this->desc);
             }
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         } elseif (isset($this->validation_min_length) && strlen($value) < $this->validation_min_length) {
             if (!empty($this->validation_min_length_invalid)) {
-                $this->invalid = xarML($this->validation_min_length_invalid);
+                $this->invalid = $this->ml($this->validation_min_length_invalid);
             } else {
-                $this->invalid = xarML('#(1) field #(3): must be at least #(2) characters long', $this->name,$this->validation_min_length, $this->desc);
+                $this->invalid = $this->ml('#(1) field #(3): must be at least #(2) characters long', $this->name,$this->validation_min_length, $this->desc);
             }
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         } elseif (!empty($this->validation_regex) && !preg_match($this->validation_regex, $value)) {
             if (!empty($this->validation_regex_invalid)) {
-                $this->invalid = xarML($this->validation_regex_invalid);
+                $this->invalid = $this->ml($this->validation_regex_invalid);
             } else {
-                $this->invalid = xarML('#(1) field #(2): does not match required pattern', $this->name, $this->desc);
+                $this->invalid = $this->ml('#(1) field #(2): does not match required pattern', $this->name, $this->desc);
             }
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         } else {
@@ -100,7 +100,7 @@ class TextBoxProperty extends DataProperty
  * Display a textbox for input
  * 
  */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         // Should we be doing this? (random)
         if(isset($data['maxlength'])) $this->display_maxlength = $data['maxlength'];
@@ -110,7 +110,7 @@ class TextBoxProperty extends DataProperty
         }
 
         // Prepare for templating
-        $data['value']    = isset($data['value']) ? xarVar::prepForDisplay($data['value']) : xarVar::prepForDisplay($this->getValue());
+        $data['value']    = isset($data['value']) ? $this->var()->prep($data['value']) : $this->var()->prep($this->getValue());
         if(!isset($data['onfocus']))   $data['onfocus']   = null;
 
         return parent::showInput($data);

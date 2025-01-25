@@ -56,7 +56,7 @@ class CheckboxProperty extends DataProperty
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            if (!xarVar::fetch($name, 'isset', $value,  NULL, xarVar::DONT_SET)) {return false;}
+            if (!$this->var()->check($name, $value, 'isset',  NULL)) {return false;}
         }
         return $this->validateValue($value);
     }
@@ -68,7 +68,7 @@ class CheckboxProperty extends DataProperty
  */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         if (empty($value) || $value == 'false') {
             $this->value = 0;
@@ -84,7 +84,7 @@ class CheckboxProperty extends DataProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (isset($data['checked'])) $data['value']  = $data['checked'];
         if (!isset($data['value'])) $data['value'] = $this->value;

@@ -43,7 +43,7 @@ sys::import('modules.base.xarproperties.dropdown');
 
             // First check for text in the text box
             $tbname  = $name.'_tb';
-            if (!xarVar::fetch($tbname, 'isset', $tbvalue,  NULL, xarVar::DONT_SET)) {return;}
+            if (!$this->var()->check($tbname, $tbvalue, 'isset',  NULL)) {return;}
 
             // store the fieldname for configurations who need them (e.g. file uploads)
             $this->fieldname = $tbname;
@@ -52,7 +52,7 @@ sys::import('modules.base.xarproperties.dropdown');
             {
                 // check as a textbox
                 $value = $tbvalue;
-                $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
+                $textbox = $this->prop()->getProperty(array('name' => 'textbox'));
                 $isvalid = $textbox->checkInput($tbname, $tbvalue);
                 if ($isvalid) {
                     $this->value = $textbox->value;
@@ -62,10 +62,10 @@ sys::import('modules.base.xarproperties.dropdown');
                 return $isvalid;
             } else {
                 // check as a dropdown
-                if (!xarVar::fetch($name, 'isset', $value,  NULL, xarVar::DONT_SET)) {return;}
+                if (!$this->var()->check($name, $value, 'isset',  NULL)) {return;}
                 // Did we find a dropdown?
                 if(!isset($value)) {
-                    $this->invalid = xarML('No dropdown available for the combobox #(1)',$name);
+                    $this->invalid = $this->ml('No dropdown available for the combobox #(1)',$name);
                     return false;
                 }                
                 return parent::checkInput($name, $value);
@@ -77,7 +77,7 @@ sys::import('modules.base.xarproperties.dropdown');
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
-        public function showInput(Array $data = array())
+        public function showInput(array $data = [])
         {
             if (empty($data['mode'])) $data['mode'] = $this->display_combo_mode;
             return parent::showInput($data);

@@ -70,15 +70,15 @@ class ExtendedDateProperty extends CalendarProperty
                             $value['hour'] > -1 && $value['hour'] < 24 && $value['min'] > -1 && $value['min'] < 61 && $value['sec'] > -1 && $value['sec'] < 61) {
                             $this->value .= ' ' . sprintf('%02d:%02d:%02d',$value['hour'],$value['min'],$value['sec']);
                         } else {
-                            $this->invalid = xarML('date: #(1)', $this->name);
-                            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                            $this->invalid = $this->ml('date: #(1)', $this->name);
+                            $this->log()->error($this->invalid);
                             $this->value = null;
                             return false;
                         }
                     }
                 } else {
-                    $this->invalid = xarML('date: #(1)', $this->name);
-                    xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                    $this->invalid = $this->ml('date: #(1)', $this->name);
+                    $this->log()->error($this->invalid);
                     $this->value = null;
                     return false;
                 }
@@ -103,8 +103,8 @@ class ExtendedDateProperty extends CalendarProperty
             return true;
 
         } else {
-            $this->invalid = xarML('date');
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->invalid = $this->ml('date');
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         }
@@ -116,7 +116,7 @@ class ExtendedDateProperty extends CalendarProperty
      * @param string[] $data Array containing the value of the property                           
      * @return string Input data
      */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
@@ -167,7 +167,7 @@ class ExtendedDateProperty extends CalendarProperty
      * @param string[] $data Array containing the value of the property                           
      * @return string Output data
      */
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!isset($data['value'])) {
             $data['value'] = $this->value;

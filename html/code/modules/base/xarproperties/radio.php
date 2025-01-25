@@ -35,7 +35,7 @@ class RadioButtonsProperty extends SelectProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (!empty($data['checked'])) $data['value'] = $data['checked'];
         return parent::showInput($data);
@@ -46,7 +46,7 @@ class RadioButtonsProperty extends SelectProperty
  * @param array<string, mixed> $data An array of input parameters 
  * @return string     HTML markup to display the property for output on a web page
  */
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         $this->template  = 'dropdown';
         return parent::showOutput($data);

@@ -31,7 +31,7 @@ class ICQProperty extends TextBoxProperty
         $this->template = 'icq';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = xarTpl::getImage('contact/icq.png','module','roles');
+            $this->initialization_icon_url = $this->tpl()->getImage('contact/icq.png','module','roles');
         }
     }
 
@@ -47,8 +47,8 @@ class ICQProperty extends TextBoxProperty
         if (!empty($value)) {
             if (is_numeric($value)) {
             } else {
-                $this->invalid = xarML('ICQ Number: #(1)', $this->name);
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->invalid = $this->ml('ICQ Number: #(1)', $this->name);
+                $this->log()->error($this->invalid);
                 $this->value = null;
                 return false;
             }
@@ -64,13 +64,13 @@ class ICQProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if(!isset($data['value'])) $data['value'] = $this->value;
 
         $data['link'] ='';
         if(!empty($data['value'])) {
-            $data['link'] = 'http://wwp.icq.com/scripts/search.dll?to='.xarVar::prepForDisplay($data['value']);
+            $data['link'] = 'http://wwp.icq.com/scripts/search.dll?to='.$this->var()->prep($data['value']);
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
@@ -82,7 +82,7 @@ class ICQProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
@@ -100,10 +100,10 @@ class ICQProperty extends TextBoxProperty
             //The data is there for anyone that wants to use the vars themselves in the template.
             $link = '<script type="text/javascript"><!--
 if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
-    document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.xarVar::prepForDisplay($value).'"><img src="'.xarVar::prepForDisplay($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
+    document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.$this->var()->prep($value).'"><img src="'.$this->var()->prep($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
 else
-    document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to='.xarVar::prepForDisplay($value).'"><img src="'.xarVar::prepForDisplay($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/'.xarVar::prepForDisplay($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.xarVar::prepForDisplay($value).'&amp;img=5" width="18" height="18" alt=""/></a>\');
-//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVar::prepForDisplay($value).'"><img src="'.xarVar::prepForDisplay($data['image']).'" alt="ICQ Number" title="ICQ Number" border="0"/></a></noscript>';
+    document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to='.$this->var()->prep($value).'"><img src="'.$this->var()->prep($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/'.$this->var()->prep($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.$this->var()->prep($value).'&amp;img=5" width="18" height="18" alt=""/></a>\');
+//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.$this->var()->prep($value).'"><img src="'.$this->var()->prep($data['image']).'" alt="ICQ Number" title="ICQ Number" border="0"/></a></noscript>';
 
         }
 

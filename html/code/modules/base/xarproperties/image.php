@@ -81,16 +81,16 @@ class ImageProperty extends TextBoxProperty
         if (isset($this->fieldname)) $name = $this->fieldname;
         else $name = 'dd_'.$this->id;
         $sourcename = $name . '_source';
-        if (!xarVar::fetch($sourcename, 'str:1:100', $image_source, NULL, xarVar::NOT_REQUIRED)) return;
+        if (!$this->var()->find($sourcename, $image_source, 'str:1:100')) return;
         if (!empty($image_source)) $this->initialization_image_source = $image_source;
 
         if ($this->initialization_image_source == 'url') {
-            $prop = DataPropertyMaster::getProperty(array('type' => 'url'));
+            $prop = $this->prop()->getProperty(array('type' => 'url'));
             $prop->validateValue($value);
             $this->value = $prop->value;
         } elseif ($this->initialization_image_source == 'upload') {
             /** @var FileUploadProperty $prop */
-            $prop = DataPropertyMaster::getProperty(array('type' => 'fileupload'));
+            $prop = $this->prop()->getProperty(array('type' => 'fileupload'));
             $prop->initialization_basedirectory = $this->initialization_basedirectory;
             $prop->setExtensions($this->validation_file_extensions);
             $prop->fieldname = $this->fieldname;
@@ -106,14 +106,14 @@ class ImageProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         // CHECKME: why not use image_source as attribute instead of inputtype ?
         $data['image_source'] = isset($data['inputtype']) ? $data['inputtype'] : $this->initialization_image_source;
         if ($data['image_source'] == 'upload') $this->upload = true;
         $data['basedirectory'] = isset($data['basedir']) ? $data['basedir'] : $this->initialization_basedirectory;
         $data['extensions'] = isset($data['extensions']) ? $data['extensions'] : $this->validation_file_extensions;
-        $data['value']    = isset($data['value']) ? xarVar::prepForDisplay($data['value']) : xarVar::prepForDisplay($this->value);
+        $data['value']    = isset($data['value']) ? $this->var()->prep($data['value']) : $this->var()->prep($this->value);
 
         return parent::showInput($data);
     }
@@ -124,7 +124,7 @@ class ImageProperty extends TextBoxProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if(!empty($data['inputtype'])) $this->initialization_image_source = $data['inputtype'];
         if(!empty($data['basedir'])) $this->initialization_basedirectory = $this->getThemeDir($data['basedir']);

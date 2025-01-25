@@ -63,7 +63,7 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
     {
         // do NOT call parent validateValue here - it will always fail !!!
         //if (!parent::validateValue($value)) return false;
-        $this->log()->message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         // If we allow values not in the options, accept the current value and return
         if ($this->validation_override) {
@@ -86,7 +86,7 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
                     } else {
                         $this->invalid = $this->ml('unallowed selection: #(1) for #(2)', $val, $this->name);
                     }
-                    $this->log()->message($this->invalid, xarLog::LEVEL_ERROR);
+                    $this->log()->error($this->invalid);
                     $this->value = null;
                     return false;
                 }

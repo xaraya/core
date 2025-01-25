@@ -60,8 +60,8 @@ class CalendarProperty extends DataProperty
                 $this->value -= xarMLS::userOffset($this->value) * 3600;
             }
         } else {
-            $this->invalid = xarML('date: #(1)', $this->name);
-            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+            $this->invalid = $this->ml('date: #(1)', $this->name);
+            $this->log()->error($this->invalid);
             $this->value = null;
             return false;
         }
@@ -82,7 +82,7 @@ class CalendarProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         extract($data);
         if (!isset($value)) $value = $this->value;
@@ -127,7 +127,7 @@ class CalendarProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         extract($data);
 
@@ -163,15 +163,15 @@ class CalendarProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters 
 	 * @return string     HTML markup to display the property for output on a web page
 	 */
-    public function showConfiguration(Array $args = array())
+    public function showConfiguration(array $args = [])
     {
         extract($args);
 
-        $data = array();
+        $data = [];
         $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
         $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
         $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['invalid']    = !empty($this->invalid) ? $this->ml('Invalid #(1)', $this->invalid) :'';
 
         if (isset($validation)) {
             $this->configuration = $validation;
@@ -190,9 +190,9 @@ class CalendarProperty extends DataProperty
         if (empty($template)) {
             $template = 'calendar';
         }
-        // Pass along the object context for xarTpl::property()
+        // Pass along the object context for $this->tpl()->property()
         $data['context'] ??= $this->objectref?->getContext();
-        return xarTpl::property('base', $template, 'configuration', $data);
+        return $this->tpl()->property('base', $template, 'configuration', $data);
     }
 	
 	/**
@@ -200,7 +200,7 @@ class CalendarProperty extends DataProperty
 	 * 
 	 * Validate the data and  save it in $this->configuration
 	 */
-    public function updateConfiguration(Array $args = array())
+    public function updateConfiguration(array $args = [])
     {
         extract($args);
 

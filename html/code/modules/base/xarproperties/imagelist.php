@@ -43,7 +43,7 @@ class ImageListProperty extends FilePickerProperty
         }
         
         // Default selection
-        if (!isset($this->initialization_firstline)) $this->initialization_firstline = ',' . xarML('Select Image');
+        if (!isset($this->initialization_firstline)) $this->initialization_firstline = ',' . $this->ml('Select Image');
     }
 /**
  * Display the output 
@@ -51,7 +51,7 @@ class ImageListProperty extends FilePickerProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for output on a web page
  */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         extract($data);
 

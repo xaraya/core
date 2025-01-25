@@ -28,8 +28,8 @@ class SelectProperty extends DataProperty
     public $basetype   = 'dropdown';
 
     public $transform  = true;                         // transform $this->value in getValue() or not
-    public $options    = array();
-    public $old_config = array();
+    public $options    = [];
+    public $old_config = [];
     public $itemfunc;   // CHECKME: how is this best implemented?
 
     public $initialization_firstline        = null;
@@ -81,11 +81,11 @@ class SelectProperty extends DataProperty
             return true;
         }
         if (!empty($this->validation_override_invalid)) {
-            $this->invalid = xarML($this->validation_override_invalid);
+            $this->invalid = $this->ml($this->validation_override_invalid);
         } else {
-            $this->invalid = xarML('unallowed selection: #(1) for #(2)', $value, $this->name);
+            $this->invalid = $this->ml('unallowed selection: #(1) for #(2)', $value, $this->name);
         }
-        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+        $this->log()->error($this->invalid);
         $this->value = null;
         return false;
     }
@@ -96,7 +96,7 @@ class SelectProperty extends DataProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */	
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         $data = $this->getTemplateData($data);
         return parent::showInput($data);
@@ -108,7 +108,7 @@ class SelectProperty extends DataProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for hidden input on a web page
  */	
-    public function showHidden(Array $data = array())
+    public function showHidden(array $data = [])
     {
         $data = $this->getTemplateData($data);
         return parent::showHidden($data);
@@ -120,7 +120,7 @@ class SelectProperty extends DataProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for output on a web page
  */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (isset($data['option_link'])) $this->display_option_link = $data['option_link'];
         if (isset($data['value'])) $this->value = $data['value'];
@@ -130,7 +130,7 @@ class SelectProperty extends DataProperty
         // get the option corresponding to this value
         $result = $this->getOption();
         // only apply xarVar::prepForDisplay on strings, not arrays et al.
-        if (!empty($result) && is_string($result)) $result = xarVar::prepForDisplay($result);
+        if (!empty($result) && is_string($result)) $result = $this->var()->prep($result);
         if (!empty($data['link'])) {
             $data['option'] = array('id' => $this->value, 'name' => $result, 'link' => $data['link']);
         } else {
@@ -151,7 +151,7 @@ class SelectProperty extends DataProperty
  *     ....
  * )
  */
-    public function setOptions($options=array())
+    public function setOptions($options = [])
     {
         $this->options = $options;
     }
@@ -172,12 +172,12 @@ class SelectProperty extends DataProperty
         // filepath appears always empty?
         if (empty($filepath)) $filepath = sys::code() . $this->initialization_file;
 
-        $options = array();
+        $options = [];
         if (!empty($this->initialization_function)) {
             /** @var array<mixed>|null $items */
             $items = null;
             eval('$items = ' . $this->initialization_function .';');
-            if (!isset($items) || !is_array($items)) $items = array();
+            if (!isset($items) || !is_array($items)) $items = [];
             if (is_array(reset($items))) {
                 foreach($items as $id => $name) {
                     $options[] = array('id' => $name['id'], 'name' => $name['name']);
@@ -271,7 +271,7 @@ class SelectProperty extends DataProperty
     public function getFirstline()
     {
         $firstline = $this->initialization_firstline;
-        if (empty($firstline)) return array();
+        if (empty($firstline)) return [];
         
         if (is_array($firstline)) {
             if (isset($firstline['name'])) {
@@ -384,11 +384,11 @@ class SelectProperty extends DataProperty
     public function isSameConfiguration($type = 'initialization')
     {
         if (empty($this->old_config)) {
-            $this->old_config = array();
+            $this->old_config = [];
             // save the current configuration properties in the old_config
             $properties = $this->getPublicProperties();
             foreach ($this->configurationtypes as $configtype) {
-                $this->old_config[$configtype] = array();
+                $this->old_config[$configtype] = [];
                 $match = '/^' . $configtype . '_/';
                 foreach ($properties as $key => $value) {
                     if (preg_match($match, $key)) {
@@ -415,7 +415,7 @@ class SelectProperty extends DataProperty
  * @param array<string, mixed> $data An array of input parameters
  * @return array<mixed> data An array of output parameters to be sent to the template
  */	
-    private function getTemplateData(Array $data = array())
+    private function getTemplateData(array $data = [])
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
 
@@ -447,9 +447,9 @@ class SelectProperty extends DataProperty
         
         // Make sure the options have the correct form
         if (!is_array($data['options']))
-            throw new Exception(xarML('Dropdown options do not have the correct form'));
+            throw new Exception($this->ml('Dropdown options do not have the correct form'));
         if (!is_array(current($data['options']))) {
-            $normalizedoptions = array();
+            $normalizedoptions = [];
             foreach ($data['options'] as $key => $value)
                 $normalizedoptions[] = array('id' => $key, 'name' => $value);
             $data['options'] = $normalizedoptions;
@@ -492,7 +492,7 @@ class DropdownPropertyInstall extends SelectProperty implements iDataPropertyIns
      * @param array<string, mixed> $data An array of input parameters
      * @return bool     true
      */
-    public function install(Array $data=array())
+    public function install(array $data = [])
     {
         $dat_file = sys::code() . 'modules/base/xardata/dropdown_configurations-dat.xml';
         $data = array('file' => $dat_file);

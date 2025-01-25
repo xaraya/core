@@ -58,7 +58,7 @@ class FileUploadProperty extends DataProperty
 
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
-        if (xarVar::getCached('Hooks.uploads','ishooked')) {
+        if ($this->var()->getCached('Hooks.uploads','ishooked')) {
             $this->UploadsModule_isHooked = TRUE;
         } else {
         // FIXME: this doesn't take into account the itemtype or non-main module objects
@@ -134,7 +134,7 @@ class FileUploadProperty extends DataProperty
         // Store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            xarVar::fetch($name, 'isset', $value,  NULL, xarVar::DONT_SET);
+            $this->var()->check($name, $value, 'isset',  NULL);
         }
         return $this->validateValue($value);
     }
@@ -146,7 +146,7 @@ class FileUploadProperty extends DataProperty
 	 */
     public function validateValue($value = null)
     {
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
         // but we're using a hidden field to keep track of any previously uploaded file here
@@ -156,8 +156,8 @@ class FileUploadProperty extends DataProperty
         else $name = $this->propertyprefix . $this->id;
 
         // retrieve new value for preview + new/modify combinations
-        if (xarVar::isCached('DynamicData.FileUpload',$name)) {
-            $this->value = xarVar::getCached('DynamicData.FileUpload',$name);
+        if ($this->var()->isCached('DynamicData.FileUpload',$name)) {
+            $this->value = $this->var()->getCached('DynamicData.FileUpload',$name);
             return true;
         }
 
@@ -165,7 +165,7 @@ class FileUploadProperty extends DataProperty
         if ($this->UploadsModule_isHooked == TRUE) {
             // set override for the upload/import paths if necessary
             if (!empty($this->initialization_basedirectory) || !empty($this->initialization_importdirectory)) {
-                $override = array();
+                $override = [];
                 if (!empty($this->initialization_basedirectory)) {
                     $override['upload'] = array('path' => $this->initialization_basedirectory);
                 }
@@ -192,14 +192,14 @@ class FileUploadProperty extends DataProperty
             // TODO: Insert try/catch clause once we know what uploads raises
             // TODO:
             if (!isset($return) || !is_array($return) || count($return) < 2) {
-                xarLog::variable($return, xarLog::LEVEL_ERROR);
+                $this->log()->error($return);
                 $this->value = null;
                 return false;
             }
             if (empty($return[0])) {
                 $this->value = null;
-                $this->invalid = xarML('value');
-                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
+                $this->invalid = $this->ml('value');
+                $this->log()->error($this->invalid);
                 return false;
             } else {
                 if (empty($return[1])) {
@@ -208,7 +208,7 @@ class FileUploadProperty extends DataProperty
                     $this->value = $return[1];
                 }
                 // save new value for preview + new/modify combinations
-                xarVar::setCached('DynamicData.FileUpload',$name,$this->value);
+                $this->var()->setCached('DynamicData.FileUpload',$name,$this->value);
                 return true;
             }
         }
@@ -219,10 +219,10 @@ class FileUploadProperty extends DataProperty
         if (isset($_FILES[$name])) {
             $file = $_FILES[$name];
         } else {
-            $file = array();
+            $file = [];
             if (!$this->validation_allowempty) {
                 // We must have a file
-                $this->invalid = xarML('Empty file: #(1)', $name);
+                $this->invalid = $this->ml('Empty file: #(1)', $name);
                 $this->value = null;
                 return false;
             } else {
@@ -238,7 +238,7 @@ class FileUploadProperty extends DataProperty
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
             if (!empty($file['name'])) {
                 if (!$this->validateExtension($file['name'])) {
-                    $this->invalid = xarML('The file type is not allowed: #(1)', $file['name']);
+                    $this->invalid = $this->ml('The file type is not allowed: #(1)', $file['name']);
                     $this->value = null;
                     return false;
                 }
@@ -294,7 +294,7 @@ class FileUploadProperty extends DataProperty
                     }
                 } elseif ($this->validation_allow_duplicates == 0 && file_exists($filepath)) {
                     // duplicate files are not allowed
-                    $this->invalid = xarML('This file already exists: #(1)', $filepath);
+                    $this->invalid = $this->ml('This file already exists: #(1)', $filepath);
                     $this->value = null;
                     return false;
                 }
@@ -303,7 +303,7 @@ class FileUploadProperty extends DataProperty
             try {
                 move_uploaded_file($file['tmp_name'], $filepath);
             } catch(Exception $e) {
-                $this->invalid = xarML('The file upload failed to #(1). <br/>The message was #(2)', $filepath, $e->getMessage());
+                $this->invalid = $this->ml('The file upload failed to #(1). <br/>The message was #(2)', $filepath, $e->getMessage());
                 $this->value = null;
                 return false;
             }
@@ -313,37 +313,37 @@ class FileUploadProperty extends DataProperty
                 // Note: if you use this, make sure you unlink($this->value) yourself once you're done with it
                 $this->value = $filepath;
                 // save new value for preview + new/modify combinations
-                xarVar::setCached('DynamicData.FileUpload',$name,$this->value);
+                $this->var()->setCached('DynamicData.FileUpload',$name,$this->value);
 
             //} elseif ($this->obfuscate_filename) {
             // TODO: obfuscate filename + return hash & original filename + handle that combined value in the other methods
             //    $this->value = $filehash . ',' . $filename;
             //    // save new value for preview + new/modify combinations
-            //    xarVar::setCached('DynamicData.FileUpload',$name,$this->value);
+            //    $this->var()->setCached('DynamicData.FileUpload',$name,$this->value);
 
             } else {
                 $this->value = $filename;
                 // save new value for preview + new/modify combinations
-                xarVar::setCached('DynamicData.FileUpload',$name,$this->value);
+                $this->var()->setCached('DynamicData.FileUpload',$name,$this->value);
             }
 
         // retrieve new value for preview + new/modify combinations
-        } elseif (xarVar::isCached('DynamicData.FileUpload',$name)) {
-            $this->value = xarVar::getCached('DynamicData.FileUpload',$name);
+        } elseif ($this->var()->isCached('DynamicData.FileUpload',$name)) {
+            $this->value = $this->var()->getCached('DynamicData.FileUpload',$name);
         } elseif (!empty($value) &&  !(is_numeric($value) || stristr($value, ';'))) {
             if (!$this->validateExtension($value)) {
-                $this->invalid = xarML('The file type is not allowed');
+                $this->invalid = $this->ml('The file type is not allowed');
                 $this->value = null;
                 return false;
             } elseif (!file_exists($this->initialization_basedirectory . '/'. $value) || !is_file($this->initialization_basedirectory . '/'. $value)) {
-                $this->invalid = xarML('The file cannot be found: #(1)', $this->initialization_basedirectory . '/'. $value);
+                $this->invalid = $this->ml('The file cannot be found: #(1)', $this->initialization_basedirectory . '/'. $value);
                 $this->value = null;
                 return false;
             }
             $this->value = $value;
         } else {
             // No file name entered, get previous value
-            xarVar::fetch($name. '_previous', 'isset', $value,  NULL, xarVar::DONT_SET);
+            $this->var()->check($name. '_previous', $value, 'isset',  NULL);
             $this->value = $value;
         }
         return true;
@@ -355,7 +355,7 @@ class FileUploadProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         $data['name'] = empty($data['name']) ? $this->propertyprefix . $this->id : $data['name'];
         $data['upname'] = $data['name'] .'_upload';
@@ -372,7 +372,7 @@ class FileUploadProperty extends DataProperty
 
         // inform anyone that we're showing a file upload field, and that they need to use
         // <form ... enctype="multipart/form-data" ... > in their input form
-        xarVar::setCached('Hooks.dynamicdata','withupload',1);
+        $this->var()->setCached('Hooks.dynamicdata','withupload',1);
 
         if ($this->UploadsModule_isHooked == TRUE) {
             // user must have hooked the uploads module after uploading files directly
@@ -382,7 +382,7 @@ class FileUploadProperty extends DataProperty
             }
             // set override for the upload/import paths if necessary
             if (!empty($this->initialization_basedirectory) || !empty($this->initialization_importdirectory)) {
-                $override = array();
+                $override = [];
                 if (!empty($this->initialization_basedirectory)) {
                     $override['upload'] = array('path' => $this->initialization_basedirectory);
                 }
@@ -415,7 +415,7 @@ class FileUploadProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         extract($data);
 
@@ -458,7 +458,7 @@ class FileUploadProperty extends DataProperty
 	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
-    public function showHidden(Array $data = array())
+    public function showHidden(array $data = [])
     {
         $data['name'] = empty($data['name']) ? $this->propertyprefix . $this->id : $data['name'];
         
@@ -468,7 +468,7 @@ class FileUploadProperty extends DataProperty
 
         // inform anyone that we're showing a file upload field, and that they need to use
         // <form ... enctype="multipart/form-data" ... > in their input form
-        xarVar::setCached('Hooks.dynamicdata','withupload',1);
+        $this->var()->setCached('Hooks.dynamicdata','withupload',1);
 
         return parent::showHidden($data);
     }

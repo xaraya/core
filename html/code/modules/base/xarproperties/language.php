@@ -33,7 +33,7 @@ class LanguageListProperty extends SelectProperty
             return $this->options;
         }
         
-        $options = array();
+        $options = [];
         $list = xarMLS::listSiteLocales();
         asort($list);
 

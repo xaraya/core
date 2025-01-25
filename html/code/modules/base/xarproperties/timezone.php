@@ -35,7 +35,7 @@ class TimeZoneProperty extends SelectProperty
  * @param array<string, mixed> $data An array of input parameters 
  * @return string     HTML markup to display the property for output on a web page
  */
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
         $zone = new DateTimeZone($data['value']);
@@ -54,7 +54,7 @@ class TimeZoneProperty extends SelectProperty
             return $this->options;
         }
         $zones = DateTimeZone::listIdentifiers();
-        $options = array();
+        $options = [];
         foreach ($zones as $name) {
             $zone = new DateTimeZone($name);
             $datetime = new DateTime('now',$zone);
