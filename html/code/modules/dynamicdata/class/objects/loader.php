@@ -31,8 +31,10 @@
 
 sys::import('modules.dynamicdata.class.objects.virtual');
 sys::import('xaraya.context.contexttrait');
+sys::import('xaraya.facades.logger');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
+use Xaraya\Facades\xarLog3;
 
 class DataObjectLoader implements ContextInterface
 {
@@ -290,7 +292,7 @@ class DataObjectLoader implements ContextInterface
         if (empty($this->objectname)) {
             return [];
         }
-        xarLog::message("DataObjectLoader::getValues: get " . count($itemids) . " items from " . $this->objectname, xarLog::LEVEL_INFO);
+        xarLog3::info("DataObjectLoader::getValues: get " . count($itemids) . " items from " . $this->objectname);
         $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
         //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
@@ -324,7 +326,7 @@ class DataObjectLoader implements ContextInterface
             //$props['id'] ??= $itemid;
             $values[$key] = array_intersect_key($props, $allowed);
         }
-        xarLog::message("DataObjectLoader::getValues: got " . count($values) . " values from " . $this->objectname, xarLog::LEVEL_INFO);
+        xarLog3::info("DataObjectLoader::getValues: got " . count($values) . " values from " . $this->objectname);
         // return array("$itemid" => single $field value) - see defer* properties
         return $values;
     }
@@ -766,7 +768,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
 
     public function getValues(array $itemids)
     {
-        xarLog::message("LinkObjectItemLoader::getValues: get links for " . count($itemids) . " items from " . $this->linkname, xarLog::LEVEL_INFO);
+        xarLog3::info("LinkObjectItemLoader::getValues: get links for " . count($itemids) . " items from " . $this->linkname);
         $fieldlist = [$this->caller_id, $this->called_id];
         $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
@@ -792,7 +794,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             }
             $values[$key][] = $props[$this->called_id];
         }
-        xarLog::message("LinkObjectItemLoader::getValues: got " . count($values) . " values from " . $this->linkname, xarLog::LEVEL_INFO);
+        xarLog3::info("LinkObjectItemLoader::getValues: got " . count($values) . " values from " . $this->linkname);
         return $values;
     }
 
@@ -926,9 +928,9 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         if (empty($newvalues) && empty($delvalues)) {
             return;
         }
-        // xarLog::message("LinkObjectItemLoader::save: old links " . implode(', ', $oldlinks), xarLog::LEVEL_INFO);
-        // xarLog::message("LinkObjectItemLoader::save: new values " . implode(', ', $newvalues), xarLog::LEVEL_INFO);
-        // xarLog::message("LinkObjectItemLoader::save: del values " . implode(', ', $delvalues), xarLog::LEVEL_INFO);
+        // xarLog3::info("LinkObjectItemLoader::save: old links " . implode(', ', $oldlinks));
+        // xarLog3::info("LinkObjectItemLoader::save: new values " . implode(', ', $newvalues));
+        // xarLog3::info("LinkObjectItemLoader::save: del values " . implode(', ', $delvalues));
         $objectref = VirtualObjectFactory::getObject($params, $this->getContext());
         foreach ($delvalues as $called_id) {
             $objectref->deleteItem(['itemid' => $oldlinks[$called_id]]);

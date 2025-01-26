@@ -12,7 +12,9 @@
 // this is used in most methods below, so we import it here
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarLog3;
 
 /**
  * Move static methods from DataObjectMaster to DataObjectFactory
@@ -35,7 +37,7 @@ class DataObjectFactory extends xarObject
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $bindvars = [];
-        xarLog::message("DB: query in getObjects", xarLog::LEVEL_INFO);
+        xarLog3::info("DB: query in getObjects");
         $query = "SELECT id,
                          name,
                          label,
@@ -112,7 +114,7 @@ class DataObjectFactory extends xarObject
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $bindvars = [];
-        xarLog::message('DD: query in getObjectInfo', xarLog::LEVEL_INFO);
+        xarLog3::info('DD: query in getObjectInfo');
         $query = "SELECT id,
                          name,
                          label,
@@ -324,10 +326,10 @@ class DataObjectFactory extends xarObject
             unset($args['itemid']);
         }
         if (empty($args)) {
-            xarLog::message('DataObjectFactory::getVariableCacheKey: ' . $scope . '(' . $name . ')', xarLog::LEVEL_INFO);
+            xarLog3::info('DataObjectFactory::getVariableCacheKey: ' . $scope . '(' . $name . ')');
             $cacheKey = xarCache::getVariableKey($scope, $name);
         } else {
-            xarLog::message('DataObjectFactory::getVariableCacheKey: TODO ' . $scope . '(' . $name . ') with ' . json_encode($args), xarLog::LEVEL_INFO);
+            xarLog3::info('DataObjectFactory::getVariableCacheKey: TODO ' . $scope . '(' . $name . ') with ' . json_encode($args));
             // TODO: any remaining arguments should *not* affect the object creation itself if we rehydrate correctly afterwards, but we'll play it safe for now...
             //$hash = md5(serialize($args));
             //$name .= '-' . $hash;
@@ -408,7 +410,7 @@ class DataObjectFactory extends xarObject
         $data['propertyargs'] = & $info;
 
         // Create the object if it was not in cache
-        xarLog::message("DataObjectFactory::getObject: Getting a new object " . $data['class'], xarLog::LEVEL_INFO);
+        xarLog3::info("DataObjectFactory::getObject: Getting a new object " . $data['class']);
 
         // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
         $descriptor = new DataObjectDescriptor($data);
@@ -600,7 +602,7 @@ class DataObjectFactory extends xarObject
         $descriptor = new DataObjectDescriptor($args);
         $objectid = $object->createItem($descriptor->getArgs());
         $classname = $object !== null ? $object::class : self::class;
-        xarLog::message("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype'], xarLog::LEVEL_INFO);
+        xarLog3::info("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
         unset($object);
         return $objectid;
     }
@@ -619,7 +621,7 @@ class DataObjectFactory extends xarObject
         if(empty($itemid)) {
             return null;
         }
-        xarLog::message("Updating an object " . $object->name . ". Objectid: " . $itemid, xarLog::LEVEL_INFO);
+        xarLog3::info("Updating an object " . $object->name . ". Objectid: " . $itemid);
         $itemid = $object->updateItem($args);
         unset($object);
         return $itemid;
@@ -649,7 +651,7 @@ class DataObjectFactory extends xarObject
         sys::import('xaraya.structures.query');
         // TODO: delete all the (dynamic ?) data for this object
 
-        xarLog::message("Deleting an object with ID " . $args['objectid'], xarLog::LEVEL_INFO);
+        xarLog3::info("Deleting an object with ID " . $args['objectid']);
 
         // Delete all the properties of this object
         $q = new Query('DELETE', $tables['dynamic_properties']);

@@ -19,7 +19,9 @@
 
 sys::import('modules.privileges.class.masks');
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarLog3;
 
 class xarPrivileges extends xarMasks
 {
@@ -269,7 +271,7 @@ class xarPrivileges extends xarMasks
     {
         parent::initialize();
 
-        xarLog::message('PRIV: getting all privileges, once!', xarLog::LEVEL_INFO);
+        xarLog3::info('PRIV: getting all privileges, once!');
         $where = "WHERE itemtype = " . self::PRIVILEGES_PRIVILEGETYPE;
         if (!empty($args['name']))      $where .= ' AND p.name = ' . $args['name'];
         if (!empty($args['module'])) {

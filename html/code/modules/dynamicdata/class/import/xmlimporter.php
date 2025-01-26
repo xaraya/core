@@ -31,6 +31,8 @@ use sys;
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.validations');
 sys::import('modules.dynamicdata.class.import.generic');
+sys::import('xaraya.facades.logger');
+use Xaraya\Facades\xarLog3;
 
 /**
  * DataObject XML Importer
@@ -80,7 +82,7 @@ class XmlImporter extends DataObjectImporter
 
         if (!empty($file)) {
             $xml = file_get_contents($file);
-            xarLog::message('DD: Importing file ' . $file, xarLog::LEVEL_INFO);
+            xarLog3::info('DD: Importing file ' . $file);
             if (empty($xml)) {
                 return null;
             }
@@ -129,7 +131,7 @@ class XmlImporter extends DataObjectImporter
         $args = [];
         // Get the object's name
         $args['name'] = (string) ($xmlobject->attributes()->name);
-        xarLog::message('DD: importing ' . $args['name'], xarLog::LEVEL_INFO);
+        xarLog3::info('DD: importing ' . $args['name']);
 
         // check if the object exists
         $info = DataObjectFactory::getObjectInfo(['name' => $args['name']]);

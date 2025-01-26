@@ -12,7 +12,9 @@
 // this is used in most methods below, so we import it here
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarLog3;
 
 /**
  * Utility Class to manage Dynamic Properties
@@ -47,7 +49,7 @@ class DataPropertyMaster extends xarObject
      */
     public static function getProperties(array $args = [])
     {
-        xarLog::message("DataPropertyMaster::getProperties: Getting all properties", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("DataPropertyMaster::getProperties: Getting all properties");
         // we can't use our own classes here, because we'd have an endless loop :-)
 
         $dbconn = xarDB3::getConn();
@@ -141,7 +143,7 @@ class DataPropertyMaster extends xarObject
             return;
         }
 
-        xarLog::message("DataPropertyMaster::addProperty: Adding a new property " . $args['name'], xarLog::LEVEL_DEBUG);
+        xarLog3::debug("DataPropertyMaster::addProperty: Adding a new property " . $args['name']);
 
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.
@@ -232,7 +234,7 @@ class DataPropertyMaster extends xarObject
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['class'];
 
-            xarLog::message("DataPropertyMaster::getProperty: Getting a new property " . $propertyClass, xarLog::LEVEL_DEBUG);
+            xarLog3::debug("DataPropertyMaster::getProperty: Getting a new property " . $propertyClass);
 
             // If we don't have the class yet, get it now
             if (!class_exists($propertyClass)) {
@@ -250,7 +252,7 @@ class DataPropertyMaster extends xarObject
                 // Load the translations for this file
                 $loaded = xarMLS::loadTranslations($propertyfile);
                 if (!$loaded) {
-                    xarLog::message("Property translations for $propertyClass NOT loaded", xarLog::LEVEL_WARNING);
+                    xarLog3::warning("Property translations for $propertyClass NOT loaded");
                 }
             }
 

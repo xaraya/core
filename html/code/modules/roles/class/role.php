@@ -11,7 +11,9 @@
 
 sys::import('modules.dynamicdata.class.objects.base');
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarLog3;
 
 /**
  * Role: class for the role object
@@ -398,7 +400,7 @@ class Role extends DataObject
             return xarVar::getCached($cacheKey,$this->properties['id']->value);
         }
         // We'll have to get it.
-        xarLog::message("ROLE: getting privileges for id: " . $this->properties['id']->value, xarLog::LEVEL_INFO);
+        xarLog3::info("ROLE: getting privileges for id: " . $this->properties['id']->value);
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $xartable = xarDB3::getTables();
         $query = "SELECT  p.id, p.name, r.name AS realm, p.module_id, m.name AS module,

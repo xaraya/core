@@ -11,11 +11,13 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
 **/
-/**
- * Base JS Class
-**/
+
+sys::import('xaraya.facades.logger');
+use Xaraya\Facades\xarLog3;
 
 /**
+ * Base JS Class
+ *
  * Notes
  * This is a persistent object. Once instantiated it saves itself in a modvar
  * Each time it wakes up it checks the filesystem for JS libraries 
@@ -84,7 +86,7 @@ class xarJS extends xarObject
 **/
     private function __construct()
     {
-        xarLog::message('xarJS::__construct: hello world');
+        xarLog3::debug('xarJS::__construct: hello world');
         // todo: run init scripts
         //$this->scan();
     }
@@ -103,11 +105,11 @@ class xarJS extends xarObject
     {
         // Check what libraries are present in the filesystem
         if (time() - $this->last_run > $this->expires) {
-            xarLog::message('xarJS::__wakeup: unserialize & refresh ' . (string)$this->last_run);
+            xarLog3::debug('xarJS::__wakeup: unserialize & refresh ' . (string)$this->last_run);
             $this->refresh();
             $this->refreshed = true;
         } else {
-            //xarLog::message('xarJS::__wakeup: unserialize & NOT refresh');
+            //xarLog3::debug('xarJS::__wakeup: unserialize & NOT refresh');
             $this->refreshed = false;
         }
         // Load the default libraries
@@ -128,7 +130,7 @@ class xarJS extends xarObject
 **/
     public function __sleep()
     {
-        xarLog::message('xarJS::__sleep: serialize');
+        xarLog3::debug('xarJS::__sleep: serialize');
         // set the last run time before we exit
         $this->last_run = time();
         // return the array of public property names to store
@@ -148,10 +150,10 @@ class xarJS extends xarObject
     public function __destruct()
     {
         if (!$this->refreshed && time() - $this->last_run < $this->expires) {
-            //xarLog::message('xarJS::__destruct: NOT saving modvars');
+            //xarLog3::debug('xarJS::__destruct: NOT saving modvars');
             return;
         }
-        xarLog::message('xarJS::__destruct: saving modvars');
+        xarLog3::debug('xarJS::__destruct: saving modvars');
         // basically, we serialize and set this object as a modvar
         // xarModVars::set can be a little flaky,
         // this workaround seems to do the trick
@@ -190,7 +192,7 @@ class xarJS extends xarObject
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            xarLog::message('xarJS::getInstance: loading modvars');
+            xarLog3::debug('xarJS::getInstance: loading modvars');
           // try unserializing the stored modvar
             self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
@@ -200,7 +202,7 @@ class xarJS extends xarObject
                 self::$instance = new $c;
             }
         } else {
-            //xarLog::message('xarJS::getInstance: NOT loading modvars');
+            //xarLog3::debug('xarJS::getInstance: NOT loading modvars');
         }
         return self::$instance;
     }
@@ -277,7 +279,7 @@ class xarJS extends xarObject
         $libs = array();
         foreach ($paths as $path) {
             if (!is_dir($path)) continue;
-            //xarLog::message('xarJS::refresh: looking in ' . $path);
+            //xarLog3::debug('xarJS::refresh: looking in ' . $path);
             $folders = $this->getFolders($path, 1);
             if (empty($folders)) continue;
             foreach (array_keys($folders) as $lib) {

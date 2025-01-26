@@ -14,7 +14,9 @@
  */
 
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarLog3;
 
 /**
  * xarSecurity::check: class for the mask repository
@@ -153,7 +155,7 @@ class xarSecurity extends xarObject
         self::initialize();
         $userID = xarSession::getVar('role_id');
         
-        xarLog::message("xarSecurity::check: Testing user $userID against mask $mask", xarLog::LEVEL_INFO);
+        xarLog3::info("xarSecurity::check: Testing user $userID against mask $mask");
         
         if ($userID == xarUser::LAST_RESORT) return true;
 
@@ -214,7 +216,7 @@ class xarSecurity extends xarObject
             else {
                 $msg = xarML('Did not find mask #(1) registered for component #(2) in module #(3)', $maskname, $component, $module);
             }
-            xarLog::message("xarSecurity::check: " . $msg, xarLog::LEVEL_INFO);
+            xarLog3::info("xarSecurity::check: " . $msg);
             return false;
         }
 
@@ -502,7 +504,7 @@ class xarSecurity extends xarObject
                 } else {
                     $msg .= " NOT FOUND. \n";
                 }
-                xarLog::message($msg, xarLog::LEVEL_DEBUG);
+                xarLog3::debug($msg);
             }
             if ($privilege['level'] == 0 && self::includes($privilege,$mask)) {
                 if (!self::$inheritdeny && is_object($role)) {
@@ -539,7 +541,7 @@ class xarSecurity extends xarObject
                 echo "Comparing <font color='blue'>[" . self::present($privilege) . "]</font> and <font color='green'>[" . self::present($mask) . "]</font>. ";
                 $msg = "Comparing \n  Privilege: ".self::present($privilege).
                     "\n       Mask: ".self::present($mask);
-                xarLog::message($msg, xarLog::LEVEL_DEBUG);
+                xarLog3::debug($msg);
             }
             if (self::includes($privilege,$mask)) {
                 if (self::implies($privilege,$mask)) {
@@ -548,7 +550,7 @@ class xarSecurity extends xarObject
                         $msg = $privilege['name'] . " WINS! ".
                             "Privilege includes mask. ".
                             "Privilege level greater or equal.\n";
-                        xarLog::message($msg, xarLog::LEVEL_DEBUG);
+                        xarLog3::debug($msg);
                     }
                     if (!$pass || $privilege['level'] > $pass['level']) $pass = $privilege;
                 }
@@ -558,7 +560,7 @@ class xarSecurity extends xarObject
                         $msg = $mask['name'] . " MATCHES! ".
                                 "Privilege includes mask. Privilege level ".
                                 "lesser.\n";
-                        xarLog::message($msg, xarLog::LEVEL_DEBUG);
+                        xarLog3::debug($msg);
                     }
                 }
                 $matched = true;
@@ -569,7 +571,7 @@ class xarSecurity extends xarObject
                         $msg = $privilege['name'] ." WINS! ".
                             "Mask includes privilege. Privilege level ".
                             "greater or equal.\n";
-                        xarLog::message($msg, xarLog::LEVEL_DEBUG);
+                        xarLog3::debug($msg);
                     }
                     if (!$pass || $privilege['level'] > $pass['level']) $pass = $privilege;
                     $matched = true;
@@ -580,14 +582,14 @@ class xarSecurity extends xarObject
                         $msg = $mask['name']." MATCHES! ".
                             "Mask includes privilege. Privilege level ".
                             "lesser.\n";
-                        xarLog::message($msg, xarLog::LEVEL_DEBUG);
+                        xarLog3::debug($msg);
                     }
                 }
             } else {
                 if($test && ($testmask == $mask['name'] || $testmask == "All")) {
                     echo "<font color='red'>no match</font>. Continuing with other checks..<br />";
                     $msg = "NO MATCH.\n";
-                    xarLog::message($msg, xarLog::LEVEL_DEBUG);
+                    xarLog3::debug($msg);
                 }
             }
         }
