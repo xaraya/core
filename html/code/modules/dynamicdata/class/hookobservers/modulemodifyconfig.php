@@ -55,19 +55,15 @@ class ModuleModifyconfig extends DataObjectHookObserver
             return '';
         }
 
-        if (!$this->mod()->apiLoad('dynamicdata', 'user')) {
-            return;
-        }
-
         $args = $this->data()->getObjectID([
             'moduleid'  => $module_id,
             'itemtype'  => $itemtype,
         ]);
 
         // @todo move to object method here too
-        $fields = $this->mod()->apiFunc(
+        $fields = $this->mod()->apiMethod(
             'dynamicdata',
-            'user',
+            'userapi',
             'getprop',
             ['objectid' => $args['objectid']]
         );

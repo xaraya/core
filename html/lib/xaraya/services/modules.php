@@ -16,12 +16,15 @@
 
 namespace Xaraya\Services;
 
+use Xaraya\Context\ContextInterface;
+use Xaraya\Modules\ModuleInterface;
 use xarMod;
 use xarModVars;
 use xarController;
 use xarTpl;
 use sys;
 use Exception;
+use FunctionNotFoundException;
 
 sys::import('xaraya.services.servicetrait');
 
@@ -47,6 +50,11 @@ interface ModulesInterface extends ServiceInterface
     /** @return array<string, mixed> */
     public function getTables(?string $modName = null): array;
     public function isAvailable(?string $modName = null): bool;
+    public function getModule(?string $modName = null): ModuleInterface;
+    /** @param array<string, mixed> $args */
+    public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName, array $args = []): mixed;
+    /** @param array<string, mixed> $args */
+    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName, array $args = []): mixed;
 }
 
 /**
@@ -245,6 +253,69 @@ trait ModulesTrait
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
         return xarMod::load($modName, $modType);
+    }
+
+    /**
+     * Get module class for this module (if there is one)
+     * @param ?string $modName
+     * @return ModuleInterface
+     */
+    public function getModule(?string $modName = null): ModuleInterface
+    {
+        $modName ??= $this->getModName();
+        return xarMod::getModule($modName);
+    }
+
+    /**
+     * Call module api method for this module (if there is one)
+     * @param ?string $modName
+     * @param ?string $modType
+     * @param string $funcName
+     * @param array<string, mixed> $args
+     * @throws \FunctionNotFoundException
+     * @return mixed
+     */
+    public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName, array $args = []): mixed
+    {
+        $modName ??= $this->getModName();
+        $modType ??= $this->getModType();
+        if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
+            $modType .= 'api';
+        }
+        $callable = xarMod::getModuleClassMethod($modName, $modType, $funcName, 'api');
+        if (empty($callable)) {
+            throw new FunctionNotFoundException($funcName);
+        }
+        if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
+            $callable[0]->setContext($this->getContext());
+        }
+        return $callable($args);
+    }
+
+    /**
+     * Call module gui method for this module (if there is one)
+     * @param ?string $modName
+     * @param ?string $modType
+     * @param string $funcName
+     * @param array<string, mixed> $args
+     * @throws \FunctionNotFoundException
+     * @return mixed
+     */
+    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName, array $args = []): mixed
+    {
+        $modName ??= $this->getModName();
+        $modType ??= $this->getModType();
+        if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
+            $modType .= 'gui';
+        }
+        $callable = xarMod::getModuleClassMethod($modName, $modType, $funcName, 'gui');
+        if (empty($callable)) {
+            throw new FunctionNotFoundException($funcName);
+        }
+        if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
+            $callable[0]->setContext($this->getContext());
+        }
+        return $callable($args);
     }
 }
 
