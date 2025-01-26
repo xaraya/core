@@ -172,7 +172,7 @@ class EventCallbackSubscriber extends EventSubscriber implements EventSubscriber
             try {
                 $callbackFunc($event, $eventName);
             } catch (Exception $e) {
-                //xarLog::message("Error in callback for $eventName: " . $e->getMessage(), xarLog::LEVEL_INFO);
+                //xarLog3::info("Error in callback for $eventName: " . $e->getMessage());
                 echo "Error in callback for $eventName: " . $e->getMessage();
             }
         }

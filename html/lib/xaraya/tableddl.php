@@ -23,7 +23,9 @@
 
 // @todo move functions to class methods and use Database Service
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarLog3;
 
 /**
  * Public Functions:
@@ -627,7 +629,7 @@ class xarXMLInstaller extends xarObject
         // Execute each of the queries
         $dbconn = xarDB3::getConn();
         foreach ($queries as $q) {
-            xarLog::message('Executing SQL: ' . $q, xarLog::LEVEL_INFO);
+            xarLog3::info('Executing SQL: ' . $q);
             $dbconn->Execute($q);
         }
         return true;

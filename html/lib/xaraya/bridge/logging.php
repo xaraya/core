@@ -19,6 +19,7 @@ namespace Xaraya\Bridge\Logging;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Xaraya\Facades\xarLog3;
 use xarLog;
 
 class LoggerBridge extends AbstractLogger implements LoggerInterface
@@ -56,7 +57,7 @@ class LoggerBridge extends AbstractLogger implements LoggerInterface
      */
     public function log($level, string|\Stringable $message, array $context = []): void
     {
-        xarLog::message($this->interpolate($message, $context), $this->mapping[$level] ?? xarLog::LEVEL_INFO);
+        xarLog3::message($this->interpolate($message, $context), $this->mapping[$level] ?? xarLog::LEVEL_INFO);
     }
 
     /**

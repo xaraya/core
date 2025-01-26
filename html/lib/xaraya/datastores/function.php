@@ -151,7 +151,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
         $items = [];
 
         /* fetch the items */
-        //xarLog::message(var_export($this, true));
+        //xarLog3::debug(var_export($this, true));
         foreach ($this->_itemids as $itemid) {
             $args['itemid'] = $itemid;
             $this->getItem($args);

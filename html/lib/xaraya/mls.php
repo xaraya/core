@@ -25,6 +25,9 @@
 sys::import('xaraya.locales');
 sys::import('xaraya.transforms.xarCharset');
 sys::import('xaraya.mlsbackends.reference');
+sys::import('xaraya.facades.logger');
+use Xaraya\Facades\xarLog3;
+
 
 /**
  * Multilanguage System Class
@@ -398,7 +401,7 @@ class xarMLS extends xarObject
         // Only refresh if we need to
         if (self::getCurrentLocale() == $locale) return true;
         
-        xarLog::message("Changing the default locale from ". self::getCurrentLocale() . " to " . $locale, xarLog::LEVEL_INFO);
+        xarLog3::info("Changing the default locale from ". self::getCurrentLocale() . " to " . $locale);
         
         static $called = 0;
     
@@ -420,7 +423,7 @@ class xarMLS extends xarObject
             if (!in_array($locale, $siteLocales)) {
                 // Locale not available, use the default
                 $locale = self::getSiteLocale();
-                xarLog::message("Falling back to default locale: $locale", xarLog::LEVEL_INFO);
+                xarLog3::info("Falling back to default locale: $locale");
             }
         }
 
@@ -432,7 +435,7 @@ class xarMLS extends xarObject
             assert($curCharset == "utf-8");
             // To be able to continue, we set the mode to BOXED
             if ($curCharset != "utf-8") {
-                xarLog::message("Resetting MLS mode to BOXED", xarLog::LEVEL_INFO);
+                xarLog3::info("Resetting MLS mode to BOXED");
                 xarConfigVars::set(null, 'Site.MLS.MLSMode', self::BOXED_MULTI_LANGUAGE_MODE);
             } else {
                 if (!xarCore::funcIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
@@ -480,14 +483,14 @@ class xarMLS extends xarObject
         static $loadedCommons = array();
         static $loadedTranslations = array();
     
-        xarLog::message("MLS: Loading translations for the context ". "$domainType,$domainName,$contextType,$contextName", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("MLS: Loading translations for the context ". "$domainType,$domainName,$contextType,$contextName");
 
         if (!isset(self::$backend)) {
-            xarLog::message("xarMLS: No translation backend was selected for ". "$domainType,$domainName,$contextType,$contextName", xarLog::LEVEL_WARNING);
+            xarLog3::warning("xarMLS: No translation backend was selected for ". "$domainType,$domainName,$contextType,$contextName");
             return false;
         }
         if (empty(self::$currentLocale)) {
-            xarLog::message("xarMLS: No current locale was selected", xarLog::LEVEL_WARNING);
+            xarLog3::warning("xarMLS: No current locale was selected");
             return false;
         }
     
@@ -564,9 +567,9 @@ class xarMLS extends xarObject
      **/
     static public function loadTranslations($path)
     {
-        xarLog::message("MLS: Loading translations for the path: $path", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("MLS: Loading translations for the path: $path");
         if(!file_exists($path)) {
-            xarLog::message("MLS: Failed loading translations for a non-existing path ($path)", xarLog::LEVEL_WARNING);
+            xarLog3::warning("MLS: Failed loading translations for a non-existing path ($path)");
             return true;
         }
     
@@ -745,7 +748,7 @@ class xarMLS extends xarObject
 	                return $madeDir;
                 } catch (Exception $e) {
                     $msg = xarMLS::translate("Could not create directory #(1). The directories under #(2) must be writeable by PHP.", $path, $next_path);
-                    xarLog::message($msg, xarLog::LEVEL_ERROR);
+                    xarLog3::error($msg);
                     xarCore::exit($msg);
                     // throw new PermissionException?
                     return false;

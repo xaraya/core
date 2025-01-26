@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -27,8 +27,18 @@ sys::import('xaraya.services.servicetrait');
  * Note: this aligns with PSR-3 interface for future compatibility
  * @see \Xaraya\Bridge\Logging\LoggerBridge
  */
-interface LoggerInterface extends ServiceInterface
+interface LoggerInterface
 {
+    /** Adapted from ServiceInterface to allow any parent here */
+
+    public function __construct(mixed $parent = null);
+
+    public function getParent(): mixed;
+
+    public static function create(mixed $parent = null): LoggerInterface;
+
+    /** Service-specific methods */
+
     public function message(string|\Stringable $message, int $level = 0): void;
 
     public function variable(string $name, mixed $var, int $level = 0): void;
@@ -66,8 +76,6 @@ interface LoggerInterface extends ServiceInterface
  */
 trait LoggerTrait
 {
-    use ServiceTrait;
-
     /** @var array<string, int> */
     protected array $mapping = [
         'emergency' => xarLog::LEVEL_EMERGENCY,
@@ -79,6 +87,39 @@ trait LoggerTrait
         'info' => xarLog::LEVEL_INFO,
         'debug' => xarLog::LEVEL_DEBUG,
     ];
+
+    /** Adapted from ServiceTrait to allow any parent here */
+
+    protected static ?LoggerInterface $xarLog = null;
+    public mixed $parent;
+
+    /**
+     * Create service class for parent
+     */
+    public function __construct(mixed $parent = null)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * Get parent of service class
+     */
+    public function getParent(): mixed
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Summary of create
+     */
+    public static function create(mixed $parent = null): LoggerInterface
+    {
+        // create singleton instance for any parent here
+        self::$xarLog ??= new self($parent);
+        return self::$xarLog;
+    }
+
+    /** Service-specific methods */
 
     public function message(string|\Stringable $message, int $level = 0): void
     {

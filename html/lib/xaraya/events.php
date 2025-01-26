@@ -27,7 +27,9 @@
 
 sys::import("xaraya.structures.events.subject");
 sys::import("xaraya.context.context");
+sys::import('xaraya.facades.logger');
 use Xaraya\Context\Context;
+use Xaraya\Facades\xarLog3;
 
 /**
  * Exception raised by the events subsystem
@@ -218,8 +220,8 @@ class xarEvents extends xarObject implements ixarEvents
             }
         } catch (Exception $e) {
             // Events never fail, ever!
-            xarLog::message("xarEvents::notify: failed notifying $event subject observers", xarLog::LEVEL_EMERGENCY);
-            xarLog::message("xarEvents::notify: Reason: " . $e->getMessage(), xarLog::LEVEL_INFO);
+            xarLog3::critical("xarEvents::notify: failed notifying $event subject observers");
+            xarLog3::info("xarEvents::notify: Reason: " . $e->getMessage());
             $response = false;
         }
         
@@ -232,7 +234,7 @@ class xarEvents extends xarObject implements ixarEvents
                 try {
                     call_user_func($callback, $info, $context);
                 } catch (Exception $e) {
-                    xarLog::message("xarEvents::notify: callback $event error " . $e->getMessage(), xarLog::LEVEL_INFO);
+                    xarLog3::info("xarEvents::notify: callback $event error " . $e->getMessage());
                 }
             }
         }
@@ -243,7 +245,7 @@ class xarEvents extends xarObject implements ixarEvents
                 try {
                     call_user_func($callback, $info, $context);
                 } catch (Exception $e) {
-                    xarLog::message("xarEvents::notify: callback $event error " . $e->getMessage(), xarLog::LEVEL_INFO);
+                    xarLog3::info("xarEvents::notify: callback $event error " . $e->getMessage());
                 }
             }
         }
@@ -512,7 +514,7 @@ class xarEvents extends xarObject implements ixarEvents
                         $newclasses = get_declared_classes();
                         // assuming new classes in namespaces only have 1 class definition per file as they should...
                         $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['HookObserver', 'EventObserver', 'HookSubject', 'EventSubject']));
-                        xarLog::message("xarEvents::fileLoad: found classes " . implode(', ', $diffclasses), xarLog::LEVEL_INFO);
+                        xarLog3::info("xarEvents::fileLoad: found classes " . implode(', ', $diffclasses));
                         if (count($diffclasses) > 0) {
                             $classname = $diffclasses[0];
                         } else {

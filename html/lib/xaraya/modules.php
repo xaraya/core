@@ -24,8 +24,10 @@
 
 sys::import("xaraya.context.contexttrait");
 sys::import("xaraya.context.context");
+sys::import('xaraya.facades.logger');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\Context;
+use Xaraya\Facades\xarLog3;
 
 /**
  * Exception raised by the modules subsystem
@@ -280,7 +282,7 @@ class xarMod extends xarObject implements IxarMod
      */
     public static function isAvailable($modName, $type = 'module')
     {
-        //xarLog::message("xarMod::isAvailable: begin $type:$modName");
+        //xarLog3::debug("xarMod::isAvailable: begin $type:$modName");
 
         // FIXME: there is no point to the cache here, since
         // xarMod::getBaseInfo() caches module details anyway.
@@ -308,7 +310,7 @@ class xarMod extends xarObject implements IxarMod
                 $modAvailableCache[$modBaseInfo['name']] = true;
             }
         }
-        //xarLog::message("xarMod::isAvailable: end $type:$modName");
+        //xarLog3::debug("xarMod::isAvailable: end $type:$modName");
         return $modAvailableCache[$modBaseInfo['name']];
     }
 
@@ -343,7 +345,7 @@ class xarMod extends xarObject implements IxarMod
                 throw new BadParameterException('module/theme type');
         }
         // Log it when it doesn't come from the cache
-        xarLog::message("xarMod::getInfo: Getting database info of ID '" . $modRegId . "' (a " . $type . ")", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("xarMod::getInfo: Getting database info of ID '" . $modRegId . "' (a " . $type . ")");
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -509,7 +511,7 @@ class xarMod extends xarObject implements IxarMod
             return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::getBaseInfo: Getting database info of '" . $modName . "' (a " . $type . ")", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("xarMod::getBaseInfo: Getting database info of '" . $modName . "' (a " . $type . ")");
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -597,7 +599,7 @@ class xarMod extends xarObject implements IxarMod
             return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir . " / " . $type);
         }
         // Log it when it didnt came from cache
-        xarLog::message("xarMod::getFileInfo: Getting file info of '" . $modOsDir . "' (a " . $type . ")", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("xarMod::getFileInfo: Getting file info of '" . $modOsDir . "' (a " . $type . ")");
 
 
         // TODO redo legacy support via type.
@@ -629,7 +631,7 @@ class xarMod extends xarObject implements IxarMod
 
         if (!file_exists($fileName)) {
             // Don't raise an exception, it is too harsh, but log it tho (bug 295)
-            xarLog::message("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir", xarLog::LEVEL_WARNING);
+            xarLog3::warning("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir");
             // throw new FileNotFoundException($fileName);
             return;
         }
@@ -886,7 +888,7 @@ class xarMod extends xarObject implements IxarMod
                 }
             }
 
-            xarLog::message("xarMod::callFunc: Calling $modFunc", xarLog::LEVEL_INFO);
+            xarLog3::info("xarMod::callFunc: Calling $modFunc");
 
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {
@@ -994,7 +996,7 @@ class xarMod extends xarObject implements IxarMod
         }
 
         // Log it when it doesn't come from the cache
-        xarLog::message("xarMod::load: Loading $modName:$modType", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("xarMod::load: Loading $modName:$modType");
 
         $modBaseInfo = self::getBaseInfo($modName);
         // Not a valid module - throw exception
@@ -1077,7 +1079,7 @@ class xarMod extends xarObject implements IxarMod
                     self::$moduleClasses[$modName] = new $class($modName);
                 } catch (Throwable $e) {
                     self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName);
-                    xarLog::message("xarMod::getModule: Error loading $class for module $modName", xarLog::LEVEL_WARNING);
+                    xarLog3::warning("xarMod::getModule: Error loading $class for module $modName");
                 }
             } else {
                 self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName);
@@ -1129,7 +1131,7 @@ class xarMod extends xarObject implements IxarMod
             // returns null for DefaultModule() = no suitable class method
             $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName, $callType);
             if (!isset($methods_cache[$key])) {
-                xarLog::message("xarMod::getModuleClassMethod: Missing method for $key", xarLog::LEVEL_INFO);
+                xarLog3::info("xarMod::getModuleClassMethod: Missing method for $key");
             }
         }
         return $methods_cache[$key];

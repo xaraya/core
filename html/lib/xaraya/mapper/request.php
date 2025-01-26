@@ -13,7 +13,9 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
+sys::import('xaraya.facades.logger');
 use Xaraya\Requests\RequestInterface;
+use Xaraya\Facades\xarLog3;
 
 class xarRequest extends xarObject
 {
@@ -231,7 +233,7 @@ class xarRequest extends xarObject
         } elseif (is_array($loopHole)) {
             // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
             //        because they request the current module too at the moment - unnecessary ?
-            xarLog::message('Avoiding loop in xarController::getRequest()->getInfo()', xarLog::LEVEL_INFO);
+            xarLog3::info('Avoiding loop in xarController::getRequest()->getInfo()');
             return $loopHole;
         }
         // Get variables

@@ -19,7 +19,9 @@
 global $installing;
 
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarLog3;
 
 /**
  * Exception raised by the users subsystem
@@ -344,7 +346,7 @@ class xarUser extends xarObject
      */
     static public function setNavigationLocale($locale)
     {
-        xarLog::message("Changing the navigation locale from ". self::getNavigationLocale() . " to " . $locale, xarLog::LEVEL_INFO);
+        xarLog3::info("Changing the navigation locale from ". self::getNavigationLocale() . " to " . $locale);
         if (xarMLS::getMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
             xarSession::setVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
@@ -462,7 +464,7 @@ class xarUser extends xarObject
                         if (!in_array($name, $optionalvars)) {
                         // log unknown user variables to inform the site admin
                             $msg = xarMLS::translate('User variable #(1) was not correctly registered', $name);
-                            xarLog::message($msg, xarLog::LEVEL_ERROR);
+                            xarLog3::error($msg);
                         }
                         return;
                     } else {

@@ -1,5 +1,8 @@
 <?php
 
+sys::import('xaraya.facades.logger');
+use Xaraya\Facades\xarLog3;
+
 class XarayaXSLProcessor extends xarObject
 {
     private $xslProc = null;    // Object representing the processor.
@@ -65,7 +68,7 @@ class XarayaXSLProcessor extends xarObject
     static function phpexpression($expr)
     {
         $res = ExpressionTransformer::transformPHPExpression($expr);
-        xarLog::message("BL: '$expr' resolved to '$res'", xarLog::LEVEL_INFO);
+        xarLog3::info("BL: '$expr' resolved to '$res'");
         return $res;
     }
 

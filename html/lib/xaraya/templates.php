@@ -51,6 +51,8 @@ class BLException extends xarExceptions
 }
 
 sys::import('xaraya.variables.config');
+sys::import('xaraya.facades.logger');
+use Xaraya\Facades\xarLog3;
 
 /**
  * BlockLayout Template Engine
@@ -149,7 +151,7 @@ class xarTpl extends xarObject
     {
         assert($themesDir != "" && $themesDir[0] != "/");
         
-        xarLog::message("xarTpl::setBaseDir: Setting the theme base dir to $themesDir", xarLog::LEVEL_INFO);
+        xarLog3::info("xarTpl::setBaseDir: Setting the theme base dir to $themesDir");
             
         if (!is_dir($themesDir)) {
             // no directory
@@ -190,7 +192,7 @@ class xarTpl extends xarObject
     {
         assert($themeName != "" && $themeName[0] != "/");
 
-        xarLog::message("xarTpl::setThemeName: Setting the theme name to $themeName", xarLog::LEVEL_INFO);
+        xarLog3::info("xarTpl::setThemeName: Setting the theme name to $themeName");
 
         $currentBase = self::getBaseDir();
         if (!is_dir($currentBase . '/'.$themeName)) {
@@ -214,7 +216,7 @@ class xarTpl extends xarObject
     {
         assert($themeDir != "" && $themeDir[0] != "/");
 
-        xarLog::message("xarTpl::setThemeDir: Setting the theme dir to $themeDir", xarLog::LEVEL_INFO);
+        xarLog3::info("xarTpl::setThemeDir: Setting the theme dir to $themeDir");
 
         $currentBase = self::getBaseDir();
         if (is_dir($currentBase . '/' . $themeDir)) {
@@ -293,7 +295,7 @@ class xarTpl extends xarObject
     {
         assert($templateName != "");
 
-        xarLog::message("xarTpl::setPageTemplateName: Setting the template name to $templateName", xarLog::LEVEL_INFO);
+        xarLog3::info("xarTpl::setPageTemplateName: Setting the template name to $templateName");
 
         if (!self::exists('theme', self::getThemeName(), $templateName, null, 'pages'))
             return false;
@@ -323,7 +325,7 @@ class xarTpl extends xarObject
     {
         assert(is_string($doctypeName));
 
-        xarLog::message("xarTpl::setDoctype: Setting the doc type to $doctypeName", xarLog::LEVEL_INFO);
+        xarLog3::info("xarTpl::setDoctype: Setting the doc type to $doctypeName");
 
         self::$doctype = $doctypeName;    
         return true;
@@ -354,7 +356,7 @@ class xarTpl extends xarObject
         // keep track of page title when we're caching
         xarCache::setPageTitle($title, $module);
 
-        xarLog::message("xarTpl::setPageTitle: Setting pageTitle to $title", xarLog::LEVEL_INFO);
+        xarLog3::info("xarTpl::setPageTitle: Setting pageTitle to $title");
         
         // @checkme: modules is a dependency of templates, redundant check?
         if (!method_exists('xarModVars','Get') || !empty(xarCoreCache::getCached('installer','installing'))){
@@ -1277,7 +1279,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
             // Load translations for the template
             xarMLS::loadTranslations($sourceFileName);
 
-            xarLog::message("xarTpl::executeFromFile: Using template $sourceFileName", xarLog::LEVEL_DEBUG);
+            xarLog3::debug("xarTpl::executeFromFile: Using template $sourceFileName");
             $templateCode = null;
 
             // Determine if we need to compile this template

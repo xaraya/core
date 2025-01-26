@@ -14,6 +14,9 @@
  * @author Marco Canini
 **/
     
+sys::import('xaraya.facades.logger');
+use Xaraya\Facades\xarLog3;
+
 switch (xarSystemVars::get(sys::CONFIG, 'DB.Middleware')){
 	case 'Creole':
 		// As per creole.ResultSet.php
@@ -173,7 +176,7 @@ class xarDB
             throw $e;
         }
 		$count = count(self::$connectionMap);
-        xarLog::message("New connection created, now serving " . $count . " connections", xarLog::LEVEL_NOTICE);
+        xarLog3::notice("New connection created, now serving " . $count . " connections");
         return $conn;
     }
     

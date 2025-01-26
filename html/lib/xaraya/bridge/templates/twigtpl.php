@@ -5,11 +5,13 @@
 sys::import('xaraya.templates');
 sys::import('xaraya.bridge.templates.twigbridge');
 sys::import('xaraya.context.context');
+sys::import('xaraya.facades.logger');
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 use Twig\TemplateWrapper;
 use Xaraya\Bridge\TemplateEngine\TwigBridge;
 use Xaraya\Context\Context;
+use Xaraya\Facades\xarLog3;
 
 /**
  * Use Twig template engine to generate output in Xaraya
@@ -105,7 +107,7 @@ class xarTwigTpl extends xarTpl
         // @checkme set generate XML urls to false to avoid autoescape issues
         xarServer::$generateXMLURLs = false;
         xarMod::$genXmlUrls = false;
-        xarLog::message(__METHOD__ . ": New twig environment for context from " . ($context['source'] ?? 'unknown'), xarLog::LEVEL_NOTICE);
+        xarLog3::notice(__METHOD__ . ": New twig environment for context from " . ($context['source'] ?? 'unknown'));
 
         return $twig;
     }
@@ -214,7 +216,7 @@ class xarTwigTpl extends xarTpl
             // @todo support individual module templates directories too!?
             $path = 'code/modules/' . $fileInfo['directory'];
             if (!is_dir($twigDir . '/' . $path)) {
-                xarLog::message(__METHOD__ . ": Invalid path for Twig namespace '$name' $twigDir/$path", xarLog::LEVEL_WARNING);
+                xarLog3::warning(__METHOD__ . ": Invalid path for Twig namespace '$name' $twigDir/$path");
                 continue;
             }
             static::$namespaces[$name] = $path;
@@ -343,7 +345,7 @@ class xarTwigTpl extends xarTpl
         $themeName = strtolower($themeName);
         // make other themes configurable based on fileinfo from xartheme.php
         if (empty(static::$extensions['themes'][$themeName])) {
-            xarLog::message(__METHOD__ . ": Theme {$themeName} does not support twig templates", xarLog::LEVEL_INFO);
+            xarLog3::info(__METHOD__ . ": Theme {$themeName} does not support twig templates");
             return false;
         }
         return true;
@@ -513,14 +515,14 @@ class xarTwigTpl extends xarTpl
             return true;
         }
         if (in_array($modName, ['installer'])) {
-            xarLog::message(__METHOD__ . ": Core module installer does not support twig templates", xarLog::LEVEL_INFO);
+            xarLog3::info(__METHOD__ . ": Core module installer does not support twig templates");
             return false;
         }
         static::getNamespaces();
         $modName = strtolower($modName);
         // make other modules configurable based on fileinfo from xarversion.php
         if (empty(static::$extensions['modules'][$modName])) {
-            xarLog::message(__METHOD__ . ": Module {$modName} does not support twig templates", xarLog::LEVEL_INFO);
+            xarLog3::info(__METHOD__ . ": Module {$modName} does not support twig templates");
             return false;
         }
         return true;
@@ -643,14 +645,14 @@ class xarTwigTpl extends xarTpl
         if (empty($modName) || $modName == 'auto') {
             $blockType = strtolower($blockType);
             if (empty(static::$extensions['block'][$blockType])) {
-                xarLog::message(__METHOD__ . ": Stand-alone block {$blockType} does not support twig templates", xarLog::LEVEL_INFO);
+                xarLog3::info(__METHOD__ . ": Stand-alone block {$blockType} does not support twig templates");
                 return false;
             }
             return true;
         }
         // let the module be the main blocker here
         if (!static::isModuleSupported($modName)) {
-            xarLog::message(__METHOD__ . ": Block {$blockType} of module {$modName} does not support twig templates", xarLog::LEVEL_INFO);
+            xarLog3::info(__METHOD__ . ": Block {$blockType} of module {$modName} does not support twig templates");
             return false;
         }
         // otherwise let's always assume that it is supported ;-)
@@ -747,7 +749,7 @@ class xarTwigTpl extends xarTpl
     {
         // let the module be the main blocker here
         if (!static::isModuleSupported($modName)) {
-            xarLog::message(__METHOD__ . ": Object {$objectName} of module {$modName} does not support twig templates", xarLog::LEVEL_INFO);
+            xarLog3::info(__METHOD__ . ": Object {$objectName} of module {$modName} does not support twig templates");
             return false;
         }
         // otherwise let's always assume that it is supported ;-)
@@ -843,14 +845,14 @@ class xarTwigTpl extends xarTpl
         if ($modName == 'auto') {
             $propertyName = strtolower($propertyName);
             if (empty(static::$extensions['property'][$propertyName])) {
-                xarLog::message(__METHOD__ . ": Stand-alone property {$propertyName} does not support twig templates", xarLog::LEVEL_INFO);
+                xarLog3::info(__METHOD__ . ": Stand-alone property {$propertyName} does not support twig templates");
                 return false;
             }
             return true;
         }
         // let the module be the main blocker here
         if (!static::isModuleSupported($modName)) {
-            xarLog::message(__METHOD__ . ": Property {$propertyName} of module {$modName} does not support twig templates", xarLog::LEVEL_INFO);
+            xarLog3::info(__METHOD__ . ": Property {$propertyName} of module {$modName} does not support twig templates");
             return false;
         }
         // otherwise let's always assume that it is supported ;-)

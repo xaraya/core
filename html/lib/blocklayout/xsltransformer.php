@@ -14,6 +14,8 @@
 **/
 
 sys::import('blocklayout.compiler');
+sys::import('xaraya.facades.logger');
+use Xaraya\Facades\xarLog3;
 
 class BlockLayoutXSLTProcessor extends xarObject
 {
@@ -76,20 +78,20 @@ class BlockLayoutXSLTProcessor extends xarObject
      */
     protected function setSourceDocument(&$xml)
     {
-        xarLog::message("XSL: Creating a DOM document for the template code", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("XSL: Creating a DOM document for the template code");
         $this->xmlDoc = new DOMDocument();
         // Setting this to false makes it 2 times faster, what do we lose?
         $this->xmlDoc->resolveExternals = false;
         // We're still a long way from validating
         // $this->xmlDoc->validateOnParse = true;
         $file = isset($this->xmlFile) ? $this->xmlFile : 'unknown';
-        xarLog::message("XSL: Loading the template code", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("XSL: Loading the template code");
         $this->xmlDoc->loadXML($xml);
 
         // Set up additional parameters related to the input
         // @todo wrong here.
         if(isset($this->xmlFile)) {
-            xarLog::message("XSL: Adding parameters to the processor", xarLog::LEVEL_DEBUG);
+            xarLog3::debug("XSL: Adding parameters to the processor");
             // Set up the parameters
             $this->xslProc->setParameter('', 'bl_filename', basename($this->xmlFile));
             $this->xslProc->setParameter('', 'bl_dirname', dirname($this->xmlFile));
@@ -125,14 +127,14 @@ class BlockLayoutXSLTProcessor extends xarObject
      */
     public function importStyleSheet($xslDoc)
     {
-        xarLog::message("XSL: Importing the stylesheet", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("XSL: Importing the stylesheet");
         if (!$this->xslProc->importStyleSheet($xslDoc)) {
             $halt = xarMLS::translate('Could not load the stylesheet #(1)', $xslDoc->saveXML());
             echo $halt;
             xarCore::exit();
             return;
         }
-        xarLog::message("XSL: The stylesheet was successfully imported", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("XSL: The stylesheet was successfully imported");
     }
 
     /**
@@ -155,11 +157,11 @@ class BlockLayoutXSLTProcessor extends xarObject
     public function transformToXML($xmlDoc)
     {
         $transform = null;
-        xarLog::message("XSL: Running the transform to XML", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("XSL: Running the transform to XML");
         try {
             $transform = $this->xslProc->transformToXML($xmlDoc);
         } catch (Exception $e) {
-            xarLog::message("XSL: huh? " . $e->getMessage(), xarLog::LEVEL_WARNING);
+            xarLog3::warning("XSL: huh? " . $e->getMessage());
         }
         return $transform;
     }
@@ -171,7 +173,7 @@ class BlockLayoutXSLTProcessor extends xarObject
      */
     public function transformToDoc($xmlNode)
     {
-        xarLog::message("XSL: Running the transform to Doc", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("XSL: Running the transform to Doc");
         return $this->xslProc->transformToDoc($xmlNode);
     }
 
@@ -185,14 +187,14 @@ class BlockLayoutXSLTProcessor extends xarObject
         // Save the original XML
         $this->origXml = $xml;
 
-        xarLog::message("XSL: Running the preprocess code", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("XSL: Running the preprocess code");
         // Preprocess it.
         $this->preProcess();
 
         // Legacy transforms for old 1x templates
         try {
             if (class_exists('xarConfigVars') && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
-                xarLog::message("XSL: Running the legacy transform code", xarLog::LEVEL_DEBUG);
+                xarLog3::debug("XSL: Running the legacy transform code");
                 sys::import('xaraya.legacy.templates');
                 $this->prepXml = xar_legacy_templates_fixLegacy($this->prepXml);
             }
@@ -203,17 +205,17 @@ class BlockLayoutXSLTProcessor extends xarObject
         $this->setSourceDocument($this->prepXml);
 
         // Transform it
-        xarLog::message("XSL: Running the XML transform", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("XSL: Running the XML transform");
         xarDebug::setExceptionHandler(array('ExceptionHandlers','defaulthandler'));
         // What should we initialize $result to?
         try {
             $this->postXml = $this->transformToXML($this->xmlDoc) ?? '';
         } catch (Exception $e) {
-            xarLog::message("XSL: rolling", xarLog::LEVEL_WARNING);
+            xarLog3::warning("XSL: rolling");
         }
 
         // Postprocess it
-        xarLog::message("XSL: Running the postprocess code", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("XSL: Running the postprocess code");
         $this->postProcess();
         return $this->postXml;
     }
@@ -273,9 +275,9 @@ class BlockLayoutXSLTProcessor extends xarObject
      */
     public static function phpexpression($expr)
     {
-        xarLog::message("BlockLayoutXSLTProcessor::phpexpression: '$expr'", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("BlockLayoutXSLTProcessor::phpexpression: '$expr'");
         $res = ExpressionTransformer::transformPHPExpression($expr);
-        xarLog::message("BlockLayoutXSLTProcessor::phpexpression: '$expr' resolved to '$res'", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("BlockLayoutXSLTProcessor::phpexpression: '$expr' resolved to '$res'");
         return $res;
     }
 }
@@ -314,7 +316,7 @@ class XsltCallbacks extends xarObject
     public static function mlsplaceholders($matches)
     {
         $res = $matches[1].'#'.$matches[2];
-        //xarLog::message('MLS: ' . $matches[0] . ' => '.$res);
+        //xarLog3::debug('MLS: ' . $matches[0] . ' => '.$res);
         return $res;
     }
 
@@ -336,7 +338,7 @@ class XsltCallbacks extends xarObject
         $raw = self::reverseXMLEntities($raw);
         // Return the first match too, to ensure not changing the input
         $res = '<?php echo ' . $raw .';?>';
-        //        xarLog::message('XsltCallbacks::attributes: '. $matches[0] . ' => ' . $res, xarLog::LEVEL_DEBUG);
+        //        xarLog3::debug('XsltCallbacks::attributes: '. $matches[0] . ' => ' . $res);
         return $res;
     }
 
@@ -404,7 +406,7 @@ class XsltCallbacks extends xarObject
                 // &xar-session-varname;
                 // &xar-url-modname-type-func-args;
         }
-        xarLog::message('XsltCallbacks::entities: found in xml source:'.$entityName, xarLog::LEVEL_DEBUG);
+        xarLog3::debug('XsltCallbacks::entities: found in xml source:'.$entityName);
         return $matches[0];
     }
 }

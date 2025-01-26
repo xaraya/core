@@ -36,10 +36,11 @@ class ServiceFactory
     /**
      * Summary of getLoggerService
      */
-    public static function getLoggerService(ServicesInterface $parent): LoggerInterface
+    public static function getLoggerService(object|string|null $parent = null): LoggerInterface
     {
         self::log(__METHOD__, $parent);
-        return new LoggerService($parent);
+        //return new LoggerService($parent);
+        return LoggerService::create($parent);
     }
 
     /**

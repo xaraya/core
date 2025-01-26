@@ -20,6 +20,9 @@
  * @todo  This is still the architecture of BL1, just stripped. We can do a lot better.
  */
 
+sys::import('xaraya.facades.logger');
+use Xaraya\Facades\xarLog3;
+
 /**
  *  Interface definition for the blocklayout compiler, these are the things
  *  it offers, no more, no less
@@ -100,7 +103,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
      */
     public function compileFile($fileName)
     {
-        xarLog::message("BL: Compiling the file '$fileName'", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("BL: Compiling the file '$fileName'");
         $this->lastFile = $fileName;
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
@@ -165,7 +168,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
      */
     protected function getProcessor($xslFile = '')
     {
-        xarLog::message("BL: Creating a new XSLT processor", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("BL: Creating a new XSLT processor");
 
         sys::import('blocklayout.xsltransformer');
         if (empty($xslFile)) {
@@ -262,18 +265,18 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
      */
     protected function compile(&$templateSource)
     {
-        xarLog::message("BL: Checking for an XSLT processor", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("BL: Checking for an XSLT processor");
         if (!isset($this->processor)) {
             $this->processor = $this->getProcessor();
             $xslDoc = new DOMDocument();
-            xarLog::message("BL: Creating the compiler as a stylesheet", xarLog::LEVEL_DEBUG);
+            xarLog3::debug("BL: Creating the compiler as a stylesheet");
             $xslDoc->loadXML($this->boot());
             $this->processor->importStyleSheet($xslDoc);
         }
 
         // This is confusing, don't do this here.
         $this->processor->xmlFile = $this->lastFile;
-        xarLog::message("BL: Preparing the transform", xarLog::LEVEL_DEBUG);
+        xarLog3::debug("BL: Preparing the transform");
         $outDoc = $this->processor->transform($templateSource);
 
         return $outDoc;
