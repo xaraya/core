@@ -21,7 +21,6 @@ use Xaraya\Services\CoreServicesTrait;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.coretrait');
 sys::import('xaraya.modules.hookstrait');
 sys::import('xaraya.services.servicestrait');
 

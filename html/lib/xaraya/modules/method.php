@@ -41,7 +41,6 @@ use Xaraya\Services\ParentServicesInterface;
 use Xaraya\Services\ParentServicesTrait;
 use sys;
 
-sys::import('xaraya.modules.coretrait');
 sys::import('xaraya.modules.hookstrait');
 sys::import('xaraya.services.parentservicestrait');
 
