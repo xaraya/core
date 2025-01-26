@@ -68,7 +68,6 @@ interface GuiModuleServicesInterface extends ModuleServicesInterface
 trait ModuleServicesTrait
 {
     use CoreServicesTrait;
-    //use CoreTrait;
     use HooksTrait;
 
     protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()

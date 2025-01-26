@@ -188,7 +188,7 @@ trait DatabaseTrait
      */
     public function getDbModName(): string
     {
-        // @todo we rely on the same property as Xaraya\Modules\CoreTrait here (on purpose)
+        // @todo we rely on the same property as in Xaraya\Modules\*Trait here (on purpose)
         return $this->moduleName;
     }
 

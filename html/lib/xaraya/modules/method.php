@@ -265,7 +265,6 @@ class MethodClass implements MethodServicesInterface, HooksInterface  // , CoreI
 {
     /** @use MethodServicesTrait<TComponent> */
     use MethodServicesTrait;
-    //use CoreTrait;
     use HooksTrait;
 
     protected string $moduleName;          // set in constructor by MethodsTrait::__call()
