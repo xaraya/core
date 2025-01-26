@@ -333,7 +333,7 @@ class CategoryWorker extends xarObject
             return $bases;
         } else {
             // We are getting the base categories of a module
-            $xartable = xarDB::getTables();
+            $xartable = xarDB3::getTables();
     
             sys::import('xaraya.structures.query');
             $q = new Query('SELECT');

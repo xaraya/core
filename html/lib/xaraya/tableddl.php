@@ -53,7 +53,7 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
     // perform validations on input arguments
     if (empty($databaseName)) throw new EmptyParameterException('databaseName');
     if (empty($databaseType)) {
-        $databaseType = xarDB::getType();
+        $databaseType = xarDB3::getType();
     }
 
     switch($databaseType) {
@@ -104,7 +104,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
     if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (!is_array($fields)) throw new BadParameterException('fields','The #(1) parameter is not an array');
     if (empty($databaseType)) {
-        $databaseType = xarDB::getType();
+        $databaseType = xarDB3::getType();
     }
     if (empty($charset)) $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
     // set Dbtype to pdosqlite
@@ -178,7 +178,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     }
 
     if (empty($databaseType)) {
-        $databaseType = xarDB::getType();
+        $databaseType = xarDB3::getType();
     }
 
     // Select the correct database type
@@ -227,7 +227,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     // perform validations on input arguments
     if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (empty($databaseType)) {
-        $databaseType = xarDB::getType();
+        $databaseType = xarDB3::getType();
     }
 
     switch($databaseType) {
@@ -274,7 +274,7 @@ function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[],
 	foreach ($params as $param) $args2[$param] ??= '';
 	extract($args2);
 	// Also this one: allow for an override
-	$databaseType ??= xarDB::getType();
+	$databaseType ??= xarDB3::getType();
 
     switch($databaseType) {
         case 'mysqli':
@@ -402,7 +402,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
     }
 
     if (empty($databaseType)) {
-        $databaseType = xarDB::getType();
+        $databaseType = xarDB3::getType();
     }
     // set Dbtype to pdosqlite
     $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
@@ -464,7 +464,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         throw new BadParameterException('index','The parameter "#(1)" must be an array, the "fields" key inside it must be an array and the "name" key must be set).');
     }
     if (empty($databaseType)) {
-        $databaseType = xarDB::getType();
+        $databaseType = xarDB3::getType();
     }
 
     // set Dbtype to pdosqlite

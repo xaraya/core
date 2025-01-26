@@ -16,6 +16,8 @@
  * @access  public
 */
 sys::import('modules.privileges.class.mask');
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 class xarPrivilege extends xarMask
 {
@@ -55,12 +57,12 @@ class xarPrivilege extends xarMask
             //return false;
         }
 
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB3::getConn();
         // create the insert query
         $realmid = null;
         if($this->realm != 'All') {
             $stmt = $dbconn->prepareStatement('SELECT id FROM '. $this->realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($this->realm),xarDB::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery(array($this->realm),xarDB3::getFetchAssoc());
             if($result->next()) $realmid = $result->getInt('id');
         }
         $query = "INSERT INTO $this->privilegestable
@@ -100,7 +102,7 @@ class xarPrivilege extends xarMask
         $query = "INSERT INTO $this->privmemberstable VALUES (?,?)";
         $bindvars = array($member->getID(), $this->getID());
         //Execute the query, bail if an exception was thrown
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB3::getConn();
         $dbconn->Execute($query,$bindvars);
         // Refresh the privileges cached for the current sessions
         sys::import('modules.privileges.class.security');
@@ -119,7 +121,7 @@ class xarPrivilege extends xarMask
     */
     function removeMember($member)
     {
-        $xartable = xarDB::getTables();
+        $xartable = xarDB3::getTables();
         $rolesobjects = $this->privmemberstable;
         $bindvars = array();
         $query = "DELETE FROM $rolesobjects ";
@@ -129,9 +131,9 @@ class xarPrivilege extends xarMask
         $query .= " AND  parent_id = ?";
         $bindvars[] = $this->getID();
         
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         if (!$result) return false;
         // Refresh the privileges cached for the current sessions
         sys::import('modules.privileges.class.security');
@@ -150,11 +152,11 @@ class xarPrivilege extends xarMask
     */
     function update()
     {
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB3::getConn();
         $realmid = null;
         if($this->realm != 'All') {
             $stmt = $dbconn->prepareStatement('SELECT id FROM '. $this->realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($this->realm),xarDB::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery(array($this->realm),xarDB3::getFetchAssoc());
             if($result->next()) $realmid = $result->getInt('id');
         }
 
@@ -190,7 +192,7 @@ class xarPrivilege extends xarMask
     {
         // set up the DELETE query
         $query = "DELETE FROM $this->privilegestable WHERE id=?";
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB3::getConn();
         //Execute the query, bail if an exception was thrown
         $dbconn->Execute($query,array($this->id));
 
@@ -248,7 +250,7 @@ class xarPrivilege extends xarMask
                 role_id = ? AND privilege_id = ?";
         $bindvars = array($role->getID(), $this->getID());
         if(!isset($stmt)) {
-            $dbconn = xarDB::getConn();
+            $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
         $result = $stmt->executeQuery($bindvars);
@@ -275,7 +277,7 @@ class xarPrivilege extends xarMask
                   FROM $this->rolestable r, $this->acltable acl
                   WHERE r.id = acl.role_id AND
                         acl.privilege_id = ?";
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->id));
 
@@ -350,7 +352,7 @@ class xarPrivilege extends xarMask
                   LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   WHERE pm.privilege_id = ?";
         if(!isset($stmt)) {
-            $dbconn = xarDB::getConn();
+            $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
         $result = $stmt->executeQuery(array($this->getID()));
@@ -433,7 +435,7 @@ class xarPrivilege extends xarMask
         // retrieve all children of everyone at once
         //              AND pm.parent_id = " . $cacheId;
         // Can't use caching here. The privs have changed
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB3::getConn();
         $result = $dbconn->executeQuery($query);
 
         while($result->next()) {
@@ -562,7 +564,7 @@ class xarPrivilege extends xarMask
     */
     function isRootPrivilege()
     {
-        $xartable = xarDB::getTables();
+        $xartable = xarDB3::getTables();
         $previlegeobjects = $this->privilegestable;
         $privilegmemobjects = $this->privmemberstable;
         $bindvars = array();
@@ -570,9 +572,9 @@ class xarPrivilege extends xarMask
                  JOIN $privilegmemobjects AS pm ON (p.id = pm.privilege_id)
                  WHERE pm.privilege_id = ?";
         $bindvars[] =  $this->getID();
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query); 
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         return ($result != array());
     }
 }

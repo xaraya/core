@@ -13,6 +13,9 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
+
 /**
  * xarSecurity::check: class for the mask repository
  *
@@ -77,9 +80,9 @@ class xarSecurity extends xarObject
     {
         if (!empty(self::$dbconn)  && !empty(self::$privilegestable)) return;
 
-        self::$dbconn = xarDB::getConn();
+        self::$dbconn = xarDB3::getConn();
         xarMod::loadDbInfo('privileges','privileges');
-        $xartable = xarDB::getTables();
+        $xartable = xarDB3::getTables();
         self::$privilegestable = $xartable['privileges'];
         self::$privmemberstable = $xartable['privmembers'];
         self::$modulestable = $xartable['modules'];
@@ -403,7 +406,7 @@ class xarSecurity extends xarObject
             $query .= " AND itemtype = ? ";
             $bindvars[] = self::PRIVILEGES_MASKTYPE;
             $stmt = self::$dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
             if(!$result->next()) return; // Mask isn't there.
             $pargs = $result->getRow();
             if(is_null($pargs['realm']))  $pargs['realm']  = 'All';

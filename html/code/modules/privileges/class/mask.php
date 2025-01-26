@@ -16,6 +16,10 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
 */
+
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
+
 class xarMask extends xarObject
 {
     const PRIVILEGES_PRIVILEGETYPE = 2;
@@ -53,7 +57,7 @@ class xarMask extends xarObject
     {
         extract($pargs);
 
-        $xartable = xarDB::getTables();
+        $xartable = xarDB3::getTables();
         $this->privilegestable = $xartable['privileges'];
         $this->privmemberstable = $xartable['privmembers'];
         $this->rolestable = $xartable['roles'];

@@ -51,10 +51,13 @@
  * @throws VariableValidationException
 **/
 
+sys::import('xaraya.validations');
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
+
 /**
  * Strings Validation Class
 **/
-sys::import('xaraya.validations');
 class PreValidation extends ValueValidations
 {
     function validate(&$subject, Array $parameters)
@@ -96,7 +99,7 @@ class PreValidation extends ValueValidations
                     case 'sql'    :
                         // @todo this doesnt belong here, creates database dependency too
                         // Preparing for use as a quoted SQL string.
-                        $dbconn = xarDB::getConn();
+                        $dbconn = xarDB3::getConn();
                         // @todo when using bindvars this can be just (string) $subject
                         $subject = $dbconn->qstr($subject);
                         break;

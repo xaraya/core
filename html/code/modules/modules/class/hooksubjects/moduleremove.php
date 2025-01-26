@@ -23,6 +23,9 @@
  * xarModHooks::call('module', 'remove', $module, $item); 
 **/
 sys::import('xaraya.structures.hooks.apisubject');
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
+
 class ModulesModuleRemoveSubject extends ApiHookSubject
 {
     public $subject = 'ModuleRemove';
@@ -61,8 +64,8 @@ class ModulesModuleRemoveSubject extends ApiHookSubject
         $module_id = $extrainfo['module_id'];
         
         // remove the module from hooks and events...
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = xarDB3::getConn();
+        $tables = xarDB3::getTables();
 
         // Delete any hooks assigned for that module, or by that module
         $query = "DELETE FROM $tables[hooks] WHERE observer = ? OR subject = ?";

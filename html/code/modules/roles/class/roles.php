@@ -11,6 +11,9 @@
  * @link http://xaraya.info/index.php/release/27.html
  */
 
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
+
 /**
  * xarRoles: class for the role repository
  *
@@ -41,9 +44,9 @@ class xarRoles extends xarObject
 
     public static function initialize()
     {
-        self::$dbconn = xarDB::getConn();
+        self::$dbconn = xarDB3::getConn();
         xarMod::loadDbInfo('roles','roles');
-        $xartable = xarDB::getTables();
+        $xartable = xarDB3::getTables();
         self::$rolestable = $xartable['roles'];
         self::$rolememberstable = $xartable['rolemembers'];
     }
@@ -69,9 +72,9 @@ class xarRoles extends xarObject
                       WHERE r.itemtype = ? AND r.state = ? ORDER BY r.name";
             $bindvars[] = self::ROLES_GROUPTYPE;
             $bindvars[] = self::ROLES_STATE_ACTIVE;
-            $dbconn = xarDB::getConn();
+            $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
             if(!$result) return;            
             while($result->next()) $allgroups[] = $result->fields;
         }
@@ -97,9 +100,9 @@ class xarRoles extends xarObject
         $bindvars[] = $id;
         $bindvars[] = self::ROLES_GROUPTYPE;
         $bindvars[] = self::ROLES_STATE_ACTIVE;
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         if(!$result) return;            
         while($result->next()) $group[] = $result->fields;
         if (!empty($group)) return $group;
@@ -347,7 +350,7 @@ class xarRoles extends xarObject
                 $params[] = $state;
             }
             $stmt = self::$dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($params, xarDB::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($params, xarDB3::getFetchAssoc());
             if(!$result) return;
             if($result->next()) $row = $result->fields;
             if (empty($row)) return;

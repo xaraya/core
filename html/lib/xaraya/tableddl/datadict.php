@@ -23,6 +23,8 @@
  */
 
 // PRIVATE FUNCTIONS BELOW - do not call directly
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 /**
  * Generate the DataDict specific SQL to create a table
@@ -482,7 +484,7 @@ function &xarDB__datadictInit()
 //          The xarTableDDL API doesn't really provide for this
 
     if (!isset($datadict)) {
-        $dbconn   = xarDB::getConn();
+        $dbconn   = xarDB3::getConn();
         // @todo This doesnt work yet in 2.x
         sys::import('xaraya.legacy.legacy');
         $datadict = xarDBNewDataDict($dbconn, 'ALTERTABLE');

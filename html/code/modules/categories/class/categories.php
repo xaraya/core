@@ -14,6 +14,8 @@
  */
 
 sys::import('xaraya.structures.tree');
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 class Categories extends xarObject
 {
@@ -25,8 +27,8 @@ class Categories extends xarObject
      */
     public static function get(int $id)
     {
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
 
         $SQLquery = "SELECT id,
                             name,
@@ -89,8 +91,8 @@ class CategoryTreeNode extends TreeNode
      */
     function getChildren()
     {
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
 
         $SQLquery = "SELECT id,
                             name,
@@ -136,8 +138,8 @@ class CategoryTreeNode extends TreeNode
 
     function getChildCount()
     {
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
 
         $SQLquery = "SELECT COUNT(*) FROM " . $xartable['categories'] . " WHERE parent_id = ? ORDER BY left_id";
         $bindvars = array($this->id);
@@ -157,8 +159,8 @@ class CategoryTreeNode extends TreeNode
      */
     function isDescendant(CategoryTreeNode $n)
     {
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
 
         $query = '
             SELECT  P1.id

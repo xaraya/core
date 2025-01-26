@@ -18,6 +18,8 @@
 */
 
 sys::import('modules.privileges.class.masks');
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 class xarPrivileges extends xarMasks
 {
@@ -145,7 +147,7 @@ class xarPrivileges extends xarMasks
         $realmid = null;
         if($realm != 'All') {
             $stmt = parent::$dbconn->prepareStatement('SELECT id FROM '.parent::$realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($realm),xarDB::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery(array($realm),xarDB3::getFetchAssoc());
             if($result->next()) $realmid = $result->getInt('id');
         }
         if($module == 'All') {
@@ -484,7 +486,7 @@ class xarPrivileges extends xarMasks
 
         $stmt = parent::$dbconn->prepareStatement($query);
         //Execute the query, bail if an exception was thrown
-        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE,$id),xarDB::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE,$id),xarDB3::getFetchNum());
 
         if ($result->next()) {
             list($id,$name,$realm,$module_id,$module,$component,$instance,$level,$description) = $result->fields;
