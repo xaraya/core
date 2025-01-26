@@ -3,13 +3,16 @@
  * @package core\hooks
  * @subpackage hooks
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
 
 sys::import('xaraya.structures.events.observer');
+sys::import('xaraya.services.servicestrait');
+use Xaraya\Services\ServicesInterface;
+use Xaraya\Services\ServicesTrait;
 
 /**
  * Hook Observer Interface
@@ -25,9 +28,30 @@ interface ixarHookObserver extends ixarEventObserver
     public function notify(ixarEventSubject $subject);
 }
 
-class HookObserver extends EventObserver implements ixarHookObserver
+class HookObserver extends EventObserver implements ixarHookObserver, ServicesInterface
 {
+    use ServicesTrait;
+
+    /** @var string */
     public $module = "modules";
+    /** @var string */
+    public $type = "admin";
+
+    /**
+     * Get name for this module in hook observer
+     */
+    public function getModName(): string
+    {
+        return $this->module;
+    }
+
+    /**
+     * Get module type (user, admin, ...) from here
+     */
+    public function getModType(): string
+    {
+        return $this->type;
+    }
 
     /**
      * @param array<string, mixed>|mixed $extrainfo
@@ -37,14 +61,14 @@ class HookObserver extends EventObserver implements ixarHookObserver
     {
         // Check whether a valid array was passed
         if (!isset($extrainfo) || !is_array($extrainfo)) {
-            $msg = xarMLS::translate('Invalid #(1) in function #(2)() in module #(3)',
+            $msg = $this->ml('Invalid #(1) in function #(2)() in module #(3)',
                          'extrainfo', 'updatehook', 'pubsub');
             throw new Exception($msg);
         }
 
         // We can use hooks via module/itemtype or object
         if (!isset($extrainfo['module']) && !isset($extrainfo['object'])) {
-            $msg = xarMLS::translate('Missing #(1) in function #(2)() in module #(3)',
+            $msg = $this->ml('Missing #(1) in function #(2)() in module #(3)',
                          'module or object', 'updatehook', 'pubsub');
             throw new Exception($msg);
         }
@@ -65,13 +89,8 @@ class HookObserver extends EventObserver implements ixarHookObserver
 
         // If we have an object, we need to get its ID
         if (isset($extrainfo['object']) && is_string($extrainfo['object'])) {
-            sys::import('modules.dynamicdata.class.properties.master');
-            $object = DataObjectFactory::getObjectList(array('name' => 'objects'));
-            $q = $object->dataquery;
-            $q->eq('name', $extrainfo['object']);
-            $items = $object->getItems();
-            $item = reset($items);
-            $extrainfo['object_id'] = (int)$item['objectid'];
+            $item = $this->data()->getObjectID(['name' => $extrainfo['object']]);
+            $extrainfo['object_id'] = (int) $item['objectid'];
         }
         
         // Assign the itemtype if we don't have one

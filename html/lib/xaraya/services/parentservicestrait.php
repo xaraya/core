@@ -69,6 +69,7 @@ trait ParentServicesTrait
      * - getModuleURL() - or use mod()->getURL() for current module
      * - getObjectURL() - or use data()->getURL() for current object
      * - getCurrentURL()
+     * - getRequest()
      * - redirect()
      * - forbidden()
      * - notFound()

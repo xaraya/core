@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use xarController;
+use xarRequest;
 use xarServer;
 use sys;
 
@@ -44,6 +45,12 @@ interface ControllerInterface extends ServiceInterface
      * @param array<string, mixed> $args
      */
     public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string;
+
+    /**
+     * Get current request
+     * @return xarRequest
+     */
+    public function getRequest(): xarRequest;
 
     /**
      * Send redirect to url and exit
@@ -105,6 +112,15 @@ trait ControllerTrait
     }
 
     /**
+     * Get current request
+     * @return xarRequest
+     */
+    public function getRequest(): xarRequest
+    {
+        return xarController::getRequest();
+    }
+
+    /**
      * Send redirect to url and exit
      * @uses xarController::redirect()
      * @return bool|never
@@ -149,6 +165,7 @@ trait ControllerTrait
  * - getModuleURL() - or use mod()->getURL() for current module
  * - getObjectURL() - or use data()->getURL() for current object
  * - getCurrentURL()
+ * - getRequest()
  * - redirect()
  * - forbidden()
  * - notFound()

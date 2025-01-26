@@ -14,44 +14,23 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
-use Xaraya\Services\ServicesInterface;
-use Xaraya\Services\ServicesTrait;
 use HookObserver;
 use ixarEventSubject;
 use ixarHookSubject;
 use sys;
 
 sys::import('xaraya.structures.hooks.observer');
-sys::import('xaraya.services.servicestrait');
 
 /**
  * DataObject Hook Observer for Item* and Module* ixarHookSubject events
  * Notified if DD module is hooked to a particular module, itemtype and/or scope
  */
-class DataObjectHookObserver extends HookObserver implements ServicesInterface
+class DataObjectHookObserver extends HookObserver
 {
-    use ServicesTrait;
-
     /** @var string */
     public $module = 'dynamicdata';
     /** @var string */
-    public $section = 'admin';
-
-    /**
-     * Get name for this module in hook observer
-     */
-    public function getModName(): string
-    {
-        return $this->module;
-    }
-
-    /**
-     * Get module type (user, admin, ...) from here
-     */
-    public function getModType(): string
-    {
-        return $this->section;
-    }
+    public $type = 'admin';
 
     /**
      * @param ixarHookSubject $subject

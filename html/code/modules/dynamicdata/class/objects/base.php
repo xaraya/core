@@ -333,7 +333,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
 
         // If a different itemid was passed, get that item before we display
-        if (isset($args['itemid']) && ($args['itemid'] != $this->properties[$this->primary]->value)) {
+        if (!empty($args['itemid']) && ($args['itemid'] != $this->properties[$this->primary]->value)) {
             $this->getItem(['itemid' => $args['itemid']]);
         }
 

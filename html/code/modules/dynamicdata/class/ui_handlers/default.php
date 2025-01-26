@@ -295,9 +295,9 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         }
 
         if (isset($this->object->itemid)) {
-            $return_url = $this->ctl()->getObjectURL(null, $this->nextmethod, ['itemid' => $this->object->itemid]);
+            $return_url = $this->ctl()->getObjectURL($this->object->name, $this->nextmethod, ['itemid' => $this->object->itemid]);
         } else {
-            $return_url = $this->ctl()->getObjectURL(null, $this->nextmethod);
+            $return_url = $this->ctl()->getObjectURL($this->object->name, $this->nextmethod);
         }
 
         return $return_url;

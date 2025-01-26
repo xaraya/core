@@ -1584,6 +1584,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarServer::getCurrentURL\(/' => '\$this->ctl()->getCurrentURL(',
             // @todo or use $this->data()->getURL()
             '/xarServer::getObjectURL\(/' => '\$this->ctl()->getObjectURL(',
+            '/xarController::getRequest\(\)/' => '\$this->ctl()->getRequest()',
             // @todo check xarTpl::module() against current modName modType for mod()->template()
             '/xarTpl::module\(/' => '\$this->tpl()->module(',
             // @todo check xarTpl::block() against current modName blockType for block()->template()

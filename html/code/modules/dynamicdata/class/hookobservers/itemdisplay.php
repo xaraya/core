@@ -21,7 +21,7 @@ sys::import('modules.dynamicdata.class.hookobservers.generic');
 class ItemDisplay extends DataObjectHookObserver
 {
     /** @var string */
-    public $section = 'user';
+    public $type = 'user';
 
     /**
      *
