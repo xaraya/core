@@ -10,8 +10,8 @@
  */
 
 sys::import('modules.dynamicdata.class.objects.base');
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 /**
  * Role: class for the role object
@@ -23,8 +23,6 @@ use Xaraya\Services\HasDatabaseStaticTrait;
  */
 class Role extends DataObject
 {
-    use HasDatabaseStaticTrait;
-
     public $parentlevel;  //we use this just to store transient information
 
     public $rolestable;
@@ -54,10 +52,10 @@ class Role extends DataObject
         // dodgy. remove later on
         sys::import('modules.privileges.xartables');
         // pass along the DB prefix to $tablefunc
-        $prefix = self::xarDB()->getPrefix();
-        self::xarDB()->importTables(privileges_xartables($prefix));
+        $prefix = xarDB3::getPrefix();
+        xarDB3::importTables(privileges_xartables($prefix));
 
-        $xartable = self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
         $this->rolestable = $xartable['roles'];
         $this->rolememberstable = $xartable['rolemembers'];
         $this->privilegestable = $xartable['privileges'];
@@ -80,7 +78,7 @@ class Role extends DataObject
     {
         // Confirm that this group or user does not already exist
         xarMod::loadDbInfo('roles','roles');
-        $xartable = self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
         $dynamicobjects = $this->rolestable;
         $bindvars = array();
         $query = "SELECT name, uname
@@ -94,9 +92,9 @@ class Role extends DataObject
             $query .= " WHERE uname = ? ";
             $bindvars[] = $data['uname'];
         }
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         if ($result->first() > 0) {
             $result = $result->getRow();
             throw new DuplicateException(array('role',($this->itemtype == xarRoles::ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
@@ -171,9 +169,9 @@ class Role extends DataObject
         $bindvars[] = $member->getID();
         $bindvars[] = $this->getID();
 
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         
         // If the relation already exists we are done
         while($result->next()) $row = $result->fields;
@@ -184,7 +182,7 @@ class Role extends DataObject
         $bindvars = array();
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
 
         // for children that are users
         // add 1 to the users field of the parent group. This is for display purposes.
@@ -196,7 +194,7 @@ class Role extends DataObject
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
             if (!$result) return;
             while($result->next()) $row = $result->fields;
 
@@ -206,7 +204,7 @@ class Role extends DataObject
             $query = "UPDATE  " . $this->rolestable . " SET users = " . $value . " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
 
         }
 
@@ -233,7 +231,7 @@ class Role extends DataObject
     public function removeMember($member)
     {
         // Delete the relevant entry from the rolemembers table
-        $xartables = self::xarDB()->getTables();
+        $xartables = xarDB3::getTables();
         sys::import('xaraya.structures.query');
         $q = new Query('DELETE', $xartables['rolemembers']);
         $q->eq('role_id', $member->getID());
@@ -249,9 +247,9 @@ class Role extends DataObject
                         FROM $this->rolestable";
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
-            $dbconn = self::xarDB()->getConn();
+            $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
             if (!$result) return;
             while($result->next()) $row = $result->fields;
 
@@ -263,7 +261,7 @@ class Role extends DataObject
             $bindvars[] =  $this->getID();
 
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         }
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
@@ -293,7 +291,7 @@ class Role extends DataObject
         // where this role is the child
         $query = "SELECT parent_id FROM $this->rolememberstable WHERE role_id= ?";
         // Execute the query, bail if an exception was thrown
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
 
@@ -361,7 +359,7 @@ class Role extends DataObject
         $date_reg = '';
 
         xarMod::loadDbInfo('roles','roles');
-        $xartable = self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
         $bindvars = array();
         $query = "UPDATE $this->rolestable
                   SET name = $name,
@@ -373,9 +371,9 @@ class Role extends DataObject
 
         $query .= " WHERE id = ? ";
         $bindvars[] = $this->getID();
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         $item['module'] = 'roles';
         $item['itemid'] = $this->getID();
         $item['itemtype'] = $this->getType();
@@ -402,7 +400,7 @@ class Role extends DataObject
         // We'll have to get it.
         xarLog::message("ROLE: getting privileges for id: " . $this->properties['id']->value, xarLog::LEVEL_INFO);
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
-        $xartable = self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
         $query = "SELECT  p.id, p.name, r.name AS realm, p.module_id, m.name AS module,
                           component, instance, level, description
                   FROM    $this->acltable acl,
@@ -412,7 +410,7 @@ class Role extends DataObject
                   WHERE   p.id = acl.privilege_id AND
                           acl.role_id = ?";
         if(!isset($stmt)) {
-            $dbconn = self::xarDB()->getConn();
+            $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
         $result = $stmt->executeQuery(array($this->properties['id']->value));
@@ -488,7 +486,7 @@ class Role extends DataObject
         // create an entry in the privmembers table
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($this->getID(),$privilege->getID());
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         $dbconn->Execute($query,$bindvars);
 
         // Refresh the privileges cached for the current sessions
@@ -509,7 +507,7 @@ class Role extends DataObject
         $query = "DELETE FROM $this->acltable
                   WHERE role_id= ? AND privilege_id= ?";
         $bindvars = array($this->properties['id']->value, $privilege->getID());
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         $dbconn->Execute($query,$bindvars);
 
         // Refresh the privileges cached for the current sessions
@@ -557,7 +555,7 @@ class Role extends DataObject
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY " . $order;
         // Prepare the query
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
 
         if ($startnum != 0) {
@@ -592,7 +590,7 @@ class Role extends DataObject
      */
     public function countChildren($state = xarRoles::ROLES_STATE_CURRENT, $selection = NULL, $itemtype = NULL)
     {
-        $xartable = self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
         $rolesmemobjects = $this->rolememberstable;
         $rolesobjects = $this->rolestable;
         $bindvars = array();
@@ -608,7 +606,7 @@ class Role extends DataObject
             $query .= " AND r.state = ? ";
             $bindvars[] = $state;
         }
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         if (isset($itemtype)) {
             $query .= " AND r.itemtype = ? ";
             $bindvars[] = $itemtype;
@@ -616,10 +614,10 @@ class Role extends DataObject
         if (isset($selection)) {
             $query = $selection;
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         } else {
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         }
         if($result) return;
         while ($result->next()) $row = $result->fields;
@@ -666,7 +664,7 @@ class Role extends DataObject
                   FROM $this->rolestable r, $this->rolememberstable rm
                   WHERE r.id = rm.parent_id AND rm.role_id = ?";
         if(!isset($stmt)) {
-            $dbconn = self::xarDB()->getConn();
+            $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
         $result = $stmt->executeQuery(array($this->properties['id']->value));
@@ -832,13 +830,13 @@ class Role extends DataObject
     public function adjustParentUsers($adjust)
     {
         xarMod::loadDbInfo('roles','roles');
-        $xartable = self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
         $memberobject =  $this->rolestable;
         $bindvars = array();
         $query = "SELECT users AS users FROM $memberobject";
         $query1 = "UPDATE $memberobject ";
 
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         $parents = $this->getParents();
         foreach ($parents as $parent) {
             $query .= " WHERE id = ? ";
@@ -847,7 +845,7 @@ class Role extends DataObject
             $bindvars[] = $parent->getID();
 
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
             if (!$result) return;
             // get the current count.
             while ($result->next())
@@ -859,7 +857,7 @@ class Role extends DataObject
             $value = $row['users'] + $adjust;
             $bindvars[] = $value;
             $stmt = $dbconn->prepareStatement($query1);
-            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
             if (!$result) return;
         }
         return true;

@@ -50,13 +50,11 @@ interface ixarBlock
  * @author Chris Powis
  */
 
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
  
 class xarBlock extends xarObject implements ixarBlock
 {
-    use HasDatabaseStaticTrait;
-    
     private function __construct()
     {}
 /**
@@ -72,8 +70,8 @@ class xarBlock extends xarObject implements ixarBlock
         // Blocks Support Tables
         sys::import('modules.blocks.xartables');
         // pass along the DB prefix to $tablefunc
-        $tables = blocks_xartables(self::xarDB()->getPrefix());
-        self::xarDB()->importTables($tables);
+        $tables = blocks_xartables(xarDB3::getPrefix());
+        xarDB3::importTables($tables);
         return true;    
     }
 

@@ -47,8 +47,8 @@ use sys;
 use Exception;
 
 sys::import('xaraya.modules.servicestrait');
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 /**
  * For documentation purposes only - available via ModuleTrait
@@ -83,7 +83,6 @@ interface ModuleInterface extends ContextInterface
 trait ModuleTrait
 {
     use ContextTrait;
-    use HasDatabaseStaticTrait;
 
     protected string $moduleName;          // set in constructor by xarMod::getModule()
 
@@ -212,8 +211,8 @@ trait ModuleTrait
         $tablefunc = $this->getModName() . '_' . 'xartables';
         if (function_exists($tablefunc)) {
             // pass along the DB prefix to $tablefunc
-            $prefix = self::xarDB()->getPrefix();
-            // self::xarDB()->importTables($tablefunc($prefix));
+            $prefix = xarDB3::getPrefix();
+            // xarDB3::importTables($tablefunc($prefix));
             return $tablefunc($prefix);
         }
         return [];

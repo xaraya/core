@@ -21,8 +21,8 @@ use Exception;
 use sys;
 
 sys::import('xaraya.datastores.interface');
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 /**
  * Base class for DD objects datastore
@@ -141,8 +141,6 @@ class DDObject extends xarObject implements IDDObject
  */
 class DataStoreFactory extends xarObject
 {
-    use HasDatabaseStaticTrait;
-
     /**
      * Class method to get a new dynamic data store (of the right type)
      * @param string $name
@@ -263,7 +261,7 @@ class DataStoreFactory extends xarObject
             return static::getExternalDataSources($object->datasources, $object->dbConnIndex);
         }
 
-        $dbconn = self::xarDB()->getConn($object->dbConnIndex);
+        $dbconn = xarDB3::getConn($object->dbConnIndex);
         $dbInfo = $dbconn->getDatabaseInfo();
 
         // TODO: re-evaluate this once we're further along

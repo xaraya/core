@@ -15,8 +15,8 @@
  */
 
 sys::import('xaraya.variables');
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 interface IxarModItemVars
 {
@@ -36,8 +36,6 @@ interface IxarModItemVars
  */
 class xarModItemVars extends xarVars implements IxarModItemVars
 {
-    use HasDatabaseStaticTrait;
-
     static function get($scope, $name, $itemid = null)
     {
         if(empty($name))
@@ -56,8 +54,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         }
 
         // Not in cache, need to retrieve it
-        $dbconn = self::xarDB()->getConn();
-        $tables = self::xarDB()->getTables();
+        $dbconn = xarDB3::getConn();
+        $tables = xarDB3::getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
         //unset($modvarid);
@@ -69,7 +67,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $bindvars = array((int)$modvarid, (int)$itemid);
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars,self::xarDB()->getFetchNum());
+        $result = $stmt->executeQuery($bindvars,xarDB3::getFetchNum());
 
         if(!$result->next()) {
             // No value, return the modvar default
@@ -88,8 +86,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         assert(!is_null($value)); /* Not allowed to set a variable to NULL value */
         if (empty($name)) throw new EmptyParameterException('name');
 
-        $dbconn = self::xarDB()->getConn();
-        $tables = self::xarDB()->getTables();
+        $dbconn = xarDB3::getConn();
+        $tables = xarDB3::getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
 
@@ -129,8 +127,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
     {
         if (empty($name)) throw new EmptyParameterException('name');
 
-        $dbconn = self::xarDB()->getConn();
-        $tables = self::xarDB()->getTables();
+        $dbconn = xarDB3::getConn();
+        $tables = xarDB3::getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
         // We need the variable id

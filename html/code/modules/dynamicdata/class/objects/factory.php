@@ -11,16 +11,14 @@
 
 // this is used in most methods below, so we import it here
 sys::import('modules.dynamicdata.class.objects.descriptor');
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 /**
  * Move static methods from DataObjectMaster to DataObjectFactory
  */
 class DataObjectFactory extends xarObject
 {
-    use HasDatabaseStaticTrait;
-
     /**
      * Class method to retrieve information about all DataObjects
      *
@@ -30,9 +28,9 @@ class DataObjectFactory extends xarObject
     public static function &getObjects(array $args = [])
     {
         extract($args);
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable =  self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -53,7 +51,7 @@ class DataObjectFactory extends xarObject
             $bindvars[] = $moduleid;
         }
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchNum());
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchNum());
 
         $objects = [];
         while ($result->next()) {
@@ -107,9 +105,9 @@ class DataObjectFactory extends xarObject
             return xarCoreCache::getCached($cacheKey, $infoid);
         }
 
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable =  self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -193,8 +191,8 @@ class DataObjectFactory extends xarObject
 
         sys::import('modules.dynamicdata.xartables');
         // pass along the DB prefix to $tablefunc
-        self::xarDB()->importTables(dynamicdata_xartables(self::xarDB()->getPrefix()));
-        $xartable =  self::xarDB()->getTables();
+        xarDB3::importTables(dynamicdata_xartables(xarDB3::getPrefix()));
+        $xartable = xarDB3::getTables();
         sys::import('xaraya.structures.query');
         $q = new Query();
 
@@ -646,7 +644,7 @@ class DataObjectFactory extends xarObject
 
         // Do direct queries here, for speed
         xarMod::load('dynamicdata');
-        $tables =  self::xarDB()->getTables();
+        $tables = xarDB3::getTables();
 
         sys::import('xaraya.structures.query');
         // TODO: delete all the (dynamic ?) data for this object

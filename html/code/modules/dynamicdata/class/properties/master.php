@@ -11,8 +11,8 @@
 
 // this is used in most methods below, so we import it here
 sys::import('modules.dynamicdata.class.objects.descriptor');
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 /**
  * Utility Class to manage Dynamic Properties
@@ -20,8 +20,6 @@ use Xaraya\Services\HasDatabaseStaticTrait;
  */
 class DataPropertyMaster extends xarObject
 {
-    use HasDatabaseStaticTrait;
-
     public const DD_DISPLAYSTATE_DISABLED = 0;
     public const DD_DISPLAYSTATE_ACTIVE = 1;
     public const DD_DISPLAYSTATE_DISPLAYONLY = 2;
@@ -52,9 +50,9 @@ class DataPropertyMaster extends xarObject
         xarLog::message("DataPropertyMaster::getProperties: Getting all properties", xarLog::LEVEL_DEBUG);
         // we can't use our own classes here, because we'd have an endless loop :-)
 
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable = self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 
@@ -336,7 +334,7 @@ class DataPropertyMaster extends xarObject
             return xarCoreCache::getCached('DynamicData', 'Configurations');
         }
         // Can't use DD methods here as we go into a recursion loop
-        $xartable = self::xarDB()->getTables();
+        $xartable = xarDB3::getTables();
         $configurations = $xartable['dynamic_configurations'];
 
         $bindvars = [];
@@ -349,9 +347,9 @@ class DataPropertyMaster extends xarObject
                             configuration
                     FROM $configurations ";
 
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
 
         $allconfigproperties = [];
         while ($result->next()) {

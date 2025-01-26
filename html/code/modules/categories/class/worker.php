@@ -13,13 +13,11 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 class CategoryWorker extends xarObject
 {
-    use HasDatabaseStaticTrait;
-
     protected $cattable;
     protected $basetable;
     protected $linktable;
@@ -38,9 +36,9 @@ class CategoryWorker extends xarObject
         sys::import('xaraya.structures.query');
         sys::import('modules.categories.xartables');
         // pass along the DB prefix to $tablefunc
-        $prefix = self::xarDB()->getPrefix();
-        self::xarDB()->importTables(categories_xartables($prefix));
-        $tables = self::xarDB()->getTables();
+        $prefix = xarDB3::getPrefix();
+        xarDB3::importTables(categories_xartables($prefix));
+        $tables = xarDB3::getTables();
         $this->table     = $tables['categories'];
         $this->cattable  = $tables['categories'];
         $this->basetable = $tables['categories_basecategories'];

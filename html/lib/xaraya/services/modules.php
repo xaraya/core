@@ -50,11 +50,12 @@ interface ModulesInterface extends ServiceInterface
     /** @return array<string, mixed> */
     public function getTables(?string $modName = null): array;
     public function isAvailable(?string $modName = null): bool;
+    public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed;
     public function getModule(?string $modName = null): ModuleInterface;
     /** @param array<string, mixed> $args */
-    public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName, array $args = []): mixed;
+    public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     /** @param array<string, mixed> $args */
-    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName, array $args = []): mixed;
+    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
 }
 
 /**
@@ -256,6 +257,20 @@ trait ModulesTrait
     }
 
     /**
+     * Load DB tables for this module
+     * @param ?string $modName
+     * @param ?string $modDir
+     * @return mixed
+     */
+    public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed
+    {
+        $modName ??= $this->getModName();
+        // preset module dir == module name here
+        $modDir ??= $modName;
+        return xarMod::loadDbInfo($modName, $modDir);
+    }
+
+    /**
      * Get module class for this module (if there is one)
      * @param ?string $modName
      * @return ModuleInterface
@@ -275,7 +290,7 @@ trait ModulesTrait
      * @throws \FunctionNotFoundException
      * @return mixed
      */
-    public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName, array $args = []): mixed
+    public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
@@ -301,7 +316,7 @@ trait ModulesTrait
      * @throws \FunctionNotFoundException
      * @return mixed
      */
-    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName, array $args = []): mixed
+    public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
@@ -330,6 +345,12 @@ trait ModulesTrait
  * - prepare() for current module itemtype
  * - getRegId()
  * - getInfo()
+ * - getTables()
+ * - isAvailable()
+ * - loadDbInfo()
+ * - getModule() - for modules using module classes
+ * - apiMethod()
+ * - guiMethod()
  * - ...
  *
  * Required methods in parent:

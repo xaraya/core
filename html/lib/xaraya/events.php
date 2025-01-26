@@ -42,8 +42,8 @@ use Xaraya\Context\Context;
  *
 **/
 
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 class EventRegistrationException extends RegistrationExceptions
 {
@@ -105,8 +105,6 @@ interface ixarEvents
 **/
 class xarEvents extends xarObject implements ixarEvents
 {
-    use HasDatabaseStaticTrait;
-
     // Event system itemtypes 
     const SUBJECT_TYPE       = 1;   // System event subjects, handles OBSERVER_TYPE events
     const OBSERVER_TYPE      = 2;   // System event observers
@@ -122,8 +120,8 @@ class xarEvents extends xarObject implements ixarEvents
     public static function init(array $args = array())
     {
         // Register tables this subsystem uses
-        $tables = array('eventsystem' => self::xarDB()->getPrefix() . '_eventsystem');
-        self::xarDB()->importTables($tables);
+        $tables = array('eventsystem' => xarDB3::getPrefix() . '_eventsystem');
+        xarDB3::importTables($tables);
         return true;
     }
 
@@ -389,8 +387,8 @@ class xarEvents extends xarObject implements ixarEvents
         }
         
          // create entry in db
-        $dbconn = self::xarDB()->getConn();
-        $tables = self::xarDB()->getTables();
+        $dbconn = xarDB3::getConn();
+        $tables = xarDB3::getTables();
         $bindvars = array();
         $emstable = $tables['eventsystem'];
         // support namespaces in modules (and core someday) - we may save $info['classname'] here
@@ -616,7 +614,7 @@ class xarEvents extends xarObject implements ixarEvents
         
         // Assemble the query
         sys::import('xaraya.structures.query');
-        $tables = self::xarDB()->getTables();
+        $tables = xarDB3::getTables();
         $q = new Query('DELETE', $tables['eventsystem']);
         $q->eq('itemtype', $itemtype);
         // @deprecated 2.4.1 this hasn't been around in a long while
@@ -690,8 +688,8 @@ class xarEvents extends xarObject implements ixarEvents
         $subjects = array();
 
         // Get database info
-        $dbconn   = self::xarDB()->getConn();
-        $xartable = self::xarDB()->getTables();
+        $dbconn   = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
         $bindvars = array();
@@ -761,8 +759,8 @@ class xarEvents extends xarObject implements ixarEvents
         }
         
         // Get database info
-        $dbconn   = self::xarDB()->getConn();
-        $xartable = self::xarDB()->getTables();
+        $dbconn   = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
         //$htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
@@ -833,8 +831,8 @@ class xarEvents extends xarObject implements ixarEvents
         }
         $_modules[$observertype] = array();
         // Get database info
-        $dbconn   = self::xarDB()->getConn();
-        $xartable = self::xarDB()->getTables();
+        $dbconn   = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
         //$htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];

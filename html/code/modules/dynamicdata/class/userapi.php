@@ -24,8 +24,8 @@ use FunctionNotFoundException;
 use sys;
 
 sys::import('modules.dynamicdata.class.traits.userapi');
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 /**
  * Handle (traditional) DD user api functions via module class
@@ -60,7 +60,6 @@ class UserApi implements UserApiInterface
 {
     /** @use UserApiTrait<Module> */
     use UserApiTrait;
-    use HasDatabaseStaticTrait;
 
     /**
      * Summary of other
@@ -103,7 +102,7 @@ class UserApi implements UserApiInterface
         if ($extensions) {
             // Get all the objects at once
             xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-            $xartable =  self::xarDB()->getTables();
+            $xartable = xarDB3::getTables();
 
             $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -118,9 +117,9 @@ class UserApi implements UserApiInterface
             $query .= " WHERE module_id = ? ";
             $bindvars[] = (int) $moduleId;
 
-            $dbconn = self::xarDB()->getConn();
+            $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, self::xarDB()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
 
             // put in itemtype as key for easier manipulation
             while ($result->next()) {

@@ -161,6 +161,7 @@ trait CoreServicesTrait
      *
      * Available methods:
      * - translate()
+     * - loadTranslations()
      * - ...
      *
      */
@@ -179,6 +180,12 @@ trait CoreServicesTrait
      * - getURL() for current module - or use ctl()->getModuleURL() with modName
      * - getRegId()
      * - getInfo()
+     * - getTables()
+     * - isAvailable()
+     * - loadDbInfo()
+     * - getModule() - for modules using module classes
+     * - apiMethod()
+     * - guiMethod()
      * - ...
      *
      * Required methods in parent:

@@ -22,8 +22,8 @@
 **/
 
 // @todo move functions to class methods and use Database Service
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseStaticTrait;
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
 
 /**
  * Public Functions:
@@ -498,8 +498,6 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
 
 class xarTableDDL extends xarObject
 {
-    use HasDatabaseStaticTrait;
-
     public static function init()
     {
         return true;
@@ -536,8 +534,6 @@ class xarTableDDL extends xarObject
 
 class xarXMLInstaller extends xarObject
 {
-    use HasDatabaseStaticTrait;
-
     private static $typesObject;
     
     // No constructor yet. maybe later
@@ -548,7 +544,7 @@ class xarXMLInstaller extends xarObject
             throw new BadParameterException(xarMLS::translate('No file to transform!'));
 
         // Get the database type from the connection
-		$databaseType = self::xarDB()->getType();
+		$databaseType = xarDB3::getType();
 		switch ($databaseType) {
 			case 'sqlite3':
 			case 'pdosqlite':
@@ -581,7 +577,7 @@ class xarXMLInstaller extends xarObject
         sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
-        $xslProc->setParameter('', 'tableprefix', self::xarDB()->getPrefix());
+        $xslProc->setParameter('', 'tableprefix', xarDB3::getPrefix());
         return $xslProc->transform($xmlFile);
     }
     
@@ -629,7 +625,7 @@ class xarXMLInstaller extends xarObject
         array_pop($queries);
 
         // Execute each of the queries
-        $dbconn = self::xarDB()->getConn();
+        $dbconn = xarDB3::getConn();
         foreach ($queries as $q) {
             xarLog::message('Executing SQL: ' . $q, xarLog::LEVEL_INFO);
             $dbconn->Execute($q);

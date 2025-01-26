@@ -32,6 +32,13 @@ interface MultiLanguageInterface extends ServiceInterface
      * @param mixed ...$args
      */
     public function translate($rawstring, ...$args): string;
+
+    /**
+     * Load translations for a file by path
+     * @param string $path
+     * @return bool
+     */
+    public function loadTranslations(string $path): bool;
 }
 
 /**
@@ -51,6 +58,17 @@ trait MultiLanguageTrait
     {
         return xarMLS::translate($rawstring, ...$args);
     }
+
+    /**
+     * Load translations for a file by path
+     * @uses xarMLS::loadTranslations()
+     * @param string $path
+     * @return bool
+     */
+    public function loadTranslations(string $path): bool
+    {
+        return xarMLS::loadTranslations($path);
+    }
 }
 
 /**
@@ -58,6 +76,7 @@ trait MultiLanguageTrait
  *
  * Available methods:
  * - translate()
+ * - loadTranslations()
  * - ...
  *
  */

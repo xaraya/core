@@ -18,7 +18,8 @@
  * @author Chris Powis <crisp@xaraya.com>
  */
 
-sys::import('xaraya.services.hasdatabasetrait');
+sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarDB3;
  
 class xarHooks extends xarEvents
 {
@@ -105,8 +106,8 @@ class xarHooks extends xarEvents
         $observers[$event] = array();
 
         // Get database info
-        $dbconn   = self::xarDB()->getConn();
-        $xartable = self::xarDB()->getTables();
+        $dbconn   = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
@@ -222,8 +223,8 @@ class xarHooks extends xarEvents
             if (!xarHooks::detach($observer, $subject, $itemtype, -1)) return;
         }        
         // Get database info
-        $dbconn   = self::xarDB()->getConn();
-        $xartable = self::xarDB()->getTables();
+        $dbconn   = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
         $htable = $xartable['hooks'];
         // Insert hook
         try {
@@ -269,8 +270,8 @@ class xarHooks extends xarEvents
         if (empty($itemtype)) $itemtype = 0;
                 
         // Get database info
-        $dbconn   = self::xarDB()->getConn();
-        $xartable = self::xarDB()->getTables();
+        $dbconn   = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
         $htable = $xartable['hooks'];
         // Delete hook
         try {
@@ -326,8 +327,8 @@ class xarHooks extends xarEvents
         if (empty($scope)) $scope = 0;
         
         // Get database info
-        $dbconn   = self::xarDB()->getConn();
-        $xartable = self::xarDB()->getTables();
+        $dbconn   = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
         $htable = $xartable['hooks'];
         $query = "SELECT observer, subject, itemtype, scope
                   FROM $htable
@@ -396,8 +397,8 @@ class xarHooks extends xarEvents
         }
         
         // Get database info
-        $dbconn   = self::xarDB()->getConn();
-        $xartable = self::xarDB()->getTables();
+        $dbconn   = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
@@ -445,8 +446,8 @@ class xarHooks extends xarEvents
         if (empty($subject_id)) return;
         
         // Get database info
-        $dbconn   = self::xarDB()->getConn();
-        $xartable = self::xarDB()->getTables();
+        $dbconn   = xarDB3::getConn();
+        $xartable = xarDB3::getTables();
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];

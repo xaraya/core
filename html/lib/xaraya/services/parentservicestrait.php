@@ -109,6 +109,7 @@ trait ParentServicesTrait
      *
      * Available methods:
      * - translate()
+     * - loadTranslations()
      * - ...
      *
      */
@@ -126,6 +127,12 @@ trait ParentServicesTrait
      * - getURL() for current module - or use ctl()->getModuleURL() with modName
      * - getRegId()
      * - getInfo()
+     * - getTables()
+     * - isAvailable()
+     * - loadDbInfo()
+     * - getModule() - for modules using module classes
+     * - apiMethod()
+     * - guiMethod()
      * - ...
      *
      * Required methods in parent:
