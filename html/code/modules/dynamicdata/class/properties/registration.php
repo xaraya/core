@@ -271,7 +271,7 @@ class PropertyRegistration extends DataContainer
                     $objectid = xarMod3::apiFunc('dynamicdata', 'util', 'import', $data);
                 }
                 xarLog3::notice('DynamicData: Looking for active modules');
-                $activeMods = xarMod3::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_ACTIVE]]);
+                $activeMods = xarMod3::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod3::STATE_ACTIVE]]);
                 assert(!empty($activeMods)); // this should never happen
                 xarLog3::debug('DynamicData: There are ' . count($activeMods) . ' active modules');
 

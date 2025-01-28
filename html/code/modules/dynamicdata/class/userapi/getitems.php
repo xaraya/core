@@ -59,17 +59,17 @@ class GetitemsMethod extends MethodClass
         $nullreturn = null;
         if (empty($module_id)) {
             if (empty($module)) {
-                $modname = xarMod::getName();
+                $modname = $this->mod()->getName();
             } else {
                 $modname = $module;
             }
             if (is_numeric($modname)) {
                 $module_id = $modname;
             } else {
-                $module_id = xarMod::getRegID($modname);
+                $module_id = $this->mod()->getRegID($modname);
             }
         }
-        $modinfo = xarMod::getInfo($module_id);
+        $modinfo = $this->mod()->getInfo($module_id);
 
         if (empty($itemtype)) {
             $itemtype = 0;

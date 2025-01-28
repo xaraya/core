@@ -67,7 +67,7 @@ class GetpropMethod extends MethodClass
         $module_id = $args['moduleid'];
 
         if (empty($module_id) && !empty($module)) {
-            $module_id = xarMod::getRegID($module);
+            $module_id = $this->mod()->getRegID($module);
         }
         if (empty($itemtype)) {
             $itemtype = 0;

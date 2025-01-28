@@ -453,7 +453,7 @@ class QueryMethod extends MethodClass
             if (!empty($table)) {
                 $data['sample'] = '&lt;xar:data-view table="' . $table . '" ';
             } else {
-                $modinfo = xarMod::getInfo($data['object']->moduleid);
+                $modinfo = $this->mod()->getInfo($data['object']->moduleid);
                 $modname = $modinfo['name'];
                 $data['sample'] = '&lt;xar:data-view module="' . $modname . '" itemtype="' . $data['object']->itemtype . '" ';
                 if (!empty($join)) {

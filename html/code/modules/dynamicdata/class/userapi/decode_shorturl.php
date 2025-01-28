@@ -55,7 +55,7 @@ class DecodeShorturlMethod extends MethodClass
 
         // Check if we're dealing with an alias here
         if ($params[0] != $module) {
-            $alias = xarModAlias::resolve($params[0]);
+            $alias = $this->mod()->resolveAlias($params[0]);
             // yup, looks like it
             if ($module == $alias) {
                 if (isset($objectcache[$params[0]])) {

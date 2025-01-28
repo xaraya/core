@@ -55,7 +55,7 @@ class ModifyconfigMethod extends MethodClass
             return;
         }
 
-        $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'dynamicdata']);
+        $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'dynamicdata']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, use_module_icons');
         $data['module_settings']->getItem();
         switch (strtolower($phase)) {
@@ -98,7 +98,7 @@ class ModifyconfigMethod extends MethodClass
                 $validadmins = array();
                 foreach ($admins as $admin) {
                     if (empty($admin)) continue;
-                    $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($admin)));
+                    $user = $this->mod()->apiFunc('roles','user','get',array('uname' => trim($admin)));
                     if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
                 }
                 $this->mod()->setVar('administrators', serialize($validadmins));

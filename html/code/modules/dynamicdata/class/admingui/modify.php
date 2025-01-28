@@ -173,8 +173,8 @@ class ModifyMethod extends MethodClass
                 $data['preview'] = $preview;
 
                 // Makes this hooks call explictly from DD - why ???
-                ////$modinfo = xarMod::getInfo($args['moduleid']);
-                //$modinfo = xarMod::getInfo(182);
+                ////$modinfo = $this->mod()->getInfo($args['moduleid']);
+                //$modinfo = $this->mod()->getInfo(182);
                 $object->callHooks('modify');
                 $data['hooks'] = $object->hookoutput;
 

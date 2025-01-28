@@ -79,7 +79,7 @@ class ImportpropertiesMethod extends MethodClass
                     'itemtype' => $itemtype]
             );
             if (!isset($object)) {
-                $modinfo = xarMod::getInfo($module_id);
+                $modinfo = $this->mod()->getInfo($module_id);
                 $name = $modinfo['name'];
                 if (!empty($itemtype)) {
                     $name .= '_' . $itemtype;

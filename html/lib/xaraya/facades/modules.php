@@ -32,6 +32,8 @@ sys::import('xaraya.services.servicefactory');
  */
 class xarMod3
 {
+    public const STATE_ACTIVE = xarMod::STATE_ACTIVE;
+
     /** @var ?ModulesInterface */
     protected static $xarMod = null;         // Access modules service with instance methods
 
@@ -69,9 +71,18 @@ class xarMod3
      * Get info from xarversion.php
      * @return array<string, mixed>
      */
-    public static function getInfo(string $modName): array
+    public static function getFileInfo(string $modName): array
     {
-        return self::getInstance()->getInfo($modName);
+        return self::getInstance()->getFileInfo($modName);
+    }
+
+    /**
+     * Get information on module
+     * @return array<string, mixed>
+     */
+    public function getInfo(int $modRegId): array
+    {
+        return self::getInstance()->getInfo($modRegId);
     }
 
     /**
@@ -138,7 +149,7 @@ class xarMod3
      * @param string $modType
      * @return mixed
      */
-    public static function load($modName, $modType)
+    public static function load($modName, $modType = 'user')
     {
         return self::getInstance()->load($modName, $modType);
     }
@@ -192,5 +203,15 @@ class xarMod3
     {
         // @todo handle context
         return self::getInstance()->guiMethod($modName, $modType, $funcName, $args);
+    }
+
+    /**
+     * Resolve module alias
+     * @param string $name
+     * @return string
+     */
+    public static function resolveAlias(string $name): string
+    {
+        return self::getInstance()->resolveAlias($name);
     }
 }

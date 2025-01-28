@@ -143,7 +143,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         }
         //FIXME where do we need to define the modname best?
         if (!empty($args['moduleid'])) {
-            $args['modname'] = xarMod::getName($args['moduleid']);
+            $args['modname'] = $this->mod()->getName($args['moduleid']);
         }
         return $args;
     }
@@ -159,7 +159,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         $this->descriptor = $descriptor;
         $descriptor->refresh($this);
 
-        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        $this->mod()->loadDbInfo('dynamicdata', 'dynamicdata');
 
         // use the object name as default template override (*-*-[template].x*)
         if (empty($this->template) && !empty($this->name)) {
@@ -509,8 +509,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             // instantiate UserApi class here!?
             sys::import('xaraya.database.databasetrait');
             if (class_exists($this->dbConnArgs[0]) && is_subclass_of($this->dbConnArgs[0], Xaraya\Database\DatabaseInterface::class)) {
-                // @todo avoid calling xarMod::getName() with xaraya db connection here - see virtual library offline
-                $modname = xarMod::getName($this->moduleid);
+                // @todo avoid calling $this->mod()->getName() with xaraya db connection here - see virtual library offline
+                $modname = $this->mod()->getName($this->moduleid);
                 $this->dbConnArgs[0] = new $this->dbConnArgs[0]($modname);
             }
         }
@@ -822,7 +822,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         } elseif (empty($this->primary)) {
             return;
             // if we already have some hook call in progress
-        } elseif (xarCoreCache::isCached('DynamicData', 'HookAction')) {
+        } elseif ($this->var()->isCached('DynamicData', 'HookAction')) {
             return;
         }
         // set context if available in dataobject
@@ -832,14 +832,14 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             $modname = 'dynamicdata';
         } else {
             // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
-            $modname = xarMod::getName($this->moduleid);
+            $modname = $this->mod()->getName($this->moduleid);
             if ($modname == 'articles' || $modname == 'roles') {
                 return;
             }
         }
 
         // CHECKME: prevent recursive hook calls in general
-        xarCoreCache::setCached('DynamicData', 'HookAction', $action);
+        $this->var()->setCached('DynamicData', 'HookAction', $action);
 
         // <chris> moved this from xarObjectHooks::initHookSubject()
         // This is the correct place to handle it, hooks system doesn't need to know
@@ -886,7 +886,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
 
         // add extra info for traditional hook modules
         // FIXME: This causes problems if you have a property named "module", "itemtype" etc.
-        //        $this->hookvalues['module'] = xarMod::getName($this->moduleid);
+        //        $this->hookvalues['module'] = $this->mod()->getName($this->moduleid);
         //        $this->hookvalues['itemtype'] = $this->itemtype;
         //        $this->hookvalues['itemid'] = $this->itemid;
         // CHECKME: is this sufficient in most cases, or do we need an explicit xarController::URL() ?
@@ -910,7 +910,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         // the result of GUI actions will be in $this->hookoutput
 
         // CHECKME: prevent recursive hook calls in general
-        xarCoreCache::delCached('DynamicData', 'HookAction');
+        $this->var()->delCached('DynamicData', 'HookAction');
     }
 
     /**

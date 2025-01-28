@@ -108,7 +108,7 @@ class ViewStaticMethod extends MethodClass
             $module_id = 182;
         }
         $data['module_id'] = $module_id;
-        $modInfo = xarMod::getInfo($module_id);
+        $modInfo = $this->mod()->getInfo($module_id);
         $data['module'] = $modInfo['name'];
         $data['itemtype'] = $itemtype;
         $data['authid'] = $this->sec()->genAuthKey();

@@ -139,8 +139,8 @@ class UpdateMethod extends MethodClass
                     }
 
                     // Makes this hooks call explictly from DD - why ???
-                    ////$modinfo = xarMod::getInfo($myobject->moduleid);
-                    //$modinfo = xarMod::getInfo(182);
+                    ////$modinfo = $this->mod()->getInfo($myobject->moduleid);
+                    //$modinfo = $this->mod()->getInfo(182);
                     $myobject->callHooks('modify');
                     $data['hooks'] = $myobject->hookoutput;
 
@@ -168,19 +168,19 @@ class UpdateMethod extends MethodClass
                 if ($myobject->objectid == 1) {
                     // check if we need to set a module alias (or remove it) for short URLs
                     $name = $myobject->properties['name']->value;
-                    $alias = xarModAlias::resolve($name);
+                    $alias = $this->mod()->resolveAlias($name);
                     $isalias = $myobject->properties['isalias']->value;
                     if (!empty($isalias)) {
                         // no alias defined yet, so we create one
                         if ($alias == $name) {
                             $args = ['modName' => 'dynamicdata', 'aliasModName' => $name];
-                            xarMod::apiFunc('modules', 'admin', 'add_module_alias', $args);
+                            $this->mod()->apiFunc('modules', 'admin', 'add_module_alias', $args);
                         }
                     } else {
                         // this was a defined alias, so we remove it
                         if ($alias == 'dynamicdata') {
                             $args = ['modName' => 'dynamicdata', 'aliasModName' => $name];
-                            xarMod::apiFunc('modules', 'admin', 'delete_module_alias', $args);
+                            $this->mod()->apiFunc('modules', 'admin', 'delete_module_alias', $args);
                         }
                     }
 

@@ -687,7 +687,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // pass some extra template variables for use in BL tags, API calls etc.
         $args['moduleid'] = $this->moduleid;
 
-        $modname = xarMod::getName($this->moduleid);
+        $modname = $this->mod()->getName($this->moduleid);
         $itemtype = $this->itemtype;
 
         // override for viewing dynamic objects
@@ -860,7 +860,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // Limit this to the dynamicdata module and maybe remove it altogether
         // This should be done in the templates
         // It is creating unnecessary shorturl encodes
-        $modname = xarMod::getName();
+        $modname = $this->mod()->getName();
         if ($modname == 'dynamicdata' || $modname == 'object') {
             if ($allow_read) {
                 $options['display'] = ['otitle' => $this->ml('Display'),

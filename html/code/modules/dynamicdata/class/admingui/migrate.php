@@ -138,10 +138,10 @@ class MigrateMethod extends MethodClass
         }
 
         // Get the list of all modules
-        $modlist = xarMod::apiFunc('modules', 'admin', 'getlist');
+        $modlist = $this->mod()->apiFunc('modules', 'admin', 'getlist');
 
         // Get the list of all hook modules, and the current hooks enabled for all modules
-        $hooklist = xarMod::apiFunc('modules', 'admin', 'gethooklist');
+        $hooklist = $this->mod()->apiFunc('modules', 'admin', 'gethooklist');
 
         $data = [];
 
@@ -155,7 +155,7 @@ class MigrateMethod extends MethodClass
 
         $data['modulesupported'] = [];
         foreach ($modsupported as $modname) {
-            $data['modulesupported'][] = xarMod::getRegID($modname);
+            $data['modulesupported'][] = $this->mod()->getRegID($modname);
         }
 
         // list of hooks supported by the migration process (for now)
@@ -170,10 +170,10 @@ class MigrateMethod extends MethodClass
             } elseif (!empty($from['module'])) {
                 // we have a from module
                 $data['from']['module'] = $from['module'];
-                $modinfo = xarMod::getInfo($from['module']);
+                $modinfo = $this->mod()->getInfo($from['module']);
                 // Get the list of all item types for this module (if any)
                 try {
-                    $itemtypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+                    $itemtypes = $this->mod()->apiFunc($modinfo['name'], 'user', 'getitemtypes');
                 } catch (Exception $e) {
                     $itemtypes = [];
                 }
@@ -196,7 +196,7 @@ class MigrateMethod extends MethodClass
 
                     // get the list of items for this module+itemtype
                     if (empty($from['itemid'])) {
-                        $items = xarMod::apiFunc(
+                        $items = $this->mod()->apiFunc(
                             $modinfo['name'],
                             'user',
                             'getitemlinks',
@@ -204,7 +204,7 @@ class MigrateMethod extends MethodClass
                                 'itemids'  => null]
                         );
                     } else {
-                        $items = xarMod::apiFunc(
+                        $items = $this->mod()->apiFunc(
                             $modinfo['name'],
                             'user',
                             'getitemlinks',
@@ -223,7 +223,7 @@ class MigrateMethod extends MethodClass
                     }
 
                     // get the list of fields for this module+itemtype
-                    $fields = xarMod::apiFunc(
+                    $fields = $this->mod()->apiFunc(
                         $modinfo['name'],
                         'user',
                         'getitemfields',
@@ -295,10 +295,10 @@ class MigrateMethod extends MethodClass
             } elseif (!empty($to['module'])) {
                 // we have a to module
                 $data['to']['module'] = $to['module'];
-                $modinfo = xarMod::getInfo($to['module']);
+                $modinfo = $this->mod()->getInfo($to['module']);
                 // Get the list of all item types for this module (if any)
                 try {
-                    $itemtypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+                    $itemtypes = $this->mod()->apiFunc($modinfo['name'], 'user', 'getitemtypes');
                 } catch (Exception $e) {
                     $itemtypes = [];
                 }
@@ -320,7 +320,7 @@ class MigrateMethod extends MethodClass
                     }
 
                     // get the list of fields for this module+itemtype
-                    $fields = xarMod::apiFunc(
+                    $fields = $this->mod()->apiFunc(
                         $modinfo['name'],
                         'user',
                         'getitemfields',

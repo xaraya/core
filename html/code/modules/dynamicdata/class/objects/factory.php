@@ -13,8 +13,12 @@
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.modules');
+sys::import('xaraya.facades.variables');
 use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMod3;
+use Xaraya\Facades\xarVar3;
 
 /**
  * Move static methods from DataObjectMaster to DataObjectFactory
@@ -31,7 +35,7 @@ class DataObjectFactory extends xarObject
     {
         extract($args);
         $dbconn = xarDB3::getConn();
-        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
         $xartable = xarDB3::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
@@ -103,12 +107,12 @@ class DataObjectFactory extends xarObject
             }
             $infoid = $args['moduleid'] . ':' . $args['itemtype'];
         }
-        if(xarCoreCache::isCached($cacheKey, $infoid)) {
-            return xarCoreCache::getCached($cacheKey, $infoid);
+        if(xarVar3::isCached($cacheKey, $infoid)) {
+            return xarVar3::getCached($cacheKey, $infoid);
         }
 
         $dbconn = xarDB3::getConn();
-        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
         $xartable = xarDB3::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
@@ -166,8 +170,8 @@ class DataObjectFactory extends xarObject
         ] = $result->fields;
         $result->close();
 
-        xarCoreCache::setCached($cacheKey, $info['objectid'], $info);
-        xarCoreCache::setCached($cacheKey, $info['name'], $info);
+        xarVar3::setCached($cacheKey, $info['objectid'], $info);
+        xarVar3::setCached($cacheKey, $info['name'], $info);
         return $info;
     }
 
@@ -184,11 +188,11 @@ class DataObjectFactory extends xarObject
         }
 
         $cacheKey = 'DynamicData._ObjectInfo';
-        if(isset($args['objectid']) && xarCoreCache::isCached($cacheKey, $args['objectid'])) {
-            return xarCoreCache::getCached($cacheKey, $args['objectid']);
+        if(isset($args['objectid']) && xarVar3::isCached($cacheKey, $args['objectid'])) {
+            return xarVar3::getCached($cacheKey, $args['objectid']);
         }
-        if(isset($args['name']) && xarCoreCache::isCached($cacheKey, $args['name'])) {
-            return xarCoreCache::getCached($cacheKey, $args['name']);
+        if(isset($args['name']) && xarVar3::isCached($cacheKey, $args['name'])) {
+            return xarVar3::getCached($cacheKey, $args['name']);
         }
 
         sys::import('modules.dynamicdata.xartables');
@@ -240,8 +244,8 @@ class DataObjectFactory extends xarObject
         $result = $q->output();
         $row = $q->row();
         if (!empty($row)) {
-            xarCoreCache::setCached($cacheKey, $row['object_id'], $result);
-            xarCoreCache::setCached($cacheKey, $row['object_name'], $result);
+            xarVar3::setCached($cacheKey, $row['object_id'], $result);
+            xarVar3::setCached($cacheKey, $row['object_name'], $result);
         }
         return $result;
     }
@@ -645,7 +649,7 @@ class DataObjectFactory extends xarObject
         }
 
         // Do direct queries here, for speed
-        xarMod::load('dynamicdata');
+        xarMod3::load('dynamicdata');
         $tables = xarDB3::getTables();
 
         sys::import('xaraya.structures.query');

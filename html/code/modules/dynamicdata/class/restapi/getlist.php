@@ -40,7 +40,7 @@ class GetlistMethod extends MethodClass
     public function __invoke($args = [])
     {
         $apilist = [];
-        // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
         $apilist['get_hello'] = [
             //'module' => 'dynamicdata',  // default = current module
             //'type' => 'rest',  // default = rest, other $type options are user, admin, ... as usual
@@ -53,7 +53,7 @@ class GetlistMethod extends MethodClass
             'description' => 'Call REST API get_hello() in module dynamicdata defined in code/modules/dynamicdata/xarrestapi/get_hello.php',
             'parameters' => ['name'],  // optional query parameter(s)
         ];
-        // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
         $apilist['post_hello'] = [
             //'type' => 'rest',  // default = rest, other options are user, admin, ... as usual
             'path' => 'hello',  // path to use in REST API operation /modules/{module}/{path}
@@ -63,7 +63,7 @@ class GetlistMethod extends MethodClass
             // @checkme verify/expand how POSTed values are defined - assuming simple json object with string props for now
             'requestBody' => ['application/json' => ['name', 'score']],  // optional requestBody
         ];
-        // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
         $apilist['getobjects'] = [
             'type' => 'user',  // default = rest, other options are user, admin, ... as usual
             'path' => 'anotherapi',  // path to use in REST API operation /modules/{module}/{path}
@@ -76,7 +76,7 @@ class GetlistMethod extends MethodClass
             //'caching' => false,  // optional disabling of caching e.g. if it overlaps with variable caching already
             //'paging' => false,  // add optional paging parameters
         ];
-        // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
         $apilist['export'] = [
             'type' => 'util',  // default = rest, other options are user, admin, ... as usual
             'path' => 'export',  // path to use in REST API operation /modules/{module}/{path}

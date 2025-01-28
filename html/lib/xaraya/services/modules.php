@@ -19,6 +19,7 @@ namespace Xaraya\Services;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Modules\ModuleInterface;
 use xarMod;
+use xarModAlias;
 use xarModVars;
 use xarController;
 use xarTpl;
@@ -48,16 +49,37 @@ interface ModulesInterface extends ServiceInterface
     public function getId(?string $modName = null): int|null;
     public function getRegID(?string $modName = null): int;
     /** @return array<string, mixed> */
-    public function getInfo(?string $modName = null): array;
+    public function getFileInfo(?string $modName = null): array;
+    /** @return array<string, mixed> */
+    public function getInfo(int $modRegId): array;
     /** @return array<string, mixed> */
     public function getTables(?string $modName = null): array;
     public function isAvailable(?string $modName = null): bool;
+    /**
+     * @param array<string, mixed> $args
+     * @return mixed
+     */
+    public function apiFunc($modName = null, $modType = null, $funcName = 'main', $args = []);
+    /**
+     * @return mixed
+     */
+    public function apiLoad($modName = null, $modType = null);
+    /**
+     * @param array<string, mixed> $args
+     * @return mixed
+     */
+    public function guiFunc($modName = null, $modType = null, $funcName = 'main', $args = []);
+    /**
+     * @return mixed
+     */
+    public function load($modName = null, $modType = null);
     public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed;
     public function getModule(?string $modName = null): ModuleInterface;
     /** @param array<string, mixed> $args */
     public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     /** @param array<string, mixed> $args */
     public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
+    public function resolveAlias(string $name): string;
 }
 
 /**
@@ -173,7 +195,7 @@ trait ModulesTrait
         $modName ??= $this->getModName();
         // avoid getting module id from xarMod::getRegID() here
         //return xarMod::getRegID($this->getModName());
-        $fileInfo = $this->getInfo($modName);
+        $fileInfo = $this->getFileInfo($modName);
         return (int) $fileInfo['regid'];
     }
 
@@ -181,10 +203,19 @@ trait ModulesTrait
      * Get info from xarversion.php
      * @return array<string, mixed>
      */
-    public function getInfo(?string $modName = null): array
+    public function getFileInfo(?string $modName = null): array
     {
         $modName ??= $this->getModName();
         return xarMod::getFileInfo($modName) ?? [];
+    }
+
+    /**
+     * Get information on module
+     * @return array<string, mixed>
+     */
+    public function getInfo(int $modRegId): array
+    {
+        return xarMod::getInfo($modRegId);
     }
 
     /**
@@ -350,6 +381,16 @@ trait ModulesTrait
             $callable[0]->setContext($this->getContext());
         }
         return $callable($args);
+    }
+
+    /**
+     * Resolve module alias
+     * @param string $name
+     * @return string
+     */
+    public function resolveAlias(string $name): string
+    {
+        return xarModAlias::resolve($name);
     }
 }
 

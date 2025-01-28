@@ -54,12 +54,12 @@ class GetstaticMethod extends MethodClass
         extract($args);
 
         if (empty($module_id) && !empty($module)) {
-            $module_id = xarMod::getRegID($module);
+            $module_id = $this->mod()->getRegID($module);
         }
         if (empty($module_id)) {
-            $module_id = xarMod::getRegID(xarMod::getName());
+            $module_id = $this->mod()->getRegID($this->mod()->getName());
         }
-        $modinfo = xarMod::getInfo($module_id);
+        $modinfo = $this->mod()->getInfo($module_id);
         if (empty($itemtype)) {
             $itemtype = 0;
         }
@@ -98,7 +98,7 @@ class GetstaticMethod extends MethodClass
         } else {
             ///        $dbTables = $dbInfo->getTables();
             // load the database info for this module
-            xarMod::loadDbInfo($modinfo['name'], $modinfo['directory']);
+            $this->mod()->loadDbInfo($modinfo['name'], $modinfo['directory']);
             // try to find any table that approximately matches the module
             $tables =  $this->db()->getTables();
             foreach ($tables as $curname => $curtable) {

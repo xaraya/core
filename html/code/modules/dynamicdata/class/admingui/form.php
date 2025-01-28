@@ -67,7 +67,7 @@ class FormMethod extends MethodClass
         }
 
         if (empty($module_id)) {
-            $module_id = xarMod::getRegID('dynamicdata');
+            $module_id = $this->mod()->getRegID('dynamicdata');
         }
         if (!isset($itemtype)) {
             $itemtype = 0;

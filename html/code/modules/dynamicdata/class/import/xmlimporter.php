@@ -32,7 +32,9 @@ sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.validations');
 sys::import('modules.dynamicdata.class.import.generic');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.modules');
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMod3;
 
 /**
  * DataObject XML Importer
@@ -171,9 +173,9 @@ class XmlImporter extends DataObjectImporter
         unset($args['objectid']);
 
         // Add an item to the object
-        $args['itemtype'] = xarMod::apiFunc(
+        $args['itemtype'] = xarMod3::apiMethod(
             'dynamicdata',
-            'admin',
+            'adminapi',
             'getnextitemtype',
             ['module_id' => $args['moduleid']]
         );

@@ -59,4 +59,14 @@ class xarVar3
     {
         self::getInstance()->delCached($scope, $name);
     }
+
+    public static function loadCached(string $scope, ?string $name = null): bool
+    {
+        return self::getInstance()->loadCached($scope, $name);
+    }
+
+    public static function saveCached(string $scope, ?string $name = null, ?string $source = null): bool
+    {
+        return self::getInstance()->saveCached($scope, $name, $source);
+    }
 }

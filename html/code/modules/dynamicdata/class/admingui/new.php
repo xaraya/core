@@ -111,8 +111,8 @@ class NewMethod extends MethodClass
         $data['authid'] = $this->sec()->genAuthKey();
 
         // Makes this hooks call explictly from DD - why ???
-        ////$modinfo = xarMod::getInfo($myobject->moduleid);
-        //$modinfo = xarMod::getInfo(182);
+        ////$modinfo = $this->mod()->getInfo($myobject->moduleid);
+        //$modinfo = $this->mod()->getInfo(182);
         $myobject->callHooks('new');
         $data['hooks'] = $myobject->hookoutput;
         $data['context'] ??= $myobject->getContext();

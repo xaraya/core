@@ -11,7 +11,11 @@
 
 sys::import('xaraya.structures.descriptor');
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.modules');
+sys::import('xaraya.facades.variables');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarMod3;
+use Xaraya\Facades\xarVar3;
 
 /*
  * generate the variables necessary to instantiate a DataObject or DataProperty class
@@ -29,13 +33,13 @@ class DataObjectDescriptor extends ObjectDescriptor
         foreach ($args as $key => &$value) {
             if (in_array($key, ['module','modid','module','moduleid'])) {
                 if (empty($value)) {
-                    $value = xarMod::getRegID(xarMod::getName());
+                    $value = xarMod3::getRegID(xarMod3::getName());
                 }
                 if (is_numeric($value) || is_integer($value)) {
                     $args['moduleid'] = $value;
                 } else {
-                    //$info = xarMod::getInfo(xarMod::getRegID($value));
-                    $args['moduleid'] = xarMod::getRegID($value);
+                    //$info = xarMod3::getInfo(xarMod3::getRegID($value));
+                    $args['moduleid'] = xarMod3::getRegID($value);
                 }
                 break;
             }
@@ -43,12 +47,12 @@ class DataObjectDescriptor extends ObjectDescriptor
         // Still not found?
         if (!isset($args['moduleid'])) {
             if (isset($args['fallbackmodule']) && ($args['fallbackmodule'] == 'current')) {
-                $args['fallbackmodule'] = xarMod::getName();
+                $args['fallbackmodule'] = xarMod3::getName();
             } else {
                 $args['fallbackmodule'] = 'dynamicdata';
             }
-            //$info = xarMod::getInfo(xarMod::getRegID($args['fallbackmodule']));
-            $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']);
+            //$info = xarMod3::getInfo(xarMod3::getRegID($args['fallbackmodule']));
+            $args['moduleid'] = xarMod3::getRegID($args['fallbackmodule']);
         }
         if (!isset($args['itemtype'])) {
             $args['itemtype'] = 0;
@@ -80,7 +84,7 @@ class DataObjectDescriptor extends ObjectDescriptor
         // object property is called module_id now instead of moduleid for whatever reason !?
         $args['module_id'] = $args['moduleid'];
         if (xarCore::isLoaded(xarCore::SYSTEM_TEMPLATES) && empty($args['tplmodule'])) {
-            $args['tplmodule'] = xarMod::getName($args['moduleid']);
+            $args['tplmodule'] = xarMod3::getName($args['moduleid']);
         }
         if (empty($args['template'])) {
             $args['template'] = $args['name'];
@@ -104,16 +108,16 @@ class DataObjectDescriptor extends ObjectDescriptor
     public static function findObject(array $args = [])
     {
         $cacheKey = 'DynamicData.FindObject';
-        if (!empty($args['objectid']) && xarCoreCache::isCached($cacheKey, $args['objectid'])) {
-            return xarCoreCache::getCached($cacheKey, $args['objectid']);
+        if (!empty($args['objectid']) && xarVar3::isCached($cacheKey, $args['objectid'])) {
+            return xarVar3::getCached($cacheKey, $args['objectid']);
         }
-        if (!empty($args['name']) && xarCoreCache::isCached($cacheKey, $args['name'])) {
-            return xarCoreCache::getCached($cacheKey, $args['name']);
+        if (!empty($args['name']) && xarVar3::isCached($cacheKey, $args['name'])) {
+            return xarVar3::getCached($cacheKey, $args['name']);
         }
-        if (!empty($args['moduleid']) && isset($args['itemtype']) && xarCoreCache::isCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype'])) {
-            return xarCoreCache::getCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype']);
+        if (!empty($args['moduleid']) && isset($args['itemtype']) && xarVar3::isCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype'])) {
+            return xarVar3::getCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype']);
         }
-        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
         $xartable = xarDB3::getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -155,13 +159,13 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['name'] = $row['name'];
         }
         if (!empty($args['objectid'])) {
-            xarCoreCache::setCached($cacheKey, $args['objectid'], $row);
+            xarVar3::setCached($cacheKey, $args['objectid'], $row);
         }
         if (!empty($args['name'])) {
-            xarCoreCache::setCached($cacheKey, $args['name'], $row);
+            xarVar3::setCached($cacheKey, $args['name'], $row);
         }
         if (!empty($args['moduleid']) && isset($args['itemtype'])) {
-            xarCoreCache::setCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype'], $row);
+            xarVar3::setCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype'], $row);
         }
         return $row;
     }

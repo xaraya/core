@@ -110,7 +110,7 @@ class UpdatehooksMethod extends MethodClass
             switch ($tohook) {
                 case 'categories':
                     // load table definitions et al.
-                    xarMod::apiLoad('categories', 'user');
+                    $this->mod()->apiLoad('categories', 'user');
                     $xartable =  $this->db()->getTables();
                     if (empty($xartable['categories_linkage'])) {
                         break;
@@ -127,7 +127,7 @@ class UpdatehooksMethod extends MethodClass
                 case 'ratings':
                 case 'xlink':
                     // load table definitions et al.
-                    xarMod::apiLoad($tohook, 'user');
+                    $this->mod()->apiLoad($tohook, 'user');
                     $xartable =  $this->db()->getTables();
                     if (empty($xartable[$tohook])) {
                         break;
@@ -140,7 +140,7 @@ class UpdatehooksMethod extends MethodClass
 
                 case 'comments':
                     // load table definitions et al.
-                    xarMod::apiLoad('comments', 'user');
+                    $this->mod()->apiLoad('comments', 'user');
                     $xartable =  $this->db()->getTables();
                     if (empty($xartable['comments'])) {
                         break;
@@ -157,7 +157,7 @@ class UpdatehooksMethod extends MethodClass
 
                 case 'polls':
                     // load table definitions et al.
-                    xarMod::apiLoad('polls', 'user');
+                    $this->mod()->apiLoad('polls', 'user');
                     $xartable =  $this->db()->getTables();
                     if (empty($xartable['polls'])) {
                         break;
@@ -176,7 +176,7 @@ class UpdatehooksMethod extends MethodClass
 
                 case 'uploads':
                     // load table definitions et al.
-                    xarMod::apiLoad('uploads', 'user');
+                    $this->mod()->apiLoad('uploads', 'user');
                     $xartable =  $this->db()->getTables();
                     if (empty($xartable['file_associations'])) {
                         break;

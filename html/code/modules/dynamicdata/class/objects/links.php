@@ -11,7 +11,9 @@
 
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.modules');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarMod3;
 
 /**
  * DataObjectLinks class
@@ -54,9 +56,9 @@ class DataObjectLinks extends xarObject
                 $def_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-def.xml';
                 $dat_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-dat.xml';
                 if (file_exists($def_file)) {
-                    $objectid = xarMod::apiFunc(
+                    $objectid = xarMod3::apiMethod(
                         'dynamicdata',
-                        'util',
+                        'utilapi',
                         'import',
                         ['file' => $def_file]
                     );
@@ -65,9 +67,9 @@ class DataObjectLinks extends xarObject
                     }
                 }
                 if (file_exists($dat_file)) {
-                    $objectid = xarMod::apiFunc(
+                    $objectid = xarMod3::apiMethod(
                         'dynamicdata',
-                        'util',
+                        'utilapi',
                         'import',
                         ['file' => $dat_file]
                     );
@@ -566,13 +568,13 @@ class DataObjectLinks extends xarObject
     public static function getMapping()
     {
         // load tables for 'dynamic_data'
-        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
         $xartables = xarDB3::getTables();
 
         $mapping = [];
-        $properties = xarMod::apiFunc(
+        $properties = xarMod3::apiMethod(
             'dynamicdata',
-            'user',
+            'userapi',
             'getobjectlist',
             ['name' => 'properties',
                                             'fieldlist' => ['name','objectid','source']]

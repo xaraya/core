@@ -94,7 +94,7 @@ class Installer extends InstallerClass
             #
             # Create the object and property dataobjects
             #
-            $module_id = xarMod::getRegID('dynamicdata');
+            $module_id = $this->mod()->getRegID('dynamicdata');
 
             // create default objects for dynamic data
             $sql = "INSERT INTO $dynamic_objects (

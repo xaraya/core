@@ -237,7 +237,7 @@ class TestApisMethod extends MethodClass
             }
         }
         $data['modules'] = DataObjectRESTBuilder::get_potential_modules($mergedlist);
-        $all_modules = xarMod::apiFunc('modules', 'admin', 'getitems');
+        $all_modules = $this->mod()->apiFunc('modules', 'admin', 'getitems');
         $data['othermodules'] = [];
         foreach ($all_modules as $item) {
             if (!array_key_exists($item['name'], $data['modules'])) {

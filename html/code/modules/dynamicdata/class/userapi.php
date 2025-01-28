@@ -25,7 +25,9 @@ use sys;
 
 sys::import('modules.dynamicdata.class.traits.userapi');
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.modules');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarMod3;
 
 /**
  * Handle (traditional) DD user api functions via module class
@@ -33,7 +35,7 @@ use Xaraya\Facades\xarDB3;
  *
  * @method mixed countitems(array $args = []) utility function to count the number of items held by this module
  * @method mixed decodeShorturl(array $args = []) extract function and arguments from short URLs for this module, and pass - them back to xarGetRequestInfo()
- * @method mixed dropdownlist(array $args = []) Get an array of DD items (itemid => fieldvalue) for use in dropdown lists - E.g. to specify the parent of an item for parent-child relationships, - add a dynamic data field of type Dropdown List with the configuration rule - xarMod::apiFunc('dynamicdata','user','dropdownlist',array('field' => 'name','module' => 'dynamicdata','itemtype' => 2))
+ * @method mixed dropdownlist(array $args = []) Get an array of DD items (itemid => fieldvalue) for use in dropdown lists - E.g. to specify the parent of an item for parent-child relationships, - add a dynamic data field of type Dropdown List with the configuration rule - xarMod3::apiMethod('dynamicdata','userapi','dropdownlist',array('field' => 'name','module' => 'dynamicdata','itemtype' => 2))
  * @method mixed encodeShorturl(array $args = []) return the path for a short URL to xarController::URL for this module
  * @method mixed getfield(array $args = []) get a specific item field
  * @method mixed getitem(array $args = []) get all data fields (dynamic or static) for an item - (identified by module + item type + item id or table + item id)
@@ -86,14 +88,14 @@ class UserApi implements UserApiInterface
      */
     public static function findModuleItemTypes($moduleId, $native = false, $extensions = true): array
     {
-        $module = xarMod::getName($moduleId);
+        $module = xarMod3::getName($moduleId);
 
         $types = [];
         if ($native) {
             // Try to get the itemtypes
             try {
                 // @todo create an adaptor class for procedural getitemtypes in modules
-                $types = xarMod::apiFunc($module, 'user', 'getitemtypes', []);
+                $types = xarMod3::apiFunc($module, 'user', 'getitemtypes', []);
             } catch (FunctionNotFoundException) {
                 // No worries
             }
@@ -101,7 +103,7 @@ class UserApi implements UserApiInterface
         // @todo combine with getItemTypes()
         if ($extensions) {
             // Get all the objects at once
-            xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+            xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
             $xartable = xarDB3::getTables();
 
             $dynamicobjects = $xartable['dynamic_objects'];

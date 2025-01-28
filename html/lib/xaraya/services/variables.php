@@ -120,6 +120,8 @@ interface VariablesInterface extends ServiceInterface
     public function getCached(string $scope, string $name): mixed;
     public function setCached(string $scope, string $name, mixed $value): void;
     public function delCached(string $scope, string $name): void;
+    public function loadCached(string $scope, ?string $name = null): bool;
+    public function saveCached(string $scope, ?string $name = null, ?string $source = null): bool;
 }
 
 /**
@@ -298,6 +300,16 @@ trait VariablesTrait
     public function delCached(string $scope, string $name): void
     {
         xarCoreCache::delCached($scope, $name);
+    }
+
+    public function loadCached(string $scope, ?string $name = null): bool
+    {
+        return xarCoreCache::loadCached($scope, $name);
+    }
+
+    public function saveCached(string $scope, ?string $name = null, ?string $source = null): bool
+    {
+        return xarCoreCache::saveCached($scope, $name, $source);
     }
 }
 

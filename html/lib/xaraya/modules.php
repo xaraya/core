@@ -249,7 +249,7 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modName The name of the module
      * @return int|void The module registry ID.
      */
-    public static function getId($modName)
+    public static function getID($modName)
     {
         $ids = self::getIds($modName);
         if (!isset($ids) || !isset($ids['systemid'])) {

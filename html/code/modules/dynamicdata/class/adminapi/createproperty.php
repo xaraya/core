@@ -69,7 +69,7 @@ class CreatepropertyMethod extends MethodClass
 
         if (empty($moduleid)) {
             // defaults to the current module
-            $moduleid = xarMod::getRegID(xarMod::getName());
+            $moduleid = $this->mod()->getRegID($this->mod()->getName());
         }
         if (empty($itemtype)) {
             $itemtype = 0;

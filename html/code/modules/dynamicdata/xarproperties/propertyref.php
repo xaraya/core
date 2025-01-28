@@ -98,7 +98,7 @@ class PropertyRefProperty extends SelectProperty
             $info = $this->data()->getObjectInfo(['name' => $objectname]);
             if (empty($info) || empty($info['objectid'])) {
                 // try table name
-                $fields = xarMod::apiFunc(
+                $fields = $this->mod()->apiMethod(
                     'dynamicdata',
                     'util',
                     'getmeta',

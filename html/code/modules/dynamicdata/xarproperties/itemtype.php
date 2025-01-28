@@ -26,10 +26,10 @@ sys::import('modules.base.xarproperties.combobox');
  *       show the list of items for that module+itemtype via getitemlinks()
  *       E.g. "articles.1" = the list of articles in publication type 1 News Articles
  *
- *   TOCHECK: module.itemtype:xarMod::apiFunc(...)
- *       show some list of "item types" for that module via xarMod::apiFunc(...)
+ *   TOCHECK: module.itemtype:$this->mod()->apiFunc(...)
+ *       show some list of "item types" for that module via $this->mod()->apiFunc(...)
  *       and use itemtype to retrieve individual items via getitemlinks()
- *       E.g. "articles.1:xarMod::apiFunc('articles','user','dropdownlist',array('ptid' => 1, 'where' => ...))"
+ *       E.g. "articles.1:$this->mod()->apiFunc('articles','user','dropdownlist',array('ptid' => 1, 'where' => ...))"
  *       = some filtered list of articles in publication type 1 News Articles
  *
  *   TODO: support 2nd API call to retrieve the item in case getitemlinks() isn't supported
@@ -94,14 +94,14 @@ class ItemTypeProperty extends ComboProperty
         /*
         if (is_numeric($this->initialization_module)) {
             // we should have a regid here, if we don't get the module name
-            $this->initialization_module = xarMod::getName($this->initialization_module);
+            $this->initialization_module = $this->mod()->getName($this->initialization_module);
         }
         */
         $options = [];
         if (empty($this->initialization_itemtype)) {
             // we're interested in the module itemtypes (= default behaviour)
             try {
-                $itemtypes = xarMod::apiFunc($this->initialization_module, 'user', 'getitemtypes');
+                $itemtypes = $this->mod()->apiFunc($this->initialization_module, 'user', 'getitemtypes');
                 if (!empty($itemtypes)) {
                     foreach ($itemtypes as $typeid => $typeinfo) {
                         if (isset($typeid) && isset($typeinfo['label'])) {
@@ -115,7 +115,7 @@ class ItemTypeProperty extends ComboProperty
         } elseif (empty($this->initialization_func)) {
             // we're interested in the items for module+itemtype
             try {
-                $itemlinks = xarMod::apiFunc(
+                $itemlinks = $this->mod()->apiFunc(
                     $this->initialization_module,
                     'user',
                     'getitemlinks',

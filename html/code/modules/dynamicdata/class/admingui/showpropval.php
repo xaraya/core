@@ -110,7 +110,7 @@ class ShowpropvalMethod extends MethodClass
         /* FIXME: can we do without this hardwiring? Comment out for now
         $module_id = $myobject->properties['module_id']->value;
         $itemtype = $myobject->properties['itemtype']->value;
-        $modinfo = xarMod::getInfo($module_id);
+        $modinfo = $this->mod()->getInfo($module_id);
         if (xarModHooks::isHooked('uploads', $modinfo['name'], $itemtype)) {
             $this->var()->setCached('Hooks.uploads','ishooked',1);
         }

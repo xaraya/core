@@ -54,7 +54,7 @@ class EncodeShorturlMethod extends MethodClass
         $path = '';
         // if we want to add some common arguments as URL parameters below
         $join = '?';
-        // we can't rely on xarMod::getName() here !
+        // we can't rely on $this->mod()->getName() here !
         $module = 'dynamicdata';
 
         // return immediately when we're dealing with the main function (don't load unnecessary stuff)
@@ -64,7 +64,7 @@ class EncodeShorturlMethod extends MethodClass
 
         // fill in default values
         if (empty($module_id)) {
-            $module_id = xarMod::getRegID('dynamicdata');
+            $module_id = $this->mod()->getRegID('dynamicdata');
         }
         if (empty($itemtype)) {
             $itemtype = 0;
@@ -84,7 +84,7 @@ class EncodeShorturlMethod extends MethodClass
         } elseif ($func == 'view') {
             if (!empty($objectcache[$module_id . ':' . $itemtype])) {
                 $name = $objectcache[$module_id . ':' . $itemtype];
-                $alias = xarModAlias::resolve($name);
+                $alias = $this->mod()->resolveAlias($name);
                 if ($module == $alias) {
                     // OK, we can use a 'fake' module name here
                     $path = '/' . $name . '/';
@@ -100,7 +100,7 @@ class EncodeShorturlMethod extends MethodClass
         } elseif ($func == 'display' && isset($itemid)) {
             if (!empty($objectcache[$module_id . ':' . $itemtype])) {
                 $name = $objectcache[$module_id . ':' . $itemtype];
-                $alias = xarModAlias::resolve($name);
+                $alias = $this->mod()->resolveAlias($name);
                 if ($module == $alias) {
                     // OK, we can use a 'fake' module name here
                     $path = '/' . $name . '/' . $itemid;

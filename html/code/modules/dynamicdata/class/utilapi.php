@@ -114,10 +114,10 @@ class UtilApi extends UserApi implements DatabaseInterface
     public function getAllDatabases()
     {
         // find any modules with module variable 'databases'
-        $all_modules = xarMod::apiFunc('modules', 'admin', 'getitems');
+        $all_modules = $this->mod()->apiFunc('modules', 'admin', 'getitems');
         $all_databases = [];
         foreach ($all_modules as $item) {
-            $databases = xarModVars::get($item['name'], 'databases');
+            $databases = $this->mod()->getVar('databases', $item['name']);
             if (empty($databases)) {
                 continue;
             }
@@ -126,12 +126,12 @@ class UtilApi extends UserApi implements DatabaseInterface
         }
         // save databases in core cache if needed
         $old_databases = [];
-        if (xarCoreCache::isCached('DynamicData', 'Databases')) {
-            $old_databases = xarCoreCache::getCached('DynamicData', 'Databases');
+        if ($this->var()->isCached('DynamicData', 'Databases')) {
+            $old_databases = $this->var()->getCached('DynamicData', 'Databases');
         }
         if (json_encode($old_databases) != json_encode($all_databases)) {
-            xarCoreCache::setCached('DynamicData', 'Databases', $all_databases);
-            xarCoreCache::saveCached('DynamicData', 'Databases', __METHOD__);
+            $this->var()->setCached('DynamicData', 'Databases', $all_databases);
+            $this->var()->saveCached('DynamicData', 'Databases', __METHOD__);
         }
         return $all_databases;
     }

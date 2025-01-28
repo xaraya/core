@@ -110,7 +110,7 @@ class UpdatepropMethod extends MethodClass
             $module_id = $objectinfo['moduleid'];
             $itemtype = $objectinfo['itemtype'];
         } elseif (!empty($module_id)) {
-            $modinfo = xarMod::getInfo($module_id);
+            $modinfo = $this->mod()->getInfo($module_id);
             if (!empty($modinfo['name'])) {
                 $name = $modinfo['name'];
                 if (!empty($itemtype)) {
@@ -239,7 +239,7 @@ class UpdatepropMethod extends MethodClass
         DataObjectFactory::flushVariableCache(['objectid' => $objectid]);
 
         if ($isprimary) {
-            $modinfo = xarMod::getInfo($module_id);
+            $modinfo = $this->mod()->getInfo($module_id);
             xarModHooks::call(
                 'module',
                 'updateconfig',

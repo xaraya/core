@@ -1564,6 +1564,8 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarVar::getCached\(/' => '\$this->var()->getCached(',
             '/xarVar::setCached\(/' => '\$this->var()->setCached(',
             '/xarVar::delCached\(/' => '\$this->var()->delCached(',
+            '/xarVar::loadCached\(/' => '\$this->var()->loadCached(',
+            '/xarVar::saveCached\(/' => '\$this->var()->saveCached(',
             '/xarCoreCache::isCached\(/' => '\$this->var()->isCached(',
             '/xarCoreCache::getCached\(/' => '\$this->var()->getCached(',
             '/xarCoreCache::setCached\(/' => '\$this->var()->setCached(',
@@ -1601,11 +1603,24 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             // @todo handle xarMod*::* - note: this assumes you set $module !
             '/xarModVars::get\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->getVar(',
             '/xarModVars::set\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->setVar(',
+            '/xarMod::apiFunc\((\s*\'' . $module . '\',\s*)/s' => '\$this->mod()->apiMethod($1',
+            '/xarMod::guiFunc\((\s*\'' . $module . '\',\s*)/s' => '\$this->mod()->guiMethod($1',
+            // @todo those can probably be removed - note: this assumes you set $module !
+            '/xarMod::apiLoad\((\s*\'' . $module . '\',\s*)/s' => '\$this->mod()->apiLoad($1',
+            '/xarMod::load\((\s*\'' . $module . '\',\s*)/s' => '\$this->mod()->load($1',
+            // @todo replace other module calls - note: this assumes you set $module !
+            '/xarMod::apiFunc\(/' => '\$this->mod()->apiFunc(',
+            '/xarMod::guiFunc\(/' => '\$this->mod()->guiFunc(',
+            '/xarMod::apiLoad\(/' => '\$this->mod()->apiLoad(',
+            '/xarMod::load\(/' => '\$this->mod()->load(',
             '/xarMod::getName\(/' => '\$this->mod()->getName(',
             '/xarMod::getID\(/' => '\$this->mod()->getID(',
             '/xarMod::getRegID\(/' => '\$this->mod()->getRegID(',
+            '/xarMod::getFileInfo\(/' => '\$this->mod()->getFileInfo(',
+            '/xarMod::getInfo\(/' => '\$this->mod()->getInfo(',
             '/xarMod::isAvailable\(/' => '\$this->mod()->isAvailable(',
             '/xarMod::loadDbInfo\(/' => '\$this->mod()->loadDbInfo(',
+            '/xarModAlias::resolve\(/' => '\$this->mod()->resolveAlias(',
             // @todo handle xarDB*::* - note: excl. meta and newConn
             '/xarDB::getConn\(/' => '\$this->db()->getConn(',
             '/xarDB::getName\(/' => '\$this->db()->getName(',
@@ -1649,10 +1664,9 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             $contents = preg_replace($search, $replace, $contents, -1, $count);
             if ($update && $count > 0 && !empty($contents)) {
                 file_put_contents($class['file'], $contents);
+            } elseif ($count > 0) {
+                $this->log('Still replacements in ' . $class['file'], true);
             }
-            //if ($count > 0) {
-            //    $this->log('Still replacements in ' . $class['file'], true);
-            //}
             $files += 1;
             $total += $count;
         }
@@ -1818,9 +1832,9 @@ $refresh = false;
 //$migrator->check_method_casing();
 $replace = false;
 //$migrator->document_module_methods('dynamicdata', '', $replace);
-//$found = $migrator->replace_method_services('dynamicdata', '', $replace);
-//$found = $migrator->replace_property_services('dynamicdata', $replace);
-//$found = $migrator->replace_block_services('dynamicdata', $replace);
+$found = $migrator->replace_method_services('dynamicdata', '', $replace);
+$found = $migrator->replace_property_services('dynamicdata', $replace);
+$found = $migrator->replace_block_services('dynamicdata', $replace);
 //$migrator->replace_internal_methods('dynamicdata', '', $replace);
 [$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '/class/');
 file_put_contents('call_dependencies.json', $migrator->to_json($summary));

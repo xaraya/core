@@ -218,7 +218,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['localmodule'])) {
             $this->localmodule = $data['localmodule'];
         } else {
-            $this->localmodule = xarMod::getName();
+            $this->localmodule = $this->mod()->getName();
             $data['localmodule'] = $this->localmodule;
         }
 
@@ -333,7 +333,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['localmodule'])) {
             $this->localmodule = $data['localmodule'];
         } else {
-            $this->localmodule = xarMod::getName();
+            $this->localmodule = $this->mod()->getName();
             $data['localmodule'] = $this->localmodule;
         }
 

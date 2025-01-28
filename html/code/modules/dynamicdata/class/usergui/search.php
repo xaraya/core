@@ -90,7 +90,7 @@ class SearchMethod extends MethodClass
                 $data['gotobject'] = 1;
             }
             if (empty($module_id)) {
-                $module_id = xarMod::getRegID('dynamicdata');
+                $module_id = $this->mod()->getRegID('dynamicdata');
             }
             if (empty($itemtype)) {
                 $itemtype = 0;
@@ -126,7 +126,7 @@ class SearchMethod extends MethodClass
         }
 
         $data['items'] = [];
-        $mymodid = xarMod::getRegID('dynamicdata');
+        $mymodid = $this->mod()->getRegID('dynamicdata');
         if ($data['ishooked']) {
             $myfunc = 'view';
         } else {

@@ -51,7 +51,7 @@ class ViewPropertydefsMethod extends MethodClass
 
         $data['authid'] = $this->sec()->genAuthKey();
 
-        if (!xarMod::apiLoad('dynamicdata', 'user')) {
+        if (!$this->mod()->apiLoad('dynamicdata', 'user')) {
             return;
         }
         $data['fields'] = $this->prop()->getPropertyTypes();

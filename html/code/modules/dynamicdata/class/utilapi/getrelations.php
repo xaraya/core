@@ -52,12 +52,12 @@ class GetrelationsMethod extends MethodClass
         extract($args);
 
         if (empty($module_id) && !empty($module)) {
-            $module_id = xarMod::getRegID($module);
+            $module_id = $this->mod()->getRegID($module);
         }
         if (empty($module_id)) {
-            $module_id = xarMod::getRegID(xarMod::getName());
+            $module_id = $this->mod()->getRegID($this->mod()->getName());
         }
-        $modinfo = xarMod::getInfo($module_id);
+        $modinfo = $this->mod()->getInfo($module_id);
         if (empty($itemtype)) {
             $itemtype = 0;
         }
@@ -109,7 +109,7 @@ class GetrelationsMethod extends MethodClass
             // for each enabled hook module
             foreach ($modlist as $mod => $val) {
                 // get the list of static properties for this hook module
-                $modstatic = $utilapi->getstatic(['module_id' => xarMod::getRegID($mod)]);
+                $modstatic = $utilapi->getstatic(['module_id' => $this->mod()->getRegID($mod)]);
                 // skip this for now
                 //      'itemtype' => $itemtype));
                 // TODO: automatically find the link(s) on module, item type, item id etc.

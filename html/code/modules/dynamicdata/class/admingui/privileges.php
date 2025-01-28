@@ -107,7 +107,7 @@ class PrivilegesMethod extends MethodClass
             if (empty($moduleid) || $moduleid == 'All') {
                 $moduleid = 0;
             } elseif (!is_numeric($moduleid)) { // for pre-wizard instances
-                $module_id = xarMod::getRegID($moduleid);
+                $module_id = $this->mod()->getRegID($moduleid);
                 if (!empty($module_id)) {
                     $moduleid = $module_id;
                 } else {
@@ -136,7 +136,7 @@ class PrivilegesMethod extends MethodClass
 
         if (!empty($apply)) {
             // create/update the privilege
-            $pid = xarMod::apiFunc('privileges', 'admin', 'returnprivilege', [
+            $pid = $this->mod()->apiFunc('privileges', 'admin', 'returnprivilege', [
                 'pid' => $extpid,
                 'name' => $extname,
                 'realm' => $extrealm,
@@ -166,7 +166,7 @@ class PrivilegesMethod extends MethodClass
         // Get module list
         $modlist = [];
         // Get a list of all modules - we just want their IDs
-        $all_modules = xarMod::apiFunc('modules', 'admin', 'getlist');
+        $all_modules = $this->mod()->apiFunc('modules', 'admin', 'getlist');
         $all_module_ids = [];
         foreach ($all_modules as $this_module) {
             $all_module_ids[] = $this_module['regid'];
@@ -175,7 +175,7 @@ class PrivilegesMethod extends MethodClass
             $module_id = $object['moduleid'];
             // Check whether the module exists before trying to fetch the details.
             if (in_array($module_id, $all_module_ids)) {
-                $modinfo = xarMod::getInfo($module_id);
+                $modinfo = $this->mod()->getInfo($module_id);
                 $modlist[$module_id] = $modinfo['displayname'];
             }
         }

@@ -105,7 +105,7 @@ class MigrateMethod extends MethodClass
             $itemids = explode(',', $from['itemid']);
         }
 
-        $modinfo = xarMod::getInfo($from['module']);
+        $modinfo = $this->mod()->getInfo($from['module']);
         if (empty($modinfo)) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
             $vars = ['from module', 'admin', 'migrate', 'DynamicData'];
@@ -113,7 +113,7 @@ class MigrateMethod extends MethodClass
         }
         $modulefrom = $modinfo['name'];
 
-        $modinfo = xarMod::getInfo($to['module']);
+        $modinfo = $this->mod()->getInfo($to['module']);
         if (empty($modinfo)) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
             $vars = ['to module', 'admin', 'migrate', 'DynamicData'];
@@ -126,7 +126,7 @@ class MigrateMethod extends MethodClass
         $items = [];
         switch ($modulefrom) {
             case 'articles':
-                $articles = xarMod::apiFunc(
+                $articles = $this->mod()->apiFunc(
                     'articles',
                     'user',
                     'getall',
@@ -154,7 +154,7 @@ class MigrateMethod extends MethodClass
                 break;
 
             case 'xarbb':
-                $topics = xarMod::apiFunc(
+                $topics = $this->mod()->apiFunc(
                     'xarbb',
                     'user',
                     'getalltopics',
@@ -176,7 +176,7 @@ class MigrateMethod extends MethodClass
                 break;
 
             case 'xarpages':
-                $items = xarMod::apiFunc(
+                $items = $this->mod()->apiFunc(
                     'xarpages',
                     'user',
                     'getpages',
@@ -201,7 +201,7 @@ class MigrateMethod extends MethodClass
 
         // get the list of fields for this module+itemtype
         try {
-            $fields = xarMod::apiFunc(
+            $fields = $this->mod()->apiFunc(
                 $moduleto,
                 'user',
                 'getitemfields',
@@ -254,7 +254,7 @@ class MigrateMethod extends MethodClass
                             continue;
                         }
                         if (empty($debug)) {
-                            if (!xarMod::apiFunc('articles', 'admin', 'update', $article)) {
+                            if (!$this->mod()->apiFunc('articles', 'admin', 'update', $article)) {
                                 return;
                             }
                         } else {
@@ -287,7 +287,7 @@ class MigrateMethod extends MethodClass
                             $article['aid'] = $itemid; // this may give us trouble with create hooks
                         }
                         if (empty($debug)) {
-                            $newid = xarMod::apiFunc('articles', 'admin', 'create', $article);
+                            $newid = $this->mod()->apiFunc('articles', 'admin', 'create', $article);
                             if (empty($newid)) {
                                 return;
                             }
@@ -370,7 +370,7 @@ class MigrateMethod extends MethodClass
                             $topic['time'] = $topic['ttime'];
                         }
                         if (empty($debug)) {
-                            if (!xarMod::apiFunc('xarbb', 'user', 'updatetopic', $topic)) {
+                            if (!$this->mod()->apiFunc('xarbb', 'user', 'updatetopic', $topic)) {
                                 return;
                             }
                         } else {
@@ -408,7 +408,7 @@ class MigrateMethod extends MethodClass
                             $topic['tid'] = $itemid; // this may give us trouble with create hooks
                         }
                         if (empty($debug)) {
-                            $newid = xarMod::apiFunc('xarbb', 'user', 'createtopic', $topic);
+                            $newid = $this->mod()->apiFunc('xarbb', 'user', 'createtopic', $topic);
                             if (empty($newid)) {
                                 return;
                             }
@@ -461,7 +461,7 @@ class MigrateMethod extends MethodClass
                             continue;
                         }
                         if (empty($debug)) {
-                            if (!xarMod::apiFunc('xarpages', 'admin', 'updatepage', $page)) {
+                            if (!$this->mod()->apiFunc('xarpages', 'admin', 'updatepage', $page)) {
                                 return;
                             }
                         } else {
@@ -495,7 +495,7 @@ class MigrateMethod extends MethodClass
                             $page['pid'] = $itemid; // this may give us trouble with create hooks
                         }
                         if (empty($debug)) {
-                            $newid = xarMod::apiFunc('xarpages', 'admin', 'createpage', $page);
+                            $newid = $this->mod()->apiFunc('xarpages', 'admin', 'createpage', $page);
                             if (empty($newid)) {
                                 return;
                             }
@@ -548,7 +548,7 @@ class MigrateMethod extends MethodClass
             switch ($modulefrom) {
                 case 'articles':
                     if (empty($debug)) {
-                        if (!xarMod::apiFunc(
+                        if (!$this->mod()->apiFunc(
                             'articles',
                             'admin',
                             'delete',
@@ -588,7 +588,7 @@ class MigrateMethod extends MethodClass
 
                 case 'xarbb':
                     if (empty($debug)) {
-                        if (!xarMod::apiFunc(
+                        if (!$this->mod()->apiFunc(
                             'xarbb',
                             'admin',
                             'deletetopics',
@@ -614,7 +614,7 @@ class MigrateMethod extends MethodClass
         if ($modulefrom == 'xarbb') {
             if (empty($debug)) {
                 // re-sync original forum
-                if (!xarMod::apiFunc(
+                if (!$this->mod()->apiFunc(
                     'xarbb',
                     'admin',
                     'sync',
@@ -636,7 +636,7 @@ class MigrateMethod extends MethodClass
                     if (empty($itemid) || empty($newid)) {
                         continue;
                     }
-                    if (!xarMod::apiFunc(
+                    if (!$this->mod()->apiFunc(
                         'xarbb',
                         'user',
                         'updatetopicsview',
@@ -646,7 +646,7 @@ class MigrateMethod extends MethodClass
                     }
                 }
                 // re-sync new forum
-                if (!xarMod::apiFunc(
+                if (!$this->mod()->apiFunc(
                     'xarbb',
                     'admin',
                     'sync',

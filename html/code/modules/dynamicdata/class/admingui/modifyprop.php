@@ -128,7 +128,7 @@ class ModifypropMethod extends MethodClass
         // Generate a one-time authorisation code for this operation
         $data['authid'] = $this->sec()->genAuthKey();
 
-        $modinfo = xarMod::getInfo($module_id);
+        $modinfo = $this->mod()->getInfo($module_id);
         if (!isset($objectinfo)) {
             $data['objectid'] = null;
             if (!empty($itemtype)) {

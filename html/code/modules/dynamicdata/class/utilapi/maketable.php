@@ -74,7 +74,7 @@ class MaketableMethod extends MethodClass
                 $objectid = null;
             }
             if (empty($module_id)) {
-                $module_id = xarMod::getRegID('dynamicdata');
+                $module_id = $this->mod()->getRegID('dynamicdata');
             }
             if (empty($itemtype)) {
                 $itemtype = 0;
