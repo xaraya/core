@@ -34,7 +34,7 @@ class xarLog3
     /** @var ?LoggerInterface */
     protected static $xarLog = null;         // Access logger service with instance methods
 
-    public static function getInstance()
+    public static function getInstance(): LoggerInterface
     {
         self::$xarLog ??= ServiceFactory::getLoggerService(__METHOD__);
         return self::$xarLog;

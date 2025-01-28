@@ -39,7 +39,7 @@ function categories_adminapi_removehook(array $args = [], $context = null)
         throw new BadParameterException(null, $msg);
     }
 
-    $modid = xarMod::getRegId($objectid);
+    $modid = xarMod::getRegID($objectid);
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 'module ID', 'admin', 'removehook', 'categories');
         throw new BadParameterException(null, $msg);
@@ -55,7 +55,7 @@ function categories_adminapi_removehook(array $args = [], $context = null)
     // Delete the link
     $sql = "DELETE FROM $categorieslinkagetable
             WHERE module_id = ?";
-    $dbconn->Execute($sql,array(xarMod::getId($objectid)));
+    $dbconn->Execute($sql,array(xarMod::getID($objectid)));
 
     if ($dbconn->ErrorNo() != 0) {
         $msg = xarML('Database error for #(1) function #(2)() in module #(3)','admin', 'removehook', 'categories');

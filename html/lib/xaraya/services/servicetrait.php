@@ -29,8 +29,8 @@ sys::import('xaraya.context.context');
  */
 interface ServiceInterface extends ContextInterface
 {
-    public function __construct(ServicesInterface $parent);
-    public function getParent(): ServicesInterface;
+    public function __construct(mixed $parent);
+    public function getParent(): mixed;
 }
 
 /**
@@ -40,12 +40,12 @@ trait ServiceTrait
 {
     use ContextTrait;
 
-    public ServicesInterface $parent;
+    public mixed $parent;
 
     /**
      * Create service class for parent
      */
-    public function __construct(ServicesInterface $parent)
+    public function __construct(mixed $parent)
     {
         $this->parent = $parent;
     }
@@ -53,8 +53,10 @@ trait ServiceTrait
     /**
      * Get parent of service class
      */
-    public function getParent(): ServicesInterface
+    public function getParent(): mixed
     {
+        // @todo this should only be called when parent has services interface
+        assert($this->parent instanceof ServicesInterface);
         return $this->parent;
     }
 
@@ -71,7 +73,7 @@ trait ServiceTrait
      * Summary of create
      * @todo could be called from ServiceFactory - currently not used
      */
-    public static function create(ServicesInterface $parent): static
+    public static function create(mixed $parent): static
     {
         return new static($parent);
     }

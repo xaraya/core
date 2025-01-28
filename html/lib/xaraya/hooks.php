@@ -137,9 +137,9 @@ class xarHooks extends xarEvents
         // The common case is hooking DD to some itemtype that is already a dataobject:
         // We pass the itemid of the object through the hooks call, causing DD to display an object of the same itemid, which is of course the original object
         if (!empty($args['exclude_module'])) {
-            //$query .= " AND mo.regid NOT IN ('" . join("','", xarMod::getRegId($extraInfo['exclude_module'])) . "')"; 
+            //$query .= " AND mo.regid NOT IN ('" . join("','", xarMod::getRegID($extraInfo['exclude_module'])) . "')"; 
             foreach ($args['exclude_module'] as $excluded_module) {
-                $where[] = "mo.regid != " . xarMod::getRegId($excluded_module);
+                $where[] = "mo.regid != " . xarMod::getRegID($excluded_module);
             }
         }
         
@@ -392,7 +392,7 @@ class xarHooks extends xarEvents
         if (empty($observer_id)) return;
 
         if (!empty($subject)) {
-            $subject_id = xarMod::getRegId($subject);
+            $subject_id = xarMod::getRegID($subject);
             if (empty($subject_id)) return;
         }
         
@@ -442,7 +442,7 @@ class xarHooks extends xarEvents
         if (isset($itemtype) && !is_numeric($itemtype))
             throw new BadParameterException('itemtype', 'Invalid #(1) for xarHooks::getSubjectObservers()');
         
-        $subject_id = xarMod::getRegId($subject);
+        $subject_id = xarMod::getRegID($subject);
         if (empty($subject_id)) return;
         
         // Get database info

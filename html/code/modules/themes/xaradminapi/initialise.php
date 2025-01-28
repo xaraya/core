@@ -24,7 +24,7 @@ function themes_adminapi_initialise(array $args = [], $context = null)
 
     extract($args);
 
-    if (isset($name)) $regid = xarMod::getRegId($name, 'theme');
+    if (isset($name)) $regid = xarMod::getRegID($name, 'theme');
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get theme information

@@ -116,10 +116,10 @@ interface VariablesInterface extends ServiceInterface
      */
     public function prepHTML(...$args);
 
-    public static function isCached(string $scope, string $name): bool;
-    public static function getCached(string $scope, string $name): mixed;
-    public static function setCached(string $scope, string $name, mixed $value): void;
-    public static function delCached(string $scope, string $name): void;
+    public function isCached(string $scope, string $name): bool;
+    public function getCached(string $scope, string $name): mixed;
+    public function setCached(string $scope, string $name, mixed $value): void;
+    public function delCached(string $scope, string $name): void;
 }
 
 /**
@@ -280,22 +280,22 @@ trait VariablesTrait
         return xarVar::prepHTMLDisplay(...$args);
     }
 
-    public static function isCached(string $scope, string $name): bool
+    public function isCached(string $scope, string $name): bool
     {
         return xarCoreCache::isCached($scope, $name);
     }
 
-    public static function getCached(string $scope, string $name): mixed
+    public function getCached(string $scope, string $name): mixed
     {
         return xarCoreCache::getCached($scope, $name);
     }
 
-    public static function setCached(string $scope, string $name, mixed $value): void
+    public function setCached(string $scope, string $name, mixed $value): void
     {
         xarCoreCache::setCached($scope, $name, $value);
     }
 
-    public static function delCached(string $scope, string $name): void
+    public function delCached(string $scope, string $name): void
     {
         xarCoreCache::delCached($scope, $name);
     }

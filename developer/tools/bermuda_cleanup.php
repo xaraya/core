@@ -1552,6 +1552,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         $mapping = [
             '/xarML\(/' => '\$this->ml(',
             '/xarMLS::translate\(/' => '\$this->ml(',
+            '/xarMLS::loadTranslations\(/' => '\$this->mls()->loadTranslations(',
             // @todo differentiate based on xarLog::* level
             '/xarLog::message\(/' => '\$this->log()->message(',
             '/xarLog::variable\(/' => '\$this->log()->variable(',
@@ -1600,6 +1601,11 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             // @todo handle xarMod*::* - note: this assumes you set $module !
             '/xarModVars::get\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->getVar(',
             '/xarModVars::set\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->setVar(',
+            '/xarMod::getName\(/' => '\$this->mod()->getName(',
+            '/xarMod::getID\(/' => '\$this->mod()->getID(',
+            '/xarMod::getRegID\(/' => '\$this->mod()->getRegID(',
+            '/xarMod::isAvailable\(/' => '\$this->mod()->isAvailable(',
+            '/xarMod::loadDbInfo\(/' => '\$this->mod()->loadDbInfo(',
             // @todo handle xarDB*::* - note: excl. meta and newConn
             '/xarDB::getConn\(/' => '\$this->db()->getConn(',
             '/xarDB::getName\(/' => '\$this->db()->getName(',

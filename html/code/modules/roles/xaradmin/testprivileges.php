@@ -88,7 +88,7 @@ function roles_admin_testprivileges(array $args = [], $context = null)
         }
         $data['testmasks'] = $testmaskarray;
         $modName = $mask->getModule();
-        $modRegId = xarMod::getRegId($modName);
+        $modRegId = xarMod::getRegID($modName);
     }
     // no test yet
     // Load Template

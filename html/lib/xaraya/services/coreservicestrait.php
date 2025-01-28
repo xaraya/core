@@ -162,6 +162,7 @@ trait CoreServicesTrait
      * Available methods:
      * - translate()
      * - loadTranslations()
+     * - loadObjectTranslations()
      * - ...
      *
      */
@@ -178,7 +179,9 @@ trait CoreServicesTrait
      * - getVar()
      * - setVar()
      * - getURL() for current module - or use ctl()->getModuleURL() with modName
-     * - getRegId()
+     * - getName()
+     * - getID()
+     * - getRegID()
      * - getInfo()
      * - getTables()
      * - isAvailable()

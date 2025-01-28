@@ -110,6 +110,7 @@ trait ParentServicesTrait
      * Available methods:
      * - translate()
      * - loadTranslations()
+     * - loadObjectTranslations()
      * - ...
      *
      */
@@ -125,7 +126,9 @@ trait ParentServicesTrait
      * - getVar()
      * - setVar()
      * - getURL() for current module - or use ctl()->getModuleURL() with modName
-     * - getRegId()
+     * - getName()
+     * - getID()
+     * - getRegID()
      * - getInfo()
      * - getTables()
      * - isAvailable()
@@ -330,6 +333,7 @@ trait ParentServicesTrait
 
     public function getParent(): ServicesInterface
     {
+        assert($this->parent instanceof ServicesInterface);
         return $this->parent;
     }
 }

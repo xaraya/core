@@ -229,7 +229,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
     {
         // If we are set up to do so, translate this value
         if ($this->translatable && $this->mod()->isAvailable('translations')) {
-            xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $this->objectref->name, $this->name);
+            $this->mls()->loadObjectTranslations($this->objectref->name, $this->name);
             $value = $this->ml($this->value);
         } else {
             $value = $this->value;
@@ -283,7 +283,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      * Check the input value of this property
      *
      * @param string $name name of the input field (default is 'dd_NN' with NN the property id)
-     * @param mixed  $value value of the input field (default is retrieved via xarVar::fetch())
+     * @param mixed  $value value of the input field (default is retrieved via $this->fetchValue())
      * @return bool|null|void
      * @todo some of the overrides return null or void instead of bool
      */
@@ -539,9 +539,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
                 }
             }
         }
-        // Pass along the object context for xarTpl::property()
-        $data['context'] ??= $this->objectref?->getContext();
-        return xarTpl::property($data['tplmodule'], $data['template'], 'showinput', $data);
+        return $this->tpl()->property($data['tplmodule'], $data['template'], 'showinput', $data);
     }
 
     /**
@@ -579,8 +577,8 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         }
 
         // If we are set up to do so, translate this value
-        if ($this->translatable && xarMod::isAvailable('translations')) {
-            xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $this->objectref->name, $this->name);
+        if ($this->translatable && $this->mod()->isAvailable('translations')) {
+            $this->mls()->loadObjectTranslations($this->objectref->name, $this->name);
             $data['value'] = $this->ml($data['value']);
         }
 
@@ -614,9 +612,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
                 }
             }
         }
-        // Pass along the object context for xarTpl::property()
-        $data['context'] ??= $this->objectref?->getContext();
-        return xarTpl::property($data['tplmodule'], $data['template'], 'showoutput', $data);
+        return $this->tpl()->property($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
 
     /**
@@ -676,9 +672,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if(!isset($data['title'])) {
             $data['title']   = $this->display_tooltip;
         }
-        // Pass along the object context for xarTpl::property()
-        $data['context'] ??= $this->objectref?->getContext();
-        return xarTpl::property($data['tplmodule'], $data['template'], 'label', $data);
+        return $this->tpl()->property($data['tplmodule'], $data['template'], 'label', $data);
     }
 
     /**
@@ -776,9 +770,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         if(!isset($data['layout'])) {
             $data['layout']   = $this->layout;
         }
-        // Pass along the object context for xarTpl::property()
-        $data['context'] ??= $this->objectref?->getContext();
-        return xarTpl::property($data['tplmodule'], $data['template'], 'filter', $data);
+        return $this->tpl()->property($data['tplmodule'], $data['template'], 'filter', $data);
     }
 
     /**
@@ -837,9 +829,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             $data['layout']   = $this->layout;
         }
 
-        // Pass along the object context for xarTpl::property()
-        $data['context'] ??= $this->objectref?->getContext();
-        return xarTpl::property($data['tplmodule'], $data['template'], 'showhidden', $data);
+        return $this->tpl()->property($data['tplmodule'], $data['template'], 'showhidden', $data);
     }
 
     /**
@@ -1002,9 +992,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
                 $data['validation'][$msgname] = '';
             }
         }
-        // Pass along the object context for xarTpl::property()
-        $data['context'] ??= $this->objectref?->getContext();
-        return xarTpl::property($data['module'], $data['template'], 'configuration', $data);
+        return $this->tpl()->property($data['module'], $data['template'], 'configuration', $data);
     }
 
     /**

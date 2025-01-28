@@ -74,7 +74,7 @@ trait ItemLinksTrait
         if (!empty(static::$_itemlinkObjects[$this->getModName()])) {
             return static::$_itemlinkObjects[$this->getModName()];
         }
-        $moduleId = $this->mod()->getRegId();
+        $moduleId = $this->mod()->getRegID();
         $objects = DataObjectFactory::getObjects();
         static::$_itemlinkObjects[$this->getModName()] = [];
         foreach ($objects as $objectid => $objectinfo) {
@@ -170,7 +170,7 @@ trait ItemLinksTrait
         }
 
         // for items managed by this module itself only
-        $moduleId = $this->mod()->getRegId();
+        $moduleId = $this->mod()->getRegID();
         $args = $this->data()->getObjectID([
             'moduleid'  => $moduleId,
             'itemtype'  => $itemtype,

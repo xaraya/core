@@ -237,7 +237,7 @@ class xarMod extends xarObject implements IxarMod
      * @param string $type determines theme or module
      * @return int|null The module registry ID.
      */
-    public static function getRegId($modName, $type = 'module')
+    public static function getRegID($modName, $type = 'module')
     {
         $ids = self::getIds($modName, $type);
         return (isset($ids['regid']) && !is_null($ids['regid'])) ? (int) $ids['regid'] : null;
@@ -247,7 +247,7 @@ class xarMod extends xarObject implements IxarMod
      * Get module system ID by name
      *
      * @param string $modName The name of the module
-     * @return string|void The module registry ID.
+     * @return int|void The module registry ID.
      */
     public static function getId($modName)
     {
@@ -255,7 +255,7 @@ class xarMod extends xarObject implements IxarMod
         if (!isset($ids) || !isset($ids['systemid'])) {
             return;
         }
-        return $ids['systemid'];
+        return (int) $ids['systemid'];
     }
 
     /**
@@ -1144,7 +1144,7 @@ class xarMod extends xarObject implements IxarMod
      */
     public static function checkVersion($modName)
     {
-        $modInfo = self::getInfo(self::getRegId($modName));
+        $modInfo = self::getInfo(self::getRegID($modName));
         if ((strpos($modInfo['class'], 'Core') !== false)) {
             return $modInfo['version'] == xarCore::VERSION_NUM;
         } else {

@@ -44,7 +44,7 @@ function categories_admin_modifyhook(array $args = [], $context = null)
     }
 
     $data['module'] = $modname;
-    $modid = xarMod::getRegId($modname);
+    $modid = xarMod::getRegID($modname);
 
 /* ---------------------------- TODO: Remove
     if (empty($modid)) {

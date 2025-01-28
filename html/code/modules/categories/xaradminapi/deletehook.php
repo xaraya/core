@@ -41,7 +41,7 @@ function categories_adminapi_deletehook(array $args = [], $context = null)
         $modname = $extrainfo['module'];
     }
 
-    $modid = xarMod::getRegId($modname);
+    $modid = xarMod::getRegID($modname);
     if (empty($modid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 'module name', 'admin', 'deletehook', 'categories');
         throw new BadParameterException(null, $msg);

@@ -44,7 +44,9 @@ interface ModulesInterface extends ServiceInterface
      * @return array<string, mixed>
      */
     public function prepare(array $tplData = []): array;
-    public function getRegId(?string $modName = null): int;
+    public function getName(?int $regID = null): string;
+    public function getId(?string $modName = null): int|null;
+    public function getRegID(?string $modName = null): int;
     /** @return array<string, mixed> */
     public function getInfo(?string $modName = null): array;
     /** @return array<string, mixed> */
@@ -147,13 +149,30 @@ trait ModulesTrait
     }
 
     /**
-     * Get module registry ID for this module
+     * Get module name for this module
      */
-    public function getRegId(?string $modName = null): int
+    public function getName(?int $regID = null): string
+    {
+        return xarMod::getName($regID);
+    }
+
+    /**
+     * Get module system ID for this module (internal)
+     */
+    public function getID(?string $modName = null): int|null
+    {
+        $modName ??= $this->getModName();
+        return xarMod::getID($modName);
+    }
+
+    /**
+     * Get module registry ID for this module (fixed)
+     */
+    public function getRegID(?string $modName = null): int
     {
         $modName ??= $this->getModName();
         // avoid getting module id from xarMod::getRegID() here
-        //return xarMod::getRegId($this->getModName());
+        //return xarMod::getRegID($this->getModName());
         $fileInfo = $this->getInfo($modName);
         return (int) $fileInfo['regid'];
     }
@@ -343,7 +362,9 @@ trait ModulesTrait
  * - getURL() for current module - or use ctl()->URL() in general with modName
  * - template() for current module type - or use tpl()->module() in general with modName modType
  * - prepare() for current module itemtype
- * - getRegId()
+ * - getName()
+ * - getID()
+ * - getRegID()
  * - getInfo()
  * - getTables()
  * - isAvailable()

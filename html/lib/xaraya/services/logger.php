@@ -27,17 +27,9 @@ sys::import('xaraya.services.servicetrait');
  * Note: this aligns with PSR-3 interface for future compatibility
  * @see \Xaraya\Bridge\Logging\LoggerBridge
  */
-interface LoggerInterface
+interface LoggerInterface extends ServiceInterface
 {
-    /** Adapted from ServiceInterface to allow any parent here */
-
-    public function __construct(mixed $parent = null);
-
-    public function getParent(): mixed;
-
     public static function create(mixed $parent = null): LoggerInterface;
-
-    /** Service-specific methods */
 
     public function message(string|\Stringable $message, int $level = 0): void;
 
@@ -76,6 +68,8 @@ interface LoggerInterface
  */
 trait LoggerTrait
 {
+    use ServiceTrait;
+
     /** @var array<string, int> */
     protected array $mapping = [
         'emergency' => xarLog::LEVEL_EMERGENCY,
@@ -88,26 +82,7 @@ trait LoggerTrait
         'debug' => xarLog::LEVEL_DEBUG,
     ];
 
-    /** Adapted from ServiceTrait to allow any parent here */
-
     protected static ?LoggerInterface $xarLog = null;
-    public mixed $parent;
-
-    /**
-     * Create service class for parent
-     */
-    public function __construct(mixed $parent = null)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
-     * Get parent of service class
-     */
-    public function getParent(): mixed
-    {
-        return $this->parent;
-    }
 
     /**
      * Summary of create
@@ -118,8 +93,6 @@ trait LoggerTrait
         self::$xarLog ??= new self($parent);
         return self::$xarLog;
     }
-
-    /** Service-specific methods */
 
     public function message(string|\Stringable $message, int $level = 0): void
     {

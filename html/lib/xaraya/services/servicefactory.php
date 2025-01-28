@@ -46,7 +46,7 @@ class ServiceFactory
     /**
      * Summary of getMultiLanguageService
      */
-    public static function getMultiLanguageService(ServicesInterface $parent): MultiLanguageInterface
+    public static function getMultiLanguageService(object|string|null $parent): MultiLanguageInterface
     {
         self::log(__METHOD__, $parent);
         return new MultiLanguageService($parent);
@@ -55,7 +55,7 @@ class ServiceFactory
     /**
      * Summary of getModulesService
      */
-    public static function getModulesService(ServicesInterface $parent): ModulesInterface
+    public static function getModulesService(object|string|null $parent): ModulesInterface
     {
         self::log(__METHOD__, $parent);
         return new ModulesService($parent);
@@ -82,7 +82,7 @@ class ServiceFactory
     /**
      * Summary of getVariablesService
      */
-    public static function getVariablesService(ServicesInterface $parent): VariablesInterface
+    public static function getVariablesService(object|string|null $parent): VariablesInterface
     {
         self::log(__METHOD__, $parent);
         return new VariablesService($parent);

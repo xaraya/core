@@ -167,7 +167,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
 
     public function xar_moduleid($modName)
     {
-        return xarMod::getRegId($modName);
+        return xarMod::getRegID($modName);
     }
 
     /**

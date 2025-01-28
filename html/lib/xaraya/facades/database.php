@@ -36,7 +36,7 @@ class xarDB3
     /** @var ?DatabaseInterface */
     protected static $xarDB = null;         // Access database service with instance methods
 
-    public static function getInstance()
+    public static function getInstance(): DatabaseInterface
     {
         self::$xarDB ??= ServiceFactory::getDatabaseService(__METHOD__);
         return self::$xarDB;

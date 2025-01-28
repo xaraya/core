@@ -17,7 +17,7 @@ function sql_211_02()
     $module_vars = xarDB::getPrefix() . '_module_vars';
     $dd_objects = xarDB::getPrefix() . '_dynamic_objects';
     $dd_properties = xarDB::getPrefix() . '_dynamic_properties';
-    $themesid = xarMod::getId('themes');
+    $themesid = xarMod::getID('themes');
 
     // Define the task and result
     $data['success'] = true;

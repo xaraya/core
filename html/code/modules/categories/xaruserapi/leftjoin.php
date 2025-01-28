@@ -22,7 +22,7 @@
  *           WHERE ...
  *               AND $where // this includes module_id = <your module ID>
  *
- * @param $args['modid'] your module ID (use xarMod::getRegId('mymodule'))
+ * @param $args['modid'] your module ID (use xarMod::getRegID('mymodule'))
  * @param $args['itemtype'] your item type (default is none) or array of itemtypes
  * @param $args['iids'] optional array of item ids that we are selecting on
  * @param $args['cids'] optional array of cids we're counting for (OR/AND)

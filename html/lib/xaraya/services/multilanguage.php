@@ -39,6 +39,14 @@ interface MultiLanguageInterface extends ServiceInterface
      * @return bool
      */
     public function loadTranslations(string $path): bool;
+
+    /**
+     * Load translations for a data object property
+     * @param string $objectName
+     * @param string $propertyName
+     * @return bool
+     */
+    public function loadObjectTranslations(string $objectName, string $propertyName): bool;
 }
 
 /**
@@ -69,6 +77,17 @@ trait MultiLanguageTrait
     {
         return xarMLS::loadTranslations($path);
     }
+
+    /**
+     * Load translations for a data object property
+     * @param string $objectName
+     * @param string $propertyName
+     * @return bool
+     */
+    public function loadObjectTranslations(string $objectName, string $propertyName): bool
+    {
+        return xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $objectName, $propertyName);
+    }
 }
 
 /**
@@ -77,6 +96,7 @@ trait MultiLanguageTrait
  * Available methods:
  * - translate()
  * - loadTranslations()
+ * - loadObjectTranslations()
  * - ...
  *
  */

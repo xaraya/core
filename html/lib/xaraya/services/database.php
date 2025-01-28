@@ -31,17 +31,9 @@ use xarDB;
  * @todo align with xarDB, xarDB_Interface and ExternalDatabase
  * (not underlying xarDB_Creole, xarDB_PDO and external drivers)
  */
-interface DatabaseInterface
+interface DatabaseInterface extends ServiceInterface
 {
-    /** Adapted from ServiceInterface to allow any parent here */
-
-    public function __construct(mixed $parent = null);
-
-    public function getParent(): mixed;
-
     public static function create(mixed $parent = null): DatabaseInterface;
-
-    /** Service-specific methods */
 
     public function &getConn(int|string $index = 0): object;
 
@@ -80,26 +72,9 @@ interface DatabaseInterface
  */
 trait DatabaseTrait
 {
-    /** Adapted from ServiceTrait to allow any parent here */
+    use ServiceTrait;
 
     protected static ?DatabaseInterface $xarDB = null;
-    public mixed $parent;
-
-    /**
-     * Create service class for parent
-     */
-    public function __construct(mixed $parent = null)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
-     * Get parent of service class
-     */
-    public function getParent(): mixed
-    {
-        return $this->parent;
-    }
 
     /**
      * Summary of create
@@ -110,8 +85,6 @@ trait DatabaseTrait
         self::$xarDB ??= new self($parent);
         return self::$xarDB;
     }
-
-    /** Service-specific methods */
 
     /**
      * Summary of getConn

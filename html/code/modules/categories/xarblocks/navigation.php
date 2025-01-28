@@ -78,7 +78,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
         } else {
             $modname = $module;
         }
-        $modid = xarMod::getRegId($modname);
+        $modid = xarMod::getRegID($modname);
         if (empty($modid)) {
             return;
         }

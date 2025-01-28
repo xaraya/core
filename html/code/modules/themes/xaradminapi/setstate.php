@@ -25,7 +25,7 @@ function themes_adminapi_setstate(array $args = [], $context = null)
     extract($args);
 
     // Argument check
-    if (isset($name)) $regid = xarMod::getRegId($name, 'theme');
+    if (isset($name)) $regid = xarMod::getRegID($name, 'theme');
     if (!isset($regid)) throw new EmptyParameterException('regid');
     if (!isset($state)) throw new EmptyParameterException('state');
 

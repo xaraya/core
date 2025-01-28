@@ -13,8 +13,14 @@
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.modules');
+sys::import('xaraya.facades.multilanguage');
+sys::import('xaraya.facades.variables');
 use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMod3;
+use Xaraya\Facades\xarMLS3;
+use Xaraya\Facades\xarVar3;
 
 /**
  * Utility Class to manage Dynamic Properties
@@ -53,7 +59,7 @@ class DataPropertyMaster extends xarObject
         // we can't use our own classes here, because we'd have an endless loop :-)
 
         $dbconn = xarDB3::getConn();
-        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
         $xartable = xarDB3::getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
@@ -202,7 +208,7 @@ class DataPropertyMaster extends xarObject
     public static function &getProperty(array $args = [])
     {
         if(!isset($args['name']) && !isset($args['type'])) {
-            throw new BadParameterException(null, xarMLS::translate('The getProperty method needs either a name or type parameter.'));
+            throw new BadParameterException(null, xarMLS3::translate('The getProperty method needs either a name or type parameter.'));
         }
 
         if(isset($args['name']) || !is_numeric($args['type'])) {
@@ -250,7 +256,7 @@ class DataPropertyMaster extends xarObject
                 sys::import($dp);
 
                 // Load the translations for this file
-                $loaded = xarMLS::loadTranslations($propertyfile);
+                $loaded = xarMLS3::loadTranslations($propertyfile);
                 if (!$loaded) {
                     xarLog3::warning("Property translations for $propertyClass NOT loaded");
                 }
@@ -332,8 +338,8 @@ class DataPropertyMaster extends xarObject
     public static function getAllConfigProperties()
     {
         // cache configuration for all properties
-        if (xarCoreCache::isCached('DynamicData', 'Configurations')) {
-            return xarCoreCache::getCached('DynamicData', 'Configurations');
+        if (xarVar3::isCached('DynamicData', 'Configurations')) {
+            return xarVar3::getCached('DynamicData', 'Configurations');
         }
         // Can't use DD methods here as we go into a recursion loop
         $xartable = xarDB3::getTables();
@@ -358,7 +364,7 @@ class DataPropertyMaster extends xarObject
             $item = $result->fields;
             $allconfigproperties[$item['name']] = $item;
         }
-        xarCoreCache::setCached('DynamicData', 'Configurations', $allconfigproperties);
+        xarVar3::setCached('DynamicData', 'Configurations', $allconfigproperties);
         return $allconfigproperties;
     }
 
