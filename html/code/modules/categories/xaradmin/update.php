@@ -34,7 +34,7 @@ function categories_admin_update(array $args = [], $context = null)
     }        
 
     // Root category cannot be modified except by the site admin
-    if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
+    if (($cid == 1) && (!xarUser::isSiteAdmin()))
         return xarController::badRequest('no_privileges', $context);
 
     //Reverses the order of cids with the 'last children' option:

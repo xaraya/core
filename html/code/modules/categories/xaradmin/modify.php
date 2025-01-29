@@ -34,7 +34,7 @@ function categories_admin_modify(array $args = [], $context = null)
     if(!xarSecurity::check('EditCategories',1,'All',"All:$cid")) return;
     
     // Root category cannot be modified except by the site admin
-    if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
+    if (($cid == 1) && (!xarUser::isSiteAdmin()))
         return xarController::badRequest('no_privileges', $context);
 
     // Setting up necessary data.

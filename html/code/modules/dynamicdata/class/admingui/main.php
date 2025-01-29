@@ -47,7 +47,7 @@ class MainMethod extends MethodClass
         // @todo use $this->getContext() here if available
         $samemodule = xarController::isRefererSameModule();
 
-        if (((bool) xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
+        if (((bool) $this->mod()->getVar('disableoverview', 'modules') == false) || $samemodule) {
             return $this->tpl()->module('dynamicdata', 'admin', 'overview', $args);
         } else {
             $this->ctl()->redirect($this->mod()->getURL('admin', 'view'));

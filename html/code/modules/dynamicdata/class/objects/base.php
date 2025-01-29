@@ -232,8 +232,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
         if (!empty($badnames)) {
             $this->log()->error('Bad properties', $badnames);
-            if (xarModVars::get('dynamicdata', 'debugmode') &&
-            in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            if ($this->mod()->getVar('debugmode', 'dynamicdata') && xarUser::isDebugAdmin()) {
                 echo "Bad properties: ";
                 echo $this->name . ": " . implode(', ', $badnames);
                 echo "<br />";
@@ -401,7 +400,7 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         $this->log()->info("DataObject::createItem: Creating an item of object " . $this->name);
 
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarModVars::get('dynamicdata', 'suppress_updates')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod()->getVar('suppress_updates', 'dynamicdata')) {
             // We are testing/debugging: return a zero
             return 0;
         }
@@ -495,7 +494,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->itemid = $this->properties[$this->primary]->getValue();
         }
 
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarModVars::get('dynamicdata', 'suppress_updates')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod()->getVar('suppress_updates', 'dynamicdata')) {
             // We are testing/debugging: return the ID of this item
             return $this->itemid;
         }
@@ -560,7 +559,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
 
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarModVars::get('dynamicdata', 'suppress_updates')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod()->getVar('suppress_updates', 'dynamicdata')) {
             // Call delete hooks for this item
             $this->callHooks('delete');
 
@@ -657,9 +656,9 @@ class DataObject extends DataObjectMaster implements iDataObject
             if (empty($nameparts[1])) {
                 throw new Exception($this->ml('Incorrect source: #(1)', $this->properties[$name]->source));
             }
-            $test = xarModVars::get($nameparts[1], $this->properties[$name]->name);
+            $test = $this->mod()->getVar($this->properties[$name]->name, $nameparts[1]);
             if ($test === null) {
-                xarModVars::set($nameparts[1], $this->properties[$name]->name, $this->properties[$name]->defaultvalue);
+                $this->mod()->setVar($this->properties[$name]->name, $this->properties[$name]->defaultvalue, $nameparts[1]);
             }
         }
         return true;

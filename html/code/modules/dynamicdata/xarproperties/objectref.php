@@ -252,8 +252,7 @@ class ObjectRefProperty extends SelectProperty
         $relations   = $descriptor->exists("relations") ? unserialize($descriptor->get("relations") ?? 'a:0:{}') : [];
 
         // Debug display
-        if ($this->mod()->getVar('debugmode') &&
-        in_array(xarUser::getVar('id'), $this->config()->getVar('Site.User.DebugAdmins'))) {
+        if ($this->mod()->getVar('debugmode') && xarUser::isDebugAdmin()) {
             echo "Ref Object: " . $this->objectref->name . "<br/>";
             echo "Property: " . $this->name . "<br/>";
             echo "Prop Object: " . $object->name . "<br/>";

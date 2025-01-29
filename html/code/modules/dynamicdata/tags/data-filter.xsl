@@ -34,7 +34,7 @@
                 </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>);}catch(Exception $e){if(xarModVars::get('dynamicdata','debugmode')&amp;&amp;in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
+            <xsl:text>);}catch(Exception $e){if(xarModVars::get('dynamicdata','debugmode')&amp;&amp;xarUser::isDebugAdmin())echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <!-- We have a property -->

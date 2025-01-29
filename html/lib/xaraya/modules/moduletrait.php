@@ -60,7 +60,7 @@ interface ModuleInterface extends ContextInterface
     public function configure();
     public function getName(): string;
     /** @return array<string, mixed> */
-    public function getInfo(): array;
+    public function getFileInfo(): array;
     /** @return array<string, mixed> */
     public function getTables(): array;
     public function getComponent(string $type): ModuleServicesInterface|null;
@@ -191,7 +191,7 @@ trait ModuleTrait
      * Get info from xarversion.php
      * @return array<string, mixed>
      */
-    public function getInfo(): array
+    public function getFileInfo(): array
     {
         return xarMod::getFileInfo($this->getModName());
     }

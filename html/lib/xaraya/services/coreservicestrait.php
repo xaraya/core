@@ -184,6 +184,7 @@ trait CoreServicesTrait
      * - getName()
      * - getID()
      * - getRegID()
+     * - getFileInfo()
      * - getInfo()
      * - getTables()
      * - isAvailable()
@@ -191,6 +192,8 @@ trait CoreServicesTrait
      * - getModule() - for modules using module classes
      * - apiMethod()
      * - guiMethod()
+     * - resolveAlias()
+     * - isHooked()
      * - ...
      *
      * Required methods in parent:

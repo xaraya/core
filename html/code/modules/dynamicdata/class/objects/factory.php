@@ -11,13 +11,17 @@
 
 // this is used in most methods below, so we import it here
 sys::import('modules.dynamicdata.class.objects.descriptor');
+sys::import('xaraya.facades.caching');
 sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.logger');
 sys::import('xaraya.facades.modules');
+sys::import('xaraya.facades.multilanguage');
 sys::import('xaraya.facades.variables');
+use Xaraya\Facades\xarCache3;
 use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarLog3;
 use Xaraya\Facades\xarMod3;
+use Xaraya\Facades\xarMLS3;
 use Xaraya\Facades\xarVar3;
 
 /**
@@ -88,7 +92,7 @@ class DataObjectFactory extends xarObject
     public static function getObjectInfo(array $args = [])
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
-            throw new Exception(xarMLS::translate('Cannot get object information without an objectid or a name'));
+            throw new Exception(xarMLS3::translate('Cannot get object information without an objectid or a name'));
         }
 
         $cacheKey = 'DynamicData.ObjectInfo';
@@ -184,7 +188,7 @@ class DataObjectFactory extends xarObject
     protected static function _getObjectInfo(array $args = [])
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
-            throw new Exception(xarMLS::translate('Cannot get object information without an objectid or a name'));
+            throw new Exception(xarMLS3::translate('Cannot get object information without an objectid or a name'));
         }
 
         $cacheKey = 'DynamicData._ObjectInfo';
@@ -275,7 +279,7 @@ class DataObjectFactory extends xarObject
             foreach ($scopes as $scope) {
                 $cacheKey = static::getVariableCacheKey($scope, ['name' => $args['name']]);
                 if (!empty($cacheKey)) {
-                    xarVariableCache::delCached($cacheKey);
+                    xarCache3::delVariable($cacheKey);
                 }
             }
         }
@@ -283,7 +287,7 @@ class DataObjectFactory extends xarObject
             foreach ($scopes as $scope) {
                 $cacheKey = static::getVariableCacheKey($scope, ['objectid' => $args['objectid']]);
                 if (!empty($cacheKey)) {
-                    xarVariableCache::delCached($cacheKey);
+                    xarCache3::delVariable($cacheKey);
                 }
             }
         }
@@ -303,23 +307,23 @@ class DataObjectFactory extends xarObject
     {
         // check if variable caching is actually enabled at all...
         if (!xarCache::isVariableCacheEnabled()) {
-            return;
+            return null;
         }
         if (empty($scope)) {
-            throw new Exception(xarMLS::translate('Cannot get variable cache key without a scope'));
+            throw new Exception(xarMLS3::translate('Cannot get variable cache key without a scope'));
         }
         if (empty($args['objectid']) && empty($args['name'])) {
-            throw new Exception(xarMLS::translate('Cannot get object information without an objectid or a name'));
+            throw new Exception(xarMLS3::translate('Cannot get object information without an objectid or a name'));
         }
         $name = '';
         if (!empty($args['name'])) {
             $scope .= '.ByName';
-            //$cacheKey = xarCache::getVariableKey($scope, $args['name']);
+            //$cacheKey = xarCache3::getVariableKey($scope, $args['name']);
             $name = $args['name'];
             unset($args['name']);
         } elseif (!empty($args['objectid'])) {
             $scope .= '.ById';
-            //$cacheKey = xarCache::getVariableKey($scope, $args['objectid']);
+            //$cacheKey = xarCache3::getVariableKey($scope, $args['objectid']);
             $name = $args['objectid'];
             unset($args['objectid']);
         }
@@ -331,13 +335,13 @@ class DataObjectFactory extends xarObject
         }
         if (empty($args)) {
             xarLog3::info('DataObjectFactory::getVariableCacheKey: ' . $scope . '(' . $name . ')');
-            $cacheKey = xarCache::getVariableKey($scope, $name);
+            $cacheKey = xarCache3::getVariableKey($scope, $name);
         } else {
             xarLog3::info('DataObjectFactory::getVariableCacheKey: TODO ' . $scope . '(' . $name . ') with ' . json_encode($args));
             // TODO: any remaining arguments should *not* affect the object creation itself if we rehydrate correctly afterwards, but we'll play it safe for now...
             //$hash = md5(serialize($args));
             //$name .= '-' . $hash;
-            //$cacheKey = xarCache::getVariableKey($scope, $name);
+            //$cacheKey = xarCache3::getVariableKey($scope, $name);
             $cacheKey = null;
         }
         return $cacheKey;
@@ -388,20 +392,14 @@ class DataObjectFactory extends xarObject
         }
 
         /* with autoload and variable caching activated */
-        // CHECKME: that actually checked if we can do output caching in object ui handlers etc.
-        // Identify the variable by its arguments here
-        //$hash = md5(serialize($args));
-        // Get a cache key for this variable if it's suitable for variable caching
-        //$cacheKey = xarCache::getObjectKey('DataObject', $hash);
-        // CHECKME: this is supposed to be about caching a DataObject variable before we do getItem() etc.
-
         // Do we allow caching?
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarModVars::get('dynamicdata', 'caching')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarMod3::getVar('caching', 'dynamicdata')) {
             $cacheKey = static::getVariableCacheKey('DataObject', $args);
             // Check if the variable is cached
-            if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+            if (!empty($cacheKey) && xarCache3::hasVariable($cacheKey)) {
                 // Return the cached variable
-                $object = xarVariableCache::getCached($cacheKey);
+                /** @var DataObject $object */
+                $object = xarCache3::getVariable($cacheKey);
                 if (!empty($args['itemid'])) {
                     $object->itemid = $args['itemid'];
                 }
@@ -426,7 +424,7 @@ class DataObjectFactory extends xarObject
         /* with autoload and variable caching activated */
         // Set the variable in cache
         if (!empty($cacheKey)) {
-            xarVariableCache::setCached($cacheKey, $object);
+            xarCache3::setVariable($cacheKey, $object);
         }
         return $object;
     }
@@ -460,12 +458,12 @@ class DataObjectFactory extends xarObject
         if (empty($info)) {
             $identifier = '';
             if (isset($args['name'])) {
-                $identifier = xarMLS::translate("the name is '#(1)'", $args['name']);
+                $identifier = xarMLS3::translate("the name is '#(1)'", $args['name']);
             }
             if (isset($args['objectid'])) {
-                $identifier = xarMLS::translate('the objectid is #(1)', $args['objectid']);
+                $identifier = xarMLS3::translate('the objectid is #(1)', $args['objectid']);
             }
-            throw new Exception(xarMLS::translate('Unable to create an object where #(1)', $identifier));
+            throw new Exception(xarMLS3::translate('Unable to create an object where #(1)', $identifier));
         }
         $data = [];
         // The info method calls an entry for each of the object's properties. We only need one
@@ -484,20 +482,14 @@ class DataObjectFactory extends xarObject
         }
 
         /* with autoload and variable caching activated */
-        // CHECKME: that actually checked if we can do output caching in object ui handlers etc.
-        // Identify the variable by its arguments here
-        //$hash = md5(serialize($args));
-        // Get a cache key for this variable if it's suitable for variable caching
-        //$cacheKey = xarCache::getObjectKey('DataObjectList', $hash);
-        // CHECKME: this is supposed to be about caching a DataObjectList variable before we do getItems() etc.
-
         // Do we allow caching?
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarModVars::get('dynamicdata', 'caching')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarMod3::getVar('caching', 'dynamicdata')) {
             $cacheKey = static::getVariableCacheKey('DataObjectList', $args);
             // Check if the variable is cached
-            if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+            if (!empty($cacheKey) && xarCache3::hasVariable($cacheKey)) {
                 // Return the cached variable
-                $object = xarVariableCache::getCached($cacheKey);
+                /** @var DataObjectList $object */
+                $object = xarCache3::getVariable($cacheKey);
                 // @todo handle reconnect of different database e.g. for library
                 $object->setContext($context);
                 return $object;
@@ -527,7 +519,7 @@ class DataObjectFactory extends xarObject
         /* with autoload and variable caching activated */
         // Set the variable in cache
         if (!empty($cacheKey)) {
-            xarVariableCache::setCached($cacheKey, $object);
+            xarCache3::setVariable($cacheKey, $object);
         }
         return $object;
     }

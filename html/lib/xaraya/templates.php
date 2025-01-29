@@ -448,8 +448,7 @@ class xarTpl extends xarObject
         // 3. Use 1. to link to 2.
         // @checkme: modules is a depency of templates, redundant check?
         if (method_exists('xarModVars','get') && method_exists('xarUser','getVar') && empty(xarCoreCache::getCached('installer','installing'))) {
-            if (xarModVars::get('themes', 'variable_dump') &&
-                in_array(xarUser::getVar('uname'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            if (xarModVars::get('themes', 'variable_dump') && xarUser::isDebugAdmin()) {
                 echo '<pre>',var_export($tplData, 1),'</pre>';
             }
         } 
@@ -1340,7 +1339,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
 
         $finalTemplate ='';
         try {
-            if(self::outputTemplateFilenames() && class_exists('xarUser') && (in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
+            if(self::outputTemplateFilenames() && class_exists('xarUser') && (xarUser::isDebugAdmin())) {
                 $outputStartComment = true;
                 if($isHeaderContent === false) {
                     if($isHeaderContent = self::modifyHeaderContent($sourceFileName, $tplOutput))
@@ -1374,7 +1373,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
             $allowed = method_exists('xarUser','getVar');
             if ($allowed && 
                 !isset(self::$showPHPCommentBlockInTemplates) && 
-                (in_array(xarUser::getVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
+                xarUser::isDebugAdmin()) {
                 // Default to not show the comments
                 self::$showPHPCommentBlockInTemplates = 0;
                 // @checkme: modules is a depency of templates, redundant check?

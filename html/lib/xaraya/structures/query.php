@@ -85,7 +85,7 @@ class Query
     public function __construct($type='SELECT',$tables='',$fields='',$dbConnIndex=0)
     {
         // Set the debugflag
-        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xarConfigVars::get(null,'Site.BL.ShowQueries',false) && in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xarConfigVars::get(null,'Site.BL.ShowQueries',false) && xarUser::isDebugAdmin()) {
             $this->debugflag = true;
         }
 
@@ -2010,7 +2010,7 @@ class Query
 
     public function setdebug($debugflag=1)
     {
-        if ($debugflag && in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        if ($debugflag && xarUser::isDebugAdmin()) {
             $this->debugflag = true;
             $this->starttime = microtime(true);
         } else {

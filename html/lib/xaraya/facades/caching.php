@@ -112,7 +112,7 @@ class xarCache3
      * Get a cache key for variable value caching
      * @return string|null cacheKey to be used with xarVariableCache::(is|get|set)Cached, or null if not applicable
      */
-    public function getVariableKey(string $scope, string $name): string|null
+    public static function getVariableKey(string $scope, string $name): string|null
     {
         return self::getInstance()->getVariableKey($scope, $name);
     }
@@ -120,7 +120,7 @@ class xarCache3
     /**
      * Check if a variable value is cached
      */
-    public function hasVariable(?string $cacheKey): bool
+    public static function hasVariable(?string $cacheKey): bool
     {
         return self::getInstance()->hasVariable($cacheKey);
     }
@@ -128,7 +128,7 @@ class xarCache3
     /**
      * Get the value of a cached variable
      */
-    public function getVariable(string $cacheKey): string
+    public static function getVariable(string $cacheKey): string
     {
         return self::getInstance()->getVariable($cacheKey);
     }
@@ -136,7 +136,7 @@ class xarCache3
     /**
      * Set the value of a cached variable
      */
-    public function setVariable(?string $cacheKey, string|object $value): void
+    public static function setVariable(?string $cacheKey, string|object $value): void
     {
         self::getInstance()->setVariable($cacheKey, $value);
     }
@@ -144,7 +144,7 @@ class xarCache3
     /**
      * Delete a cached variable
      */
-    public function delVariable(?string $cacheKey): void
+    public static function delVariable(?string $cacheKey): void
     {
         self::getInstance()->delVariable($cacheKey);
     }

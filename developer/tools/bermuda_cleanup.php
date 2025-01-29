@@ -1603,6 +1603,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             // @todo handle xarMod*::* - note: this assumes you set $module !
             '/xarModVars::get\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->getVar(',
             '/xarModVars::set\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->setVar(',
+            '/xarModVars::delete\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->delVar(',
             '/xarMod::apiFunc\((\s*\'' . $module . '\',\s*)/s' => '\$this->mod()->apiMethod($1',
             '/xarMod::guiFunc\((\s*\'' . $module . '\',\s*)/s' => '\$this->mod()->guiMethod($1',
             // @todo those can probably be removed - note: this assumes you set $module !
@@ -1621,6 +1622,19 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarMod::isAvailable\(/' => '\$this->mod()->isAvailable(',
             '/xarMod::loadDbInfo\(/' => '\$this->mod()->loadDbInfo(',
             '/xarModAlias::resolve\(/' => '\$this->mod()->resolveAlias(',
+            '/xarModHooks::isHooked\(/' => '\$this->mod()->isHooked(',
+            '/xarHooks::isAttached\(/' => '\$this->mod()->isHooked(',
+            // xar*Cache::* only for variable caching here
+            '/xarCache::getVariableKey\(/' => '\$this->cache()->getVariableKey(',
+            '/xarVariableCache::isCached\(/' => '\$this->cache()->hasVariable(',
+            '/xarVariableCache::getCached\(/' => '\$this->cache()->getVariable(',
+            '/xarVariableCache::setCached\(/' => '\$this->cache()->setVariable(',
+            '/xarVariableCache::delCached\(/' => '\$this->cache()->delVariable(',
+            // xarConfigVars $scope = null not used
+            '/xarConfigVars::get\([^,]+,\s*/s' => '\$this->config()->getVar(',
+            '/xarConfigVars::set\([^,]+,\s*/s' => '\$this->config()->setVar(',
+            '/xarConfigVars::delete\([^,]+,\s*/s' => '\$this->config()->delVar(',
+            '/xarConfigVars::cache\([^)]*\)/s' => '\$this->config()->cache()',
             // @todo handle xarDB*::* - note: excl. meta and newConn
             '/xarDB::getConn\(/' => '\$this->db()->getConn(',
             '/xarDB::getName\(/' => '\$this->db()->getName(',

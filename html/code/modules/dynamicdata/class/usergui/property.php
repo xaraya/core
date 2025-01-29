@@ -64,7 +64,7 @@ class PropertyMethod extends MethodClass
             $function();
             return true;
         } catch (Exception $e) {
-            if ($this->mod()->getVar('debugmode') && in_array(xarUser::getVar('id'), $this->config()->getVar('Site.User.DebugAdmins'))) {
+            if ($this->mod()->getVar('debugmode') && xarUser::isDebugAdmin()) {
                 echo "<pre>";
                 print($e->__toString());
             } else {

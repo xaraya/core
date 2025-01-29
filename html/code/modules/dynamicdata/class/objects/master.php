@@ -1201,7 +1201,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         // DD specific access scheme
         // check if we have specific access rules for this level
         if (!empty($access_rules) && is_array($access_rules) && !empty($access_rules[$level])) {
-            $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID');
+            $anonid = $this->config()->getVar('Site.User.AnonymousUID');
             if (empty($roleid) && !empty(xarSession::getAnonId()) && xarUser::isLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
                 $grouplist = xarCache::getParents();

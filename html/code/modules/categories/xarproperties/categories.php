@@ -613,8 +613,7 @@ class CategoriesProperty extends DataProperty
         $this->objectref->setFieldList();
 
         // Debug display
-        if (xarModVars::get('dynamicdata','debugmode') && 
-        in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        if (xarModVars::get('dynamicdata','debugmode') && xarUser::isDebugAdmin()) {
             echo "Ref Object: " . $this->objectref->name . "<br/>";
             echo "Property: " . $this->name . "<br/>";
             echo "Query: " . $q->qecho() . "<br/>";

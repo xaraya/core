@@ -881,8 +881,7 @@ class xarJS extends xarObject
          if (empty($paths)) return;
          
          // Debug display
-         if (xarModVars::get('themes','debugmode') && 
-         in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+         if (xarModVars::get('themes','debugmode') && xarUser::isDebugAdmin()) {
             foreach ($paths as $path) {
                 echo xarML('Possible location: ') . $path . "<br/>";                
             }
@@ -893,8 +892,7 @@ class xarJS extends xarObject
              if (!file_exists($path)) continue;
              $filePath = $path;
             // Debug display
-             if (xarModVars::get('themes','debugmode') && 
-             in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+             if (xarModVars::get('themes','debugmode') && xarUser::isDebugAdmin()) {
                 echo "<b>" . xarML('Chosen: ') . $path . "</b><br/>";
              }
              break;

@@ -43,7 +43,7 @@ class xarConfig3
     /**
      * Get config variable
      */
-    public function getVar(string $varName, mixed $value = null): mixed
+    public static function getVar(string $varName, mixed $value = null): mixed
     {
         return self::getInstance()->getVar($varName, $value);
     }
@@ -51,7 +51,7 @@ class xarConfig3
     /**
      * Set config variable
      */
-    public function setVar(string $varName, mixed $value): bool
+    public static function setVar(string $varName, mixed $value): bool
     {
         return self::getInstance()->setVar($varName, $value);
     }
@@ -59,7 +59,7 @@ class xarConfig3
     /**
      * Delete config variable
      */
-    public function delVar(string $varName): bool
+    public static function delVar(string $varName): bool
     {
         return self::getInstance()->delVar($varName);
     }
@@ -67,7 +67,7 @@ class xarConfig3
     /**
      * Cache config variables
      */
-    public function cache(): void
+    public static function cache(): void
     {
         self::getInstance()->cache();
     }

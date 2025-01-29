@@ -26,8 +26,10 @@ use sys;
 sys::import('modules.dynamicdata.class.traits.userapi');
 sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.modules');
+sys::import('xaraya.facades.multilanguage');
 use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarMod3;
+use Xaraya\Facades\xarMLS3;
 
 /**
  * Handle (traditional) DD user api functions via module class
@@ -128,8 +130,8 @@ class UserApi implements UserApiInterface
                 $row = $result->fields;
                 $types [$row['itemtype']] = [
                     'label' => $row['objectlabel'],
-                    'title' => xarMLS::translate('View #(1)', $row['objectlabel']),
-                    'url' => xarController::URL('dynamicdata', 'user', 'view', ['itemtype' => $row['itemtype']]),
+                    'title' => xarMLS3::translate('View #(1)', $row['objectlabel']),
+                    'url' => xarMod3::getURL('user', 'view', ['itemtype' => $row['itemtype']], 'dynamicdata'),
                 ];
             }
         }

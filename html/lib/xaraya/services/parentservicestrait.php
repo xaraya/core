@@ -129,6 +129,7 @@ trait ParentServicesTrait
      * - getName()
      * - getID()
      * - getRegID()
+     * - getFileInfo()
      * - getInfo()
      * - getTables()
      * - isAvailable()
@@ -136,6 +137,8 @@ trait ParentServicesTrait
      * - getModule() - for modules using module classes
      * - apiMethod()
      * - guiMethod()
+     * - resolveAlias()
+     * - isHooked()
      * - ...
      *
      * Required methods in parent:

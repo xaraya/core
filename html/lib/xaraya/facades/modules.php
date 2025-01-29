@@ -29,7 +29,7 @@ sys::import('xaraya.services.servicefactory');
 
 /**
  * Make Modules Service available via facade - xarMod3:: static methods
- * similar to traditional xarMod::* method calls
+ * similar to traditional xarMod::* method calls - modName is mandatory here
  */
 class xarMod3
 {
@@ -42,6 +42,23 @@ class xarMod3
     {
         self::$xarMod ??= ServiceFactory::getModulesService(__METHOD__);
         return self::$xarMod;
+    }
+
+    /**
+     * Get module variable for this module - modName is mandatory here
+     */
+    public static function getVar(string $varName, string $modName): mixed
+    {
+        return self::getInstance()->getVar($varName, $modName);
+    }
+
+    /**
+     * Get url for this module type function - modName is mandatory here
+     * @param array<string, mixed> $args
+     */
+    public static function getURL(string $modType = 'user', string $funcName = 'main', array $args = [], string $modName = 'base'): string
+    {
+        return self::getInstance()->getURL($modType, $funcName, $args, $modName);
     }
 
     /**
@@ -61,7 +78,7 @@ class xarMod3
     }
 
     /**
-     * Get module registry ID for this module
+     * Get module registry ID for this module - modName is mandatory here
      */
     public static function getRegID(string $modName): int
     {
@@ -69,7 +86,7 @@ class xarMod3
     }
 
     /**
-     * Get info from xarversion.php
+     * Get info from xarversion.php - modName is mandatory here
      * @return array<string, mixed>
      */
     public static function getFileInfo(string $modName): array
@@ -87,7 +104,7 @@ class xarMod3
     }
 
     /**
-     * Get tables from xartables.php
+     * Get tables from xartables.php - modName is mandatory here
      * @return array<string, mixed>
      */
     public static function getTables(string $modName): array
@@ -96,7 +113,7 @@ class xarMod3
     }
 
     /**
-     * Check if a module is available - @todo review for module classes
+     * Check if a module is available - modName is mandatory here - @todo review for module classes
      * @param string $modName
      * @return bool
      */
@@ -109,9 +126,12 @@ class xarMod3
      * Wrapper for xarMod::apiFunc() - only for migration
      * @param array<string, mixed> $args
      */
-    public static function apiFunc(string $modName, string $modType, string $funcName = 'main', array $args = []): mixed
+    public static function apiFunc(string $modName, string $modType, string $funcName = 'main', array $args = [], mixed $context = null): mixed
     {
         // @todo handle context
+        if (!empty($context)) {
+            self::getInstance()->setContext($context);
+        }
         return self::getInstance()->apiFunc($modName, $modType, $funcName, $args);
     }
 
@@ -127,9 +147,12 @@ class xarMod3
      * Wrapper for xarMod::guiFunc() - only for migration
      * @param array<string, mixed> $args
      */
-    public static function guiFunc(string $modName, string $modType, string $funcName = 'main', array $args = []): mixed
+    public static function guiFunc(string $modName, string $modType, string $funcName = 'main', array $args = [], mixed $context = null): mixed
     {
         // @todo handle context
+        if (!empty($context)) {
+            self::getInstance()->setContext($context);
+        }
         return self::getInstance()->guiFunc($modName, $modType, $funcName, $args);
     }
 
@@ -142,7 +165,7 @@ class xarMod3
     }
 
     /**
-     * Load DB tables for this module
+     * Load DB tables for this module - modName is mandatory here
      * @param string $modName
      * @param ?string $modDir
      * @return mixed
@@ -200,5 +223,13 @@ class xarMod3
     public static function resolveAlias(string $name): string
     {
         return self::getInstance()->resolveAlias($name);
+    }
+
+    /**
+     * See if a hook module (observer) is attached (hooked) to specific module (subject) (+ itemtype)
+     */
+    public static function isHooked(string $hookModName, string $callerModName, ?int $callerItemType = null): bool
+    {
+        return self::getInstance()->isHooked($hookModName, $callerModName, $callerItemType);
     }
 }

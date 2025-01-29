@@ -93,8 +93,7 @@ function mail_adminapi__sendmail_new(array $args = [], $context = null)
 
     // If we are in debug mode, then make the appropriate calls to the class
     // We will be outputting html to the browser
-    if (xarModVars::get('mail', 'debugmode') &&
-        in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+    if (xarModVars::get('mail', 'debugmode') && xarUser::isDebugAdmin()) {
         $mail->SMTPDebug = 4;
         $mail->Debugoutput = 'html';
     }
@@ -117,8 +116,7 @@ function mail_adminapi__sendmail_new(array $args = [], $context = null)
 
             // If we are in debug mode, then make the appropriate calls to the class
             // We will be outputting html to the browser
-            if (xarModVars::get('mail', 'debugmode') &&
-                in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            if (xarModVars::get('mail', 'debugmode') && xarUser::isDebugAdmin()) {
                 $mail->SMTPDebug = 4;
                 $mail->Debugoutput = 'html';
             }

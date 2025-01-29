@@ -424,7 +424,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $grouplist = xarCache::getParents();
         } else {
             // check anonymous visitors by themselves
-            $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID');
+            $anonid = $this->config()->getVar('Site.User.AnonymousUID');
             $grouplist = [$anonid];
         }
 

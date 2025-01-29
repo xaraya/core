@@ -31,8 +31,10 @@ use sys;
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.validations');
 sys::import('modules.dynamicdata.class.import.generic');
+sys::import('xaraya.facades.config');
 sys::import('xaraya.facades.logger');
 sys::import('xaraya.facades.modules');
+use Xaraya\Facades\xarConfig3;
 use Xaraya\Facades\xarLog3;
 use Xaraya\Facades\xarMod3;
 
@@ -72,7 +74,7 @@ class XmlImporter extends DataObjectImporter
             throw new EmptyParameterException('xml or file');
         } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/', $file))) {
             // check if we tried to load a file using an old path
-            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true && str_starts_with($file, 'modules/')) {
+            if (xarConfig3::getVar('Site.Core.LoadLegacy') == true && str_starts_with($file, 'modules/')) {
                 $file = sys::code() . $file;
                 if (!file_exists($file)) {
                     throw new BadParameterException($file, 'Invalid importfile "#(1)"');

@@ -23,6 +23,7 @@ use xarModAlias;
 use xarModVars;
 use xarController;
 use xarTpl;
+use xarHooks;
 use sys;
 use Exception;
 use FunctionNotFoundException;
@@ -69,6 +70,7 @@ interface ModulesInterface extends ServiceInterface
     /** @param array<string, mixed> $args */
     public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     public function resolveAlias(string $name): string;
+    public function isHooked(string $hookModName, ?string $callerModName = null, ?int $callerItemType = null): bool;
 }
 
 /**
@@ -378,6 +380,16 @@ trait ModulesTrait
     {
         return xarModAlias::resolve($name);
     }
+
+    /**
+     * See if a hook module (observer) is attached (hooked) to specific module (subject) (+ itemtype)
+     */
+    public function isHooked(string $hookModName, ?string $callerModName = null, ?int $callerItemType = null): bool
+    {
+        $callerModName ??= $this->getModName();
+        $callerItemType ??= $this->getItemType();
+        return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
+    }
 }
 
 /**
@@ -392,6 +404,7 @@ trait ModulesTrait
  * - getName()
  * - getID()
  * - getRegID()
+ * - getFileInfo()
  * - getInfo()
  * - getTables()
  * - isAvailable()
@@ -399,11 +412,13 @@ trait ModulesTrait
  * - getModule() - for modules using module classes
  * - apiMethod()
  * - guiMethod()
+ * - resolveAlias()
+ * - isHooked()
  * - ...
  *
  * Required methods in parent:
  * - getModName()
- * - getItemType() for mod()->prepare()
+ * - getItemType() for mod()->prepare() and mod()->isHooked()
  * - getModType() for mod()->template()
  *
  */
