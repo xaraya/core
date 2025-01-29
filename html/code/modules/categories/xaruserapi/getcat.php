@@ -217,7 +217,7 @@ function categories_userapi_getcat(array $args = [], $context = null)
 	$categories = array();
 		
 	// TODO: Ideally this all goes into a Query or similar so we avoid this if statement
-	if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
+	if (xarDB::withPDO()) {
 		$rows = $result->getall();
 		$index = -1;
 		foreach ($rows as $row) {

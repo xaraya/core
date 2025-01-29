@@ -71,10 +71,13 @@ trait ServiceTrait
 
     /**
      * Summary of create
-     * @todo could be called from ServiceFactory - currently not used
      */
     public static function create(mixed $parent): static
     {
+        // @todo handle context for facades
+        if (!is_object($parent)) {
+            $parent = new DummyParent($parent);
+        }
         return new static($parent);
     }
 }
@@ -85,4 +88,20 @@ trait ServiceTrait
 class ServiceClass implements ServiceInterface
 {
     use ServiceTrait;
+}
+
+/**
+ * Dummy parent with context for facades
+ * @todo handle context for facades
+ */
+class DummyParent implements ContextInterface
+{
+    use ContextTrait;
+
+    public function __construct(mixed $parent = null)
+    {
+        //$context = xarServer::getInstance()?->getContext();
+        $context = new Context(['source' => $parent]);
+        $this->setContext($context);
+    }
 }

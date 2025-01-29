@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -19,6 +19,7 @@ namespace Xaraya\Services;
 use xarCache;
 use xarModuleCache;
 use xarObjectCache;
+use xarVariableCache;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -71,6 +72,32 @@ interface CachingInterface extends ServiceInterface
      * Set the output of the object method in cache
      */
     public function setObject(string $cacheKey, string $value): void;
+
+    /**
+     * Get a cache key for variable instance caching
+     * @return string|null cacheKey to be used with xarVariableCache::(is|get|set)Cached, or null if not applicable
+     */
+    public function getVariableKey(string $scope, string $name): string|null;
+
+    /**
+     * Check if a variable value is cached
+     */
+    public function hasVariable(?string $cacheKey): bool;
+
+    /**
+     * Get the value of a cached variable
+     */
+    public function getVariable(string $cacheKey): string;
+
+    /**
+     * Set the value of a cached variable
+     */
+    public function setVariable(?string $cacheKey, string|object $value): void;
+
+    /**
+     * Delete a cached variable
+     */
+    public function delVariable(?string $cacheKey): void;
 }
 
 /**
@@ -165,6 +192,56 @@ trait CachingTrait
         }
         xarObjectCache::setCached($cacheKey, $value);
     }
+
+    /**
+     * Get a cache key for variable value caching
+     * @return string|null cacheKey to be used with xarVariableCache::(is|get|set)Cached, or null if not applicable
+     */
+    public function getVariableKey(string $scope, string $name): string|null
+    {
+        return xarCache::getVariableKey($scope, $name);
+    }
+
+    /**
+     * Check if a variable value is cached
+     */
+    public function hasVariable(?string $cacheKey): bool
+    {
+        if (empty($cacheKey)) {
+            return false;
+        }
+        return xarVariableCache::isCached($cacheKey);
+    }
+
+    /**
+     * Get the value of a cached variable
+     */
+    public function getVariable(string $cacheKey): string
+    {
+        return xarVariableCache::getCached($cacheKey);
+    }
+
+    /**
+     * Set the value of a cached variable
+     */
+    public function setVariable(?string $cacheKey, string|object $value): void
+    {
+        if (empty($cacheKey)) {
+            return;
+        }
+        xarVariableCache::setCached($cacheKey, $value);
+    }
+
+    /**
+     * Delete a cached variable
+     */
+    public function delVariable(?string $cacheKey): void
+    {
+        if (empty($cacheKey)) {
+            return;
+        }
+        xarVariableCache::delCached($cacheKey);
+    }
 }
 
 /**
@@ -179,6 +256,11 @@ trait CachingTrait
  * - hasObject()
  * - getObject()
  * - setObject()
+ * - getVariableKey()
+ * - hasVariable()
+ * - getVariable()
+ * - setVariable()
+ * - delVariable()
  * - ...
  *
  */

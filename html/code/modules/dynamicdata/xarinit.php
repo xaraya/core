@@ -40,7 +40,6 @@ function dynamicdata_init()
 
     // Create tables inside a transaction
     try {
-        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
         # --------------------------------------------------------
         #

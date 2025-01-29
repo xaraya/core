@@ -62,6 +62,11 @@ class xarDB
 		self::$mw = $middleware_class;
 	}
 
+    public static function withPDO()
+    {
+        return xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO';
+    }
+
     // Not all database types have more than one driver
     public static function getDrivers()
     {

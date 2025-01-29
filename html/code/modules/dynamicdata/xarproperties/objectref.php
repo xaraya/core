@@ -253,7 +253,7 @@ class ObjectRefProperty extends SelectProperty
 
         // Debug display
         if ($this->mod()->getVar('debugmode') &&
-        in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        in_array(xarUser::getVar('id'), $this->config()->getVar('Site.User.DebugAdmins'))) {
             echo "Ref Object: " . $this->objectref->name . "<br/>";
             echo "Property: " . $this->name . "<br/>";
             echo "Prop Object: " . $object->name . "<br/>";

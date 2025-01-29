@@ -154,4 +154,9 @@ class xarDB3
     {
         return self::getInstance()->getTypeMap();
     }
+
+    public static function withPDO(): bool
+    {
+        return self::getInstance()->withPDO();
+    }
 }

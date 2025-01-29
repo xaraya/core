@@ -132,7 +132,7 @@ class Query
         if ($this->debugflag) $querystart = microtime(true);
 
         if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
-        if ($this->debugflag && (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO')) {
+        if ($this->debugflag && $this->db()->withPDO()) {
             $this->dbconn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         if (empty($statement) && ($this->optimize == true)) $this->optimize();
@@ -165,7 +165,7 @@ class Query
                 return $result;
             }
             // This is a select
-            if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
+            if ($this->db()->withPDO()) {
                 if($this->rowstodo != 0 && $this->limits == 1) {
                     $begin = $this->startat-1;
                     if ($this->usebinding) {
@@ -214,7 +214,7 @@ class Query
             $numfields = count($result->fields); // Better than the private var, fields should still be protected
         $this->output = array();
         if ($display == 1) {
-            if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
+            if ($this->db()->withPDO()) {
                 $this->output = $result->getall();
             } elseif (!empty($this->dbConnIndex) && get_class($result) === 'PdoSQLiteResultSet') {
                 // PDO ResultSet doesn't handle EOF very well in Creole

@@ -282,6 +282,11 @@ trait ParentServicesTrait
      * - hasObject()
      * - getObject()
      * - setObject()
+     * - getVariableKey()
+     * - hasVariable()
+     * - getVariable()
+     * - setVariable()
+     * - delVariable()
      * - ...
      *
      * Required methods in parent:
@@ -291,6 +296,22 @@ trait ParentServicesTrait
     public function cache(): CachingInterface
     {
         return $this->getParent()->cache();
+    }
+
+    /**
+     * Access xarConfigVars::* Config methods (getVar, setVar, ...)
+     *
+     * Available methods:
+     * - getVar()
+     * - setVar()
+     * - delVar()
+     * - cache()
+     * - ...
+     *
+     */
+    public function config(): ConfigInterface
+    {
+        return $this->getParent()->config();
     }
 
     /**

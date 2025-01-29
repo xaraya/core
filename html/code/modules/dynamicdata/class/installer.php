@@ -88,7 +88,6 @@ class Installer extends InstallerClass
 
         // Create tables inside a transaction
         try {
-            $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
             $dbconn->begin();
             # --------------------------------------------------------
             #

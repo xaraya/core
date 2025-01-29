@@ -145,7 +145,7 @@ class xarCache extends xarObject
     }
 
     /**
-     * Get a cache key for variable caching
+     * Get a cache key for variable value caching
      *
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param string $name  the name of the variable in that particular scope

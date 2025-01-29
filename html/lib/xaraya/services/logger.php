@@ -90,7 +90,13 @@ trait LoggerTrait
     public static function create(mixed $parent = null): LoggerInterface
     {
         // create singleton instance for any parent here
-        self::$xarLog ??= new self($parent);
+        if (!isset(self::$xarLog)) {
+            // @todo handle context for facades
+            if (!is_object($parent)) {
+                $parent = new DummyParent($parent);
+            }
+            self::$xarLog = new self($parent);
+        }
         return self::$xarLog;
     }
 

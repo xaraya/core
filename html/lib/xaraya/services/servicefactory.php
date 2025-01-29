@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.1
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -30,7 +30,7 @@ class ServiceFactory
     public static function getControllerService(ServicesInterface $parent): ControllerInterface
     {
         self::log(__METHOD__, $parent);
-        return new ControllerService($parent);
+        return ControllerService::create($parent);
     }
 
     /**
@@ -39,7 +39,6 @@ class ServiceFactory
     public static function getLoggerService(object|string|null $parent = null): LoggerInterface
     {
         self::log(__METHOD__, $parent);
-        //return new LoggerService($parent);
         return LoggerService::create($parent);
     }
 
@@ -49,7 +48,7 @@ class ServiceFactory
     public static function getMultiLanguageService(object|string|null $parent): MultiLanguageInterface
     {
         self::log(__METHOD__, $parent);
-        return new MultiLanguageService($parent);
+        return MultiLanguageService::create($parent);
     }
 
     /**
@@ -58,7 +57,7 @@ class ServiceFactory
     public static function getModulesService(object|string|null $parent): ModulesInterface
     {
         self::log(__METHOD__, $parent);
-        return new ModulesService($parent);
+        return ModulesService::create($parent);
     }
 
     /**
@@ -67,7 +66,7 @@ class ServiceFactory
     public static function getSecurityService(ServicesInterface $parent): SecurityInterface
     {
         self::log(__METHOD__, $parent);
-        return new SecurityService($parent);
+        return SecurityService::create($parent);
     }
 
     /**
@@ -76,7 +75,7 @@ class ServiceFactory
     public static function getTemplatingService(ServicesInterface $parent): TemplatingInterface
     {
         self::log(__METHOD__, $parent);
-        return new TemplatingService($parent);
+        return TemplatingService::create($parent);
     }
 
     /**
@@ -85,7 +84,7 @@ class ServiceFactory
     public static function getVariablesService(object|string|null $parent): VariablesInterface
     {
         self::log(__METHOD__, $parent);
-        return new VariablesService($parent);
+        return VariablesService::create($parent);
     }
 
     /**
@@ -94,7 +93,7 @@ class ServiceFactory
     public static function getBlocksService(ServicesInterface $parent): BlocksInterface
     {
         self::log(__METHOD__, $parent);
-        return new BlocksService($parent);
+        return BlocksService::create($parent);
     }
 
     /**
@@ -103,7 +102,7 @@ class ServiceFactory
     public static function getDataObjectService(ServicesInterface $parent): DataObjectInterface
     {
         self::log(__METHOD__, $parent);
-        return new DataObjectService($parent);
+        return DataObjectService::create($parent);
     }
 
     /**
@@ -112,17 +111,25 @@ class ServiceFactory
     public static function getDataPropertyService(ServicesInterface $parent): DataPropertyInterface
     {
         self::log(__METHOD__, $parent);
-        return new DataPropertyService($parent);
+        return DataPropertyService::create($parent);
     }
 
     /**
      * Summary of getCachingService
      */
-    public static function getCachingService(ServicesInterface $parent): CachingInterface
+    public static function getCachingService(object|string|null $parent = null): CachingInterface
     {
         self::log(__METHOD__, $parent);
-        //return new CachingService($parent);
         return CachingService::create($parent);
+    }
+
+    /**
+     * Summary of getConfigService
+     */
+    public static function getConfigService(object|string|null $parent = null): ConfigInterface
+    {
+        self::log(__METHOD__, $parent);
+        return ConfigService::create($parent);
     }
 
     /**
@@ -140,7 +147,6 @@ class ServiceFactory
     public static function getDatabaseService(object|string|null $parent = null): DatabaseInterface
     {
         self::log(__METHOD__, $parent);
-        //return new DatabaseService($parent);
         return DatabaseService::create($parent);
     }
 

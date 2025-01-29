@@ -33,7 +33,6 @@ function blocks_init()
         throw $e;
     }
     $prefix = xarDB::getPrefix();
-    $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
     
     xarModVars::set('blocks', 'selstyle', 'plain');
     xarModVars::set('blocks', 'noexceptions', 1);

@@ -757,7 +757,7 @@ class CelkoPositionProperty extends DataProperty
         }
 
 
-		if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
+		if ($this->db()->withPDO()) {
 
 			$rows = $result->getall();
 			$index = -1;

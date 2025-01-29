@@ -36,6 +36,7 @@ interface ModulesInterface extends ServiceInterface
 {
     public function getVar(string $varName, ?string $modName = null): mixed;
     public function setVar(string $varName, mixed $value, ?string $modName = null): bool;
+    public function delVar(string $varName, ?string $modName = null): bool;
     /** @param array<string, mixed> $args */
     public function getURL(string $modType = 'user', string $funcName = 'main', array $args = [], ?string $modName = null): string;
     /** @param array<string, mixed> $tplData */
@@ -55,24 +56,12 @@ interface ModulesInterface extends ServiceInterface
     /** @return array<string, mixed> */
     public function getTables(?string $modName = null): array;
     public function isAvailable(?string $modName = null): bool;
-    /**
-     * @param array<string, mixed> $args
-     * @return mixed
-     */
-    public function apiFunc($modName = null, $modType = null, $funcName = 'main', $args = []);
-    /**
-     * @return mixed
-     */
-    public function apiLoad($modName = null, $modType = null);
-    /**
-     * @param array<string, mixed> $args
-     * @return mixed
-     */
-    public function guiFunc($modName = null, $modType = null, $funcName = 'main', $args = []);
-    /**
-     * @return mixed
-     */
-    public function load($modName = null, $modType = null);
+    /** @param array<string, mixed> $args */
+    public function apiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
+    public function apiLoad(?string $modName = null, ?string $modType = null): mixed;
+    /** @param array<string, mixed> $args */
+    public function guiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
+    public function load(?string $modName = null, ?string $modType = null): mixed;
     public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed;
     public function getModule(?string $modName = null): ModuleInterface;
     /** @param array<string, mixed> $args */
@@ -108,6 +97,15 @@ trait ModulesTrait
             return xarModVars::delete($modName, $varName);
         }
         return xarModVars::set($modName, $varName, $value);
+    }
+
+    /**
+     * Delete module variable for this module
+     */
+    public function delVar(string $varName, ?string $modName = null): bool
+    {
+        $modName ??= $this->getModName();
+        return xarModVars::delete($modName, $varName);
     }
 
     /**
@@ -252,26 +250,20 @@ trait ModulesTrait
 
     /**
      * Wrapper for xarMod::apiFunc() - only for migration
-     * @param ?string $modName
-     * @param ?string $modType
-     * @param string $funcName
      * @param array<string, mixed> $args
-     * @return mixed
      */
-    public function apiFunc($modName = null, $modType = null, $funcName = 'main', $args = [])
+    public function apiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
+        // @todo handle context for facades
         return xarMod::apiFunc($modName, $modType, $funcName, $args, $this->getContext());
     }
 
     /**
      * Wrapper for xarMod::apiLoad() - only for migration
-     * @param ?string $modName
-     * @param ?string $modType
-     * @return mixed
      */
-    public function apiLoad($modName = null, $modType = null)
+    public function apiLoad(?string $modName = null, ?string $modType = null): mixed
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
@@ -280,26 +272,20 @@ trait ModulesTrait
 
     /**
      * Wrapper for xarMod::guiFunc() - only for migration
-     * @param ?string $modName
-     * @param ?string $modType
-     * @param string $funcName
      * @param array<string, mixed> $args
-     * @return mixed
      */
-    public function guiFunc($modName = null, $modType = null, $funcName = 'main', $args = [])
+    public function guiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
+        // @todo handle context for facades
         return xarMod::guiFunc($modName, $modType, $funcName, $args, $this->getContext());
     }
 
     /**
      * Wrapper for xarMod::load() - only for migration
-     * @param ?string $modName
-     * @param ?string $modType
-     * @return mixed
      */
-    public function load($modName = null, $modType = null)
+    public function load(?string $modName = null, ?string $modType = null): mixed
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();

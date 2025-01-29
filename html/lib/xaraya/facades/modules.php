@@ -21,6 +21,7 @@ namespace Xaraya\Facades;
 use Xaraya\Services\ModulesInterface;
 use Xaraya\Services\ServiceFactory;
 use Xaraya\Modules\ModuleInterface;
+use xarMod;
 use sys;
 
 sys::import('xaraya.services.modules');
@@ -106,13 +107,9 @@ class xarMod3
 
     /**
      * Wrapper for xarMod::apiFunc() - only for migration
-     * @param string $modName
-     * @param string $modType
-     * @param string $funcName
      * @param array<string, mixed> $args
-     * @return mixed
      */
-    public static function apiFunc($modName, $modType, $funcName = 'main', $args = [])
+    public static function apiFunc(string $modName, string $modType, string $funcName = 'main', array $args = []): mixed
     {
         // @todo handle context
         return self::getInstance()->apiFunc($modName, $modType, $funcName, $args);
@@ -120,24 +117,17 @@ class xarMod3
 
     /**
      * Wrapper for xarMod::apiLoad() - only for migration
-     * @param string $modName
-     * @param string $modType
-     * @return mixed
      */
-    public static function apiLoad($modName, $modType)
+    public static function apiLoad(string $modName, string $modType = 'user'): mixed
     {
         return self::getInstance()->apiLoad($modName, $modType);
     }
 
     /**
      * Wrapper for xarMod::guiFunc() - only for migration
-     * @param string $modName
-     * @param string $modType
-     * @param string $funcName
      * @param array<string, mixed> $args
-     * @return mixed
      */
-    public static function guiFunc($modName, $modType, $funcName = 'main', $args = [])
+    public static function guiFunc(string $modName, string $modType, string $funcName = 'main', array $args = []): mixed
     {
         // @todo handle context
         return self::getInstance()->guiFunc($modName, $modType, $funcName, $args);
@@ -145,11 +135,8 @@ class xarMod3
 
     /**
      * Wrapper for xarMod::load() - only for migration
-     * @param string $modName
-     * @param string $modType
-     * @return mixed
      */
-    public static function load($modName, $modType = 'user')
+    public static function load(string $modName, string $modType = 'user'): mixed
     {
         return self::getInstance()->load($modName, $modType);
     }

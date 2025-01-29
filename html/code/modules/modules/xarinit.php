@@ -126,18 +126,6 @@ function modules_upgrade($oldversion)
             $dbconn = xarDB::getConn();
             $tables = array('eventsystem' => xarDB::getPrefix() . '_eventsystem');
             xarDB::importTables($tables);
-            $tables = xarDB::getTables();
-            $prefix = xarDB::getPrefix();
-            // Creating the first part inside a transaction
-            try {
-                $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
-                $dbconn->begin();
-                // Let's commit this, since we're gonna do some other stuff
-                $dbconn->commit();
-            } catch (Exception $e) {
-                $dbconn->rollback();
-                throw $e;
-            }
             // Register base module event subjects
             // Base module inits before modules, so we have to register events for it here
             xarEvents::registerSubject('Event', 'event', 'base');

@@ -72,7 +72,7 @@ class ModifyconfigMethod extends MethodClass
                 if (!$this->var()->find('debugmode', $debugmode, 'checkbox', $this->mod()->getVar('debugmode'))) {
                     return;
                 }
-                if (!$this->var()->find('show_queries', $show_queries, 'checkbox', xarConfigVars::get(null, 'Site.BL.ShowQueries'))) {
+                if (!$this->var()->find('show_queries', $show_queries, 'checkbox', $this->config()->getVar('Site.BL.ShowQueries'))) {
                     return;
                 }
                 if (!$this->var()->find('suppress_updates', $suppress_updates, 'checkbox', false)) {
@@ -104,7 +104,7 @@ class ModifyconfigMethod extends MethodClass
                 $this->mod()->setVar('administrators', serialize($validadmins));
                 */
                 $this->mod()->setVar('debugmode', $debugmode);
-                xarConfigVars::set(null, 'Site.BL.ShowQueries', $show_queries);
+                $this->config()->setVar('Site.BL.ShowQueries', $show_queries);
                 $this->mod()->setVar('suppress_updates', $suppress_updates);
                 $this->mod()->setVar('caching', $caching);
                 $this->mod()->setVar('twig_support', $twig_support);

@@ -20,11 +20,9 @@
 namespace Xaraya\Services;
 
 use xarDB;
+use sys;
 
-//use sys;
-
-// this does not re-use ServiceInterface
-//sys::import('xaraya.services.servicetrait');
+sys::import('xaraya.services.servicetrait');
 
 /**
  * For documentation purposes only - available via DatabaseTrait
@@ -65,6 +63,8 @@ interface DatabaseInterface extends ServiceInterface
 
     /** @return array<mixed> */
     public function getTypeMap(): array;
+
+    public function withPDO(): bool;
 }
 
 /**
@@ -82,7 +82,13 @@ trait DatabaseTrait
     public static function create(mixed $parent = null): DatabaseInterface
     {
         // create singleton instance for any parent here
-        self::$xarDB ??= new self($parent);
+        if (!isset(self::$xarDB)) {
+            // @todo handle context for facades
+            if (!is_object($parent)) {
+                $parent = new DummyParent($parent);
+            }
+            self::$xarDB = new self($parent);
+        }
         return self::$xarDB;
     }
 
@@ -197,6 +203,11 @@ trait DatabaseTrait
     public function getTypeMap(): array
     {
         return xarDB::getTypeMap();
+    }
+
+    public function withPDO(): bool
+    {
+        return xarDB::withPDO();
     }
 }
 
