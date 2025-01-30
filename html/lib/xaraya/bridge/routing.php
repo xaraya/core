@@ -70,6 +70,8 @@ class RoutingBridge extends BasicBridge
     public static string $baseUri = '';
     public static string $prefix = '';
     public bool $wrapPage = false;
+    protected ?DataObjectRESTHandler $restAPIHandler = null;
+    protected ?xarGraphQL $graphQLHandler = null;
 
     /**
      * Summary of getRouter
@@ -208,9 +210,10 @@ class RoutingBridge extends BasicBridge
      * @param ?string $type
      * @param string|int|null $func
      * @param array<string, mixed> $extra
+     * @see \Xaraya\Bridge\Requests\BasicBridgeTrait::prepareController()
      * @return string
      */
-    public static function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
+    public function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
     {
         $prefix = static::$baseUri;
         return ModuleRequest::buildModulePath($module, $type, $func, $extra, $prefix);
@@ -266,8 +269,8 @@ class RoutingBridge extends BasicBridge
         // ... call $handler with $vars
         if (str_starts_with($path, $group . '/restapi/')) {
             // different processing for REST API - see rst.php
-            DataObjectRESTHandler::$endpoint = static::getBaseUri() . $group . '/restapi';
-            [$result, $context] = static::callRestApiHandler($handler, $vars, $request);
+            DataObjectRESTHandler::$endpoint = $this->getBaseUri() . $group . '/restapi';
+            [$result, $context] = $this->callRestApiHandler($handler, $vars, $request);
         } elseif (str_starts_with($path, $group . '/graphql')) {
             // different processing for GraphQL API - see gql.php
             [$result, $context] = $this->callHandler($handler, $vars, $request);
@@ -286,15 +289,15 @@ class RoutingBridge extends BasicBridge
      */
     public function run(string $group = '', &$request = null)
     {
-        $method = static::getMethod($request);
-        $path = static::getPathInfo($request);
+        $method = $this->getMethod($request);
+        $path = $this->getPathInfo($request);
         [$result, $context] = $this->dispatchRequest($method, $path, $group, $request);
         if (str_starts_with($path, $group . '/restapi/')) {
             // different processing for REST API - see rst.php
-            DataObjectRESTHandler::output($result, 200, $context);
+            $this->getRestApiHandler()->output($result, 200, $context);
         } elseif (str_starts_with($path, $group . '/graphql')) {
             // different processing for GraphQL API - see gql.php
-            xarGraphQL::output($result, $context);
+            $this->getGraphQLHandler()->output($result, $context);
         } else {
             $this->output($result, $context);
         }
@@ -324,7 +327,7 @@ class RoutingBridge extends BasicBridge
             if ($transform) {
                 // wrap output in page
                 if ($this->wrapPage) {
-                    echo $transform(static::wrapOutputInPage($result, $context));
+                    echo $transform($this->wrapOutputInPage($result, $context));
                 } else {
                     echo $transform($result);
                 }
@@ -332,7 +335,7 @@ class RoutingBridge extends BasicBridge
             }
             // wrap output in page
             if ($this->wrapPage) {
-                echo static::wrapOutputInPage($result, $context);
+                echo $this->wrapOutputInPage($result, $context);
             } else {
                 echo $result;
             }
@@ -411,18 +414,28 @@ class RoutingBridge extends BasicBridge
 
     // different processing for REST API - see rst.php
     /**
+     * Summary of getRestHandler
+     * @return DataObjectRESTHandler
+     */
+    public function getRestApiHandler()
+    {
+        $this->restAPIHandler ??= new DataObjectRESTHandler();
+        return $this->restAPIHandler;
+    }
+
+    /**
      * Summary of callRestApiHandler
      * @param mixed $handler
      * @param array<string, mixed> $vars
      * @param mixed $request
      * @return mixed
      */
-    public static function callRestApiHandler($handler, $vars, &$request = null)
+    public function callRestApiHandler($handler, $vars, &$request = null)
     {
         if (empty($vars)) {
             $vars = [];
         }
-        [$result, $context] = DataObjectRESTHandler::callHandler($handler, $vars, $request);
+        [$result, $context] = $this->getRestApiHandler()->callHandler($handler, $vars, $request);
         if ($handler[1] === 'getOpenAPI') {
             header('Access-Control-Allow-Origin: *');
             // @checkme set server url to current path here
@@ -430,6 +443,16 @@ class RoutingBridge extends BasicBridge
             $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
         }
         return [$result, $context];
+    }
+
+    /**
+     * Summary of getGraphQLHandler
+     * @return xarGraphQL
+     */
+    public function getGraphQLHandler()
+    {
+        $this->graphQLHandler ??= new xarGraphQL();
+        return $this->graphQLHandler;
     }
 
     /**
@@ -459,11 +482,11 @@ class RoutingBridge extends BasicBridge
         }
         // path = /{object}[/{itemid}[/{method}]] or /{object}/{method}
         // dispatcher doesn't provide query params by default
-        $query = static::getQueryParams($request);
+        $query = $this->getQueryParams($request);
         // add remaining query params to path vars
         $params = array_merge($vars, $query);
         // add body params to query params
-        $input = static::getParsedBody($request);
+        $input = $this->getParsedBody($request);
         if (!empty($input) && is_array($input)) {
             $params = array_merge($params, $input);
         }
@@ -478,10 +501,10 @@ class RoutingBridge extends BasicBridge
 
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
-        static::$baseUri = static::getBaseUri($request) . static::$prefix;
+        static::$baseUri = $this->getBaseUri($request) . static::$prefix;
         $context['baseuri'] = static::$baseUri;
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName()
-        static::prepareController('object', static::$baseUri . '/object');
+        $this->prepareController('object', static::$baseUri . '/object');
         $context['module'] = 'object';
 
         $result = $this->runObjectRequest($params, $context);
@@ -522,21 +545,21 @@ class RoutingBridge extends BasicBridge
         }
         // path = /{module}/{type}/{func}
         // dispatcher doesn't provide query params by default
-        $query = static::getQueryParams($request);
+        $query = $this->getQueryParams($request);
         // filter out path vars from remaining query params here
         $params = array_diff_key($query, $vars);
         // add body params to query params (if any)
-        $input = static::getParsedBody($request);
+        $input = $this->getParsedBody($request);
         if (!empty($input) && is_array($input)) {
             $params = array_merge($params, $input);
         }
 
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
-        static::$baseUri = static::getBaseUri($request) . static::$prefix;
+        static::$baseUri = $this->getBaseUri($request) . static::$prefix;
         $context['baseuri'] = static::$baseUri;
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
-        static::prepareController($vars['module'], static::$baseUri);
+        $this->prepareController($vars['module'], static::$baseUri);
         $context['module'] = $vars['module'];
 
         $result = $this->runModuleRequest($vars, $params, $context);
@@ -565,14 +588,14 @@ class RoutingBridge extends BasicBridge
     {
         // @checkme limited to renderBlock() or getinfo() for now, so no query params or body params taken into account yet
         // dispatcher doesn't provide query params by default
-        $query = static::getQueryParams($request);
+        $query = $this->getQueryParams($request);
 
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
-        static::$baseUri = static::getBaseUri($request) . static::$prefix;
+        static::$baseUri = $this->getBaseUri($request) . static::$prefix;
         $context['baseuri'] = static::$baseUri;
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
-        static::prepareController($vars['module'] ?? 'base', static::$baseUri);
+        $this->prepareController($vars['module'] ?? 'base', static::$baseUri);
         $context['module'] = $vars['module'] ?? 'base';
 
         $result = $this->runBlockRequest($vars, $query, $context);

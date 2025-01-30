@@ -48,7 +48,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
     public function process(ServerRequestInterface $request, RequestHandlerInterface $next): ResponseInterface
     {
         // identify module requests and set request attributes
-        $request = static::matchRequest($request);
+        $request = $this->matchRequest($request);
 
         // check only the request attributes relevant for module request
         $allowed = array_flip($this->attributes);
@@ -64,10 +64,10 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         // @checkme keep track of the current base uri if filtered in router
-        static::setBaseUri($request);
+        $this->setBaseUri($request);
         $context['baseuri'] = static::$baseUri;
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
-        static::prepareController($attribs['module'], static::$baseUri);
+        $this->prepareController($attribs['module'], static::$baseUri);
         $context['module'] = $attribs['module'];
         // @todo where do we decide to use Twig or not
         //$context['twig'] = true;

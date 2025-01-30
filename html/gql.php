@@ -72,6 +72,6 @@ $data = xarGraphQL::get_data($query, $variables, $operationName);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
 //$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes, $schemaFile);
  */
-
-[$data, $context] = xarGraphQL::handleRequest();
-xarGraphQL::output($data, $context);
+$xarGraphQL = new xarGraphQL();
+[$data, $context] = $xarGraphQL->handleRequest();
+$xarGraphQL->output($data, $context);

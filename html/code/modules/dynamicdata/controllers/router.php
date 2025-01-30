@@ -29,13 +29,13 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
     /**
      * Basic route matcher to identify object requests and set request attributes e.g. in router middleware
      */
-    public static function matchRequest(ServerRequestInterface $request): ServerRequestInterface
+    public function matchRequest(ServerRequestInterface $request): ServerRequestInterface
     {
         // @checkme keep track of the current base uri if filtered in router
-        static::setBaseUri($request);
+        $this->setBaseUri($request);
 
         // parse request uri for path + query params
-        $params = static::parseUri($request);
+        $params = $this->parseUri($request);
 
         // identify object requests and set request attributes
         if (!empty($params['object'])) {
@@ -56,7 +56,7 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
      * @param ServerRequestInterface $request
      * @return array<string, mixed>
      */
-    public static function parseUri(ServerRequestInterface $request): array
+    public function parseUri(ServerRequestInterface $request): array
     {
         // did we already filter out the base uri in router middleware?
         if ($request->getAttribute('baseUri') !== null) {
@@ -75,9 +75,10 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
      * @param ?string $method
      * @param string|int|null $itemid
      * @param array<string, mixed> $extra
+     * @see \Xaraya\Bridge\Requests\BasicBridgeTrait::prepareController()
      * @return string
      */
-    public static function buildUri(?string $object = null, ?string $method = null, string|int|null $itemid = null, array $extra = []): string
+    public function buildUri(?string $object = null, ?string $method = null, string|int|null $itemid = null, array $extra = []): string
     {
         $prefix = static::$baseUri;
         return DataObjectRequest::buildDataObjectPath($object, $method, $itemid, $extra, $prefix);

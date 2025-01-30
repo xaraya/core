@@ -17,5 +17,4 @@ namespace Xaraya\Bridge\Requests;
 class BasicBridge extends BasicRequest implements BasicBridgeInterface
 {
     use BasicBridgeTrait;
-    //public static string $baseUri = '';
 }

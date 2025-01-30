@@ -66,7 +66,7 @@
  * @package core\bridge
  * @subpackage middleware
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -107,7 +107,7 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
     /**
      * Basic route matcher to identify object/module requests and set request attributes e.g. in router middleware
      */
-    public static function matchRequest(ServerRequestInterface $request): ServerRequestInterface
+    public function matchRequest(ServerRequestInterface $request): ServerRequestInterface
     {
         return $request;
     }
@@ -116,7 +116,7 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
      * Basic route parser for object/module requests e.g. in route matcher for router middleware
      * @return array<string, mixed>
      */
-    public static function parseUri(ServerRequestInterface $request): array
+    public function parseUri(ServerRequestInterface $request): array
     {
         return [];
     }
@@ -125,7 +125,7 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
      * Basic route builder for object/module requests e.g. in response output or templates - assuming short url format here
      * @param array<string, mixed> $extra
      */
-    public static function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string
+    public function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string
     {
         return '/';
     }

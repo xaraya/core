@@ -55,19 +55,19 @@ function try_builder()
 
 /**
  * Summary of send_openapi
- * @param mixed $restHandler
+ * @param DataObjectRESTHandler $restHandler
  * @return void
  */
 function send_openapi($restHandler)
 {
     // @todo move away from static methods for context
-    $result = $restHandler::getOpenAPI();
-    $restHandler::output($result);
+    $result = $restHandler->getOpenAPI();
+    $restHandler->output($result);
 }
 
 /**
  * Summary of get_router
- * @param mixed $restHandler
+ * @param DataObjectRESTHandler $restHandler
  * @return RouterInterface
  */
 function get_router($restHandler)
@@ -86,7 +86,7 @@ function get_router($restHandler)
  * @param string $method
  * @param string $path
  * @param RouterInterface $router
- * @param mixed $restHandler
+ * @param DataObjectRESTHandler $restHandler
  * @return void
  */
 function handle_request($method, $path, $router, $restHandler)
@@ -112,25 +112,25 @@ function handle_request($method, $path, $router, $restHandler)
     // $restHandler::setTimer('dispatch');
     // ... call $handler with $vars
     try {
-        [$result, $context] = $restHandler::callHandler($handler, $vars);
-        $restHandler::output($result, 200, $context);
+        [$result, $context] = $restHandler->callHandler($handler, $vars);
+        $restHandler->output($result, 200, $context);
     } catch (UnauthorizedOperationException $e) {
-        $restHandler::output('This operation is unauthorized, please authenticate.', 401);
+        $restHandler->output('This operation is unauthorized, please authenticate.', 401);
     } catch (ForbiddenOperationException $e) {
-        $restHandler::output('This operation is forbidden.', 403);
+        $restHandler->output('This operation is forbidden.', 403);
     } catch (Throwable $e) {
         $result = "Exception: " . $e->getMessage();
         if ($e->getPrevious() !== null) {
             $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
         }
         $result .= "\nTrace:\n" . $e->getTraceAsString();
-        $restHandler::output($result, 422);
+        $restHandler->output($result, 422);
     }
 }
 
 /**
  * Summary of try_handler
- * @param mixed $restHandler
+ * @param DataObjectRESTHandler $restHandler
  * @return void
  */
 function try_handler($restHandler)
@@ -146,6 +146,6 @@ function try_handler($restHandler)
 }
 
 //try_builder();
-// @todo move away from static methods for context
-$restHandler = DataObjectRESTHandler::class;
+// move away from static methods for context
+$restHandler = new DataObjectRESTHandler();
 try_handler($restHandler);

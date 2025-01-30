@@ -34,9 +34,9 @@ class HtmxHandler
      */
     public function run(&$request = null)
     {
-        $method = $this->bridge::getMethod($request);
-        $path = $this->bridge::getPathInfo($request);
-        $server = $this->bridge::getServerParams($request);
+        $method = $this->bridge->getMethod($request);
+        $path = $this->bridge->getPathInfo($request);
+        $server = $this->bridge->getServerParams($request);
         [$result, $context] = $this->bridge->dispatchRequest($method, $path, $this->prefix, $request);
         if (!empty($server['HTTP_HX_REQUEST']) &&
             empty($server['HTTP_HX_HISTORY_RESTORE_REQUEST']) &&

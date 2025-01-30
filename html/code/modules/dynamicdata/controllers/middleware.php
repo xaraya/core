@@ -49,7 +49,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
     public function process(ServerRequestInterface $request, RequestHandlerInterface $next): ResponseInterface
     {
         // identify object requests and set request attributes
-        $request = static::matchRequest($request);
+        $request = $this->matchRequest($request);
 
         // check only the request attributes relevant for object request
         $allowed = array_flip($this->attributes);
@@ -65,10 +65,10 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         // @checkme keep track of the current base uri if filtered in router
-        static::setBaseUri($request);
+        $this->setBaseUri($request);
         $context['baseuri'] = static::$baseUri;
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName() in DD list
-        static::prepareController('object', static::$baseUri);
+        $this->prepareController('object', static::$baseUri);
         $context['module'] = 'object';
         // @todo where do we decide to use Twig or not
         //$context['twig'] = true;
@@ -85,7 +85,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
 
         // @checkme pass along buildUri() as link function to DD
         $params['linktype'] = 'other';
-        $params['linkfunc'] = static::buildUri(...);
+        $params['linkfunc'] = $this->buildUri(...);
 
         $response = $this->run($params, $context);
 

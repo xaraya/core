@@ -18,5 +18,4 @@ namespace Xaraya\Bridge\Requests;
 class CommonBridge extends BasicBridge implements CommonBridgeInterface
 {
     use CommonBridgeTrait;
-    //public static string $baseUri = '';
 }

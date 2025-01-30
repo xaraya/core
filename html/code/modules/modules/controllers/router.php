@@ -27,13 +27,13 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
     /**
      * Basic route matcher to identify module requests and set request attributes e.g. in router middleware
      */
-    public static function matchRequest(ServerRequestInterface $request): ServerRequestInterface
+    public function matchRequest(ServerRequestInterface $request): ServerRequestInterface
     {
         // @checkme keep track of the current base uri if filtered in router
-        static::setBaseUri($request);
+        $this->setBaseUri($request);
 
         // parse request uri for path + query params
-        $params = static::parseUri($request);
+        $params = $this->parseUri($request);
 
         // identify module requests and set request attributes
         if (!empty($params['module']) && $params['module'] != 'object') {
@@ -54,7 +54,7 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
      * @param ServerRequestInterface $request
      * @return array<string, mixed>
      */
-    public static function parseUri(ServerRequestInterface $request): array
+    public function parseUri(ServerRequestInterface $request): array
     {
         // did we already filter out the base uri in router middleware?
         if ($request->getAttribute('baseUri') !== null) {
@@ -73,9 +73,10 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
      * @param ?string $type
      * @param string|int|null $func
      * @param array<string, mixed> $extra
+     * @see \Xaraya\Bridge\Requests\BasicBridgeTrait::prepareController()
      * @return string
      */
-    public static function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
+    public function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
     {
         $prefix = static::$baseUri;
         return ModuleRequest::buildModulePath($module, $type, $func, $extra, $prefix);

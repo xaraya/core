@@ -15,7 +15,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -636,7 +636,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      * @param mixed $context
      * @return void
      */
-    public static function output($data, $context = null)
+    public function output($data, $context = null)
     {
         if (is_string($data)) {
             //header('Access-Control-Allow-Origin: *');
@@ -771,12 +771,12 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      * @param mixed $request
      * @return mixed
      */
-    public static function handleRequest($vars = [], &$request = null)
+    public function handleRequest($vars = [], &$request = null)
     {
         // dispatcher doesn't provide query params by default
-        $params = static::getQueryParams($request);
+        $params = $this->getQueryParams($request);
         // handle php://input for POST etc.
-        $input = static::getJsonBody($request);
+        $input = $this->getJsonBody($request);
         if (!empty($input)) {
             $query = $input['query'] ?? '{schema}';
             $variables = $input['variables'] ?? null;

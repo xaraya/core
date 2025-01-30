@@ -3,7 +3,7 @@
  * @package core\bridge
  * @subpackage requests
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -26,8 +26,8 @@ use Xaraya\Bridge\Requests\ModuleRequest;
  */
 interface BasicBridgeInterface
 {
-    public static function prepareController(string $module = 'base', string $baseUri = ''): void;
-    public static function wrapOutputInPage(string $body, $context = null): string;
+    public function prepareController(string $module = 'base', string $baseUri = ''): void;
+    public function wrapOutputInPage(string $body, $context = null): string;
 }
 
 /**
@@ -41,7 +41,7 @@ trait BasicBridgeTrait
      * @param string $baseUri
      * @return void
      */
-    public static function prepareController(string $module = 'base', string $baseUri = ''): void
+    public function prepareController(string $module = 'base', string $baseUri = ''): void
     {
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         xarController::getRequest()->setModule($module);
@@ -53,7 +53,7 @@ trait BasicBridgeTrait
         // @todo get xarServer::getBaseURL() working correctly for ReactPHP etc.
         //sys::import('modules.modules.controllers.router');
         //ModuleRouter::setBaseUri($baseUri);
-        xarController::$buildUri = [static::class, 'buildUri'];
+        xarController::$buildUri = [$this, 'buildUri'];
         //xarController::$buildUri = [ModuleRequest::class, 'buildModulePath'];
         //xarController::$redirectTo = [ModuleRequest::class, 'redirectTo'];
     }
@@ -64,7 +64,7 @@ trait BasicBridgeTrait
      * @param mixed $context
      * @return string
      */
-    public static function wrapOutputInPage(string $body, $context = null): string
+    public function wrapOutputInPage(string $body, $context = null): string
     {
         // Render page with the output - see index.php
         return xarTpl::renderPage($body, null, $context);

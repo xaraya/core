@@ -46,27 +46,28 @@ final class BridgeRequestsTest extends TestCase
         $_GET = array_replace($_GET ?? [], $queryVars);
         $expected = $serverVars;
 
-        $this->assertEquals($expected['REQUEST_METHOD'], BasicRequest::getMethod());
-        $this->assertEquals($expected['PATH_INFO'], BasicRequest::getPathInfo());
+        $basicRequest = new BasicRequest();
+        $this->assertEquals($expected['REQUEST_METHOD'], $basicRequest->getMethod());
+        $this->assertEquals($expected['PATH_INFO'], $basicRequest->getPathInfo());
         $allowed = array_flip(array_keys($expected));
-        $this->assertEquals($expected, array_intersect_key(BasicRequest::getServerParams(), $allowed));
+        $this->assertEquals($expected, array_intersect_key($basicRequest->getServerParams(), $allowed));
 
         // {request_uri} = {/baseurl/script.php}{/path_info}?{query_string}
-        $this->assertEquals($expected['SCRIPT_NAME'], BasicRequest::getBaseUri());
+        $this->assertEquals($expected['SCRIPT_NAME'], $basicRequest->getBaseUri());
 
         // {request_uri} = {/otherurl}{/path_info}?{query_string} = mod_rewrite possibly unrelated to {/baseurl/script.php}
         $expected['REQUEST_URI'] = '/home/fastroute.php/site?all=yes';
         $_SERVER = array_replace($_SERVER ?? [], $expected);
-        $this->assertEquals('/home/fastroute.php', BasicRequest::getBaseUri());
+        $this->assertEquals('/home/fastroute.php', $basicRequest->getBaseUri());
 
         // {request_uri} = {/otherurl}?{query_string} = mod_rewrite possibly unrelated to {/baseurl/script.php}
         $expected['REQUEST_URI'] = '/home/fastroute.php/other?hello=world';
         $_SERVER = array_replace($_SERVER ?? [], $expected);
-        $this->assertEquals('/home/fastroute.php/other', BasicRequest::getBaseUri());
+        $this->assertEquals('/home/fastroute.php/other', $basicRequest->getBaseUri());
 
         $expected = $queryVars;
         $allowed = array_flip(array_keys($expected));
-        $this->assertEquals($expected, array_intersect_key(BasicRequest::getQueryParams(), $allowed));
+        $this->assertEquals($expected, array_intersect_key($basicRequest->getQueryParams(), $allowed));
 
         $_SERVER = [];
         $_GET = [];
@@ -79,32 +80,33 @@ final class BridgeRequestsTest extends TestCase
         $request = static::$requestCreator->fromArrays($serverVars);
         $expected = $serverVars;
 
-        $this->assertEquals($expected['REQUEST_METHOD'], BasicRequest::getMethod($request));
-        $this->assertEquals($expected['PATH_INFO'], BasicRequest::getPathInfo($request));
-        $this->assertEquals($expected, BasicRequest::getServerParams($request));
+        $basicRequest = new BasicRequest();
+        $this->assertEquals($expected['REQUEST_METHOD'], $basicRequest->getMethod($request));
+        $this->assertEquals($expected['PATH_INFO'], $basicRequest->getPathInfo($request));
+        $this->assertEquals($expected, $basicRequest->getServerParams($request));
 
         // {request_uri} = {/baseurl/script.php}{/path_info}?{query_string}
-        $this->assertEquals($expected['SCRIPT_NAME'], BasicRequest::getBaseUri($request));
+        $this->assertEquals($expected['SCRIPT_NAME'], $basicRequest->getBaseUri($request));
 
         // {request_uri} = {/otherurl}{/path_info}?{query_string} = mod_rewrite possibly unrelated to {/baseurl/script.php}
         $expected['REQUEST_URI'] = '/home/fastroute.php/site?all=yes';
         $request = static::$requestCreator->fromArrays($expected);
-        $this->assertEquals('/home/fastroute.php', BasicRequest::getBaseUri($request));
+        $this->assertEquals('/home/fastroute.php', $basicRequest->getBaseUri($request));
 
         // {request_uri} = {/otherurl}?{query_string} = mod_rewrite possibly unrelated to {/baseurl/script.php}
         $expected['REQUEST_URI'] = '/home/fastroute.php/other?hello=world';
         $request = static::$requestCreator->fromArrays($expected);
-        $this->assertEquals('/home/fastroute.php/other', BasicRequest::getBaseUri($request));
+        $this->assertEquals('/home/fastroute.php/other', $basicRequest->getBaseUri($request));
 
         // did we already filter out the base uri in router middleware?
         $expected = 'hi there!';
         $request = $request->withAttribute('baseUri', $expected);
-        $this->assertEquals($expected, BasicRequest::getBaseUri($request));
+        $this->assertEquals($expected, $basicRequest->getBaseUri($request));
 
         $expected = $queryVars;
         $request = static::$requestCreator->fromArrays($serverVars, [], [], $queryVars);
         $allowed = array_flip(array_keys($expected));
-        $this->assertEquals($expected, array_intersect_key(BasicRequest::getQueryParams($request), $allowed));
+        $this->assertEquals($expected, array_intersect_key($basicRequest->getQueryParams($request), $allowed));
     }
 
     public static function getDataObjectProvider(): array

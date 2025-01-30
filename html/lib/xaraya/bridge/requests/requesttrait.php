@@ -3,7 +3,7 @@
  * @package core\bridge
  * @subpackage requests
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -19,77 +19,77 @@ sys::import('modules.dynamicdata.class.userinterface');
 /**
  * For documentation purposes only - available via CommonRequestTrait
  */
-interface CommonRequestInterface
+interface CommonRequestInterface extends Psr7BaseUriInterface
 {
     /**
      * Summary of getMethod
      * @param mixed $request
      * @return string
      */
-    public static function getMethod($request = null): string;
+    public function getMethod($request = null): string;
 
     /**
      * Summary of getPathInfo
      * @param mixed $request
      * @return string
      */
-    public static function getPathInfo($request = null): string;
+    public function getPathInfo($request = null): string;
 
     /**
      * Summary of getBaseUri
      * @param mixed $request
      * @return string
      */
-    public static function getBaseUri($request = null): string;
+    public function getBaseUri($request = null): string;
 
     /**
      * Summary of getQueryParams
      * @param mixed $request
      * @return array<string, mixed>
      */
-    public static function getQueryParams($request = null): array;
+    public function getQueryParams($request = null): array;
 
     /**
      * Summary of getServerParams
      * @param mixed $request
      * @return array<string, mixed>
      */
-    public static function getServerParams($request = null): array;
+    public function getServerParams($request = null): array;
 
     /**
      * Summary of getCookieParams
      * @param mixed $request
      * @return array<string, mixed>
      */
-    public static function getCookieParams($request = null): array;
+    public function getCookieParams($request = null): array;
 
     /**
      * Summary of getAuthToken
      * @param mixed $request
      * @return string
      */
-    public static function getAuthToken($request = null): string;
+    public function getAuthToken($request = null): string;
 
     /**
      * Summary of getUploadedFiles
      * @param mixed $request
      * @return array<string, mixed>
      */
-    public static function getUploadedFiles($request = null): array;
+    public function getUploadedFiles($request = null): array;
 
     /**
      * Summary of getParsedBody
      * @param mixed $request
      * @return mixed
      */
-    public static function getParsedBody($request = null): mixed;
+    public function getParsedBody($request = null): mixed;
 
     /**
      * Summary of getJsonBody
      * @param mixed $request
      * @return mixed
      */
-    public static function getJsonBody($request = null): mixed;
+    public function getJsonBody($request = null): mixed;
 }
 
 /**
@@ -98,19 +98,21 @@ interface CommonRequestInterface
  */
 trait CommonRequestTrait
 {
+    use Psr7BaseUriTrait;
+
     /**
      * Summary of getMethod
      * @param mixed $request
      * @return string
      */
-    public static function getMethod($request = null): string
+    public function getMethod($request = null): string
     {
         // for PSR-7 compatible requests and xarRequest
         if (is_object($request) && method_exists($request, 'getMethod')) {
             return $request->getMethod();
         }
         // for everyone else
-        $server = static::getServerParams($request);
+        $server = $this->getServerParams($request);
         return $server['REQUEST_METHOD'] ?? 'GET';
     }
 
@@ -119,10 +121,10 @@ trait CommonRequestTrait
      * @param mixed $request
      * @return string
      */
-    public static function getPathInfo($request = null): string
+    public function getPathInfo($request = null): string
     {
         // for PSR-7 compatible server requests and everyone else
-        $server = static::getServerParams($request);
+        $server = $this->getServerParams($request);
         // no PATH_INFO available for ReactPHP etc.
         if (is_object($request) && method_exists($request, 'getUri') && empty($server['PATH_INFO'])) {
             return $request->getUri()->getPath();
@@ -135,7 +137,7 @@ trait CommonRequestTrait
      * @param mixed $request
      * @return string
      */
-    public static function getBaseUri($request = null): string
+    public function getBaseUri($request = null): string
     {
         // for PSR-7 compatible requests
         if (is_object($request) && method_exists($request, 'getAttribute')) {
@@ -145,7 +147,7 @@ trait CommonRequestTrait
             }
         }
         // for PSR-7 compatible server requests and everyone else
-        $server = static::getServerParams($request);
+        $server = $this->getServerParams($request);
         $requestPath = explode('?', $server['REQUEST_URI'] ?? '')[0];
         // no REQUEST_URI, SCRIPT_NAME or PATH_INFO available for ReactPHP etc.
         if (empty($requestPath)) {
@@ -168,14 +170,14 @@ trait CommonRequestTrait
      * @param mixed $request
      * @return array<string, mixed>
      */
-    public static function getQueryParams($request = null): array
+    public function getQueryParams($request = null): array
     {
         // for PSR-7 compatible server requests
         if (is_object($request) && method_exists($request, 'getQueryParams')) {
             return $request->getQueryParams();
         }
         // for everyone else
-        $server = static::getServerParams($request);
+        $server = $this->getServerParams($request);
         $query = [];
         if (!empty($server['QUERY_STRING'])) {
             parse_str($server['QUERY_STRING'], $query);
@@ -188,7 +190,7 @@ trait CommonRequestTrait
      * @param mixed $request
      * @return array<string, mixed>
      */
-    public static function getServerParams($request = null): array
+    public function getServerParams($request = null): array
     {
         // for PSR-7 compatible server requests
         if (is_object($request) && method_exists($request, 'getServerParams')) {
@@ -203,7 +205,7 @@ trait CommonRequestTrait
      * @param mixed $request
      * @return array<string, mixed>
      */
-    public static function getCookieParams($request = null): array
+    public function getCookieParams($request = null): array
     {
         // for PSR-7 compatible server requests
         if (is_object($request) && method_exists($request, 'getCookieParams')) {
@@ -218,16 +220,17 @@ trait CommonRequestTrait
      * @param mixed $request
      * @return string
      */
-    public static function getAuthToken($request = null): string
+    public function getAuthToken($request = null): string
     {
         // for PSR-7 compatible requests
         if (is_object($request) && method_exists($request, 'hasHeader')) {
+            /** @var \Psr\Http\Message\ServerRequestInterface $request */
             if ($request->hasHeader('X-Auth-Token')) {
                 return $request->getHeaderLine('X-Auth-Token');
             }
         }
         // for PSR-7 compatible server requests and everyone else
-        $server = static::getServerParams($request);
+        $server = $this->getServerParams($request);
         if (empty($server) || empty($server['HTTP_X_AUTH_TOKEN'])) {
             return '';
         }
@@ -239,7 +242,7 @@ trait CommonRequestTrait
      * @param mixed $request
      * @return array<string, mixed>
      */
-    public static function getUploadedFiles($request = null): array
+    public function getUploadedFiles($request = null): array
     {
         // for PSR-7 compatible server requests
         if (is_object($request) && method_exists($request, 'getUploadedFiles')) {
@@ -254,7 +257,7 @@ trait CommonRequestTrait
      * @param mixed $request
      * @return mixed
      */
-    public static function getParsedBody($request = null): mixed
+    public function getParsedBody($request = null): mixed
     {
         // for PSR-7 compatible server requests
         if (is_object($request) && method_exists($request, 'getParsedBody')) {
@@ -269,7 +272,7 @@ trait CommonRequestTrait
      * @param mixed $request
      * @return mixed
      */
-    public static function getJsonBody($request = null): mixed
+    public function getJsonBody($request = null): mixed
     {
         // for PSR-7 compatible server requests
         if (is_object($request) && method_exists($request, 'getBody')) {

@@ -12,7 +12,6 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Middlewares\Utils\Dispatcher;
 // use Xaraya PSR-15 compatible middleware(s)
-use Xaraya\Bridge\Middleware\DefaultMiddleware;
 use Xaraya\Bridge\Middleware\DataObjectMiddleware;
 use Xaraya\Bridge\Middleware\DataObjectApiMiddleware;
 use Xaraya\Bridge\Middleware\ModuleMiddleware;
@@ -67,10 +66,10 @@ function getStack($psr17Factory, $api = false, $wrapPage = false)
     LocalTimer::setTimer('middleware');
 
     // some other middleware before or after...
-    $filter = function ($request, $next) {
+    $filter = function ($request, $next) use ($modules) {
         LocalTimer::setTimer('filter_in');
         // @checkme strip baseUrl from request path here?
-        $request = DefaultMiddleware::stripBaseUri($request);
+        $request = $modules->stripBaseUri($request);
         LocalTimer::setTimer('filter_stripped');
         $response = $next->handle($request->withHeader('X-Request-Before', 'Bar'));
         LocalTimer::setTimer('filter_handled');

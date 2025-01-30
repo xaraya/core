@@ -136,7 +136,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
     {
         // @checkme not applicable for ReactPHP etc.
         // Strip the base uri for the calling script from the request path and set 'baseUri' request attribute
-        $request = DefaultMiddleware::stripBaseUri($request);
+        $request = $this->bridge->stripBaseUri($request);
         $method = $request->getMethod();
         // @checkme see https://github.com/middlewares/fast-route/blob/master/src/FastRoute.php on using rawurldecode() here
         $path = $request->getUri()->getPath();
@@ -179,7 +179,8 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
             // don't use call_user_func here anymore because $request is passed by reference
             if (str_starts_with($path, '/restapi/')) {
                 // different processing for REST API - see rst.php
-                [$result, $context] = DataObjectRESTHandler::callHandler($handler, $vars, $request);
+                $restApiHandler = new DataObjectRESTHandler();
+                [$result, $context] = $restApiHandler->callHandler($handler, $vars, $request);
             } elseif (str_starts_with($path, '/graphql')) {
                 // different processing for GraphQL API - see gql.php
                 [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);

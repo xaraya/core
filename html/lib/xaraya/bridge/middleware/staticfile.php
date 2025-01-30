@@ -3,7 +3,7 @@
  * @package core\bridge
  * @subpackage middleware
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -53,7 +53,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     public function process(ServerRequestInterface $request, RequestHandlerInterface|callable $next): ResponseInterface
     {
         // identify static file requests and set request attributes
-        $request = static::matchRequest($request);
+        $request = $this->matchRequest($request);
 
         // check only the request attributes relevant for static file request
         $allowed = array_flip($this->attributes);
@@ -108,10 +108,10 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     /**
      * Basic route matcher to identify static file requests and set request attributes e.g. in router middleware
      */
-    public static function matchRequest(ServerRequestInterface $request): ServerRequestInterface
+    public function matchRequest(ServerRequestInterface $request): ServerRequestInterface
     {
         // @checkme keep track of the current base uri if filtered in router
-        static::setBaseUri($request);
+        $this->setBaseUri($request);
 
         if ($request->getUri()->getPath() === '/favicon.ico') {
             $request = $request->withAttribute('static', 'other');
@@ -123,7 +123,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
 
         foreach (static::$locations as $type => $prefix) {
             // parse request uri for path + query params
-            $params = static::parseUri($request, $prefix, $type);
+            $params = $this->parseUri($request, $prefix, $type);
 
             // identify static file requests and set request attributes
             if ((!empty($params['static']) && $params['static'] == $type) && !empty($params['source']) && !empty($params['folder']) && !empty($params['file'])) {
@@ -142,7 +142,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
      * Basic route parser for static file requests e.g. in route matcher for router middleware
      * @return array<string, mixed>
      */
-    public static function parseUri(ServerRequestInterface $request, string $prefix = '/themes', string $type = 'theme'): array
+    public function parseUri(ServerRequestInterface $request, string $prefix = '/themes', string $type = 'theme'): array
     {
         // did we already filter out the base uri in router middleware?
         if ($request->getAttribute('baseUri') !== null) {
@@ -159,7 +159,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
      * Basic route builder for static file requests e.g. in response output or templates - assuming short url format here
      * @param array<string, mixed> $extra
      */
-    public static function buildUri(?string $source = null, ?string $folder = null, string|int|null $file = null, array $extra = [], string $prefix = ''): string
+    public function buildUri(?string $source = null, ?string $folder = null, string|int|null $file = null, array $extra = [], string $prefix = ''): string
     {
         $uri = static::$baseUri;
         if (!empty($prefix) && strstr($uri, $prefix) !== $prefix) {
