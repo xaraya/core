@@ -23,7 +23,7 @@ interface RequestInterface
      * @uses xarServer::setInstance()
      * @return void
      **/
-    public function __construct($args);
+    public function __construct($args = []);
 
     /**
      * Initialize the request after setup

@@ -133,6 +133,16 @@ class ServiceFactory
     }
 
     /**
+     * Summary of getSessionService
+     * @todo integrate SessionHandler vs. SessionContext options
+     */
+    public static function getSessionService(object|string|null $parent = null): SessionInterface
+    {
+        self::log(__METHOD__, $parent);
+        return SessionService::create($parent);
+    }
+
+    /**
      * Summary of getExitCallable
      */
     public static function getExitCallable(ServicesInterface $parent): callable

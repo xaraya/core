@@ -1635,6 +1635,13 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarConfigVars::set\([^,]+,\s*/s' => '\$this->config()->setVar(',
             '/xarConfigVars::delete\([^,]+,\s*/s' => '\$this->config()->delVar(',
             '/xarConfigVars::cache\([^)]*\)/s' => '\$this->config()->cache()',
+            // xarSession replace getVar('role_id') first
+            '/xarSession::getVar\(\'role_id\'\)/' => '\$this->session()->getUserId()',
+            '/xarSession::getVar\(/' => '\$this->session()->getVar(',
+            '/xarSession::setVar\(/' => '\$this->session()->setVar(',
+            '/xarSession::delVar\(/' => '\$this->session()->delVar(',
+            '/xarSession::getUserId\(/' => '\$this->session()->getUserId(',
+            '/xarSession::getAnonId\(/' => '\$this->session()->getAnonId(',
             // @todo handle xarDB*::* - note: excl. meta and newConn
             '/xarDB::getConn\(/' => '\$this->db()->getConn(',
             '/xarDB::getName\(/' => '\$this->db()->getName(',

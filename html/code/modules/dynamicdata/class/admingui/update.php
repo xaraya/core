@@ -162,7 +162,7 @@ class UpdateMethod extends MethodClass
                 } // throw back
 
                 // If we are here then the update is valid: reset the session var
-                xarSession::setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
+                $this->session()->setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
 
                 // special case for dynamic objects themselves
                 if ($myobject->objectid == 1) {

@@ -69,6 +69,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
 
     private ?string $sessionId = null;  // The id assigned to us.
     private string $ipAddress = '';     // IP-address belonging to this session.
+    private ?int $lastSaved = null;     // When was this session last saved ?
 
     /**
      * Constructor for the session handler
@@ -322,7 +323,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             $this->db->begin();
             $query = "INSERT INTO $this->tbl (id, ip_addr, role_id, first_use, last_use)
                       VALUES (?,?,?,?,?)";
-            $bindvars = [$this->sessionId, $ipAddress, xarSession::$anonId, time(), time()];
+            $bindvars = [$this->sessionId, $ipAddress, xarSession::getAnonId(), time(), time()];
             $stmt = $this->db->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
             $this->db->commit();
@@ -390,15 +391,15 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
                 $timeoutSetting = xarSession::getTimeoutSetting();
                 if ($lastused < $timeoutSetting) {
                     // force a reset of the userid (but use the same sessionid)
-                    $this->setUserInfo(xarSession::$anonId, 0);
+                    $this->setUserInfo(xarSession::getAnonId(), 0);
                     $this->ipAddress = '';
                     $vars = '';
                 }
             }
             // Keep track of when this session was last saved
-            xarSession::saveTime($lastused);
+            $this->saveTime($lastused);
         } else {
-            $_SESSION[self::PREFIX . 'role_id'] = xarSession::$anonId;
+            $_SESSION[self::PREFIX . 'role_id'] = xarSession::getAnonId();
 
             $this->ipAddress = '';
             $vars = '';
@@ -417,6 +418,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      */
     public function write($sessionId, $vars): bool
     {
+        $now = time();
         try {
             $this->db->begin();
             // FIXME: We had to do qstr here, cos the query failed for some reason
@@ -426,10 +428,11 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             // UPDATE: Could this be because the vars column is a BLOB (i.e. binary) ?
             $query = "UPDATE $this->tbl SET vars = " .
                 $this->db->qstr($vars) . ", last_use = " .
-                $this->db->qstr(time()) . "WHERE id = " .
+                $this->db->qstr($now) . "WHERE id = " .
                 $this->db->qstr($sessionId);
             $this->db->executeUpdate($query);
             $this->db->commit();
+            $this->saveTime($now);
         } catch (Exception $e) {
             //$this->db->rollback(); (why was commented out again?)
             throw $e;
@@ -516,7 +519,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             return $_SESSION[$var];
         } elseif ($name == 'role_id') {
             // mrb: why is this again?
-            $_SESSION[$var] = xarSession::$anonId;
+            $_SESSION[$var] = xarSession::getAnonId();
             return $_SESSION[$var];
         }
     }
@@ -589,6 +592,20 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
 
         $_SESSION[self::PREFIX . 'role_id'] = $userId;
         return true;
+    }
+
+    /**
+     * When was this session last saved ?
+     * @param int $lastused
+     * @return int
+     */
+    public function saveTime($lastused = 0)
+    {
+        // initialize saveTime if necessary
+        if (!isset($this->lastSaved) || !empty($lastused)) {
+            $this->lastSaved = (int) $lastused;
+        }
+        return $this->lastSaved;
     }
 
     /**
@@ -672,7 +689,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     public function setContext($context)
     {
         // not used in default session handler
-        $context['session'] = new VirtualSession($this->getId(), $this->getUserId(), $this->ipAddress, xarSession::saveTime(), $this->getVars());
+        $context['session'] = new VirtualSession($this->getId(), $this->getUserId(), $this->ipAddress, $this->saveTime(), $this->getVars());
         $context['session']->isNew = $this->isNew();
     }
 }

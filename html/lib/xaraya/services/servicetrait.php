@@ -25,6 +25,13 @@ sys::import('xaraya.context.contexttrait');
 sys::import('xaraya.context.context');
 
 /**
+ * @todo find out why sys::import() has an issue with autoload of xarDatabase() in gql.php
+ */
+if (interface_exists('Xaraya\Services\ServiceInterface', false)) {
+    return;
+}
+
+/**
  * For documentation purposes only - available via ServiceTrait
  */
 interface ServiceInterface extends ContextInterface

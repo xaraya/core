@@ -207,9 +207,9 @@ class XarayaCoreExtension extends XarayaTwigExtension
             return false;
         }
         if (isset($context)) {
-            return $context->getUserId() ?? xarSession::getVar('role_id');
+            return $context->getUserId() ?? xarSession::getUserId();
         }
-        return xarSession::getVar('role_id');
+        return xarSession::getUserId();
     }
 
     public function xar_modname($regId = null)

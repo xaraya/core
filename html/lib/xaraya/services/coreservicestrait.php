@@ -55,6 +55,7 @@ interface CoreServicesInterface extends ContextInterface
     public function prop(): DataPropertyInterface;
     public function cache(): CachingInterface;
     public function config(): ConfigInterface;
+    public function session(): SessionInterface;
     public function db(): DatabaseInterface;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
@@ -91,6 +92,7 @@ trait CoreServicesTrait
     protected ?DataPropertyInterface $xarProp = null;
     protected ?CachingInterface $xarCache = null;
     protected ?ConfigInterface $xarConfig = null;
+    protected ?SessionInterface $xarSession = null;
     protected ?DatabaseInterface $xarDB = null;
     /** @var ?callable */
     protected $xarExit = null;
@@ -379,6 +381,24 @@ trait CoreServicesTrait
     {
         $this->xarConfig ??= ServiceFactory::getConfigService($this);
         return $this->xarConfig;
+    }
+
+    /**
+     * Access xarSession::* Session methods (getVar, setVar, ...)
+     *
+     * Available methods:
+     * - getVar()
+     * - setVar()
+     * - delVar()
+     * - getUserId()
+     * - getAnonId()
+     * - ...
+     *
+     */
+    public function session(): SessionInterface
+    {
+        $this->xarSession ??= ServiceFactory::getSessionService($this);
+        return $this->xarSession;
     }
 
     /**

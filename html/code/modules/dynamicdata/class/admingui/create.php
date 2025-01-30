@@ -139,7 +139,7 @@ class CreateMethod extends MethodClass
         $itemid = $myobject->createItem();
 
         // If we are here then the create is valid: reset the session var
-        xarSession::setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
+        $this->session()->setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
 
         if (empty($itemid)) {
             return;

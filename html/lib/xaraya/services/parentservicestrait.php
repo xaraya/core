@@ -318,6 +318,23 @@ trait ParentServicesTrait
     }
 
     /**
+     * Access xarSession::* Session methods (getVar, setVar, ...)
+     *
+     * Available methods:
+     * - getVar()
+     * - setVar()
+     * - delVar()
+     * - getUserId()
+     * - getAnonId()
+     * - ...
+     *
+     */
+    public function session(): SessionInterface
+    {
+        return $this->getParent()->session();
+    }
+
+    /**
      * Access xarDB::* Database methods (getConn, getPrefix, ...)
      *
      * Available methods:

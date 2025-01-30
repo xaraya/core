@@ -114,7 +114,7 @@ class FiltertagMethod extends MethodClass
             if (empty($filtername)) {
                 $filtername = $objectname;
             }
-            xarSession::setVar('DynamicData.Filter.' . $filtername, serialize($q));
+            $this->session()->setVar('DynamicData.Filter.' . $filtername, serialize($q));
 
             // Redirect to the next page
             $this->ctl()->redirect($return_url);
@@ -148,7 +148,7 @@ class FiltertagMethod extends MethodClass
             if (empty($args['filtername'])) {
                 $args['filtername'] = $args['object']->name;
             }
-            $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $args['filtername']) ?? '');
+            $filter = @unserialize($this->session()->getVar('DynamicData.Filter.' . $args['filtername']) ?? '');
             if (empty($filter)) {
                 $filter = [];
             }

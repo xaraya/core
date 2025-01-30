@@ -297,7 +297,7 @@ class xarRoles extends xarObject
 
     public static function current()
     {
-        return self::getRole(xarSession::getVar('role_id'));
+        return self::getRole(xarSession::getUserId());
     }
 
     public static function isParent($name1, $name2)

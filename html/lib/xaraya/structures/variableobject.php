@@ -60,7 +60,7 @@ abstract class xarVariableObject extends xarObject
                     static::$instance = @unserialize((string) xarModVars::get(static::$module, static::$variable));
                     break;
                 case 'user':
-                    $role_id = isset($role_id) ? $role_id : xarSession::getVar('role_id');
+                    $role_id = isset($role_id) ? $role_id : xarSession::getUserId();
                     static::$instance = @unserialize((string) xarModUserVars::get(static::$module, static::$variable, $role_id));
                     break;
                 case 'session':

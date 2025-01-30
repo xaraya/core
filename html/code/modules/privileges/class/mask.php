@@ -122,7 +122,7 @@ class xarMask extends xarObject
             // Cater to the myself role
             $normalinstance = array();
             foreach ($instancearray as $key => $value) 
-                $normalinstance[$key] = $value == 'myself' ? xarSession::getVar('role_id') : $value;
+                $normalinstance[$key] = $value == 'myself' ? xarSession::getUserId() : $value;
                 
             $normalform['instance']   = $normalinstance;
             $this->normalform = $normalform;

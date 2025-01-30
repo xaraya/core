@@ -47,6 +47,7 @@ class SessionContext implements ContextInterface, SessionInterface
     private array $args = [];
     private ?string $sessionId = null;
     private bool $isUpdated = false;
+    private ?int $lastSaved = null;
 
     /**
      * Constructor for the session handler
@@ -213,6 +214,20 @@ class SessionContext implements ContextInterface, SessionInterface
     }
 
     /**
+     * When was this session last saved ?
+     * @param int $lastused
+     * @return int
+     */
+    public function saveTime($lastused = 0)
+    {
+        // initialize saveTime if necessary
+        if (!isset($this->lastSaved) || !empty($lastused)) {
+            $this->lastSaved = (int) $lastused;
+        }
+        return $this->lastSaved;
+    }
+
+    /**
      * Get current userId from session (if any)
      * @return int|null
      */
@@ -303,6 +318,7 @@ class SessionContext implements ContextInterface, SessionInterface
             self::$storage->update($session);
             $this->isUpdated = false;
         }
+        $this->saveTime($session->lastUsed);
         return true;
     }
 }

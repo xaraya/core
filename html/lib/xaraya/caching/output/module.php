@@ -143,7 +143,7 @@ class xarModuleCache extends xarObject
             $gidlist = xarCache::getParents();
             $factors .= join(';', $gidlist);
         } else {
-            $factors .= xarSession::getVar('role_id');
+            $factors .= xarSession::getUserId();
         }
 
         // add the function params

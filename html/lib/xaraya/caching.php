@@ -285,7 +285,7 @@ class xarCache extends xarObject
     public static function getParents($currentid = null)
     {
         if (empty($currentid)) {
-            $currentid = xarSession::getVar('role_id');
+            $currentid = xarSession::getUserId();
         }
         if (xarCoreCache::isCached('User.Variables.'.$currentid, 'parentlist')) {
             return xarCoreCache::getCached('User.Variables.'.$currentid, 'parentlist');

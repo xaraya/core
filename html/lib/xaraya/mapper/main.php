@@ -86,6 +86,7 @@ class xarController extends xarObject
      */
     public static function getConfig()
     {
+        // xarController::init() comes after xarVar::init()
         $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => true);
         return $systemArgs;

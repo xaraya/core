@@ -111,7 +111,7 @@ class ViewMethod extends MethodClass
 
         // Check if we are filtering
         try {
-            $conditions = unserialize(xarSession::getVar('DynamicData.Filter.' . $object->name));
+            $conditions = unserialize($this->session()->getVar('DynamicData.Filter.' . $object->name));
             if (!empty($conditions)) {
                 $object->dataquery->addconditions($conditions);
             }

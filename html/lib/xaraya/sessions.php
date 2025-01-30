@@ -18,9 +18,11 @@
 
 sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.handler');
+sys::import('xaraya.facades.config');
 use Xaraya\Sessions\SessionInterface;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Sessions\SessionException;
+use Xaraya\Facades\xarConfig3;
 
 class xarSession
 {
@@ -66,14 +68,11 @@ class xarSession
         //self::$refererCheck = $args['refererCheck'));
         //self::sessionClass = $args['sessionClass'] ?? SessionHandler::class;
 
-        self::$anonId = (int) xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
+        self::$anonId = (int) xarConfig3::getVar('Site.User.AnonymousUID', 5);
+        // @deprecated 2.4.0 remove someday
         if (!defined('_XAR_ID_UNREGISTERED')) {
             define('_XAR_ID_UNREGISTERED', self::$anonId);
         }
-
-        // Register the SessionCreate event
-        // this is now registered during modules module init
-        // xarEvents::register('SessionCreate');
 
         // Set up the session object
         $session = new self::$sessionClass($args);
@@ -90,14 +89,15 @@ class xarSession
     public static function getConfig()
     {
         $systemArgs = [
-            'securityLevel'     => xarConfigVars::get(null, 'Site.Session.SecurityLevel'),
-            'duration'          => xarConfigVars::get(null, 'Site.Session.Duration'),
-            'inactivityTimeout' => xarConfigVars::get(null, 'Site.Session.InactivityTimeout'),
-            'cookieName'        => xarConfigVars::get(null, 'Site.Session.CookieName'),
-            'cookiePath'        => xarConfigVars::get(null, 'Site.Session.CookiePath'),
-            'cookieDomain'      => xarConfigVars::get(null, 'Site.Session.CookieDomain'),
-            'refererCheck'      => xarConfigVars::get(null, 'Site.Session.RefererCheck')];
-        //'sessionClass'      => xarConfigVars::get(null, 'Site.Session.HandlerClass'));
+            'securityLevel'     => xarConfig3::getVar('Site.Session.SecurityLevel'),
+            'duration'          => xarConfig3::getVar('Site.Session.Duration'),
+            'inactivityTimeout' => xarConfig3::getVar('Site.Session.InactivityTimeout'),
+            'cookieName'        => xarConfig3::getVar('Site.Session.CookieName'),
+            'cookiePath'        => xarConfig3::getVar('Site.Session.CookiePath'),
+            'cookieDomain'      => xarConfig3::getVar('Site.Session.CookieDomain'),
+            'refererCheck'      => xarConfig3::getVar('Site.Session.RefererCheck'),
+            //'sessionClass'      => xarConfig3::getVar('Site.Session.HandlerClass'),
+        ];
         return $systemArgs;
     }
 
@@ -118,7 +118,7 @@ class xarSession
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            // do not initialize session here
+            // do *not* initialize session here - depends on the caller
             //self::init();
         }
         return self::$instance;
@@ -160,7 +160,7 @@ class xarSession
         }
         // ignore templates and security try to get stuff in session
         if ($name == 'navigationLocale') {
-            return xarConfigVars::get(null, 'Site.MLS.DefaultLocale');
+            return xarConfig3::getVar('Site.MLS.DefaultLocale');
         } elseif ($name == 'privilegeset') {
             return null;
         }
@@ -239,20 +239,35 @@ class xarSession
      */
     public static function saveTime($lastused = 0)
     {
-        // initialize saveTime if necessary
-        if (!isset(self::$lastSaved) || !empty($lastused)) {
-            self::$lastSaved = (int) $lastused;
-        }
-        return self::$lastSaved;
+        return self::getInstance()?->saveTime($lastused);
     }
 
     /**
-     * Get the anonymous userId
+     * Get current userId from session (if any) or anonymous userId or null
+     * @return ?int
+     */
+    public static function getUserId()
+    {
+        // @todo see UserContext::getUserId() for userId without session
+        return self::getInstance()?->getUserId();
+    }
+
+    /**
+     * Get the anonymous userId or null if no session has been initialized
      * @return ?int
      */
     public static function getAnonId()
     {
         return self::$anonId;
+    }
+
+    /**
+     * Set the anonymous userId
+     * @param int $anonId
+     */
+    public static function setAnonId($anonId)
+    {
+        self::$anonId = $anonId;
     }
 
     /**

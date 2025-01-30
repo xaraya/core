@@ -40,7 +40,7 @@ class SessioncontextMethod extends MethodClass
         extract($args);
         /** @var ?string $module */
         $module ??= 'dynamicdata';
-        $ddcontext = xarSession::getVar('ddcontext.' . $module);
+        $ddcontext = $this->session()->getVar('ddcontext.' . $module);
         $ddcontext['tplmodule'] = $module;
         return $ddcontext;
     }

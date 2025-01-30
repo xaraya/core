@@ -40,7 +40,7 @@ class RequestContext implements ContextInterface, RequestInterface
      * @uses xarServer::setInstance()
      * @return void
      **/
-    public function __construct($args)
+    public function __construct($args = [])
     {
         $this->args = $args;
         xarServer::setInstance($this);

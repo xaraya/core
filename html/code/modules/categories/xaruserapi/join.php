@@ -31,7 +31,7 @@ function __construct($tagged_module_id=null,
     $this->tagged_itemtype = (isset($tagged_itemtype)) ? $tagged_itemtype : 0;
     $this->tagger_module_id = (isset($tagger_module_id)) ? $tagged_module_id : xarMod::getID(xarMod::getName());
     $this->tagger_itemtype = (isset($tagger_itemtype)) ? $tagged_itemtype : 0;
-    $this->role_id = (isset($role_id)) ? $role_id : xarSession::getVar('role_id');
+    $this->role_id = (isset($role_id)) ? $role_id : xarSession::getUserId();
 }
     
     // Get arguments from argument array

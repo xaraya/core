@@ -154,7 +154,7 @@ class QueryMethod extends MethodClass
             // used the pager, so we retrieve the current query from session variables
         } elseif (!empty($startnum) && is_numeric($startnum)
                   && empty($itemid) && empty($table) && empty($query)) {
-            $query = xarSession::getVar('DynamicData.LastQuery');
+            $query = $this->session()->getVar('DynamicData.LastQuery');
             if (!empty($query)) {
                 $newquery = $query;
                 $startpager = $startnum;
@@ -163,7 +163,7 @@ class QueryMethod extends MethodClass
             // used the header sort, so we retrieve the current query from session variables
         } elseif (!empty($sort) && is_string($sort)
                   && empty($itemid) && empty($table) && empty($query)) {
-            $query = xarSession::getVar('DynamicData.LastQuery');
+            $query = $this->session()->getVar('DynamicData.LastQuery');
             if (!empty($query)) {
                 $newquery = $query;
                 $sorthead = $sort;
@@ -480,9 +480,9 @@ class QueryMethod extends MethodClass
             $data['sample'] .= 'numitems="' . $this->var()->prep($numitems) . '" ';
             $data['sample'] .= 'startnum="' . $this->var()->prep($startnum) . '" ';
             $data['sample'] .= '/&gt;';
-            xarSession::setVar('DynamicData.LastQuery', $newquery);
+            $this->session()->setVar('DynamicData.LastQuery', $newquery);
         } else {
-            xarSession::setVar('DynamicData.LastQuery', '');
+            $this->session()->setVar('DynamicData.LastQuery', '');
         }
 
         if (!empty($newquery)) {

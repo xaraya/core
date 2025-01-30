@@ -153,7 +153,7 @@ class xarSecurity extends xarObject
            return true;
         }
         self::initialize();
-        $userID = xarSession::getVar('role_id');
+        $userID = xarSession::getUserId();
         
         xarLog3::info("xarSecurity::check: Testing user $userID against mask $mask");
         
@@ -295,7 +295,7 @@ class xarSecurity extends xarObject
         // an empty role means take the current user
         if ($rolename == '') {
             // mrb: again?
-            $userID = xarSession::getVar('role_id');
+            $userID = xarSession::getUserId();
             if (empty($userID)) {
                 $userID = xarSession::getAnonId();
             }

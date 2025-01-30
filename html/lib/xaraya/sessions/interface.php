@@ -14,6 +14,7 @@ namespace Xaraya\Sessions;
  * Interface between xarSession (static) and SessionHandler (instance)
  * Note: if you want to replace SessionHandler with a custom class, use
  * xarSession::setSessionClass(SessionContext::class);
+ * @todo align with Xaraya\Services\SessionInterface
  */
 interface SessionInterface
 {
@@ -68,6 +69,13 @@ interface SessionInterface
      * @return bool
      */
     public function setUserInfo($userId, $rememberSession);
+
+    /**
+     * When was this session last saved ?
+     * @param int $lastused
+     * @return int
+     */
+    public function saveTime($lastused = 0);
 
     /**
      * Get current userId from session (if any)

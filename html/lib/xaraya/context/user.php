@@ -131,7 +131,7 @@ class UserContext
             return null;
         }
         xarSession::getInstance()->setContext($this->context);
-        return xarSession::getVar('role_id');
+        return xarSession::getUserId();
     }
 
     /**

@@ -31,7 +31,7 @@ class RequestHandler implements RequestInterface
      * @uses xarServer::setInstance()
      * @return void
      **/
-    public function __construct($args)
+    public function __construct($args = [])
     {
         $this->args = $args;
         xarServer::setInstance($this);

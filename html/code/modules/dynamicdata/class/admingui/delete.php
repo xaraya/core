@@ -110,7 +110,7 @@ class DeleteMethod extends MethodClass
 
         // recover any session var information and remove it from the var
         $data = array_merge($data, $userapi->sessioncontext(['module' => $tplmodule]));
-        xarSession::setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
+        $this->session()->setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
         extract($data);
 
         if (!empty($noconfirm)) {
