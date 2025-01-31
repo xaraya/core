@@ -349,4 +349,40 @@ class ModuleAPIHandler extends RestAPIHandler
         }
         return null;
     }
+
+    /**
+     * Summary of loadModuleConfig
+     * @param array<string, mixed> $config
+     * @return array<string, mixed>
+     */
+    public static function loadModuleConfig($config = [])
+    {
+        $configFile = sys::varpath() . '/cache/api/restapi_modules.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        if (!empty($config['modules'])) {
+            return $config['modules'];
+        }
+        return self::getDefaultModules();
+    }
+
+    /**
+     * Summary of getDefaultModules
+     * @return array<string, mixed>
+     */
+    public static function getDefaultModules()
+    {
+        $modulelist = ['dynamicdata'];
+        $default = [];
+        xarMod::init();
+        foreach ($modulelist as $module) {
+            $default[$module] = [
+                'module' => $module,
+                'apilist' => xarMod::apiFunc($module, 'rest', 'getlist'),
+            ];
+        }
+        return $default;
+    }
 }

@@ -526,4 +526,52 @@ class DataObjectAPIHandler extends RestAPIHandler
         }
         return $fieldlist;
     }
+
+    /**
+     * Summary of loadObjectConfig
+     * @param array<string, mixed> $config
+     * @return array<string, mixed>
+     */
+    public static function loadObjectConfig($config = [])
+    {
+        $configFile = sys::varpath() . '/cache/api/restapi_objects.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        if (!empty($config['objects'])) {
+            $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
+            $allowed = array_flip($fieldlist);
+            $objects = [];
+            foreach ($config['objects'] as $name => $item) {
+                $item = array_intersect_key($item, $allowed);
+                $objects[(string) $name] = $item;
+            }
+            return $objects;
+        }
+        return self::getDefaultObjects();
+    }
+
+    /**
+     * Summary of getDefaultObjects
+     * @return array<string, mixed>
+     */
+    public static function getDefaultObjects()
+    {
+        $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
+        $allowed = array_flip($fieldlist);
+        $object = 'objects';
+        $params = ['name' => $object, 'fieldlist' => $fieldlist];
+        $objectlist = DataObjectFactory::getObjectList($params);
+        $objects = $objectlist->getItems();
+        $default = [];
+        foreach ($objects as $itemid => $item) {
+            if ($item['datastore'] !== 'dynamicdata') {
+                continue;
+            }
+            $item = array_intersect_key($item, $allowed);
+            $default[$item['name']] = $item;
+        }
+        return $default;
+    }
 }
