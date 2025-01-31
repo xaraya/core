@@ -12,12 +12,8 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('xaraya.tools.timertrait');
-sys::import('xaraya.caching.cachetrait');
-sys::import('xaraya.bridge.requests.requesttrait');
-sys::import('xaraya.context.context');
-sys::import('modules.authsystem.class.authtoken');
+namespace Xaraya\Bridge\RestAPI;
+
 use Xaraya\Caching\CacheInterface;
 use Xaraya\Caching\CacheTrait;
 use Xaraya\Tools\TimerInterface;
@@ -27,12 +23,36 @@ use Xaraya\Bridge\Requests\CommonRequestTrait;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
 use Xaraya\Authentication\AuthToken;
+use xarObject;
+use xarCache;
+use xarDatabase;
+use xarMod;
+use xarModVars;
+use xarRoles;
+use xarSecurity;
+use xarServer;
+use xarUser;
+use sys;
+use DataObjectFactory;
+use DataObjectLoader;
+use BadParameterException;
+use ForbiddenOperationException;
+use UnauthorizedOperationException;
+use Exception;
+use JsonException;
+
+sys::import('modules.dynamicdata.class.objects.factory');
+sys::import('xaraya.tools.timertrait');
+sys::import('xaraya.caching.cachetrait');
+sys::import('xaraya.bridge.requests.requesttrait');
+sys::import('xaraya.context.context');
+sys::import('modules.authsystem.class.authtoken');
 
 /**
- * Class to handle DataObject REST API calls
+ * Class to handle REST API calls
  * @uses \sys::autoload()
  */
-class DataObjectRESTHandler extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
+class RestAPIHandler extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
 {
     use CommonRequestTrait;
     use TimerTrait;  // activate with self::enableTimer(true)
@@ -60,7 +80,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (!file_exists($openapi)) {
             xarDatabase::init();
             sys::import('xaraya.bridge.restapi.builder');
-            DataObjectRESTBuilder::init();
+            RestAPIBuilder::init();
             return ['TODO' => 'generate var/cache/api/openapi.json with builder'];
         }
         $content = file_get_contents($openapi);
@@ -1184,7 +1204,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     {
         // @todo move away from static methods for context
         $restHandler ??= static::class;
-        return DataObjectRESTRoutes::getRoutes($pathPrefix, $namePrefix, $restHandler);
+        return RestAPIRoutes::getRoutes($pathPrefix, $namePrefix, $restHandler);
     }
 
     /**
@@ -1267,7 +1287,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         xarCache::init();
         $this->loadConfig();
         $tryCachedResult = false;
-        if (is_array($handler) && is_string($handler[0]) && $handler[0] === "DataObjectRESTHandler" && str_starts_with($handler[1], "get")) {
+        if (is_array($handler) && is_string($handler[0]) && $handler[0] === "RestAPIHandler" && str_starts_with($handler[1], "get")) {
             $tryCachedResult = true;
         }
         if ($tryCachedResult && self::enableCache()) {

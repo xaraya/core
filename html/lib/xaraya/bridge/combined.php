@@ -50,7 +50,7 @@ use Xaraya\Bridge\Routing\RoutingApiBridge;
 use Xaraya\Routing\RouterInterface;
 use Xaraya\Routing\FastRouter;
 use Xaraya\Routing\Routing;
-use DataObjectRESTHandler;
+use Xaraya\Bridge\RestAPI\RestAPIHandler;
 
 class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
 {
@@ -179,7 +179,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
             // don't use call_user_func here anymore because $request is passed by reference
             if (str_starts_with($path, '/restapi/')) {
                 // different processing for REST API - see rst.php
-                $restApiHandler = new DataObjectRESTHandler();
+                $restApiHandler = new RestAPIHandler();
                 [$result, $context] = $restApiHandler->callHandler($handler, $vars, $request);
             } elseif (str_starts_with($path, '/graphql')) {
                 // different processing for GraphQL API - see gql.php
@@ -197,8 +197,8 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
             if ($handler[1] === 'getOpenAPI') {
                 //header('Access-Control-Allow-Origin: *');
                 // @checkme set server url to current path here
-                //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
-                //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
+                //$result['servers'][0]['url'] = RestAPIHandler::getBaseURL();
+                //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . RestAPIHandler::$endpoint;
             }
         } catch (UnauthorizedOperationException) {
             return $this->responseUtil->createUnauthorizedResponse();

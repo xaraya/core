@@ -12,10 +12,12 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+namespace Xaraya\Bridge\RestAPI;
+
 /**
- * Class to define DataObject REST API routes
+ * Class to define REST API routes
  */
-class DataObjectRESTRoutes
+class RestAPIRoutes
 {
     /**
      * Get REST API routes (in generic format)
@@ -27,7 +29,7 @@ class DataObjectRESTRoutes
     public static function getRoutes($pathPrefix = '/v1', $namePrefix = 'restapi-', $restHandler = null)
     {
         // @todo move away from static methods for context
-        $restHandler ??= DataObjectRESTHandler::class;
+        $restHandler ??= RestAPIHandler::class;
         $routes = [];
         $extra = [];
 

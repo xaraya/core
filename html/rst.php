@@ -23,9 +23,11 @@ use Xaraya\Routing\FastRouter;
 // use the Symfony Routing component here
 use Xaraya\Routing\Routing;
 use Xaraya\Routing\RouterInterface;
+use Xaraya\Bridge\RestAPI\RestAPIBuilder;
+use Xaraya\Bridge\RestAPI\RestAPIHandler;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    DataObjectRESTHandler::sendCORSOptions();
+    RestAPIHandler::sendCORSOptions();
     return;
 }
 
@@ -46,16 +48,16 @@ sys::init();
  */
 function try_builder()
 {
-    DataObjectRESTBuilder::init();
-    $objects = DataObjectRESTBuilder::get_objects();
-    //DataObjectRESTBuilder::create_openapi();
+    RestAPIBuilder::init();
+    $objects = RestAPIBuilder::get_objects();
+    //RestAPIBuilder::create_openapi();
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($objects, JSON_PRETTY_PRINT);
 }
 
 /**
  * Summary of send_openapi
- * @param DataObjectRESTHandler $restHandler
+ * @param RestAPIHandler $restHandler
  * @return void
  */
 function send_openapi($restHandler)
@@ -67,7 +69,7 @@ function send_openapi($restHandler)
 
 /**
  * Summary of get_router
- * @param DataObjectRESTHandler $restHandler
+ * @param RestAPIHandler $restHandler
  * @return RouterInterface
  */
 function get_router($restHandler)
@@ -86,7 +88,7 @@ function get_router($restHandler)
  * @param string $method
  * @param string $path
  * @param RouterInterface $router
- * @param DataObjectRESTHandler $restHandler
+ * @param RestAPIHandler $restHandler
  * @return void
  */
 function handle_request($method, $path, $router, $restHandler)
@@ -130,7 +132,7 @@ function handle_request($method, $path, $router, $restHandler)
 
 /**
  * Summary of try_handler
- * @param DataObjectRESTHandler $restHandler
+ * @param RestAPIHandler $restHandler
  * @return void
  */
 function try_handler($restHandler)
@@ -147,5 +149,5 @@ function try_handler($restHandler)
 
 //try_builder();
 // move away from static methods for context
-$restHandler = new DataObjectRESTHandler();
+$restHandler = new RestAPIHandler();
 try_handler($restHandler);

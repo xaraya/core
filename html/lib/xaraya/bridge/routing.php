@@ -52,7 +52,7 @@ use Xaraya\Bridge\Requests\DataObjectRequest;
 use Xaraya\Bridge\Requests\ModuleRequest;
 use Xaraya\Bridge\Requests\BlockRequest;
 use Xaraya\Bridge\Requests\StaticFileRequest;
-use DataObjectRESTHandler;
+use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use xarGraphQL;
 
 /**
@@ -70,7 +70,7 @@ class RoutingBridge extends BasicBridge
     public static string $baseUri = '';
     public static string $prefix = '';
     public bool $wrapPage = false;
-    protected ?DataObjectRESTHandler $restAPIHandler = null;
+    protected ?RestAPIHandler $restAPIHandler = null;
     protected ?xarGraphQL $graphQLHandler = null;
 
     /**
@@ -144,12 +144,12 @@ class RoutingBridge extends BasicBridge
         // @todo move away from static methods for context
         $path = $pathPrefix . '/restapi';
         $name = $namePrefix . 'restapi-';
-        $restHandler = DataObjectRESTHandler::class;
-        $routes = array_replace($routes, DataObjectRESTHandler::getRoutes($path, $name, $restHandler));
+        $restHandler = RestAPIHandler::class;
+        $routes = array_replace($routes, RestAPIHandler::getRoutes($path, $name, $restHandler));
 
         $path = $pathPrefix . '/restapi/';
         $name = $namePrefix . 'restapi';
-        $routes[$name] = ['GET', $path, [DataObjectRESTHandler::class, 'getOpenAPI'], $extra];
+        $routes[$name] = ['GET', $path, [RestAPIHandler::class, 'getOpenAPI'], $extra];
 
         $path = $pathPrefix . '/graphql';
         $name = $namePrefix . 'graphql';
@@ -178,7 +178,7 @@ class RoutingBridge extends BasicBridge
         // @todo do we want/need to add pathPrefix here too?
         $path = '*';
         $name = $namePrefix . 'cors';
-        $routes[$name] = ['OPTIONS', $path, [DataObjectRESTHandler::class, 'sendCORSOptions'], $extra];
+        $routes[$name] = ['OPTIONS', $path, [RestAPIHandler::class, 'sendCORSOptions'], $extra];
 
         return $routes;
     }
@@ -269,7 +269,7 @@ class RoutingBridge extends BasicBridge
         // ... call $handler with $vars
         if (str_starts_with($path, $group . '/restapi/')) {
             // different processing for REST API - see rst.php
-            DataObjectRESTHandler::$endpoint = $this->getBaseUri() . $group . '/restapi';
+            RestAPIHandler::$endpoint = $this->getBaseUri() . $group . '/restapi';
             [$result, $context] = $this->callRestApiHandler($handler, $vars, $request);
         } elseif (str_starts_with($path, $group . '/graphql')) {
             // different processing for GraphQL API - see gql.php
@@ -415,11 +415,11 @@ class RoutingBridge extends BasicBridge
     // different processing for REST API - see rst.php
     /**
      * Summary of getRestHandler
-     * @return DataObjectRESTHandler
+     * @return RestAPIHandler
      */
     public function getRestApiHandler()
     {
-        $this->restAPIHandler ??= new DataObjectRESTHandler();
+        $this->restAPIHandler ??= new RestAPIHandler();
         return $this->restAPIHandler;
     }
 
@@ -439,8 +439,8 @@ class RoutingBridge extends BasicBridge
         if ($handler[1] === 'getOpenAPI') {
             header('Access-Control-Allow-Origin: *');
             // @checkme set server url to current path here
-            //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
-            $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
+            //$result['servers'][0]['url'] = RestAPIHandler::getBaseURL();
+            $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . RestAPIHandler::$endpoint;
         }
         return [$result, $context];
     }

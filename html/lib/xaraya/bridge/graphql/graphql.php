@@ -31,6 +31,7 @@ use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
+use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
 use GraphQL\GraphQL;
@@ -629,7 +630,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
     public static function findExtraTypes($objectNames = null)
     {
         // @checkme set list of modules here before filtering out for $extraTypes - note: dependency on REST API
-        self::$config['modules'] = DataObjectRESTBuilder::get_potential_modules($objectNames);
+        self::$config['modules'] = RestAPIBuilder::get_potential_modules($objectNames);
         return xarGraphQLTypes::findExtraTypes($objectNames);
     }
 

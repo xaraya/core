@@ -11,14 +11,25 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+namespace Xaraya\Bridge\RestAPI;
+
+use Xaraya\Authentication\AuthToken;
+use xarObject;
+use xarMod;
+use xarServer;
+use sys;
+use DataObjectFactory;
+use DataPropertyMaster;
+use Exception;
+
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('modules.authsystem.class.authtoken');
-use Xaraya\Authentication\AuthToken;
 
 /**
- * Class to build DataObject REST API
+ * Class to build REST API
 **/
-class DataObjectRESTBuilder extends xarObject
+class RestAPIBuilder extends xarObject
 {
     protected static string $openapi;
     /** @var array<string, mixed> */
@@ -1457,7 +1468,7 @@ class DataObjectRESTBuilder extends xarObject
 
     /**
      * Summary of match_proptype
-     * @param DataProperty $property
+     * @param \DataProperty $property
      * @throws \Exception
      * @return array<string, mixed>
      */
