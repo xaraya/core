@@ -201,7 +201,7 @@ class TestApisMethod extends MethodClass
         }
         if (!empty($create_gql)) {
             sys::autoload();
-            sys::import('modules.dynamicdata.class.graphql');
+            sys::import('xaraya.bridge.graphql.graphql');
             $xarGraphQL = new xarGraphQL();
             $extraTypes = $xarGraphQL->findExtraTypes($graphqllist);
             $xarGraphQL->dumpSchema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
