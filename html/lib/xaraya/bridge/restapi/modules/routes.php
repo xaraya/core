@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @package core\bridge
+ * @subpackage restapi
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.2
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+ *
+ * @author mikespub <mikespub@xaraya.com>
+ */
+
+namespace Xaraya\Bridge\RestAPI;
+
+/**
+ * Class to define REST API routes
+ */
+class ModuleAPIRoutes
+{
+    /**
+     * Get Module REST API routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $restHandler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getRoutes($pathPrefix, $namePrefix, $restHandler = null, $extra = [])
+    {
+        $routes = [];
+        $restHandler ??= ModuleAPIHandler::class;
+        $pathPrefix .= '/modules';
+
+        $path = $pathPrefix;
+        $name = $namePrefix . 'getModules';
+        $routes[$name] = ['GET', $path, [$restHandler, 'getModules'], $extra];
+
+        $path = $pathPrefix . '/{module}';
+        $name = $namePrefix . 'getModuleApis';
+        $routes[$name] = ['GET', $path, [$restHandler, 'getModuleApis'], $extra];
+
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $path = $pathPrefix . '/{module}/{path}[/{more:.+}]';
+        $name = $namePrefix . 'getModuleCall';
+        $routes[$name] = ['GET', $path, [$restHandler, 'getModuleCall'], $extra];
+
+        $path = $pathPrefix . '/{module}/{path}[/{more:.+}]';
+        $name = $namePrefix . 'postModuleCall';
+        $routes[$name] = ['POST', $path, [$restHandler, 'postModuleCall'], $extra];
+
+        $path = $pathPrefix . '/{module}/{path}[/{more:.+}]';
+        $name = $namePrefix . 'putModuleCall';
+        $routes[$name] = ['PUT', $path, [$restHandler, 'putModuleCall'], $extra];
+
+        $path = $pathPrefix . '/{module}/{path}[/{more:.+}]';
+        $name = $namePrefix . 'deleteModuleCall';
+        $routes[$name] = ['DELETE', $path, [$restHandler, 'deleteModuleCall'], $extra];
+
+        return $routes;
+    }
+}

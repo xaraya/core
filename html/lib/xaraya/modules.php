@@ -899,6 +899,7 @@ class xarMod extends xarObject implements IxarMod
                     // Note: pass modType . funcType as modType here for module classes, and use funcType to identify the callType (api or not)
                     $callable = self::getModuleClassMethod($modName, $modType . $funcType, $funcName, $funcType);
                     if (!empty($callable)) {
+                        // this expects an instance in $callable[0]
                         if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
                             $callable[0]->setContext($context);
                         }

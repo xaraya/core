@@ -1,0 +1,352 @@
+<?php
+
+/**
+ * @package core\bridge
+ * @subpackage restapi
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.2
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+ *
+ * @author mikespub <mikespub@xaraya.com>
+ */
+
+namespace Xaraya\Bridge\RestAPI;
+
+use Xaraya\Context\Context;
+use xarMod;
+use xarRoles;
+use xarSecurity;
+use xarUser;
+use sys;
+use ForbiddenOperationException;
+use Exception;
+
+/**
+ * Class to handle Module REST API calls
+ */
+class ModuleAPIHandler extends RestAPIHandler
+{
+    /**
+     * Summary of getModuleURL
+     * @param ?string $module
+     * @param ?string $api
+     * @param array<string, mixed> $args
+     * @return string
+     */
+    public function getModuleURL($module = null, $api = null, $args = [])
+    {
+        if (empty($module)) {
+            return $this->getBaseURL('/modules');
+        }
+        if (empty($api)) {
+            return $this->getBaseURL('/modules', $module);
+        }
+        return $this->getBaseURL('/modules', $module . '/' . $api);
+    }
+
+    /**
+     * Summary of getModules
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     */
+    public function getModules($args)
+    {
+        $this->loadModules();
+        $result = ['items' => [], 'count' => count(self::$modules)];
+        foreach (self::$modules as $itemid => $item) {
+            $item['apilist'] = array_keys($item['apilist']);
+            $item['_links'] = ['self' => ['href' => $this->getModuleURL($item['module'])]];
+            array_push($result['items'], $item);
+        }
+        return $result;
+    }
+
+    /**
+     * Summary of getModuleApis
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     */
+    public function getModuleApis($args)
+    {
+        $module = $args['path']['module'];
+        if (!$this->hasModule($module)) {
+            return ['method' => 'getModuleApis', 'args' => $args, 'error' => 'Unknown module'];
+        }
+        $result = ['module' => $module, 'apilist' => [], 'count' => 0];
+        $apilist = $this->getModuleApiList($module);
+        foreach ($apilist as $api => $item) {
+            if (isset($item['enabled']) && empty($item['enabled'])) {
+                continue;
+            }
+            $item['name'] = $api;
+            $item['path'] = $this->getModuleURL($module, $item['path']);
+            $result['apilist'][] = $item;
+        }
+        $result['count'] = count($result['apilist']);
+        return $result;
+    }
+
+    /**
+     * Summary of getModuleCall
+     * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
+     * @uses xarMod::init()
+     * @uses xarUser::init()
+     * @uses xarMod::apiFunc()
+     * @throws \ForbiddenOperationException
+     * @return mixed
+     */
+    public function getModuleCall($args, $context)
+    {
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = $this->getModuleApiFunc($module, $path, 'get', $more);
+        if (empty($func)) {
+            return ['method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
+        xarMod::init();
+        xarUser::init();
+        if (!empty($func['security'])) {
+            // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+            $userId = $this->checkUser($context);
+            // @checkme assume we have a security mask here
+            if (is_string($func['security'])) {
+                $role = xarRoles::getRole($userId);
+                $rolename = $role->getName();
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
+                // @todo verify access for user based on what?
+            } else {
+                $pass = true;
+            }
+            if (!$pass) {
+                throw new ForbiddenOperationException();
+            }
+            // @checkme for security checks inside API functions when using auth token - see also reactphp single session
+            //$_SESSION[xarSession::PREFIX . 'role_id'] = $userId;
+        }
+        if (empty($func['caching'])) {
+            self::enableCache(false);
+        }
+        // @checkme how to save this in case of caching?
+        if (!empty($func['mediatype'])) {
+            $context['mediatype'] = $func['mediatype'];
+            if (!empty($context['request'])) {
+                $context['request'] = ($context['request'])->withAttribute('mediaType', $func['mediatype']);
+            }
+        }
+        // @checkme pass all query args from handler here?
+        $params = $args['query'] ?? [];
+        if (!empty($func['args'])) {
+            if (!empty($more)) {
+                // @checkme path params overwrite query params - but what about default args?
+                $params = array_merge($params, $func['args']);
+            } else {
+                // @checkme query params overwrite default args
+                $params = array_merge($func['args'], $params);
+            }
+        }
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params, $context);
+    }
+
+    /**
+     * Summary of postModuleCall
+     * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
+     * @uses xarMod::init()
+     * @uses xarUser::init()
+     * @uses xarMod::apiFunc()
+     * @throws \ForbiddenOperationException
+     * @return mixed
+     */
+    public function postModuleCall($args, $context)
+    {
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = $this->getModuleApiFunc($module, $path, 'post', $more);
+        if (empty($func)) {
+            return ['method' => 'postModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
+        // this contains any POSTed args from rst.php
+        if (empty($args['input'])) {
+            $args['input'] = [];
+        }
+        xarMod::init();
+        xarUser::init();
+        if (!empty($func['security'])) {
+            // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+            $userId = $this->checkUser($context);
+            // @checkme assume we have a security mask here
+            if (is_string($func['security'])) {
+                $role = xarRoles::getRole($userId);
+                $rolename = $role->getName();
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
+                // @todo verify access for user based on what?
+            } else {
+                $pass = true;
+            }
+            if (!$pass) {
+                throw new ForbiddenOperationException();
+            }
+            // @checkme for security checks inside API functions when using auth token - see also reactphp single session
+            //$_SESSION[xarSession::PREFIX . 'role_id'] = $userId;
+        }
+        if (!empty($func['mediatype'])) {
+            $context['mediatype'] = $func['mediatype'];
+            if (!empty($context['request'])) {
+                $context['request'] = ($context['request'])->withAttribute('mediaType', $func['mediatype']);
+            }
+        }
+        // @checkme handle POSTed args by passing $args['input'] only in handler?
+        $params = $args['input'] ?? [];
+        if (!empty($more) && !empty($func['args'])) {
+            $params = array_merge($params, $func['args']);
+        }
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params, $context);
+    }
+
+    /**
+     * Summary of putModuleCall
+     * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
+     * @throws \Exception
+     * @return mixed
+     */
+    public function putModuleCall($args, $context)
+    {
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = $this->getModuleApiFunc($module, $path, 'put', $more);
+        if (empty($func)) {
+            return ['method' => 'putModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
+        throw new Exception('Unsupported method PUT for module api');
+    }
+
+    /**
+     * Summary of deleteModuleCall
+     * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
+     * @throws \Exception
+     * @return mixed
+     */
+    public function deleteModuleCall($args, $context)
+    {
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = $this->getModuleApiFunc($module, $path, 'delete', $more);
+        if (empty($func)) {
+            return ['method' => 'deleteModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
+        throw new Exception('Unsupported method DELETE for module api');
+    }
+
+    /**
+     * Summary of hasModule
+     * @param string $module
+     * @return bool
+     */
+    public function hasModule($module)
+    {
+        $this->loadModules();
+        if (empty(self::$config) || empty(self::$config['modules']) || empty(self::$config['modules'][$module])) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Summary of getModuleApiList
+     * @param string $module
+     * @return array<string, mixed>
+     */
+    public function getModuleApiList($module)
+    {
+        if (!$this->hasModule($module)) {
+            return [];
+        }
+        return self::$modules[$module]['apilist'];
+    }
+
+    /**
+     * Summary of getModuleApiFunc
+     * @param string $module
+     * @param string $path
+     * @param string $method
+     * @param ?string $more
+     * @throws \Exception
+     * @return array<string, mixed>|null
+     */
+    public function getModuleApiFunc($module, $path, $method = 'get', $more = null)
+    {
+        if (!$this->hasModule($module)) {
+            return null;
+        }
+        $apilist = $this->getModuleApiList($module);
+        if (!empty($more)) {
+            // @checkme sort by decreasing path length
+            uasort($apilist, function ($a, $b) {
+                $lena = strlen($a['path']);
+                $lenb = strlen($b['path']);
+                return $lenb <=> $lena;
+            });
+        }
+        foreach ($apilist as $api => $item) {
+            if (isset($item['enabled']) && empty($item['enabled'])) {
+                continue;
+            }
+            if (empty($more) && $item['path'] == $path && $item['method'] == $method) {
+                $item['module'] ??= $module;
+                $item['type'] ??= 'rest';
+                $item['name'] ??= $api;
+                // @checkme allow default args to start with
+                $item['args'] ??= [];
+                $item['caching'] ??= ($method == 'get') ? true : false;
+                return $item;
+            }
+            // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+            if (!empty($more) && strncmp($item['path'], $path . '/', strlen($path) + 1) === 0 && $item['method'] == $method) {
+                // @checkme assuming only more path parameter(s) in module paths for now... {type}/{key}/{code}
+                $more_params = explode('/', substr($item['path'], strlen($path) + 1));
+                $more_values = explode('/', $more);
+                if (count($more_values) != count($more_params)) {
+                    continue;
+                }
+                $item['module'] ??= $module;
+                $item['type'] ??= 'rest';
+                $item['name'] ??= $api;
+                // @checkme allow default args to start with
+                $item['args'] ??= [];
+                $item['caching'] ??= ($method == 'get') ? true : false;
+                $i = 0;
+                foreach ($more_params as $path_param) {
+                    if (empty($path_param)) {
+                        continue;
+                    }
+                    if (!str_starts_with($path_param, '{') && !str_ends_with($path_param, '}')) {
+                        // @checkme how do we keep track of fixed parts of the path here?
+                        continue;
+                    }
+                    if (!str_starts_with($path_param, '{') || !str_ends_with($path_param, '}')) {
+                        throw new Exception('Invalid path parameter in ' . $item['path']);
+                    }
+                    $path_param = substr($path_param, 1, -1);
+                    // @checkme path params overwrite default args
+                    $item['args'][$path_param] = $more_values[$i];
+                    $i += 1;
+                }
+                return $item;
+            }
+        }
+        return null;
+    }
+}

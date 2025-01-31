@@ -339,6 +339,7 @@ trait ModulesTrait
         if (empty($callable)) {
             throw new FunctionNotFoundException($funcName);
         }
+        // this expects an instance in $callable[0]
         if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
             $callable[0]->setContext($this->getContext());
         }
@@ -365,6 +366,7 @@ trait ModulesTrait
         if (empty($callable)) {
             throw new FunctionNotFoundException($funcName);
         }
+        // this expects an instance in $callable[0]
         if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
             $callable[0]->setContext($this->getContext());
         }

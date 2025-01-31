@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @package core\bridge
+ * @subpackage restapi
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.2
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+ *
+ * @author mikespub <mikespub@xaraya.com>
+ */
+
+namespace Xaraya\Bridge\RestAPI;
+
+/**
+ * Class to define Generic REST API routes
+ */
+class GenericAPIRoutes
+{
+    /**
+     * Get Generic REST API routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $restHandler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getRoutes($pathPrefix, $namePrefix, $restHandler = null, $extra = [])
+    {
+        $routes = [];
+        $restHandler ??= GenericAPIHandler::class;
+        //$pathPrefix .= '';
+
+        $path = $pathPrefix . '/whoami';
+        $name = $namePrefix . 'whoami';
+        $routes[$name] = ['GET', $path, [$restHandler, 'whoami'], $extra];
+
+        $path = $pathPrefix . '/context';
+        $name = $namePrefix . 'getContext';
+        $routes[$name] = ['GET', $path, [$restHandler, 'showContext'], $extra];
+
+        $path = $pathPrefix . '/token';
+        $name = $namePrefix . 'postToken';
+        $routes[$name] = ['POST', $path, [$restHandler, 'postToken'], $extra];
+
+        $path = $pathPrefix . '/token';
+        $name = $namePrefix . 'deleteToken';
+        $routes[$name] = ['DELETE', $path, [$restHandler, 'deleteToken'], $extra];
+
+        return $routes;
+    }
+}

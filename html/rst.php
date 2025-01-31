@@ -1,6 +1,6 @@
 <?php
 /**
- * Entrypoint for handling REST API calls on Dynamic Data Objects (POC)
+ * Entrypoint for handling REST API calls
  *
  * Note: this assumes you install fast-route with composer
  * and use composer autoload in the entrypoint, see e.g. rst.php
@@ -25,6 +25,7 @@ use Xaraya\Routing\Routing;
 use Xaraya\Routing\RouterInterface;
 use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
+use Xaraya\Bridge\RestAPI\RestAPIRoutes;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     RestAPIHandler::sendCORSOptions();
@@ -62,7 +63,7 @@ function try_builder()
  */
 function send_openapi($restHandler)
 {
-    // @todo move away from static methods for context
+    // move away from static methods for context
     $result = $restHandler->getOpenAPI();
     $restHandler->output($result);
 }
@@ -75,11 +76,9 @@ function send_openapi($restHandler)
 function get_router($restHandler)
 {
     //$cacheFile = sys::varpath() . '/cache/api/restapi_fastroute.php';
-    // @todo move away from static methods for context
-    $router = new FastRouter($restHandler::getRoutes(...));
+    $router = new FastRouter(RestAPIRoutes::getRoutes(...));
     //$cacheFile = sys::varpath() . '/cache/api/url_matching_routes.php';
-    // @todo move away from static methods for context
-    //$router = new Routing($restHandler::getRoutes(...));
+    //$router = new Routing(RestAPIRoutes::getRoutes(...));
     return $router;
 }
 

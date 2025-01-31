@@ -1,6 +1,6 @@
 <?php
 /**
- * Entrypoint for handling GraphQL queries on Dynamic Data Objects (POC)
+ * Entrypoint for handling GraphQL queries
  *
  * Note: this assumes you install graphql-php with composer
  * and use composer autoload in the entrypoint, see e.g. gql.php

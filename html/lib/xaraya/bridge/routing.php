@@ -144,7 +144,8 @@ class RoutingBridge extends BasicBridge
         // @todo move away from static methods for context
         $path = $pathPrefix . '/restapi';
         $name = $namePrefix . 'restapi-';
-        $restHandler = RestAPIHandler::class;
+        //$restHandler = RestAPIHandler::class;
+        $restHandler = null;
         $routes = array_replace($routes, RestAPIHandler::getRoutes($path, $name, $restHandler));
 
         $path = $pathPrefix . '/restapi/';
