@@ -10,11 +10,11 @@
  *
  * class myFancyClass implements TimerInterface
  * {
- *     use TimerTrait;  // activate with self::$enableTimer = true
+ *     use TimerTrait;  // activate with self::enableTimer(true)
  *
  *     public function __construct()
  *     {
- *         self::$enableTimer = true;
+ *         self::enableTimer(true);
  *         // ...
  *         self::setTimer('contructed');
  *     }
@@ -28,7 +28,7 @@
  *         self::setTimer('stop result');
  *
  *         // ... add timer information to result ...
- *         if (self::$enableTimer) {
+ *         if (self::enableTimer()) {
  *             $result['timer'] = self::getTimers();
  *         }
  *         return $result;
@@ -55,6 +55,7 @@ use xarServer;
  */
 interface TimerInterface
 {
+    public static function enableTimer(?bool $enable = null): bool;
     public static function setTimer(string $label): void;
     /** @return list<array<string, float>> */
     public static function getTimers(): array;
@@ -67,24 +68,36 @@ interface TimerInterface
  */
 trait TimerTrait
 {
-    public static bool $enableTimer = false;  // activate with self::$enableTimer = true
+    public static bool $enableTimer = false;  // activate with self::enableTimer(true)
     /** @var list<array<string, float>> */
     protected static array $_timerKeep = [];
     protected static float $_timerPrev = 0.0;
     protected static float $_timerMult = 1000.0;  // in milliseconds
     protected static int $_timerPrec = 3;
 
+    /**
+     * Get or set enableTimer
+     */
+    public static function enableTimer(?bool $enable = null): bool
+    {
+        if (isset($enable)) {
+            static::$enableTimer = $enable;
+        }
+        return static::$enableTimer;
+    }
+
     public static function setTimer(string $label): void
     {
-        if (static::$enableTimer) {
-            $now = microtime(true);
-            if (empty(static::$_timerPrev)) {
-                static::$_timerPrev = !empty(xarServer::getVar('REQUEST_TIME_FLOAT')) ? (float) xarServer::getVar('REQUEST_TIME_FLOAT') : 0.0;
-                static::$_timerKeep[] = ['request' => static::$_timerPrev];
-            }
-            static::$_timerKeep[] = [$label => round(($now - static::$_timerPrev) * self::$_timerMult, self::$_timerPrec)];
-            static::$_timerPrev = $now;
+        if (!static::$enableTimer) {
+            return;
         }
+        $now = microtime(true);
+        if (empty(static::$_timerPrev)) {
+            static::$_timerPrev = !empty(xarServer::getVar('REQUEST_TIME_FLOAT')) ? (float) xarServer::getVar('REQUEST_TIME_FLOAT') : 0.0;
+            static::$_timerKeep[] = ['request' => static::$_timerPrev];
+        }
+        static::$_timerKeep[] = [$label => round(($now - static::$_timerPrev) * self::$_timerMult, self::$_timerPrec)];
+        static::$_timerPrev = $now;
     }
 
     /**
@@ -93,6 +106,9 @@ trait TimerTrait
      */
     public static function getTimers(): array
     {
+        if (!static::$enableTimer) {
+            return [];
+        }
         static::$_timerPrev = !empty(xarServer::getVar('REQUEST_TIME_FLOAT')) ? (float) xarServer::getVar('REQUEST_TIME_FLOAT') : 0.0;
         static::setTimer('elapsed');
         return static::$_timerKeep;

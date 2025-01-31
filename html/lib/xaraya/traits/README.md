@@ -19,21 +19,21 @@ use Xaraya\Caching\CacheTrait;
 
 class myFancyClass implements CacheInterface
 {
-    use CacheTrait;  // activate with self::$enableCache = true
+    use CacheTrait;  // activate with self::enableCache(true)
 
     public function __construct()
     {
         // ...
-        static::$enableCache = true;
-        static::setCacheScope('myFancyItems');
+        self::enableCache(true);
+        self::setCacheScope('myFancyItems');
     }
 
     public function getItemCached($id)
     {
         // ... get item from cache ...
-        $cacheKey = static::getCacheKey($id);
-        if (!empty($cacheKey) && static::isCached($cacheKey)) {
-            return static::getCached($cacheKey);
+        $cacheKey = self::getCacheKey($id);
+        if (self::isCached($cacheKey)) {
+            return self::getCached($cacheKey);
         }
 
         // ... retrieve item here in myFancyClass ...
@@ -41,12 +41,10 @@ class myFancyClass implements CacheInterface
 
         // ... set item in cache ...
         // if you don't know the $cacheKey for item from before (e.g. because it was defined with $id elsewhere)
-        // if (static::$enableCache && static::hasCacheKey()) {
+        // if (self::hasCacheKey()) {
         //     $cacheKey = self::getCacheKey();
         // }
-        if (!empty($cacheKey)) {
-            static::setCached($cacheKey, $item);
-        }
+        self::setCached($cacheKey, $item);
         return $item;
     }
 }
@@ -63,11 +61,11 @@ use Xaraya\Tools\TimerTrait;
 
 class myFancyClass implements TimerInterface
 {
-    use TimerTrait;  // activate with self::$enableTimer = true
+    use TimerTrait;  // activate with self::enableTimer(true)
 
     public function __construct()
     {
-        self::$enableTimer = true;
+        self::enableTimer(true);
         // ...
         self::setTimer('contructed');
     }
@@ -81,7 +79,7 @@ class myFancyClass implements TimerInterface
         self::setTimer('stop result');
 
         // ... add timer information to result ...
-        if (self::$enableTimer) {
+        if (self::enableTimer()) {
             $result['timer'] = self::getTimers();
         }
         return $result;

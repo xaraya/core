@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -53,8 +54,8 @@ trait xarGraphQLQueryListTrait
         return [
             'name' => $listname,
             'description' => 'List DD ' . $object . ' items',
-            //'type' => Type::listOf(xarGraphQL::get_type($typename)),
-            'type' => xarGraphQL::get_type_list($typename),
+            //'type' => Type::listOf(xarGraphQLTypes::getType($typename)),
+            'type' => xarGraphQLTypes::getTypeList($typename),
             'args' => [
                 'order' => Type::string(),
                 //'offset' => [
@@ -89,15 +90,13 @@ trait xarGraphQLQueryListTrait
         $object ??= xarGraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
-            if (xarGraphQL::has_cached_data($typename . '_list', $rootValue, $args, $context, $info)) {
+            if (xarGraphQL::hasCachedData($typename . '_list', $rootValue, $args, $context, $info)) {
                 return;
             }
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["list query " . $typename, $args]);
-            }
+            xarGraphQL::tracePath(array_merge($info->path, ["list query " . $typename, $args]));
             $fields = $info->getFieldSelection(1);
-            if (array_key_exists($typename, xarGraphQL::$type_fields)) {
-                $fieldlist = xarGraphQL::$type_fields[$typename];
+            if (xarGraphQL::hasQueryFields($typename)) {
+                $fieldlist = xarGraphQL::getQueryFields($typename);
             } else {
                 $fieldlist = array_keys($fields);
             }
@@ -123,7 +122,7 @@ trait xarGraphQLQueryListTrait
             $params = $loader->addPagingParams();
             $items = $objectlist->getItems($params);
             //$items = $loader->query($args);
-            xarGraphQL::$object_ref[$object] = & $objectlist;
+            xarGraphQLObjects::setObjectRef($object, $objectlist);
             return $items;
         };
         return $resolver;

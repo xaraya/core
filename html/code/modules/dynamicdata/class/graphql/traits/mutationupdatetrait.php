@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -52,9 +53,9 @@ trait xarGraphQLMutationUpdateTrait
         return [
             'name' => $name,
             'description' => 'Update DD ' . $object . ' item',
-            'type' => xarGraphQL::get_type($typename),
+            'type' => xarGraphQLTypes::getType($typename),
             'args' => [
-                'input' => xarGraphQL::get_input_type($typename),
+                'input' => xarGraphQLTypes::getInputType($typename),
             ],
             //'extensions' => [
             //    'access' => 'update',
@@ -76,10 +77,8 @@ trait xarGraphQLMutationUpdateTrait
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations
-            xarGraphQL::$enableCache = false;
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["update mutation"]);
-            }
+            xarGraphQL::enableCache(false);
+            xarGraphQL::tracePath(array_merge($info->path, ["update mutation"]));
             $fields = $info->getFieldSelection(1);
             if (empty($args['input']) || empty($args['input']['id'])) {
                 throw new Exception('Unknown input for type ' . $typename);

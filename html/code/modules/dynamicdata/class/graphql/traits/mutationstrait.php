@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -100,10 +101,8 @@ trait xarGraphQLMutationsTrait
         // call the right mutation resolver based on the first part of the field name <action><Object>
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
             // disable caching for mutations
-            xarGraphQL::$enableCache = false;
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object mutation", $args]);
-            }
+            xarGraphQL::enableCache(false);
+            xarGraphQL::tracePath(array_merge($info->path, ["object mutation", $args]));
             // @todo check if type class corresponding to fieldname has overridden _xar_*_mutation_resolver
             $name = $info->fieldName;
             $action = substr($name, 0, 6);

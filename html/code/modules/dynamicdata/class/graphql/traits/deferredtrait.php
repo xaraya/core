@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -83,7 +84,7 @@ trait xarGraphQLDeferredTrait
         // xarGraphQL::setTimer('get deferred field ' . $fieldname);
         return [
             'name' => $fieldname,
-            'type' => ($islist ? xarGraphQL::get_type_list($typename) : xarGraphQL::get_type($typename)),
+            'type' => ($islist ? xarGraphQLTypes::getTypeList($typename) : xarGraphQLTypes::getType($typename)),
             // @todo move to resolveField?
             'resolve' => static::_xar_deferred_field_resolver($typename, $fieldname),
         ];
@@ -104,20 +105,19 @@ trait xarGraphQLDeferredTrait
     {
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname, $object) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["deferred property $typename $fieldname", $args]);
-            }
+            xarGraphQL::tracePath(array_merge($info->path, ["deferred property $typename $fieldname", $args]));
             // @checkme this will be empty for defermany properties, since we use the id to defer
             // if (empty($values[$fieldname])) {
             //     return;
             // }
             // @checkme are we sure we'll always have this available?
-            if (empty(xarGraphQL::$object_ref[$object])) {
+            if (!xarGraphQLObjects::hasObjectRef($object)) {
                 // set context if available in resolver
-                xarGraphQL::$object_ref[$object] = DataObjectFactory::getObjectList(['name' => $object], $context);
+                $objectlist = DataObjectFactory::getObjectList(['name' => $object], $context);
+                xarGraphQLObjects::setObjectRef($object, $objectlist);
             }
             /** @var DeferredItemProperty $property */
-            $property = (xarGraphQL::$object_ref[$object])->properties[$fieldname];
+            $property = (xarGraphQLObjects::getObjectRef($object))->properties[$fieldname];
             if ($property::class === 'DeferredManyProperty') {
                 // $fieldname = 'id';
                 if (empty($values['id'])) {
@@ -133,17 +133,15 @@ trait xarGraphQLDeferredTrait
             $fieldlist = array_keys($fields);
             if (empty($property->objectname)) {
                 // only looking for id's here
-            } elseif (!empty(xarGraphQL::$object_type[$property->objectname])) {
-                $objtype = strtolower(xarGraphQL::$object_type[$property->objectname]);
-                if (array_key_exists($objtype, xarGraphQL::$type_fields)) {
-                    $fieldlist = xarGraphQL::$type_fields[$objtype];
+            } elseif (!empty(xarGraphQLObjects::getType($property->objectname))) {
+                $objtype = strtolower(xarGraphQLObjects::getType($property->objectname));
+                if (xarGraphQL::hasQueryFields($objtype)) {
+                    $fieldlist = xarGraphQL::getQueryFields($objtype);
                 }
             } else {
                 throw new Exception('Unknown object ' . $property->objectname);
             }
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = ["add deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null), implode(',', $fieldlist)];
-            }
+            xarGraphQL::tracePath(["add deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null), implode(',', $fieldlist)]);
             $loader = $property->getDeferredLoader();
             // set context if available in resolver
             $loader->setContext($context);
@@ -157,18 +155,14 @@ trait xarGraphQLDeferredTrait
             $value = $property->setDataToDefer($values['id'], $values[$fieldname] ?? null);
 
             return new GraphQL\Deferred(function () use ($typename, $values, $fieldname, $property) {
-                if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = ["get deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null)];
-                }
+                xarGraphQL::tracePath(["get deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null)]);
                 $data = $property->getDeferredData(['value' => ($values[$fieldname] ?? null), '_itemid' => $values['id']]);
                 //print_r($data['value']);
                 // @checkme convert deferred data into assoc array or list of assoc array
                 //if (property_exists($property, 'linkname')) {
                 //    return array('count' => 0, 'filter' => array("$typename,eq,".$values['id']), $property->objectname => $data['value']);
                 //}
-                //if (xarGraphQL::$trace_path) {
-                //    xarGraphQL::$paths[] = array_merge(["return deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null), $data['value']]);
-                //}
+                //xarGraphQL::tracePath(array_merge(["return deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null), $data['value']]));
                 return $data['value'];
             });
         };
@@ -201,9 +195,7 @@ trait xarGraphQLDeferredTrait
             }
         }
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["deferred field $typename $fieldname", $args]);
-            }
+            xarGraphQL::tracePath(array_merge($info->path, ["deferred field $typename $fieldname", $args]));
             if (empty($values[$fieldname])) {
                 return;
             }
@@ -211,8 +203,8 @@ trait xarGraphQLDeferredTrait
             if (array_key_exists('id', $fields) && count($fields) < 2) {
                 return ['id' => $values[$fieldname]];
             }
-            if (array_key_exists($typename, xarGraphQL::$type_fields)) {
-                $fieldlist = xarGraphQL::$type_fields[$typename];
+            if (xarGraphQL::hasQueryFields($typename)) {
+                $fieldlist = xarGraphQL::getQueryFields($typename);
             } else {
                 $fieldlist = array_keys($fields);
             }
@@ -228,15 +220,11 @@ trait xarGraphQLDeferredTrait
                 $loader->mergeFieldlist($fieldlist);
                 $loader->parseQueryArgs($args);
             }
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = ["add deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null), implode(',', $fieldlist)];
-            }
+            xarGraphQL::tracePath(["add deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null), implode(',', $fieldlist)]);
             static::_xar_add_deferred($typename, $values[$fieldname], $fieldlist);
 
             return new GraphQL\Deferred(function () use ($typename, $values, $fieldname) {
-                if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = ["get deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null)];
-                }
+                xarGraphQL::tracePath(["get deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null)]);
                 return static::_xar_get_deferred($typename, $values[$fieldname]);
             });
         };

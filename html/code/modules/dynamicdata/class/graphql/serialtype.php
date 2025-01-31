@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -23,9 +24,7 @@ class xarGraphQLSerialType extends ScalarType
 
     public function serialize($value)
     {
-        if (xarGraphQL::$trace_path) {
-            xarGraphQL::$paths[] = ["serial scalar type"];
-        }
+        xarGraphQL::tracePath(["serial scalar type"]);
         return $this->tryUnserialized($value);
     }
 
@@ -53,9 +52,7 @@ class xarGraphQLSerialType extends ScalarType
 
     public function parseLiteral($valueNode, ?array $variables = null)
     {
-        if (xarGraphQL::$trace_path) {
-            xarGraphQL::$paths[] = ["parse literal", $valueNode->kind, $variables];
-        }
+        xarGraphQL::tracePath(["parse literal", $valueNode->kind, $variables]);
         // @checkme support only top-level serialized values here
         if ($valueNode instanceof StringValueNode) {
             return $this->tryUnserialized($valueNode->value);

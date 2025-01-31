@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -86,8 +87,8 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             'limit' => Type::int(),
             'count' => Type::int(),
             'filter' => Type::listOf(Type::string()),
-            //$list => Type::listOf(xarGraphQL::get_type($type)),
-            $list => xarGraphQL::get_type_list($type),
+            //$list => Type::listOf(xarGraphQLTypes::getType($type)),
+            $list => xarGraphQLTypes::getTypeList($type),
         ];
         $newType = new ObjectType([
             'name' => $page,
@@ -173,14 +174,14 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
                 continue;
             }
             if ($fieldtype == 'typelist') {
-                //$fields[$fieldname] = Type::listOf(xarGraphQL::get_type($typename));
-                $fields[$fieldname] = xarGraphQL::get_type_list($typename);
-                //$fields[$fieldname] = xarGraphQL::get_type_list("mixed");
+                //$fields[$fieldname] = Type::listOf(xarGraphQLTypes::getType($typename));
+                $fields[$fieldname] = xarGraphQLTypes::getTypeList($typename);
+                //$fields[$fieldname] = xarGraphQLTypes::getTypeList("mixed");
                 continue;
             }
             if ($fieldtype == 'bsonprop') {
-                //$fields[$fieldname] = xarGraphQL::get_type_list("mixed");
-                $fields[$fieldname] = xarGraphQL::get_type($typename);
+                //$fields[$fieldname] = xarGraphQLTypes::getTypeList("mixed");
+                $fields[$fieldname] = xarGraphQLTypes::getType($typename);
                 continue;
             }
             if ($fieldtype == 'basetype') {
@@ -206,7 +207,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             'checkbox' => Type::boolean(),
             'dropdown' => Type::string(),  // @todo use EnumType here?
             'time' => Type::int(),
-            //'array' => xarGraphQL::get_type("serial"),
+            //'array' => xarGraphQLTypes::getType("serial"),
         ];
     }
 
@@ -229,34 +230,34 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             $fieldtype = array_shift($fieldspec);
             $typename = array_shift($fieldspec);
             if ($fieldtype == 'deferred') {
-                $fields[$fieldname] = xarGraphQL::get_input_type($typename);
+                $fields[$fieldname] = xarGraphQLTypes::getInputType($typename);
                 continue;
             }
             if ($fieldtype == 'deferitem') {
                 $defername = array_shift($fieldspec);
-                $fields[$fieldname] = xarGraphQL::get_input_type($typename);
+                $fields[$fieldname] = xarGraphQLTypes::getInputType($typename);
                 continue;
             }
             if ($fieldtype == 'deferlist') {
                 $defername = array_shift($fieldspec);
-                $fields[$fieldname] = xarGraphQL::get_input_type_list($typename);
+                $fields[$fieldname] = xarGraphQLTypes::getInputTypeList($typename);
                 continue;
             }
             if ($fieldtype == 'defermany') {
                 $defername = array_shift($fieldspec);
                 // @checkme we need the itemid here!
-                $fields[$fieldname] = xarGraphQL::get_input_type_list($typename);
+                $fields[$fieldname] = xarGraphQLTypes::getInputTypeList($typename);
                 continue;
             }
             if ($fieldtype == 'typelist') {
-                //$fields[$fieldname] = Type::listOf(xarGraphQL::get_type($typename));
-                $fields[$fieldname] = xarGraphQL::get_input_type_list($typename);
-                //$fields[$fieldname] = xarGraphQL::get_type_list("mixed");
+                //$fields[$fieldname] = Type::listOf(xarGraphQLTypes::getType($typename));
+                $fields[$fieldname] = xarGraphQLTypes::getInputTypeList($typename);
+                //$fields[$fieldname] = xarGraphQLTypes::getTypeList("mixed");
                 continue;
             }
             if ($fieldtype == 'bsonprop') {
-                //$fields[$fieldname] = xarGraphQL::get_input_type_list("mixed");
-                $fields[$fieldname] = xarGraphQL::get_input_type($typename);
+                //$fields[$fieldname] = xarGraphQLTypes::getInputTypeList("mixed");
+                $fields[$fieldname] = xarGraphQLTypes::getInputType($typename);
                 continue;
             }
             if ($fieldtype == 'basetype') {
@@ -297,8 +298,8 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     public static function find_object_fieldspecs($object, $refresh = false)
     {
         xarGraphQL::loadObjects();
-        if (!empty(xarGraphQL::$objectFieldSpecs[$object]) && !$refresh) {
-            return xarGraphQL::$objectFieldSpecs[$object];
+        if (!empty(xarGraphQLObjects::getFieldSpecs($object)) && !$refresh) {
+            return xarGraphQLObjects::getFieldSpecs($object);
         }
         xarGraphQL::setTimer('find object fieldspecs ' . $object);
         //$args = array('name' => $object, 'numitems' => 1);
@@ -362,7 +363,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
                 $fieldspecs[$property->name] = ['basetype', $typename];
             }
         }
-        xarGraphQL::$objectFieldSpecs[$object] = $fieldspecs;
+        xarGraphQLObjects::setFieldSpecs($object, $fieldspecs);
         xarGraphQL::setTimer('found object fieldspecs ' . $object);
         return $fieldspecs;
     }
@@ -377,12 +378,12 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         if (empty($property->objectname)) {
             return "mixed";
         }
-        if (!empty(xarGraphQL::$object_type[$property->objectname])) {
-            $typename = xarGraphQL::$object_type[$property->objectname];
+        if (!empty(xarGraphQLObjects::getType($property->objectname))) {
+            $typename = xarGraphQLObjects::getType($property->objectname);
         } else {
             $typename = xarGraphQLInflector::singularize($property->objectname);
         }
-        if (!xarGraphQL::has_type($typename)) {
+        if (!xarGraphQLTypes::hasType($typename)) {
             $typename = "mixed";
         }
         return $typename;
@@ -400,7 +401,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         // xarGraphQL::setTimer('get deferred field ' . $fieldname);
         return [
             'name' => $fieldname,
-            'type' => ($islist ? xarGraphQL::get_type_list($typename) : xarGraphQL::get_type($typename)),
+            'type' => ($islist ? xarGraphQLTypes::getTypeList($typename) : xarGraphQLTypes::getType($typename)),
             // @todo move to resolveField?
             // @todo should we pass along the object instead of the type here?
             'resolve' => self::deferred_field_resolver($typename, $fieldname),
@@ -423,7 +424,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         //$type = $property->objectname;
         //if (count($property->fieldlist) > 1) {
         //$typename = self::find_property_typename($property);
-        $type = xarGraphQL::get_type($typename);
+        $type = xarGraphQLTypes::getType($typename);
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         return [
             'name' => $fieldname,
@@ -449,9 +450,9 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         //$type = $property->objectname;
         //if (count($property->fieldlist) > 1) {
         //$typename = self::find_property_typename($property);
-        //$type = xarGraphQL::get_type($typename);
-        $typelist = xarGraphQL::get_type_list($typename);
-        //$typelist = xarGraphQL::get_page_type($type);
+        //$type = xarGraphQLTypes::getType($typename);
+        $typelist = xarGraphQLTypes::getTypeList($typename);
+        //$typelist = xarGraphQLTypes::getPageType($type);
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         return [
             'name' => $fieldname,
@@ -490,9 +491,9 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         //$type = $property->targetname;
         //if (!empty($property->targetname) && count($property->fieldlist) > 1) {
         //$typename = self::find_property_typename($property);
-        //$type = xarGraphQL::get_type($typename);
-        $typelist = xarGraphQL::get_type_list($typename);
-        //$typelist = xarGraphQL::get_page_type($type);
+        //$type = xarGraphQLTypes::getType($typename);
+        $typelist = xarGraphQLTypes::getTypeList($typename);
+        //$typelist = xarGraphQLTypes::getPageType($type);
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         return [
             'name' => $fieldname,
@@ -528,9 +529,9 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     {
         // we only need the type class here, not the type instance
         if (!empty($object)) {
-            $clazz = xarGraphQL::get_type_class('basetype');
+            $clazz = xarGraphQLTypes::getTypeClass('basetype');
         } else {
-            $clazz = xarGraphQL::get_type_class($typename);
+            $clazz = xarGraphQLTypes::getTypeClass($typename);
         }
         // @todo should we pass along the object instead of the type here?
         return $clazz::_xar_deferred_field_resolver($typename, $fieldname, $object);
@@ -544,38 +545,8 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      */
     public static function object_field_resolver($type, $object = null)
     {
-        // @checkme use type classes by default for get_schema()
+        // @checkme use type classes by default for getSchema()
         return self::default_field_resolver(true);
-        /**
-        static $field_resolvers = [];
-        xarGraphQL::$paths[] = "field resolver $type";
-
-        // xarGraphQL::setTimer('object field resolver ' . $type);
-        // when using type config decorator
-        if (!isset($object)) {
-            $type = xarGraphQLInflector::singularize($type);
-            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
-        }
-        $field_resolvers[$object] ??= [];
-
-        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $object, &$field_resolvers) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, [$info->parentType->name, "object field " . $object, gettype($values), $args]);
-            }
-
-            // @checkme use standard default field resolver for any known types - will we need this?
-            if ($info->parentType->isBuiltInType()) {
-                $field_resolver = self::find_field_resolver();
-                return call_user_func($field_resolver, $values, $args, $context, $info);
-            }
-            $typename = $info->parentType->name;
-            $fieldname = $info->fieldName;
-            // @checkme try finding field resolver for any other types and fields - will we need this?
-            $field_resolver = self::find_field_resolver($typename, $fieldname);
-            return call_user_func($field_resolver, $values, $args, $context, $info);
-        };
-        return $resolver;
-         */
     }
 
     /**
@@ -586,9 +557,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     public static function default_field_resolver($useTypeClasses = true)
     {
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($useTypeClasses) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, [$info->parentType->name . '.' . $info->fieldName, gettype($values), $args]);
-            }
+            xarGraphQL::tracePath(array_merge($info->path, [$info->parentType->name . '.' . $info->fieldName, gettype($values), $args]));
 
             // @checkme use standard default field resolver for any known types - will we need this?
             if ($info->parentType->isBuiltInType()) {
@@ -613,7 +582,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      */
     public static function keys_field_resolver($typename, $fieldname)
     {
-        xarGraphQL::$paths[] = "use keys field resolver for type $typename field $fieldname";
+        xarGraphQL::tracePath("use keys field resolver for type $typename field $fieldname");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
             if (empty($values)) {
                 return;
@@ -643,7 +612,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      */
     public static function serial_field_resolver($typename, $fieldname)
     {
-        xarGraphQL::$paths[] = "use serial field resolver for type $typename field $fieldname";
+        xarGraphQL::tracePath("use serial field resolver for type $typename field $fieldname");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
             // @todo handle case where values is object
             if (is_string($values[$fieldname]) && !empty($values[$fieldname])) {
@@ -665,7 +634,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      */
     public static function bson_field_resolver($typename, $fieldname)
     {
-        xarGraphQL::$paths[] = "use bson field resolver for type $typename field $fieldname";
+        xarGraphQL::tracePath("use bson field resolver for type $typename field $fieldname");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
             // handle case where values is object - see MongoDB\Model\BSONDocument and MongoDB\Model\BSONArray
             if (is_object($values[$fieldname]) && !empty($values[$fieldname])) {
@@ -688,7 +657,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      */
     public static function alias_field_resolver($typename, $fieldname, $fieldalias)
     {
-        xarGraphQL::$paths[] = "use alias field resolver for type $typename field $fieldname = $fieldalias";
+        xarGraphQL::tracePath("use alias field resolver for type $typename field $fieldname = $fieldalias");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname, $fieldalias) {
             if (is_array($values)) {
                 return $values[$fieldname] ?? ($values[$fieldalias] ?? null);
@@ -709,7 +678,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      */
     public static function keyval_field_resolver($typename, $fieldname, $fieldalias)
     {
-        xarGraphQL::$paths[] = "use keyval field resolver for type $typename field $fieldname";
+        xarGraphQL::tracePath("use keyval field resolver for type $typename field $fieldname");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname, $fieldalias) {
             $result = null;
             if (is_array($values)) {
@@ -749,7 +718,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      */
     public static function basetype_field_resolver($typename, $fieldname)
     {
-        xarGraphQL::$paths[] = "use basetype field resolver for type $typename field $fieldname";
+        xarGraphQL::tracePath("use basetype field resolver for type $typename field $fieldname");
         // @checkme use standard default field resolver here?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
             if (is_array($values)) {
@@ -810,7 +779,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             // @checkme not possible to override page/list/item resolvers in child class by type here
             $field_resolver = self::_xar_query_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
-            xarGraphQL::$paths[] = "use query field resolver for type $typename";
+            xarGraphQL::tracePath("use query field resolver for type $typename");
             return $field_resolver;
         }
 
@@ -821,7 +790,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             // @checkme not possible to override create/update/delete resolvers in child class by type here
             $field_resolver = self::_xar_mutation_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
-            xarGraphQL::$paths[] = "use mutation field resolver for type $typename";
+            xarGraphQL::tracePath("use mutation field resolver for type $typename");
             return $field_resolver;
         }
 
@@ -830,18 +799,18 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         if (str_ends_with($typename, $page_ext)) {
             $field_resolver = $field_resolvers['*']['*'];
             $field_resolvers[$typename]['*'] = $field_resolver;
-            xarGraphQL::$paths[] = "use default field resolver for page type $typename";
+            xarGraphQL::tracePath("use default field resolver for page type $typename");
             return $field_resolver;
         }
 
         // check for existing class with field resolver(s)?
-        if ($useTypeClasses && empty($type_checked[$typename]) && array_key_exists($typename, xarGraphQL::$type_mapper)) {
+        if ($useTypeClasses && empty($type_checked[$typename]) && array_key_exists($typename, xarGraphQLTypes::getTypeMapper())) {
             $type_checked[$typename] = true;
-            $clazz = xarGraphQL::get_type_class($typename);
+            $clazz = xarGraphQLTypes::getTypeClass($typename);
             if (!is_subclass_of($clazz, ObjectType::class)) {
                 $field_resolver = $field_resolvers['*']['*'];
                 $field_resolvers[$typename]['*'] = $field_resolver;
-                xarGraphQL::$paths[] = "use default field resolver for type $typename = class " . $clazz;
+                xarGraphQL::tracePath("use default field resolver for type $typename = class " . $clazz);
                 return $field_resolver;
             }
             //$type_config = $clazz::_xar_get_type_config($typename);
@@ -851,7 +820,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
                 if ($type_def->resolveFieldFn) {
                     $field_resolver = $type_def->resolveFieldFn;
                     $field_resolvers[$typename]['*'] = $field_resolver;
-                    xarGraphQL::$paths[] = "use resolveField fn for type $typename = " . (string) $type_def;
+                    xarGraphQL::tracePath("use resolveField fn for type $typename = " . (string) $type_def);
                     return $field_resolver;
                 }
                 // use resolve function for field if available
@@ -859,14 +828,14 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
                     foreach ($type_def->getFields() as $field_def) {
                         if ($field_def->resolveFn) {
                             $field_resolvers[$typename][$field_def->name] = $field_def->resolveFn;
-                            xarGraphQL::$paths[] = "use resolve fn for type $typename = " . (string) $type_def . " field " . $field_def->name;
+                            xarGraphQL::tracePath("use resolve fn for type $typename = " . (string) $type_def . " field " . $field_def->name);
                         }
                     }
                     if (isset($field_resolvers[$typename][$fieldname])) {
                         return $field_resolvers[$typename][$fieldname];
                     }
                 } catch (Exception $e) {
-                    xarGraphQL::$paths[] = "Unknown fields for type $typename = " . (string) $type_def . ": " . $e->getMessage();
+                    xarGraphQL::tracePath("Unknown fields for type $typename = " . (string) $type_def . ": " . $e->getMessage());
                 }
             }
         }
@@ -885,7 +854,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         } catch (Exception) {
             $field_resolver = $field_resolvers['*']['*'];
             $field_resolvers[$typename]['*'] = $field_resolver;
-            xarGraphQL::$paths[] = "Unknown object $object - use default field resolver for type $typename";
+            xarGraphQL::tracePath("Unknown object $object - use default field resolver for type $typename");
             return $field_resolver;
         }
         if (empty($fieldspecs)) {
@@ -906,11 +875,11 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
 
         if ($fieldtype == 'deferred') {
             $field_resolver = self::deferred_field_resolver($objecttype, $fieldname);
-            xarGraphQL::$paths[] = "use deferred field resolver for type $typename field $fieldname";
+            xarGraphQL::tracePath("use deferred field resolver for type $typename field $fieldname");
         } elseif (in_array($fieldtype, ['deferitem', 'deferlist', 'defermany'])) {
             $defername = array_shift($fieldspecs[$fieldname]);
             $field_resolver = self::deferred_field_resolver($defername, $fieldname, $object);
-            xarGraphQL::$paths[] = "use $fieldtype property resolver for object $object property $fieldname [$defername]";
+            xarGraphQL::tracePath("use $fieldtype property resolver for object $object property $fieldname [$defername]");
         } elseif ($fieldtype == 'typelist') {
             $field_resolver = self::serial_field_resolver($typename, $fieldname);
         } elseif ($fieldtype == 'basetype' && $fieldspec == 'Serial') {
@@ -938,7 +907,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
                 throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
             }
         } else {
-            xarGraphQL::$paths[] = ["object field $object.$fieldname", $fieldspecs[$fieldname]];
+            xarGraphQL::tracePath(["object field $object.$fieldname", $fieldspecs[$fieldname]]);
             throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
         }
 
@@ -1001,7 +970,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      */
     public static function object_type_resolver($name)
     {
-        //xarGraphQL::$paths[] = "type resolver $name";
+        //xarGraphQL::tracePath("type resolver $name");
         return self::object_field_resolver($name);
     }
 
@@ -1012,7 +981,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      */
     public static function object_type_definition($name)
     {
-        $found = xarGraphQL::get_type($name);
+        $found = xarGraphQLTypes::getType($name);
         if (!empty($found)) {
             if (is_string($found)) {
                 $type = $found();
@@ -1026,9 +995,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         } else {
             $type = false;
         }
-        if (xarGraphQL::$trace_path) {
-            xarGraphQL::$paths[] = "object type $name = " . (string) $type;
-        }
+        xarGraphQL::tracePath("object type $name = " . (string) $type);
         return $type;
     }
 }

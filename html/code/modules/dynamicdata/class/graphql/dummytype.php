@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -53,9 +54,7 @@ class xarGraphQLDummyType extends ObjectType
                 'description' => 'Hello World!',
                 'type' => Type::string(),
                 'resolve' => function () {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = "hello";
-                    }
+                    xarGraphQL::tracePath("hello");
                     return 'Hello World!';
                 },
             ],
@@ -67,9 +66,7 @@ class xarGraphQLDummyType extends ObjectType
                     'message' => ['type' => Type::string()],
                 ],
                 'resolve' => function ($rootValue, $args) {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = "echo";
-                    }
+                    xarGraphQL::tracePath("echo");
                     if (empty($args['message'])) {
                         return $rootValue['prefix'] . 'nothing';
                     } else {
@@ -81,18 +78,16 @@ class xarGraphQLDummyType extends ObjectType
             'parse' => [
                 'name' => 'parse',
                 'description' => 'Parse Arguments',
-                'type' => xarGraphQL::get_type('mixed'),
+                'type' => xarGraphQLTypes::getType('mixed'),
                 'args' => [
                     [
                         'name' => 'args',
-                        'type' => xarGraphQL::get_type('mixed'),  // or 'serial'
+                        'type' => xarGraphQLTypes::getType('mixed'),  // or 'serial'
                         'defaultValue' => 'assoc array, string, list, ...',
                     ],
                 ],
                 'resolve' => function ($rootValue, $args) {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = ["parse"];
-                    }
+                    xarGraphQL::tracePath("parse");
                     return $args;
                 },
             ],
@@ -102,20 +97,16 @@ class xarGraphQLDummyType extends ObjectType
                 'description' => 'Get GraphQL Schema Definition',
                 'type' => Type::string(),
                 'resolve' => function () {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = "schema";
-                    }
+                    xarGraphQL::tracePath("schema");
                     return 'Here is the schema';
                 },
             ],
             'whoami' => [
                 'name' => 'whoami',
                 'description' => 'Display current user',
-                'type' => xarGraphQL::get_type('user'),
+                'type' => xarGraphQLTypes::getType('user'),
                 'resolve' => function ($rootValue, $args, $context) {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = "whoami";
-                    }
+                    xarGraphQL::tracePath("whoami");
                     $userId = xarGraphQL::checkUser($context);
                     if (empty($userId)) {
                         return;

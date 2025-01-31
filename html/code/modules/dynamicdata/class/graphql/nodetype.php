@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -40,18 +41,16 @@ class xarGraphQLNodeType extends InterfaceType
                 'id' => ['type' => Type::nonNull(Type::id())],
             ],
             'resolveType' => function ($value, $context, ResolveInfo $info) {
-                if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = array_merge($info->path, ["node type"]);
-                    xarGraphQL::$paths[] = $value;
-                    xarGraphQL::$paths[] = xarGraphQL::$object_type;
-                }
+                xarGraphQL::tracePath(array_merge($info->path, ["node type"]));
+                xarGraphQL::tracePath($value);
+                xarGraphQL::tracePath(xarGraphQLObjects::getTypes());
                 if (!is_array($value)) {
                     return Type::string();
                 }
-                //if (!empty($value['object']) && !empty(xarGraphQL::$object_type[$value['object']])) {
-                //    return xarGraphQL::$object_type[$value['object']];
+                //if (!empty($value['object']) && !empty(xarGraphQLObjects::getType($value['object']))) {
+                //    return xarGraphQLObjects::getType($value['object']);
                 //}
-                return xarGraphQL::get_type("ddnode");
+                return xarGraphQLTypes::getType("ddnode");
             },
         ];
     }
@@ -66,7 +65,7 @@ class xarGraphQLNodeType extends InterfaceType
             'node' => [
                 'name' => 'node',
                 'description' => 'Get object item using global object identification',
-                'type' => xarGraphQL::get_type("node"),
+                'type' => xarGraphQLTypes::getType("node"),
                 'args' => [
                     'id' => ['type' => Type::nonNull(Type::id())],
                 ],
@@ -75,7 +74,7 @@ class xarGraphQLNodeType extends InterfaceType
                     return ['global_id' => $args['id'], 'id' => $id, 'object' => $object];
                 },
                 //'interfaces' => [
-                //    xarGraphQL::get_type("node")
+                //    xarGraphQLTypes::getType("node")
                 //],
             ],
         ];

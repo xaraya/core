@@ -22,7 +22,7 @@ require_once dirname(__DIR__).'/vendor/autoload.php';
 //use GraphQL\GraphQL;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    xarGraphQL::send_cors_options();
+    xarGraphQL::sendCORSOptions();
     return;
 }
 
@@ -61,16 +61,16 @@ $context = new \Xaraya\Context\Context(['request' => $_REQUEST, 'server' => $_SE
 //$query = '{samples { name, age } }';
 //$query = '{sample(id: 0) { name, age } }';
 //$query = '{schema}';
-//xarGraphQL::$trace_path = true;
-//xarGraphQL::$enableTimer = true;
-//xarGraphQL::$cache_plan = true;
-//xarGraphQL::$cache_data = true;
-//xarGraphQL::$enableCache = true;
-$data = xarGraphQL::get_data($query, $variables, $operationName);
+//xarGraphQL::$tracePath = true;
+//xarGraphQL::enableTimer(true);
+//xarGraphQL::$cachePlan = true;
+//xarGraphQL::$cacheData = true;
+//xarGraphQL::enableCache(true);
+$data = xarGraphQL::getData($query, $variables, $operationName);
 //$extraTypes = ['module', 'theme', 'category', 'configuration'];
-//$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);
+//$data = xarGraphQL::getData($query, $variables, $operationName, $extraTypes);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
-//$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes, $schemaFile);
+//$data = xarGraphQL::getData($query, $variables, $operationName, $extraTypes, $schemaFile);
  */
 $xarGraphQL = new xarGraphQL();
 [$data, $context] = $xarGraphQL->handleRequest();

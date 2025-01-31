@@ -138,7 +138,7 @@ function try_handler($restHandler)
     if (empty(xarServer::getVar('PATH_INFO'))) {
         send_openapi($restHandler);
     } else {
-        // $restHandler::$enableTimer = true;
+        // $restHandler::enableTimer(true);
         // $restHandler::setTimer('start');
         $router = get_router($restHandler);
         handle_request(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO'), $router, $restHandler);

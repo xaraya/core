@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -42,24 +43,22 @@ class xarGraphQLKeyValType extends ObjectType implements xarGraphQLInputInterfac
             'fields' => [
                 'key' => Type::string(),
                 //'value' => Type::string(),
-                'value' => xarGraphQL::get_type('mixed'),
+                'value' => xarGraphQLTypes::getType('mixed'),
                 // @checkme this causes memory problems!
-                //'value' => xarGraphQL::get_type("multival"),
+                //'value' => xarGraphQLTypes::getType("multival"),
             ],
             /**
             // see recurring and circular types at https://webonyx.github.io/graphql-php/type-system/object-types/
             'fields' => function() {
                 return [
                     'key' => Type::string(),
-                    'value' => xarGraphQL::get_type("multival"),
+                    'value' => xarGraphQLTypes::getType("multival"),
                 ];
             }
              */
             /**
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
-                if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = array_merge($info->path, ["keyval field"]);
-                }
+                xarGraphQL::tracePath(array_merge($info->path, ["keyval field"]));
                 if (empty($object)) {
                     return null;
                 }
@@ -83,7 +82,7 @@ class xarGraphQLKeyValType extends ObjectType implements xarGraphQLInputInterfac
         $fields = [
             'key' => Type::string(),
             //'value' => Type::string(),
-            'value' => xarGraphQL::get_type('mixed'),  // Scalar Type doesn't need an equivalent Input Type
+            'value' => xarGraphQLTypes::getType('mixed'),  // Scalar Type doesn't need an equivalent Input Type
         ];
         return $fields;
     }

@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -36,18 +37,16 @@ class xarGraphQLMultiValType extends UnionType
             'name' => $typename,
             'types' => [
                 Type::string(),
-                //Type::listOf(xarGraphQL::get_type("keyval")),
-                xarGraphQL::get_type_list("keyval"),
+                //Type::listOf(xarGraphQLTypes::getType("keyval")),
+                xarGraphQLTypes::getTypeList("keyval"),
             ],
             'resolveType' => function ($value, $context, ResolveInfo $info) {
-                if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = array_merge($info->path, ["multival type"]);
-                }
+                xarGraphQL::tracePath(array_merge($info->path, ["multival type"]));
                 if (!is_array($value)) {
                     return Type::string();
                 }
-                //return Type::listOf(xarGraphQL::get_type("keyval"));
-                return xarGraphQL::get_type_list("keyval");
+                //return Type::listOf(xarGraphQLTypes::getType("keyval"));
+                return xarGraphQLTypes::getTypeList("keyval");
             },
         ];
     }

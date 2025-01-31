@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -42,9 +43,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'keys' => [
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = array_merge($info->path, ["property keys", gettype($property)]);
-                    }
+                    xarGraphQL::tracePath(array_merge($info->path, ["property keys", gettype($property)]));
                     //print_r("property keys resolve");
                     if (is_array($property)) {
                         return array_keys($property);
@@ -62,7 +61,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'name' => Type::string(),
             'label' => Type::string(),
             '_objectid' => Type::string(),
-            //'objectid' => xarGraphQL::get_type('object'),
+            //'objectid' => xarGraphQLTypes::getType('object'),
             //'object_id' => static::_xar_get_deferred_field('object_id', 'object'),
             'type' => Type::string(),
             'defaultvalue' => Type::string(),
@@ -70,14 +69,12 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'status' => Type::int(),
             'translatable' => Type::boolean(),
             'seq' => Type::int(),
-            'configuration' => xarGraphQL::get_type('serial'),
+            'configuration' => xarGraphQLTypes::getType('serial'),
             'configuration_kv' => [
-                //'type' => Type::listOf(xarGraphQL::get_type("keyval")),
-                'type' => xarGraphQL::get_type_list("keyval"),
+                //'type' => Type::listOf(xarGraphQLTypes::getType("keyval")),
+                'type' => xarGraphQLTypes::getTypeList("keyval"),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = array_merge($info->path, ["property configuration_kv"]);
-                    }
+                    xarGraphQL::tracePath(array_merge($info->path, ["property configuration_kv"]));
                     if (is_array($property) && isset($property['configuration'])) {
                         $values = @unserialize($property['configuration']);
                         if (empty($values)) {
@@ -115,7 +112,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                     return null;
                 },
             ],
-            //'objectref' => xarGraphQL::get_type("object"),
+            //'objectref' => xarGraphQLTypes::getType("object"),
             //'args' => Type::listOf(Type::string()),
         ];
         return $fields;

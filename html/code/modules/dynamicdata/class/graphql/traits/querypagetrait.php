@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -53,7 +54,7 @@ trait xarGraphQLQueryPageTrait
         return [
             'name' => $pagename,
             'description' => 'Page ' . $object . ' items',
-            'type' => xarGraphQL::get_page_type($typename),
+            'type' => xarGraphQLTypes::getPageType($typename),
             'args' => [
                 'order' => Type::string(),
                 'offset' => [
@@ -85,16 +86,14 @@ trait xarGraphQLQueryPageTrait
         $object ??= xarGraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
-            if (xarGraphQL::has_cached_data($typename . '_page', $rootValue, $args, $context, $info)) {
+            if (xarGraphQL::hasCachedData($typename . '_page', $rootValue, $args, $context, $info)) {
                 return;
             }
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["page query " . $typename, $args]);
-            }
+            xarGraphQL::tracePath(array_merge($info->path, ["page query " . $typename, $args]));
             // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
             $allowed = array_flip(['order', 'offset', 'limit', 'filter', 'count']);
             $fields = $info->getFieldSelection(1);
-            $args = array_intersect_key($args, $allowed);
+            $args = array_intersect_key($args, arrays: $allowed);
             $todo = array_keys(array_diff_key($fields, $allowed));
             if (array_key_exists('count', $fields)) {
                 $args['count'] = true;
@@ -104,8 +103,8 @@ trait xarGraphQLQueryPageTrait
             }
             // @checkme we assume that the first field other than the allowed ones is the list we need
             $list = $todo[0];
-            if (array_key_exists($typename, xarGraphQL::$type_fields)) {
-                $fieldlist = xarGraphQL::$type_fields[$typename];
+            if (xarGraphQL::hasQueryFields($typename)) {
+                $fieldlist = xarGraphQL::getQueryFields($typename);
             } elseif (!empty($list) && array_key_exists($list, $fields)) {
                 $fieldlist = array_keys($fields[$list]);
             } else {
@@ -158,7 +157,7 @@ trait xarGraphQLQueryPageTrait
             if (!empty($args['count'])) {
                 $args['count'] = $loader->count;
             }
-            xarGraphQL::$object_ref[$object] = & $objectlist;
+            xarGraphQLObjects::setObjectRef($object, $objectlist);
             return $args;
         };
         return $resolver;

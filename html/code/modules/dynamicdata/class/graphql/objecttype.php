@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -43,9 +44,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'keys' => [
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = array_merge($info->path, ["object keys"]);
-                    }
+                    xarGraphQL::tracePath(array_merge($info->path, ["object keys"]));
                     if (empty($object['_objectref'])) {
                         return array_keys($object);
                     }
@@ -60,9 +59,9 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'class' => Type::string(),
             'urlparam' => Type::string(),
             // @checkme where do we unserialize best - or do we simply re-use what DD already did for us?
-            //'access' => xarGraphQL::get_type("access"),
+            //'access' => xarGraphQLTypes::getType("access"),
             'access' => [
-                'type' => xarGraphQL::get_type("access"),
+                'type' => xarGraphQLTypes::getType("access"),
                 'resolve' => function ($object, $args) {
                     if (empty($object['access'])) {
                         return null;
@@ -72,13 +71,11 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             ],
             'datastore' => Type::string(),
             // this is not returned via getFieldValues()
-            'config' => xarGraphQL::get_type("serial"),
+            'config' => xarGraphQLTypes::getType("serial"),
             'config_kv' => [
-                'type' => xarGraphQL::get_type_list("keyval"),
+                'type' => xarGraphQLTypes::getTypeList("keyval"),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = array_merge($info->path, ["object config_kv", gettype($object)]);
-                    }
+                    xarGraphQL::tracePath(array_merge($info->path, ["object config_kv", gettype($object)]));
                     // Note: this may not be filled in by object(s) resolve above
                     if (empty($object['config'])) {
                         return null;
@@ -100,7 +97,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                     return $config;
                 },
             ],
-            'sources' => xarGraphQL::get_type("serial"),
+            'sources' => xarGraphQLTypes::getType("serial"),
             'maxid' => Type::int(),
             'isalias' => Type::boolean(),
             'category' => Type::string(),
@@ -111,8 +108,8 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                 },
             ],
             //'category' => static::_xar_get_deferred_field('category', 'category'),
-            //'properties' => Type::listOf(xarGraphQL::get_type("property")),
-            'properties' => xarGraphQL::get_type_list("property"),
+            //'properties' => Type::listOf(xarGraphQLTypes::getType("property")),
+            'properties' => xarGraphQLTypes::getTypeList("property"),
         ];
         return $fields;
     }
@@ -138,12 +135,10 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
     public static function _xar_list_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object list query", $args]);
-            }
+            xarGraphQL::tracePath(array_merge($info->path, ["object list query", $args]));
             $fields = $info->getFieldSelection(1);
-            if (array_key_exists($type, xarGraphQL::$type_fields)) {
-                $fieldlist = xarGraphQL::$type_fields[$type];
+            if (xarGraphQL::hasQueryFields($type)) {
+                $fieldlist = xarGraphQL::getQueryFields($type);
             } else {
                 $fieldlist = array_keys($fields);
             }
@@ -222,9 +217,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
     public static function _xar_item_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object item query"]);
-            }
+            xarGraphQL::tracePath(array_merge($info->path, ["object item query"]));
             $fields = $info->getFieldSelection(1);
             if (empty($args['id'])) {
                 throw new Exception('Unknown ' . $type);

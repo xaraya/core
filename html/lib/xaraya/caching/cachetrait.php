@@ -10,21 +10,21 @@
  *
  * class myFancyClass implements CacheInterface
  * {
- *     use CacheTrait;  // activate with self::$enableCache = true
+ *     use CacheTrait;  // activate with self::enableCache(true)
  *
  *     public function __construct()
  *     {
  *         // ...
- *         static::$enableCache = true;
- *         static::setCacheScope('myFancyItems');
+ *         self::enableCache(true);
+ *         self::setCacheScope('myFancyItems');
  *     }
  *
  *     public function getItemCached($id)
  *     {
  *         // ... get item from cache ...
- *         $cacheKey = static::getCacheKey($id);
- *         if (!empty($cacheKey) && static::isCached($cacheKey)) {
- *             return static::getCached($cacheKey);
+ *         $cacheKey = self::getCacheKey($id);
+ *         if (self::isCached($cacheKey)) {
+ *             return self::getCached($cacheKey);
  *         }
  *
  *         // ... retrieve item here in myFancyClass ...
@@ -32,12 +32,10 @@
  *
  *         // ... set item in cache ...
  *         // if you don't know the $cacheKey for item from before (e.g. because it was defined with $id elsewhere)
- *         // if (static::$enableCache && static::hasCacheKey()) {
+ *         // if (self::hasCacheKey()) {
  *         //     $cacheKey = self::getCacheKey();
  *         // }
- *         if (!empty($cacheKey)) {
- *             static::setCached($cacheKey, $item);
- *         }
+ *         self::setCached($cacheKey, $item);
  *         return $item;
  *     }
  * }
@@ -64,6 +62,11 @@ use xarVariableCache;
  */
 interface CacheInterface
 {
+    /**
+     * Get or set enableCache
+     */
+    public static function enableCache(?bool $enable = null): bool;
+
     /**
      * Summary of setCacheScope
      * @param string $cacheScope
@@ -144,9 +147,20 @@ interface CacheInterface
  */
 trait CacheTrait
 {
-    public static bool $enableCache = false;  // activate with self::$enableCache = true
+    public static bool $enableCache = false;  // activate with self::enableCache(true)
     public static string $_cacheScope = 'CacheTrait';
     public static ?string $_cacheKey = null;
+
+    /**
+     * Get or set enableCache
+     */
+    public static function enableCache(?bool $enable = null): bool
+    {
+        if (isset($enable)) {
+            static::$enableCache = $enable;
+        }
+        return static::$enableCache;
+    }
 
     /**
      * Summary of setCacheScope

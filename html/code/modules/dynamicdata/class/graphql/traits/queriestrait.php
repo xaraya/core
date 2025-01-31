@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -104,9 +105,7 @@ trait xarGraphQLQueriesTrait
     {
         // call either list_query_resolver or item_query_resolver here depending on $args['id']
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object query", $args]);
-            }
+            xarGraphQL::tracePath(array_merge($info->path, ["object query", $args]));
             // @todo check if type class corresponding to fieldname has overridden _xar_*_query_resolver
             $name = strtolower($info->fieldName);
             $page_ext = '_page';

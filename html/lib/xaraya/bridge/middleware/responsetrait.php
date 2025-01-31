@@ -34,9 +34,9 @@ interface DefaultResponseInterface
     public function createRedirectResponse(string $redirectURL, int $status = 302): ResponseInterface;
     public function createExceptionResponse(Throwable $e, mixed $result = null): ResponseInterface;
     public function createFileResponse(string $path, ?string $mediaType = null): ResponseInterface;
-    public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory, ?callable $cleaner = null): ResponseInterface;
-    public static function wrapResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface;
-    public static function wrapOutputInPage(string $body): string;
+    public function cleanResponse(ResponseInterface $response, ?callable $cleaner = null): ResponseInterface;
+    public function wrapResponse(ResponseInterface $response): ResponseInterface;
+    public function wrapOutputInPage(string $body): string;
     public static function emitResponse(ResponseInterface $response): void;
 }
 
@@ -170,7 +170,7 @@ trait DefaultResponseTrait
     /**
      * Basic route cleaner for object/module requests in response e.g. in router middleware
      */
-    public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory, ?callable $cleaner = null): ResponseInterface
+    public function cleanResponse(ResponseInterface $response, ?callable $cleaner = null): ResponseInterface
     {
         if (empty($cleaner) || !is_callable($cleaner)) {
             return $response;
@@ -182,6 +182,7 @@ trait DefaultResponseTrait
         $content = (string) $response->getBody();
         $content = call_user_func($cleaner, $content);
         // @todo replace object/module request links and return response with updated body
+        $factory = $this->getStreamFactory();
         if ($factory instanceof StreamFactoryInterface) {
             $body = $factory->createStream($content);
         } else {
@@ -196,13 +197,13 @@ trait DefaultResponseTrait
     /**
      * Basic page wrapper for object/module requests in response e.g. in router middleware
      */
-    public static function wrapResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface
+    public function wrapResponse(ResponseInterface $response): ResponseInterface
     {
         // Render page with the output - see index.php
-        return static::cleanResponse($response, $factory, static::wrapOutputInPage(...));
+        return $this->cleanResponse($response, $this->wrapOutputInPage(...));
     }
 
-    public static function wrapOutputInPage(string $body, $context = null): string
+    public function wrapOutputInPage(string $body, $context = null): string
     {
         // Render page with the output - see index.php - @todo use context?
         return \xarTpl::renderPage($body, null, $context);

@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -51,7 +52,7 @@ trait xarGraphQLQueryItemTrait
         return [
             'name' => $itemname,
             'description' => 'Get DD ' . $object . ' item',
-            'type' => xarGraphQL::get_type($typename),
+            'type' => xarGraphQLTypes::getType($typename),
             'args' => [
                 'id' => Type::nonNull(Type::id()),
             ],
@@ -77,12 +78,10 @@ trait xarGraphQLQueryItemTrait
         $object ??= xarGraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
-            if (xarGraphQL::has_cached_data($typename . '_item', $rootValue, $args, $context, $info)) {
+            if (xarGraphQL::hasCachedData($typename . '_item', $rootValue, $args, $context, $info)) {
                 return;
             }
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["item query"]);
-            }
+            xarGraphQL::tracePath(array_merge($info->path, ["item query"]));
             $fields = $info->getFieldSelection(1);
             if (empty($args['id'])) {
                 throw new Exception('Unknown id for type ' . $typename);
@@ -129,7 +128,7 @@ trait xarGraphQLQueryItemTrait
                     $values['config'] = [$objectitem->config];
                 }
             }
-            xarGraphQL::$object_ref[$object] = & $objectitem;
+            xarGraphQLObjects::setObjectRef($object, $objectitem);
             return $values;
         };
         return $resolver;

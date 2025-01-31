@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -78,17 +79,17 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
             'location' => Type::string(),
             // @checkme use deferred field or property resolver here with default load resolver = DataObjectLoader
             'partner' => [
-                'type' => xarGraphQL::get_type('sample'),
+                'type' => xarGraphQLTypes::getType('sample'),
                 //'resolve' => self::_xar_deferred_field_resolver('sample', 'partner'),
                 'resolve' => self::_xar_deferred_property_resolver('sample', 'partner', $object),
             ],
             'parents' => [
-                'type' => xarGraphQL::get_type_list('sample'),
+                'type' => xarGraphQLTypes::getTypeList('sample'),
                 //'resolve' => self::_xar_deferred_field_resolver('sample', 'parents'),
                 'resolve' => self::_xar_deferred_property_resolver('sample', 'parents', $object),
             ],
             'children' => [
-                'type' => xarGraphQL::get_type_list('sample'),
+                'type' => xarGraphQLTypes::getTypeList('sample'),
                 //'resolve' => self::_xar_deferred_field_resolver('sample', 'children'),
                 'resolve' => self::_xar_deferred_property_resolver('sample', 'children', $object),
             ],
@@ -107,9 +108,9 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
             'name' => Type::string(),
             'age' => Type::int(),
             'location' => Type::string(),
-            //'partner' => xarGraphQL::get_input_type('sample'),
-            //'parents' => xarGraphQL::get_input_type_list('sample'),
-            //'children' => xarGraphQL::get_input_type_list('sample'),
+            //'partner' => xarGraphQLTypes::getInputType('sample'),
+            //'parents' => xarGraphQLTypes::getInputTypeList('sample'),
+            //'children' => xarGraphQLTypes::getInputTypeList('sample'),
             'partner' => $newType,
             'parents' => Type::listOf($newType),
             'children' => Type::listOf($newType),

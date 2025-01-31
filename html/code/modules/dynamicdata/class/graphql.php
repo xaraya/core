@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Classes for handling GraphQL queries on Dynamic Data Objects (POC)
  *
@@ -42,7 +43,6 @@ use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
-
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 use GraphQL\Type\SchemaConfig;
@@ -53,7 +53,6 @@ use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
-
 use GraphQL\Validator\Rules;
 use GraphQL\Validator\DocumentValidator;
 
@@ -64,64 +63,26 @@ use GraphQL\Validator\DocumentValidator;
 class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
 {
     use CommonRequestTrait;
-    use TimerTrait;  // activate with self::$enableTimer = true
-    use CacheTrait;  // activate with self::$enableCache = true
+    use TimerTrait;  // activate with self::enableTimer(true)
+    use CacheTrait;  // activate with self::enableCache(true)
 
     public static string $endpoint = 'gql.php';
     /** @var array<string, mixed> */
     public static $config = [];
     /** @var string|null */
     public static $schemaFile = null;
-    /** @var array<string, mixed> */
-    public static $type_cache = [];
-    /** @var array<string, string> */
-    public static $type_mapper = [
-        'query'    => 'querytype',
-        'sample'   => 'sampletype',
-        'object'   => 'objecttype',
-        'property' => 'propertytype',
-        'access'   => 'accesstype',
-        'keyval'   => 'keyvaltype',
-        'multival' => 'multivaltype',
-        'user'     => 'usertype',
-        'token'    => 'tokentype',
-        'serial'   => 'serialtype',
-        'mixed'    => 'mixedtype',
-        'mutation' => 'mutationtype',
-        //'node'     => 'nodetype',
-        //'ddnode'   => 'ddnodetype',
-        'module_api' => 'moduleapitype',
-    ];
-    /** @var array<string, string> */
-    public static $base_types = [
-        'id'      => 'id',
-        'string'  => 'string',
-        'integer' => 'int',
-        'boolean' => 'boolean',
-        'number'  => 'float',
-    ];
-    /** @var array<string> */
-    public static $extra_types = [];
-    public static bool $trace_path = false;
+    public static bool $tracePath = false;
     /** @var array<string> */
     public static $paths = [];
     /** @var mixed */
-    public static $query_plan = null;
+    public static $queryPlan = null;
     /** @var array<string, mixed> */
-    public static $type_fields = [];
-    public static bool $cache_plan = false;
-    public static bool $cache_data = false;
-    public static bool $cache_operation = false;
-    /** @var array<string, string> */
-    public static $object_type = [];
+    public static $queryFields = [];
+    public static bool $cachePlan = false;
+    public static bool $cacheData = false;
+    public static bool $cacheOperation = false;
     public static int $queryComplexity = 0;
     public static int $queryDepth = 0;
-    /** @var array<string, mixed> */
-    public static $objectSecurity = [];
-    /** @var array<string, mixed> */
-    public static $objectFieldSpecs = [];
-    /** @var array<string, mixed> */
-    public static $object_ref = [];
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -130,23 +91,23 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      * @phpstan-import-type SchemaConfigOptions from SchemaConfig
      * @return Schema
      */
-    public static function get_schema($extraTypes = null, $validate = false)
+    public function getSchema($extraTypes = null, $validate = false)
     {
         if (!empty($extraTypes)) {
-            self::$extra_types = $extraTypes;
+            xarGraphQLTypes::setExtraTypes($extraTypes);
         }
-        // self::map_objects();
+        // xarGraphQLObjects::mapObjects();
         self::loadObjects();
         // Schema doesn't accept lazy loading of query type (besides typeLoader)
-        $queryType = self::get_type("query");
-        $mutationType = self::get_type("mutation");
+        $queryType = xarGraphQLTypes::getType("query");
+        $mutationType = xarGraphQLTypes::getType("mutation");
 
         $schema = new Schema([
             'query' => $queryType,
             'mutation' => $mutationType,
-            //'types' => [self::get_type("ddnode")],  // invisible types
+            //'types' => [self::getType("ddnode")],  // invisible types
             'typeLoader' => function ($name) {
-                return self::get_type($name);
+                return xarGraphQLTypes::getType($name);
             },
         ]);
 
@@ -157,285 +118,13 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
     }
 
     /**
-     * Summary of map_objects
-     * @return void
-     */
-    public static function map_objects()
-    {
-        if (!empty(self::$object_type)) {
-            return;
-        }
-        foreach (self::$type_mapper as $name => $type) {
-            $clazz = self::get_type_class($type);
-            if (property_exists($clazz, '_xar_object') && !empty($clazz::$_xar_object)) {
-                self::$object_type[$clazz::$_xar_object] = $name;
-                if (property_exists($clazz, '_xar_security') && isset($clazz::$_xar_security)) {
-                    self::$objectSecurity[$clazz::$_xar_object] = $clazz::$_xar_security;
-                }
-            }
-        }
-        foreach (self::$extra_types as $type) {
-            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
-            self::$object_type[$object] = $name;
-        }
-        self::setTimer('mapped');
-    }
-
-    /**
-     * Get GraphQL Type by name
-     * @param string $name
-     * @return mixed|void
-     */
-    public static function get_type($name)
-    {
-        $name = strtolower($name);
-        if (isset(self::$type_cache[$name])) {
-            return self::$type_cache[$name];
-        }
-        // Schema doesn't accept lazy loading of query type or scalar type (besides typeLoader)
-        if (in_array($name, ['query', 'mutation', 'mixed', 'serial'])) {
-            return self::load_lazy_type($name);
-        }
-        if (in_array($name, ['subscription'])) {
-            return;
-        }
-        //if (!self::has_type($name)) {
-        //    throw new Exception("Unknown graphql type: " . $name);
-        //}
-        // See https://github.com/webonyx/graphql-php/pull/557
-        return static function () use ($name) {
-            return self::load_lazy_type($name);
-        };
-    }
-
-    /**
-     * Summary of has_type
-     * @param string $name
-     * @return bool
-     */
-    public static function has_type($name)
-    {
-        $name = strtolower($name);
-        if (in_array($name, self::$extra_types) || array_key_exists($name, self::$type_mapper)) {
-            return true;
-        }
-        // @checkme for dynamically created types like the module api input types per function
-        if (isset(self::$type_cache[$name])) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @checkme for dynamically created types like the module api input types per function
-     * Summary of set_type
-     * @param string $name
-     * @param mixed $type
-     * @return void
-     */
-    public static function set_type($name, $type)
-    {
-        $name = strtolower($name);
-        self::$type_cache[$name] = $type;
-    }
-
-    /**
-     * Summary of get_type_list
-     * 'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)), doesn't accept lazy loading
-     * @param string $name
-     * @return Closure
-     */
-    public static function get_type_list($name)
-    {
-        $name = strtolower($name);
-        // See https://github.com/webonyx/graphql-php/pull/557
-        return static function () use ($name) {
-            // return Type::listOf(self::get_type($name));
-            return Type::listOf(self::load_lazy_type($name));
-        };
-    }
-
-    /**
-     * Summary of get_input_type_list
-     * 'type' => Type::listOf(xarGraphQL::get_input_type(static::$_xar_type)), doesn't accept lazy loading
-     * @param string $name
-     * @return Closure
-     */
-    public static function get_input_type_list($name)
-    {
-        $name = strtolower($name);
-        $input = $name . '_input';
-        // See https://github.com/webonyx/graphql-php/pull/557
-        return static function () use ($name) {
-            // return Type::listOf(self::load_lazy_type($input));
-            return Type::listOf(self::get_input_type($name));
-        };
-    }
-
-    /**
-     * Summary of load_lazy_type
-     * @param string $name
-     * @throws \Exception
-     * @return mixed
-     */
-    public static function load_lazy_type($name)
-    {
-        if (isset(self::$type_cache[$name])) {
-            return self::$type_cache[$name];
-        }
-        // @checkme use openapi data types and/or graphql base types + see buildtype get_field_basetypes()
-        if (array_key_exists($name, self::$base_types)) {
-            return Type::{self::$base_types[$name]}();
-        }
-        //self::$paths[] = ['load_lazy_type', $name];
-        $page_ext = '_page';
-        if (str_ends_with($name, $page_ext)) {
-            return self::get_page_type(substr($name, 0, strlen($name) - strlen($page_ext)));
-        }
-        $input_ext = '_input';
-        if (str_ends_with($name, $input_ext)) {
-            return self::get_input_type(substr($name, 0, strlen($name) - strlen($input_ext)));
-        }
-        // make Object Type from BuildType for extra dynamicdata object types
-        if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
-            $type = xarGraphQLBuildType::make_type($name);
-            if (!$type) {
-                throw new Exception("Unknown graphql type: " . $name);
-            }
-            self::$type_cache[$name] = $type;
-            return $type;
-        }
-        if (!array_key_exists($name, self::$type_mapper)) {
-            throw new Exception("Unknown graphql type: " . $name);
-        }
-        $clazz = self::get_type_class(self::$type_mapper[$name]);
-        $type = new $clazz();
-        if (!$type) {
-            throw new Exception("Unknown graphql type: " . $name);
-        }
-        self::$type_cache[$name] = $type;
-        return $type;
-    }
-
-    /**
-     * Get GraphQL Type by name with pagination
-     * @param string $name
-     * @throws \Exception
-     * @return mixed
-     */
-    public static function get_page_type($name)
-    {
-        $name = strtolower($name);
-        $page = $name . '_page';
-        if (isset(self::$type_cache[$page])) {
-            return self::$type_cache[$page];
-        }
-        // make Object Type from BuildType for extra dynamicdata object types
-        if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
-            $type = xarGraphQLBuildType::make_page_type($name);
-            if (!$type) {
-                throw new Exception("Unknown graphql type: " . $page);
-            }
-            self::$type_cache[$page] = $type;
-            return $type;
-        }
-        if (!array_key_exists($name, self::$type_mapper)) {
-            throw new Exception("Unknown graphql type: " . $page);
-        }
-        $clazz = self::get_type_class(self::$type_mapper[$name]);
-        // get page type from existing type class
-        $type = $clazz::_xar_get_page_type($page);
-        if (!$type) {
-            throw new Exception("Unknown graphql type: " . $page);
-        }
-        self::$type_cache[$page] = $type;
-        return $type;
-    }
-
-    /**
-     * Get GraphQL Input Type by name
-     * @param string $name
-     * @throws \Exception
-     * @return mixed
-     */
-    public static function get_input_type($name)
-    {
-        $name = strtolower($name);
-        $input = $name . '_input';
-        if (isset(self::$type_cache[$input])) {
-            return self::$type_cache[$input];
-        }
-        // make Object Type from BuildType for extra dynamicdata object types
-        if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
-            $type = xarGraphQLBuildType::make_input_type($name);
-            if (!$type) {
-                throw new Exception("Unknown graphql type: " . $input);
-            }
-            self::$type_cache[$input] = $type;
-            return $type;
-        }
-        if (!array_key_exists($name, self::$type_mapper)) {
-            throw new Exception("Unknown graphql type: " . $input);
-        }
-        $clazz = self::get_type_class(self::$type_mapper[$name]);
-        // get input type from existing type class
-        $type = $clazz::_xar_get_input_type($input);
-        if (!$type) {
-            throw new Exception("Unknown graphql type: " . $input);
-        }
-        self::$type_cache[$input] = $type;
-        return $type;
-    }
-
-    /**
-     * Get class where the GraphQL Type is defined
-     * @param string $type
-     * @return string
-     */
-    public static function get_type_class($type)
-    {
-        static $class_mapper = [
-            'querytype' => xarGraphQLQueryType::class,
-            'dummytype' => xarGraphQLDummyType::class,
-            'buildtype' => xarGraphQLBuildType::class,
-            'basetype' => xarGraphQLBaseType::class,
-            'sampletype' => xarGraphQLSampleType::class,
-            'objecttype' => xarGraphQLObjectType::class,
-            'propertytype' => xarGraphQLPropertyType::class,
-            'accesstype' => xarGraphQLAccessType::class,
-            'keyvaltype' => xarGraphQLKeyValType::class,
-            'multivaltype' => xarGraphQLMultiValType::class,
-            'usertype' => xarGraphQLUserType::class,
-            'tokentype' => xarGraphQLTokenType::class,
-            'serialtype' => xarGraphQLSerialType::class,
-            'mixedtype' => xarGraphQLMixedType::class,
-            'mutationtype' => xarGraphQLMutationType::class,
-            //'nodetype' => xarGraphQLNodeType::class,
-            //'ddnodetype' => xarGraphQLDDNodeType::class,
-            'moduleapitype' => xarGraphQLModuleApiType::class,
-        ];
-        if (!array_key_exists($type, $class_mapper) && array_key_exists($type, self::$type_mapper)) {
-            $type = self::$type_mapper[$type];
-        }
-        // from deferred_field_resolver()
-        if (!array_key_exists($type, $class_mapper) && in_array($type, self::$extra_types)) {
-            $type = 'basetype';
-        }
-        // from deferred_field_resolver() for unknown type e.g. category
-        if (!array_key_exists($type, $class_mapper)) {
-            $type = 'basetype';
-        }
-        return $class_mapper[$type];
-    }
-
-    /**
      * Build GraphQL Schema based on schema.graphql file and type config decorator
      * @param string $schemaFile
      * @param ?array<string> $extraTypes
      * @param bool $validate
      * @return Schema
      */
-    public static function build_schema($schemaFile, $extraTypes = null, $validate = false)
+    public function buildSchema($schemaFile, $extraTypes = null, $validate = false)
     {
         $parsedFile = $schemaFile . '_parsed.php';
         if (file_exists($parsedFile) && filemtime($parsedFile) > filemtime($schemaFile)) {
@@ -446,62 +135,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         }
         // @todo add extraTypes to schema contents if needed?
         //$typeConfigDecorator = static function ($typeConfig, $typeDefinitionNode, $allNodesMap) {
-        //    return self::type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap);
+        //    return xarGraphQLTypes::type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap);
         //};
         //$schema = BuildSchema::build($contents, $typeConfigDecorator);
         $schema = BuildSchema::build($document);
         return $schema;
-    }
-
-    /**
-     * Type config decorator for Query and Object types when using BuildSchema
-     * @param array<string, mixed> $typeConfig
-     * @param mixed $typeDefinitionNode
-     * @param mixed $allNodesMap
-     * @return mixed
-     */
-    public static function type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap)
-    {
-        $name = $typeConfig['name'];
-        // https://github.com/diasfs/graphql-php-resolvers/blob/master/src/FieldResolver.php
-        // $typeConfig['resolveField'] = function($value, $args, $ctx, $info) use ($resolver) {
-        //     return static::ResolveField($value, $args, $ctx, $info, $resolver);
-        // };
-        // @checkme forget about trying to override individual field resolve functions here - use fieldspecs later
-        if (self::has_type($name)) {
-            $type = strtolower($name);
-            //$clazz = self::get_type_class($type);
-            //if ($clazz !== "xarGraphQLBaseType" && method_exists($clazz, "_xar_get_type_config")) {
-            //    self::$paths[] = "type config $name defined in $clazz";
-            //    $classConfig = $clazz::_xar_get_type_config($name);
-            //    //return $classConfig;
-            //}
-        }
-        // @todo skip this and override default field resolver in executeQuery, or use one in basetype?
-        if ($name == 'Query') {
-            self::$paths[] = "query config $name";
-            //$fields = $typeConfig['fields']();
-            //self::$paths[] = "query config fields " . implode(',', array_keys($fields));
-            //$typeConfig['fields'] = static function () use ($name) {
-            //    $typeDef = xarGraphQLBuildType::object_type_definition($name);
-            //    //return $typeDef->getFields();
-            //    return $typeDef;
-            //};
-            // @checkme not possible to override page/list/item resolvers in child class by type here
-            $typeConfig['resolveField'] = xarGraphQLBuildType::_xar_query_field_resolver($name);
-        } elseif ($name == 'Mutation') {
-            self::$paths[] = "mutation config $name";
-            // @checkme not possible to override create/update/delete resolvers in child class by type here
-            $typeConfig['resolveField'] = xarGraphQLBuildType::_xar_mutation_field_resolver($name);
-        } else {
-            self::$paths[] = "type config $name";
-            //$typeConfig['fields'] = static function () use ($name) {
-            //    $typeDef = xarGraphQLBuildType::object_type_definition($name);
-            //    return $typeDef->getFields();
-            //};
-            $typeConfig['resolveField'] = xarGraphQLBuildType::object_type_resolver($name);
-        }
-        return $typeConfig;
     }
 
     /**
@@ -514,15 +152,15 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      * @param mixed $context
      * @return mixed
      */
-    public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null, $context = null)
+    public function getData($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null, $context = null)
     {
-        self::loadConfig();
+        $this->loadConfig();
         self::setTimer('start');
         if (!empty($schemaFile)) {
             self::$schemaFile = $schemaFile;
         }
         $cacheOperationKey = null;
-        if (self::$cache_operation) {
+        if (self::$cacheOperation) {
             $queryId = md5($queryString) . '-' . ($operationName ?? 'null');
             if (!empty($variableValues) && is_array($variableValues)) {
                 ksort($variableValues);
@@ -539,7 +177,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
                 $extensions['cached'] = self::keyCached($cacheOperationKey);
                 // $extensions['cached'] = true;
                 self::setTimer('cache');
-                if (self::$enableTimer) {
+                if (self::enableTimer()) {
                     $extensions['times'] = self::getTimers();
                 }
                 if (!empty($extensions)) {
@@ -548,16 +186,16 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
                 return $serializableResult;
             }
         }
-        //$schemaFile = self::$schemaFile;  // if we want to test build_schema without using $schemaFile in gql.php
+        //$schemaFile = self::$schemaFile;  // if we want to test buildSchema without using $schemaFile in gql.php
         if (!empty($schemaFile) && file_exists($schemaFile)) {
             // @checkme try out default object field resolver instead of type config decorator
-            $schema = self::build_schema($schemaFile, $extraTypes);
+            $schema = $this->buildSchema($schemaFile, $extraTypes);
             //$fieldResolver = null;
             // @checkme don't use type classes by default for BuildSchema?
             //$fieldResolver = xarGraphQLBuildType::default_field_resolver();
             $fieldResolver = xarGraphQLBuildType::default_field_resolver(false);
         } else {
-            $schema = self::get_schema($extraTypes);
+            $schema = $this->getSchema($extraTypes);
             $fieldResolver = null;
         }
         self::setTimer('schema');
@@ -603,7 +241,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         $serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE);
         self::setTimer('array');
         $extensions = [];
-        if (self::$cache_data && self::hasCacheKey()) {
+        if (self::$cacheData && self::hasCacheKey()) {
             $cacheKey = self::getCacheKey();
             if (self::isCached($cacheKey)) {
                 $serializableResult = self::getCached($cacheKey);
@@ -614,17 +252,17 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
                 self::setCached($cacheKey, $serializableResult);
             }
         }
-        if (self::$trace_path) {
+        if (self::$tracePath) {
             $extensions['paths'] = self::$paths;
         }
         self::setTimer('stop');
-        if (self::$enableTimer) {
+        if (self::enableTimer()) {
             $extensions['times'] = self::getTimers();
         }
         if (!empty($extensions)) {
             $serializableResult['extensions'] = $extensions;
         }
-        if (self::$cache_operation && !empty($cacheOperationKey)) {
+        if (self::$cacheOperation && !empty($cacheOperationKey)) {
             self::setCached($cacheOperationKey, $serializableResult);
         }
         return $serializableResult;
@@ -660,7 +298,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      * Send CORS options to the browser in preflight checks
      * @return void
      */
-    public static function send_cors_options()
+    public static function sendCORSOptions()
     {
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
         http_response_code(204);
@@ -672,11 +310,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
     }
 
     /**
-     * Summary of dump_query_plan
+     * Summary of dumpQueryPlan
      * @param mixed $plan
      * @return mixed
      */
-    public static function dump_query_plan($plan)
+    public static function dumpQueryPlan($plan)
     {
         if (!is_array($plan)) {
             return $plan;
@@ -686,14 +324,27 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
             if ($key === 'type' && !is_array($value)) {
                 $info[$key] = (string) $value;
             } else {
-                $info[$key] = self::dump_query_plan($value);
+                $info[$key] = self::dumpQueryPlan($value);
             }
         }
         return $info;
     }
 
     /**
-     * Summary of has_cached_data
+     * Summary of tracePath
+     * @param mixed $path
+     * @return void
+     */
+    public static function tracePath($path)
+    {
+        if (!self::$tracePath) {
+            return;
+        }
+        self::$paths[] = $path;
+    }
+
+    /**
+     * Summary of hasCachedData
      * @param mixed $queryType
      * @param mixed $rootValue
      * @param mixed $args
@@ -701,42 +352,42 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      * @param ResolveInfo $info
      * @return bool
      */
-    public static function has_cached_data($queryType, $rootValue, $args, $context, ResolveInfo $info)
+    public static function hasCachedData($queryType, $rootValue, $args, $context, ResolveInfo $info)
     {
-        if (!empty(self::$query_plan)) {
+        if (!empty(self::$queryPlan)) {
             return false;
         }
         self::setTimer('check');
         // disable caching for mutations
         if ($info->operation->operation === 'mutation') {
-            self::$enableCache = false;
-            self::$cache_plan = false;
-            self::$cache_data = false;
+            self::enableCache(false);
+            self::$cachePlan = false;
+            self::$cacheData = false;
         }
         $operationName = '';
         if ($info->operation->name) {
             $operationName = $info->operation->name->value;
         }
         $queryPlan = $info->lookAhead();
-        self::$query_plan = $queryPlan;
-        self::$type_fields = [];
+        self::$queryPlan = $queryPlan;
+        self::$queryFields = [];
         foreach ($queryPlan->getReferencedTypes() as $type) {
-            self::$type_fields[strtolower($type)] = array_values($queryPlan->subFields($type));
+            self::$queryFields[strtolower($type)] = array_values($queryPlan->subFields($type));
         }
-        //self::$paths[] = self::$type_fields;
-        $dumpPlan = self::dump_query_plan($queryPlan->queryPlan());
+        //self::$paths[] = self::$queryFields;
+        $dumpPlan = self::dumpQueryPlan($queryPlan->queryPlan());
         $queryId = $queryType . '-' . md5(json_encode($dumpPlan));
         if (!empty($args) && is_array($args)) {
             ksort($args);
         }
         // @checkme cache query plan + (later) perhaps result based on args
-        if (self::$cache_plan) {
+        if (self::$cachePlan) {
             $cacheKey = self::getCacheKey($queryId);
             if (!empty($cacheKey)) {
                 if (!self::isCached($cacheKey)) {
                     self::setCached($cacheKey, $dumpPlan);
                 }
-                if (self::$cache_data) {
+                if (self::$cacheData) {
                     // @checkme add current arguments to cacheKey to cache results
                     if (!empty($args)) {
                         $cacheKey .= '-' . md5(json_encode($args));
@@ -747,7 +398,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
                 }
             }
         }
-        if (self::$trace_path) {
+        if (self::$tracePath) {
             self::$paths[] = [
                 'queryId' => $queryId,
                 'queryType' => $queryType,
@@ -759,10 +410,30 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         }
         self::setTimer('plan');
         // @checkme don't try to resolve anything further if the result is already cached?
-        if (self::$cache_data && self::hasCacheKey() && self::isCached(self::getCacheKey())) {
+        if (self::$cacheData && self::hasCacheKey() && self::isCached(self::getCacheKey())) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Summary of hasQueryFields
+     * @param string $typeName
+     * @return bool
+     */
+    public static function hasQueryFields($typeName)
+    {
+        return array_key_exists($typeName, self::$queryFields);
+    }
+
+    /**
+     * Summary of getQueryFields
+     * @param string $typeName
+     * @return array<mixed>
+     */
+    public static function getQueryFields($typeName)
+    {
+        return self::$queryFields[$typeName];
     }
 
     /**
@@ -792,7 +463,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         }
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
-        $result = self::get_data($query, $variables, $operationName, [], null, $context);
+        $result = $this->getData($query, $variables, $operationName, [], null, $context);
         if ($query == '{schema}') {
             $context['mediatype'] = 'text/plain';
             if (!empty($request)) {
@@ -820,14 +491,14 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      */
     public static function hasSecurity($object, $method = null)
     {
-        return !empty(self::$objectSecurity[$object]) ? true : false;
+        return xarGraphQLObjects::hasSecurity($object, $method);
     }
 
     /**
      * Summary of loadConfig
      * @return void
      */
-    public static function loadConfig()
+    public function loadConfig()
     {
         if (!empty(self::$config)) {
             return;
@@ -839,7 +510,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
             self::$config = json_decode($contents, true);
         }
         if (!empty(self::$config['extraTypes'])) {
-            self::$extra_types = self::$config['extraTypes'];
+            xarGraphQLTypes::setExtraTypes(self::$config['extraTypes']);
         }
         if (!empty(self::$config['queryComplexity'])) {
             self::$queryComplexity = self::$config['queryComplexity'];
@@ -857,33 +528,33 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
          */
         // use xarTimerTrait
         if (!empty(self::$config['enableTimer'])) {
-            self::$enableTimer = true;
+            self::enableTimer(true);
         }
         if (!empty(self::$config['tracePath'])) {
-            self::$trace_path = true;
+            self::$tracePath = true;
         }
-        if (self::$trace_path) {
-            self::$enableTimer = true;
+        if (self::$tracePath) {
+            self::enableTimer(true);
         }
         // use xarCacheTrait
         if (!empty(self::$config['enableCache'])) {
-            self::$enableCache = true;
+            self::enableCache(true);
         }
         if (!empty(self::$config['cachePlan'])) {
-            self::$cache_plan = true;
+            self::$cachePlan = true;
         }
         if (!empty(self::$config['cacheData'])) {
-            self::$cache_data = true;
+            self::$cacheData = true;
             // this is needed for cache_data to work
-            self::$cache_plan = true;
+            self::$cachePlan = true;
         }
         if (!empty(self::$config['cacheOperation'])) {
-            self::$cache_operation = true;
+            self::$cacheOperation = true;
         }
-        if (self::$cache_plan || self::$cache_data || self::$cache_operation) {
-            self::$enableCache = true;
+        if (self::$cachePlan || self::$cacheData || self::$cacheOperation) {
+            self::enableCache(true);
         }
-        if (self::$enableCache) {
+        if (self::enableCache()) {
             $cacheScope = 'GraphQLAPI.QueryPlan';
             self::setCacheScope($cacheScope);
         }
@@ -893,6 +564,15 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         if (!empty(self::$config['objects'])) {
             self::loadObjects(self::$config);
         }
+    }
+
+    /**
+     * Summary of getObjects
+     * @return array<mixed>
+     */
+    public static function getObjects()
+    {
+        return self::$config['objects'];
     }
 
     /**
@@ -915,12 +595,17 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         } else {
             self::$config['objects'] = [];
         }
-        foreach (self::$config['objects'] as $object => $info) {
-            self::$object_type[$object] = $info['name'];
-            self::$objectSecurity[$object] = $info['security'];
-            self::$objectFieldSpecs[$object] = $info['fieldspecs'] ?? false;
-        }
+        xarGraphQLObjects::loadObjects(self::$config['objects']);
         self::setTimer('objects');
+    }
+
+    /**
+     * Summary of getModules
+     * @return array<mixed>
+     */
+    public static function getModules()
+    {
+        return self::$config['modules'];
     }
 
     /**
@@ -947,32 +632,19 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
     }
 
     /**
-     * Summary of find_extra_types
+     * Summary of findExtraTypes
      * @param ?array<string> $objectNames
      * @return array<string>
      */
-    public static function find_extra_types($objectNames = null)
+    public static function findExtraTypes($objectNames = null)
     {
         // @checkme set list of modules here before filtering out for $extraTypes - note: dependency on REST API
         self::$config['modules'] = DataObjectRESTBuilder::get_potential_modules($objectNames);
-        $extraTypes = [];
-        if (!empty($objectNames)) {
-            foreach ($objectNames as $name) {
-                if (str_contains($name, '.')) {
-                    continue;
-                }
-                $type = xarGraphQLInflector::singularize($name);
-                if (self::has_type($type)) {
-                    continue;
-                }
-                $extraTypes[] = $type;
-            }
-        }
-        return $extraTypes;
+        return xarGraphQLTypes::findExtraTypes($objectNames);
     }
 
     /**
-     * Summary of dump_schema
+     * Summary of dumpSchema
      * @param ?array<string> $extraTypes
      * @param string $storage
      * @param int $expires
@@ -986,7 +658,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      * @param bool $operation
      * @return void
      */
-    public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0, $timer = false, $trace = false, $cache = false, $plan = false, $data = false, $operation = false)
+    public function dumpSchema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0, $timer = false, $trace = false, $cache = false, $plan = false, $data = false, $operation = false)
     {
         $infoData = [];
         $infoData['generated'] = date('c');
@@ -1009,45 +681,8 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
 
         $configFile = sys::varpath() . '/cache/api/graphql_objects.json';
         $configData = $infoData;
-        $configData['objects'] = [];
-        self::$extra_types = $extraTypes;
-        self::$object_type = [];
-        self::map_objects();
-        self::$objectFieldSpecs = [];
-        foreach (self::$object_type as $object => $name) {
-            $configData['objects'][$object] = [];
-            $configData['objects'][$object]['name'] = $name;
-            $name = strtolower($name);
-            $type = self::$type_mapper[$name] ?? $name;
-            $configData['objects'][$object]['type'] = $type;
-            $configData['objects'][$object]['security'] = self::$objectSecurity[$object] ?? false;
-            $configData['objects'][$object]['class'] = self::get_type_class($type);
-            if (!empty(self::$type_mapper[$name])) {
-                $configData['objects'][$object]['fieldspecs'] = [];
-                $objectType = self::load_lazy_type($name);
-                foreach ($objectType->getFields() as $field) {
-                    $configData['objects'][$object]['fieldspecs'][$field->getName()] = ['fieldtype', $field->getType()->toString()];
-                }
-                $fieldspecs = xarGraphQLBuildType::find_object_fieldspecs($object, true);
-                foreach ($fieldspecs as $prop_name => $fieldspec) {
-                    if (array_key_exists($prop_name, $configData['objects'][$object]['fieldspecs'])) {
-                        $configData['objects'][$object]['fieldspecs'][$prop_name] = array_merge($configData['objects'][$object]['fieldspecs'][$prop_name], $fieldspec);
-                    } else {
-                        $configData['objects'][$object]['fieldspecs'][$prop_name] = $fieldspec;
-                    }
-                }
-            } else {
-                $configData['objects'][$object]['maketype'] = true;
-            }
-        }
-        $fieldspecs = [];
-        foreach (self::$extra_types as $type) {
-            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
-            $fieldspecs[$object] = xarGraphQLBuildType::find_object_fieldspecs($object, true);
-        }
-        foreach ($fieldspecs as $object => $fieldspec) {
-            $configData['objects'][$object]['fieldspecs'] = $fieldspec;
-        }
+        xarGraphQLTypes::setExtraTypes($extraTypes);
+        $configData['objects'] = xarGraphQLObjects::dumpObjects();
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
 
         $configFile = sys::varpath() . '/cache/api/graphql_modules.json';
@@ -1059,7 +694,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         self::$schemaFile = null;
         $content = '# GraphQL Endpoint: ' . xarServer::getBaseURL() . self::$endpoint . "\n";
         $content .= '# Generated: ' . date('c') . "\n";
-        $content .= self::get_data('{schema}', [], null, $extraTypes);
+        $content .= $this->getData('{schema}', [], null, $extraTypes);
         file_put_contents($schemaFile, $content);
     }
 }

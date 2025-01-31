@@ -17,11 +17,10 @@ use Xaraya\Tools\TimerTrait;
 
 class LocalTimer implements TimerInterface
 {
-    use TimerTrait;
-    //public static bool $enableTimer = true;  // activate with self::$enableTimer = true
+    use TimerTrait;  // activate with self::enableTimer(true)
 }
 
-LocalTimer::$enableTimer = true;
+LocalTimer::enableTimer(true);
 //LocalTimer::setTimer('autoload');
 sys::init();
 LocalTimer::setTimer('sys');

@@ -22,11 +22,10 @@ use Xaraya\Tools\TimerTrait;
 
 class LocalTimer implements TimerInterface
 {
-    use TimerTrait;
-    //public static bool $enableTimer = true;  // activate with self::$enableTimer = true
+    use TimerTrait;  // activate with self::enableTimer(true)
 }
 
-LocalTimer::$enableTimer = true;
+LocalTimer::enableTimer(true);
 //LocalTimer::setTimer('autoload');
 sys::init();
 LocalTimer::setTimer('sys');
@@ -76,11 +75,12 @@ function getStack($psr17Factory, $api = false, $wrapPage = false)
         return $response->withHeader('X-Response-Before', 'Bar');
     };
     // page wrapper for object requests in response output (if not specified above)
-    $wrapper = function ($request, $next) use ($psr17Factory) {
+    $responseUtil = new ResponseUtil($psr17Factory);
+    $wrapper = function ($request, $next) use ($responseUtil) {
         LocalTimer::setTimer('wrapper_in');
         $response = $next->handle($request->withAddedHeader('X-Middleware-Seen', 'Wrapper'));
         LocalTimer::setTimer('wrapper_handled');
-        $response = ResponseUtil::wrapResponse($response, $psr17Factory);
+        $response = $responseUtil->wrapResponse($response);
         LocalTimer::setTimer('wrapper_wrapped');
         return $response->withAddedHeader('X-Middleware-Seen', 'Wrapper');
     };

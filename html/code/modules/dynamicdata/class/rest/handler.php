@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @category Xaraya Web Applications Framework
@@ -33,8 +34,8 @@ use Xaraya\Authentication\AuthToken;
 class DataObjectRESTHandler extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
 {
     use CommonRequestTrait;
-    use TimerTrait;  // activate with self::$enableTimer = true
-    use CacheTrait;  // activate with self::$enableCache = true
+    use TimerTrait;  // activate with self::enableTimer(true)
+    use CacheTrait;  // activate with self::enableCache(true)
 
     public static string $endpoint = 'rst.php/v1';
     /** @var array<string, mixed> */
@@ -139,8 +140,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             $userId = $this->checkUser($context);
             //$args['access'] = 'view';
         }
-        if (self::$enableCache && !$this->hasCaching($object, $method)) {
-            self::$enableCache = false;
+        if (!$this->hasCaching($object, $method)) {
+            self::enableCache(false);
         }
         $args = $args['query'] ?? [];
         // @checkme always count here
@@ -231,8 +232,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             $userId = $this->checkUser($context);
             //$args['access'] = 'display';
         }
-        if (self::$enableCache && !$this->hasCaching($object, $method)) {
-            self::$enableCache = false;
+        if (!$this->hasCaching($object, $method)) {
+            self::enableCache(false);
         }
         $args = $args['query'] ?? [];
         $fieldlist = $this->getDisplayProperties($object, $args);
@@ -447,13 +448,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
          */
         // use xarTimerTrait
         if (isset(self::$config['timer'])) {
-            self::$enableTimer = !empty(self::$config['timer']) ? true : false;
+            self::enableTimer(!empty(self::$config['timer']) ? true : false);
         }
         // use xarCacheTrait
         if (isset(self::$config['cache'])) {
-            self::$enableCache = !empty(self::$config['cache']) ? true : false;
+            self::enableCache(!empty(self::$config['cache']) ? true : false);
         }
-        if (self::$enableCache) {
+        if (self::enableCache()) {
             $cacheScope = 'RestAPI.Operation';
             $this->setCacheScope($cacheScope);
         }
@@ -949,8 +950,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             // @checkme for security checks inside API functions when using auth token - see also reactphp single session
             //$_SESSION[xarSession::PREFIX . 'role_id'] = $userId;
         }
-        if (self::$enableCache && empty($func['caching'])) {
-            self::$enableCache = false;
+        if (empty($func['caching'])) {
+            self::enableCache(false);
         }
         // @checkme how to save this in case of caching?
         if (!empty($func['mediatype'])) {
@@ -1182,79 +1183,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     {
         // @todo move away from static methods for context
         $restHandler ??= static::class;
-        $routes = [];
-        $extra = [];
-
-        $path = $pathPrefix . '/objects';
-        $name = $namePrefix . 'getObjects';
-        $routes[$name] = ['GET', $path, [$restHandler, 'getObjects'], $extra];
-
-        $path = $pathPrefix . '/objects/{object}';
-        $name = $namePrefix . 'getObjectList';
-        $routes[$name] = ['GET', $path, [$restHandler, 'getObjectList'], $extra];
-
-        $path = $pathPrefix . '/objects/{object}/{itemid}';
-        $name = $namePrefix . 'getObjectItem';
-        $routes[$name] = ['GET', $path, [$restHandler, 'getObjectItem'], $extra];
-
-        $path = $pathPrefix . '/objects/{object}';
-        $name = $namePrefix . 'createObjectItem';
-        $routes[$name] = ['POST', $path, [$restHandler, 'createObjectItem'], $extra];
-
-        $path = $pathPrefix . '/objects/{object}/{itemid}';
-        $name = $namePrefix . 'updateObjectItem';
-        $routes[$name] = ['PUT', $path, [$restHandler, 'updateObjectItem'], $extra];
-
-        $path = $pathPrefix . '/objects/{object}/{itemid}';
-        $name = $namePrefix . 'deleteObjectItem';
-        $routes[$name] = ['DELETE', $path, [$restHandler, 'deleteObjectItem'], $extra];
-
-        //$path = $pathPrefix . '/objects/{object}';
-        //$name = $namePrefix . 'patchObjectDefinition';
-        //$routes[$name] = ['PATCH', $path, [$restHandler, 'patchObjectDefinition'], $extra];
-
-        $path = $pathPrefix . '/whoami';
-        $name = $namePrefix . 'whoami';
-        $routes[$name] = ['GET', $path, [$restHandler, 'whoami'], $extra];
-
-        $path = $pathPrefix . '/context';
-        $name = $namePrefix . 'getContext';
-        $routes[$name] = ['GET', $path, [$restHandler, 'getContext'], $extra];
-
-        $path = $pathPrefix . '/token';
-        $name = $namePrefix . 'postToken';
-        $routes[$name] = ['POST', $path, [$restHandler, 'postToken'], $extra];
-
-        $path = $pathPrefix . '/token';
-        $name = $namePrefix . 'deleteToken';
-        $routes[$name] = ['DELETE', $path, [$restHandler, 'deleteToken'], $extra];
-
-        $path = $pathPrefix . '/modules';
-        $name = $namePrefix . 'getModules';
-        $routes[$name] = ['GET', $path, [$restHandler, 'getModules'], $extra];
-
-        $path = $pathPrefix . '/modules/{module}';
-        $name = $namePrefix . 'getModuleApis';
-        $routes[$name] = ['GET', $path, [$restHandler, 'getModuleApis'], $extra];
-
-        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-        $path = $pathPrefix . '/modules/{module}/{path}[/{more:.+}]';
-        $name = $namePrefix . 'getModuleCall';
-        $routes[$name] = ['GET', $path, [$restHandler, 'getModuleCall'], $extra];
-
-        $path = $pathPrefix . '/modules/{module}/{path}[/{more:.+}]';
-        $name = $namePrefix . 'postModuleCall';
-        $routes[$name] = ['POST', $path, [$restHandler, 'postModuleCall'], $extra];
-
-        $path = $pathPrefix . '/modules/{module}/{path}[/{more:.+}]';
-        $name = $namePrefix . 'putModuleCall';
-        $routes[$name] = ['PUT', $path, [$restHandler, 'putModuleCall'], $extra];
-
-        $path = $pathPrefix . '/modules/{module}/{path}[/{more:.+}]';
-        $name = $namePrefix . 'deleteModuleCall';
-        $routes[$name] = ['DELETE', $path, [$restHandler, 'deleteModuleCall'], $extra];
-
-        return $routes;
+        return DataObjectRESTRoutes::getRoutes($pathPrefix, $namePrefix, $restHandler);
     }
 
     /**
@@ -1340,7 +1269,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (is_array($handler) && is_string($handler[0]) && $handler[0] === "DataObjectRESTHandler" && str_starts_with($handler[1], "get")) {
             $tryCachedResult = true;
         }
-        if ($tryCachedResult && self::$enableCache) {
+        if ($tryCachedResult && self::enableCache()) {
             $queryId = $this->getQueryId($handler[1], $params);
             $cacheKey = $this->getCacheKey($queryId);
             // @checkme we need to initialize the database here too if variable caching uses database instead of apcu
@@ -1403,7 +1332,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         // if (is_array($result)) {
         //     $result['x-debug'] = ['handler' => $handler, 'params' => $params];
         // }
-        if ($tryCachedResult && self::$enableCache && $this->hasCacheKey()) {
+        if ($tryCachedResult && $this->hasCacheKey()) {
             $cacheKey = $this->getCacheKey();
             $this->setCached($cacheKey, $result);
         }
@@ -1423,7 +1352,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (!isset($result) && php_sapi_name() !== 'cli') {
             return;
         }
-        if (is_array($result) && self::$enableTimer) {
+        if (is_array($result) && self::enableTimer()) {
             $result['x-times'] = $this->getTimers();
         }
         if (!headers_sent() && $status !== 200) {

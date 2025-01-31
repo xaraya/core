@@ -1,9 +1,10 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -84,41 +85,13 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
         return [
             'name' => 'getToken',
             'description' => 'Get API access token',
-            'type' => xarGraphQL::get_type('token'),
+            'type' => xarGraphQLTypes::getType('token'),
             'args' => [
                 'uname' => ['type' => Type::string()],
                 'pass' => ['type' => Type::string()],
                 'access' => ['type' => Type::string(), 'defaultValue' => 'display'],
             ],
             'resolve' => static::_xar_create_mutation_resolver($name),
-            /**
-            'resolve' => function ($rootValue, $args) {
-                // disable caching for mutations
-                xarGraphQL::$enableCache = false;
-                if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = "getToken";
-                }
-                if (empty($args['uname']) || empty($args['pass'])) {
-                    throw new Exception('Invalid username or password');
-                }
-                if (empty($args['access']) || !in_array($args['access'], AuthToken::ACCESS_LEVELS)) {
-                    throw new Exception('Invalid access');
-                }
-                //xarSession::init();
-                xarMod::init();
-                xarUser::init();
-                // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
-                // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
-                $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args);
-                if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
-                    throw new Exception('Invalid username or password');
-                }
-                $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];
-                $token = AuthToken::createToken($userInfo);
-                $expiration = date('c', time() + AuthToken::$tokenExpires);
-                return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
-            },
-             */
         ];
     }
 
@@ -132,10 +105,8 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
         //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
         $resolver = function ($rootValue, $args, $context) {
             // disable caching for mutations
-            xarGraphQL::$enableCache = false;
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = "getToken";
-            }
+            xarGraphQL::enableCache(false);
+            xarGraphQL::tracePath("getToken");
             if (empty($args['uname']) || empty($args['pass'])) {
                 throw new Exception('Invalid username or password');
             }
@@ -173,25 +144,6 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
                 'confirm' => ['type' => Type::boolean(), 'defaultValue' => false],
             ],
             'resolve' => static::_xar_delete_mutation_resolver($name),
-            /**
-            'resolve' => function ($rootValue, $args, $context) {
-                // disable caching for mutations
-                xarGraphQL::$enableCache = false;
-                if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = "deleteToken";
-                }
-                if (empty($args['confirm'])) {
-                    return false;
-                }
-                // see dummytype whoami and graphql checkUser
-                $token = AuthToken::getAuthToken($context);
-                if (empty($token)) {
-                    return true;
-                }
-                AuthToken::deleteToken($token);
-                return true;
-            },
-             */
         ];
     }
 
@@ -205,10 +157,8 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
         //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
         $resolver = function ($rootValue, $args, $context) {
             // disable caching for mutations
-            xarGraphQL::$enableCache = false;
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = "deleteToken";
-            }
+            xarGraphQL::enableCache(false);
+            xarGraphQL::tracePath("deleteToken");
             if (empty($args['confirm'])) {
                 return false;
             }

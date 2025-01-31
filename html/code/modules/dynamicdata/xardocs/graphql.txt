@@ -25,9 +25,9 @@ queried and/or its fields are resolved afterwards.
 Classes and Methods (to update)
 ===================
 gql.php
- |- graphql::get_schema
+ |- graphql::getSchema
  | |
- | #- get_type
+ | #- getType
  |   |
  |   |- basetype::__construct
  |   | |
@@ -115,7 +115,7 @@ gql.php
  |         |
  |         ...
  |
- #- build_schema
+ #- buildSchema
    |
    #- type_config_decorator
       |

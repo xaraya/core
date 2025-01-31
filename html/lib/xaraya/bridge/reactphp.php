@@ -60,8 +60,9 @@ $static = function (ServerRequestInterface $request, callable $next) use ($files
 
 $onesession = new SingleSessionMiddleware();
 
-$wrapper = function (ServerRequestInterface $request, callable $next) use ($psr17Factory): ResponseInterface {
-    return ResponseUtil::wrapResponse($next($request), $psr17Factory);
+$responseUtil = new ResponseUtil($psr17Factory);
+$wrapper = function (ServerRequestInterface $request, callable $next) use ($responseUtil): ResponseInterface {
+    return $responseUtil->wrapResponse($next($request));
 };
 
 // See https://github.com/php-pm/php-pm/blob/master/src/ProcessSlave.php to set server environment
