@@ -24,7 +24,11 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
-sys::import('xaraya.bridge.requests.requesttrait');
+namespace Xaraya\Bridge\GraphQL;
+
+use Xaraya\Bridge\GraphQL\Types\xarGraphQLBuildType;
+use Xaraya\Bridge\GraphQL\Types\xarGraphQLObjects;
+use Xaraya\Bridge\GraphQL\Types\xarGraphQLTypes;
 use Xaraya\Caching\CacheInterface;
 use Xaraya\Caching\CacheTrait;
 use Xaraya\Tools\TimerInterface;
@@ -46,6 +50,12 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Validator\Rules;
 use GraphQL\Validator\DocumentValidator;
+use xarObject;
+use xarServer;
+use sys;
+use Exception;
+
+sys::import('xaraya.bridge.requests.requesttrait');
 
 /**
  * See xardocs/graphql.txt for class structure

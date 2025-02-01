@@ -24,6 +24,10 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use GraphQL\Type\Definition\ObjectType;
+
 /**
  * See xardocs/graphql.txt for class structure
  * @uses \sys::autoload()
@@ -220,6 +224,7 @@ class xarGraphQLObjects
             $info[$object]['class'] = xarGraphQLTypes::getTypeClass($type);
             if (!empty($typeMapper[$name])) {
                 $info[$object]['fieldspecs'] = [];
+                /** @var ObjectType $objectType */
                 $objectType = xarGraphQLTypes::loadLazyType($name);
                 foreach ($objectType->getFields() as $field) {
                     $info[$object]['fieldspecs'][$field->getName()] = ['fieldtype', $field->getType()->toString()];

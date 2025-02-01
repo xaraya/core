@@ -24,7 +24,15 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\InputObjectType;
+use GraphQL\Type\Definition\ScalarType;
+use Closure;
+use Exception;
 
 /**
  * See xardocs/graphql.txt for class structure
@@ -125,7 +133,7 @@ class xarGraphQLTypes
      * Summary of getTypeList
      * 'type' => Type::listOf(xarGraphQLTypes::getType(static::$_xar_type)), doesn't accept lazy loading
      * @param string $name
-     * @return Closure
+     * @return \Closure
      */
     public static function getTypeList($name)
     {
@@ -141,7 +149,7 @@ class xarGraphQLTypes
      * Summary of get_input_type_list
      * 'type' => Type::listOf(xarGraphQLTypes::getInputType(static::$_xar_type)), doesn't accept lazy loading
      * @param string $name
-     * @return Closure
+     * @return \Closure
      */
     public static function getInputTypeList($name)
     {
@@ -158,7 +166,7 @@ class xarGraphQLTypes
      * Summary of loadLazyType
      * @param string $name
      * @throws \Exception
-     * @return mixed
+     * @return ObjectType|InputObjectType|ScalarType
      */
     public static function loadLazyType($name)
     {
@@ -203,7 +211,7 @@ class xarGraphQLTypes
      * Get GraphQL Type by name with pagination
      * @param string $name
      * @throws \Exception
-     * @return mixed
+     * @return \GraphQL\Type\Definition\ObjectType
      */
     public static function getPageType($name)
     {
@@ -238,7 +246,7 @@ class xarGraphQLTypes
      * Get GraphQL Input Type by name
      * @param string $name
      * @throws \Exception
-     * @return mixed
+     * @return InputObjectType
      */
     public static function getInputType($name)
     {

@@ -10,8 +10,12 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**

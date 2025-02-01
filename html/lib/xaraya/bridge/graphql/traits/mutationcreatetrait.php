@@ -10,8 +10,13 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
+use DataObjectFactory;
+use Exception;
 
 /**
  * For documentation purposes only - available via xarGraphQLMutationCreateTrait

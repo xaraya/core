@@ -10,6 +10,9 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Language\AST\ObjectValueNode;
 use GraphQL\Type\Definition\ScalarType;
 use GraphQL\Language\AST\StringValueNode;

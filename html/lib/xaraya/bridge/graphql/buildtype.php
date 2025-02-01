@@ -10,12 +10,20 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Deferred;
 use GraphQL\Executor\Executor;
+use DataObjectFactory;
+use DataPropertyMaster;
+use DeferredItemProperty;
+use Closure;
+use Exception;
 
 /**
  * Build GraphQL ObjectType, query fields and resolvers for generic dynamicdata object type

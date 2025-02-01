@@ -10,8 +10,12 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\InputObjectType;
 
 /**
  * GraphQL ObjectType and query fields for "base" dynamicdata object type
@@ -96,7 +100,7 @@ class xarGraphQLBaseType extends ObjectType implements xarGraphQLQueriesInterfac
     /**
      * This method *should* be overridden for each specific object type
      * @param mixed $object
-     * @param mixed $newType
+     * @param InputObjectType $newType
      * @return array<string, mixed>
      */
     public static function _xar_get_input_fields($object, &$newType): array

@@ -10,6 +10,8 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\InputObjectType;
 
@@ -72,7 +74,7 @@ trait xarGraphQLInputTrait
     /**
      * This method *should* be overridden for each specific object type
      * @param mixed $object
-     * @param mixed $newType
+     * @param InputObjectType $newType
      * @return array<string, mixed>
      */
     public static function _xar_get_input_fields($object, &$newType): array

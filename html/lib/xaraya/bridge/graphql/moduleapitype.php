@@ -10,10 +10,17 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use xarMod;
+use xarUser;
+use Closure;
+use Exception;
 
 /**
  * Module API GraphQL ObjectType for calling module api functions
@@ -288,7 +295,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
      * This method *may* be overridden for a specific module api function, but it doesn't have to be
      * @param mixed $func
      * @throws \Exception
-     * @return Closure
+     * @return \Closure
      */
     public static function _xar_call_query_resolver($func)
     {
@@ -479,7 +486,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
      * This method *may* be overridden for a specific module api function, but it doesn't have to be
      * @param mixed $func
      * @throws \Exception
-     * @return Closure
+     * @return \Closure
      */
     public static function _xar_call_mutation_resolver($func)
     {

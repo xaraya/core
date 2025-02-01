@@ -10,6 +10,8 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
 /**
  * Class to handle singular/plural conversion of names
  */

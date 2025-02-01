@@ -10,10 +10,15 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Deferred;
+use DataObjectFactory;
+use Exception;
 
 /**
  * GraphQL ObjectType and query fields for "roles_users" dynamicdata object type

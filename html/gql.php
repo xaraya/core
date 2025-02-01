@@ -18,8 +18,7 @@
  */
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
-// use the GraphQL PHP library here
-//use GraphQL\GraphQL;
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     xarGraphQL::sendCORSOptions();

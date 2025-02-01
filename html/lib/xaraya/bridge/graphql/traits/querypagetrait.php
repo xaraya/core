@@ -10,9 +10,14 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
-
+use DataObjectFactory;
+use Exception;
+ 
 /**
  * For documentation purposes only - available via xarGraphQLQueryPageTrait
  */
@@ -121,7 +126,7 @@ trait xarGraphQLQueryPageTrait
                     throw new Exception('Invalid user');
                 }
             }
-            $loader = new DataObjectLoader($object, $fieldlist);
+            $loader = DataObjectFactory::getObjectLoader($object, $fieldlist);
             // set context if available in resolver
             $loader->setContext($context);
             $loader->parseQueryArgs($args);

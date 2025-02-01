@@ -10,9 +10,15 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use DataObjectFactory;
+use DataPropertyMaster;
+use Exception;
 
 /**
  * GraphQL ObjectType and query fields for "objects" dynamicdata object type
@@ -156,7 +162,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                     throw new Exception('Invalid user');
                 }
             }
-            $loader = new DataObjectLoader($object, $fieldlist);
+            $loader = DataObjectFactory::getObjectLoader($object, $fieldlist);
             // set context if available in resolver
             $loader->setContext($context);
             $loader->parseQueryArgs($args);

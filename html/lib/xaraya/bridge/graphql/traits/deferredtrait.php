@@ -10,7 +10,14 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\Bridge\GraphQL\Types;
+
+use Xaraya\Bridge\GraphQL\xarGraphQL;
 use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Deferred;
+use DataObjectFactory;
+use DeferredItemProperty;
+use Exception;
 
 /**
  * For documentation purposes only - available via xarGraphQLDeferredTrait
@@ -154,7 +161,7 @@ trait xarGraphQLDeferredTrait
             // @todo  how to avoid setting this twice for lists?
             $value = $property->setDataToDefer($values['id'], $values[$fieldname] ?? null);
 
-            return new GraphQL\Deferred(function () use ($typename, $values, $fieldname, $property) {
+            return new Deferred(function () use ($typename, $values, $fieldname, $property) {
                 xarGraphQL::tracePath(["get deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null)]);
                 $data = $property->getDeferredData(['value' => ($values[$fieldname] ?? null), '_itemid' => $values['id']]);
                 //print_r($data['value']);
@@ -187,7 +194,7 @@ trait xarGraphQLDeferredTrait
         }
         $object ??= xarGraphQLInflector::pluralize($typename);
         if (!array_key_exists($typename, static::$_xar_deferred)) {
-            static::$_xar_deferred[$typename] = new DataObjectLoader($object, ['id']);
+            static::$_xar_deferred[$typename] = DataObjectFactory::getObjectLoader($object, ['id']);
             // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
             $getValuesFunc = static::_xar_load_deferred($typename);
             if (!empty($getValuesFunc)) {
@@ -223,7 +230,7 @@ trait xarGraphQLDeferredTrait
             xarGraphQL::tracePath(["add deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null), implode(',', $fieldlist)]);
             static::_xar_add_deferred($typename, $values[$fieldname], $fieldlist);
 
-            return new GraphQL\Deferred(function () use ($typename, $values, $fieldname) {
+            return new Deferred(function () use ($typename, $values, $fieldname) {
                 xarGraphQL::tracePath(["get deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null)]);
                 return static::_xar_get_deferred($typename, $values[$fieldname]);
             });
