@@ -63,6 +63,16 @@ class GraphQLObjects
     }
 
     /**
+     * Summary of hasType
+     * @param string $objectName
+     * @return bool
+     */
+    public static function hasType($objectName)
+    {
+        return isset(self::$objectType[$objectName]);
+    }
+
+    /**
      * Summary of setType
      * @param string $objectName
      * @param string $typeName
@@ -110,6 +120,16 @@ class GraphQLObjects
     public static function getFieldSpecs($objectName)
     {
         return self::$objectFieldSpecs[$objectName] ?? false;
+    }
+
+    /**
+     * Summary of hasFieldSpecs
+     * @param string $objectName
+     * @return bool
+     */
+    public static function hasFieldSpecs($objectName)
+    {
+        return isset(self::$objectFieldSpecs[$objectName]);
     }
 
     /**

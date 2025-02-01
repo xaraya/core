@@ -140,7 +140,7 @@ trait DeferredTrait
             $fieldlist = array_keys($fields);
             if (empty($property->objectname)) {
                 // only looking for id's here
-            } elseif (!empty(GraphQLObjects::getType($property->objectname))) {
+            } elseif (GraphQLObjects::hasType($property->objectname)) {
                 $objtype = strtolower(GraphQLObjects::getType($property->objectname));
                 if (GraphQLHandler::hasQueryFields($objtype)) {
                     $fieldlist = GraphQLHandler::getQueryFields($objtype);

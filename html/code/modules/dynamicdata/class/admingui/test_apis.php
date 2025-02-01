@@ -11,12 +11,12 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
+use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
 use DataObjectFactory;
-use DataObjectRESTBuilder;
 use xarController;
-use xarGraphQL;
 use xarMod;
 use xarModVars;
 use xarPageCache;
@@ -186,13 +186,14 @@ class TestApisMethod extends MethodClass
             $cacheData = $this->mod()->getVar('graphql_cache_data');
             $cacheOperation = $this->mod()->getVar('graphql_cache_operation');
         }
+        sys::import('xaraya.bridge.restapi.builder');
 
-        DataObjectRESTBuilder::init();
+        RestAPIBuilder::init();
         if (!$this->var()->find('create_rst', $create_rst, 'notempty', 0)) {
             return;
         }
         if (!empty($create_rst)) {
-            DataObjectRESTBuilder::create_openapi($restapilist, $storageType, $tokenExpires, $enableTimer, $enableCache);
+            RestAPIBuilder::create_openapi($restapilist, $storageType, $tokenExpires, $enableTimer, $enableCache);
             $this->ctl()->redirect($this->ctl()->getCurrentURL(['create_rst' => null]));
             return true;
         }
@@ -201,10 +202,10 @@ class TestApisMethod extends MethodClass
         }
         if (!empty($create_gql)) {
             sys::autoload();
-            sys::import('xaraya.bridge.graphql.graphql');
-            $xarGraphQL = new xarGraphQL();
-            $extraTypes = $xarGraphQL->findExtraTypes($graphqllist);
-            $xarGraphQL->dumpSchema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
+            sys::import('xaraya.bridge.graphql.handler');
+            $graphQLHandler = new GraphQLHandler();
+            $extraTypes = $graphQLHandler->findExtraTypes($graphqllist);
+            $graphQLHandler->dumpSchema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
             $this->ctl()->redirect($this->ctl()->getCurrentURL(['create_gql' => null]));
             return true;
         }
@@ -224,7 +225,7 @@ class TestApisMethod extends MethodClass
         $data['restapilist'] = $restapilist;
         $data['graphqllist'] = $graphqllist;
         $mergedlist = array_unique(array_merge($restapilist, $graphqllist));
-        $data['objects'] = DataObjectRESTBuilder::get_potential_objects($mergedlist);
+        $data['objects'] = RestAPIBuilder::get_potential_objects($mergedlist);
         $known_objects = [];
         foreach ($data['objects'] as $item) {
             array_push($known_objects, $item['name']);
@@ -237,7 +238,7 @@ class TestApisMethod extends MethodClass
                 array_push($data['otherlist'], $item);
             }
         }
-        $data['modules'] = DataObjectRESTBuilder::get_potential_modules($mergedlist);
+        $data['modules'] = RestAPIBuilder::get_potential_modules($mergedlist);
         $all_modules = $this->mod()->apiFunc('modules', 'admin', 'getitems');
         $data['othermodules'] = [];
         foreach ($all_modules as $item) {

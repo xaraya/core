@@ -37,6 +37,8 @@ use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
 use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use Xaraya\Context\ContextFactory;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
@@ -61,9 +63,10 @@ sys::import('xaraya.bridge.requests.requesttrait');
  * See xardocs/graphql.txt for class structure
  * @uses \sys::autoload()
  */
-class GraphQLHandler extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
+class GraphQLHandler extends xarObject implements CommonRequestInterface, ContextInterface, CacheInterface, TimerInterface
 {
     use CommonRequestTrait;
+    use ContextTrait;
     use TimerTrait;  // activate with self::enableTimer(true)
     use CacheTrait;  // activate with self::enableCache(true)
 
@@ -150,10 +153,9 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, CacheI
      * @param ?string $operationName
      * @param ?array<string> $extraTypes
      * @param ?string $schemaFile
-     * @param mixed $context
      * @return mixed
      */
-    public function getData($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null, $context = null)
+    public function getData($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null)
     {
         $this->loadConfig();
         self::setTimer('start');
@@ -231,7 +233,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, CacheI
             $schema,
             $queryString,
             $rootValue,
-            $context,
+            $this->getContext(),
             $variableValues,
             $operationName,
             $fieldResolver,
@@ -465,8 +467,8 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, CacheI
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         // @todo check if we already have a context? (via request or from elsewhere)
-        //$this->setContext($context);
-        $result = $this->getData($query, $variables, $operationName, [], null, $context);
+        $this->setContext($context);
+        $result = $this->getData($query, $variables, $operationName);
         if ($query == '{schema}') {
             $context['mediatype'] = 'text/plain';
             if (!empty($request)) {
@@ -563,10 +565,6 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, CacheI
         }
         self::$schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         self::setTimer('config');
-        // @deprecated for existing _config files before rebuild
-        if (!empty(self::$config['objects'])) {
-            self::loadObjects(self::$config);
-        }
     }
 
     /**

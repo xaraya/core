@@ -306,7 +306,7 @@ class BuildType implements QueriesInterface, MutationsInterface
     public static function find_object_fieldspecs($object, $refresh = false)
     {
         GraphQLHandler::loadObjects();
-        if (!empty(GraphQLObjects::getFieldSpecs($object)) && !$refresh) {
+        if (GraphQLObjects::hasFieldSpecs($object) && !$refresh) {
             return GraphQLObjects::getFieldSpecs($object);
         }
         GraphQLHandler::setTimer('find object fieldspecs ' . $object);
@@ -386,7 +386,7 @@ class BuildType implements QueriesInterface, MutationsInterface
         if (empty($property->objectname)) {
             return "mixed";
         }
-        if (!empty(GraphQLObjects::getType($property->objectname))) {
+        if (GraphQLObjects::hasType($property->objectname)) {
             $typename = GraphQLObjects::getType($property->objectname);
         } else {
             $typename = GraphQLInflector::singularize($property->objectname);
