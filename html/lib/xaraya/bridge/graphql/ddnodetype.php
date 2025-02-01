@@ -21,7 +21,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType for getting DD object items using global object identification
  */
-class xarGraphQLDDNodeType extends ObjectType
+class DDNodeType extends ObjectType
 {
     public function __construct()
     {

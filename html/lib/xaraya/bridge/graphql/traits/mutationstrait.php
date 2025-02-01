@@ -18,9 +18,9 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Exception;
 
 /**
- * For documentation purposes only - available via xarGraphQLMutationsTrait
+ * For documentation purposes only - available via MutationsTrait
  */
-interface xarGraphQLMutationsInterface extends xarGraphQLMutationCreateInterface, xarGraphQLMutationUpdateInterface, xarGraphQLMutationDeleteInterface
+interface MutationsInterface extends MutationCreateInterface, MutationUpdateInterface, MutationDeleteInterface
 {
     /**
      * Get the mutation fields listed in the $_xar_mutations property of the actual class
@@ -47,11 +47,11 @@ interface xarGraphQLMutationsInterface extends xarGraphQLMutationCreateInterface
 /**
  * Trait to handle default mutation fields for dataobjects (create, update, delete)
  */
-trait xarGraphQLMutationsTrait
+trait MutationsTrait
 {
-    use xarGraphQLMutationCreateTrait;
-    use xarGraphQLMutationUpdateTrait;
-    use xarGraphQLMutationDeleteTrait;
+    use MutationCreateTrait;
+    use MutationUpdateTrait;
+    use MutationDeleteTrait;
 
     public static string $_xar_type   = '';  // specify in the class using this trait
     public static string $_xar_object = '';  // specify in the class using this trait

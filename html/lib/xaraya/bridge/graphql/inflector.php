@@ -15,7 +15,7 @@ namespace Xaraya\Bridge\GraphQL\Types;
 /**
  * Class to handle singular/plural conversion of names
  */
-class xarGraphQLInflector
+class GraphQLInflector
 {
     /**
      * Sanitize name, type, object, list and item based on given name, e.g.:

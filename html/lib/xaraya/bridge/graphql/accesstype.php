@@ -20,7 +20,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType and (no) query fields for "access" field = unserialized in "object(s)"
  */
-class xarGraphQLAccessType extends ObjectType
+class AccessType extends ObjectType
 {
     public function __construct()
     {

@@ -19,9 +19,9 @@ use DataObjectFactory;
 use Exception;
  
 /**
- * For documentation purposes only - available via xarGraphQLQueryPageTrait
+ * For documentation purposes only - available via QueryPageTrait
  */
-interface xarGraphQLQueryPageInterface
+interface QueryPageInterface
 {
     /**
      * Get paginated list query field for this object type - see also relay connection for cursor-based
@@ -45,7 +45,7 @@ interface xarGraphQLQueryPageInterface
 /**
  * Trait to handle default page query for dataobjects
  */
-trait xarGraphQLQueryPageTrait
+trait QueryPageTrait
 {
     /**
      * Get paginated list query field for this object type - see also relay connection for cursor-based
@@ -88,7 +88,7 @@ trait xarGraphQLQueryPageTrait
     public static function _xar_page_query_resolver($typename, $object = null): callable
     {
         // when using type config decorator and object_query_resolver
-        $object ??= xarGraphQLInflector::pluralize($typename);
+        $object ??= GraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
             if (GraphQLHandler::hasCachedData($typename . '_page', $rootValue, $args, $context, $info)) {

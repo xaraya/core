@@ -19,9 +19,9 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType and (no) query fields for assoc array configuration = unserialized in "propertie(s)"
  */
-class xarGraphQLKeyValType extends ObjectType implements xarGraphQLInputInterface
+class KeyValType extends ObjectType implements InputObjectInterface
 {
-    use xarGraphQLInputTrait;
+    use InputObjectTrait;
 
     public static string $_xar_name   = 'KeyVal';
 

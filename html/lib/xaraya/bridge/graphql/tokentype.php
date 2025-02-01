@@ -24,7 +24,7 @@ use Exception;
 /**
  * Token GraphQL ObjectType to get an access token
  */
-class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreateInterface, xarGraphQLMutationDeleteInterface
+class TokenType extends ObjectType implements MutationCreateInterface, MutationDeleteInterface
 {
     /** @var array<mixed> */
     public static $_xar_mutations = ['getToken', 'deleteToken'];

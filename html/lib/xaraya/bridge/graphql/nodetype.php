@@ -22,7 +22,7 @@ use Exception;
 /**
  * GraphQL InterfaceType for getting DD object items using global object identification
  */
-class xarGraphQLNodeType extends InterfaceType
+class NodeType extends InterfaceType
 {
     public function __construct()
     {

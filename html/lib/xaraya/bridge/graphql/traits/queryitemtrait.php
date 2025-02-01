@@ -20,9 +20,9 @@ use DataPropertyMaster;
 use Exception;
 
 /**
- * For documentation purposes only - available via xarGraphQLQueryItemTrait
+ * For documentation purposes only - available via QueryItemTrait
  */
-interface xarGraphQLQueryItemInterface
+interface QueryItemInterface
 {
     /**
      * Get item query field for this object type
@@ -44,7 +44,7 @@ interface xarGraphQLQueryItemInterface
 /**
  * Trait to handle default item query for dataobjects
  */
-trait xarGraphQLQueryItemTrait
+trait QueryItemTrait
 {
     /**
      * Get item query field for this object type
@@ -81,7 +81,7 @@ trait xarGraphQLQueryItemTrait
     public static function _xar_item_query_resolver($typename, $object = null): callable
     {
         // when using type config decorator and object_query_resolver
-        $object ??= xarGraphQLInflector::pluralize($typename);
+        $object ??= GraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
             if (GraphQLHandler::hasCachedData($typename . '_item', $rootValue, $args, $context, $info)) {

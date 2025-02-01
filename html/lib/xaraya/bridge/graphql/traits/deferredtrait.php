@@ -20,9 +20,9 @@ use DeferredItemProperty;
 use Exception;
 
 /**
- * For documentation purposes only - available via xarGraphQLDeferredTrait
+ * For documentation purposes only - available via DeferredTrait
  */
-interface xarGraphQLDeferredInterface
+interface DeferredInterface
 {
     /**
      * Summary of _xar_get_deferred_field
@@ -74,7 +74,7 @@ interface xarGraphQLDeferredInterface
 /**
  * Trait to handle deferred fields and properties for dataobjects (e.g. username, object, deferitem, ...)
  */
-trait xarGraphQLDeferredTrait
+trait DeferredTrait
 {
     /** @var array<string, mixed> */
     protected static $_xar_deferred = [];
@@ -192,7 +192,7 @@ trait xarGraphQLDeferredTrait
         if (!empty($object)) {
             return static::_xar_deferred_property_resolver($typename, $fieldname, $object);
         }
-        $object ??= xarGraphQLInflector::pluralize($typename);
+        $object ??= GraphQLInflector::pluralize($typename);
         if (!array_key_exists($typename, static::$_xar_deferred)) {
             static::$_xar_deferred[$typename] = DataObjectFactory::getObjectLoader($object, ['id']);
             // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)

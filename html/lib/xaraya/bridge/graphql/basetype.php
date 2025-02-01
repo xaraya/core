@@ -20,13 +20,13 @@ use GraphQL\Type\Definition\InputObjectType;
 /**
  * GraphQL ObjectType and query fields for "base" dynamicdata object type
  */
-class xarGraphQLBaseType extends ObjectType implements xarGraphQLQueriesInterface, xarGraphQLMutationsInterface, xarGraphQLObjectInterface, xarGraphQLDeferredInterface, xarGraphQLInputInterface
+class BaseType extends ObjectType implements QueriesInterface, MutationsInterface, DataObjectInterface, DeferredInterface, InputObjectInterface
 {
-    use xarGraphQLQueriesTrait;
-    use xarGraphQLMutationsTrait;
-    use xarGraphQLObjectTrait;
-    use xarGraphQLDeferredTrait;
-    use xarGraphQLInputTrait;
+    use QueriesTrait;
+    use MutationsTrait;
+    use DataObjectTrait;
+    use DeferredTrait;
+    use InputObjectTrait;
 
     public static string $_xar_name   = '';
     public static string $_xar_type   = '';
@@ -59,7 +59,7 @@ class xarGraphQLBaseType extends ObjectType implements xarGraphQLQueriesInterfac
      */
     public static function _xar_get_type_config($typename, $object = null): array
     {
-        $object ??= xarGraphQLInflector::pluralize($typename);
+        $object ??= GraphQLInflector::pluralize($typename);
         return [
             'name' => ucwords($typename, '_'),
             'description' => 'DD ' . $object . ' item',

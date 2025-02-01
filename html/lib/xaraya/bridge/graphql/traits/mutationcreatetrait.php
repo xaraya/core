@@ -19,9 +19,9 @@ use DataObjectFactory;
 use Exception;
 
 /**
- * For documentation purposes only - available via xarGraphQLMutationCreateTrait
+ * For documentation purposes only - available via MutationCreateTrait
  */
-interface xarGraphQLMutationCreateInterface
+interface MutationCreateInterface
 {
     /**
      * Get create mutation field for this object type
@@ -44,7 +44,7 @@ interface xarGraphQLMutationCreateInterface
 /**
  * Trait to handle default create mutation for dataobjects
  */
-trait xarGraphQLMutationCreateTrait
+trait MutationCreateTrait
 {
     /**
      * Get create mutation field for this object type

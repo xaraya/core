@@ -28,14 +28,14 @@ use Exception;
 /**
  * Build GraphQL ObjectType, query fields and resolvers for generic dynamicdata object type
  */
-//class xarGraphQLBuildType extends ObjectType
-class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutationsInterface
+//class BuildType extends ObjectType
+class BuildType implements QueriesInterface, MutationsInterface
 {
-    use xarGraphQLQueriesTrait;
-    use xarGraphQLMutationsTrait;
-    //use xarGraphQLObjectTrait;
-    //use xarGraphQLDeferredTrait;
-    //use xarGraphQLInputTrait;
+    use QueriesTrait;
+    use MutationsTrait;
+    //use DataObjectTrait;
+    //use DeferredTrait;
+    //use InputObjectTrait;
 
     /** @var array<string, int> */
     public static $property_id = [];
@@ -56,7 +56,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     {
         GraphQLHandler::setTimer('make type ' . $name);
         // name=Property, type=property, object=properties
-        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        [$name, $type, $object] = GraphQLInflector::sanitize($name, $type, $object);
         $description = "$object item";
         // $fields = self::get_object_fields($object);
         $newType = new ObjectType([
@@ -83,7 +83,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     {
         // GraphQLHandler::setTimer('make page type ' . $name);
         // name=Property, type=property, object=properties
-        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        [$name, $type, $object] = GraphQLInflector::sanitize($name, $type, $object);
         // page=Property_Page
         $page = $name . '_Page';
         // list=properties
@@ -119,7 +119,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     {
         // GraphQLHandler::setTimer('make input type ' . $name);
         // name=Property, type=property, object=properties
-        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        [$name, $type, $object] = GraphQLInflector::sanitize($name, $type, $object);
         // page=Property_Input
         $input = $name . '_Input';
         $description = "Input for $object item";
@@ -389,7 +389,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         if (!empty(GraphQLObjects::getType($property->objectname))) {
             $typename = GraphQLObjects::getType($property->objectname);
         } else {
-            $typename = xarGraphQLInflector::singularize($property->objectname);
+            $typename = GraphQLInflector::singularize($property->objectname);
         }
         if (!GraphQLTypes::hasType($typename)) {
             $typename = "mixed";
@@ -856,7 +856,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         }
 
         // look in field specs for corresponding object
-        $object = xarGraphQLInflector::pluralize($typename);
+        $object = GraphQLInflector::pluralize($typename);
         try {
             $fieldspecs = self::find_object_fieldspecs($object);
         } catch (Exception) {
@@ -934,7 +934,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     public static function get_query_fields($name, $type = null, $object = null)
     {
         // name=Property, type=property, object=properties
-        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        [$name, $type, $object] = GraphQLInflector::sanitize($name, $type, $object);
         // page=properties_page
         $page = $object . '_page';
         // list=properties
@@ -961,7 +961,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     public static function get_mutation_fields($name, $type = null, $object = null)
     {
         // name=Property, type=property, object=properties
-        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        [$name, $type, $object] = GraphQLInflector::sanitize($name, $type, $object);
         // @checkme not possible to override create/update/delete resolvers in child class by type here
         $fields = [
             //self::_xar_get_create_mutation('create' . $name, $type, $object),

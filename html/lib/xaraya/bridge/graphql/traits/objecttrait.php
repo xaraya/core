@@ -16,9 +16,9 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 
 /**
- * For documentation purposes only - available via xarGraphQLObjectTrait
+ * For documentation purposes only - available via DataObjectTrait
  */
-interface xarGraphQLObjectInterface
+interface DataObjectInterface
 {
     /**
      * Make a generic Object Type for a dynamicdata object type by name = "Sample" for samples etc.
@@ -64,7 +64,7 @@ interface xarGraphQLObjectInterface
 /**
  * Trait to handle default object types for dataobjects
  */
-trait xarGraphQLObjectTrait
+trait DataObjectTrait
 {
     /**
      * Make a generic Object Type for a dynamicdata object type by name = "Sample" for samples etc.
@@ -79,7 +79,7 @@ trait xarGraphQLObjectTrait
      */
     public static function _xar_get_object_type($typename, $object = null): ObjectType
     {
-        $object ??= xarGraphQLInflector::pluralize($typename);
+        $object ??= GraphQLInflector::pluralize($typename);
         // https://webonyx.github.io/graphql-php/type-definitions/object-types/#recurring-and-circular-types
         // $fields = static::_xar_get_object_fields($object);
         $newType = new ObjectType(
@@ -96,7 +96,7 @@ trait xarGraphQLObjectTrait
      */
     public static function _xar_get_type_config($typename, $object = null): array
     {
-        $object ??= xarGraphQLInflector::pluralize($typename);
+        $object ??= GraphQLInflector::pluralize($typename);
         return [
             'name' => ucwords($typename, '_'),
             'description' => 'DD ' . $object . ' item',
@@ -145,7 +145,7 @@ trait xarGraphQLObjectTrait
     public static function _xar_get_page_type($name, $type = null, $object = null): ObjectType
     {
         // name=Property_Page, type=property, object=properties
-        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        [$name, $type, $object] = GraphQLInflector::sanitize($name, $type, $object);
         // list=properties
         $list = $object;
         $description = "Paginated list of DD $object items";

@@ -19,9 +19,9 @@ use DataObjectFactory;
 use Exception;
 
 /**
- * For documentation purposes only - available via xarGraphQLMutationUpdateTrait
+ * For documentation purposes only - available via MutationUpdateTrait
  */
-interface xarGraphQLMutationUpdateInterface
+interface MutationUpdateInterface
 {
     /**
      * Get update mutation field for this object type
@@ -44,7 +44,7 @@ interface xarGraphQLMutationUpdateInterface
 /**
  * Trait to handle default update mutation for dataobjects
  */
-trait xarGraphQLMutationUpdateTrait
+trait MutationUpdateTrait
 {
     /**
      * Get update mutation field for this object type

@@ -19,9 +19,9 @@ use DataObjectFactory;
 use Exception;
  
 /**
- * For documentation purposes only - available via xarGraphQLQueryListTrait
+ * For documentation purposes only - available via QueryListTrait
  */
-interface xarGraphQLQueryListInterface
+interface QueryListInterface
 {
     /**
      * Get list query field for this object type
@@ -45,7 +45,7 @@ interface xarGraphQLQueryListInterface
 /**
  * Trait to handle default list query for dataobjects
  */
-trait xarGraphQLQueryListTrait
+trait QueryListTrait
 {
     /**
      * Get list query field for this object type
@@ -92,7 +92,7 @@ trait xarGraphQLQueryListTrait
     public static function _xar_list_query_resolver($typename, $object = null): callable
     {
         // when using type config decorator and object_query_resolver
-        $object ??= xarGraphQLInflector::pluralize($typename);
+        $object ??= GraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
             if (GraphQLHandler::hasCachedData($typename . '_list', $rootValue, $args, $context, $info)) {

@@ -26,7 +26,7 @@
 
 namespace Xaraya\Bridge\GraphQL;
 
-use Xaraya\Bridge\GraphQL\Types\xarGraphQLBuildType;
+use Xaraya\Bridge\GraphQL\Types\BuildType;
 use Xaraya\Bridge\GraphQL\Types\GraphQLObjects;
 use Xaraya\Bridge\GraphQL\Types\GraphQLTypes;
 use Xaraya\Caching\CacheInterface;
@@ -193,8 +193,8 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, CacheI
             $schema = $this->buildSchema($schemaFile, $extraTypes);
             //$fieldResolver = null;
             // @checkme don't use type classes by default for BuildSchema?
-            //$fieldResolver = xarGraphQLBuildType::default_field_resolver();
-            $fieldResolver = xarGraphQLBuildType::default_field_resolver(false);
+            //$fieldResolver = BuildType::default_field_resolver();
+            $fieldResolver = BuildType::default_field_resolver(false);
         } else {
             $schema = $this->getSchema($extraTypes);
             $fieldResolver = null;

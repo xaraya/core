@@ -19,9 +19,9 @@ use DataObjectFactory;
 use Exception;
 
 /**
- * For documentation purposes only - available via xarGraphQLMutationDeleteTrait
+ * For documentation purposes only - available via MutationDeleteTrait
  */
-interface xarGraphQLMutationDeleteInterface
+interface MutationDeleteInterface
 {
     /**
      * Get delete mutation field for this object type
@@ -45,7 +45,7 @@ interface xarGraphQLMutationDeleteInterface
 /**
  * Trait to handle default delete mutation for dataobjects
  */
-trait xarGraphQLMutationDeleteTrait
+trait MutationDeleteTrait
 {
     /**
      * Get delete mutation field for this object type

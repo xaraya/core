@@ -17,9 +17,9 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Summary of xarGraphQLQueryType
+ * Summary of QueryType
  */
-class xarGraphQLQueryType extends ObjectType
+class QueryType extends ObjectType
 {
     /** @var array<string> */
     public static $query_types = ['dummytype', 'sampletype', 'objecttype', 'propertytype', 'moduleapitype'];  // 'nodetype'
@@ -62,7 +62,7 @@ class xarGraphQLQueryType extends ObjectType
         if (!empty(GraphQLTypes::getExtraTypes())) {
             // @checkme not possible to override page/list/item resolvers in child class by type here
             foreach (GraphQLTypes::getExtraTypes() as $name) {
-                $add_fields = xarGraphQLBuildType::get_query_fields($name);
+                $add_fields = BuildType::get_query_fields($name);
                 if (!empty($add_fields)) {
                     $fields = array_merge($fields, $add_fields);
                 }

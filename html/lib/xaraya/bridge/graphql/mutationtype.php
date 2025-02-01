@@ -17,9 +17,9 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * Summary of xarGraphQLMutationType
+ * Summary of MutationType
  */
-class xarGraphQLMutationType extends ObjectType
+class MutationType extends ObjectType
 {
     /** @var array<string> */
     public static $mutation_types = ['tokentype', 'sampletype', 'moduleapitype'];
@@ -63,7 +63,7 @@ class xarGraphQLMutationType extends ObjectType
         if (!empty(GraphQLTypes::getExtraTypes())) {
             // @checkme not possible to override create/update/delete resolvers in child class by type here
             foreach (GraphQLTypes::getExtraTypes() as $name) {
-                $add_fields = xarGraphQLBuildType::get_mutation_fields($name);
+                $add_fields = BuildType::get_mutation_fields($name);
                 if (!empty($add_fields)) {
                     $fields = array_merge($fields, $add_fields);
                 }

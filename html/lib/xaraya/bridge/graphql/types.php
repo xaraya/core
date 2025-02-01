@@ -188,7 +188,7 @@ class GraphQLTypes
         }
         // make Object Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extraTypes) || in_array(ucfirst($name), self::$extraTypes)) {
-            $type = xarGraphQLBuildType::make_type($name);
+            $type = BuildType::make_type($name);
             if (!$type) {
                 throw new Exception("Unknown graphql type: " . $name);
             }
@@ -222,7 +222,7 @@ class GraphQLTypes
         }
         // make Object Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extraTypes) || in_array(ucfirst($name), self::$extraTypes)) {
-            $type = xarGraphQLBuildType::make_page_type($name);
+            $type = BuildType::make_page_type($name);
             if (!$type) {
                 throw new Exception("Unknown graphql type: " . $page);
             }
@@ -257,7 +257,7 @@ class GraphQLTypes
         }
         // make Object Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extraTypes) || in_array(ucfirst($name), self::$extraTypes)) {
-            $type = xarGraphQLBuildType::make_input_type($name);
+            $type = BuildType::make_input_type($name);
             if (!$type) {
                 throw new Exception("Unknown graphql type: " . $input);
             }
@@ -285,24 +285,24 @@ class GraphQLTypes
     public static function getTypeClass($type)
     {
         static $classMapper = [
-            'querytype' => xarGraphQLQueryType::class,
-            'dummytype' => xarGraphQLDummyType::class,
-            'buildtype' => xarGraphQLBuildType::class,
-            'basetype' => xarGraphQLBaseType::class,
-            'sampletype' => xarGraphQLSampleType::class,
-            'objecttype' => xarGraphQLObjectType::class,
-            'propertytype' => xarGraphQLPropertyType::class,
-            'accesstype' => xarGraphQLAccessType::class,
-            'keyvaltype' => xarGraphQLKeyValType::class,
-            'multivaltype' => xarGraphQLMultiValType::class,
-            'usertype' => xarGraphQLUserType::class,
-            'tokentype' => xarGraphQLTokenType::class,
-            'serialtype' => xarGraphQLSerialType::class,
-            'mixedtype' => xarGraphQLMixedType::class,
-            'mutationtype' => xarGraphQLMutationType::class,
-            //'nodetype' => xarGraphQLNodeType::class,
-            //'ddnodetype' => xarGraphQLDDNodeType::class,
-            'moduleapitype' => xarGraphQLModuleApiType::class,
+            'querytype' => QueryType::class,
+            'dummytype' => DummyType::class,
+            'buildtype' => BuildType::class,
+            'basetype' => BaseType::class,
+            'sampletype' => SampleType::class,
+            'objecttype' => DataObjectType::class,
+            'propertytype' => PropertyType::class,
+            'accesstype' => AccessType::class,
+            'keyvaltype' => KeyValType::class,
+            'multivaltype' => MultiValType::class,
+            'usertype' => UserType::class,
+            'tokentype' => TokenType::class,
+            'serialtype' => SerialType::class,
+            'mixedtype' => MixedType::class,
+            'mutationtype' => MutationType::class,
+            //'nodetype' => NodeType::class,
+            //'ddnodetype' => DDNodeType::class,
+            'moduleapitype' => ModuleApiType::class,
         ];
         if (!array_key_exists($type, $classMapper) && array_key_exists($type, self::$typeMapper)) {
             $type = self::$typeMapper[$type];
@@ -336,7 +336,7 @@ class GraphQLTypes
         if (self::hasType($name)) {
             $type = strtolower($name);
             //$clazz = self::getTypeClass($type);
-            //if ($clazz !== "xarGraphQLBaseType" && method_exists($clazz, "_xar_get_type_config")) {
+            //if ($clazz !== "BaseType" && method_exists($clazz, "_xar_get_type_config")) {
             //    GraphQLHandler::tracePath("type config $name defined in $clazz");
             //    $classConfig = $clazz::_xar_get_type_config($name);
             //    //return $classConfig;
@@ -348,23 +348,23 @@ class GraphQLTypes
             //$fields = $typeConfig['fields']();
             //GraphQLHandler::tracePath("query config fields " . implode(',', array_keys($fields)));
             //$typeConfig['fields'] = static function () use ($name) {
-            //    $typeDef = xarGraphQLBuildType::object_type_definition($name);
+            //    $typeDef = BuildType::object_type_definition($name);
             //    //return $typeDef->getFields();
             //    return $typeDef;
             //};
             // @checkme not possible to override page/list/item resolvers in child class by type here
-            $typeConfig['resolveField'] = xarGraphQLBuildType::_xar_query_field_resolver($name);
+            $typeConfig['resolveField'] = BuildType::_xar_query_field_resolver($name);
         } elseif ($name == 'Mutation') {
             GraphQLHandler::tracePath("mutation config $name");
             // @checkme not possible to override create/update/delete resolvers in child class by type here
-            $typeConfig['resolveField'] = xarGraphQLBuildType::_xar_mutation_field_resolver($name);
+            $typeConfig['resolveField'] = BuildType::_xar_mutation_field_resolver($name);
         } else {
             GraphQLHandler::tracePath("type config $name");
             //$typeConfig['fields'] = static function () use ($name) {
-            //    $typeDef = xarGraphQLBuildType::object_type_definition($name);
+            //    $typeDef = BuildType::object_type_definition($name);
             //    return $typeDef->getFields();
             //};
-            $typeConfig['resolveField'] = xarGraphQLBuildType::object_type_resolver($name);
+            $typeConfig['resolveField'] = BuildType::object_type_resolver($name);
         }
         return $typeConfig;
     }
@@ -423,7 +423,7 @@ class GraphQLTypes
                 if (str_contains($name, '.')) {
                     continue;
                 }
-                $type = xarGraphQLInflector::singularize($name);
+                $type = GraphQLInflector::singularize($name);
                 if (self::hasType($type)) {
                     continue;
                 }

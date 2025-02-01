@@ -16,9 +16,9 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\InputObjectType;
 
 /**
- * For documentation purposes only - available via xarGraphQLInputTrait
+ * For documentation purposes only - available via InputObjectTrait
  */
-interface xarGraphQLInputInterface
+interface InputObjectInterface
 {
     /**
      * Make a generic Input Object Type for create/update mutations
@@ -46,7 +46,7 @@ interface xarGraphQLInputInterface
 /**
  * Trait to handle default input object types for dataobjects
  */
-trait xarGraphQLInputTrait
+trait InputObjectTrait
 {
     /**
      * Make a generic Input Object Type for create/update mutations
@@ -56,7 +56,7 @@ trait xarGraphQLInputTrait
      */
     public static function _xar_get_input_type($typename, $object = null): InputObjectType
     {
-        $object ??= xarGraphQLInflector::pluralize($typename);
+        $object ??= GraphQLInflector::pluralize($typename);
         $description = "Input for DD " . $object . " item";
         // https://webonyx.github.io/graphql-php/type-definitions/object-types/#recurring-and-circular-types
         // $fields = static::_xar_get_input_fields($object);

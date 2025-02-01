@@ -18,9 +18,9 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Exception;
 
 /**
- * For documentation purposes only - available via xarGraphQLQueriesTrait
+ * For documentation purposes only - available via QueriesTrait
  */
-interface xarGraphQLQueriesInterface extends xarGraphQLQueryPageInterface, xarGraphQLQueryListInterface, xarGraphQLQueryItemInterface
+interface QueriesInterface extends QueryPageInterface, QueryListInterface, QueryItemInterface
 {
     /**
      * Get the query fields listed in the $_xar_queries property of the actual class
@@ -45,11 +45,11 @@ interface xarGraphQLQueriesInterface extends xarGraphQLQueryPageInterface, xarGr
 /**
  * Trait to handle default query fields for dataobjects (page, list, item)
  */
-trait xarGraphQLQueriesTrait
+trait QueriesTrait
 {
-    use xarGraphQLQueryPageTrait;
-    use xarGraphQLQueryListTrait;
-    use xarGraphQLQueryItemTrait;
+    use QueryPageTrait;
+    use QueryListTrait;
+    use QueryItemTrait;
 
     public static string $_xar_type   = '';  // specify in the class using this trait
     public static string $_xar_object = '';  // specify in the class using this trait
@@ -116,11 +116,11 @@ trait xarGraphQLQueriesTrait
             if (str_ends_with($name, $page_ext)) {
                 $type = substr($name, 0, strlen($name) - strlen($page_ext));
                 // @checkme do we want to use singular type here?
-                $type = xarGraphQLInflector::singularize($type);
+                $type = GraphQLInflector::singularize($type);
                 $page_resolver = static::_xar_page_query_resolver($type);
                 return call_user_func($page_resolver, $rootValue, $args, $context, $info);
             }
-            $type = xarGraphQLInflector::singularize($name);
+            $type = GraphQLInflector::singularize($name);
             if (!empty($args['id'])) {
                 //print_r($info->parentType->name . "." . $info->fieldName . "[" . $args['id'] . "]");
                 $item_resolver = static::_xar_item_query_resolver($type);

@@ -182,7 +182,7 @@ class GraphQLObjects
             }
         }
         foreach (GraphQLTypes::getExtraTypes() as $type) {
-            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
+            [$name, $type, $object] = GraphQLInflector::sanitize($type);
             self::$objectType[$object] = $name;
         }
     }
@@ -229,7 +229,7 @@ class GraphQLObjects
                 foreach ($objectType->getFields() as $field) {
                     $info[$object]['fieldspecs'][$field->getName()] = ['fieldtype', $field->getType()->toString()];
                 }
-                $fieldspecs = xarGraphQLBuildType::find_object_fieldspecs($object, true);
+                $fieldspecs = BuildType::find_object_fieldspecs($object, true);
                 foreach ($fieldspecs as $prop_name => $fieldspec) {
                     if (array_key_exists($prop_name, $info[$object]['fieldspecs'])) {
                         $info[$object]['fieldspecs'][$prop_name] = array_merge($info[$object]['fieldspecs'][$prop_name], $fieldspec);
@@ -244,8 +244,8 @@ class GraphQLObjects
 
         $fieldspecs = [];
         foreach (GraphQLTypes::getExtraTypes() as $type) {
-            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
-            $fieldspecs[$object] = xarGraphQLBuildType::find_object_fieldspecs($object, true);
+            [$name, $type, $object] = GraphQLInflector::sanitize($type);
+            $fieldspecs[$object] = BuildType::find_object_fieldspecs($object, true);
         }
         foreach ($fieldspecs as $object => $fieldspec) {
             $info[$object]['fieldspecs'] = $fieldspec;

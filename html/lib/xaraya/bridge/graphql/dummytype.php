@@ -24,7 +24,7 @@ use Exception;
 /**
  * Dummy GraphQL ObjectType for standard query fields (hello, echo, schema)
  */
-class xarGraphQLDummyType extends ObjectType
+class DummyType extends ObjectType
 {
     /** @var array<mixed> */
     public static $_xar_queries = ['hello', 'echo', 'schema', 'whoami'];

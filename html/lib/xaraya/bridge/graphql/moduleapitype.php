@@ -47,7 +47,7 @@ use Exception;
  * Or use specific input type when the arguments are defined as ['field' => 'type', ...] below
  *
  */
-class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInterface
+class ModuleApiType extends ObjectType implements InputObjectInterface
 {
     // @todo analyze response and mediatype + create result type per function if needed
     /**

@@ -21,7 +21,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType and query fields for "sample" dynamicdata object type
  */
-class xarGraphQLSampleType extends xarGraphQLBaseType
+class SampleType extends BaseType
 {
     public static string $_xar_name   = 'Sample';
     public static string $_xar_type   = 'sample';
@@ -58,7 +58,7 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
     /**
     public static function _xar_get_type_config($typename, $object = null)
     {
-        $object ??= xarGraphQLInflector::pluralize($typename);
+        $object ??= GraphQLInflector::pluralize($typename);
         return [
             'name' => ucwords($typename, '_'),
             'fields' => function () use ($object) {
