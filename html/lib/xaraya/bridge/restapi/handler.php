@@ -28,10 +28,8 @@ use Xaraya\Authentication\AuthToken;
 use xarObject;
 use xarCache;
 use xarDatabase;
-use xarMod;
 use xarServer;
 use sys;
-use DataObjectFactory;
 use ForbiddenOperationException;
 use UnauthorizedOperationException;
 use JsonException;
@@ -40,7 +38,7 @@ sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.tools.timertrait');
 sys::import('xaraya.caching.cachetrait');
 sys::import('xaraya.bridge.requests.requesttrait');
-sys::import('xaraya.context.context');
+sys::import('xaraya.context.contexttrait');
 sys::import('modules.authsystem.class.authtoken');
 
 /**
@@ -59,10 +57,6 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     public static $schemas = [];
     /** @var array<string, mixed> */
     public static $config = [];
-    /** @var array<string, mixed> */
-    public static $objects = [];
-    /** @var array<string, mixed> */
-    public static $modules = [];
 
     /**
      * Summary of getOpenAPI
@@ -135,36 +129,6 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             $this->setCacheScope($cacheScope);
         }
         $this->setTimer('config');
-    }
-
-    /**
-     * Summary of loadObjects
-     * @param array<string, mixed> $config
-     * @return void
-     */
-    public function loadObjects($config = [])
-    {
-        if (!empty(self::$objects)) {
-            return;
-        }
-        self::$config['objects'] = DataObjectAPIHandler::loadObjectConfig($config);
-        self::$objects = self::$config['objects'];
-        $this->setTimer('objects');
-    }
-
-    /**
-     * Summary of loadModules
-     * @param array<string, mixed> $config
-     * @return void
-     */
-    public function loadModules($config = [])
-    {
-        if (!empty(self::$modules)) {
-            return;
-        }
-        self::$config['modules'] = ModuleAPIHandler::loadModuleConfig($config);
-        self::$modules = self::$config['modules'];
-        $this->setTimer('modules');
     }
 
     /**

@@ -28,6 +28,9 @@ use Exception;
  */
 class DataObjectAPIHandler extends RestAPIHandler
 {
+    /** @var array<string, mixed> */
+    public static $objects = [];
+
     /**
      * Summary of getObjectURL
      * @param ?string $object
@@ -528,6 +531,28 @@ class DataObjectAPIHandler extends RestAPIHandler
     }
 
     /**
+     * Summary of loadObjects
+     * @param array<string, mixed> $config
+     * @return void
+     */
+    public function loadObjects($config = [])
+    {
+        if (!empty(self::$objects)) {
+            return;
+        }
+        self::$config['objects'] = self::loadObjectConfig($config);
+        // remove x-operations etc. from object config
+        $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
+        $allowed = array_flip($fieldlist);
+        self::$objects = [];
+        foreach (self::$config['objects'] as $name => $item) {
+            $item = array_intersect_key($item, $allowed);
+            self::$objects[(string) $name] = $item;
+        }
+        $this->setTimer('objects');
+    }
+
+    /**
      * Summary of loadObjectConfig
      * @param array<string, mixed> $config
      * @return array<string, mixed>
@@ -540,14 +565,7 @@ class DataObjectAPIHandler extends RestAPIHandler
             $config = json_decode($contents, true);
         }
         if (!empty($config['objects'])) {
-            $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
-            $allowed = array_flip($fieldlist);
-            $objects = [];
-            foreach ($config['objects'] as $name => $item) {
-                $item = array_intersect_key($item, $allowed);
-                $objects[(string) $name] = $item;
-            }
-            return $objects;
+            return $config['objects'];
         }
         return self::getDefaultObjects();
     }
@@ -564,6 +582,7 @@ class DataObjectAPIHandler extends RestAPIHandler
         $params = ['name' => $object, 'fieldlist' => $fieldlist];
         $objectlist = DataObjectFactory::getObjectList($params);
         $objects = $objectlist->getItems();
+        // @todo add x-operations etc. to object config
         $default = [];
         foreach ($objects as $itemid => $item) {
             if ($item['datastore'] !== 'dynamicdata') {

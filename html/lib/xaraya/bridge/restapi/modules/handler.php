@@ -28,6 +28,9 @@ use Exception;
  */
 class ModuleAPIHandler extends RestAPIHandler
 {
+    /** @var array<string, mixed> */
+    public static $modules = [];
+
     /**
      * Summary of getModuleURL
      * @param ?string $module
@@ -348,6 +351,21 @@ class ModuleAPIHandler extends RestAPIHandler
             }
         }
         return null;
+    }
+
+    /**
+     * Summary of loadModules
+     * @param array<string, mixed> $config
+     * @return void
+     */
+    public function loadModules($config = [])
+    {
+        if (!empty(self::$modules)) {
+            return;
+        }
+        self::$config['modules'] = self::loadModuleConfig($config);
+        self::$modules = self::$config['modules'];
+        $this->setTimer('modules');
     }
 
     /**
