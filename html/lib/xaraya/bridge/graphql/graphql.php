@@ -454,6 +454,8 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         }
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
+        // @todo check if we already have a context? (via request or from elsewhere)
+        //$this->setContext($context);
         $result = $this->getData($query, $variables, $operationName, [], null, $context);
         if ($query == '{schema}') {
             $context['mediatype'] = 'text/plain';

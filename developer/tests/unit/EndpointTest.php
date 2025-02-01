@@ -125,7 +125,7 @@ final class EndpointTest extends TestCase
         $output = ob_get_clean();
         xarServer::setVar('REQUEST_METHOD', null);
 
-        $expected = 'DynamicData REST API';
+        $expected = 'Xaraya REST API';
         $result = json_decode($output, true);
         $this->assertEquals($expected, $result['info']['title']);
     }

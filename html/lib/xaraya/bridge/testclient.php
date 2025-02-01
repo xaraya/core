@@ -132,9 +132,9 @@ class TestClient
         // use empty stream context for GET requests
         $context = $this->getStreamContext();
         // GET request
-        $contents = file_get_contents($url, false, $context);
+        $contents = @file_get_contents($url, false, $context);
         if ($contents === false && !empty($http_response_header)) {
-            var_dump($http_response_header); // variable is populated in the local scope
+            $contents = var_export($http_response_header, true); // variable is populated in the local scope
         }
         return $contents;
     }
@@ -173,9 +173,9 @@ class TestClient
         }
         $context = $this->getStreamContext('POST', $headers, $content);
         // POST request
-        $contents = file_get_contents($url, false, $context);
+        $contents = @file_get_contents($url, false, $context);
         if ($contents === false && !empty($http_response_header)) {
-            var_dump($http_response_header); // variable is populated in the local scope
+            $contents = var_export($http_response_header, true); // variable is populated in the local scope
         }
         return $contents;
     }

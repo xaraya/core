@@ -525,6 +525,20 @@ class DataObjectFactory extends xarObject
     }
 
     /**
+     * Summary of getObjectLoader
+     * @param string $objectName
+     * @param array $fieldlist
+     * @param mixed $context
+     * @return DataObjectLoader
+     */
+    public static function getObjectLoader(string $objectName, array $fieldlist, mixed $context = null)
+    {
+        $loader = new DataObjectLoader($objectName, $fieldlist);
+        $loader->setContext($context);
+        return $loader;
+    }
+
+    /**
      * Class method to retrieve a particular object interface definition, with sub-classing
      * (= the same as creating a new Dynamic Object User Interface)
      *

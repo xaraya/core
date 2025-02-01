@@ -507,6 +507,8 @@ class RoutingBridge extends BasicBridge
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName()
         $this->prepareController('object', static::$baseUri . '/object');
         $context['module'] = 'object';
+        // @todo check if we already have a context? (via request or from elsewhere)
+        //$this->setContext($context);
 
         $result = $this->runObjectRequest($params, $context);
         return [$result, $context];
@@ -562,6 +564,8 @@ class RoutingBridge extends BasicBridge
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         $this->prepareController($vars['module'], static::$baseUri);
         $context['module'] = $vars['module'];
+        // @todo check if we already have a context? (via request or from elsewhere)
+        //$this->setContext($context);
 
         $result = $this->runModuleRequest($vars, $params, $context);
         return [$result, $context];
@@ -598,6 +602,8 @@ class RoutingBridge extends BasicBridge
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         $this->prepareController($vars['module'] ?? 'base', static::$baseUri);
         $context['module'] = $vars['module'] ?? 'base';
+        // @todo check if we already have a context? (via request or from elsewhere)
+        //$this->setContext($context);
 
         $result = $this->runBlockRequest($vars, $query, $context);
         return [$result, $context];

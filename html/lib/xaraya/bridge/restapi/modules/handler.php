@@ -14,7 +14,6 @@
 
 namespace Xaraya\Bridge\RestAPI;
 
-use Xaraya\Context\Context;
 use xarMod;
 use xarRoles;
 use xarSecurity;
@@ -54,7 +53,7 @@ class ModuleAPIHandler extends RestAPIHandler
      * @param array<string, mixed> $args
      * @return array<string, mixed>
      */
-    public function getModules($args)
+    public function getModules($args = [])
     {
         $this->loadModules();
         $result = ['items' => [], 'count' => count(self::$modules)];
@@ -94,14 +93,13 @@ class ModuleAPIHandler extends RestAPIHandler
     /**
      * Summary of getModuleCall
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @uses xarMod::init()
      * @uses xarUser::init()
      * @uses xarMod::apiFunc()
      * @throws \ForbiddenOperationException
      * @return mixed
      */
-    public function getModuleCall($args, $context)
+    public function getModuleCall($args)
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
@@ -115,7 +113,7 @@ class ModuleAPIHandler extends RestAPIHandler
         xarUser::init();
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = $this->checkUser($context);
+            $userId = $this->checkUser();
             // @checkme assume we have a security mask here
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
@@ -134,6 +132,7 @@ class ModuleAPIHandler extends RestAPIHandler
         if (empty($func['caching'])) {
             self::enableCache(false);
         }
+        $context = $this->getContext();
         // @checkme how to save this in case of caching?
         if (!empty($func['mediatype'])) {
             $context['mediatype'] = $func['mediatype'];
@@ -158,14 +157,13 @@ class ModuleAPIHandler extends RestAPIHandler
     /**
      * Summary of postModuleCall
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @uses xarMod::init()
      * @uses xarUser::init()
      * @uses xarMod::apiFunc()
      * @throws \ForbiddenOperationException
      * @return mixed
      */
-    public function postModuleCall($args, $context)
+    public function postModuleCall($args)
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
@@ -183,7 +181,7 @@ class ModuleAPIHandler extends RestAPIHandler
         xarUser::init();
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = $this->checkUser($context);
+            $userId = $this->checkUser();
             // @checkme assume we have a security mask here
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
@@ -199,6 +197,7 @@ class ModuleAPIHandler extends RestAPIHandler
             // @checkme for security checks inside API functions when using auth token - see also reactphp single session
             //$_SESSION[xarSession::PREFIX . 'role_id'] = $userId;
         }
+        $context = $this->getContext();
         if (!empty($func['mediatype'])) {
             $context['mediatype'] = $func['mediatype'];
             if (!empty($context['request'])) {
@@ -216,11 +215,10 @@ class ModuleAPIHandler extends RestAPIHandler
     /**
      * Summary of putModuleCall
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @throws \Exception
      * @return mixed
      */
-    public function putModuleCall($args, $context)
+    public function putModuleCall($args)
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
@@ -236,11 +234,10 @@ class ModuleAPIHandler extends RestAPIHandler
     /**
      * Summary of deleteModuleCall
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @throws \Exception
      * @return mixed
      */
-    public function deleteModuleCall($args, $context)
+    public function deleteModuleCall($args)
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];

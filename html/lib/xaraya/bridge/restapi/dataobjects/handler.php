@@ -14,10 +14,8 @@
 
 namespace Xaraya\Bridge\RestAPI;
 
-use Xaraya\Context\Context;
 use sys;
 use DataObjectFactory;
-use DataObjectLoader;
 use BadParameterException;
 use ForbiddenOperationException;
 use Exception;
@@ -53,7 +51,7 @@ class DataObjectAPIHandler extends RestAPIHandler
      * @param array<string, mixed> $args
      * @return array<string, mixed>
      */
-    public function getObjects($args)
+    public function getObjects($args = [])
     {
         $this->loadObjects();
         $result = ['items' => [], 'count' => count(self::$objects)];
@@ -72,11 +70,10 @@ class DataObjectAPIHandler extends RestAPIHandler
     /**
      * Summary of getObjectList
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @throws \ForbiddenOperationException
      * @return array<string, mixed>
      */
-    public function getObjectList($args, $context)
+    public function getObjectList($args)
     {
         $object = $args['path']['object'];
         $method = 'view';
@@ -86,7 +83,7 @@ class DataObjectAPIHandler extends RestAPIHandler
         $userId = 0;
         if ($this->hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = $this->checkUser($context);
+            $userId = $this->checkUser();
             //$args['access'] = 'view';
         }
         if (!$this->hasCaching($object, $method)) {
@@ -99,9 +96,9 @@ class DataObjectAPIHandler extends RestAPIHandler
             $args['limit'] = 100;
         }
         $fieldlist = $this->getViewProperties($object, $args);
-        $loader = new DataObjectLoader($object, $fieldlist);
+        $context = $this->getContext();
         // set context if available in handler
-        $loader->setContext($context);
+        $loader = DataObjectFactory::getObjectLoader($object, $fieldlist, $context);
         $loader->parseQueryArgs($args);
         $objectlist = $loader->getObjectList();
         if ($this->hasSecurity($object, $method) && !$objectlist->checkAccess('view', 0, $userId)) {
@@ -159,12 +156,11 @@ class DataObjectAPIHandler extends RestAPIHandler
     /**
      * Summary of getObjectItem
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @throws \Exception
      * @throws \ForbiddenOperationException
      * @return array<string, mixed>
      */
-    public function getObjectItem($args, $context)
+    public function getObjectItem($args)
     {
         $object = $args['path']['object'];
         $itemid = $this->checkItemId($object, $args['path']['itemid']);
@@ -178,7 +174,7 @@ class DataObjectAPIHandler extends RestAPIHandler
         $userId = 0;
         if ($this->hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = $this->checkUser($context);
+            $userId = $this->checkUser();
             //$args['access'] = 'display';
         }
         if (!$this->hasCaching($object, $method)) {
@@ -187,6 +183,7 @@ class DataObjectAPIHandler extends RestAPIHandler
         $args = $args['query'] ?? [];
         $fieldlist = $this->getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
+        $context = $this->getContext();
         // set context if available in handler
         $objectitem = DataObjectFactory::getObject($params, $context);
         if (empty($objectitem)) {
@@ -249,12 +246,11 @@ class DataObjectAPIHandler extends RestAPIHandler
     /**
      * Summary of createObjectItem
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @throws \Exception
      * @throws \ForbiddenOperationException
      * @return array<mixed>|int|mixed
      */
-    public function createObjectItem($args, $context)
+    public function createObjectItem($args)
     {
         $object = $args['path']['object'];
         $method = 'create';
@@ -262,7 +258,7 @@ class DataObjectAPIHandler extends RestAPIHandler
             return ['method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = $this->checkUser($context);
+        $userId = $this->checkUser();
         $fieldlist = $this->getCreateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -272,6 +268,7 @@ class DataObjectAPIHandler extends RestAPIHandler
             unset($args['input']['id']);
         }
         $params = ['name' => $object];
+        $context = $this->getContext();
         // set context if available in handler
         $objectitem = DataObjectFactory::getObject($params, $context);
         if (empty($objectitem)) {
@@ -291,12 +288,11 @@ class DataObjectAPIHandler extends RestAPIHandler
     /**
      * Summary of updateObjectItem
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @throws \Exception
      * @throws \ForbiddenOperationException
      * @return array<string, mixed>|int|mixed
      */
-    public function updateObjectItem($args, $context)
+    public function updateObjectItem($args)
     {
         $object = $args['path']['object'];
         $itemid = $this->checkItemId($object, $args['path']['itemid']);
@@ -308,7 +304,7 @@ class DataObjectAPIHandler extends RestAPIHandler
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = $this->checkUser($context);
+        $userId = $this->checkUser();
         $fieldlist = $this->getUpdateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -318,6 +314,7 @@ class DataObjectAPIHandler extends RestAPIHandler
             throw new Exception('Unknown id ' . $object);
         }
         $params = ['name' => $object, 'itemid' => $itemid];
+        $context = $this->getContext();
         // set context if available in handler
         $objectitem = DataObjectFactory::getObject($params, $context);
         if (empty($objectitem)) {
@@ -337,12 +334,11 @@ class DataObjectAPIHandler extends RestAPIHandler
     /**
      * Summary of deleteObjectItem
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @throws \Exception
      * @throws \ForbiddenOperationException
      * @return array<string, mixed>|int|mixed
      */
-    public function deleteObjectItem($args, $context)
+    public function deleteObjectItem($args)
     {
         $object = $args['path']['object'];
         $itemid = $this->checkItemId($object, $args['path']['itemid']);
@@ -354,8 +350,9 @@ class DataObjectAPIHandler extends RestAPIHandler
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = $this->checkUser($context);
+        $userId = $this->checkUser();
         $params = ['name' => $object, 'itemid' => $itemid];
+        $context = $this->getContext();
         // set context if available in handler
         $objectitem = DataObjectFactory::getObject($params, $context);
         if (empty($objectitem)) {

@@ -23,7 +23,6 @@ use Xaraya\Bridge\Requests\CommonRequestTrait;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
-use Xaraya\Context\Context;
 use Xaraya\Authentication\AuthToken;
 use xarObject;
 use xarCache;
@@ -61,10 +60,9 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     /**
      * Summary of getOpenAPI
      * @param array<string, mixed> $vars
-     * @param mixed $context
      * @return mixed
      */
-    public function getOpenAPI($vars = [], $context = null)
+    public function getOpenAPI($vars = [])
     {
         $openapi = sys::varpath() . '/cache/api/openapi.json';
         if (!file_exists($openapi)) {
@@ -82,7 +80,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      * Summary of getBaseURL
      * @param string $base
      * @param ?string $path
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $args not used here
      * @return string
      */
     public function getBaseURL($base = '', $path = null, $args = [])
@@ -148,12 +146,12 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
 
     /**
      * Verify that the token or cookie corresponds to an authorized user (with minimal core load) or exit with 401 status code
-     * @param Context<string, mixed> $context
      * @throws \UnauthorizedOperationException
      * @return int
      */
-    protected function checkUser($context)
+    protected function checkUser()
     {
+        $context = $this->getContext();
         $userId = $context->getUserId();
         // return the userId if we have one
         if (!empty($userId)) {
@@ -306,10 +304,13 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         // define context of the request - see GraphQL
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
+        // @todo check if we already have a context? (via request or from elsewhere)
+        $this->setContext($context);
         // get handler instance with context
         $handler = $this->getHandler($handler, $context);
         try {
-            $result = call_user_func($handler, $params, $context);
+            // no longer pass $context to method call here, since we use instance now
+            $result = call_user_func($handler, $params);
         } catch (UnauthorizedOperationException) {
             $this->setTimer('unauthorized');
             throw new UnauthorizedOperationException();
@@ -377,6 +378,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         if (!isset($result) && php_sapi_name() !== 'cli') {
             return;
         }
+        $context ??= $this->getContext();
         if (is_array($result) && self::enableTimer()) {
             $result['x-times'] = $this->getTimers();
         }

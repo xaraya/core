@@ -72,6 +72,8 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         $context['module'] = 'object';
         // @todo where do we decide to use Twig or not
         //$context['twig'] = true;
+        // @todo check if we already have a context? (via request or from elsewhere)
+        //$this->setContext($context);
 
         // add remaining query params to request attributes
         $params = array_merge($attribs, $request->getQueryParams());

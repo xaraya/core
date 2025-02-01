@@ -71,6 +71,8 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         $context['module'] = $attribs['module'];
         // @todo where do we decide to use Twig or not
         //$context['twig'] = true;
+        // @todo check if we already have a context? (via request or from elsewhere)
+        //$this->setContext($context);
 
         // filter out request attributes from remaining query params here
         $params = array_diff_key($request->getQueryParams(), $attribs);

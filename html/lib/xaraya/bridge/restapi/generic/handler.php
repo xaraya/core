@@ -14,7 +14,6 @@
 
 namespace Xaraya\Bridge\RestAPI;
 
-use Xaraya\Context\Context;
 use Xaraya\Authentication\AuthToken;
 use xarMod;
 use xarModVars;
@@ -34,19 +33,19 @@ class GenericAPIHandler extends RestAPIHandler
     /**
      * Return the current user or exit with 401 status code
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @uses xarMod::init()
      * @uses xarUser::init()
      * @return array<string, mixed>
      */
-    public function whoami($args, $context)
+    public function whoami($args = [])
     {
-        $userId = $this->checkUser($context);
+        $userId = $this->checkUser();
         //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
         xarMod::init();
         xarUser::init();
         $role = xarRoles::getRole($userId);
         $user = $role->getFieldValues();
+        $context = $this->getContext();
         if (isset($context['authMethod'])) {
             return ['id' => $user['id'], 'name' => $user['name'], 'source' => $context['authMethod']];
         }
@@ -56,11 +55,11 @@ class GenericAPIHandler extends RestAPIHandler
     /**
      * Return the current context or exit with 401 status code
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @return array<string, mixed>
      */
-    public function showContext($args, $context)
+    public function showContext($args = [])
     {
+        $context = $this->getContext();
         $userId = $context->getUserId();
         // return restricted version for non-site admin
         if (empty($userId) || $userId != xarModVars::get('roles', 'admin')) {
@@ -72,14 +71,13 @@ class GenericAPIHandler extends RestAPIHandler
     /**
      * Summary of postToken
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @uses xarMod::init()
      * @uses xarUser::init()
      * @uses xarMod::apiFunc()
      * @throws \UnauthorizedOperationException
      * @return array<string, mixed>
      */
-    public function postToken($args, $context)
+    public function postToken($args)
     {
         // this contains any POSTed args from rst.php
         if (empty($args['input'])) {
@@ -102,6 +100,7 @@ class GenericAPIHandler extends RestAPIHandler
             }
             throw new UnauthorizedOperationException();
         }
+        $context = $this->getContext();
         //xarSession::init();
         xarMod::init();
         xarUser::init();
@@ -124,14 +123,13 @@ class GenericAPIHandler extends RestAPIHandler
     /**
      * Summary of deleteToken
      * @param array<string, mixed> $args
-     * @param Context<string, mixed> $context
      * @return bool
      */
-    public function deleteToken($args, $context)
+    public function deleteToken($args = [])
     {
-        $args['request'] ??= null;
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = $this->checkUser($context);
+        $userId = $this->checkUser();
+        $context = $this->getContext();
         // check if we had an auth token before
         $token = AuthToken::getAuthToken($context);
         if (empty($token)) {
