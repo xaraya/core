@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use DataObjectFactory;
@@ -59,8 +59,8 @@ trait xarGraphQLQueryListTrait
         return [
             'name' => $listname,
             'description' => 'List DD ' . $object . ' items',
-            //'type' => Type::listOf(xarGraphQLTypes::getType($typename)),
-            'type' => xarGraphQLTypes::getTypeList($typename),
+            //'type' => Type::listOf(GraphQLTypes::getType($typename)),
+            'type' => GraphQLTypes::getTypeList($typename),
             'args' => [
                 'order' => Type::string(),
                 //'offset' => [
@@ -95,13 +95,13 @@ trait xarGraphQLQueryListTrait
         $object ??= xarGraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
-            if (xarGraphQL::hasCachedData($typename . '_list', $rootValue, $args, $context, $info)) {
+            if (GraphQLHandler::hasCachedData($typename . '_list', $rootValue, $args, $context, $info)) {
                 return;
             }
-            xarGraphQL::tracePath(array_merge($info->path, ["list query " . $typename, $args]));
+            GraphQLHandler::tracePath(array_merge($info->path, ["list query " . $typename, $args]));
             $fields = $info->getFieldSelection(1);
-            if (xarGraphQL::hasQueryFields($typename)) {
-                $fieldlist = xarGraphQL::getQueryFields($typename);
+            if (GraphQLHandler::hasQueryFields($typename)) {
+                $fieldlist = GraphQLHandler::getQueryFields($typename);
             } else {
                 $fieldlist = array_keys($fields);
             }
@@ -110,8 +110,8 @@ trait xarGraphQLQueryListTrait
             //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
             //}
             $userId = 0;
-            if (xarGraphQL::hasSecurity($object)) {
-                $userId = xarGraphQL::checkUser($context);
+            if (GraphQLHandler::hasSecurity($object)) {
+                $userId = GraphQLHandler::checkUser($context);
                 if (empty($userId)) {
                     throw new Exception('Invalid user');
                 }
@@ -121,13 +121,13 @@ trait xarGraphQLQueryListTrait
             $loader->setContext($context);
             $loader->parseQueryArgs($args);
             $objectlist = $loader->getObjectList();
-            if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
+            if (GraphQLHandler::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
                 throw new Exception('Invalid user access');
             }
             $params = $loader->addPagingParams();
             $items = $objectlist->getItems($params);
             //$items = $loader->query($args);
-            xarGraphQLObjects::setObjectRef($object, $objectlist);
+            GraphQLObjects::setObjectRef($object, $objectlist);
             return $items;
         };
         return $resolver;

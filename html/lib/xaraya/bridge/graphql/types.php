@@ -26,7 +26,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InputObjectType;
@@ -38,7 +38,7 @@ use Exception;
  * See xardocs/graphql.txt for class structure
  * @uses \sys::autoload()
  */
-class xarGraphQLTypes
+class GraphQLTypes
 {
     /** @var array<string, mixed> */
     protected static $typeCache = [];
@@ -131,7 +131,7 @@ class xarGraphQLTypes
 
     /**
      * Summary of getTypeList
-     * 'type' => Type::listOf(xarGraphQLTypes::getType(static::$_xar_type)), doesn't accept lazy loading
+     * 'type' => Type::listOf(GraphQLTypes::getType(static::$_xar_type)), doesn't accept lazy loading
      * @param string $name
      * @return \Closure
      */
@@ -147,7 +147,7 @@ class xarGraphQLTypes
 
     /**
      * Summary of get_input_type_list
-     * 'type' => Type::listOf(xarGraphQLTypes::getInputType(static::$_xar_type)), doesn't accept lazy loading
+     * 'type' => Type::listOf(GraphQLTypes::getInputType(static::$_xar_type)), doesn't accept lazy loading
      * @param string $name
      * @return \Closure
      */
@@ -177,7 +177,7 @@ class xarGraphQLTypes
         if (array_key_exists($name, self::$baseTypes)) {
             return Type::{self::$baseTypes[$name]}();
         }
-        //xarGraphQL::tracePath(['load_lazy_type', $name]);
+        //GraphQLHandler::tracePath(['load_lazy_type', $name]);
         $page_ext = '_page';
         if (str_ends_with($name, $page_ext)) {
             return self::getPageType(substr($name, 0, strlen($name) - strlen($page_ext)));
@@ -337,16 +337,16 @@ class xarGraphQLTypes
             $type = strtolower($name);
             //$clazz = self::getTypeClass($type);
             //if ($clazz !== "xarGraphQLBaseType" && method_exists($clazz, "_xar_get_type_config")) {
-            //    xarGraphQL::tracePath("type config $name defined in $clazz");
+            //    GraphQLHandler::tracePath("type config $name defined in $clazz");
             //    $classConfig = $clazz::_xar_get_type_config($name);
             //    //return $classConfig;
             //}
         }
         // @todo skip this and override default field resolver in executeQuery, or use one in basetype?
         if ($name == 'Query') {
-            xarGraphQL::tracePath("query config $name");
+            GraphQLHandler::tracePath("query config $name");
             //$fields = $typeConfig['fields']();
-            //xarGraphQL::tracePath("query config fields " . implode(',', array_keys($fields)));
+            //GraphQLHandler::tracePath("query config fields " . implode(',', array_keys($fields)));
             //$typeConfig['fields'] = static function () use ($name) {
             //    $typeDef = xarGraphQLBuildType::object_type_definition($name);
             //    //return $typeDef->getFields();
@@ -355,11 +355,11 @@ class xarGraphQLTypes
             // @checkme not possible to override page/list/item resolvers in child class by type here
             $typeConfig['resolveField'] = xarGraphQLBuildType::_xar_query_field_resolver($name);
         } elseif ($name == 'Mutation') {
-            xarGraphQL::tracePath("mutation config $name");
+            GraphQLHandler::tracePath("mutation config $name");
             // @checkme not possible to override create/update/delete resolvers in child class by type here
             $typeConfig['resolveField'] = xarGraphQLBuildType::_xar_mutation_field_resolver($name);
         } else {
-            xarGraphQL::tracePath("type config $name");
+            GraphQLHandler::tracePath("type config $name");
             //$typeConfig['fields'] = static function () use ($name) {
             //    $typeDef = xarGraphQLBuildType::object_type_definition($name);
             //    return $typeDef->getFields();

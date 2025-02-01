@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Exception;
@@ -109,7 +109,7 @@ trait xarGraphQLQueriesTrait
     {
         // call either list_query_resolver or item_query_resolver here depending on $args['id']
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
-            xarGraphQL::tracePath(array_merge($info->path, ["object query", $args]));
+            GraphQLHandler::tracePath(array_merge($info->path, ["object query", $args]));
             // @todo check if type class corresponding to fieldname has overridden _xar_*_query_resolver
             $name = strtolower($info->fieldName);
             $page_ext = '_page';

@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\UnionType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -40,16 +40,16 @@ class xarGraphQLMultiValType extends UnionType
             'name' => $typename,
             'types' => [
                 Type::string(),
-                //Type::listOf(xarGraphQLTypes::getType("keyval")),
-                xarGraphQLTypes::getTypeList("keyval"),
+                //Type::listOf(GraphQLTypes::getType("keyval")),
+                GraphQLTypes::getTypeList("keyval"),
             ],
             'resolveType' => function ($value, $context, ResolveInfo $info) {
-                xarGraphQL::tracePath(array_merge($info->path, ["multival type"]));
+                GraphQLHandler::tracePath(array_merge($info->path, ["multival type"]));
                 if (!is_array($value)) {
                     return Type::string();
                 }
-                //return Type::listOf(xarGraphQLTypes::getType("keyval"));
-                return xarGraphQLTypes::getTypeList("keyval");
+                //return Type::listOf(GraphQLTypes::getType("keyval"));
+                return GraphQLTypes::getTypeList("keyval");
             },
         ];
     }

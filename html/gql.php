@@ -18,10 +18,10 @@
  */
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    xarGraphQL::sendCORSOptions();
+    GraphQLHandler::sendCORSOptions();
     return;
 }
 
@@ -60,17 +60,17 @@ $context = new \Xaraya\Context\Context(['request' => $_REQUEST, 'server' => $_SE
 //$query = '{samples { name, age } }';
 //$query = '{sample(id: 0) { name, age } }';
 //$query = '{schema}';
-//xarGraphQL::$tracePath = true;
-//xarGraphQL::enableTimer(true);
-//xarGraphQL::$cachePlan = true;
-//xarGraphQL::$cacheData = true;
-//xarGraphQL::enableCache(true);
-$data = xarGraphQL::getData($query, $variables, $operationName);
+//GraphQLHandler::$tracePath = true;
+//GraphQLHandler::enableTimer(true);
+//GraphQLHandler::$cachePlan = true;
+//GraphQLHandler::$cacheData = true;
+//GraphQLHandler::enableCache(true);
+$data = GraphQLHandler::getData($query, $variables, $operationName);
 //$extraTypes = ['module', 'theme', 'category', 'configuration'];
-//$data = xarGraphQL::getData($query, $variables, $operationName, $extraTypes);
+//$data = GraphQLHandler::getData($query, $variables, $operationName, $extraTypes);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
-//$data = xarGraphQL::getData($query, $variables, $operationName, $extraTypes, $schemaFile);
+//$data = GraphQLHandler::getData($query, $variables, $operationName, $extraTypes, $schemaFile);
  */
-$xarGraphQL = new xarGraphQL();
-[$data, $context] = $xarGraphQL->handleRequest();
-$xarGraphQL->output($data, $context);
+$graphQLHandler = new GraphQLHandler();
+[$data, $context] = $graphQLHandler->handleRequest();
+$graphQLHandler->output($data, $context);

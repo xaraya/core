@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use DataObjectFactory;
@@ -58,7 +58,7 @@ trait xarGraphQLQueryItemTrait
         return [
             'name' => $itemname,
             'description' => 'Get DD ' . $object . ' item',
-            'type' => xarGraphQLTypes::getType($typename),
+            'type' => GraphQLTypes::getType($typename),
             'args' => [
                 'id' => Type::nonNull(Type::id()),
             ],
@@ -84,10 +84,10 @@ trait xarGraphQLQueryItemTrait
         $object ??= xarGraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
-            if (xarGraphQL::hasCachedData($typename . '_item', $rootValue, $args, $context, $info)) {
+            if (GraphQLHandler::hasCachedData($typename . '_item', $rootValue, $args, $context, $info)) {
                 return;
             }
-            xarGraphQL::tracePath(array_merge($info->path, ["item query"]));
+            GraphQLHandler::tracePath(array_merge($info->path, ["item query"]));
             $fields = $info->getFieldSelection(1);
             if (empty($args['id'])) {
                 throw new Exception('Unknown id for type ' . $typename);
@@ -97,8 +97,8 @@ trait xarGraphQLQueryItemTrait
             //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
             //}
             $userId = 0;
-            if (xarGraphQL::hasSecurity($object)) {
-                $userId = xarGraphQL::checkUser($context);
+            if (GraphQLHandler::hasSecurity($object)) {
+                $userId = GraphQLHandler::checkUser($context);
                 if (empty($userId)) {
                     throw new Exception('Invalid user');
                 }
@@ -106,7 +106,7 @@ trait xarGraphQLQueryItemTrait
             $params = ['name' => $object, 'itemid' => $args['id']];
             // set context if available in resolver
             $objectitem = DataObjectFactory::getObject($params, $context);
-            if (xarGraphQL::hasSecurity($object) && !$objectitem->checkAccess('display', $params['itemid'], $userId)) {
+            if (GraphQLHandler::hasSecurity($object) && !$objectitem->checkAccess('display', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
             }
             $itemid = $objectitem->getItem();
@@ -134,7 +134,7 @@ trait xarGraphQLQueryItemTrait
                     $values['config'] = [$objectitem->config];
                 }
             }
-            xarGraphQLObjects::setObjectRef($object, $objectitem);
+            GraphQLObjects::setObjectRef($object, $objectitem);
             return $values;
         };
         return $resolver;

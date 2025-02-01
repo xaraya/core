@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -50,7 +50,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'keys' => [
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
-                    xarGraphQL::tracePath(array_merge($info->path, ["object keys"]));
+                    GraphQLHandler::tracePath(array_merge($info->path, ["object keys"]));
                     if (empty($object['_objectref'])) {
                         return array_keys($object);
                     }
@@ -65,9 +65,9 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'class' => Type::string(),
             'urlparam' => Type::string(),
             // @checkme where do we unserialize best - or do we simply re-use what DD already did for us?
-            //'access' => xarGraphQLTypes::getType("access"),
+            //'access' => GraphQLTypes::getType("access"),
             'access' => [
-                'type' => xarGraphQLTypes::getType("access"),
+                'type' => GraphQLTypes::getType("access"),
                 'resolve' => function ($object, $args) {
                     if (empty($object['access'])) {
                         return null;
@@ -77,11 +77,11 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             ],
             'datastore' => Type::string(),
             // this is not returned via getFieldValues()
-            'config' => xarGraphQLTypes::getType("serial"),
+            'config' => GraphQLTypes::getType("serial"),
             'config_kv' => [
-                'type' => xarGraphQLTypes::getTypeList("keyval"),
+                'type' => GraphQLTypes::getTypeList("keyval"),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
-                    xarGraphQL::tracePath(array_merge($info->path, ["object config_kv", gettype($object)]));
+                    GraphQLHandler::tracePath(array_merge($info->path, ["object config_kv", gettype($object)]));
                     // Note: this may not be filled in by object(s) resolve above
                     if (empty($object['config'])) {
                         return null;
@@ -103,7 +103,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                     return $config;
                 },
             ],
-            'sources' => xarGraphQLTypes::getType("serial"),
+            'sources' => GraphQLTypes::getType("serial"),
             'maxid' => Type::int(),
             'isalias' => Type::boolean(),
             'category' => Type::string(),
@@ -114,8 +114,8 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                 },
             ],
             //'category' => static::_xar_get_deferred_field('category', 'category'),
-            //'properties' => Type::listOf(xarGraphQLTypes::getType("property")),
-            'properties' => xarGraphQLTypes::getTypeList("property"),
+            //'properties' => Type::listOf(GraphQLTypes::getType("property")),
+            'properties' => GraphQLTypes::getTypeList("property"),
         ];
         return $fields;
     }
@@ -141,10 +141,10 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
     public static function _xar_list_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            xarGraphQL::tracePath(array_merge($info->path, ["object list query", $args]));
+            GraphQLHandler::tracePath(array_merge($info->path, ["object list query", $args]));
             $fields = $info->getFieldSelection(1);
-            if (xarGraphQL::hasQueryFields($type)) {
-                $fieldlist = xarGraphQL::getQueryFields($type);
+            if (GraphQLHandler::hasQueryFields($type)) {
+                $fieldlist = GraphQLHandler::getQueryFields($type);
             } else {
                 $fieldlist = array_keys($fields);
             }
@@ -156,8 +156,8 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
             //}
             $userId = 0;
-            if (xarGraphQL::hasSecurity($object)) {
-                $userId = xarGraphQL::checkUser($context);
+            if (GraphQLHandler::hasSecurity($object)) {
+                $userId = GraphQLHandler::checkUser($context);
                 if (empty($userId)) {
                     throw new Exception('Invalid user');
                 }
@@ -167,7 +167,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             $loader->setContext($context);
             $loader->parseQueryArgs($args);
             $objectlist = $loader->getObjectList();
-            if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
+            if (GraphQLHandler::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
                 throw new Exception('Invalid user access');
             }
             $params = $loader->addPagingParams();
@@ -223,7 +223,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
     public static function _xar_item_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            xarGraphQL::tracePath(array_merge($info->path, ["object item query"]));
+            GraphQLHandler::tracePath(array_merge($info->path, ["object item query"]));
             $fields = $info->getFieldSelection(1);
             if (empty($args['id'])) {
                 throw new Exception('Unknown ' . $type);
@@ -233,8 +233,8 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
             //}
             $userId = 0;
-            if (xarGraphQL::hasSecurity($object)) {
-                $userId = xarGraphQL::checkUser($context);
+            if (GraphQLHandler::hasSecurity($object)) {
+                $userId = GraphQLHandler::checkUser($context);
                 if (empty($userId)) {
                     throw new Exception('Invalid user');
                 }
@@ -242,7 +242,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             $params = ['name' => $object, 'itemid' => $args['id']];
             // set context if available in resolver
             $objectref = DataObjectFactory::getObject($params, $context);
-            if (xarGraphQL::hasSecurity($object) && !$objectref->checkAccess('display', $params['itemid'], $userId)) {
+            if (GraphQLHandler::hasSecurity($object) && !$objectref->checkAccess('display', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
             }
             $itemid = $objectref->getItem();

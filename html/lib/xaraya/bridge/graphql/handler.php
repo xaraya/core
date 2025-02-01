@@ -27,8 +27,8 @@
 namespace Xaraya\Bridge\GraphQL;
 
 use Xaraya\Bridge\GraphQL\Types\xarGraphQLBuildType;
-use Xaraya\Bridge\GraphQL\Types\xarGraphQLObjects;
-use Xaraya\Bridge\GraphQL\Types\xarGraphQLTypes;
+use Xaraya\Bridge\GraphQL\Types\GraphQLObjects;
+use Xaraya\Bridge\GraphQL\Types\GraphQLTypes;
 use Xaraya\Caching\CacheInterface;
 use Xaraya\Caching\CacheTrait;
 use Xaraya\Tools\TimerInterface;
@@ -61,7 +61,7 @@ sys::import('xaraya.bridge.requests.requesttrait');
  * See xardocs/graphql.txt for class structure
  * @uses \sys::autoload()
  */
-class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
+class GraphQLHandler extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
 {
     use CommonRequestTrait;
     use TimerTrait;  // activate with self::enableTimer(true)
@@ -95,20 +95,20 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
     public function getSchema($extraTypes = null, $validate = false)
     {
         if (!empty($extraTypes)) {
-            xarGraphQLTypes::setExtraTypes($extraTypes);
+            GraphQLTypes::setExtraTypes($extraTypes);
         }
-        // xarGraphQLObjects::mapObjects();
+        // GraphQLObjects::mapObjects();
         self::loadObjects();
         // Schema doesn't accept lazy loading of query type (besides typeLoader)
-        $queryType = xarGraphQLTypes::getType("query");
-        $mutationType = xarGraphQLTypes::getType("mutation");
+        $queryType = GraphQLTypes::getType("query");
+        $mutationType = GraphQLTypes::getType("mutation");
 
         $schema = new Schema([
             'query' => $queryType,
             'mutation' => $mutationType,
             //'types' => [self::getType("ddnode")],  // invisible types
             'typeLoader' => function ($name) {
-                return xarGraphQLTypes::getType($name);
+                return GraphQLTypes::getType($name);
             },
         ]);
 
@@ -136,7 +136,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         }
         // @todo add extraTypes to schema contents if needed?
         //$typeConfigDecorator = static function ($typeConfig, $typeDefinitionNode, $allNodesMap) {
-        //    return xarGraphQLTypes::type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap);
+        //    return GraphQLTypes::type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap);
         //};
         //$schema = BuildSchema::build($contents, $typeConfigDecorator);
         $schema = BuildSchema::build($document);
@@ -494,7 +494,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      */
     public static function hasSecurity($object, $method = null)
     {
-        return xarGraphQLObjects::hasSecurity($object, $method);
+        return GraphQLObjects::hasSecurity($object, $method);
     }
 
     /**
@@ -513,7 +513,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
             self::$config = json_decode($contents, true);
         }
         if (!empty(self::$config['extraTypes'])) {
-            xarGraphQLTypes::setExtraTypes(self::$config['extraTypes']);
+            GraphQLTypes::setExtraTypes(self::$config['extraTypes']);
         }
         if (!empty(self::$config['queryComplexity'])) {
             self::$queryComplexity = self::$config['queryComplexity'];
@@ -598,7 +598,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         } else {
             self::$config['objects'] = [];
         }
-        xarGraphQLObjects::loadObjects(self::$config['objects']);
+        GraphQLObjects::loadObjects(self::$config['objects']);
         self::setTimer('objects');
     }
 
@@ -643,7 +643,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
     {
         // @checkme set list of modules here before filtering out for $extraTypes - note: dependency on REST API
         self::$config['modules'] = RestAPIBuilder::get_potential_modules($objectNames);
-        return xarGraphQLTypes::findExtraTypes($objectNames);
+        return GraphQLTypes::findExtraTypes($objectNames);
     }
 
     /**
@@ -684,8 +684,8 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
 
         $configFile = sys::varpath() . '/cache/api/graphql_objects.json';
         $configData = $infoData;
-        xarGraphQLTypes::setExtraTypes($extraTypes);
-        $configData['objects'] = xarGraphQLObjects::dumpObjects();
+        GraphQLTypes::setExtraTypes($extraTypes);
+        $configData['objects'] = GraphQLObjects::dumpObjects();
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
 
         $configFile = sys::varpath() . '/cache/api/graphql_modules.json';

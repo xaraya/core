@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InputObjectType;
@@ -74,7 +74,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
     public function __construct()
     {
         $config = static::_xar_get_type_config('Module_Api');
-        xarGraphQL::setTimer('new ' . $config['name']);
+        GraphQLHandler::setTimer('new ' . $config['name']);
         parent::__construct($config);
     }
 
@@ -99,8 +99,8 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
      */
     public static function _xar_load_config()
     {
-        xarGraphQL::loadModules();
-        foreach (xarGraphQL::getModules() as $itemid => $info) {
+        GraphQLHandler::loadModules();
+        foreach (GraphQLHandler::getModules() as $itemid => $info) {
             $module = $info['module'];
             foreach ($info['apilist'] as $api => $item) {
                 if (isset($item['enabled']) && empty($item['enabled'])) {
@@ -249,42 +249,42 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
     public static function _xar_get_param_fielddef($param)
     {
         if (empty($param)) {
-            $typedef = ['type' => xarGraphQLTypes::getType('mixed')];
+            $typedef = ['type' => GraphQLTypes::getType('mixed')];
         } elseif (is_string($param)) {
             // @checkme use openapi data types and/or graphql base types + see buildtype get_field_basetypes()
             $name = $param;
             //if (array_key_exists(ucfirst($param), Type::getStandardTypes())) {
             if (in_array($name, ['id', 'string', 'boolean', 'integer', 'number'])) {
                 //$typedef = ['type' => Type::{$name}()];
-                $typedef = ['type' => xarGraphQLTypes::getType($name)];
+                $typedef = ['type' => GraphQLTypes::getType($name)];
             } elseif ($name == 'object') {
-                $typedef = ['type' => xarGraphQLTypes::getType('mixed')];
+                $typedef = ['type' => GraphQLTypes::getType('mixed')];
             } else {
-                $typedef = ['type' => xarGraphQLTypes::getType($name)];
+                $typedef = ['type' => GraphQLTypes::getType($name)];
             }
         } elseif (is_numeric(array_key_first($param)) && count($param) == 1) {
             $name = $param[0];
             if (in_array($name, ['id', 'string', 'boolean', 'integer', 'number'])) {
                 //$typedef = ['type' => Type::listOf(Type::{$name}())];
-                $typedef = ['type' => xarGraphQLTypes::getTypeList($name)];
+                $typedef = ['type' => GraphQLTypes::getTypeList($name)];
             } elseif ($name == 'object') {
-                $typedef = ['type' => xarGraphQLTypes::getTypeList('mixed')];
+                $typedef = ['type' => GraphQLTypes::getTypeList('mixed')];
             } else {
-                $typedef = ['type' => xarGraphQLTypes::getTypeList($name)];
+                $typedef = ['type' => GraphQLTypes::getTypeList($name)];
             }
         } elseif (array_key_exists('type', $param) && $param['type'] == 'array') {
             $name = $param['items']['type'];
             if (in_array($name, ['id', 'string', 'boolean', 'integer', 'number'])) {
                 //$typedef = ['type' => Type::listOf(Type::{$name}())];
-                $typedef = ['type' => xarGraphQLTypes::getTypeList($name)];
+                $typedef = ['type' => GraphQLTypes::getTypeList($name)];
             } elseif ($name == 'object') {
-                $typedef = ['type' => xarGraphQLTypes::getTypeList('mixed')];
+                $typedef = ['type' => GraphQLTypes::getTypeList('mixed')];
             } else {
-                $typedef = ['type' => xarGraphQLTypes::getTypeList($name)];
+                $typedef = ['type' => GraphQLTypes::getTypeList($name)];
             }
         } else {
             // @checkme create input type corresponding to $args later?
-            $typedef = ['type' => xarGraphQLTypes::getType('mixed')];
+            $typedef = ['type' => GraphQLTypes::getType('mixed')];
         }
         return $typedef;
     }
@@ -300,7 +300,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
     public static function _xar_call_query_resolver($func)
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($func) {
-            xarGraphQL::tracePath(array_merge($info->path, ["module_api call query"]));
+            GraphQLHandler::tracePath(array_merge($info->path, ["module_api call query"]));
             $fields = $info->getFieldSelection(1);
             // @checkme we only get the relevant 'args' values via the input type here
             if (is_array($func['args']) && !is_numeric(array_key_first($func['args']))) {
@@ -309,7 +309,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
             } elseif (empty($args['module']) || $args['module'] != $func['module']) {
                 throw new Exception("Invalid module for $func[module] $func[type] $func[func] function");
             }
-            $userId = xarGraphQL::checkUser($context);
+            $userId = GraphQLHandler::checkUser($context);
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }
@@ -362,8 +362,8 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
                 //'module' => ['type' => Type::string(), 'defaultValue' => $func['module']],
                 //'type' => ['type' => Type::string(), 'defaultValue' => $func['type']],
                 //'func' => ['type' => Type::string(), 'defaultValue' => $func['func']],
-                //'args' => ['type' => xarGraphQLTypes::getType('mixed')],
-                //'input' => xarGraphQLTypes::getInputType($name),
+                //'args' => ['type' => GraphQLTypes::getType('mixed')],
+                //'input' => GraphQLTypes::getInputType($name),
                 'input' => function () use ($name) {
                     return static::_xar_create_input_type($name);
                 },
@@ -381,11 +381,11 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
     public static function _xar_create_input_type($name)
     {
         $typename = ucwords($name . '_input', '_');
-        if (xarGraphQLTypes::hasType($typename)) {
-            return xarGraphQLTypes::getType($typename);
+        if (GraphQLTypes::hasType($typename)) {
+            return GraphQLTypes::getType($typename);
         }
         $newType = static::_xar_get_input_type($name);
-        xarGraphQLTypes::setType($typename, $newType);
+        GraphQLTypes::setType($typename, $newType);
         return $newType;
     }
 
@@ -491,7 +491,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
     public static function _xar_call_mutation_resolver($func)
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($func) {
-            xarGraphQL::tracePath(array_merge($info->path, ["module_api call mutation"]));
+            GraphQLHandler::tracePath(array_merge($info->path, ["module_api call mutation"]));
             $fields = $info->getFieldSelection(1);
             if (empty($args['input'])) {
                 throw new Exception("Unknown input for $func[module] $func[type] $func[func] function");
@@ -506,7 +506,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
             } elseif (empty($args['module']) || $args['module'] != $func['module']) {
                 throw new Exception("Invalid module for $func[module] $func[type] $func[func] function");
             }
-            $userId = xarGraphQL::checkUser($context);
+            $userId = GraphQLHandler::checkUser($context);
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }
@@ -538,7 +538,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         //$rolename = $role->getName();
         xarMod::init();
         xarUser::init();
-        xarGraphQL::tracePath(["Calling $module $type $func for user $userId", $args, $fields]);
+        GraphQLHandler::tracePath(["Calling $module $type $func for user $userId", $args, $fields]);
         return xarMod::apiFunc($module, $type, $func, $args);
         //$values = ['func_args' => $args];
         //return $values;

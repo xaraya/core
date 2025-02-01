@@ -32,7 +32,7 @@ use GraphQL\Type\Definition\ObjectType;
  * See xardocs/graphql.txt for class structure
  * @uses \sys::autoload()
  */
-class xarGraphQLObjects
+class GraphQLObjects
 {
     /** @var array<string, string> */
     protected static $objectType = [];
@@ -172,8 +172,8 @@ class xarGraphQLObjects
         if (!empty(self::$objectType)) {
             return;
         }
-        foreach (xarGraphQLTypes::getTypeMapper() as $name => $type) {
-            $clazz = xarGraphQLTypes::getTypeClass($type);
+        foreach (GraphQLTypes::getTypeMapper() as $name => $type) {
+            $clazz = GraphQLTypes::getTypeClass($type);
             if (property_exists($clazz, '_xar_object') && !empty($clazz::$_xar_object)) {
                 self::$objectType[$clazz::$_xar_object] = $name;
                 if (property_exists($clazz, '_xar_security') && isset($clazz::$_xar_security)) {
@@ -181,7 +181,7 @@ class xarGraphQLObjects
                 }
             }
         }
-        foreach (xarGraphQLTypes::getExtraTypes() as $type) {
+        foreach (GraphQLTypes::getExtraTypes() as $type) {
             [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
             self::$objectType[$object] = $name;
         }
@@ -211,7 +211,7 @@ class xarGraphQLObjects
         self::clearSecurity();
         self::clearFieldSpecs();
         self::mapObjects();
-        $typeMapper = xarGraphQLTypes::getTypeMapper();
+        $typeMapper = GraphQLTypes::getTypeMapper();
 
         $info = [];
         foreach (self::getTypes() as $object => $name) {
@@ -221,11 +221,11 @@ class xarGraphQLObjects
             $type = $typeMapper[$name] ?? $name;
             $info[$object]['type'] = $type;
             $info[$object]['security'] = self::hasSecurity($object);
-            $info[$object]['class'] = xarGraphQLTypes::getTypeClass($type);
+            $info[$object]['class'] = GraphQLTypes::getTypeClass($type);
             if (!empty($typeMapper[$name])) {
                 $info[$object]['fieldspecs'] = [];
                 /** @var ObjectType $objectType */
-                $objectType = xarGraphQLTypes::loadLazyType($name);
+                $objectType = GraphQLTypes::loadLazyType($name);
                 foreach ($objectType->getFields() as $field) {
                     $info[$object]['fieldspecs'][$field->getName()] = ['fieldtype', $field->getType()->toString()];
                 }
@@ -243,7 +243,7 @@ class xarGraphQLObjects
         }
 
         $fieldspecs = [];
-        foreach (xarGraphQLTypes::getExtraTypes() as $type) {
+        foreach (GraphQLTypes::getExtraTypes() as $type) {
             [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
             $fieldspecs[$object] = xarGraphQLBuildType::find_object_fieldspecs($object, true);
         }

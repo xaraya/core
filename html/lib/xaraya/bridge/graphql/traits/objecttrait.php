@@ -155,8 +155,8 @@ trait xarGraphQLObjectTrait
             'limit' => Type::int(),
             'count' => Type::int(),
             'filter' => Type::listOf(Type::string()),
-            //$list => Type::listOf(xarGraphQLTypes::getType($type)),
-            $list => xarGraphQLTypes::getTypeList($type),
+            //$list => Type::listOf(GraphQLTypes::getType($type)),
+            $list => GraphQLTypes::getTypeList($type),
         ];
         $newType = new ObjectType([
             'name' => ucwords($name, '_'),

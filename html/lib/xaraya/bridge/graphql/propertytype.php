@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -46,7 +46,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'keys' => [
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
-                    xarGraphQL::tracePath(array_merge($info->path, ["property keys", gettype($property)]));
+                    GraphQLHandler::tracePath(array_merge($info->path, ["property keys", gettype($property)]));
                     //print_r("property keys resolve");
                     if (is_array($property)) {
                         return array_keys($property);
@@ -64,7 +64,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'name' => Type::string(),
             'label' => Type::string(),
             '_objectid' => Type::string(),
-            //'objectid' => xarGraphQLTypes::getType('object'),
+            //'objectid' => GraphQLTypes::getType('object'),
             //'object_id' => static::_xar_get_deferred_field('object_id', 'object'),
             'type' => Type::string(),
             'defaultvalue' => Type::string(),
@@ -72,12 +72,12 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'status' => Type::int(),
             'translatable' => Type::boolean(),
             'seq' => Type::int(),
-            'configuration' => xarGraphQLTypes::getType('serial'),
+            'configuration' => GraphQLTypes::getType('serial'),
             'configuration_kv' => [
-                //'type' => Type::listOf(xarGraphQLTypes::getType("keyval")),
-                'type' => xarGraphQLTypes::getTypeList("keyval"),
+                //'type' => Type::listOf(GraphQLTypes::getType("keyval")),
+                'type' => GraphQLTypes::getTypeList("keyval"),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
-                    xarGraphQL::tracePath(array_merge($info->path, ["property configuration_kv"]));
+                    GraphQLHandler::tracePath(array_merge($info->path, ["property configuration_kv"]));
                     if (is_array($property) && isset($property['configuration'])) {
                         $values = @unserialize($property['configuration']);
                         if (empty($values)) {
@@ -115,7 +115,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                     return null;
                 },
             ],
-            //'objectref' => xarGraphQLTypes::getType("object"),
+            //'objectref' => GraphQLTypes::getType("object"),
             //'args' => Type::listOf(Type::string()),
         ];
         return $fields;

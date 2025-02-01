@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\ScalarType;
 
 /**
@@ -25,7 +25,7 @@ class xarGraphQLMixedType extends ScalarType
 
     public function serialize($value)
     {
-        xarGraphQL::tracePath(["mixed scalar type"]);
+        GraphQLHandler::tracePath(["mixed scalar type"]);
         return $value;
     }
 
@@ -45,7 +45,7 @@ class xarGraphQLMixedType extends ScalarType
      */
     public function parseValue($value)
     {
-        xarGraphQL::tracePath(["parse value", gettype($value), $value]);
+        GraphQLHandler::tracePath(["parse value", gettype($value), $value]);
         return $value;
     }
 
@@ -56,7 +56,7 @@ class xarGraphQLMixedType extends ScalarType
      */
     public function parseLiteral($valueNode, ?array $variables = null)
     {
-        xarGraphQL::tracePath(["parse literal", $valueNode->kind, $variables]);
+        GraphQLHandler::tracePath(["parse literal", $valueNode->kind, $variables]);
         return $this->parseValueNode($valueNode);
     }
 

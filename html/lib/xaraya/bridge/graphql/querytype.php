@@ -59,9 +59,9 @@ class xarGraphQLQueryType extends ObjectType
                 $fields = array_merge($fields, $add_fields);
             }
         }
-        if (!empty(xarGraphQLTypes::getExtraTypes())) {
+        if (!empty(GraphQLTypes::getExtraTypes())) {
             // @checkme not possible to override page/list/item resolvers in child class by type here
-            foreach (xarGraphQLTypes::getExtraTypes() as $name) {
+            foreach (GraphQLTypes::getExtraTypes() as $name) {
                 $add_fields = xarGraphQLBuildType::get_query_fields($name);
                 if (!empty($add_fields)) {
                     $fields = array_merge($fields, $add_fields);
@@ -78,7 +78,7 @@ class xarGraphQLQueryType extends ObjectType
      */
     public static function _xar_add_query_fields($type)
     {
-        $clazz = xarGraphQLTypes::getTypeClass($type);
+        $clazz = GraphQLTypes::getTypeClass($type);
         return $clazz::_xar_get_query_fields();
     }
 
@@ -90,7 +90,7 @@ class xarGraphQLQueryType extends ObjectType
      */
     public static function _xar_add_query_field($name, $type)
     {
-        $clazz = xarGraphQLTypes::getTypeClass($type);
+        $clazz = GraphQLTypes::getTypeClass($type);
         return $clazz::_xar_get_query_field($name);
     }
 }

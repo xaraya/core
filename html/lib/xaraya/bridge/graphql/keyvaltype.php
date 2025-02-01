@@ -45,22 +45,22 @@ class xarGraphQLKeyValType extends ObjectType implements xarGraphQLInputInterfac
             'fields' => [
                 'key' => Type::string(),
                 //'value' => Type::string(),
-                'value' => xarGraphQLTypes::getType('mixed'),
+                'value' => GraphQLTypes::getType('mixed'),
                 // @checkme this causes memory problems!
-                //'value' => xarGraphQLTypes::getType("multival"),
+                //'value' => GraphQLTypes::getType("multival"),
             ],
             /**
             // see recurring and circular types at https://webonyx.github.io/graphql-php/type-system/object-types/
             'fields' => function() {
                 return [
                     'key' => Type::string(),
-                    'value' => xarGraphQLTypes::getType("multival"),
+                    'value' => GraphQLTypes::getType("multival"),
                 ];
             }
              */
             /**
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
-                xarGraphQL::tracePath(array_merge($info->path, ["keyval field"]));
+                GraphQLHandler::tracePath(array_merge($info->path, ["keyval field"]));
                 if (empty($object)) {
                     return null;
                 }
@@ -84,7 +84,7 @@ class xarGraphQLKeyValType extends ObjectType implements xarGraphQLInputInterfac
         $fields = [
             'key' => Type::string(),
             //'value' => Type::string(),
-            'value' => xarGraphQLTypes::getType('mixed'),  // Scalar Type doesn't need an equivalent Input Type
+            'value' => GraphQLTypes::getType('mixed'),  // Scalar Type doesn't need an equivalent Input Type
         ];
         return $fields;
     }

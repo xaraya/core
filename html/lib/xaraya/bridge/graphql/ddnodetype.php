@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\InterfaceType;
 use GraphQL\Type\Definition\ObjectType;
@@ -52,7 +52,7 @@ class xarGraphQLDDNodeType extends ObjectType
                 return $args;
             },
             'interfaces' => [
-                xarGraphQLTypes::getType("node"),
+                GraphQLTypes::getType("node"),
             ],
         ];
     }

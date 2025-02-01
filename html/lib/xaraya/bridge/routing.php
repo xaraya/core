@@ -53,7 +53,7 @@ use Xaraya\Bridge\Requests\ModuleRequest;
 use Xaraya\Bridge\Requests\BlockRequest;
 use Xaraya\Bridge\Requests\StaticFileRequest;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
-use xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 
 /**
  * Routing bridge to handle Xaraya object, module and block GUI calls + REST API and GraphQL API requests
@@ -71,7 +71,7 @@ class RoutingBridge extends BasicBridge
     public static string $prefix = '';
     public bool $wrapPage = false;
     protected ?RestAPIHandler $restAPIHandler = null;
-    protected ?xarGraphQL $graphQLHandler = null;
+    protected ?GraphQLHandler $graphQLHandler = null;
 
     /**
      * Summary of getRouter
@@ -154,7 +154,7 @@ class RoutingBridge extends BasicBridge
 
         $path = $pathPrefix . '/graphql';
         $name = $namePrefix . 'graphql';
-        $routes[$name] = [['GET', 'POST'], $path, [xarGraphQL::class, 'handleRequest'], $extra];
+        $routes[$name] = [['GET', 'POST'], $path, [GraphQLHandler::class, 'handleRequest'], $extra];
 
         $path = $pathPrefix . '/routes';
         $name = $namePrefix . 'routes';
@@ -448,11 +448,11 @@ class RoutingBridge extends BasicBridge
 
     /**
      * Summary of getGraphQLHandler
-     * @return xarGraphQL
+     * @return GraphQLHandler
      */
     public function getGraphQLHandler()
     {
-        $this->graphQLHandler ??= new xarGraphQL();
+        $this->graphQLHandler ??= new GraphQLHandler();
         return $this->graphQLHandler;
     }
 

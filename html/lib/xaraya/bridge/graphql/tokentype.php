@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -91,7 +91,7 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
         return [
             'name' => 'getToken',
             'description' => 'Get API access token',
-            'type' => xarGraphQLTypes::getType('token'),
+            'type' => GraphQLTypes::getType('token'),
             'args' => [
                 'uname' => ['type' => Type::string()],
                 'pass' => ['type' => Type::string()],
@@ -111,8 +111,8 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
         //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
         $resolver = function ($rootValue, $args, $context) {
             // disable caching for mutations
-            xarGraphQL::enableCache(false);
-            xarGraphQL::tracePath("getToken");
+            GraphQLHandler::enableCache(false);
+            GraphQLHandler::tracePath("getToken");
             if (empty($args['uname']) || empty($args['pass'])) {
                 throw new Exception('Invalid username or password');
             }
@@ -163,8 +163,8 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
         //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
         $resolver = function ($rootValue, $args, $context) {
             // disable caching for mutations
-            xarGraphQL::enableCache(false);
-            xarGraphQL::tracePath("deleteToken");
+            GraphQLHandler::enableCache(false);
+            GraphQLHandler::tracePath("deleteToken");
             if (empty($args['confirm'])) {
                 return false;
             }

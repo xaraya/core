@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InputObjectType;
@@ -83,17 +83,17 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
             'location' => Type::string(),
             // @checkme use deferred field or property resolver here with default load resolver = DataObjectLoader
             'partner' => [
-                'type' => xarGraphQLTypes::getType('sample'),
+                'type' => GraphQLTypes::getType('sample'),
                 //'resolve' => self::_xar_deferred_field_resolver('sample', 'partner'),
                 'resolve' => self::_xar_deferred_property_resolver('sample', 'partner', $object),
             ],
             'parents' => [
-                'type' => xarGraphQLTypes::getTypeList('sample'),
+                'type' => GraphQLTypes::getTypeList('sample'),
                 //'resolve' => self::_xar_deferred_field_resolver('sample', 'parents'),
                 'resolve' => self::_xar_deferred_property_resolver('sample', 'parents', $object),
             ],
             'children' => [
-                'type' => xarGraphQLTypes::getTypeList('sample'),
+                'type' => GraphQLTypes::getTypeList('sample'),
                 //'resolve' => self::_xar_deferred_field_resolver('sample', 'children'),
                 'resolve' => self::_xar_deferred_property_resolver('sample', 'children', $object),
             ],
@@ -112,9 +112,9 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
             'name' => Type::string(),
             'age' => Type::int(),
             'location' => Type::string(),
-            //'partner' => xarGraphQLTypes::getInputType('sample'),
-            //'parents' => xarGraphQLTypes::getInputTypeList('sample'),
-            //'children' => xarGraphQLTypes::getInputTypeList('sample'),
+            //'partner' => GraphQLTypes::getInputType('sample'),
+            //'parents' => GraphQLTypes::getInputTypeList('sample'),
+            //'children' => GraphQLTypes::getInputTypeList('sample'),
             'partner' => $newType,
             'parents' => Type::listOf($newType),
             'children' => Type::listOf($newType),

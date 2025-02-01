@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -120,7 +120,7 @@ class xarGraphQLUserType extends xarGraphQLBaseType
         $fieldlist = ['id', 'name'];
         // get the DD items for a deferred list of item ids here
         $resolver = function ($itemids) use ($type, $object, $fieldlist) {
-            xarGraphQL::tracePath(["load deferred $type"]);
+            GraphQLHandler::tracePath(["load deferred $type"]);
             // @checkme create an extra object with 'username' property, add to extratypes and try extras_page{extras{...}}
             //$params = array('name' => $object);
             $params = ['name' => $object, 'fieldlist' => $fieldlist];

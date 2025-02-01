@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\InterfaceType;
 use GraphQL\Type\Definition\ObjectType;
@@ -45,16 +45,16 @@ class xarGraphQLNodeType extends InterfaceType
                 'id' => ['type' => Type::nonNull(Type::id())],
             ],
             'resolveType' => function ($value, $context, ResolveInfo $info) {
-                xarGraphQL::tracePath(array_merge($info->path, ["node type"]));
-                xarGraphQL::tracePath($value);
-                xarGraphQL::tracePath(xarGraphQLObjects::getTypes());
+                GraphQLHandler::tracePath(array_merge($info->path, ["node type"]));
+                GraphQLHandler::tracePath($value);
+                GraphQLHandler::tracePath(GraphQLObjects::getTypes());
                 if (!is_array($value)) {
                     return Type::string();
                 }
-                //if (!empty($value['object']) && !empty(xarGraphQLObjects::getType($value['object']))) {
-                //    return xarGraphQLObjects::getType($value['object']);
+                //if (!empty($value['object']) && !empty(GraphQLObjects::getType($value['object']))) {
+                //    return GraphQLObjects::getType($value['object']);
                 //}
-                return xarGraphQLTypes::getType("ddnode");
+                return GraphQLTypes::getType("ddnode");
             },
         ];
     }
@@ -69,7 +69,7 @@ class xarGraphQLNodeType extends InterfaceType
             'node' => [
                 'name' => 'node',
                 'description' => 'Get object item using global object identification',
-                'type' => xarGraphQLTypes::getType("node"),
+                'type' => GraphQLTypes::getType("node"),
                 'args' => [
                     'id' => ['type' => Type::nonNull(Type::id())],
                 ],
@@ -78,7 +78,7 @@ class xarGraphQLNodeType extends InterfaceType
                     return ['global_id' => $args['id'], 'id' => $id, 'object' => $object];
                 },
                 //'interfaces' => [
-                //    xarGraphQLTypes::getType("node")
+                //    GraphQLTypes::getType("node")
                 //],
             ],
         ];

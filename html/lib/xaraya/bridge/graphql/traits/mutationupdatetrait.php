@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use DataObjectFactory;
@@ -58,9 +58,9 @@ trait xarGraphQLMutationUpdateTrait
         return [
             'name' => $name,
             'description' => 'Update DD ' . $object . ' item',
-            'type' => xarGraphQLTypes::getType($typename),
+            'type' => GraphQLTypes::getType($typename),
             'args' => [
-                'input' => xarGraphQLTypes::getInputType($typename),
+                'input' => GraphQLTypes::getInputType($typename),
             ],
             //'extensions' => [
             //    'access' => 'update',
@@ -82,13 +82,13 @@ trait xarGraphQLMutationUpdateTrait
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations
-            xarGraphQL::enableCache(false);
-            xarGraphQL::tracePath(array_merge($info->path, ["update mutation"]));
+            GraphQLHandler::enableCache(false);
+            GraphQLHandler::tracePath(array_merge($info->path, ["update mutation"]));
             $fields = $info->getFieldSelection(1);
             if (empty($args['input']) || empty($args['input']['id'])) {
                 throw new Exception('Unknown input for type ' . $typename);
             }
-            $userId = xarGraphQL::checkUser($context);
+            $userId = GraphQLHandler::checkUser($context);
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }

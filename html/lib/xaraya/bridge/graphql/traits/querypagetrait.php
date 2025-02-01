@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use DataObjectFactory;
@@ -59,7 +59,7 @@ trait xarGraphQLQueryPageTrait
         return [
             'name' => $pagename,
             'description' => 'Page ' . $object . ' items',
-            'type' => xarGraphQLTypes::getPageType($typename),
+            'type' => GraphQLTypes::getPageType($typename),
             'args' => [
                 'order' => Type::string(),
                 'offset' => [
@@ -91,10 +91,10 @@ trait xarGraphQLQueryPageTrait
         $object ??= xarGraphQLInflector::pluralize($typename);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // @checkme don't try to resolve anything further if the result is already cached?
-            if (xarGraphQL::hasCachedData($typename . '_page', $rootValue, $args, $context, $info)) {
+            if (GraphQLHandler::hasCachedData($typename . '_page', $rootValue, $args, $context, $info)) {
                 return;
             }
-            xarGraphQL::tracePath(array_merge($info->path, ["page query " . $typename, $args]));
+            GraphQLHandler::tracePath(array_merge($info->path, ["page query " . $typename, $args]));
             // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
             $allowed = array_flip(['order', 'offset', 'limit', 'filter', 'count']);
             $fields = $info->getFieldSelection(1);
@@ -108,8 +108,8 @@ trait xarGraphQLQueryPageTrait
             }
             // @checkme we assume that the first field other than the allowed ones is the list we need
             $list = $todo[0];
-            if (xarGraphQL::hasQueryFields($typename)) {
-                $fieldlist = xarGraphQL::getQueryFields($typename);
+            if (GraphQLHandler::hasQueryFields($typename)) {
+                $fieldlist = GraphQLHandler::getQueryFields($typename);
             } elseif (!empty($list) && array_key_exists($list, $fields)) {
                 $fieldlist = array_keys($fields[$list]);
             } else {
@@ -120,8 +120,8 @@ trait xarGraphQLQueryPageTrait
             //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
             //}
             $userId = 0;
-            if (xarGraphQL::hasSecurity($object)) {
-                $userId = xarGraphQL::checkUser($context);
+            if (GraphQLHandler::hasSecurity($object)) {
+                $userId = GraphQLHandler::checkUser($context);
                 if (empty($userId)) {
                     throw new Exception('Invalid user');
                 }
@@ -131,7 +131,7 @@ trait xarGraphQLQueryPageTrait
             $loader->setContext($context);
             $loader->parseQueryArgs($args);
             $objectlist = $loader->getObjectList();
-            if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
+            if (GraphQLHandler::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
                 throw new Exception('Invalid user access');
             }
             $params = $loader->addPagingParams();
@@ -162,7 +162,7 @@ trait xarGraphQLQueryPageTrait
             if (!empty($args['count'])) {
                 $args['count'] = $loader->count;
             }
-            xarGraphQLObjects::setObjectRef($object, $objectlist);
+            GraphQLObjects::setObjectRef($object, $objectlist);
             return $args;
         };
         return $resolver;

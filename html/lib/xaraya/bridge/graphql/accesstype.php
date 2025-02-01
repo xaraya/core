@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -42,15 +42,15 @@ class xarGraphQLAccessType extends ObjectType
             'fields' => [
                 'keys' => Type::listOf(Type::string()),
                 //'access' => Type::string(),
-                //'access' => Type::listOf(xarGraphQLTypes::getType("keyval")),
-                //'access' => xarGraphQLTypes::getTypeList("keyval"),
-                'access' => xarGraphQLTypes::getType("mixed"),
-                //'display_access' => Type::listOf(xarGraphQLTypes::getType("keyval")),
+                //'access' => Type::listOf(GraphQLTypes::getType("keyval")),
+                //'access' => GraphQLTypes::getTypeList("keyval"),
+                'access' => GraphQLTypes::getType("mixed"),
+                //'display_access' => Type::listOf(GraphQLTypes::getType("keyval")),
                 //'filters' => Type::string(),
-                'filters' => xarGraphQLTypes::getType('serial'),
+                'filters' => GraphQLTypes::getType('serial'),
             ],
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
-                xarGraphQL::tracePath(array_merge($info->path, ["access field"]));
+                GraphQLHandler::tracePath(array_merge($info->path, ["access field"]));
                 if (empty($object)) {
                     return null;
                 }

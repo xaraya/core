@@ -12,7 +12,7 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\xarGraphQL;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Language\AST\ObjectValueNode;
 use GraphQL\Type\Definition\ScalarType;
 use GraphQL\Language\AST\StringValueNode;
@@ -27,7 +27,7 @@ class xarGraphQLSerialType extends ScalarType
 
     public function serialize($value)
     {
-        xarGraphQL::tracePath(["serial scalar type"]);
+        GraphQLHandler::tracePath(["serial scalar type"]);
         return $this->tryUnserialized($value);
     }
 
@@ -55,7 +55,7 @@ class xarGraphQLSerialType extends ScalarType
 
     public function parseLiteral($valueNode, ?array $variables = null)
     {
-        xarGraphQL::tracePath(["parse literal", $valueNode->kind, $variables]);
+        GraphQLHandler::tracePath(["parse literal", $valueNode->kind, $variables]);
         // @checkme support only top-level serialized values here
         if ($valueNode instanceof StringValueNode) {
             return $this->tryUnserialized($valueNode->value);
