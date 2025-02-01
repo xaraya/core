@@ -141,9 +141,9 @@ class RestAPIBuilder extends xarObject
         $doc = [];
         $doc['openapi'] = '3.0.2';
         $doc['info'] = [
-            'title' => 'DynamicData REST API',
-            'description' => 'This provides a REST API endpoint as proof of concept to access Dynamic Data Objects stored in dynamic_data. Access to all objects is limited to read-only mode by default. The Sample object requires cookie authentication (after login on this site) or token authentication to create/update/delete items. Some internal DD objects are also available in read-only mode for use in Javascript on the site.',
-            'version' => '1.3.0',
+            'title' => 'Xaraya REST API',
+            'description' => 'This provides a REST API endpoint to access defined Module API Functions and Dynamic Data Objects stored in dynamic_data. Access to all objects is limited to read-only mode by default. The Sample object requires cookie authentication (after login on this site) or token authentication to create/update/delete items. Some internal DD objects are also available in read-only mode for use in Javascript on the site.',
+            'version' => '1.4.0',
         ];
         $doc['info']['x-generated'] = date('c');
         $doc['servers'] = [

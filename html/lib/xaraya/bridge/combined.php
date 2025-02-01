@@ -116,7 +116,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
             $request = $request->withAttribute('redirectURL', $redirectURL);
             $request = $request->withAttribute('status', $status);
         };
-        xarController::$redirectTo = $callback;
+        xarController::setCallback('redirectTo', $callback);
     }
 
     /**

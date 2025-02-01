@@ -47,6 +47,9 @@ class GenericAPIHandler extends RestAPIHandler
         xarUser::init();
         $role = xarRoles::getRole($userId);
         $user = $role->getFieldValues();
+        if (isset($context['authMethod'])) {
+            return ['id' => $user['id'], 'name' => $user['name'], 'source' => $context['authMethod']];
+        }
         return ['id' => $user['id'], 'name' => $user['name']];
     }
 

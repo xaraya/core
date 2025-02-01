@@ -19,6 +19,41 @@ namespace Xaraya\Bridge\RestAPI;
  */
 class RestAPIRoutes
 {
+    public static string $pathPrefix = '/v1';
+    public static string $namePrefix = 'restapi-';
+    /** @var class-string<RestAPIHandler>|RestAPIHandler|null */
+    public static mixed $handlerClass = null;
+
+    /**
+     * Summary of setPathPrefix
+     * @param string $pathPrefix
+     * @return void
+     */
+    public static function setPathPrefix(string $pathPrefix): void
+    {
+        self::$pathPrefix = $pathPrefix;
+    }
+
+    /**
+     * Summary of setNamePrefix
+     * @param string $namePrefix
+     * @return void
+     */
+    public static function setNamePrefix(string $namePrefix): void
+    {
+        self::$namePrefix = $namePrefix;
+    }
+
+    /**
+     * Summary of setHandlerClass
+     * @param mixed $handlerClass
+     * @return void
+     */
+    public static function setHandlerClass(mixed $handlerClass): void
+    {
+        self::$handlerClass = $handlerClass;
+    }
+
     /**
      * Get REST API routes (in generic format)
      * @param string $pathPrefix
@@ -27,9 +62,11 @@ class RestAPIRoutes
      * @param array<mixed> $extra
      * @return array<mixed> array of name => [method(s), path, handler, options = []]
      */
-    public static function getRoutes($pathPrefix = '/v1', $namePrefix = 'restapi-', $restHandler = null, $extra = [])
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $restHandler = null, array $extra = []): array
     {
-        //$restHandler ??= RestAPIHandler::class;
+        $pathPrefix .= self::$pathPrefix;
+        $namePrefix .= self::$namePrefix;
+        $restHandler ??= self::$handlerClass;
         $routes = [];
 
         $routes = array_merge($routes, DataObjectAPIRoutes::getRoutes($pathPrefix, $namePrefix, $restHandler, $extra));

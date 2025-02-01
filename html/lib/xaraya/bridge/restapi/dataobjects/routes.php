@@ -17,8 +17,11 @@ namespace Xaraya\Bridge\RestAPI;
 /**
  * Class to define DataObject REST API routes
  */
-class DataObjectAPIRoutes
+class DataObjectAPIRoutes extends RestAPIRoutes
 {
+    public static string $pathPrefix = '/objects';
+    public static mixed $handlerClass = DataObjectAPIHandler::class;
+
     /**
      * Get DataObject REST API routes (in generic format)
      * @param string $pathPrefix
@@ -27,11 +30,12 @@ class DataObjectAPIRoutes
      * @param array<mixed> $extra
      * @return array<mixed> array of name => [method(s), path, handler, options = []]
      */
-    public static function getRoutes($pathPrefix, $namePrefix, $restHandler = null, $extra = [])
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $restHandler = null, array $extra = []): array
     {
+        $pathPrefix .= self::$pathPrefix;
+        $namePrefix .= self::$namePrefix;
+        $restHandler ??= self::$handlerClass;
         $routes = [];
-        $restHandler ??= DataObjectAPIHandler::class;
-        $pathPrefix .= '/objects';
 
         $path = $pathPrefix;
         $name = $namePrefix . 'getObjects';

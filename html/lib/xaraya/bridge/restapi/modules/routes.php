@@ -17,8 +17,11 @@ namespace Xaraya\Bridge\RestAPI;
 /**
  * Class to define REST API routes
  */
-class ModuleAPIRoutes
+class ModuleAPIRoutes extends RestAPIRoutes
 {
+    public static string $pathPrefix = '/modules';
+    public static mixed $handlerClass = ModuleAPIHandler::class;
+
     /**
      * Get Module REST API routes (in generic format)
      * @param string $pathPrefix
@@ -27,11 +30,12 @@ class ModuleAPIRoutes
      * @param array<mixed> $extra
      * @return array<mixed> array of name => [method(s), path, handler, options = []]
      */
-    public static function getRoutes($pathPrefix, $namePrefix, $restHandler = null, $extra = [])
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $restHandler = null, array $extra = []): array
     {
+        $pathPrefix .= self::$pathPrefix;
+        $namePrefix .= self::$namePrefix;
+        $restHandler ??= self::$handlerClass;
         $routes = [];
-        $restHandler ??= ModuleAPIHandler::class;
-        $pathPrefix .= '/modules';
 
         $path = $pathPrefix;
         $name = $namePrefix . 'getModules';
