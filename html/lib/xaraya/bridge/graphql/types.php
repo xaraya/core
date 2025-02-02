@@ -86,12 +86,14 @@ class GraphQLTypes
         if (in_array($name, ['query', 'mutation', 'mixed', 'serial'])) {
             return self::loadLazyType($name);
         }
+        // Schema doesn't accept lazy loading of InputObject types either
+        $input_ext = '_input';
+        if (str_ends_with($name, $input_ext)) {
+            return self::loadLazyType($name);
+        }
         if (in_array($name, ['subscription'])) {
             return;
         }
-        //if (!self::hasType($name)) {
-        //    throw new Exception("Unknown graphql type: " . $name);
-        //}
         // See https://github.com/webonyx/graphql-php/pull/557
         return static function () use ($name) {
             return self::loadLazyType($name);
@@ -256,7 +258,7 @@ class GraphQLTypes
         if (isset(self::$typeCache[$input])) {
             return self::$typeCache[$input];
         }
-        // make Object Type from BuildType for extra dynamicdata object types
+        // make InputObject Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extraTypes) || in_array(ucfirst($name), self::$extraTypes)) {
             $type = BuildType::make_input_type($name);
             if (!$type) {
@@ -265,8 +267,16 @@ class GraphQLTypes
             self::$typeCache[$input] = $type;
             return $type;
         }
+        // make InputObject Type for ModuleApi mutation
         if (!array_key_exists($name, self::$typeMapper)) {
-            throw new Exception("Unknown graphql type: " . $input);
+            $clazz = self::getTypeClass(self::$typeMapper['module_api']);
+            $clazz::load_config();
+            $type = $clazz::get_input_type($name);
+            if (!$type) {
+                throw new Exception("Unknown graphql type: " . $input);
+            }
+            self::$typeCache[$input] = $type;
+            return $type;
         }
         $clazz = self::getTypeClass(self::$typeMapper[$name]);
         // get input type from existing type class
