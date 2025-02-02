@@ -23,7 +23,7 @@ use Exception;
 /**
  * GraphQL ObjectType and query fields for "objects" dynamicdata object type
  */
-class DataObjectType extends BaseType
+class DataObjectType extends BaseObjectType
 {
     public static string $_xar_name   = 'Object';
     public static string $_xar_type   = 'object';

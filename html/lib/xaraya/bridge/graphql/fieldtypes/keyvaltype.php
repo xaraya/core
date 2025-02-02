@@ -19,7 +19,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType and (no) query fields for assoc array configuration = unserialized in "propertie(s)"
  */
-class KeyValType extends ObjectType implements InputObjectInterface
+class KeyValFieldType extends ObjectType implements InputObjectInterface
 {
     use InputObjectTrait;
 

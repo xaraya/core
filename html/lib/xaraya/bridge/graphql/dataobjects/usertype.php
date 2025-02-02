@@ -23,7 +23,7 @@ use Exception;
 /**
  * GraphQL ObjectType and query fields for "roles_users" dynamicdata object type
  */
-class UserType extends BaseType
+class UserObjectType extends BaseObjectType
 {
     public static string $_xar_name   = 'User';
     public static string $_xar_type   = 'user';

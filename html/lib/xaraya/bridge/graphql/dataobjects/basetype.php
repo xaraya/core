@@ -20,7 +20,7 @@ use GraphQL\Type\Definition\InputObjectType;
 /**
  * GraphQL ObjectType and query fields for "base" dynamicdata object type
  */
-class BaseType extends ObjectType implements QueriesInterface, MutationsInterface, DataObjectInterface, DeferredInterface, InputObjectInterface
+class BaseObjectType extends ObjectType implements QueriesInterface, MutationsInterface, DataObjectInterface, DeferredInterface, InputObjectInterface
 {
     use QueriesTrait;
     use MutationsTrait;

@@ -21,7 +21,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType and query fields for "sample" dynamicdata object type
  */
-class SampleType extends BaseType
+class SampleObjectType extends BaseObjectType
 {
     public static string $_xar_name   = 'Sample';
     public static string $_xar_type   = 'sample';

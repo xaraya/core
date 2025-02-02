@@ -20,7 +20,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType and query fields for "properties" dynamicdata object type
  */
-class PropertyType extends BaseType
+class DataPropertyType extends BaseObjectType
 {
     public static string $_xar_name   = 'Property';
     public static string $_xar_type   = 'property';

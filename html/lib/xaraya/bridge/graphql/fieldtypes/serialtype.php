@@ -20,7 +20,7 @@ use GraphQL\Language\AST\StringValueNode;
 /**
  * GraphQL ScalarType for serialized fields
  */
-class SerialType extends ScalarType
+class SerialFieldType extends ScalarType
 {
     public string $name = 'Serial';
     public ?string $description = 'Serialized value';

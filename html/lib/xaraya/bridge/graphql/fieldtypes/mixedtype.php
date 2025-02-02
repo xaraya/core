@@ -18,7 +18,7 @@ use GraphQL\Type\Definition\ScalarType;
 /**
  * GraphQL ScalarType for mixed type fields - used in keyval type instead of multival, or as generic args field
  */
-class MixedType extends ScalarType
+class MixedFieldType extends ScalarType
 {
     public string $name = 'Mixed';
     public ?string $description = 'Mixed type';

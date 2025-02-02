@@ -20,7 +20,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL UnionType for possibly recursive config value = unserialized in "propertie(s)" - NOT USED
  */
-class MultiValType extends UnionType
+class MultiValFieldType extends UnionType
 {
     public function __construct()
     {
