@@ -91,7 +91,6 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function getData($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null)
     {
-        $this->loadConfig();
         self::setTimer('start');
         if (!empty($schemaFile)) {
             self::$schemaFile = $schemaFile;
@@ -188,8 +187,11 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
                 self::setCached($cacheKey, $serializableResult);
             }
         }
-        if (self::$tracePath) {
-            $extensions['paths'] = self::$paths;
+        //if (self::$tracePath) {
+        //    $extensions['paths'] = self::$paths;
+        //}
+        if ($this->getContext()->enableTrace()) {
+            $extensions['paths'] = $this->getContext()->getTrace();
         }
         self::setTimer('stop');
         if (self::enableTimer()) {
@@ -401,8 +403,11 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
         if (!empty($variables) && is_string($variables)) {
             $variables = json_decode($variables, true);
         }
+        // load config before setting the context
+        $this->loadConfig();
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
+        $context->enableTrace(self::$tracePath);
         // @todo check if we already have a context? (via request or from elsewhere)
         $this->setContext($context);
         $result = $this->getData($query, $variables, $operationName);

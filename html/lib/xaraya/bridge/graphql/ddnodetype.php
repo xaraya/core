@@ -49,7 +49,7 @@ class DDNodeObjectType extends ObjectType
                 'object' => ['type' => Type::string()],
             ],
             'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
-                GraphQLHandler::tracePath(__CLASS__ . '::get_type_config: resolve');
+                $context->tracePath(__CLASS__ . '::get_type_config: resolve');
                 return $args;
             },
             'interfaces' => [

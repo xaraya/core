@@ -120,7 +120,7 @@ class UserObjectType extends BaseObjectType
         $fieldlist = ['id', 'name'];
         // get the DD items for a deferred list of item ids here
         $resolver = function ($itemids) use ($type, $object, $fieldlist) {
-            GraphQLHandler::tracePath(__CLASS__ . '::load_deferred: ' . $type, ['itemids' => $itemids]);
+            //$context->tracePath(__CLASS__ . '::load_deferred: ' . $type, ['itemids' => $itemids]);
             // @checkme create an extra object with 'username' property, add to extratypes and try extras_page{extras{...}}
             //$params = array('name' => $object);
             $params = ['name' => $object, 'fieldlist' => $fieldlist];

@@ -112,7 +112,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
         $resolver = function ($rootValue, $args, $context) {
             // disable caching for mutations
             GraphQLHandler::enableCache(false);
-            GraphQLHandler::tracePath(__CLASS__ . '::create_mutation_resolver: getToken');
+            $context->tracePath(__CLASS__ . '::create_mutation_resolver: getToken');
             if (empty($args['uname']) || empty($args['pass'])) {
                 throw new Exception('Invalid username or password');
             }
@@ -164,7 +164,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
         $resolver = function ($rootValue, $args, $context) {
             // disable caching for mutations
             GraphQLHandler::enableCache(false);
-            GraphQLHandler::tracePath(__CLASS__ . '::delete_mutation_resolver: deleteToken');
+            $context->tracePath(__CLASS__ . '::delete_mutation_resolver: deleteToken');
             if (empty($args['confirm'])) {
                 return false;
             }

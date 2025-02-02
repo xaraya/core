@@ -179,7 +179,7 @@ class GraphQLTypes
         if (array_key_exists($name, self::$baseTypes)) {
             return Type::{self::$baseTypes[$name]}();
         }
-        //GraphQLHandler::tracePath(['load_lazy_type', $name]);
+        //$context->tracePath(['load_lazy_type', $name]);
         $page_ext = '_page';
         if (str_ends_with($name, $page_ext)) {
             return self::getPageType(substr($name, 0, strlen($name) - strlen($page_ext)));
@@ -349,16 +349,16 @@ class GraphQLTypes
             $type = strtolower($name);
             //$clazz = self::getTypeClass($type);
             //if ($clazz !== "BaseType" && method_exists($clazz, "get_type_config")) {
-            //    GraphQLHandler::tracePath("type config $name defined in $clazz");
+            //    $context->tracePath("type config $name defined in $clazz");
             //    $classConfig = $clazz::get_type_config($name);
             //    //return $classConfig;
             //}
         }
         // @todo skip this and override default field resolver in executeQuery, or use one in basetype?
         if ($name == 'Query') {
-            GraphQLHandler::tracePath("query config $name");
+            //$context->tracePath("query config $name");
             //$fields = $typeConfig['fields']();
-            //GraphQLHandler::tracePath("query config fields " . implode(',', array_keys($fields)));
+            //$context->tracePath("query config fields " . implode(',', array_keys($fields)));
             //$typeConfig['fields'] = static function () use ($name) {
             //    $typeDef = BuildType::object_type_definition($name);
             //    //return $typeDef->getFields();
@@ -367,11 +367,11 @@ class GraphQLTypes
             // @checkme not possible to override page/list/item resolvers in child class by type here
             $typeConfig['resolveField'] = Queries::query_field_resolver($name);
         } elseif ($name == 'Mutation') {
-            GraphQLHandler::tracePath("mutation config $name");
+            //$context->tracePath("mutation config $name");
             // @checkme not possible to override create/update/delete resolvers in child class by type here
             $typeConfig['resolveField'] = Mutations::mutation_field_resolver($name);
         } else {
-            GraphQLHandler::tracePath("type config $name");
+            //$context->tracePath("type config $name");
             //$typeConfig['fields'] = static function () use ($name) {
             //    $typeDef = BuildType::object_type_definition($name);
             //    return $typeDef->getFields();

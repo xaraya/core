@@ -3,7 +3,7 @@
  * @package core\context
  * @subpackage context
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -28,6 +28,11 @@ sys::import('xaraya.context.user');
  */
 class Context extends ArrayObject implements ContextObjectInterface
 {
+    protected bool $enableTrace = false;
+    protected float $startTrace = 0;
+    /** @var array<mixed> */
+    protected array $tracePaths = [];
+
     /**
      * Get current requestId
      * @return string|null
@@ -122,9 +127,49 @@ class Context extends ArrayObject implements ContextObjectInterface
     }
 
     /**
+     * Get or set enableTrace
+     */
+    public function enableTrace(?bool $enable = null): bool
+    {
+        if (isset($enable)) {
+            $this->enableTrace = $enable;
+            $this->startTrace = microtime(true);
+            $this->tracePaths = [];
+            $this->tracePaths[] = [$this->startTrace, 'start trace', null];
+        }
+        return $this->enableTrace;
+    }
+
+    /**
+     * Summary of tracePath
+     * @param string $message
+     * @param mixed $infoPath
+     * @return void
+     */
+    public function tracePath($message, $infoPath = null)
+    {
+        if (!$this->enableTrace) {
+            return;
+        }
+        $elapsed = sprintf('%.3f', (microtime(true) - $this->startTrace) * 1000.0);
+        $this->tracePaths[] = [$elapsed, $message, $infoPath];
+    }
+
+    /**
+     * Summary of getTrace
+     * @return array<mixed>
+     */
+    public function getTrace()
+    {
+        $this->tracePath('stop trace');
+        return $this->tracePaths;
+    }
+
+    /**
      * Avoid issues with serialize, cfr. pager blockOptions with context
      * In fact, since the context is for a particular request, drop it altogether
      * @internal
+     * @return array<string, mixed>
      */
     public function __serialize(): array
     {
@@ -136,6 +181,7 @@ class Context extends ArrayObject implements ContextObjectInterface
     /**
      * Fill the context with the unserialized data
      * @internal
+     * @param array<string, mixed> $data
      */
     public function __unserialize(array $data): void
     {

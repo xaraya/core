@@ -39,6 +39,7 @@ class ContextFactory
             return static::fromGlobals($source);
         }
         // @todo use static::$mapping of context key to request attribute
+        /** @var Context<string, mixed> $context */
         // set context from request attributes
         $context = new Context((array) $request->getAttributes());
         // @todo don't save request in the context for now, unless we really need it later...
@@ -64,6 +65,7 @@ class ContextFactory
      */
     public static function fromGlobals($source = null)
     {
+        /** @var Context<string, mixed> $context */
         $context = new Context();
         $context['requestId'] = static::makeRequestId();
         // @todo see rest handler and graphql for getUserId()

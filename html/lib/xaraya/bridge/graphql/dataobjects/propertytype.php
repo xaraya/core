@@ -46,7 +46,7 @@ class DataPropertyType extends BaseObjectType
             'keys' => [
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
-                    GraphQLHandler::tracePath(__CLASS__ . '::get_object_fields: resolve keys', $info->path);
+                    $context->tracePath(__CLASS__ . '::get_object_fields: resolve keys', $info->path);
                     if (is_array($property)) {
                         return array_keys($property);
                     }
@@ -76,7 +76,7 @@ class DataPropertyType extends BaseObjectType
                 //'type' => Type::listOf(GraphQLTypes::getType("keyval")),
                 'type' => GraphQLTypes::getTypeList("keyval"),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
-                    GraphQLHandler::tracePath(__CLASS__ . '::get_object_fields: resolve configuration_kv', $info->path);
+                    $context->tracePath(__CLASS__ . '::get_object_fields: resolve configuration_kv', $info->path);
                     if (is_array($property) && isset($property['configuration'])) {
                         $values = @unserialize($property['configuration']);
                         if (empty($values)) {

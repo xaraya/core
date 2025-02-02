@@ -94,7 +94,7 @@ trait QueryPageTrait
             if (GraphQLHandler::hasCachedData($typename . '_page', $rootValue, $args, $context, $info)) {
                 return;
             }
-            GraphQLHandler::tracePath(__CLASS__ . '::page_query_resolver: ' . $typename, $info->path);
+            $context->tracePath(__CLASS__ . '::page_query_resolver: ' . $typename, $info->path);
             // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
             $allowed = array_flip(['order', 'offset', 'limit', 'filter', 'count']);
             $fields = $info->getFieldSelection(1);

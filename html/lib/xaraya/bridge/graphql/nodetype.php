@@ -45,9 +45,9 @@ class NodeInterfaceType extends InterfaceType
                 'id' => ['type' => Type::nonNull(Type::id())],
             ],
             'resolveType' => function ($value, $context, ResolveInfo $info) {
-                GraphQLHandler::tracePath(__CLASS__ . '::get_type_config: resolveType', $info->path);
-                //GraphQLHandler::tracePath($value);
-                //GraphQLHandler::tracePath(GraphQLObjects::getTypes());
+                $context->tracePath(__CLASS__ . '::get_type_config: resolveType', $info->path);
+                //$context->tracePath($value);
+                //$context->tracePath(GraphQLObjects::getTypes());
                 if (!is_array($value)) {
                     return Type::string();
                 }
@@ -74,7 +74,7 @@ class NodeInterfaceType extends InterfaceType
                     'id' => ['type' => Type::nonNull(Type::id())],
                 ],
                 'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
-                    GraphQLHandler::tracePath(__CLASS__ . '::get_query_fields: resolve');
+                    $context->tracePath(__CLASS__ . '::get_query_fields: resolve');
                     [$object, $id] = explode(':', $args['id']);
                     return ['global_id' => $args['id'], 'id' => $id, 'object' => $object];
                 },

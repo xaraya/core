@@ -559,7 +559,7 @@ class BuildType
     public static function default_field_resolver($useTypeClasses = true)
     {
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($useTypeClasses) {
-            //GraphQLHandler::tracePath(__CLASS__ . '::default_field_resolver: ' . $info->parentType->name . '.' . $info->fieldName, $info->path);
+            //$context->tracePath(__CLASS__ . '::default_field_resolver: ' . $info->parentType->name . '.' . $info->fieldName, $info->path);
 
             // @checkme use standard default field resolver for any known types - will we need this?
             if ($info->parentType->isBuiltInType()) {
@@ -584,9 +584,9 @@ class BuildType
      */
     public static function keys_field_resolver($typename, $fieldname)
     {
-        GraphQLHandler::tracePath("use keys field resolver for type $typename field $fieldname");
+        //$context->tracePath("use keys field resolver for type $typename field $fieldname");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
-            GraphQLHandler::tracePath(__CLASS__ . '::keys_field_resolver: ' . $typename . '.' . $fieldname);
+            $context->tracePath(__CLASS__ . '::keys_field_resolver: ' . $typename . '.' . $fieldname);
             if (empty($values)) {
                 return;
             }
@@ -615,9 +615,9 @@ class BuildType
      */
     public static function serial_field_resolver($typename, $fieldname)
     {
-        GraphQLHandler::tracePath("use serial field resolver for type $typename field $fieldname");
+        //$context->tracePath("use serial field resolver for type $typename field $fieldname");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
-            GraphQLHandler::tracePath(__CLASS__ . '::serial_field_resolver: ' . $typename . '.' . $fieldname);
+            $context->tracePath(__CLASS__ . '::serial_field_resolver: ' . $typename . '.' . $fieldname);
             // @todo handle case where values is object
             if (is_string($values[$fieldname]) && !empty($values[$fieldname])) {
                 $result = @unserialize($values[$fieldname]);
@@ -638,9 +638,9 @@ class BuildType
      */
     public static function bson_field_resolver($typename, $fieldname)
     {
-        GraphQLHandler::tracePath("use bson field resolver for type $typename field $fieldname");
+        //$context->tracePath("use bson field resolver for type $typename field $fieldname");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
-            GraphQLHandler::tracePath(__CLASS__ . '::bson_field_resolver: ' . $typename . '.' . $fieldname);
+            $context->tracePath(__CLASS__ . '::bson_field_resolver: ' . $typename . '.' . $fieldname);
             // handle case where values is object - see MongoDB\Model\BSONDocument and MongoDB\Model\BSONArray
             if (is_object($values[$fieldname]) && !empty($values[$fieldname])) {
                 $result = $values[$fieldname]->jsonSerialize();
@@ -662,9 +662,9 @@ class BuildType
      */
     public static function alias_field_resolver($typename, $fieldname, $fieldalias)
     {
-        GraphQLHandler::tracePath("use alias field resolver for type $typename field $fieldname = $fieldalias");
+        //$context->tracePath("use alias field resolver for type $typename field $fieldname = $fieldalias");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname, $fieldalias) {
-            GraphQLHandler::tracePath(__CLASS__ . '::alias_field_resolver: ' . $typename . '.' . $fieldname);
+            $context->tracePath(__CLASS__ . '::alias_field_resolver: ' . $typename . '.' . $fieldname);
             if (is_array($values)) {
                 return $values[$fieldname] ?? ($values[$fieldalias] ?? null);
             }
@@ -684,9 +684,9 @@ class BuildType
      */
     public static function keyval_field_resolver($typename, $fieldname, $fieldalias)
     {
-        GraphQLHandler::tracePath("use keyval field resolver for type $typename field $fieldname");
+        //$context->tracePath("use keyval field resolver for type $typename field $fieldname");
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname, $fieldalias) {
-            GraphQLHandler::tracePath(__CLASS__ . '::keyval_field_resolver: ' . $typename . '.' . $fieldname);
+            $context->tracePath(__CLASS__ . '::keyval_field_resolver: ' . $typename . '.' . $fieldname);
             $result = null;
             if (is_array($values)) {
                 $result = $values[$fieldname] ?? ($values[$fieldalias] ?? null);
@@ -725,10 +725,10 @@ class BuildType
      */
     public static function basetype_field_resolver($typename, $fieldname)
     {
-        GraphQLHandler::tracePath("use basetype field resolver for type $typename field $fieldname");
+        //$context->tracePath("use basetype field resolver for type $typename field $fieldname");
         // @checkme use standard default field resolver here?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
-            GraphQLHandler::tracePath(__CLASS__ . '::basetype_field_resolver: ' . $typename . '.' . $fieldname);
+            $context->tracePath(__CLASS__ . '::basetype_field_resolver: ' . $typename . '.' . $fieldname);
             if (is_array($values)) {
                 return $values[$fieldname] ?? null;
             }
@@ -788,7 +788,7 @@ class BuildType
             // @checkme not possible to override page/list/item resolvers in child class by type here
             $field_resolver = Queries::query_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
-            GraphQLHandler::tracePath("use query field resolver for type $typename");
+            $context->tracePath("use query field resolver for type $typename");
             return $field_resolver;
         }
 
@@ -799,7 +799,7 @@ class BuildType
             // @checkme not possible to override create/update/delete resolvers in child class by type here
             $field_resolver = Mutations::mutation_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
-            GraphQLHandler::tracePath("use mutation field resolver for type $typename");
+            $context->tracePath("use mutation field resolver for type $typename");
             return $field_resolver;
         }
 
@@ -808,7 +808,7 @@ class BuildType
         if (str_ends_with($typename, needle: $page_ext)) {
             $field_resolver = $field_resolvers['*']['*'];
             $field_resolvers[$typename]['*'] = $field_resolver;
-            GraphQLHandler::tracePath("use default field resolver for page type $typename");
+            $context->tracePath("use default field resolver for page type $typename");
             return $field_resolver;
         }
 
@@ -819,7 +819,7 @@ class BuildType
             if (!is_subclass_of($clazz, ObjectType::class)) {
                 $field_resolver = $field_resolvers['*']['*'];
                 $field_resolvers[$typename]['*'] = $field_resolver;
-                GraphQLHandler::tracePath("use default field resolver for type $typename = class " . $clazz);
+                $context->tracePath("use default field resolver for type $typename = class " . $clazz);
                 return $field_resolver;
             }
             //$type_config = $clazz::get_type_config($typename);
@@ -829,7 +829,7 @@ class BuildType
                 if ($type_def->resolveFieldFn) {
                     $field_resolver = $type_def->resolveFieldFn;
                     $field_resolvers[$typename]['*'] = $field_resolver;
-                    GraphQLHandler::tracePath("use resolveField fn for type $typename = " . (string) $type_def);
+                    $context->tracePath("use resolveField fn for type $typename = " . (string) $type_def);
                     return $field_resolver;
                 }
                 // use resolve function for field if available
@@ -837,14 +837,14 @@ class BuildType
                     foreach ($type_def->getFields() as $field_def) {
                         if ($field_def->resolveFn) {
                             $field_resolvers[$typename][$field_def->name] = $field_def->resolveFn;
-                            GraphQLHandler::tracePath("use resolve fn for type $typename = " . (string) $type_def . " field " . $field_def->name);
+                            $context->tracePath("use resolve fn for type $typename = " . (string) $type_def . " field " . $field_def->name);
                         }
                     }
                     if (isset($field_resolvers[$typename][$fieldname])) {
                         return $field_resolvers[$typename][$fieldname];
                     }
                 } catch (Exception $e) {
-                    GraphQLHandler::tracePath("Unknown fields for type $typename = " . (string) $type_def . ": " . $e->getMessage());
+                    $context->tracePath("Unknown fields for type $typename = " . (string) $type_def . ": " . $e->getMessage());
                 }
             }
         }
@@ -863,7 +863,7 @@ class BuildType
         } catch (Exception) {
             $field_resolver = $field_resolvers['*']['*'];
             $field_resolvers[$typename]['*'] = $field_resolver;
-            GraphQLHandler::tracePath("Unknown object $object - use default field resolver for type $typename");
+            $context->tracePath("Unknown object $object - use default field resolver for type $typename");
             return $field_resolver;
         }
         if (empty($fieldspecs)) {
@@ -884,11 +884,11 @@ class BuildType
 
         if ($fieldtype == 'deferred') {
             $field_resolver = self::deferred_field_resolver($objecttype, $fieldname);
-            GraphQLHandler::tracePath("use deferred field resolver for type $typename field $fieldname");
+            $context->tracePath("use deferred field resolver for type $typename field $fieldname");
         } elseif (in_array($fieldtype, ['deferitem', 'deferlist', 'defermany'])) {
             $defername = array_shift($fieldspecs[$fieldname]);
             $field_resolver = self::deferred_field_resolver($defername, $fieldname, $object);
-            GraphQLHandler::tracePath("use $fieldtype property resolver for object $object property $fieldname [$defername]");
+            $context->tracePath("use $fieldtype property resolver for object $object property $fieldname [$defername]");
         } elseif ($fieldtype == 'typelist') {
             $field_resolver = self::serial_field_resolver($typename, $fieldname);
         } elseif ($fieldtype == 'basetype' && $fieldspec == 'Serial') {
@@ -916,7 +916,7 @@ class BuildType
                 throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
             }
         } else {
-            GraphQLHandler::tracePath("object field $object.$fieldname", ['fieldspecs' => $fieldspecs[$fieldname]]);
+            $context->tracePath("object field $object.$fieldname", ['fieldspecs' => $fieldspecs[$fieldname]]);
             throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
         }
 
@@ -979,7 +979,7 @@ class BuildType
      */
     public static function object_type_resolver($name)
     {
-        //GraphQLHandler::tracePath("type resolver $name");
+        //$context->tracePath("type resolver $name");
         return self::object_field_resolver($name);
     }
 
@@ -1005,7 +1005,7 @@ class BuildType
         } else {
             $type = false;
         }
-        GraphQLHandler::tracePath("object type $name = " . (string) $type);
+        $context->tracePath("object type $name = " . (string) $type);
         return $type;
     }
 }

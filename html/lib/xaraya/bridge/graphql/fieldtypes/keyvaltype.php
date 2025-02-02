@@ -60,7 +60,7 @@ class KeyValFieldType extends ObjectType implements InputObjectInterface
              */
             /**
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
-                GraphQLHandler::tracePath(__CLASS__ . '::get_type_config: resolveField ' . $info->fieldName, $info->path);
+                $context->tracePath(__CLASS__ . '::get_type_config: resolveField ' . $info->fieldName, $info->path);
                 if (empty($object)) {
                     return null;
                 }

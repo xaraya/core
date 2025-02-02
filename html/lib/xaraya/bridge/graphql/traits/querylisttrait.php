@@ -98,7 +98,7 @@ trait QueryListTrait
             if (GraphQLHandler::hasCachedData($typename . '_list', $rootValue, $args, $context, $info)) {
                 return;
             }
-            GraphQLHandler::tracePath(__CLASS__ . '::list_query_resolver: ' . $typename, $info->path);
+            $context->tracePath(__CLASS__ . '::list_query_resolver: ' . $typename, $info->path);
             $fields = $info->getFieldSelection(1);
             if (GraphQLHandler::hasQueryFields($typename)) {
                 $fieldlist = GraphQLHandler::getQueryFields($typename);
