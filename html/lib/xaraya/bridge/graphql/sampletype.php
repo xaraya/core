@@ -46,7 +46,7 @@ class SampleType extends BaseType
     /**
     public function __construct()
     {
-        $config = static::_xar_get_type_config(static::$_xar_name);
+        $config = $this->get_type_config(static::$_xar_name);
         // you need to pass the type config to the parent here, if you want to override the constructor
         parent::__construct($config);
     }
@@ -56,15 +56,15 @@ class SampleType extends BaseType
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
     /**
-    public static function _xar_get_type_config($typename, $object = null)
+    public function get_type_config($typename, $object = null)
     {
         $object ??= GraphQLInflector::pluralize($typename);
         return [
             'name' => ucwords($typename, '_'),
             'fields' => function () use ($object) {
-                return static::_xar_get_object_fields($object);
+                return $this->get_object_fields($object);
             },
-            'resolveField' => static::_xar_object_field_resolver($typename, $object),
+            'resolveField' => $this->object_field_resolver($typename, $object),
         ];
     }
      */
@@ -74,7 +74,7 @@ class SampleType extends BaseType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_object_fields($object): array
+    public function get_object_fields($object): array
     {
         $fields = [
             'id' => Type::nonNull(Type::id()),
@@ -84,18 +84,18 @@ class SampleType extends BaseType
             // @checkme use deferred field or property resolver here with default load resolver = DataObjectLoader
             'partner' => [
                 'type' => GraphQLTypes::getType('sample'),
-                //'resolve' => self::_xar_deferred_field_resolver('sample', 'partner'),
-                'resolve' => self::_xar_deferred_property_resolver('sample', 'partner', $object),
+                //'resolve' => self::deferred_field_resolver('sample', 'partner'),
+                'resolve' => self::deferred_property_resolver('sample', 'partner', $object),
             ],
             'parents' => [
                 'type' => GraphQLTypes::getTypeList('sample'),
-                //'resolve' => self::_xar_deferred_field_resolver('sample', 'parents'),
-                'resolve' => self::_xar_deferred_property_resolver('sample', 'parents', $object),
+                //'resolve' => self::deferred_field_resolver('sample', 'parents'),
+                'resolve' => self::deferred_property_resolver('sample', 'parents', $object),
             ],
             'children' => [
                 'type' => GraphQLTypes::getTypeList('sample'),
-                //'resolve' => self::_xar_deferred_field_resolver('sample', 'children'),
-                'resolve' => self::_xar_deferred_property_resolver('sample', 'children', $object),
+                //'resolve' => self::deferred_field_resolver('sample', 'children'),
+                'resolve' => self::deferred_property_resolver('sample', 'children', $object),
             ],
         ];
         return $fields;
@@ -104,9 +104,9 @@ class SampleType extends BaseType
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_fields($object, &$newType): array
+    public static function get_input_fields($object, &$newType): array
     {
-        // return static::_xar_get_object_fields($object);
+        // return static::get_object_fields($object);
         $fields = [
             'id' => Type::id(),  // allow null for create here
             'name' => Type::string(),
@@ -127,7 +127,7 @@ class SampleType extends BaseType
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_object_field_resolver($type, $object = null): ?callable
+    public function object_field_resolver($type, $object = null): ?callable
     {
         return null;
     }
@@ -139,9 +139,9 @@ class SampleType extends BaseType
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_load_deferred($type): ?callable
+    public static function load_deferred($type): ?callable
     {
-        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        // support equivalent of overridden load_deferred in inheritance (e.g. usertype)
         // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
         return null;
     }

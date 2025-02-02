@@ -31,14 +31,14 @@ interface QueryItemInterface
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_item_query($itemname, $typename, $object): array;
+    public static function get_item_query($itemname, $typename, $object): array;
     /**
      * Get the item query resolver for the object type
      * @param mixed $typename
      * @param mixed $object
      * @return callable
      */
-    public static function _xar_item_query_resolver($typename, $object = null): callable;
+    public static function item_query_resolver($typename, $object = null): callable;
 }
 
 /**
@@ -53,7 +53,7 @@ trait QueryItemTrait
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_item_query($itemname, $typename, $object): array
+    public static function get_item_query($itemname, $typename, $object): array
     {
         return [
             'name' => $itemname,
@@ -65,7 +65,7 @@ trait QueryItemTrait
             //'extensions' => [
             //    'access' => 'display',
             //],
-            'resolve' => static::_xar_item_query_resolver($typename, $object),
+            'resolve' => static::item_query_resolver($typename, $object),
         ];
     }
 
@@ -78,7 +78,7 @@ trait QueryItemTrait
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_item_query_resolver($typename, $object = null): callable
+    public static function item_query_resolver($typename, $object = null): callable
     {
         // when using type config decorator and object_query_resolver
         $object ??= GraphQLInflector::pluralize($typename);
@@ -139,4 +139,9 @@ trait QueryItemTrait
         };
         return $resolver;
     }
+}
+
+class QueryItem implements QueryItemInterface
+{
+    use QueryItemTrait;
 }

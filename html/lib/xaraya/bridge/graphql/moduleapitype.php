@@ -73,7 +73,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
 
     public function __construct()
     {
-        $config = static::_xar_get_type_config('Module_Api');
+        $config = $this->get_type_config('Module_Api');
         GraphQLHandler::setTimer('new ' . $config['name']);
         parent::__construct($config);
     }
@@ -84,7 +84,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_type_config($typename, $object = null)
+    public function get_type_config($typename, $object = null)
     {
         return [
             'name' => 'Module_Api',
@@ -93,11 +93,11 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     }
 
     /**
-     * Summary of _xar_load_config
+     * Summary of load_config
      * @throws \Exception
      * @return void
      */
-    public static function _xar_load_config()
+    public static function load_config()
     {
         GraphQLHandler::loadModules();
         foreach (GraphQLHandler::getModules() as $itemid => $info) {
@@ -139,14 +139,14 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
                 }
                 if ($item['method'] == 'post' || !empty($item['requestBody'])) {
                     if (!empty($item['requestBody']) && !empty($item['requestBody']['application/json'])) {
-                        $item['args'] = static::_xar_parse_api_parameters($item['requestBody']['application/json']);
+                        $item['args'] = static::parse_api_parameters($item['requestBody']['application/json']);
                     }
                     if (!array_key_exists($name, static::$_xar_mutations)) {
                         static::$_xar_mutations[$name] = $item;
                     }
                 } elseif (!array_key_exists($name, static::$_xar_queries)) {
                     if (isset($item['parameters'])) {
-                        $item['args'] = static::_xar_parse_api_parameters($item['parameters']);
+                        $item['args'] = static::parse_api_parameters($item['parameters']);
                     }
                     static::$_xar_queries[$name] = $item;
                 }
@@ -155,11 +155,11 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     }
 
     /**
-     * Summary of _xar_parse_api_parameters
+     * Summary of parse_api_parameters
      * @param mixed $parameters
      * @return array<string, mixed>
      */
-    public static function _xar_parse_api_parameters($parameters)
+    public static function parse_api_parameters($parameters)
     {
         $properties = [];
         // @checkme handle more complex parameters like arrays of itemids for getitemlinks
@@ -192,39 +192,39 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     }
 
     /**
-     * Summary of _xar_get_query_fields
+     * Summary of get_query_fields
      * @return array<mixed>
      */
-    public static function _xar_get_query_fields(): array
+    public static function get_query_fields(): array
     {
-        static::_xar_load_config();
+        static::load_config();
         $fields = [];
         foreach (static::$_xar_queries as $name => $func) {
-            $fields[] = static::_xar_get_query_field($name, $func);
+            $fields[] = static::get_query_field($name, $func);
         }
         return $fields;
     }
 
     /**
-     * Summary of _xar_get_query_field
+     * Summary of get_query_field
      * @param mixed $name
      * @param mixed $func
      * @throws \Exception
      * @return array<string, mixed>
      */
-    public static function _xar_get_query_field($name, $func = []): array
+    public static function get_query_field($name, $func = []): array
     {
         if (empty($func)) {
             throw new Exception("Unknown module_api query '$name'");
         }
         // @todo add loadModules(), analyze parameters and requestBody + get rid of module, type and func args
-        //$argstype = static::_xar_get_param_fielddef($func['args']);
+        //$argstype = static::get_param_fielddef($func['args']);
         // @todo add loadModules(), analyze response and mediatype + create result type per function if needed
-        $resulttype = static::_xar_get_param_fielddef($func['result']);
-        $fields = static::_xar_parse_input_args($name, $func);
+        $resulttype = static::get_param_fielddef($func['result']);
+        $fields = static::parse_input_args($name, $func);
         // @checkme add paging parameters if specified in getlist.php
         if (!empty($func['paging'])) {
-            $fields = array_merge($fields, static::_xar_get_paging_args());
+            $fields = array_merge($fields, static::get_paging_args());
         }
         return [
             'name' => $name,
@@ -237,16 +237,16 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
             //    'args' => $argstype,
             //],
             'args' => $fields,
-            'resolve' => static::_xar_call_query_resolver($func),
+            'resolve' => static::call_query_resolver($func),
         ];
     }
 
     /**
-     * Summary of _xar_get_param_fielddef
+     * Summary of get_param_fielddef
      * @param mixed $param
      * @return array<string, mixed>
      */
-    public static function _xar_get_param_fielddef($param)
+    public static function get_param_fielddef($param)
     {
         if (empty($param)) {
             $typedef = ['type' => GraphQLTypes::getType('mixed')];
@@ -297,7 +297,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
      * @throws \Exception
      * @return \Closure
      */
-    public static function _xar_call_query_resolver($func)
+    public static function call_query_resolver($func)
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($func) {
             GraphQLHandler::tracePath(array_merge($info->path, ["module_api call query"]));
@@ -320,40 +320,40 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
                 $args['args'] = array_merge($func['default'], $args['args']);
             }
             // @checkme pass along the $args['args'] part here
-            return static::_xar_call_module_function($func['module'], $func['type'], $func['func'], $args['args'], $userId, $fields);
+            return static::call_module_function($func['module'], $func['type'], $func['func'], $args['args'], $context, $userId, $fields);
         };
         return $resolver;
     }
 
     /**
-     * Summary of _xar_get_mutation_fields
+     * Summary of get_mutation_fields
      * @return array<mixed>
      */
-    public static function _xar_get_mutation_fields(): array
+    public static function get_mutation_fields(): array
     {
-        static::_xar_load_config();
+        static::load_config();
         $fields = [];
         foreach (static::$_xar_mutations as $name => $func) {
-            $fields[] = static::_xar_get_mutation_field($name, $func);
+            $fields[] = static::get_mutation_field($name, $func);
         }
         return $fields;
     }
 
     /**
-     * Summary of _xar_get_mutation_field
+     * Summary of get_mutation_field
      * @param mixed $name
      * @param mixed $func
      * @throws \Exception
      * @return array<string, mixed>
      */
-    public static function _xar_get_mutation_field($name, $func = []): array
+    public static function get_mutation_field($name, $func = []): array
     {
         if (empty($func)) {
             throw new Exception("Unknown module_api mutation '$name'");
         }
         // @todo add loadModules(), analyze parameters and requestBody + get rid of module, type and func args
         // @todo add loadModules(), analyze response and mediatype + create result type per function if needed
-        $resulttype = static::_xar_get_param_fielddef($func['result']);
+        $resulttype = static::get_param_fielddef($func['result']);
         return [
             'name' => $name,
             'description' => 'Call ' . $func['module'] . ' ' . $func['type'] . 'api ' . $func['func'] . ' function via GraphQL',
@@ -365,26 +365,26 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
                 //'args' => ['type' => GraphQLTypes::getType('mixed')],
                 //'input' => GraphQLTypes::getInputType($name),
                 'input' => function () use ($name) {
-                    return static::_xar_create_input_type($name);
+                    return static::create_input_type($name);
                 },
             ],
-            'resolve' => static::_xar_call_mutation_resolver($func),
+            'resolve' => static::call_mutation_resolver($func),
         ];
     }
 
     // @checkme for dynamically created types like the module api input types per function
     /**
-     * Summary of _xar_create_input_type
+     * Summary of create_input_type
      * @param mixed $name
      * @return InputObjectType|mixed
      */
-    public static function _xar_create_input_type($name)
+    public static function create_input_type($name)
     {
         $typename = ucwords($name . '_input', '_');
         if (GraphQLTypes::hasType($typename)) {
             return GraphQLTypes::getType($typename);
         }
-        $newType = static::_xar_get_input_type($name);
+        $newType = static::get_input_type($name);
         GraphQLTypes::setType($typename, $newType);
         return $newType;
     }
@@ -392,23 +392,23 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     /**
      * Make a generic Input Object Type for create/update mutations - @checkme these are created for each function
      */
-    public static function _xar_get_input_type($name, $object = null): InputObjectType
+    public static function get_input_type($name, $object = null): InputObjectType
     {
         $input = ucwords($name . '_input', '_');
         $func = static::$_xar_mutations[$name];
         $description = 'Input for ' . $func['module'] . ' ' . $func['type'] . 'api ' . $func['func'] . ' function';
         // https://webonyx.github.io/graphql-php/type-definitions/object-types/#recurring-and-circular-types
-        // $fields = static::_xar_get_input_fields($object);
+        // $fields = static::get_input_fields($object);
         $newType = new InputObjectType([
             'name' => $input,
             'description' => $description,
             //'fields' => function () use ($name, &$newType) {
-            //    return static::_xar_get_input_fields($name, $newType);
+            //    return static::get_input_fields($name, $newType);
             //},
             'fields' => function () use ($name, $func) {
-                return static::_xar_parse_input_args($name, $func);
+                return static::parse_input_args($name, $func);
             },
-            'parseValue' => static::_xar_input_value_parser($name, $object),
+            'parseValue' => static::input_value_parser($name, $object),
         ]);
         return $newType;
     }
@@ -416,19 +416,19 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     /**
      * This method *may* be overridden for a specific module api function, but it doesn't have to be
      */
-    public static function _xar_get_input_fields($name, &$newType = null): array
+    public static function get_input_fields($name, &$newType = null): array
     {
         $func = static::$_xar_mutations[$name];
-        return static::_xar_parse_input_args($name, $func);
+        return static::parse_input_args($name, $func);
     }
 
     /**
-     * Summary of _xar_parse_input_args
+     * Summary of parse_input_args
      * @param mixed $name
      * @param mixed $func
      * @return array<string, mixed>
      */
-    public static function _xar_parse_input_args($name, $func)
+    public static function parse_input_args($name, $func)
     {
         if (empty($func['args'])) {
             return [];
@@ -437,11 +437,11 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
         if (is_array($func['args']) && !is_numeric(array_key_first($func['args']))) {
             $fields = [];
             foreach ($func['args'] as $key => $value) {
-                $fields[$key] = static::_xar_get_param_fielddef($value);
+                $fields[$key] = static::get_param_fielddef($value);
             }
             return $fields;
         }
-        $argstype = static::_xar_get_param_fielddef($func['args']);
+        $argstype = static::get_param_fielddef($func['args']);
         $fields = [
             'module' => ['type' => Type::string(), 'defaultValue' => $func['module']],
             'type' => ['type' => Type::string(), 'defaultValue' => $func['type']],
@@ -452,10 +452,10 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     }
 
     /**
-     * Summary of _xar_get_paging_args
+     * Summary of get_paging_args
      * @return array<string, mixed>
      */
-    public static function _xar_get_paging_args()
+    public static function get_paging_args()
     {
         $fields = [
             'order' => Type::string(),
@@ -475,7 +475,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_input_value_parser($name, $object): ?callable
+    public static function input_value_parser($name, $object): ?callable
     {
         return null;
     }
@@ -488,7 +488,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
      * @throws \Exception
      * @return \Closure
      */
-    public static function _xar_call_mutation_resolver($func)
+    public static function call_mutation_resolver($func)
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($func) {
             GraphQLHandler::tracePath(array_merge($info->path, ["module_api call mutation"]));
@@ -517,29 +517,30 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
                 $args['args'] = array_merge($func['default'], $args['args']);
             }
             // @checkme pass along the $args['args'] part here
-            return static::_xar_call_module_function($func['module'], $func['type'], $func['func'], $args['args'], $userId, $fields);
+            return static::call_module_function($func['module'], $func['type'], $func['func'], $args['args'], $context, $userId, $fields);
         };
         return $resolver;
     }
 
     /**
-     * Summary of _xar_call_module_function
+     * Summary of call_module_function
      * @param mixed $module
      * @param mixed $type
      * @param mixed $func
      * @param mixed $args
+     * @param mixed $context
      * @param mixed $userId
      * @param mixed $fields
      * @return mixed
      */
-    public static function _xar_call_module_function($module, $type, $func, $args, $userId, $fields)
+    public static function call_module_function($module, $type, $func, $args, $context, $userId, $fields)
     {
         //$role = xarRoles::getRole($userId);
         //$rolename = $role->getName();
         xarMod::init();
         xarUser::init();
         GraphQLHandler::tracePath(["Calling $module $type $func for user $userId", $args, $fields]);
-        return xarMod::apiFunc($module, $type, $func, $args);
+        return xarMod::apiFunc($module, $type, $func, $args, $context);
         //$values = ['func_args' => $args];
         //return $values;
     }

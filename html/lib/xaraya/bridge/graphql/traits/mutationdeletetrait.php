@@ -30,7 +30,7 @@ interface MutationDeleteInterface
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_delete_mutation($name, $typename, $object): array;
+    public static function get_delete_mutation($name, $typename, $object): array;
     /**
      * Get the delete mutation resolver for the object type
      * @param mixed $typename
@@ -38,7 +38,7 @@ interface MutationDeleteInterface
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_delete_mutation_resolver($typename, $object = null): callable;
+    public static function delete_mutation_resolver($typename, $object = null): callable;
 }
 
 
@@ -54,7 +54,7 @@ trait MutationDeleteTrait
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_delete_mutation($name, $typename, $object): array
+    public static function get_delete_mutation($name, $typename, $object): array
     {
         return [
             'name' => $name,
@@ -66,7 +66,7 @@ trait MutationDeleteTrait
             //'extensions' => [
             //    'access' => 'delete',
             //],
-            'resolve' => static::_xar_delete_mutation_resolver($typename, $object),
+            'resolve' => static::delete_mutation_resolver($typename, $object),
         ];
     }
 
@@ -79,7 +79,7 @@ trait MutationDeleteTrait
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_delete_mutation_resolver($typename, $object = null): callable
+    public static function delete_mutation_resolver($typename, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations
@@ -107,4 +107,9 @@ trait MutationDeleteTrait
         };
         return $resolver;
     }
+}
+
+class MutationDelete implements MutationDeleteInterface
+{
+    use MutationDeleteTrait;
 }

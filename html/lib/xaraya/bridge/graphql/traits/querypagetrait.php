@@ -30,7 +30,7 @@ interface QueryPageInterface
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_page_query($pagename, $typename, $object): array;
+    public static function get_page_query($pagename, $typename, $object): array;
     /**
      * Get the paginated list query resolver for the object type
      *
@@ -39,7 +39,7 @@ interface QueryPageInterface
      * @param mixed $object
      * @return callable
      */
-    public static function _xar_page_query_resolver($typename, $object = null): callable;
+    public static function page_query_resolver($typename, $object = null): callable;
 }
 
 /**
@@ -54,7 +54,7 @@ trait QueryPageTrait
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_page_query($pagename, $typename, $object): array
+    public static function get_page_query($pagename, $typename, $object): array
     {
         return [
             'name' => $pagename,
@@ -72,7 +72,7 @@ trait QueryPageTrait
                 ],
                 'filter' => Type::listOf(Type::string()),
             ],
-            'resolve' => static::_xar_page_query_resolver($typename, $object),
+            'resolve' => static::page_query_resolver($typename, $object),
         ];
     }
 
@@ -85,7 +85,7 @@ trait QueryPageTrait
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_page_query_resolver($typename, $object = null): callable
+    public static function page_query_resolver($typename, $object = null): callable
     {
         // when using type config decorator and object_query_resolver
         $object ??= GraphQLInflector::pluralize($typename);
@@ -167,4 +167,9 @@ trait QueryPageTrait
         };
         return $resolver;
     }
+}
+
+class QueryPage implements QueryPageInterface
+{
+    use QueryPageTrait;
 }

@@ -31,7 +31,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
 
     public function __construct()
     {
-        $config = static::_xar_get_type_config('Token');
+        $config = $this->get_type_config('Token');
         parent::__construct($config);
     }
 
@@ -41,7 +41,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_type_config($typename, $object = null)
+    public function get_type_config($typename, $object = null)
     {
         return [
             'name' => $typename,
@@ -55,14 +55,14 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
     }
 
     /**
-     * Summary of _xar_get_mutation_fields
+     * Summary of get_mutation_fields
      * @return array<mixed>
      */
-    public static function _xar_get_mutation_fields()
+    public static function get_mutation_fields()
     {
         $fields = [];
         foreach (static::$_xar_mutations as $kind => $name) {
-            $fields[] = static::_xar_get_mutation_field($name, $kind);
+            $fields[] = static::get_mutation_field($name, $kind);
         }
         return $fields;
     }
@@ -74,11 +74,11 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
      * @throws \Exception
      * @return array<string, mixed>
      */
-    public static function _xar_get_mutation_field($name, $kind = 'token')
+    public static function get_mutation_field($name, $kind = 'token')
     {
         return match ($name) {
-            'getToken' => static::_xar_get_create_mutation($name),
-            'deleteToken' => static::_xar_get_delete_mutation($name),
+            'getToken' => static::get_create_mutation($name),
+            'deleteToken' => static::get_delete_mutation($name),
             default => throw new Exception("Unknown '$kind' mutation '$name'"),
         };
     }
@@ -86,7 +86,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
     /**
      * Get create mutation field for this object type
      */
-    public static function _xar_get_create_mutation($name, $typename = '', $object = null): array
+    public static function get_create_mutation($name, $typename = '', $object = null): array
     {
         return [
             'name' => 'getToken',
@@ -97,7 +97,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
                 'pass' => ['type' => Type::string()],
                 'access' => ['type' => Type::string(), 'defaultValue' => 'display'],
             ],
-            'resolve' => static::_xar_create_mutation_resolver($name),
+            'resolve' => static::create_mutation_resolver($name),
         ];
     }
 
@@ -106,7 +106,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_create_mutation_resolver($typename, $object = null): callable
+    public static function create_mutation_resolver($typename, $object = null): callable
     {
         //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
         $resolver = function ($rootValue, $args, $context) {
@@ -140,7 +140,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
     /**
      * Get delete mutation field for this object type
      */
-    public static function _xar_get_delete_mutation($name, $typename = '', $object = null): array
+    public static function get_delete_mutation($name, $typename = '', $object = null): array
     {
         return [
             'name' => $name,
@@ -149,7 +149,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
             'args' => [
                 'confirm' => ['type' => Type::boolean(), 'defaultValue' => false],
             ],
-            'resolve' => static::_xar_delete_mutation_resolver($name),
+            'resolve' => static::delete_mutation_resolver($name),
         ];
     }
 
@@ -158,7 +158,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_delete_mutation_resolver($typename, $object = null): callable
+    public static function delete_mutation_resolver($typename, $object = null): callable
     {
         //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
         $resolver = function ($rootValue, $args, $context) {

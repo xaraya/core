@@ -38,7 +38,7 @@ class PropertyType extends BaseType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_object_fields($object): array
+    public function get_object_fields($object): array
     {
         $fields = [
             'id' => Type::nonNull(Type::id()),
@@ -65,7 +65,7 @@ class PropertyType extends BaseType
             'label' => Type::string(),
             '_objectid' => Type::string(),
             //'objectid' => GraphQLTypes::getType('object'),
-            //'object_id' => static::_xar_get_deferred_field('object_id', 'object'),
+            //'object_id' => static::get_deferred_field('object_id', 'object'),
             'type' => Type::string(),
             'defaultvalue' => Type::string(),
             'source' => Type::string(),
@@ -124,9 +124,9 @@ class PropertyType extends BaseType
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_fields($object, &$newType): array
+    public static function get_input_fields($object, &$newType): array
     {
-        // return static::_xar_get_object_fields($object);
+        // return static::get_object_fields($object);
         $fields = [
             'id' => Type::id(),  // allow null for create here
             'name' => Type::string(),

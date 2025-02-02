@@ -28,15 +28,8 @@ use Exception;
 /**
  * Build GraphQL ObjectType, query fields and resolvers for generic dynamicdata object type
  */
-//class BuildType extends ObjectType
-class BuildType implements QueriesInterface, MutationsInterface
+class BuildType
 {
-    use QueriesTrait;
-    use MutationsTrait;
-    //use DataObjectTrait;
-    //use DeferredTrait;
-    //use InputObjectTrait;
-
     /** @var array<string, int> */
     public static $property_id = [];
     /** @var array<int, string> */
@@ -102,6 +95,7 @@ class BuildType implements QueriesInterface, MutationsInterface
             'name' => $page,
             'description' => $description,
             'fields' => $fields,
+            // use standard default field resolver for _page types: order, offset, ..., [list items]
             //'resolveField' => self::object_field_resolver($type, $object),
         ]);
         // GraphQLHandler::setTimer('made page type ' . $name);
@@ -227,7 +221,7 @@ class BuildType implements QueriesInterface, MutationsInterface
      */
     public static function get_input_fields($object)
     {
-        // return self::_xar_get_object_fields($object);
+        // return self::get_object_fields($object);
         $fieldspecs = self::find_object_fieldspecs($object);
         $fields = [
             'id' => Type::id(),  // allow null for create here
@@ -542,7 +536,7 @@ class BuildType implements QueriesInterface, MutationsInterface
             $clazz = GraphQLTypes::getTypeClass($typename);
         }
         // @todo should we pass along the object instead of the type here?
-        return $clazz::_xar_deferred_field_resolver($typename, $fieldname, $object);
+        return $clazz::deferred_field_resolver($typename, $fieldname, $object);
     }
 
     /**
@@ -782,10 +776,10 @@ class BuildType implements QueriesInterface, MutationsInterface
 
         // use object query resolver for query type
         if ($typename == 'query' && !$useTypeClasses) {
-            // @todo check if type class corresponding to fieldname has overridden _xar_*_query_resolver (objecttype)
+            // @todo check if type class corresponding to fieldname has overridden *_query_resolver (objecttype)
             // @todo check if field type corresponding to fieldname has specific resolve Fn (tokentype)
             // @checkme not possible to override page/list/item resolvers in child class by type here
-            $field_resolver = self::_xar_query_field_resolver($typename);
+            $field_resolver = Queries::query_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
             GraphQLHandler::tracePath("use query field resolver for type $typename");
             return $field_resolver;
@@ -793,10 +787,10 @@ class BuildType implements QueriesInterface, MutationsInterface
 
         // use object mutation resolver for mutation type
         if ($typename == 'mutation' && !$useTypeClasses) {
-            // @todo check if type class corresponding to fieldname has overridden _xar_*_mutation_resolver
+            // @todo check if type class corresponding to fieldname has overridden *_mutation_resolver
             // @todo check if field type corresponding to fieldname has specific resolve Fn (tokentype)
             // @checkme not possible to override create/update/delete resolvers in child class by type here
-            $field_resolver = self::_xar_mutation_field_resolver($typename);
+            $field_resolver = Mutations::mutation_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
             GraphQLHandler::tracePath("use mutation field resolver for type $typename");
             return $field_resolver;
@@ -821,7 +815,7 @@ class BuildType implements QueriesInterface, MutationsInterface
                 GraphQLHandler::tracePath("use default field resolver for type $typename = class " . $clazz);
                 return $field_resolver;
             }
-            //$type_config = $clazz::_xar_get_type_config($typename);
+            //$type_config = $clazz::get_type_config($typename);
             $type_def = self::object_type_definition($typename);
             if ($type_def) {
                 // use resolveField for type if available - @checkme shouldn't this come after field resolver(s)?
@@ -943,9 +937,9 @@ class BuildType implements QueriesInterface, MutationsInterface
         $item = $type;
         // @checkme not possible to override page/list/item resolvers in child class by type here
         $fields = [
-            self::_xar_get_page_query($page, $type, $object),
-            //self::_xar_get_list_query($list, $type, $object),
-            self::_xar_get_item_query($item, $type, $object),
+            QueryPage::get_page_query($page, $type, $object),
+            //QueryList::get_list_query($list, $type, $object),
+            QueryItem::get_item_query($item, $type, $object),
         ];
         return $fields;
     }
@@ -964,9 +958,9 @@ class BuildType implements QueriesInterface, MutationsInterface
         [$name, $type, $object] = GraphQLInflector::sanitize($name, $type, $object);
         // @checkme not possible to override create/update/delete resolvers in child class by type here
         $fields = [
-            //self::_xar_get_create_mutation('create' . $name, $type, $object),
-            //self::_xar_get_update_mutation('update' . $name, $type, $object),
-            //self::_xar_get_delete_mutation('delete' . $name, $type, $object),
+            //MutationCreate::get_create_mutation('create' . $name, $type, $object),
+            //MutationUpdate::get_update_mutation('update' . $name, $type, $object),
+            //MutationDelete::get_delete_mutation('delete' . $name, $type, $object),
         ];
         return $fields;
     }

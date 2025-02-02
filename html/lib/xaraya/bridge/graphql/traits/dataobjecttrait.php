@@ -12,48 +12,54 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\InputObjectType;
 
 /**
- * GraphQL ObjectType and query fields for "base" dynamicdata object type
+ * For documentation purposes only - available via DataObjectTrait
  */
-class BaseType extends ObjectType implements QueriesInterface, MutationsInterface, DataObjectInterface, DeferredInterface, InputObjectInterface
+interface DataObjectInterface
 {
-    use QueriesTrait;
-    use MutationsTrait;
-    use DataObjectTrait;
-    use DeferredTrait;
-    use InputObjectTrait;
-
-    public static string $_xar_name   = '';
-    public static string $_xar_type   = '';
-    public static string $_xar_object = '';
-    public static bool $_xar_security = true;
-    /** @var array<mixed> */
-    public static $_xar_queries = [];
-    /** @var array<mixed> */
-    public static $_xar_mutations = [];
-
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
-     * @param ?array<string, mixed> $config
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
-    public function __construct($config = null)
-    {
-        if (empty($config)) {
-            $config = $this->get_type_config(static::$_xar_name, static::$_xar_object);
-        }
-        GraphQLHandler::setTimer('new ' . $config['name']);
-        // you need to pass the type config to the parent here, if you want to override the constructor
-        parent::__construct($config);
-    }
+    public function get_type_config($typename, $object = null): array;
+    /**
+     * This method *should* be overridden for each specific object type
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
+    public function get_object_fields($object): array;
+    /**
+     * Get the object field resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @return ?callable
+     */
+    public function object_field_resolver($typename, $object = null): ?callable;
+    /**
+     * Make a generic Object Type with pagination for a dynamic object type by name = "Sample_Page" for samples etc.
+     * @param mixed $name
+     * @param mixed $type
+     * @param mixed $object
+     * @return ObjectType
+     */
+    public static function get_page_type($name, $type = null, $object = null): ObjectType;
+}
 
+/**
+ * Trait to handle default object types for dataobjects
+ */
+trait DataObjectTrait
+{
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
-     * @param string $typename
+     * @param mixed $typename
      * @param mixed $object
      * @return array<string, mixed>
      */
@@ -66,6 +72,7 @@ class BaseType extends ObjectType implements QueriesInterface, MutationsInterfac
             'fields' => function () use ($object) {
                 return $this->get_object_fields($object);
             },
+            // use specific field resolver for the object type if overridden in the class
             'resolveField' => $this->object_field_resolver($typename, $object),
         ];
     }
@@ -88,7 +95,7 @@ class BaseType extends ObjectType implements QueriesInterface, MutationsInterfac
      * Get the object field resolver for the object type
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
-     * @param string $typename
+     * @param mixed $typename
      * @param mixed $object
      * @return ?callable
      */
@@ -98,18 +105,14 @@ class BaseType extends ObjectType implements QueriesInterface, MutationsInterfac
     }
 
     /**
-     * This method *should* be overridden for each specific object type
+     * Make a generic Object Type with pagination for a dynamic object type by name = "Sample_Page" for samples etc.
+     * @param mixed $name
+     * @param mixed $type
      * @param mixed $object
-     * @param InputObjectType $newType
-     * @return array<string, mixed>
+     * @return ObjectType
      */
-    public static function get_input_fields($object, &$newType): array
+    public static function get_page_type($name, $type = null, $object = null): ObjectType
     {
-        // return static::get_object_fields($object);
-        $fields = [
-            'id' => Type::id(),  // allow null for create here
-            'name' => Type::string(),
-        ];
-        return $fields;
+        return BuildType::make_page_type($name, $type, $object);
     }
 }

@@ -31,7 +31,7 @@ class DummyType extends ObjectType
 
     public function __construct()
     {
-        $config = static::_xar_get_type_config('Dummy');
+        $config = $this->get_type_config('Dummy');
         parent::__construct($config);
     }
 
@@ -41,7 +41,7 @@ class DummyType extends ObjectType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_type_config($typename, $object = null): array
+    public function get_type_config($typename, $object = null): array
     {
         return [
             'name' => 'Dummy',
@@ -50,10 +50,10 @@ class DummyType extends ObjectType
     }
 
     /**
-     * Summary of _xar_get_query_fields
+     * Summary of get_query_fields
      * @return array<string, mixed>
      */
-    public static function _xar_get_query_fields(): array
+    public static function get_query_fields(): array
     {
         return [
             'hello' => [
@@ -129,15 +129,15 @@ class DummyType extends ObjectType
     }
 
     /**
-     * Summary of _xar_get_query_field
+     * Summary of get_query_field
      * @param mixed $name
      * @param mixed $kind
      * @throws \Exception
      * @return array<string, mixed>
      */
-    public static function _xar_get_query_field($name, $kind = 'dummy'): array
+    public static function get_query_field($name, $kind = 'dummy'): array
     {
-        $fields = static::_xar_get_query_fields();
+        $fields = static::get_query_fields();
         if (!empty($fields[$name])) {
             return $fields[$name];
         }

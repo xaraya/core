@@ -24,7 +24,7 @@ class MultiValType extends UnionType
 {
     public function __construct()
     {
-        $config = static::_xar_get_type_config('MultiVal');
+        $config = $this->get_type_config('MultiVal');
         parent::__construct($config);
     }
 
@@ -34,7 +34,7 @@ class MultiValType extends UnionType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_type_config($typename, $object = null)
+    public function get_type_config($typename, $object = null)
     {
         return [
             'name' => $typename,

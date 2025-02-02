@@ -30,7 +30,7 @@ interface MutationUpdateInterface
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_update_mutation($name, $typename, $object): array;
+    public static function get_update_mutation($name, $typename, $object): array;
     /**
      * Get the update mutation resolver for the object type
      * @param mixed $typename
@@ -38,7 +38,7 @@ interface MutationUpdateInterface
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_update_mutation_resolver($typename, $object = null): callable;
+    public static function update_mutation_resolver($typename, $object = null): callable;
 }
 
 /**
@@ -53,7 +53,7 @@ trait MutationUpdateTrait
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_update_mutation($name, $typename, $object): array
+    public static function get_update_mutation($name, $typename, $object): array
     {
         return [
             'name' => $name,
@@ -65,7 +65,7 @@ trait MutationUpdateTrait
             //'extensions' => [
             //    'access' => 'update',
             //],
-            'resolve' => static::_xar_update_mutation_resolver($typename, $object),
+            'resolve' => static::update_mutation_resolver($typename, $object),
         ];
     }
 
@@ -78,7 +78,7 @@ trait MutationUpdateTrait
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_update_mutation_resolver($typename, $object = null): callable
+    public static function update_mutation_resolver($typename, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations
@@ -107,4 +107,9 @@ trait MutationUpdateTrait
         };
         return $resolver;
     }
+}
+
+class MutationUpdate implements MutationUpdateInterface
+{
+    use MutationUpdateTrait;
 }

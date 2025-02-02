@@ -27,7 +27,7 @@ class KeyValType extends ObjectType implements InputObjectInterface
 
     public function __construct()
     {
-        $config = static::_xar_get_type_config(static::$_xar_name);
+        $config = $this->get_type_config(static::$_xar_name);
         parent::__construct($config);
     }
 
@@ -37,7 +37,7 @@ class KeyValType extends ObjectType implements InputObjectInterface
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_type_config($typename, $object = null)
+    public function get_type_config($typename, $object = null)
     {
         return [
             'name' => $typename,
@@ -78,9 +78,9 @@ class KeyValType extends ObjectType implements InputObjectInterface
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_fields($object, &$newType): array
+    public static function get_input_fields($object, &$newType): array
     {
-        // return static::_xar_get_object_fields($object);
+        // return static::get_object_fields($object);
         $fields = [
             'key' => Type::string(),
             //'value' => Type::string(),

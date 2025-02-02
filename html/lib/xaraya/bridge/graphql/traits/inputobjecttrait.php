@@ -26,21 +26,21 @@ interface InputObjectInterface
      * @param mixed $object
      * @return InputObjectType
      */
-    public static function _xar_get_input_type($typename, $object = null): InputObjectType;
+    public static function get_input_type($typename, $object = null): InputObjectType;
     /**
      * This method *should* be overridden for each specific object type
      * @param mixed $object
      * @param mixed $newType
      * @return array<string, mixed>
      */
-    public static function _xar_get_input_fields($object, &$newType): array;
+    public static function get_input_fields($object, &$newType): array;
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      * @param mixed $typename
      * @param mixed $object
      * @return ?callable
      */
-    public static function _xar_input_value_parser($typename, $object): ?callable;
+    public static function input_value_parser($typename, $object): ?callable;
 }
 
 /**
@@ -54,19 +54,19 @@ trait InputObjectTrait
      * @param mixed $object
      * @return InputObjectType
      */
-    public static function _xar_get_input_type($typename, $object = null): InputObjectType
+    public static function get_input_type($typename, $object = null): InputObjectType
     {
         $object ??= GraphQLInflector::pluralize($typename);
         $description = "Input for DD " . $object . " item";
         // https://webonyx.github.io/graphql-php/type-definitions/object-types/#recurring-and-circular-types
-        // $fields = static::_xar_get_input_fields($object);
+        // $fields = static::get_input_fields($object);
         $newType = new InputObjectType([
             'name' => ucwords($typename, '_'),
             'description' => $description,
             'fields' => function () use ($object, &$newType) {
-                return static::_xar_get_input_fields($object, $newType);
+                return static::get_input_fields($object, $newType);
             },
-            'parseValue' => static::_xar_input_value_parser($typename, $object),
+            'parseValue' => static::input_value_parser($typename, $object),
         ]);
         return $newType;
     }
@@ -77,9 +77,9 @@ trait InputObjectTrait
      * @param InputObjectType $newType
      * @return array<string, mixed>
      */
-    public static function _xar_get_input_fields($object, &$newType): array
+    public static function get_input_fields($object, &$newType): array
     {
-        // return static::_xar_get_object_fields($object);
+        // return static::get_object_fields($object);
         $fields = [
             'id' => Type::id(),  // allow null for create here
             'name' => Type::string(),
@@ -93,8 +93,13 @@ trait InputObjectTrait
      * @param mixed $object
      * @return ?callable
      */
-    public static function _xar_input_value_parser($typename, $object): ?callable
+    public static function input_value_parser($typename, $object): ?callable
     {
         return null;
     }
+}
+
+class InputObject implements InputObjectInterface
+{
+    use InputObjectTrait;
 }

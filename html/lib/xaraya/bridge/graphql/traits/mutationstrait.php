@@ -26,7 +26,7 @@ interface MutationsInterface extends MutationCreateInterface, MutationUpdateInte
      * Get the mutation fields listed in the $_xar_mutations property of the actual class
      * @return array<mixed>
      */
-    public static function _xar_get_mutation_fields(): array;
+    public static function get_mutation_fields(): array;
     /**
      * This method will be inherited by all specific object types, so it's important to use "static"
      * @param mixed $name
@@ -34,14 +34,14 @@ interface MutationsInterface extends MutationCreateInterface, MutationUpdateInte
      * @throws \Exception
      * @return array<string, mixed>
      */
-    public static function _xar_get_mutation_field($name, $kind = ''): array;
+    public static function get_mutation_field($name, $kind = ''): array;
     /**
      * Add to the mutation resolver for the object type (create, update, delete) - when using BuildSchema
      * @param mixed $typename
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_mutation_field_resolver($typename = 'mutation'): callable;
+    public static function mutation_field_resolver($typename = 'mutation'): callable;
 }
 
 /**
@@ -62,12 +62,12 @@ trait MutationsTrait
      * Get the mutation fields listed in the $_xar_mutations property of the actual class
      * @return array<mixed>
      */
-    public static function _xar_get_mutation_fields(): array
+    public static function get_mutation_fields(): array
     {
         $fields = [];
         foreach (static::$_xar_mutations as $kind => $name) {
             if (!empty($name)) {
-                $fields[] = static::_xar_get_mutation_field($name, $kind);
+                $fields[] = static::get_mutation_field($name, $kind);
             }
         }
         return $fields;
@@ -81,15 +81,16 @@ trait MutationsTrait
      * @throws \Exception
      * @return array<string, mixed>
      */
-    public static function _xar_get_mutation_field($name, $kind = ''): array
+    public static function get_mutation_field($name, $kind = ''): array
     {
         if (empty($kind) || is_numeric($kind)) {
             $kind = strtolower(substr($name, 0, 6));
         }
+        // allow overriding create/update/delete mutation resolvers for custom type classes using this trait
         return match ($kind) {
-            'create' => static::_xar_get_create_mutation($name, static::$_xar_type, static::$_xar_object),
-            'update' => static::_xar_get_update_mutation($name, static::$_xar_type, static::$_xar_object),
-            'delete' => static::_xar_get_delete_mutation($name, static::$_xar_type, static::$_xar_object),
+            'create' => static::get_create_mutation($name, static::$_xar_type, static::$_xar_object),
+            'update' => static::get_update_mutation($name, static::$_xar_type, static::$_xar_object),
+            'delete' => static::get_delete_mutation($name, static::$_xar_type, static::$_xar_object),
             default => throw new Exception("Unknown '$kind' mutation '$name'"),
         };
     }
@@ -100,31 +101,36 @@ trait MutationsTrait
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_mutation_field_resolver($typename = 'mutation'): callable
+    public static function mutation_field_resolver($typename = 'mutation'): callable
     {
         // call the right mutation resolver based on the first part of the field name <action><Object>
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
             // disable caching for mutations
             GraphQLHandler::enableCache(false);
             GraphQLHandler::tracePath(array_merge($info->path, ["object mutation", $args]));
-            // @todo check if type class corresponding to fieldname has overridden _xar_*_mutation_resolver
+            // @todo check if type class corresponding to fieldname has overridden *_mutation_resolver
             $name = $info->fieldName;
             $action = substr($name, 0, 6);
             $type = strtolower(substr($name, 6));
             if ($action === "create") {
-                $create_resolver = static::_xar_create_mutation_resolver($type);
+                $create_resolver = static::create_mutation_resolver($type);
                 return call_user_func($create_resolver, $rootValue, $args, $context, $info);
             }
             if ($action === "update") {
-                $update_resolver = static::_xar_update_mutation_resolver($type);
+                $update_resolver = static::update_mutation_resolver($type);
                 return call_user_func($update_resolver, $rootValue, $args, $context, $info);
             }
             if ($action === "delete") {
-                $delete_resolver = static::_xar_delete_mutation_resolver($type);
+                $delete_resolver = static::delete_mutation_resolver($type);
                 return call_user_func($delete_resolver, $rootValue, $args, $context, $info);
             }
             throw new Exception('Invalid action ' . $action . ' for mutation ' . $info->fieldName);
         };
         return $resolver;
     }
+}
+
+class Mutations implements MutationsInterface
+{
+    use MutationsTrait;
 }

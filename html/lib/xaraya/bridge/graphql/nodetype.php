@@ -26,7 +26,7 @@ class NodeType extends InterfaceType
 {
     public function __construct()
     {
-        $config = static::_xar_get_type_config('Node');
+        $config = $this->get_type_config('Node');
         parent::__construct($config);
     }
 
@@ -36,7 +36,7 @@ class NodeType extends InterfaceType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_type_config($typename, $object = null)
+    public function get_type_config($typename, $object = null)
     {
         return [
             'name' => $typename,
@@ -60,10 +60,10 @@ class NodeType extends InterfaceType
     }
 
     /**
-     * Summary of _xar_get_query_fields
+     * Summary of get_query_fields
      * @return array<string, mixed>
      */
-    public static function _xar_get_query_fields()
+    public static function get_query_fields()
     {
         return [
             'node' => [
@@ -85,13 +85,13 @@ class NodeType extends InterfaceType
     }
 
     /**
-     * Summary of _xar_get_query_field
+     * Summary of get_query_field
      * @param mixed $name
      * @return array<string, mixed>
      */
-    public static function _xar_get_query_field($name)
+    public static function get_query_field($name)
     {
-        $fields = static::_xar_get_query_fields();
+        $fields = static::get_query_fields();
         if (!empty($fields[$name])) {
             return $fields[$name];
         }

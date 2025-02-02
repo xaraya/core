@@ -41,7 +41,7 @@ class DataObjectType extends BaseType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_object_fields($object): array
+    public function get_object_fields($object): array
     {
         $fields = [
             'objectid' => Type::nonNull(Type::id()),
@@ -60,7 +60,7 @@ class DataObjectType extends BaseType
             'name' => Type::string(),
             'label' => Type::string(),
             'module_id' => Type::string(),
-            //'module_id' => static::_xar_get_deferred_field('module_id', 'module'),
+            //'module_id' => static::get_deferred_field('module_id', 'module'),
             'itemtype' => Type::int(),
             'class' => Type::string(),
             'urlparam' => Type::string(),
@@ -113,7 +113,7 @@ class DataObjectType extends BaseType
                     return $object['_objectref']::class;
                 },
             ],
-            //'category' => static::_xar_get_deferred_field('category', 'category'),
+            //'category' => static::get_deferred_field('category', 'category'),
             //'properties' => Type::listOf(GraphQLTypes::getType("property")),
             'properties' => GraphQLTypes::getTypeList("property"),
         ];
@@ -123,9 +123,9 @@ class DataObjectType extends BaseType
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_fields($object, &$newType): array
+    public static function get_input_fields($object, &$newType): array
     {
-        // return static::_xar_get_object_fields($object);
+        // return static::get_object_fields($object);
         $fields = [
             'id' => Type::id(),  // allow null for create here
             'name' => Type::string(),
@@ -138,7 +138,7 @@ class DataObjectType extends BaseType
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_list_query_resolver($type, $object = null): callable
+    public static function list_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             GraphQLHandler::tracePath(array_merge($info->path, ["object list query", $args]));
@@ -220,7 +220,7 @@ class DataObjectType extends BaseType
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_item_query_resolver($type, $object = null): callable
+    public static function item_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             GraphQLHandler::tracePath(array_merge($info->path, ["object item query"]));

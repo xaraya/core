@@ -199,6 +199,7 @@ class GraphQLTypes
             throw new Exception("Unknown graphql type: " . $name);
         }
         $clazz = self::getTypeClass(self::$typeMapper[$name]);
+        // get type from existing type class = instance here
         $type = new $clazz();
         if (!$type) {
             throw new Exception("Unknown graphql type: " . $name);
@@ -234,7 +235,7 @@ class GraphQLTypes
         }
         $clazz = self::getTypeClass(self::$typeMapper[$name]);
         // get page type from existing type class
-        $type = $clazz::_xar_get_page_type($page);
+        $type = $clazz::get_page_type($page);
         if (!$type) {
             throw new Exception("Unknown graphql type: " . $page);
         }
@@ -269,7 +270,7 @@ class GraphQLTypes
         }
         $clazz = self::getTypeClass(self::$typeMapper[$name]);
         // get input type from existing type class
-        $type = $clazz::_xar_get_input_type($input);
+        $type = $clazz::get_input_type($input);
         if (!$type) {
             throw new Exception("Unknown graphql type: " . $input);
         }
@@ -336,9 +337,9 @@ class GraphQLTypes
         if (self::hasType($name)) {
             $type = strtolower($name);
             //$clazz = self::getTypeClass($type);
-            //if ($clazz !== "BaseType" && method_exists($clazz, "_xar_get_type_config")) {
+            //if ($clazz !== "BaseType" && method_exists($clazz, "get_type_config")) {
             //    GraphQLHandler::tracePath("type config $name defined in $clazz");
-            //    $classConfig = $clazz::_xar_get_type_config($name);
+            //    $classConfig = $clazz::get_type_config($name);
             //    //return $classConfig;
             //}
         }
@@ -353,11 +354,11 @@ class GraphQLTypes
             //    return $typeDef;
             //};
             // @checkme not possible to override page/list/item resolvers in child class by type here
-            $typeConfig['resolveField'] = BuildType::_xar_query_field_resolver($name);
+            $typeConfig['resolveField'] = Queries::query_field_resolver($name);
         } elseif ($name == 'Mutation') {
             GraphQLHandler::tracePath("mutation config $name");
             // @checkme not possible to override create/update/delete resolvers in child class by type here
-            $typeConfig['resolveField'] = BuildType::_xar_mutation_field_resolver($name);
+            $typeConfig['resolveField'] = Mutations::mutation_field_resolver($name);
         } else {
             GraphQLHandler::tracePath("type config $name");
             //$typeConfig['fields'] = static function () use ($name) {

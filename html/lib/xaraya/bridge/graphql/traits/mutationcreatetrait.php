@@ -30,7 +30,7 @@ interface MutationCreateInterface
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_create_mutation($name, $typename, $object): array;
+    public static function get_create_mutation($name, $typename, $object): array;
     /**
      * Get the create mutation resolver for the object type
      * @param mixed $typename
@@ -38,7 +38,7 @@ interface MutationCreateInterface
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_create_mutation_resolver($typename, $object = null): callable;
+    public static function create_mutation_resolver($typename, $object = null): callable;
 }
 
 /**
@@ -53,7 +53,7 @@ trait MutationCreateTrait
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_create_mutation($name, $typename, $object): array
+    public static function get_create_mutation($name, $typename, $object): array
     {
         return [
             'name' => $name,
@@ -65,7 +65,7 @@ trait MutationCreateTrait
             //'extensions' => [
             //    'access' => 'create',
             //],
-            'resolve' => static::_xar_create_mutation_resolver($typename, $object),
+            'resolve' => static::create_mutation_resolver($typename, $object),
         ];
     }
 
@@ -78,7 +78,7 @@ trait MutationCreateTrait
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_create_mutation_resolver($typename, $object = null): callable
+    public static function create_mutation_resolver($typename, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations
@@ -111,4 +111,9 @@ trait MutationCreateTrait
         };
         return $resolver;
     }
+}
+
+class MutationCreate implements MutationCreateInterface
+{
+    use MutationCreateTrait;
 }

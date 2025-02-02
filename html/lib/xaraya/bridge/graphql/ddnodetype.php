@@ -25,7 +25,7 @@ class DDNodeType extends ObjectType
 {
     public function __construct()
     {
-        $config = static::_xar_get_type_config('DDNode');
+        $config = $this->get_type_config('DDNode');
         parent::__construct($config);
     }
 
@@ -35,7 +35,7 @@ class DDNodeType extends ObjectType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_type_config($typename, $object = null)
+    public function get_type_config($typename, $object = null)
     {
         return [
             'name' => $typename,

@@ -30,7 +30,7 @@ interface QueryListInterface
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_list_query($listname, $typename, $object): array;
+    public static function get_list_query($listname, $typename, $object): array;
     /**
      * Get the list query resolver for the object type
      *
@@ -39,7 +39,7 @@ interface QueryListInterface
      * @param mixed $object
      * @return callable
      */
-    public static function _xar_list_query_resolver($typename, $object = null): callable;
+    public static function list_query_resolver($typename, $object = null): callable;
 }
 
 /**
@@ -54,7 +54,7 @@ trait QueryListTrait
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_list_query($listname, $typename, $object): array
+    public static function get_list_query($listname, $typename, $object): array
     {
         return [
             'name' => $listname,
@@ -76,7 +76,7 @@ trait QueryListTrait
             //'extensions' => [
             //    'access' => 'view',
             //],
-            'resolve' => static::_xar_list_query_resolver($typename, $object),
+            'resolve' => static::list_query_resolver($typename, $object),
         ];
     }
 
@@ -89,7 +89,7 @@ trait QueryListTrait
      * @throws \Exception
      * @return callable
      */
-    public static function _xar_list_query_resolver($typename, $object = null): callable
+    public static function list_query_resolver($typename, $object = null): callable
     {
         // when using type config decorator and object_query_resolver
         $object ??= GraphQLInflector::pluralize($typename);
@@ -132,4 +132,9 @@ trait QueryListTrait
         };
         return $resolver;
     }
+}
+
+class QueryList implements QueryListInterface
+{
+    use QueryListTrait;
 }

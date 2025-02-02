@@ -25,13 +25,13 @@ use Exception;
 interface DeferredInterface
 {
     /**
-     * Summary of _xar_get_deferred_field
+     * Summary of get_deferred_field
      * @param mixed $fieldname
      * @param mixed $typename
      * @param mixed $islist
      * @return array<string, mixed>
      */
-    public static function _xar_get_deferred_field($fieldname, $typename, $islist = false): array;
+    public static function get_deferred_field($fieldname, $typename, $islist = false): array;
     /**
      * Get the field resolver for a deferred field - looking up the user names for example
      * @param mixed $typename
@@ -39,7 +39,7 @@ interface DeferredInterface
      * @param mixed $object
      * @return callable
      */
-    public static function _xar_deferred_field_resolver($typename, $fieldname, $object = null): callable;
+    public static function deferred_field_resolver($typename, $fieldname, $object = null): callable;
     /**
      * Get the property resolver for a deferred field - looking up the user names for example
      * @param mixed $typename
@@ -47,7 +47,7 @@ interface DeferredInterface
      * @param mixed $object
      * @return callable
      */
-    public static function _xar_deferred_property_resolver($typename, $fieldname, $object): callable;
+    public static function deferred_property_resolver($typename, $fieldname, $object): callable;
     /**
      * Add item id to the deferred list of items to be looked up later
      * @param mixed $typename
@@ -55,20 +55,20 @@ interface DeferredInterface
      * @param mixed $fieldlist
      * @return void
      */
-    public static function _xar_add_deferred($typename, $id, $fieldlist = null): void;
+    public static function add_deferred($typename, $id, $fieldlist = null): void;
     /**
      * Load values for a deferred field - looking up the user names for example
      * @param mixed $typename
      * @return ?callable
      */
-    public static function _xar_load_deferred($typename): ?callable;
+    public static function load_deferred($typename): ?callable;
     /**
      * Get item from the deferred list of items once they're all loaded
      * @param mixed $typename
      * @param mixed $id
      * @return mixed
      */
-    public static function _xar_get_deferred($typename, $id): mixed;
+    public static function get_deferred($typename, $id): mixed;
 }
 
 /**
@@ -80,20 +80,20 @@ trait DeferredTrait
     protected static $_xar_deferred = [];
 
     /**
-     * Summary of _xar_get_deferred_field
+     * Summary of get_deferred_field
      * @param mixed $fieldname
      * @param mixed $typename
      * @param mixed $islist
      * @return array<string, mixed>
      */
-    public static function _xar_get_deferred_field($fieldname, $typename, $islist = false): array
+    public static function get_deferred_field($fieldname, $typename, $islist = false): array
     {
         // GraphQLHandler::setTimer('get deferred field ' . $fieldname);
         return [
             'name' => $fieldname,
             'type' => ($islist ? GraphQLTypes::getTypeList($typename) : GraphQLTypes::getType($typename)),
             // @todo move to resolveField?
-            'resolve' => static::_xar_deferred_field_resolver($typename, $fieldname),
+            'resolve' => static::deferred_field_resolver($typename, $fieldname),
         ];
     }
 
@@ -108,7 +108,7 @@ trait DeferredTrait
      * @phpstan-type Executor callable(): mixed
      * @return callable
      */
-    public static function _xar_deferred_property_resolver($typename, $fieldname, $object): callable
+    public static function deferred_property_resolver($typename, $fieldname, $object): callable
     {
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname, $object) {
@@ -186,17 +186,17 @@ trait DeferredTrait
      * @phpstan-type Executor callable(): mixed
      * @return callable
      */
-    public static function _xar_deferred_field_resolver($typename, $fieldname, $object = null): callable
+    public static function deferred_field_resolver($typename, $fieldname, $object = null): callable
     {
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         if (!empty($object)) {
-            return static::_xar_deferred_property_resolver($typename, $fieldname, $object);
+            return static::deferred_property_resolver($typename, $fieldname, $object);
         }
         $object ??= GraphQLInflector::pluralize($typename);
         if (!array_key_exists($typename, static::$_xar_deferred)) {
             static::$_xar_deferred[$typename] = DataObjectFactory::getObjectLoader($object, ['id']);
-            // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
-            $getValuesFunc = static::_xar_load_deferred($typename);
+            // support equivalent of overridden load_deferred in inheritance (e.g. usertype)
+            $getValuesFunc = static::load_deferred($typename);
             if (!empty($getValuesFunc)) {
                 static::$_xar_deferred[$typename]->setResolver($getValuesFunc);
             }
@@ -228,11 +228,11 @@ trait DeferredTrait
                 $loader->parseQueryArgs($args);
             }
             GraphQLHandler::tracePath(["add deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null), implode(',', $fieldlist)]);
-            static::_xar_add_deferred($typename, $values[$fieldname], $fieldlist);
+            static::add_deferred($typename, $values[$fieldname], $fieldlist);
 
             return new Deferred(function () use ($typename, $values, $fieldname) {
                 GraphQLHandler::tracePath(["get deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null)]);
-                return static::_xar_get_deferred($typename, $values[$fieldname]);
+                return static::get_deferred($typename, $values[$fieldname]);
             });
         };
         return $resolver;
@@ -245,7 +245,7 @@ trait DeferredTrait
      * @param mixed $fieldlist
      * @return void
      */
-    public static function _xar_add_deferred($typename, $id, $fieldlist = null): void
+    public static function add_deferred($typename, $id, $fieldlist = null): void
     {
         static::$_xar_deferred[$typename]->add($id);
     }
@@ -259,9 +259,9 @@ trait DeferredTrait
      * @param mixed $typename
      * @return ?callable
      */
-    public static function _xar_load_deferred($typename): ?callable
+    public static function load_deferred($typename): ?callable
     {
-        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        // support equivalent of overridden load_deferred in inheritance (e.g. usertype)
         // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
         //$object = static::$_xar_object;
         //$fieldlist = ['id', 'name'];
@@ -282,9 +282,9 @@ trait DeferredTrait
      * @param mixed $id
      * @return mixed
      */
-    public static function _xar_get_deferred($typename, $id): mixed
+    public static function get_deferred($typename, $id): mixed
     {
-        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        // support equivalent of overridden load_deferred in inheritance (e.g. usertype)
         return static::$_xar_deferred[$typename]->get($id);
     }
 }

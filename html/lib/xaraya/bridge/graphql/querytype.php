@@ -26,7 +26,7 @@ class QueryType extends ObjectType
 
     public function __construct()
     {
-        $config = static::_xar_get_type_config('Query');
+        $config = $this->get_type_config('Query');
         parent::__construct($config);
     }
 
@@ -36,12 +36,12 @@ class QueryType extends ObjectType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_type_config($typename = 'Query', $object = null)
+    public function get_type_config($typename = 'Query', $object = null)
     {
         return [
             'name' => $typename,
             'fields' => function () {
-                return static::_xar_get_query_fields();
+                return $this->get_query_fields();
             },
         ];
     }
@@ -50,11 +50,11 @@ class QueryType extends ObjectType
      * Get all root query fields for the GraphQL Query type from the query_types above
      * @return array<mixed>
      */
-    public static function _xar_get_query_fields(): array
+    public static function get_query_fields(): array
     {
         $fields = [];
         foreach (static::$query_types as $type) {
-            $add_fields = static::_xar_add_query_fields($type);
+            $add_fields = static::add_query_fields($type);
             if (!empty($add_fields)) {
                 $fields = array_merge($fields, $add_fields);
             }
@@ -76,10 +76,10 @@ class QueryType extends ObjectType
      * @param mixed $type
      * @return mixed
      */
-    public static function _xar_add_query_fields($type)
+    public static function add_query_fields($type)
     {
         $clazz = GraphQLTypes::getTypeClass($type);
-        return $clazz::_xar_get_query_fields();
+        return $clazz::get_query_fields();
     }
 
     /**
@@ -88,9 +88,9 @@ class QueryType extends ObjectType
      * @param mixed $type
      * @return mixed
      */
-    public static function _xar_add_query_field($name, $type)
+    public static function add_query_field($name, $type)
     {
         $clazz = GraphQLTypes::getTypeClass($type);
-        return $clazz::_xar_get_query_field($name);
+        return $clazz::get_query_field($name);
     }
 }

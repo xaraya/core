@@ -38,7 +38,7 @@ class UserType extends BaseType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_object_fields($object): array
+    public function get_object_fields($object): array
     {
         $fields = [
             'id' => Type::nonNull(Type::id()),
@@ -67,9 +67,9 @@ class UserType extends BaseType
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_fields($object, &$newType): array
+    public static function get_input_fields($object, &$newType): array
     {
-        // return static::_xar_get_object_fields($object);
+        // return static::get_object_fields($object);
         $fields = [
             'id' => Type::id(),  // allow null for create here
             'name' => Type::string(),
@@ -82,7 +82,7 @@ class UserType extends BaseType
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_page_query_resolver($type, $object = null): callable
+    public static function page_query_resolver($type, $object = null): callable
     {
         throw new Exception('Page queries are disabled in graphql/usertype.php');
     }
@@ -92,7 +92,7 @@ class UserType extends BaseType
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_list_query_resolver($type, $object = null): callable
+    public static function list_query_resolver($type, $object = null): callable
     {
         throw new Exception('List queries are disabled in graphql/usertype.php');
     }
@@ -102,7 +102,7 @@ class UserType extends BaseType
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_item_query_resolver($type, $object = null): callable
+    public static function item_query_resolver($type, $object = null): callable
     {
         throw new Exception('Item queries are disabled in graphql/usertype.php');
     }
@@ -112,9 +112,9 @@ class UserType extends BaseType
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_load_deferred($type): ?callable
+    public static function load_deferred($type): ?callable
     {
-        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        // support equivalent of overridden load_deferred in inheritance (e.g. usertype)
         // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
         $object = static::$_xar_object;
         $fieldlist = ['id', 'name'];

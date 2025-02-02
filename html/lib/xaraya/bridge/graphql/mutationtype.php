@@ -26,7 +26,7 @@ class MutationType extends ObjectType
 
     public function __construct()
     {
-        $config = static::_xar_get_type_config('Mutation');
+        $config = $this->get_type_config('Mutation');
         parent::__construct($config);
     }
 
@@ -36,12 +36,12 @@ class MutationType extends ObjectType
      * @param mixed $object
      * @return array<string, mixed>
      */
-    public static function _xar_get_type_config($typename = 'Mutation', $object = null)
+    public function get_type_config($typename = 'Mutation', $object = null)
     {
         return [
             'name' => $typename,
             'fields' => function () {
-                return static::_xar_get_mutation_fields();
+                return $this->get_mutation_fields();
             },
         ];
     }
@@ -50,11 +50,11 @@ class MutationType extends ObjectType
      * Get all root mutation fields for the GraphQL Mutation type from the mutation_types above
      * @return array<mixed>
      */
-    public static function _xar_get_mutation_fields(): array
+    public function get_mutation_fields(): array
     {
         $fields = [];
         foreach (static::$mutation_types as $type) {
-            $add_fields = static::_xar_add_mutation_fields($type);
+            $add_fields = $this->add_mutation_fields($type);
             if (!empty($add_fields)) {
                 $fields = array_merge($fields, $add_fields);
             }
@@ -77,10 +77,10 @@ class MutationType extends ObjectType
      * @param mixed $type
      * @return array<mixed>
      */
-    public static function _xar_add_mutation_fields($type)
+    public function add_mutation_fields($type)
     {
         $clazz = GraphQLTypes::getTypeClass($type);
-        return $clazz::_xar_get_mutation_fields();
+        return $clazz::get_mutation_fields();
     }
 
     /**
@@ -89,9 +89,9 @@ class MutationType extends ObjectType
      * @param mixed $type
      * @return array<string, mixed>
      */
-    public static function _xar_add_mutation_field($name, $type)
+    public function add_mutation_field($name, $type)
     {
         $clazz = GraphQLTypes::getTypeClass($type);
-        return $clazz::_xar_get_mutation_field($name);
+        return $clazz::get_mutation_field($name);
     }
 }
