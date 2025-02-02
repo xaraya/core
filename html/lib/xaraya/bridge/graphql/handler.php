@@ -35,19 +35,12 @@ use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
-use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
 use GraphQL\GraphQL;
-use GraphQL\Type\Schema;
-use GraphQL\Type\SchemaConfig;
 use GraphQL\Error\DebugFlag;
-use GraphQL\Language\Parser;
-use GraphQL\Utils\AST;
-use GraphQL\Utils\BuildSchema;
-use GraphQL\Utils\SchemaPrinter;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Validator\Rules;
@@ -70,7 +63,6 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     use TimerTrait;  // activate with self::enableTimer(true)
     use CacheTrait;  // activate with self::enableCache(true)
 
-    public static string $endpoint = 'gql.php';
     /** @var array<string, mixed> */
     public static $config = [];
     /** @var string|null */
@@ -87,64 +79,6 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     public static bool $cacheOperation = false;
     public static int $queryComplexity = 0;
     public static int $queryDepth = 0;
-
-    /**
-     * Get GraphQL Schema with Query type and typeLoader
-     * @param ?array<string> $extraTypes
-     * @param bool $validate
-     * @phpstan-import-type SchemaConfigOptions from SchemaConfig
-     * @return Schema
-     */
-    public function getSchema($extraTypes = null, $validate = false)
-    {
-        if (!empty($extraTypes)) {
-            GraphQLTypes::setExtraTypes($extraTypes);
-        }
-        // GraphQLObjects::mapObjects();
-        self::loadObjects();
-        // Schema doesn't accept lazy loading of query type (besides typeLoader)
-        $queryType = GraphQLTypes::getType("query");
-        $mutationType = GraphQLTypes::getType("mutation");
-
-        $schema = new Schema([
-            'query' => $queryType,
-            'mutation' => $mutationType,
-            //'types' => [self::getType("ddnode")],  // invisible types
-            'typeLoader' => function ($name) {
-                return GraphQLTypes::getType($name);
-            },
-        ]);
-
-        if ($validate) {
-            $schema->assertValid();
-        }
-        return $schema;
-    }
-
-    /**
-     * Build GraphQL Schema based on schema.graphql file and type config decorator
-     * @param string $schemaFile
-     * @param ?array<string> $extraTypes
-     * @param bool $validate
-     * @return Schema
-     */
-    public function buildSchema($schemaFile, $extraTypes = null, $validate = false)
-    {
-        $parsedFile = $schemaFile . '_parsed.php';
-        if (file_exists($parsedFile) && filemtime($parsedFile) > filemtime($schemaFile)) {
-            $document = AST::fromArray(require $parsedFile);  // fromArray() is a lazy operation as well
-        } else {
-            $document = Parser::parse(file_get_contents($schemaFile));
-            file_put_contents($parsedFile, "<?php\nreturn " . var_export(AST::toArray($document), true) . ";\n");
-        }
-        // @todo add extraTypes to schema contents if needed?
-        //$typeConfigDecorator = static function ($typeConfig, $typeDefinitionNode, $allNodesMap) {
-        //    return GraphQLTypes::type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap);
-        //};
-        //$schema = BuildSchema::build($contents, $typeConfigDecorator);
-        $schema = BuildSchema::build($document);
-        return $schema;
-    }
 
     /**
      * Utility function to execute a GraphQL query and get the data
@@ -189,23 +123,22 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
                 return $serializableResult;
             }
         }
+        $graphQLBuilder = new GraphQLBuilder();
         //$schemaFile = self::$schemaFile;  // if we want to test buildSchema without using $schemaFile in gql.php
         if (!empty($schemaFile) && file_exists($schemaFile)) {
             // @checkme try out default object field resolver instead of type config decorator
-            $schema = $this->buildSchema($schemaFile, $extraTypes);
+            $schema = $graphQLBuilder->buildSchema($schemaFile, $extraTypes);
             //$fieldResolver = null;
             // @checkme don't use type classes by default for BuildSchema?
             //$fieldResolver = BuildType::default_field_resolver();
             $fieldResolver = BuildType::default_field_resolver(false);
         } else {
-            $schema = $this->getSchema($extraTypes);
+            $schema = $graphQLBuilder->getSchema($extraTypes);
             $fieldResolver = null;
         }
         self::setTimer('schema');
         if ($queryString == '{schema}') {
-            $header = "schema {\n  query: Query\n  mutation: Mutation\n}\n\n";
-            return $header . SchemaPrinter::doPrint($schema);
-            //return SchemaPrinter::printIntrospectionSchema($schema);
+            return $graphQLBuilder->printSchema($schema);
         }
 
         // Add to standard set of rules globally (values from GraphQL Playground IntrospectionQuery)
@@ -335,15 +268,19 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
 
     /**
      * Summary of tracePath
-     * @param mixed $path
+     * @param string $message
+     * @param mixed $infoPath
      * @return void
      */
-    public static function tracePath($path)
+    public static function tracePath($message, $infoPath = null)
     {
         if (!self::$tracePath) {
             return;
         }
-        self::$paths[] = $path;
+        if (isset($infoPath)) {
+            self::$paths[] = $infoPath;
+        }
+        self::$paths[] = $message;
     }
 
     /**
@@ -538,9 +475,6 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
         if (!empty(self::$config['tracePath'])) {
             self::$tracePath = true;
         }
-        if (self::$tracePath) {
-            self::enableTimer(true);
-        }
         // use xarCacheTrait
         if (!empty(self::$config['enableCache'])) {
             self::enableCache(true);
@@ -630,72 +564,5 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
             self::$config['modules'] = [];
         }
         self::setTimer('modules');
-    }
-
-    /**
-     * Summary of findExtraTypes
-     * @param ?array<string> $objectNames
-     * @return array<string>
-     */
-    public static function findExtraTypes($objectNames = null)
-    {
-        // @checkme set list of modules here before filtering out for $extraTypes - note: dependency on REST API
-        self::$config['modules'] = RestAPIBuilder::get_potential_modules($objectNames);
-        return GraphQLTypes::findExtraTypes($objectNames);
-    }
-
-    /**
-     * Summary of dumpSchema
-     * @param ?array<string> $extraTypes
-     * @param string $storage
-     * @param int $expires
-     * @param int $complexity
-     * @param int $depth
-     * @param bool $timer
-     * @param bool $trace
-     * @param bool $cache
-     * @param bool $plan
-     * @param bool $data
-     * @param bool $operation
-     * @return void
-     */
-    public function dumpSchema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0, $timer = false, $trace = false, $cache = false, $plan = false, $data = false, $operation = false)
-    {
-        $infoData = [];
-        $infoData['generated'] = date('c');
-        $infoData['caution'] = 'This file is updated when you rebuild the schema.graphql document in Dynamic Data - Utilities - Test APIs';
-
-        $configFile = sys::varpath() . '/cache/api/graphql_config.json';
-        $configData = $infoData;
-        $configData['extraTypes'] = $extraTypes;
-        $configData['tokenExpires'] = intval($expires);
-        $configData['storageType'] = $storage;
-        $configData['queryComplexity'] = intval($complexity);
-        $configData['queryDepth'] = intval($depth);
-        $configData['enableTimer'] = !empty($timer) ? true : false;
-        $configData['tracePath'] = !empty($trace) ? true : false;
-        $configData['enableCache'] = !empty($cache) ? true : false;
-        $configData['cachePlan'] = !empty($plan) ? true : false;
-        $configData['cacheData'] = !empty($data) ? true : false;
-        $configData['cacheOperation'] = !empty($operation) ? true : false;
-        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
-
-        $configFile = sys::varpath() . '/cache/api/graphql_objects.json';
-        $configData = $infoData;
-        GraphQLTypes::setExtraTypes($extraTypes);
-        $configData['objects'] = GraphQLObjects::dumpObjects();
-        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
-
-        $configFile = sys::varpath() . '/cache/api/graphql_modules.json';
-        $configData = $infoData;
-        $configData['modules'] = self::$config['modules'] ?? [];
-        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
-
-        $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
-        self::$schemaFile = null;
-        $content = '# GraphQL Endpoint: ' . xarServer::getBaseURL() . self::$endpoint . "\n";
-        $content .= '# Generated: ' . date('c') . "\n";
-        $content .= $this->getData('{schema}', [], null, $extraTypes);
-        file_put_contents($schemaFile, $content);
     }
 }

@@ -112,7 +112,7 @@ trait DeferredTrait
     {
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname, $object) {
-            GraphQLHandler::tracePath(array_merge($info->path, ["deferred property $typename $fieldname", $args]));
+            GraphQLHandler::tracePath(__CLASS__ . '::deferred_property_resolver: ' . $typename . '.' . $fieldname, $info->path);
             // @checkme this will be empty for defermany properties, since we use the id to defer
             // if (empty($values[$fieldname])) {
             //     return;
@@ -148,7 +148,7 @@ trait DeferredTrait
             } else {
                 throw new Exception('Unknown object ' . $property->objectname);
             }
-            GraphQLHandler::tracePath(["add deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null), implode(',', $fieldlist)]);
+            GraphQLHandler::tracePath("add deferred $typename $fieldname " . $values['id'], ['values' => ($values[$fieldname] ?? null), 'fieldlist' => implode(',', $fieldlist)]);
             $loader = $property->getDeferredLoader();
             // set context if available in resolver
             $loader->setContext($context);
@@ -162,14 +162,14 @@ trait DeferredTrait
             $value = $property->setDataToDefer($values['id'], $values[$fieldname] ?? null);
 
             return new Deferred(function () use ($typename, $values, $fieldname, $property) {
-                GraphQLHandler::tracePath(["get deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null)]);
+                GraphQLHandler::tracePath("get deferred $typename $fieldname " . $values['id'], ['values' => ($values[$fieldname] ?? null)]);
                 $data = $property->getDeferredData(['value' => ($values[$fieldname] ?? null), '_itemid' => $values['id']]);
                 //print_r($data['value']);
                 // @checkme convert deferred data into assoc array or list of assoc array
                 //if (property_exists($property, 'linkname')) {
                 //    return array('count' => 0, 'filter' => array("$typename,eq,".$values['id']), $property->objectname => $data['value']);
                 //}
-                //GraphQLHandler::tracePath(array_merge(["return deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null), $data['value']]));
+                //GraphQLHandler::tracePath("return deferred $typename $fieldname " . $values['id'], ['values' => ($values[$fieldname] ?? null), 'data' => $data['value']]);
                 return $data['value'];
             });
         };
@@ -202,7 +202,7 @@ trait DeferredTrait
             }
         }
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
-            GraphQLHandler::tracePath(array_merge($info->path, ["deferred field $typename $fieldname", $args]));
+            GraphQLHandler::tracePath(__CLASS__ . '::deferred_field_resolver: ' . $typename . '.' . $fieldname, $info->path);
             if (empty($values[$fieldname])) {
                 return;
             }
@@ -227,11 +227,11 @@ trait DeferredTrait
                 $loader->mergeFieldlist($fieldlist);
                 $loader->parseQueryArgs($args);
             }
-            GraphQLHandler::tracePath(["add deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null), implode(',', $fieldlist)]);
+            GraphQLHandler::tracePath("add deferred $typename $fieldname " . ($values['id'] ?? null), ['values' => ($values[$fieldname] ?? null), 'fieldlist' => implode(',', $fieldlist)]);
             static::add_deferred($typename, $values[$fieldname], $fieldlist);
 
             return new Deferred(function () use ($typename, $values, $fieldname) {
-                GraphQLHandler::tracePath(["get deferred $typename $fieldname " . ($values['id'] ?? null), ($values[$fieldname] ?? null)]);
+                GraphQLHandler::tracePath("get deferred $typename $fieldname " . ($values['id'] ?? null), ['values' => ($values[$fieldname] ?? null)]);
                 return static::get_deferred($typename, $values[$fieldname]);
             });
         };

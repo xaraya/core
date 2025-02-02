@@ -87,7 +87,7 @@ trait QueryItemTrait
             if (GraphQLHandler::hasCachedData($typename . '_item', $rootValue, $args, $context, $info)) {
                 return;
             }
-            GraphQLHandler::tracePath(array_merge($info->path, ["item query"]));
+            GraphQLHandler::tracePath(__CLASS__ . '::item_query_resolver: ' . $typename, $info->path);
             $fields = $info->getFieldSelection(1);
             if (empty($args['id'])) {
                 throw new Exception('Unknown id for type ' . $typename);

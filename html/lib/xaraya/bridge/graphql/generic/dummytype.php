@@ -60,8 +60,8 @@ class DummyType extends ObjectType
                 'name' => 'hello',
                 'description' => 'Hello World!',
                 'type' => Type::string(),
-                'resolve' => function () {
-                    GraphQLHandler::tracePath("hello");
+                'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_query_fields: resolve hello');
                     return 'Hello World!';
                 },
             ],
@@ -72,8 +72,8 @@ class DummyType extends ObjectType
                 'args' => [
                     'message' => ['type' => Type::string()],
                 ],
-                'resolve' => function ($rootValue, $args) {
-                    GraphQLHandler::tracePath("echo");
+                'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_query_fields: resolve echo');
                     if (empty($args['message'])) {
                         return $rootValue['prefix'] . 'nothing';
                     } else {
@@ -93,8 +93,8 @@ class DummyType extends ObjectType
                         'defaultValue' => 'assoc array, string, list, ...',
                     ],
                 ],
-                'resolve' => function ($rootValue, $args) {
-                    GraphQLHandler::tracePath("parse");
+                'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_query_fields: resolve parse');
                     return $args;
                 },
             ],
@@ -103,8 +103,8 @@ class DummyType extends ObjectType
                 'name' => 'schema',
                 'description' => 'Get GraphQL Schema Definition',
                 'type' => Type::string(),
-                'resolve' => function () {
-                    GraphQLHandler::tracePath("schema");
+                'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_query_fields: resolve schema');
                     return 'Here is the schema';
                 },
             ],
@@ -112,8 +112,8 @@ class DummyType extends ObjectType
                 'name' => 'whoami',
                 'description' => 'Display current user',
                 'type' => GraphQLTypes::getType('user'),
-                'resolve' => function ($rootValue, $args, $context) {
-                    GraphQLHandler::tracePath("whoami");
+                'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_query_fields: resolve whoami');
                     $userId = GraphQLHandler::checkUser($context);
                     if (empty($userId)) {
                         return;

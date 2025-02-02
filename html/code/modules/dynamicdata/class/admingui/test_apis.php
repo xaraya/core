@@ -11,7 +11,7 @@
 
 namespace Xaraya\DataObject\AdminGui;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
+use Xaraya\Bridge\GraphQL\GraphQLBuilder;
 use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
@@ -202,10 +202,9 @@ class TestApisMethod extends MethodClass
         }
         if (!empty($create_gql)) {
             sys::autoload();
-            sys::import('xaraya.bridge.graphql.handler');
-            $graphQLHandler = new GraphQLHandler();
-            $extraTypes = $graphQLHandler->findExtraTypes($graphqllist);
-            $graphQLHandler->dumpSchema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
+            sys::import('xaraya.bridge.graphql.builder');
+            $graphQLBuilder = new GraphQLBuilder();
+            $graphQLBuilder->dumpSchema($graphqllist, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
             $this->ctl()->redirect($this->ctl()->getCurrentURL(['create_gql' => null]));
             return true;
         }

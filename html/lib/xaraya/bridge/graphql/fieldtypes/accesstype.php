@@ -50,7 +50,7 @@ class AccessFieldType extends ObjectType
                 'filters' => GraphQLTypes::getType('serial'),
             ],
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
-                GraphQLHandler::tracePath(array_merge($info->path, ["access field"]));
+                GraphQLHandler::tracePath(__CLASS__ . '::get_type_config: resolveField ' . $info->fieldName, $info->path);
                 if (empty($object)) {
                     return null;
                 }

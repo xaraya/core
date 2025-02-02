@@ -21,7 +21,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType for getting DD object items using global object identification
  */
-class DDNodeType extends ObjectType
+class DDNodeObjectType extends ObjectType
 {
     public function __construct()
     {
@@ -49,6 +49,7 @@ class DDNodeType extends ObjectType
                 'object' => ['type' => Type::string()],
             ],
             'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                GraphQLHandler::tracePath(__CLASS__ . '::get_type_config: resolve');
                 return $args;
             },
             'interfaces' => [

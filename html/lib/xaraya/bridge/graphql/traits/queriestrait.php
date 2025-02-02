@@ -110,7 +110,7 @@ trait QueriesTrait
     {
         // call either list_query_resolver or item_query_resolver here depending on $args['id']
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
-            GraphQLHandler::tracePath(array_merge($info->path, ["object query", $args]));
+            GraphQLHandler::tracePath(__CLASS__ . '::query_field_resolver: query', $info->path);
             // @todo check if type class corresponding to fieldname has overridden *_query_resolver
             $name = strtolower($info->fieldName);
             $page_ext = '_page';

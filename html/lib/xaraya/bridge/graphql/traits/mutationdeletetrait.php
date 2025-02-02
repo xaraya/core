@@ -84,7 +84,7 @@ trait MutationDeleteTrait
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations
             GraphQLHandler::enableCache(false);
-            GraphQLHandler::tracePath(array_merge($info->path, ["delete mutation"]));
+            GraphQLHandler::tracePath(__CLASS__ . '::delete_mutation_resolver: ' . $typename, $info->path);
             $fields = $info->getFieldSelection(1);
             if (empty($args['id'])) {
                 throw new Exception('Unknown id for type ' . $typename);

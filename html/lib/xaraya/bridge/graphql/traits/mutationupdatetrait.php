@@ -83,7 +83,7 @@ trait MutationUpdateTrait
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations
             GraphQLHandler::enableCache(false);
-            GraphQLHandler::tracePath(array_merge($info->path, ["update mutation"]));
+            GraphQLHandler::tracePath(__CLASS__ . '::update_mutation_resolver: ' . $typename, $info->path);
             $fields = $info->getFieldSelection(1);
             if (empty($args['input']) || empty($args['input']['id'])) {
                 throw new Exception('Unknown input for type ' . $typename);

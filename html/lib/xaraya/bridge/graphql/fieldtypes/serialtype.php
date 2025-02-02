@@ -27,7 +27,7 @@ class SerialFieldType extends ScalarType
 
     public function serialize($value)
     {
-        GraphQLHandler::tracePath(["serial scalar type"]);
+        GraphQLHandler::tracePath(__CLASS__ . '::serialize: ' . gettype($value));
         return $this->tryUnserialized($value);
     }
 
@@ -55,7 +55,7 @@ class SerialFieldType extends ScalarType
 
     public function parseLiteral($valueNode, ?array $variables = null)
     {
-        GraphQLHandler::tracePath(["parse literal", $valueNode->kind, $variables]);
+        GraphQLHandler::tracePath(__CLASS__ . '::parseLiteral: ' . $valueNode->kind, $variables);
         // @checkme support only top-level serialized values here
         if ($valueNode instanceof StringValueNode) {
             return $this->tryUnserialized($valueNode->value);

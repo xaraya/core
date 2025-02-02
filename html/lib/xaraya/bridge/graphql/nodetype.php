@@ -22,7 +22,7 @@ use Exception;
 /**
  * GraphQL InterfaceType for getting DD object items using global object identification
  */
-class NodeType extends InterfaceType
+class NodeInterfaceType extends InterfaceType
 {
     public function __construct()
     {
@@ -45,9 +45,9 @@ class NodeType extends InterfaceType
                 'id' => ['type' => Type::nonNull(Type::id())],
             ],
             'resolveType' => function ($value, $context, ResolveInfo $info) {
-                GraphQLHandler::tracePath(array_merge($info->path, ["node type"]));
-                GraphQLHandler::tracePath($value);
-                GraphQLHandler::tracePath(GraphQLObjects::getTypes());
+                GraphQLHandler::tracePath(__CLASS__ . '::get_type_config: resolveType', $info->path);
+                //GraphQLHandler::tracePath($value);
+                //GraphQLHandler::tracePath(GraphQLObjects::getTypes());
                 if (!is_array($value)) {
                     return Type::string();
                 }
@@ -74,6 +74,7 @@ class NodeType extends InterfaceType
                     'id' => ['type' => Type::nonNull(Type::id())],
                 ],
                 'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_query_fields: resolve');
                     [$object, $id] = explode(':', $args['id']);
                     return ['global_id' => $args['id'], 'id' => $id, 'object' => $object];
                 },

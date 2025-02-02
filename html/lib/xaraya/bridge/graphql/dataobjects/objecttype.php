@@ -50,7 +50,7 @@ class DataObjectType extends BaseObjectType
             'keys' => [
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
-                    GraphQLHandler::tracePath(array_merge($info->path, ["object keys"]));
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_object_fields: resolve keys', $info->path);
                     if (empty($object['_objectref'])) {
                         return array_keys($object);
                     }
@@ -68,7 +68,8 @@ class DataObjectType extends BaseObjectType
             //'access' => GraphQLTypes::getType("access"),
             'access' => [
                 'type' => GraphQLTypes::getType("access"),
-                'resolve' => function ($object, $args) {
+                'resolve' => function ($object, $args, $context, ResolveInfo $info) {
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_object_fields: resolve access');
                     if (empty($object['access'])) {
                         return null;
                     }
@@ -81,7 +82,7 @@ class DataObjectType extends BaseObjectType
             'config_kv' => [
                 'type' => GraphQLTypes::getTypeList("keyval"),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
-                    GraphQLHandler::tracePath(array_merge($info->path, ["object config_kv", gettype($object)]));
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_object_fields: resolve config_kv', $info->path);
                     // Note: this may not be filled in by object(s) resolve above
                     if (empty($object['config'])) {
                         return null;
@@ -109,7 +110,8 @@ class DataObjectType extends BaseObjectType
             'category' => Type::string(),
             '_objectref' => [
                 'type' => Type::string(),
-                'resolve' => function ($object, $args) {
+                'resolve' => function ($object, $args, $context, ResolveInfo $info) {
+                    GraphQLHandler::tracePath(__CLASS__ . '::get_object_fields: resolve _objectref');
                     return $object['_objectref']::class;
                 },
             ],
@@ -141,7 +143,7 @@ class DataObjectType extends BaseObjectType
     public static function list_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            GraphQLHandler::tracePath(array_merge($info->path, ["object list query", $args]));
+            GraphQLHandler::tracePath(__CLASS__ . '::list_query_resolver: ' . $type, $info->path);
             $fields = $info->getFieldSelection(1);
             if (GraphQLHandler::hasQueryFields($type)) {
                 $fieldlist = GraphQLHandler::getQueryFields($type);
@@ -223,7 +225,7 @@ class DataObjectType extends BaseObjectType
     public static function item_query_resolver($type, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            GraphQLHandler::tracePath(array_merge($info->path, ["object item query"]));
+            GraphQLHandler::tracePath(__CLASS__ . '::item_query_resolver: ' . $type, $info->path);
             $fields = $info->getFieldSelection(1);
             if (empty($args['id'])) {
                 throw new Exception('Unknown ' . $type);

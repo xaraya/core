@@ -559,18 +559,18 @@ class BuildType
     public static function default_field_resolver($useTypeClasses = true)
     {
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($useTypeClasses) {
-            GraphQLHandler::tracePath(array_merge($info->path, [$info->parentType->name . '.' . $info->fieldName, gettype($values), $args]));
+            //GraphQLHandler::tracePath(__CLASS__ . '::default_field_resolver: ' . $info->parentType->name . '.' . $info->fieldName, $info->path);
 
             // @checkme use standard default field resolver for any known types - will we need this?
             if ($info->parentType->isBuiltInType()) {
-                $field_resolver = self::find_field_resolver();
+                $field_resolver = self::find_field_resolver($context);
                 return call_user_func($field_resolver, $values, $args, $context, $info);
             }
 
             $typename = $info->parentType->name;
             $fieldname = $info->fieldName;
             // try finding field resolver for any other types and fields
-            $field_resolver = self::find_field_resolver($typename, $fieldname, $useTypeClasses);
+            $field_resolver = self::find_field_resolver($context, $typename, $fieldname, $useTypeClasses);
             return call_user_func($field_resolver, $values, $args, $context, $info);
         };
         return $resolver;
@@ -585,7 +585,8 @@ class BuildType
     public static function keys_field_resolver($typename, $fieldname)
     {
         GraphQLHandler::tracePath("use keys field resolver for type $typename field $fieldname");
-        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
+            GraphQLHandler::tracePath(__CLASS__ . '::keys_field_resolver: ' . $typename . '.' . $fieldname);
             if (empty($values)) {
                 return;
             }
@@ -615,7 +616,8 @@ class BuildType
     public static function serial_field_resolver($typename, $fieldname)
     {
         GraphQLHandler::tracePath("use serial field resolver for type $typename field $fieldname");
-        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
+            GraphQLHandler::tracePath(__CLASS__ . '::serial_field_resolver: ' . $typename . '.' . $fieldname);
             // @todo handle case where values is object
             if (is_string($values[$fieldname]) && !empty($values[$fieldname])) {
                 $result = @unserialize($values[$fieldname]);
@@ -637,7 +639,8 @@ class BuildType
     public static function bson_field_resolver($typename, $fieldname)
     {
         GraphQLHandler::tracePath("use bson field resolver for type $typename field $fieldname");
-        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
+            GraphQLHandler::tracePath(__CLASS__ . '::bson_field_resolver: ' . $typename . '.' . $fieldname);
             // handle case where values is object - see MongoDB\Model\BSONDocument and MongoDB\Model\BSONArray
             if (is_object($values[$fieldname]) && !empty($values[$fieldname])) {
                 $result = $values[$fieldname]->jsonSerialize();
@@ -660,7 +663,8 @@ class BuildType
     public static function alias_field_resolver($typename, $fieldname, $fieldalias)
     {
         GraphQLHandler::tracePath("use alias field resolver for type $typename field $fieldname = $fieldalias");
-        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname, $fieldalias) {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname, $fieldalias) {
+            GraphQLHandler::tracePath(__CLASS__ . '::alias_field_resolver: ' . $typename . '.' . $fieldname);
             if (is_array($values)) {
                 return $values[$fieldname] ?? ($values[$fieldalias] ?? null);
             }
@@ -681,7 +685,8 @@ class BuildType
     public static function keyval_field_resolver($typename, $fieldname, $fieldalias)
     {
         GraphQLHandler::tracePath("use keyval field resolver for type $typename field $fieldname");
-        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname, $fieldalias) {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname, $fieldalias) {
+            GraphQLHandler::tracePath(__CLASS__ . '::keyval_field_resolver: ' . $typename . '.' . $fieldname);
             $result = null;
             if (is_array($values)) {
                 $result = $values[$fieldname] ?? ($values[$fieldalias] ?? null);
@@ -722,7 +727,8 @@ class BuildType
     {
         GraphQLHandler::tracePath("use basetype field resolver for type $typename field $fieldname");
         // @checkme use standard default field resolver here?
-        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
+            GraphQLHandler::tracePath(__CLASS__ . '::basetype_field_resolver: ' . $typename . '.' . $fieldname);
             if (is_array($values)) {
                 return $values[$fieldname] ?? null;
             }
@@ -742,13 +748,14 @@ class BuildType
 
     /**
      * Find the appropriate field resolver for a particular type and field
+     * @param mixed $context
      * @param mixed $typename
      * @param mixed $fieldname
      * @param mixed $useTypeClasses
      * @throws \Exception
      * @return mixed
      */
-    public static function find_field_resolver($typename = '*', $fieldname = '*', $useTypeClasses = true)
+    public static function find_field_resolver($context = null, $typename = '*', $fieldname = '*', $useTypeClasses = true)
     {
         // initialize with the standard default field resolver
         static $field_resolvers = [
@@ -798,7 +805,7 @@ class BuildType
 
         // use standard default field resolver for _page types: order, offset, ..., [list items]
         $page_ext = '_page';
-        if (str_ends_with($typename, $page_ext)) {
+        if (str_ends_with($typename, needle: $page_ext)) {
             $field_resolver = $field_resolvers['*']['*'];
             $field_resolvers[$typename]['*'] = $field_resolver;
             GraphQLHandler::tracePath("use default field resolver for page type $typename");
@@ -816,7 +823,7 @@ class BuildType
                 return $field_resolver;
             }
             //$type_config = $clazz::get_type_config($typename);
-            $type_def = self::object_type_definition($typename);
+            $type_def = self::object_type_definition($typename, $context);
             if ($type_def) {
                 // use resolveField for type if available - @checkme shouldn't this come after field resolver(s)?
                 if ($type_def->resolveFieldFn) {
@@ -909,7 +916,7 @@ class BuildType
                 throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
             }
         } else {
-            GraphQLHandler::tracePath(["object field $object.$fieldname", $fieldspecs[$fieldname]]);
+            GraphQLHandler::tracePath("object field $object.$fieldname", ['fieldspecs' => $fieldspecs[$fieldname]]);
             throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
         }
 
@@ -979,9 +986,10 @@ class BuildType
     /**
      * Get the type definition for the object type - used by the default field resolver now
      * @param mixed $name
+     * @param mixed $context
      * @return mixed
      */
-    public static function object_type_definition($name)
+    public static function object_type_definition($name, $context = null)
     {
         $found = GraphQLTypes::getType($name);
         if (!empty($found)) {

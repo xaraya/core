@@ -44,7 +44,7 @@ class MultiValFieldType extends UnionType
                 GraphQLTypes::getTypeList("keyval"),
             ],
             'resolveType' => function ($value, $context, ResolveInfo $info) {
-                GraphQLHandler::tracePath(array_merge($info->path, ["multival type"]));
+                GraphQLHandler::tracePath(__CLASS__ . '::get_type_config: resolveType', $info->path);
                 if (!is_array($value)) {
                     return Type::string();
                 }

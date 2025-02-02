@@ -25,7 +25,7 @@ class MixedFieldType extends ScalarType
 
     public function serialize($value)
     {
-        GraphQLHandler::tracePath(["mixed scalar type"]);
+        GraphQLHandler::tracePath(__CLASS__ . '::serialize: ' . gettype($value));
         return $value;
     }
 
@@ -45,7 +45,7 @@ class MixedFieldType extends ScalarType
      */
     public function parseValue($value)
     {
-        GraphQLHandler::tracePath(["parse value", gettype($value), $value]);
+        GraphQLHandler::tracePath(__CLASS__ . '::parseValue: ' . gettype($value));
         return $value;
     }
 
@@ -56,7 +56,7 @@ class MixedFieldType extends ScalarType
      */
     public function parseLiteral($valueNode, ?array $variables = null)
     {
-        GraphQLHandler::tracePath(["parse literal", $valueNode->kind, $variables]);
+        GraphQLHandler::tracePath(__CLASS__ . '::parseLiteral: ' . $valueNode->kind, $variables);
         return $this->parseValueNode($valueNode);
     }
 

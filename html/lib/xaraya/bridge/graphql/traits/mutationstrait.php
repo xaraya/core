@@ -107,7 +107,7 @@ trait MutationsTrait
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
             // disable caching for mutations
             GraphQLHandler::enableCache(false);
-            GraphQLHandler::tracePath(array_merge($info->path, ["object mutation", $args]));
+            GraphQLHandler::tracePath(__CLASS__ . '::mutation_field_resolver: mutation', $info->path);
             // @todo check if type class corresponding to fieldname has overridden *_mutation_resolver
             $name = $info->fieldName;
             $action = substr($name, 0, 6);

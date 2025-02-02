@@ -300,7 +300,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     public static function call_query_resolver($func)
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($func) {
-            GraphQLHandler::tracePath(array_merge($info->path, ["module_api call query"]));
+            GraphQLHandler::tracePath(__CLASS__ . '::call_query_resolver: ' . $func['module'] . ' ' . $func['type'] . ' ' . $func['func'], $info->path);
             $fields = $info->getFieldSelection(1);
             // @checkme we only get the relevant 'args' values via the input type here
             if (is_array($func['args']) && !is_numeric(array_key_first($func['args']))) {
@@ -491,7 +491,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     public static function call_mutation_resolver($func)
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($func) {
-            GraphQLHandler::tracePath(array_merge($info->path, ["module_api call mutation"]));
+            GraphQLHandler::tracePath(__CLASS__ . '::call_mutation_resolver: ' . $func['module'] . ' ' . $func['type'] . ' ' . $func['func'], $info->path);
             $fields = $info->getFieldSelection(1);
             if (empty($args['input'])) {
                 throw new Exception("Unknown input for $func[module] $func[type] $func[func] function");
@@ -539,7 +539,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
         //$rolename = $role->getName();
         xarMod::init();
         xarUser::init();
-        GraphQLHandler::tracePath(["Calling $module $type $func for user $userId", $args, $fields]);
+        GraphQLHandler::tracePath("Calling $module $type $func for user $userId", ['args' => $args, 'fields' => $fields]);
         return xarMod::apiFunc($module, $type, $func, $args, $context);
         //$values = ['func_args' => $args];
         //return $values;

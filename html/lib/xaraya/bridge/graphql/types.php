@@ -298,7 +298,7 @@ class GraphQLTypes
         static $classMapper = [
             'querytype' => QueryType::class,
             'dummytype' => DummyType::class,
-            'buildtype' => BuildType::class,
+            //'buildtype' => BuildType::class,
             'basetype' => BaseObjectType::class,
             'sampletype' => SampleObjectType::class,
             'objecttype' => DataObjectType::class,
@@ -311,8 +311,8 @@ class GraphQLTypes
             'serialtype' => SerialFieldType::class,
             'mixedtype' => MixedFieldType::class,
             'mutationtype' => MutationType::class,
-            //'nodetype' => NodeType::class,
-            //'ddnodetype' => DDNodeType::class,
+            //'nodetype' => NodeInterfaceType::class,
+            //'ddnodetype' => DDNodeObjectType::class,
             'moduleapitype' => ModuleApiType::class,
         ];
         if (!array_key_exists($type, $classMapper) && array_key_exists($type, self::$typeMapper)) {
@@ -331,6 +331,7 @@ class GraphQLTypes
 
     /**
      * Type config decorator for Query and Object types when using BuildSchema
+     * @todo handle $context for tracePath()
      * @param array<string, mixed> $typeConfig
      * @param mixed $typeDefinitionNode
      * @param mixed $allNodesMap
