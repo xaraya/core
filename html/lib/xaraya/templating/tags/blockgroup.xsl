@@ -10,6 +10,7 @@
 
 <xsl:template name="xar-blockgroup" match="xar:blockgroup">
   <xsl:processing-instruction name="php">
+    <xsl:text>$_bl_context ??= null;&nl;</xsl:text>
     <xsl:text>echo </xsl:text>
     <xsl:call-template name="blockgroup_code"/>
   </xsl:processing-instruction>
@@ -32,7 +33,7 @@
     </xsl:when>
     <xsl:when test="not(child::node())">
       <xsl:text>xarBlock::renderGroup('</xsl:text><xsl:value-of select="@name"/>
-      <xsl:text>');&nl;</xsl:text>
+      <xsl:text>', null, $_bl_context);&nl;</xsl:text>
 
       <xsl:apply-templates />
     </xsl:when>

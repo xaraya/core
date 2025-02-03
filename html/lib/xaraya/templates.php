@@ -1097,6 +1097,8 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
         $tplData = array(
             'tpl'                      => $tpl,
             '_bl_mainModuleOutput'     => $mainModuleOutput,
+            // pass context for xar:blockgroup etc.
+            '_bl_context'              => $context,
         );
 
         return self::executeFromFile($sourceFileName, $tplData);

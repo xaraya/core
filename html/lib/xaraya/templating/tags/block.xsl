@@ -17,6 +17,7 @@
 
 <xsl:template match="xar:block">
   <xsl:processing-instruction name="php">
+    <xsl:text>$_bl_context ??= null;&nl;</xsl:text>
     <xsl:text>echo </xsl:text>
     <xsl:call-template name="block_code"/>
     <xsl:text>;</xsl:text>
@@ -53,7 +54,7 @@
           name="nodeset"
           select="@*[name() != 'instance' and name() != 'module' and name() != 'type' and name() != 'name' and  name() != 'title' and name() != 'template' and name() != 'state' and name() != 'tplmodule'] "/>
       </xsl:call-template>
-      <xsl:text>))</xsl:text>
+      <xsl:text>), $_bl_context)</xsl:text>
     </xsl:when>
     <xsl:otherwise>
         <!-- Error out? -->

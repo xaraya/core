@@ -300,10 +300,10 @@ class xarTwigTpl extends xarTpl
      * @param TemplateWrapper $template
      * @param array<string, mixed> $tplData
      * @param string $templateName
-     * @param string $trace
+     * @param string $caller
      * @return string
      */
-    public static function renderTemplate($template, $tplData, $templateName, $trace = '')
+    public static function renderTemplate($template, $tplData, $templateName, $caller = '')
     {
         $output = $template->render($tplData);
         /**
@@ -317,12 +317,12 @@ class xarTwigTpl extends xarTpl
         if (str_contains($output, '&amp;amp;')) {
             $output = str_replace('&amp;amp;', '&amp;', $output);
         }
-        // don't use trace in page templates to avoid adding comments to page
-        if (empty($trace) || !xarTpl::outputTemplateFilenames()) {
+        // don't use caller in page templates to avoid adding comments to page
+        if (empty($caller) || !xarTpl::outputTemplateFilenames()) {
             return $output;
         }
         return '<!-- start: ' . $templateName . " -->\n" .
-            //'<!-- args: ' . $trace . ' -->' .
+            //'<!-- args: ' . $caller . ' -->' .
             trim($output) .
             '<!-- end: ' . $templateName . " -->\n";
     }
@@ -370,7 +370,7 @@ class xarTwigTpl extends xarTpl
             $pageTemplate = $context['page'] ?? self::getPageTemplateName();
         }
         $themeName = $context['theme'] ?? xarTpl::getThemeName();
-        $trace = "xarTwigTpl::renderPage('...', 'theme', $themeName, $pageTemplate, null, 'pages')";
+        $caller = "xarTwigTpl::renderPage('...', 'theme', $themeName, $pageTemplate, null, 'pages')";
         // get page template source (current > common)
         //$sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $pageTemplate, null, 'pages');
         /** @var Environment $twig */
@@ -378,7 +378,7 @@ class xarTwigTpl extends xarTpl
         $templateName = static::findPageTemplate($twig, $themeName, 'pages', $pageTemplate, '');
         if (empty($templateName)) {
             //return parent::renderPage($mainModuleOutput, $pageTemplate, $context);
-            return 'Twig template not found: ' . $trace;
+            return 'Twig template not found: ' . $caller;
         }
         // see xarTpl::renderPage
         $tpl = (object) null; // Create an object to hold the 'specials'
@@ -386,6 +386,8 @@ class xarTwigTpl extends xarTpl
         $tplData = [
             'tpl'                      => $tpl,
             '_bl_mainModuleOutput'     => $mainModuleOutput,
+            // not really needed for xar_blockgroup() etc. as context is already known in extension, but let's be consistent
+            '_bl_context'              => $context,
         ];
         $template = $twig->load($templateName);
         // don't use trace in page templates to avoid adding comments to page
@@ -449,18 +451,18 @@ class xarTwigTpl extends xarTpl
             $blockInfo['context']['twig'] = static::getTwigEnvironment($blockInfo['context']);
         }
         $themeName = $blockInfo['context']['theme'] ?? xarTpl::getThemeName();
-        $trace = "[$themeName] xarTwigTpl::renderBlockBox([...], $tplName)";
+        $caller = "[$themeName] xarTwigTpl::renderBlockBox([...], $tplName)";
         /** @var Environment $twig */
         $twig = $blockInfo['context']['twig'];
         $templateName = static::findBoxTemplate($twig, $themeName, $tplName ?? '');
         if (empty($templateName)) {
             //return parent::renderPage($mainModuleOutput, $pageTemplate, $context);
-            return 'Twig template not found: ' . $trace;
+            return 'Twig template not found: ' . $caller;
         }
         //var_dump($blockInfo);
-        //return $templateName . ':' . $trace;
+        //return $templateName . ':' . $caller;
         $template = $twig->load($templateName);
-        return static::renderTemplate($template, $blockInfo, $templateName, $trace);
+        return static::renderTemplate($template, $blockInfo, $templateName, $caller);
     }
 
     /**
@@ -543,16 +545,16 @@ class xarTwigTpl extends xarTpl
             $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
-        $trace = "[$themeName] xarTwigTpl::module($modName, $modType, $funcName, [...], $tplName)";
+        $caller = "[$themeName] xarTwigTpl::module($modName, $modType, $funcName, [...], $tplName)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findModuleTemplate($twig, $themeName, $modName, $modType, $funcName, $tplName ?? '');
         if (empty($templateName)) {
             //return parent::module($modName, $modType, $funcName, $tplData, $templateName);
-            return 'Twig template not found: ' . $trace;
+            return 'Twig template not found: ' . $caller;
         }
         $template = $twig->load($templateName);
-        return static::renderTemplate($template, $tplData, $templateName, $trace);
+        return static::renderTemplate($template, $tplData, $templateName, $caller);
     }
 
     /**
@@ -675,18 +677,18 @@ class xarTwigTpl extends xarTpl
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
         //return parent::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
-        $trace = "[$themeName] xarTwigTpl::block($modName, $blockType, [...], $tplName, $tplBase, $tplModule)";
+        $caller = "[$themeName] xarTwigTpl::block($modName, $blockType, [...], $tplName, $tplBase, $tplModule)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findBlockTemplate($twig, $themeName, $modName, $blockType, $tplName ?? '', $tplBase ?? '', $tplModule ?? '');
         if (empty($templateName)) {
             //return parent::object($modName, $objectName, $tplType, $tplData, $tplBase);
-            return 'Twig template not found: ' . $trace;
+            return 'Twig template not found: ' . $caller;
         }
         //var_dump($tplData);
-        //return $templateName . ':' . $trace;
+        //return $templateName . ':' . $caller;
         $template = $twig->load($templateName);
-        return static::renderTemplate($template, $tplData, $templateName, $trace);
+        return static::renderTemplate($template, $tplData, $templateName, $caller);
     }
 
     /**
@@ -770,16 +772,16 @@ class xarTwigTpl extends xarTpl
             $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
-        $trace = "[$themeName] xarTwigTpl::object($modName, $objectName, $tplType, [...], $tplBase)";
+        $caller = "[$themeName] xarTwigTpl::object($modName, $objectName, $tplType, [...], $tplBase)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findObjectTemplate($twig, $themeName, $modName, $objectName, $tplType, $tplBase ?? '');
         if (empty($templateName)) {
             //return parent::object($modName, $objectName, $tplType, $tplData, $tplBase);
-            return 'Twig template not found: ' . $trace;
+            return 'Twig template not found: ' . $caller;
         }
         $template = $twig->load($templateName);
-        return static::renderTemplate($template, $tplData, $templateName, $trace);
+        return static::renderTemplate($template, $tplData, $templateName, $caller);
     }
 
     /**
@@ -875,16 +877,16 @@ class xarTwigTpl extends xarTpl
             $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
-        $trace = "[$themeName] xarTwigTpl::property($modName, $propertyName, $tplType, [...], $tplBase)";
+        $caller = "[$themeName] xarTwigTpl::property($modName, $propertyName, $tplType, [...], $tplBase)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findPropertyTemplate($twig, $themeName, $modName, $propertyName, $tplType, $tplBase ?? '');
         if (empty($templateName)) {
             //return parent::property($modName, $propertyName, $tplType, $tplData, $tplBase);
-            return 'Twig template not found: ' . $trace;
+            return 'Twig template not found: ' . $caller;
         }
         $template = $twig->load($templateName);
-        return static::renderTemplate($template, $tplData, $templateName, $trace);
+        return static::renderTemplate($template, $tplData, $templateName, $caller);
     }
 
     /**
