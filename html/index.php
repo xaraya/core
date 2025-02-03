@@ -185,6 +185,11 @@ function xarMain()
 
         // Get context of the request if available
         $context = $request->getServerContext()?->getContext();
+        /**
+         * Un-comment the next line to enable context trace
+         * Show it with <xar:template file="context-trace" module="base" /> or in PHP content block
+         */
+        //$context->enableTrace(true);
         // Use Twig templates with Xaraya - install xaraya/twig package with composer first
         /** un-comment the next line to activate Twig templates */
         //$context['twig'] = true;

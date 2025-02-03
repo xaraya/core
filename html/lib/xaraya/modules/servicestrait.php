@@ -293,7 +293,6 @@ trait ModuleServicesTrait
         if (!isset($this->methods[$funcName])) {
             return;
         }
-        $this->context?->tracePath(__CLASS__ . '::' . $funcName, $arguments);
         $this->methods[$funcName]->setContext($this->context);
         if (!empty($arguments)) {
             return $this->methods[$funcName]->__invoke(...$arguments);

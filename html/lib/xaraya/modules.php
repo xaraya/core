@@ -901,6 +901,7 @@ class xarMod extends xarObject implements IxarMod
                     if (!empty($callable)) {
                         // this expects an instance in $callable[0]
                         if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
+                            $context?->tracePath($callable[0]::class . '::' . $callable[1], $args);
                             $callable[0]->setContext($context);
                         }
                         $funcResult = $callable($args);

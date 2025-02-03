@@ -41,6 +41,7 @@
                 #$centergroup#                
             </div>
             <xar:place-javascript position="body"/>
+            <xar:comment><xar:template file="context-trace" module="base" /></xar:comment>
         </body>
     </html>
 </xar:blocklayout>

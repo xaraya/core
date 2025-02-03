@@ -361,6 +361,7 @@ class DataObjectFactory extends xarObject
     **/
     public static function getObject(array $args = [], $context = null)
     {
+        $context?->tracePath(__METHOD__, $args);
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
         if (!empty($args['table']) && empty($args['objectid']) && empty($args['name'])) {
             sys::import('modules.dynamicdata.class.objects.virtual');
@@ -444,6 +445,7 @@ class DataObjectFactory extends xarObject
     **/
     public static function getObjectList(array $args = [], $context = null)
     {
+        $context?->tracePath(__METHOD__, $args);
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
         // Complete the info if this is a known object
         if (!empty($args['table']) && empty($args['objectid']) && empty($args['name'])) {
@@ -533,6 +535,7 @@ class DataObjectFactory extends xarObject
      */
     public static function getObjectLoader(string $objectName, array $fieldlist, mixed $context = null)
     {
+        $context?->tracePath(__METHOD__, ['objectName' => $objectName, 'fieldlist' => $fieldlist]);
         $loader = new DataObjectLoader($objectName, $fieldlist);
         $loader->setContext($context);
         return $loader;

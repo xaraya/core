@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- get context from page template if available -->
+    <xar:if condition="!empty($_bl_context) and empty($context)">
+        <xar:set name="context">$_bl_context</xar:set>
+    </xar:if>
+    <xar:set name="trace">$context->getTrace()</xar:set>
+    <div id="context-trace">
+        <p>Context Trace:</p>
+        <ol>
+        <xar:foreach in="$trace" value="$line">
+            <li>#$line[0]#: #$line[1]# #json_encode($line[2])#</li>
+        </xar:foreach>
+        </ol>
+    </div>
+</xar:template>
