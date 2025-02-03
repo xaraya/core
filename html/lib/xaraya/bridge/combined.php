@@ -79,10 +79,10 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
 
     public function getRouter(): RouterInterface
     {
-        // get normal routes
-        $routes = $this->bridge::getRoutes();
-        // add api routes (with default /api prefix)
-        $routes = array_replace($routes, RoutingApiBridge::getRoutes());
+        // get api routes (with default /api prefix) first
+        $routes = RoutingApiBridge::getRoutes();
+        // add normal routes - must be after /api or /{module}/{type}/{func} will match first
+        $routes = array_replace($routes, $this->bridge::getRoutes());
         // get router for all routes
         $router = $this->bridge->getRouter($routes);
         return $router;

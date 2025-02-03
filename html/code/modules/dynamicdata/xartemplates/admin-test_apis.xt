@@ -86,16 +86,38 @@
     <!-- show the list of api objects -->
         <form method="post">
             <fieldset class="xar-form-actions">
-                <legend>Objects Available via APIs</legend>
+                <legend>Available via APIs</legend>
                 <table class="xar-table xar-items">
                     <thead>
                         <tr>
-                            <th>Dynamic Data Object</th>
-                            <th>REST API</th>
-                            <th>GraphQL</th>
+                            <th>Resource Type</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <th>Generic</th>
+                        <th>REST API</th>
+                        <th>GraphQL</th>
+                    </tr>
+                    <tr>
+                        <td>Who am I?</td>
+                        <td><input type="checkbox" id="restapi_whoami" checked="checked" disabled="disabled"/></td>
+                        <td><input type="checkbox" id="graphql_whoami" checked="checked" disabled="disabled"/></td>
+                    </tr>
+                    <tr>
+                        <td>Context</td>
+                        <td><input type="checkbox" id="restapi_context" checked="checked" disabled="disabled"/></td>
+                        <td><input type="checkbox" id="graphql_context" checked="checked" disabled="disabled"/></td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <th>Dynamic Data Object</th>
+                        <th>REST API</th>
+                        <th>GraphQL</th>
+                    </tr>
                     <xar:foreach in="$objects" value="$item">
                         <tr>
                             <td><a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></td>
@@ -121,15 +143,12 @@
                         <td><input type="checkbox" name="restapi_new" id="restapi_new"/></td>
                         <td><input type="checkbox" name="graphql_new" id="graphql_new"/></td>
                     </tr>
+                    </tbody>
+                    <tbody>
                     <tr>
-                        <td>Who am I?</td>
-                        <td><input type="checkbox" id="restapi_whoami" checked="checked" disabled="disabled"/></td>
-                        <td><input type="checkbox" id="graphql_whoami" checked="checked" disabled="disabled"/></td>
-                    </tr>
-                    <tr>
-                        <td>Context</td>
-                        <td><input type="checkbox" id="restapi_context" checked="checked" disabled="disabled"/></td>
-                        <td><input type="checkbox" id="graphql_context" checked="checked" disabled="disabled"/></td>
+                        <th>Module APIs</th>
+                        <th>REST API</th>
+                        <th>GraphQL</th>
                     </tr>
                     <xar:foreach in="$modules" value="$item">
                         <xar:foreach in="$item['apilist']" key="$api" value="$info">

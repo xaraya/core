@@ -14,6 +14,7 @@ namespace Xaraya\Context;
 class ContextFactory
 {
     public const REQUESTID_PREFIX = 'req_';
+    public const REQUEST_ATTRIBUTE = 'xaraya:context';
 
     /** @var array<string, string> */
     public static array $mapping = [
@@ -28,7 +29,7 @@ class ContextFactory
     protected static mixed $requestCreator = null;
 
     /**
-     * Create new context from request
+     * Create new context from PSR-7 server request
      * @param ?\Psr\Http\Message\ServerRequestInterface $request PSR-7 server request if available
      * @param ?string $source source where the context is created
      * @return Context<string, mixed>
@@ -38,23 +39,31 @@ class ContextFactory
         if (!isset($request)) {
             return static::fromGlobals($source);
         }
+        // check if we already have a context as request attribute for PSR-15 middleware etc.
+        $context = $request->getAttribute(static::REQUEST_ATTRIBUTE, null);
+        if (!is_null($context) && $context instanceof ContextObjectInterface) {
+            // @todo what if request is updated by PSR-15 middleware - do we care here?
+            return $context;
+        }
         // @todo use static::$mapping of context key to request attribute
         /** @var Context<string, mixed> $context */
         // set context from request attributes
         $context = new Context((array) $request->getAttributes());
-        // @todo don't save request in the context for now, unless we really need it later...
+        // don't save request in the context for now, unless we really need it later...
         //$context['request'] = &$request;
         $context['requestId'] = static::makeRequestId($request);
-        // @todo see rest handler and graphql for getUserId()
+        // see rest handler and graphql for getUserId()
         $context['server'] = $request->getServerParams();
         $context['cookie'] = $request->getCookieParams();
-        // @todo see RequestContext
+        // see RequestContext
         $context['query'] = $request->getQueryParams();
         $context['body'] = $request->getParsedBody();
         if (empty($context['body'])) {
             $context['input'] = (string) $request->getBody();
         }
         //$context['files'] = $request->getUploadedFiles();
+        // set context as request attribute for middleware etc.
+        $request = $request->withAttribute(static::REQUEST_ATTRIBUTE, $context);
         return $context;
     }
 
@@ -123,6 +132,7 @@ class ContextFactory
         }
         $headers = static::$requestCreator::getHeadersFromServer($context['server'] ?? []);
         $request = static::$requestCreator->fromArrays($context['server'] ?? [], $headers, $context['cookie'] ?? [], $context['query'] ?? [], $context['body'] ?? null, $context['files'] ?? [], $context['input'] ?? null);
+        $request = $request->withAttribute(static::REQUEST_ATTRIBUTE, $context);
         return $request;
     }
 }

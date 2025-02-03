@@ -34,10 +34,22 @@ final class ContextFactoryTest extends TestCase
             'query' => $queryVars,
         ]);
         $request = ContextFactory::makeRequest($context);
+        // reset context as request attribute first to create a fresh context
+        $request = $request->withAttribute(ContextFactory::REQUEST_ATTRIBUTE, null);
 
         $context = ContextFactory::fromRequest($request);
         $this->assertEquals($serverVars, $context['server']);
         $this->assertEquals($queryVars, $context['query']);
+
+        $context['updated'] = 'from_attribute';
+        // context is set as request attribute
+        $expected = $request->getAttribute(ContextFactory::REQUEST_ATTRIBUTE, null);
+        $this->assertEquals($expected, $context);
+
+        $context['updated'] = 'from_request';
+        // check if we already have a context as request attribute
+        $expected = ContextFactory::fromRequest($request);
+        $this->assertEquals($expected, $context);
     }
 
     public function testFromGlobals(): void
@@ -91,6 +103,11 @@ final class ContextFactoryTest extends TestCase
         $this->assertEquals($serverVars, $request->getServerParams());
         $this->assertEquals($queryVars, $request->getQueryParams());
         $this->assertEquals($headers, $request->getHeaders());
+
+        $context['updated'] = 'from_attribute';
+        // context is set as request attribute
+        $expected = $request->getAttribute(ContextFactory::REQUEST_ATTRIBUTE, null);
+        $this->assertEquals($expected, $context);
     }
 
     public function testMakeRequestFromGlobals(): void
