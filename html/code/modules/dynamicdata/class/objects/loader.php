@@ -243,6 +243,7 @@ class DataObjectLoader implements ContextInterface
         if (empty($this->todo)) {
             return;
         }
+        $this->getContext()?->tracePath(__METHOD__ . ': ' . $this->objectname, $this->todo);
         $this->preLoad();
         // 1. call resolver if defined, or
         if (!empty($this->resolver) && is_callable($this->resolver)) {

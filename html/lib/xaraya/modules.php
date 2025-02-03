@@ -940,6 +940,7 @@ class xarMod extends xarObject implements IxarMod
         if (!$found) {
             return xarController::notFound('Function not found', $context);
         }
+        $context?->tracePath(__METHOD__ . ': ' . $modFunc, $args);
 
         $funcResult = $modFunc($args, $context);
         return $funcResult;

@@ -280,6 +280,7 @@ class DataObjectUserInterface extends xarObject
             // create the new handler with the initial arguments
             $this->handler = new $handlerclazz($this->args);
         }
+        $context?->tracePath(__METHOD__ . ': ' . $this->handler::class . '->' . $handlerfunc, $args);
         // set the context for this handler call
         $this->handler->setContext($context);
 

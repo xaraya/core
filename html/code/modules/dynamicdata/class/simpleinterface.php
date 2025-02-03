@@ -70,6 +70,7 @@ class SimpleObjectInterface extends DefaultHandler
         } else {
             $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
         }
+        $this->getContext()?->tracePath(__METHOD__ . ': ' . $this->object->name, $this->args);
 
         if (empty($this->object)) {
             return;
