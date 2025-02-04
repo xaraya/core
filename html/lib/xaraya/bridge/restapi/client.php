@@ -126,7 +126,7 @@ function restapi_client($argc, $argv)
 {
     [$path, $params] = parse_cli_arguments($argc, $argv);
     $client = new RestApiClient();
-    if (!empty($path)) {
+    if (!empty($path) && str_contains($path, '/')) {
         echo $client->get($path, $params);
         // $client->login($user, $pass);  // or
         // $client->setAuthToken('...');

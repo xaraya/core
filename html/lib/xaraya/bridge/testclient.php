@@ -233,7 +233,7 @@ function parse_cli_arguments($argc, $argv)
 {
     $path = '';
     $params = [];
-    if ($argc > 1 && str_contains($argv[1], '/')) {
+    if ($argc > 1) {
         $path = $argv[1];
         if ($argc > 2) {
             $query = implode('&', array_slice($argv, 2));
