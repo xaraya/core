@@ -136,9 +136,10 @@ class ModuleAPIHandler extends RestAPIHandler
         // @checkme how to save this in case of caching?
         if (!empty($func['mediatype'])) {
             $context['mediatype'] = $func['mediatype'];
-            if (!empty($context['request'])) {
-                $context['request'] = ($context['request'])->withAttribute('mediaType', $func['mediatype']);
-            }
+            // don't save request in the context for now, unless we really need it later...
+            //if (!empty($context['request'])) {
+            //    $context['request'] = ($context['request'])->withAttribute('mediaType', $func['mediatype']);
+            //}
         }
         // @checkme pass all query args from handler here?
         $params = $args['query'] ?? [];
@@ -200,9 +201,10 @@ class ModuleAPIHandler extends RestAPIHandler
         $context = $this->getContext();
         if (!empty($func['mediatype'])) {
             $context['mediatype'] = $func['mediatype'];
-            if (!empty($context['request'])) {
-                $context['request'] = ($context['request'])->withAttribute('mediaType', $func['mediatype']);
-            }
+            // don't save request in the context for now, unless we really need it later...
+            //if (!empty($context['request'])) {
+            //    $context['request'] = ($context['request'])->withAttribute('mediaType', $func['mediatype']);
+            //}
         }
         // @checkme handle POSTed args by passing $args['input'] only in handler?
         $params = $args['input'] ?? [];

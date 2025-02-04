@@ -239,6 +239,7 @@ trait ParentServicesTrait
      * - getURL() for current object - or use ctl()->getObjectURL() in general with objectName
      * - getObject()
      * - getObjectList()
+     * - getObjectLoader()
      * - getObjectInfo()
      * - getObjects()
      * - getObjectID()

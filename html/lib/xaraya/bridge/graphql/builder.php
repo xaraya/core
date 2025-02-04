@@ -59,7 +59,7 @@ class GraphQLBuilder
             GraphQLTypes::setExtraTypes($extraTypes);
         }
         // GraphQLObjects::mapObjects();
-        GraphQLHandler::loadObjects();
+        GraphQLObjects::loadObjects();
         // Schema doesn't accept lazy loading of query type (besides typeLoader)
         $queryType = GraphQLTypes::getType("query");
         $mutationType = GraphQLTypes::getType("mutation");

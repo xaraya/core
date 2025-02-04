@@ -260,6 +260,7 @@ class GraphQLTypes
         }
         // make InputObject Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extraTypes) || in_array(ucfirst($name), self::$extraTypes)) {
+            /** @var InputObjectType $type */
             $type = BuildType::make_input_type($name);
             if (!$type) {
                 throw new Exception("Unknown graphql type: " . $input);
@@ -269,8 +270,8 @@ class GraphQLTypes
         }
         // make InputObject Type for ModuleApi mutation
         if (!array_key_exists($name, self::$typeMapper)) {
+            /** @var ModuleApiType $clazz */
             $clazz = self::getTypeClass(self::$typeMapper['module_api']);
-            $clazz::load_config();
             $type = $clazz::get_input_type($name);
             if (!$type) {
                 throw new Exception("Unknown graphql type: " . $input);
@@ -278,6 +279,7 @@ class GraphQLTypes
             self::$typeCache[$input] = $type;
             return $type;
         }
+        /** @var InputObjectInterface $clazz */
         $clazz = self::getTypeClass(self::$typeMapper[$name]);
         // get input type from existing type class
         $type = $clazz::get_input_type($input);

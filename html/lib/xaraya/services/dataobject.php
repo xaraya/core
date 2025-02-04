@@ -20,6 +20,7 @@ use DataObjectDescriptor;
 use DataObjectFactory;
 use DataObject;
 use DataObjectList;
+use DataObjectLoader;
 use DataPropertyMaster;
 use DataProperty;
 use xarServer;
@@ -57,6 +58,12 @@ interface DataObjectInterface extends ServiceInterface
      * @param array<string, mixed> $args
      */
     public function getObjectList(array $args = []): DataObjectList|null;
+
+    /**
+     * Get data object loader
+     * @param array<string> $fieldlist
+     */
+    public function getObjectLoader(?string $objectName = null, array $fieldlist = ['id', 'name']): DataObjectLoader|null;
 
     /**
      * Get info about a data object by name or objectid
@@ -147,6 +154,16 @@ trait DataObjectTrait
     }
 
     /**
+     * Get data object loader
+     * @param array<string> $fieldlist
+     */
+    public function getObjectLoader(?string $objectName = null, array $fieldlist = ['id', 'name']): DataObjectLoader|null
+    {
+        $objectName ??= $this->getObjectName();
+        return DataObjectFactory::getObjectLoader($objectName, $fieldlist, $this->getContext());
+    }
+
+    /**
      * Get info about a data object by name or objectid
      * @param array<string, mixed> $args
      * @return array<mixed>|null containing the name => value pairs for the object
@@ -194,6 +211,7 @@ trait DataObjectTrait
  * - template() for current object - or use tpl()->object() in general with modName objectTemplate
  * - getObject()
  * - getObjectList()
+ * - getObjectLoader()
  * - getObjectInfo()
  * - getObjects()
  * - getObjectID()

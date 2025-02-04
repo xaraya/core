@@ -50,22 +50,6 @@ use Exception;
 class ModuleApiType extends ObjectType implements InputObjectInterface
 {
     // @todo analyze response and mediatype + create result type per function if needed
-    /**
-    public static $_xar_functions = [
-        'get_hello' => [
-            'module' => 'dynamicdata', 'type' => 'rest', 'func' => 'get_hello', 'args' => 'mixed', 'result' => 'mixed'
-        ],
-        'post_hello' => [
-            'module' => 'dynamicdata', 'type' => 'rest', 'func' => 'post_hello', 'args' => 'mixed', 'result' => 'mixed'
-        ],
-        'anotherapi' => [
-            'module' => 'dynamicdata', 'type' => 'user', 'func' => 'getobjects', 'args' => ['moduleid' => 'string'], 'result' => ['object']
-        ],
-        'no_login' => [
-            'module' => 'authsystem', 'type' => 'rest', 'func' => 'honeypot', 'args' => ['username' => 'string', 'password' => 'string'], 'result' => 'string'
-        ],
-    ];
-     */
     /** @var array<mixed> */
     public static $_xar_queries = [];
     /** @var array<mixed> */
@@ -93,111 +77,14 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
     }
 
     /**
-     * Summary of load_config
-     * @throws \Exception
-     * @return void
-     */
-    public static function load_config()
-    {
-        GraphQLHandler::loadModules();
-        foreach (GraphQLHandler::getModules() as $itemid => $info) {
-            $module = $info['module'];
-            foreach ($info['apilist'] as $api => $item) {
-                if (isset($item['enabled']) && empty($item['enabled'])) {
-                    continue;
-                }
-                $item['module'] = $module;
-                $item['type'] ??= 'rest';
-                // @checkme 'name' is a tricky part for GraphQL type definitions - use 'func' here instead to be sure
-                $item['func'] = $item['name'] ?? $api;
-                $item['method'] ??= 'get';
-                // @checkme handle default args if specified in getlist.php
-                $item['default'] = $item['args'] ?? [];
-                $item['args'] = 'mixed';
-                // @checkme add paging parameters if specified in getlist.php
-                $item['paging'] ??= false;
-                // @todo parse optional response - and how to match with result type, e.g. DD getobjects -> ['object']
-                $item['result'] = $item['response'] ?? 'mixed';
-                if (str_contains($item['path'], '/')) {
-                    $name = $module . '_' . $api;
-                    // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-                    if (str_contains($item['path'], '{')) {
-                        $found = preg_match_all('/\{([^}]+)\}/', $item['path'], $matches);
-                        if (empty($found)) {
-                            throw new Exception('Invalid path parameter in path ' . $item['path'] . ' for rest api ' . $api . ' in module ' . $module);
-                        }
-                        // @checkme assuming we don't have more complex parameters already, we simply add them first
-                        $path_params = [];
-                        foreach ($matches[1] as $part) {
-                            $path_params[] = $part;
-                        }
-                        $item['parameters'] ??= [];
-                        $item['parameters'] = array_merge($path_params, $item['parameters']);
-                    }
-                } else {
-                    $name = $module . '_' . $item['path'];
-                }
-                if ($item['method'] == 'post' || !empty($item['requestBody'])) {
-                    if (!empty($item['requestBody']) && !empty($item['requestBody']['application/json'])) {
-                        $item['args'] = static::parse_api_parameters($item['requestBody']['application/json']);
-                    }
-                    if (!array_key_exists($name, static::$_xar_mutations)) {
-                        static::$_xar_mutations[$name] = $item;
-                    }
-                } elseif (!array_key_exists($name, static::$_xar_queries)) {
-                    if (isset($item['parameters'])) {
-                        $item['args'] = static::parse_api_parameters($item['parameters']);
-                    }
-                    static::$_xar_queries[$name] = $item;
-                }
-            }
-        }
-    }
-
-    /**
-     * Summary of parse_api_parameters
-     * @param mixed $parameters
-     * @return array<string, mixed>
-     */
-    public static function parse_api_parameters($parameters)
-    {
-        $properties = [];
-        // @checkme handle more complex parameters like arrays of itemids for getitemlinks
-        foreach ($parameters as $key => $name) {
-            // 'parameters' => ['itemtype', 'itemids'],  // optional parameter(s)
-            // 'requestBody' => ['application/json' => ['name', 'score']],  // optional requestBody
-            if (is_numeric($key)) {
-                $properties[$name] = 'string';
-            } elseif (is_array($name)) {
-                // => ['itemtype' => ['type' => 'string'], 'itemids' => ['type' => 'array', 'items' => ['type' => 'string']]]
-                if (array_key_exists("type", $name)) {
-                    $properties[$key] = $name['type'];
-                    // => ['itemtype' => 'string', 'itemids' => ['integer']]
-                } else {
-                    // @checkme use style = form + explode = true here
-                    $properties[$key] = [$name[0]];
-                }
-                // => ['itemtype' => 'string', 'itemids' => 'array']
-            } elseif (in_array($name, ["string", "integer", "boolean"])) {
-                $properties[$key] = $name;
-                // => ['itemtype' => 'string', 'itemids' => 'array']
-            } elseif ($name === "array") {
-                // @checkme use style = form + explode = true here
-                $properties[$key] = ['string'];
-                //} elseif ($name === "object") {
-            } else {
-            }
-        }
-        return $properties;
-    }
-
-    /**
      * Summary of get_query_fields
      * @return array<mixed>
      */
     public static function get_query_fields(): array
     {
-        static::load_config();
+        if (empty(static::$_xar_queries)) {
+            static::$_xar_queries = GraphQLModules::getQueries();
+        }
         $fields = [];
         foreach (static::$_xar_queries as $name => $func) {
             $fields[] = static::get_query_field($name, $func);
@@ -331,7 +218,9 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
      */
     public static function get_mutation_fields(): array
     {
-        static::load_config();
+        if (empty(static::$_xar_mutations)) {
+            static::$_xar_mutations = GraphQLModules::getMutations();
+        }
         $fields = [];
         foreach (static::$_xar_mutations as $name => $func) {
             $fields[] = static::get_mutation_field($name, $func);
@@ -394,6 +283,9 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
      */
     public static function get_input_type($name, $object = null): InputObjectType
     {
+        if (empty(static::$_xar_mutations)) {
+            static::$_xar_mutations = GraphQLModules::getMutations();
+        }
         $input = ucwords($name . '_input', '_');
         $func = static::$_xar_mutations[$name];
         $description = 'Input for ' . $func['module'] . ' ' . $func['type'] . 'api ' . $func['func'] . ' function';
@@ -418,6 +310,9 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
      */
     public static function get_input_fields($name, &$newType = null): array
     {
+        if (empty(static::$_xar_mutations)) {
+            static::$_xar_mutations = GraphQLModules::getMutations();
+        }
         $func = static::$_xar_mutations[$name];
         return static::parse_input_args($name, $func);
     }

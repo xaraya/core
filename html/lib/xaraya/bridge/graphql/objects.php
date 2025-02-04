@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Classes for handling GraphQL queries on Dynamic Data Objects (POC)
+ * Class for handling GraphQL queries on Dynamic Data Objects
  *
  * Note: this assumes you install graphql-php with composer
  * and use composer autoload in the entrypoint, see e.g. gql.php
@@ -27,6 +27,8 @@
 namespace Xaraya\Bridge\GraphQL\Types;
 
 use GraphQL\Type\Definition\ObjectType;
+use sys;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
 
 /**
  * See xardocs/graphql.txt for class structure
@@ -209,16 +211,40 @@ class GraphQLObjects
 
     /**
      * Summary of loadObjects
-     * @param array<string, mixed> $objects
+     * @param array<string, mixed> $config
      * @return void
      */
-    public static function loadObjects($objects = [])
+    public static function loadObjects($config = [])
     {
+        if (!empty(self::$objectType)) {
+            return;
+        }
+        $objects = self::loadObjectConfig($config);
         foreach ($objects as $object => $info) {
             self::$objectType[$object] = $info['name'];
             self::$objectSecurity[$object] = $info['security'];
             self::$objectFieldSpecs[$object] = $info['fieldspecs'] ?? false;
         }
+        GraphQLHandler::setTimer('objects');
+    }
+
+    /**
+     * Summary of loadObjectConfig
+     * @param array<string, mixed> $config
+     * @return array<string, mixed>
+     */
+    public static function loadObjectConfig($config = [])
+    {
+        $configFile = sys::varpath() . '/cache/api/graphql_objects.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        if (!empty($config['objects'])) {
+            return $config['objects'];
+        }
+        //return self::getDefaultObjects();
+        return [];
     }
 
     /**

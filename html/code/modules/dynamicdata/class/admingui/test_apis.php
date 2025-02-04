@@ -26,6 +26,7 @@ use xarServer;
 use xarTpl;
 use xarVar;
 use sys;
+use Exception;
 
 sys::import('xaraya.modules.method');
 
@@ -242,6 +243,16 @@ class TestApisMethod extends MethodClass
         $data['othermodules'] = [];
         foreach ($all_modules as $item) {
             if (!array_key_exists($item['name'], $data['modules'])) {
+                try {
+                    $apiList = $this->mod()->apiFunc($item['name'], 'rest', 'getlist');
+                    $item['displayname'] .= ' [' . count($apiList) . ']';
+                } catch (Exception) {
+                    $apiList = RestAPIBuilder::find_default_api_functions($item['name']);
+                    if (empty($apiList)) {
+                        continue;
+                    }
+                    $item['displayname'] .= ' (' . count($apiList) . ')';
+                }
                 array_push($data['othermodules'], $item);
             }
         }

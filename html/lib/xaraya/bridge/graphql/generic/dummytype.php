@@ -17,6 +17,7 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use xarMod;
+use xarModVars;
 use xarRoles;
 use xarUser;
 use Exception;
@@ -27,7 +28,7 @@ use Exception;
 class DummyType extends ObjectType
 {
     /** @var array<mixed> */
-    public static $_xar_queries = ['hello', 'echo', 'schema', 'whoami'];
+    public static $_xar_queries = ['hello', 'echo', 'schema', 'whoami', 'context'];
 
     public function __construct()
     {
@@ -125,6 +126,20 @@ class DummyType extends ObjectType
                     return ['id' => $fields['id'], 'name' => $fields['name']];
                 },
             ],
+            'context' => [
+                'name' => 'context',
+                'description' => 'Show current context',
+                'type' => GraphQLTypes::getType('mixed'),
+                'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
+                    $context->tracePath(__CLASS__ . '::get_query_fields: resolve context');
+                    $userId = GraphQLHandler::checkUser($context);
+                    // return restricted version for non-site admin
+                    if (empty($userId) || $userId != xarModVars::get('roles', 'admin')) {
+                        return ['userId' => $userId, 'error' => 'Restricted to site admin'];
+                    }
+                    return $context->getArrayCopy();
+                },
+            ]
         ];
     }
 

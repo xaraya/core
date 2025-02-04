@@ -107,7 +107,7 @@
                         <td><input type="checkbox" id="graphql_whoami" checked="checked" disabled="disabled"/></td>
                     </tr>
                     <tr>
-                        <td>Context</td>
+                        <td>Context (site admin)</td>
                         <td><input type="checkbox" id="restapi_context" checked="checked" disabled="disabled"/></td>
                         <td><input type="checkbox" id="graphql_context" checked="checked" disabled="disabled"/></td>
                     </tr>
@@ -178,8 +178,8 @@
                                 <option value="#$item['name']#.any">#$item['displayname']#</option>
                             </xar:foreach>
                         </select></td>
-                        <td><input type="checkbox" name="restapi_module" id="restapi_module"/></td>
-                        <td><input type="checkbox" name="graphql_module" id="graphql_module"/></td>
+                        <td><input type="checkbox" name="restapi_module" id="restapi_module" checked="checked"/></td>
+                        <td><input type="checkbox" name="graphql_module" id="graphql_module" checked="checked"/></td>
                     </tr>
                     </tbody>
                 </table>

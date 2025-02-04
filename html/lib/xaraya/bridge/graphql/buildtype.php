@@ -299,7 +299,7 @@ class BuildType
      */
     public static function find_object_fieldspecs($object, $refresh = false)
     {
-        GraphQLHandler::loadObjects();
+        GraphQLObjects::loadObjects();
         if (GraphQLObjects::hasFieldSpecs($object) && !$refresh) {
             return GraphQLObjects::getFieldSpecs($object);
         }
