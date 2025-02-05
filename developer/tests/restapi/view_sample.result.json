@@ -3,18 +3,26 @@
         {
             "name": "Nancy",
             "age": 29,
+            "partner": {
+                "id": 1,
+                "name": "Johnny"
+            },
             "_links": {
                 "self": {
-                    "href": "https://owncloud.mikespub.net/bermuda/rst.php/v1/objects/sample/2"
+                    "href": "http://localhost/xaraya/rst.php/v1/objects/sample/2"
                 }
             }
         },
         {
             "name": "Johnny",
             "age": 32,
+            "partner": {
+                "id": 2,
+                "name": "Nancy"
+            },
             "_links": {
                 "self": {
-                    "href": "https://owncloud.mikespub.net/bermuda/rst.php/v1/objects/sample/1"
+                    "href": "http://localhost/xaraya/rst.php/v1/objects/sample/1"
                 }
             }
         }

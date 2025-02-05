@@ -66,24 +66,33 @@ class RestAPITest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        $openapiFile = '../../../html/var/cache/api/openapi.json';
+        $openapiFile = dirname(__DIR__, 3) . '/html/var/cache/api/openapi.json';
         if (file_exists($openapiFile)) {
             $contents = file_get_contents($openapiFile);
             $openapi = json_decode($contents, true);
             if (!empty($openapi['servers']) && !empty($openapi['servers'][0]['url'])) {
                 self::$endpoint = $openapi['servers'][0]['url'];
             }
+            if (!is_dir(__DIR__ . '/operations')) {
+                mkdir(__DIR__ . '/operations');
+            }
             self::$operations = [];
             foreach ($openapi['paths'] as $path => $operations) {
                 foreach ($operations as $method => $operation) {
                     $operation['path'] = $path;
-                    $operation['method'] = $method;
+                    $operation['method'] = strtoupper($method);
                     self::$operations[$operation['operationId']] = $operation;
                     //echo $operation['operationId'], ' ', $path, ' ', $method, PHP_EOL;
+                    //$fileName = __DIR__ . '/operations/' . $operation['operationId'] . '.request.json';
+                    // @todo replace params in path etc.
+                    //if (strtoupper($method) == 'GET' && !file_exists($fileName)) {
+                    //    file_put_contents($fileName, json_encode($operation, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                    //}
                 }
             }
             self::$components = $openapi['components'];
         }
+        chdir(__DIR__);
     }
 
     /**

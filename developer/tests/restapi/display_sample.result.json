@@ -2,5 +2,16 @@
     "id": 1,
     "name": "Johnny",
     "age": 32,
-    "location": "https://owncloud.mikespub.net/images/cuernos1.jpg"
+    "location": "https://owncloud.mikespub.net/images/cuernos1.jpg",
+    "partner": {
+        "id": 2,
+        "name": "Nancy"
+    },
+    "children": [
+        {
+            "id": 3,
+            "name": "Baby"
+        }
+    ],
+    "parents": []
 }
