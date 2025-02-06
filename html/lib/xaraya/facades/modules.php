@@ -98,7 +98,7 @@ class xarMod3
      * Get information on module
      * @return array<string, mixed>
      */
-    public function getInfo(int $modRegId): array
+    public static function getInfo(int $modRegId): array
     {
         return self::getInstance()->getInfo($modRegId);
     }
@@ -183,6 +183,19 @@ class xarMod3
     public static function getModule(string $modName): ModuleInterface
     {
         return self::getInstance()->getModule($modName);
+    }
+
+    /**
+     * Check if a particular module class method exists, or return null
+     * @param string $modName registered name of module -> used to define namespace
+     * @param string $modType type of function to run (incl. funcType) -> will be mapped to class type
+     * @param string $funcName specific function to run -> find corresponding method
+     * @param string $callType is this called as an api function or not -> check against module class
+     * @return callable|null
+     */
+    public static function getModuleClassMethod(string $modName, string $modType, string $funcName = 'main', string $callType = 'api'): callable|null
+    {
+        return self::getInstance()->getModuleClassMethod($modName, $modType, $funcName, $callType);
     }
 
     /**

@@ -5,7 +5,7 @@
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -26,7 +26,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -55,8 +55,8 @@ function &xarMLSLoadLocaleData($locale = NULL)
     // rraymond : move the check for the loaded locale before processing as
     //          : all of this would have been taken care of the first time
     //          : the locale data was loaded - saves processing time
-    if (isset(xarMLS::$localeDataCache[$locale])) {
-        return xarMLS::$localeDataCache[$locale];
+    if (isset(xarLocale::$dataCache[$locale])) {
+        return xarLocale::$dataCache[$locale];
     }
 
     // check for locale availability
@@ -86,7 +86,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
         include $fileName;
         $loaded[$fileName] = true;
         /** @phpstan-ignore-next-line */
-        xarMLS::$localeDataCache[$locale] = $localeData;
+        xarLocale::$dataCache[$locale] = $localeData;
     } else if (file_exists($utf8FileName) && !isset($loaded[$utf8FileName])) {
         include $utf8FileName;
         $loaded[$utf8FileName] = true;
@@ -97,7 +97,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
                 $localeData[$tempKey] = $tempValue;
             }
         }
-        xarMLS::$localeDataCache[$locale] = $localeData;
+        xarLocale::$dataCache[$locale] = $localeData;
     } else {
 /* TODO: delete after new backend testing
         if (xarMLS::$backendName == 'xml2php') {
@@ -105,34 +105,35 @@ function &xarMLSLoadLocaleData($locale = NULL)
             if (!$parsedLocale = xarMLS::parseLocaleString($locale)) return $falsereturn;
             $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
             $siteCharset = $parsedLocale['charset'];
-            $res = xarMLS::$localeDataLoader->load($utf8locale);
+            xarLocale::$dataLoader ??= new xarMLS__LocaleDataLoader();
+            $res = xarLocale::$dataLoader->load($utf8locale);
             if (isset($res) && $res == false) {
                 throw new LocaleNotFoundException($utf8locale);
             }
             if (!isset($res)) return $nullreturn; // Throw back
-            $tempArray = xarMLS::$localeDataLoader->getLocaleData();
+            $tempArray = xarLocale::$dataLoader->getLocaleData();
             if ($siteCharset != 'utf-8') {
                 foreach ( $tempArray as $tempKey => $tempValue ) {
                     $tempValue = xarMLS::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
                     $tempArray[$tempKey] = $tempValue;
                 }
             }
-            xarMLS::$localeDataCache[$locale] = $tempArray;
+            xarLocale::$dataCache[$locale] = $tempArray;
 /* TODO: delete after new backend testing
         } else {
-            $res = xarMLS::$localeDataLoader->load($locale);
+            $res = xarLocale::$dataLoader->load($locale);
             if (!isset($res)) return $nullreturn; // Throw back
             if ($res == false) {
                 // Can we use xarML here? border case, play it safe for now.
                 throw new LocaleNotFoundException($locale);
 
             }
-            xarMLS::$localeDataCache[$locale] = xarMLS::$localeDataLoader->getLocaleData();
+            xarLocale::$dataCache[$locale] = xarLocale::$dataLoader->getLocaleData();
         }
 */
     }
 
-    return xarMLS::$localeDataCache[$locale];
+    return xarLocale::$dataCache[$locale];
 }
 
 /**
@@ -141,7 +142,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -166,7 +167,7 @@ function xarLocaleParseCurrency($currency, $localeData = NULL)
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -194,7 +195,7 @@ function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -218,7 +219,7 @@ function xarLocaleFormatCurrency($currency, $localeData = NULL)
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -316,7 +317,7 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -339,7 +340,7 @@ function xarLocaleGetFormattedUTCDate($length = 'short', $timestamp = null, $add
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -384,7 +385,7 @@ function xarLocaleGetFormattedDate($length = 'short', $timestamp = null, $addoff
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -407,7 +408,7 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addo
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -488,7 +489,7 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -510,7 +511,7 @@ function xarLocaleFormatUTCDate($format = null, $time = null, $addoffset = false
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -574,7 +575,7 @@ function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = tru
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -622,7 +623,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -817,6 +818,9 @@ class xarMLS__LocaleDataLoader extends xarObject
  */
 class xarLocale extends xarObject
 {
+    public static $dataLoader  = null;
+    public static $dataCache   = [];
+
     /**
      * Gets the locale data for a certain locale.
      * Locale data is an associative array, its keys are described at the top

@@ -4,7 +4,7 @@
  *
  * @package core\variables
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -80,7 +80,9 @@ interface IxarVars
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
 
+sys::import('xaraya.facades.config');
 sys::import('xaraya.facades.database');
+use Xaraya\Facades\xarConfig3;
 use Xaraya\Facades\xarDB3;
 
 class xarVars extends xarObject
@@ -136,8 +138,8 @@ class xarVar extends xarObject
 
         // Initialise the variable cache
         sys::import('xaraya.variables.config');
-	self::$allowableHTML = xarConfigVars::get(null, 'Site.Core.AllowableHTML', array());
-	self::$fixHTMLEntities = xarConfigVars::get(null, 'Site.Core.FixHTMLEntities',true);
+        self::$allowableHTML = xarConfig3::getVar('Site.Core.AllowableHTML', array());
+        self::$fixHTMLEntities = xarConfig3::getVar('Site.Core.FixHTMLEntities', true);
 
         return true;
     }

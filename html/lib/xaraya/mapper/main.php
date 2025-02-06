@@ -5,7 +5,7 @@
  * @package core\controllers
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -13,7 +13,9 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
+sys::import('xaraya.facades.config');
 use Xaraya\Requests\RequestInterface;
+use Xaraya\Facades\xarConfig3;
 
 class xarController extends xarObject
 {
@@ -87,7 +89,7 @@ class xarController extends xarObject
     public static function getConfig()
     {
         // xarController::init() comes after xarVar::init()
-        $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
+        $systemArgs = array('enableShortURLsSupport' => xarConfig3::getVar('Site.Core.EnableShortURLsSupport'),
                             'generateXMLURLs' => true);
         return $systemArgs;
     }
@@ -506,7 +508,7 @@ class xarController extends xarObject
     public static function getCallback($name)
     {
         if (!in_array($name, ['buildUri', 'redirectTo', 'forbiddenTo', 'notFoundTo', 'badRequestTo'])) {
-            return;
+            return null;
         }
         return self::${$name};
     }
@@ -574,7 +576,7 @@ class xarController extends xarObject
         // If we are passed a route, then use it
         if (empty($route)) {
             // No route passed: use the default
-            $route = xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport');
+            $route = xarConfig3::getVar('Site.Core.EnableShortURLsSupport');
         }
         // Define the route
         if (!empty($route)) {

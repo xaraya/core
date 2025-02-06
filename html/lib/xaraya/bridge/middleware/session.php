@@ -8,7 +8,7 @@
  * @package core\bridge
  * @subpackage middleware
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -22,12 +22,12 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
+use Xaraya\Facades\xarConfig3;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
 use Xaraya\Sessions\VirtualSession;
 use xarSession;
-use xarConfigVars;
 use xarServer;
 use xarEvents;
 
@@ -58,7 +58,7 @@ class SessionMiddleware implements MiddlewareInterface
         $this->config = array_replace(xarSession::getConfig(), $config);
         $this->cookieName = $this->config['cookieName'] ?? SessionHandler::COOKIE;
         $this->prefix = SessionHandler::PREFIX;
-        $this->anonId = intval(xarConfigVars::get(null, 'Site.User.AnonymousUID', 5));
+        $this->anonId = intval(xarConfig3::getVar('Site.User.AnonymousUID', 5));
         //$this->storage = new SessionDatabaseStorage($this->config);
         $this->storage = new SessionCacheStorage($this->config);
         // register callback functions for UserLogin and UserLogout events - to update userId in request

@@ -13,6 +13,7 @@
 namespace Xaraya\Bridge\GraphQL\Types;
 
 use Xaraya\Bridge\GraphQL\GraphQLHandler;
+use Xaraya\Facades\xarMod3;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -125,7 +126,7 @@ class TokenType extends ObjectType implements MutationCreateInterface, MutationD
             xarUser::init();
             // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
             // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
-            $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args, $context);
+            $userId = xarMod3::apiFunc('authsystem', 'user', 'authenticate_user', $args, $context);
             if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
                 throw new Exception('Invalid username or password');
             }

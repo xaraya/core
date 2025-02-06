@@ -13,6 +13,7 @@
 namespace Xaraya\Bridge\GraphQL\Types;
 
 use Xaraya\Bridge\GraphQL\GraphQLHandler;
+use Xaraya\Facades\xarMod3;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InputObjectType;
@@ -435,7 +436,7 @@ class ModuleApiType extends ObjectType implements InputObjectInterface
         xarMod::init();
         xarUser::init();
         $context->tracePath(__CLASS__ . '::call_module_function: ' . "$module $type $func for user $userId", ['args' => $args, 'fields' => $fields]);
-        return xarMod::apiFunc($module, $type, $func, $args, $context);
+        return xarMod3::apiFunc($module, $type, $func, $args, $context);
         //$values = ['func_args' => $args];
         //return $values;
     }

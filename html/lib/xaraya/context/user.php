@@ -145,6 +145,7 @@ class UserContext
         if (!empty(xarSession::getInstance())) {
             throw new Exception('Session was already initialized');
         }
+        sys::import('xaraya.sessions.context');
         xarSession::setSessionClass(SessionContext::class);
         xarSession::init();
         $serverVars = $this->context['server'] ?? [];

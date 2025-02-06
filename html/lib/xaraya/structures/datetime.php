@@ -3,7 +3,7 @@
  * @package core\structures
  * @subpackage structures
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -13,6 +13,9 @@
  * @author Marc Lutolf
  *
  */
+
+sys::import('xaraya.facades.config');
+use Xaraya\Facades\xarConfig3;
 
 class XarDateTime extends DateTime
 {
@@ -35,7 +38,7 @@ class XarDateTime extends DateTime
         $this->hour = $hour;
         $this->minute = $minute;
         $this->second = $second;
-        $this->servertz = empty($timezone) ? xarConfigVars::get(null, 'Site.Core.TimeZone') : $timezone;
+        $this->servertz = empty($timezone) ? xarConfig3::getVar('Site.Core.TimeZone') : $timezone;
         $this->setISODate($this->year,$this->month,$this->day);
         $this->setTime($this->hour,$this->minute,$this->second);
     }

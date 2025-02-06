@@ -20,6 +20,7 @@ use xarConfigVars;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
+sys::import('xaraya.variables.config');
 
 /**
  * For documentation purposes only - available via ConfigTrait

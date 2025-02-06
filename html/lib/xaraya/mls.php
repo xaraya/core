@@ -4,7 +4,7 @@
  *
  * @package core\multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -25,9 +25,10 @@
 sys::import('xaraya.locales');
 sys::import('xaraya.transforms.xarCharset');
 sys::import('xaraya.mlsbackends.reference');
+sys::import('xaraya.facades.config');
 sys::import('xaraya.facades.logger');
+use Xaraya\Facades\xarConfig3;
 use Xaraya\Facades\xarLog3;
-
 
 /**
  * Multilanguage System Class
@@ -54,8 +55,6 @@ class xarMLS extends xarObject
 
     public static $mode              = self::SINGLE_LANGUAGE_MODE;
     public static $backendName       = 'xml2php';
-    public static $localeDataLoader  = null;
-    public static $localeDataCache   = array();
     public static $currentLocale     = '';
     public static $defaultLocale     = 'en_US.utf-8';
     public static $allowedLocales    = array('en_US.utf-8');
@@ -93,10 +92,6 @@ class xarMLS extends xarObject
         }
 	self::$backendName = $args['translationsBackend'];
     
-        // USERLOCALE FIXME Delete after new backend testing
-	self::$localeDataLoader = new xarMLS__LocaleDataLoader();
-	self::$localeDataCache = array();
-    
 	self::$currentLocale = '';
     
 	self::$defaultLocale = $args['defaultLocale'];
@@ -133,13 +128,13 @@ class xarMLS extends xarObject
     static function getConfig()
     {
         // FIXME: Site.MLS.MLSMode is NULL during install
-        $systemArgs = array('MLSMode'             => xarConfigVars::get(null, 'Site.MLS.MLSMode'),
-    //                      'translationsBackend' => xarConfigVars::get(null, 'Site.MLS.TranslationsBackend'),
+        $systemArgs = array('MLSMode'             => xarConfig3::getVar('Site.MLS.MLSMode'),
+    //                      'translationsBackend' => xarConfig3::getVar('Site.MLS.TranslationsBackend'),
                             'translationsBackend' => 'xml2php',
-                            'defaultLocale'       => xarConfigVars::get(null, 'Site.MLS.DefaultLocale'),
-                            'allowedLocales'      => xarConfigVars::get(null, 'Site.MLS.AllowedLocales'),
-                            'defaultTimeZone'     => xarConfigVars::get(null, 'Site.Core.TimeZone'),
-                            'defaultTimeOffset'   => xarConfigVars::get(null, 'Site.MLS.DefaultTimeOffset'),
+                            'defaultLocale'       => xarConfig3::getVar('Site.MLS.DefaultLocale'),
+                            'allowedLocales'      => xarConfig3::getVar('Site.MLS.AllowedLocales'),
+                            'defaultTimeZone'     => xarConfig3::getVar('Site.Core.TimeZone'),
+                            'defaultTimeOffset'   => xarConfig3::getVar('Site.MLS.DefaultTimeOffset'),
                             );
         return $systemArgs;
     }
@@ -383,7 +378,7 @@ class xarMLS extends xarObject
         if (xarUser::isLoggedIn()) {
             $usertz = xarModItemVars::get('roles','usertimezone',xarSession::getUserId());
         } else {
-            $usertz = xarConfigVars::get(null, 'Site.Core.TimeZone');
+            $usertz = xarConfig3::getVar('Site.Core.TimeZone');
         }
         $useroffset = $datetime->getTZOffset($usertz);
     
@@ -436,7 +431,7 @@ class xarMLS extends xarObject
             // To be able to continue, we set the mode to BOXED
             if ($curCharset != "utf-8") {
                 xarLog3::info("Resetting MLS mode to BOXED");
-                xarConfigVars::set(null, 'Site.MLS.MLSMode', self::BOXED_MULTI_LANGUAGE_MODE);
+                xarConfig3::setVar('Site.MLS.MLSMode', self::BOXED_MULTI_LANGUAGE_MODE);
             } else {
                 if (!xarCore::funcIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
                 mb_internal_encoding($curCharset);

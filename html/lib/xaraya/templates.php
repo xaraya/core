@@ -23,7 +23,7 @@
  *
  * @package core\templating
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -39,7 +39,7 @@ class BLValidationException extends ValidationExceptions
  *
  * @package core\templating
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -51,8 +51,12 @@ class BLException extends xarExceptions
 }
 
 sys::import('xaraya.variables.config');
+sys::import('xaraya.facades.config');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.modules');
+use Xaraya\Facades\xarConfig3;
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMod3;
 
 /**
  * BlockLayout Template Engine
@@ -129,10 +133,10 @@ class xarTpl extends xarObject
     public static function getConfig()
     {
         $systemArgs = array(
-            'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
+            'enableTemplatesCaching' => xarConfig3::getVar('Site.BL.CacheTemplates'),
             'defaultThemeDir'        => xarModVars::get('themes', 'default_theme','default'),
             'generateXMLURLs'        => true,
-            'defaultDocType'         => xarConfigVars::get(null, 'Site.BL.DocType'),
+            'defaultDocType'         => xarConfig3::getVar('Site.BL.DocType'),
         );
         return $systemArgs;
     }
@@ -160,7 +164,7 @@ class xarTpl extends xarObject
             // found a directory, but the current theme isn't in it
             throw new DirectoryNotFoundException(array(self::getThemeName(), $themesDir), 'xarTpl::setBaseDir: Nonexistant theme #(1) in base themes directory #(2)');
         }
-        xarConfigVars::set(null, 'Site.BL.ThemesDirectory', $themesDir);
+        xarConfig3::setVar('Site.BL.ThemesDirectory', $themesDir);
         return true;     
     }
 
@@ -173,7 +177,7 @@ class xarTpl extends xarObject
     public static function getBaseDir()
     {
         try {
-            $themesdir = sys::web() . xarConfigVars::get(null, 'Site.BL.ThemesDirectory', 'themes');
+            $themesdir = sys::web() . xarConfig3::getVar('Site.BL.ThemesDirectory', 'themes');
         } catch (Exception $e) {
             $themesdir = sys::web() . 'themes';
         }
@@ -1028,7 +1032,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
         sys::import('blocklayout.template.compiled');
         $compiled = new CompiledTemplate(xarTemplateCache::cacheFile('memory'));
         try {
-            $caching = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
+            $caching = xarConfig3::getVar('Site.BL.MemCacheTemplates');
         } catch (Exception $e) {
             $caching = 0;
         }
@@ -1225,7 +1229,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
             // module include in module
             $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
             if (file_exists($sourceFileName)) break;
-            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
+            if (xarConfig3::getVar('Site.Core.LoadLegacy') == true) {
                 $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xd";
                 if (file_exists($sourceFileName)) break;
             }
@@ -1309,7 +1313,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
         sys::import('blocklayout.template.compiled');
         $compiled = new CompiledTemplate($cachedFileName, $sourceFileName, $tplType);
         try {
-            $caching = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
+            $caching = xarConfig3::getVar('Site.BL.MemCacheTemplates');
         } catch (Exception $e) {
             $caching = 0;
         }

@@ -4,7 +4,7 @@
  * @package core\bridge
  * @subpackage restapi
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -15,6 +15,7 @@
 namespace Xaraya\Bridge\RestAPI;
 
 use Xaraya\Authentication\AuthToken;
+use Xaraya\Facades\xarMod3;
 use xarObject;
 use xarMod;
 use xarServer;
@@ -23,6 +24,7 @@ use DataObjectFactory;
 use DataPropertyMaster;
 use Exception;
 
+sys::import('xaraya.facades.modules');
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('modules.authsystem.class.authtoken');
 
@@ -1333,7 +1335,7 @@ class RestAPIBuilder extends xarObject
                 'apilist' => [],
             ];
             try {
-                $apiList = xarMod::apiFunc($module, 'rest', 'getlist');
+                $apiList = xarMod3::apiFunc($module, 'rest', 'getlist');
             } catch (Exception) {
                 $apiList = self::find_default_api_functions($module);
             }
@@ -1369,7 +1371,7 @@ class RestAPIBuilder extends xarObject
         $apiList = [];
         $found = xarMod::checkModuleFunction($module, 'userapi', 'getitemtypes');
         if ($found === $module) {
-            // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+            // $func name as used in xarMod3::apiFunc($module, $type, $func, $args)
             $apiList['getitemtypes'] = [
                 'type' => 'user',  // default = rest, other options are user, admin, ... as usual
                 'path' => 'itemtypes',  // path to use in REST API operation /modules/{module}/{path}
@@ -1384,7 +1386,7 @@ class RestAPIBuilder extends xarObject
         // Note: we can use method = get + paramaters or method = post + requestBody here - both will work
         $found = xarMod::checkModuleFunction($module, 'userapi', 'getitemlinks');
         if ($found === $module) {
-            // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+            // $func name as used in xarMod3::apiFunc($module, $type, $func, $args)
             $apiList['getitemlinks'] = [
                 'type' => 'user',  // default = rest, other options are user, admin, ... as usual
                 'path' => 'itemlinks',  // path to use in REST API operation /modules/{module}/{path}

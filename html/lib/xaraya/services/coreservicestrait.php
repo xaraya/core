@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.1
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -346,6 +346,10 @@ trait CoreServicesTrait
      * - hasModule()
      * - getModule()
      * - setModule()
+     * - getBlockKey()
+     * - hasBlock()
+     * - getBlock()
+     * - setBlock()
      * - getObjectKey()
      * - hasObject()
      * - getObject()
@@ -358,7 +362,7 @@ trait CoreServicesTrait
      * - ...
      *
      * Required methods in parent:
-     * - getObject() for cache()->getObjecKey(null, '...')
+     * - getObject() for cache()->getObjectKey(null, '...')
      *
      */
     public function cache(): CachingInterface

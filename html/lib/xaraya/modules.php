@@ -24,9 +24,15 @@
 
 sys::import("xaraya.context.contexttrait");
 sys::import("xaraya.context.context");
+sys::import('xaraya.facades.caching');
+sys::import('xaraya.facades.config');
+sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.logger');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\Context;
+use Xaraya\Facades\xarCache3;
+use Xaraya\Facades\xarConfig3;
+use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarLog3;
 
 /**
@@ -66,8 +72,6 @@ class ModuleNotActiveException extends xarExceptions
 */
 sys::import('xaraya.variables.module');
 sys::import('xaraya.variables.moduser');
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
 
 /**
  * Interface declaration for xarMod
@@ -140,7 +144,7 @@ class xarMod extends xarObject implements IxarMod
 
     public static function getConfig()
     {
-        $systemArgs = ['enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
+        $systemArgs = ['enableShortURLsSupport' => xarConfig3::getVar('Site.Core.EnableShortURLsSupport'),
             'generateXMLURLs' => true];
         return $systemArgs;
     }
@@ -622,7 +626,7 @@ class xarMod extends xarObject implements IxarMod
                 $part = $modOsDir;
                 break;
             case 'theme':
-                $fileName = xarConfigVars::get(null, 'Site.BL.ThemesDirectory') . '/' . $modOsDir . '/xartheme.php';
+                $fileName = xarConfig3::getVar('Site.BL.ThemesDirectory') . '/' . $modOsDir . '/xartheme.php';
                 $part = 'xartheme';
                 break;
             default:
@@ -773,12 +777,12 @@ class xarMod extends xarObject implements IxarMod
         }
 
         // Get a cache key for this module function if it's suitable for module caching
-        $cacheKey = xarCache::getModuleKey($modName, $modType, $funcName, $args);
+        $cacheKey = xarCache3::getModuleKey($modName, $modType, $funcName, $args);
 
         // Check if the module function is cached
-        if (!empty($cacheKey) && xarModuleCache::isCached($cacheKey)) {
+        if (xarCache3::hasModule($cacheKey)) {
             // Return the cached module function output
-            return xarModuleCache::getCached($cacheKey);
+            return xarCache3::getModule($cacheKey);
         }
         if (!isset($context)) {
             $context = new Context(['source' => __METHOD__]);
@@ -788,9 +792,7 @@ class xarMod extends xarObject implements IxarMod
         // If we have a string of data, we assume someone else did xarTpl* for us
         if (!is_array($tplData)) {
             // Set the output of the module function in cache
-            if (!empty($cacheKey)) {
-                xarModuleCache::setCached($cacheKey, $tplData);
-            }
+            xarCache3::setModule($cacheKey, $tplData);
             return $tplData;
         }
 
@@ -807,9 +809,7 @@ class xarMod extends xarObject implements IxarMod
         $tplOutput = xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
 
         // Set the output of the module function in cache
-        if (!empty($cacheKey)) {
-            xarModuleCache::setCached($cacheKey, $tplOutput);
-        }
+        xarCache3::setModule($cacheKey, $tplOutput);
 
         return $tplOutput;
     }
@@ -1264,7 +1264,7 @@ class xarModAlias extends xarObject implements IxarModAlias
         if ($alias == 'object') {
             return $alias;
         }
-        $aliasesMap = xarConfigVars::get(null, 'System.ModuleAliases');
+        $aliasesMap = xarConfig3::getVar('System.ModuleAliases');
         return (!empty($aliasesMap[$alias])) ? $aliasesMap[$alias] : $alias;
     }
 

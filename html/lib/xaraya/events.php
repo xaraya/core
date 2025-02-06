@@ -27,9 +27,15 @@
 
 sys::import("xaraya.structures.events.subject");
 sys::import("xaraya.context.context");
+sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.modules');
+sys::import('xaraya.facades.variables');
 use Xaraya\Context\Context;
+use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMod3;
+use Xaraya\Facades\xarVar3;
 
 /**
  * Exception raised by the events subsystem
@@ -37,16 +43,12 @@ use Xaraya\Facades\xarLog3;
  * @package core\events
  * @subpackage events
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  *
 **/
-
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
-
 class EventRegistrationException extends RegistrationExceptions
 {
     protected $message = 'The event "#(1)" is not properly registered';
@@ -58,7 +60,7 @@ class EventRegistrationException extends RegistrationExceptions
  * @package core\events
  * @subpackage events
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -73,7 +75,7 @@ class DuplicateEventRegistrationException extends EventRegistrationException
  * @package core\events
  * @subpackage events
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -99,7 +101,7 @@ interface ixarEvents
  * @package core\events
  * @subpackage events
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -210,7 +212,7 @@ class xarEvents extends xarObject implements ixarEvents
                     $response = $subject->$method();
                 break;
                 case 'api':
-                    $response = xarMod::apiFunc($module, $info['type'], $info['func'], $args, $context);
+                    $response = xarMod3::apiFunc($module, $info['type'], $info['func'], $args, $context);
                 break;
                 case 'gui':
                     // not allowed in event subjects
@@ -335,13 +337,13 @@ class xarEvents extends xarObject implements ixarEvents
      * xarEvents::registerSubject('MyEvent', 'base);
      * BaseMyEventObserver::notify() in file /base/class/baseobserver/myevent.php
      * xarEvents::registerSubject('OtherEvent', 'roles', 'api', 'user', 'otherevent');
-     * xarMod::apiFunc('roles', 'user', 'otherevent');
+     * xarMod3::apiFunc('roles', 'user', 'otherevent');
     **/
     
     final public static function register($event, $module, $area = 'class', $type = 'eventobservers', $func = 'notify', $itemtype = 0, $scope = '', $classname = '')
     {
 
-        $module_id = xarMod::getRegID($module);
+        $module_id = xarMod3::getRegID($module);
         // support namespaces in modules (and core someday) - we may pass along $info['classname'] here too
         $info = array(
             'event'    => $event,
@@ -444,14 +446,14 @@ class xarEvents extends xarObject implements ixarEvents
         /** @var string $module */
         if (empty($module) || is_numeric($module) || empty($module_id) || !is_numeric($module_id)) {
             if (!empty($module)) {
-                $module_id = is_numeric($module) ? $module : xarMod::getRegID($module);
+                $module_id = is_numeric($module) ? $module : xarMod3::getRegID($module);
             }
             /** @var int $module_id */
             if (!empty($module_id))
-                $modinfo = xarMod::getInfo($module_id);
+                $modinfo = xarMod3::getInfo($module_id);
             // can't check mod available here, since it may not be if the module is init'ing
             /** @var array<mixed> $modinfo */
-            //if (empty($modinfo) || !xarMod::isAvailable($modinfo['name']))
+            //if (empty($modinfo) || !xarMod3::isAvailable($modinfo['name']))
             if (!empty($modinfo)) {
                 $module = $modinfo['name'];
             } else {
@@ -551,8 +553,8 @@ class xarEvents extends xarObject implements ixarEvents
                 $type = $area == 'gui' ? $type : $type . $area;
                 // define the function name (module_xartype(api)_func);
                 $func = $module .'_' . $type . '_' . $filename;
-                // @checkme by importing the function directly here, we never call xarMod::apiLoad($module, $type)
-                // or xarMod::load($module, $type) in xarMod::callFunc() later when calling the function in observer
+                // @checkme by importing the function directly here, we never call xarMod3::apiLoad($module, $type)
+                // or xarMod3::load($module, $type) in xarMod3::callFunc() later when calling the function in observer
                 // import the file (raises exception if file not found) 
                 try {
                     // try for specific file in type folder (eg /module/xaruserapi/eventfunc.php)
@@ -564,7 +566,7 @@ class xarEvents extends xarObject implements ixarEvents
                     try {
                         sys::import("modules.{$module}.xar{$type}");
                     } catch (Exception $e) {
-                        $instance = xarMod::getModule($module);
+                        $instance = xarMod3::getModule($module);
                         // let's fall through until we find the function (or not)
                     }
                 }
@@ -573,7 +575,7 @@ class xarEvents extends xarObject implements ixarEvents
                     // see xarMod::callFunc() - pass modType . funcType as modType here for module classes
                     $type = $area != 'gui' ? $type : $type . $area;
                     // old-style module_type_func() hook function called via module class
-                    $callable = xarMod::getModuleClassMethod($module, $type, $filename, 'api');
+                    $callable = xarMod3::getModuleClassMethod($module, $type, $filename, 'api');
                     if (empty($callable)) {
                         throw new FunctionNotFoundException($func);
                     }
@@ -629,10 +631,10 @@ class xarEvents extends xarObject implements ixarEvents
             if (is_numeric($module)) {
                 $module_id = $module;
             } else {
-                $module_id = xarMod::getRegID($module);
+                $module_id = xarMod3::getRegID($module);
             }
             if (!empty($module_id))
-                $modinfo = xarMod::getInfo($module_id);
+                $modinfo = xarMod3::getInfo($module_id);
             if (empty($modinfo))
                 $invalid[] = 'module';
             $q->eq('module_id', $module_id);
@@ -681,8 +683,8 @@ class xarEvents extends xarObject implements ixarEvents
         // Cached event subjects and observers
         $cacheScope = 'Events.Subjects';
         $cacheName = $subjecttype;
-        if (xarCoreCache::isCached($cacheScope, $cacheName)) {
-            $subjects = xarCoreCache::getCached($cacheScope, $cacheName);
+        if (xarVar3::isCached($cacheScope, $cacheName)) {
+            $subjects = xarVar3::getCached($cacheScope, $cacheName);
             return $subjects;
         }
         
@@ -703,7 +705,7 @@ class xarEvents extends xarObject implements ixarEvents
         // get subjects for valid, active modules only 
         $where[] = "es.module_id = ms.regid";
         $where[] = "ms.state = ?";
-        $bindvars[] = xarMod::STATE_ACTIVE;
+        $bindvars[] = xarMod3::STATE_ACTIVE;
         // get subjects for current subjecttype
         $where[] = "es.itemtype = ?";
         $bindvars[] = $subjecttype;        
@@ -731,7 +733,7 @@ class xarEvents extends xarObject implements ixarEvents
         };
         $result->close();
         // return cached results
-        xarCoreCache::setCached($cacheScope, $cacheName, $subjects);
+        xarVar3::setCached($cacheScope, $cacheName, $subjects);
         return $subjects;
     }
 
@@ -753,8 +755,8 @@ class xarEvents extends xarObject implements ixarEvents
         $cacheScope = 'Events.Observers';
         $cacheName = $observertype;
         $observers = array();
-        if (xarCoreCache::isCached($cacheScope, $cacheName)) {
-            $observers = xarCoreCache::getCached($cacheScope, $cacheName);
+        if (xarVar3::isCached($cacheScope, $cacheName)) {
+            $observers = xarVar3::getCached($cacheScope, $cacheName);
             if (isset($observers[$event])) {
                 return $observers[$event];
             }
@@ -780,7 +782,7 @@ class xarEvents extends xarObject implements ixarEvents
         $where[] = "ms.regid = s.module_id";
          // only get subjects of active modules
         $where[] = "ms.state = ?";
-        $bindvars[] = xarMod::STATE_ACTIVE;
+        $bindvars[] = xarMod3::STATE_ACTIVE;
         // only get subjects for the current subject itemtype
         $where[] =  "s.itemtype = ?";
         $bindvars[] = $subjecttype;
@@ -788,7 +790,7 @@ class xarEvents extends xarObject implements ixarEvents
         $where[] = "mo.regid = o.module_id";
         // only get observers of active modules
         $where[] = "mo.state = ?";
-        $bindvars[] = xarMod::STATE_ACTIVE;
+        $bindvars[] = xarMod3::STATE_ACTIVE;
         // only get observers for the current observer itemtype
         $where[] = "o.itemtype = ?";
         $bindvars[] = $observertype;
@@ -820,7 +822,7 @@ class xarEvents extends xarObject implements ixarEvents
         if (!isset($observers[$event]))
             $observers[$event] = array();
 
-        xarCoreCache::setCached($cacheScope, $cacheName, $observers);
+        xarVar3::setCached($cacheScope, $cacheName, $observers);
         return $observers[$event];
     }
 
@@ -851,9 +853,9 @@ class xarEvents extends xarObject implements ixarEvents
         $where[] = "eo.module_id = mo.regid";
         // make sure they belong to an active module
         $where[] = "mo.state = ?";
-        $bindvars[] = xarMod::STATE_ACTIVE;
+        $bindvars[] = xarMod3::STATE_ACTIVE;
         $where[] = "ms.state = ?";
-        $bindvars[] = xarMod::STATE_ACTIVE;
+        $bindvars[] = xarMod3::STATE_ACTIVE;
         // only observers of current observer itemtype
         $where[] = "eo.itemtype = ?";
         $bindvars[] = $observertype;

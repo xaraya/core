@@ -5,18 +5,21 @@
  * @package core\validation
  * @subpackage validation
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
 */
+
+sys::import('xaraya.validations');
+sys::import('xaraya.facades.config');
+use Xaraya\Facades\xarConfig3;
 
 /**
  * HTML Validation Class
  *
  * @throws VariableValidationException
 **/
-sys::import('xaraya.validations');
 class HtmlValidation extends ValueValidations
 {
     function validate(&$subject, Array $parameters)
@@ -31,7 +34,7 @@ class HtmlValidation extends ValueValidations
         }
 
         $allowedTags = array();
-        foreach (xarConfigVars::get(null,'Site.Core.AllowableHTML') as $k=>$v) {
+        foreach (xarConfig3::getVar('Site.Core.AllowableHTML') as $k=>$v) {
             if ($v) {
                 $allowedTags[] = $k;
             }

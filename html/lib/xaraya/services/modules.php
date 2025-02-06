@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -65,6 +65,7 @@ interface ModulesInterface extends ServiceInterface
     public function load(?string $modName = null, ?string $modType = null): mixed;
     public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed;
     public function getModule(?string $modName = null): ModuleInterface;
+    public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): callable|null;
     /** @param array<string, mixed> $args */
     public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     /** @param array<string, mixed> $args */
@@ -317,6 +318,21 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         return xarMod::getModule($modName);
+    }
+
+    /**
+     * Check if a particular module class method exists, or return null
+     * @param ?string $modName registered name of module -> used to define namespace
+     * @param ?string $modType type of function to run (incl. funcType) -> will be mapped to class type
+     * @param string $funcName specific function to run -> find corresponding method
+     * @param string $callType is this called as an api function or not -> check against module class
+     * @return callable|null
+     */
+    public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): callable|null
+    {
+        $modName ??= $this->getModName();
+        $modType ??= $this->getModType();
+        return xarMod::getModuleClassMethod($modName, $modType, $funcName, $callType);
     }
 
     /**

@@ -3,7 +3,7 @@
  * @package core\blocks
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -43,7 +43,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
         $this->xarmodules = xarMod::apiFunc('modules','admin','getlist',
             array('filter' => array($typeCapable => true, 'State' => xarMod::STATE_ACTIVE)));
         // get module aliases while we're here, we need those too
-        $aliasMap = xarConfigVars::get(null,'System.ModuleAliases');
+        $aliasMap = $this->config()->getVar('System.ModuleAliases');
         $aliases = array();
         if (!empty($aliasMap)) {
             foreach ($aliasMap as $alias => $modname) {

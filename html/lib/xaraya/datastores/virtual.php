@@ -37,7 +37,7 @@ class DummyDataStore extends BasicDataStore
     public function getItem(array $args = [])
     {
         if (empty($args['itemid'])) {
-            throw new BadParameterException(xarMLS::translate('Cannot get itemid 0'));
+            throw new BadParameterException($this->ml('Cannot get itemid 0'));
         }
         // Get the itemid from the params or from the object definition
         $itemid = $args['itemid'] ?? $this->object->itemid;
@@ -77,7 +77,7 @@ class DummyDataStore extends BasicDataStore
     public function updateItem(array $args = [])
     {
         if (empty($args['itemid'])) {
-            throw new BadParameterException(xarMLS::translate('Cannot update itemid 0'));
+            throw new BadParameterException($this->ml('Cannot update itemid 0'));
         }
         // Get the itemid from the params or from the object definition
         $itemid = $args['itemid'] ?? $this->object->itemid;

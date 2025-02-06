@@ -3,13 +3,15 @@
  * @package core\structures
  * @subpackage structures
  * @category Xaraya Web Applications Framework
- * @version 2.6.1
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
 
 sys::import('xaraya.services.hasdatabasetrait');
+sys::import('xaraya.facades.config');
+use Xaraya\Facades\xarConfig3;
 
 /**
  * Query class for SQL abstraction
@@ -85,7 +87,7 @@ class Query
     public function __construct($type='SELECT',$tables='',$fields='',$dbConnIndex=0)
     {
         // Set the debugflag
-        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xarConfigVars::get(null,'Site.BL.ShowQueries',false) && xarUser::isDebugAdmin()) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xarConfig3::getVar('Site.BL.ShowQueries', false) && xarUser::isDebugAdmin()) {
             $this->debugflag = true;
         }
 

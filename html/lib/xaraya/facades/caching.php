@@ -75,6 +75,40 @@ class xarCache3
     }
 
     /**
+     * Get a cache key for block output caching
+     * @param array<string, mixed> $blockInfo block information
+     * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Block, or null if not applicable
+     */
+    public static function getBlockKey(array $blockInfo = []): string|null
+    {
+        return self::getInstance()->getBlockKey($blockInfo);
+    }
+
+    /**
+     * Check if the output of a block display is cached
+     */
+    public static function hasBlock(?string $cacheKey): bool
+    {
+        return self::getInstance()->hasBlock($cacheKey);
+    }
+
+    /**
+     * Get the output of the block display from cache
+     */
+    public static function getBlock(string $cacheKey): string
+    {
+        return self::getInstance()->getBlock($cacheKey);
+    }
+
+    /**
+     * Set the output of the block display in cache
+     */
+    public static function setBlock(?string $cacheKey, string $value): void
+    {
+        self::getInstance()->setBlock($cacheKey, $value);
+    }
+
+    /**
      * Get a cache key for object output caching
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Object, or null if not applicable

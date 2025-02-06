@@ -15,14 +15,15 @@
 namespace Xaraya\Bridge\RestAPI;
 
 use Xaraya\Authentication\AuthToken;
+use Xaraya\Facades\xarMod3;
 use xarMod;
-use xarModVars;
 use xarRoles;
 use xarUser;
 use sys;
 use UnauthorizedOperationException;
 
 sys::import('xaraya.context.context');
+sys::import('xaraya.facades.modules');
 sys::import('modules.authsystem.class.authtoken');
 
 /**
@@ -62,7 +63,7 @@ class GenericAPIHandler extends RestAPIHandler
         $context = $this->getContext();
         $userId = $context->getUserId();
         // return restricted version for non-site admin
-        if (empty($userId) || $userId != xarModVars::get('roles', 'admin')) {
+        if (empty($userId) || !xarUser::isSiteAdmin($userId)) {
             return ['userId' => $userId, 'error' => 'Restricted to site admin'];
         }
         return $context->getArrayCopy();
@@ -73,7 +74,7 @@ class GenericAPIHandler extends RestAPIHandler
      * @param array<string, mixed> $args
      * @uses xarMod::init()
      * @uses xarUser::init()
-     * @uses xarMod::apiFunc()
+     * @uses xarMod3::apiFunc()
      * @throws \UnauthorizedOperationException
      * @return array<string, mixed>
      */
@@ -106,7 +107,7 @@ class GenericAPIHandler extends RestAPIHandler
         xarUser::init();
         // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
         // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
-        $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args['input'], $context);
+        $userId = xarMod3::apiFunc('authsystem', 'user', 'authenticate_user', $args['input'], $context);
         if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
             if (!headers_sent()) {
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');

@@ -55,12 +55,12 @@ class VariableTableDataStore extends SQLDataStore
         $itemid = $args['itemid'] ?? $this->object->itemid;
 
         if (empty($itemid)) {
-            throw new Exception(xarMLS::translate('Cannot get itemid 0'));
+            throw new Exception($this->ml('Cannot get itemid 0'));
         }
 
         //Make sure we have a primary field
         if (empty($this->object->primary)) {
-            throw new Exception(xarMLS::translate('The object #(1) has no primary key', $this->object->name));
+            throw new Exception($this->ml('The object #(1) has no primary key', $this->object->name));
         }
 
         // Bail if the object has no properties
@@ -171,7 +171,7 @@ class VariableTableDataStore extends SQLDataStore
         $itemid = $args['itemid'] ?? $this->object->itemid;
 
         if (empty($itemid)) {
-            throw new BadParameterException(xarMLS::translate('Cannot update itemid 0'));
+            throw new BadParameterException($this->ml('Cannot update itemid 0'));
         }
 
         // Bail if the object has no properties
@@ -196,13 +196,13 @@ class VariableTableDataStore extends SQLDataStore
                 // We have an override through the methods parameters
                 // Encrypt if required
                 //if (!empty($field->initialization_encrypt)) {
-                //    throw new Exception(xarMLS::translate('Cannot encrypt data for variable table store'));
+                //    throw new Exception($this->ml('Cannot encrypt data for variable table store'));
                 //}
             } else {
                 // No override, just take the value the property already has
                 // Encrypt if required
                 //if (!empty($field->initialization_encrypt)) {
-                //    throw new Exception(xarMLS::translate('Cannot encrypt data for variable table store'));
+                //    throw new Exception($this->ml('Cannot encrypt data for variable table store'));
                 //}
             }
             $goodproperties[$fieldname] = & $this->object->properties[$fieldname];

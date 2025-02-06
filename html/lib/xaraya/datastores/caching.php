@@ -49,7 +49,7 @@ class CachingDataStore extends BasicDataStore
         // Get the itemid from the params or from the object definition
         $itemid = $args['itemid'] ?? $this->object->itemid;
         if (empty($itemid)) {
-            throw new Exception(xarMLS::translate('Cannot get itemid 0'));
+            throw new Exception($this->ml('Cannot get itemid 0'));
         }
         $value = $this->getCacheStorage()->getCached($itemid);
         //echo "Getting item $itemid: $value";
@@ -114,7 +114,7 @@ class CachingDataStore extends BasicDataStore
         // Get the itemid from the params or from the object definition
         $itemid = $args['itemid'] ?? $this->object->itemid;
         if (empty($itemid)) {
-            throw new Exception(xarMLS::translate('Cannot create itemid 0'));
+            throw new Exception($this->ml('Cannot create itemid 0'));
         }
         $item = array_merge(['itemid' => $itemid], $args);
         if (!empty($this->object->primary) && $this->object->primary !== 'itemid') {
@@ -135,7 +135,7 @@ class CachingDataStore extends BasicDataStore
         // Get the itemid from the params or from the object definition
         $itemid = $args['itemid'] ?? $this->object->itemid;
         if (empty($itemid)) {
-            throw new Exception(xarMLS::translate('Cannot update itemid 0'));
+            throw new Exception($this->ml('Cannot update itemid 0'));
         }
         // $args should be empty as properties have already been updated in object
         $item = array_merge(['itemid' => $itemid], $args);
@@ -157,7 +157,7 @@ class CachingDataStore extends BasicDataStore
         // Get the itemid from the params or from the object definition
         $itemid = $args['itemid'] ?? $this->object->itemid;
         if (empty($itemid)) {
-            throw new Exception(xarMLS::translate('Cannot delete itemid 0'));
+            throw new Exception($this->ml('Cannot delete itemid 0'));
         }
         //echo "Deleting item $itemid\n";
         $this->getCacheStorage()->delCached($itemid);

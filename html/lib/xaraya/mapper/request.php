@@ -5,7 +5,7 @@
  * @package core\controllers
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -13,8 +13,10 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
+sys::import('xaraya.facades.config');
 sys::import('xaraya.facades.logger');
 use Xaraya\Requests\RequestInterface;
+use Xaraya\Facades\xarConfig3;
 use Xaraya\Facades\xarLog3;
 
 class xarRequest extends xarObject
@@ -502,7 +504,7 @@ class xarRequest extends xarObject
     {
         if (!isset($this->isAjax)) {
             $xhp = xarServer::getVar('HTTP_X_REQUESTED_WITH');
-            if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest') && xarConfigVars::get(null, 'Site.Core.AllowAJAX')) {
+            if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest') && xarConfig3::getVar('Site.Core.AllowAJAX')) {
                 $this->isAjax = true;
             } else {
                 $this->isAjax = false;

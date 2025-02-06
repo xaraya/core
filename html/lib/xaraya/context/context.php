@@ -17,8 +17,6 @@ use sys;
 sys::import('xaraya.context.interface');
 sys::import('xaraya.context.factory');
 sys::import('xaraya.requests.context');
-sys::import('xaraya.sessions.context');
-sys::import('xaraya.context.user');
 
 /**
  * Context object for request etc.
@@ -64,6 +62,7 @@ class Context extends ArrayObject implements ContextObjectInterface
     public function getUserId()
     {
         if (!$this->offsetExists('userId')) {
+            sys::import('xaraya.context.user');
             $userContext = new UserContext($this);
             $userId = $userContext->getUserId();
             $this->offsetSet('userId', $userId);
@@ -79,6 +78,7 @@ class Context extends ArrayObject implements ContextObjectInterface
     public function setUserId($userId)
     {
         $this->offsetSet('userId', $userId);
+        //sys::import('xaraya.sessions.context');
         // @todo let session middleware update session if available?
         //$session = $this->getSession();
         //if (!empty($session)) {

@@ -354,7 +354,7 @@ class xarPageCache extends xarObject
         // We delay checking this extra caching rule until now
         if (self::$cacheHookedOnly) {
             $modName = substr($cacheKey, 0, strpos($cacheKey, '-'));
-            if (!xarModHooks::isHooked('cachemanager', $modName)) {
+            if (!xarHooks::isAttached('cachemanager', $modName)) {
                 return;
             }
         }

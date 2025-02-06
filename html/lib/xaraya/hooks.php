@@ -7,7 +7,7 @@
  * @todo <chris> review the above todo's and checkme's
  * @package core\hooks
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -19,8 +19,12 @@
  */
 
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.modules');
+sys::import('xaraya.facades.variables');
 use Xaraya\Facades\xarDB3;
- 
+use Xaraya\Facades\xarMod3;
+use Xaraya\Facades\xarVar3;
+
 class xarHooks extends xarEvents
 {
     // unique event system itemtype ids for storage/retrieval/actioning in the event system 
@@ -96,8 +100,8 @@ class xarHooks extends xarEvents
         $cacheScope = 'Hooks.Observers';
         $cacheName = $subject_module . '.' . $subject_itemtype;
         $observers = array();
-        if (xarCoreCache::isCached($cacheScope, $cacheName)) {
-            $observers = xarCoreCache::getCached($cacheScope, $cacheName);
+        if (xarVar3::isCached($cacheScope, $cacheName)) {
+            $observers = xarVar3::getCached($cacheScope, $cacheName);
             if (isset($observers[$event])) {
                 return $observers[$event];
             }
@@ -131,15 +135,15 @@ class xarHooks extends xarEvents
         $where[] = "eo.module_id = mo.regid";
         // only get observers of active modules
         $where[] = "mo.state = ?";
-        $bindvars[] = xarMod::STATE_ACTIVE;
+        $bindvars[] = xarMod3::STATE_ACTIVE;
 
         // This excludes observers of one or more modules in order to avoid duplication
         // The common case is hooking DD to some itemtype that is already a dataobject:
         // We pass the itemid of the object through the hooks call, causing DD to display an object of the same itemid, which is of course the original object
         if (!empty($args['exclude_module'])) {
-            //$query .= " AND mo.regid NOT IN ('" . join("','", xarMod::getRegID($extraInfo['exclude_module'])) . "')"; 
+            //$query .= " AND mo.regid NOT IN ('" . join("','", xarMod3::getRegID($extraInfo['exclude_module'])) . "')"; 
             foreach ($args['exclude_module'] as $excluded_module) {
-                $where[] = "mo.regid != " . xarMod::getRegID($excluded_module);
+                $where[] = "mo.regid != " . xarMod3::getRegID($excluded_module);
             }
         }
         
@@ -178,7 +182,7 @@ class xarHooks extends xarEvents
             );
         };
         $result->close();
-        xarCoreCache::setCached($cacheScope, $cacheName, $observers);
+        xarVar3::setCached($cacheScope, $cacheName, $observers);
         return $observers[$event];
     }
     
@@ -201,9 +205,9 @@ class xarHooks extends xarEvents
         if (!empty($itemtype) && !is_numeric($itemtype)) 
             throw new BadParameterException('itemtype');
         
-        $observer_id = xarMod::getRegID($observer);
+        $observer_id = xarMod3::getRegID($observer);
         if (empty($observer_id)) return;
-        $subject_id = xarMod::getRegID($subject);
+        $subject_id = xarMod3::getRegID($subject);
         if (empty($subject_id)) return;
         
         if (empty($itemtype)) $itemtype = 0;
@@ -262,9 +266,9 @@ class xarHooks extends xarEvents
         if (!empty($scope) && !is_numeric($scope) && !is_string($scope))
             throw new EmptyParameterException('scope');
         
-        $observer_id = xarMod::getRegID($observer);
+        $observer_id = xarMod3::getRegID($observer);
         if (empty($observer_id)) return;
-        $subject_id = xarMod::getRegID($subject);
+        $subject_id = xarMod3::getRegID($subject);
         if (empty($subject_id)) return;
         
         if (empty($itemtype)) $itemtype = 0;
@@ -318,9 +322,9 @@ class xarHooks extends xarEvents
         if (!empty($scope) && !is_numeric($scope) && !is_string($scope))
             throw new EmptyParameterException('scope');
                     
-        $observer_id = xarMod::getRegID($observer);
+        $observer_id = xarMod3::getRegID($observer);
         if (empty($observer_id)) return;
-        $subject_id = xarMod::getRegID($subject);
+        $subject_id = xarMod3::getRegID($subject);
         if (empty($subject_id)) return;
         
         if (empty($itemtype)) $itemtype = 0;
@@ -367,7 +371,7 @@ class xarHooks extends xarEvents
         $hooklist = array();    
         foreach ($hookmods as $modname => $hooks) {
             if (!empty($observer) && $modname != $observer) continue;
-            $hooklist[$modname] = xarMod::getInfo(xarMod::getRegID($modname));
+            $hooklist[$modname] = xarMod3::getInfo(xarMod3::getRegID($modname));
             $hooklist[$modname]['hooks'] = $hooks;
             $hooklist[$modname]['scopes'] = array();            
             foreach ($hooks as $event => $info) {
@@ -388,11 +392,11 @@ class xarHooks extends xarEvents
         if (empty($observer)) 
             throw new EmptyParameterException('observer');        
         
-        $observer_id = xarMod::getRegID($observer);
+        $observer_id = xarMod3::getRegID($observer);
         if (empty($observer_id)) return;
 
         if (!empty($subject)) {
-            $subject_id = xarMod::getRegID($subject);
+            $subject_id = xarMod3::getRegID($subject);
             if (empty($subject_id)) return;
         }
         
@@ -442,7 +446,7 @@ class xarHooks extends xarEvents
         if (isset($itemtype) && !is_numeric($itemtype))
             throw new BadParameterException('itemtype', 'Invalid #(1) for xarHooks::getSubjectObservers()');
         
-        $subject_id = xarMod::getRegID($subject);
+        $subject_id = xarMod3::getRegID($subject);
         if (empty($subject_id)) return;
         
         // Get database info

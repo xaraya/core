@@ -4,7 +4,7 @@
  *
  * @package core\users
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -283,20 +283,24 @@ class xarUser extends xarObject
 
     /**
      * Is the user listed as debug admin
+     * @param ?int $userId
      * @return bool
      */
-    public static function isDebugAdmin()
+    public static function isDebugAdmin($userId = null)
     {
-        return in_array(self::getVar('id'), xarConfig3::getVar('Site.User.DebugAdmins'));
+        $userId ??= xarSession::getUserId();
+        return in_array($userId, xarConfig3::getVar('Site.User.DebugAdmins'));
     }
 
     /**
      * Is the user defined as site admin (see roles module)
+     * @param ?int $userId
      * @return bool
      */
-    public static function isSiteAdmin()
+    public static function isSiteAdmin($userId = null)
     {
-        return self::getVar('id') == xarMod3::getVar('admin', 'roles');
+        $userId ??= xarSession::getUserId();
+        return $userId == xarMod3::getVar('admin', 'roles');
     }
 
     /**

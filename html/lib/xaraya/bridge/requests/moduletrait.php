@@ -3,7 +3,7 @@
  * @package core\bridge
  * @subpackage requests
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -13,6 +13,7 @@ namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
 use Xaraya\Context\Context;
+use Xaraya\Facades\xarMod3;
 use xarMod;
 
 /**
@@ -147,7 +148,7 @@ trait ModuleBridgeTrait
      */
     public static function runModuleGuiRequest($vars, $query, $context = null): ?string
     {
-        return xarMod::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query, $context);
+        return xarMod3::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query, $context);
     }
 
     /**
@@ -159,6 +160,6 @@ trait ModuleBridgeTrait
      */
     public static function runModuleApiRequest($vars, $query, $context = null): mixed
     {
-        return xarMod::apiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'getitemtypes', $query, $context);
+        return xarMod3::apiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'getitemtypes', $query, $context);
     }
 }

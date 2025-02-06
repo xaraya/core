@@ -18,6 +18,7 @@ namespace Xaraya\Services;
 
 use xarCache;
 use xarModuleCache;
+use xarBlockCache;
 use xarObjectCache;
 use xarVariableCache;
 use sys;
@@ -37,7 +38,7 @@ interface CachingInterface extends ServiceInterface
     public function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): string|null;
 
     /**
-     * Check if the output of an module function is cached
+     * Check if the output of a module function is cached
      */
     public function hasModule(?string $cacheKey): bool;
 
@@ -50,6 +51,28 @@ interface CachingInterface extends ServiceInterface
      * Set the output of the module function in cache
      */
     public function setModule(?string $cacheKey, string $value): void;
+
+    /**
+     * Get a cache key for block output caching
+     * @param array<string, mixed> $blockInfo block information
+     * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Block, or null if not applicable
+     */
+    public function getBlockKey(array $blockInfo = []): string|null;
+
+    /**
+     * Check if the output of a block display is cached
+     */
+    public function hasBlock(?string $cacheKey): bool;
+
+    /**
+     * Get the output of the block display from cache
+     */
+    public function getBlock(string $cacheKey): string;
+
+    /**
+     * Set the output of the block display in cache
+     */
+    public function setBlock(?string $cacheKey, string $value): void;
 
     /**
      * Get a cache key for object output caching
@@ -121,7 +144,7 @@ trait CachingTrait
     }
 
     /**
-     * Check if the output of an module function is cached
+     * Check if the output of a module function is cached
      */
     public function hasModule(?string $cacheKey): bool
     {
@@ -148,6 +171,46 @@ trait CachingTrait
             return;
         }
         xarModuleCache::setCached($cacheKey, $value);
+    }
+
+    /**
+     * Get a cache key for block output caching
+     * @param array<string, mixed> $blockInfo block information
+     * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Block, or null if not applicable
+     */
+    public function getBlockKey(array $blockInfo = []): string|null
+    {
+        return xarCache::getBlockKey($blockInfo);
+    }
+
+    /**
+     * Check if the output of a block display is cached
+     */
+    public function hasBlock(?string $cacheKey): bool
+    {
+        if (empty($cacheKey)) {
+            return false;
+        }
+        return xarBlockCache::isCached($cacheKey);
+    }
+
+    /**
+     * Get the output of the block display from cache
+     */
+    public function getBlock(string $cacheKey): string
+    {
+        return xarBlockCache::getCached($cacheKey);
+    }
+
+    /**
+     * Set the output of the block display in cache
+     */
+    public function setBlock(?string $cacheKey, string $value): void
+    {
+        if (empty($cacheKey)) {
+            return;
+        }
+        xarBlockCache::setCached($cacheKey, $value);
     }
 
     /**
@@ -252,6 +315,10 @@ trait CachingTrait
  * - hasModule()
  * - getModule()
  * - setModule()
+ * - getBlockKey()
+ * - hasBlock()
+ * - getBlock()
+ * - setBlock()
  * - getObjectKey()
  * - hasObject()
  * - getObject()

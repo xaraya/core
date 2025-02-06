@@ -45,7 +45,8 @@ class xarVersion extends xarObject
  */
     public static function parse($version='')
     {
-        if (empty($version)) throw new Exception(xarMLS::translate('Missing a version parameter'));
+        sys::import('xaraya.facades.multilanguage');
+        if (empty($version)) throw new Exception(\Xaraya\Facades\xarMLS3::translate('Missing a version parameter'));
 
         $filter = '/^([1-9]\d*|0)\.([1-9]\d*|0)\.([1-9]\d*|0)(-(a|b|rc)([1-9]\d*))?$/';
         if (!preg_match($filter,$version,$matches)) return false;
@@ -147,10 +148,12 @@ class xarVersion extends xarObject
     {
         if (empty($version)) return true;
         if ($application == 'core') {
-            $version2 = xarConfigVars::get(null, 'System.Core.VersionNum');
+            sys::import('xaraya.facades.config');
+            $version2 = \Xaraya\Facades\xarConfig3::getVar('System.Core.VersionNum');
         } else {
+            sys::import('xaraya.facades.modules');
             try {
-                $info = xarMod::getBaseInfo($application);
+                $info = \Xaraya\Facades\xarMod3::getFileInfo($application);
                 $version2 = $info['version'];
             } catch (Exception $e) {
                 throw new ModuleBaseInfoNotFoundException($application);
