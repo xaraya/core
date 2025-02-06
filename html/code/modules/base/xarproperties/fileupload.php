@@ -62,11 +62,11 @@ class FileUploadProperty extends DataProperty
             $this->UploadsModule_isHooked = TRUE;
         } else {
         // FIXME: this doesn't take into account the itemtype or non-main module objects
-            if (xarModHooks::isHooked('uploads', xarMod::getName())) {
+            if (xarHooks::isAttached('uploads', xarMod::getName())) {
                 $this->UploadsModule_isHooked = true;
             }
             /*
-            $list = xarModHooks::getList(xarMod::getName(), 'item', 'transform');
+            $list = xarHooks::getSubjectObservers(xarMod::getName(), 'ItemTransform');
             foreach ($list as $hook) {
                 if ($hook['module'] == 'uploads') {
                     $this->UploadsModule_isHooked = TRUE;

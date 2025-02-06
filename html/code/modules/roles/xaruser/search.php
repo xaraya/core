@@ -29,7 +29,7 @@ function roles_user_search(array $args = [], $context = null)
     $data['users'] = array();
     // show the search form
     if (!isset($q)) {
-        if (xarModHooks::isHooked('dynamicdata','roles')) {
+        if (xarHooks::isAttached('dynamicdata','roles')) {
             // get the DataObject defined for this module
             /** @var DataObject $object */
             $object = xarMod::apiFunc('dynamicdata','user','getobject',
@@ -60,7 +60,7 @@ function roles_user_search(array $args = [], $context = null)
     // remember what we selected before
     $data['checked'] = array();
 
-    if (xarModHooks::isHooked('dynamicdata','roles')) {
+    if (xarHooks::isAttached('dynamicdata','roles')) {
         // make sure the DD classes are loaded
         if (!xarMod::apiLoad('dynamicdata','user')) return $data;
 

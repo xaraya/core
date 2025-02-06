@@ -9,7 +9,7 @@
            We want to show this option so people know it is available.
            We only show this if we can use it eg scheduler is installed and hooked to mail
        -->
-        <xar:if condition="xarMod::isAvailable('scheduler') and xarModHooks::isHooked('mail','scheduler')">
+        <xar:if condition="xarMod::isAvailable('scheduler') and xarHooks::isAttached('mail','scheduler')">
             <!-- We only show this if we can use it eg scheduler is installed and hooked to mail -->
             <xar:if condition="!empty($log)">
                 <pre>

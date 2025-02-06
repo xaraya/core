@@ -814,7 +814,7 @@ class CategoryNavigationProperty extends SelectProperty
                             'catcount' => $curcount
                         );
                         // add a hit for the categories we're viewing here
-                        if (empty($itemid) && xarModHooks::isHooked('hitcount','categories')) {
+                        if (empty($itemid) && xarHooks::isAttached('hitcount','categories')) {
                             foreach ($cids as $cid) {
                                 if (empty($cid)) {
                                     continue;

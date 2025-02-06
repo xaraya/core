@@ -16,7 +16,7 @@ use Xaraya\DataObject\UtilApi;
 use BadParameterException;
 use DataPropertyMaster;
 use xarMod;
-use xarModHooks;
+use xarHooks;
 use xarVar;
 use sys;
 
@@ -85,11 +85,11 @@ class GetrelationsMethod extends MethodClass
 
         // get the list of hook modules that are enabled for this module
         // TODO: get all hooks types, not only item display hooks
-        //    $hooklist = xarModHooks::getList($modinfo['name'],'item','display');
+        //    $hooklist = xarHooks::getSubjectObservers($modinfo['name'],'ItemDisplay');
         $hooklist = array_merge(
-            xarModHooks::getList($modinfo['name'], 'item', 'display'),
-            xarModHooks::getList($modinfo['name'], 'item', 'update'),
-            xarModHooks::getList($modinfo['name'], 'module', 'remove')
+            xarHooks::getSubjectObservers($modinfo['name'], 'ItemDisplay'),
+            xarHooks::getSubjectObservers($modinfo['name'], 'ItemUpdate'),
+            xarHooks::getSubjectObservers($modinfo['name'], 'ModuleRemove')
         );
         $modlist = [];
         foreach ($hooklist as $hook) {

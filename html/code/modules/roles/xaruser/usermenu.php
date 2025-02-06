@@ -214,7 +214,7 @@ function roles_user_usermenu(array $args = [], $context = null)
 
                 $menumods = array();
                 // for now, roles must be hooked to roles in order for usermenus to be available
-                if (xarModHooks::isHooked('roles', 'roles')) {
+                if (xarHooks::isAttached('roles', 'roles')) {
                     // get a list of modules with user menu enabled
                     $allmods = xarMod::apiFunc('modules', 'admin', 'getlist');
                     foreach ($allmods as $modinfo) {

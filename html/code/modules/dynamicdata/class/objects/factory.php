@@ -3,7 +3,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -394,10 +394,11 @@ class DataObjectFactory extends xarObject
 
         /* with autoload and variable caching activated */
         // Do we allow caching?
+        $cacheKey = null;
         if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarMod3::getVar('caching', 'dynamicdata')) {
             $cacheKey = static::getVariableCacheKey('DataObject', $args);
             // Check if the variable is cached
-            if (!empty($cacheKey) && xarCache3::hasVariable($cacheKey)) {
+            if (xarCache3::hasVariable($cacheKey)) {
                 // Return the cached variable
                 /** @var DataObject $object */
                 $object = xarCache3::getVariable($cacheKey);
@@ -424,9 +425,7 @@ class DataObjectFactory extends xarObject
 
         /* with autoload and variable caching activated */
         // Set the variable in cache
-        if (!empty($cacheKey)) {
-            xarCache3::setVariable($cacheKey, $object);
-        }
+        xarCache3::setVariable($cacheKey, $object);
         return $object;
     }
 
@@ -488,7 +487,7 @@ class DataObjectFactory extends xarObject
         if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarMod3::getVar('caching', 'dynamicdata')) {
             $cacheKey = static::getVariableCacheKey('DataObjectList', $args);
             // Check if the variable is cached
-            if (!empty($cacheKey) && xarCache3::hasVariable($cacheKey)) {
+            if (xarCache3::hasVariable($cacheKey)) {
                 // Return the cached variable
                 /** @var DataObjectList $object */
                 $object = xarCache3::getVariable($cacheKey);

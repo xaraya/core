@@ -58,7 +58,7 @@
                         <xar:data-label label="Enable InPage Admin SubMenus" for="adminpagemenu" title="Use submenus in the page for admin functions."/>
                     </div>
                     <div class="checkInputContainer">
-                        <xar:set name="checkUsermenu">xarModHooks::isHooked('themes', 'roles')</xar:set>
+                        <xar:set name="checkUsermenu">xarHooks::isAttached('themes', 'roles')</xar:set>
                         <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checkUsermenu"/>
                         <xar:data-label label="Allow users to set their theme in User Account page" for="usermenu" title="Allow users to select themes from their Account Details page."/>
                     </div>

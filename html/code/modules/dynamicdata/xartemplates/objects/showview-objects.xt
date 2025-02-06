@@ -4,7 +4,7 @@
     <!-- TODO: multi-column output -->
     <div class="xar-mod-page-head">
         <xar:style scope="module" module="dynamicdata" file="dd"/>
-        <xar:if condition="!empty($isprimary) and xarModHooks::isHooked('categories',$modname,$itemtype)">
+        <xar:if condition="!empty($isprimary) and xarHooks::isAttached('categories',$modname,$itemtype)">
             <xar:template file="catnavigation"/>
         </xar:if>
     
