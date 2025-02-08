@@ -41,6 +41,14 @@ class xarMLS3
     }
 
     /**
+     * Get the current locale or empty if not defined in xarUser::init() yet
+     */
+    public static function getCurrentLocale(): string
+    {
+        return self::getInstance()->getCurrentLocale();
+    }
+
+    /**
      * Translate string with optional arguments
      * @param string $rawstring
      * @param mixed ...$args
@@ -56,6 +64,18 @@ class xarMLS3
     public static function loadTranslations(string $path): bool
     {
         return self::getInstance()->loadTranslations($path);
+    }
+
+    /**
+     * Load translations for a module function or method
+     * @param string $modName
+     * @param string $modType (incl. $funcType)
+     * @param string $funcName
+     * @return bool
+     */
+    public static function loadModuleTranslations(string $modName, string $modType, string $funcName): bool
+    {
+        return self::getInstance()->loadModuleTranslations($modName, $modType, $funcName);
     }
 
     /**

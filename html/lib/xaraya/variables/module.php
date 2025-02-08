@@ -161,7 +161,7 @@ class xarModVars extends xarVars implements IxarModVars
         $module_varstable = $tables['module_vars'];
         // We need the variable id
         //unset($modvarid);
-        $modvarid = self::getId($scope, $name);
+        $modvarid = self::getID($scope, $name);
 
         if($value === false) $value = 0;
         if($value === true) $value = 1;
@@ -202,7 +202,7 @@ class xarModVars extends xarVars implements IxarModVars
         $modBaseInfo = xarMod::getBaseInfo($scope);
 
         // Delete all the itemvars derived from this var first
-        $modvarid = self::getId($scope, $name);
+        $modvarid = self::getID($scope, $name);
         // TODO: we should delegate this to moditemvars class somehow
         if($modvarid) {
             $module_itemvarstable = $tables['module_itemvars'];

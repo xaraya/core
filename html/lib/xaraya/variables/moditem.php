@@ -59,7 +59,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
 
         $module_itemvarstable = $tables['module_itemvars'];
         //unset($modvarid);
-        $modvarid = xarModVars::getId($scope, $name);
+        $modvarid = xarModVars::getID($scope, $name);
         if(!$modvarid)
             return;
 
@@ -96,7 +96,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
 
         // We need the variable id
         //unset($modvarid);
-        $modvarid = xarModVars::getId($scope, $name);
+        $modvarid = xarModVars::getID($scope, $name);
         if(!$modvarid) throw new VariableNotFoundException($name);
 
         // First delete it.
@@ -132,7 +132,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
 
         $module_itemvarstable = $tables['module_itemvars'];
         // We need the variable id
-        $modvarid = xarModVars::getId($scope, $name);
+        $modvarid = xarModVars::getID($scope, $name);
         if(!$modvarid) return;
         $query = "DELETE FROM $module_itemvarstable WHERE module_var_id = ? AND item_id = ?";
         $bindvars = array((int)$modvarid, (int)$itemid);

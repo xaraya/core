@@ -38,6 +38,7 @@ interface ModulesInterface extends ServiceInterface
     public function getVar(string $varName, ?string $modName = null): mixed;
     public function setVar(string $varName, mixed $value, ?string $modName = null): bool;
     public function delVar(string $varName, ?string $modName = null): bool;
+    public function getVarID(string $varName, ?string $modName = null): int;
     /** @param array<string, mixed> $args */
     public function getURL(string $modType = 'user', string $funcName = 'main', array $args = [], ?string $modName = null): string;
     /** @param array<string, mixed> $tplData */
@@ -48,7 +49,7 @@ interface ModulesInterface extends ServiceInterface
      */
     public function prepare(array $tplData = []): array;
     public function getName(?int $regID = null): string;
-    public function getId(?string $modName = null): int|null;
+    public function getID(?string $modName = null): int|null;
     public function getRegID(?string $modName = null): int;
     /** @return array<string, mixed> */
     public function getFileInfo(?string $modName = null): array;
@@ -109,6 +110,15 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         return xarModVars::delete($modName, $varName);
+    }
+
+    /**
+     * Get module variable ID for this module
+     */
+    public function getVarID(string $varName, ?string $modName = null): int
+    {
+        $modName ??= $this->getModName();
+        return xarModVars::getID($modName, $varName);
     }
 
     /**

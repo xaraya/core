@@ -376,7 +376,7 @@ class xarMLS extends xarObject
         $datetime = new XarDateTime();
         $datetime->setTimeStamp($timestamp);
         if (xarUser::isLoggedIn()) {
-            $usertz = xarModItemVars::get('roles','usertimezone',xarSession::getUserId());
+            $usertz = xarModUserVars::get('roles', 'usertimezone');
         } else {
             $usertz = xarConfig3::getVar('Site.Core.TimeZone');
         }

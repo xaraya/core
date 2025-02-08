@@ -12,7 +12,6 @@ namespace Xaraya\Sessions;
 
 use xarCore;
 use xarEvents;
-use xarMLS;
 use xarObject;
 use xarServer;
 use xarSession;
@@ -27,6 +26,7 @@ sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.exception');
 sys::import('xaraya.sessions.virtual');
 sys::import('xaraya.services.hasdatabasetrait');
+sys::import('xaraya.services.hasmultilanguagetrait');
 
 /**
  * Class to model the default session handler
@@ -59,6 +59,7 @@ interface iSessionHandler extends SessionHandlerInterface
 class SessionHandler extends xarObject implements iSessionHandler, SessionInterface
 {
     use \Xaraya\Services\HasDatabaseTrait;
+    use \Xaraya\Services\HasMultiLanguageTrait;
 
     public const  PREFIX = 'XARSV';     // Reserved by us for our session vars
     public const  COOKIE = 'XARAYASID'; // Our cookiename
@@ -655,7 +656,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     public function clear($spared = [])
     {
         if (!is_array($spared)) {
-            $msg = xarMLS::translate('Not an array: \'$spared\'');
+            $msg = $this->ml('Not an array: \'$spared\'');
             throw new BadParameterException(null, $msg);
         }
 

@@ -1,11 +1,12 @@
 <?php
+
 /**
- * Object handling subsystem (experimental counterpart for modules on object-centric sites)
+ * Object handling subsystem (counterpart for modules on object-centric sites)
  *
  * @package core
  * @subpackage objects
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -22,10 +23,7 @@ use Xaraya\Context\Context;
  * @package core\objects
  * @todo this is very likely to change, it was created as baseline for refactoring
  */
-interface IxarDDObject
-{
-
-}
+interface IxarDDObject {}
 
 /**
  * Preliminary class to model xarDDObject interface
@@ -38,7 +36,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * Initialize
      *
      */
-    static function init(array $args=array())
+    public static function init(array $args = [])
     {
         // Nothing to do here
         return true;
@@ -54,9 +52,11 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @return mixed The output of the method, or raise an exception
      * @throws EmptyParameterException
      */
-    static function guiMethod($objectName, $methodName = 'view', $args = [], $context = null)
+    public static function guiMethod($objectName, $methodName = 'view', $args = [], $context = null)
     {
-        if (empty($objectName)) throw new EmptyParameterException('objectName');
+        if (empty($objectName)) {
+            throw new EmptyParameterException('objectName');
+        }
 
         // Pass the object name and method to the userinterface class
         $args['object'] = $objectName;
@@ -89,10 +89,13 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param ?Context<string, mixed> $context optional context for the method call (default = none)
      * @return mixed The output of the method, or false on failure
      * @throws EmptyParameterException
+     * @deprecated 2.6.2 not used
      */
-    static function classMethod($objectName, $methodName = 'showDisplay', $args = array(), $roleid = null, $context = null)
+    public static function classMethod($objectName, $methodName = 'showDisplay', $args = [], $roleid = null, $context = null)
     {
-        if (empty($objectName)) throw new EmptyParameterException('objectName');
+        if (empty($objectName)) {
+            throw new EmptyParameterException('objectName');
+        }
 
         // Pass the object name to the object class
         $args['name'] = $objectName;
@@ -102,8 +105,7 @@ class xarDDObject extends xarObject implements IxarDDObject
 
         sys::import('modules.dynamicdata.class.objects.factory');
 
-        switch (strtolower($methodName))
-        {
+        switch (strtolower($methodName)) {
             case 'countitems':
                 $objectlist = DataObjectFactory::getObjectList($args, $context);
                 if (!$objectlist->checkAccess('view', null, $roleid)) {
@@ -128,7 +130,7 @@ class xarDDObject extends xarObject implements IxarDDObject
                 $objectlist->getItems($args);
                 return $objectlist->{$methodName}($args);
 
-            // CHECKME: what do we want to return here ?
+                // CHECKME: what do we want to return here ?
             case 'getitem':
                 $object = DataObjectFactory::getObject($args, $context);
                 if (!$object->checkAccess('display', $args['itemid'], $roleid)) {
@@ -179,10 +181,13 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param ?Context<string, mixed> $context optional context for the method call (default = none)
      * @return mixed The output of the method, or false on failure
      * @throws EmptyParameterException
+     * @deprecated 2.6.2 not used
      */
-    static function simpleMethod($objectName, $methodName = 'showDisplay', $args = array(), $context = null)
+    public static function simpleMethod($objectName, $methodName = 'showDisplay', $args = [], $context = null)
     {
-        if (empty($objectName)) throw new EmptyParameterException('objectName');
+        if (empty($objectName)) {
+            throw new EmptyParameterException('objectName');
+        }
 
         // Pass the object name and method to the simpleinterface class
         $args['name'] = $objectName;
@@ -207,7 +212,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
-    static function getActionURL($object, $action = '', $itemid = null, $extra = array())
+    public static function getActionURL($object, $action = '', $itemid = null, $extra = [])
     {
         // special case when dealing with objectid 1 = objects
         if ($action == 'modifyprop' || $action == 'viewitems') {
@@ -215,8 +220,7 @@ class xarDDObject extends xarObject implements IxarDDObject
         }
 
         // CHECKME: the linktype is set by the object user interface when we work with object URLs - make this depend on current request, config, ... ?
-        switch ($object->linktype)
-        {
+        switch ($object->linktype) {
             case 'object':
                 $link = self::getObjectURL($object, $action, $itemid, $extra);
                 break;
@@ -254,7 +258,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
-    static function getModuleURL($object, $action = '', $itemid = null, $extra=array())
+    public static function getModuleURL($object, $action = '', $itemid = null, $extra = [])
     {
         $urlargs = $extra;
         if (!empty($object->table)) {
@@ -267,8 +271,7 @@ class xarDDObject extends xarObject implements IxarDDObject
         // TODO: do we need the concept of tplmodule at all? Good question :-)
         $urlargs['tplmodule'] = $object->tplmodule;
 
-        switch ($action)
-        {
+        switch ($action) {
             case 'display':
                 $tplmodule = xarMod::checkModuleFunction($object->tplmodule, $object->linktype, $object->linkfunc);
                 $link = xarServer::getModuleURL($tplmodule, $object->linktype, $object->linkfunc, $urlargs);
@@ -280,21 +283,26 @@ class xarDDObject extends xarObject implements IxarDDObject
                 $link = xarServer::getModuleURL($tplmodule, $object->linktype, 'view', $urlargs);
                 break;
 
-            // special case when dealing with objectid 1 = objects
+                // special case when dealing with objectid 1 = objects
             case 'modifyprop':
                 $tplmodule = xarMod::checkModuleFunction($object->tplmodule, 'admin', 'modifyprop');
                 $link = xarServer::getModuleURL($tplmodule, 'admin', 'modifyprop', $urlargs);
                 break;
 
-            // special case when dealing with objectid 1 = objects
+                // special case when dealing with objectid 1 = objects
             case 'viewitems':
-                $link = xarServer::getModuleURL('dynamicdata','admin','view',
-                                                array('itemid' => $itemid));
+                $link = xarServer::getModuleURL(
+                    'dynamicdata',
+                    'admin',
+                    'view',
+                    ['itemid' => $itemid]
+                );
                 break;
 
             case 'new':
                 unset($urlargs['itemid']);
                 // fall through
+                // no break
             case 'modify':
             case 'delete':
             default:
@@ -316,7 +324,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
-    static function getObjectURL($object, $action = '', $itemid = null ,$extra=array())
+    public static function getObjectURL($object, $action = '', $itemid = null, $extra = [])
     {
         $urlargs = $extra;
         if (!empty($object->table)) {
@@ -326,8 +334,7 @@ class xarDDObject extends xarObject implements IxarDDObject
             $urlargs[$object->urlparam] = $itemid;
         }
 
-        switch ($action)
-        {
+        switch ($action) {
             case 'new':
                 unset($urlargs['itemid']);
                 $link = xarServer::getObjectURL($object->name, 'create', $urlargs);
@@ -341,7 +348,7 @@ class xarDDObject extends xarObject implements IxarDDObject
                 $link = xarServer::getObjectURL($object->name, 'view');
                 break;
 
-            // all other actions should correspond to some gui method
+                // all other actions should correspond to some gui method
             case 'display':
             default:
                 $link = xarServer::getObjectURL($object->name, $action, $urlargs);
@@ -360,38 +367,37 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param mixed $itemid the specific item id or null
      * @return string the generated URL
      */
-    static function getCurrentURL($object, $action = '', $itemid = null)
+    public static function getCurrentURL($object, $action = '', $itemid = null)
     {
-        switch ($action)
-        {
+        switch ($action) {
             case 'display':
                 // CHECKME: reset method in the current URL ?
-                $link = xarServer::getCurrentURL(array('method' => null, 'itemid' => $itemid));
+                $link = xarServer::getCurrentURL(['method' => null, 'itemid' => $itemid]);
                 break;
 
             case 'new':
                 // CHECKME: reset itemid in the current URL ?
-                $link = xarServer::getCurrentURL(array('method' => 'create', 'itemid' => null));
+                $link = xarServer::getCurrentURL(['method' => 'create', 'itemid' => null]);
                 break;
 
             case 'modify':
                 // CHECKME: pass method and itemid to the current URL ?
-                $link = xarServer::getCurrentURL(array('method' => 'update', 'itemid' => $itemid));
+                $link = xarServer::getCurrentURL(['method' => 'update', 'itemid' => $itemid]);
                 break;
 
             case 'delete':
                 // CHECKME: pass method and itemid to the current URL ?
-                $link = xarServer::getCurrentURL(array('method' => 'delete', 'itemid' => $itemid));
+                $link = xarServer::getCurrentURL(['method' => 'delete', 'itemid' => $itemid]);
                 break;
 
             case 'view':
                 // CHECKME: reset method and itemid in the current URL ?
-                $link = xarServer::getCurrentURL(array('method' => null, 'itemid' => null));
+                $link = xarServer::getCurrentURL(['method' => null, 'itemid' => null]);
                 break;
 
             default:
                 // CHECKME: pass method and itemid to the current URL ?
-                $link = xarServer::getCurrentURL(array('method' => $action, 'itemid' => $itemid));
+                $link = xarServer::getCurrentURL(['method' => $action, 'itemid' => $itemid]);
                 break;
         }
 
@@ -406,7 +412,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param mixed $itemid the specific item id or null
      * @return string the generated URL
      */
-    static function getOtherURL($object, $action = '', $itemid = null)
+    public static function getOtherURL($object, $action = '', $itemid = null)
     {
         return 'http://www.xaraya.com/to_be_defined';
     }
@@ -420,7 +426,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param mixed $roleid override the current user or null
      * @return boolean true if access
      */
-    static function checkAccess($object, $action, $itemid = null, $roleid = null)
+    public static function checkAccess($object, $action, $itemid = null, $roleid = null)
     {
         return $object->checkAccess($action, $itemid, $roleid);
     }

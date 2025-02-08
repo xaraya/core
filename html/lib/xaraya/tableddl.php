@@ -24,8 +24,10 @@
 // @todo move functions to class methods and use Database Service
 sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.multilanguage');
 use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMLS3;
 
 /**
  * Public Functions:
@@ -543,7 +545,7 @@ class xarXMLInstaller extends xarObject
     private static function transform($xmlFile, $xslAction='display', $xslFile=null)
     {
         if (!isset($xmlFile))
-            throw new BadParameterException(xarMLS::translate('No file to transform!'));
+            throw new BadParameterException(xarMLS3::translate('No file to transform!'));
 
         // Get the database type from the connection
 		$databaseType = xarDB3::getType();
@@ -567,13 +569,13 @@ class xarXMLInstaller extends xarObject
 				$databaseType = 'pgsql';
 			break;
 			default:
-				throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $databaseType));
+				throw new Exception(xarMLS3::translate("Unknown database type: '#(1)'", $databaseType));
 		}
         
         if (!isset($xslFile))
             $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-'. $databaseType . '.xsl';
         if (!file_exists($xslFile)) {
-            $msg = xarMLS::translate('The file #(1) was not found', $xslFile);
+            $msg = xarMLS3::translate('The file #(1) was not found', $xslFile);
             throw new BadParameterException(null, $msg);
         }
         sys::import('xaraya.tableddl.xslprocessor');
@@ -594,11 +596,11 @@ class xarXMLInstaller extends xarObject
         sys::import('creole.CreoleTypes');
         $code = (int)CreoleTypes::getCreoleCode(strtoupper($creoleType));
         if (null == $code) {
-            xarCore::exit(xarMLS::translate("Unknown Creole type: '#(1)'", $creoleType));
+            xarCore::exit(xarMLS3::translate("Unknown Creole type: '#(1)'", $creoleType));
             return;
         }
         if (null == $type = strtoupper(self::$typesObject::getNativeType($code))) {
-            xarCore::exit(xarMLS::translate("Unknown Creole type: '#(1)'", $creoleType));
+            xarCore::exit(xarMLS3::translate("Unknown Creole type: '#(1)'", $creoleType));
             return;
         }
         return $type;
@@ -613,7 +615,7 @@ class xarXMLInstaller extends xarObject
             
         $xmlfile = sys::code() . 'modules/' . $module . '/xardata/' . $tablefile . '.xml';
         if (!file_exists($xmlfile)) {
-            $msg = xarMLS::translate('Could not find the file #(1) to create tables from', $xmlfile);
+            $msg = xarMLS3::translate('Could not find the file #(1) to create tables from', $xmlfile);
             throw new BadParameterException(null, $msg);
         }
 

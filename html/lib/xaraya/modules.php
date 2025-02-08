@@ -28,12 +28,14 @@ sys::import('xaraya.facades.caching');
 sys::import('xaraya.facades.config');
 sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.multilanguage');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\Context;
 use Xaraya\Facades\xarCache3;
 use Xaraya\Facades\xarConfig3;
 use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMLS3;
 
 /**
  * Exception raised by the modules subsystem
@@ -190,7 +192,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modInfo['displayname'])) {
             $modInfo['displayname'] = $modName;
         }
-        return xarMLS::translate($modInfo['displayname']);
+        return xarMLS3::translate($modInfo['displayname']);
     }
 
     /**
@@ -212,7 +214,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modInfo['displaydescription'])) {
             $modInfo['displaydescription'] = $modName;
         }
-        return xarMLS::translate($modInfo['displaydescription']);
+        return xarMLS3::translate($modInfo['displaydescription']);
     }
 
     /**
@@ -442,9 +444,9 @@ class xarMod extends xarObject implements IxarMod
         if (!isset($modFileInfo)) {
             // We couldn't get file info, fill in unknowns.
             // The exception for this is logged in getFileInfo
-            $unknown = xarMLS::translate('Unknown');
+            $unknown = xarMLS3::translate('Unknown');
             $modFileInfo['class'] = $unknown;
-            $modFileInfo['description'] = xarMLS::translate('This module is not installed properly. Not all info could be retrieved');
+            $modFileInfo['description'] = xarMLS3::translate('This module is not installed properly. Not all info could be retrieved');
             $modFileInfo['category'] = $unknown;
             $modFileInfo['displayname'] = $unknown;
             $modFileInfo['displaydescription'] = $unknown;
@@ -613,8 +615,8 @@ class xarMod extends xarObject implements IxarMod
                 $fileName = sys::code() . 'modules/' . $modOsDir . '/xarversion.php';
                 $part = 'xarversion';
                 // If the locale is already present, it means we can make the translations available
-                if (!empty(xarMLS::$currentLocale)) {
-                    xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
+                if (!empty(xarMLS3::getCurrentLocale())) {
+                    xarMLS3::loadModuleTranslations($modOsDir, '', 'version');
                 }
                 break;
             case 'property':
@@ -932,7 +934,7 @@ class xarMod extends xarObject implements IxarMod
 
             if ($found) {
                 // Load the translations file, only if we have loaded the API function for the first time here.
-                if (xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:' . $modType . $funcType, $funcName) === null) {
+                if (xarMLS3::loadModuleTranslations($modName, $modType . $funcType, $funcName) === null) {
                     return;
                 }
             }
@@ -1047,7 +1049,7 @@ class xarMod extends xarObject implements IxarMod
         }
 
         // Load the module translations files (common functions, uncut functions etc.)
-        if (xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:', $modType) === null) {
+        if (xarMLS3::loadModuleTranslations($modName, '', $modType) === null) {
             return;
         }
 
@@ -1135,6 +1137,8 @@ class xarMod extends xarObject implements IxarMod
             $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName, $callType);
             if (!isset($methods_cache[$key])) {
                 xarLog3::info("xarMod::getModuleClassMethod: Missing method for $key");
+            } else {
+                // @todo load module function translations
             }
         }
         return $methods_cache[$key];

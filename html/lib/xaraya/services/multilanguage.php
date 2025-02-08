@@ -27,6 +27,11 @@ sys::import('xaraya.services.servicetrait');
 interface MultiLanguageInterface extends ServiceInterface
 {
     /**
+     * Get the current locale or empty if not defined yet
+     */
+    public function getCurrentLocale(): string;
+
+    /**
      * Translate string with optional arguments
      * @param string $rawstring
      * @param mixed ...$args
@@ -39,6 +44,15 @@ interface MultiLanguageInterface extends ServiceInterface
      * @return bool
      */
     public function loadTranslations(string $path): bool;
+
+    /**
+     * Load translations for a module function or method
+     * @param string $modName
+     * @param string $modType (incl. funcType)
+     * @param string $funcName
+     * @return bool
+     */
+    public function loadModuleTranslations(string $modName, string $modType, string $funcName): bool;
 
     /**
      * Load translations for a data object property
@@ -55,6 +69,14 @@ interface MultiLanguageInterface extends ServiceInterface
 trait MultiLanguageTrait
 {
     use ServiceTrait;
+
+    /**
+     * Get the current locale or empty if not defined in xarUser::init() yet
+     */
+    public function getCurrentLocale(): string
+    {
+        return xarMLS::getCurrentLocale();
+    }
 
     /**
      * Translate string with optional arguments
@@ -76,6 +98,21 @@ trait MultiLanguageTrait
     public function loadTranslations(string $path): bool
     {
         return xarMLS::loadTranslations($path);
+    }
+
+    /**
+     * Load translations for a module function or method
+     * @param string $modName
+     * @param string $modType (incl. $funcType)
+     * @param string $funcName
+     * @return bool
+     */
+    public function loadModuleTranslations(string $modName, string $modType, string $funcName): bool
+    {
+        //xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
+        //if (xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:' . $modType . $funcType, $funcName) === null) {
+        //if (xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:', $modType) === null) {
+        return xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:' . $modType, $funcName);
     }
 
     /**
