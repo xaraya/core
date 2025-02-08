@@ -14,12 +14,7 @@
  * $path = xarServer::getVar('PATH_INFO') ?? '/';
  * $method = xarServer::getVar('REQUEST_METHOD');
  *
- * // get a simple router to work with yourself, possibly in a group
- * // $router = RoutingBridge::getSimpleRouter('/mysite');
- * // [$handler, $params] = $router->match($path, $method);
- * // ... adapt handler and call with params ...
- *
- * // or let the routing bridge handle the request itself and return the result
+ * // let the routing bridge handle the request itself and return the result
  * $bridge = new RoutingBridge();
  * [$result, $context] = $bridge->dispatchRequest($method, $path, '/mysite');
  * $bridge->output($result, $context);
@@ -31,7 +26,7 @@
 namespace Xaraya\Bridge\Routing;
 
 // use the FastRoute library here - see https://github.com/nikic/FastRoute
-use Xaraya\Routing\FastRouter;
+//use Xaraya\Routing\FastRouter;
 // use the Symfony Routing component here - see https://github.com/symfony/routing
 use Xaraya\Routing\Routing;
 use Xaraya\Routing\RouterInterface;
@@ -61,10 +56,10 @@ use Xaraya\Bridge\GraphQL\GraphQLHandler;
  */
 class RoutingBridge extends BasicBridge
 {
-    public const ROUTING_CACHE_FILE = 'fastroute_cache.php';
+    public const ROUTING_CACHE_FILE = 'routing_cache.php';
 
-    public static string $routerClass = FastRouter::class;
-    //protected static string $routerClass = Routing::class;
+    //public static string $routerClass = FastRouter::class;
+    protected static string $routerClass = Routing::class;
     /** @var RouterInterface|null */
     public static $router = null;
     public static string $baseUri = '';
@@ -91,15 +86,15 @@ class RoutingBridge extends BasicBridge
         if (isset(static::$router)) {
             return static::$router;
         }
-        $cacheKey = sys::varpath() . '/cache/api/' . static::ROUTING_CACHE_FILE;
+        $cacheKey = $cacheFile ?: sys::varpath() . '/cache/' . static::ROUTING_CACHE_FILE;
         static::$router = new (static::$routerClass)(static::getRoutes(...), $cacheKey);
         return static::$router;
     }
 
     /**
      * Summary of setRouter
-     * @param RouterInterface $router
-     * @return RouterInterface
+     * @param ?RouterInterface $router
+     * @return ?RouterInterface
      */
     public static function setRouter($router)
     {
@@ -197,6 +192,7 @@ class RoutingBridge extends BasicBridge
      * Summary of getSimpleRouter
      * @param string $group
      * @return RouterInterface
+     * @deprecated 2.6.2 use getRouter() instead
      */
     public static function getSimpleRouter(string $group = '')
     {

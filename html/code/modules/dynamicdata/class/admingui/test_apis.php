@@ -315,7 +315,7 @@ class TestApisMethod extends MethodClass
         if (file_exists($cacheFile)) {
             unlink($cacheFile);
         }
-        $cacheFile = sys::varpath() . '/cache/api/fastroute_cache.php';
+        $cacheFile = sys::varpath() . '/cache/api/routing_cache.php';
         if (file_exists($cacheFile)) {
             unlink($cacheFile);
         }

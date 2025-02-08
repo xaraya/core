@@ -51,6 +51,7 @@ class RouteLoader extends Loader
             // set route param in request once we find matching route
             //$params[Route::ROUTE_PARAM] ??= $name;
             [$path, $requirements] = self::getPathRequirements($path);
+            var_dump($path, $requirements);
             // set handler in 'defaults' here!? - @todo
             $params = [Routing::HANDLER_PARAM => $handler];
             $route = new SymfonyRoute($path, $params);
@@ -80,8 +81,10 @@ class RouteLoader extends Loader
      * Check path params + extract custom patterns - see nikic/fast-route
      * This will convert
      *   [nikic/fast-route] $path = '/books/{id:\d+}'
+     *   [nikic/fast-route] $path = '/object/{object}/{itemid:[0-9a-f]{24}}/{method}'
      * into
      *   [symfony/routing] [$path, $requirements] = ['/books/{id}', ['id' => '\d+']]
+     *   [symfony/routing] [$path, $requirements] = ['/object/{object}/{itemid}/{method}', ['itemid' => '[0-9a-f]{24}']]
      * @param string $path
      * @return array{0: string, 1: array<mixed>}
      */
@@ -89,7 +92,7 @@ class RouteLoader extends Loader
     {
         $requirements = [];
         $found = [];
-        if (!preg_match_all("~\{(\w+(|:[^}]+))\}~", $path, $found)) {
+        if (!preg_match_all("~\{(\w+(|:[^/]+))\}~", $path, $found)) {
             return [$path, $requirements];
         }
         foreach ($found[1] as $param) {

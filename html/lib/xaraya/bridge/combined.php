@@ -48,8 +48,6 @@ sys::import('xaraya.bridge.routing');
 use Xaraya\Bridge\Routing\RoutingBridge;
 use Xaraya\Bridge\Routing\RoutingApiBridge;
 use Xaraya\Routing\RouterInterface;
-use Xaraya\Routing\FastRouter;
-use Xaraya\Routing\Routing;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
 
 class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
