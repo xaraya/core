@@ -10,7 +10,6 @@ chdir(dirname(__DIR__, 3) . '/html');
 use Xaraya\Bridge\Routing\RoutingBridge;
 use Xaraya\Bridge\Routing\RoutingApiBridge;
 use Xaraya\Bridge\Routing\RoutingStaticBridge;
-use Xaraya\Bridge\Routing\FastRouteBuildTest;
 
 sys::init();
 xarCache::init();
@@ -41,23 +40,3 @@ $wrapPage = false;
 $bridge = new RoutingBridge($wrapPage);
 [$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD') ?? 'GET', xarServer::getVar('PATH_INFO') ?? '/');
 $bridge->output($result, $context);
-
-/**
-$dispatcher = RoutingBridge::getSimpleDispatcher();
-//$routes = FastRouteBuildTest::getRoutes();
-//echo var_export($routes, true);
-$params = ['object' => 'sample', 'method' => 'update', 'itemid' => 4];
-$params = ['object' => 'sample', 'itemid' => 4];
-$params = ['object' => 'sample', 'method' => 'create'];
-$params = ['object' => 'sample'];
-//$params = ['abject' => 'sample'];
-$route = FastRouteBuildTest::getObjectRoute($params);
-echo $route . "\n";
-$params = ['module' => 'base', 'type' => 'admin', 'func' => 'main'];
-//$params = ['module' => 'base', 'func' => 'main'];
-//$params = ['module' => 'base', 'type' => 'user'];
-//$params = ['module' => 'base'];
-//$params = ['madule' => 'base'];
-$route = FastRouteBuildTest::getModuleRoute($params);
-echo $route . "\n";
- */

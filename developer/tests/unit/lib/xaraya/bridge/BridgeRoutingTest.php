@@ -71,14 +71,5 @@ final class BridgeRoutingTest extends TestCase
         $expected = $path;
         $path = $router->generate($route, $params);
         $this->assertEquals($expected, $path);
-        /**
-        $params = ['module' => 'base', 'type' => 'admin', 'func' => 'main'];
-        //$params = ['module' => 'base', 'func' => 'main'];
-        //$params = ['module' => 'base', 'type' => 'user'];
-        //$params = ['module' => 'base'];
-        //$params = ['madule' => 'base'];
-        $route = FastRouteBuildTest::getModuleRoute($params);
-        echo $route . "\n";
-        */
     }
 }

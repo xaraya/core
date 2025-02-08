@@ -912,6 +912,7 @@ class RoutingStaticBridge extends RoutingBridge
 
 /**
  * Summary of FastRouteBuildTest
+ * @deprecated 2.6.2 use RouterInterface::generate() instead
  */
 class FastRouteBuildTest
 {
