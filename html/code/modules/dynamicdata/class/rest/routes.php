@@ -19,5 +19,6 @@ sys::import('xaraya.bridge.restapi.routes');
 
 /**
  * Class to define DataObject REST API routes
+ * @deprecated 2.6.2 use RestAPIRoutes() instead
  */
 class DataObjectRESTRoutes extends RestAPIRoutes {}

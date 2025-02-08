@@ -19,6 +19,6 @@ sys::import('xaraya.bridge.restapi.handler');
 
 /**
  * Class to handle DataObject REST API calls
- * @uses \sys::autoload()
+ * @deprecated 2.6.2 use RestAPIHandler() instead
  */
 class DataObjectRESTHandler extends RestAPIHandler {}

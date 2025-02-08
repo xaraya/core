@@ -19,5 +19,6 @@ sys::import('xaraya.bridge.restapi.builder');
 
 /**
  * Class to build DataObject REST API
-**/
+ * @deprecated 2.6.2 use RestAPIBuilder() instead
+ */
 class DataObjectRESTBuilder extends RestAPIBuilder {}

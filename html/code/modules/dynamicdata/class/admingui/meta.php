@@ -42,8 +42,6 @@ class MetaMethod extends MethodClass
     {
         /** @var UtilApi $utilapi */
         $utilapi = $this->utilapi();
-        /** @var UserApi $userapi */
-        $userapi = $this->userapi();
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -71,7 +69,6 @@ class MetaMethod extends MethodClass
         }
 
         $data = [];
-        $utilapi = new \Xaraya\DataObject\UtilApi();
 
         $dbconn = $this->db()->getConn();
         $dbname = $this->db()->getName();

@@ -53,7 +53,8 @@ class GetmetaMethod extends MethodClass
         if (empty($dbConnArgs)) {
             $dbConnArgs = [];
         }
-        $utilapi = new \Xaraya\DataObject\UtilApi();
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
 
         return $utilapi->getMetaInfo($table, $db, $dbConnIndex, $dbConnArgs);
     }

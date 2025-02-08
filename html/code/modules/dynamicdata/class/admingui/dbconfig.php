@@ -13,6 +13,7 @@ namespace Xaraya\DataObject\AdminGui;
 
 use Xaraya\DataObject\MethodClass;
 use Xaraya\DataObject\AdminGui;
+use Xaraya\DataObject\UtilApi;
 use DataObjectFactory;
 use Exception;
 use xarController;
@@ -50,9 +51,10 @@ class DbconfigMethod extends MethodClass
         if (!$this->var()->find('obj', $obj, 'notempty', '')) {
             return;
         }
+        /** @var UtilApi $utilapi */
+        $utilapi = $this->utilapi();
 
         $data = [];
-        $utilapi = new \Xaraya\DataObject\UtilApi();
 
         if (!empty($db)) {
             if ($db === 'default') {
