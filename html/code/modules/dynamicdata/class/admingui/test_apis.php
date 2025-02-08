@@ -297,7 +297,7 @@ class TestApisMethod extends MethodClass
      * Summary of clearCacheFiles
      * @return void
      * @see \Xaraya\Routing\FastRouter::FASTROUTE_CACHE_FILE
-     * @see \Xaraya\Bridge\Middleware\FastRouteHandler::COMBINED_CACHE_FILE
+     * @see \Xaraya\Bridge\Middleware\RoutingHandler::COMBINED_CACHE_FILE
      * @see \Xaraya\Routing\Routing::MATCHER_CACHE_FILE
      * @see \Xaraya\Bridge\Routing\RoutingBridge::ROUTING_CACHE_FILE
      */

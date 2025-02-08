@@ -35,7 +35,7 @@ use Psr\Http\Message\ResponseInterface;
 // use some PSR-7 factory and PSR-15 dispatcher
 use Nyholm\Psr7\Factory\Psr17Factory;
 // use Xaraya PSR-15 compatible middleware(s)
-use Xaraya\Bridge\Middleware\FastRouteHandler;
+use Xaraya\Bridge\Middleware\RoutingHandler;
 use Xaraya\Bridge\Middleware\ResponseUtil;
 use Xaraya\Bridge\Middleware\StaticFileMiddleware;
 use Xaraya\Bridge\Middleware\SingleSessionMiddleware;
@@ -45,7 +45,7 @@ use Xaraya\Context\Context;
 $psr17Factory = new Psr17Factory();
 
 // the Xaraya PSR-15 request handler + middleware here
-$fastrouted = new FastRouteHandler($psr17Factory);
+$fastrouted = new RoutingHandler($psr17Factory);
 
 $logger = function (ServerRequestInterface $request, callable $next): ResponseInterface {
     echo date('Y-m-d H:i:s') . ' ' . $request->getMethod() . ' ' . $request->getUri() . PHP_EOL;

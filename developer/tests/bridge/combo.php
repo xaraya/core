@@ -11,7 +11,7 @@ chdir(dirname(__DIR__, 3) . '/html');
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
-use Xaraya\Bridge\Middleware\FastRouteHandler;
+use Xaraya\Bridge\Middleware\RoutingHandler;
 use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
 
@@ -55,7 +55,7 @@ $psr17Factory = new Psr17Factory();
 $request = getRequest($psr17Factory);
 
 // the Xaraya PSR-15 request handler + middleware here
-$fastrouted = new FastRouteHandler($psr17Factory);
+$fastrouted = new RoutingHandler($psr17Factory);
 
 // handle the request directly, or use as middleware
 $response = $fastrouted->handle($request);

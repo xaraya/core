@@ -19,7 +19,6 @@ use xarTpl;
 use sys;
 
 sys::import('xaraya.bridge.requests.module');
-use Xaraya\Bridge\Requests\ModuleRequest;
 
 /**
  * For documentation purposes only - available via BasicBridgeTrait

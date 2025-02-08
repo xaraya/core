@@ -185,7 +185,8 @@ final class BridgeRequestsTest extends TestCase
 
         $params = ['object' => 'sample'];
         $context = null;
-        $output = DataObjectRequest::runDataObjectGuiRequest($params, $context);
+        $handler = new DataObjectRequest();
+        $output = $handler->runDataObjectGuiRequest($params, $context);
         $output = preg_replace('/<!--.*?-->/s', '', $output);
         $this->assertEquals($expected, strlen($output));
 

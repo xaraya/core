@@ -52,7 +52,6 @@ use Xaraya\Bridge\GraphQL\GraphQLHandler;
 
 /**
  * Routing bridge to handle Xaraya object, module and block GUI calls + REST API and GraphQL API requests
- * @phpstan-type ExtraParameters array<string, string|int|bool|float>
  */
 class RoutingBridge extends BasicBridge
 {
@@ -60,10 +59,10 @@ class RoutingBridge extends BasicBridge
 
     //public static string $routerClass = FastRouter::class;
     protected static string $routerClass = Routing::class;
-    /** @var RouterInterface|null */
-    public static $router = null;
     public static string $baseUri = '';
     public static string $prefix = '';
+    /** @var RouterInterface|null */
+    public $router = null;
     public bool $wrapPage = false;
     protected ?RestAPIHandler $restAPIHandler = null;
     protected ?GraphQLHandler $graphQLHandler = null;
@@ -74,21 +73,21 @@ class RoutingBridge extends BasicBridge
      * @param string $cacheFile for pre-defined routes (optional)
      * @return RouterInterface
      */
-    public static function getRouter($routes = null, $cacheFile = '')
+    public function getRouter($routes = null, $cacheFile = '')
     {
         if (!empty($routes)) {
-            // create router with pre-defined routes - see combined FastRouteHandler::getRouter()
-            static::$router = new (static::$routerClass)(function () use ($routes) {
+            // create router with pre-defined routes - see combined RoutingHandler::getRouter()
+            $this->router = new (static::$routerClass)(function () use ($routes) {
                 return $routes;
             }, $cacheFile);
-            return static::$router;
+            return $this->router;
         }
-        if (isset(static::$router)) {
-            return static::$router;
+        if (isset($this->router)) {
+            return $this->router;
         }
         $cacheKey = $cacheFile ?: sys::varpath() . '/cache/' . static::ROUTING_CACHE_FILE;
-        static::$router = new (static::$routerClass)(static::getRoutes(...), $cacheKey);
-        return static::$router;
+        $this->router = new (static::$routerClass)(static::getRoutes(...), $cacheKey);
+        return $this->router;
     }
 
     /**
@@ -96,10 +95,10 @@ class RoutingBridge extends BasicBridge
      * @param ?RouterInterface $router
      * @return ?RouterInterface
      */
-    public static function setRouter($router)
+    public function setRouter($router)
     {
-        static::$router = $router;
-        return static::$router;
+        $this->router = $router;
+        return $this->router;
     }
 
     /**
@@ -189,28 +188,6 @@ class RoutingBridge extends BasicBridge
     }
 
     /**
-     * Summary of getSimpleRouter
-     * @param string $group
-     * @return RouterInterface
-     * @deprecated 2.6.2 use getRouter() instead
-     */
-    public static function getSimpleRouter(string $group = '')
-    {
-        if (isset(static::$router) && static::$prefix == $group) {
-            return static::$router;
-        }
-        // @todo remove/add prefix in match/generate (see cache) or add to route (combo)?
-        static::$prefix = $group;
-        // override standard routeCollector here
-        if (empty($group)) {
-            return static::getRouter();
-        }
-        // @todo or reset router with new prefix here?
-        static::$router = null;
-        return static::getRouter();
-    }
-
-    /**
      * Basic route builder for module requests e.g. in response output or templates - assuming short url format here
      * @param ?string $module
      * @param ?string $type
@@ -242,7 +219,7 @@ class RoutingBridge extends BasicBridge
     {
         // @todo keep dispatcher static but replace $handler[0] with $this if current class?
         //$dispatcher = static::getSimpleDispatcher($group);
-        $router = static::getRouter();
+        $router = $this->getRouter();
         // @todo remove $group prefix from path here? - see /htmx
         if (!empty($group) && str_starts_with($path, $group . '/')) {
             $path = substr($path, strlen($group));
@@ -425,6 +402,7 @@ class RoutingBridge extends BasicBridge
      */
     public function getRestApiHandler()
     {
+        sys::import('xaraya.bridge.restapi.handler');
         $this->restAPIHandler ??= new RestAPIHandler();
         return $this->restAPIHandler;
     }
@@ -457,6 +435,7 @@ class RoutingBridge extends BasicBridge
      */
     public function getGraphQLHandler()
     {
+        sys::import('xaraya.bridge.graphql.handler');
         $this->graphQLHandler ??= new GraphQLHandler();
         return $this->graphQLHandler;
     }
@@ -527,7 +506,8 @@ class RoutingBridge extends BasicBridge
      */
     public function runObjectRequest($params, $context = null)
     {
-        return DataObjectRequest::runDataObjectGuiRequest($params, $context);
+        $handler = new DataObjectRequest();
+        return $handler->runDataObjectGuiRequest($params, $context);
     }
 
     /**
@@ -585,7 +565,8 @@ class RoutingBridge extends BasicBridge
      */
     public function runModuleRequest($vars, $query, $context = null)
     {
-        return ModuleRequest::runModuleGuiRequest($vars, $query, $context);
+        $handler = new ModuleRequest();
+        return $handler->runModuleGuiRequest($vars, $query, $context);
     }
 
     /**
@@ -623,7 +604,8 @@ class RoutingBridge extends BasicBridge
      */
     public function runBlockRequest($vars, $query = null, $context = null)
     {
-        return BlockRequest::runBlockGuiRequest($vars, $query, $context);
+        $handler = new BlockRequest();
+        return $handler->runBlockGuiRequest($vars, $query, $context);
     }
 
     /**
@@ -634,12 +616,24 @@ class RoutingBridge extends BasicBridge
      */
     public function handleRoutesRequest($vars, &$request = null)
     {
+        $result = $this->runRoutesRequest($vars);
+        return [$result, null];
+    }
+
+    /**
+     * Summary of runRoutesRequest
+     * @param array<string, mixed> $vars
+     * @param ?Context<string, mixed> $context
+     * @return string
+     */
+    public function runRoutesRequest($vars, $context = null)
+    {
         $result = "<ul>";
-        foreach (static::getRouter()->getRoutes() as $name => $route) {
+        foreach ($this->getRouter()->getRoutes() as $name => $route) {
             $result .= "<li>" . $name . " [" . json_encode($route, JSON_UNESCAPED_SLASHES) . "]</li>";
         }
         $result .= "</ul>";
-        return [$result, null];
+        return $result;
     }
 }
 
@@ -648,7 +642,6 @@ class RoutingBridge extends BasicBridge
  *
  * Note: if you really want to use APIs for DataObject please have a look at the REST API or GraphQL API instead
  * They can be configured via the admin Back End > Dynamic Data > Utilities > Test APIs
- * @phpstan-type ExtraParameters array<string, string|int|bool|float>
  */
 class RoutingApiBridge extends RoutingBridge
 {
@@ -699,6 +692,10 @@ class RoutingApiBridge extends RoutingBridge
         $name = $namePrefix . 'block-instance';
         $routes[$name] = ['GET', $path, [static::class, 'handleBlockRequest'], $extra];
 
+        $path = $pathPrefix . '/routes';
+        $name = $namePrefix . 'routes';
+        $routes[$name] = ['GET', $path, [static::class, 'handleRoutesRequest'], $extra];
+
         // without trailing /
         $path = $pathPrefix . '/{module}';
         $name = $namePrefix . 'module';
@@ -727,7 +724,8 @@ class RoutingApiBridge extends RoutingBridge
      */
     public function runObjectRequest($params, $context = null)
     {
-        return DataObjectRequest::runDataObjectApiRequest($params, $context);
+        $handler = new DataObjectRequest();
+        return $handler->runDataObjectApiRequest($params, $context);
     }
 
     /**
@@ -739,7 +737,8 @@ class RoutingApiBridge extends RoutingBridge
      */
     public function runModuleRequest($vars, $query, $context = null)
     {
-        return ModuleRequest::runModuleApiRequest($vars, $query, $context);
+        $handler = new ModuleRequest();
+        return $handler->runModuleApiRequest($vars, $query, $context);
     }
 
     /**
@@ -751,7 +750,23 @@ class RoutingApiBridge extends RoutingBridge
      */
     public function runBlockRequest($vars, $query = null, $context = null)
     {
-        return BlockRequest::runBlockApiRequest($vars, $query, $context);
+        $handler = new BlockRequest();
+        return $handler->runBlockApiRequest($vars, $query, $context);
+    }
+
+    /**
+     * Summary of runRoutesRequest
+     * @param array<string, mixed> $vars
+     * @param ?Context<string, mixed> $context
+     * @return mixed
+     */
+    public function runRoutesRequest($vars, $context = null)
+    {
+        $result = [];
+        foreach ($this->getRouter()->getRoutes() as $name => $route) {
+            $result[$name] = $route;
+        }
+        return $result;
     }
 }
 
@@ -759,7 +774,6 @@ class RoutingApiBridge extends RoutingBridge
  * Same as RoutingBridge but handles static files too
  *
  * Note: static files should really be handled by a web server or reverse proxy in front of the application
- * @phpstan-type ExtraParameters array<string, string|int|bool|float>
  */
 class RoutingStaticBridge extends RoutingBridge
 {
@@ -907,123 +921,5 @@ class RoutingStaticBridge extends RoutingBridge
         //}
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
         return [var_export($vars, true), null];
-    }
-}
-
-/**
- * Summary of FastRouteBuildTest
- * @deprecated 2.6.2 use RouterInterface::generate() instead
- */
-class FastRouteBuildTest
-{
-    /**
-     * Summary of getObjectRoute
-     * @param array<string, mixed> $params
-     * @return string
-     */
-    public static function getObjectRoute($params)
-    {
-        static $routes;
-        if (empty($routes)) {
-            $routes = static::getRoutes('handleObjectRequest');
-        }
-        $attributes = ['object', 'method', 'itemid'];
-        $allowed = array_flip($attributes);
-        $vars = array_intersect_key($params, $allowed);
-        return static::matchRoutes($routes, $vars);
-    }
-
-    /**
-     * Summary of getModuleRoute
-     * @param array<string, mixed> $params
-     * @return string
-     */
-    public static function getModuleRoute($params)
-    {
-        static $routes;
-        if (empty($routes)) {
-            $routes = static::getRoutes('handleModuleRequest');
-        }
-        $attributes = ['module', 'type', 'func'];
-        $allowed = array_flip($attributes);
-        $vars = array_intersect_key($params, $allowed);
-        if (!empty($vars['func']) && empty($vars['type'])) {
-            $vars['type'] = 'user';
-        }
-        return static::matchRoutes($routes, $vars);
-    }
-
-    /**
-     * Summary of getBlockRoute
-     * @param array<string, mixed> $params
-     * @return string
-     */
-    public static function getBlockRoute($params)
-    {
-        static $routes;
-        if (empty($routes)) {
-            $routes = static::getRoutes('handleBlockRequest');
-        }
-        $attributes = ['instance'];
-        $allowed = array_flip($attributes);
-        $vars = array_intersect_key($params, $allowed);
-        return static::matchRoutes($routes, $vars);
-    }
-
-    /**
-     * Summary of matchRoutes
-     * @param array<mixed> $routes
-     * @param array<string, mixed> $vars
-     * @return string
-     */
-    public static function matchRoutes($routes, $vars)
-    {
-        $vars = array_filter($vars);
-        $variables = array_keys($vars);
-        sort($variables);
-        $replace = [];
-        foreach ($vars as $key => $value) {
-            $replace['{' . $key . '}'] = $value;
-        }
-        foreach ($routes as $info) {
-            // [$path, $method, $handler, $variables] = $info;
-            sort($info[3]);
-            if ($variables === $info[3]) {
-                return strtr($info[0], $replace);
-            }
-        }
-        return '';
-    }
-
-    /**
-     * Get available routes, optionally by handler method and/or handler class
-     * @return array<mixed>
-     */
-    public static function getRoutes(?string $handlerMethod = null, ?string $handlerClass = null)
-    {
-        $router = RoutingBridge::getRouter();
-        $routes = [];
-        foreach ($router->getRoutes() as $name => $route) {
-            // add extra options if needed
-            $route[] = [];
-            /** @var array<string, string|int|bool|float> $options */
-            [$methods, $path, $handler, $options] = $route;
-            if (!is_array($handler) || count($handler) < 2) {
-                continue;
-            }
-            [$class, $method] = $handler;
-            if (!empty($handlerMethod) && $method !== $handlerMethod) {
-                continue;
-            }
-            if (!empty($handlerClass) && $class !== $handlerClass) {
-                continue;
-            }
-            // @todo parse variables from path (again)?
-            $variables = [];
-            $routes[] = [$path, $methods, $handler, $variables];
-            // @checkme re-using routeParser here - why not call it the first time?
-            //$routeDatas = (array) $parser->parse($route);
-        }
-        return $routes;
     }
 }

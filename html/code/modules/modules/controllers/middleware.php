@@ -102,7 +102,8 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
     public function run($attribs, $params, $context = null)
     {
         try {
-            $result = ModuleRequest::runModuleGuiRequest($attribs, $params, $context);
+            $handler = new ModuleRequest();
+            $result = $handler->runModuleGuiRequest($attribs, $params, $context);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }
@@ -130,7 +131,8 @@ class ModuleApiMiddleware extends ModuleMiddleware
     public function run($attribs, $params, $context = null)
     {
         try {
-            $result = ModuleRequest::runModuleApiRequest($attribs, $params, $context);
+            $handler = new ModuleRequest();
+            $result = $handler->runModuleApiRequest($attribs, $params, $context);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }

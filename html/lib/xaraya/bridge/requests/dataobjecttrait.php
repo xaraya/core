@@ -3,7 +3,7 @@
  * @package core\bridge
  * @subpackage requests
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -13,6 +13,8 @@ namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
 use Xaraya\Context\Context;
+use Xaraya\Services\DataObjectInterface;
+use Xaraya\Services\ServiceFactory;
 use Exception;
 use sys;
 
@@ -51,7 +53,7 @@ interface DataObjectBridgeInterface extends CommonRequestInterface
      * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runDataObjectGuiRequest($params, $context = null): ?string;
+    public function runDataObjectGuiRequest($params, $context = null): ?string;
 
     /**
      * Summary of runDataObjectApiRequest
@@ -59,7 +61,7 @@ interface DataObjectBridgeInterface extends CommonRequestInterface
      * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runDataObjectApiRequest($params, $context = null): mixed;
+    public function runDataObjectApiRequest($params, $context = null): mixed;
 }
 
 /**
@@ -67,6 +69,14 @@ interface DataObjectBridgeInterface extends CommonRequestInterface
  */
 trait DataObjectBridgeTrait
 {
+    protected ?DataObjectInterface $xarData = null;
+
+    public function data(): DataObjectInterface
+    {
+        $this->xarData ??= ServiceFactory::getDataObjectService($this);
+        return $this->xarData;
+    }
+
     /**
      * Summary of parseDataObjectPath
      * @param string $path
@@ -141,11 +151,12 @@ trait DataObjectBridgeTrait
      * @throws \Exception
      * @return string|null
      */
-    public static function runDataObjectGuiRequest($params, $context = null): ?string
+    public function runDataObjectGuiRequest($params, $context = null): ?string
     {
         if (empty($params['object'])) {
             throw new Exception("Missing object parameter");
         }
+        //$this->data()->setContext($context);
         $interface = new DataObjectUserInterface($params);
         return $interface->handle($params, $context);
         // From DataObjectUserInterface:
@@ -159,21 +170,22 @@ trait DataObjectBridgeTrait
      * @throws \Exception
      * @return mixed
      */
-    public static function runDataObjectApiRequest($params, $context = null): mixed
+    public function runDataObjectApiRequest($params, $context = null): mixed
     {
         if (empty($params['object'])) {
             throw new Exception("Missing object parameter");
         }
+        $this->data()->setContext($context);
         // @checkme overriding $params['name'] here
         $params['name'] = $params['object'];
         unset($params['object']);
-        $info = DataObjectFactory::getObjectInfo($params);
+        $info = $this->data()->getObjectInfo($params);
         if (empty($info) || empty($info['objectid'])) {
             $params = array_merge($params, $info ?? []);
             return $params;
         }
         if (!empty($params['itemid'])) {
-            $objectitem = DataObjectFactory::getObject($params, $context);
+            $objectitem = $this->data()->getObject($params);
             if (!empty($params['method']) && method_exists($objectitem, $params['method'])) {
                 return "Running method $params[method]() on object '$params[name]' is not advised here - please use REST API or GraphQL API instead";
             }
@@ -181,7 +193,7 @@ trait DataObjectBridgeTrait
             $item = $objectitem->getFieldValues();
             return $item;
         }
-        $objectlist = DataObjectFactory::getObjectList($params, $context);
+        $objectlist = $this->data()->getObjectList($params);
         if (!empty($params['method']) && method_exists($objectlist, $params['method'])) {
             return "Running method $params[method]() on object '$params[name]' is not advised here - please use REST API or GraphQL API instead";
         }

@@ -3,7 +3,7 @@
  * @package core\bridge
  * @subpackage requests
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -11,11 +11,15 @@
 
 namespace Xaraya\Bridge\Requests;
 
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
+
 /**
  * Handle generic requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  * Accepts PSR-7 compatible server requests, xarRequest (partial use) or nothing (using $_SERVER)
  */
-class BasicRequest implements CommonRequestInterface
+class BasicRequest implements CommonRequestInterface, ContextInterface
 {
     use CommonRequestTrait;
+    use ContextTrait;
 }

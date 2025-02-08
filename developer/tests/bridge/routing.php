@@ -39,4 +39,8 @@ if (php_sapi_name() === 'cli') {
 $wrapPage = false;
 $bridge = new RoutingBridge($wrapPage);
 [$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD') ?? 'GET', xarServer::getVar('PATH_INFO') ?? '/');
-$bridge->output($result, $context);
+$transform = function ($result) {
+    // strip html comments from templates
+    return preg_replace('/\s*<!--.*?-->\s*/s', '', $result);
+};
+$bridge->output($result, $context, $transform);

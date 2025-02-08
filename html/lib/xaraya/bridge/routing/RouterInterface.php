@@ -28,7 +28,7 @@ interface RouterInterface
     /**
      * Generate URL path for route name and params
      * @param string $name
-     * @param array<mixed> $params
+     * @param array<string, mixed> $params
      * @return string|null
      */
     public function generate($name, $params);

@@ -16,7 +16,6 @@ use Xaraya\Context\Context;
 use Xaraya\Facades\xarMod3;
 use Exception;
 use xarBlock;
-use xarMod;
 
 /**
  * For documentation purposes only - available via BlockBridgeTrait
@@ -50,7 +49,7 @@ interface BlockBridgeInterface extends CommonRequestInterface
      * @param ?Context<string, mixed> $context
      * @return string
      */
-    public static function runBlockGuiRequest($vars, $query = null, $context = null): string;
+    public function runBlockGuiRequest($vars, $query = null, $context = null): string;
 
     /**
      * Summary of runBlockApiRequest
@@ -59,7 +58,7 @@ interface BlockBridgeInterface extends CommonRequestInterface
      * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runBlockApiRequest($vars, $query = null, $context = null): mixed;
+    public function runBlockApiRequest($vars, $query = null, $context = null): mixed;
 }
 
 /**
@@ -104,7 +103,7 @@ trait BlockBridgeTrait
      * @throws \Exception
      * @return string
      */
-    public static function runBlockGuiRequest($vars, $query = null, $context = null): string
+    public function runBlockGuiRequest($vars, $query = null, $context = null): string
     {
         if (empty($vars['instance'])) {
             throw new Exception("Missing object parameter");
@@ -121,7 +120,7 @@ trait BlockBridgeTrait
      * @throws \Exception
      * @return mixed
      */
-    public static function runBlockApiRequest($vars, $query = null, $context = null): mixed
+    public function runBlockApiRequest($vars, $query = null, $context = null): mixed
     {
         if (empty($vars['instance'])) {
             throw new Exception("Missing object parameter");

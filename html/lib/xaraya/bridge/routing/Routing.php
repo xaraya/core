@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
 
@@ -134,6 +135,7 @@ class Routing implements RouterInterface
             // set router context with method
             $this->getRouter()->getContext()->setMethod($method);
         }
+        /** @var UrlMatcherInterface $matcher */
         $matcher = $this->getRouter()->getMatcher();
         try {
             $attributes = $matcher->match($path);
@@ -152,7 +154,7 @@ class Routing implements RouterInterface
     /**
      * Generate URL path for route name and params
      * @param string $name
-     * @param array<mixed> $params
+     * @param array<string, mixed> $params
      * @return string|null
      */
     public function generate($name, $params)
@@ -179,7 +181,18 @@ class Routing implements RouterInterface
      */
     public function getRoutes(): array
     {
-        // @todo handle cached routes
+        if (empty($this->cacheDir)) {
+            return [];
+        }
+        $cacheFile = $this->cacheDir . '/' . self::GENERATOR_CACHE_FILE;
+        // @todo generate cache file if needed
+        if (!file_exists($cacheFile)) {
+            $generator = $this->getRouter()->getGenerator();
+        }
+        if (file_exists($cacheFile)) {
+            $routes = include $cacheFile;
+            return $routes ?? [];
+        }
         return [];
     }
 }

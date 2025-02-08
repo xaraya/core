@@ -106,7 +106,8 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
     public function run($params, $context = null)
     {
         try {
-            $result = DataObjectRequest::runDataObjectGuiRequest($params, $context);
+            $handler = new DataObjectRequest();
+            $result = $handler->runDataObjectGuiRequest($params, $context);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }
@@ -133,7 +134,8 @@ class DataObjectApiMiddleware extends DataObjectMiddleware
     public function run($params, $context = null)
     {
         try {
-            $result = DataObjectRequest::runDataObjectApiRequest($params, $context);
+            $handler = new DataObjectRequest();
+            $result = $handler->runDataObjectApiRequest($params, $context);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }

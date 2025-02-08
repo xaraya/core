@@ -3,7 +3,7 @@
  * @package core\bridge
  * @subpackage requests
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -46,7 +46,7 @@ interface StaticFileBridgeInterface extends CommonRequestInterface
      * @param array<string, mixed> $params
      * @return string
      */
-    public static function getStaticFileRequest($params): string;
+    public function getStaticFileRequest($params): string;
 }
 
 /**
@@ -198,7 +198,7 @@ trait StaticFileBridgeTrait
      * @throws \Exception
      * @return string
      */
-    public static function getStaticFileRequest($params): string
+    public function getStaticFileRequest($params): string
     {
         if (empty($params['static'])) {
             throw new Exception("Missing static parameter");

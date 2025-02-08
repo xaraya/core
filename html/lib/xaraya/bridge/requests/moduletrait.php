@@ -13,8 +13,8 @@ namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
 use Xaraya\Context\Context;
-use Xaraya\Facades\xarMod3;
-use xarMod;
+use Xaraya\Services\ModulesInterface;
+use Xaraya\Services\ServiceFactory;
 
 /**
  * For documentation purposes only - available via ModuleBridgeTrait
@@ -48,7 +48,7 @@ interface ModuleBridgeInterface extends CommonRequestInterface
      * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runModuleGuiRequest($vars, $query, $context = null): ?string;
+    public function runModuleGuiRequest($vars, $query, $context = null): ?string;
 
     /**
      * Summary of runModuleApiRequest
@@ -57,7 +57,7 @@ interface ModuleBridgeInterface extends CommonRequestInterface
      * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runModuleApiRequest($vars, $query, $context = null): mixed;
+    public function runModuleApiRequest($vars, $query, $context = null): mixed;
 }
 
 /**
@@ -65,6 +65,14 @@ interface ModuleBridgeInterface extends CommonRequestInterface
  */
 trait ModuleBridgeTrait
 {
+    protected ?ModulesInterface $xarMod = null;
+
+    public function mod(): ModulesInterface
+    {
+        $this->xarMod ??= ServiceFactory::getModulesService($this);
+        return $this->xarMod;
+    }
+
     /**
      * Summary of parseModulePath
      * @param string $path
@@ -146,9 +154,10 @@ trait ModuleBridgeTrait
      * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runModuleGuiRequest($vars, $query, $context = null): ?string
+    public function runModuleGuiRequest($vars, $query, $context = null): ?string
     {
-        return xarMod3::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query, $context);
+        $this->mod()->setContext($context);
+        return $this->mod()->guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query);
     }
 
     /**
@@ -158,8 +167,9 @@ trait ModuleBridgeTrait
      * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runModuleApiRequest($vars, $query, $context = null): mixed
+    public function runModuleApiRequest($vars, $query, $context = null): mixed
     {
-        return xarMod3::apiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'getitemtypes', $query, $context);
+        $this->mod()->setContext($context);
+        return $this->mod()->apiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'getitemtypes', $query);
     }
 }

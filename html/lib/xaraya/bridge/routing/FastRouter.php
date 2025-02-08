@@ -121,13 +121,16 @@ class FastRouter implements RouterInterface
 
         $dispatcher = $this->getDispatcher();
         $routeInfo = $dispatcher->dispatch($method, $path);
+        $handler = null;
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
+                /** @var \FastRoute\Dispatcher\Result\NotMatched $routeInfo */
                 // ... 404 Not Found
                 //http_response_code(404);
                 //throw new Exception("Invalid route " . htmlspecialchars($path));
                 return [null, ['status' => 404]];
             case Dispatcher::METHOD_NOT_ALLOWED:
+                /** @var \FastRoute\Dispatcher\Result\MethodNotAllowed $routeInfo */
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
                 //header('Allow: ' . implode(', ', $allowedMethods));
@@ -135,6 +138,7 @@ class FastRouter implements RouterInterface
                 //throw new Exception("Invalid method " . htmlspecialchars($method) . " for route " . htmlspecialchars($path));
                 return [null, ['status' => 405, 'methods' => $allowedMethods]];
             case Dispatcher::FOUND:
+                /** @var \FastRoute\Dispatcher\Result\Matched $routeInfo */
                 // handler specified for route
                 $handler = $routeInfo[1];
                 // path params found by dispatcher
@@ -152,12 +156,13 @@ class FastRouter implements RouterInterface
     /**
      * Generate URL path for route name and params
      * @param string $name
-     * @param array<mixed> $params
+     * @param array<string, mixed> $params
      * @return string|null
      */
     public function generate($name, $params)
     {
         $generator = $this->getUriGenerator();
+        /** @var array<non-empty-string, non-empty-string> $params */
         $params = array_map("strval", $params);
         // @todo slugify & rawurlencode title & author
         // @todo add fixed params!?
