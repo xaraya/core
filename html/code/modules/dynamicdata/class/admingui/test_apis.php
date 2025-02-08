@@ -315,7 +315,19 @@ class TestApisMethod extends MethodClass
         if (file_exists($cacheFile)) {
             unlink($cacheFile);
         }
+        $cacheFile = sys::varpath() . '/cache/url_generating_routes.php';
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
         $cacheFile = sys::varpath() . '/cache/api/routing_cache.php';
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
+        $cacheFile = sys::varpath() . '/cache/api/url_matching_routes.php';
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
+        $cacheFile = sys::varpath() . '/cache/api/url_generating_routes.php';
         if (file_exists($cacheFile)) {
             unlink($cacheFile);
         }

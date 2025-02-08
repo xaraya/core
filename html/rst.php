@@ -2,10 +2,10 @@
 /**
  * Entrypoint for handling REST API calls
  *
- * Note: this assumes you install fast-route with composer
+ * Note: this assumes you install symfony/routing with composer
  * and use composer autoload in the entrypoint, see e.g. rst.php
  *
- * $ composer require --dev nikic/fast-route
+ * $ composer require --dev symfony/routing symfony/config
  * $ head html/rst.php
  * <?php
  * ...
@@ -19,7 +19,7 @@
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 // use the nikic FastRoute library here
-use Xaraya\Routing\FastRouter;
+//use Xaraya\Routing\FastRouter;
 // use the Symfony Routing component here
 use Xaraya\Routing\Routing;
 use Xaraya\Routing\RouterInterface;
@@ -76,9 +76,9 @@ function send_openapi($restHandler)
 function get_router($restHandler)
 {
     //$cacheFile = sys::varpath() . '/cache/api/restapi_fastroute.php';
-    $router = new FastRouter(RestAPIRoutes::getRoutes(...));
-    //$cacheFile = sys::varpath() . '/cache/api/url_matching_routes.php';
-    //$router = new Routing(RestAPIRoutes::getRoutes(...));
+    //$router = new FastRouter(RestAPIRoutes::getRoutes(...));
+    $cacheFile = sys::varpath() . '/cache/api/url_matching_routes.php';
+    $router = new Routing(RestAPIRoutes::getRoutes(...), $cacheFile);
     return $router;
 }
 

@@ -51,7 +51,6 @@ class RouteLoader extends Loader
             // set route param in request once we find matching route
             //$params[Route::ROUTE_PARAM] ??= $name;
             [$path, $requirements] = self::getPathRequirements($path);
-            var_dump($path, $requirements);
             // set handler in 'defaults' here!? - @todo
             $params = [Routing::HANDLER_PARAM => $handler];
             $route = new SymfonyRoute($path, $params);

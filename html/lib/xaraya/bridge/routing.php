@@ -652,7 +652,7 @@ class RoutingBridge extends BasicBridge
  */
 class RoutingApiBridge extends RoutingBridge
 {
-    public const ROUTING_CACHE_FILE = 'fastroute_api_cache.php';
+    public const ROUTING_CACHE_FILE = 'routing_api_cache.php';
 
     /**
      * Summary of getRoutes
@@ -763,7 +763,7 @@ class RoutingApiBridge extends RoutingBridge
  */
 class RoutingStaticBridge extends RoutingBridge
 {
-    public const ROUTING_CACHE_FILE = 'fastroute_static_cache.php';
+    public const ROUTING_CACHE_FILE = 'routing_static_cache.php';
 
     /**
      * Summary of getRoutes

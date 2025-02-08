@@ -84,6 +84,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
         // add normal routes - must be after /api or /{module}/{type}/{func} will match first
         $routes = array_replace($routes, $this->bridge::getRoutes());
         // get router for all routes
+        // @todo move elsewhere than /cache/ and /cache/api/
         $cacheFile = sys::varpath() . '/cache/' . self::COMBINED_CACHE_FILE;
         $router = $this->bridge->getRouter($routes, $cacheFile);
         return $router;
