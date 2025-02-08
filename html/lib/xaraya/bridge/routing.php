@@ -76,15 +76,16 @@ class RoutingBridge extends BasicBridge
     /**
      * Summary of getRouter
      * @param ?array<mixed> $routes with pre-defined routes (optional)
+     * @param string $cacheFile for pre-defined routes (optional)
      * @return RouterInterface
      */
-    public static function getRouter($routes = null)
+    public static function getRouter($routes = null, $cacheFile = '')
     {
         if (!empty($routes)) {
             // create router with pre-defined routes - see combined FastRouteHandler::getRouter()
             static::$router = new (static::$routerClass)(function () use ($routes) {
                 return $routes;
-            });
+            }, $cacheFile);
             return static::$router;
         }
         if (isset(static::$router)) {
@@ -118,15 +119,23 @@ class RoutingBridge extends BasicBridge
         $extra = [];
 
         $path = $pathPrefix . '/object/{object}';
-        $name = $namePrefix . 'object';
+        $name = $namePrefix . 'object-list';
         $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
 
-        $path = $pathPrefix . '/object/{object}/{itemid:\d+}[/{method}]';
+        $path = $pathPrefix . '/object/{object}/{itemid:\d+}';
         $name = $namePrefix . 'object-item';
         $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
 
-        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}[/{method}]';
+        $path = $pathPrefix . '/object/{object}/{itemid:\d+}/{method}';
+        $name = $namePrefix . 'object-item-method';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}';
         $name = $namePrefix . 'object-document';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}/{method}';
+        $name = $namePrefix . 'object-document-method';
         $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
 
         $path = $pathPrefix . '/object/{object}/{method}';
@@ -138,12 +147,12 @@ class RoutingBridge extends BasicBridge
         //$routes[$name] = ['GET', $path, [static::class, 'handleObjectRequest']);
 
         $path = $pathPrefix . '/block/{instance}';
-        $name = $namePrefix . 'block';
+        $name = $namePrefix . 'block-instance';
         $routes[$name] = ['GET', $path, [static::class, 'handleBlockRequest'], $extra];
 
         // @todo move away from static methods for context
         $path = $pathPrefix . '/restapi';
-        $name = $namePrefix . 'restapi-';
+        $name = $namePrefix;
         //$restHandler = RestAPIHandler::class;
         $restHandler = null;
         $routes = array_replace($routes, RestAPIHandler::getRoutes($path, $name, $restHandler));
@@ -660,18 +669,28 @@ class RoutingApiBridge extends RoutingBridge
         $routes = [];
         $extra = [];
 
+        // without trailing /
         $path = $pathPrefix . '/object/{object}';
-        $name = $namePrefix . 'object';
+        $name = $namePrefix . 'object-list';
         $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
 
-        $path = $pathPrefix . '/object/{object}/{itemid:\d+}[/{method}]';
+        $path = $pathPrefix . '/object/{object}/{itemid:\d+}';
         $name = $namePrefix . 'object-item';
         $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
 
-        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}[/{method}]';
+        $path = $pathPrefix . '/object/{object}/{itemid:\d+}/{method}';
+        $name = $namePrefix . 'object-item-method';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}';
         $name = $namePrefix . 'object-document';
         $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
 
+        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}/{method}';
+        $name = $namePrefix . 'object-document-method';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+
+        // something other than itemid matching \d+ or [0-9a-f]{24}
         $path = $pathPrefix . '/object/{object}/{method}';
         $name = $namePrefix . 'object-method';
         $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
@@ -681,11 +700,20 @@ class RoutingApiBridge extends RoutingBridge
         //$routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
 
         $path = $pathPrefix . '/block/{instance}';
-        $name = $namePrefix . 'block';
+        $name = $namePrefix . 'block-instance';
         $routes[$name] = ['GET', $path, [static::class, 'handleBlockRequest'], $extra];
 
-        $path = $pathPrefix . '/{module}[/{type}[/{func}]]';
+        // without trailing /
+        $path = $pathPrefix . '/{module}';
         $name = $namePrefix . 'module';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
+
+        $path = $pathPrefix . '/{module}/{func}';
+        $name = $namePrefix . 'module-func';
+        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
+
+        $path = $pathPrefix . '/{module}/{type}/{func}';
+        $name = $namePrefix . 'module-type-func';
         $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
 
         $path = $pathPrefix . '/';

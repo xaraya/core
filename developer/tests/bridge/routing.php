@@ -29,24 +29,6 @@ if (php_sapi_name() === 'cli') {
     }
 }
 
-/**
-// add route collection to your own dispatcher
-$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    // ...
-    // RoutingBridge::addRouteCollection($r);
-    $r->addGroup('/xaraya', function (FastRoute\RouteCollector $r) {
-        RoutingBridge::addRouteCollection($r);
-    });
-});
-$routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
-if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
-    $handler = $routeInfo[1];
-    $vars = $routeInfo[2];
-    // ... call $handler with $vars
-    echo var_export($handler, true) . " with " . var_export($vars, true);
-}
- */
-
 // or direct use of simple route dispatcher
 //$bridge = new RoutingBridge();
 //[$result, $context] = $bridge->dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');

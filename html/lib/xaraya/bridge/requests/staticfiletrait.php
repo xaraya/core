@@ -313,6 +313,10 @@ trait StaticFileBridgeTrait
         if (empty($real)) {
             throw new Exception("Invalid file");
         }
+        $web = realpath(sys::web() . '/');
+        if (empty($web) || !str_starts_with($real, $web)) {
+            throw new Exception("Invalid file path");
+        }
         return $real;
     }
 }

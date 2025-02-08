@@ -105,6 +105,7 @@ class ModuleAPIHandler extends RestAPIHandler
         $module = $args['path']['module'];
         $path = $args['path']['path'];
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        // see workflow restapi: 'path' => 'tracker/{workflow}/{subjectId}/{trackerId}'
         $more = $args['path']['more'] ?? '';
         $func = $this->getModuleApiFunc($module, $path, 'get', $more);
         if (empty($func)) {
@@ -317,6 +318,7 @@ class ModuleAPIHandler extends RestAPIHandler
                 return $item;
             }
             // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+            // see workflow restapi: 'path' => 'tracker/{workflow}/{subjectId}/{trackerId}'
             if (!empty($more) && strncmp($item['path'], $path . '/', strlen($path) + 1) === 0 && $item['method'] == $method) {
                 // @checkme assuming only more path parameter(s) in module paths for now... {type}/{key}/{code}
                 $more_params = explode('/', substr($item['path'], strlen($path) + 1));

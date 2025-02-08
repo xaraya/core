@@ -165,6 +165,7 @@ class TestApisMethod extends MethodClass
             $this->mod()->setVar('graphql_cache_data', !empty($cacheData) ? true : false);
             $this->mod()->setVar('graphql_cache_operation', !empty($cacheOperation) ? true : false);
             // save to cache if enabled
+            $this->clearCacheFiles();
             xarModVars::cache('dynamicdata');
         } else {
             $restapiserial = $this->mod()->getVar('restapi_object_list');
@@ -195,6 +196,7 @@ class TestApisMethod extends MethodClass
         }
         if (!empty($create_rst)) {
             RestAPIBuilder::create_openapi($restapilist, $storageType, $tokenExpires, $enableTimer, $enableCache);
+            $this->clearCacheFiles();
             $this->ctl()->redirect($this->ctl()->getCurrentURL(['create_rst' => null]));
             return true;
         }
@@ -206,6 +208,7 @@ class TestApisMethod extends MethodClass
             sys::import('xaraya.bridge.graphql.builder');
             $graphQLBuilder = new GraphQLBuilder();
             $graphQLBuilder->dumpSchema($graphqllist, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
+            $this->clearCacheFiles();
             $this->ctl()->redirect($this->ctl()->getCurrentURL(['create_gql' => null]));
             return true;
         }
@@ -288,5 +291,33 @@ class TestApisMethod extends MethodClass
         $this->tpl()->setPageTemplateName('admin');
 
         return $data;
+    }
+
+    /**
+     * Summary of clearCacheFiles
+     * @return void
+     * @see \Xaraya\Routing\FastRouter::FASTROUTE_CACHE_FILE
+     * @see \Xaraya\Bridge\Middleware\FastRouteHandler::COMBINED_CACHE_FILE
+     * @see \Xaraya\Routing\Routing::MATCHER_CACHE_FILE
+     * @see \Xaraya\Bridge\Routing\RoutingBridge::ROUTING_CACHE_FILE
+     */
+    protected function clearCacheFiles()
+    {
+        $cacheFile = sys::varpath() . '/cache/url_fastroute_cache.php';
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
+        $cacheFile = sys::varpath() . '/cache/url_combined_cache.php';
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
+        $cacheFile = sys::varpath() . '/cache/url_matching_routes.php';
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
+        $cacheFile = sys::varpath() . '/cache/api/fastroute_cache.php';
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
     }
 }

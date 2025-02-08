@@ -54,6 +54,8 @@ use Xaraya\Bridge\RestAPI\RestAPIHandler;
 
 class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
 {
+    public const COMBINED_CACHE_FILE = 'url_combined_cache.php';
+
     /** @var ResponseUtil */
     protected $responseUtil;
     /** @var RouterInterface */
@@ -84,7 +86,8 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
         // add normal routes - must be after /api or /{module}/{type}/{func} will match first
         $routes = array_replace($routes, $this->bridge::getRoutes());
         // get router for all routes
-        $router = $this->bridge->getRouter($routes);
+        $cacheFile = sys::varpath() . '/cache/' . self::COMBINED_CACHE_FILE;
+        $router = $this->bridge->getRouter($routes, $cacheFile);
         return $router;
     }
 

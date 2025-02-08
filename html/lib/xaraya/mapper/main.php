@@ -19,6 +19,8 @@ use Xaraya\Facades\xarConfig3;
 
 class xarController extends xarObject
 {
+    public const ROUTE_PARAM = '_route';
+
     public static bool $allowShortURLs = true;
     /** @var array<string, mixed> */
     public static $shortURLVariables;
@@ -356,12 +358,13 @@ class xarController extends xarObject
         }
 
         // Pass along redirectURL and bail out if we have a callback
-        if (!empty(self::$redirectTo) && is_callable(self::$redirectTo)) {
+        $callback = self::getCallback('redirectTo');
+        if (!empty($callback) && is_callable($callback)) {
             if (!empty($context)) {
                 $context['redirectURL'] = $redirectURL;
                 $context->setResponse(null, $httpResponse);
             }
-            call_user_func(self::$redirectTo, $redirectURL, $httpResponse, $context);
+            call_user_func($callback, $redirectURL, $httpResponse, $context);
             return false;
         }
 
@@ -399,8 +402,9 @@ class xarController extends xarObject
     public static function forbidden($msg = '', $context = null, $template = null)
     {
         $context?->setResponse($msg, 403);
-        if (!empty(self::$forbiddenTo) && is_callable(self::$forbiddenTo)) {
-            return call_user_func(self::$forbiddenTo, $msg, $context);
+        $callback = self::getCallback('forbiddenTo');
+        if (!empty($callback) && is_callable($callback)) {
+            return call_user_func($callback, $msg, $context);
         }
         return xarResponse::Forbidden($msg, 'base', 'message', 'forbidden', $template, $context);
     }
@@ -418,8 +422,9 @@ class xarController extends xarObject
     public static function notFound($msg = '', $context = null, $template = null)
     {
         $context?->setResponse($msg, 404);
-        if (!empty(self::$notFoundTo) && is_callable(self::$notFoundTo)) {
-            return call_user_func(self::$notFoundTo, $msg, $context);
+        $callback = self::getCallback('notFoundTo');
+        if (!empty($callback) && is_callable($callback)) {
+            return call_user_func($callback, $msg, $context);
         }
         return xarResponse::NotFound($msg, 'base', 'message', 'notfound', $template, $context);
     }
@@ -436,8 +441,9 @@ class xarController extends xarObject
     {
         $layout ??= 'bad_author';
         $context?->setResponse($layout, 400);
-        if (!empty(self::$badRequestTo) && is_callable(self::$badRequestTo)) {
-            return call_user_func(self::$badRequestTo, $layout, $context);
+        $callback = self::getCallback('badRequestTo');
+        if (!empty($callback) && is_callable($callback)) {
+            return call_user_func($callback, $layout, $context);
         }
         xarCache::noCache();
         if (!headers_sent()) {
@@ -530,9 +536,10 @@ class xarController extends xarObject
     public static function URL($modName = null, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = null, $fragment = null, $entrypoint = array(), $route = null)
     {
         // Allow overriding building URL if needed
-        if (!empty(self::$buildUri) && is_callable(self::$buildUri)) {
+        $callback = self::getCallback('buildUri');
+        if (!empty($callback) && is_callable(value: $callback)) {
             // @todo do we need to add baseUri as prefix here?
-            return call_user_func(self::$buildUri, $modName, $modType, $funcName, $args);
+            return call_user_func($callback, $modName, $modType, $funcName, $args);
         }
         // (Re)initialize the controller
         self::init();

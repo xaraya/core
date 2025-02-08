@@ -1131,6 +1131,7 @@ class RestAPIBuilder extends xarObject
             self::$paths[$path][$item['method']]['parameters'] = $parameters;
         }
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        // see workflow restapi: 'path' => 'tracker/{workflow}/{subjectId}/{trackerId}'
         if (str_contains($item['path'], '{')) {
             $found = preg_match_all('/\{([^}]+)\}/', $item['path'], $matches);
             if (empty($found)) {

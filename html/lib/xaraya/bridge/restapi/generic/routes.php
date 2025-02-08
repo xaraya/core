@@ -20,6 +20,7 @@ namespace Xaraya\Bridge\RestAPI;
 class GenericAPIRoutes extends RestAPIRoutes
 {
     public static string $pathPrefix = '';
+    public static string $namePrefix = 'generic-';
     public static mixed $handlerClass = GenericAPIHandler::class;
 
     /**

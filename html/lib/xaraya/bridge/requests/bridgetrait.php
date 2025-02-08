@@ -53,7 +53,7 @@ trait BasicBridgeTrait
         // @todo get xarServer::getBaseURL() working correctly for ReactPHP etc.
         //sys::import('modules.modules.controllers.router');
         //ModuleRouter::setBaseUri($baseUri);
-        xarController::$buildUri = [$this, 'buildUri'];
+        xarController::setCallback('buildUri', [$this, 'buildUri']);
         //xarController::$buildUri = [ModuleRequest::class, 'buildModulePath'];
         //xarController::$redirectTo = [ModuleRequest::class, 'redirectTo'];
     }

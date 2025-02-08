@@ -66,6 +66,7 @@ class GenericAPIHandler extends RestAPIHandler
         if (empty($userId) || !xarUser::isSiteAdmin($userId)) {
             return ['userId' => $userId, 'error' => 'Restricted to site admin'];
         }
+        $context['args'] ??= $args;
         return $context->getArrayCopy();
     }
 

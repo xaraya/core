@@ -21,6 +21,7 @@ use Throwable;
 class FastRouter implements RouterInterface
 {
     public const ROUTE_PARAM = '_route';
+    public const FASTROUTE_CACHE_FILE = 'url_fastroute_cache.php';
 
     /** @var callable|null */
     protected $callable = null;
@@ -182,6 +183,10 @@ class FastRouter implements RouterInterface
     public function getRoutes(): array
     {
         // @todo handle cached routes
+        if (!empty($this->cacheFile) && file_exists($this->cacheFile)) {
+            $routes = include $this->cacheFile;
+            return $routes[2] ?? [];
+        }
         return $this->trackRoutes;
     }
 }

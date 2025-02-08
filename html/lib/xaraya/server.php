@@ -430,8 +430,9 @@ class xarServer extends xarObject
     public static function getObjectURL($objectName = null, $methodName = 'view', $args = [], $generateXMLURL = null, $fragment = null, $entrypoint = [])
     {
         // Allow overriding building URL if needed
-        if (!empty(xarController::$buildUri) && is_callable(xarController::$buildUri)) {
-            return call_user_func(xarController::$buildUri, 'object', $objectName, $methodName, $args);
+        $callback = xarController::getCallback('buildUri');
+        if (!empty($callback) && is_callable($callback)) {
+            return call_user_func($callback, 'object', $objectName, $methodName, $args);
         }
         // 1. override any existing 'method' in args, and place before the rest
         if (!empty($methodName)) {

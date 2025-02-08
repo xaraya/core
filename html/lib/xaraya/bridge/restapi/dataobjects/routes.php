@@ -20,6 +20,7 @@ namespace Xaraya\Bridge\RestAPI;
 class DataObjectAPIRoutes extends RestAPIRoutes
 {
     public static string $pathPrefix = '/objects';
+    public static string $namePrefix = 'objects-';
     public static mixed $handlerClass = DataObjectAPIHandler::class;
 
     /**

@@ -20,6 +20,7 @@ namespace Xaraya\Bridge\RestAPI;
 class ModuleAPIRoutes extends RestAPIRoutes
 {
     public static string $pathPrefix = '/modules';
+    public static string $namePrefix = 'modules-';
     public static mixed $handlerClass = ModuleAPIHandler::class;
 
     /**
