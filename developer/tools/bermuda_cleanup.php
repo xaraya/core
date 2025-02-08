@@ -1043,7 +1043,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         if (count($found) < 1) {
             return;
         }
-        if (in_array($modType, ['user', 'admin'])) {
+        if (in_array($modType, ['user', 'admin', 'hooks'])) {
             $classname = ucfirst($modType) . 'Gui';
             $classtype = $modType . 'gui';
         } else {
@@ -1154,7 +1154,25 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             $this->log('Class file for module ' . $module . ' exists - SKIP ' . $typefile);
             return;
         }
-        $output = file_get_contents(__DIR__ . '/' . str_replace('.php', '.txt', $typename));
+        $filename = __DIR__ . '/' . str_replace('.php', '.txt', $typename);
+        if (!file_exists($filename)) {
+            if (str_ends_with($typename, 'api.php')) {
+                $apiname = substr($typename, 0, -7);
+                $classname = ucfirst($apiname) . 'Api';
+                $input = file_get_contents(__DIR__ . '/dataapi.txt');
+                $input = str_replace('DataApi', $classname, $input);
+                $input = str_replace(' data ', " $apiname ", $input);
+                file_put_contents($filename, $input);
+            } else {
+                $guiname = substr($typename, 0, -4);
+                $classname = ucfirst($guiname) . 'Gui';
+                $input = file_get_contents(__DIR__ . '/usergui.txt');
+                $input = str_replace(' UserGui ', " $classname ", $input);
+                $input = str_replace(' user ', " $guiname ", $input);
+                file_put_contents($filename, $input);
+            }
+        }
+        $output = file_get_contents($filename);
         $output = str_replace('skeleton', $module, $output);
         $xarversion = str_replace('/class/' . $typename, '/xarversion.php', $typefile);
         $namespace = $this->get_module_namespace($xarversion);
@@ -1393,6 +1411,45 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         }
         $this->log('Internal/in-module/external module calls found: ' . $internal . ' / ' . $inmodule . ' / ' . $external, true);
         return $modules;
+    }
+
+    public function draw_mermaid_graph($called)
+    {
+        $lines = [];
+        $lines[] = '## Call Dependencies';
+        $lines[] = '';
+        ksort($called);
+        foreach ($called as $class => $methods) {
+            $fromto = [];
+            $lines[] ='### ' . $class;
+            $lines[] = '';
+            $lines[] = '```mermaid';
+            $lines[] = 'flowchart LR';
+            $lines[] = '  subgraph ' . $class;
+            ksort($methods);
+            foreach ($methods as $method => $callers) {
+                $to = $class . '_' . $method;
+                $lines[] = '    ' . $to;
+                foreach ($callers as $caller) {
+                    $from = $caller['class'] . '_' . $caller['method'];
+                    $fromto[$from] ??= [];
+                    $fromto[$from][$to] ??= 0;
+                    $fromto[$from][$to] += 1;
+                }
+            }
+            ksort($fromto);
+            $lines[] = '  end';
+            foreach ($fromto as $from => $links) {
+                ksort($links);
+                foreach ($links as $to => $count) {
+                    $lines[] = '  ' . $from . ' --|' . $count . '|--> ' . $to;
+                }
+            }
+            $lines[] = '```';
+            $lines[] = '';
+        }
+        $output = implode("\n", $lines);
+        return $output;
     }
 
     public function check_method_casing($module = '', $type = '')
@@ -1655,6 +1712,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/DataObjectDescriptor::getObjectID\(/' => '\$this->data()->getObjectID(',
             '/DataObjectFactory::getObject\(/' => '\$this->data()->getObject(',
             '/DataObjectFactory::getObjectList\(/' => '\$this->data()->getObjectList(',
+            '/DataObjectFactory::getObjectLoader\(/' => '\$this->data()->getObjectLoader(',
             '/DataObjectFactory::getObjectInfo\(/' => '\$this->data()->getObjectInfo(',
             '/DataObjectFactory::getObjects\(/' => '\$this->data()->getObjects(',
             '/DataPropertyMaster::getPropertyTypes\(/' => '\$this->prop()->getPropertyTypes(',
@@ -1847,18 +1905,21 @@ $refresh = false;
 //$migrator->migrate_installer_functions($refresh);
 //$migrator->find_installer_classes();
 //$types = ['user', 'userapi', 'admin', 'adminapi', 'utilapi', 'restapi', 'dataapi'];
+//$types = ['hooksapi', 'indexapi', 'wordsapi', 'hooks'];
 //foreach ($types as $type) {
 //    $migrator->migrate_module_functions($type, $refresh);
 //}
 //$migrator->check_method_casing();
 $replace = false;
 //$migrator->document_module_methods('dynamicdata', '', $replace);
-$found = $migrator->replace_method_services('dynamicdata', '', $replace);
-$found = $migrator->replace_property_services('dynamicdata', $replace);
-$found = $migrator->replace_block_services('dynamicdata', $replace);
+//$found = $migrator->replace_method_services('dynamicdata', '', $replace);
+//$found = $migrator->replace_property_services('dynamicdata', $replace);
+//$found = $migrator->replace_block_services('dynamicdata', $replace);
 //$migrator->replace_internal_methods('dynamicdata', '', $replace);
 [$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '/class/');
-file_put_contents('call_dependencies.json', $migrator->to_json($summary));
+file_put_contents('call_dependencies.json', $migrator->to_json($called));
+$output = $migrator->draw_mermaid_graph($called);
+file_put_contents('call_dependencies.md', $output);
 /**
 $modules = [
     'apischemas', 'cachemanager', 'calendar', 'changelog', 'ckeditor', 'comments',
@@ -1885,7 +1946,7 @@ foreach ($modules as $module) {
     $migrator->parse_project();
     //$migrator->replace_internal_methods($module, '', $replace);
     //$found = $migrator->replace_method_services($module, '', $replace);
-    $found = $migrator->replace_property_services($module, $replace);
-    //$found = $migrator->replace_block_services($module, $replace);
+    //$found = $migrator->replace_property_services($module, $replace);
+    $found = $migrator->replace_block_services($module, $replace);
 }
  */
