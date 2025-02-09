@@ -15,9 +15,22 @@ namespace Xaraya\Bridge\Requests;
 /**
  * Handle Block requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  */
-class BlockRequest extends BasicBridge implements BlockBridgeInterface
+class BlockRequestHandler extends BasicBridge implements BlockBridgeInterface
 {
     use BlockBridgeTrait;
+
+    /**
+     * Get Block handler routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $handler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    {
+        return static::getBlockRoutes($pathPrefix, $namePrefix, $handler, $extra);
+    }
 
     public function setContext($context)
     {
@@ -26,7 +39,7 @@ class BlockRequest extends BasicBridge implements BlockBridgeInterface
     }
 }
 
-class BlockGuiRequest extends BlockRequest
+class BlockGuiHandler extends BlockRequestHandler
 {
     /**
      * Summary of runBlockRequest
@@ -40,7 +53,7 @@ class BlockGuiRequest extends BlockRequest
     }
 }
 
-class BlockApiRequest extends BlockRequest
+class BlockApiHandler extends BlockRequestHandler
 {
     /**
      * Summary of runBlockRequest

@@ -15,11 +15,24 @@ namespace Xaraya\Bridge\Requests;
 /**
  * Handle Module requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  *
- * Note: requests with module = object or prefix = /object are handed off to DataObjectRequest
+ * Note: requests with module = object or prefix = /object are handed off to DataObjectRequestHandler
  */
-class ModuleRequest extends BasicBridge implements ModuleBridgeInterface
+class ModuleRequestHandler extends BasicBridge implements ModuleBridgeInterface
 {
     use ModuleBridgeTrait;
+
+    /**
+     * Get Module handler routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $handler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    {
+        return static::getModuleRoutes($pathPrefix, $namePrefix, $handler, $extra);
+    }
 
     public function setContext($context)
     {
@@ -28,7 +41,7 @@ class ModuleRequest extends BasicBridge implements ModuleBridgeInterface
     }
 }
 
-class ModuleGuiRequest extends ModuleRequest
+class ModuleGuiHandler extends ModuleRequestHandler
 {
     /**
      * Summary of runModuleRequest
@@ -42,7 +55,7 @@ class ModuleGuiRequest extends ModuleRequest
     }
 }
 
-class ModuleApiRequest extends ModuleRequest
+class ModuleApiHandler extends ModuleRequestHandler
 {
     /**
      * Summary of runModuleRequest

@@ -157,11 +157,11 @@ $ composer require nyholm/psr7 nyholm/psr7-server
 
 Usage:
 ```php
-use Xaraya\Bridge\Requests\CommonBridgeTrait;
+use Xaraya\Bridge\Requests\DataObjectBridgeTrait;
 
 class MyRequestHandler
 {
-    use CommonBridgeTrait;
+    use DataObjectBridgeTrait;
 
     /**
      * This can handle both a PSR-7 server $request or (= null) standard Server API request using superglobals

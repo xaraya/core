@@ -45,15 +45,15 @@ sys::import('xaraya.bridge.requests.staticfile');
 sys::import('xaraya.bridge.requests.generic');
 use Xaraya\Bridge\Requests\BasicBridge;
 use Xaraya\Bridge\Requests\BasicRequest;
-use Xaraya\Bridge\Requests\DataObjectGuiRequest;
-use Xaraya\Bridge\Requests\DataObjectApiRequest;
-use Xaraya\Bridge\Requests\ModuleGuiRequest;
-use Xaraya\Bridge\Requests\ModuleApiRequest;
-use Xaraya\Bridge\Requests\BlockGuiRequest;
-use Xaraya\Bridge\Requests\BlockApiRequest;
-use Xaraya\Bridge\Requests\GenericGuiRequest;
-use Xaraya\Bridge\Requests\GenericApiRequest;
-use Xaraya\Bridge\Requests\StaticFileRequest;
+use Xaraya\Bridge\Requests\DataObjectGuiHandler;
+use Xaraya\Bridge\Requests\DataObjectApiHandler;
+use Xaraya\Bridge\Requests\ModuleGuiHandler;
+use Xaraya\Bridge\Requests\ModuleApiHandler;
+use Xaraya\Bridge\Requests\BlockGuiHandler;
+use Xaraya\Bridge\Requests\BlockApiHandler;
+use Xaraya\Bridge\Requests\GenericGuiHandler;
+use Xaraya\Bridge\Requests\GenericApiHandler;
+use Xaraya\Bridge\Requests\StaticFileHandler;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use Xaraya\Bridge\GraphQL\GraphQLHandler;
 
@@ -132,10 +132,10 @@ class RoutingBridge extends BasicBridge
         //$handler = static::class;
         $handler = null;
 
-        $routes = array_merge($routes, DataObjectGuiRequest::getDataObjectRoutes($pathPrefix, $namePrefix, $handler, $extra));
-        $routes = array_merge($routes, BlockGuiRequest::getBlockRoutes($pathPrefix, $namePrefix, $handler, $extra));
-        $routes = array_merge($routes, GenericGuiRequest::getGenericRoutes($pathPrefix, $namePrefix, $handler, $extra));
-        $routes = array_merge($routes, ModuleGuiRequest::getModuleRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, DataObjectGuiHandler::getRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, BlockGuiHandler::getRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, GenericGuiHandler::getRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, ModuleGuiHandler::getRoutes($pathPrefix, $namePrefix, $handler, $extra));
 
         // @todo do we want/need to add pathPrefix here too?
         $path = '*';
@@ -158,7 +158,7 @@ class RoutingBridge extends BasicBridge
     {
         $prefix = static::$baseUri;
         // @todo do we want to keep this static?
-        $handler = new ModuleGuiRequest();
+        $handler = new ModuleGuiHandler();
         return $handler->buildModulePath($module, $type, $func, $extra, $prefix);
     }
 
@@ -428,10 +428,10 @@ class RoutingApiBridge extends RoutingBridge
         //$handler = static::class;
         $handler = null;
 
-        $routes = array_merge($routes, DataObjectApiRequest::getDataObjectRoutes($pathPrefix, $namePrefix, $handler, $extra));
-        $routes = array_merge($routes, BlockApiRequest::getBlockRoutes($pathPrefix, $namePrefix, $handler, $extra));
-        $routes = array_merge($routes, GenericApiRequest::getGenericRoutes($pathPrefix, $namePrefix, $handler, $extra));
-        $routes = array_merge($routes, ModuleApiRequest::getModuleRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, DataObjectApiHandler::getRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, BlockApiHandler::getRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, GenericApiHandler::getRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, ModuleApiHandler::getRoutes($pathPrefix, $namePrefix, $handler, $extra));
 
         return $routes;
     }
@@ -463,7 +463,7 @@ class RoutingStaticBridge extends RoutingBridge
 
         // @checkme use this as group e.g. everything under /static
         $path = $pathPrefix . $staticFiles;
-        $routes = array_merge($routes, StaticFileRequest::getStaticFileRoutes($path, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, StaticFileHandler::getRoutes($path, $namePrefix, $handler, $extra));
 
         // add parent route collection = RoutingBridge::getRoutes()
         // @todo strip one level of prefix and pass along here?

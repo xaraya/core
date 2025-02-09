@@ -20,7 +20,7 @@ use Exception;
 use sys;
 
 sys::import('xaraya.bridge.requests.staticfile');
-use Xaraya\Bridge\Requests\StaticFileRequest;
+use Xaraya\Bridge\Requests\StaticFileHandler;
 
 /**
  * Static file middleware for PSR-7 and PSR-15 compatible middleware controllers
@@ -29,7 +29,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
 {
     /** @var array<string> */
     protected array $attributes = ['static', 'source', 'folder', 'file'];
-    protected StaticFileRequest $handler;
+    protected StaticFileHandler $handler;
     protected ResponseUtil $responseUtil;
     public static string $baseUri = '';
     /** @var array<string, string> */
@@ -45,7 +45,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
     {
-        $this->handler = new StaticFileRequest();
+        $this->handler = new StaticFileHandler();
         $this->responseUtil = new ResponseUtil($responseFactory, $options);
     }
 

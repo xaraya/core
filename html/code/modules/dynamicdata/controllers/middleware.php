@@ -22,7 +22,7 @@ sys::import('xaraya.bridge.middleware.router');
 sys::import('modules.dynamicdata.controllers.router');
 sys::import('modules.dynamicdata.class.userinterface');
 sys::import('xaraya.bridge.requests.dataobject');
-use Xaraya\Bridge\Requests\DataObjectRequest;
+use Xaraya\Bridge\Requests\DataObjectRequestHandler;
 
 /**
  * PSR-15 compatible middleware for DataObject UI methods (view, display, search, ...)
@@ -31,7 +31,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
 {
     /** @var array<string> */
     protected array $attributes = ['object', 'method', 'itemid'];
-    protected DataObjectRequest $handler;
+    protected DataObjectRequestHandler $handler;
     protected ResponseUtil $responseUtil;
     protected bool $wrapPage = false;
 
@@ -40,7 +40,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, bool $wrapPage = false)
     {
-        $this->handler = new DataObjectRequest();
+        $this->handler = new DataObjectRequestHandler();
         $this->responseUtil = new ResponseUtil($responseFactory);
         $this->wrapPage = $wrapPage;
     }

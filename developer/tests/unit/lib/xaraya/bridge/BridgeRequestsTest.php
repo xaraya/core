@@ -4,8 +4,8 @@ use PHPUnit\Framework\TestCase;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Xaraya\Bridge\Requests\BasicRequest;
-use Xaraya\Bridge\Requests\DataObjectGuiRequest;
-use Xaraya\Bridge\Requests\DataObjectApiRequest;
+use Xaraya\Bridge\Requests\DataObjectGuiHandler;
+use Xaraya\Bridge\Requests\DataObjectApiHandler;
 
 final class BridgeRequestsTest extends TestCase
 {
@@ -132,7 +132,7 @@ final class BridgeRequestsTest extends TestCase
         // ignore the rest
     ): void {
         $expected = $params;
-        $handler = new DataObjectGuiRequest();
+        $handler = new DataObjectGuiHandler();
         $this->assertEquals($expected, $handler->parseDataObjectPath($path, $query, $prefix));
     }
 
@@ -150,7 +150,7 @@ final class BridgeRequestsTest extends TestCase
         if (!empty($extra)) {
             $expected .= '?' . http_build_query($extra);
         }
-        $handler = new DataObjectGuiRequest();
+        $handler = new DataObjectGuiHandler();
         $this->assertEquals($expected, $handler->buildDataObjectPath($object, $method, $itemid, $extra, $prefix));
     }
 
@@ -180,7 +180,7 @@ final class BridgeRequestsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('testPrepareOutput')]
-    public function testRunDataObjectGuiRequest()
+    public function testRunDataObjectGuiHandler()
     {
         // should be the same output as DataObjectTest::testObjectInterface()
         $filename = $this->getFixtureFile('ui_handlers.view.html');
@@ -188,7 +188,7 @@ final class BridgeRequestsTest extends TestCase
 
         $params = ['object' => 'sample'];
         $context = null;
-        $handler = new DataObjectGuiRequest();
+        $handler = new DataObjectGuiHandler();
         $handler->setContext($context);
         $output = $handler->runDataObjectRequest($params);
         $output = preg_replace('/<!--.*?-->/s', '', $output);
@@ -197,7 +197,7 @@ final class BridgeRequestsTest extends TestCase
         // @todo try out with different context
     }
 
-    public function testRunDataObjectApiRequest()
+    public function testRunDataObjectApiHandler()
     {
         // should be the same output as DataObjectTest::testObjectInterface()
         $filename = $this->getFixtureFile('ui_handlers.view.json');
@@ -209,7 +209,7 @@ final class BridgeRequestsTest extends TestCase
 
         $params = ['object' => 'sample'];
         $context = null;
-        $handler = new DataObjectApiRequest();
+        $handler = new DataObjectApiHandler();
         $handler->setContext($context);
         $output = $handler->runDataObjectRequest($params);
         if (!file_exists($filename)) {

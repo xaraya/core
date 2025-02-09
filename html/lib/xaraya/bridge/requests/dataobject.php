@@ -15,9 +15,22 @@ namespace Xaraya\Bridge\Requests;
 /**
  * Handle DataObject requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  */
-class DataObjectRequest extends BasicBridge implements DataObjectBridgeInterface
+class DataObjectRequestHandler extends BasicBridge implements DataObjectBridgeInterface
 {
     use DataObjectBridgeTrait;
+
+    /**
+     * Get DataObject handler routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $handler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    {
+        return static::getDataObjectRoutes($pathPrefix, $namePrefix, $handler, $extra);
+    }
 
     public function setContext($context)
     {
@@ -26,7 +39,7 @@ class DataObjectRequest extends BasicBridge implements DataObjectBridgeInterface
     }
 }
 
-class DataObjectGuiRequest extends DataObjectRequest
+class DataObjectGuiHandler extends DataObjectRequestHandler
 {
     /**
      * Summary of runDataObjectRequest
@@ -39,7 +52,7 @@ class DataObjectGuiRequest extends DataObjectRequest
     }
 }
 
-class DataObjectApiRequest extends DataObjectRequest
+class DataObjectApiHandler extends DataObjectRequestHandler
 {
     /**
      * Summary of runDataObjectRequest

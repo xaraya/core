@@ -123,7 +123,7 @@ trait ModuleBridgeTrait
             $params['module'] = $pieces[0];
             if ($params['module'] == 'object') {
                 // see DataObjectBridgeTrait with prefix /object
-                $handler = new DataObjectRequest();
+                $handler = new DataObjectRequestHandler();
                 return $handler->parseDataObjectPath($path, $query, $prefix . '/object');
             }
             if (count($pieces) == 2) {
@@ -158,7 +158,7 @@ trait ModuleBridgeTrait
             unset($extra['itemid']);
             // see DataObjectBridgeTrait with prefix /object
             $prefix .= '/object';
-            $handler = new DataObjectRequest();
+            $handler = new DataObjectRequestHandler();
             return $handler->buildDataObjectPath($type, $func, $itemid, $extra, $prefix);
         }
         // see xarServer::getModuleURL()
@@ -197,7 +197,12 @@ trait ModuleBridgeTrait
         // path = /object[/...]
         if ($vars['module'] == 'object') {
             // @todo figure out if we need GUI or API DataObject request handler here
-            return $this->handleObjectRequest($vars, $request);
+            if ($this instanceof ModuleApiHandler) {
+                $handler = new DataObjectApiHandler($this->getRouter());
+            } else {
+                $handler = new DataObjectGuiHandler($this->getRouter());
+            }
+            return $handler->handleObjectRequest($vars, $request);
         }
         // path = /{module}/{func}
         if (empty($vars['type']) && !empty($vars['func'])) {

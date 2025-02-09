@@ -19,17 +19,17 @@ use sys;
 
 sys::import('xaraya.bridge.middleware.router');
 sys::import('xaraya.bridge.requests.dataobject');
-use Xaraya\Bridge\Requests\DataObjectRequest;
+use Xaraya\Bridge\Requests\DataObjectRequestHandler;
 
 class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
 {
     public static string $baseUri = '';
     public static string $prefix = '/object';
-    protected DataObjectRequest $handler;
+    protected DataObjectRequestHandler $handler;
 
     public function __construct()
     {
-        $this->handler = new DataObjectRequest();
+        $this->handler = new DataObjectRequestHandler();
     }
 
     /**

@@ -17,17 +17,17 @@ use sys;
 
 sys::import('xaraya.bridge.middleware.router');
 sys::import('xaraya.bridge.requests.module');
-use Xaraya\Bridge\Requests\ModuleRequest;
+use Xaraya\Bridge\Requests\ModuleRequestHandler;
 
 class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
 {
     public static string $baseUri = '';
     public static string $prefix = '';
-    protected ModuleRequest $handler;
+    protected ModuleRequestHandler $handler;
 
     public function __construct()
     {
-        $this->handler = new ModuleRequest();
+        $this->handler = new ModuleRequestHandler();
     }
 
     /**

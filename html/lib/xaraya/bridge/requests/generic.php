@@ -15,9 +15,22 @@ namespace Xaraya\Bridge\Requests;
 /**
  * Handle Generic requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  */
-class GenericRequest extends BasicBridge implements GenericBridgeInterface
+class GenericRequestHandler extends BasicBridge implements GenericBridgeInterface
 {
     use GenericBridgeTrait;
+
+    /**
+     * Get Generic handler routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $handler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    {
+        return static::getGenericRoutes($pathPrefix, $namePrefix, $handler, $extra);
+    }
 
     public function setContext($context)
     {
@@ -26,7 +39,7 @@ class GenericRequest extends BasicBridge implements GenericBridgeInterface
     }
 }
 
-class GenericGuiRequest extends GenericRequest
+class GenericGuiHandler extends GenericRequestHandler
 {
     /**
      * Summary of runGenericRequest
@@ -50,7 +63,7 @@ class GenericGuiRequest extends GenericRequest
     }
 }
 
-class GenericApiRequest extends GenericRequest
+class GenericApiHandler extends GenericRequestHandler
 {
     /**
      * Summary of runGenericRequest

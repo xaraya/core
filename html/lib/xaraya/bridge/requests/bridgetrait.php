@@ -52,8 +52,8 @@ trait BasicBridgeTrait
         //sys::import('modules.modules.controllers.router');
         //ModuleRouter::setBaseUri($baseUri);
         xarController::setCallback('buildUri', [$this, 'buildUri']);
-        //xarController::$buildUri = [ModuleRequest::class, 'buildModulePath'];
-        //xarController::$redirectTo = [ModuleRequest::class, 'redirectTo'];
+        //xarController::$buildUri = [ModuleRequestHandler::class, 'buildModulePath'];
+        //xarController::$redirectTo = [ModuleRequestHandler::class, 'redirectTo'];
     }
 
     /**
