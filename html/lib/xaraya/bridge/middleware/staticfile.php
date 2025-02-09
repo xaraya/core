@@ -29,6 +29,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
 {
     /** @var array<string> */
     protected array $attributes = ['static', 'source', 'folder', 'file'];
+    protected StaticFileRequest $handler;
     protected ResponseUtil $responseUtil;
     public static string $baseUri = '';
     /** @var array<string, string> */
@@ -44,6 +45,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
     {
+        $this->handler = new StaticFileRequest();
         $this->responseUtil = new ResponseUtil($responseFactory, $options);
     }
 
@@ -152,7 +154,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
             $prefix = static::$baseUri . $prefix;
         }
         $path = $request->getUri()->getPath();
-        $params = StaticFileRequest::parseStaticFilePath($path, $request->getQueryParams(), $prefix, $type);
+        $params = $this->handler->parseStaticFilePath($path, $request->getQueryParams(), $prefix, $type);
         return $params;
     }
 
@@ -166,6 +168,6 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
         if (!empty($prefix) && strstr($uri, $prefix) !== $prefix) {
             $uri .= $prefix;
         }
-        return StaticFileRequest::buildStaticFilePath($source, $folder, $file, $extra, $uri);
+        return $this->handler->buildStaticFilePath($source, $folder, $file, $extra, $uri);
     }
 }

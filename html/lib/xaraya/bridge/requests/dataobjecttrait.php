@@ -12,7 +12,6 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
-use Xaraya\Context\Context;
 use Xaraya\Services\DataObjectInterface;
 use Xaraya\Services\ServiceFactory;
 use Exception;
@@ -20,7 +19,6 @@ use sys;
 
 sys::import('modules.dynamicdata.class.userinterface');
 use DataObjectUserInterface;
-use DataObjectFactory;
 
 /**
  * For documentation purposes only - available via DataObjectBridgeTrait
@@ -34,7 +32,7 @@ interface DataObjectBridgeInterface extends CommonRequestInterface
      * @param string $prefix
      * @return array<string, mixed>
      */
-    public static function parseDataObjectPath(string $path = '/', array $query = [], string $prefix = ''): array;
+    public function parseDataObjectPath(string $path = '/', array $query = [], string $prefix = ''): array;
 
     /**
      * Summary of buildDataObjectPath
@@ -45,23 +43,21 @@ interface DataObjectBridgeInterface extends CommonRequestInterface
      * @param string $prefix
      * @return string
      */
-    public static function buildDataObjectPath(string $object = 'sample', ?string $method = null, string|int|null $itemid = null, array $extra = [], string $prefix = '/object'): string;
+    public function buildDataObjectPath(string $object = 'sample', ?string $method = null, string|int|null $itemid = null, array $extra = [], string $prefix = '/object'): string;
 
     /**
      * Summary of runDataObjectGuiRequest
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public function runDataObjectGuiRequest($params, $context = null): ?string;
+    public function runDataObjectGuiRequest($params): ?string;
 
     /**
      * Summary of runDataObjectApiRequest
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public function runDataObjectApiRequest($params, $context = null): mixed;
+    public function runDataObjectApiRequest($params): mixed;
 }
 
 /**
@@ -84,7 +80,7 @@ trait DataObjectBridgeTrait
      * @param string $prefix
      * @return array<string, mixed>
      */
-    public static function parseDataObjectPath(string $path = '/', array $query = [], string $prefix = ''): array
+    public function parseDataObjectPath(string $path = '/', array $query = [], string $prefix = ''): array
     {
         $params = [];
         if (strlen($path) > strlen($prefix) && str_starts_with($path, $prefix . '/')) {
@@ -118,8 +114,9 @@ trait DataObjectBridgeTrait
      * @param array<string, mixed> $extra
      * @param string $prefix
      * @return string
+     * @todo do we want to keep this static?
      */
-    public static function buildDataObjectPath(string $object = 'sample', ?string $method = null, string|int|null $itemid = null, array $extra = [], string $prefix = '/object'): string
+    public function buildDataObjectPath(string $object = 'sample', ?string $method = null, string|int|null $itemid = null, array $extra = [], string $prefix = '/object'): string
     {
         // see xarDDObject::getObjectURL() and xarServer::getObjectURL()
         $uri = $prefix;
@@ -147,18 +144,16 @@ trait DataObjectBridgeTrait
     /**
      * Summary of runDataObjectGuiRequest
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
      * @throws \Exception
      * @return string|null
      */
-    public function runDataObjectGuiRequest($params, $context = null): ?string
+    public function runDataObjectGuiRequest($params): ?string
     {
         if (empty($params['object'])) {
             throw new Exception("Missing object parameter");
         }
-        //$this->data()->setContext($context);
         $interface = new DataObjectUserInterface($params);
-        return $interface->handle($params, $context);
+        return $interface->handle($params, $this->getContext());
         // From DataObjectUserInterface:
         //...
     }
@@ -166,16 +161,14 @@ trait DataObjectBridgeTrait
     /**
      * Summary of runDataObjectApiRequest
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
      * @throws \Exception
      * @return mixed
      */
-    public function runDataObjectApiRequest($params, $context = null): mixed
+    public function runDataObjectApiRequest($params): mixed
     {
         if (empty($params['object'])) {
             throw new Exception("Missing object parameter");
         }
-        $this->data()->setContext($context);
         // @checkme overriding $params['name'] here
         $params['name'] = $params['object'];
         unset($params['object']);

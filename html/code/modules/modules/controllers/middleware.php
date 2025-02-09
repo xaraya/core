@@ -30,6 +30,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
 {
     /** @var array<string> */
     protected array $attributes = ['module', 'type', 'func'];
+    protected ModuleRequest $handler;
     protected ResponseUtil $responseUtil;
     protected bool $wrapPage = false;
 
@@ -38,6 +39,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, bool $wrapPage = false)
     {
+        $this->handler = new ModuleRequest();
         $this->responseUtil = new ResponseUtil($responseFactory);
         $this->wrapPage = $wrapPage;
     }
@@ -73,6 +75,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         //$context['twig'] = true;
         // @todo check if we already have a context? (via request or from elsewhere)
         //$this->setContext($context);
+        $this->handler->setContext($context);
 
         // filter out request attributes from remaining query params here
         $params = array_diff_key($request->getQueryParams(), $attribs);
@@ -102,8 +105,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
     public function run($attribs, $params, $context = null)
     {
         try {
-            $handler = new ModuleRequest();
-            $result = $handler->runModuleGuiRequest($attribs, $params, $context);
+            $result = $this->handler->runModuleGuiRequest($attribs, $params);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }
@@ -131,8 +133,7 @@ class ModuleApiMiddleware extends ModuleMiddleware
     public function run($attribs, $params, $context = null)
     {
         try {
-            $handler = new ModuleRequest();
-            $result = $handler->runModuleApiRequest($attribs, $params, $context);
+            $result = $this->handler->runModuleApiRequest($attribs, $params);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }

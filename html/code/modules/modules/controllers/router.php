@@ -23,6 +23,12 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
 {
     public static string $baseUri = '';
     public static string $prefix = '';
+    protected ModuleRequest $handler;
+
+    public function __construct()
+    {
+        $this->handler = new ModuleRequest();
+    }
 
     /**
      * Basic route matcher to identify module requests and set request attributes e.g. in router middleware
@@ -63,7 +69,7 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
             $prefix = static::$baseUri . static::$prefix;
         }
         $path = $request->getUri()->getPath();
-        $params = ModuleRequest::parseModulePath($path, $request->getQueryParams(), $prefix);
+        $params = $this->handler->parseModulePath($path, $request->getQueryParams(), $prefix);
         return $params;
     }
 
@@ -79,6 +85,6 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
     public function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
     {
         $prefix = static::$baseUri;
-        return ModuleRequest::buildModulePath($module, $type, $func, $extra, $prefix);
+        return $this->handler->buildModulePath($module, $type, $func, $extra, $prefix);
     }
 }

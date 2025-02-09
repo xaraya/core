@@ -131,7 +131,8 @@ final class BridgeRequestsTest extends TestCase
         // ignore the rest
     ): void {
         $expected = $params;
-        $this->assertEquals($expected, DataObjectRequest::parseDataObjectPath($path, $query, $prefix));
+        $handler = new DataObjectRequest();
+        $this->assertEquals($expected, $handler->parseDataObjectPath($path, $query, $prefix));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDataObjectProvider')]
@@ -148,7 +149,8 @@ final class BridgeRequestsTest extends TestCase
         if (!empty($extra)) {
             $expected .= '?' . http_build_query($extra);
         }
-        $this->assertEquals($expected, DataObjectRequest::buildDataObjectPath($object, $method, $itemid, $extra, $prefix));
+        $handler = new DataObjectRequest();
+        $this->assertEquals($expected, $handler->buildDataObjectPath($object, $method, $itemid, $extra, $prefix));
     }
 
     public function testPrepareOutput(): void
@@ -186,7 +188,8 @@ final class BridgeRequestsTest extends TestCase
         $params = ['object' => 'sample'];
         $context = null;
         $handler = new DataObjectRequest();
-        $output = $handler->runDataObjectGuiRequest($params, $context);
+        $handler->setContext($context);
+        $output = $handler->runDataObjectGuiRequest($params);
         $output = preg_replace('/<!--.*?-->/s', '', $output);
         $this->assertEquals($expected, strlen($output));
 

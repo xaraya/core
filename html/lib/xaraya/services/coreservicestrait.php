@@ -281,6 +281,8 @@ trait CoreServicesTrait
      * Available methods:
      * - template() for current block type - or use tpl()->block() in general with modName blockType
      * - prepare()
+     * - guiRequest()
+     * - apiRequest()
      * - ...
      *
      * Required methods in parent:

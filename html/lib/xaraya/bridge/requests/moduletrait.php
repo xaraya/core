@@ -12,7 +12,6 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
-use Xaraya\Context\Context;
 use Xaraya\Services\ModulesInterface;
 use Xaraya\Services\ServiceFactory;
 
@@ -28,7 +27,7 @@ interface ModuleBridgeInterface extends CommonRequestInterface
      * @param string $prefix
      * @return array<string, mixed>
      */
-    public static function parseModulePath(string $path = '/', array $query = [], string $prefix = ''): array;
+    public function parseModulePath(string $path = '/', array $query = [], string $prefix = ''): array;
 
     /**
      * Summary of buildModulePath
@@ -39,25 +38,23 @@ interface ModuleBridgeInterface extends CommonRequestInterface
      * @param string $prefix
      * @return string
      */
-    public static function buildModulePath(string $module = 'base', ?string $type = null, string|int|null $func = null, array $extra = [], string $prefix = ''): string;
+    public function buildModulePath(string $module = 'base', ?string $type = null, string|int|null $func = null, array $extra = [], string $prefix = ''): string;
 
     /**
      * Summary of runModuleGuiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
-     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public function runModuleGuiRequest($vars, $query, $context = null): ?string;
+    public function runModuleGuiRequest($vars, $query): ?string;
 
     /**
      * Summary of runModuleApiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
-     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public function runModuleApiRequest($vars, $query, $context = null): mixed;
+    public function runModuleApiRequest($vars, $query): mixed;
 }
 
 /**
@@ -80,7 +77,7 @@ trait ModuleBridgeTrait
      * @param string $prefix
      * @return array<string, mixed>
      */
-    public static function parseModulePath(string $path = '/', array $query = [], string $prefix = ''): array
+    public function parseModulePath(string $path = '/', array $query = [], string $prefix = ''): array
     {
         $params = [];
         if (strlen($path) > strlen($prefix) && str_starts_with($path, $prefix . '/')) {
@@ -89,7 +86,8 @@ trait ModuleBridgeTrait
             $params['module'] = $pieces[0];
             if ($params['module'] == 'object') {
                 // see DataObjectBridgeTrait with prefix /object
-                return DataObjectRequest::parseDataObjectPath($path, $query, $prefix . '/object');
+                $handler = new DataObjectRequest();
+                return $handler->parseDataObjectPath($path, $query, $prefix . '/object');
             }
             if (count($pieces) == 2) {
                 // {prefix}/{module}/{func} = user view, display, ...
@@ -114,15 +112,17 @@ trait ModuleBridgeTrait
      * @param array<string, mixed> $extra
      * @param string $prefix
      * @return string
+     * @todo do we want to keep this static?
      */
-    public static function buildModulePath(string $module = 'base', ?string $type = null, string|int|null $func = null, array $extra = [], string $prefix = ''): string
+    public function buildModulePath(string $module = 'base', ?string $type = null, string|int|null $func = null, array $extra = [], string $prefix = ''): string
     {
         if ($module == 'object') {
             $itemid = $extra['itemid'] ?? null;
             unset($extra['itemid']);
             // see DataObjectBridgeTrait with prefix /object
             $prefix .= '/object';
-            return DataObjectRequest::buildDataObjectPath($type, $func, $itemid, $extra, $prefix);
+            $handler = new DataObjectRequest();
+            return $handler->buildDataObjectPath($type, $func, $itemid, $extra, $prefix);
         }
         // see xarServer::getModuleURL()
         $uri = $prefix;
@@ -151,12 +151,10 @@ trait ModuleBridgeTrait
      * Summary of runModuleGuiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
-     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public function runModuleGuiRequest($vars, $query, $context = null): ?string
+    public function runModuleGuiRequest($vars, $query): ?string
     {
-        $this->mod()->setContext($context);
         return $this->mod()->guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query);
     }
 
@@ -164,12 +162,10 @@ trait ModuleBridgeTrait
      * Summary of runModuleApiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
-     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public function runModuleApiRequest($vars, $query, $context = null): mixed
+    public function runModuleApiRequest($vars, $query): mixed
     {
-        $this->mod()->setContext($context);
         return $this->mod()->apiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'getitemtypes', $query);
     }
 }

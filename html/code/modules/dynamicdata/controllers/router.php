@@ -25,6 +25,12 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
 {
     public static string $baseUri = '';
     public static string $prefix = '/object';
+    protected DataObjectRequest $handler;
+
+    public function __construct()
+    {
+        $this->handler = new DataObjectRequest();
+    }
 
     /**
      * Basic route matcher to identify object requests and set request attributes e.g. in router middleware
@@ -65,7 +71,7 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
             $prefix = static::$baseUri . static::$prefix;
         }
         $path = $request->getUri()->getPath();
-        $params = DataObjectRequest::parseDataObjectPath($path, $request->getQueryParams(), $prefix);
+        $params = $this->handler->parseDataObjectPath($path, $request->getQueryParams(), $prefix);
         return $params;
     }
 
@@ -81,6 +87,6 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
     public function buildUri(?string $object = null, ?string $method = null, string|int|null $itemid = null, array $extra = []): string
     {
         $prefix = static::$baseUri;
-        return DataObjectRequest::buildDataObjectPath($object, $method, $itemid, $extra, $prefix);
+        return $this->handler->buildDataObjectPath($object, $method, $itemid, $extra, $prefix);
     }
 }

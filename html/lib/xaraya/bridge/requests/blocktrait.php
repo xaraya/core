@@ -12,10 +12,8 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
-use Xaraya\Context\Context;
-use Xaraya\Facades\xarMod3;
-use Exception;
-use xarBlock;
+use Xaraya\Services\BlocksInterface;
+use Xaraya\Services\ServiceFactory;
 
 /**
  * For documentation purposes only - available via BlockBridgeTrait
@@ -29,7 +27,7 @@ interface BlockBridgeInterface extends CommonRequestInterface
      * @param string $prefix
      * @return array<string, mixed>
      */
-    public static function parseBlockPath(string $path = '/', array $query = [], string $prefix = ''): array;
+    public function parseBlockPath(string $path = '/', array $query = [], string $prefix = ''): array;
 
     /**
      * Summary of buildBlockPath
@@ -40,25 +38,23 @@ interface BlockBridgeInterface extends CommonRequestInterface
      * @param string $prefix
      * @return string
      */
-    public static function buildBlockPath(string|int $type = 'menu', ?string $method = null, string|int|null $instance = null, array $extra = [], string $prefix = '/block'): string;
+    public function buildBlockPath(string|int $type = 'menu', ?string $method = null, string|int|null $instance = null, array $extra = [], string $prefix = '/block'): string;
 
     /**
      * Summary of runBlockGuiRequest
      * @param array<string, mixed> $vars
      * @param ?array<string, mixed> $query
-     * @param ?Context<string, mixed> $context
      * @return string
      */
-    public function runBlockGuiRequest($vars, $query = null, $context = null): string;
+    public function runBlockGuiRequest($vars, $query = null): string;
 
     /**
      * Summary of runBlockApiRequest
      * @param array<string, mixed> $vars
      * @param ?array<string, mixed> $query
-     * @param ?Context<string, mixed> $context
-     * @return mixed
+     * @return array<mixed>
      */
-    public function runBlockApiRequest($vars, $query = null, $context = null): mixed;
+    public function runBlockApiRequest($vars, $query = null): array;
 }
 
 /**
@@ -66,6 +62,14 @@ interface BlockBridgeInterface extends CommonRequestInterface
  */
 trait BlockBridgeTrait
 {
+    protected ?BlocksInterface $xarBlock = null;
+
+    public function block(): BlocksInterface
+    {
+        $this->xarBlock ??= ServiceFactory::getBlocksService($this);
+        return $this->xarBlock;
+    }
+
     /**
      * Summary of parseBlockPath
      * @param string $path
@@ -73,7 +77,7 @@ trait BlockBridgeTrait
      * @param string $prefix
      * @return array<string, mixed>
      */
-    public static function parseBlockPath(string $path = '/', array $query = [], string $prefix = ''): array
+    public function parseBlockPath(string $path = '/', array $query = [], string $prefix = ''): array
     {
         // @todo
         return [];
@@ -88,7 +92,7 @@ trait BlockBridgeTrait
      * @param string $prefix
      * @return string
      */
-    public static function buildBlockPath(string|int $type = 'menu', ?string $method = null, string|int|null $instance = null, array $extra = [], string $prefix = '/block'): string
+    public function buildBlockPath(string|int $type = 'menu', ?string $method = null, string|int|null $instance = null, array $extra = [], string $prefix = '/block'): string
     {
         // @todo
         return '/';
@@ -99,32 +103,27 @@ trait BlockBridgeTrait
      * Summary of runBlockGuiRequest
      * @param array<string, mixed> $vars
      * @param ?array<string, mixed> $query
-     * @param ?Context<string, mixed> $context
-     * @throws \Exception
      * @return string
      */
-    public function runBlockGuiRequest($vars, $query = null, $context = null): string
+    public function runBlockGuiRequest($vars, $query = null): string
     {
-        if (empty($vars['instance'])) {
-            throw new Exception("Missing object parameter");
+        if (!empty($query)) {
+            $vars = array_merge($vars, $query);
         }
-        return xarBlock::renderBlock($vars, $context);
+        return $this->block()->guiRequest($vars);
     }
 
-    // @checkme limited to getinfo() for now
     /**
      * Summary of runBlockApiRequest
      * @param array<string, mixed> $vars
      * @param ?array<string, mixed> $query
-     * @param ?Context<string, mixed> $context
-     * @throws \Exception
-     * @return mixed
+     * @return array<mixed>
      */
-    public function runBlockApiRequest($vars, $query = null, $context = null): mixed
+    public function runBlockApiRequest($vars, $query = null): array
     {
-        if (empty($vars['instance'])) {
-            throw new Exception("Missing object parameter");
+        if (!empty($query)) {
+            $vars = array_merge($vars, $query);
         }
-        return xarMod3::apiFunc('blocks', 'blocks', 'getinfo', $vars, $context);
+        return $this->block()->apiRequest($vars);
     }
 }

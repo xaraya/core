@@ -31,6 +31,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
 {
     /** @var array<string> */
     protected array $attributes = ['object', 'method', 'itemid'];
+    protected DataObjectRequest $handler;
     protected ResponseUtil $responseUtil;
     protected bool $wrapPage = false;
 
@@ -39,6 +40,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, bool $wrapPage = false)
     {
+        $this->handler = new DataObjectRequest();
         $this->responseUtil = new ResponseUtil($responseFactory);
         $this->wrapPage = $wrapPage;
     }
@@ -74,6 +76,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         //$context['twig'] = true;
         // @todo check if we already have a context? (via request or from elsewhere)
         //$this->setContext($context);
+        $this->handler->setContext($context);
 
         // add remaining query params to request attributes
         $params = array_merge($attribs, $request->getQueryParams());
@@ -106,8 +109,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
     public function run($params, $context = null)
     {
         try {
-            $handler = new DataObjectRequest();
-            $result = $handler->runDataObjectGuiRequest($params, $context);
+            $result = $this->handler->runDataObjectGuiRequest($params);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }
@@ -134,8 +136,7 @@ class DataObjectApiMiddleware extends DataObjectMiddleware
     public function run($params, $context = null)
     {
         try {
-            $handler = new DataObjectRequest();
-            $result = $handler->runDataObjectApiRequest($params, $context);
+            $result = $this->handler->runDataObjectApiRequest($params);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }

@@ -90,7 +90,7 @@ class ServiceFactory
     /**
      * Summary of getBlocksService
      */
-    public static function getBlocksService(ServicesInterface $parent): BlocksInterface
+    public static function getBlocksService(object|string|null $parent): BlocksInterface
     {
         self::log(__METHOD__, $parent);
         return BlocksService::create($parent);
@@ -99,7 +99,7 @@ class ServiceFactory
     /**
      * Summary of getDataObjectService
      */
-    public static function getDataObjectService(ServicesInterface $parent): DataObjectInterface
+    public static function getDataObjectService(object|string|null $parent): DataObjectInterface
     {
         self::log(__METHOD__, $parent);
         return DataObjectService::create($parent);

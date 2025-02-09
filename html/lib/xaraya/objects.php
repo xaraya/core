@@ -211,6 +211,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param mixed $itemid the specific item id or null
      * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
+     * @see Xaraya\Bridge\Routing\RoutingBridge::handleObjectRequest()
      */
     public static function getActionURL($object, $action = '', $itemid = null, $extra = [])
     {

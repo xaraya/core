@@ -21,6 +21,7 @@ use xarMod;
 use xarModVars;
 use xarTpl;
 use sys;
+use Exception;
 
 sys::import('xaraya.services.servicetrait');
 
@@ -36,6 +37,13 @@ interface BlocksInterface extends ServiceInterface
      * @return array<string, mixed>
      */
     public function prepare(array $tplData = []): array;
+    /** @param array<mixed> $args */
+    public function guiRequest(array $args): string;
+    /**
+     * @param array<mixed> $args
+     * @return array<mixed>
+     */
+    public function apiRequest(array $args): array;
 }
 
 /**
@@ -89,6 +97,35 @@ trait BlocksTrait
         $tplData['context'] ??= $this->getContext();
         return $tplData;
     }
+
+    /**
+     * Summary of guiRequest
+     * @todo limited to renderBlock() for now
+     * @param array<mixed> $args
+     * @return string
+     */
+    public function guiRequest(array $args): string
+    {
+        if (empty($vars['instance'])) {
+            throw new Exception("Missing object parameter");
+        }
+        return xarBlock::renderBlock($args, $this->getContext());
+    }
+
+    /**
+     * Summary of apiRequest
+     * @todo limited to getinfo() for now
+     * @param array<mixed> $args
+     * @throws \Exception
+     * @return array<mixed>
+     */
+    public function apiRequest(array $args): array
+    {
+        if (empty($vars['instance'])) {
+            throw new Exception("Missing object parameter");
+        }
+        return xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args, $this->getContext());
+    }
 }
 
 /**
@@ -97,6 +134,8 @@ trait BlocksTrait
  * Available methods:
  * - template() for current block type - or use tpl()->block() in general with modName blockType
  * - prepare()
+ * - guiRequest()
+ * - apiRequest()
  * - ...
  *
  * Required methods in parent:

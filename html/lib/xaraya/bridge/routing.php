@@ -199,7 +199,9 @@ class RoutingBridge extends BasicBridge
     public function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
     {
         $prefix = static::$baseUri;
-        return ModuleRequest::buildModulePath($module, $type, $func, $extra, $prefix);
+        // @todo do we want to keep this static?
+        $handler = new ModuleRequest();
+        return $handler->buildModulePath($module, $type, $func, $extra, $prefix);
     }
 
     public function __construct(bool $wrapPage = false)
@@ -445,6 +447,7 @@ class RoutingBridge extends BasicBridge
      * @param array<string, mixed> $vars
      * @param mixed $request
      * @return array<mixed>
+     * @see \xarDDObject::getActionURL()
      */
     public function handleObjectRequest($vars, &$request = null)
     {
@@ -476,9 +479,10 @@ class RoutingBridge extends BasicBridge
             $params = array_merge($params, $input);
         }
 
+        $handler = new DataObjectRequest();
         // @checkme pass along buildUri() as link function to DD
         $params['linktype'] = 'other';
-        $params['linkfunc'] = [static::class, 'buildDataObjectPath'];
+        $params['linkfunc'] = [$handler, 'buildDataObjectPath'];
 
         if ($params['object'] == 'roles_users') {
             $params['fieldlist'] = ['id', 'name', 'uname', 'state'];
@@ -493,21 +497,21 @@ class RoutingBridge extends BasicBridge
         $context['module'] = 'object';
         // @todo check if we already have a context? (via request or from elsewhere)
         //$this->setContext($context);
+        $handler->setContext($context);
 
-        $result = $this->runObjectRequest($params, $context);
+        $result = $this->runObjectRequest($handler, $params);
         return [$result, $context];
     }
 
     /**
      * Summary of runObjectRequest
+     * @param DataObjectRequest $handler
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public function runObjectRequest($params, $context = null)
+    public function runObjectRequest($handler, $params)
     {
-        $handler = new DataObjectRequest();
-        return $handler->runDataObjectGuiRequest($params, $context);
+        return $handler->runDataObjectGuiRequest($params);
     }
 
     /**
@@ -551,22 +555,23 @@ class RoutingBridge extends BasicBridge
         $context['module'] = $vars['module'];
         // @todo check if we already have a context? (via request or from elsewhere)
         //$this->setContext($context);
+        $handler = new ModuleRequest();
+        $handler->setContext($context);
 
-        $result = $this->runModuleRequest($vars, $params, $context);
+        $result = $this->runModuleRequest($handler, $vars, $params);
         return [$result, $context];
     }
 
     /**
      * Summary of runModuleRequest
+     * @param ModuleRequest $handler
      * @param array<string, mixed> $vars
      * @param mixed $query
-     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public function runModuleRequest($vars, $query, $context = null)
+    public function runModuleRequest($handler, $vars, $query)
     {
-        $handler = new ModuleRequest();
-        return $handler->runModuleGuiRequest($vars, $query, $context);
+        return $handler->runModuleGuiRequest($vars, $query);
     }
 
     /**
@@ -590,22 +595,23 @@ class RoutingBridge extends BasicBridge
         $context['module'] = $vars['module'] ?? 'base';
         // @todo check if we already have a context? (via request or from elsewhere)
         //$this->setContext($context);
+        $handler = new BlockRequest();
+        $handler->setContext($context);
 
-        $result = $this->runBlockRequest($vars, $query, $context);
+        $result = $this->runBlockRequest($handler, $vars, $query);
         return [$result, $context];
     }
 
     /**
      * Summary of runBlockRequest
+     * @param BlockRequest $handler
      * @param array<string, mixed> $vars
      * @param mixed $query
-     * @param ?Context<string, mixed> $context
      * @return string
      */
-    public function runBlockRequest($vars, $query = null, $context = null)
+    public function runBlockRequest($handler, $vars, $query = null)
     {
-        $handler = new BlockRequest();
-        return $handler->runBlockGuiRequest($vars, $query, $context);
+        return $handler->runBlockGuiRequest($vars, $query);
     }
 
     /**
@@ -623,10 +629,9 @@ class RoutingBridge extends BasicBridge
     /**
      * Summary of runRoutesRequest
      * @param array<string, mixed> $vars
-     * @param ?Context<string, mixed> $context
      * @return string
      */
-    public function runRoutesRequest($vars, $context = null)
+    public function runRoutesRequest($vars)
     {
         $result = "<ul>";
         foreach ($this->getRouter()->getRoutes() as $name => $route) {
@@ -718,49 +723,45 @@ class RoutingApiBridge extends RoutingBridge
 
     /**
      * Summary of runObjectRequest
+     * @param DataObjectRequest $handler
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public function runObjectRequest($params, $context = null)
+    public function runObjectRequest($handler, $params)
     {
-        $handler = new DataObjectRequest();
-        return $handler->runDataObjectApiRequest($params, $context);
+        return $handler->runDataObjectApiRequest($params);
     }
 
     /**
      * Summary of runModuleRequest
+     * @param ModuleRequest $handler
      * @param array<string, mixed> $vars
      * @param mixed $query
-     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public function runModuleRequest($vars, $query, $context = null)
+    public function runModuleRequest($handler, $vars, $query)
     {
-        $handler = new ModuleRequest();
-        return $handler->runModuleApiRequest($vars, $query, $context);
+        return $handler->runModuleApiRequest($vars, $query);
     }
 
     /**
      * Summary of runBlockRequest
+     * @param BlockRequest $handler
      * @param array<string, mixed> $vars
      * @param mixed $query
-     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public function runBlockRequest($vars, $query = null, $context = null)
+    public function runBlockRequest($handler, $vars, $query = null)
     {
-        $handler = new BlockRequest();
-        return $handler->runBlockApiRequest($vars, $query, $context);
+        return $handler->runBlockApiRequest($vars, $query);
     }
 
     /**
      * Summary of runRoutesRequest
      * @param array<string, mixed> $vars
-     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public function runRoutesRequest($vars, $context = null)
+    public function runRoutesRequest($vars)
     {
         $result = [];
         foreach ($this->getRouter()->getRoutes() as $name => $route) {
@@ -778,6 +779,8 @@ class RoutingApiBridge extends RoutingBridge
 class RoutingStaticBridge extends RoutingBridge
 {
     public const ROUTING_CACHE_FILE = 'routing_static_cache.php';
+
+    protected StaticFileRequest $handler;
 
     /**
      * Summary of getRoutes
@@ -854,6 +857,11 @@ class RoutingStaticBridge extends RoutingBridge
         return $routes;
     }
 
+    public function __construct()
+    {
+        $this->handler = new StaticFileRequest();
+    }
+
     /**
      * Summary of handleThemeFileRequest
      * @param array<string, mixed> $vars
@@ -863,7 +871,7 @@ class RoutingStaticBridge extends RoutingBridge
     public function handleThemeFileRequest($vars, &$request = null)
     {
         // path = /themes/{source}/{folder}/{file:.+}
-        $path = StaticFileRequest::getThemeFileRequest($vars);
+        $path = $this->handler->getThemeFileRequest($vars);
         $vars['path'] = $path;
         $vars['static'] = 'theme';
         if (file_exists($path)) {
@@ -886,7 +894,7 @@ class RoutingStaticBridge extends RoutingBridge
     public function handleModuleFileRequest($vars, &$request = null)
     {
         // path = /code/modules/{source}/{folder}/{file:.+}
-        $path = StaticFileRequest::getModuleFileRequest($vars);
+        $path = $this->handler->getModuleFileRequest($vars);
         $vars['path'] = $path;
         $vars['static'] = 'module';
         if (file_exists($path)) {
@@ -909,7 +917,7 @@ class RoutingStaticBridge extends RoutingBridge
     public function handleVarFileRequest($vars, &$request = null)
     {
         // path = /var/{source}/{folder}/{file:.+}
-        $path = StaticFileRequest::getVarFileRequest($vars);
+        $path = $this->handler->getVarFileRequest($vars);
         $vars['path'] = $path;
         $vars['static'] = 'var';
         if (file_exists($path)) {

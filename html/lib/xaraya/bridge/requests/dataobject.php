@@ -3,7 +3,7 @@
  * @package core\bridge
  * @subpackage requests
  * @category Xaraya Web Applications Framework
- * @version 2.4.2
+ * @version 2.6.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -17,4 +17,10 @@ namespace Xaraya\Bridge\Requests;
 class DataObjectRequest extends BasicRequest implements DataObjectBridgeInterface
 {
     use DataObjectBridgeTrait;
+
+    public function setContext($context)
+    {
+        $this->data()->setContext($context);
+        parent::setContext($context);
+    }
 }
