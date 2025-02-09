@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -16,7 +17,7 @@ namespace Xaraya\Bridge\Requests;
  *
  * Note: requests with module = object or prefix = /object are handed off to DataObjectRequest
  */
-class ModuleRequest extends BasicRequest implements ModuleBridgeInterface
+class ModuleRequest extends BasicBridge implements ModuleBridgeInterface
 {
     use ModuleBridgeTrait;
 
@@ -24,5 +25,33 @@ class ModuleRequest extends BasicRequest implements ModuleBridgeInterface
     {
         $this->mod()->setContext($context);
         parent::setContext($context);
+    }
+}
+
+class ModuleGuiRequest extends ModuleRequest
+{
+    /**
+     * Summary of runModuleRequest
+     * @param array<string, mixed> $vars
+     * @param array<string, mixed> $query
+     * @return string|null
+     */
+    public function runModuleRequest($vars, $query): ?string
+    {
+        return $this->runModuleGuiRequest($vars, $query);
+    }
+}
+
+class ModuleApiRequest extends ModuleRequest
+{
+    /**
+     * Summary of runModuleRequest
+     * @param array<string, mixed> $vars
+     * @param array<string, mixed> $query
+     * @return mixed
+     */
+    public function runModuleRequest($vars, $query): mixed
+    {
+        return $this->runModuleApiRequest($vars, $query);
     }
 }

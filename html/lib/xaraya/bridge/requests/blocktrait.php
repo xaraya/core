@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -14,6 +15,7 @@ namespace Xaraya\Bridge\Requests;
 // use some Xaraya classes
 use Xaraya\Services\BlocksInterface;
 use Xaraya\Services\ServiceFactory;
+use Xaraya\Context\ContextFactory;
 
 /**
  * For documentation purposes only - available via BlockBridgeTrait
@@ -62,12 +64,34 @@ interface BlockBridgeInterface extends CommonRequestInterface
  */
 trait BlockBridgeTrait
 {
+    public static string $baseUri = '';
+    public static string $prefix = '';
     protected ?BlocksInterface $xarBlock = null;
 
     public function block(): BlocksInterface
     {
         $this->xarBlock ??= ServiceFactory::getBlocksService($this);
         return $this->xarBlock;
+    }
+
+    /**
+     * Get Block handler routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $handler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getBlockRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    {
+        $handler ??= static::class;
+        $routes = [];
+
+        $path = $pathPrefix . '/block/{instance}';
+        $name = $namePrefix . 'block-instance';
+        $routes[$name] = ['GET', $path, [$handler, 'handleBlockRequest'], $extra];
+
+        return $routes;
     }
 
     /**
@@ -96,6 +120,33 @@ trait BlockBridgeTrait
     {
         // @todo
         return '/';
+    }
+
+    /**
+     * Summary of handleBlockRequest
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return array<mixed>
+     */
+    public function handleBlockRequest($vars, &$request = null)
+    {
+        // @checkme limited to renderBlock() or getinfo() for now, so no query params or body params taken into account yet
+        // dispatcher doesn't provide query params by default
+        $query = $this->getQueryParams($request);
+
+        $context = ContextFactory::fromRequest($request, __METHOD__);
+        $context['mediatype'] = '';
+        static::$baseUri = $this->getBaseUri($request) . static::$prefix;
+        $context['baseuri'] = static::$baseUri;
+        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
+        $this->prepareController($vars['module'] ?? 'base', static::$baseUri);
+        $context['module'] = $vars['module'] ?? 'base';
+        // @todo check if we already have a context? (via request or from elsewhere)
+        $this->setContext($context);
+
+        // @todo allow overriding this for RoutingApiBridge vs. RoutingBridge
+        $result = $this->runBlockRequest($vars, $query);
+        return [$result, $context];
     }
 
     // @checkme limited to renderBlock() for now

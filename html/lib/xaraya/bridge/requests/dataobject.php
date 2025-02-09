@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -14,7 +15,7 @@ namespace Xaraya\Bridge\Requests;
 /**
  * Handle DataObject requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  */
-class DataObjectRequest extends BasicRequest implements DataObjectBridgeInterface
+class DataObjectRequest extends BasicBridge implements DataObjectBridgeInterface
 {
     use DataObjectBridgeTrait;
 
@@ -22,5 +23,31 @@ class DataObjectRequest extends BasicRequest implements DataObjectBridgeInterfac
     {
         $this->data()->setContext($context);
         parent::setContext($context);
+    }
+}
+
+class DataObjectGuiRequest extends DataObjectRequest
+{
+    /**
+     * Summary of runDataObjectRequest
+     * @param array<string, mixed> $params
+     * @return string|null
+     */
+    public function runDataObjectRequest($params): ?string
+    {
+        return $this->runDataObjectGuiRequest($params);
+    }
+}
+
+class DataObjectApiRequest extends DataObjectRequest
+{
+    /**
+     * Summary of runDataObjectRequest
+     * @param array<string, mixed> $params
+     * @return mixed
+     */
+    public function runDataObjectRequest($params): mixed
+    {
+        return $this->runDataObjectApiRequest($params);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -14,6 +15,7 @@ namespace Xaraya\Bridge\Requests;
 // use some Xaraya classes
 use Xaraya\Services\ModulesInterface;
 use Xaraya\Services\ServiceFactory;
+use Xaraya\Context\ContextFactory;
 
 /**
  * For documentation purposes only - available via ModuleBridgeTrait
@@ -62,12 +64,47 @@ interface ModuleBridgeInterface extends CommonRequestInterface
  */
 trait ModuleBridgeTrait
 {
+    public static string $baseUri = '';
+    public static string $prefix = '';
     protected ?ModulesInterface $xarMod = null;
 
     public function mod(): ModulesInterface
     {
         $this->xarMod ??= ServiceFactory::getModulesService($this);
         return $this->xarMod;
+    }
+
+    /**
+     * Get Module handler routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $handler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getModuleRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    {
+        $handler ??= static::class;
+        $routes = [];
+
+        // without trailing /
+        $path = $pathPrefix . '/{module}';
+        $name = $namePrefix . 'module';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleModuleRequest'], $extra];
+
+        $path = $pathPrefix . '/{module}/{func}';
+        $name = $namePrefix . 'module-func';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleModuleRequest'], $extra];
+
+        $path = $pathPrefix . '/{module}/{type}/{func}';
+        $name = $namePrefix . 'module-type-func';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleModuleRequest'], $extra];
+
+        $path = $pathPrefix . '/';
+        $name = $namePrefix . 'root';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleModuleRequest'], $extra];
+
+        return $routes;
     }
 
     /**
@@ -145,6 +182,54 @@ trait ModuleBridgeTrait
             $uri .= '?' . http_build_query($extra);
         }
         return $uri;
+    }
+
+    /**
+     * Summary of handleModuleRequest
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return array<mixed>
+     */
+    public function handleModuleRequest($vars, &$request = null)
+    {
+        // path = /
+        $vars['module'] ??= 'base';
+        // path = /object[/...]
+        if ($vars['module'] == 'object') {
+            // @todo figure out if we need GUI or API DataObject request handler here
+            return $this->handleObjectRequest($vars, $request);
+        }
+        // path = /{module}/{func}
+        if (empty($vars['type']) && !empty($vars['func'])) {
+            $vars['type'] = 'user';
+        } elseif (!empty($vars['type']) && empty($vars['func'])) {
+            $vars['func'] = $vars['type'];
+            $vars['type'] = 'user';
+        }
+        // path = /{module}/{type}/{func}
+        // dispatcher doesn't provide query params by default
+        $query = $this->getQueryParams($request);
+        // filter out path vars from remaining query params here
+        $params = array_diff_key($query, $vars);
+        // add body params to query params (if any)
+        $input = $this->getParsedBody($request);
+        if (!empty($input) && is_array($input)) {
+            $params = array_merge($params, $input);
+        }
+
+        $context = ContextFactory::fromRequest($request, __METHOD__);
+        $context['mediatype'] = '';
+        static::$baseUri = $this->getBaseUri($request) . static::$prefix;
+        $context['baseuri'] = static::$baseUri;
+        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
+        $this->prepareController($vars['module'], static::$baseUri);
+        $context['module'] = $vars['module'];
+        // @todo check if we already have a context? (via request or from elsewhere)
+        $this->setContext($context);
+
+        // @todo allow overriding this for RoutingApiBridge vs. RoutingBridge
+        $result = $this->runModuleRequest($vars, $params);
+        return [$result, $context];
     }
 
     /**

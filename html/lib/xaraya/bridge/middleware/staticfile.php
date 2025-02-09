@@ -93,8 +93,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     public function run($attribs, $params)
     {
         try {
-            $handler = new StaticFileRequest();
-            $result = $handler->getStaticFileRequest($attribs);
+            $result = $this->handler->getStaticFileRequest($attribs);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }

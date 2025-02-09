@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -14,7 +15,7 @@ namespace Xaraya\Bridge\Requests;
 /**
  * Handle Block requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  */
-class BlockRequest extends BasicRequest implements BlockBridgeInterface
+class BlockRequest extends BasicBridge implements BlockBridgeInterface
 {
     use BlockBridgeTrait;
 
@@ -22,5 +23,33 @@ class BlockRequest extends BasicRequest implements BlockBridgeInterface
     {
         $this->block()->setContext($context);
         parent::setContext($context);
+    }
+}
+
+class BlockGuiRequest extends BlockRequest
+{
+    /**
+     * Summary of runBlockRequest
+     * @param array<string, mixed> $vars
+     * @param ?array<string, mixed> $query
+     * @return string
+     */
+    public function runBlockRequest($vars, $query = null): string
+    {
+        return $this->runBlockGuiRequest($vars, $query);
+    }
+}
+
+class BlockApiRequest extends BlockRequest
+{
+    /**
+     * Summary of runBlockRequest
+     * @param array<string, mixed> $vars
+     * @param ?array<string, mixed> $query
+     * @return array<mixed>
+     */
+    public function runBlockRequest($vars, $query = null): array
+    {
+        return $this->runBlockApiRequest($vars, $query);
     }
 }

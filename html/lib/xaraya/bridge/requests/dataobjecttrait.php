@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -14,6 +15,7 @@ namespace Xaraya\Bridge\Requests;
 // use some Xaraya classes
 use Xaraya\Services\DataObjectInterface;
 use Xaraya\Services\ServiceFactory;
+use Xaraya\Context\ContextFactory;
 use Exception;
 use sys;
 
@@ -65,12 +67,60 @@ interface DataObjectBridgeInterface extends CommonRequestInterface
  */
 trait DataObjectBridgeTrait
 {
+    public static string $baseUri = '';
+    public static string $prefix = '';
     protected ?DataObjectInterface $xarData = null;
 
     public function data(): DataObjectInterface
     {
         $this->xarData ??= ServiceFactory::getDataObjectService($this);
         return $this->xarData;
+    }
+
+    /**
+     * Get DataObject handler routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $handler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getDataObjectRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    {
+        $handler ??= static::class;
+        $routes = [];
+
+        // without trailing /
+        $path = $pathPrefix . '/object/{object}';
+        $name = $namePrefix . 'object-list';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:\d+}';
+        $name = $namePrefix . 'object-item';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:\d+}/{method}';
+        $name = $namePrefix . 'object-item-method';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}';
+        $name = $namePrefix . 'object-document';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleObjectRequest'], $extra];
+
+        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}/{method}';
+        $name = $namePrefix . 'object-document-method';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleObjectRequest'], $extra];
+
+        // something other than itemid matching \d+ or [0-9a-f]{24}
+        $path = $pathPrefix . '/object/{object}/{method}';
+        $name = $namePrefix . 'object-method';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleObjectRequest'], $extra];
+
+        //$path = $pathPrefix . '/object/';
+        //$name = $namePrefix . 'object-root';
+        //$routes[$name] = [['GET', 'POST'], $path, [$handler, 'handleObjectRequest'], $extra];
+
+        return $routes;
     }
 
     /**
@@ -139,6 +189,66 @@ trait DataObjectBridgeTrait
             $uri .= '?' . http_build_query($extra);
         }
         return $uri;
+    }
+
+    /**
+     * Summary of handleObjectRequest
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return array<mixed>
+     * @see \xarDDObject::getActionURL()
+     */
+    public function handleObjectRequest($vars, &$request = null)
+    {
+        // if coming from module request handler, convert to object request
+        if (empty($vars['object']) && $vars['module'] == 'object') {
+            // path = /object/{object}
+            $vars['object'] = $vars['type'] ?? '';
+            if (!empty($vars['func'])) {
+                if (is_numeric($vars['func'])) {
+                    // path = /object/{object}/{itemid}
+                    $vars['itemid'] = $vars['func'];
+                } else {
+                    // path = /object/{object}/{method}
+                    $vars['method'] = $vars['func'];
+                }
+                unset($vars['func']);
+            }
+            unset($vars['module']);
+            unset($vars['type']);
+        }
+        // path = /{object}[/{itemid}[/{method}]] or /{object}/{method}
+        // dispatcher doesn't provide query params by default
+        $query = $this->getQueryParams($request);
+        // add remaining query params to path vars
+        $params = array_merge($vars, $query);
+        // add body params to query params
+        $input = $this->getParsedBody($request);
+        if (!empty($input) && is_array($input)) {
+            $params = array_merge($params, $input);
+        }
+
+        // @checkme pass along buildUri() as link function to DD
+        $params['linktype'] = 'other';
+        $params['linkfunc'] = [$this, 'buildDataObjectPath'];
+
+        if ($params['object'] == 'roles_users') {
+            $params['fieldlist'] = ['id', 'name', 'uname', 'state'];
+        }
+
+        $context = ContextFactory::fromRequest($request, __METHOD__);
+        $context['mediatype'] = '';
+        static::$baseUri = $this->getBaseUri($request) . static::$prefix;
+        $context['baseuri'] = static::$baseUri;
+        // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName()
+        $this->prepareController('object', static::$baseUri . '/object');
+        $context['module'] = 'object';
+        // @todo check if we already have a context? (via request or from elsewhere)
+        $this->setContext($context);
+
+        // @todo allow overriding this for RoutingApiBridge vs. RoutingBridge
+        $result = $this->runDataObjectRequest($params);
+        return [$result, $context];
     }
 
     /**

@@ -42,10 +42,17 @@ sys::import('xaraya.bridge.requests.dataobject');
 sys::import('xaraya.bridge.requests.module');
 sys::import('xaraya.bridge.requests.block');
 sys::import('xaraya.bridge.requests.staticfile');
+sys::import('xaraya.bridge.requests.generic');
 use Xaraya\Bridge\Requests\BasicBridge;
-use Xaraya\Bridge\Requests\DataObjectRequest;
-use Xaraya\Bridge\Requests\ModuleRequest;
-use Xaraya\Bridge\Requests\BlockRequest;
+use Xaraya\Bridge\Requests\BasicRequest;
+use Xaraya\Bridge\Requests\DataObjectGuiRequest;
+use Xaraya\Bridge\Requests\DataObjectApiRequest;
+use Xaraya\Bridge\Requests\ModuleGuiRequest;
+use Xaraya\Bridge\Requests\ModuleApiRequest;
+use Xaraya\Bridge\Requests\BlockGuiRequest;
+use Xaraya\Bridge\Requests\BlockApiRequest;
+use Xaraya\Bridge\Requests\GenericGuiRequest;
+use Xaraya\Bridge\Requests\GenericApiRequest;
 use Xaraya\Bridge\Requests\StaticFileRequest;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use Xaraya\Bridge\GraphQL\GraphQLHandler;
@@ -112,72 +119,23 @@ class RoutingBridge extends BasicBridge
         $routes = [];
         $extra = [];
 
-        $path = $pathPrefix . '/object/{object}';
-        $name = $namePrefix . 'object-list';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        $path = $pathPrefix . '/object/{object}/{itemid:\d+}';
-        $name = $namePrefix . 'object-item';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        $path = $pathPrefix . '/object/{object}/{itemid:\d+}/{method}';
-        $name = $namePrefix . 'object-item-method';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}';
-        $name = $namePrefix . 'object-document';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}/{method}';
-        $name = $namePrefix . 'object-document-method';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        $path = $pathPrefix . '/object/{object}/{method}';
-        $name = $namePrefix . 'object-method';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        //$path = $pathPrefix . '/object/';
-        //$name = $namePrefix . 'object-root';
-        //$routes[$name] = ['GET', $path, [static::class, 'handleObjectRequest']);
-
-        $path = $pathPrefix . '/block/{instance}';
-        $name = $namePrefix . 'block-instance';
-        $routes[$name] = ['GET', $path, [static::class, 'handleBlockRequest'], $extra];
-
         // @todo move away from static methods for context
         $path = $pathPrefix . '/restapi';
         $name = $namePrefix;
-        //$restHandler = RestAPIHandler::class;
         $restHandler = null;
         $routes = array_replace($routes, RestAPIHandler::getRoutes($path, $name, $restHandler));
-
-        $path = $pathPrefix . '/restapi/';
-        $name = $namePrefix . 'restapi';
-        $routes[$name] = ['GET', $path, [RestAPIHandler::class, 'getOpenAPI'], $extra];
 
         $path = $pathPrefix . '/graphql';
         $name = $namePrefix . 'graphql';
         $routes[$name] = [['GET', 'POST'], $path, [GraphQLHandler::class, 'handleRequest'], $extra];
 
-        $path = $pathPrefix . '/routes';
-        $name = $namePrefix . 'routes';
-        $routes[$name] = ['GET', $path, [static::class, 'handleRoutesRequest'], $extra];
+        //$handler = static::class;
+        $handler = null;
 
-        $path = $pathPrefix . '/{module}';
-        $name = $namePrefix . 'module';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
-
-        $path = $pathPrefix . '/{module}/{func}';
-        $name = $namePrefix . 'module-func';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
-
-        $path = $pathPrefix . '/{module}/{type}/{func}';
-        $name = $namePrefix . 'module-type-func';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
-
-        $path = $pathPrefix . '/';
-        $name = $namePrefix . 'root';
-        $routes[$name] = ['GET', $path, [static::class, 'handleModuleRequest'], $extra];
+        $routes = array_merge($routes, DataObjectGuiRequest::getDataObjectRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, BlockGuiRequest::getBlockRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, GenericGuiRequest::getGenericRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, ModuleGuiRequest::getModuleRoutes($pathPrefix, $namePrefix, $handler, $extra));
 
         // @todo do we want/need to add pathPrefix here too?
         $path = '*';
@@ -200,7 +158,7 @@ class RoutingBridge extends BasicBridge
     {
         $prefix = static::$baseUri;
         // @todo do we want to keep this static?
-        $handler = new ModuleRequest();
+        $handler = new ModuleGuiRequest();
         return $handler->buildModulePath($module, $type, $func, $extra, $prefix);
     }
 
@@ -358,6 +316,9 @@ class RoutingBridge extends BasicBridge
             } elseif (is_subclass_of($handler[0], static::class)) {
                 // @todo instantiate handler[0] for subclasses like RoutingApiBridge?
                 $handler[0] = new $handler[0]();
+            } elseif (is_subclass_of($handler[0], BasicRequest::class)) {
+                // @todo instantiate handler[0] for subclasses of BasicRequest with router?
+                $handler[0] = new $handler[0]($this->getRouter());
             } else {
                 // leave it for someone else to take care of...
             }
@@ -441,205 +402,6 @@ class RoutingBridge extends BasicBridge
         $this->graphQLHandler ??= new GraphQLHandler();
         return $this->graphQLHandler;
     }
-
-    /**
-     * Summary of handleObjectRequest
-     * @param array<string, mixed> $vars
-     * @param mixed $request
-     * @return array<mixed>
-     * @see \xarDDObject::getActionURL()
-     */
-    public function handleObjectRequest($vars, &$request = null)
-    {
-        // if coming from module request handler, convert to object request
-        if (empty($vars['object']) && $vars['module'] == 'object') {
-            // path = /object/{object}
-            $vars['object'] = $vars['type'] ?? '';
-            if (!empty($vars['func'])) {
-                if (is_numeric($vars['func'])) {
-                    // path = /object/{object}/{itemid}
-                    $vars['itemid'] = $vars['func'];
-                } else {
-                    // path = /object/{object}/{method}
-                    $vars['method'] = $vars['func'];
-                }
-                unset($vars['func']);
-            }
-            unset($vars['module']);
-            unset($vars['type']);
-        }
-        // path = /{object}[/{itemid}[/{method}]] or /{object}/{method}
-        // dispatcher doesn't provide query params by default
-        $query = $this->getQueryParams($request);
-        // add remaining query params to path vars
-        $params = array_merge($vars, $query);
-        // add body params to query params
-        $input = $this->getParsedBody($request);
-        if (!empty($input) && is_array($input)) {
-            $params = array_merge($params, $input);
-        }
-
-        $handler = new DataObjectRequest();
-        // @checkme pass along buildUri() as link function to DD
-        $params['linktype'] = 'other';
-        $params['linkfunc'] = [$handler, 'buildDataObjectPath'];
-
-        if ($params['object'] == 'roles_users') {
-            $params['fieldlist'] = ['id', 'name', 'uname', 'state'];
-        }
-
-        $context = ContextFactory::fromRequest($request, __METHOD__);
-        $context['mediatype'] = '';
-        static::$baseUri = $this->getBaseUri($request) . static::$prefix;
-        $context['baseuri'] = static::$baseUri;
-        // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName()
-        $this->prepareController('object', static::$baseUri . '/object');
-        $context['module'] = 'object';
-        // @todo check if we already have a context? (via request or from elsewhere)
-        //$this->setContext($context);
-        $handler->setContext($context);
-
-        $result = $this->runObjectRequest($handler, $params);
-        return [$result, $context];
-    }
-
-    /**
-     * Summary of runObjectRequest
-     * @param DataObjectRequest $handler
-     * @param array<string, mixed> $params
-     * @return string|null
-     */
-    public function runObjectRequest($handler, $params)
-    {
-        return $handler->runDataObjectGuiRequest($params);
-    }
-
-    /**
-     * Summary of handleModuleRequest
-     * @param array<string, mixed> $vars
-     * @param mixed $request
-     * @return array<mixed>
-     */
-    public function handleModuleRequest($vars, &$request = null)
-    {
-        // path = /
-        $vars['module'] ??= 'base';
-        // path = /object[/...]
-        if ($vars['module'] == 'object') {
-            return $this->handleObjectRequest($vars, $request);
-        }
-        // path = /{module}/{func}
-        if (empty($vars['type']) && !empty($vars['func'])) {
-            $vars['type'] = 'user';
-        } elseif (!empty($vars['type']) && empty($vars['func'])) {
-            $vars['func'] = $vars['type'];
-            $vars['type'] = 'user';
-        }
-        // path = /{module}/{type}/{func}
-        // dispatcher doesn't provide query params by default
-        $query = $this->getQueryParams($request);
-        // filter out path vars from remaining query params here
-        $params = array_diff_key($query, $vars);
-        // add body params to query params (if any)
-        $input = $this->getParsedBody($request);
-        if (!empty($input) && is_array($input)) {
-            $params = array_merge($params, $input);
-        }
-
-        $context = ContextFactory::fromRequest($request, __METHOD__);
-        $context['mediatype'] = '';
-        static::$baseUri = $this->getBaseUri($request) . static::$prefix;
-        $context['baseuri'] = static::$baseUri;
-        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
-        $this->prepareController($vars['module'], static::$baseUri);
-        $context['module'] = $vars['module'];
-        // @todo check if we already have a context? (via request or from elsewhere)
-        //$this->setContext($context);
-        $handler = new ModuleRequest();
-        $handler->setContext($context);
-
-        $result = $this->runModuleRequest($handler, $vars, $params);
-        return [$result, $context];
-    }
-
-    /**
-     * Summary of runModuleRequest
-     * @param ModuleRequest $handler
-     * @param array<string, mixed> $vars
-     * @param mixed $query
-     * @return string|null
-     */
-    public function runModuleRequest($handler, $vars, $query)
-    {
-        return $handler->runModuleGuiRequest($vars, $query);
-    }
-
-    /**
-     * Summary of handleBlockRequest
-     * @param array<string, mixed> $vars
-     * @param mixed $request
-     * @return array<mixed>
-     */
-    public function handleBlockRequest($vars, &$request = null)
-    {
-        // @checkme limited to renderBlock() or getinfo() for now, so no query params or body params taken into account yet
-        // dispatcher doesn't provide query params by default
-        $query = $this->getQueryParams($request);
-
-        $context = ContextFactory::fromRequest($request, __METHOD__);
-        $context['mediatype'] = '';
-        static::$baseUri = $this->getBaseUri($request) . static::$prefix;
-        $context['baseuri'] = static::$baseUri;
-        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
-        $this->prepareController($vars['module'] ?? 'base', static::$baseUri);
-        $context['module'] = $vars['module'] ?? 'base';
-        // @todo check if we already have a context? (via request or from elsewhere)
-        //$this->setContext($context);
-        $handler = new BlockRequest();
-        $handler->setContext($context);
-
-        $result = $this->runBlockRequest($handler, $vars, $query);
-        return [$result, $context];
-    }
-
-    /**
-     * Summary of runBlockRequest
-     * @param BlockRequest $handler
-     * @param array<string, mixed> $vars
-     * @param mixed $query
-     * @return string
-     */
-    public function runBlockRequest($handler, $vars, $query = null)
-    {
-        return $handler->runBlockGuiRequest($vars, $query);
-    }
-
-    /**
-     * Show available routes
-     * @param array<string, mixed> $vars
-     * @param mixed $request
-     * @return array<mixed>
-     */
-    public function handleRoutesRequest($vars, &$request = null)
-    {
-        $result = $this->runRoutesRequest($vars);
-        return [$result, null];
-    }
-
-    /**
-     * Summary of runRoutesRequest
-     * @param array<string, mixed> $vars
-     * @return string
-     */
-    public function runRoutesRequest($vars)
-    {
-        $result = "<ul>";
-        foreach ($this->getRouter()->getRoutes() as $name => $route) {
-            $result .= "<li>" . $name . " [" . json_encode($route, JSON_UNESCAPED_SLASHES) . "]</li>";
-        }
-        $result .= "</ul>";
-        return $result;
-    }
 }
 
 /**
@@ -663,111 +425,15 @@ class RoutingApiBridge extends RoutingBridge
         $routes = [];
         $extra = [];
 
-        // without trailing /
-        $path = $pathPrefix . '/object/{object}';
-        $name = $namePrefix . 'object-list';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
+        //$handler = static::class;
+        $handler = null;
 
-        $path = $pathPrefix . '/object/{object}/{itemid:\d+}';
-        $name = $namePrefix . 'object-item';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        $path = $pathPrefix . '/object/{object}/{itemid:\d+}/{method}';
-        $name = $namePrefix . 'object-item-method';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}';
-        $name = $namePrefix . 'object-document';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        $path = $pathPrefix . '/object/{object}/{itemid:[0-9a-f]{24}}/{method}';
-        $name = $namePrefix . 'object-document-method';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        // something other than itemid matching \d+ or [0-9a-f]{24}
-        $path = $pathPrefix . '/object/{object}/{method}';
-        $name = $namePrefix . 'object-method';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        //$path = $pathPrefix . '/object/';
-        //$name = $namePrefix . 'object-root';
-        //$routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleObjectRequest'], $extra];
-
-        $path = $pathPrefix . '/block/{instance}';
-        $name = $namePrefix . 'block-instance';
-        $routes[$name] = ['GET', $path, [static::class, 'handleBlockRequest'], $extra];
-
-        $path = $pathPrefix . '/routes';
-        $name = $namePrefix . 'routes';
-        $routes[$name] = ['GET', $path, [static::class, 'handleRoutesRequest'], $extra];
-
-        // without trailing /
-        $path = $pathPrefix . '/{module}';
-        $name = $namePrefix . 'module';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
-
-        $path = $pathPrefix . '/{module}/{func}';
-        $name = $namePrefix . 'module-func';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
-
-        $path = $pathPrefix . '/{module}/{type}/{func}';
-        $name = $namePrefix . 'module-type-func';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
-
-        $path = $pathPrefix . '/';
-        $name = $namePrefix . 'root';
-        $routes[$name] = [['GET', 'POST'], $path, [static::class, 'handleModuleRequest'], $extra];
+        $routes = array_merge($routes, DataObjectApiRequest::getDataObjectRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, BlockApiRequest::getBlockRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, GenericApiRequest::getGenericRoutes($pathPrefix, $namePrefix, $handler, $extra));
+        $routes = array_merge($routes, ModuleApiRequest::getModuleRoutes($pathPrefix, $namePrefix, $handler, $extra));
 
         return $routes;
-    }
-
-    /**
-     * Summary of runObjectRequest
-     * @param DataObjectRequest $handler
-     * @param array<string, mixed> $params
-     * @return mixed
-     */
-    public function runObjectRequest($handler, $params)
-    {
-        return $handler->runDataObjectApiRequest($params);
-    }
-
-    /**
-     * Summary of runModuleRequest
-     * @param ModuleRequest $handler
-     * @param array<string, mixed> $vars
-     * @param mixed $query
-     * @return mixed
-     */
-    public function runModuleRequest($handler, $vars, $query)
-    {
-        return $handler->runModuleApiRequest($vars, $query);
-    }
-
-    /**
-     * Summary of runBlockRequest
-     * @param BlockRequest $handler
-     * @param array<string, mixed> $vars
-     * @param mixed $query
-     * @return mixed
-     */
-    public function runBlockRequest($handler, $vars, $query = null)
-    {
-        return $handler->runBlockApiRequest($vars, $query);
-    }
-
-    /**
-     * Summary of runRoutesRequest
-     * @param array<string, mixed> $vars
-     * @return mixed
-     */
-    public function runRoutesRequest($vars)
-    {
-        $result = [];
-        foreach ($this->getRouter()->getRoutes() as $name => $route) {
-            $result[$name] = $route;
-        }
-        return $result;
     }
 }
 
@@ -780,154 +446,29 @@ class RoutingStaticBridge extends RoutingBridge
 {
     public const ROUTING_CACHE_FILE = 'routing_static_cache.php';
 
-    protected StaticFileRequest $handler;
-
     /**
      * Summary of getRoutes
      * @param string $pathPrefix
-     * @param string $staticFiles
+     * @param string $staticFiles use this as group e.g. everything under /static
      * @param string $namePrefix
      * @return array<mixed>
      */
     public static function getRoutes(string $pathPrefix = '', string $staticFiles = '', string $namePrefix = 'static-')
     {
         $routes = [];
+        $extra = [];
+
+        //$handler = static::class;
+        $handler = null;
 
         // @checkme use this as group e.g. everything under /static
         $path = $pathPrefix . $staticFiles;
-        $routes = array_replace($routes, static::addModuleFileRoutes($path, $namePrefix));
-        $routes = array_replace($routes, static::addThemeFileRoutes($path, $namePrefix));
-        $routes = array_replace($routes, static::addVarFileRoutes($path, $namePrefix));
+        $routes = array_merge($routes, StaticFileRequest::getStaticFileRoutes($path, $namePrefix, $handler, $extra));
 
         // add parent route collection = RoutingBridge::getRoutes()
         // @todo strip one level of prefix and pass along here?
         $routes = array_replace($routes, parent::getRoutes($pathPrefix));
 
         return $routes;
-    }
-
-    /**
-     * Summary of addThemeFileRoutes
-     * @param string $pathPrefix
-     * @param string $namePrefix
-     * @return array<mixed>
-     */
-    public static function addThemeFileRoutes(string $pathPrefix, string $namePrefix = '')
-    {
-        $routes = [];
-        $extra = [];
-
-        $path = $pathPrefix . '/themes/{source}/{folder}/{file:.+}';
-        $name = $namePrefix . 'theme-file';
-        $routes[$name] = ['GET', $path, [static::class, 'handleThemeFileRequest'], $extra];
-        return $routes;
-    }
-
-    /**
-     * Summary of addModuleFileRoutes
-     * @param string $pathPrefix
-     * @param string $namePrefix
-     * @return array<mixed>
-     */
-    public static function addModuleFileRoutes(string $pathPrefix, string $namePrefix = '')
-    {
-        $routes = [];
-        $extra = [];
-
-        $path = $pathPrefix . '/code/modules/{source}/{folder}/{file:.+}';
-        $name = $namePrefix . 'module-file';
-        $routes[$name] = ['GET', $path, [static::class, 'handleModuleFileRequest'], $extra];
-        return $routes;
-    }
-
-    /**
-     * Summary of addVarFileRoutes
-     * @param string $pathPrefix
-     * @param string $namePrefix
-     * @return array<mixed>
-     */
-    public static function addVarFileRoutes(string $pathPrefix, string $namePrefix = '')
-    {
-        $routes = [];
-        $extra = [];
-
-        $path = $pathPrefix . '/var/{source}/{folder}/{file:.+}';
-        $name = $namePrefix . 'var-file';
-        $routes[$name] = ['GET', $path, [static::class, 'handleVarFileRequest'], $extra];
-        return $routes;
-    }
-
-    public function __construct()
-    {
-        $this->handler = new StaticFileRequest();
-    }
-
-    /**
-     * Summary of handleThemeFileRequest
-     * @param array<string, mixed> $vars
-     * @param mixed $request
-     * @return array<mixed>
-     */
-    public function handleThemeFileRequest($vars, &$request = null)
-    {
-        // path = /themes/{source}/{folder}/{file:.+}
-        $path = $this->handler->getThemeFileRequest($vars);
-        $vars['path'] = $path;
-        $vars['static'] = 'theme';
-        if (file_exists($path)) {
-            $vars['size'] = filesize($path);
-            $vars['mtime'] = filemtime($path);
-        }
-        //if (!empty($request)) {
-        //    $request = $request->withAttribute('mediaType', '...');
-        //}
-        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
-        return [var_export($vars, true), null];
-    }
-
-    /**
-     * Summary of handleModuleFileRequest
-     * @param array<string, mixed> $vars
-     * @param mixed $request
-     * @return array<mixed>
-     */
-    public function handleModuleFileRequest($vars, &$request = null)
-    {
-        // path = /code/modules/{source}/{folder}/{file:.+}
-        $path = $this->handler->getModuleFileRequest($vars);
-        $vars['path'] = $path;
-        $vars['static'] = 'module';
-        if (file_exists($path)) {
-            $vars['size'] = filesize($path);
-            $vars['mtime'] = filemtime($path);
-        }
-        //if (!empty($request)) {
-        //    $request = $request->withAttribute('mediaType', '...');
-        //}
-        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
-        return [var_export($vars, true), null];
-    }
-
-    /**
-     * Summary of handleVarFileRequest
-     * @param array<string, mixed> $vars
-     * @param mixed $request
-     * @return array<mixed>
-     */
-    public function handleVarFileRequest($vars, &$request = null)
-    {
-        // path = /var/{source}/{folder}/{file:.+}
-        $path = $this->handler->getVarFileRequest($vars);
-        $vars['path'] = $path;
-        $vars['static'] = 'var';
-        if (file_exists($path)) {
-            $vars['size'] = filesize($path);
-            $vars['mtime'] = filemtime($path);
-        }
-        //if (!empty($request)) {
-        //    $request = $request->withAttribute('mediaType', '...');
-        //}
-        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
-        return [var_export($vars, true), null];
     }
 }

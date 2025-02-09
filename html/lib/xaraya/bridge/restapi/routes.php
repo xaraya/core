@@ -64,10 +64,17 @@ class RestAPIRoutes
      */
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $restHandler = null, array $extra = []): array
     {
-        $pathPrefix .= self::$pathPrefix;
-        $namePrefix .= self::$namePrefix;
+        // default null handler here = let specific sub-handlers deal with requests
         $restHandler ??= self::$handlerClass;
         $routes = [];
+
+        // get openapi without /v1 prefix + use generic restapi handler here
+        $path = $pathPrefix . '/';
+        $name = $namePrefix . 'openapi';
+        $routes[$name] = ['GET', $path, [$restHandler ?? RestAPIHandler::class, 'getOpenAPI'], $extra];
+
+        $pathPrefix .= self::$pathPrefix;
+        $namePrefix .= self::$namePrefix;
 
         $routes = array_merge($routes, DataObjectAPIRoutes::getRoutes($pathPrefix, $namePrefix, $restHandler, $extra));
         $routes = array_merge($routes, GenericAPIRoutes::getRoutes($pathPrefix, $namePrefix, $restHandler, $extra));

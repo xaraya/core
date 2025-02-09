@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -57,6 +58,34 @@ trait StaticFileBridgeTrait
     // @todo check extensions + use mime_content_type() or equivalent
     /** @var array<string> */
     protected static array $extensions = ['png', 'jpg', 'gif', 'css', 'js', 'htm', 'html', 'txt', 'xml', 'json', 'ico'];
+
+    /**
+     * Summary of getRoutes
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @param mixed $handler
+     * @param array<mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getStaticFileRoutes(string $pathPrefix = '', string $namePrefix = 'static-', mixed $handler = null, array $extra = null)
+    {
+        $handler ??= static::class;
+        $routes = [];
+
+        $path = $pathPrefix . '/code/modules/{source}/{folder}/{file:.+}';
+        $name = $namePrefix . 'module-file';
+        $routes[$name] = ['GET', $path, [$handler, 'handleModuleFileRequest'], $extra];
+
+        $path = $pathPrefix . '/themes/{source}/{folder}/{file:.+}';
+        $name = $namePrefix . 'theme-file';
+        $routes[$name] = ['GET', $path, [$handler, 'handleThemeFileRequest'], $extra];
+
+        $path = $pathPrefix . '/var/{source}/{folder}/{file:.+}';
+        $name = $namePrefix . 'var-file';
+        $routes[$name] = ['GET', $path, [$handler, 'handleVarFileRequest'], $extra];
+
+        return $routes;
+    }
 
     /**
      * Summary of parseStaticFilePath
@@ -190,6 +219,75 @@ trait StaticFileBridgeTrait
     public function buildVarFilePath(string $source = 'cache', string $folder = null, string $file = null, array $extra = [], string $prefix = '/var'): string
     {
         return $this->buildStaticFilePath($source, $folder, $file, $extra, $prefix);
+    }
+
+    /**
+     * Summary of handleThemeFileRequest
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return array<mixed>
+     */
+    public function handleThemeFileRequest($vars, &$request = null)
+    {
+        // path = /themes/{source}/{folder}/{file:.+}
+        $path = $this->getThemeFileRequest($vars);
+        $vars['path'] = $path;
+        $vars['static'] = 'theme';
+        if (file_exists($path)) {
+            $vars['size'] = filesize($path);
+            $vars['mtime'] = filemtime($path);
+        }
+        //if (!empty($request)) {
+        //    $request = $request->withAttribute('mediaType', '...');
+        //}
+        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
+        return [var_export($vars, true), null];
+    }
+
+    /**
+     * Summary of handleModuleFileRequest
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return array<mixed>
+     */
+    public function handleModuleFileRequest($vars, &$request = null)
+    {
+        // path = /code/modules/{source}/{folder}/{file:.+}
+        $path = $this->getModuleFileRequest($vars);
+        $vars['path'] = $path;
+        $vars['static'] = 'module';
+        if (file_exists($path)) {
+            $vars['size'] = filesize($path);
+            $vars['mtime'] = filemtime($path);
+        }
+        //if (!empty($request)) {
+        //    $request = $request->withAttribute('mediaType', '...');
+        //}
+        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
+        return [var_export($vars, true), null];
+    }
+
+    /**
+     * Summary of handleVarFileRequest
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return array<mixed>
+     */
+    public function handleVarFileRequest($vars, &$request = null)
+    {
+        // path = /var/{source}/{folder}/{file:.+}
+        $path = $this->getVarFileRequest($vars);
+        $vars['path'] = $path;
+        $vars['static'] = 'var';
+        if (file_exists($path)) {
+            $vars['size'] = filesize($path);
+            $vars['mtime'] = filemtime($path);
+        }
+        //if (!empty($request)) {
+        //    $request = $request->withAttribute('mediaType', '...');
+        //}
+        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
+        return [var_export($vars, true), null];
     }
 
     /**

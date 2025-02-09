@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -14,7 +15,7 @@ namespace Xaraya\Bridge\Requests;
 /**
  * Handle static file requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  */
-class StaticFileRequest extends BasicRequest implements StaticFileBridgeInterface
+class StaticFileRequest extends BasicBridge implements StaticFileBridgeInterface
 {
     use StaticFileBridgeTrait;
 }

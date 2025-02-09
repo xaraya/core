@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -14,9 +15,7 @@ namespace Xaraya\Bridge\Requests;
 /**
  * For documentation purposes only - available via CommonBridgeTrait
  */
-interface CommonBridgeInterface extends BasicBridgeInterface, CommonRequestInterface, DataObjectBridgeInterface, ModuleBridgeInterface, BlockBridgeInterface
-{
-}
+interface CommonBridgeInterface extends BasicBridgeInterface, CommonRequestInterface, DataObjectBridgeInterface, ModuleBridgeInterface, BlockBridgeInterface {}
 
 /**
  * Handle common requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges

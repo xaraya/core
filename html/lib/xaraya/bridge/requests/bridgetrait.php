@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -17,8 +18,6 @@ use xarServer;
 use xarSystemVars;
 use xarTpl;
 use sys;
-
-sys::import('xaraya.bridge.requests.module');
 
 /**
  * For documentation purposes only - available via BasicBridgeTrait

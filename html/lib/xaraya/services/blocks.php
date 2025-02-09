@@ -106,7 +106,7 @@ trait BlocksTrait
      */
     public function guiRequest(array $args): string
     {
-        if (empty($vars['instance'])) {
+        if (empty($args['instance'])) {
             throw new Exception("Missing object parameter");
         }
         return xarBlock::renderBlock($args, $this->getContext());
@@ -121,7 +121,7 @@ trait BlocksTrait
      */
     public function apiRequest(array $args): array
     {
-        if (empty($vars['instance'])) {
+        if (empty($args['instance'])) {
             throw new Exception("Missing object parameter");
         }
         return xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args, $this->getContext());

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\bridge
  * @subpackage requests
@@ -14,9 +15,7 @@ namespace Xaraya\Bridge\Requests;
 /**
  * For documentation purposes only - available via Psr7BaseUriTrait
  */
-interface Psr7BaseUriInterface
-{
-}
+interface Psr7BaseUriInterface {}
 
 /**
  * Handle base uri for PSR-7 compatible server requests via middleware controllers, routing bridges or others
