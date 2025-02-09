@@ -222,6 +222,19 @@ trait StaticFileBridgeTrait
     }
 
     /**
+     * Basic route builder for static file requests e.g. in response output or templates - assuming short url format here
+     * @param array<string, mixed> $extra
+     */
+    public function buildUri(?string $source = null, ?string $folder = null, string|int|null $file = null, array $extra = [], string $prefix = ''): string
+    {
+        $uri = static::$baseUri;
+        if (!empty($prefix) && strstr($uri, $prefix) !== $prefix) {
+            $uri .= $prefix;
+        }
+        return $this->buildStaticFilePath($source, $folder, $file, $extra, $uri);
+    }
+
+    /**
      * Summary of handleThemeFileRequest
      * @param array<string, mixed> $vars
      * @param mixed $request

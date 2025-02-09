@@ -185,6 +185,21 @@ trait ModuleBridgeTrait
     }
 
     /**
+     * Basic route builder for module requests e.g. in response output or templates - assuming short url format here
+     * @param ?string $module
+     * @param ?string $type
+     * @param string|int|null $func
+     * @param array<string, mixed> $extra
+     * @see \Xaraya\Bridge\Requests\BasicBridgeTrait::prepareController()
+     * @return string
+     */
+    public function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
+    {
+        $prefix = static::$baseUri;
+        return $this->buildModulePath($module, $type, $func, $extra, $prefix);
+    }
+
+    /**
      * Summary of handleModuleRequest
      * @param array<string, mixed> $vars
      * @param mixed $request

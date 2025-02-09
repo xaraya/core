@@ -73,6 +73,7 @@ class RoutingBridge extends BasicBridge
     public bool $wrapPage = false;
     protected ?RestAPIHandler $restAPIHandler = null;
     protected ?GraphQLHandler $graphQLHandler = null;
+    protected string $handlerClass = 'generic';
 
     /**
      * Summary of getRouter
@@ -183,6 +184,7 @@ class RoutingBridge extends BasicBridge
         // @todo remove $group prefix from path here? - see /htmx
         if (!empty($group) && str_starts_with($path, $group . '/')) {
             $path = substr($path, strlen($group));
+            self::$prefix .= $group;
         }
         [$handler, $vars] = $router->match($path, $method);
         if (empty($handler)) {
@@ -208,19 +210,8 @@ class RoutingBridge extends BasicBridge
             }
         }
 
-        $context = null;
         // ... call $handler with $vars
-        if (str_starts_with($path, $group . '/restapi/')) {
-            // different processing for REST API - see rst.php
-            RestAPIHandler::$endpoint = $this->getBaseUri() . $group . '/restapi';
-            [$result, $context] = $this->callRestApiHandler($handler, $vars, $request);
-        } elseif (str_starts_with($path, $group . '/graphql')) {
-            // different processing for GraphQL API - see gql.php
-            [$result, $context] = $this->callHandler($handler, $vars, $request);
-        } else {
-            // @todo keep dispatcher static but replace $handler[0] with $this if current class?
-            [$result, $context] = $this->callHandler($handler, $vars, $request);
-        }
+        [$result, $context] = $this->callHandler($handler, $vars, $request);
         return [$result, $context];
     }
 
@@ -235,10 +226,10 @@ class RoutingBridge extends BasicBridge
         $method = $this->getMethod($request);
         $path = $this->getPathInfo($request);
         [$result, $context] = $this->dispatchRequest($method, $path, $group, $request);
-        if (str_starts_with($path, $group . '/restapi/')) {
+        if ($this->handlerClass == RestAPIHandler::class) {
             // different processing for REST API - see rst.php
             $this->getRestApiHandler()->output($result, 200, $context);
-        } elseif (str_starts_with($path, $group . '/graphql')) {
+        } elseif ($this->handlerClass == GraphQLHandler::class) {
             // different processing for GraphQL API - see gql.php
             $this->getGraphQLHandler()->output($result, $context);
         } else {
@@ -309,6 +300,7 @@ class RoutingBridge extends BasicBridge
             // @todo handle first class callable syntax $this->method(...)
             return $handler;
         }
+        // keep dispatcher static but replace $handler[0] with instance if known class
         if (is_string($handler[0])) {
             if ($handler[0] == static::class) {
                 // replace with $this - see webhooks fastroute endpoint
@@ -351,14 +343,40 @@ class RoutingBridge extends BasicBridge
         if (empty($vars)) {
             $vars = [];
         }
+        if ($this->isRestApiHandler($handler)) {
+            // different processing for REST API - see rst.php
+            RestAPIHandler::$endpoint = $this->getBaseUri() . self::$prefix . '/restapi';
+            return $this->callRestApiHandler($handler, $vars, $request);
+        }
+        if ($this->isGraphQLHandler($handler)) {
+            // different processing for GraphQL API - see gql.php
+            return $this->callGraphQLHandler($handler, $vars, $request);
+        }
+        $this->handlerClass = static::class;
         // fix handler if needed
         $handler = $this->getHandler($handler);
         // don't use call_user_func here anymore because $request is passed by reference
-        $result = $handler($vars, $request);
-        return $result;
+        return $handler($vars, $request);
     }
 
     // different processing for REST API - see rst.php
+    /**
+     * Summary of isRestApiHandler
+     * @param mixed $handler
+     * @return bool
+     */
+    public function isRestApiHandler($handler): bool
+    {
+        if (!is_array($handler)) {
+            return false;
+        }
+        // handler is (sub-class of) RestAPIHandler
+        if (is_a($handler[0], RestAPIHandler::class, true)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Summary of getRestHandler
      * @return RestAPIHandler
@@ -382,14 +400,34 @@ class RoutingBridge extends BasicBridge
         if (empty($vars)) {
             $vars = [];
         }
+        $this->handlerClass = RestAPIHandler::class;
         [$result, $context] = $this->getRestApiHandler()->callHandler($handler, $vars, $request);
         if ($handler[1] === 'getOpenAPI') {
-            header('Access-Control-Allow-Origin: *');
+            // @todo move to output?
+            //header('Access-Control-Allow-Origin: *');
             // @checkme set server url to current path here
             //$result['servers'][0]['url'] = RestAPIHandler::getBaseURL();
             $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . RestAPIHandler::$endpoint;
         }
         return [$result, $context];
+    }
+
+    // different processing for GraphQL API - see gql.php
+    /**
+     * Summary of isGraphQLHandler
+     * @param mixed $handler
+     * @return bool
+     */
+    public function isGraphQLHandler($handler): bool
+    {
+        if (!is_array($handler)) {
+            return false;
+        }
+        // handler is (sub-class of) GraphQLHandler
+        if (is_a($handler[0], GraphQLHandler::class, true)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -401,6 +439,23 @@ class RoutingBridge extends BasicBridge
         sys::import('xaraya.bridge.graphql.handler');
         $this->graphQLHandler ??= new GraphQLHandler();
         return $this->graphQLHandler;
+    }
+
+    /**
+     * Summary of callGraphQLHandler
+     * @param mixed $handler
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return mixed
+     */
+    public function callGraphQLHandler($handler, $vars, &$request = null)
+    {
+        if (empty($vars)) {
+            $vars = [];
+        }
+        $this->handlerClass = GraphQLHandler::class;
+        [$result, $context] = $this->getGraphQLHandler()->handleRequest($vars, $request);
+        return [$result, $context];
     }
 }
 

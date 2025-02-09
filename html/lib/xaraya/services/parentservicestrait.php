@@ -68,6 +68,7 @@ trait ParentServicesTrait
      * Available methods:
      * - getModuleURL() - or use mod()->getURL() for current module
      * - getObjectURL() - or use data()->getURL() for current object
+     * - getActionURL() - or use $object->getActionURL() with actual object
      * - getCurrentURL()
      * - getRequest()
      * - redirect()

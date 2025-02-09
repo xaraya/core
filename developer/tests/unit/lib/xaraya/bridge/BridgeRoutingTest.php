@@ -30,6 +30,10 @@ final class BridgeRoutingTest extends TestCase
             '/object/sample/search' => ['GET', '/object/sample/search', [], 'Search Sample Object'],
             '/object/sample/1/update' => ['GET', '/object/sample/1/update', [], 'you cannot perform this operation'],
             '/object/sample?sort=name' => ['GET', '/object/sample', ['sort' => 'name'], '<tr class="xar-alt"><td>Johnny</td>'],
+            '/restapi/' => ['GET', '/restapi/', [], '"title":"Xaraya REST API"'],
+            '/restapi/v1/objects/sample' => ['GET', '/restapi/v1/objects/sample', [], '"name":"Johnny"'],
+            '/graphql' => ['POST', '/graphql', [], '  query: Query'],
+            '/graphql_hello' => ['POST', '/graphql', ['query' => '{hello}'], '"data":{"hello":"Hello World!"}'],
         ];
     }
 
@@ -38,8 +42,19 @@ final class BridgeRoutingTest extends TestCase
     {
         $bridge = new RoutingBridge();
         $expected = $output;
-        $_GET = $query;
+        if ($method == 'POST' && str_starts_with($path, '/graphql')) {
+            if (!empty($query)) {
+                // @todo set content for php://input = not possible as such
+                //$_POST = json_encode($query);
+                $this->markTestSkipped('Unable to test POST-ed content here');
+            }
+        } else {
+            $_GET = $query;
+        }
         [$result, $context] = $bridge->dispatchRequest($method, $path);
+        if (str_starts_with($path, '/restapi') && is_array($result)) {
+            $result = json_encode($result);
+        }
         $result = preg_replace('/<!--.*?-->/s', '', $result);
         $this->assertStringContainsString($expected, $result);
         //var_dump($context);

@@ -19,6 +19,7 @@ namespace Xaraya\Services;
 use xarController;
 use xarRequest;
 use xarServer;
+use xarDDObject;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -45,6 +46,12 @@ interface ControllerInterface extends ServiceInterface
      * @param array<string, mixed> $args
      */
     public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string;
+
+    /**
+     * Generate URL for a specific action on an object - the format will depend on the linktype
+     * @param array<string, mixed> $extra extra arguments to pass to the URL
+     */
+    public function getActionURL(object $object, string $action = '', mixed $itemid = null, array $extra = []): string;
 
     /**
      * Get current request
@@ -112,6 +119,20 @@ trait ControllerTrait
     }
 
     /**
+     * Generate URL for a specific action on an object - the format will depend on the linktype
+     *
+     * @param object $object the object or object list we want to create an URL for
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @return string the generated URL
+     */
+    public function getActionURL(object $object, string $action = '', mixed $itemid = null, array $extra = []): string
+    {
+        return xarDDObject::getActionURL($object, $action, $itemid, $extra);
+    }
+
+    /**
      * Get current request
      * @return xarRequest
      */
@@ -164,6 +185,7 @@ trait ControllerTrait
  * Available methods:
  * - getModuleURL() - or use mod()->getURL() for current module
  * - getObjectURL() - or use data()->getURL() for current object
+ * - getActionURL() - or use $object->getActionURL() with actual object
  * - getCurrentURL()
  * - getRequest()
  * - redirect()

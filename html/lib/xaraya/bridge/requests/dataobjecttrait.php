@@ -192,6 +192,21 @@ trait DataObjectBridgeTrait
     }
 
     /**
+     * Basic route builder for object requests e.g. in response output or templates - assuming short url format here
+     * @param ?string $object
+     * @param ?string $method
+     * @param string|int|null $itemid
+     * @param array<string, mixed> $extra
+     * @see \Xaraya\Bridge\Requests\BasicBridgeTrait::prepareController()
+     * @return string
+     */
+    public function buildUri(?string $object = null, ?string $method = null, string|int|null $itemid = null, array $extra = []): string
+    {
+        $prefix = static::$baseUri;
+        return $this->buildDataObjectPath($object, $method, $itemid, $extra, $prefix);
+    }
+
+    /**
      * Summary of handleObjectRequest
      * @param array<string, mixed> $vars
      * @param mixed $request

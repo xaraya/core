@@ -181,18 +181,12 @@ class RoutingHandler implements MiddlewareInterface, RequestHandlerInterface
         try {
             // @checkme we need to somehow update $request here to do any good!?
             $this->prepareRequestCallback($request);
-            // don't use call_user_func here anymore because $request is passed by reference
-            if (str_starts_with($path, '/restapi/')) {
-                // different processing for REST API - see rst.php
-                $restApiHandler = new RestAPIHandler();
-                [$result, $context] = $restApiHandler->callHandler($handler, $vars, $request);
-            } elseif (str_starts_with($path, '/graphql')) {
-                // different processing for GraphQL API - see gql.php
-                [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
+            if ($this->bridge->isGraphQLHandler($handler)) {
+                // @checkme GraphQL playground doesn't like JSON_NUMERIC_CHECK for introspection, e.g. default value for offset = 0 instead of "0"
                 $numeric = false;
-            } else {
-                [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
             }
+            // don't use call_user_func here anymore because $request is passed by reference
+            [$result, $context] = $this->bridge->callHandler($handler, $vars, $request);
             $redirectURL = $request->getAttribute('redirectURL');
             if (!empty($redirectURL)) {
                 echo "Location: " . $redirectURL . "\n";
