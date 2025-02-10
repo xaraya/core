@@ -44,15 +44,16 @@ final class BridgeRoutingTest extends TestCase
         $expected = $output;
         if ($method == 'POST' && str_starts_with($path, '/graphql')) {
             if (!empty($query)) {
-                // @todo set content for php://input = not possible as such
+                // set content for php://input = not possible as such, but use setRawInput() on GraphQLHandler() here
                 //$_POST = json_encode($query);
-                $this->markTestSkipped('Unable to test POST-ed content here');
+                //$this->markTestSkipped('Unable to test POST-ed content here');
+                $bridge->getGraphQLHandler()->setRawInput(json_encode($query));
             }
         } else {
             $_GET = $query;
         }
         [$result, $context] = $bridge->dispatchRequest($method, $path);
-        if (str_starts_with($path, '/restapi') && is_array($result)) {
+        if (is_array($result)) {
             $result = json_encode($result);
         }
         $result = preg_replace('/<!--.*?-->/s', '', $result);

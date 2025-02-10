@@ -101,6 +101,8 @@ trait CommonRequestTrait
 {
     use Psr7BaseUriTrait;
 
+    protected ?string $rawInput = null;
+
     /**
      * Summary of getMethod
      * @param mixed $request
@@ -278,6 +280,9 @@ trait CommonRequestTrait
         // for PSR-7 compatible server requests
         if (is_object($request) && method_exists($request, 'getBody')) {
             $rawInput = (string) $request->getBody();
+        } elseif (isset($this->rawInput)) {
+            // for testing etc. - see BridgeRoutingTest for graphql
+            $rawInput = $this->rawInput;
         } else {
             // for everyone else
             $rawInput = file_get_contents('php://input');
@@ -287,5 +292,15 @@ trait CommonRequestTrait
             $input = json_decode($rawInput, true, 512, JSON_THROW_ON_ERROR);
         }
         return $input;
+    }
+
+    /**
+     * Summary of setRawInput
+     * @param string $input
+     * @return void
+     */
+    public function setRawInput($input)
+    {
+        $this->rawInput = $input;
     }
 }

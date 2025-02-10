@@ -33,6 +33,7 @@ class ContextFactory
      * @param ?\Psr\Http\Message\ServerRequestInterface $request PSR-7 server request if available
      * @param ?string $source source where the context is created
      * @return Context<string, mixed>
+     * @see \Xaraya\Bridge\Requests\CommonRequestTrait
      */
     public static function fromRequest(&$request = null, $source = null)
     {
@@ -71,6 +72,7 @@ class ContextFactory
      * Create new context from globals
      * @param ?string $source source where the context is created
      * @return Context<string, mixed>
+     * @see \Xaraya\Bridge\Requests\CommonRequestTrait
      */
     public static function fromGlobals($source = null)
     {
@@ -84,6 +86,7 @@ class ContextFactory
         $context['query'] = $_GET;
         $context['body'] = $_POST;
         if (empty($context['body'])) {
+            // @see \Xaraya\Bridge\Requests\CommonRequestTrait::setRawInput()
             $context['input'] = file_get_contents('php://input');
         }
         //$context['files'] = $_FILES;
