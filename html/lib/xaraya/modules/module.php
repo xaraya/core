@@ -29,7 +29,7 @@
  *     // get module class instance first
  *     $module = xarMod::getModule('myfancymodule');
  *     $module->setContext($context);
- *     return $module->getGUI()->main($args);
+ *     return $module->usergui()->main($args);
  *     // or get module gui directly
  *     // see usergui.php for an example
  * }
@@ -63,11 +63,11 @@ sys::import('xaraya.modules.moduletrait');
  *
  * Available methods:
  * - configure() Configure module class types - override if needed
- * - getAPI() Get module class for user api functions
- * - getGUI() Get module class for user gui functions
- * - getAdminAPI() Get module class for admin api functions
- * - getAdminGUI() Get module class for admin gui functions
- * - getInstaller() Get module class for installer functions
+ * - userapi() Get module class for user api functions
+ * - usergui() Get module class for user gui functions
+ * - adminapi() Get module class for admin api functions
+ * - admingui() Get module class for admin gui functions
+ * - installer() Get module class for installer functions
  * - setClassTypes() Set module class type for all supported modTypes (user, userapi, admin, ...)
  * - getClassType($modType) Is there a module class type for this modType
  * - getCallableMethod($modType, $funcName, $callType = 'api') Get callable method for this modType & funcName

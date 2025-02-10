@@ -45,7 +45,7 @@ $session = new \Xaraya\Context\SessionContext();
 //xarSession::init();
 
 /** @var UserApi $userapi */
-$userapi = xarMod::getAPI('library');
+$userapi = xarMod::userapi('library');
 // set current database before we get to dbConnArgs - this uses xarSession (not initialized) = $_SESSION
 $userapi->setCurrentDatabase('test');
 if ($offline or true) {

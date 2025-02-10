@@ -43,7 +43,7 @@ Module functions use a naming convention for the function type: '' for gui funct
 Newer modules can use class methods instead of procedural functions. They can be invoked via the traditional `xarMod::guiFunc()` or `xarMod::apiFunc()`, or by getting a *module class* via `xarMod::getModule()` and then using method calls to get the right component and method(s).
 
 Each module has a central module handler class, and *component classes* per type with their own methods. 
-Short-hand methods like `xarMod::getAPI()` and `xarMod::getGUI()` are available to get common components by module.
+Short-hand methods like `xarMod::userapi()` and `xarMod::usergui()` are available to get common components by module.
 You can also get a callable to a module method directly via `xarMod::getModuleClassMethod()`.
 
 For smaller modules, methods can be combined in a single component class file by type:

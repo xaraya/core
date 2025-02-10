@@ -28,9 +28,9 @@
  *     // get module class instance first
  *     //$module = xarMod::getModule('myfancymodule');
  *     //$module->setContext($context);
- *     //return $module->getAPI()->get($args);
+ *     //return $module->userapi()->get($args);
  *     // or get module api directly
- *     $userapi = xarMod::getAPI('myfancymodule');
+ *     $userapi = xarMod::userapi('myfancymodule');
  *     $userapi->setContext($context);
  *     return $userapi->get($args);
  * }

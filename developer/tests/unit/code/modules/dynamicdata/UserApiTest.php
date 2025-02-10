@@ -8,7 +8,7 @@ final class UserApiTest extends TestHelper
     public function testUserApi(): void
     {
         $expected = UserApi::class;
-        $userapi = xarMod::getAPI('dynamicdata');
+        $userapi = xarMod::userapi('dynamicdata');
         $this->assertEquals($expected, $userapi::class);
 
         // the method "exists" as inherited class method (case-insensitive)
@@ -47,7 +47,7 @@ final class UserApiTest extends TestHelper
     public function testUserApiTestCall(): void
     {
         $context = $this->createContext(['source' => __METHOD__]);
-        $userapi = xarMod::getAPI('dynamicdata');
+        $userapi = xarMod::userapi('dynamicdata');
         $userapi->setContext($context);
 
         // we have the right component class

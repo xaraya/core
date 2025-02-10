@@ -121,7 +121,7 @@ $descriptor->set('config', serialize($config));
 
 If you support more than 1 database (besides the Xaraya DB), you can set the current DB for the user with:
 ```
-$userapi = xarMod::getAPI('library');
+$userapi = xarMod::userapi('library');
 $userapi->setCurrentDatabase($name)
 ```
 
@@ -219,9 +219,9 @@ function myfancymodule_user_main($args = [], $context = null) {
     // get module class instance first
     //$module = xarMod::getModule('myfancymodule');
     //$module->setContext($context);
-    //return $module->getGUI()->main($args);
+    //return $module->usergui()->main($args);
     // or get module gui directly
-    $usergui = xarMod::getGUI('myfancymodule');
+    $usergui = xarMod::usergui('myfancymodule');
     $usergui->setContext($context);
     return $usergui->main($args);
 }
@@ -231,9 +231,9 @@ function myfancymodule_userapi_get($args = [], $context = null) {
     // get module class instance first
     //$module = xarMod::getModule('myfancymodule');
     //$module->setContext($context);
-    //return $module->getAPI()->get($args);
+    //return $module->userapi()->get($args);
     // or get module api directly
-    $userapi = xarMod::getAPI('myfancymodule');
+    $userapi = xarMod::userapi('myfancymodule');
     $userapi->setContext($context);
     return $userapi->get($args);
 }

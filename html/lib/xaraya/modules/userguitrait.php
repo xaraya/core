@@ -28,9 +28,9 @@
  *     // get module class instance first
  *     //$module = xarMod::getModule('myfancymodule');
  *     //$module->setContext($context);
- *     //return $module->getGUI()->main($args);
+ *     //return $module->usergui()->main($args);
  *     // or get module gui directly
- *     $usergui = xarMod::getGUI('myfancymodule');
+ *     $usergui = xarMod::usergui('myfancymodule');
  *     $usergui->setContext($context);
  *     return $usergui->main($args);
  * }

@@ -8,14 +8,14 @@ final class UserGuiTest extends TestHelper
     public function testUserGui(): void
     {
         $expected = UserGui::class;
-        $usergui = xarMod::getGUI('dynamicdata');
+        $usergui = xarMod::usergui('dynamicdata');
         $this->assertEquals($expected, $usergui::class);
     }
 
     public function testMain(): void
     {
         $context = $this->createContext(['source' => __METHOD__]);
-        $usergui = xarMod::getGUI('dynamicdata');
+        $usergui = xarMod::usergui('dynamicdata');
         $usergui->setContext($context);
 
         // the method "exists" as inherited class method (case-insensitive)

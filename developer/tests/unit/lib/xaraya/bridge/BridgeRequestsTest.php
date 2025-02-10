@@ -18,6 +18,7 @@ final class BridgeRequestsTest extends TestCase
         $requestCreator = new ServerRequestCreator($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
         static::$psr17Factory = $psr17Factory;
         static::$requestCreator = $requestCreator;
+        xarController::setCallback('buildUri', null);
     }
 
     protected function getServerVars()
@@ -192,11 +193,13 @@ final class BridgeRequestsTest extends TestCase
         $handler->setContext($context);
         $output = $handler->runDataObjectRequest($params);
         $output = preg_replace('/<!--.*?-->/s', '', $output);
+        //file_put_contents($filename . '.new', $output);
         $this->assertEquals($expected, strlen($output));
 
         // @todo try out with different context
     }
 
+    #[\PHPUnit\Framework\Attributes\Depends('testPrepareOutput')]
     public function testRunDataObjectApiHandler()
     {
         // should be the same output as DataObjectTest::testObjectInterface()

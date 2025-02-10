@@ -30,7 +30,7 @@
  *
  * If you support more than 1 database (besides the Xaraya DB), you can set the current DB for the user with:
  * ```
- * $userapi = xarMod::getAPI('library');
+ * $userapi = xarMod::userapi('library');
  * $userapi->setCurrentDatabase($name)
  * ```
  *

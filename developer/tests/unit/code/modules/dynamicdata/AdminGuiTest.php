@@ -8,7 +8,7 @@ final class AdminGuiTest extends TestHelper
     public function testAdminGui(): void
     {
         $expected = AdminGui::class;
-        $admingui = xarMod::getModule('dynamicdata')->getAdminGUI();
+        $admingui = xarMod::getModule('dynamicdata')->admingui();
         $this->assertEquals($expected, $admingui::class);
     }
 

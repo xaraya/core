@@ -1098,9 +1098,9 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modName
      * @return \Xaraya\Modules\UserApiInterface|null
      */
-    public static function getAPI($modName)
+    public static function userapi($modName)
     {
-        return self::getModule($modName)->getAPI();
+        return self::getModule($modName)->userapi();
     }
 
     /**
@@ -1108,9 +1108,9 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modName
      * @return \Xaraya\Modules\UserGuiInterface|null
      */
-    public static function getGUI($modName)
+    public static function usergui($modName)
     {
-        return self::getModule($modName)->getGUI();
+        return self::getModule($modName)->usergui();
     }
 
     /**

@@ -21,7 +21,7 @@
  *     // get module class instance first
  *     $module = xarMod::getModule('myfancymodule');
  *     $module->setContext($context);
- *     return $module->getGUI()->main($args);
+ *     return $module->usergui()->main($args);
  *     // or get module gui directly
  *     // see usergui.php for an example
  * }
@@ -65,11 +65,11 @@ interface ModuleInterface extends ContextInterface
     public function getTables(): array;
     public function getComponent(string $type): ModuleServicesInterface|null;
     public function hasComponent(string $type): bool;
-    public function getAPI(): UserApiInterface|null;
-    public function getGUI(): UserGuiInterface|null;
-    public function getAdminAPI(): AdminApiInterface|null;
-    public function getAdminGUI(): AdminGuiInterface|null;
-    public function getInstaller(): InstallerInterface|null;
+    public function userapi(): UserApiInterface|null;
+    public function usergui(): UserGuiInterface|null;
+    public function adminapi(): AdminApiInterface|null;
+    public function admingui(): AdminGuiInterface|null;
+    public function installer(): InstallerInterface|null;
     public function setClassTypes(): void;
     public function getClassType(string $modType): string|null;
     public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): callable|null;
@@ -242,35 +242,35 @@ trait ModuleTrait
         return xarMod::guiFunc($this->getModName(), $type, $func, $args, $this->getContext());
     }
 
-    public function getAPI(): UserApiInterface|null
+    public function userapi(): UserApiInterface|null
     {
         $component = $this->getComponent('UserApi');
         assert($component instanceof UserApiInterface);
         return $component;
     }
 
-    public function getGUI(): UserGuiInterface|null
+    public function usergui(): UserGuiInterface|null
     {
         $component = $this->getComponent('UserGui');
         assert($component instanceof UserGuiInterface);
         return $component;
     }
 
-    public function getAdminAPI(): AdminApiInterface|null
+    public function adminapi(): AdminApiInterface|null
     {
         $component = $this->getComponent('AdminApi');
         assert($component instanceof AdminApiInterface);
         return $component;
     }
 
-    public function getAdminGUI(): AdminGuiInterface|null
+    public function admingui(): AdminGuiInterface|null
     {
         $component = $this->getComponent('AdminGui');
         assert($component instanceof AdminGuiInterface);
         return $component;
     }
 
-    public function getInstaller(): InstallerInterface|null
+    public function installer(): InstallerInterface|null
     {
         $component = $this->getComponent('Installer');
         assert($component instanceof InstallerInterface);
