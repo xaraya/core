@@ -1681,6 +1681,8 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarModAlias::resolve\(/' => '\$this->mod()->resolveAlias(',
             '/xarModHooks::isHooked\(/' => '\$this->mod()->isHooked(',
             '/xarHooks::isAttached\(/' => '\$this->mod()->isHooked(',
+            '/xarModHooks::call\(/' => '\$this->mod()->callHooks(',
+            '/xarHooks::notify\(/' => '\$this->mod()->notifyHooks(',
             // xar*Cache::* only for variable caching here
             '/xarCache::getVariableKey\(/' => '\$this->cache()->getVariableKey(',
             '/xarVariableCache::isCached\(/' => '\$this->cache()->hasVariable(',

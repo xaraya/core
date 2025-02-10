@@ -240,7 +240,7 @@ class UpdatepropMethod extends MethodClass
 
         if ($isprimary) {
             $modinfo = $this->mod()->getInfo($module_id);
-            xarModHooks::call(
+            $this->mod()->callHooks(
                 'module',
                 'updateconfig',
                 $modinfo['name'],

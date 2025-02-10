@@ -183,7 +183,9 @@ trait CoreServicesTrait
      * Available methods:
      * - getVar()
      * - setVar()
-     * - getURL() for current module - or use ctl()->getModuleURL() with modName
+     * - getURL() for current module - or use ctl()->getModuleURL() in general with modName
+     * - template() for current module type - or use tpl()->module() in general with modName modType
+     * - prepare() for current module itemtype
      * - getName()
      * - getID()
      * - getRegID()
@@ -196,14 +198,17 @@ trait CoreServicesTrait
      * - apiMethod()
      * - guiMethod()
      * - resolveAlias()
-     * - isHooked()
+     * - isHooked() for current module itemtype if not specified
+     * - callHooks() for current module itemtype if not specified
+     * - notifyHooks() for current module itemtype if not specified
      * - ...
      *
      * Required methods in parent:
      * - getModName()
      *
      * Optional methods in parent:
-     * - getModType() for mod()->apiFunc(null, null, ...) - only for migration
+     * - getItemType() for mod()->prepare(), mod()->isHooked() and mod()->callHooks()
+     * - getModType() for mod()->template()
      *
      */
     public function mod(): ModulesInterface

@@ -22,6 +22,7 @@ sys::import('xaraya.modules.hookstrait');
 
 /**
  * Handle module hook calls
+ * @deprecated 2.6.2 use module service instead
  */
 class HooksClass implements HooksInterface
 {

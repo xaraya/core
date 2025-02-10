@@ -47,7 +47,7 @@ final class UserApiTest extends TestHelper
     public function testUserApiTestCall(): void
     {
         $context = $this->createContext(['source' => __METHOD__]);
-        $userapi = xarMod::getAPI(modName: 'dynamicdata');
+        $userapi = xarMod::getAPI('dynamicdata');
         $userapi->setContext($context);
 
         // we have the right component class

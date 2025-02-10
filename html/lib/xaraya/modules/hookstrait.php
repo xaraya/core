@@ -24,6 +24,7 @@ use xarHooks;
 
 /**
  * For documentation purposes only - available via HooksTrait
+ * @deprecated 2.6.2 use module service instead
  */
 interface HooksInterface extends ContextInterface
 {
@@ -48,6 +49,7 @@ interface HooksInterface extends ContextInterface
 
 /**
  * Trait to handle hook calls
+ * @deprecated 2.6.2 use module service instead
  */
 trait HooksTrait
 {

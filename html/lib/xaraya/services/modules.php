@@ -73,6 +73,9 @@ interface ModulesInterface extends ServiceInterface
     public function guiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     public function resolveAlias(string $name): string;
     public function isHooked(string $hookModName, ?string $callerModName = null, ?int $callerItemType = null): bool;
+    public function callHooks(string $scope, string $action, mixed $itemid, mixed $extraInfo = null, ?string $callerModName = null, ?int $callerItemType = null): mixed;
+    /** @param array<string, mixed> $info */
+    public function notifyHooks(string $event, array $info = []): mixed;
 }
 
 /**
@@ -418,6 +421,45 @@ trait ModulesTrait
         $callerItemType ??= $this->getItemType();
         return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
     }
+
+    /**
+     * Wrapper for xarModHooks::call() - only for migration
+     * @see \xarModHooks::call()
+     * @return mixed output from hooks, or null if there are no hooks
+     */
+    public function callHooks(string $scope, string $action, mixed $itemid, mixed $extraInfo = null, ?string $callerModName = null, ?int $callerItemType = null): mixed
+    {
+        $callerModName ??= $this->getModName();
+        $callerItemType ??= $this->getItemType();
+        //return xarModHooks::call($scope, $action, $itemid, $extraInfo, $this->getModName(), $this->getItemType(), $this->getContext());
+        // scope and action are concatenated to form the name of the hook event
+        $event = ucfirst($scope) . ucfirst($action);
+        $extraInfo ??= [];
+        $extraInfo['itemid'] ??= $itemid;
+        $extraInfo['module'] ??= $callerModName;
+        $extraInfo['itemtype'] ??= $callerItemType;
+        // skip legacy format here - handled by HookSubject if needed
+        //$args = [
+        //    'objectid' => $itemid,
+        //    'extrainfo' => $extraInfo,
+        //];
+        //return $this->notifyHooks($event, $args);
+        return $this->notifyHooks($event, $extraInfo);
+    }
+
+    /**
+     * Wrapper for xarHooks::notify() - only for migration
+     * @see \xarHooks::notify()
+     * @param array<string, mixed> $info
+     * @return mixed output from hooks, or null if there are no hooks
+     */
+    public function notifyHooks(string $event, array $info = []): mixed
+    {
+        $info['itemid'] ??= null;
+        $info['module'] ??= $this->getModName();
+        $info['itemtype'] ??= $this->getItemType();
+        return xarHooks::notify($event, $info, $this->getContext());
+    }
 }
 
 /**
@@ -426,7 +468,7 @@ trait ModulesTrait
  * Available methods:
  * - getVar()
  * - setVar()
- * - getURL() for current module - or use ctl()->URL() in general with modName
+ * - getURL() for current module - or use ctl()->getModuleURL() in general with modName
  * - template() for current module type - or use tpl()->module() in general with modName modType
  * - prepare() for current module itemtype
  * - getName()
@@ -441,12 +483,14 @@ trait ModulesTrait
  * - apiMethod()
  * - guiMethod()
  * - resolveAlias()
- * - isHooked()
+ * - isHooked() for current module itemtype if not specified
+ * - callHooks() for current module itemtype if not specified
+ * - notifyHooks() for current module itemtype if not specified
  * - ...
  *
  * Required methods in parent:
  * - getModName()
- * - getItemType() for mod()->prepare() and mod()->isHooked()
+ * - getItemType() for mod()->prepare(), mod()->isHooked() and mod()->callHooks()
  * - getModType() for mod()->template()
  *
  */

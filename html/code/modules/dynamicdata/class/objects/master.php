@@ -894,9 +894,9 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
 
         // Use the standard method to call hooks
         if ($this instanceof DataObject) {
-            $hooks = xarModHooks::call('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype, $context);
+            $hooks = $this->mod()->callHooks('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype);
         } else {
-            $hooks = xarModHooks::call('item', $action, null, $this->hookvalues, $modname, $this->itemtype, $context);
+            $hooks = $this->mod()->callHooks('item', $action, null, $this->hookvalues, $modname, $this->itemtype);
         }
         // FIXME: we don't need two distinct properties to store gui and api hook responses
         // A response is a response, it's up to the caller to decide if it's appropriate

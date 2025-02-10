@@ -177,7 +177,7 @@ class ModifypropMethod extends MethodClass
         }
         $hooks = [];
         if ($isprimary) {
-            $hooks = xarModHooks::call(
+            $hooks = $this->mod()->callHooks(
                 'module',
                 'modifyconfig',
                 $modinfo['name'],

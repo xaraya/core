@@ -27,7 +27,7 @@ sys::import('xaraya.services.servicestrait');
 /**
  * For documentation purposes only - available via ModuleServicesTrait
  */
-interface ModuleServicesInterface extends ServicesInterface, HooksInterface  // CoreInterface
+interface ModuleServicesInterface extends ServicesInterface  // , HooksInterface, CoreInterface
 {
     public function __construct(string $modName, ?ModuleInterface $parent = null);
     /** @return void */
@@ -67,7 +67,7 @@ interface GuiModuleServicesInterface extends ModuleServicesInterface
 trait ModuleServicesTrait
 {
     use CoreServicesTrait;
-    use HooksTrait;
+    //use HooksTrait;
 
     protected string $moduleName;          // set in constructor by ModuleTrait::createComponent()
     protected string $moduleType;          // set in configure() by user/admin gui/api traits
@@ -97,8 +97,8 @@ trait ModuleServicesTrait
         'ml',
         'exit',
         // HooksTrait
-        'callhooks',
-        'notifyhooks',
+        //'callhooks',
+        //'notifyhooks',
         // ModuleServicesTrait
         'configure',
         'getmodtype',

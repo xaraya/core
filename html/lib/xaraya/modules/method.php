@@ -260,11 +260,11 @@ trait MethodServicesTrait
  * @template TComponent of ModuleServicesInterface
  * @implements MethodServicesInterface<TComponent>
  */
-class MethodClass implements MethodServicesInterface, HooksInterface  // , CoreInterface,
+class MethodClass implements MethodServicesInterface  // , HooksInterface , CoreInterface,
 {
     /** @use MethodServicesTrait<TComponent> */
     use MethodServicesTrait;
-    use HooksTrait;
+    //use HooksTrait;
 
     protected string $moduleName;          // set in constructor by MethodsTrait::__call()
     protected int $itemtype = 0;
