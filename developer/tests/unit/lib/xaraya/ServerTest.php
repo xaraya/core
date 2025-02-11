@@ -21,7 +21,7 @@ final class ServerTest extends TestCase
     public function testStandardInit(): void
     {
         $expected = RequestHandler::class;
-        xarServer::init();
+        xarServer::init(xarServer::getConfig());
 
         $instance = xarServer::getInstance();
         $this->assertEquals($expected, $instance::class);
@@ -31,7 +31,7 @@ final class ServerTest extends TestCase
     {
         xarServer::setRequestClass(RequestContext::class);
         $expected = RequestContext::class;
-        xarServer::init();
+        xarServer::init(xarServer::getConfig());
 
         $instance = xarServer::getInstance();
         $this->assertEquals($expected, $instance::class);
@@ -52,7 +52,7 @@ final class ServerTest extends TestCase
     {
         $expected = $this->getServerVars();
         $_SERVER = array_replace($_SERVER ?? [], $expected);
-        xarServer::init();
+        xarServer::init(xarServer::getConfig());
         // @todo we need to reset xarSystemVars::get(sys::LAYOUT, 'BaseURI')
 
         $this->assertEquals($expected['REQUEST_URI'], xarServer::getVar('REQUEST_URI'));
@@ -67,7 +67,7 @@ final class ServerTest extends TestCase
         xarServer::setRequestClass(RequestContext::class);
         $expected = $this->getServerVars();
         $_SERVER = array_replace($_SERVER ?? [], $expected);
-        xarServer::init();
+        xarServer::init(xarServer::getConfig());
         // @todo we need to reset xarSystemVars::get(sys::LAYOUT, 'BaseURI')
 
         // default empty context for the request

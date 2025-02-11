@@ -87,6 +87,7 @@ class xarTpl extends xarObject
     
     protected static $showPHPCommentBlockInTemplates;
     protected static $showTemplateFilenames;
+    protected static bool $initialized = false;
 
 /**
  * Initializes the BlockLayout Template Engine
@@ -103,6 +104,9 @@ class xarTpl extends xarObject
     public static function init(array $args = array())
     {
         if (empty($args)) {
+            if (self::$initialized) {
+                return true;
+            }
             $args = self::getConfig();
         }
         // This is the theme directory, solo (aka, themename)
@@ -127,6 +131,7 @@ class xarTpl extends xarObject
 
         // This is wrong here as well, but it's better at least than in modules.php
         sys::import('xaraya.themes');
+        self::$initialized = true;
         return true;
     }
 

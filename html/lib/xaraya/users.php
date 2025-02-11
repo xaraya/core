@@ -70,6 +70,7 @@ class xarUser extends xarObject
 
     private static $objectRef;
     public static $authenticationModules;
+    protected static bool $initialized = false;
     
     /**
      * Initialise the User System
@@ -81,6 +82,9 @@ class xarUser extends xarObject
     static public function init(array $args = array())
     {
         if (empty($args)) {
+            if (self::$initialized) {
+                return true;
+            }
             $args = self::getConfig();
         }
         // User System and Security Service Tables
@@ -112,6 +116,7 @@ class xarUser extends xarObject
         // Populate the GLOBAL for legacy calls
         //$GLOBALS['xarUser_authenticationModules'] =  self::$authenticationModules;
         
+        self::$initialized = true;
         return true;
     }
 

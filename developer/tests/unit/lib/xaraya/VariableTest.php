@@ -16,7 +16,7 @@ final class VariableTest extends TestCase
     public function testFetchArrayVar(): void
     {
         $_POST['testing'] = ['itemtype' => 1, 'categories' => [2, 3]];
-        xarServer::init();
+        xarServer::init(xarServer::getConfig());
         xarController::init();
 
         $itemtype = null;

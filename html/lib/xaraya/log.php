@@ -52,9 +52,13 @@ class xarLog extends xarObject
     static private $logFile;
     static public $loggers  = array();
     static public $config  = array();
+    protected static bool $initialized = false;
     
     static public function init(array $args = array())
     {
+        if (empty($args) && self::$initialized) {
+            return true;
+        }
         // Only log if logging is enabled and if the config.system file is present
         // Of course, if this file doesn't exist then Xaraya is already kaputt :)
         try {
@@ -127,6 +131,7 @@ class xarLog extends xarObject
         // Subsystem initialized, register a shutdown function
         register_shutdown_function('xarLog__shutdown_handler');
 
+        self::$initialized = true;
         return true;
     }
 

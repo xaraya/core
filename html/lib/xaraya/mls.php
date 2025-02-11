@@ -62,6 +62,7 @@ class xarMLS extends xarObject
     public static $defaultTimeZone   = 'UTC';
     public static $defaultTimeOffset = 0;
     public static $backend           = null;
+    protected static bool $initialized = false;
 
     /**
      * Initializes the Multi Language System
@@ -72,6 +73,9 @@ class xarMLS extends xarObject
     static public function init(array $args = array())
     {
         if (empty($args)) {
+            if (self::$initialized) {
+                return true;
+            }
             $args = self::getConfig();
         }
         switch ($args['MLSMode']) {
@@ -122,6 +126,7 @@ class xarMLS extends xarObject
         // *AND* commented out the assertion on running this once per request lower
         // in this file. We need to investigate this better after the MLS refactoring
         self::setCurrentLocale($args['defaultLocale']);
+        self::$initialized = true;
         return true;
     }
 

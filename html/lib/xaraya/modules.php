@@ -112,6 +112,7 @@ class xarMod extends xarObject implements IxarMod
     public static $noCacheState = false;
     /** @var array<string, object> */
     private static $moduleClasses = [];
+    protected static bool $initialized = false;
 
     /**
      * Initialize
@@ -120,6 +121,9 @@ class xarMod extends xarObject implements IxarMod
     public static function init(array $args = [])
     {
         if (empty($args)) {
+            if (self::$initialized) {
+                return true;
+            }
             $args = self::getConfig();
         }
         self::$genShortUrls = $args['enableShortURLsSupport'];
@@ -141,6 +145,7 @@ class xarMod extends xarObject implements IxarMod
         $tables['themes']          = $prefix . '_themes';
 
         xarDB3::importTables($tables);
+        self::$initialized = true;
         return true;
     }
 

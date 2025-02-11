@@ -29,8 +29,6 @@ use UnauthorizedOperationException;
 class TestHelper extends TestCase
 {
     protected static string $oldDir;
-    /** @var ?callable */
-    protected $callback = null;
 
     public static function setUpBeforeClass(): void
     {
@@ -54,9 +52,9 @@ class TestHelper extends TestCase
         xarSession::setSessionClass(SessionContext::class);
         xarSession::init();
 
-        // file paths are relative to parent directory
+        // file paths are relative to html directory here
         static::$oldDir = (string) getcwd();
-        chdir(dirname(__DIR__));
+        chdir(dirname(__DIR__, 3));
     }
 
     public static function tearDownAfterClass(): void
@@ -154,19 +152,7 @@ class TestHelper extends TestCase
      */
     protected function createMockWithAccess(string $modName, string $className, int $count = 1): object
     {
-        // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
-        /**
-        $mock = $this->getMockBuilder($className)
-            ->setConstructorArgs($args)
-            ->onlyMethods(['checkAccess'])
-            ->getMock();
-        // override checkAccess() method to return true + check if called $count times
-        $constraint = $this->atMost($count);
-        $mock->expects($constraint)
-            ->method('checkAccess')
-            ->willReturn(true);
-         */
         $mock = new $className(...$args);
         // override core security service class with mock too
         $helper = new ServicesHelper();
@@ -183,44 +169,12 @@ class TestHelper extends TestCase
      */
     protected function createMockWithoutAccess(string $modName, string $className, int $count = 1): object
     {
-        // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
-        /**
-        $mock = $this->getMockBuilder($className)
-            ->setConstructorArgs($args)
-            ->onlyMethods(['callSecurityCheck'])
-            ->getMock();
-        // override callSecurityCheck() method to intercept redirect + check if called $count times
-        $constraint = $this->atMost($count);
-        $mock->expects($constraint)
-            ->method('callSecurityCheck')
-            ->willReturnCallback(function ($mask, $catch = 1, $component = '', $instance = '') {
-                $this->callback = xarController::getCallback('redirectTo');
-                xarController::setCallback('redirectTo', [$this, 'sendRedirectToCallback']);
-                $result = xarSecurity::check($mask, $catch, $component, $instance) ? true : false;
-                xarController::setCallback('redirectTo', $this->callback);
-                return $result;
-            });
-         */
         $mock = new $className(...$args);
         // override core security service class with mock too
         $helper = new ServicesHelper();
         $helper->createMockSecurityWithoutAccess($mock, $count);
         return $mock;
-    }
-
-    /**
-     * Send redirect to callback in xarController::redirect()
-     * @param string $redirectURL
-     * @param mixed $httpResponse
-     * @param mixed $context
-     * @throws \UnauthorizedOperationException
-     * @return never
-     */
-    public function sendRedirectToCallback($redirectURL, $httpResponse, $context)
-    {
-        xarController::setCallback('redirectTo', $this->callback);
-        throw new UnauthorizedOperationException('Called redirectToCallback() for ' . $redirectURL);
     }
 
     /**
@@ -232,21 +186,7 @@ class TestHelper extends TestCase
      */
     protected function createMockWithoutRedirect(string $modName, string $className, int $count = 1): object
     {
-        // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
-        /**
-        $mock = $this->getMockBuilder($className)
-            ->setConstructorArgs($args)
-            ->onlyMethods(['redirect'])
-            ->getMock();
-        // override redirect() method to throw exception + check if called $count times
-        $constraint = $this->atMost($count);
-        $mock->expects($constraint)
-            ->method('redirect')
-            ->willReturnCallback(function ($url) {
-                throw new LogicException("Called redirect('$url')");
-            });
-         */
         $mock = new $className(...$args);
         // override core controller service class with mock too
         $helper = new ServicesHelper();
@@ -263,7 +203,6 @@ class TestHelper extends TestCase
      */
     protected function createMockWithoutExit(string $modName, string $className, int $count = 1): object
     {
-        // @todo deprecate direct method access from coretrait here - use core services below
         $args = $this->getConstructorArgs($modName, $className);
         $mock = $this->getMockBuilder($className)
             ->setConstructorArgs($args)

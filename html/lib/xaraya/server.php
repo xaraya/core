@@ -36,6 +36,7 @@ class xarServer extends xarObject
     private static $instance;
     /** @var class-string */
     private static $requestClass = RequestHandler::class;
+    protected static bool $initialized = false;
 
     /**
      * Initialize
@@ -45,6 +46,9 @@ class xarServer extends xarObject
     public static function init(array $args = [])
     {
         if (empty($args)) {
+            if (self::$initialized) {
+                return;
+            }
             $args = self::getConfig();
         }
         self::$allowShortURLs = $args['enableShortURLsSupport'];
@@ -57,6 +61,7 @@ class xarServer extends xarObject
         $request->initialize();
         // This event is now registered during base module init
         //xarEvents::register('ServerRequest');
+        self::$initialized = true;
     }
 
     /**

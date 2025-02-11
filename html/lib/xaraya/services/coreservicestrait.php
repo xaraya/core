@@ -18,7 +18,6 @@ namespace Xaraya\Services;
 
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
-use xarLog;
 use sys;
 use Exception;
 
@@ -93,7 +92,7 @@ trait CoreServicesTrait
     protected ?CachingInterface $xarCache = null;
     protected ?ConfigInterface $xarConfig = null;
     protected ?SessionInterface $xarSession = null;
-    protected ?DatabaseInterface $xarDB = null;
+    protected ?DatabaseInterface $xarDb = null;
     /** @var ?callable */
     protected $xarExit = null;
 
@@ -103,7 +102,7 @@ trait CoreServicesTrait
      */
     public function setCoreServices(array $args = []): void
     {
-        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'data', 'cache', 'exit'];
+        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'config', 'session', 'db', 'exit'];
         foreach ($args as $name => $service) {
             if (!in_array($name, $supported)) {
                 throw new Exception('Unsupported service ' . $name);
@@ -429,8 +428,8 @@ trait CoreServicesTrait
      */
     public function db(): DatabaseInterface
     {
-        $this->xarDB ??= ServiceFactory::getDatabaseService($this);
-        return $this->xarDB;
+        $this->xarDb ??= ServiceFactory::getDatabaseService($this);
+        return $this->xarDb;
     }
 
     /**

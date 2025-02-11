@@ -115,6 +115,7 @@ class xarVar extends xarObject
 
     public static $allowableHTML = array();
     public static $fixHTMLEntities = true;
+    protected static bool $initialized = false;
 
     /**
      * Initialise the variable handling options
@@ -131,6 +132,9 @@ class xarVar extends xarObject
     **/
     public static function init(array $args = array())
     {
+        if (empty($args) && self::$initialized) {
+            return true;
+        }
         // Configuration init needs to be done first
         $tables = array('config_vars' => xarDB3::getPrefix() . '_module_vars');
 
@@ -141,6 +145,7 @@ class xarVar extends xarObject
         self::$allowableHTML = xarConfig3::getVar('Site.Core.AllowableHTML', array());
         self::$fixHTMLEntities = xarConfig3::getVar('Site.Core.FixHTMLEntities', true);
 
+        self::$initialized = true;
         return true;
     }
 

@@ -16,9 +16,11 @@
 sys::import("xaraya.context.context");
 sys::import('xaraya.facades.caching');
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.modules');
 use Xaraya\Context\Context;
 use Xaraya\Facades\xarCache3;
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarMod3;
 
 interface ixarBlock
 {
@@ -55,6 +57,8 @@ interface ixarBlock
  */
 class xarBlock extends xarObject implements ixarBlock
 {
+    protected static bool $initialized = false;
+
     private function __construct()
     {}
 /**
@@ -67,11 +71,15 @@ class xarBlock extends xarObject implements ixarBlock
  */
     public static function init(array $args = array())
     {
+        if (empty($args) && self::$initialized) {
+            return true;
+        }
         // Blocks Support Tables
         sys::import('modules.blocks.xartables');
         // pass along the DB prefix to $tablefunc
         $tables = blocks_xartables(xarDB3::getPrefix());
         xarDB3::importTables($tables);
+        self::$initialized = true;
         return true;    
     }
 
@@ -124,7 +132,7 @@ class xarBlock extends xarObject implements ixarBlock
                 return '';
             }
             // don't render hidden blocks
-            if ($block->state == xarBlock::BLOCK_STATE_HIDDEN) {
+            if ($block->state == self::BLOCK_STATE_HIDDEN) {
                 // just execute the display method and return an empty string
                 $block->display();
                 xarCache3::setBlock($cacheKey, '');
@@ -163,7 +171,7 @@ class xarBlock extends xarObject implements ixarBlock
             return $boxOutput;
             
         } catch (Exception $e) {
-            if ((bool) xarModVars::get('blocks', 'noexceptions') || !xarUser::isDebugAdmin()) {
+            if ((bool) xarMod3::getVar('noexceptions', 'blocks') || !xarUser::isDebugAdmin()) {
                 xarCache3::setBlock($cacheKey, '');
                 return '';
             } else {
@@ -414,17 +422,17 @@ class xarBlock extends xarObject implements ixarBlock
         // All the hard work is done in this function.
         // It keeps the core code lighter when standalone blocks are not used.
         if (isset($args['instance']))  // valid block instance states
-            $args['state'] = array(xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN);
-        $args['type_state'] = array(xarBlock::TYPE_STATE_ACTIVE); // valid block type states
+            $args['state'] = array(self::BLOCK_STATE_VISIBLE, self::BLOCK_STATE_HIDDEN);
+        $args['type_state'] = array(self::TYPE_STATE_ACTIVE); // valid block type states
         if (!isset($context)) {
             $context = new Context(['source' => __METHOD__]);
         }
         // get block info
         try {
-            $blockinfo = xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args, $context);
+            $blockinfo = xarMod3::apiFunc('blocks', 'blocks', 'getinfo', $args, $context);
             return self::render($blockinfo, $context);
         } catch (Exception $e) {
-            if ((bool) xarModVars::get('blocks', 'noexceptions') || !xarUser::isDebugAdmin()) {
+            if ((bool) xarMod3::getVar('noexceptions', 'blocks') || !xarUser::isDebugAdmin()) {
                 // Get a cache key for this block if it's suitable for block caching
                 if (!empty($blockinfo)) {
                     $cacheKey = xarCache3::getBlockKey($blockinfo);

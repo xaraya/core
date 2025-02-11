@@ -32,6 +32,8 @@ interface IxarDDObject {}
  */
 class xarDDObject extends xarObject implements IxarDDObject
 {
+    protected static bool $initialized = false;
+
     /**
      * Initialize
      *

@@ -120,12 +120,17 @@ class xarEvents extends xarObject implements ixarEvents
     protected static $classtypes = ['hookobservers'];
     // allow others to define callback functions without registering observers e.g. for event bridge
     protected static $callbackFunctions = [];
+    protected static bool $initialized = false;
 
     public static function init(array $args = array())
     {
+        if (empty($args) && self::$initialized) {
+            return true;
+        }
         // Register tables this subsystem uses
         $tables = array('eventsystem' => xarDB3::getPrefix() . '_eventsystem');
         xarDB3::importTables($tables);
+        self::$initialized = true;
         return true;
     }
 

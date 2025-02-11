@@ -49,7 +49,7 @@ sys::import('xaraya.services.servicefactory');
 trait HasDatabaseTrait
 {
     /** @var ?DatabaseInterface */
-    protected $xarDB = null;         // Access database service with instance methods
+    protected $xarDb = null;         // Access database service with instance methods
 
     /**
      * Access database service
@@ -57,7 +57,7 @@ trait HasDatabaseTrait
      */
     protected function db(): DatabaseInterface
     {
-        $this->xarDB ??= ServiceFactory::getDatabaseService($this);
-        return $this->xarDB;
+        $this->xarDb ??= ServiceFactory::getDatabaseService($this);
+        return $this->xarDb;
     }
 }
