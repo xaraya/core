@@ -20,7 +20,7 @@ use Xaraya\Modules\ModuleInterface;
 use sys;
 
 sys::import('xaraya.modules.userguitrait');
-sys::import('modules.dynamicdata.class.traits.otherapi');
+sys::import('modules.dynamicdata.traits.otherapi');
 
 /**
  * For documentation purposes only - available via UserGuiTrait
@@ -44,7 +44,7 @@ interface UserGuiInterface extends CoreGuiInterface
  * use Xaraya\DataObject\Traits\UserGuiTrait;
  * use sys;
  *
- * sys::import('modules.dynamicdata.class.traits.usergui');
+ * sys::import('modules.dynamicdata.traits.usergui');
  *
  * class MyClassGui implements UserGuiInterface
  * {

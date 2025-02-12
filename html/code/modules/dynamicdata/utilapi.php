@@ -32,7 +32,7 @@ use sys;
 sys::import('xaraya.database.databasetrait');
 sys::import('modules.dynamicdata.class.objects.virtual');
 sys::import('modules.dynamicdata.class.import.generic');
-sys::import('modules.dynamicdata.class.userapi');
+sys::import('modules.dynamicdata.userapi');
 
 /**
  * Class to handle the dynamicdata util API

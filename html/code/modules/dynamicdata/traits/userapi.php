@@ -20,8 +20,8 @@ use Xaraya\Modules\ModuleInterface;
 use sys;
 
 sys::import('xaraya.modules.userapitrait');
-sys::import('modules.dynamicdata.class.traits.itemlinks');
-sys::import('modules.dynamicdata.class.traits.otherapi');
+sys::import('modules.dynamicdata.traits.itemlinks');
+sys::import('modules.dynamicdata.traits.otherapi');
 
 /**
  * For documentation purposes only - available via UserApiTrait
@@ -44,7 +44,7 @@ interface UserApiInterface extends CoreApiInterface, ItemLinksInterface
  * use Xaraya\DataObject\Traits\UserApiTrait;
  * use sys;
  *
- * sys::import('modules.dynamicdata.class.traits.userapi');
+ * sys::import('modules.dynamicdata.traits.userapi');
  *
  * class MyClassApi implements UserApiInterface
  * {

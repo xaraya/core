@@ -169,7 +169,7 @@ use Xaraya\DataObject\Traits\UserApiInterface;
 use Xaraya\DataObject\Traits\UserApiTrait;
 use sys;
 
-sys::import('modules.dynamicdata.class.traits.userapi');
+sys::import('modules.dynamicdata.traits.userapi');
 
 /**
  * Handle (traditional) DD user api functions via module class

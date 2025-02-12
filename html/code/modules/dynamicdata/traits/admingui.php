@@ -20,7 +20,7 @@ use Xaraya\Modules\ModuleInterface;
 use sys;
 
 sys::import('xaraya.modules.adminguitrait');
-sys::import('modules.dynamicdata.class.traits.otherapi');
+sys::import('modules.dynamicdata.traits.otherapi');
 
 /**
  * For documentation purposes only - available via AdminGuiTrait
@@ -39,7 +39,7 @@ interface AdminGuiInterface extends CoreGuiInterface
  * use Xaraya\DataObject\Traits\AdminGuiTrait;
  * use sys;
  *
- * sys::import('modules.dynamicdata.class.traits.admingui');
+ * sys::import('modules.dynamicdata.traits.admingui');
  *
  * class MyClassGui implements AdminGuiInterface
  * {

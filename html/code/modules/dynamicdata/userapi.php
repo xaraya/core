@@ -23,7 +23,7 @@ use xarMod;
 use FunctionNotFoundException;
 use sys;
 
-sys::import('modules.dynamicdata.class.traits.userapi');
+sys::import('modules.dynamicdata.traits.userapi');
 sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.modules');
 sys::import('xaraya.facades.multilanguage');

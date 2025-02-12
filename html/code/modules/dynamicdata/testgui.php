@@ -16,7 +16,7 @@ namespace Xaraya\DataObject;
 
 use sys;
 
-sys::import('modules.dynamicdata.class.admingui');
+sys::import('modules.dynamicdata.admingui');
 
 /**
  * Handle (traditional) DD test gui functions via module class

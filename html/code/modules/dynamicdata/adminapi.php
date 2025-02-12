@@ -18,7 +18,7 @@ use Xaraya\DataObject\Traits\AdminApiInterface;
 use Xaraya\DataObject\Traits\AdminApiTrait;
 use sys;
 
-sys::import('modules.dynamicdata.class.traits.adminapi');
+sys::import('modules.dynamicdata.traits.adminapi');
 
 /**
  * Handle (traditional) DD admin api functions via module class

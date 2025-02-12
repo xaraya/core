@@ -18,7 +18,7 @@ use Xaraya\DataObject\Traits\AdminGuiInterface;
 use Xaraya\DataObject\Traits\AdminGuiTrait;
 use sys;
 
-sys::import('modules.dynamicdata.class.traits.admingui');
+sys::import('modules.dynamicdata.traits.admingui');
 
 /**
  * Handle (traditional) DD admin gui functions via module class
