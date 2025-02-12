@@ -5,7 +5,7 @@
  *
  * Usage:
  * ```
- * # class/userapi/get.php
+ * # userapi/get.php
  * namespace Xaraya\Modules\MyFancyModule\UserApi;
  *
  * use Xaraya\Modules\MethodClass;

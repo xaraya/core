@@ -15,7 +15,7 @@ use Xaraya\Modules\AdminGuiClass;
 use sys;
 
 sys::import('xaraya.modules.admingui');
-sys::import('modules.skeleton.class.adminapi');
+sys::import('modules.skeleton.adminapi');
 
 /**
  * Handle the skeleton admin GUI

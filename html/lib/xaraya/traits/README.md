@@ -171,7 +171,7 @@ Trait to get module classes via xarMod::getModule(), and associated traits for u
 
 Usage:
 ```
-# class/module.php
+# module.php
 namespace Xaraya\Modules\MyFancyModule;
 
 use Xaraya\Modules\ModuleInterface;
@@ -182,7 +182,7 @@ class Module implements ModuleInterface
     use ModuleTrait;
 }
 
-# class/userapi.php
+# userapi.php
 namespace Xaraya\Modules\MyFancyModule;
 
 use Xaraya\Modules\UserApiInterface;
@@ -198,7 +198,7 @@ class UserApi implements UserApiInterface
     }
 }
 
-# class/usergui.php
+# usergui.php
 namespace Xaraya\Modules\MyFancyModule;
 
 use Xaraya\Modules\UserGuiInterface;

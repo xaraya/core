@@ -947,7 +947,7 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
             if (!empty($module) && !str_contains($class['file'], '/' . $module . '/')) {
                 continue;
             }
-            if (!empty($type) && !str_contains($class['file'], '/class/' . $type)) {
+            if (!empty($type) && !str_contains($class['file'], '/' . $type)) {
                 continue;
             }
             if (!empty($path) && !str_contains($class['file'], $path)) {
@@ -974,12 +974,12 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         }
         $this->log('Files to migrate: ' . $this->to_json($files), true);
         foreach ($files as $fpath => $functions) {
-            $installer = str_replace('/xarinit.php', '/class/installer.php', $fpath);
+            $installer = str_replace('/xarinit.php', '/installer.php', $fpath);
             $module = basename(dirname($fpath));
-            $modulefile = str_replace('/class/installer.php', '/class/module.php', $installer);
+            $modulefile = str_replace('/installer.php', '/module.php', $installer);
             $this->check_module_class($modulefile);
             if (file_exists($installer) && !$refresh) {
-                //$gitfile = '/home/mikespub/modules/' . $module . '/class/installer.php';
+                //$gitfile = '/home/mikespub/modules/' . $module . '/installer.php';
                 //copy($installer, $gitfile);
                 $this->log('Installer file for module ' . $module . ' exists - SKIP ' . $installer);
                 continue;
@@ -1021,7 +1021,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         $module = basename(dirname($modulefile, 2));
         if (file_exists($modulefile)) {
             if (empty($this->todo[$modulefile])) {
-                //$gitfile = '/home/mikespub/modules/' . $module . '/class/module.php';
+                //$gitfile = '/home/mikespub/modules/' . $module . '/module.php';
                 //copy($modulefile, $gitfile);
                 $this->todo[$modulefile] = true;
             }
@@ -1030,7 +1030,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         }
         $output = file_get_contents(__DIR__ . '/module.txt');
         $output = str_replace('skeleton', $module, $output);
-        $xarversion = str_replace('/class/module.php', '/xarversion.php', $modulefile);
+        $xarversion = str_replace('/module.php', '/xarversion.php', $modulefile);
         $namespace = $this->get_module_namespace($xarversion);
         $output = str_replace('Xaraya\Modules\Skeleton', $namespace, $output);
         $this->log('Module file for module ' . $module . ' exists - CREATE ' . $modulefile, true);
@@ -1059,11 +1059,11 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         $this->log('Files to migrate: ' . $this->to_json($files), true);
         foreach ($files as $fpath => $functions) {
             if (str_contains($fpath, '/xar' . $modType . '/')) {
-                $typefile = dirname($fpath, 2) . '/class/' . $classtype . '.php';
+                $typefile = dirname($fpath, 2) . '/' . $classtype . '.php';
                 $module = basename(dirname($fpath, 2));
                 $split = false;
             } elseif (str_ends_with($fpath, '/xar' . $modType . '.php')) {
-                $typefile = dirname($fpath) . '/class/' . $classtype . '.php';
+                $typefile = dirname($fpath) . '/' . $classtype . '.php';
                 $module = basename(dirname($fpath));
                 $split = true;
             } else {
@@ -1084,14 +1084,14 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             }
             $methodfile = str_replace('.php', '/', $typefile) . $funcName . '.php';
             if (file_exists($methodfile) && !$refresh) {
-                //$gitfile = '/home/mikespub/modules/' . $module . '/class/' . $classtype . '/' . $funcName . '.php';
+                //$gitfile = '/home/mikespub/modules/' . $module . '/' . $classtype . '/' . $funcName . '.php';
                 //copy($installer, $gitfile);
                 $this->log('Method file for module ' . $module . ' exists - SKIP ' . $methodfile);
                 continue;
             }
             $output = file_get_contents(__DIR__ . '/method.txt');
             $output = str_replace('skeleton', $module, $output);
-            $xarversion = str_replace('/class/' . $classtype . '.php', '/xarversion.php', $typefile);
+            $xarversion = str_replace('/' . $classtype . '.php', '/xarversion.php', $typefile);
             $namespace = $this->get_module_namespace($xarversion);
             $output = str_replace('Xaraya\Modules\Skeleton\UserApi', $namespace . '\\' . $classname, $output);
             $output = str_replace('<UserApi>', '<' . $classname . '>', $output);
@@ -1145,7 +1145,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         $typename = basename($typefile);
         if (file_exists($typefile)) {
             if (empty($this->todo[$typefile])) {
-                //$gitfile = '/home/mikespub/modules/' . $module . '/class/' . $typename;
+                //$gitfile = '/home/mikespub/modules/' . $module . '/' . $typename;
                 //if (!file_exists($gitfile)) {
                 //    copy($typefile, $gitfile);
                 //}
@@ -1174,7 +1174,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         }
         $output = file_get_contents($filename);
         $output = str_replace('skeleton', $module, $output);
-        $xarversion = str_replace('/class/' . $typename, '/xarversion.php', $typefile);
+        $xarversion = str_replace('/' . $typename, '/xarversion.php', $typefile);
         $namespace = $this->get_module_namespace($xarversion);
         $output = str_replace('Xaraya\Modules\Skeleton', $namespace, $output);
         $this->log('Class file for module ' . $module . ' exists - CREATE ' . $typefile, true);
@@ -1758,7 +1758,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
 
     public function replace_method_services($module, $type = '', $replace)
     {
-        return $this->replace_core_services($module, $type, '/class/', 'Method', $replace);
+        return $this->replace_core_services($module, $type, '', 'Method', $replace);
     }
 
     public function replace_property_services($module, $replace)
@@ -1918,7 +1918,7 @@ $replace = false;
 //$found = $migrator->replace_property_services('dynamicdata', $replace);
 //$found = $migrator->replace_block_services('dynamicdata', $replace);
 //$migrator->replace_internal_methods('dynamicdata', '', $replace);
-[$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '/class/');
+[$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '');
 file_put_contents('call_dependencies.json', $migrator->to_json($called));
 $output = $migrator->draw_mermaid_graph($called);
 file_put_contents('call_dependencies.md', $output);

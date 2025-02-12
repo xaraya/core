@@ -5,7 +5,7 @@
  *
  * Usage:
  * ```
- * # class/module.php
+ * # module.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
  * use Xaraya\Modules\ModuleInterface;

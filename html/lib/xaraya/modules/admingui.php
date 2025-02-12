@@ -5,7 +5,7 @@
  *
  * Usage:
  * ```
- * # class/admingui.php
+ * # admingui.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
  * use Xaraya\Modules\AdminGuiClass;

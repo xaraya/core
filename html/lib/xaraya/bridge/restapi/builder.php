@@ -960,7 +960,7 @@ class RestAPIBuilder extends xarObject
         $method = 'get';
         $schema = 'list-modules';
         $operationId = str_replace('-', '_', $schema);
-        $description = 'Show available REST API calls for modules defined in code/modules/{module}/xarrestapi/getlist.php or code/modules/{module}/class/restapi/getlist.php';
+        $description = 'Show available REST API calls for modules defined in code/modules/{module}/xarrestapi/getlist.php or code/modules/{module}/restapi/getlist.php';
         self::$paths[$path] = [
             $method => [
                 'tags' => ['start'],
@@ -1001,7 +1001,7 @@ class RestAPIBuilder extends xarObject
         $method = 'get';
         $schema = $module . '-apilist';
         $operationId = str_replace('-', '_', $schema);
-        $description = 'Show REST API calls for module ' . $module . ' defined in code/modules/' . $module . '/xarrestapi/getlist.php or code/modules/' . $module . '/class/restapi/getlist.php';
+        $description = 'Show REST API calls for module ' . $module . ' defined in code/modules/' . $module . '/xarrestapi/getlist.php or code/modules/' . $module . '/restapi/getlist.php';
         self::$paths[$path] = [
             $method => [
                 'tags' => [$module . '_module'],

@@ -48,7 +48,7 @@ You can also get a callable to a module method directly via `xarMod::getModuleCl
 
 For smaller modules, methods can be combined in a single component class file by type:
 
-html/code/modules/myfancymodule/class
+html/code/modules/myfancymodule
 - module.php -> Xaraya\Modules\MyFancyModule\Module()
 - admingui.php -> Xaraya\Modules\MyFancyModule\AdminGui()->\*($args)
 - adminapi.php -> Xaraya\Modules\MyFancyModule\AdminApi()->\*($args)
@@ -58,7 +58,7 @@ html/code/modules/myfancymodule/class
 
 For larger modules, methods will be in separate class files by type and name:
 
-html/code/modules/myfancymodule/class
+html/code/modules/myfancymodule
 - module.php -> Xaraya\Modules\MyFancyModule\Module()
 - admingui.php -> Xaraya\Modules\MyFancyModule\AdminGui()
 - adminapi.php -> Xaraya\Modules\MyFancyModule\AdminApi()
@@ -89,7 +89,7 @@ Module developers can use the traits and classes in `html/lib/xaraya/modules/` t
 ### Module Class
 
 ```php
-# class/module.php
+# module.php
 
 namespace Xaraya\Modules\MyFancyModule;
 
@@ -117,7 +117,7 @@ class Module extends ModuleClass
 If you want to start from scratch, you can use basic component traits and interfaces here:
 
 ```php
-# class/userapi.php
+# userapi.php
 
 namespace Xaraya\Modules\MyFancyModule;
 
@@ -140,7 +140,7 @@ class UserApi implements UserApiInterface
 Component classes can also extend `UserApiClass` etc. instead of implementing `UserApiInterface` and using `UserApiTrait`:
 
 ```php
-# class/userapi.php
+# userapi.php
 namespace Xaraya\Modules\MyFancyModule;
 
 use Xaraya\Modules\UserApiClass;
@@ -161,7 +161,7 @@ class UserApi extends UserApiClass
 If your module handles DD objects, you may want to start from DD component traits:
 
 ```php
-# class/userapi.php
+# userapi.php
 
 namespace Xaraya\Modules\MyFancyModule;
 
@@ -185,7 +185,7 @@ class UserApi implements UserApiInterface
 Module methods can be added directly in the component class:
 
 ```php
-# class/userapi.php
+# userapi.php
 
 // ...
 
@@ -208,7 +208,7 @@ class UserApi extends UserApiClass
 For larger modules, you can split off each module method into its own method class:
 
 ```php
-# class/userapi/get.php
+# userapi/get.php
 
 namespace Xaraya\Modules\MyFancyModule\UserApi;
 

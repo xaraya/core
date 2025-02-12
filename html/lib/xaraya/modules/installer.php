@@ -5,7 +5,7 @@
  *
  * Usage:
  * ```
- * # class/installer.php
+ * # installer.php
  * namespace Xaraya\Modules\MyFancyModule;
  *
  * use Xaraya\Modules\InstallerClass;

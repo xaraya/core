@@ -308,7 +308,7 @@ class RoutingBridge extends BasicBridge
             } elseif (is_subclass_of($handler[0], static::class)) {
                 // @todo instantiate handler[0] for subclasses like RoutingApiBridge?
                 $handler[0] = new $handler[0]();
-            } elseif (is_subclass_of($handler[0], BasicRequest::class)) {
+            } elseif (is_subclass_of($handler[0], BasicBridge::class)) {
                 // @todo instantiate handler[0] for subclasses of BasicRequest with router?
                 $handler[0] = new $handler[0]($this->getRouter());
             } else {
