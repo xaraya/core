@@ -250,6 +250,7 @@ function dynamicdata_upgrade($oldversion)
             /*  display hook is now disabled by default - use the BL tags or APIs instead
                 xarModHooks::unregister('item', 'display', 'GUI', 'dynamicdata', 'user', 'displayhook');
             */
+            // @todo change namespace to DD module + move out of class subdir
             $namespace = 'Xaraya\DataObject\HookObservers';
             // when a new module item is being specified
             xarHooks::registerObserver('ItemNew', 'dynamicdata', $namespace . '\ItemNew');
