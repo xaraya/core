@@ -12,7 +12,7 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject;
+namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Modules\ModuleClass;
 use Xaraya\Modules\AdminGuiInterface;

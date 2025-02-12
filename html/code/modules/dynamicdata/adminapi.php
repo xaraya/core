@@ -12,10 +12,10 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject;
+namespace Xaraya\Modules\DynamicData;
 
-use Xaraya\DataObject\Traits\AdminApiInterface;
-use Xaraya\DataObject\Traits\AdminApiTrait;
+use Xaraya\Modules\DynamicData\Traits\AdminApiInterface;
+use Xaraya\Modules\DynamicData\Traits\AdminApiTrait;
 use sys;
 
 sys::import('modules.dynamicdata.traits.adminapi');

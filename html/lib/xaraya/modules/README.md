@@ -165,8 +165,8 @@ If your module handles DD objects, you may want to start from DD component trait
 
 namespace Xaraya\Modules\MyFancyModule;
 
-use Xaraya\DataObject\Traits\UserApiInterface;
-use Xaraya\DataObject\Traits\UserApiTrait;
+use Xaraya\Modules\DynamicData\Traits\UserApiInterface;
+use Xaraya\Modules\DynamicData\Traits\UserApiTrait;
 use sys;
 
 sys::import('modules.dynamicdata.traits.userapi');

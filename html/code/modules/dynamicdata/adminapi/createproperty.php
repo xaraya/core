@@ -9,11 +9,11 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject\AdminApi;
+namespace Xaraya\Modules\DynamicData\AdminApi;
 
-use Xaraya\DataObject\MethodClass;
-use Xaraya\DataObject\AdminApi;
-use Xaraya\DataObject\UserApi;
+use Xaraya\Modules\DynamicData\MethodClass;
+use Xaraya\Modules\DynamicData\AdminApi;
+use Xaraya\Modules\DynamicData\UserApi;
 use BadParameterException;
 use DataObjectFactory;
 use xarMod;

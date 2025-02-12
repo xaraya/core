@@ -1,7 +1,7 @@
 <?php
 
 use Xaraya\Modules\TestHelper;
-use Xaraya\DataObject\UserApi;
+use Xaraya\Modules\DynamicData\UserApi;
 
 final class UserApiTest extends TestHelper
 {
@@ -66,10 +66,10 @@ final class UserApiTest extends TestHelper
         $expected = array_merge($args, [
             'context' => $context,
             'handled' => true,
-            'parent' => 'Xaraya\DataObject\UserApi',
+            'parent' => 'Xaraya\Modules\DynamicData\UserApi',
             'other' => [
                 'handled' => 'other',
-                'parent' => 'Xaraya\DataObject\Module',
+                'parent' => 'Xaraya\Modules\DynamicData\Module',
             ],
         ]);
         $result = $userapi->test_call($args);
@@ -124,10 +124,10 @@ final class UserApiTest extends TestHelper
         $expected = array_merge($args, [
             'context' => $context,
             'handled' => true,
-            'parent' => 'Xaraya\DataObject\UserApi',
+            'parent' => 'Xaraya\Modules\DynamicData\UserApi',
             'other' => [
                 'handled' => 'other',
-                'parent' => 'Xaraya\DataObject\Module',
+                'parent' => 'Xaraya\Modules\DynamicData\Module',
             ],
         ]);
         $result = xarMod::apiFunc('dynamicdata', 'user', 'test_call', $args, $context);

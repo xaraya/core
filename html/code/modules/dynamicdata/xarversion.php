@@ -38,6 +38,6 @@ $modversion = [
     'user'               => true,
     'class'              => 'Core Complete',
     'category'           => 'Content',
-    'namespace'          => 'Xaraya\DataObject',
+    'namespace'          => 'Xaraya\Modules\DynamicData',
     'twigtemplates'      => true,
 ];

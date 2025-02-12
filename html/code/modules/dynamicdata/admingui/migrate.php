@@ -9,12 +9,12 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject\AdminGui;
+namespace Xaraya\Modules\DynamicData\AdminGui;
 
-use Xaraya\DataObject\MethodClass;
-use Xaraya\DataObject\AdminGui;
-use Xaraya\DataObject\UserApi;
-use Xaraya\DataObject\UtilApi;
+use Xaraya\Modules\DynamicData\MethodClass;
+use Xaraya\Modules\DynamicData\AdminGui;
+use Xaraya\Modules\DynamicData\UserApi;
+use Xaraya\Modules\DynamicData\UtilApi;
 use DataPropertyMaster;
 use Exception;
 use xarController;

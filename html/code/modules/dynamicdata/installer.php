@@ -11,7 +11,7 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject;
+namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Modules\InstallerClass;
 use DataPropertyMaster;

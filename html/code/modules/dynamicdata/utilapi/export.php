@@ -9,10 +9,10 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject\UtilApi;
+namespace Xaraya\Modules\DynamicData\UtilApi;
 
-use Xaraya\DataObject\MethodClass;
-use Xaraya\DataObject\UtilApi;
+use Xaraya\Modules\DynamicData\MethodClass;
+use Xaraya\Modules\DynamicData\UtilApi;
 use xarMod;
 use sys;
 

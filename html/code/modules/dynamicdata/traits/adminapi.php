@@ -12,7 +12,7 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject\Traits;
+namespace Xaraya\Modules\DynamicData\Traits;
 
 use Xaraya\Modules\AdminApiInterface as CoreApiInterface;
 use Xaraya\Modules\AdminApiTrait as CoreApiTrait;
@@ -35,8 +35,8 @@ interface AdminApiInterface extends CoreApiInterface
  *
  * Example:
  * ```
- * use Xaraya\DataObject\Traits\AdminApiInterface;
- * use Xaraya\DataObject\Traits\AdminApiTrait;
+ * use Xaraya\Modules\DynamicData\Traits\AdminApiInterface;
+ * use Xaraya\Modules\DynamicData\Traits\AdminApiTrait;
  * use sys;
  *
  * sys::import('modules.dynamicdata.traits.adminapi');

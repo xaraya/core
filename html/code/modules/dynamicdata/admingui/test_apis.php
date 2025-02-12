@@ -9,12 +9,12 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject\AdminGui;
+namespace Xaraya\Modules\DynamicData\AdminGui;
 
 use Xaraya\Bridge\GraphQL\GraphQLBuilder;
 use Xaraya\Bridge\RestAPI\RestAPIBuilder;
-use Xaraya\DataObject\MethodClass;
-use Xaraya\DataObject\AdminGui;
+use Xaraya\Modules\DynamicData\MethodClass;
+use Xaraya\Modules\DynamicData\AdminGui;
 use DataObjectFactory;
 use xarController;
 use xarMod;

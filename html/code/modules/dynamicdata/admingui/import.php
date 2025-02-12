@@ -9,12 +9,12 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject\AdminGui;
+namespace Xaraya\Modules\DynamicData\AdminGui;
 
-use Xaraya\DataObject\MethodClass;
-use Xaraya\DataObject\AdminGui;
-use Xaraya\DataObject\AdminApi;
-use Xaraya\DataObject\UtilApi;
+use Xaraya\Modules\DynamicData\MethodClass;
+use Xaraya\Modules\DynamicData\AdminGui;
+use Xaraya\Modules\DynamicData\AdminApi;
+use Xaraya\Modules\DynamicData\UtilApi;
 use DuplicateException;
 use Exception;
 use FileNotFoundException;

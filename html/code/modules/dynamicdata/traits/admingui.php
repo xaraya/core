@@ -12,7 +12,7 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject\Traits;
+namespace Xaraya\Modules\DynamicData\Traits;
 
 use Xaraya\Modules\AdminGuiInterface as CoreGuiInterface;
 use Xaraya\Modules\AdminGuiTrait as CoreGuiTrait;
@@ -35,8 +35,8 @@ interface AdminGuiInterface extends CoreGuiInterface
  *
  * Example:
  * ```
- * use Xaraya\DataObject\Traits\AdminGuiInterface;
- * use Xaraya\DataObject\Traits\AdminGuiTrait;
+ * use Xaraya\Modules\DynamicData\Traits\AdminGuiInterface;
+ * use Xaraya\Modules\DynamicData\Traits\AdminGuiTrait;
  * use sys;
  *
  * sys::import('modules.dynamicdata.traits.admingui');

@@ -12,7 +12,7 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject\Traits;
+namespace Xaraya\Modules\DynamicData\Traits;
 
 /**
  * Trait to handle other api functions for modules with their own DD objects

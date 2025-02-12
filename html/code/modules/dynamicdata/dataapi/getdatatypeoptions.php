@@ -9,10 +9,10 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject\DataApi;
+namespace Xaraya\Modules\DynamicData\DataApi;
 
-use Xaraya\DataObject\MethodClass;
-use Xaraya\DataObject\DataApi;
+use Xaraya\Modules\DynamicData\MethodClass;
+use Xaraya\Modules\DynamicData\DataApi;
 use sys;
 
 sys::import('xaraya.modules.method');

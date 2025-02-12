@@ -1,7 +1,7 @@
 <?php
 
 use Xaraya\Modules\TestHelper;
-use Xaraya\DataObject\UserGui;
+use Xaraya\Modules\DynamicData\UserGui;
 
 final class UserGuiTest extends TestHelper
 {

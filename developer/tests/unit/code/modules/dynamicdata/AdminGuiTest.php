@@ -1,7 +1,7 @@
 <?php
 
 use Xaraya\Modules\TestHelper;
-use Xaraya\DataObject\AdminGui;
+use Xaraya\Modules\DynamicData\AdminGui;
 
 final class AdminGuiTest extends TestHelper
 {

@@ -12,7 +12,7 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject\Traits;
+namespace Xaraya\Modules\DynamicData\Traits;
 
 use Xaraya\Modules\UserGuiInterface as CoreGuiInterface;
 use Xaraya\Modules\UserGuiTrait as CoreGuiTrait;
@@ -40,8 +40,8 @@ interface UserGuiInterface extends CoreGuiInterface
  *
  * Example:
  * ```
- * use Xaraya\DataObject\Traits\UserGuiInterface;
- * use Xaraya\DataObject\Traits\UserGuiTrait;
+ * use Xaraya\Modules\DynamicData\Traits\UserGuiInterface;
+ * use Xaraya\Modules\DynamicData\Traits\UserGuiTrait;
  * use sys;
  *
  * sys::import('modules.dynamicdata.traits.usergui');

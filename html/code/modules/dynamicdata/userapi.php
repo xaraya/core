@@ -12,10 +12,10 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject;
+namespace Xaraya\Modules\DynamicData;
 
-use Xaraya\DataObject\Traits\UserApiInterface;
-use Xaraya\DataObject\Traits\UserApiTrait;
+use Xaraya\Modules\DynamicData\Traits\UserApiInterface;
+use Xaraya\Modules\DynamicData\Traits\UserApiTrait;
 use xarController;
 use xarDB;
 use xarMLS;

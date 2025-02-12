@@ -14,7 +14,7 @@ sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('modules.dynamicdata.utilapi');
 sys::import('xaraya.facades.variables');
-use Xaraya\DataObject\UtilApi;
+use Xaraya\Modules\DynamicData\UtilApi;
 use Xaraya\Facades\xarVar3;
 
 /**

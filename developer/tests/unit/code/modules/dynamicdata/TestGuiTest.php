@@ -1,7 +1,7 @@
 <?php
 
 use Xaraya\Modules\TestHelper;
-use Xaraya\DataObject\TestGui;
+use Xaraya\Modules\DynamicData\TestGui;
 
 final class TestGuiTest extends TestHelper
 {
@@ -40,7 +40,7 @@ final class TestGuiTest extends TestHelper
         $data = $testgui->test_with_services($args);
 
         $expected = array_merge($args, [
-            'method' => 'Xaraya\DataObject\TestGui::test_with_services',
+            'method' => 'Xaraya\Modules\DynamicData\TestGui::test_with_services',
             'return_url' => 'http://localhost/index.php?module=dynamicdata&amp;type=test&amp;func=other&amp;hello=world',
             'module' => 'dynamicdata',
             'itemtype' => 0,
@@ -59,7 +59,7 @@ final class TestGuiTest extends TestHelper
         $data = $testgui->test_services($args);
 
         $expected = array_merge($args, [
-            'method' => 'Xaraya\DataObject\TestGui\TestServicesMethod::__invoke',
+            'method' => 'Xaraya\Modules\DynamicData\TestGui\TestServicesMethod::__invoke',
             'return_url' => 'http://localhost/index.php?module=dynamicdata&amp;type=test&amp;func=other&amp;hello=world',
             'module' => 'dynamicdata',
             'itemtype' => 0,

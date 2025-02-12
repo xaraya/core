@@ -12,11 +12,11 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject;
+namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Modules\MethodClass as CoreMethodClass;
 use Xaraya\Modules\ModuleServicesInterface;
-use Xaraya\DataObject\Traits\UserApiInterface;
+use Xaraya\Modules\DynamicData\Traits\UserApiInterface;
 
 /**
  * Handle (traditional) DD api/gui functions via module class

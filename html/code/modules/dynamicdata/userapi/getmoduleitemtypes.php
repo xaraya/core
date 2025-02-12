@@ -9,10 +9,10 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject\UserApi;
+namespace Xaraya\Modules\DynamicData\UserApi;
 
-use Xaraya\DataObject\MethodClass;
-use Xaraya\DataObject\UserApi;
+use Xaraya\Modules\DynamicData\MethodClass;
+use Xaraya\Modules\DynamicData\UserApi;
 use BadParameterException;
 use xarMod;
 use sys;
@@ -30,7 +30,7 @@ class GetmoduleitemtypesMethod extends MethodClass
 
     /**
      * utility function to retrieve the list of item types of a module (if any)
-     * @uses \Xaraya\DataObject\UserApi::findModuleItemTypes()
+     * @uses \Xaraya\Modules\DynamicData\UserApi::findModuleItemTypes()
      * @todo remove this before it can propagate - too late, sorry
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return array containing the item types and their description

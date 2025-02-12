@@ -18,17 +18,17 @@ parameters:
 		-
 			message: "#^Undefined variable\\: \\$maxlength$#"
 			count: 1
-			path: html/code/modules/dynamicdata/class/admingui/showpropval.php
+			path: html/code/modules/dynamicdata/admingui/showpropval.php
 
 		-
 			message: "#^Undefined variable\\: \\$size$#"
 			count: 1
-			path: html/code/modules/dynamicdata/class/admingui/showpropval.php
+			path: html/code/modules/dynamicdata/admingui/showpropval.php
 
 		-
 			message: "#^Undefined variable\\: \\$tabindex$#"
 			count: 1
-			path: html/code/modules/dynamicdata/class/admingui/showpropval.php
+			path: html/code/modules/dynamicdata/admingui/showpropval.php
 
 		-
 			message: "#^Call to an undefined method DataObjectMaster\\:\\:checkInput\\(\\)\\.$#"

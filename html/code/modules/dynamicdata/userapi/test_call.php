@@ -12,10 +12,10 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject\UserApi;
+namespace Xaraya\Modules\DynamicData\UserApi;
 
-use Xaraya\DataObject\UserApi;
-use Xaraya\DataObject\MethodClass;
+use Xaraya\Modules\DynamicData\UserApi;
+use Xaraya\Modules\DynamicData\MethodClass;
 use sys;
 
 sys::import('xaraya.modules.method');

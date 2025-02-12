@@ -9,10 +9,10 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject\UserGui;
+namespace Xaraya\Modules\DynamicData\UserGui;
 
-use Xaraya\DataObject\MethodClass;
-use Xaraya\DataObject\UserGui;
+use Xaraya\Modules\DynamicData\MethodClass;
+use Xaraya\Modules\DynamicData\UserGui;
 use xarController;
 use xarMod;
 use xarModVars;

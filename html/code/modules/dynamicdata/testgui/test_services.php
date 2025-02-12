@@ -12,10 +12,10 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject\TestGui;
+namespace Xaraya\Modules\DynamicData\TestGui;
 
-use Xaraya\DataObject\TestGui;
-use Xaraya\DataObject\MethodClass;
+use Xaraya\Modules\DynamicData\TestGui;
+use Xaraya\Modules\DynamicData\MethodClass;
 use sys;
 
 sys::import('xaraya.modules.method');

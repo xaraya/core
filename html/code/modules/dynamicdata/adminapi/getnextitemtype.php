@@ -9,11 +9,11 @@
  * @link https://github.com/mikespub/xaraya-modules
 **/
 
-namespace Xaraya\DataObject\AdminApi;
+namespace Xaraya\Modules\DynamicData\AdminApi;
 
-use Xaraya\DataObject\MethodClass;
-use Xaraya\DataObject\AdminApi;
-use Xaraya\DataObject\UserApi;
+use Xaraya\Modules\DynamicData\MethodClass;
+use Xaraya\Modules\DynamicData\AdminApi;
+use Xaraya\Modules\DynamicData\UserApi;
 use DataObject;
 use xarMod;
 use sys;
@@ -30,7 +30,7 @@ class GetnextitemtypeMethod extends MethodClass
 
     /**
      * get the next itemtype of objects pertaining to a given module
-     * @uses \Xaraya\DataObject\UserApi::findModuleItemTypes()
+     * @uses \Xaraya\Modules\DynamicData\UserApi::findModuleItemTypes()
      * @author the DynamicData module development team
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @return int of object definitions

@@ -12,7 +12,7 @@
  * @author mikespub <mikespub@xaraya.com>
  **/
 
-namespace Xaraya\DataObject\Traits;
+namespace Xaraya\Modules\DynamicData\Traits;
 
 use Xaraya\Modules\UserApiInterface as CoreApiInterface;
 use Xaraya\Modules\UserApiTrait as CoreApiTrait;
@@ -40,8 +40,8 @@ interface UserApiInterface extends CoreApiInterface, ItemLinksInterface
  *
  * Example:
  * ```
- * use Xaraya\DataObject\Traits\UserApiInterface;
- * use Xaraya\DataObject\Traits\UserApiTrait;
+ * use Xaraya\Modules\DynamicData\Traits\UserApiInterface;
+ * use Xaraya\Modules\DynamicData\Traits\UserApiTrait;
  * use sys;
  *
  * sys::import('modules.dynamicdata.traits.userapi');
