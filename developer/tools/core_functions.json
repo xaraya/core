@@ -7,7 +7,8 @@
             "$l = 0"
         ],
         "namespace": "",
-        "line": 61
+        "lines": "61-94",
+        "docs": null
     },
     "blocks_adminapi_load_legacy": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/blocks/load.php",
@@ -20,18 +21,8 @@
             "$blockDir"
         ],
         "namespace": "",
-        "line": 14
-    },
-    "bohwaz_strftime": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "bohwaz_strftime",
-        "args": [
-            "string $format",
-            "$timestamp = null",
-            "?string $locale = null"
-        ],
-        "namespace": "",
-        "line": 785
+        "lines": "14-124",
+        "docs": {}
     },
     "debug": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/exceptions.php",
@@ -40,7 +31,8 @@
             "$anything"
         ],
         "namespace": "",
-        "line": 62
+        "lines": "62-65",
+        "docs": {}
     },
     "m": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/structures/sequences/runtests.php",
@@ -50,14 +42,16 @@
             "$level = 0"
         ],
         "namespace": "",
-        "line": 55
+        "lines": "55-59",
+        "docs": {}
     },
     "xar_legacy_templates_entities": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
         "name": "xar_legacy_templates_entities",
         "args": [],
         "namespace": "",
-        "line": 426
+        "lines": "426-536",
+        "docs": {}
     },
     "xar_legacy_templates_fixlegacy": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
@@ -66,7 +60,8 @@
             "$templatestring"
         ],
         "namespace": "",
-        "line": 399
+        "lines": "399-420",
+        "docs": {}
     },
     "xar_legacy_templates_loadsourcefilename": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
@@ -80,7 +75,8 @@
             "$canonical"
         ],
         "namespace": "",
-        "line": 377
+        "lines": "377-390",
+        "docs": {}
     },
     "xar_legacy_validations_dropdown": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/validations.php",
@@ -89,7 +85,8 @@
             "$validation"
         ],
         "namespace": "",
-        "line": 15
+        "lines": "15-26",
+        "docs": {}
     },
     "xarassignprivilege": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
@@ -99,11 +96,68 @@
             "$role"
         ],
         "namespace": "",
-        "line": 165,
+        "lines": "165-168",
+        "docs": {},
         "uses": "xarPrivileges::assign()",
         "class": "xarPrivileges",
         "check": "assign",
         "method": "assign"
+    },
+    "xaraya\\bridge\\test\\graphql_client": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/client.php",
+        "name": "Xaraya\\Bridge\\Test\\graphql_client",
+        "args": [
+            "$argc",
+            "$argv"
+        ],
+        "namespace": "Xaraya\\Bridge\\Test\\",
+        "lines": "108-122",
+        "docs": {}
+    },
+    "xaraya\\bridge\\test\\parse_cli_arguments": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/testclient.php",
+        "name": "Xaraya\\Bridge\\Test\\parse_cli_arguments",
+        "args": [
+            "$argc",
+            "$argv"
+        ],
+        "namespace": "Xaraya\\Bridge\\Test\\",
+        "lines": "232-244",
+        "docs": {}
+    },
+    "xaraya\\bridge\\test\\restapi_client": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/restapi/client.php",
+        "name": "Xaraya\\Bridge\\Test\\restapi_client",
+        "args": [
+            "$argc",
+            "$argv"
+        ],
+        "namespace": "Xaraya\\Bridge\\Test\\",
+        "lines": "125-143",
+        "docs": {}
+    },
+    "xaraya\\bridge\\test\\test_client": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/testclient.php",
+        "name": "Xaraya\\Bridge\\Test\\test_client",
+        "args": [
+            "$argc",
+            "$argv"
+        ],
+        "namespace": "Xaraya\\Bridge\\Test\\",
+        "lines": "252-261",
+        "docs": {}
+    },
+    "xaraya\\tools\\strftime": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tools/strftime.php",
+        "name": "Xaraya\\Tools\\strftime",
+        "args": [
+            "string $format",
+            "$timestamp = null",
+            "?string $locale = null"
+        ],
+        "namespace": "Xaraya\\Tools\\",
+        "lines": "25-181",
+        "docs": {}
     },
     "xarblock_init": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
@@ -112,7 +166,8 @@
             "&$args"
         ],
         "namespace": "",
-        "line": 325,
+        "lines": "325-325",
+        "docs": {},
         "uses": "xarBlock::init()",
         "class": "xarBlock",
         "check": "init",
@@ -125,7 +180,8 @@
             "$blockinfo"
         ],
         "namespace": "",
-        "line": 332,
+        "lines": "332-332",
+        "docs": {},
         "uses": "xarBlock::render()",
         "class": "xarBlock",
         "check": "render",
@@ -138,7 +194,8 @@
             "$args"
         ],
         "namespace": "",
-        "line": 339,
+        "lines": "339-339",
+        "docs": {},
         "uses": "xarBlock::renderBlock()",
         "class": "xarBlock",
         "check": "renderBlock",
@@ -152,7 +209,8 @@
             "$template = NULL"
         ],
         "namespace": "",
-        "line": 346,
+        "lines": "346-346",
+        "docs": {},
         "uses": "xarBlock::renderGroup()",
         "class": "xarBlock",
         "check": "renderGroup",
@@ -165,7 +223,8 @@
             "$obj"
         ],
         "namespace": "",
-        "line": 33,
+        "lines": "33-36",
+        "docs": {},
         "class": "xarBoot",
         "check": "getPublicObjectProperties"
     },
@@ -176,7 +235,8 @@
             "array $args = array()"
         ],
         "namespace": "",
-        "line": 364,
+        "lines": "364-364",
+        "docs": {},
         "uses": "xarCache::getStorage()",
         "class": "xarCache",
         "check": "getStorage",
@@ -189,7 +249,8 @@
             "$args = false"
         ],
         "namespace": "",
-        "line": 357,
+        "lines": "357-357",
+        "docs": {},
         "uses": "xarCache::init()",
         "class": "xarCache",
         "check": "init",
@@ -202,7 +263,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 109,
+        "lines": "109-109",
+        "docs": {},
         "uses": "xarConfigVars::get()",
         "class": "xarConfigVars",
         "check": "get",
@@ -216,7 +278,8 @@
             "$value"
         ],
         "namespace": "",
-        "line": 103,
+        "lines": "103-103",
+        "docs": {},
         "uses": "xarConfigVars::set()",
         "class": "xarConfigVars",
         "check": "set",
@@ -229,7 +292,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 68,
+        "lines": "68-72",
+        "docs": {},
         "uses": "xarSystemVars::get()",
         "class": "xarSystemVars",
         "check": "get",
@@ -240,7 +304,8 @@
         "name": "xarCoreGetVarDirPath",
         "args": [],
         "namespace": "",
-        "line": 58,
+        "lines": "58-58",
+        "docs": {},
         "uses": "sys::varpath()",
         "class": "sys",
         "check": "GetVarDirPath",
@@ -252,7 +317,8 @@
         "name": "xarCurrentRole",
         "args": [],
         "namespace": "",
-        "line": 254,
+        "lines": "254-257",
+        "docs": {},
         "uses": "xarRoles::current()",
         "class": "xarRoles",
         "check": "current",
@@ -266,7 +332,8 @@
             "$args"
         ],
         "namespace": "",
-        "line": 81,
+        "lines": "83-151",
+        "docs": {},
         "class": "xarDB",
         "check": "_datadictAlterTable"
     },
@@ -278,7 +345,8 @@
             "$parameters"
         ],
         "namespace": "",
-        "line": 160,
+        "lines": "162-382",
+        "docs": {},
         "class": "xarDB",
         "check": "_datadictColumnDefinition"
     },
@@ -289,7 +357,8 @@
             "$databaseName"
         ],
         "namespace": "",
-        "line": 393,
+        "lines": "395-406",
+        "docs": {},
         "class": "xarDB",
         "check": "_datadictCreateDatabase"
     },
@@ -301,7 +370,8 @@
             "$index"
         ],
         "namespace": "",
-        "line": 437,
+        "lines": "439-450",
+        "docs": {},
         "class": "xarDB",
         "check": "_datadictCreateIndex"
     },
@@ -313,7 +383,8 @@
             "$fields"
         ],
         "namespace": "",
-        "line": 37,
+        "lines": "39-65",
+        "docs": {},
         "class": "xarDB",
         "check": "_datadictCreateTable"
     },
@@ -325,7 +396,8 @@
             "$index"
         ],
         "namespace": "",
-        "line": 460,
+        "lines": "462-473",
+        "docs": {},
         "class": "xarDB",
         "check": "_datadictDropIndex"
     },
@@ -336,7 +408,8 @@
             "$tableName"
         ],
         "namespace": "",
-        "line": 415,
+        "lines": "417-428",
+        "docs": {},
         "class": "xarDB",
         "check": "_datadictDropTable"
     },
@@ -345,7 +418,8 @@
         "name": "xarDB__datadictInit",
         "args": [],
         "namespace": "",
-        "line": 477,
+        "lines": "479-494",
+        "docs": {},
         "class": "xarDB",
         "check": "_datadictInit"
     },
@@ -357,7 +431,8 @@
             "$args"
         ],
         "namespace": "",
-        "line": 102,
+        "lines": "104-207",
+        "docs": {},
         "class": "xarDB",
         "check": "_mysqlAlterTable"
     },
@@ -369,7 +444,8 @@
             "$parameters"
         ],
         "namespace": "",
-        "line": 215,
+        "lines": "217-452",
+        "docs": {},
         "class": "xarDB",
         "check": "_mysqlColumnDefinition"
     },
@@ -382,7 +458,8 @@
             "$charset = null"
         ],
         "namespace": "",
-        "line": 36,
+        "lines": "38-87",
+        "docs": {},
         "class": "xarDB",
         "check": "_mysqlCreateTable"
     },
@@ -394,7 +471,8 @@
             "$args"
         ],
         "namespace": "",
-        "line": 97,
+        "lines": "99-191",
+        "docs": {},
         "class": "xarDB",
         "check": "_oracleAlterTable"
     },
@@ -406,7 +484,8 @@
             "$parameters"
         ],
         "namespace": "",
-        "line": 199,
+        "lines": "201-395",
+        "docs": {},
         "class": "xarDB",
         "check": "_oracleColumnDefinition"
     },
@@ -419,7 +498,8 @@
             "$charset = null"
         ],
         "namespace": "",
-        "line": 36,
+        "lines": "38-83",
+        "docs": {},
         "class": "xarDB",
         "check": "_oracleCreateTable"
     },
@@ -431,7 +511,8 @@
             "$parameters"
         ],
         "namespace": "",
-        "line": 182,
+        "lines": "182-390",
+        "docs": {},
         "class": "xarDB",
         "check": "_postgresColumnDefinition"
     },
@@ -443,7 +524,8 @@
             "$args"
         ],
         "namespace": "",
-        "line": 99,
+        "lines": "99-172",
+        "docs": {},
         "class": "xarDB",
         "check": "_postgresqlAlterTable"
     },
@@ -456,7 +538,8 @@
             "$charset = null"
         ],
         "namespace": "",
-        "line": 36,
+        "lines": "36-83",
+        "docs": {},
         "class": "xarDB",
         "check": "_postgresqlCreateTable"
     },
@@ -468,7 +551,8 @@
             "$args"
         ],
         "namespace": "",
-        "line": 88,
+        "lines": "88-120",
+        "docs": {},
         "class": "xarDB",
         "check": "_sqliteAlterTable"
     },
@@ -480,7 +564,8 @@
             "$parameters"
         ],
         "namespace": "",
-        "line": 134,
+        "lines": "134-293",
+        "docs": {},
         "class": "xarDB",
         "check": "_sqliteColumnDefinition"
     },
@@ -493,7 +578,8 @@
             "$charset = null"
         ],
         "namespace": "",
-        "line": 35,
+        "lines": "35-71",
+        "docs": {},
         "class": "xarDB",
         "check": "_sqliteCreateTable"
     },
@@ -504,7 +590,8 @@
             "array &$args"
         ],
         "namespace": "",
-        "line": 372,
+        "lines": "380-399",
+        "docs": null,
         "class": "xarDB",
         "check": "init"
     },
@@ -517,7 +604,8 @@
             "$databaseType = NULL"
         ],
         "namespace": "",
-        "line": 168,
+        "lines": "176-218",
+        "docs": {},
         "uses": "xarTableDDL::alterTable()",
         "class": "xarTableDDL",
         "check": "alterTable",
@@ -533,7 +621,8 @@
             "$databaseType = NULL"
         ],
         "namespace": "",
-        "line": 261,
+        "lines": "269-383",
+        "docs": {},
         "uses": "xarTableDDL::dropTable()",
         "class": "xarTableDDL",
         "check": "dropTable",
@@ -548,7 +637,8 @@
             "$databaseCharset = 'utf-8'"
         ],
         "namespace": "",
-        "line": 47,
+        "lines": "55-91",
+        "docs": {},
         "uses": "xarTableDDL::createDatabase()",
         "class": "xarTableDDL",
         "check": "createDatabase",
@@ -563,7 +653,8 @@
             "$databaseType = NULL"
         ],
         "namespace": "",
-        "line": 386,
+        "lines": "396-451",
+        "docs": {},
         "uses": "xarTableDDL::createIndex()",
         "class": "xarTableDDL",
         "check": "createIndex",
@@ -579,7 +670,8 @@
             "$charset = \"\""
         ],
         "namespace": "",
-        "line": 97,
+        "lines": "105-153",
+        "docs": {},
         "uses": "xarTableDDL::createTable()",
         "class": "xarTableDDL",
         "check": "createTable",
@@ -594,7 +686,8 @@
             "$databaseType = NULL"
         ],
         "namespace": "",
-        "line": 453,
+        "lines": "463-501",
+        "docs": {},
         "uses": "xarTableDDL::dropIndex()",
         "class": "xarTableDDL",
         "check": "dropIndex",
@@ -608,7 +701,8 @@
             "$databaseType = NULL"
         ],
         "namespace": "",
-        "line": 221,
+        "lines": "229-258",
+        "docs": {},
         "uses": "xarTableDDL::dropTable()",
         "class": "xarTableDDL",
         "check": "dropTable",
@@ -621,7 +715,8 @@
             "$index = 0"
         ],
         "namespace": "",
-        "line": 269,
+        "lines": "269-269",
+        "docs": {},
         "uses": "xarDB::getConn()",
         "class": "xarDB",
         "check": "getConn",
@@ -632,7 +727,8 @@
         "name": "xarDBGetHost",
         "args": [],
         "namespace": "",
-        "line": 81,
+        "lines": "81-81",
+        "docs": {},
         "uses": "xarDB::getHost()",
         "class": "xarDB",
         "check": "getHost",
@@ -643,7 +739,8 @@
         "name": "xarDBGetName",
         "args": [],
         "namespace": "",
-        "line": 90,
+        "lines": "90-90",
+        "docs": {},
         "uses": "xarDB::getName()",
         "class": "xarDB",
         "check": "getName",
@@ -654,7 +751,8 @@
         "name": "xarDBGetSiteTablePrefix",
         "args": [],
         "namespace": "",
-        "line": 282,
+        "lines": "282-282",
+        "docs": {},
         "uses": "xarDB::getPrefix()",
         "class": "xarDB",
         "check": "getPrefix",
@@ -665,7 +763,8 @@
         "name": "xarDBGetSystemTablePrefix",
         "args": [],
         "namespace": "",
-        "line": 275,
+        "lines": "275-275",
+        "docs": {},
         "uses": "xarDB::getPrefix()",
         "class": "xarDB",
         "check": "getPrefix",
@@ -676,7 +775,8 @@
         "name": "xarDBGetTables",
         "args": [],
         "namespace": "",
-        "line": 289,
+        "lines": "289-289",
+        "docs": {},
         "uses": "xarDB::getTables()",
         "class": "xarDB",
         "check": "getTables",
@@ -687,7 +787,8 @@
         "name": "xarDBGetType",
         "args": [],
         "namespace": "",
-        "line": 304,
+        "lines": "304-304",
+        "docs": {},
         "uses": "xarDB::getType()",
         "class": "xarDB",
         "check": "getType",
@@ -698,7 +799,8 @@
         "name": "xarDBLoadTableMaintenanceAPI",
         "args": [],
         "namespace": "",
-        "line": 297,
+        "lines": "297-297",
+        "docs": {},
         "uses": "xarTableDDL::init()",
         "class": "xarTableDDL",
         "check": "init",
@@ -712,7 +814,8 @@
             "$mode = 'READONLY'"
         ],
         "namespace": "",
-        "line": 311,
+        "lines": "311-314",
+        "docs": {},
         "uses": "xarTableDDL::init()",
         "class": "xarTableDDL",
         "check": "init",
@@ -732,7 +835,8 @@
             "$description = ''"
         ],
         "namespace": "",
-        "line": 202,
+        "lines": "202-205",
+        "docs": {},
         "uses": "xarPrivileges::defineInstance()",
         "class": "xarPrivileges",
         "check": "defineInstance",
@@ -745,7 +849,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 243,
+        "lines": "243-243",
+        "docs": {},
         "uses": "xarRoles::findRole()",
         "class": "xarRoles",
         "check": "findRole",
@@ -756,7 +861,8 @@
         "name": "xarGetGroups",
         "args": [],
         "namespace": "",
-        "line": 231,
+        "lines": "231-231",
+        "docs": {},
         "uses": "xarRoles::getgroups()",
         "class": "xarRoles",
         "check": "getgroups",
@@ -770,7 +876,8 @@
             "$name2"
         ],
         "namespace": "",
-        "line": 276,
+        "lines": "276-279",
+        "docs": {},
         "uses": "xarRoles::isAncestor()",
         "class": "xarRoles",
         "check": "isAncestor",
@@ -784,7 +891,8 @@
             "$name2"
         ],
         "namespace": "",
-        "line": 265,
+        "lines": "265-268",
+        "docs": {},
         "uses": "xarRoles::isParent()",
         "class": "xarRoles",
         "check": "isParent",
@@ -798,7 +906,8 @@
             "$localeData = NULL"
         ],
         "namespace": "",
-        "line": 202,
+        "lines": "207-214",
+        "docs": {},
         "class": "xarLocale",
         "check": "FormatCurrency",
         "method": "formatCurrency",
@@ -816,7 +925,8 @@
             "$addoffset = true"
         ],
         "namespace": "",
-        "line": 519,
+        "lines": "524-548",
+        "docs": {},
         "class": "xarLocale",
         "check": "FormatDate",
         "method": "formatDate",
@@ -835,7 +945,8 @@
             "$isCurrency = false"
         ],
         "namespace": "",
-        "line": 224,
+        "lines": "229-312",
+        "docs": {},
         "class": "xarLocale",
         "check": "FormatNumber",
         "method": "formatNumber",
@@ -854,7 +965,8 @@
             "$addoffset = false"
         ],
         "namespace": "",
-        "line": 493,
+        "lines": "498-506",
+        "docs": {},
         "class": "xarLocale",
         "check": "FormatUTCDate",
         "method": "formatUTCDate",
@@ -873,7 +985,8 @@
             "$addoffset = true"
         ],
         "namespace": "",
-        "line": 348,
+        "lines": "353-380",
+        "docs": {},
         "class": "xarLocale",
         "check": "GetFormattedDate",
         "method": "getFormattedDate",
@@ -892,7 +1005,8 @@
             "$addoffset = true"
         ],
         "namespace": "",
-        "line": 416,
+        "lines": "421-484",
+        "docs": {},
         "class": "xarLocale",
         "check": "GetFormattedTime",
         "method": "getFormattedTime",
@@ -911,7 +1025,8 @@
             "$addoffset = false"
         ],
         "namespace": "",
-        "line": 321,
+        "lines": "326-335",
+        "docs": {},
         "class": "xarLocale",
         "check": "GetFormattedUTCDate",
         "method": "getFormattedUTCDate",
@@ -930,7 +1045,8 @@
             "$addoffset = false"
         ],
         "namespace": "",
-        "line": 389,
+        "lines": "394-403",
+        "docs": {},
         "class": "xarLocale",
         "check": "GetFormattedUTCTime",
         "method": "getFormattedUTCTime",
@@ -947,7 +1063,8 @@
             "$locale"
         ],
         "namespace": "",
-        "line": 102,
+        "lines": "104-107",
+        "docs": {},
         "uses": "xarMLS::localeGetInfo()",
         "class": "xarMLS",
         "check": "localeGetInfo",
@@ -960,7 +1077,8 @@
             "$filter = array()"
         ],
         "namespace": "",
-        "line": 122,
+        "lines": "124-127",
+        "docs": {},
         "uses": "xarMLS::localeGetList()",
         "class": "xarMLS",
         "check": "localeGetList",
@@ -973,7 +1091,8 @@
             "$localeInfo"
         ],
         "namespace": "",
-        "line": 112,
+        "lines": "114-117",
+        "docs": {},
         "uses": "xarMLS::localeGetString()",
         "class": "xarMLS",
         "check": "localeGetString",
@@ -987,7 +1106,8 @@
             "$localeData = NULL"
         ],
         "namespace": "",
-        "line": 147,
+        "lines": "152-162",
+        "docs": {},
         "class": "xarLocale",
         "check": "ParseCurrency",
         "method": "parseCurrency",
@@ -1005,7 +1125,8 @@
             "$isCurrency = false"
         ],
         "namespace": "",
-        "line": 174,
+        "lines": "179-190",
+        "docs": {},
         "class": "xarLocale",
         "check": "ParseNumber",
         "method": "parseNumber",
@@ -1022,7 +1143,8 @@
             "array $array"
         ],
         "namespace": "",
-        "line": 16,
+        "lines": "16-109",
+        "docs": {},
         "class": "xarLog",
         "check": "_dumpVariable"
     },
@@ -1031,7 +1153,8 @@
         "name": "xarLog__shutdown_handler",
         "args": [],
         "namespace": "",
-        "line": 259,
+        "lines": "264-295",
+        "docs": {},
         "class": "xarLog",
         "check": "_shutdown_handler"
     },
@@ -1042,7 +1165,8 @@
             "$string"
         ],
         "namespace": "",
-        "line": 17,
+        "lines": "17-31",
+        "docs": {},
         "class": "xarLog",
         "check": "_stringToLevel"
     },
@@ -1051,7 +1175,8 @@
         "name": "xarLogConfigFile",
         "args": [],
         "namespace": "",
-        "line": 20,
+        "lines": "20-23",
+        "docs": {},
         "uses": "xarLog::configFile()",
         "class": "xarLog",
         "check": "configFile",
@@ -1062,7 +1187,8 @@
         "name": "xarLogConfigReadable",
         "args": [],
         "namespace": "",
-        "line": 30,
+        "lines": "30-33",
+        "docs": {},
         "uses": "xarLog::configReadable()",
         "class": "xarLog",
         "check": "configReadable",
@@ -1073,7 +1199,8 @@
         "name": "xarLogFallbackFile",
         "args": [],
         "namespace": "",
-        "line": 40,
+        "lines": "40-43",
+        "docs": {},
         "uses": "xarLog::fallbackFile()",
         "class": "xarLog",
         "check": "fallbackFile",
@@ -1084,7 +1211,8 @@
         "name": "xarLogFallbackPossible",
         "args": [],
         "namespace": "",
-        "line": 50,
+        "lines": "50-53",
+        "docs": {},
         "uses": "xarLog::fallbackPossible()",
         "class": "xarLog",
         "check": "fallbackPossible",
@@ -1098,7 +1226,8 @@
             "$level = ''"
         ],
         "namespace": "",
-        "line": 60,
+        "lines": "60-64",
+        "docs": {},
         "uses": "xarLog::message()",
         "class": "xarLog",
         "check": "message",
@@ -1113,7 +1242,8 @@
             "$level = ''"
         ],
         "namespace": "",
-        "line": 71,
+        "lines": "71-75",
+        "docs": {},
         "uses": "xarLog::variable()",
         "class": "xarLog",
         "check": "variable",
@@ -1127,7 +1257,8 @@
             "$parentName"
         ],
         "namespace": "",
-        "line": 149,
+        "lines": "149-152",
+        "docs": {},
         "uses": "xarPrivileges::makeMember()",
         "class": "xarPrivileges",
         "check": "makeMember",
@@ -1140,7 +1271,8 @@
             "$privilege"
         ],
         "namespace": "",
-        "line": 164,
+        "lines": "164-164",
+        "docs": {},
         "class": "xarMake",
         "check": "PrivilegeRoot"
     },
@@ -1152,7 +1284,8 @@
             "$parentId"
         ],
         "namespace": "",
-        "line": 96,
+        "lines": "96-99",
+        "docs": {},
         "uses": "xarRoles::makeMemberByID()",
         "class": "xarRoles",
         "check": "makeMemberByID",
@@ -1166,7 +1299,8 @@
             "$parentName"
         ],
         "namespace": "",
-        "line": 64,
+        "lines": "64-67",
+        "docs": {},
         "uses": "xarRoles::makeMemberByName()",
         "class": "xarRoles",
         "check": "makeMemberByName",
@@ -1180,7 +1314,8 @@
             "$parentName"
         ],
         "namespace": "",
-        "line": 80,
+        "lines": "80-83",
+        "docs": {},
         "uses": "xarRoles::makeMemberByUname()",
         "class": "xarRoles",
         "check": "makeMemberByUname",
@@ -1193,7 +1328,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 170,
+        "lines": "170-170",
+        "docs": {},
         "class": "xarMake",
         "check": "RoleRoot"
     },
@@ -1206,7 +1342,8 @@
             "$component = \"All\""
         ],
         "namespace": "",
-        "line": 361,
+        "lines": "361-364",
+        "docs": {},
         "uses": "xarSecurity::hasMask()",
         "class": "xarSecurity",
         "check": "hasMask",
@@ -1219,7 +1356,8 @@
             "$rawstring"
         ],
         "namespace": "",
-        "line": 82,
+        "lines": "83-86",
+        "docs": {},
         "uses": "xarMLS::translate()",
         "class": "xarMLS",
         "check": "translate",
@@ -1232,7 +1370,8 @@
             "$key"
         ],
         "namespace": "",
-        "line": 92,
+        "lines": "94-97",
+        "docs": {},
         "uses": "xarMLS::translateByKey()",
         "class": "xarMLS",
         "check": "translateByKey",
@@ -1245,7 +1384,8 @@
             "$directory = NULL"
         ],
         "namespace": "",
-        "line": 212,
+        "lines": "214-217",
+        "docs": {},
         "uses": "xarMLS::iswritable()",
         "class": "xarMLS",
         "check": "iswritable",
@@ -1258,7 +1398,8 @@
             "$path"
         ],
         "namespace": "",
-        "line": 202,
+        "lines": "204-207",
+        "docs": {},
         "uses": "xarMLS::mkdirr()",
         "class": "xarMLS",
         "check": "mkdirr",
@@ -1271,7 +1412,8 @@
             "$locale"
         ],
         "namespace": "",
-        "line": 192,
+        "lines": "194-197",
+        "docs": {},
         "uses": "xarMLS::parseLocaleString()",
         "class": "xarMLS",
         "check": "parseLocaleString",
@@ -1285,7 +1427,8 @@
             "$method"
         ],
         "namespace": "",
-        "line": 182,
+        "lines": "184-187",
+        "docs": {},
         "uses": "xarMLS::convertFromInput()",
         "class": "xarMLS",
         "check": "convertFromInput",
@@ -1301,7 +1444,8 @@
             "$ctxName"
         ],
         "namespace": "",
-        "line": 162,
+        "lines": "164-167",
+        "docs": {},
         "uses": "xarMLS::_loadTranslations()",
         "class": "xarMLS",
         "check": "_loadTranslations",
@@ -1314,7 +1458,8 @@
             "$locale"
         ],
         "namespace": "",
-        "line": 152,
+        "lines": "154-157",
+        "docs": {},
         "uses": "xarMLS::setCurrentLocale()",
         "class": "xarMLS",
         "check": "setCurrentLocale",
@@ -1328,7 +1473,8 @@
             "$timestamp = null"
         ],
         "namespace": "",
-        "line": 582,
+        "lines": "587-618",
+        "docs": {},
         "class": "xarMLS",
         "check": "strftime"
     },
@@ -1339,7 +1485,8 @@
             "$timestamp = null"
         ],
         "namespace": "",
-        "line": 142,
+        "lines": "144-147",
+        "docs": {},
         "uses": "xarMLS::userOffset()",
         "class": "xarMLS",
         "check": "userOffset",
@@ -1353,7 +1500,8 @@
             "$flag = 1"
         ],
         "namespace": "",
-        "line": 132,
+        "lines": "134-137",
+        "docs": {},
         "uses": "xarMLS::userTime()",
         "class": "xarMLS",
         "check": "userTime",
@@ -1366,7 +1514,8 @@
             "$locale"
         ],
         "namespace": "",
-        "line": 72,
+        "lines": "72-75",
+        "docs": {},
         "uses": "xarMLS::getCharsetFromLocale()",
         "class": "xarMLS",
         "check": "getCharsetFromLocale",
@@ -1377,7 +1526,8 @@
         "name": "xarMLSGetCurrentLocale",
         "args": [],
         "namespace": "",
-        "line": 62,
+        "lines": "62-65",
+        "docs": {},
         "uses": "xarMLS::getCurrentLocale()",
         "class": "xarMLS",
         "check": "getCurrentLocale",
@@ -1388,7 +1538,8 @@
         "name": "xarMLSGetMode",
         "args": [],
         "namespace": "",
-        "line": 32,
+        "lines": "32-35",
+        "docs": {},
         "uses": "xarMLS::getMode()",
         "class": "xarMLS",
         "check": "getMode",
@@ -1399,7 +1550,8 @@
         "name": "xarMLSGetSiteLocale",
         "args": [],
         "namespace": "",
-        "line": 42,
+        "lines": "42-45",
+        "docs": {},
         "uses": "xarMLS::getSiteLocale()",
         "class": "xarMLS",
         "check": "getSiteLocale",
@@ -1410,7 +1562,8 @@
         "name": "xarMLSListSiteLocales",
         "args": [],
         "namespace": "",
-        "line": 52,
+        "lines": "52-55",
+        "docs": {},
         "uses": "xarMLS::listSiteLocales()",
         "class": "xarMLS",
         "check": "listSiteLocales",
@@ -1423,7 +1576,8 @@
             "$locale = NULL"
         ],
         "namespace": "",
-        "line": 44,
+        "lines": "48-137",
+        "docs": {},
         "uses": "xarLocale::loadData()",
         "class": "xarLocale",
         "check": "loadData",
@@ -1436,7 +1590,8 @@
             "$path"
         ],
         "namespace": "",
-        "line": 172,
+        "lines": "174-177",
+        "docs": {},
         "uses": "xarMLS::loadTranslations()",
         "class": "xarMLS",
         "check": "loadTranslations",
@@ -1450,7 +1605,8 @@
             "$modDir"
         ],
         "namespace": "",
-        "line": 203,
+        "lines": "203-204",
+        "docs": {},
         "uses": "xarMod::loadDbInfo()",
         "class": "xarMod",
         "check": "loadDbInfo",
@@ -1466,7 +1622,8 @@
             "$psep"
         ],
         "namespace": "",
-        "line": 113,
+        "lines": "113-116",
+        "docs": {},
         "uses": "RequestURL::addParametersToPath()",
         "class": "RequestURL",
         "check": "_URLaddParametersToPath",
@@ -1481,7 +1638,8 @@
             "$type = 'getname'"
         ],
         "namespace": "",
-        "line": 93,
+        "lines": "93-96",
+        "docs": {},
         "uses": "RequestURL::encode()",
         "class": "RequestURL",
         "check": "_URLencode",
@@ -1496,7 +1654,8 @@
             "$prefix"
         ],
         "namespace": "",
-        "line": 103,
+        "lines": "103-106",
+        "docs": {},
         "uses": "RequestURL::nested()",
         "class": "RequestURL",
         "check": "_URLnested",
@@ -1511,7 +1670,8 @@
             "$type = 'module'"
         ],
         "namespace": "",
-        "line": 187,
+        "lines": "187-188",
+        "docs": {},
         "uses": "xarMod::getBaseInfo()",
         "class": "xarMod",
         "check": "getBaseInfo",
@@ -1525,7 +1685,8 @@
             "$type = 'module'"
         ],
         "namespace": "",
-        "line": 195,
+        "lines": "195-196",
+        "docs": {},
         "uses": "xarMod::getFileInfo()",
         "class": "xarMod",
         "check": "getFileInfo",
@@ -1540,7 +1701,8 @@
             "$type = 'module'"
         ],
         "namespace": "",
-        "line": 219,
+        "lines": "219-220",
+        "docs": {},
         "uses": "xarMod::getState()",
         "class": "xarMod",
         "check": "getState",
@@ -1556,7 +1718,8 @@
             "$args = array()"
         ],
         "namespace": "",
-        "line": 243,
+        "lines": "243-244",
+        "docs": {},
         "uses": "xarMod::apiFunc()",
         "class": "xarMod",
         "check": "apiFunc",
@@ -1570,7 +1733,8 @@
             "$modType = 'user'"
         ],
         "namespace": "",
-        "line": 259,
+        "lines": "259-260",
+        "docs": {},
         "uses": "xarMod::apiLoad()",
         "class": "xarMod",
         "check": "apiLoad",
@@ -1588,7 +1752,8 @@
             "$callerItemType = ''"
         ],
         "namespace": "",
-        "line": 24,
+        "lines": "24-27",
+        "docs": {},
         "uses": "xarModHooks::call()",
         "class": "xarModHooks",
         "check": "call",
@@ -1603,7 +1768,8 @@
             "$type = 'module'"
         ],
         "namespace": "",
-        "line": 211,
+        "lines": "211-212",
+        "docs": {},
         "uses": "xarMod::loadDbInfo()",
         "class": "xarMod",
         "check": "loadDbInfo",
@@ -1617,7 +1783,8 @@
             "$modName"
         ],
         "namespace": "",
-        "line": 284,
+        "lines": "284-284",
+        "docs": {},
         "uses": "xarModAlias::delete()",
         "class": "xarModAlias",
         "check": "delete",
@@ -1630,7 +1797,8 @@
             "$modName"
         ],
         "namespace": "",
-        "line": 143,
+        "lines": "143-143",
+        "docs": {},
         "uses": "xarModVars::delete_all()",
         "class": "xarModVars",
         "check": "delete_all",
@@ -1645,7 +1813,8 @@
             "$id = NULL"
         ],
         "namespace": "",
-        "line": 86,
+        "lines": "86-86",
+        "docs": {},
         "uses": "xarModUserVars::delete()",
         "class": "xarModUserVars",
         "check": "delete",
@@ -1659,7 +1828,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 136,
+        "lines": "136-136",
+        "docs": {},
         "uses": "xarModVars::delete()",
         "class": "xarModVars",
         "check": "delete",
@@ -1675,7 +1845,8 @@
             "$args = array()"
         ],
         "namespace": "",
-        "line": 235,
+        "lines": "235-236",
+        "docs": {},
         "uses": "xarMod::guiFunc()",
         "class": "xarMod",
         "check": "guiFunc",
@@ -1688,7 +1859,8 @@
             "$alias"
         ],
         "namespace": "",
-        "line": 272,
+        "lines": "272-272",
+        "docs": {},
         "uses": "xarModAlias::resolve()",
         "class": "xarModAlias",
         "check": "resolve",
@@ -1702,7 +1874,8 @@
             "$type = 'module'"
         ],
         "namespace": "",
-        "line": 163,
+        "lines": "163-164",
+        "docs": {},
         "uses": "xarMod::getDisplayDescription()",
         "class": "xarMod",
         "check": "getDisplayDescription",
@@ -1716,7 +1889,8 @@
             "$type = 'module'"
         ],
         "namespace": "",
-        "line": 155,
+        "lines": "155-156",
+        "docs": {},
         "uses": "xarMod::getDisplayName()",
         "class": "xarMod",
         "check": "getDisplayName",
@@ -1732,7 +1906,8 @@
             "$callerItemType = ''"
         ],
         "namespace": "",
-        "line": 36,
+        "lines": "36-39",
+        "docs": {},
         "uses": "xarModHooks::getList()",
         "class": "xarModHooks",
         "check": "getList",
@@ -1746,11 +1921,12 @@
             "$type = 'module'"
         ],
         "namespace": "",
-        "line": 171,
-        "uses": "xarMod::getRegId()",
+        "lines": "171-172",
+        "docs": {},
+        "uses": "xarMod::getRegID()",
         "class": "xarMod",
-        "check": "getRegId",
-        "method": "getRegId"
+        "check": "getRegID",
+        "method": "getRegID"
     },
     "xarmodgetinfo": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
@@ -1760,7 +1936,8 @@
             "$type = 'module'"
         ],
         "namespace": "",
-        "line": 179,
+        "lines": "179-180",
+        "docs": {},
         "uses": "xarMod::getInfo()",
         "class": "xarMod",
         "check": "getInfo",
@@ -1771,7 +1948,8 @@
         "name": "xarModGetName",
         "args": [],
         "namespace": "",
-        "line": 139,
+        "lines": "139-140",
+        "docs": {},
         "uses": "xarMod::getName()",
         "class": "xarMod",
         "check": "getName",
@@ -1784,7 +1962,8 @@
             "$regid"
         ],
         "namespace": "",
-        "line": 147,
+        "lines": "147-148",
+        "docs": {},
         "uses": "xarMod::getName()",
         "class": "xarMod",
         "check": "getName",
@@ -1800,7 +1979,8 @@
             "$prep = NULL"
         ],
         "namespace": "",
-        "line": 150,
+        "lines": "150-150",
+        "docs": {},
         "uses": "xarModUserVars::get()",
         "class": "xarModUserVars",
         "check": "get",
@@ -1815,7 +1995,8 @@
             "$prep = NULL"
         ],
         "namespace": "",
-        "line": 122,
+        "lines": "122-122",
+        "docs": {},
         "uses": "xarModVars::get()",
         "class": "xarModVars",
         "check": "get",
@@ -1829,7 +2010,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 79,
+        "lines": "79-79",
+        "docs": {},
         "uses": "xarModVars::getID()",
         "class": "xarModVars",
         "check": "getID",
@@ -1843,7 +2025,8 @@
             "$type = 'module'"
         ],
         "namespace": "",
-        "line": 227,
+        "lines": "227-228",
+        "docs": {},
         "uses": "xarMod::isAvailable()",
         "class": "xarMod",
         "check": "isAvailable",
@@ -1858,7 +2041,8 @@
             "$callerItemType = ''"
         ],
         "namespace": "",
-        "line": 48,
+        "lines": "48-51",
+        "docs": {},
         "uses": "xarModHooks::isHooked()",
         "class": "xarModHooks",
         "check": "isHooked",
@@ -1872,7 +2056,8 @@
             "$modType = 'user'"
         ],
         "namespace": "",
-        "line": 251,
+        "lines": "251-252",
+        "docs": {},
         "uses": "xarMod::load()",
         "class": "xarMod",
         "check": "load",
@@ -1890,7 +2075,8 @@
             "$hookModFunc"
         ],
         "namespace": "",
-        "line": 60,
+        "lines": "60-63",
+        "docs": {},
         "uses": "xarModHooks::register()",
         "class": "xarModHooks",
         "check": "register",
@@ -1904,7 +2090,8 @@
             "$modName"
         ],
         "namespace": "",
-        "line": 278,
+        "lines": "278-278",
+        "docs": {},
         "uses": "xarModAlias::set()",
         "class": "xarModAlias",
         "check": "set",
@@ -1920,7 +2107,8 @@
             "$id = NULL"
         ],
         "namespace": "",
-        "line": 157,
+        "lines": "157-157",
+        "docs": {},
         "uses": "xarModUserVars::set()",
         "class": "xarModUserVars",
         "check": "set",
@@ -1935,7 +2123,8 @@
             "$value"
         ],
         "namespace": "",
-        "line": 129,
+        "lines": "129-129",
+        "docs": {},
         "uses": "xarModVars::set()",
         "class": "xarModVars",
         "check": "set",
@@ -1953,7 +2142,8 @@
             "$hookModFunc"
         ],
         "namespace": "",
-        "line": 72,
+        "lines": "72-75",
+        "docs": {},
         "uses": "xarModHooks::unregister()",
         "class": "xarModHooks",
         "check": "unregister",
@@ -1972,7 +2162,8 @@
             "$entrypoint = array()"
         ],
         "namespace": "",
-        "line": 123,
+        "lines": "123-126",
+        "docs": {},
         "uses": "xarController::URL()",
         "class": "xarController",
         "check": "URL",
@@ -1985,7 +2176,8 @@
             "$cacheGroups"
         ],
         "namespace": "",
-        "line": 427,
+        "lines": "429-448",
+        "docs": {},
         "class": "xarPage",
         "check": "checkUserCaching"
     },
@@ -1996,7 +2188,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 346,
+        "lines": "346-349",
+        "docs": {},
         "uses": "xarSecurity::hasPrivilege()",
         "class": "xarSecurity",
         "check": "hasPrivilege",
@@ -2015,7 +2208,8 @@
             "$description = ''"
         ],
         "namespace": "",
-        "line": 410,
+        "lines": "410-413",
+        "docs": {},
         "uses": "xarMasks::register()",
         "class": "xarMasks",
         "check": "register",
@@ -2034,7 +2228,8 @@
             "$description = ''"
         ],
         "namespace": "",
-        "line": 133,
+        "lines": "133-136",
+        "docs": {},
         "uses": "xarPrivileges::register()",
         "class": "xarPrivileges",
         "check": "register",
@@ -2047,7 +2242,8 @@
             "$module"
         ],
         "namespace": "",
-        "line": 217,
+        "lines": "217-220",
+        "docs": {},
         "uses": "xarPrivileges::removeInstances()",
         "class": "xarPrivileges",
         "check": "removeInstances",
@@ -2060,7 +2256,8 @@
             "$module"
         ],
         "namespace": "",
-        "line": 438,
+        "lines": "438-441",
+        "docs": {},
         "uses": "xarMasks::removemasks()",
         "class": "xarMasks",
         "check": "removemasks",
@@ -2073,7 +2270,8 @@
             "$module"
         ],
         "namespace": "",
-        "line": 180,
+        "lines": "180-183",
+        "docs": {},
         "uses": "xarPrivileges::removeModule()",
         "class": "xarPrivileges",
         "check": "removeModule",
@@ -2087,7 +2285,8 @@
             "$parentId"
         ],
         "namespace": "",
-        "line": 112,
+        "lines": "112-115",
+        "docs": {},
         "uses": "xarRoles::removeMemberByID()",
         "class": "xarRoles",
         "check": "removeMemberByID",
@@ -2098,7 +2297,8 @@
         "name": "xarRequestGetInfo",
         "args": [],
         "namespace": "",
-        "line": 230,
+        "lines": "230-230",
+        "docs": {},
         "uses": "arController::getRequest()->getInfo()",
         "class": "xarRequest",
         "check": "GetInfo",
@@ -2115,7 +2315,8 @@
             "$allowOnlyMethod = NULL"
         ],
         "namespace": "",
-        "line": 223,
+        "lines": "223-223",
+        "docs": {},
         "uses": "xarController::getVar()",
         "class": "xarController",
         "check": "getVar",
@@ -2126,7 +2327,8 @@
         "name": "xarRequestIsLocalReferer",
         "args": [],
         "namespace": "",
-        "line": 237,
+        "lines": "237-237",
+        "docs": {},
         "uses": "xarController::isLocalReferer()",
         "class": "xarController",
         "check": "isLocalReferer",
@@ -2139,7 +2341,8 @@
             "$redirectURL"
         ],
         "namespace": "",
-        "line": 244,
+        "lines": "244-244",
+        "docs": {},
         "uses": "xarController::redirect()",
         "class": "xarController",
         "check": "redirect",
@@ -2158,7 +2361,8 @@
             "$level"
         ],
         "namespace": "",
-        "line": 318,
+        "lines": "318-321",
+        "docs": {},
         "uses": "xarPrivileges::external()",
         "class": "xarPrivileges",
         "check": "external",
@@ -2173,7 +2377,8 @@
             "$catch = false"
         ],
         "namespace": "",
-        "line": 468,
+        "lines": "468-471",
+        "docs": {},
         "uses": "xarSec::confirmAuthKey()",
         "class": "xarSec",
         "check": "confirmAuthKey",
@@ -2186,7 +2391,8 @@
             "$modName = NULL"
         ],
         "namespace": "",
-        "line": 452,
+        "lines": "452-455",
+        "docs": {},
         "uses": "xarSec::genAuthKey()",
         "class": "xarSec",
         "check": "genAuthKey",
@@ -2206,7 +2412,8 @@
             "$pnlevel = 0"
         ],
         "namespace": "",
-        "line": 384,
+        "lines": "384-394",
+        "docs": {},
         "uses": "xarSecurity::check()",
         "class": "xarSecurity",
         "check": "check",
@@ -2219,7 +2426,8 @@
             "$levelname"
         ],
         "namespace": "",
-        "line": 333,
+        "lines": "333-336",
+        "docs": {},
         "uses": "xarSecurity::getLevel()",
         "class": "xarSecurity",
         "check": "getLevel",
@@ -2230,7 +2438,8 @@
         "name": "xarServerGetBaseURI",
         "args": [],
         "namespace": "",
-        "line": 188,
+        "lines": "188-188",
+        "docs": {},
         "uses": "xarServer::getBaseURI()",
         "class": "xarServer",
         "check": "getBaseURI",
@@ -2241,7 +2450,8 @@
         "name": "xarServerGetBaseURL",
         "args": [],
         "namespace": "",
-        "line": 209,
+        "lines": "209-209",
+        "docs": {},
         "uses": "xarServer::getBaseURL()",
         "class": "xarServer",
         "check": "getBaseURL",
@@ -2256,7 +2466,8 @@
             "$target = NULL"
         ],
         "namespace": "",
-        "line": 216,
+        "lines": "216-216",
+        "docs": {},
         "uses": "xarServer::getCurrentURL()",
         "class": "xarServer",
         "check": "getCurrentURL",
@@ -2267,7 +2478,8 @@
         "name": "xarServerGetHost",
         "args": [],
         "namespace": "",
-        "line": 195,
+        "lines": "195-195",
+        "docs": {},
         "uses": "xarServer::getHost()",
         "class": "xarServer",
         "check": "getHost",
@@ -2278,7 +2490,8 @@
         "name": "xarServerGetProtocol",
         "args": [],
         "namespace": "",
-        "line": 202,
+        "lines": "202-202",
+        "docs": {},
         "uses": "xarServer::getProtocol()",
         "class": "xarServer",
         "check": "getProtocol",
@@ -2291,7 +2504,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 181,
+        "lines": "181-181",
+        "docs": {},
         "uses": "xarServer::getVar()",
         "class": "xarServer",
         "check": "getVar",
@@ -2304,7 +2518,8 @@
             "&$args"
         ],
         "namespace": "",
-        "line": 46,
+        "lines": "46-46",
+        "docs": {},
         "uses": "xarSession::init()",
         "class": "xarSession",
         "check": "init",
@@ -2318,7 +2533,8 @@
             "$rememberSession"
         ],
         "namespace": "",
-        "line": 79,
+        "lines": "79-80",
+        "docs": {},
         "uses": "xarSession::setUserInfo()",
         "class": "xarSession",
         "check": "setUserInfo",
@@ -2331,7 +2547,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 64,
+        "lines": "64-64",
+        "docs": {},
         "uses": "xarSession::delVar()",
         "class": "xarSession",
         "check": "delVar",
@@ -2342,7 +2559,8 @@
         "name": "xarSessionGetId",
         "args": [],
         "namespace": "",
-        "line": 70,
+        "lines": "70-70",
+        "docs": {},
         "uses": "xarSession::getId()",
         "class": "xarSession",
         "check": "getId",
@@ -2353,7 +2571,8 @@
         "name": "xarSessionGetSecurityLevel",
         "args": [],
         "namespace": "",
-        "line": 26,
+        "lines": "26-29",
+        "docs": {},
         "uses": "xarSession::getSecurityLevel()",
         "class": "xarSession",
         "check": "getSecurityLevel",
@@ -2366,7 +2585,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 52,
+        "lines": "52-52",
+        "docs": {},
         "uses": "xarSession::getVar()",
         "class": "xarSession",
         "check": "getVar",
@@ -2380,7 +2600,8 @@
             "$value"
         ],
         "namespace": "",
-        "line": 58,
+        "lines": "58-58",
+        "docs": {},
         "uses": "xarSession::setVar()",
         "class": "xarSession",
         "check": "setVar",
@@ -2393,7 +2614,8 @@
             "$themeName"
         ],
         "namespace": "",
-        "line": 84,
+        "lines": "84-84",
+        "docs": {},
         "uses": "xarTheme::getBaseInfo()",
         "class": "xarTheme",
         "check": "getBaseInfo",
@@ -2406,7 +2628,8 @@
             "$themeOsDir"
         ],
         "namespace": "",
-        "line": 74,
+        "lines": "74-74",
+        "docs": {},
         "uses": "xarTheme::getFileInfo()",
         "class": "xarTheme",
         "check": "getFileInfo",
@@ -2419,7 +2642,8 @@
             "$themeName"
         ],
         "namespace": "",
-        "line": 94,
+        "lines": "94-97",
+        "docs": {},
         "uses": "xarTheme::getVarsByTheme()",
         "class": "xarTheme",
         "check": "getVarsByTheme",
@@ -2433,7 +2657,8 @@
             "$id = 'regid'"
         ],
         "namespace": "",
-        "line": 38,
+        "lines": "38-41",
+        "docs": {},
         "uses": "xarTheme::getIDFromName()",
         "class": "xarTheme",
         "check": "getIDFromName",
@@ -2446,7 +2671,8 @@
             "$regId"
         ],
         "namespace": "",
-        "line": 51,
+        "lines": "51-51",
+        "docs": {},
         "uses": "xarTheme::getInfo()",
         "class": "xarTheme",
         "check": "getInfo",
@@ -2461,7 +2687,8 @@
             "$prep = NULL"
         ],
         "namespace": "",
-        "line": 23,
+        "lines": "23-23",
+        "docs": {},
         "uses": "xarThemeVars::get()",
         "class": "xarThemeVars",
         "check": "get",
@@ -2474,7 +2701,8 @@
             "$themeName"
         ],
         "namespace": "",
-        "line": 61,
+        "lines": "61-61",
+        "docs": {},
         "uses": "xarTheme::isAvailable()",
         "class": "xarTheme",
         "check": "isAvailable",
@@ -2489,7 +2717,8 @@
             "$tplType = 'module'"
         ],
         "namespace": "",
-        "line": 311,
+        "lines": "311-314",
+        "docs": {},
         "uses": "xarTpl::executeFromFile()",
         "class": "xarTpl",
         "check": "executeFromFile",
@@ -2505,7 +2734,8 @@
             "$propertyName = ''"
         ],
         "namespace": "",
-        "line": 296,
+        "lines": "296-299",
+        "docs": {},
         "uses": "xarTpl::includeModuleTemplate()",
         "class": "xarTpl",
         "check": "includeModuleTemplate",
@@ -2519,7 +2749,8 @@
             "$tplData"
         ],
         "namespace": "",
-        "line": 284,
+        "lines": "284-287",
+        "docs": {},
         "uses": "xarTpl::includeThemeTemplate()",
         "class": "xarTpl",
         "check": "includeThemeTemplate",
@@ -2532,7 +2763,8 @@
             "&$args"
         ],
         "namespace": "",
-        "line": 20,
+        "lines": "20-23",
+        "docs": {},
         "uses": "xarTpl::init()",
         "class": "xarTpl",
         "check": "init",
@@ -2546,7 +2778,8 @@
             "&$tplOutput"
         ],
         "namespace": "",
-        "line": 368,
+        "lines": "368-371",
+        "docs": {},
         "uses": "xarTpl::modifyHeaderContent()",
         "class": "xarTpl",
         "check": "modifyHeaderContent",
@@ -2557,7 +2790,8 @@
         "name": "xarTpl_outputPHPCommentBlockInTemplates",
         "args": [],
         "namespace": "",
-        "line": 344,
+        "lines": "344-347",
+        "docs": {},
         "uses": "xarTpl::outputPHPCommentBlockInTemplates()",
         "class": "xarTpl",
         "check": "outputPHPCommentBlockInTemplates",
@@ -2571,7 +2805,8 @@
             "&$tplOutput"
         ],
         "namespace": "",
-        "line": 332,
+        "lines": "332-335",
+        "docs": {},
         "uses": "xarTpl::outputTemplate()",
         "class": "xarTpl",
         "check": "outputTemplate",
@@ -2582,7 +2817,8 @@
         "name": "xarTpl_outputTemplateFilenames",
         "args": [],
         "namespace": "",
-        "line": 356,
+        "lines": "356-359",
+        "docs": {},
         "uses": "xarTpl::outputTemplateFilenames()",
         "class": "xarTpl",
         "check": "outputTemplateFilenames",
@@ -2596,7 +2832,8 @@
             "$templateName = NULL"
         ],
         "namespace": "",
-        "line": 272,
+        "lines": "272-275",
+        "docs": {},
         "uses": "xarTpl::renderBlockBox()",
         "class": "xarTpl",
         "check": "renderBlockBox",
@@ -2610,7 +2847,8 @@
             "$pageTemplate = NULL"
         ],
         "namespace": "",
-        "line": 260,
+        "lines": "260-263",
+        "docs": {},
         "uses": "xarTpl::renderPage()",
         "class": "xarTpl",
         "check": "renderPage",
@@ -2627,7 +2865,8 @@
             "$tplBase = NULL"
         ],
         "namespace": "",
-        "line": 170,
+        "lines": "170-173",
+        "docs": {},
         "uses": "xarTpl::block()",
         "class": "xarTpl",
         "check": "block",
@@ -2640,7 +2879,8 @@
             "$templateSource"
         ],
         "namespace": "",
-        "line": 248,
+        "lines": "248-251",
+        "docs": {},
         "uses": "xarTpl::compileString()",
         "class": "xarTpl",
         "check": "compileString",
@@ -2654,7 +2894,8 @@
             "&$tplData"
         ],
         "namespace": "",
-        "line": 236,
+        "lines": "236-239",
+        "docs": {},
         "uses": "xarTpl::file()",
         "class": "xarTpl",
         "check": "file",
@@ -2665,7 +2906,8 @@
         "name": "xarTplGetDoctype",
         "args": [],
         "namespace": "",
-        "line": 110,
+        "lines": "110-113",
+        "docs": {},
         "uses": "xarTpl::getDoctype()",
         "class": "xarTpl",
         "check": "getDoctype",
@@ -2679,7 +2921,8 @@
             "$modName = NULL"
         ],
         "namespace": "",
-        "line": 212,
+        "lines": "212-215",
+        "docs": {},
         "uses": "xarTpl::getImage()",
         "class": "xarTpl",
         "check": "getImage",
@@ -2698,7 +2941,8 @@
             "$tplmodule = 'base'"
         ],
         "namespace": "",
-        "line": 386,
+        "lines": "386-390",
+        "docs": {},
         "uses": "xarTplPager::getPager()",
         "class": "xarTplPager",
         "check": "getPager",
@@ -2709,7 +2953,8 @@
         "name": "xarTplGetPageTemplateName",
         "args": [],
         "namespace": "",
-        "line": 86,
+        "lines": "86-89",
+        "docs": {},
         "uses": "xarTpl::getPageTemplateName()",
         "class": "xarTpl",
         "check": "getPageTemplateName",
@@ -2720,7 +2965,8 @@
         "name": "xarTplGetPageTitle",
         "args": [],
         "namespace": "",
-        "line": 146,
+        "lines": "146-149",
+        "docs": {},
         "uses": "xarTpl::getPageTitle()",
         "class": "xarTpl",
         "check": "getPageTitle",
@@ -2733,7 +2979,8 @@
             "$theme = null"
         ],
         "namespace": "",
-        "line": 74,
+        "lines": "74-77",
+        "docs": {},
         "uses": "xarTpl::getThemeDir()",
         "class": "xarTpl",
         "check": "getThemeDir",
@@ -2744,7 +2991,8 @@
         "name": "xarTplGetThemeName",
         "args": [],
         "namespace": "",
-        "line": 32,
+        "lines": "32-35",
+        "docs": {},
         "uses": "xarTpl::getThemeName()",
         "class": "xarTpl",
         "check": "getThemeName",
@@ -2761,7 +3009,8 @@
             "$templateName = NULL"
         ],
         "namespace": "",
-        "line": 158,
+        "lines": "158-161",
+        "docs": {},
         "uses": "xarTpl::module()",
         "class": "xarTpl",
         "check": "module",
@@ -2778,7 +3027,8 @@
             "$tplBase = NULL"
         ],
         "namespace": "",
-        "line": 194,
+        "lines": "194-197",
+        "docs": {},
         "uses": "xarTpl::object()",
         "class": "xarTpl",
         "check": "object",
@@ -2794,7 +3044,8 @@
             "$blockOptions = 10"
         ],
         "namespace": "",
-        "line": 375,
+        "lines": "375-379",
+        "docs": {},
         "uses": "xarTplPager::getInfo()",
         "class": "xarTplPager",
         "check": "getInfo",
@@ -2811,7 +3062,8 @@
             "$tplBase = NULL"
         ],
         "namespace": "",
-        "line": 182,
+        "lines": "182-185",
+        "docs": {},
         "uses": "xarTpl::property()",
         "class": "xarTpl",
         "check": "property",
@@ -2824,7 +3076,8 @@
             "$doctypeName"
         ],
         "namespace": "",
-        "line": 122,
+        "lines": "122-125",
+        "docs": {},
         "uses": "xarTpl::setDoctype()",
         "class": "xarTpl",
         "check": "setDoctype",
@@ -2837,7 +3090,8 @@
             "$templateName"
         ],
         "namespace": "",
-        "line": 98,
+        "lines": "98-101",
+        "docs": {},
         "uses": "xarTpl::setPageTemplateName()",
         "class": "xarTpl",
         "check": "setPageTemplateName",
@@ -2851,7 +3105,8 @@
             "$module = NULL"
         ],
         "namespace": "",
-        "line": 134,
+        "lines": "134-137",
+        "docs": {},
         "uses": "xarTpl::setPageTitle()",
         "class": "xarTpl",
         "check": "setPageTitle",
@@ -2864,7 +3119,8 @@
             "$themeDir"
         ],
         "namespace": "",
-        "line": 56,
+        "lines": "56-59",
+        "docs": {},
         "uses": "xarTpl::setThemeDir()",
         "class": "xarTpl",
         "check": "setThemeDir",
@@ -2877,7 +3133,8 @@
             "$themeName"
         ],
         "namespace": "",
-        "line": 44,
+        "lines": "44-47",
+        "docs": {},
         "uses": "xarTpl::setThemeName()",
         "class": "xarTpl",
         "check": "setThemeName",
@@ -2891,7 +3148,8 @@
             "&$tplData"
         ],
         "namespace": "",
-        "line": 224,
+        "lines": "224-227",
+        "docs": {},
         "uses": "xarTpl::string()",
         "class": "xarTpl",
         "check": "string",
@@ -2902,7 +3160,8 @@
         "name": "xarTree",
         "args": [],
         "namespace": "",
-        "line": 292,
+        "lines": "292-299",
+        "docs": {},
         "uses": "xarTreeRenderer"
     },
     "xarufindrole": {
@@ -2912,7 +3171,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 248,
+        "lines": "248-248",
+        "docs": {},
         "uses": "xarRoles::ufindRole()",
         "class": "xarRoles",
         "check": "ufindRole",
@@ -2925,7 +3185,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 423,
+        "lines": "423-426",
+        "docs": {},
         "uses": "xarMasks::unregister()",
         "class": "xarMasks",
         "check": "unregister",
@@ -2941,7 +3202,8 @@
             "$cryptSalt = ''"
         ],
         "namespace": "",
-        "line": 114,
+        "lines": "114-117",
+        "docs": {},
         "uses": "xarUser::comparePasswords()",
         "class": "xarUser",
         "check": "comparePasswords",
@@ -2952,7 +3214,8 @@
         "name": "xarUserGetNavigationLocale",
         "args": [],
         "namespace": "",
-        "line": 78,
+        "lines": "78-81",
+        "docs": {},
         "uses": "xarUser::getNavigationLocale()",
         "class": "xarUser",
         "check": "getNavigationLocale",
@@ -2963,7 +3226,8 @@
         "name": "xarUserGetNavigationThemeName",
         "args": [],
         "namespace": "",
-        "line": 60,
+        "lines": "60-63",
+        "docs": {},
         "uses": "xarUser::getNavigationThemeName()",
         "class": "xarUser",
         "check": "getNavigationThemeName",
@@ -2977,7 +3241,8 @@
             "$userId = NULL"
         ],
         "namespace": "",
-        "line": 96,
+        "lines": "96-99",
+        "docs": {},
         "uses": "xarUser::getVar()",
         "class": "xarUser",
         "check": "getVar",
@@ -2988,7 +3253,8 @@
         "name": "xarUserIsLoggedIn",
         "args": [],
         "namespace": "",
-        "line": 51,
+        "lines": "51-54",
+        "docs": {},
         "uses": "xarUser::isLoggedIn()",
         "class": "xarUser",
         "check": "isLoggedIn",
@@ -3003,7 +3269,8 @@
             "$rememberMe = 0"
         ],
         "namespace": "",
-        "line": 33,
+        "lines": "33-36",
+        "docs": {},
         "uses": "xarUser::logIn()",
         "class": "xarUser",
         "check": "logIn",
@@ -3014,7 +3281,8 @@
         "name": "xarUserLogOut",
         "args": [],
         "namespace": "",
-        "line": 42,
+        "lines": "42-45",
+        "docs": {},
         "uses": "xarUser::logOut()",
         "class": "xarUser",
         "check": "logOut",
@@ -3027,7 +3295,8 @@
             "$locale"
         ],
         "namespace": "",
-        "line": 87,
+        "lines": "87-90",
+        "docs": {},
         "uses": "xarUser::setNavigationLocale()",
         "class": "xarUser",
         "check": "setNavigationLocale",
@@ -3040,7 +3309,8 @@
             "$themeName"
         ],
         "namespace": "",
-        "line": 69,
+        "lines": "69-72",
+        "docs": {},
         "uses": "xarUser::setNavigationThemeName()",
         "class": "xarUser",
         "check": "setNavigationThemeName",
@@ -3055,7 +3325,8 @@
             "$userId = null"
         ],
         "namespace": "",
-        "line": 105,
+        "lines": "105-108",
+        "docs": {},
         "uses": "xarUser::setVar()",
         "class": "xarUser",
         "check": "setVar",
@@ -3068,7 +3339,8 @@
             "&$args"
         ],
         "namespace": "",
-        "line": 43,
+        "lines": "43-46",
+        "docs": {},
         "uses": "xarVar::init()",
         "class": "xarVar",
         "check": "init",
@@ -3079,7 +3351,8 @@
         "name": "xarVarBatchFetch",
         "args": [],
         "namespace": "",
-        "line": 53,
+        "lines": "53-56",
+        "docs": {},
         "uses": "xarVar::batchFetch()",
         "class": "xarVar",
         "check": "batchFetch",
@@ -3093,7 +3366,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 126,
+        "lines": "126-126",
+        "docs": {},
         "uses": "xarVar::delCached()",
         "class": "xarVar",
         "check": "delCached",
@@ -3111,7 +3385,8 @@
             "$prep = xarVar::PREP_FOR_NOTHING"
         ],
         "namespace": "",
-        "line": 63,
+        "lines": "63-66",
+        "docs": {},
         "uses": "xarVar::fetch()",
         "class": "xarVar",
         "check": "fetch",
@@ -3124,7 +3399,8 @@
             "$scope"
         ],
         "namespace": "",
-        "line": 132,
+        "lines": "132-132",
+        "docs": {},
         "uses": "xarVar::flushCached()",
         "class": "xarVar",
         "check": "flushCached",
@@ -3138,7 +3414,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 114,
+        "lines": "114-114",
+        "docs": {},
         "uses": "xarVar::getCached()",
         "class": "xarVar",
         "check": "getCached",
@@ -3152,7 +3429,8 @@
             "$name"
         ],
         "namespace": "",
-        "line": 108,
+        "lines": "108-108",
+        "docs": {},
         "uses": "xarVar::isCached()",
         "class": "xarVar",
         "check": "isCached",
@@ -3163,7 +3441,8 @@
         "name": "xarVarPrepEmailDisplay",
         "args": [],
         "namespace": "",
-        "line": 604,
+        "lines": "616-649",
+        "docs": {},
         "class": "xarVar",
         "check": "PrepEmailDisplay",
         "method": "prepEmailDisplay",
@@ -3176,7 +3455,8 @@
         "name": "xarVarPrepForDisplay",
         "args": [],
         "namespace": "",
-        "line": 469,
+        "lines": "481-510",
+        "docs": {},
         "class": "xarVar",
         "check": "PrepForDisplay",
         "method": "prepForDisplay",
@@ -3189,7 +3469,8 @@
         "name": "xarVarPrepForOS",
         "args": [],
         "namespace": "",
-        "line": 654,
+        "lines": "666-689",
+        "docs": {},
         "class": "xarVar",
         "check": "PrepForOS",
         "method": "prepForOS",
@@ -3202,7 +3483,8 @@
         "name": "xarVarPrepHTMLDisplay",
         "args": [],
         "namespace": "",
-        "line": 511,
+        "lines": "523-593",
+        "docs": {},
         "class": "xarVar",
         "check": "PrepHTMLDisplay",
         "method": "prepHTMLDisplay",
@@ -3217,7 +3499,8 @@
             "$matches"
         ],
         "namespace": "",
-        "line": 583,
+        "lines": "595-603",
+        "docs": null,
         "class": "xarVar",
         "check": "PrepHTMLDisplay__callback"
     },
@@ -3230,7 +3513,8 @@
             "$value"
         ],
         "namespace": "",
-        "line": 120,
+        "lines": "120-120",
+        "docs": {},
         "uses": "xarVar::setCached()",
         "class": "xarVar",
         "check": "setCached",
@@ -3246,7 +3530,8 @@
             "$name = ''"
         ],
         "namespace": "",
-        "line": 73,
+        "lines": "73-76",
+        "docs": {},
         "uses": "xarVar::validate()",
         "class": "xarVar",
         "check": "validate",
