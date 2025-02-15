@@ -39,6 +39,6 @@ class MethodClass extends CoreMethodClass
      */
     public function dataapi(): UserApiInterface|null
     {
-        return $this->getParent()->datapi();
+        return $this->getParent()->dataapi();
     }
 }

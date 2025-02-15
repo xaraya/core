@@ -212,6 +212,7 @@ For larger modules, you can split off each module method into its own method cla
 
 namespace Xaraya\Modules\MyFancyModule\UserApi;
 
+use Xaraya\Modules\MyFancyModule\UserApi;
 use Xaraya\Modules\MethodClass;
 use sys;
 
@@ -219,7 +220,7 @@ sys::import('xaraya.modules.method');
 
 /**
  * myfancymodule userapi get function
- * @extends MethodClass<Xaraya\Modules\MyFancyModule\UserApi>
+ * @extends MethodClass<UserApi>
  */
 class GetMethod extends MethodClass
 {
@@ -227,8 +228,8 @@ class GetMethod extends MethodClass
     {
         // get single module item
         // $context = $this->getContext();
-        // call other methods from the UserApi() class via ->getParent() here
-        // $other = $this->getParent()->other();
+        // call other methods from the UserApi() class via ->userapi() here
+        // $other = $this->userapi()->other();
         return $data;
     }
 }

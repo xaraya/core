@@ -224,6 +224,7 @@ trait ModuleTrait
      * @param mixed $func
      * @param mixed $args
      * @return mixed
+     * @deprecated 2.6.3 use mod() or userapi() etc. instead
      */
     public function callAPI($type, $func, $args = [])
     {
@@ -236,6 +237,7 @@ trait ModuleTrait
      * @param mixed $func
      * @param mixed $args
      * @return mixed
+     * @deprecated 2.6.3 use mod() or usergui() etc. instead
      */
     public function callGUI($type, $func, $args = [])
     {
@@ -291,7 +293,6 @@ trait ModuleTrait
             'admingui' => 'AdminGui',
             'admin' => 'AdminGui',
             // special types
-            'hooks' => 'Hooks',
             'installer' => 'Installer',
             // other types
             'dataapi' => 'DataApi',

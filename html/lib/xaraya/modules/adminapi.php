@@ -68,8 +68,12 @@ sys::import('xaraya.modules.adminapitrait');
  * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
  * - $this->tpl() = xarTpl::* Templating (module, setPageTitle, ...)
  * - $this->var() = xarVar::* Variables (fetch, check, ...)
+ * - $this->block() = xarBlock*::* Blocks (template, ...)
  * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
+ * - $this->prop() = DataProperty*::* with context (getProperty, template, ...)
  * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
+ * - $this->config() = xarConfigVars::* Config (getVar, setVar, ...)
+ * - $this->session() = xarSession::* Session (getVar, setVar, ...)
  * - $this->db() = xarDB::* Database (getConn, getPrefix, ...)
  * - ...
  * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
