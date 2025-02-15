@@ -7,6 +7,7 @@
     "/xarVar::fetch\\(/": "\\$this->var()->fetch(",
     "/xarVar::prepForDisplay\\(/": "\\$this->var()->prep(",
     "/xarVar::prepHTMLDisplay\\(/": "\\$this->var()->prepHTML(",
+    "/xarVar::prepForOS\\(/": "\\$this->var()->prepPath(",
     "/xarVar::isCached\\(/": "\\$this->var()->isCached(",
     "/xarVar::getCached\\(/": "\\$this->var()->getCached(",
     "/xarVar::setCached\\(/": "\\$this->var()->setCached(",

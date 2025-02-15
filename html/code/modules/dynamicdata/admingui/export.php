@@ -184,7 +184,7 @@ class ExportMethod extends MethodClass
 
         if (!empty($tofile) && !empty($ext)) {
             $varDir = sys::varpath();
-            $outfile = $varDir . '/uploads/' . xarVar::prepForOS($myobject->name) . $ext . '.' . xarLocale::formatDate('%Y%m%d%H%M%S', time()) . '.' . $format;
+            $outfile = $varDir . '/uploads/' . $this->var()->prepPath($myobject->name) . $ext . '.' . xarLocale::formatDate('%Y%m%d%H%M%S', time()) . '.' . $format;
             $fp = @fopen($outfile, 'w');
             if (!$fp) {
                 $data['xml'] = $this->ml('Unable to open file #(1)', $outfile);

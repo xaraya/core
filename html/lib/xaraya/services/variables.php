@@ -37,7 +37,7 @@ interface VariablesInterface extends ServiceInterface
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param mixed $defaultValue the default value (default null)
      * @param integer $flags bitmask which modify the behaviour of function (default xarVar::GET_OR_POST)
-     * @param integer $prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
+     * @param integer $prep will prep the value with xarVar::prepForDisplay, xarVar::prepHTMLDisplay, or dbconn->qstr()
      * @return mixed
      */
     public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): mixed;
@@ -116,6 +116,14 @@ interface VariablesInterface extends ServiceInterface
      */
     public function prepHTML(...$args);
 
+    /**
+     * Prepare text for operating system path, and convert all special characters
+     *
+     * @param string ...$args
+     * @return mixed
+     */
+    public function prepPath(...$args);
+
     public function isCached(string $scope, string $name): bool;
     public function getCached(string $scope, string $name): mixed;
     public function setCached(string $scope, string $name, mixed $value): void;
@@ -147,7 +155,7 @@ trait VariablesTrait
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param mixed $defaultValue the default value (default null)
      * @param integer $flags bitmask which modify the behaviour of function (default xarVar::GET_OR_POST)
-     * @param integer $prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
+     * @param integer $prep will prep the value with xarVar::prepForDisplay, xarVar::prepHTMLDisplay, or dbconn->qstr()
      * @return mixed
      */
     public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): mixed
@@ -280,6 +288,17 @@ trait VariablesTrait
     public function prepHTML(...$args)
     {
         return xarVar::prepHTMLDisplay(...$args);
+    }
+
+    /**
+     * Prepare text for operating system path, and convert all special characters
+     *
+     * @param string ...$args
+     * @return mixed
+     */
+    public function prepPath(...$args)
+    {
+        return xarVar::prepForOS(...$args);
     }
 
     public function isCached(string $scope, string $name): bool

@@ -720,6 +720,18 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
                     $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
                     continue;
                 }
+                if (str_ends_with($file->getPathName(), '/xaraya/locales.php')) {
+                    $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
+                    continue;
+                }
+                if (str_ends_with($file->getPathName(), '/xaraya/tableddl.php')) {
+                    $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
+                    continue;
+                }
+                if (str_ends_with($file->getPathName(), '/xaraya/variables.php')) {
+                    $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
+                    continue;
+                }
                 if (str_contains($file->getPathName(), 'xarayatesting/tests/core/')) {
                     $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
                     continue;
@@ -1617,6 +1629,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarVar::fetch\(/' => '\$this->var()->fetch(',
             '/xarVar::prepForDisplay\(/' => '\$this->var()->prep(',
             '/xarVar::prepHTMLDisplay\(/' => '\$this->var()->prepHTML(',
+            '/xarVar::prepForOS\(/' => '\$this->var()->prepPath(',
             '/xarVar::isCached\(/' => '\$this->var()->isCached(',
             '/xarVar::getCached\(/' => '\$this->var()->getCached(',
             '/xarVar::setCached\(/' => '\$this->var()->setCached(',
@@ -1949,6 +1962,6 @@ foreach ($modules as $module) {
     //$migrator->replace_internal_methods($module, '', $replace);
     //$found = $migrator->replace_method_services($module, '', $replace);
     //$found = $migrator->replace_property_services($module, $replace);
-    $found = $migrator->replace_block_services($module, $replace);
+    //$found = $migrator->replace_block_services($module, $replace);
 }
  */
