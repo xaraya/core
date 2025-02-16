@@ -75,8 +75,8 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
         if (!headers_sent()) {
             // @todo use current context
             if (empty($charSet)) {
-                $locale = xarMLS::getCurrentLocale();
-                $charSet = xarMLS::getCharsetFromLocale($locale);
+                $locale = $this->mls()->getCurrentLocale();
+                $charSet = $this->mls()->getCharsetFromLocale($locale);
             }
             header("Content-Type: " . $contentType . "; charset=" . $charSet);
         }
@@ -106,7 +106,7 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
     public function xar_blockgroup($groupname, $template = null)
     {
         // use current context
-        return xarBlock::renderGroup($groupname, $template, $this->context);
+        return $this->block()->renderGroup($groupname, $template);
     }
 
     public function xar_block($args = [])
@@ -119,19 +119,19 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
             throw new Exception('Content in block tag: ' . var_export($params, true));
         }
         // use current context
-        return xarBlock::renderBlock($params, $this->context);
+        return $this->block()->renderBlock($params);
     }
 
     public function xar_pager($args = [])
     {
         //$args['context'] ??= $this->context;
-        return xarMod::apiFunc('base', 'user', 'pager', $args, $this->context);
+        return $this->mod()->apiFunc('base', 'user', 'pager', $args);
     }
 
     public function xar_javascript($args = [])
     {
         //$args['context'] ??= $this->context;
-        xarMod::apiFunc('themes', 'user', 'registerjs', $args, $this->context);
+        $this->mod()->apiFunc('themes', 'user', 'registerjs', $args);
         return '';
     }
 
@@ -141,13 +141,13 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
         $type = $args['type'] ?? '';
         $params = ['position' => $position, 'type' => $type];
         $params['context'] = $this->context;
-        return trim(xarMod::apiFunc('themes', 'user', 'renderjs', $params, $this->context));
+        return trim($this->mod()->apiFunc('themes', 'user', 'renderjs', $params));
     }
 
     public function xar_style($args = [])
     {
         //$args['context'] ??= $this->context;
-        xarMod::apiFunc('themes', 'user', 'register', $args, $this->context);
+        $this->mod()->apiFunc('themes', 'user', 'register', $args);
         return '';
     }
 
@@ -155,25 +155,25 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
     {
         $params = ['method' => 'render', 'base' => 'theme'];
         $params['context'] = $this->context;
-        return xarMod::apiFunc('themes', 'user', 'deliver', $params);
+        return $this->mod()->apiFunc('themes', 'user', 'deliver', $params);
     }
 
     public function xar_meta($args = [])
     {
-        xarMod::apiFunc('themes','user','registermeta', $args, $this->context);
+        $this->mod()->apiFunc('themes','user','registermeta', $args);
         return '';
     }
 
     public function xar_place_meta($args = [])
     {
         $args['context'] ??= $this->context;
-        return trim(xarMod::apiFunc('themes', 'user', 'rendermeta', $args, $this->context));
+        return trim($this->mod()->apiFunc('themes', 'user', 'rendermeta', $args));
 
     }
 
     public function xar_image($args = [])
     {
-        $link = xarMod::apiFunc('themes', 'user', 'getimage', $args, $this->context);
+        $link = $this->mod()->apiFunc('themes', 'user', 'getimage', $args);
         $html = '<img src="' . $link . '"';
         foreach ($args as $name => $value) {
             if (in_array($name, ['src', 'file', 'scope'])) {
@@ -191,16 +191,16 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
     public function xar_button($args = [])
     {
         $args['context'] ??= $this->context;
-        return xarTpl::module('themes', 'user', 'buttontag', $args);
+        return $this->tpl()->module('themes', 'user', 'buttontag', $args);
     }
 
     public function xar_prep_display(...$args)
     {
-        return xarVar::prepForDisplay(...$args);
+        return $this->var()->prep(...$args);
     }
 
     public function xar_prep_html(...$args)
     {
-        return xarVar::prepHTMLDisplay(...$args);
+        return $this->var()->prepHTML(...$args);
     }
 }

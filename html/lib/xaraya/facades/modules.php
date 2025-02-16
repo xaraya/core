@@ -86,6 +86,14 @@ class xarMod3
     }
 
     /**
+     * Get display name for this module - modName is mandatory here
+     */
+    public static function getDisplayName(string $modName): string
+    {
+        return self::getInstance()->getDisplayName($modName);
+    }
+
+    /**
      * Get info from xarversion.php - modName is mandatory here
      * @return array<string, mixed>
      */
@@ -95,7 +103,16 @@ class xarMod3
     }
 
     /**
-     * Get information on module
+     * Get base information on module - modName is mandatory here
+     * @return array<string, mixed>
+     */
+    public static function getBaseInfo(string $modName): array
+    {
+        return self::getInstance()->getBaseInfo($modName);
+    }
+
+    /**
+     * Get information on module by registry ID (fixed)
      * @return array<string, mixed>
      */
     public static function getInfo(int $modRegId): array

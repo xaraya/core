@@ -6,12 +6,19 @@ sys::import('xaraya.templates');
 sys::import('xaraya.bridge.templates.twigbridge');
 sys::import('xaraya.context.context');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.modules');
+sys::import('xaraya.facades.variables');
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 use Twig\TemplateWrapper;
 use Xaraya\Bridge\TemplateEngine\TwigBridge;
 use Xaraya\Context\Context;
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMod3;
+use Xaraya\Facades\xarVar3;
+//use xarMod;
+//use xarServer;
+//use xarTpl;
 
 /**
  * Use Twig template engine to generate output in Xaraya
@@ -202,7 +209,7 @@ class xarTwigTpl extends xarTpl
     public static function addModuleTemplates()
     {
         // make other modules configurable based on fileinfo from xarversion.php
-        $fileModules = xarMod::apiFunc('modules', 'admin', 'getfilemodules');
+        $fileModules = xarMod3::apiFunc('modules', 'admin', 'getfilemodules');
         // support templates/twig or vendor/xaraya/twig/html directory for standard templates
         $twigDir = static::getTwigTemplatesDir();
         foreach ($fileModules as $name => $fileInfo) {
@@ -233,7 +240,7 @@ class xarTwigTpl extends xarTpl
     {
         // @todo this assumes we're running in sys::web() because it looks for 'themes'
         // make other themes configurable based on fileinfo from xartheme.php
-        $fileThemes = xarMod::apiFunc('themes', 'admin', 'getfilethemes');
+        $fileThemes = xarMod3::apiFunc('themes', 'admin', 'getfilethemes');
         foreach ($fileThemes as $name => $fileInfo) {
             $name = strtolower($name);
             // no namespace for themes
@@ -406,8 +413,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "page:$themeName:$tplType:$tplName:$pageName";
         // cache frequently-used sourcefilenames
-        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
-            return xarCoreCache::getCached('Templates.Twig', $cachename);
+        if (xarVar3::isCached('Templates.Twig', $cachename)) {
+            return xarVar3::getCached('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -439,7 +446,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarCoreCache::setCached('Templates.Twig', $cachename, $templateName);
+        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -475,8 +482,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "box:$themeName:$tplName";
         // cache frequently-used sourcefilenames
-        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
-            return xarCoreCache::getCached('Templates.Twig', $cachename);
+        if (xarVar3::isCached('Templates.Twig', $cachename)) {
+            return xarVar3::getCached('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -501,7 +508,7 @@ class xarTwigTpl extends xarTpl
         $templates[] = '@blocks/blocks/block' . $extension;
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarCoreCache::setCached('Templates.Twig', $cachename, $templateName);
+        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -570,8 +577,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "module:$themeName:$modName:$modType:$funcName:$tplName";
         // cache frequently-used sourcefilenames
-        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
-            return xarCoreCache::getCached('Templates.Twig', $cachename);
+        if (xarVar3::isCached('Templates.Twig', $cachename)) {
+            return xarVar3::getCached('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -632,7 +639,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarCoreCache::setCached('Templates.Twig', $cachename, $templateName);
+        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -705,8 +712,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "block:$themeName:$modName:$blockType:$tplName:$tplBase:$tplModule";
         // cache frequently-used sourcefilenames
-        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
-            return xarCoreCache::getCached('Templates.Twig', $cachename);
+        if (xarVar3::isCached('Templates.Twig', $cachename)) {
+            return xarVar3::getCached('Templates.Twig', $cachename);
         }
 
         // use name of blocktype as base unless over-ridden
@@ -728,7 +735,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarCoreCache::setCached('Templates.Twig', $cachename, $templateName);
+        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
         /**
@@ -797,8 +804,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "object:$themeName:$modName:$objectName:$tplType:$tplBase";
         // cache frequently-used sourcefilenames
-        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
-            return xarCoreCache::getCached('Templates.Twig', $cachename);
+        if (xarVar3::isCached('Templates.Twig', $cachename)) {
+            return xarVar3::getCached('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -832,7 +839,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarCoreCache::setCached('Templates.Twig', $cachename, $templateName);
+        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -902,11 +909,11 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "property:$themeName:$modName:$propertyName:$tplType:$tplBase";
         // cache frequently-used sourcefilenames
-        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
-            return xarCoreCache::getCached('Templates.Twig', $cachename);
+        if (xarVar3::isCached('Templates.Twig', $cachename)) {
+            return xarVar3::getCached('Templates.Twig', $cachename);
         }
         if (!empty($tplBase)) {
-            $tplType = xarVar::prepForOS($tplBase);
+            $tplType = xarVar3::prepPath($tplBase);
         }
 
         // @todo define this in theme config
@@ -942,7 +949,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarCoreCache::setCached('Templates.Twig', $cachename, $templateName);
+        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }

@@ -93,32 +93,34 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_guifunc($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
         // use current context
-        return xarMod::guiFunc($modName, $modType, $funcName, $args, $this->context);
+        return $this->mod()->guiFunc($modName, $modType, $funcName, $args);
     }
 
     public function xar_apifunc($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
         // use current context
-        return xarMod::apiFunc($modName, $modType, $funcName, $args, $this->context);
+        return $this->mod()->apiFunc($modName, $modType, $funcName, $args);
     }
 
     public function xar_moduleurl($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
         // avoid double-encoding URLs
-        return xarServer::getModuleURL($modName, $modType, $funcName, $args, false);
+        $generateXMLURL = false;
+        return $this->ctl()->getModuleURL($modName, $modType, $funcName, $args, $generateXMLURL);
     }
 
     public function xar_objecturl($objectName, $methodName = 'view', $args = [])
     {
         // avoid double-encoding URLs
-        return xarServer::getObjectURL($objectName, $methodName, $args, false);
+        $generateXMLURL = false;
+        return $this->ctl()->getObjectURL($objectName, $methodName, $args, $generateXMLURL);
     }
 
-    public function xar_currenturl($args = [], $generateXMLURL = null, $target = null)
+    public function xar_currenturl($args = [], $generateXMLURL = null)
     {
         // avoid double-encoding URLs
         $generateXMLURL ??= false;
-        return xarServer::getCurrentURL($args, $generateXMLURL, $target);
+        return $this->ctl()->getCurrentURL($args, $generateXMLURL);
     }
 
     public function xar_baseurl()
@@ -136,13 +138,13 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_imageurl($fileName, $scope = null, $package = null)
     {
         // avoid double-encoding URLs
-        return xarTpl::getImage($fileName, $scope, $package);
+        return $this->tpl()->getImage($fileName, $scope, $package);
     }
 
     public function xar_fileurl($fileName, $scope = null, $package = null)
     {
         // avoid double-encoding URLs
-        return xarTpl::getFile($fileName, $scope, $package);
+        return $this->tpl()->getFile($fileName, $scope, $package);
     }
 
     public function xar_username($userId)
@@ -157,17 +159,17 @@ class XarayaCoreExtension extends XarayaTwigExtension
 
     public function xar_configvar($name)
     {
-        return xarConfigVars::get(null, $name);
+        return $this->config()->getVar($name);
     }
 
     public function xar_modulevar($scope, $name)
     {
-        return xarModVars::get($scope, $name);
+        return $this->mod()->getVar($name, $scope);
     }
 
     public function xar_moduleid($modName)
     {
-        return xarMod::getRegID($modName);
+        return $this->mod()->getRegID($modName);
     }
 
     /**
@@ -183,15 +185,15 @@ class XarayaCoreExtension extends XarayaTwigExtension
         $args['scope'] ??= 'local';
         $result = match ($args['scope']) {
             'local' => $args['name'],
-            'module' => xarModVars::get($args['module'], $args['name']),
+            'module' => $this->mod()->getVar($args['name'], $args['module']),
             'user' => xarUser::getVar($args['name'], $args['user'] ?? null),
-            'config' => xarConfigVars::get(null, $args['name']),
-            'session' => xarSession::getVar($args['name']),
-            'request' => xarController::getVar($args['name']),
+            'config' => $this->config()->getVar($args['name']),
+            'session' => $this->session()->getVar($args['name']),
+            'request' => $this->ctl()->getRequestVar($args['name']),
             default => 'Unknown scope ' . $args['scope'],
         };
         if (!empty($args['prep'])) {
-            return xarVar::prepForDisplay($result);
+            return $this->var()->prep($result);
         }
         return $result;
     }
@@ -207,24 +209,24 @@ class XarayaCoreExtension extends XarayaTwigExtension
             return false;
         }
         if (isset($context)) {
-            return $context->getUserId() ?? xarSession::getUserId();
+            return $context->getUserId() ?? $this->session()->getUserId();
         }
-        return xarSession::getUserId();
+        return $this->session()->getUserId();
     }
 
     public function xar_modname($regId = null)
     {
-        return xarMod::getName($regId);
+        return $this->mod()->getName($regId);
     }
 
-    public function xar_request($url = null)
+    public function xar_request()
     {
-        return xarController::getRequest($url);
+        return $this->ctl()->getRequest();
     }
 
     public function xar_translate($rawstring, ...$args)
     {
-        return xarMLS::translate($rawstring, ...$args);
+        return $this->ml($rawstring, ...$args);
     }
 
     public function xar_localedate($timestamp, $dateFormat = 'medium', $timeFormat = 'short')
@@ -246,7 +248,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
 
     public function xar_security_authkey($modName = null)
     {
-        return xarSec::genAuthKey($modName);
+        return $this->sec()->genAuthKey($modName);
     }
 
     /**

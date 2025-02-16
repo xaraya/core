@@ -50,7 +50,7 @@ class ModuleTagExtension extends XarayaTwigExtension
      */
     public function xar_image_resize($args = [])
     {
-        return xarMod::apiFunc('images', 'user', 'resize', $args, $this->context);
+        return $this->mod()->apiFunc('images', 'user', 'resize', $args);
     }
 
     /**
@@ -58,6 +58,6 @@ class ModuleTagExtension extends XarayaTwigExtension
      */
     public function xar_workflow_actions($args = [])
     {
-        return xarMod::apiFunc('workflow', 'user', 'showactions', $args, $this->context);
+        return $this->mod()->apiFunc('workflow', 'user', 'showactions', $args);
     }
 }

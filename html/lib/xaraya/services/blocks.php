@@ -37,6 +37,9 @@ interface BlocksInterface extends ServiceInterface
      * @return array<string, mixed>
      */
     public function prepare(array $tplData = []): array;
+    public function renderGroup(string $groupName, ?string $template): string;
+    /** @param array<string, mixed> $args */
+    public function renderBlock(array $args): string;
     /** @param array<mixed> $args */
     public function guiRequest(array $args): string;
     /**
@@ -96,6 +99,23 @@ trait BlocksTrait
         // Pass along the context for xarTpl::module() if needed
         $tplData['context'] ??= $this->getContext();
         return $tplData;
+    }
+
+    /**
+     * Render block group by name
+     */
+    public function renderGroup(string $groupName, ?string $template): string
+    {
+        return xarBlock::renderGroup($groupName, $template, $this->getContext());
+    }
+
+    /**
+     * Render single block instance
+     * @param array<string, mixed> $args
+     */
+    public function renderBlock(array $args): string
+    {
+        return xarBlock::renderBlock($args, $this->getContext());
     }
 
     /**

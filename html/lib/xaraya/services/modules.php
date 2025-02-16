@@ -51,8 +51,11 @@ interface ModulesInterface extends ServiceInterface
     public function getName(?int $regID = null): string;
     public function getID(?string $modName = null): int|null;
     public function getRegID(?string $modName = null): int;
+    public function getDisplayName(?string $modName = null): string;
     /** @return array<string, mixed> */
     public function getFileInfo(?string $modName = null): array;
+    /** @return array<string, mixed> */
+    public function getBaseInfo(?string $modName = null): array;
     /** @return array<string, mixed> */
     public function getInfo(int $modRegId): array;
     /** @return array<string, mixed> */
@@ -214,6 +217,15 @@ trait ModulesTrait
     }
 
     /**
+     * Get display name for this module
+     */
+    public function getDisplayName(?string $modName = null): string
+    {
+        $modName ??= $this->getModName();
+        return xarMod::getDisplayName($modName);
+    }
+
+    /**
      * Get info from xarversion.php
      * @return array<string, mixed>
      */
@@ -224,7 +236,17 @@ trait ModulesTrait
     }
 
     /**
-     * Get information on module
+     * Get base information on module
+     * @return array<string, mixed>
+     */
+    public function getBaseInfo(?string $modName = null): array
+    {
+        $modName ??= $this->getModName();
+        return xarMod::getBaseInfo($modName) ?? [];
+    }
+
+    /**
+     * Get information on module by registry ID (fixed)
      * @return array<string, mixed>
      */
     public function getInfo(int $modRegId): array

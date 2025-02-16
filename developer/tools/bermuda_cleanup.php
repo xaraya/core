@@ -1622,6 +1622,8 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarML\(/' => '\$this->ml(',
             '/xarMLS::translate\(/' => '\$this->ml(',
             '/xarMLS::loadTranslations\(/' => '\$this->mls()->loadTranslations(',
+            '/xarMLS::getCurrentLocale\(/' => '\$this->mls()->getCurrentLocale(',
+            '/xarMLS::getCharsetFromLocale\(/' => '\$this->mls()->getCharsetFromLocale(',
             // @todo differentiate based on xarLog::* level
             '/xarLog::message\(/' => '\$this->log()->message(',
             '/xarLog::variable\(/' => '\$this->log()->variable(',
@@ -1640,6 +1642,9 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarCoreCache::getCached\(/' => '\$this->var()->getCached(',
             '/xarCoreCache::setCached\(/' => '\$this->var()->setCached(',
             '/xarCoreCache::delCached\(/' => '\$this->var()->delCached(',
+            '/xarCoreCache::hasPreload\(/' => '\$this->var()->hasPreload(',
+            '/xarCoreCache::loadCached\(/' => '\$this->var()->loadCached(',
+            '/xarCoreCache::saveCached\(/' => '\$this->var()->saveCached(',
             // @todo handle xarSecurity::check() with component & instance
             '/xarSec::genAuthKey\(/' => '\$this->sec()->genAuthKey(',
             '/xarSec::confirmAuthKey\(/' => '\$this->sec()->confirmAuthKey(',
@@ -1654,10 +1659,12 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarController::URL\(/' => '\$this->ctl()->getModuleURL(',
             // @todo we need to drop extra , null, $this->getContext() here
             '/,\s*null,\s*\$this->getContext\(\)\s*\)/s' => ')',
+            '/xarServer::getModuleURL\(/' => '\$this->ctl()->getModuleURL(',
             '/xarServer::getCurrentURL\(/' => '\$this->ctl()->getCurrentURL(',
             // @todo or use $this->data()->getURL()
             '/xarServer::getObjectURL\(/' => '\$this->ctl()->getObjectURL(',
             '/xarController::getRequest\(\)/' => '\$this->ctl()->getRequest()',
+            '/xarController::getVar\(/' => '\$this->ctl()->getRequestVar(',
             // @todo check xarTpl::module() against current modName modType for mod()->template()
             '/xarTpl::module\(/' => '\$this->tpl()->module(',
             // @todo check xarTpl::block() against current modName blockType for block()->template()
@@ -1669,6 +1676,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarTpl::setPageTitle\(/' => '\$this->tpl()->setPageTitle(',
             '/xarTpl::setPageTemplateName\(/' => '\$this->tpl()->setPageTemplateName(',
             '/xarTpl::getImage\(/' => '\$this->tpl()->getImage(',
+            '/xarTpl::getFile\(/' => '\$this->tpl()->getFile(',
             '/xarTplPager::getPager\(/' => '\$this->tpl()->getPager(',
             // @todo handle xarMod*::* - note: this assumes you set $module !
             '/xarModVars::get\(\s*\'' . $module . '\',\s*/s' => '\$this->mod()->getVar(',
@@ -1687,7 +1695,9 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarMod::getName\(/' => '\$this->mod()->getName(',
             '/xarMod::getID\(/' => '\$this->mod()->getID(',
             '/xarMod::getRegID\(/' => '\$this->mod()->getRegID(',
+            '/xarMod::getDisplayName\(/' => '\$this->mod()->getDisplayName(',
             '/xarMod::getFileInfo\(/' => '\$this->mod()->getFileInfo(',
+            '/xarMod::getBaseInfo\(/' => '\$this->mod()->getBaseInfo(',
             '/xarMod::getInfo\(/' => '\$this->mod()->getInfo(',
             '/xarMod::isAvailable\(/' => '\$this->mod()->isAvailable(',
             '/xarMod::loadDbInfo\(/' => '\$this->mod()->loadDbInfo(',

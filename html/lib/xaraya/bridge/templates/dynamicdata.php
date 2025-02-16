@@ -82,12 +82,12 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         if (!empty($args['objectname'])) {
             $objectName = $args['objectname'];
             unset($args['objectname']);
-            $object = DataObjectFactory::getObjectList(['name' => $objectName], $this->context);
+            $object = $this->data()->getObjectList(['name' => $objectName]);
             $object->getItems($args);
             return $object->showView($args);
         }
         // No object or objectname? Generate ourselves then
-        return xarMod::apiFunc('dynamicdata', 'user', 'showview', $args, $this->context);
+        return $this->mod()->apiFunc('dynamicdata', 'user', 'showview', $args);
     }
 
     public function xar_data_display($args = [])
@@ -97,7 +97,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             unset($args['object']);
             if (is_string($object)) {
                 $objectName = $object;
-                $object = DataObjectFactory::getObject(['name' => $objectName], $this->context);
+                $object = $this->data()->getObject(['name' => $objectName]);
             } else {
                 // @todo do we always overwrite the context or not?
                 if (empty($object->getContext())) {
@@ -108,10 +108,10 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         }
         // No object passed in
         if (!empty($args['definition'])) {
-            return xarMod::apiFunc('dynamicdata', 'user', 'showdisplay', $args['definition'], $this->context);
+            return $this->mod()->apiFunc('dynamicdata', 'user', 'showdisplay', $args['definition']);
         }
         // No direct definition, use the attributes
-        return xarMod::apiFunc('dynamicdata', 'user', 'showdisplay', $args, $this->context);
+        return $this->mod()->apiFunc('dynamicdata', 'user', 'showdisplay', $args);
     }
 
     public function xar_data_form($args = [])
@@ -122,7 +122,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             unset($args['object']);
             if (is_string($object)) {
                 $objectName = $object;
-                $object = DataObjectFactory::getObject(['name' => $objectName], $this->context);
+                $object = $this->data()->getObject(['name' => $objectName]);
             } else {
                 // @todo do we always overwrite the context or not?
                 if (empty($object->getContext())) {
@@ -133,10 +133,10 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         }
         // No object passed in
         if (!empty($args['definition'])) {
-            return xarMod::apiFunc('dynamicdata', 'user', 'showform', $args['definition'], $this->context);
+            return $this->mod()->apiFunc('dynamicdata', 'user', 'showform', $args['definition']);
         }
         // No direct definition, use the attributes
-        return xarMod::apiFunc('dynamicdata', 'user', 'showform', $args, $this->context);
+        return $this->mod()->apiFunc('dynamicdata', 'user', 'showform', $args);
     }
 
     public function xar_data_filterform($args = [])
@@ -147,7 +147,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             unset($args['object']);
             if (is_string($object)) {
                 $objectName = $object;
-                $object = DataObjectFactory::getObject(['name' => $objectName], $this->context);
+                $object = $this->data()->getObject(['name' => $objectName]);
             } else {
                 // @todo do we always overwrite the context or not?
                 if (empty($object->getContext())) {
@@ -158,10 +158,10 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         }
         // No object passed in
         if (!empty($args['definition'])) {
-            return xarMod::apiFunc('dynamicdata', 'user', 'showfilterform', $args['definition'], $this->context);
+            return $this->mod()->apiFunc('dynamicdata', 'user', 'showfilterform', $args['definition']);
         }
         // No direct definition, use the attributes
-        return xarMod::apiFunc('dynamicdata', 'user', 'showfilterform', $args, $this->context);
+        return $this->mod()->apiFunc('dynamicdata', 'user', 'showfilterform', $args);
     }
 
     public function xar_data_label($args = [])
@@ -169,7 +169,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         // If we have an object, throw out its label
         if (!empty($args['object'])) {
             $object = $args['object'];
-            return xarVar::prepForDisplay($object->label);
+            return $this->var()->prep($object->label);
         }
         // We have a property
         if (!empty($args['property'])) {
@@ -184,7 +184,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         if (!empty($args['label'])) {
             $args['context'] ??= $this->context;
             // @todo why are we using this here instead of changing showoutput directly? - see xar:data-label
-            return xarTpl::property('dynamicdata', 'label', 'showoutput', $args, 'label');
+            return $this->tpl()->property('dynamicdata', 'label', 'showoutput', $args, 'label');
         }
         return 'I need an object or a property or a label attribute';
     }
@@ -193,7 +193,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
     {
         if (empty($args['property'])) {
             // No prop, get one (the right one, preferably)
-            $property = DataPropertyMaster::getProperty($args);
+            $property = $this->prop()->getProperty($args);
             if (empty($property->objectref)) {
                 $property->objectref = DummyObjectFactory::getDummyObject($this->context);
             }
@@ -224,7 +224,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             unset($params['preset']);
             if (empty($args['property'])) {
                 // No property, gotta make one
-                $property = DataPropertyMaster::getProperty($params);
+                $property = $this->prop()->getProperty($params);
                 if (empty($property->objectref)) {
                     $property->objectref = DummyObjectFactory::getDummyObject($this->context);
                 }
@@ -260,7 +260,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             unset($params['preset']);
             if (empty($args['property'])) {
                 // No property, gotta make one
-                $property = DataPropertyMaster::getProperty($params);
+                $property = $this->prop()->getProperty($params);
                 if (empty($property->objectref)) {
                     $property->objectref = DummyObjectFactory::getDummyObject($this->context);
                 }
@@ -308,12 +308,12 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         if (!empty($args['objectname'])) {
             $objectName = $args['objectname'];
             unset($params['objectname']);
-            $object = DataObjectFactory::getObjectList(['name' => $objectName], $this->context);
+            $object = $this->data()->getObjectList(['name' => $objectName]);
             $values = $object->getItems($params);
             $properties = $object->getProperties();
             return [$properties, $values];
         }
-        [$properties, $values] = xarMod::apiFunc('dynamicdata', 'user', 'getitemsforview', $params, $this->context);
+        [$properties, $values] = $this->mod()->apiFunc('dynamicdata', 'user', 'getitemsforview', $params);
         return [$properties, $values];
     }
 
@@ -328,7 +328,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             unset($params['object']);
             if (is_string($object)) {
                 $objectName = $object;
-                $object = DataObjectFactory::getObject(['name' => $objectName], $this->context);
+                $object = $this->data()->getObject(['name' => $objectName]);
             } else {
                 // @todo do we always overwrite the context or not?
                 if (empty($object->getContext())) {
@@ -337,7 +337,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             }
         } else {
             $params = array_merge(['getobject' => 1], $params);
-            $object = xarMod::apiFunc('dynamicdata', 'user', 'getitem', $params, $this->context);
+            $object = $this->mod()->apiFunc('dynamicdata', 'user', 'getitem', $params);
         }
         $object->getItem($params);
         // @todo not sure this will help unless we change template too
@@ -347,17 +347,17 @@ class DynamicDataTagExtension extends XarayaTwigExtension
 
     public function xar_data_objectlist($args)
     {
-        return DataObjectFactory::getObjectList($args, $this->context);
+        return $this->data()->getObjectList($args);
     }
 
     public function xar_data_object($args)
     {
-        return DataObjectFactory::getObject($args, $this->context);
+        return $this->data()->getObject($args);
     }
 
     public function xar_data_property($args, $objectref = null)
     {
-        $property = DataPropertyMaster::getProperty($args);
+        $property = $this->prop()->getProperty($args);
         $property->objectref = $objectref ?? DummyObjectFactory::getDummyObject($this->context);
         return $property;
     }
@@ -365,7 +365,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
     public function xar_access($args = [], $exclusive = 1)
     {
         /** @var AccessProperty $access */
-        $access = DataPropertyMaster::getProperty(['type' => 'access']);
+        $access = $this->prop()->getProperty(['type' => 'access']);
         return $access->checkAccessTag($args, $exclusive);
     }
 }

@@ -32,6 +32,11 @@ interface MultiLanguageInterface extends ServiceInterface
     public function getCurrentLocale(): string;
 
     /**
+     * Get the charset component from a locale
+     */
+    public function getCharsetFromLocale(string $locale): string;
+
+    /**
      * Translate string with optional arguments
      * @param string $rawstring
      * @param mixed ...$args
@@ -76,6 +81,14 @@ trait MultiLanguageTrait
     public function getCurrentLocale(): string
     {
         return xarMLS::getCurrentLocale();
+    }
+
+    /**
+     * Get the charset component from a locale
+     */
+    public function getCharsetFromLocale(string $locale): string
+    {
+        return xarMLS::getCharsetFromLocale($locale);
     }
 
     /**

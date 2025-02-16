@@ -54,9 +54,11 @@ sys::import('xaraya.variables.config');
 sys::import('xaraya.facades.config');
 sys::import('xaraya.facades.logger');
 sys::import('xaraya.facades.modules');
+sys::import('xaraya.facades.variables');
 use Xaraya\Facades\xarConfig3;
 use Xaraya\Facades\xarLog3;
 use Xaraya\Facades\xarMod3;
+use Xaraya\Facades\xarVar3;
 
 /**
  * BlockLayout Template Engine
@@ -139,7 +141,7 @@ class xarTpl extends xarObject
     {
         $systemArgs = array(
             'enableTemplatesCaching' => xarConfig3::getVar('Site.BL.CacheTemplates'),
-            'defaultThemeDir'        => xarModVars::get('themes', 'default_theme','default'),
+            'defaultThemeDir'        => xarMod3::getVar('default_theme', 'themes') ?? 'default',
             'generateXMLURLs'        => true,
             'defaultDocType'         => xarConfig3::getVar('Site.BL.DocType'),
         );
@@ -270,7 +272,7 @@ class xarTpl extends xarObject
         // If it is not set, set it return the default theme.
         // @checkme: modules is a depency of templates, redundant check?
         if (method_exists('xarModVars', 'get')) {
-            $themeName = xarModVars::get('themes', 'default_theme');
+            $themeName = xarMod3::getVar('default_theme', 'themes');
             if (!empty($themeName))
                 self::setThemeName($themeName);
         }
@@ -368,29 +370,29 @@ class xarTpl extends xarObject
         xarLog3::info("xarTpl::setPageTitle: Setting pageTitle to $title");
         
         // @checkme: modules is a dependency of templates, redundant check?
-        if (!method_exists('xarModVars','Get') || !empty(xarCoreCache::getCached('installer','installing'))){
+        if (!method_exists('xarModVars','Get') || !empty(xarVar3::getCached('installer','installing'))){
             self::$pageTitle = $title;
         } else {
-            $order      = xarModVars::get('themes', 'SiteTitleOrder');
-            $separator  = xarModVars::get('themes', 'SiteTitleSeparator');
+            $order      = xarMod3::getVar('SiteTitleOrder', 'themes');
+            $separator  = xarMod3::getVar('SiteTitleSeparator', 'themes');
             if (empty($module)) {
                 // FIXME: the ucwords is layout stuff which doesn't belong here
                 // <chris/> Why don't we just use display name then?
-                $module = ucwords(xarMod::getDisplayName());
+                $module = ucwords(xarMod3::getDisplayName(xarMod3::getName()));
             }
             switch(strtolower($order)) {
                 case 'default':
                 default:
-                    self::$pageTitle = xarModVars::get('themes', 'SiteName') . $separator . $module . $separator . $title;
+                    self::$pageTitle = xarMod3::getVar('SiteName', 'themes') . $separator . $module . $separator . $title;
                 break;
                 case 'sp':
-                    self::$pageTitle = xarModVars::get('themes', 'SiteName') . $separator . $title;
+                    self::$pageTitle = xarMod3::getVar('SiteName', 'themes') . $separator . $title;
                 break;
                 case 'mps':
-                    self::$pageTitle = $module . $separator . $title . $separator .  xarModVars::get('themes', 'SiteName');
+                    self::$pageTitle = $module . $separator . $title . $separator .  xarMod3::getVar('SiteName', 'themes');
                 break;
                 case 'pms':
-                    self::$pageTitle = $title . $separator .  $module . $separator . xarModVars::get('themes', 'SiteName');
+                    self::$pageTitle = $title . $separator .  $module . $separator . xarMod3::getVar('SiteName', 'themes');
                 break;
                 case 'to':
                     self::$pageTitle = $title;
@@ -456,8 +458,8 @@ class xarTpl extends xarObject
         // 2. Create a page in the themes module with an interface
         // 3. Use 1. to link to 2.
         // @checkme: modules is a depency of templates, redundant check?
-        if (method_exists('xarModVars','get') && method_exists('xarUser','getVar') && empty(xarCoreCache::getCached('installer','installing'))) {
-            if (xarModVars::get('themes', 'variable_dump') && xarUser::isDebugAdmin()) {
+        if (method_exists('xarModVars','get') && method_exists('xarUser','getVar') && empty(xarVar3::getCached('installer','installing'))) {
+            if (xarMod3::getVar('variable_dump', 'themes') && xarUser::isDebugAdmin()) {
                 echo '<pre>',var_export($tplData, 1),'</pre>';
             }
         } 
@@ -545,19 +547,19 @@ class xarTpl extends xarObject
     private static function getScopeFileName($scope, $package, $tplBase, $tplName=null, $tplPart='', $callerMod=null)
     {
         // prep input
-        $package = xarVar::prepForOS($package);
-        $tplBase = xarVar::prepForOS($tplBase);
+        $package = xarVar3::prepPath($package);
+        $tplBase = xarVar3::prepPath($tplBase);
         if (!empty($tplName))
-            $tplName = xarVar::prepForOS($tplName);
+            $tplName = xarVar3::prepPath($tplName);
         if (!empty($tplPart))
-            $tplPart = strtr(trim(xarVar::prepForOS($tplPart)), " ", "/");
+            $tplPart = strtr(trim(xarVar3::prepPath($tplPart)), " ", "/");
         $canTemplateName = strtr($tplName ?? "", "-", "/");
         $canonical = ($canTemplateName == $tplName) ? false : true;
 
         $cachename = "$scope:$package:$tplBase:$tplName:$tplPart:$callerMod";
         // cache frequently-used sourcefilenames 
-        if (xarCoreCache::isCached('Templates.Element', $cachename))
-            return xarCoreCache::getCached('Templates.Element', $cachename);
+        if (xarVar3::isCached('Templates.Element', $cachename))
+            return xarVar3::getCached('Templates.Element', $cachename);
 
         // default paths 
         $themePath = self::getThemeDir();
@@ -664,7 +666,7 @@ class xarTpl extends xarObject
             }
         }
 
-        xarCoreCache::setCached('Templates.Element', $cachename, $sourceFileName);
+        xarVar3::setCached('Templates.Element', $cachename, $sourceFileName);
 
         return $sourceFileName;
        
@@ -690,15 +692,15 @@ class xarTpl extends xarObject
                 return xarTwigTpl::object($modName, $objectName, $tplType, $tplData, $tplBase);
             }
         }
-        $modName = xarVar::prepForOS($modName);
-        $objectName = xarVar::prepForOS($objectName);
-        $tplType = xarVar::prepForOS($tplType);
-        $tplBase   = empty($tplBase) ? $tplType : xarVar::prepForOS($tplBase);
+        $modName = xarVar3::prepPath($modName);
+        $objectName = xarVar3::prepPath($objectName);
+        $tplType = xarVar3::prepPath($tplType);
+        $tplBase   = empty($tplBase) ? $tplType : xarVar3::prepPath($tplBase);
         $cachename = "$modName:$objectName:$tplType:$tplBase:objects";
 
         // cache frequently-used sourcefilenames for DD elements
-        if (xarCoreCache::isCached('Templates.DDElement', $cachename)) {
-            $sourceFileName = xarCoreCache::getCached('Templates.DDElement', $cachename);
+        if (xarVar3::isCached('Templates.DDElement', $cachename)) {
+            $sourceFileName = xarVar3::getCached('Templates.DDElement', $cachename);
             return self::executeFromFile($sourceFileName, $tplData);
         }
         
@@ -709,7 +711,7 @@ class xarTpl extends xarObject
         if (empty($sourceFileName)) 
             throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$objectName]");
         
-        xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
+        xarVar3::setCached('Templates.DDElement', $cachename, $sourceFileName);
         
         return self::executeFromFile($sourceFileName, $tplData);
     }
@@ -736,15 +738,15 @@ class xarTpl extends xarObject
                 return xarTwigTpl::property($modName, $propertyName, $tplType, $tplData, $tplBase);
             }
         }
-        $modName = xarVar::prepForOS($modName);
-        $propertyName = xarVar::prepForOS($propertyName);
-        $tplType = xarVar::prepForOS($tplType);
-        $tplBase   = empty($tplBase) ? $tplType : xarVar::prepForOS($tplBase);
+        $modName = xarVar3::prepPath($modName);
+        $propertyName = xarVar3::prepPath($propertyName);
+        $tplType = xarVar3::prepPath($tplType);
+        $tplBase   = empty($tplBase) ? $tplType : xarVar3::prepPath($tplBase);
         $cachename = "$modName:$propertyName:$tplType:$tplBase:properties";
 
         // cache frequently-used sourcefilenames for DD elements
-        if (xarCoreCache::isCached('Templates.DDElement', $cachename)) {
-            $sourceFileName = xarCoreCache::getCached('Templates.DDElement', $cachename);
+        if (xarVar3::isCached('Templates.DDElement', $cachename)) {
+            $sourceFileName = xarVar3::getCached('Templates.DDElement', $cachename);
             return self::executeFromFile($sourceFileName, $tplData);
         }
 
@@ -782,7 +784,7 @@ class xarTpl extends xarObject
         if (empty($sourceFileName)) 
             throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$propertyName]");
         
-        xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
+        xarVar3::setCached('Templates.DDElement', $cachename, $sourceFileName);
         
         return self::executeFromFile($sourceFileName, $tplData);
     }
@@ -815,7 +817,7 @@ class xarTpl extends xarObject
  * @param   string $fileName
  * @param   ?string $scope
  * @param   ?string $package
- * @return  string|void image url if it exists or module image url if not, or NULL if neither found
+ * @return  string|null image url if it exists or module image url if not, or NULL if neither found
  *
  * @todo    provide examples, improve description, add functionality
  * @todo    provide XML URL override flag
@@ -842,7 +844,7 @@ class xarTpl extends xarObject
             case 'theme':
                 // optional theme images to look in passed as third param
                 if (!empty($package)) {
-                    $package = xarVar::prepForOS($package);
+                    $package = xarVar3::prepPath($package);
                     $paths[] = self::getThemeDir($package) . '/images/' . $fileName;
                 }                
                 // current theme images
@@ -852,14 +854,14 @@ class xarTpl extends xarObject
                 break;
             case 'module':
                 if (empty($package))
-                    $package = xarMod::getName();
+                    $package = xarMod3::getName();
                 // @checkme: modules is a depency of templates, redundant check?
                 if (method_exists('xarMod', 'getBaseInfo')) {
-                    $modBaseInfo = xarMod::getBaseInfo($package);
-                    if (!isset($modBaseInfo)) return;
+                    $modBaseInfo = xarMod3::getBaseInfo($package);
+                    if (!isset($modBaseInfo)) return null;
                     $modOsDir = $modBaseInfo['osdirectory'];
                 } else {
-                    $modOsDir = xarVar::prepForOS($package);
+                    $modOsDir = xarVar3::prepPath($package);
                 }
                 // handle legacy calls to base module images moved to common/images or themename/images
                 // @todo remove this when all modules are passing correct params 
@@ -879,8 +881,8 @@ class xarTpl extends xarObject
                 $paths[] = sys::code() . 'modules/' . $modOsDir . '/xartemplates/images/' . $fileName;
                 break;
             case 'property':
-                if (empty($package)) return;
-                $package = xarVar::prepForOS($package);
+                if (empty($package)) return null;
+                $package = xarVar3::prepPath($package);
                 // current theme property images
                 $paths[] = self::getThemeDir() . '/properties/' . $package . '/images/' . $fileName;
                 // common property images
@@ -891,8 +893,8 @@ class xarTpl extends xarObject
                 $paths[] = sys::code() . 'properties/' . $package . '/xartemplates/images/' . $fileName;
                 break;
             case 'block':
-                if (empty($package)) return;
-                $package = xarVar::prepForOS($package);
+                if (empty($package)) return null;
+                $package = xarVar3::prepPath($package);
                 // current theme block images
                 $paths[] = self::getThemeDir() . '/blocks/' . $package . '/images/' . $fileName;
                 // common block images
@@ -901,7 +903,7 @@ class xarTpl extends xarObject
                 $paths[] = sys::code() . 'blocks/' . $package . '/xarimages/' . $fileName;
                 break;
         }
-        if (empty($paths)) return;
+        if (empty($paths)) return null;
         
         $filePath = null;
         foreach ($paths as $path) {
@@ -939,7 +941,7 @@ class xarTpl extends xarObject
  * @param   string $fileName the fileName relative to the theme/module/property/block folder/
  * @param   ?string $scope the scope to check for (theme/module/property/block)
  * @param   ?string $package the actual theme/module/property/block we're looking at
- * @return  string|void file url if it exists or NULL if not
+ * @return  string|null file url if it exists or NULL if not
 */
 public static function getFile($fileName, $scope=NULL, $package=NULL)
 {
@@ -949,7 +951,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
     }
 
     if ($scope != 'theme' && $scope != 'module' && $scope != 'property' && $scope != 'block') {
-        return;
+        return null;
     }
 
     $paths = array();
@@ -957,7 +959,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
         case 'theme':
             // optional theme files to look in passed as third param
             if (!empty($package)) {
-                $package = xarVar::prepForOS($package);
+                $package = xarVar3::prepPath($package);
                 $paths[] = self::getThemeDir($package) . '/' . $fileName;
             }
             // current theme files
@@ -967,32 +969,32 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
             break;
         case 'module':
             if (empty($package))
-                $package = xarMod::getName();
+                $package = xarMod3::getName();
             // @checkme: modules is a depency of templates, redundant check?
             if (method_exists('xarMod', 'getBaseInfo')) {
-                $modBaseInfo = xarMod::getBaseInfo($package);
-                if (!isset($modBaseInfo)) return;
+                $modBaseInfo = xarMod3::getBaseInfo($package);
+                if (!isset($modBaseInfo)) return null;
                 $modOsDir = $modBaseInfo['osdirectory'];
             } else {
-                $modOsDir = xarVar::prepForOS($package);
+                $modOsDir = xarVar3::prepPath($package);
             }
             // code/modules/{module}/{file}
             $paths[] = sys::code() . 'modules/' . $modOsDir . '/' . $fileName;
             break;
         case 'property':
-            if (empty($package)) return;
-            $package = xarVar::prepForOS($package);
+            if (empty($package)) return null;
+            $package = xarVar3::prepPath($package);
             // code/properties/{property}/{file}
             $paths[] = sys::code() . 'properties/' . $package . '/' . $fileName;
             break;
         case 'block':
-            if (empty($package)) return;
-            $package = xarVar::prepForOS($package);
+            if (empty($package)) return null;
+            $package = xarVar3::prepPath($package);
             // code/blocks/{block}/{file}
             $paths[] = sys::code() . 'blocks/' . $package . '/' . $fileName;
             break;
     }
-    if (empty($paths)) return;
+    if (empty($paths)) return null;
 
     $filePath = null;
     foreach ($paths as $path) {
@@ -1000,7 +1002,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
         $filePath = $path;
         break;
     }
-    if (empty($filePath)) return;
+    if (empty($filePath)) return null;
 
     // Turn relative path into an absolute URL
     $webDir = sys::web();
@@ -1217,7 +1219,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
     public static function includeModuleTemplate($modName, $templateName, $tplData, $propertyName='')
     {
         // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
-        $templateName = xarVar::prepForOS($templateName);
+        $templateName = xarVar3::prepPath($templateName);
         $themeDir = self::getThemeDir();
         $commonDir = self::getThemeDir('common');
         
@@ -1282,8 +1284,8 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
         assert(is_array($tplData));
 
         // cache frequently-used cachedfilenames
-        if (xarCoreCache::isCached('Templates.ExecuteFromFile', $sourceFileName)) {
-            $cachedFileName = xarCoreCache::getCached('Templates.ExecuteFromFile', $sourceFileName);
+        if (xarVar3::isCached('Templates.ExecuteFromFile', $sourceFileName)) {
+            $cachedFileName = xarVar3::getCached('Templates.ExecuteFromFile', $sourceFileName);
 
         } else {
             // Load translations for the template
@@ -1310,7 +1312,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
             // @todo get rid of the cachedFileName usage - why?
             $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
 
-            xarCoreCache::setCached('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);
+            xarVar3::setCached('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);
         }
 
         // Execute the compiled template from the cache file
@@ -1389,7 +1391,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
                 self::$showPHPCommentBlockInTemplates = 0;
                 // @checkme: modules is a depency of templates, redundant check?
                 if (method_exists('xarModVars','Get')){
-                    $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
+                    $showphpcbit = xarMod3::getVar('ShowPHPCommentBlockInTemplates', 'themes');
                     if (!empty($showphpcbit)) {
                         self::$showPHPCommentBlockInTemplates = 1;
                     }
@@ -1419,7 +1421,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
             self::$showTemplateFilenames = 0;
             // @checkme: modules is a depency of templates, redundant check?
             if (method_exists('xarModVars','Get')){
-                $showtemplates = xarModVars::get('themes', 'ShowTemplates');
+                $showtemplates = xarMod3::getVar('ShowTemplates', 'themes');
                 if (!empty($showtemplates)) {
                     self::$showTemplateFilenames = 1;
                 }

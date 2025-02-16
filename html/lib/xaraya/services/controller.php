@@ -33,13 +33,13 @@ interface ControllerInterface extends ServiceInterface
      * Get url for some module type function
      * @param array<string, mixed> $args
      */
-    public function getModuleURL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $args = []): string;
+    public function getModuleURL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $args = [], ?bool $generateXMLURL = null): string;
 
     /**
      * Get url for some object method
      * @param array<string, mixed> $args
      */
-    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = []): string;
+    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = [], ?bool $generateXMLURL = null): string;
 
     /**
      * Get current url
@@ -58,6 +58,8 @@ interface ControllerInterface extends ServiceInterface
      * @return xarRequest
      */
     public function getRequest(): xarRequest;
+
+    public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed;
 
     /**
      * Send redirect to url and exit
@@ -95,18 +97,18 @@ trait ControllerTrait
      * Get url for a module type function
      * @param array<string, mixed> $args
      */
-    public function getModuleURL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $args = []): string
+    public function getModuleURL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $args = [], ?bool $generateXMLURL = null): string
     {
-        return xarController::URL($modName, $modType, $funcName, $args);
+        return xarController::URL($modName, $modType, $funcName, $args, $generateXMLURL);
     }
 
     /**
      * Get url for an object method
      * @param array<string, mixed> $args
      */
-    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = []): string
+    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = [], ?bool $generateXMLURL = null): string
     {
-        return xarServer::getObjectURL($objectName, $methodName, $args);
+        return xarServer::getObjectURL($objectName, $methodName, $args, $generateXMLURL);
     }
 
     /**
@@ -139,6 +141,15 @@ trait ControllerTrait
     public function getRequest(): xarRequest
     {
         return xarController::getRequest();
+    }
+
+    /**
+     * Get a request variable
+     * @return mixed
+     */
+    public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed
+    {
+        return xarController::getVar($varName, $allowOnlyMethod);
     }
 
     /**

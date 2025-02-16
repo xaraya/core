@@ -66,6 +66,9 @@ class xarDDObject extends xarObject implements IxarDDObject
         if (!isset($context)) {
             $context = new Context(['source' => __METHOD__]);
         }
+        // Set module name and type in context if needed (dummy)
+        $context['module'] ??= 'object';
+        $context['modtype'] ??= $objectName;
 
         // @todo refine configuration elsewhere later
         $twig_support = xarModVars::get('dynamicdata', 'twig_support');

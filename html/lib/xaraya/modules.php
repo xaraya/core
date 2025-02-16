@@ -794,6 +794,9 @@ class xarMod extends xarObject implements IxarMod
         if (!isset($context)) {
             $context = new Context(['source' => __METHOD__]);
         }
+        // Set module name and type in context if needed
+        $context['module'] ??= $modName;
+        $context['modtype'] ??= $modType;
         // @todo call module gui class method directly if available
         $tplData = self::callFunc($modName, $modType, $funcName, $args, '', $context);
         // If we have a string of data, we assume someone else did xarTpl* for us

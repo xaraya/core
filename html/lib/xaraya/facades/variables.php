@@ -40,6 +40,17 @@ class xarVar3
         return self::$xarVar;
     }
 
+    /**
+     * Prepare text for operating system path, and convert all special characters
+     *
+     * @param string ...$args
+     * @return mixed
+     */
+    public static function prepPath(...$args)
+    {
+        return self::getInstance()->prepPath(...$args);
+    }
+
     public static function isCached(string $scope, string $name): bool
     {
         return self::getInstance()->isCached($scope, $name);
@@ -58,6 +69,11 @@ class xarVar3
     public static function delCached(string $scope, string $name): void
     {
         self::getInstance()->delCached($scope, $name);
+    }
+
+    public static function hasPreload(string $scope, ?string $name = null): bool
+    {
+        return self::getInstance()->hasPreload($scope, $name);
     }
 
     public static function loadCached(string $scope, ?string $name = null): bool
