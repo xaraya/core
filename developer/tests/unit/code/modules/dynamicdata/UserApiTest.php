@@ -44,6 +44,35 @@ final class UserApiTest extends TestHelper
         $this->assertEquals($expected, $itemlinks[1]);
     }
 
+    public function testUserApiContext(): void
+    {
+        // reset context of dd module class first
+        $module = xarMod::getModule('dynamicdata');
+        $module->setContext(null);
+
+        $context = $this->createContext(['source' => __METHOD__]);
+        $userapi = xarMod::userapi('dynamicdata');
+        $userapi->setContext($context);
+
+        // we have the right context
+        $expected = $context;
+        $this->assertEquals($expected, $userapi->getContext());
+
+        // get corresponding user GUI
+        $usergui = $userapi->usergui();
+
+        // we still have the same context
+        $expected = $context;
+        $this->assertEquals($expected, $usergui->getContext());
+
+        // get admin API of another module
+        $adminapi = $userapi->getModule('dynamicdata')->adminapi();
+
+        // we still have the same context
+        $expected = $context;
+        $this->assertEquals($expected, $adminapi->getContext());
+    }
+
     public function testUserApiTestCall(): void
     {
         $context = $this->createContext(['source' => __METHOD__]);

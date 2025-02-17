@@ -34,7 +34,7 @@ interface ModuleServicesInterface extends ServicesInterface
     public function getModType(): string;
     public function setModType(string $modType): void;
     public function hasMethod(string $funcName, string $callType = 'api'): bool;
-    public function getModule(): ModuleInterface|null;
+    public function getModule(?string $modName = null): ModuleInterface|null;
     public function userapi(): UserApiInterface|null;
     public function usergui(): UserGuiInterface|null;
     public function adminapi(): AdminApiInterface|null;
@@ -196,9 +196,17 @@ trait ModuleServicesTrait
      * Get parent module to access other module classes
      * @return TModule
      */
-    public function getModule(): ModuleInterface|null
+    public function getModule(?string $modName = null): ModuleInterface|null
     {
+        if (!empty($modName)) {
+            $module = xarMod::getModule($modName);
+            $module->setContext($this->context);
+            return $module;
+        }
         $this->parent ??= xarMod::getModule($this->getModName());
+        if (is_null($this->parent->getContext())) {
+            $this->parent->setContext($this->context);
+        }
         return $this->parent;
     }
 
@@ -209,17 +217,6 @@ trait ModuleServicesTrait
     public function setModule(?ModuleInterface $parent): void
     {
         $this->parent = $parent;
-    }
-
-    /**
-     * Get module user API class for this module
-     * @deprecated 2.6.2 use userapi() instead
-     */
-    public function getAPI(): UserApiInterface|null
-    {
-        $component = $this->getModule()?->userapi();
-        assert($component instanceof UserApiInterface);
-        return $component;
     }
 
     /**

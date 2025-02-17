@@ -9,20 +9,8 @@ use VirtualObjectDescriptor;
 use DataObject;
 
 /**
- * Dummy object with context for use in Twig functions
+ * Get dummy object with context for use in Twig functions
  */
-/**
-class DummyObject implements ContextInterface
-{
-    use ContextTrait;
-
-    public function __construct($context = null)
-    {
-        $this->setContext($context);
-    }
-}
- */
-
 class DummyObjectFactory
 {
     /** @var ?DataObject */

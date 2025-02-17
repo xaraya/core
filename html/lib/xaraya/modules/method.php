@@ -62,6 +62,7 @@ interface MethodServicesInterface extends ParentServicesInterface
     public function getParent(): ModuleServicesInterface;
     /** @param TComponent $parent */
     public function setParent(ModuleServicesInterface $parent): void;
+    public function getModule(?string $modName = null): ModuleInterface|null;
     public function userapi(): UserApiInterface|null;
     public function usergui(): UserGuiInterface|null;
     public function adminapi(): AdminApiInterface|null;
@@ -135,6 +136,13 @@ trait MethodServicesTrait
         $this->parent = $parent;
     }
 
+    /**
+     * Get parent module to access other module classes
+     */
+    public function getModule(?string $modName = null): ModuleInterface|null
+    {
+        return $this->getParent()->getModule($modName);   
+    }
 
     /**
      * Get module user API class for this module

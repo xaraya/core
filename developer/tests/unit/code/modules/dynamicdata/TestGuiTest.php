@@ -33,6 +33,7 @@ final class TestGuiTest extends TestHelper
     public function testWithServices(): void
     {
         $context = $this->createContext();
+        /** @var TestGui $testgui */
         $testgui = xarMod::getModule('dynamicdata')->getTestGUI();
         $testgui->setContext($context);
 
@@ -52,6 +53,7 @@ final class TestGuiTest extends TestHelper
     public function testServicesMethod(): void
     {
         $context = $this->createContext();
+        /** @var TestGui $testgui */
         $testgui = xarMod::getModule('dynamicdata')->getTestGUI();
         $testgui->setContext($context);
 

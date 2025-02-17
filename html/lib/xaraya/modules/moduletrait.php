@@ -218,32 +218,6 @@ trait ModuleTrait
         return [];
     }
 
-    /**
-     * Wrapper for xarMod::apiFunc() - only for migration
-     * @param mixed $type
-     * @param mixed $func
-     * @param mixed $args
-     * @return mixed
-     * @deprecated 2.6.3 use mod() or userapi() etc. instead
-     */
-    public function callAPI($type, $func, $args = [])
-    {
-        return xarMod::apiFunc($this->getModName(), $type, $func, $args, $this->getContext());
-    }
-
-    /**
-     * Wrapper for xarMod::guiFunc() - only for migration
-     * @param mixed $type
-     * @param mixed $func
-     * @param mixed $args
-     * @return mixed
-     * @deprecated 2.6.3 use mod() or usergui() etc. instead
-     */
-    public function callGUI($type, $func, $args = [])
-    {
-        return xarMod::guiFunc($this->getModName(), $type, $func, $args, $this->getContext());
-    }
-
     public function userapi(): UserApiInterface|null
     {
         $component = $this->getComponent('UserApi');
