@@ -15,6 +15,12 @@
 
 sys::import('xaraya.variables.theme');
 
+// Themes
+class ThemeNotFoundException extends NotFoundExceptions
+{ 
+    protected $message = 'A theme is missing, the theme name could not be determined in the current context';
+}
+
 /**
  * Theme handling functions
  */
