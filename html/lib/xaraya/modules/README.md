@@ -82,6 +82,28 @@ Module methods rely on component class interfaces for the function type: `GuiMet
 
 Note: the `$context` is handled by the class itself, and does not need to be passed to the method call here.
 
+```mermaid
+flowchart LR
+  subgraph m[MyFancyModule]
+    Module
+  end
+  subgraph a[User API]
+    UserApi
+    GetMethod
+    UserApi -- get --> GetMethod
+    GetMethod -. userapi .-> UserApi
+  end
+  subgraph g[User GUI]
+    UserGui
+  end
+  Module -- userapi --> UserApi
+  Module -- usergui --> UserGui
+  UserApi -. getModule .-> m
+  UserApi -. usergui .-> g
+  GetMethod -. usergui .-> g
+  GetMethod -. getModule .-> m
+```
+
 ## Implementation Details
 
 Module developers can use the traits and classes in `html/lib/xaraya/modules/` to easily start new modules and/or migrate existing module functions to module methods.
