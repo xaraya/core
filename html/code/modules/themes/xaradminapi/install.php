@@ -31,7 +31,7 @@ function themes_adminapi_install(array $args = [], $context = null)
     if (!isset($regid)) throw new EmptyParameterException('regid');
     // See if we have lost any modules since last generation
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance('themes');  
+    $installer = InstallerTool::getInstance('themes');  
     if (!$installer->checkformissing()) {return;}
 
     // Make xarMod::getInfo not cache anything...

@@ -20,7 +20,7 @@ use xarSecurity;
 use xarVar;
 use xarVersion;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
@@ -51,7 +51,7 @@ class RegenerateMethod extends MethodClass
 
         //Finds and updates missing modules
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance();
+        $installer = InstallerTool::getInstance();
         if (!$installer->checkformissing()) {
             return;
         }

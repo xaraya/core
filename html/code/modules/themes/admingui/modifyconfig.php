@@ -16,6 +16,7 @@ use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
 use DataPropertyMaster;
 use Exception;
+use FilePickerProperty;
 use Query;
 use RelativeDirectoryIterator;
 use xarConfigVars;

@@ -17,7 +17,7 @@ use xarSec;
 use xarSecurity;
 use xarVar;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
@@ -52,7 +52,7 @@ class UpdateinstalloptionsMethod extends MethodClass
         //    if (!xarSec::confirmAuthKey()) return;
         xarVar::fetch('regid', 'int', $regid, null, xarVar::DONT_SET);
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance();
+        $installer = InstallerTool::getInstance();
         if (!$installer->installmodule($regid)) {
             return;
         }

@@ -18,7 +18,7 @@ function modules_admin_modifyinstalloptions(array $args = [], $context = null)
     if (!xarSecurity::check('AdminModules')) return; 
     
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance();    
+    $installer = InstallerTool::getInstance();    
     if (!$installer->getModuleStack()->size) {
         xarVar::fetch('regid', 'int', $regid, NULL, xarVar::DONT_SET);
         if(!isset($regid)) throw new Exception('Missing id of module for installation options...aborting');

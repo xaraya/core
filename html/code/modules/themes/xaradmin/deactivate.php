@@ -47,7 +47,7 @@ function themes_admin_deactivate(array $args = [], $context = null)
 
     // See if we have lost any modules since last generation
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance('themes');  
+    $installer = InstallerTool::getInstance('themes');  
     if (!$installer->checkformissing()) {return;}
 
     // deactivate

@@ -19,7 +19,7 @@ use xarMod;
 use xarSecurity;
 use xarTheme;
 use sys;
-use Installer;
+use InstallerTool;
 use ThemeInitialization;
 
 sys::import('xaraya.modules.method');
@@ -51,7 +51,7 @@ class RegenerateMethod extends MethodClass
 
         //Finds and updates missing themes
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance('themes');
+        $installer = InstallerTool::getInstance('themes');
         if (!$installer->checkformissing()) {
             return;
         }

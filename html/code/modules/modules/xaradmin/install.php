@@ -30,7 +30,7 @@ function modules_admin_install(array $args = [], $context = null)
     // Security
     if (!xarSecurity::check('AdminModules')) return; 
     
-    $installer = Installer::getInstance();    
+    $installer = InstallerTool::getInstance();    
     // Security and sanity checks
     // TODO: check under what conditions this is needed
 //    if (!xarSec::confirmAuthKey()) return;

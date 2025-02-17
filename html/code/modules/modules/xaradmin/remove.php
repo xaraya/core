@@ -49,7 +49,7 @@ function modules_admin_remove(array $args = [], $context = null)
         $return_url = xarController::URL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
 
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance();    
+    $installer = InstallerTool::getInstance();    
     if(!$command) {
         // not been thru gui yet, first check the modules dependencies
         $dependents = $installer->getalldependents($id);

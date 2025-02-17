@@ -37,7 +37,7 @@ function modules_admin_installall(array $args = [], $context = null)
     if (!isset($dbModules)) return;
 
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance();    
+    $installer = InstallerTool::getInstance();    
     foreach ($dbModules as $name => $info) {
         //Jump if already installed
         if ($info['state'] == xarMod::STATE_INSTALLED) continue;

@@ -22,7 +22,7 @@ function modules_adminapi_regenerate(array $args = [], $context = null)
 
     //Finds and updates missing modules
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance();    
+    $installer = InstallerTool::getInstance();    
     if (!$installer->checkformissing()) {return;}
 
     //Get all modules in the filesystem

@@ -18,7 +18,7 @@ use xarMod;
 use xarSecurity;
 use xarTheme;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
@@ -56,7 +56,7 @@ class InstallMethod extends MethodClass
         }
         // See if we have lost any modules since last generation
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance('themes');
+        $installer = InstallerTool::getInstance('themes');
         if (!$installer->checkformissing()) {
             return;
         }

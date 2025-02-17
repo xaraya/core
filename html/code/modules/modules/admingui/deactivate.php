@@ -20,7 +20,7 @@ use xarSec;
 use xarSecurity;
 use xarVar;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
@@ -86,7 +86,7 @@ class DeactivateMethod extends MethodClass
         }
 
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance();
+        $installer = InstallerTool::getInstance();
 
         // If we haven't been to the deps GUI, check that first
         if (!$command) {

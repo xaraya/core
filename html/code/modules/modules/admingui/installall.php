@@ -19,7 +19,7 @@ use xarMod;
 use xarSec;
 use xarSecurity;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
@@ -66,7 +66,7 @@ class InstallallMethod extends MethodClass
         }
 
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance();
+        $installer = InstallerTool::getInstance();
         foreach ($dbModules as $name => $info) {
             //Jump if already installed
             if ($info['state'] == xarMod::STATE_INSTALLED) {

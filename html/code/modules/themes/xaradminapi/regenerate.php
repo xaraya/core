@@ -23,7 +23,7 @@ function themes_adminapi_regenerate(array $args = [], $context = null)
 
     //Finds and updates missing themes
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance('themes');  
+    $installer = InstallerTool::getInstance('themes');  
     if (!$installer->checkformissing()) {return;}
 
     //Get all themes in the filesystem

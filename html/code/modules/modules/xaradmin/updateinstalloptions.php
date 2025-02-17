@@ -18,6 +18,6 @@
 //    if (!xarSec::confirmAuthKey()) return;
     xarVar::fetch('regid', 'int', $regid, NULL, xarVar::DONT_SET);
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance();    
+    $installer = InstallerTool::getInstance();    
     if (!$installer->installmodule($regid)) return;
 }

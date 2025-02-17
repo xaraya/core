@@ -19,7 +19,7 @@ use xarSec;
 use xarSecurity;
 use xarVar;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
@@ -45,7 +45,7 @@ class ModifyinstalloptionsMethod extends MethodClass
         }
 
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance();
+        $installer = InstallerTool::getInstance();
         if (!$installer->getModuleStack()->size) {
             xarVar::fetch('regid', 'int', $regid, null, xarVar::DONT_SET);
             if (!isset($regid)) {

@@ -22,7 +22,7 @@ use xarSec;
 use xarSecurity;
 use xarVar;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
@@ -88,7 +88,7 @@ class RemoveMethod extends MethodClass
         }
 
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance();
+        $installer = InstallerTool::getInstance();
         if (!$command) {
             // not been thru gui yet, first check the modules dependencies
             $dependents = $installer->getalldependents($id);

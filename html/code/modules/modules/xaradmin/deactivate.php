@@ -46,7 +46,7 @@ function modules_admin_deactivate (array $args = [], $context = null)
         $return_url = xarController::URL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
 
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance();    
+    $installer = InstallerTool::getInstance();    
 
     // If we haven't been to the deps GUI, check that first
     if (!$command) {

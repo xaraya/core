@@ -20,7 +20,7 @@ use xarCore;
 use xarEvents;
 use xarMod;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
@@ -66,7 +66,7 @@ class InitialiseMethod extends MethodClass
 
         //Checks module dependency
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance();
+        $installer = InstallerTool::getInstance();
         if (!$installer->verifydependency($regid)) {
             //TODO: Add description of the dependencies
             $msg = xarML('The dependencies to initialise the module "#(1)" were not met.', $modInfo['displayname']);

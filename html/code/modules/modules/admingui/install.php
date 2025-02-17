@@ -26,7 +26,7 @@ use xarSession;
 use xarTpl;
 use xarVar;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 
@@ -46,7 +46,7 @@ class InstallMethod extends MethodClass
             return;
         }
 
-        $installer = Installer::getInstance();
+        $installer = InstallerTool::getInstance();
         // Security and sanity checks
         // TODO: check under what conditions this is needed
         //    if (!xarSec::confirmAuthKey()) return;

@@ -33,7 +33,7 @@ function modules_adminapi_initialise(array $args = [], $context = null)
 
     //Checks module dependency
     sys::import('modules.modules.class.installer');
-    $installer = Installer::getInstance();    
+    $installer = InstallerTool::getInstance();    
     if (!$installer->verifydependency($regid)) {
         //TODO: Add description of the dependencies
         $msg = xarML('The dependencies to initialise the module "#(1)" were not met.', $modInfo['displayname']);

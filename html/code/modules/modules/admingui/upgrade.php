@@ -21,7 +21,7 @@ use xarSec;
 use xarSecurity;
 use xarVar;
 use sys;
-use Installer;
+use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
@@ -79,7 +79,7 @@ class UpgradeMethod extends MethodClass
 
         // See if we have lost any modules since last generation
         sys::import('modules.modules.class.installer');
-        $installer = Installer::getInstance();
+        $installer = InstallerTool::getInstance();
         if (!$installer->checkformissing()) {
             return;
         }
