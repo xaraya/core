@@ -12,8 +12,9 @@
  * Default setup for roles and privileges
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
-*/
-function initializeSetup()
+ * @todo move to privileges/xarinit.php or privileges/installer.php
+ */
+function privileges_initializeSetup()
 {
 
     /*********************************************************************

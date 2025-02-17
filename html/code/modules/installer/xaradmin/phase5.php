@@ -369,7 +369,8 @@ function installer_admin_phase5()
     
     // create the default masks and privilege instances
     sys::import('modules.privileges.xarsetup');
-    initializeSetup();
+    // @todo move to privileges/xarinit.php or privileges/installer.php
+    privileges_initializeSetup();
 
     // TODO: is this is correct place for a default value for a modvar?
     xarModVars::set('base', 'AlternatePageTemplate', 'homepage');
