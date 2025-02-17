@@ -176,7 +176,7 @@ class SendmailMethod extends MethodClass
                 $message_envelope = "";
             }
             // Call private sendmail
-            return $adminapi->_sendmail(['info'             => $info,
+            return $adminapi->internal_sendmail(['info'             => $info,
                 'name'             => $name,
                 'recipients'       => $recipients,
                 'ccinfo'           => $ccinfo,

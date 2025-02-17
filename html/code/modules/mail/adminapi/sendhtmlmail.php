@@ -187,7 +187,7 @@ class SendhtmlmailMethod extends MethodClass
         }
 
         // Call private sendmail
-        return $adminapi->_sendmail(['info'             => $info,
+        return $adminapi->internal_sendmail(['info'             => $info,
             'name'             => $name,
             'recipients'       => $recipients,
             'ccinfo'           => $ccinfo,

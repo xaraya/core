@@ -68,7 +68,7 @@ class SendmailMethod extends MethodClass
             $args = unserialize($data);
             unset($args['when']);
             // send it with the internal _sendmail API function
-            if ($adminapi->_sendmail($args)) {
+            if ($adminapi->internal_sendmail($args)) {
                 $log .= xarML('succeeded');
                 xarModVars::delete('mail', $id);
                 $sent[] = $id;

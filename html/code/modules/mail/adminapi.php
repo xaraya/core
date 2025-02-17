@@ -19,6 +19,9 @@ sys::import('xaraya.modules.adminapi');
 /**
  * Handle the modules admin API
  *
+ * @method mixed internal_queuemail(array $args = [])
+ * @method mixed internal_sendmail(array $args = [])
+ * @method mixed internal_sendmail_new(array $args = [])
  * @method mixed createq(array $args = [])
  * @method mixed getmenulinks(array $args = []) Utility function pass individual menu items to the admin menu.
  * @method mixed getmessagestrings(array $args = [])
