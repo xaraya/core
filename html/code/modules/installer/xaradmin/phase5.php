@@ -226,7 +226,7 @@ function installer_admin_phase5()
         if(!$dbconn->Execute(xarTableDDL::createDatabase($init_args['databaseName'],
         												 $init_args['databaseType'],
         												 $init_args['databaseCharset']))) {
-          //if (!xarInstallAPIFunc('createdb', $config_args)) {
+          //if (!xarInstall::apiFunc('createdb', $config_args)) {
         	return xarTpl::module('installer','admin','errors',array('layout' => 'cannot_create', 'database_name' => $init_args['databaseName']));
         }
 
@@ -294,7 +294,7 @@ function installer_admin_phase5()
     $modules = array('base','modules');
     foreach ($modules as $module) {
         try {
-       		xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'));
+       		xarInstall::apiFunc('initialise', array('directory' => $module,'initfunc'  => 'init'));
         } catch (Exception $e) {
         	return xarTpl::module('installer','admin','errors',array('layout' => 'general_exception', 'message' => $e->getMessage()));        	
         }
@@ -357,15 +357,15 @@ function installer_admin_phase5()
             // pass along the DB prefix to $tablefunc
             if (function_exists($tablefunc)) xarDB::importTables($tablefunc($prefix));
         }
-        if (!xarInstallAPIFunc('initialise', array('directory' => $module, 'initfunc'  => 'init'))) return;
+        if (!xarInstall::apiFunc('initialise', array('directory' => $module, 'initfunc'  => 'init'))) return;
     }
 
-    if (!xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;
-    if (!xarInstallAPIFunc('initialise', array('directory'=>'privileges', 'initfunc'=>'activate'))) return;
-    if (!xarInstallAPIFunc('initialise', array('directory'=>'mail', 'initfunc'=>'activate'))) return;
+    if (!xarInstall::apiFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;
+    if (!xarInstall::apiFunc('initialise', array('directory'=>'privileges', 'initfunc'=>'activate'))) return;
+    if (!xarInstall::apiFunc('initialise', array('directory'=>'mail', 'initfunc'=>'activate'))) return;
     // todo: activate blocks here *after* all other core modules
     // block activation takes care of registering all block types for core modules
-    //if (!xarInstallAPIFunc('initialise', array('directory'=>'blocks', 'initfunc'=>'activate'))) return;
+    //if (!xarInstall::apiFunc('initialise', array('directory'=>'blocks', 'initfunc'=>'activate'))) return;
     
     // create the default masks and privilege instances
     sys::import('modules.privileges.xarsetup');

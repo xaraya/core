@@ -64,6 +64,8 @@ trait DataPropertyServicesTrait
     protected function getDummyObject()
     {
         if (!isset(static::$dummyObject)) {
+            // needed for installation after phase 5
+            sys::import('modules.dynamicdata.class.objects.base');
             $descriptor = new VirtualObjectDescriptor(['name' => 'dummy']);
             static::$dummyObject = new DataObject($descriptor);
         }
