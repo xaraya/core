@@ -48,7 +48,7 @@ class InitialiseMethod extends MethodClass
         $adminapi = $this->adminapi();
 
         if (isset($name)) {
-            $regid = xarMod::getRegID($name, 'theme');
+            $regid = xarTheme::getRegID($name);
         }
         if (!isset($regid)) {
             throw new EmptyParameterException('regid');
@@ -60,7 +60,7 @@ class InitialiseMethod extends MethodClass
             throw new ThemeNotFoundException($regid, 'Theme (regid: #(1) does not exist.');
         }
         $themename = $themeInfo['name'];
-        $themeInfo = xarMod::getBaseInfo($themename, 'theme');
+        $themeInfo = xarTheme::getBaseInfo($themename);
 
         // Update state of theme
         $set = $adminapi->setstate(['regid' => $regid,

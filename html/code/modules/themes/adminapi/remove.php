@@ -55,7 +55,7 @@ class RemoveMethod extends MethodClass
 
         // Get theme information
         if (isset($name)) {
-            $regid = xarMod::getRegID($name, 'theme');
+            $regid = xarTheme::getRegID($name);
         }
         $themeInfo = xarTheme::getInfo($regid);
         $defaultTheme = xarModVars::get('themes', 'default_theme');

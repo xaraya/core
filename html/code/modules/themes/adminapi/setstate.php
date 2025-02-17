@@ -49,7 +49,7 @@ class SetstateMethod extends MethodClass
 
         // Argument check
         if (isset($name)) {
-            $regid = xarMod::getRegID($name, 'theme');
+            $regid = xarTheme::getRegID($name);
         }
         if (!isset($regid)) {
             throw new EmptyParameterException('regid');

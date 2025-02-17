@@ -53,6 +53,14 @@ class xarTheme extends xarObject
     }
 
     /**
+     * get registry ID for theme
+     */
+    public static function getRegID($themeName)
+    {
+        return xarMod::getRegID($themeName, 'theme');
+    }
+
+    /**
      * get information on theme
      */
     public static function getInfo($regId)
