@@ -1,0 +1,90 @@
+<?php
+
+/**
+ * @package modules\themes
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Themes\AdminApi;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\Modules\Themes\AdminApi;
+use EmptyParameterException;
+use xarDB;
+use xarMod;
+use xarSession;
+use xarTheme;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * themes adminapi upgrade function
+ * @extends MethodClass<AdminApi>
+ */
+class UpgradeMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * Upgrade a theme
+     * @author Marty Vance
+     * @param array<string,mixed> $args array of optional parameters<br/>
+     * integer  $args['regid'] registered theme id
+     * @return bool|void true on success, false on failure
+     * @throws \EmptyParameterException
+     * @see AdminApi::upgrade()
+     */
+    public function __invoke(array $args = [])
+    {
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
+        // Get arguments from argument array
+        extract($args);
+
+        // Argument check
+        if (!isset($regid)) {
+            throw new EmptyParameterException('regid');
+        }
+
+        // Get theme information
+        $themeInfo = xarTheme::getInfo($regid);
+        if (empty($themeInfo)) {
+            xarSession::setVar('errormsg', xarML('No such theme'));
+            return false;
+        }
+
+        // Update state of theme
+        $res = $adminapi->setstate(['regid' => $regid, 'state' => xarTheme::STATE_INACTIVE]);
+
+        if (!isset($res)) {
+            return;
+        }
+
+        // Get the new version information...
+        $themeFileInfo = xarTheme::getFileInfo($themeInfo['osdirectory']);
+        if (!isset($themeFileInfo)) {
+            return;
+        }
+
+        // Note the changes in the database...
+        $dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
+
+        $sql = "UPDATE $xartable[themes] SET version = ? WHERE regid = ?";
+        $bindvars = [$themeFileInfo['version'],
+            $regid];
+
+        $dbconn->Execute($sql, $bindvars);
+
+        // Message
+        xarSession::setVar('statusmsg', xarML('Theme has been upgraded, now inactive'));
+
+        // Success
+        return true;
+    }
+}

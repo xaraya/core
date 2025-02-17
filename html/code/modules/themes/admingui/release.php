@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * @package modules\themes
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Themes\AdminGui;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\Modules\Themes\AdminGui;
+use ConfigurationException;
+use Exception;
+use feedParser;
+use xarCore;
+use xarMod;
+use xarSecurity;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * themes admin release function
+ * @extends MethodClass<AdminGui>
+ */
+class ReleaseMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * View recent module releases via central repository
+     * @author Marty Vance
+     * @access public
+     * @return array|void data for the template display
+     * @todo change feed url once release module is moved
+     * @see AdminGui::release()
+     */
+    public function __invoke(array $args = [])
+    {
+        // Security
+        if (!xarSecurity::check('EditThemes')) {
+            return;
+        }
+
+        // allow fopen
+        if (!xarCore::funcIsDisabled('ini_set')) {
+            ini_set('allow_url_fopen', 1);
+        }
+        if (!ini_get('allow_url_fopen')) {
+            throw new ConfigurationException('allow_url_fopen', 'PHP is not currently configured to allow URL retrieval
+                                 of remote files.  Please turn on #(1) to use the base module getfile userapi.');
+        }
+        // Require the feedParser class
+        sys::import('modules.base.class.feedParser');
+        // Check and see if a feed has been supplied to us.
+        // Need to change the url once release module is moved to
+        $feedfile = "http://www.xaraya.com/index.php/articles/rnid/c69/?theme=rss";
+        // Get the feed file (from cache or from the remote site)
+        $feeddata = xarMod::apiFunc(
+            'base',
+            'user',
+            'getfile',
+            ['url' => $feedfile,
+                'cached' => true,
+                'cachedir' => 'cache/rss',
+                'refresh' => 604800,
+                'extension' => '.xml']
+        );
+        if (!$feeddata) {
+            return;
+        }
+        // Create a need feedParser object
+        $p = new feedParser();
+        // Tell feedParser to parse the data
+        $info = $p->parseFeed($feeddata);
+        if (empty($info['warning'])) {
+            foreach ($info as $content) {
+                foreach ($content as $newline) {
+                    if (is_array($newline)) {
+                        if (isset($newline['description'])) {
+                            $description = $newline['description'];
+                        } else {
+                            $description = '';
+                        }
+                        if (isset($newline['title'])) {
+                            $title = $newline['title'];
+                        } else {
+                            $title = '';
+                        }
+                        if (isset($newline['link'])) {
+                            $link = $newline['link'];
+                        } else {
+                            $link = '';
+                        }
+
+                        $feedcontent[] = ['title' => $title, 'link' => $link, 'description' => $description];
+                    }
+                }
+            }
+            $data['chantitle']  =   $info['channel']['title'];
+            $data['chanlink']   =   $info['channel']['link'];
+            $data['chandesc']   =   $info['channel']['description'];
+        } else {
+            $msg = xarML('There is a problem with a feed.');
+            throw new Exception($msg);
+        }
+        $data['feedcontent'] = $feedcontent;
+        return $data;
+    }
+}

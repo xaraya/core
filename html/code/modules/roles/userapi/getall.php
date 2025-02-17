@@ -1,0 +1,271 @@
+<?php
+
+/**
+ * @package modules\roles
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Roles\UserApi;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\Modules\Roles\UserApi;
+use xarDB;
+use xarMod;
+use xarModVars;
+use xarRoles;
+use xarSecurity;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * roles userapi getall function
+ * @extends MethodClass<UserApi>
+ */
+class GetallMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * get all users
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @param array<string,mixed> $args array of optional parameters<br/>
+     * string   $args['order'] comma-separated list of order items; default 'name'<br/>
+     * string   $args['selection'] extra coonditions passed into the where-clause<br/>
+     * string   $args['group'] comma-separated list of group names or IDs, or<br/>
+     * array    $args['idlist'] array of user ids
+     * @return mixed array of users, or false on failure
+     * @see UserApi::getall()
+     */
+    public function __invoke(array $args = [])
+    {
+        extract($args);
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+
+        // the property uses grouplist rather than group
+        if (isset($grouplist)) {
+            $group = $grouplist;
+        }
+
+        // Optional arguments.
+        if (!isset($startnum)) {
+            $startnum = 1;
+        }
+        if (!isset($numitems)) {
+            $numitems = -1;
+        }
+
+        // Security check - need overview level to see that the roles exist
+        if (!xarSecurity::check('ViewRoles')) {
+            return;
+        }
+
+        // Get database setup
+        $dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
+
+        $rolestable = $xartable['roles'];
+        $rolemembtable = $xartable['rolemembers'];
+
+        // Create the order array.
+        if (!isset($order)) {
+            $order_clause = ['roletab.name'];
+        } else {
+            $order_clause = [];
+            foreach (explode(',', $order) as $order_field) {
+                if (preg_match('/^[-]?(name|uname|email|id|state|date_reg)$/', $order_field)) {
+                    if (strstr($order_field, '-')) {
+                        $order_clause[] = 'roletab.' . str_replace('-', '', $order_field) . ' desc';
+                    } else {
+                        $order_clause[] = 'roletab.' . $order_field;
+                    }
+                }
+            }
+        }
+
+        $where_clause = [];
+        $bindvars = [];
+
+        # --------------------------------------------------------
+        #
+        # Filter by state
+        #
+        if (!empty($state) && is_numeric($state) && $state == xarRoles::ROLES_STATE_CURRENT) {
+            $where_clause[] = 'roletab.state <> ?';
+            $bindvars[] = (int) xarRoles::ROLES_STATE_DELETED;
+        } elseif (!empty($state) && is_numeric($state) && $state == xarRoles::ROLES_STATE_ALL) {
+        } else {
+            $where_clause[] = 'roletab.state = ?';
+            $state = empty($state) ? 0 : $state;
+            $bindvars[] = (int) $state;
+        }
+
+        # --------------------------------------------------------
+        #
+        # Filter by one or more groups (see grouplist below)
+        #
+        if (isset($group)) {
+            $groups = explode(',', $group);
+            $group_list = [];
+            foreach ($groups as $group) {
+                $group = $userapi->get(
+                    [
+                        (is_numeric($group) ? 'id' : 'name') => $group,
+                        'itemtype' => xarRoles::ROLES_GROUPTYPE,
+                    ]
+                );
+                if (isset($group['id']) && is_numeric($group['id'])) {
+                    $group_list[] = (int) $group['id'];
+                }
+            }
+            if (empty($group_list)) {
+                return [];
+            }
+        }
+
+        # --------------------------------------------------------
+        #
+        # Filter by group list
+        #
+        if (empty($group_list)) {
+            // Simple query.
+            $query = '
+                SELECT  roletab.id,
+                        roletab.uname,
+                        roletab.name,
+                        roletab.email,
+                        roletab.pass,
+                        roletab.state,
+                        roletab.date_reg';
+            $query .= ' FROM ' . $rolestable . ' AS roletab';
+        } else {
+            // Select-clause.
+            $query = '
+                SELECT  DISTINCT roletab.id,
+                        roletab.uname,
+                        roletab.name,
+                        roletab.email,
+                        roletab.pass,
+                        roletab.state,
+                        roletab.date_reg';
+            // Restrict by group(s) - join to the group_members table.
+            $query .= ' FROM ' . $rolestable . ' AS roletab, ' . $rolemembtable . ' AS rolememb';
+            $where_clause[] = 'roletab.id = rolememb.role_id';
+            if (count($group_list) > 1) {
+                $bindmarkers = '?' . str_repeat(',?', count($group_list) - 1);
+                $where_clause[] = 'rolememb.parent_id in (' . $bindmarkers . ')';
+                $bindvars = array_merge($bindvars, $group_list);
+            } else {
+                $where_clause[] = 'rolememb.parent_id = ?';
+                $bindvars[] = $group_list[0];
+            }
+        }
+
+        // Hide pending users from non-admins
+        if (!xarSecurity::check('AdminRoles', 0)) {
+            $where_clause[] = 'roletab.state <> ?';
+            $bindvars[] = (int) xarRoles::ROLES_STATE_PENDING;
+        }
+
+        # --------------------------------------------------------
+        #
+        # If we aren't including anonymous in the query,
+        # then find the anonymous user's id and add
+        # a where clause to the query.
+        #
+        if (isset($include_anonymous) && !$include_anonymous) {
+            $thisrole = $userapi->get(['uname' => 'anonymous']);
+            $where_clause[] = 'roletab.id <> ?';
+            $bindvars[] = (int) $thisrole['id'];
+        }
+
+        # --------------------------------------------------------
+        #
+        # Return only users (not groups).
+        #
+        $where_clause[] = 'roletab.itemtype = ' . xarRoles::ROLES_USERTYPE;
+
+        // Add the where-clause to the query.
+        $query .= ' WHERE ' . implode(' AND ', $where_clause);
+
+        // Add extra where-clause criteria.
+        if (isset($selection)) {
+            $query .= ' ' . $selection;
+        }
+
+        if (isset($idlist) && is_array($idlist) && count($idlist) > 0) {
+            $query .= ' AND roletab.id IN (' . join(',', $idlist) . ') ';
+        }
+
+        // Add the order clause.
+        if (!empty($order_clause)) {
+            $query .= ' ORDER BY ' . implode(', ', $order_clause);
+        }
+
+        // We got the complete query, prepare it
+        $stmt = $dbconn->prepareStatement($query);
+
+        // cfr. cachemanager - this approach might change later
+        $expire = xarModVars::get('roles', 'cache.userapi.getall');
+
+        if ($startnum > 0) {
+            $stmt->setLimit($numitems);
+            $stmt->setOffset($startnum - 1);
+        }
+        // Statement constructed, create a resultset out of it
+        $result = $stmt->executeQuery($bindvars);
+
+        // Put users into result array
+        $roles = [];
+        while ($result->next()) {
+            [$id, $uname, $name, $email, $pass, $state, $date_reg] = $result->fields;
+            if (xarSecurity::check('ReadRoles', 0, 'Roles', "$uname")) {
+
+                if (!empty($idlist)) {
+                    $roles[$id] = [
+                        'id'       => (int) $id,
+                        'uname'     => $uname,
+                        'name'      => $name,
+                        'email'     => $email,
+                        'pass'      => $pass,
+                        'state'     => $state,
+                        'date_reg'  => $date_reg,
+                    ];
+                } else {
+                    $roles[] = [
+                        'id'       => (int) $id,
+                        'uname'     => $uname,
+                        'name'      => $name,
+                        'email'     => $email,
+                        'pass'      => $pass,
+                        'state'     => $state,
+                        'date_reg'  => $date_reg,
+                    ];
+                }
+            } elseif (xarSecurity::check('ViewRoles', 0, 'Roles', "$uname")) {
+                // If we only have overview privilege, then supply more restricted information.
+                if (!empty($idlist)) {
+                    $roles[$id] = [
+                        'id'       => (int) $id,
+                        'name'      => $name,
+                        'date_reg'  => $date_reg,
+                    ];
+                } else {
+                    $roles[] = [
+                        'id'       => (int) $id,
+                        'name'      => $name,
+                        'date_reg'  => $date_reg,
+                    ];
+                }
+            }
+        }
+
+        // Return the users
+        return $roles;
+    }
+}

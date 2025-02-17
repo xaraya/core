@@ -30,7 +30,7 @@ function strftime(string $format, $timestamp = null, ?string $locale = null): st
         $timestamp = date_create('@' . $timestamp);
 
         if ($timestamp) {
-            $timestamp->setTimezone(new \DateTimezone(date_default_timezone_get()));
+            $timestamp->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         }
     } elseif (is_string($timestamp)) {
         $timestamp = date_create($timestamp);

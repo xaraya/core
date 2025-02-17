@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * @package modules\roles
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Roles\UserApi;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\Modules\Roles\UserApi;
+use xarConfigVars;
+use xarDB;
+use xarMod;
+use xarModVars;
+use xarRoles;
+use xarSecurity;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * roles userapi getallactive function
+ * @extends MethodClass<UserApi>
+ */
+class GetallactiveMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * get all active users
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @param array<string,mixed> $args array of optional parameters<br/>
+     * boolean  $args['include_anonymous'] whether or not to include anonymous user
+     * @return mixed array of users, or false on failure
+     * @see UserApi::getallactive()
+     */
+    public function __invoke(array $args = [])
+    {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        // Security Check
+        if (!xarSecurity::check('ViewRoles')) {
+            return;
+        }
+
+        // Set some defaults
+        $include_anonymous = true;
+        $startnum = 1;
+        $numitems = -1;
+        $order = "name";
+        $filter = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
+
+        // See if the arguments said otherwise
+        extract($args);
+
+        $include_anonymous = (bool) $include_anonymous;
+
+        // Get database setup
+        $dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
+
+        $sessioninfoTable = $xartable['session_info'];
+        $rolestable = $xartable['roles'];
+
+        $bindvars = [];
+        $query = "SELECT a.id,
+                         a.uname,
+                         a.name,
+                         a.email,
+                         a.date_reg,
+                         b.ip_addr
+                  FROM $rolestable a, $sessioninfoTable b
+                  WHERE a.id = b.role_id AND b.last_use > ?";
+        $bindvars[] = $filter;
+        if (isset($selection)) {
+            $query .= $selection;
+        }
+
+        // if we aren't including anonymous in the query,
+        // then find the anonymous user's id and add
+        // a where clause to the query
+        if (!$include_anonymous) {
+            $anon = $userapi->get(['uname' => 'anonymous']);
+            $query .= " AND a.id != ?";
+            $bindvars[] = (int) $anon['id'];
+        }
+
+        $query .= " AND itemtype = ? ORDER BY " . $order;
+        $bindvars[] = xarRoles::ROLES_USERTYPE;
+        $stmt = $dbconn->prepareStatement($query);
+
+        // cfr. cachemanager - this approach might change later
+        $expire = xarModVars::get('roles', 'cache.userapi.getallactive');
+
+        if ($startnum > 0) {
+            $stmt->setLimit($numitems);
+            $stmt->setOffset($startnum - 1);
+        }
+        $result = $stmt->executeQuery($bindvars);
+
+        // Put users into result array
+        $sessions = [];
+
+        while ($result->next()) {
+            [$id, $uname, $name, $email, $date_reg, $ipaddr] = $result->fields;
+            if (xarSecurity::check('ViewRoles', 0, 'All', "$uname:All:$id")) {
+                $sessions[] = ['id'       => (int) $id,
+                    'name'      => $name,
+                    'uname'     => $uname,
+                    'email'     => $email,
+                    'date_reg'  => $date_reg,
+                    'ipaddr'    => $ipaddr];
+            }
+        }
+        return $sessions;
+    }
+}

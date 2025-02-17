@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @package modules\modules
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Modules\AdminApi;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\Modules\Modules\AdminApi;
+use EmptyParameterException;
+use xarHooks;
+use xarSecurity;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * modules adminapi gethookedmodules function
+ * @extends MethodClass<AdminApi>
+ */
+class GethookedmodulesMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * Get list of modules calling a particular hook module
+     * @author Xaraya Development Team
+     * @param array<string,mixed> $args array of optional parameters<br/>
+     * string   $args['hookModName'] hook module we're looking for<br/>
+     * string   $args['hookObject'] the object of the hook (item, module, ...) (optional)<br/>
+     * string   $args['hookAction'] the action on that object (transform, display, ...) (optional)<br/>
+     * string   $args['hookArea'] the area we're dealing with (GUI, API) (optional)
+     * @return array modules calling this hook module
+     * @throws \EmptyParameterException
+     * @see AdminApi::gethookedmodules()
+     */
+    public function __invoke(array $args = [])
+    {
+        // Security Check (called by other modules, so we can't use one this here)
+        //    if(!xarSecurity::check('ManageModules')) return;
+
+        // Get arguments from argument array
+        extract($args);
+
+        // Argument check
+        if (empty($hookModName)) {
+            throw new EmptyParameterException('hookModName');
+        }
+
+        return xarHooks::getObserverSubjects($hookModName);
+
+    }
+}

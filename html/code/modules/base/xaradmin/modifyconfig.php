@@ -367,11 +367,11 @@ function base_admin_modifyconfig(array $args = [], $context = null)
                     if (!xarVar::fetch('hosttimezone','str:1:',$hosttimezone,'UTC',xarVar::NOT_REQUIRED)) return;
                     if (!xarVar::fetch('sitetimezone','str:1:',$sitetimezone,'UTC',xarVar::NOT_REQUIRED)) return;
 
-                    $tzobject = new DateTimezone($hosttimezone);
+                    $tzobject = new DateTimeZone($hosttimezone);
                     $variables = array('SystemTimeZone' => !empty($tzobject) ? $hosttimezone : 'UTC');
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
                     
-                    $tzobject = new DateTimezone($sitetimezone);
+                    $tzobject = new DateTimeZone($sitetimezone);
                     if (!empty($tzobject)) {
                         $datetime = new DateTime();
                         xarConfigVars::set(null, 'Site.Core.TimeZone', $sitetimezone);

@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @package modules\roles
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Roles\UserApi;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\Modules\Roles\UserApi;
+use xarController;
+use xarModVars;
+use xarUser;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * roles userapi getmenulinks function
+ * @extends MethodClass<UserApi>
+ */
+class GetmenulinksMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * Utility function pass individual menu items to the user menu.
+     * @author Marc Lutolf <marcinmilan@xaraya.com>
+     * @param array<string,mixed> $args array of optional parameters<br/>
+     * @return array the menulinks for the user menu items of this module.
+     * @see UserApi::getmenulinks()
+     */
+    public function __invoke(array $args = [])
+    {
+        //If we have turned on role list (memberlist) display and users have requisite level to see them
+        $menulinks = [];
+        if ((bool) xarModVars::get('roles', 'displayrolelist')) {
+            $menulinks[] = [
+                'url'   => xarController::URL('roles', 'user', 'view'),
+                'title' => xarML('View All Users'),
+                'label' => xarML('Memberslist'),
+                'active' => ['view'],
+            ];
+        }
+        if (xarUser::isLoggedIn()) {
+            $menulinks[] = [
+                'url'   => xarController::URL('roles', 'user', 'account'),
+                'title' => xarML('Your Custom Configuration'),
+                'label' => xarML('Your Account'),
+                'active' => ['account'],
+            ];
+        }
+        return $menulinks;
+    }
+}

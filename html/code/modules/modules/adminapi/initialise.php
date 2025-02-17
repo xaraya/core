@@ -1,0 +1,99 @@
+<?php
+
+/**
+ * @package modules\modules
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Modules\AdminApi;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\Modules\Modules\AdminApi;
+use EmptyParameterException;
+use Exception;
+use ModuleNotFoundException;
+use xarCore;
+use xarEvents;
+use xarMod;
+use sys;
+use Installer;
+
+sys::import('xaraya.modules.method');
+sys::import('modules.modules.class.installer');
+
+/**
+ * modules adminapi initialise function
+ * @extends MethodClass<AdminApi>
+ */
+class InitialiseMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * Initialise a module
+     * @author Xaraya Development Team
+     * @param array<string,mixed> $args array of optional parameters<br/>
+     * string   $args['regid'] registered module id
+     * string   $args['name'] module's name
+     * @return bool|void true on success, false on failure
+     * @throws \EmptyParameterException
+     * @see AdminApi::initialise()
+     */
+    public function __invoke(array $args = [])
+    {
+        /** @var AdminApi $adminapi */
+        $adminapi = $this->adminapi();
+        // Get arguments from argument array
+        extract($args);
+
+        // Argument check
+        if (isset($name)) {
+            $regid = xarMod::getRegID($name, 'module');
+        }
+        if (!isset($regid)) {
+            throw new EmptyParameterException('regid');
+        }
+
+        // Get module information
+        $modInfo = xarMod::getInfo($regid);
+        if (!isset($modInfo)) {
+            throw new ModuleNotFoundException($regid, 'Module (regid: $regid) does not exist.');
+        }
+
+        //Checks module dependency
+        sys::import('modules.modules.class.installer');
+        $installer = Installer::getInstance();
+        if (!$installer->verifydependency($regid)) {
+            //TODO: Add description of the dependencies
+            $msg = xarML('The dependencies to initialise the module "#(1)" were not met.', $modInfo['displayname']);
+            xarCore::exit($msg);
+            return;
+        }
+
+        // Module deletion function
+        if (!$adminapi->executeinitfunction(['regid'    => $regid,
+            'function' => 'init'])) {
+            //Raise an Exception
+            return;
+        }
+
+        // Update state of module
+        $set = $adminapi->setstate(['regid' => $regid,
+            'state' => xarMod::STATE_INACTIVE]);
+
+        // debug($set);
+        if (!isset($set)) {
+            $msg = xarML('Module state change failed');
+            throw new Exception($msg);
+        }
+        // notify any observers that this module was initialised
+        // NOTE: the ModInitialise event observer notifies ModuleInit hooks
+        xarEvents::notify('ModInitialise', $modInfo['name']);
+        // Success
+        return true;
+    }
+}

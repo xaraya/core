@@ -1,0 +1,140 @@
+<?php
+
+/**
+ * @package modules\categories
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Categories\UserApi;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\Modules\Categories\UserApi;
+use xarDB;
+use xarSecurity;
+use xarSession;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * categories userapi getneighbours function
+ * @extends MethodClass<UserApi>
+ */
+class GetneighboursMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * Get info on neighbours based on left/right numbers
+     * (easiest is to pass it a category array coming from getcat*)
+     * @param array<string,mixed> $args
+     * @param mixed $args ['left'] left number
+     * @param mixed $args ['right'] right number
+     * @param mixed $args ['parent'] parent id (optional)
+     * @return array|bool|void Returns array containing neighbours info
+     * @see UserApi::getneighbours()
+     */
+    public function __invoke(array $args = [])
+    {
+        extract($args);
+
+        if (!isset($left) || !isset($right) || !is_numeric($left) || !is_numeric($right)) {
+            xarSession::setVar('errormsg', xarML('Bad arguments for API function'));
+            return false;
+        }
+
+        //    if (!isset($parent) || !is_numeric($parent)) {
+        //       $parent = 0;
+        //    }
+
+        // TODO: evaluate this
+        // don't return neighbours unless we're at a leaf node
+        //    if ($left != $right - 1) {
+        //        return array();
+        //    }
+
+        $dbconn = xarDB::getConn();
+        $xartable = xarDB::getTables();
+
+        $categoriestable = $xartable['categories'];
+
+        $SQLquery = "SELECT id,
+                            name,
+                            description,
+                            image,
+                            parent_id,
+                            left_id,
+                            right_id
+                       FROM $categoriestable ";
+        // next at same level
+        $SQLquery .= "WHERE left_id =" . ($right + 1);
+        // next at level higher
+        $SQLquery .= " OR right_id =" . ($right + 1);
+        // next at level lower (if we accept non-leaf nodes)
+        $SQLquery .= " OR left_id =" . ($left + 1);
+        // previous at same level
+        $SQLquery .= " OR right_id =" . ($left - 1);
+        // previous at level higher
+        $SQLquery .= " OR left_id =" . ($left - 1);
+        // previous at level lower (if we accept non-leaf nodes)
+        $SQLquery .= " OR right_id =" . ($right - 1);
+        // parent node, just in case
+        //    if (!empty($parent)) {
+        //        $SQLquery .= " OR id =". $parent;
+        //    }
+
+        $result = $dbconn->Execute($SQLquery);
+        if (!$result) {
+            return;
+        }
+
+        if ($result->EOF) {
+            xarSession::setVar('errormsg', xarML('Unknown Category'));
+            return false;
+        }
+
+        //    $curparent = $parent;
+        $info = [];
+        while (!$result->EOF) {
+            [$cid, $name, $description, $image, $parent, $cleft, $cright] = $result->fields;
+            if (!xarSecurity::check('ViewCategories', 0, 'Category', "$name:$cid")) {
+                $result->MoveNext();
+                continue;
+            }
+            //        if ($cid == $curparent) {
+            //            $link = 'parent';
+            //        } elseif ($cleft == $right + 1) {
+            if ($cleft == $right + 1) {
+                $link = 'next';
+            } elseif ($cleft == $left - 1) {
+                // Note: we'll never get here, actually - cfr. parent
+                $link = 'previousup';
+            } elseif ($cright == $right + 1) {
+                // Note: we'll never get here, actually - cfr. parent
+                $link = 'nextup';
+            } elseif ($cleft == $left + 1) {
+                $link = 'nextdown';
+            } elseif ($cright == $left - 1) {
+                $link = 'previous';
+            } elseif ($cright == $right - 1) {
+                $link = 'previousdown';
+            }
+            $info[$cid] = [
+                "cid"         => $cid,
+                "name"        => $name,
+                "description" => $description,
+                "image"       => $image,
+                "parent"      => $parent,
+                "left"        => $cleft,
+                "right"       => $cright,
+                "link"        => $link,
+            ];
+            $result->MoveNext();
+        }
+        return $info;
+    }
+}

@@ -1,0 +1,92 @@
+<?php
+
+/**
+ * @package modules\roles
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Roles\AdminGui;
+
+use Xaraya\Modules\MethodClass;
+use Xaraya\Modules\Roles\AdminGui;
+use Xaraya\Modules\Roles\UserApi;
+use BadParameterException;
+use DataNotFoundException;
+use xarController;
+use xarMod;
+use xarModVars;
+use xarRoles;
+use xarSecurity;
+use xarSession;
+use xarVar;
+use sys;
+
+sys::import('xaraya.modules.method');
+
+/**
+ * roles admin createpassword function
+ * @extends MethodClass<AdminGui>
+ */
+class CreatepasswordMethod extends MethodClass
+{
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * createpassword - create a new password for the user
+     * @see AdminGui::createpassword()
+     */
+    public function __invoke(array $args = [])
+    {
+        /** @var UserApi $userapi */
+        $userapi = $this->userapi();
+        // Security
+        if (!xarSecurity::check('EditRoles')) {
+            return;
+        }
+
+        // Get parameters
+        if (!xarVar::fetch('state', 'isset', $state, null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('groupid', 'int:0:', $groupid, 0, xarVar::NOT_REQUIRED)) {
+            return;
+        }
+        if (!xarVar::fetch('id', 'isset', $id)) {
+            $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
+            $vars = ['parameters', 'admin', 'createpassword', 'Roles'];
+            throw new BadParameterException($vars, $msg);
+        }
+
+        $pass = $userapi->makepass();
+        if (empty($pass)) {
+            throw new DataNotFoundException([], 'Problem generating new password');
+        }
+        $role = xarRoles::get($id);
+        $modifiedstatus = $role->setPass($pass);
+        if (!$role->updateItem()) {
+            return;
+        }
+
+        if (!xarModVars::get('roles', 'askpasswordemail')) {
+            xarController::redirect(xarController::URL(
+                'roles',
+                'admin',
+                'showusers',
+                ['id' => $groupid, 'state' => $state]
+            ), null, $this->getContext());
+        } else {
+            xarSession::setVar('tmppass', $pass);
+            xarController::redirect(xarController::URL(
+                'roles',
+                'admin',
+                'asknotification',
+                ['id' => [$id => '1'], 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state]
+            ), null, $this->getContext());
+        }
+        return true;
+    }
+}
