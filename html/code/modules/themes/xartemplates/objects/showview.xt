@@ -60,7 +60,7 @@
                                 <xar:img scope="theme" file="icons/display.png" class="xar-icon" alt="$title"/>
                             </a>&#160;
                             <xar:var name="title">Modify Configuration</xar:var>
-                            <a href="#xarController::URL('themes','admin','modify_config',['itemid' => $fields['id']])#" title="#$title#" class="xar-icon-modify">
+                            <a href="#xarController::URL('themes','admin','update_config',['itemid' => $fields['id']])#" title="#$title#" class="xar-icon-modify">
                                 <xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="$title"/>
                             </a>&#160;
                             <xar:var name="title">Delete Configuration</xar:var>
@@ -73,7 +73,7 @@
                             </a>
                         <xar:else/>
                             <a href="#xarController::URL('themes','admin','display_config',['itemid' => $fields['id']])#">Display</a>&#160;
-                            <a href="#xarController::URL('themes','admin','modify_config',['itemid' => $fields['id']])#">Modify</a>&#160;
+                            <a href="#xarController::URL('themes','admin','update_config',['itemid' => $fields['id']])#">Modify</a>&#160;
                             <a href="#xarController::URL('themes','admin','delete_config',['itemid' => $fields['id']])#">Delete</a>&#160;
                             <a href="#xarController::URL('themes','admin','export_config',['itemid' => $fields['id']])#">Export</a>&#160;
                         </xar:if>
