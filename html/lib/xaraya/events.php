@@ -514,18 +514,24 @@ class xarEvents extends xarObject implements ixarEvents
                 if (empty($info['classname'])) {
                     // for non-core modules we're only interested in hookobservers for now - this may extend to eventobservers later...
                     if (in_array($info['type'], static::$classtypes)) {
-                        // we try to get the actual $classname here first
-                        $oldclasses = get_declared_classes();
-                        // import the file (raises exception if file not found)
-                        sys::import("modules.{$module}.class.{$type}.{$filename}");
-                        $newclasses = get_declared_classes();
-                        // assuming new classes in namespaces only have 1 class definition per file as they should...
-                        $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['HookObserver', 'EventObserver', 'HookSubject', 'EventSubject']));
-                        xarLog3::info("xarEvents::fileLoad: found classes " . implode(', ', $diffclasses));
-                        if (count($diffclasses) > 0) {
-                            $classname = $diffclasses[0];
+                        $classname = xarClassMap::findHookObserver("/{$module}/class/{$type}/{$filename}.php");
+                        if (!empty($classname)) {
+                            // import the file (raises exception if file not found)
+                            sys::import("modules.{$module}.class.{$type}.{$filename}");
                         } else {
-                            $classname = ucfirst($module) . $event . $suffix;
+                            // we try to get the actual $classname here first
+                            $oldclasses = get_declared_classes();
+                            // import the file (raises exception if file not found)
+                            sys::import("modules.{$module}.class.{$type}.{$filename}");
+                            $newclasses = get_declared_classes();
+                            // assuming new classes in namespaces only have 1 class definition per file as they should...
+                            $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['HookObserver', 'EventObserver', 'HookSubject', 'EventSubject']));
+                            xarLog3::info("xarEvents::fileLoad: found classes " . implode(', ', $diffclasses));
+                            if (count($diffclasses) > 0) {
+                                $classname = $diffclasses[0];
+                            } else {
+                                $classname = ucfirst($module) . $event . $suffix;
+                            }
                         }
                         // keep track of classname as detected in fileLoad() for register()
                         $classkey = implode(':', [$info['event'], $info['module'], $info['type']]);
