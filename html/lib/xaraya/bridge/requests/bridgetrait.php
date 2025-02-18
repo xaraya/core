@@ -41,8 +41,6 @@ trait BasicBridgeTrait
      */
     public function prepareController(string $module = 'base', string $baseUri = ''): void
     {
-        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
-        xarController::getRequest()->setModule($module);
         // @checkme override system config here, since xarController does re-init() for each URL() for some reason...
         $entryPoint = str_replace(xarServer::getBaseURI(), '', $baseUri);
         //xarSystemVars::set(sys::LAYOUT, 'BaseURI');
@@ -54,6 +52,10 @@ trait BasicBridgeTrait
         xarController::setCallback('buildUri', [$this, 'buildUri']);
         //xarController::$buildUri = [ModuleRequestHandler::class, 'buildModulePath'];
         //xarController::$redirectTo = [ModuleRequestHandler::class, 'redirectTo'];
+        // Note: do this after updating controller entryPoint, so that request entryPoint matches
+        xarController::getRequest()->setEntryPoint(xarController::$entryPoint);
+        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
+        xarController::getRequest()->setModule($module);
     }
 
     /**

@@ -56,12 +56,12 @@ class ShortRoute extends xarRoute
         if ($pos = strpos($path, '?')) {
             $path = substr($path, 0, $pos);
         }
-        if (strpos($path, $request->entryPoint) === 0) {
+        if (str_starts_with($path, $request->getEntryPoint())) {
             // This is a relative URL
-            $path = substr($path, strlen($request->entryPoint));
+            $path = substr($path, strlen($request->getEntryPoint()));
         } else {
             // This is a full URL
-            $path = substr($path, strlen(xarServer::getBaseURL() . $request->entryPoint));
+            $path = substr($path, strlen(xarServer::getBaseURL() . $request->getEntryPoint()));
         }
         if (empty($path)) {
             return false;

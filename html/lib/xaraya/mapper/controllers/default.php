@@ -65,8 +65,12 @@ class DefaultActionController extends BaseActionController implements iControlle
 
     public function getActionString(xarRequest $request): string
     {
-        $initialpath = xarServer::getBaseURL() . $request->entryPoint;
-        $actionstring = substr($request->getURL() ?? '', strlen($initialpath));
+        $initialpath = xarServer::getBaseURL() . $request->getEntryPoint();
+        if (str_starts_with($request->getURL(), $initialpath)) {
+            $actionstring = substr($request->getURL() ?? '', strlen($initialpath));
+        } else {
+            $actionstring = '';
+        }
         return $actionstring;
     }
 

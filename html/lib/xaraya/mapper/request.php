@@ -63,8 +63,8 @@ class xarRequest extends xarObject
         //$this->setType(xarModVars::get('modules', 'defaultmoduletype'));
         //$this->setFunction(xarModVars::get('modules', 'defaultmodulefunction'));
 
-        $this->requestContext = xarServer::getInstance();
-        $this->entryPoint = xarController::$entryPoint;
+        $this->setServerContext(xarServer::getInstance());
+        $this->setEntryPoint(xarController::$entryPoint);
         $this->setURL($url);
     }
 
@@ -74,6 +74,35 @@ class xarRequest extends xarObject
     public function getServerContext()
     {
         return $this->requestContext;
+    }
+
+    /**
+     * Summary of setServerContext
+     * @param ?RequestInterface $requestContext
+     * @return void
+     */
+    public function setServerContext($requestContext)
+    {
+        $this->requestContext = $requestContext;
+    }
+
+    /**
+     * Summary of getEntryPoint
+     * @return string
+     */
+    public function getEntryPoint()
+    {
+        return $this->entryPoint;
+    }
+
+    /**
+     * Summary of setEntryPoint
+     * @param string $entryPoint
+     * @return void
+     */
+    public function setEntryPoint($entryPoint)
+    {
+        $this->entryPoint = $entryPoint;
     }
 
     /**
@@ -149,8 +178,9 @@ class xarRequest extends xarObject
                 // Try and get the module the traditional Xaraya way
                 xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, null, xarVar::NOT_REQUIRED);
 
+                // @todo let router do its job - see xarController::normalizeRequest()
                 // Else assume a form of short urls. The module name or the object keyword will be the first item
-                if (null == $modName) {
+                if (null == $modName && str_starts_with($url, xarServer::getBaseURL() . $this->entryPoint)) {
                     $path = substr($url, strlen(xarServer::getBaseURL() . $this->entryPoint . xarController::$delimiter));
                     $tokens = explode('/', $path);
                     $modName = array_shift($tokens);
