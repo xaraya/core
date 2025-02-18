@@ -35,5 +35,9 @@ sys::import('modules.modules.adminapi');
  */
 class AdminGui extends AdminGuiClass
 {
-    // ...
+    public function configure()
+    {
+        $this->setModType('admin');
+        // don't call xarMod:load() for xarInstall::func()
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Call an installer function
  *
@@ -14,7 +15,7 @@
 /**
  * @deprecated 2.6.2 use xarInstall::func() instead
  */
-function xarInstallFunc($funcName = 'main', $args = array())
+function xarInstallFunc($funcName = 'main', $args = [])
 {
     return xarInstall::func($funcName, $args);
 }
@@ -22,7 +23,7 @@ function xarInstallFunc($funcName = 'main', $args = array())
 /**
  * @deprecated 2.6.2 use xarInstall::apiFunc() instead
  */
-function xarInstallAPIFunc($funcName = 'main', $args = array())
+function xarInstallAPIFunc($funcName = 'main', $args = [])
 {
     return xarInstall::apiFunc($funcName, $args);
 }
@@ -50,71 +51,91 @@ class xarInstall extends xarObject
      *
      * @author John Robeson
      * @author Marcel van der Boom <marcel@hsdev.com>
-     * This function is similar to xarMod::guiFunc but simplified. 
+     * This function is similar to xarMod::guiFunc but simplified.
      * We need this because during install we cant have the module
      * subsystem online directly, so we need a direct way of calling
      * the admin functions of the installer. The actual functions
      * called adhere to normal Xaraya module functions, so we can use
      * the installer later on when xaraya is installed
      *
-     * @todo support module class methods
      * @access public
      * @param string $funcName specific function to run
      * @param array<string, mixed> $args argument array
      * @return string|void output display string
      * @throws FunctionNotFoundException
      */
-    public static function func($funcName = 'main', $args = array())
+    public static function func($funcName = 'main', $args = [])
     {
         $modName = 'installer';
         $modType = 'admin';
-    
-        // Build function name and call function
-        $modFunc = "{$modName}_{$modType}_{$funcName}";
-        if (!function_exists($modFunc)) {
+
+        // Get module class for installer module
+        $namespace = 'Xaraya\\Modules\\' . ucfirst($modName);
+        $className = $namespace . '\\Module';
+        if (!class_exists($className)) {
             // try to load it
             xarInstall::load($funcName);
-            if(!function_exists($modFunc)) throw new FunctionNotFoundException($modFunc);
+            if (!class_exists($className)) {
+                throw new ClassNotFoundException($className);
+            }
         }
-    
+        $module = new $className($modName);
+        // Get callable method for modType gui funcName
+        $modFunc = $module->getCallableMethod($modType, $funcName);
+        if (empty($modFunc)) {
+            throw new FunctionNotFoundException($funcName);
+        }
+
         // Load the translations file
-        $file = sys::code() . 'modules/'.$modName.'/xar'.$modType.'/'.strtolower($funcName).'.php';
-        if (!xarMLS::loadTranslations($file)) return;
-    
+        $file = sys::code() . 'modules/' . $modName . '/xar' . $modType . '/' . strtolower($funcName) . '.php';
+        if (!xarMLS::loadTranslations($file)) {
+            return;
+        }
+
         $tplData = $modFunc($args);
         if (!is_array($tplData)) {
             return $tplData;
         }
-    
+
         $templateName = '';
         if (isset($tplData['_bl_template'])) {
             $templateName = $tplData['_bl_template'];
         }
-    
+
         return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
     }
 
     /**
-     * @todo support module class methods
+     * support module class methods
      */
-    public static function apiFunc($funcName = 'main', $args = array())
+    public static function apiFunc($funcName = 'main', $args = [])
     {
         $modName = 'installer';
         $modType = 'admin';
-    
-        // Build function name and call function
-        $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
-        if (!function_exists($modAPIFunc)) {
+
+        // Get module class for installer module
+        $namespace = 'Xaraya\\Modules\\' . ucfirst($modName);
+        $className = $namespace . '\\Module';
+        if (!class_exists($className)) {
             // attempt to load the install api
             xarInstall::apiLoad();
-            // let's check for the function again to be sure
-            if (!function_exists($modAPIFunc)) throw new FunctionNotFoundException($modAPIFunc);
+            if (!class_exists($className)) {
+                throw new ClassNotFoundException($className);
+            }
         }
-    
+        $module = new $className($modName);
+        // Get callable method for modType api funcName
+        $modAPIFunc = $module->getCallableMethod($modType . 'api', $funcName);
+        if (empty($modAPIFunc)) {
+            throw new FunctionNotFoundException($funcName);
+        }
+
         // Load the translations file
-        $file = sys::code() . 'modules/'.$modName.'/xar'.$modType.'api/'.strtolower($funcName).'.php';
-        if (!xarMLS::loadTranslations($file)) return;
-    
+        $file = sys::code() . 'modules/' . $modName . '/xar' . $modType . 'api/' . strtolower($funcName) . '.php';
+        if (!xarMLS::loadTranslations($file)) {
+            return;
+        }
+
         return $modAPIFunc($args);
     }
 
@@ -129,27 +150,21 @@ class xarInstall extends xarObject
      */
     public static function apiLoad()
     {
-        static $loadedAPICache = array();
+        static $loadedAPICache = [];
 
         $modName    = 'installer';
         $modOsDir   = 'installer';
         $modType  = 'admin';
-    
+
         if (isset($loadedAPICache[strtolower("$modName$modType")])) {
             // Already loaded from somewhere else
             return true;
         }
-    
-        $modOsType = xarVar::prepForOS($modType);
-    
-        $osfile = sys::code() . "modules/$modOsDir/xar{$modOsType}api.php";
-        if (!file_exists($osfile)) throw new FileNotFoundException($osfile);
-    
-    
-        // Load the file
-        include $osfile;
+        // Use autoload() for module class methods
+        sys::autoload();
+
         $loadedAPICache[strtolower("$modName$modType")] = true;
-    
+
         return true;
     }
 
@@ -162,29 +177,30 @@ class xarInstall extends xarObject
      */
     public static function load($func)
     {
-        static $loadedModuleCache = array();
+        static $loadedModuleCache = [];
 
         $modName = 'installer';
         $modType = 'admin';
-    
-        if (empty($modName)) throw new EmptyParameterException('modName');
-    
+
+        if (empty($modName)) {
+            throw new EmptyParameterException('modName');
+        }
+
         if (isset($loadedModuleCache[strtolower("$modName$modType")])) {
             // Already loaded from somewhere else
             return true;
         }
-       
+        // Use autoload() for module class methods
+        sys::autoload();
+
         // Load the module files
         $modOsType = xarVar::prepForOS($modType);
         $modOsDir = 'installer';
-    
+
         $osfile = sys::code() . "modules/$modOsDir/xar$modOsType/$func.php";
-        if (!file_exists($osfile)) throw new FileNotFoundException($osfile);
-    
-        // Load file
-        include $osfile;
+
         $loadedModuleCache[strtolower("$modName$modType")] = true;
-    
+
         // Load the module translations files
         $res = xarMLS::loadTranslations($osfile);
         return true;

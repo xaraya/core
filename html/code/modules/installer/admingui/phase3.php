@@ -86,9 +86,9 @@ class Phase3Method extends MethodClass
         }
 
         $systemConfigIsWritable     = is_writable($systemConfigFile);
-        $cacheIsWritable            = check_dir($cacheDir);
-        $cacheTemplatesIsWritable   = (check_dir($cacheTemplatesDir) || @mkdir($cacheTemplatesDir, 0o700));
-        $rssTemplatesIsWritable     = (check_dir($rssTemplatesDir) || @mkdir($rssTemplatesDir, 0o700));
+        $cacheIsWritable            = $this->check_dir($cacheDir);
+        $cacheTemplatesIsWritable   = ($this->check_dir($cacheTemplatesDir) || @mkdir($cacheTemplatesDir, 0o700));
+        $rssTemplatesIsWritable     = ($this->check_dir($rssTemplatesDir) || @mkdir($rssTemplatesDir, 0o700));
         $phpLanguageFilesIsWritable = xarMLS::iswritable($phpLanguageDir);
         $xmlLanguageFilesIsWritable = xarMLS::iswritable($xmlLanguageDir);
         $maxexectime = trim(ini_get('max_execution_time'));
@@ -168,5 +168,31 @@ class Phase3Method extends MethodClass
         }
 
         return $data;
+    }
+
+    /**
+     * Check whether directory permissions allow to write and read files inside it
+     *
+     * @access private
+     * @param string dirname directory name
+     * @return boolean true if directory is writable, readable and executable
+     */
+    public function check_dir($dirname)
+    {
+        if (!file_exists('install.php')) {
+            throw new Exception('Already installed');
+        }
+        if (@touch($dirname . '/.check_dir')) {
+            $fd = @fopen($dirname . '/.check_dir', 'r');
+            if ($fd) {
+                fclose($fd);
+                unlink($dirname . '/.check_dir');
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        return true;
     }
 }

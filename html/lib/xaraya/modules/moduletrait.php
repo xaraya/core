@@ -157,6 +157,7 @@ trait ModuleTrait
                     $this->components[$type]->setContext($this->context);
                 }
             } catch (\Throwable $e) {
+                throw new Exception("Unable to create '$className': " . $e->getMessage(), 0, $e);
                 $this->components[$type] = null;
             }
         }
