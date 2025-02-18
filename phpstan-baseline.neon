@@ -1,172 +1,308 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Call to deprecated function xar_legacy_validations_dropdown\\(\\)\\.$#"
+			message: '#^Call to deprecated function xar_legacy_validations_dropdown\(\)\.$#'
+			identifier: function.deprecated
 			count: 1
 			path: html/code/modules/base/xarproperties/dropdown.php
 
 		-
-			message: "#^Call to deprecated function xar_legacy_validations_dropdown\\(\\)\\.$#"
+			message: '#^Call to deprecated function xar_legacy_validations_dropdown\(\)\.$#'
+			identifier: function.deprecated
 			count: 1
 			path: html/code/modules/base/xarproperties/multiselect.php
 
 		-
-			message: "#^Use of constant FILTER_SANITIZE_STRING is deprecated\\.$#"
+			message: '#^Use of constant FILTER_SANITIZE_STRING is deprecated\.$#'
+			identifier: constant.deprecated
 			count: 1
 			path: html/code/modules/base/xarproperties/textbox.php
 
 		-
-			message: "#^Undefined variable\\: \\$maxlength$#"
+			message: '#^Undefined variable\: \$maxlength$#'
+			identifier: variable.undefined
 			count: 1
 			path: html/code/modules/dynamicdata/admingui/showpropval.php
 
 		-
-			message: "#^Undefined variable\\: \\$size$#"
+			message: '#^Undefined variable\: \$size$#'
+			identifier: variable.undefined
 			count: 1
 			path: html/code/modules/dynamicdata/admingui/showpropval.php
 
 		-
-			message: "#^Undefined variable\\: \\$tabindex$#"
+			message: '#^Undefined variable\: \$tabindex$#'
+			identifier: variable.undefined
 			count: 1
 			path: html/code/modules/dynamicdata/admingui/showpropval.php
 
 		-
-			message: "#^Call to an undefined method DataObjectMaster\\:\\:checkInput\\(\\)\\.$#"
+			message: '#^Call to an undefined method DataObjectMaster\:\:checkInput\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: html/code/modules/dynamicdata/class/objects/master.php
 
 		-
-			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:createModuleSymLinks\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
+			message: '#^Path in include_once\(\) "code/modules/authsystem/xartables\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: html/code/modules/installer/admingui/phase5.php
+
+		-
+			message: '#^Path in include_once\(\) "code/modules/blocks/xartables\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: html/code/modules/installer/admingui/phase5.php
+
+		-
+			message: '#^Path in include_once\(\) "code/modules/categories/xartables\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: html/code/modules/installer/admingui/phase5.php
+
+		-
+			message: '#^Path in include_once\(\) "code/modules/dynamicdata/xartables\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: html/code/modules/installer/admingui/phase5.php
+
+		-
+			message: '#^Path in include_once\(\) "code/modules/mail/xartables\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: html/code/modules/installer/admingui/phase5.php
+
+		-
+			message: '#^Path in include_once\(\) "code/modules/privileges/xartables\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: html/code/modules/installer/admingui/phase5.php
+
+		-
+			message: '#^Path in include_once\(\) "code/modules/roles/xartables\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: html/code/modules/installer/admingui/phase5.php
+
+		-
+			message: '#^Path in include_once\(\) "code/modules/themes/xartables\.php" is not a file or it does not exist\.$#'
+			identifier: includeOnce.fileNotFound
+			count: 1
+			path: html/code/modules/installer/admingui/phase5.php
+
+		-
+			message: '#^Parameter \$event of method xarInstallComposer\:\:createModuleSymLinks\(\) has invalid type Composer\\Script\\Event\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:createPropertySymLinks\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
+			message: '#^Parameter \$event of method xarInstallComposer\:\:createPropertySymLinks\(\) has invalid type Composer\\Script\\Event\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:eventHandler\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
+			message: '#^Parameter \$event of method xarInstallComposer\:\:eventHandler\(\) has invalid type Composer\\Script\\Event\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:postPackageInstall\\(\\) has invalid type Composer\\\\Installer\\\\PackageEvent\\.$#"
+			message: '#^Parameter \$event of method xarInstallComposer\:\:postPackageInstall\(\) has invalid type Composer\\Installer\\PackageEvent\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:postPackageUninstall\\(\\) has invalid type Composer\\\\Installer\\\\PackageEvent\\.$#"
+			message: '#^Parameter \$event of method xarInstallComposer\:\:postPackageUninstall\(\) has invalid type Composer\\Installer\\PackageEvent\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:postPackageUpdate\\(\\) has invalid type Composer\\\\Installer\\\\PackageEvent\\.$#"
+			message: '#^Parameter \$event of method xarInstallComposer\:\:postPackageUpdate\(\) has invalid type Composer\\Installer\\PackageEvent\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:removeModuleSymLinks\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
+			message: '#^Parameter \$event of method xarInstallComposer\:\:removeModuleSymLinks\(\) has invalid type Composer\\Script\\Event\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:removePropertySymLinks\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
+			message: '#^Parameter \$event of method xarInstallComposer\:\:removePropertySymLinks\(\) has invalid type Composer\\Script\\Event\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:showProperties\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
+			message: '#^Parameter \$event of method xarInstallComposer\:\:showProperties\(\) has invalid type Composer\\Script\\Event\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Undefined variable\\: \\$show$#"
+			message: '#^Function getcomponents not found\.$#'
+			identifier: function.notFound
 			count: 1
-			path: html/code/modules/privileges/xaradmin/modifyprivilege.php
+			path: html/code/modules/privileges/adminapi/getcomponents.php
 
 		-
-			message: "#^Function getcomponents not found\\.$#"
+			message: '#^Undefined variable\: \$show$#'
+			identifier: variable.undefined
 			count: 1
-			path: html/code/modules/privileges/xaradminapi/getcomponents.php
+			path: html/code/modules/privileges/admingui/modifyprivilege.php
 
 		-
-			message: "#^Call to deprecated function xar_legacy_templates_fixLegacy\\(\\)\\.$#"
+			message: '#^Path in include\(\) "var\://_compiler_output" is not a file or it does not exist\.$#'
+			identifier: include.fileNotFound
+			count: 1
+			path: html/lib/blocklayout/template/compiled.php
+
+		-
+			message: '#^Call to deprecated function xar_legacy_templates_fixLegacy\(\)\.$#'
+			identifier: function.deprecated
 			count: 1
 			path: html/lib/blocklayout/xsltransformer.php
 
 		-
-			message: "#^Function eaccelerator not found\\.$#"
+			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\BlockRequestHandler\:\:runBlockRequest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: html/lib/xaraya/bridge/requests/block.php
+
+		-
+			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\CommonBridge\:\:runBlockRequest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: html/lib/xaraya/bridge/requests/common.php
+
+		-
+			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\CommonBridge\:\:runDataObjectRequest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: html/lib/xaraya/bridge/requests/common.php
+
+		-
+			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\CommonBridge\:\:runModuleRequest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: html/lib/xaraya/bridge/requests/common.php
+
+		-
+			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\DataObjectRequestHandler\:\:runDataObjectRequest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: html/lib/xaraya/bridge/requests/dataobject.php
+
+		-
+			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\GenericRequestHandler\:\:runRoutesRequest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: html/lib/xaraya/bridge/requests/generic.php
+
+		-
+			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\ModuleRequestHandler\:\:runModuleRequest\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: html/lib/xaraya/bridge/requests/module.php
+
+		-
+			message: '#^Function eaccelerator not found\.$#'
+			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/caching/storage/eaccelerator.php
 
 		-
-			message: "#^Function eaccelerator_gc not found\\.$#"
+			message: '#^Function eaccelerator_gc not found\.$#'
+			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/caching/storage/eaccelerator.php
 
 		-
-			message: "#^Function eaccelerator_get not found\\.$#"
+			message: '#^Function eaccelerator_get not found\.$#'
+			identifier: function.notFound
 			count: 2
 			path: html/lib/xaraya/caching/storage/eaccelerator.php
 
 		-
-			message: "#^Function eaccelerator_put not found\\.$#"
+			message: '#^Function eaccelerator_put not found\.$#'
+			identifier: function.notFound
 			count: 2
 			path: html/lib/xaraya/caching/storage/eaccelerator.php
 
 		-
-			message: "#^Function eaccelerator_rm not found\\.$#"
+			message: '#^Function eaccelerator_rm not found\.$#'
+			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/caching/storage/eaccelerator.php
 
 		-
-			message: "#^Function mmcache not found\\.$#"
+			message: '#^Function mmcache not found\.$#'
+			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/caching/storage/mmcache.php
 
 		-
-			message: "#^Function mmcache_gc not found\\.$#"
+			message: '#^Function mmcache_gc not found\.$#'
+			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/caching/storage/mmcache.php
 
 		-
-			message: "#^Function mmcache_get not found\\.$#"
+			message: '#^Function mmcache_get not found\.$#'
+			identifier: function.notFound
 			count: 2
 			path: html/lib/xaraya/caching/storage/mmcache.php
 
 		-
-			message: "#^Function mmcache_put not found\\.$#"
+			message: '#^Function mmcache_put not found\.$#'
+			identifier: function.notFound
 			count: 2
 			path: html/lib/xaraya/caching/storage/mmcache.php
 
 		-
-			message: "#^Function mmcache_rm not found\\.$#"
+			message: '#^Function mmcache_rm not found\.$#'
+			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/caching/storage/mmcache.php
 
 		-
-			message: "#^Function mcrypt_generic not found\\.$#"
+			message: '#^Function mcrypt_generic not found\.$#'
+			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/encryptor.php
 
 		-
-			message: "#^Function mcrypt_generic_deinit not found\\.$#"
+			message: '#^Function mcrypt_generic_deinit not found\.$#'
+			identifier: function.notFound
 			count: 2
 			path: html/lib/xaraya/encryptor.php
 
 		-
-			message: "#^Function mcrypt_generic_init not found\\.$#"
+			message: '#^Function mcrypt_generic_init not found\.$#'
+			identifier: function.notFound
 			count: 2
 			path: html/lib/xaraya/encryptor.php
 
 		-
-			message: "#^Function mdecrypt_generic not found\\.$#"
+			message: '#^Function mdecrypt_generic not found\.$#'
+			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/encryptor.php
 
 		-
-			message: "#^Instantiated class soap_fault not found\\.$#"
+			message: '#^Method Xaraya\\Services\\TestHelper\:\:__construct\(\) overrides @final method PHPUnit\\Framework\\TestCase\:\:__construct\(\)\.$#'
+			identifier: method.parentMethodFinalByPhpDoc
+			count: 1
+			path: html/lib/xaraya/services/testhelper.php
+
+		-
+			message: '#^Instantiated class soap_fault not found\.$#'
+			identifier: class.notFound
 			count: 1
 			path: html/ws.php
 
