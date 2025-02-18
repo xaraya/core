@@ -34,34 +34,6 @@ class GetSupportedDbsMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (empty($args['database_middleware'])) {
-            return [];
-        }
-
-        switch ($args['database_middleware']) {
-            case 'Creole':
-                $data['database_types']  = ['mysqli'      => ['name' => 'MySQL', 'available' => extension_loaded('mysqli')],
-                    //											 'pgsql'       => array('name' => 'Postgres (limited support in this version)', 'available' => extension_loaded('pgsql')),
-                    'sqlite3'     => ['name' => 'SQLite (limited support in this version)', 'available' => extension_loaded('sqlite3')],
-                    //											 'pgsql'       => array('name' => 'Postgres (limited support in this version)', 'available' => false),
-                    // use portable version of OCI8 driver to support ? bind variables
-                    //											 'oci8po'      => array('name' => 'Oracle 9+ (not supported)'  , 'available' => extension_loaded('oci8')),
-                    //											 'mssql'       => array('name' => 'MS SQL Server (not supported)' , 'available' => extension_loaded('mssql')),
-                ];
-                break;
-            case 'PDO':
-            default:
-                $data['database_types']  = ['pdomysqli'   => ['name' => 'MySQL', 'available' => extension_loaded('pdo_mysql')],
-                    //											 'pdopgsql'    => array('name' => 'Postgres (limited support in this version)', 'available' => extension_loaded('pdo_pgsql')),
-                    'pdosqlite'   => ['name' => 'SQLite (limited support in this version)', 'available' => extension_loaded('pdo_sqlite')],
-                    //											 'pdopgsql'    => array('name' => 'Postgres (limited support in this version)', 'available' => false),
-                ];
-                break;
-            case 'DBAL':
-                // Nothing yet
-                $data['database_types']  = [];
-                break;
-        }
-        return $data['database_types'];
+        return AdminApi::getSupportedDbs($args);
     }
 }

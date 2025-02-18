@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\AdminApi;
+use DataObject;
 use xarController;
 use xarMod;
 use xarRoles;
@@ -110,12 +111,7 @@ class AsknotificationMethod extends MethodClass
                 if (xarMod::isAvailable('dynamicdata')) {
                     // get the DataObject defined for this module (and itemtype, if relevant)
                     /** @var DataObject $object */
-                    $object = xarMod::apiFunc(
-                        'dynamicdata',
-                        'user',
-                        'getobject',
-                        ['module' => 'roles']
-                    );
+                    $object = $this->data()->getObject(['module' => 'roles']);
                     if (isset($object) && !empty($object->objectid)) {
                         // get the Dynamic Properties of this object
                         $data['properties'] = &$object->getProperties();

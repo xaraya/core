@@ -22,7 +22,7 @@ sys::import('modules.dynamicdata.method');
 
 /**
  * dynamicdata userapi getobject function
- * @deprecated use $this->data()->getObject()
+ * @deprecated 2.6.2 use $this->data()->getObject()
  * @extends MethodClass<UserApi>
  */
 class GetobjectMethod extends MethodClass

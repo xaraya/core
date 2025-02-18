@@ -1779,17 +1779,17 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         return $classList;
     }
 
-    public function replace_method_services($module, $type = '', $replace)
+    public function replace_method_services($module, $type = '', $replace = false)
     {
         return $this->replace_core_services($module, $type, '', 'Method', $replace);
     }
 
-    public function replace_property_services($module, $replace)
+    public function replace_property_services($module, $replace = false)
     {
         return $this->replace_core_services($module, '', '/xarproperties/', '', $replace);
     }
 
-    public function replace_block_services($module, $replace)
+    public function replace_block_services($module, $replace = false)
     {
         return $this->replace_core_services($module, '', '/xarblocks/', '', $replace);
     }

@@ -21,7 +21,7 @@ sys::import('modules.dynamicdata.method');
 
 /**
  * dynamicdata userapi getproperty function
- * @deprecated use $this->prop()->getProperty()
+ * @deprecated 2.6.2 use $this->prop()->getProperty()
  * @extends MethodClass<UserApi>
  */
 class GetpropertyMethod extends MethodClass

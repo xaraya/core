@@ -19,7 +19,6 @@ sys::import('xaraya.modules.adminapi');
 /**
  * Handle the base admin API
  *
- * @method mixed getSupportedDbs(array $args = []) Function return the database types give a middleware
  * @method mixed getmodulesettings(array $args = []) Get module settings for admin API
  * @method mixed getusersettings(array $args) Get user settings for admin API
  *  array{args: string, args: int}

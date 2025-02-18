@@ -78,7 +78,7 @@ class CreateqdefMethod extends MethodClass
                     return xarController::notFound(null, $this->getContext());
                 }
                 // Get the name of the object from dd
-                $qdefObject = xarMod::apiFunc('dynamicdata', 'user', 'getobject', ['objectid' => $qdefObjectId]);
+                $qdefObject = $this->data()->getObject(['objectid' => $qdefObjectId]);
                 if (!isset($qdefObject)) {
                     return;
                 }

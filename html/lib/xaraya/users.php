@@ -694,8 +694,8 @@ class xarUser extends xarObject
     {
         // Retrieve the dynamic user object if necessary
         if (!isset(self::$objectRef) && xarMod3::isHooked('dynamicdata','roles')) {
-            self::$objectRef = xarMod3::apiFunc('dynamicdata', 'user', 'getobject',
-                                                           array('module' => 'roles'));
+            sys::import('modules.dynamicdata.class.objects.factory');
+            self::$objectRef = DataObjectFactory::getObject(['module' => 'roles']);
             if (empty(self::$objectRef) || empty(self::$objectRef->objectid)) {
                 self::$objectRef = false;
             }

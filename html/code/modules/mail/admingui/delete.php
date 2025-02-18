@@ -63,7 +63,7 @@ class DeleteMethod extends MethodClass
             return xarController::notFound(null, $this->getContext());
         }
 
-        $qdefObject = xarMod::apiFunc('dynamicdata', 'user', 'getobject', ['objectid' => $objectid]);
+        $qdefObject = $this->data()->getObject(['objectid' => $objectid]);
         if (!$qdefObject) {
             return;
         }

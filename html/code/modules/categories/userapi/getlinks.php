@@ -123,7 +123,7 @@ class GetlinksMethod extends MethodClass
 
         if (!empty($sort) && $sort == 'numlinks' && count($answer) > 0) {
             // TODO: find some way to sort first on count, and then on itemid
-            uasort($answer, 'categories_userapi_getlinks_sortbycount');
+            uasort($answer, [$this, 'getlinks_sortbycount']);
         }
 
         // Return Array with linkage

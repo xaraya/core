@@ -88,7 +88,7 @@ class GetorphanlinksMethod extends MethodClass
         }
 
         $catlist = $userapi->getcatinfo(['cids' => array_keys($seencid)]);
-        uasort($catlist, 'categories_userapi_getorphanlinks_sortbyleft');
+        uasort($catlist, [$this, 'getorphanlinks_sortbyleft']);
 
         // Security check
         if (!xarSecurity::check('ViewCategoryLink')) {

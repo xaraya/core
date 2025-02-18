@@ -14,6 +14,7 @@ namespace Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
+use DataObject;
 use DataObjectDescriptor;
 use DataObjectList;
 use xarDB;
@@ -74,12 +75,7 @@ class SearchMethod extends MethodClass
             if (xarHooks::isAttached('dynamicdata', 'roles')) {
                 // get the DataObject defined for this module
                 /** @var DataObject $object */
-                $object = xarMod::apiFunc(
-                    'dynamicdata',
-                    'user',
-                    'getobject',
-                    ['module' => 'roles']
-                );
+                $object = $this->data()->getObject(['module' => 'roles']);
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object
                     $data['properties'] = & $object->getProperties();
