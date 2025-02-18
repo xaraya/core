@@ -152,13 +152,17 @@ trait ModuleTrait
             try {
                 // this assumes that the class is in the same namespace as the module
                 $className = $this->getClassName($type);
-                $this->components[$type] = $this->createComponent($className);
-                if ($this->context !== null) {
-                    $this->components[$type]->setContext($this->context);
+                if (class_exists($className)) {
+                    $this->components[$type] = $this->createComponent($className);
+                    if ($this->context !== null) {
+                        $this->components[$type]->setContext($this->context);
+                    }
+                } else {
+                    $this->components[$type] = null;
                 }
             } catch (\Throwable $e) {
                 throw new Exception("Unable to create '$className': " . $e->getMessage(), 0, $e);
-                $this->components[$type] = null;
+                //$this->components[$type] = null;
             }
         }
         return $this->components[$type];

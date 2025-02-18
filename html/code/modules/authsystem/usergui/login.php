@@ -249,7 +249,7 @@ class LoginMethod extends MethodClass
                 }
 
                 // Get the default authentication data - we need to check again as authsystem is always installed and users could get here direct
-                $res = $userapi->login(['uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme], $this->getContext());
+                $res = $userapi->login(['uname' => $uname, 'pass' => $pass, 'rememberme' => $rememberme]);
 
                 if ($res === null) {
                     return;
