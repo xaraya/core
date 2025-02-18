@@ -1146,7 +1146,8 @@ class xarMod extends xarObject implements IxarMod
             if (!isset($methods_cache[$key])) {
                 xarLog3::info("xarMod::getModuleClassMethod: Missing method for $key");
             } else {
-                // @todo load module function translations
+                // Load the translations file, only if we have loaded the function for the first time here.
+                xarMLS3::loadModuleTranslations($modName, $modType, $funcName);
             }
         }
         return $methods_cache[$key];

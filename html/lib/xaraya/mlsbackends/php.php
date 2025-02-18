@@ -104,7 +104,16 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 //            return;
             return true;
         }
+        // @todo return entries and keys from include file instead of using globals
+        global $xarML_PHPBackend_entries;
+        global $xarML_PHPBackend_keyEntries;
         include_once $fileName;
+        if (!empty($xarML_PHPBackend_entries)) {
+            self::$PHPBackend_entries = array_merge(self::$PHPBackend_entries, $xarML_PHPBackend_entries);
+        }
+        if (!empty($xarML_PHPBackend_keyEntries)) {
+            self::$PHPBackend_keyEntries = array_merge(self::$PHPBackend_keyEntries, $xarML_PHPBackend_keyEntries);
+        }
 
         return true;
     }

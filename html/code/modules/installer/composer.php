@@ -6,13 +6,19 @@
  *     "post-package-install": "xarInstallComposer::postPackageInstall",
  *     "post-package-update": "xarInstallComposer::postPackageUpdate",
  *     "post-package-uninstall": "xarInstallComposer::postPackageUninstall",
- *     "xar-install-modules": "xarInstallComposer::createModuleSymLinks",
- *     "xar-list-modules": "xarInstallComposer::showModules",
+ *     "xar-modules-install": "xarInstallComposer::createModuleSymLinks",
+ *     "xar-modules-list": "xarInstallComposer::showModules",
+ *     "xar-modules-uninstall": "xarInstallComposer::removeModuleSymLinks",
+ *     "xar-properties-install": "xarInstallComposer::createPropertySymLinks",
+ *     "xar-properties-list": "xarInstallComposer::showProperties",
+ *     "xar-properties-uninstall": "xarInstallComposer::removePropertySymLinks",
+ *     "xar-properties-update": "cd vendor/xaraya/properties; git submodule update --init; echo 'done'",
+ *     "xar-twig-install": "composer require xaraya/twig",
+ *     "xar-twig-uninstall": "composer remove xaraya/twig",
  *     "xar-start-server": [
  *         "Composer\\Config::disableProcessTimeout",
  *         "php -S 0.0.0.0:8080 -t html"
- *     ],
- *     "xar-uninstall-modules": "xarInstallComposer::removeModuleSymLinks"
+ *     ]
  * },
  *
  * @package modules\installer\installer
