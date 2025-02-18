@@ -29,25 +29,6 @@ sys::import('xaraya.modules.installer');
  */
 class Installer extends InstallerClass
 {
-    /**
-     * Configure this module - override this method
-     *
-     * @todo use this instead of init() etc. for standard installation
-     * @return void
-     */
-    public function configure()
-    {
-        $this->objects = [
-            // add your DD objects here
-            //'mail_object',
-        ];
-        $this->variables = [
-            // add your module variables here
-            'hello' => 'world',
-        ];
-        $this->oldversion = '2.4.1';
-    }
-
     /** xarinit.php functions imported by bermuda_cleanup */
 
     /**

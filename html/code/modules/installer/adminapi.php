@@ -18,6 +18,7 @@ use Exception;
 use FileNotFoundException;
 use FunctionNotFoundException;
 use xarDB;
+use xarMod;
 use xarSystemVars;
 use xarTableDDL;
 use xarVar;
@@ -85,7 +86,7 @@ class AdminApi extends AdminApiClass
 
     /**
      * Include a module init file and run a function
-     * @todo support module class methods
+     * @see \Xaraya\Modules\Modules\AdminApi::executeinitfunction()
      *
      * @access public
      * @param array<string, mixed> $args array of optional parameters<br/>
@@ -108,15 +109,26 @@ class AdminApi extends AdminApiClass
         $modInitFile = sys::code() . 'modules/' . $osDirectory . '/xarinit.php';
 
 
-        // @todo support installer class in the future - see Xaraya\Modules\InstallerTrait
+        // support module Installer classes - see modules_adminapi_executeinitfunction()
         if (!file_exists($modInitFile)) {
+            // use modType = 'installer' here to get the module Installer class (if available)
+            $modInitFunc = xarMod::getModuleClassMethod($directory, 'installer', $initfunc, 'api');
+            if (!empty($modInitFunc)) {
+                // Note: we don't support upgrade($oldversion) here
+                $res = $modInitFunc();
+                if ($res == false) {
+                    // exception
+                    throw new Exception('Core initialization failed for ' . $modInitFunc);
+                }
+                return true;
+            }
             throw new FileNotFoundException($modInitFile);
         }
         sys::import('modules.' . $osDirectory . '.xarinit');
 
         // Run the function, check for existence
 
-        // @todo support namespaces in the future - see modules_adminapi_executeinitfunction()
+        // @todo support namespaces if not using installer class - see modules_adminapi_executeinitfunction()
         $modInitFunc = $osDirectory . '_' . $initfunc;
         if (function_exists($modInitFunc)) {
             $res = $modInitFunc();

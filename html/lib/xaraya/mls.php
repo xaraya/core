@@ -568,10 +568,11 @@ class xarMLS extends xarObject
     static public function loadTranslations($path)
     {
         xarLog3::debug("MLS: Loading translations for the path: $path");
-        if(!file_exists($path)) {
-            xarLog3::warning("MLS: Failed loading translations for a non-existing path ($path)");
-            return true;
-        }
+        // @todo with migration to module class methods, it doesn't matter if the old path still exists
+        //if(!file_exists($path)) {
+        //    xarLog3::warning("MLS: Failed loading translations for a non-existing path ($path)");
+        //    return true;
+        //}
     
         $domainArray = xarMLSContext::getContextFromPath($path);
         if(empty($domainArray)) {
