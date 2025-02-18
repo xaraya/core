@@ -16,7 +16,8 @@ use Xaraya\Modules\DynamicData\RestApi;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata restapi getlist function

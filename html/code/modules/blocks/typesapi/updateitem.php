@@ -18,7 +18,7 @@ use EmptyParameterException;
 use xarDB;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi updateitem function

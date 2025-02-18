@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\installer
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\AdminGuiClass;
 use sys;
 
 sys::import('xaraya.modules.admingui');
-sys::import('modules.modules.adminapi');
+sys::import('modules.installer.adminapi');
 
 /**
- * Handle the modules admin GUI
+ * Handle the installer admin GUI
  *
  * @method mixed bootstrap(array $args = []) Bootstrap Xaraya
  * @method mixed cleanup(array $args = []) Installer

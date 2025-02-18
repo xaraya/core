@@ -16,7 +16,8 @@ use Xaraya\Modules\DynamicData\AdminApi;
 use DataObjectFactory;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata adminapi deleteobject function

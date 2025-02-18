@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -14,14 +14,14 @@ namespace Xaraya\Modules\Blocks;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get modules module classes via xarMod::getModule()
+ * Get blocks module classes via xarMod::getModule()
  */
 class Module extends ModuleClass
 {
     public function setClassTypes(): void
     {
         parent::setClassTypes();
-        // add other class types for modules
+        // add other class types for blocks
         $this->classtypes['blocksapi'] = 'BlocksApi';
         $this->classtypes['instancesapi'] = 'InstancesApi';
         $this->classtypes['typesapi'] = 'TypesApi';

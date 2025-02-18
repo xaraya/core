@@ -19,7 +19,8 @@ use xarMod;
 use xarModAlias;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata userapi encode_shorturl function

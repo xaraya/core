@@ -20,7 +20,8 @@ use xarSecurity;
 use xarVar;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata admin delete_static_table function

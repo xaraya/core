@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\privileges
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.adminapi');
 
 /**
- * Handle the modules admin API
+ * Handle the privileges admin API
  *
  * @method mixed get(array $args = []) Get a specific privilege - Transient hack, will be removed
  * @method mixed getcomponents(array $args = []) getcomponents: returns all the current components of a module.

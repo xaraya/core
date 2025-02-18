@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules ws API
+ * Handle the base ws API
  *
  * @method mixed default(array $args = []) Default web suervices call
  * @extends UserApiClass<Module>

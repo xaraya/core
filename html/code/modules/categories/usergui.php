@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\UserGuiClass;
 use sys;
 
 sys::import('xaraya.modules.usergui');
-sys::import('modules.modules.userapi');
+sys::import('modules.categories.userapi');
 
 /**
- * Handle the modules user GUI
+ * Handle the categories user GUI
  *
  * @method mixed main(array $args = []) The main user function
  * @extends UserGuiClass<Module>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\themes
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\AdminGuiClass;
 use sys;
 
 sys::import('xaraya.modules.admingui');
-sys::import('modules.modules.adminapi');
+sys::import('modules.themes.adminapi');
 
 /**
- * Handle the modules admin GUI
+ * Handle the themes admin GUI
  *
  * @method mixed activate(array $args = []) Activate a theme - Loads theme admin API and calls the activate - function to actually perform the activation, - then redirects to the list function with a - status message and returns true.
  * @method mixed cacheview(array $args = [])

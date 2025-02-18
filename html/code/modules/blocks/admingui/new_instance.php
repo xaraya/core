@@ -29,7 +29,7 @@ use xarSecurity;
 use xarVar;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks admin new_instance function
@@ -172,7 +172,7 @@ class NewInstanceMethod extends MethodClass
                     return;
                 }
                 // get the block type object
-                $block_type = $blocksapi->getobject($type);
+                $block_type = $blocksapi->getblock($type);
                 $instance_states = $instancesapi->getstates();
                 // get the list of registered block group types
                 $block_groups = $instancesapi->getitems([
@@ -230,7 +230,7 @@ class NewInstanceMethod extends MethodClass
                                 continue;
                             }
                             $group = $block_groups[$group_id];
-                            $block_group = $blocksapi->getobject($group);
+                            $block_group = $blocksapi->getblock($group);
                             if (!$block_group) {
                                 continue;
                             }

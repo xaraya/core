@@ -16,7 +16,7 @@ use Xaraya\Modules\Blocks\TypesApi;
 use xarBlock;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi getstates function

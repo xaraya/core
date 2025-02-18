@@ -89,7 +89,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
             if (!empty($removes)) {
                 foreach ($removes as $id => $remove) {
                     $this->detachInstance($remove['block_id']);
-                    $r_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $remove);
+                    $r_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $remove);
                     $r_block->detachGroup($this->block_id);
                     $remove['content'] = $r_block->storeContent();
                     if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $remove)) return;
@@ -104,7 +104,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
             $add = xarMod::apiFunc('blocks', 'instances', 'getitem', 
                 array('block_id' => $add_block));
             $this->attachInstance($add['block_id']);
-            $a_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $add);
+            $a_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $add);
             $a_block->attachGroup($this->block_id);
             $add['content'] = $a_block->storeContent();
             if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $add)) return;

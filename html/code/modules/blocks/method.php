@@ -43,6 +43,6 @@ class MethodClass extends CoreMethodClass
      */
     public function typesapi(): UserApiInterface|null
     {
-        return $this->getParent()->types();
+        return $this->getParent()->typesapi();
     }
 }

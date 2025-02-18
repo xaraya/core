@@ -26,7 +26,7 @@ use xarSecurity;
 use xarVar;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks admin delete_instance function
@@ -135,7 +135,7 @@ class DeleteInstanceMethod extends MethodClass
         $data['instance'] = $instance;
         try {
             $instance['method'] = 'delete';
-            $block = $blocksapi->getobject($instance);
+            $block = $blocksapi->getblock($instance);
 
             if ($instance['type_category'] == 'group') {
                 $instance_ids = $block->getInstances();

@@ -16,7 +16,8 @@ use Xaraya\Modules\DynamicData\AdminApi;
 use DataPropertyMaster;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata adminapi showinput function

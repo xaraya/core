@@ -17,7 +17,7 @@ use EmptyParameterException;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks instancesapi getitem function

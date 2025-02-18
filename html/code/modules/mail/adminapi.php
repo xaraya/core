@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\mail
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.adminapi');
 
 /**
- * Handle the modules admin API
+ * Handle the mail admin API
  *
  * @method mixed internal_queuemail(array $args = [])
  * @method mixed internal_sendmail(array $args = [])

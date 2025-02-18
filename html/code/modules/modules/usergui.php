@@ -15,7 +15,6 @@ use Xaraya\Modules\UserGuiClass;
 use sys;
 
 sys::import('xaraya.modules.usergui');
-sys::import('modules.modules.userapi');
 
 /**
  * Handle the modules user GUI

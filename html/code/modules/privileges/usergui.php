@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\privileges
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,9 @@ use Xaraya\Modules\UserGuiClass;
 use sys;
 
 sys::import('xaraya.modules.usergui');
-sys::import('modules.modules.userapi');
 
 /**
- * Handle the modules user GUI
+ * Handle the privileges user GUI
  *
  * @method mixed errors(array $args = [])
  * @extends UserGuiClass<Module>

@@ -35,7 +35,8 @@ use xarTpl;
 use xarVar;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata admin relations function

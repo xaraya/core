@@ -18,7 +18,7 @@ use xarMod;
 use xarTpl;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.base.method');
 
 /**
  * base javascriptapi _findfile function

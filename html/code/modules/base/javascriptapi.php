@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules javascript API
+ * Handle the base javascript API
  *
  * @method mixed findfile(array $args = []) Base JavaScript management functions - Find the path for a JavaScript file.
  * @method mixed geteventattributes(array $args = []) Handle render javascript form field tags - Get JavaScript event attributes for a tag.

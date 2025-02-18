@@ -24,7 +24,8 @@ use xarSecurity;
 use xarVar;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata admin orderprops function

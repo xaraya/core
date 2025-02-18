@@ -62,8 +62,9 @@ class Phase4Method extends MethodClass
         ];
         // Supported Databases:
         // Not very Xaraya, but xarMod is not yet available
-        sys::import('modules.base.xaradminapi.get_supported_dbs');
-        $data['database_types'] = base_adminapi_get_supported_dbs(['database_middleware' => $data['database_middleware']]);
+        //sys::import('modules.base.adminapi.get_supported_dbs');
+        sys::import('modules.base.adminapi');
+        $data['database_types'] = \Xaraya\Modules\Base\AdminApi::getSupportedDbs($data['database_middleware']);
 
         // The Continue button was clicked
         if (isset($continue)) {

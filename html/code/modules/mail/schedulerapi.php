@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\mail
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules scheduler API
+ * Handle the mail scheduler API
  *
  * @method mixed sendmail(array $args = []) send queued/scheduled mails (executed by the scheduler module)
  * @extends UserApiClass<Module>

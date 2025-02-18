@@ -22,7 +22,8 @@ use xarSec;
 use xarSecurity;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata admin view_propertydefs function

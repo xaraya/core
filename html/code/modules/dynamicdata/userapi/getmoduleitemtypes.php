@@ -17,7 +17,8 @@ use BadParameterException;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata userapi getmoduleitemtypes function

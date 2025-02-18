@@ -16,7 +16,8 @@ use Xaraya\Modules\DynamicData\RestApi;
 use xarVar;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata restapi post_hello function

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\AdminGuiClass;
 use sys;
 
 sys::import('xaraya.modules.admingui');
-sys::import('modules.modules.adminapi');
+sys::import('modules.base.adminapi');
 
 /**
- * Handle the modules admin GUI
+ * Handle the base admin GUI
  *
  * @method mixed composer(array $args = []) Manage third party libraries with composer
  * @method mixed confirmlogout(array $args = []) Confirm logout from administration system

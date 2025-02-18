@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.adminapi');
 
 /**
- * Handle the modules admin API
+ * Handle the categories admin API
  *
  * @method mixed create(array $args = []) Create a new category
  * @method mixed createhook(array $args = []) Create linkage for an item - hook for ('item','create','API') - Needs $extrainfo['cids'] from arguments, or 'cids' from input

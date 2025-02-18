@@ -18,7 +18,8 @@ use SQLException;
 use xarDB;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata adminapi deleteprop function

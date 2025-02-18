@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\UserGuiClass;
 use sys;
 
 sys::import('xaraya.modules.usergui');
-sys::import('modules.modules.userapi');
+sys::import('modules.blocks.userapi');
 
 /**
- * Handle the modules user GUI
+ * Handle the blocks user GUI
  *
  * @method mixed display(array $args = [])
  * @extends UserGuiClass<Module>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\roles
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\AdminGuiClass;
 use sys;
 
 sys::import('xaraya.modules.admingui');
-sys::import('modules.modules.adminapi');
+sys::import('modules.roles.adminapi');
 
 /**
- * Handle the modules admin GUI
+ * Handle the roles admin GUI
  *
  * @method mixed addmember(array $args = []) addMember - assign a user or group to a group - Make a user or group a member of another group.
  * @method mixed addprivilege(array $args = []) addprivilege - assign a privilege to role - This is an action page

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\roles
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.adminapi');
 
 /**
- * Handle the modules admin API
+ * Handle the roles admin API
  *
  * @method mixed addmember(array $args = []) insertuser - add a user to a group
  * @method mixed getgroupmenulinks(array $args = []) utility function pass individual menu items to the main menu

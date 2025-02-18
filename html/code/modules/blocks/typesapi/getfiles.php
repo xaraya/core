@@ -17,7 +17,7 @@ use DirectoryIterator;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi getfiles function
@@ -101,7 +101,7 @@ class GetfilesMethod extends MethodClass
                     continue;
                 }
 
-                // $classname does not take into account possible namespace + it is not used in refresh() or blocksapi getobject()
+                // $classname does not take into account possible namespace + it is not used in refresh() or blocksapi getblock()
                 if (empty($scope)) {
                     // solo block
                     $classname = ucfirst($type) . 'Block';

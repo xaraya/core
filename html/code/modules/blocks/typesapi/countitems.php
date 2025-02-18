@@ -18,7 +18,7 @@ use xarDB;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi countitems function

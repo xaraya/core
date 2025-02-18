@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\UserGuiClass;
 use sys;
 
 sys::import('xaraya.modules.usergui');
-sys::import('modules.modules.userapi');
+sys::import('modules.authsystem.userapi');
 
 /**
- * Handle the modules user GUI
+ * Handle the authsystem user GUI
  *
  * @method mixed login(array $args = []) Log a user into the system
  * @method mixed logout(array $args = []) Log a user out of the system.

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.adminapi');
 
 /**
- * Handle the modules admin API
+ * Handle the blocks admin API
  *
  * @method mixed import(array $args = []) Import a block definition from XML
  * @method mixed registerBlockType(array $args = []) Register block type - IMPORTANT: this function is marked for deprecation - The blocks subsystem now automatically creates block types - when modules are activated

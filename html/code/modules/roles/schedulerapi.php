@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\roles
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules scheduler API
+ * Handle the roles scheduler API
  *
  * @method mixed expire(array $args = []) expire non-validated accounts or whatever (executed by the scheduler module)
  * @extends UserApiClass<Module>

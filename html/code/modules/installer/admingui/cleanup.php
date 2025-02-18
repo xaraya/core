@@ -142,7 +142,7 @@ class CleanupMethod extends MethodClass
                 ['type' => 'menu', 'module' => 'base']
             );
             // get an instance of the menu block type
-            $menu_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $menu_type);
+            $menu_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $menu_type);
             // attach the left group to the menu instance
             $menu_block->attachGroup($left_group['block_id']);
             // create menu instance
@@ -164,7 +164,7 @@ class CleanupMethod extends MethodClass
         // add menu instance to left block
         if (!empty($menu_id)) {
             // get an instance of the left group
-            $left_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $left_group);
+            $left_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $left_group);
             // attach menu block to left group instance
             $left_block->attachInstance($menu_id);
             // update left block instance
@@ -194,7 +194,7 @@ class CleanupMethod extends MethodClass
                 ['type' => 'login', 'module' => 'authsystem']
             );
             // get an instance of the login block type
-            $login_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $login_type);
+            $login_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $login_type);
             // attach the right group to the login instance
             $login_block->attachGroup($right_group['block_id']);
             // create login instance
@@ -216,7 +216,7 @@ class CleanupMethod extends MethodClass
         // add login instance to right block
         if (!empty($login_id)) {
             // get an instance of the right group
-            $right_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $right_group);
+            $right_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $right_group);
             // attach login block to right group instance
             $right_block->attachInstance($login_id);
             // update right block instance
@@ -246,7 +246,7 @@ class CleanupMethod extends MethodClass
                 ['type' => 'meta', 'module' => 'themes']
             );
             // get an instance of the meta block type
-            $meta_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $meta_type);
+            $meta_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $meta_type);
             // attach the header group to the meta instance
             $meta_block->attachGroup($header_group['block_id']);
             // create meta instance
@@ -267,7 +267,7 @@ class CleanupMethod extends MethodClass
         // add meta instance to header block
         if (!empty($meta_id)) {
             // get an instance of the header group
-            $header_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $header_group);
+            $header_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $header_group);
             // attach meta block to header group instance
             $header_block->attachInstance($meta_id);
             // update header block instance
@@ -297,7 +297,7 @@ class CleanupMethod extends MethodClass
                 ['type' => 'adminmenu', 'module' => 'base']
             );
             // get an instance of the adminmenu block type
-            $adminmenu_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $adminmenu_type);
+            $adminmenu_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $adminmenu_type);
             // attach the admin group to the adminmenu instance
             $adminmenu_block->attachGroup($admin_group['block_id']);
             // create adminmenu instance
@@ -327,7 +327,7 @@ class CleanupMethod extends MethodClass
                 ['type' => 'content', 'module' => 'base']
             );
             // get an instance of the reminder block type
-            $reminder_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $reminder_type);
+            $reminder_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $reminder_type);
             // attach the admin group to the reminder instance
             $reminder_block->attachGroup($admin_group['block_id']);
             // set content
@@ -356,7 +356,7 @@ class CleanupMethod extends MethodClass
         // add adminmenu and/or reminder instance to admin block
         if (!empty($adminmenu_id) || !empty($reminder_id)) {
             // get an instance of the admin group
-            $admin_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $admin_group);
+            $admin_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $admin_group);
             // attach reminder block to admin group instance
             if (!empty($reminder_id)) {
                 $admin_block->attachInstance($reminder_id);

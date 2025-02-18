@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\AdminGuiClass;
 use sys;
 
 sys::import('xaraya.modules.admingui');
-sys::import('modules.modules.adminapi');
+sys::import('modules.blocks.adminapi');
 
 /**
- * Handle the modules admin GUI
+ * Handle the blocks admin GUI
  *
  * @method mixed deleteInstance(array $args = []) Delete a block instance
  * @method mixed deleteType(array $args = []) Function to delete type

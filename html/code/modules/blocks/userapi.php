@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules user API
+ * Handle the blocks user API
  *
  * @method mixed convertseconds(array $args = []) Update the configuration parameters of the module based on data from the modification form
  * @method mixed getitemlinks(array $args = []) Utility function to pass individual item links to whoever

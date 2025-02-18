@@ -20,7 +20,7 @@ use xarDB;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi createitem function
@@ -99,7 +99,7 @@ class CreateitemMethod extends MethodClass
         }
 
         // get an instance of this block type object
-        $blocktype = $typesapi->getobject(['type' => $type, 'module' => $module]);
+        $blocktype = $typesapi->getblock(['type' => $type, 'module' => $module]);
 
         $category = $blocktype->type_category;
         $info = serialize($blocktype->storeContent());

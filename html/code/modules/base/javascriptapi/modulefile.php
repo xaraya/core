@@ -17,7 +17,7 @@ use xarMod;
 use xarServer;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.base.method');
 
 /**
  * base javascriptapi modulefile function

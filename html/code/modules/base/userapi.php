@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules user API
+ * Handle the base user API
  *
  * @method mixed browseFiles(array $args = []) Browse for files and directories (recursion supported).
  * @method mixed checklink(array $args = []) Check the status of some URL

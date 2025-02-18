@@ -16,7 +16,8 @@ use Xaraya\Modules\DynamicData\UserApi;
 use DataPropertyMaster;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata userapi getproperty function

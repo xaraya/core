@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\mail
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -14,14 +14,14 @@ namespace Xaraya\Modules\Mail;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get modules module classes via xarMod::getModule()
+ * Get mail module classes via xarMod::getModule()
  */
 class Module extends ModuleClass
 {
     public function setClassTypes(): void
     {
         parent::setClassTypes();
-        // add other class types for modules
+        // add other class types for mail
         $this->classtypes['cliapi'] = 'CliApi';
     }
 }

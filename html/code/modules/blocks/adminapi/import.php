@@ -30,7 +30,7 @@ use xarVar;
 use sys;
 use ValueValidations;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 sys::import('xaraya.validations');
 
 /**

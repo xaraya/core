@@ -16,7 +16,7 @@ use Xaraya\Modules\Blocks\InstancesApi;
 use xarBlock;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks instancesapi getstates function

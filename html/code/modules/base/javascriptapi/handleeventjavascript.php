@@ -16,7 +16,7 @@ use Xaraya\Modules\Base\JavascriptApi;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.base.method');
 
 /**
  * base javascriptapi handleeventjavascript function

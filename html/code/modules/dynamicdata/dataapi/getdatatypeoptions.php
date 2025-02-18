@@ -15,7 +15,8 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\DataApi;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata dataapi getdatatypeoptions function

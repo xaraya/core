@@ -28,7 +28,8 @@ use xarVar;
 use sys;
 use Exception;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata admin test_apis function

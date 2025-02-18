@@ -16,7 +16,8 @@ use Xaraya\Modules\DynamicData\UserApi;
 use xarSession;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata userapi sessioncontext function (was getcontext)

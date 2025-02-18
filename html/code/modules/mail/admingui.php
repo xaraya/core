@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\mail
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\AdminGuiClass;
 use sys;
 
 sys::import('xaraya.modules.admingui');
-sys::import('modules.modules.adminapi');
+sys::import('modules.mail.adminapi');
 
 /**
- * Handle the modules admin GUI
+ * Handle the mail admin GUI
  *
  * @method mixed compose(array $args = []) Test the email settings
  * @method mixed create(array $args = [])

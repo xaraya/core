@@ -20,7 +20,7 @@ use xarBlock;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi refresh function
@@ -88,7 +88,7 @@ class RefreshMethod extends MethodClass
             } else {
                 try {
                     // check the block can be instantiated
-                    $block = $blocksapi->getobject($type);
+                    $block = $blocksapi->getblock($type);
                     $state = xarBlock::TYPE_STATE_ACTIVE;
                     if ($block->type_category != $type['type_category']) {
                         $update['type_category'] = $block->type_category;

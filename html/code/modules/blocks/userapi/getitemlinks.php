@@ -21,7 +21,7 @@ use xarSecurity;
 use xarVar;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks userapi getitemlinks function

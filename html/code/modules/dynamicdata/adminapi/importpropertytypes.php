@@ -17,7 +17,8 @@ use Exception;
 use PropertyRegistration;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata adminapi importpropertytypes function

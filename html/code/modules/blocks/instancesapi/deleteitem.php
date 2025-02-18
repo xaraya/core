@@ -23,7 +23,7 @@ use xarHooks;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks instancesapi deleteitem function
@@ -64,7 +64,7 @@ class DeleteitemMethod extends MethodClass
 
         try {
             $instance['method'] = 'delete';
-            $block = $blocksapi->getobject($instance);
+            $block = $blocksapi->getblock($instance);
 
             if ($instance['type_category'] == 'group') {
                 $instance_ids = $block->getInstances();
@@ -92,7 +92,7 @@ class DeleteitemMethod extends MethodClass
                 if (!isset($instance_groups[$block_id])) {
                     continue;
                 }
-                $g_block = $blocksapi->getobject($instance_groups[$block_id]);
+                $g_block = $blocksapi->getblock($instance_groups[$block_id]);
                 $g_block->detachInstance($args['block_id']);
                 if (!$instancesapi->updateitem([
                     'block_id' => $block_id,
@@ -109,7 +109,7 @@ class DeleteitemMethod extends MethodClass
                 if (!isset($group_instances[$block_id])) {
                     continue;
                 }
-                $i_block = $blocksapi->getobject($group_instances[$block_id]);
+                $i_block = $blocksapi->getblock($group_instances[$block_id]);
                 $i_block->detachGroup($args['block_id']);
                 if (!$instancesapi->updateitem([
                     'block_id' => $block_id,

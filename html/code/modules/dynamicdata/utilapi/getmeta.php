@@ -15,7 +15,8 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UtilApi;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata utilapi getmeta function

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\privileges
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\AdminGuiClass;
 use sys;
 
 sys::import('xaraya.modules.admingui');
-sys::import('modules.modules.adminapi');
+sys::import('modules.privileges.adminapi');
 
 /**
- * Handle the modules admin GUI
+ * Handle the privileges admin GUI
  *
  * @method mixed addmember(array $args = []) addMember - assign a privilege as a member of another privilege - Make a privilege a member of another privilege.
  * @method mixed addprivilege(array $args = []) addPrivilege - add a privilege to the repository - This is an action page

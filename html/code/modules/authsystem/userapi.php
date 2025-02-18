@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules user API
+ * Handle the authsystem user API
  *
  * @method mixed authenticateUser(array $args = []) Authenticate a user
  * @method mixed login(array $args = []) Api function to log a user on to the system

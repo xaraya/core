@@ -16,7 +16,8 @@ use Xaraya\Modules\DynamicData\UtilApi;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata utilapi export function

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,10 +17,10 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules blocks API
+ * Handle the blocks blocks API
  *
  * @method mixed getinfo(array $args = []) Get blocks API info
- * @method mixed getobject(array $args = []) Gets an object from the blocks API
+ * @method mixed getblock(array $args = []) Gets an object from the blocks API
  * @extends UserApiClass<Module>
  */
 class BlocksApi extends UserApiClass

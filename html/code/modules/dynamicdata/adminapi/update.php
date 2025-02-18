@@ -18,7 +18,8 @@ use DataObjectDescriptor;
 use DataObjectFactory;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata adminapi update function

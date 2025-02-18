@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\roles
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -14,14 +14,14 @@ namespace Xaraya\Modules\Roles;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get modules module classes via xarMod::getModule()
+ * Get roles module classes via xarMod::getModule()
  */
 class Module extends ModuleClass
 {
     public function setClassTypes(): void
     {
         parent::setClassTypes();
-        // add other class types for modules
+        // add other class types for roles
         //$this->classtypes['utilapi'] = 'UtilApi';
     }
 }

@@ -19,7 +19,8 @@ use xarSecurity;
 use xarTpl;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata admin main function

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules rest API
+ * Handle the authsystem rest API
  *
  * @method mixed getlist(array $args = []) Get the list of REST API calls supported by this module (if any)
  * @method mixed honeypot(array $args = []) Sample REST API call supported by this module (if any)

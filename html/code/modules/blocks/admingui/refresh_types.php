@@ -19,7 +19,7 @@ use xarMod;
 use xarSecurity;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks admin refresh_types function

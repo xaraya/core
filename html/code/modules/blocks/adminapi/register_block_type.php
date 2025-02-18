@@ -15,7 +15,7 @@ use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\AdminApi;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks adminapi register_block_type function

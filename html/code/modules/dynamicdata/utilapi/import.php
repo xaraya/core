@@ -17,7 +17,8 @@ use DataObjectImporter;
 use xarDB;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.dynamicdata.method');
+
 
 /**
  * dynamicdata utilapi import function

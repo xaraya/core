@@ -18,7 +18,7 @@ use xarBlock;
 use xarTpl;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks restapi render function

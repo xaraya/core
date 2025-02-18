@@ -19,7 +19,7 @@ use xarMod;
 use xarVar;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks typesapi getitems function

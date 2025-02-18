@@ -32,7 +32,7 @@ use xarServer;
 use xarVar;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks admin modify_instance function
@@ -351,14 +351,14 @@ class ModifyInstanceMethod extends MethodClass
                                     foreach ($blockinfo_groups as $group_id => $tpls) {
                                         if (!empty($tpls['detach'])) {
                                             $block->detachGroup($group_id);
-                                            $group_block = $blocksapi->getobject($block_groups[$group_id]);
+                                            $group_block = $blocksapi->getblock($block_groups[$group_id]);
                                             $group_block->detachInstance($blockinfo['block_id']);
                                         } else {
                                             $block->attachGroup($group_id, $tpls['box_template'], $tpls['block_template']);
                                             if (isset($old_groups[$group_id])) {
                                                 continue;
                                             }
-                                            $group_block = $blocksapi->getobject($block_groups[$group_id]);
+                                            $group_block = $blocksapi->getblock($block_groups[$group_id]);
                                             $group_block->attachInstance($blockinfo['block_id']);
                                         }
                                         $group_update = [

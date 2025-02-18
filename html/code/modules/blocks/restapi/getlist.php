@@ -16,7 +16,7 @@ use Xaraya\Modules\Blocks\RestApi;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
  * blocks restapi getlist function

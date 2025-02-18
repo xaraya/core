@@ -1,73 +1,97 @@
 <?php
-/**
- * @package modules\blocks
- * @subpackage blocks
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- * @link http://xaraya.info/index.php/release/13.html
- */
 
 /**
- * 
- * Gets an object from the blocks API
- * 
- * @author Chris Powis <crisp@xaraya.com>
- * 
- * @staticvar array $loaded Keeps track of clases that have been loaded
- * @param array<string, mixed> $args Parameter data array
- * @return object|void Object to be returned
- * @throws BadParameterException
- * @throws FileNotFoundException
- * @throws ClassNotFoundException
- * @throws FunctionNotFoundException
+ * @package modules\blocks
+ * @category Xaraya Web Applications Framework
+ * @version 2.6.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link https://github.com/mikespub/xaraya-modules
+**/
+
+namespace Xaraya\Modules\Blocks\BlocksApi;
+
+use Xaraya\Modules\Blocks\MethodClass;
+use Xaraya\Modules\Blocks\BlocksApi;
+use BadParameterException;
+use ClassNotFoundException;
+use FileNotFoundException;
+use FunctionNotFoundException;
+use xarMLS;
+use sys;
+
+sys::import('modules.blocks.method');
+
+/**
+ * blocks blocksapi getblock function
+ * @extends MethodClass<BlocksApi>
  */
-function blocks_blocksapi_getobject(array $args = [], $context = null)
+class GetblockMethod extends MethodClass
 {
+    /** functions imported by bermuda_cleanup */
+
+    /**
+     * Gets an object from the blocks API
+     * @author Chris Powis <crisp@xaraya.com>
+     * @staticvar array $loaded Keeps track of clases that have been loaded
+     * @param array<string,mixed> $args Parameter data array
+     * @return object|void Object to be returned
+     * @throws \BadParameterException
+     * @throws \FileNotFoundException
+     * @throws \ClassNotFoundException
+     * @throws \FunctionNotFoundException
+     * @see BlocksApi::getblock()
+     */
+    public function __invoke(array $args = [])
+    {
         // must have a valid type
-        if (empty($args['type']) || !is_string($args['type']))
+        if (empty($args['type']) || !is_string($args['type'])) {
             $invalid[] = 'type';
+        }
         // if we have a module, make sure it's valid
-        if (!empty($args['module']) && !is_string($args['module']))
+        if (!empty($args['module']) && !is_string($args['module'])) {
             $invalid[] = 'module';
-        
-        if (isset($args['block_method']) && !is_string($args['block_method']))
+        }
+
+        if (isset($args['block_method']) && !is_string($args['block_method'])) {
             $invalid[] = 'block_method';
-        
+        }
+
         if (!empty($invalid)) {
             $msg = 'Invalid #(1) for #(2) module #(3) function #(4)()';
-            $vars = array(join(', ', $invalid), 'blocks', 'blocksapi', 'getobject');
-            throw new BadParameterException($vars, $msg);        
+            $vars = [join(', ', $invalid), 'blocks', 'blocksapi', 'getblock'];
+            throw new BadParameterException($vars, $msg);
         }
-        
-        // keep track of classes we've already loaded 
-        static $loaded = array();        
+
+        // keep track of classes we've already loaded
+        static $loaded = [];
         $key = !empty($args['module']) ? $args['module'] . ':' . $args['type'] : $args['type'];
-        if (!empty($args['block_method'])) $key .= ':' . $args['block_method'];
+        if (!empty($args['block_method'])) {
+            $key .= ':' . $args['block_method'];
+        }
         if (isset($loaded[$key])) {
-            if (isset($args['block_method']))
-                unset($args['block_method']); 
+            if (isset($args['block_method'])) {
+                unset($args['block_method']);
+            }
             $classname = $loaded[$key];
             return new $classname($args);
-        }      
+        }
 
         // $typeclass does not take into account possible namespace + it does not re-use what typesapi getfiles() gave
         if (!empty($args['module'])) {
             // import a block type class belonging to a module
-            $basepath = sys::code() . 'modules/'.$args['module'].'/xarblocks/';
+            $basepath = sys::code() . 'modules/' . $args['module'] . '/xarblocks/';
             $baseclass = ucfirst($args['module']) . '_' . ucfirst($args['type']) . 'Block';
         } else {
-            // import a solo block type class 
+            // import a solo block type class
             $basepath = sys::code() . 'blocks/';
             $baseclass = ucfirst($args['type']) . 'Block';
         }
-        $typepaths = array();
-        $typeclass = array();      
+        $typepaths = [];
+        $typeclass = [];
         if (!empty($args['block_method'])) {
             // method specific class
-            // basepath/type/method.php 
+            // basepath/type/method.php
             $typepaths[] = $basepath . $args['type'] . '/' . $args['block_method'] . '.php';
             $typeclass[] = $baseclass . ucfirst($args['block_method']);
             // basepath/type_method.php (legacy)
@@ -75,26 +99,28 @@ function blocks_blocksapi_getobject(array $args = [], $context = null)
             $typeclass[] = $baseclass . ucfirst($args['block_method']);
             if ($args['block_method'] != 'display') {
                 // admin methods class
-                // basepath/type/admin.php 
+                // basepath/type/admin.php
                 $typepaths[] = $basepath . $args['type'] . '/admin.php';
-                $typeclass[] = $baseclass . 'Admin';         
-                // basepath/type_admin.php (legacy)
-                $typepaths[] = $basepath . $args['type'] . '_admin.php';            
                 $typeclass[] = $baseclass . 'Admin';
-            }            
-        } 
-        // base class 
-        // basepath/type/type.php 
-        $typepaths[] = $basepath . $args['type'] . '/' . $args['type'] . '.php';           
+                // basepath/type_admin.php (legacy)
+                $typepaths[] = $basepath . $args['type'] . '_admin.php';
+                $typeclass[] = $baseclass . 'Admin';
+            }
+        }
+        // base class
+        // basepath/type/type.php
+        $typepaths[] = $basepath . $args['type'] . '/' . $args['type'] . '.php';
         $typeclass[] = $baseclass;
         // basepath/type.php (legacy)
-        $typepaths[] = $basepath . $args['type'] . '.php';                              
+        $typepaths[] = $basepath . $args['type'] . '.php';
         $typeclass[] = $baseclass;
 
         // we try to get the actual $classname and $filepath here first - as input for after UPGRADE due to table change
         $oldclasses = get_declared_classes();
         foreach ($typepaths as $i => $typepath) {
-            if (!file_exists($typepath)) continue;
+            if (!file_exists($typepath)) {
+                continue;
+            }
             include_once $typepath;
             $newclasses = get_declared_classes();
             $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
@@ -109,27 +135,32 @@ function blocks_blocksapi_getobject(array $args = [], $context = null)
             break;
         }
 
-        if (empty($classname))
+        if (empty($classname)) {
             throw new FileNotFoundException($typepath);
-        
-        if (!class_exists($classname) || !is_subclass_of($classname, 'BasicBlock')) 
-            throw new ClassNotFoundException($classname);
+        }
 
-        if (!empty($args['block_method']) && !method_exists($classname, $args['block_method']))
+        if (!class_exists($classname) || !is_subclass_of($classname, 'BasicBlock')) {
+            throw new ClassNotFoundException($classname);
+        }
+
+        if (!empty($args['block_method']) && !method_exists($classname, $args['block_method'])) {
             throw new FunctionNotFoundException($args['block_method']);
+        }
 
         // Load the block language files
-        if(!xarMLS::loadTranslations($typepath)) {
+        if (!xarMLS::loadTranslations($typepath)) {
             // What to do here? return doesnt seem right
             return;
         }
-        
-        if (isset($args['block_method']))
-            unset($args['block_method']);         
+
+        if (isset($args['block_method'])) {
+            unset($args['block_method']);
+        }
 
         $object = new $classname($args);
-        
-        $loaded[$key] = $classname;        
-        
-        return $object;     
+
+        $loaded[$key] = $classname;
+
+        return $object;
+    }
 }

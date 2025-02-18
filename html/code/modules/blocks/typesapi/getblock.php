@@ -17,13 +17,13 @@ use Xaraya\Modules\Blocks\BlocksApi;
 use xarMod;
 use sys;
 
-sys::import('xaraya.modules.method');
+sys::import('modules.blocks.method');
 
 /**
- * blocks typesapi getobject function
+ * blocks typesapi getblock function
  * @extends MethodClass<TypesApi>
  */
-class GetobjectMethod extends MethodClass
+class GetblockMethod extends MethodClass
 {
     /** functions imported by bermuda_cleanup */
 
@@ -32,12 +32,12 @@ class GetobjectMethod extends MethodClass
      * @author Chris Powis <crisp@xaraya.com>
      * @param array<string,mixed> $args Parameter data array
      * @return array Data array
-     * @see TypesApi::getobject()
+     * @see TypesApi::getblock()
      */
     public function __invoke(array $args = [])
     {
         /** @var BlocksApi $blocksapi */
         $blocksapi = $this->blocksapi();
-        return $blocksapi->getobject($args);
+        return $blocksapi->getblock($args);
     }
 }

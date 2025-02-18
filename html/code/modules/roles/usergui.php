@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\roles
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -15,10 +15,10 @@ use Xaraya\Modules\UserGuiClass;
 use sys;
 
 sys::import('xaraya.modules.usergui');
-sys::import('modules.modules.userapi');
+sys::import('modules.roles.userapi');
 
 /**
- * Handle the modules user GUI
+ * Handle the roles user GUI
  *
  * @method mixed account(array $args = []) Displays the dynamic user menu.
  * @method mixed changelanguage(array $args = []) Changes the navigation language - This is the external entry point to tell MLS use another language

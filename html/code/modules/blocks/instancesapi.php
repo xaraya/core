@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules instances API
+ * Handle the blocks instances API
  *
  * @method mixed countitems(array $args = []) Returns item count
  * @method mixed createitem(array $args = []) Create an item

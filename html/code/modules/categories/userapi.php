@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package modules\modules
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.6.1
  * @copyright see the html/credits.html file in this release
@@ -17,7 +17,7 @@ use sys;
 sys::import('xaraya.modules.userapi');
 
 /**
- * Handle the modules user API
+ * Handle the categories user API
  *
  * @method mixed countcats(array $args = []) Count number of categories (optionally below some category) - Usage : $num = xarMod::apiFunc('categories', 'user', 'countcats', $cat); -         $total = xarMod::apiFunc('categories', 'user', 'countcats', array());
  * @method mixed countitems(array $args = []) Count number of items
