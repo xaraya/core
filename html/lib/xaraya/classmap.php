@@ -105,15 +105,15 @@ class xarClassMap extends xarObject
     }
 
     /**
-     * Summary of findModuleClassType
-     * @param string $module
+     * Summary of findModuleClassFile
+     * @param string $modName
      * @param string $type class type like hookobservers, eventsubjects etc.
-     * @param string $filename
+     * @param string $filename (optional)
      * @return array<string, string>
      */
-    public static function findModuleClassType($module, $type, $filename = '')
+    public static function findModuleClassFile(string $modName, string $type, string $filename = '')
     {
-        $find = "{$module}/class/{$type}/{$filename}";
+        $find = "{$modName}/class/{$type}/{$filename}";
         return array_filter(static::getClassMap(), function ($path) use ($find) {
             return str_contains($path, '/html/code/modules/' . $find)
                 || str_contains($path, '/vendor/xaraya/' . $find);
@@ -146,24 +146,24 @@ class xarClassMap extends xarObject
 
     /**
      * Summary of findHookObserver
-     * @param string $module
+     * @param string $modName
      * @param string $event
      * @throws \ClassNotFoundException
      * @return string|null
      * @see xarEvents::fileLoad()
      */
-    public static function findHookObserver($module, $event)
+    public static function findHookObserver(string $modName, string $event): string|null
     {
         $type = 'hookobservers';
         $filename = strtolower($event) . '.php';
-        $found = static::findModuleClassType($module, $type, $filename);
+        $found = static::findModuleClassFile($modName, $type, $filename);
         if (count($found) == 1) {
-            $filepath = reset($found);
-            $classname = array_key_first($found);
-            return $classname;
+            $filePath = reset($found);
+            $className = array_key_first($found);
+            return $className;
         }
         if (count($found) > 1) {
-            throw new ClassNotFoundException('Several hook observer classes match ' . $module . ' ' . $event);
+            throw new ClassNotFoundException('Several hook observer classes match ' . $modName . ' ' . $event);
         }
         return null;
     }
@@ -179,5 +179,88 @@ class xarClassMap extends xarObject
                 || (str_contains($path, '/vendor/xaraya/') && str_contains($path, '/xarproperties/'))
                 || str_contains($path, '/html/code/properties/');
         });
+    }
+
+    /**
+     * Summary of getModuleClasses
+     * @return array<string, array{classname: string, filepath: string, module: string}>
+     */
+    public static function getModuleClasses(): array
+    {
+        $find = '/module.php';
+        $found = array_filter(static::getClassMap(), function ($path) use ($find) {
+            return (str_contains($path, '/html/code/modules/') && str_ends_with($path, $find))
+                || (str_contains($path, '/vendor/xaraya/') && str_ends_with($path, $find));
+        });
+        sys::import('xaraya.modules.moduletrait');
+        $interface = \Xaraya\Modules\ModuleInterface::class;
+        $modules = [];
+        foreach ($found as $className => $filePath) {
+            if (!is_subclass_of($className, $interface, true)) {
+                continue;
+            }
+            $modName = basename(dirname($filePath));
+            $modules[$modName] = ['classname' => $className, 'filepath' => $filePath, 'module' => $modName];
+        }
+        return $modules;
+    }
+
+    /**
+     * Summary of getModuleClassTypes
+     * @param string $modName
+     * @return array<string, array{classname: string, filepath: string, classtype: string}>
+     */
+    public static function getModuleClassTypes(string $modName): array
+    {
+        $subDir = $modName;
+        // module classes are located at the top of the module directory
+        $found = array_filter(static::getClassMap(), function ($path) use ($subDir) {
+            $dirName = dirname($path);
+            return str_ends_with($dirName, '/html/code/modules/' . $subDir)
+                || str_ends_with($dirName, '/vendor/xaraya/' . $subDir);
+        });
+        sys::import('xaraya.modules.servicestrait');
+        $interface = \Xaraya\Modules\ModuleServicesInterface::class;
+        $classTypes = [];
+        foreach ($found as $className => $filePath) {
+            if (!is_subclass_of($className, $interface, true)) {
+                continue;
+            }
+            $modType = str_replace('.php', '', basename($filePath));
+            $parts = explode('\\', $className);
+            $classType = end($parts);
+            $classTypes[$modType] = ['classname' => $className, 'filepath' => $filePath, 'classtype' => $classType];
+        }
+        return $classTypes;
+    }
+
+    /**
+     * Summary of getModuleClassMethods
+     * @todo this excludes any methods inside the module class itself
+     * @param string $modName
+     * @param string $classType
+     * @return array<string, array{classname: string, filepath: string, method: string}>
+     */
+    public static function getModuleClassMethods(string $modName, string $classType): array
+    {
+        $modType = strtolower($classType);
+        $subDir = "{$modName}/{$modType}";
+        // method classes are located in modType subdir of the module directory
+        $found = array_filter(static::getClassMap(), function ($path) use ($subDir) {
+            $dirName = dirname($path);
+            return str_ends_with($dirName, '/html/code/modules/' . $subDir)
+                || str_ends_with($dirName, '/vendor/xaraya/' . $subDir);
+        });
+        sys::import('xaraya.modules.method');
+        $interface = \Xaraya\Modules\MethodServicesInterface::class;
+        $methods = [];
+        foreach ($found as $className => $filePath) {
+            if (!is_subclass_of($className, $interface, true)) {
+                continue;
+            }
+            $funcName = str_replace('.php', '', basename($filePath));
+            $methods[$funcName] = ['classname' => $className, 'filepath' => $filePath, 'method' => $funcName];
+        }
+        return $methods;
     }
 }

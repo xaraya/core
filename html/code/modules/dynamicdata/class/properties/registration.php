@@ -301,7 +301,7 @@ class PropertyRegistration extends DataContainer
                 }
 
                 // Clear the cache
-                self::ClearCache();
+                self::clearCache();
             }
             xarLog3::notice('DynamicData: Retrieved the list of directories to be searched');
 
