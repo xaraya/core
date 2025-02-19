@@ -16,6 +16,7 @@ use Xaraya\Modules\Blocks\AdminGui;
 use Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\BlocksApi;
 use Xaraya\Modules\Blocks\InstancesApi;
+use AccessProperty;
 use BadParameterException;
 use DataPropertyMaster;
 use DuplicateException;

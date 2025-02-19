@@ -17,6 +17,7 @@ use Xaraya\Modules\Blocks\InstancesApi;
 use Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\UserApi;
 use Xaraya\Modules\Blocks\BlocksApi;
+use AccessProperty;
 use DataPropertyMaster;
 use EmptyParameterException;
 use Exception;

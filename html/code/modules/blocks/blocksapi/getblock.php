@@ -17,10 +17,12 @@ use BadParameterException;
 use ClassNotFoundException;
 use FileNotFoundException;
 use FunctionNotFoundException;
+use xarClassMap;
 use xarMLS;
 use sys;
 
 sys::import('modules.blocks.method');
+sys::import("xaraya.classmap");
 
 /**
  * blocks blocksapi getblock function
@@ -32,6 +34,7 @@ class GetblockMethod extends MethodClass
 
     /**
      * Gets an object from the blocks API
+     * @todo how is this different from xarBlock::getObject()?
      * @author Chris Powis <crisp@xaraya.com>
      * @staticvar array $loaded Keeps track of clases that have been loaded
      * @param array<string,mixed> $args Parameter data array
@@ -115,24 +118,35 @@ class GetblockMethod extends MethodClass
         $typepaths[] = $basepath . $args['type'] . '.php';
         $typeclass[] = $baseclass;
 
-        // we try to get the actual $classname and $filepath here first - as input for after UPGRADE due to table change
-        $oldclasses = get_declared_classes();
-        foreach ($typepaths as $i => $typepath) {
-            if (!file_exists($typepath)) {
-                continue;
-            }
+        $result = xarClassMap::findBlock($typepaths);
+        if (!empty($result['filepath']) && !empty($result['found'])) {
+            $typepath = $result['filepath'];
             include_once $typepath;
-            $newclasses = get_declared_classes();
-            $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
-            // assuming new classes in namespaces only have 1 class definition per file as they should...
-            if (count($diffclasses) > 0) {
-                $classname = $diffclasses[0];
-            } else {
-                $classname = $typeclass[$i];
+            if (count($result['found']) > 1) {
+                // @todo which one do we pick here?
             }
-            // we need to set the actual $filepath here before constructing the object
+            $classname = array_key_first($result['found']);
             $args['filepath'] = $typepath;
-            break;
+        } else {
+            // we try to get the actual $classname and $filepath here first - as input for after UPGRADE due to table change
+            $oldclasses = get_declared_classes();
+            foreach ($typepaths as $i => $typepath) {
+                if (!file_exists($typepath)) {
+                    continue;
+                }
+                include_once $typepath;
+                $newclasses = get_declared_classes();
+                $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
+                // assuming new classes in namespaces only have 1 class definition per file as they should...
+                if (count($diffclasses) > 0) {
+                    $classname = $diffclasses[0];
+                } else {
+                    $classname = $typeclass[$i];
+                }
+                // we need to set the actual $filepath here before constructing the object
+                $args['filepath'] = $typepath;
+                break;
+            }
         }
 
         if (empty($classname)) {

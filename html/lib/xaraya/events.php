@@ -514,7 +514,8 @@ class xarEvents extends xarObject implements ixarEvents
                 if (empty($info['classname'])) {
                     // for non-core modules we're only interested in hookobservers for now - this may extend to eventobservers later...
                     if (in_array($info['type'], static::$classtypes)) {
-                        $classname = xarClassMap::findHookObserver("/{$module}/class/{$type}/{$filename}.php");
+                        sys::import("xaraya.classmap");
+                        $classname = xarClassMap::findHookObserver($module, $event);
                         if (!empty($classname)) {
                             // import the file (raises exception if file not found)
                             sys::import("modules.{$module}.class.{$type}.{$filename}");

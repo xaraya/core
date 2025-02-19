@@ -278,22 +278,35 @@ class xarBlock extends xarObject implements ixarBlock
             $dps[] = "{$basedp}.{$blockinfo['type']}";
         }
 
-        // we try to get the actual $classname and $filepath here again - at least until after UPGRADE due to table change
-        $oldclasses = get_declared_classes();
-        foreach ($paths as $i => $filepath) {
-            if (!file_exists($filepath)) continue;
-            sys::import($dps[$i]);
-            $newclasses = get_declared_classes();
-            $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
-            // assuming new classes in namespaces only have 1 class definition per file as they should...
-            if (count($diffclasses) > 0) {
-                $classname = $diffclasses[0];
-            } else {
-                $classname = $cls[$i];
+        sys::import("xaraya.classmap");
+        $result = xarClassMap::findBlock($paths);
+        if (!empty($result['filepath']) && !empty($result['found'])) {
+            $filepath = $result['filepath'];
+            // require the file (raises error if file not found)
+            require_once($filepath);
+            if (count($result['found']) > 1) {
+                // @todo which one do we pick here?
             }
-            // we need to set the actual $filepath here before constructing the object
+            $classname = array_key_first($result['found']);
             $blockinfo['filepath'] = $filepath;
-            break;
+        } else {
+            // we try to get the actual $classname and $filepath here again - at least until after UPGRADE due to table change
+            $oldclasses = get_declared_classes();
+            foreach ($paths as $i => $filepath) {
+                if (!file_exists($filepath)) continue;
+                sys::import($dps[$i]);
+                $newclasses = get_declared_classes();
+                $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
+                // assuming new classes in namespaces only have 1 class definition per file as they should...
+                if (count($diffclasses) > 0) {
+                    $classname = $diffclasses[0];
+                } else {
+                    $classname = $cls[$i];
+                }
+                // we need to set the actual $filepath here before constructing the object
+                $blockinfo['filepath'] = $filepath;
+                break;
+            }
         }
         
         if (empty($classname))
