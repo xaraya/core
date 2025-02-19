@@ -26,5 +26,10 @@ sys::import('xaraya.modules.userapi');
 class RestApi extends UserApiClass
 {
     use OtherApiTrait;
-    // ...
+
+    public function configure()
+    {
+        $this->setModType('rest');
+        // don't call xarMod:apiLoad() for blocks rest API
+    }
 }

@@ -26,5 +26,10 @@ sys::import('xaraya.modules.userapi');
 class BlocksApi extends UserApiClass
 {
     use OtherApiTrait;
-    // ...
+
+    public function configure()
+    {
+        $this->setModType('blocks');
+        // don't call xarMod:apiLoad() for blocks blocks API
+    }
 }

@@ -24,5 +24,9 @@ sys::import('xaraya.modules.userapi');
  */
 class SchedulerApi extends UserApiClass
 {
-    // ...
+    public function configure()
+    {
+        $this->setModType('scheduler');
+        // don't call xarMod:apiLoad() for mail scheduler API
+    }
 }

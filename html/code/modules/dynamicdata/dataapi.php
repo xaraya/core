@@ -24,5 +24,9 @@ sys::import('xaraya.modules.userapi');
  */
 class DataApi extends UserApiClass
 {
-    // ...
+    public function configure()
+    {
+        $this->setModType('data');
+        // don't call xarMod:apiLoad() for dynamicdata data API
+    }
 }

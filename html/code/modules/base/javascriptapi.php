@@ -31,5 +31,10 @@ sys::import('xaraya.modules.userapi');
 class JavascriptApi extends UserApiClass
 {
     use OtherApiTrait;
-    // ...
+
+    public function configure()
+    {
+        $this->setModType('javascript');
+        // don't call xarMod:apiLoad() for base javascript API
+    }
 }

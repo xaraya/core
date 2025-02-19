@@ -70,6 +70,8 @@ interface ModuleInterface extends ContextInterface
     public function adminapi(): AdminApiInterface|null;
     public function admingui(): AdminGuiInterface|null;
     public function installer(): InstallerInterface|null;
+    public function restapi(): UserApiInterface|null;
+    public function schedulerapi(): UserApiInterface|null;
     public function setClassTypes(): void;
     public function getClassType(string $modType): string|null;
     public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): callable|null;
@@ -255,6 +257,20 @@ trait ModuleTrait
     {
         $component = $this->getComponent('Installer');
         assert($component instanceof InstallerInterface);
+        return $component;
+    }
+
+    public function restapi(): UserApiInterface|null
+    {
+        $component = $this->getComponent('RestApi');
+        //assert($component instanceof UserApiInterface);
+        return $component;
+    }
+
+    public function schedulerapi(): UserApiInterface|null
+    {
+        $component = $this->getComponent('SchedulerApi');
+        //assert($component instanceof UserApiInterface);
         return $component;
     }
 

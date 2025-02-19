@@ -34,5 +34,10 @@ sys::import('xaraya.modules.userapi');
 class TypesApi extends UserApiClass
 {
     use OtherApiTrait;
-    // ...
+
+    public function configure()
+    {
+        $this->setModType('types');
+        // don't call xarMod:apiLoad() for blocks types API
+    }
 }

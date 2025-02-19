@@ -25,5 +25,9 @@ sys::import('xaraya.modules.userapi');
  */
 class RestApi extends UserApiClass
 {
-    // ...
+    public function configure()
+    {
+        $this->setModType('rest');
+        // don't call xarMod:apiLoad() for authsystem rest API
+    }
 }

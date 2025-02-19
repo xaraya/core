@@ -177,20 +177,26 @@ class xarClassMap extends xarObject
         return array_filter(static::getClassMap(), function ($path) {
             return (str_contains($path, '/html/code/modules/') && str_contains($path, '/xarproperties/'))
                 || (str_contains($path, '/vendor/xaraya/') && str_contains($path, '/xarproperties/'))
-                || str_contains($path, '/html/code/properties/');
+                || str_contains($path, '/html/code/properties/')
+                || str_contains($path, '/vendor/xaraya/properties/');
         });
     }
 
     /**
      * Summary of getModuleClasses
+     * @param string $modName (optional)
      * @return array<string, array{classname: string, filepath: string, module: string}>
      */
-    public static function getModuleClasses(): array
+    public static function getModuleClasses(string $modName = ''): array
     {
-        $find = '/module.php';
-        $found = array_filter(static::getClassMap(), function ($path) use ($find) {
-            return (str_contains($path, '/html/code/modules/') && str_ends_with($path, $find))
-                || (str_contains($path, '/vendor/xaraya/') && str_ends_with($path, $find));
+        $subDir = '';
+        if (!empty($modName)) {
+            $subDir = $modName . '/';
+        }
+        $filename = '/module.php';
+        $found = array_filter(static::getClassMap(), function ($path) use ($subDir, $filename) {
+            return (str_contains($path, '/html/code/modules/' . $subDir) && str_ends_with($path, $filename))
+                || (str_contains($path, '/vendor/xaraya/' . $subDir) && str_ends_with($path, $filename));
         });
         sys::import('xaraya.modules.moduletrait');
         $interface = \Xaraya\Modules\ModuleInterface::class;
@@ -206,15 +212,34 @@ class xarClassMap extends xarObject
     }
 
     /**
+     * Summary of findModuleClass
+     * @param string $modName
+     * @return array{classname: string, filepath: string, module: string}|null
+     */
+    public static function findModuleClass(string $modName): array|null
+    {
+        $modules = static::getModuleClasses($modName);
+        return $modules[$modName] ?? null;
+    }
+
+    /**
      * Summary of getModuleClassTypes
      * @param string $modName
+     * @param string $modType (optional)
      * @return array<string, array{classname: string, filepath: string, classtype: string}>
      */
-    public static function getModuleClassTypes(string $modName): array
+    public static function getModuleClassTypes(string $modName, string $modType = ''): array
     {
         $subDir = $modName;
+        $filename = '';
+        if (!empty($modType)) {
+            $filename = strtolower($modType) . '.php';
+        }
         // module classes are located at the top of the module directory
-        $found = array_filter(static::getClassMap(), function ($path) use ($subDir) {
+        $found = array_filter(static::getClassMap(), function ($path) use ($subDir, $filename) {
+            if (!empty($filename) && basename($path) != $filename) {
+                return false;
+            }
             $dirName = dirname($path);
             return str_ends_with($dirName, '/html/code/modules/' . $subDir)
                 || str_ends_with($dirName, '/vendor/xaraya/' . $subDir);
@@ -235,18 +260,38 @@ class xarClassMap extends xarObject
     }
 
     /**
+     * Summary of findModuleClassType
+     * @param string $modName
+     * @param string $modType
+     * @return array{classname: string, filepath: string, classtype: string}|null
+     */
+    public static function findModuleClassType(string $modName, string $modType): array|null
+    {
+        $classTypes = static::getModuleClassTypes($modName, $modType);
+        return $classTypes[$modType] ?? null;
+    }
+
+    /**
      * Summary of getModuleClassMethods
      * @todo this excludes any methods inside the module class itself
      * @param string $modName
-     * @param string $classType
+     * @param string $modType
+     * @param string $funcName (optional)
      * @return array<string, array{classname: string, filepath: string, method: string}>
      */
-    public static function getModuleClassMethods(string $modName, string $classType): array
+    public static function getModuleClassMethods(string $modName, string $modType, string $funcName = ''): array
     {
-        $modType = strtolower($classType);
+        $modType = strtolower($modType);
         $subDir = "{$modName}/{$modType}";
+        $filename = '';
+        if (!empty($funcName)) {
+            $filename = strtolower($funcName) . '.php';
+        }
         // method classes are located in modType subdir of the module directory
-        $found = array_filter(static::getClassMap(), function ($path) use ($subDir) {
+        $found = array_filter(static::getClassMap(), function ($path) use ($subDir, $filename) {
+            if (!empty($filename) && basename($path) != $filename) {
+                return false;
+            }
             $dirName = dirname($path);
             return str_ends_with($dirName, '/html/code/modules/' . $subDir)
                 || str_ends_with($dirName, '/vendor/xaraya/' . $subDir);
@@ -262,5 +307,20 @@ class xarClassMap extends xarObject
             $methods[$funcName] = ['classname' => $className, 'filepath' => $filePath, 'method' => $funcName];
         }
         return $methods;
+    }
+
+    /**
+     * Summary of findModuleClassMethod
+     * @param string $modName
+     * @param string $modType
+     * @param string $funcName
+     * @return array{classname: string, filepath: string, method: string}|null
+     */
+    public static function findModuleClassMethod(string $modName, string $modType, string $funcName): array|null
+    {
+        $modType = strtolower($modType);
+        $funcName = strtolower($funcName);
+        $methods = static::getModuleClassMethods($modName, $modType, $funcName);
+        return $methods[$funcName] ?? null;
     }
 }

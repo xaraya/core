@@ -31,5 +31,10 @@ sys::import('xaraya.modules.userapi');
 class InstancesApi extends UserApiClass
 {
     use OtherApiTrait;
-    // ...
+
+    public function configure()
+    {
+        $this->setModType('instances');
+        // don't call xarMod:apiLoad() for blocks instances API
+    }
 }

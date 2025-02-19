@@ -24,5 +24,9 @@ sys::import('xaraya.modules.userapi');
  */
 class WsApi extends UserApiClass
 {
-    // ...
+    public function configure()
+    {
+        $this->setModType('ws');
+        // don't call xarMod:apiLoad() for base ws API
+    }
 }
