@@ -245,6 +245,8 @@ class PropertyRegistration extends DataContainer
         $dbconn = xarDB3::getConn(); // Need this for the transaction
         $propDirs = [];
 
+        // @todo use xarClassMap::getProperties() and filter on $dirs if needed?
+
         // We do the whole thing, or not at all (given proper db support)
         try {
             $dbconn->begin();
