@@ -10,7 +10,7 @@ namespace Xaraya\Tools;
  * Note that output can be slightly different between libc sprintf and this function as it is using ICU.
  *
  * Usage:
- * use function \PHP81_BC\strftime;
+ * use function Xaraya\Tools\strftime;
  * echo strftime('%A %e %B %Y %X', new \DateTime('2021-09-28 00:00:00'), 'fr_FR');
  *
  * Original use:

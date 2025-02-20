@@ -11,7 +11,7 @@
  * @link http://www.xaraya.info
 */
 
-sys::import('xaraya.tools.strftim');
+sys::import('xaraya.tools.strftime');
 use function Xaraya\Tools\strftime;
 
 /**
