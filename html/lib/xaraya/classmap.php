@@ -105,15 +105,22 @@ class xarClassMap extends xarObject
     }
 
     /**
-     * Summary of findModuleClassFile
+     * Summary of getModuleClassFiles
      * @param string $modName
-     * @param string $type class type like hookobservers, eventsubjects etc.
+     * @param string $type class type like hookobservers, eventsubjects etc. (optional)
      * @param string $filename (optional)
      * @return array<string, string>
      */
-    public static function findModuleClassFile(string $modName, string $type, string $filename = '')
+    public static function getModuleClassFiles(string $modName, string $type = '', string $filename = ''): array
     {
-        $find = "{$modName}/class/{$type}/{$filename}";
+        // modName is mandatory here
+        $find = $modName . '/class/';
+        if (!empty($type)) {
+            $find .= strtolower($type) . '/';
+        }
+        if (!empty($filename)) {
+            $find .= $filename;
+        }
         return array_filter(static::getClassMap(), function ($path) use ($find) {
             return str_contains($path, '/html/code/modules/' . $find)
                 || str_contains($path, '/vendor/xaraya/' . $find);
@@ -121,27 +128,75 @@ class xarClassMap extends xarObject
     }
 
     /**
-     * Summary of getEventObservers
-     * @return array<string, string>
+     * Summary of getEventClassFiles
+     * @param string $type class type like hookobservers, eventsubjects etc.
+     * @param string $modName (optional)
+     * @param string $event (optional)
+     * @return void
      */
-    public static function getEventObservers(): array
+    public static function getEventClassFiles(string $type, string $modName = '', string $event = ''): array
     {
-        return array_filter(static::getClassMap(), function ($path) {
-            return (str_contains($path, '/html/code/modules/') && str_contains($path, '/class/eventobservers/'))
-                || (str_contains($path, '/vendor/xaraya/') && str_contains($path, '/class/eventobservers/'));
+        // we can specify modName or event or both here
+        $subDir = '';
+        if (!empty($modName)) {
+            $subDir = $modName . '/';
+        }
+        $classFiles = '/class/' . $type . '/';
+        if (!empty($event)) {
+            $classFiles .= strtolower($event) . '.php';
+        }
+        return array_filter(static::getClassMap(), function ($path) use ($subDir, $classFiles) {
+            return (str_contains($path, '/html/code/modules/' . $subDir) && str_contains($path, $classFiles))
+                || (str_contains($path, '/vendor/xaraya/' . $subDir) && str_contains($path, $classFiles));
         });
     }
 
     /**
-     * Summary of getHookObservers
+     * Summary of getEventSubjects
+     * @param string $modName (optional)
+     * @param string $event (optional)
      * @return array<string, string>
      */
-    public static function getHookObservers(): array
+    public static function getEventSubjects(string $modName = '', string $event = ''): array
     {
-        return array_filter(static::getClassMap(), function ($path) {
-            return (str_contains($path, '/html/code/modules/') && str_contains($path, '/class/hookobservers/'))
-                || (str_contains($path, '/vendor/xaraya/') && str_contains($path, '/class/hookobservers/'));
-        });
+        // we can specify modName or event or both here
+        return static::getEventClassFiles('eventsubjects', $modName, $event);
+    }
+
+    /**
+     * Summary of getHookSubjects
+     * @param string $modName (optional)
+     * @param string $event (optional)
+     * @return array<string, string>
+     */
+    public static function getHookSubjects(string $modName = '', string $event = ''): array
+    {
+        // we can specify modName or event or both here
+        return static::getEventClassFiles('hooksubjects', $modName, $event);
+    }
+
+    /**
+     * Summary of getEventObservers
+     * @param string $modName (optional)
+     * @param string $event (optional)
+     * @return array<string, string>
+     */
+    public static function getEventObservers(string $modName = '', string $event = ''): array
+    {
+        // we can specify modName or event or both here
+        return static::getEventClassFiles('eventobservers', $modName, $event);
+    }
+
+    /**
+     * Summary of getHookObservers
+     * @param string $modName (optional)
+     * @param string $event (optional)
+     * @return array<string, string>
+     */
+    public static function getHookObservers(string $modName = '', string $event = ''): array
+    {
+        // we can specify modName or event or both here
+        return static::getEventClassFiles('hookobservers', $modName, $event);
     }
 
     /**
@@ -154,9 +209,7 @@ class xarClassMap extends xarObject
      */
     public static function findHookObserver(string $modName, string $event): string|null
     {
-        $type = 'hookobservers';
-        $filename = strtolower($event) . '.php';
-        $found = static::findModuleClassFile($modName, $type, $filename);
+        $found = static::getHookObservers($modName, $event);
         if (count($found) == 1) {
             $filePath = reset($found);
             $className = array_key_first($found);
@@ -170,16 +223,69 @@ class xarClassMap extends xarObject
 
     /**
      * Summary of getProperties
+     * @param string $modName (optional)
+     * @param string $type property type (optional)
      * @return array<string, string>
      */
-    public static function getProperties(): array
+    public static function getProperties(string $modName = '', string $type = ''): array
     {
-        return array_filter(static::getClassMap(), function ($path) {
-            return (str_contains($path, '/html/code/modules/') && str_contains($path, '/xarproperties/'))
-                || (str_contains($path, '/vendor/xaraya/') && str_contains($path, '/xarproperties/'))
-                || str_contains($path, '/html/code/properties/')
-                || str_contains($path, '/vendor/xaraya/properties/');
+        $subDir = '';
+        if (!empty($modName)) {
+            $subDir = $modName . '/';
+        }
+        $filename = '';
+        if (!empty($type)) {
+            $filename = strtolower($type) . '.php';
+        }
+        return array_filter(static::getClassMap(), function ($path) use ($subDir, $filename) {
+            return (str_contains($path, '/html/code/modules/' . $subDir) && str_contains($path, '/xarproperties/' . $filename))
+                || (str_contains($path, '/vendor/xaraya/' . $subDir) && str_contains($path, '/xarproperties/' . $filename))
+                // @todo support type here too
+                || (empty($subDir) && str_contains($path, '/html/code/properties/'))
+                || (empty($subDir) && str_contains($path, '/vendor/xaraya/properties/'));
         });
+    }
+
+    /**
+     * Summary of getControllers
+     * @param string $modName (optional)
+     * @param string $type route type like default, short etc. (optional)
+     * @return array<string, string>
+     */
+    public static function getControllers(string $modName = '', string $type = ''): array
+    {
+        $subDir = '';
+        if (!empty($modName)) {
+            $subDir = $modName . '/';
+        }
+        $filename = '';
+        if (!empty($type)) {
+            $filename = strtolower($type) . '.php';
+        }
+        return array_filter(static::getClassMap(), function ($path) use ($subDir, $filename) {
+            return (str_contains($path, '/html/code/modules/' . $subDir) && str_contains($path, '/controllers/' . $filename))
+                || (str_contains($path, '/vendor/xaraya/' . $subDir) && str_contains($path, '/controllers/' . $filename));
+        });
+    }
+
+    /**
+     * Summary of findController
+     * @param string $modName
+     * @param string $type
+     * @return array{classname: string, filepath: string, module: string, type: string}|null
+     */
+    public static function findController(string $modName, string $type)
+    {
+        $found = static::getControllers($modName, $type);
+        if (count($found) == 1) {
+            $filePath = reset($found);
+            $className = array_key_first($found);
+            return ['classname' => $className, 'filepath' => $filePath, 'module' => $modName, 'type' => $type];
+        }
+        if (count($found) > 1) {
+            throw new ClassNotFoundException('Several controller classes match ' . $modName . ' ' . $type);
+        }
+        return null;
     }
 
     /**
@@ -226,7 +332,7 @@ class xarClassMap extends xarObject
      * Summary of getModuleClassTypes
      * @param string $modName
      * @param string $modType (optional)
-     * @return array<string, array{classname: string, filepath: string, classtype: string}>
+     * @return array<string, array{classname: string, filepath: string, module: string, classtype: string}>
      */
     public static function getModuleClassTypes(string $modName, string $modType = ''): array
     {
@@ -254,7 +360,7 @@ class xarClassMap extends xarObject
             $modType = str_replace('.php', '', basename($filePath));
             $parts = explode('\\', $className);
             $classType = end($parts);
-            $classTypes[$modType] = ['classname' => $className, 'filepath' => $filePath, 'classtype' => $classType];
+            $classTypes[$modType] = ['classname' => $className, 'filepath' => $filePath, 'module' => $modName, 'classtype' => $classType];
         }
         return $classTypes;
     }
@@ -263,7 +369,7 @@ class xarClassMap extends xarObject
      * Summary of findModuleClassType
      * @param string $modName
      * @param string $modType
-     * @return array{classname: string, filepath: string, classtype: string}|null
+     * @return array{classname: string, filepath: string, module: string, classtype: string}|null
      */
     public static function findModuleClassType(string $modName, string $modType): array|null
     {
@@ -281,8 +387,7 @@ class xarClassMap extends xarObject
      */
     public static function getModuleClassMethods(string $modName, string $modType, string $funcName = ''): array
     {
-        $modType = strtolower($modType);
-        $subDir = "{$modName}/{$modType}";
+        $subDir = $modName . '/' . strtolower($modType);
         $filename = '';
         if (!empty($funcName)) {
             $filename = strtolower($funcName) . '.php';
