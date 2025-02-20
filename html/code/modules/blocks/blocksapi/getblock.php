@@ -80,6 +80,8 @@ class GetblockMethod extends MethodClass
             return new $classname($args);
         }
 
+        // @todo use xarClassMap::findBlock() instead
+
         // $typeclass does not take into account possible namespace + it does not re-use what typesapi getfiles() gave
         if (!empty($args['module'])) {
             // import a block type class belonging to a module
@@ -118,7 +120,7 @@ class GetblockMethod extends MethodClass
         $typepaths[] = $basepath . $args['type'] . '.php';
         $typeclass[] = $baseclass;
 
-        $result = xarClassMap::findBlock($typepaths);
+        $result = xarClassMap::findBlockByPath($typepaths);
         if (!empty($result['filepath']) && !empty($result['found'])) {
             $typepath = $result['filepath'];
             include_once $typepath;

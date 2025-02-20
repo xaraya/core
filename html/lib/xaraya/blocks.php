@@ -221,6 +221,8 @@ class xarBlock extends xarObject implements ixarBlock
             return $object;
         }
 
+        // @todo use xarClassMap::findBlock() instead
+
         // $cls does not take into account possible namespace + it does not re-use what blocksapi getinfo() could give
         if (empty($blockinfo['module'])) {
             $baseclass = ucfirst($blockinfo['type']).'Block';
@@ -279,7 +281,7 @@ class xarBlock extends xarObject implements ixarBlock
         }
 
         sys::import("xaraya.classmap");
-        $result = xarClassMap::findBlock($paths);
+        $result = xarClassMap::findBlockByPath($paths);
         if (!empty($result['filepath']) && !empty($result['found'])) {
             $filepath = $result['filepath'];
             // require the file (raises error if file not found)

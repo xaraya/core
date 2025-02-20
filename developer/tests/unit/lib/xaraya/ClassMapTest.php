@@ -32,6 +32,44 @@ final class ClassMapTest extends TestCase
 
     public function testFindBlock(): void
     {
+        $modName = 'base';
+        $type = 'menu';
+        $blocks = xarClassMap::getBlocks($modName, $type);
+
+        // we have three block classes here
+        $expected = [
+            'Base_MenuBlock' => sys::code() . 'modules/base/xarblocks/menu.php',
+            'Base_MenuBlockConfig' => sys::code() . 'modules/base/xarblocks/menu_config.php',
+            'Base_MenuBlockDisplay' => sys::code() . 'modules/base/xarblocks/menu_display.php',
+        ];
+        $this->assertEquals($expected, $blocks);
+
+        // find the block class for display
+        $interface = 'display';
+        $result = xarClassMap::findBlock($modName, $type, $interface);
+
+        $expected = [
+            'classname' => 'Base_MenuBlockDisplay',
+            'filepath' => sys::code() . 'modules/base/xarblocks/menu_display.php',
+            'module' => 'base',
+            'type' => 'menu',
+            'interface' => 'display',
+        ];
+        $this->assertEquals($expected, $result);
+
+        // we can't instantiate block instance without database here
+        $defaults = get_class_vars($result['classname']);
+
+        $expected = [
+            'backlabel' => 'View Back End',
+        ];
+        $key = array_key_first($expected);
+        $this->assertArrayHasKey($key, $defaults);
+        $this->assertEquals($expected[$key], $defaults[$key]);
+    }
+
+    public function testFindBlockByPath(): void
+    {
         $paths = [
             sys::code() . 'modules/base/xarblocks/menu/menu_display.php',
             sys::code() . 'modules/base/xarblocks/menu/display.php',
@@ -39,7 +77,7 @@ final class ClassMapTest extends TestCase
             sys::code() . 'modules/base/xarblocks/menu_display.php',
             sys::code() . 'modules/base/xarblocks/menu.php',
         ];
-        $result = xarClassMap::findBlock($paths);
+        $result = xarClassMap::findBlockByPath($paths);
 
         $expected = [
             'filepath' => sys::code() . 'modules/base/xarblocks/menu_display.php',
@@ -105,7 +143,7 @@ final class ClassMapTest extends TestCase
             sys::code() . 'modules/invalid/xarblocks/menu_display.php',
             sys::code() . 'modules/invalid/xarblocks/menu.php',
         ];
-        $result = xarClassMap::findBlock($paths);
+        $result = xarClassMap::findBlockByPath($paths);
 
         $expected = [
             'filepath' => '',
@@ -170,13 +208,18 @@ final class ClassMapTest extends TestCase
         $this->assertCount(1, $subjects);
 
         // we can instantiate eventsubject instance without database (but without observers to notify)
-        $instance = new $classname();
+        $item = ['module' => 'dynamicdata', 'itemtype' => 4, 'itemid' => 1];
+        $instance = new $classname($item);
         $this->assertInstanceOf($classname, $instance);
 
         $expected = $event;
         $this->assertEquals($expected, $instance->getSubject());
+
+        $expected = $item;
+        $this->assertEquals($expected, $instance->getArgs());
     }
 
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
     public function testGetHookSubjects(): void
     {
         $subjects = xarClassMap::getHookSubjects();
@@ -206,16 +249,26 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected[$classname], $subjects[$classname]);
         $this->assertCount(1, $subjects);
 
-        $this->markTestIncomplete('Risky: Test code or tested code did not remove its own error handlers');
+        //$this->markTestIncomplete('Risky: Test code or tested code did not remove its own error handlers');
         // we can't instantiate hooksubject instance without database here due to xarMod::getRegID($module)
-        $expected = 'No connection available';
-        $this->expectExceptionMessage($expected);
+        //$expected = 'No connection available';
+        //$this->expectExceptionMessage($expected);
 
-        $instance = new $classname(['module' => 'dynamicdata']);
-        //$this->assertInstanceOf($classname, $instance);
+        // we can instantiate hooksubject instance without database here thanks to xarMod3::getRegID($module)
+        $item = ['module' => 'dynamicdata', 'itemtype' => 4, 'itemid' => 1];
+        $instance = new $classname($item);
+        $this->assertInstanceOf($classname, $instance);
 
-        //$expected = $event;
-        //$this->assertEquals($expected, $instance->getSubject());
+        $expected = $event;
+        $this->assertEquals($expected, $instance->getSubject());
+
+        $expected = $item;
+        $expected['module_id'] = 182;
+        $this->assertEquals($expected, $instance->getExtrainfo());
+
+        // Note: error & exception handlers are set when importing xaraya.exceptions in xarCore for xarLog::message()
+        //restore_error_handler();
+        //restore_exception_handler();
     }
 
     public function testGetEventObservers(): void
@@ -288,24 +341,141 @@ final class ClassMapTest extends TestCase
         $this->assertInstanceOf($classname, $instance);
 
         $expected = $modName;
-        $this->assertEquals($expected, $instance->module);
+        $this->assertEquals($expected, $instance->getModName());
+    }
+
+    public function testFindEventClassFile(): void
+    {
+        $type = 'eventsubjects';
+        $modName = 'base';
+        $event = 'ServerRequest';
+        $result = xarClassMap::findEventClassFile($type, $modName, $event);
+
+        $expected = [
+            'classname' => 'BaseServerRequestSubject',
+            'filepath' => sys::code() . 'modules/base/class/eventsubjects/serverrequest.php',
+            'type' => $type,
+            'module' => $modName,
+            'event' => $event,
+        ];
+        $this->assertEquals($expected, $result);
+
+        // we can instantiate eventsubject instance without database (but without observers to notify)
+        $item = ['module' => 'dynamicdata', 'itemtype' => 4, 'itemid' => 1];
+        $instance = new $result['classname']($item);
+        $this->assertInstanceOf($result['classname'], $instance);
+
+        $expected = $event;
+        $this->assertEquals($expected, $instance->getSubject());
+
+        $expected = $item;
+        $this->assertEquals($expected, $instance->getArgs());
     }
 
     public function testFindHookObserver(): void
     {
         $modName = 'dynamicdata';
         $event = 'ItemCreate';
-        $classname = xarClassMap::findHookObserver($modName, $event);
+        $result = xarClassMap::findHookObserver($modName, $event);
 
-        $expected = 'Xaraya\DataObject\HookObservers\ItemCreate';
-        $this->assertEquals($expected, $classname);
+        $expected = [
+            'classname' => 'Xaraya\DataObject\HookObservers\ItemCreate',
+            'filepath' => sys::code() . 'modules/dynamicdata/class/hookobservers/itemcreate.php',
+            'type' => 'hookobservers',
+            'module' => $modName,
+            'event' => $event,
+        ];
+        $this->assertEquals($expected, $result);
 
         // we can instantiate hookobserver instance without database (but not run notify)
-        $instance = new $classname();
-        $this->assertInstanceOf($expected, $instance);
+        $instance = new $result['classname']();
+        $this->assertInstanceOf($expected['classname'], $instance);
 
         $expected = $modName;
         $this->assertEquals($expected, $instance->getModName());
+    }
+
+    public function testGetProperties(): void
+    {
+        $properties = xarClassMap::getProperties();
+
+        $expected = [
+            'ArrayProperty' => sys::code() . 'modules/base/xarproperties/array.php',
+        ];
+        $classname = array_key_first($expected);
+        $this->assertArrayHasKey($classname, $properties);
+        $this->assertEquals($expected[$classname], $properties[$classname]);
+        $this->assertGreaterThan(33, count($properties));
+
+        $modName = 'base';
+        $properties = xarClassMap::getProperties($modName, '');
+        $this->assertArrayHasKey($classname, $properties);
+        $this->assertEquals($expected[$classname], $properties[$classname]);
+        $this->assertCount(33, $properties);
+
+        $type = 'array';
+        $properties = xarClassMap::getProperties('', $type);
+        $this->assertArrayHasKey($classname, $properties);
+        $this->assertEquals($expected[$classname], $properties[$classname]);
+        $this->assertCount(1, $properties);
+
+        $properties = xarClassMap::getProperties($modName, $type);
+        $this->assertArrayHasKey($classname, $properties);
+        $this->assertEquals($expected[$classname], $properties[$classname]);
+        $this->assertCount(1, $properties);
+    }
+
+    public function testFindProperty(): void
+    {
+        $modName = 'base';
+        $type = 'array';
+        $result = xarClassMap::findProperty($modName, $type);
+
+        $expected = [
+            'classname' => 'ArrayProperty',
+            'filepath' => sys::code() . 'modules/base/xarproperties/array.php',
+            'module' => $modName,
+            'type' => $type,
+        ];
+        $this->assertEquals($expected, $result);
+
+        // we can instantiate property instance without database (but not without objectdescriptor)
+        $defaults = get_class_vars($result['classname']);
+        $descriptor = new ObjectDescriptor($defaults);
+        $instance = new $result['classname']($descriptor);
+
+        $expected = $defaults;
+        // these are set in ArrayProperty constructor
+        $expected['tplmodule'] = $modName;
+        $expected['template'] = $type;
+        $expected['filepath'] = dirname(str_replace(sys::code(), '', $result['filepath']));
+        // this is set by setValue() with empty default value
+        $value = [];
+        $expected['value'] = serialize($value);
+        $this->assertEquals($expected, get_object_vars($instance));
+    }
+
+    public function testStandAloneProperties(): void
+    {
+        // we have 2 classes here: ListingProperty and ListingPropertyInstall
+        $type = 'listing';
+        $properties = xarClassMap::getProperties('', $type);
+        $this->assertCount(2, $properties);
+    }
+
+    public function testFindStandAloneProperty(): void
+    {
+        $modName = '';
+        $type = 'listing';
+        $result = xarClassMap::findProperty($modName, $type);
+
+        $expected = [
+            'classname' => 'ListingProperty',
+            'filepath' => sys::code() . 'properties/listing/main.php',
+            'module' => $modName,
+            'type' => $type,
+        ];
+        $this->assertEquals($expected, $result);
     }
 
     public function testGetControllers(): void

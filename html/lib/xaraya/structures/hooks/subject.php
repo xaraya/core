@@ -9,6 +9,8 @@
  * @link http://www.xaraya.info
  */
 sys::import('xaraya.structures.events.subject');
+sys::import('xaraya.facades.modules');
+use Xaraya\Facades\xarMod3;
 
 interface ixarHookSubject extends ixarEventSubject
 {
@@ -61,12 +63,12 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
             if (!empty($extrainfo['module'])) {
                 $module = $extrainfo['module'];
             } else {
-                $module = xarMod::getName();
+                $module = xarMod3::getName();
             }        
         }        
 
         // No module_id given here raises an exception        
-        $module_id = xarMod::getRegID($module);
+        $module_id = xarMod3::getRegID($module);
         if (empty($module_id))
             throw new BadParameterException('module');
         
