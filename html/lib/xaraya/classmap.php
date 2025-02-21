@@ -402,6 +402,7 @@ class xarClassMap extends xarObject
      * Summary of findModuleClass
      * @param string $modName
      * @return array{classname: string, filepath: string, module: string}|null
+     * @see \xarMod::getModule()
      */
     public static function findModuleClass(string $modName): array|null
     {
@@ -437,6 +438,7 @@ class xarClassMap extends xarObject
      * @param string $modName
      * @param string $modType
      * @return array{classname: string, filepath: string, module: string, classtype: string}|null
+     * @see \Xaraya\Modules\ModuleTrait::getClassName()
      */
     public static function findModuleClassType(string $modName, string $modType): array|null
     {
@@ -465,7 +467,9 @@ class xarClassMap extends xarObject
         }
         $filename = '';
         if (!empty($funcName)) {
+            // @todo support converted method name here too?
             $filename = strtolower($funcName) . '.php';
+            //$methodName = str_replace('_', '', ucwords($funcName, '_')) . 'Method';
         }
         $result = [];
         foreach ($methods[$modName][$modType] as $fileType => $class) {
@@ -486,11 +490,14 @@ class xarClassMap extends xarObject
      * @param string $modType
      * @param string $funcName
      * @return array{classname: string, filepath: string, method: string}|null
+     * @see \Xaraya\Modules\ModuleServicesTrait::getClassName()
      */
     public static function findModuleClassMethod(string $modName, string $modType, string $funcName): array|null
     {
         $modType = strtolower($modType);
+        // @todo support converted method name here too?
         $funcName = strtolower($funcName);
+        //$methodName = str_replace('_', '', ucwords($funcName, '_')) . 'Method';
         $methods = static::getModuleClassMethods($modName, $modType, $funcName);
         return $methods[$funcName] ?? null;
     }

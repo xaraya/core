@@ -71,11 +71,11 @@ class UpdatehooksMethod extends MethodClass
                 switch ($values['hookstate']) {
                     case 0:
                         // hooked to none
-                        continue;
+                        break;
                     case 1:
                         // hooked to all scopes, all items
                         xarHooks::attach($curhook, $module, 0, 0);
-                        continue;
+                        break;
                     case 2:
                         // hooked to some scopes, all items
                         // see which scopes
@@ -90,7 +90,7 @@ class UpdatehooksMethod extends MethodClass
                             }
                         }
 
-                        continue;
+                        break;
                     case 3:
                         // hooked to some scopes, some items
                         // see which items
@@ -102,11 +102,11 @@ class UpdatehooksMethod extends MethodClass
                                 switch ($typeinfo['scopes'][0]) {
                                     case 0:
                                         // none
-                                        continue;
+                                        break;
                                     case 1:
                                         // all scopes, this itemtype
                                         xarHooks::attach($curhook, $module, $itemtype, 0);
-                                        continue;
+                                        break;
                                     case 2:
                                         // some scopes, this itemtype
                                         // see which scopes
@@ -123,7 +123,7 @@ class UpdatehooksMethod extends MethodClass
                             }
                         }
 
-                        continue;
+                        break;
                 }
 
             }

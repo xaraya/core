@@ -1084,10 +1084,10 @@ class xarMod extends xarObject implements IxarMod
     {
         if (!array_key_exists($modName, self::$moduleClasses)) {
             sys::autoload();
-            $modInfo = self::getFileInfo($modName);
-            $namespace = $modInfo['namespace'] ?: 'Xaraya\\Modules\\' . ucfirst($modName);
-            $class = $namespace . '\\Module';
-            if (class_exists($class)) {
+            sys::import("xaraya.classmap");
+            $result = xarClassMap::findModuleClass($modName);
+            if (!empty($result) && class_exists($result['classname'])) {
+                $class = $result['classname'];
                 try {
                     self::$moduleClasses[$modName] = new $class($modName);
                 } catch (Throwable $e) {

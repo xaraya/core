@@ -232,6 +232,7 @@ class ClassMapParser
                 return;
             }
         }
+        // @todo this excludes any methods inside the module class itself
         $classType = 'methods';
         // multi-level modType fileType here
         $this->classmap[$classType][$modName] ??= [];
