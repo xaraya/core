@@ -4,18 +4,22 @@ use PHPUnit\Framework\TestCase;
 
 final class ClassMapTest extends TestCase
 {
-    public function testGetClassMap(): void
+    public function testGetClassType(): void
     {
-        $classmap = xarClassMap::getClassMap();
+        $classType = 'others';
+        $others = xarClassMap::getClassType($classType);
 
-        $expected = 1;
-        $this->assertGreaterThan($expected, count($classmap));
         $expected = [
-            'classname' => 'Xaraya\Authentication\AuthToken',
-            'filepath' => '/html/code/modules/authsystem/class/authtoken.php',
+            'authsystem' => [
+                'authtoken' => [
+                    'Xaraya\Authentication\AuthToken' => sys::code() . 'modules/authsystem/class/authtoken.php',
+                ],
+            ],
         ];
-        $this->assertArrayHasKey($expected['classname'], $classmap);
-        $this->assertStringEndsWith($expected['filepath'], $classmap[$expected['classname']]);
+        $modName = array_key_first($expected);
+        $fileType = array_key_first($expected[$modName]);
+        $this->assertGreaterThan(1, count($others));
+        $this->assertEquals($expected[$modName][$fileType], $others[$modName][$fileType]);
     }
 
     public function testGetBlocks(): void
@@ -152,33 +156,6 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testGetModuleClassFiles(): void
-    {
-        $modName = 'base';
-        $classfiles = xarClassMap::getModuleClassFiles($modName, '');
-
-        $expected = [
-            'BaseServerRequestSubject' => sys::code() . 'modules/base/class/eventsubjects/serverrequest.php',
-        ];
-        $classname = array_key_first($expected);
-        $this->assertArrayHasKey($classname, $classfiles);
-        $this->assertEquals($expected[$classname], $classfiles[$classname]);
-        $this->assertCount(8, $classfiles);
-
-        $type = 'eventsubjects';
-        $classfiles = xarClassMap::getModuleClassFiles($modName, $type);
-        $this->assertArrayHasKey($classname, $classfiles);
-        $this->assertEquals($expected[$classname], $classfiles[$classname]);
-        $this->assertCount(3, $classfiles);
-
-        $event = 'ServerRequest';
-        $filename = strtolower($event) . '.php';
-        $classfiles = xarClassMap::getModuleClassFiles($modName, $type, $filename);
-        $this->assertArrayHasKey($classname, $classfiles);
-        $this->assertEquals($expected[$classname], $classfiles[$classname]);
-        $this->assertCount(1, $classfiles);
-    }
-
     public function testGetEventSubjects(): void
     {
         $subjects = xarClassMap::getEventSubjects();
@@ -191,13 +168,13 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected[$classname], $subjects[$classname]);
 
         $modName = 'base';
-        $subjects = xarClassMap::getEventSubjects($modName, '');
+        $subjects = xarClassMap::getEventSubjects($modName, null);
         $this->assertArrayHasKey($classname, $subjects);
         $this->assertEquals($expected[$classname], $subjects[$classname]);
         $this->assertCount(3, $subjects);
 
         $event = 'ServerRequest';
-        $subjects = xarClassMap::getEventSubjects('', $event);
+        $subjects = xarClassMap::getEventSubjects(null, $event);
         $this->assertArrayHasKey($classname, $subjects);
         $this->assertEquals($expected[$classname], $subjects[$classname]);
         $this->assertCount(1, $subjects);
@@ -233,13 +210,13 @@ final class ClassMapTest extends TestCase
         $this->assertGreaterThan(22, count($subjects));
 
         $modName = 'modules';
-        $subjects = xarClassMap::getHookSubjects($modName, '');
+        $subjects = xarClassMap::getHookSubjects($modName, null);
         $this->assertArrayHasKey($classname, $subjects);
         $this->assertEquals($expected[$classname], $subjects[$classname]);
         $this->assertCount(22, $subjects);
 
         $event = 'ItemCreate';
-        $subjects = xarClassMap::getHookSubjects('', $event);
+        $subjects = xarClassMap::getHookSubjects(null, $event);
         $this->assertArrayHasKey($classname, $subjects);
         $this->assertEquals($expected[$classname], $subjects[$classname]);
         $this->assertGreaterThan(0, count($subjects));
@@ -283,13 +260,13 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected[$classname], $observers[$classname]);
 
         $modName = 'modules';
-        $observers = xarClassMap::getEventObservers($modName, '');
+        $observers = xarClassMap::getEventObservers($modName, null);
         $this->assertArrayHasKey($classname, $observers);
         $this->assertEquals($expected[$classname], $observers[$classname]);
         $this->assertCount(4, $observers);
 
         $event = 'ModActivate';
-        $observers = xarClassMap::getEventObservers('', $event);
+        $observers = xarClassMap::getEventObservers(null, $event);
         $this->assertArrayHasKey($classname, $observers);
         $this->assertEquals($expected[$classname], $observers[$classname]);
         $this->assertCount(2, $observers);
@@ -320,13 +297,13 @@ final class ClassMapTest extends TestCase
         $this->assertGreaterThan(10, count($observers));
 
         $modName = 'dynamicdata';
-        $observers = xarClassMap::getHookObservers($modName, '');
+        $observers = xarClassMap::getHookObservers($modName, null);
         $this->assertArrayHasKey($classname, $observers);
         $this->assertEquals($expected[$classname], $observers[$classname]);
         $this->assertCount(10, $observers);
 
         $event = 'ItemCreate';
-        $observers = xarClassMap::getHookObservers('', $event);
+        $observers = xarClassMap::getHookObservers(null, $event);
         $this->assertArrayHasKey($classname, $observers);
         $this->assertEquals($expected[$classname], $observers[$classname]);
         $this->assertGreaterThan(0, count($observers));
@@ -344,19 +321,19 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected, $instance->getModName());
     }
 
-    public function testFindEventClassFile(): void
+    public function testFindClassFile(): void
     {
         $type = 'eventsubjects';
         $modName = 'base';
         $event = 'ServerRequest';
-        $result = xarClassMap::findEventClassFile($type, $modName, $event);
+        $result = xarClassMap::findClassFile($type, $modName, $event);
 
         $expected = [
             'classname' => 'BaseServerRequestSubject',
             'filepath' => sys::code() . 'modules/base/class/eventsubjects/serverrequest.php',
-            'type' => $type,
+            'classtype' => $type,
             'module' => $modName,
-            'event' => $event,
+            'filetype' => $event,
         ];
         $this->assertEquals($expected, $result);
 
@@ -381,9 +358,9 @@ final class ClassMapTest extends TestCase
         $expected = [
             'classname' => 'Xaraya\DataObject\HookObservers\ItemCreate',
             'filepath' => sys::code() . 'modules/dynamicdata/class/hookobservers/itemcreate.php',
-            'type' => 'hookobservers',
+            'classtype' => 'hookobservers',
             'module' => $modName,
-            'event' => $event,
+            'filetype' => $event,
         ];
         $this->assertEquals($expected, $result);
 
@@ -405,16 +382,16 @@ final class ClassMapTest extends TestCase
         $classname = array_key_first($expected);
         $this->assertArrayHasKey($classname, $properties);
         $this->assertEquals($expected[$classname], $properties[$classname]);
-        $this->assertGreaterThan(33, count($properties));
+        $this->assertGreaterThan(32, count($properties));
 
         $modName = 'base';
-        $properties = xarClassMap::getProperties($modName, '');
+        $properties = xarClassMap::getProperties($modName, null);
         $this->assertArrayHasKey($classname, $properties);
         $this->assertEquals($expected[$classname], $properties[$classname]);
-        $this->assertCount(33, $properties);
+        $this->assertCount(32, $properties);
 
         $type = 'array';
-        $properties = xarClassMap::getProperties('', $type);
+        $properties = xarClassMap::getProperties(null, $type);
         $this->assertArrayHasKey($classname, $properties);
         $this->assertEquals($expected[$classname], $properties[$classname]);
         $this->assertCount(1, $properties);
@@ -457,10 +434,10 @@ final class ClassMapTest extends TestCase
 
     public function testStandAloneProperties(): void
     {
-        // we have 2 classes here: ListingProperty and ListingPropertyInstall
+        // we have 2 classes here: ListingProperty and ListingPropertyInstall but *Install is skipped
         $type = 'listing';
         $properties = xarClassMap::getProperties('', $type);
-        $this->assertCount(2, $properties);
+        $this->assertCount(1, $properties);
     }
 
     public function testFindStandAloneProperty(): void
@@ -488,16 +465,16 @@ final class ClassMapTest extends TestCase
         $classname = array_key_first($expected);
         $this->assertArrayHasKey($classname, $controllers);
         $this->assertEquals($expected[$classname], $controllers[$classname]);
-        $this->assertGreaterThan(10, count($controllers));
+        $this->assertGreaterThan(4, count($controllers));
 
         $modName = 'base';
-        $controllers = xarClassMap::getControllers($modName, '');
+        $controllers = xarClassMap::getControllers($modName, null);
         $this->assertArrayHasKey($classname, $controllers);
         $this->assertEquals($expected[$classname], $controllers[$classname]);
         $this->assertCount(1, $controllers);
 
         $type = 'short';
-        $controllers = xarClassMap::getControllers('', $type);
+        $controllers = xarClassMap::getControllers(null, $type);
         $this->assertArrayHasKey($classname, $controllers);
         $this->assertEquals($expected[$classname], $controllers[$classname]);
         $this->assertGreaterThan(2, count($controllers));

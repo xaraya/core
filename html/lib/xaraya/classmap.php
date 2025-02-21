@@ -24,12 +24,12 @@
  */
 class xarClassMap extends xarObject
 {
-    /** @var array<string, string> */
+    /** @var array<string, array<mixed>> */
     protected static array $classmap = [];
 
     /**
      * Summary of getClassMap
-     * @return array<string, string>
+     * @return array<string, array<mixed>>
      */
     public static function getClassMap(): array
     {
@@ -41,7 +41,7 @@ class xarClassMap extends xarObject
 
     /**
      * Summary of loadClassMap
-     * @return array<string, string>
+     * @return array<string, array<mixed>>
      */
     public static function loadClassMap(): array
     {
@@ -52,54 +52,135 @@ class xarClassMap extends xarObject
             $root = rtrim($root, '/');
         }
         $file = $root . '/vendor/composer/autoload_classmap.php';
+        $classmap = [
+            'autoload' => ['classmap' => $file],
+        ];
         if (!file_exists($file)) {
-            return ['' => $file];
+            return $classmap;
         }
-        $defined = require $file;
-        // we are only looking for xaraya code here, not lib, themes etc.
-        return array_filter($defined, function ($path) {
-            return str_contains($path, '/html/code/') || str_contains($path, '/vendor/xaraya/');
-        });
+        $cacheFile = sys::varpath() . '/cache/classmap_parsed.php';
+        if (file_exists($cacheFile) && filemtime($cacheFile) > filemtime($file)) {
+            // load cacheFile
+            $classmap = require $cacheFile;
+            return $classmap;
+        }
+        sys::import('xaraya.tools.classmapparser');
+        $parser = new \Xaraya\Tools\ClassMapParser();
+        $classmap = $parser->parse($file);
+        file_put_contents($cacheFile, "<?php\nreturn " . var_export($classmap, true) . ";\n");
+        return $classmap;
+    }
+
+    /**
+     * Summary of clearClassMap
+     * @return void
+     */
+    public static function clearClassMap()
+    {
+        static::$classmap = [];
+        $cacheFile = sys::varpath() . '/cache/classmap_parsed.php';
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
+    }
+
+    /**
+     * Summary of getClassType
+     * @return array<string, mixed>
+     */
+    public static function getClassType(string $classType): array
+    {
+        static::getClassMap();
+        return static::$classmap[$classType] ?? [];
+    }
+
+    /**
+     * Summary of getClassFiles
+     * @param string $classType class type like modules, blocks, hookobservers, eventsubjects etc.
+     * @param ?string $modName (optional)
+     * @param ?string $fileType (optional)
+     * @param bool $fuzzy use fuzzy match (optional)
+     * @return array<string, string>
+     */
+    public static function getClassFiles(string $classType, ?string $modName = null, ?string $fileType = null, bool $fuzzy = false): array
+    {
+        // we can specify modName or fileType or both here
+        $found = static::getClassType($classType);
+        if (!is_null($modName)) {
+            if (empty($found[$modName])) {
+                return [];
+            }
+            $modules = [ $modName ];
+        } else {
+            $modules = array_keys($found);
+        }
+        if (!empty($fileType)) {
+            $fileType = strtolower($fileType);
+        }
+        $result = [];
+        foreach ($modules as $module) {
+            foreach ($found[$module] as $type => $class) {
+                if (!empty($fileType)) {
+                    if (!$fuzzy && $type != $fileType) {
+                        continue;
+                    }
+                    // @todo handle interface? This could be .php, _display.php or /admin.php - last one is not supported
+                    if ($fuzzy && !str_starts_with($type, $fileType)) {
+                        continue;
+                    }
+                }
+                $result = array_merge($result, $class);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Summary of findClassFile
+     * @param string $classType
+     * @param string $modName
+     * @param string $fileType
+     * @throws \ClassNotFoundException
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
+     * @see xarEvents::fileLoad() not used except for hook observers
+     */
+    public static function findClassFile(string $classType, string $modName, string $fileType): array|null
+    {
+        $found = static::getClassFiles($classType, $modName, $fileType);
+        if (count($found) == 1) {
+            $filePath = reset($found);
+            $className = array_key_first($found);
+            return ['classname' => $className, 'filepath' => $filePath, 'classtype' => $classType, 'module' => $modName, 'filetype' => $fileType];
+        }
+        if (count($found) > 1) {
+            throw new ClassNotFoundException('Several ' . $classType . ' classes match ' . $modName . ' ' . $fileType);
+        }
+        return null;
     }
 
     /**
      * Summary of getBlocks
-     * @param string $modName
-     * @param string $type
+     * @param ?string $modName
+     * @param ?string $type
      * @return array<string, string>
      */
-    public static function getBlocks(string $modName = '', string $type = ''): array
+    public static function getBlocks(?string $modName = null, ?string $type = null): array
     {
         // we can specify modName or type or both here
-        $subDir = '';
-        if (!empty($modName)) {
-            $subDir = $modName . '/';
-        }
-        $filename = '';
-        if (!empty($type)) {
-            // @todo handle interface? This could be .php, _display.php or /admin.php
-            $filename = strtolower($type);
-        }
-        $subType = '';
-        if (empty($modName) && !empty($type)) {
-            $subType = strtolower($type) . '/';
-        }
-        return array_filter(static::getClassMap(), function ($path) use ($subDir, $filename, $subType) {
-            return (str_contains($path, '/html/code/modules/' . $subDir) && str_contains($path, '/xarblocks/' . $filename))
-                || (str_contains($path, '/vendor/xaraya/' . $subDir) && str_contains($path, '/xarblocks/' . $filename))
-                || (empty($subDir) && str_contains($path, '/html/code/blocks/' . $subType));
-        });
+        // @todo handle interface? This could be .php, _display.php or /admin.php - last one is not supported
+        return static::getClassFiles('blocks', $modName, $type, true);
     }
 
     /**
      * Summary of findBlock
      * @param string $modName use empty string for stand-alone blocks
      * @param string $type
-     * @param string $interface (optional)
+     * @param ?string $interface (optional)
      * @return array{classname: string, filepath: string, module: string, type: string, interface: string}|null
      */
-    public static function findBlock(string $modName, string $type, string $interface = ''): array|null
+    public static function findBlock(string $modName, string $type, ?string $interface = null): array|null
     {
+        $interface ??= '';
         $found = static::getBlocks($modName, $type);
         if (count($found) > 1) {
             // filter by interface here
@@ -112,14 +193,14 @@ class xarClassMap extends xarObject
                 return str_ends_with($class, $suffix);
             }, ARRAY_FILTER_USE_KEY);
             // try again with BlockAdmin suffix for admin classes
-            if (count($filter) < 1 && !empty($interface) && !in_array($interface, ['display', 'admin']))  {
+            if (count($filter) < 1 && !empty($interface) && !in_array($interface, ['display', 'admin'])) {
                 $suffix = 'BlockAdmin';
                 $filter = array_filter($found, function ($class) use ($suffix) {
                     return str_ends_with($class, $suffix);
                 }, ARRAY_FILTER_USE_KEY);
             }
             // try again with Block suffix for all-in-one classes
-            if (count($filter) < 1 && !empty($interface))  {
+            if (count($filter) < 1 && !empty($interface)) {
                 $suffix = 'Block';
                 $filter = array_filter($found, function ($class) use ($suffix) {
                     return str_ends_with($class, $suffix);
@@ -168,163 +249,76 @@ class xarClassMap extends xarObject
     }
 
     /**
-     * Summary of getModuleClassFiles
-     * @param string $modName
-     * @param string $type class type like hookobservers, eventsubjects etc. (optional)
-     * @param string $filename (optional)
-     * @return array<string, string>
-     */
-    public static function getModuleClassFiles(string $modName, string $type = '', string $filename = ''): array
-    {
-        // modName is mandatory here
-        $find = $modName . '/class/';
-        if (!empty($type)) {
-            $find .= strtolower($type) . '/';
-        }
-        if (!empty($filename)) {
-            $find .= $filename;
-        }
-        return array_filter(static::getClassMap(), function ($path) use ($find) {
-            return str_contains($path, '/html/code/modules/' . $find)
-                || str_contains($path, '/vendor/xaraya/' . $find);
-        });
-    }
-
-    /**
-     * Summary of getEventClassFiles
-     * @param string $type class type like hookobservers, eventsubjects etc.
-     * @param string $modName (optional)
-     * @param string $event (optional)
-     * @return void
-     */
-    public static function getEventClassFiles(string $type, string $modName = '', string $event = ''): array
-    {
-        // we can specify modName or event or both here
-        $subDir = '';
-        if (!empty($modName)) {
-            $subDir = $modName . '/';
-        }
-        $classFiles = '/class/' . $type . '/';
-        if (!empty($event)) {
-            $classFiles .= strtolower($event) . '.php';
-        }
-        return array_filter(static::getClassMap(), function ($path) use ($subDir, $classFiles) {
-            return (str_contains($path, '/html/code/modules/' . $subDir) && str_contains($path, $classFiles))
-                || (str_contains($path, '/vendor/xaraya/' . $subDir) && str_contains($path, $classFiles));
-        });
-    }
-
-    /**
-     * Summary of findEventClassFile
-     * @param string $type
-     * @param string $modName
-     * @param string $event
-     * @throws \ClassNotFoundException
-     * @return array{classname: string, filepath: string, type: string, module: string, event: string}|null
-     * @see xarEvents::fileLoad() not used except for hook observers
-     */
-    public static function findEventClassFile(string $type, string $modName, string $event): array|null
-    {
-        $found = static::getEventClassFiles($type, $modName, $event);
-        if (count($found) == 1) {
-            $filePath = reset($found);
-            $className = array_key_first($found);
-            return ['classname' => $className, 'filepath' => $filePath, 'type' => $type, 'module' => $modName, 'event' => $event];
-        }
-        if (count($found) > 1) {
-            throw new ClassNotFoundException('Several ' . $type . ' classes match ' . $modName . ' ' . $event);
-        }
-        return null;
-    }
-
-    /**
      * Summary of getEventSubjects
-     * @param string $modName (optional)
-     * @param string $event (optional)
+     * @param ?string $modName (optional)
+     * @param ?string $event (optional)
      * @return array<string, string>
      */
-    public static function getEventSubjects(string $modName = '', string $event = ''): array
+    public static function getEventSubjects(?string $modName = null, ?string $event = null): array
     {
         // we can specify modName or event or both here
-        return static::getEventClassFiles('eventsubjects', $modName, $event);
+        return static::getClassFiles('eventsubjects', $modName, $event);
     }
 
     /**
      * Summary of getHookSubjects
-     * @param string $modName (optional)
-     * @param string $event (optional)
+     * @param ?string $modName (optional)
+     * @param ?string $event (optional)
      * @return array<string, string>
      */
-    public static function getHookSubjects(string $modName = '', string $event = ''): array
+    public static function getHookSubjects(?string $modName = null, ?string $event = null): array
     {
         // we can specify modName or event or both here
-        return static::getEventClassFiles('hooksubjects', $modName, $event);
+        return static::getClassFiles('hooksubjects', $modName, $event);
     }
 
     /**
      * Summary of getEventObservers
-     * @param string $modName (optional)
-     * @param string $event (optional)
+     * @param ?string $modName (optional)
+     * @param ?string $event (optional)
      * @return array<string, string>
      */
-    public static function getEventObservers(string $modName = '', string $event = ''): array
+    public static function getEventObservers(?string $modName = null, ?string $event = null): array
     {
         // we can specify modName or event or both here
-        return static::getEventClassFiles('eventobservers', $modName, $event);
+        return static::getClassFiles('eventobservers', $modName, $event);
     }
 
     /**
      * Summary of getHookObservers
-     * @param string $modName (optional)
-     * @param string $event (optional)
+     * @param ?string $modName (optional)
+     * @param ?string $event (optional)
      * @return array<string, string>
      */
-    public static function getHookObservers(string $modName = '', string $event = ''): array
+    public static function getHookObservers(?string $modName = null, ?string $event = null): array
     {
         // we can specify modName or event or both here
-        return static::getEventClassFiles('hookobservers', $modName, $event);
+        return static::getClassFiles('hookobservers', $modName, $event);
     }
 
     /**
      * Summary of findHookObserver
      * @param string $modName
      * @param string $event
-     * @return array{classname: string, filepath: string, type: string, module: string, event: string}|null
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
      * @see xarEvents::fileLoad()
      */
     public static function findHookObserver(string $modName, string $event): array|null
     {
-        return static::findEventClassFile('hookobservers', $modName, $event);
+        return static::findClassFile('hookobservers', $modName, $event);
     }
 
     /**
      * Summary of getProperties
-     * @param string $modName (optional)
-     * @param string $type property type (optional)
+     * @param ?string $modName (optional)
+     * @param ?string $type property type (optional)
      * @return array<string, string>
      * @see PropertyRegistration::importPropertyTypes()
      */
-    public static function getProperties(string $modName = '', string $type = ''): array
+    public static function getProperties(?string $modName = null, ?string $type = null): array
     {
         // we can specify modName or type or both here
-        $subDir = '';
-        if (!empty($modName)) {
-            $subDir = $modName . '/';
-        }
-        $filename = '';
-        if (!empty($type)) {
-            $filename = strtolower($type) . '.php';
-        }
-        $subType = '';
-        if (empty($modName) && !empty($type)) {
-            $subType = strtolower($type) . '/';
-        }
-        return array_filter(static::getClassMap(), function ($path) use ($subDir, $filename, $subType) {
-            return (str_contains($path, '/html/code/modules/' . $subDir) && str_contains($path, '/xarproperties/' . $filename))
-                || (str_contains($path, '/vendor/xaraya/' . $subDir) && str_contains($path, '/xarproperties/' . $filename))
-                || (empty($subDir) && str_contains($path, '/html/code/properties/' . $subType))
-                || (empty($subDir) && str_contains($path, '/vendor/xaraya/properties/' . $subType));
-        });
+        return static::getClassFiles('properties', $modName, $type);
     }
 
     /**
@@ -355,25 +349,14 @@ class xarClassMap extends xarObject
 
     /**
      * Summary of getControllers
-     * @param string $modName (optional)
-     * @param string $type route type like default, short etc. (optional)
+     * @param ?string $modName (optional)
+     * @param ?string $type route type like default, short etc. (optional)
      * @return array<string, string>
      */
-    public static function getControllers(string $modName = '', string $type = ''): array
+    public static function getControllers(?string $modName = null, ?string $type = null): array
     {
         // we can specify modName or type or both here
-        $subDir = '';
-        if (!empty($modName)) {
-            $subDir = $modName . '/';
-        }
-        $filename = '';
-        if (!empty($type)) {
-            $filename = strtolower($type) . '.php';
-        }
-        return array_filter(static::getClassMap(), function ($path) use ($subDir, $filename) {
-            return (str_contains($path, '/html/code/modules/' . $subDir) && str_contains($path, '/controllers/' . $filename))
-                || (str_contains($path, '/vendor/xaraya/' . $subDir) && str_contains($path, '/controllers/' . $filename));
-        });
+        return static::getClassFiles('controllers', $modName, $type);
     }
 
     /**
@@ -399,27 +382,16 @@ class xarClassMap extends xarObject
 
     /**
      * Summary of getModuleClasses
-     * @param string $modName (optional)
+     * @param ?string $modName (optional)
      * @return array<string, array{classname: string, filepath: string, module: string}>
      */
-    public static function getModuleClasses(string $modName = ''): array
+    public static function getModuleClasses(?string $modName = null): array
     {
-        $subDir = '';
-        if (!empty($modName)) {
-            $subDir = $modName . '/';
-        }
-        $filename = '/module.php';
-        $found = array_filter(static::getClassMap(), function ($path) use ($subDir, $filename) {
-            return (str_contains($path, '/html/code/modules/' . $subDir) && str_ends_with($path, $filename))
-                || (str_contains($path, '/vendor/xaraya/' . $subDir) && str_ends_with($path, $filename));
-        });
-        sys::import('xaraya.modules.moduletrait');
-        $interface = \Xaraya\Modules\ModuleInterface::class;
+        $classType = 'modules';
+        $fileType = 'module';
+        $found = static::getClassFiles($classType, $modName, $fileType);
         $modules = [];
         foreach ($found as $className => $filePath) {
-            if (!is_subclass_of($className, $interface, true)) {
-                continue;
-            }
             $modName = basename(dirname($filePath));
             $modules[$modName] = ['classname' => $className, 'filepath' => $filePath, 'module' => $modName];
         }
@@ -440,33 +412,19 @@ class xarClassMap extends xarObject
     /**
      * Summary of getModuleClassTypes
      * @param string $modName
-     * @param string $modType (optional)
+     * @param ?string $modType (optional)
      * @return array<string, array{classname: string, filepath: string, module: string, classtype: string}>
      */
-    public static function getModuleClassTypes(string $modName, string $modType = ''): array
+    public static function getModuleClassTypes(string $modName, ?string $modType = null): array
     {
-        $subDir = $modName;
-        $filename = '';
-        if (!empty($modType)) {
-            $filename = strtolower($modType) . '.php';
-        }
-        // module classes are located at the top of the module directory
-        $found = array_filter(static::getClassMap(), function ($path) use ($subDir, $filename) {
-            if (!empty($filename) && basename($path) != $filename) {
-                return false;
-            }
-            $dirName = dirname($path);
-            return str_ends_with($dirName, '/html/code/modules/' . $subDir)
-                || str_ends_with($dirName, '/vendor/xaraya/' . $subDir);
-        });
-        sys::import('xaraya.modules.servicestrait');
-        $interface = \Xaraya\Modules\ModuleServicesInterface::class;
+        $classType = 'modules';
+        $found = static::getClassFiles($classType, $modName, $modType);
         $classTypes = [];
         foreach ($found as $className => $filePath) {
-            if (!is_subclass_of($className, $interface, true)) {
+            $modType = str_replace('.php', '', basename($filePath));
+            if ($modType == 'module') {
                 continue;
             }
-            $modType = str_replace('.php', '', basename($filePath));
             $parts = explode('\\', $className);
             $classType = end($parts);
             $classTypes[$modType] = ['classname' => $className, 'filepath' => $filePath, 'module' => $modName, 'classtype' => $classType];
@@ -491,36 +449,35 @@ class xarClassMap extends xarObject
      * @todo this excludes any methods inside the module class itself
      * @param string $modName
      * @param string $modType
-     * @param string $funcName (optional)
+     * @param ?string $funcName (optional)
      * @return array<string, array{classname: string, filepath: string, method: string}>
      */
-    public static function getModuleClassMethods(string $modName, string $modType, string $funcName = ''): array
+    public static function getModuleClassMethods(string $modName, string $modType, ?string $funcName = null): array
     {
-        $subDir = $modName . '/' . strtolower($modType);
+        $classType = 'methods';
+        $methods = static::getClassType($classType);
+        if (empty($methods[$modName])) {
+            return [];
+        }
+        $modType = strtolower($modType);
+        if (empty($methods[$modName][$modType])) {
+            return [];
+        }
         $filename = '';
         if (!empty($funcName)) {
             $filename = strtolower($funcName) . '.php';
         }
-        // method classes are located in modType subdir of the module directory
-        $found = array_filter(static::getClassMap(), function ($path) use ($subDir, $filename) {
-            if (!empty($filename) && basename($path) != $filename) {
-                return false;
-            }
-            $dirName = dirname($path);
-            return str_ends_with($dirName, '/html/code/modules/' . $subDir)
-                || str_ends_with($dirName, '/vendor/xaraya/' . $subDir);
-        });
-        sys::import('xaraya.modules.method');
-        $interface = \Xaraya\Modules\MethodServicesInterface::class;
-        $methods = [];
-        foreach ($found as $className => $filePath) {
-            if (!is_subclass_of($className, $interface, true)) {
+        $result = [];
+        foreach ($methods[$modName][$modType] as $fileType => $class) {
+            $filePath = reset($class);
+            $className = array_key_first($class);
+            if (!empty($filename) && basename($filePath) != $filename) {
                 continue;
             }
             $funcName = str_replace('.php', '', basename($filePath));
-            $methods[$funcName] = ['classname' => $className, 'filepath' => $filePath, 'method' => $funcName];
+            $result[$funcName] = ['classname' => $className, 'filepath' => $filePath, 'method' => $funcName];
         }
-        return $methods;
+        return $result;
     }
 
     /**
