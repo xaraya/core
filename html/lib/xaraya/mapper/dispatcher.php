@@ -24,9 +24,11 @@ class xarDispatcher extends xarObject
 
     public function findController(xarRequest $request): iController
     {
-        if (file_exists(sys::code() . 'modules/' . $request->getModule() . '/controllers/' . $request->getRoute() . '.php')) {
-            sys::import('modules.' . $request->getModule() . '.controllers.' . $request->getRoute());
-            $controllername = UCFirst($request->getModule()) . UCFirst($request->getRoute()) . 'Controller';
+        sys::import('xaraya.classmap');
+        $result = xarClassMap::findController($request->getModule(), $request->getRoute());
+        if (!empty($result)) {
+            require_once($result['filepath']);
+            $controllername = $result['classname'];
         } else {
             sys::import('xaraya.mapper.controllers.' . $request->getRoute());
             $controllername = UCFirst($request->getRoute()) . 'ActionController';

@@ -362,7 +362,7 @@ class xarClassMap extends xarObject
     /**
      * Summary of findController
      * @param string $modName
-     * @param string $type
+     * @param string $type route type like default, short etc.
      * @return array{classname: string, filepath: string, module: string, type: string}|null
      * @see xarDispatcher::findController()
      */
@@ -442,6 +442,7 @@ class xarClassMap extends xarObject
      */
     public static function findModuleClassType(string $modName, string $modType): array|null
     {
+        $modType = strtolower($modType);
         $classTypes = static::getModuleClassTypes($modName, $modType);
         return $classTypes[$modType] ?? null;
     }

@@ -22,7 +22,7 @@ use xarMLS;
 use sys;
 
 sys::import('modules.blocks.method');
-sys::import("xaraya.classmap");
+sys::import('xaraya.classmap');
 
 /**
  * blocks blocksapi getblock function
@@ -80,7 +80,46 @@ class GetblockMethod extends MethodClass
             return new $classname($args);
         }
 
-        // @todo use xarClassMap::findBlock() instead
+        // use xarClassMap::findBlock() here
+        $result = xarClassMap::findBlock($args['module'] ?? '', $args['type'], $args['block_method'] ?? null);
+        if (!empty($result)) {
+            $classname = $result['classname'];
+            $typepath = $result['filepath'];
+            // require the file (raises error if file not found)
+            require_once($typepath);
+            // we need to set the actual $filepath here before constructing the object
+            $args['filepath'] = $typepath;
+
+            if (empty($classname)) {
+                throw new FileNotFoundException($typepath);
+            }
+    
+            if (!class_exists($classname) || !is_subclass_of($classname, 'BasicBlock')) {
+                throw new ClassNotFoundException($classname);
+            }
+    
+            if (!empty($args['block_method']) && !method_exists($classname, $args['block_method'])) {
+                throw new FunctionNotFoundException($args['block_method']);
+            }
+    
+            // Load the block language files
+            if (!xarMLS::loadTranslations($typepath)) {
+                // What to do here? return doesnt seem right
+                return;
+            }
+    
+            if (isset($args['block_method'])) {
+                unset($args['block_method']);
+            }
+    
+            $object = new $classname($args);
+    
+            $loaded[$key] = $classname;
+    
+            return $object;
+        }
+
+        // @deprecated 2.7.0 remove old code
 
         // $typeclass does not take into account possible namespace + it does not re-use what typesapi getfiles() gave
         if (!empty($args['module'])) {

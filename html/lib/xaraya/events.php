@@ -512,9 +512,9 @@ class xarEvents extends xarObject implements ixarEvents
                 $filename = strtolower($event);
                 // support namespaces in modules (and core someday) - we may detect or use $info['classname'] here
                 if (empty($info['classname'])) {
+                    sys::import('xaraya.classmap');
                     // for non-core modules we're only interested in hookobservers for now - this may extend to eventobservers later...
                     if (in_array($info['type'], static::$classtypes)) {
-                        sys::import("xaraya.classmap");
                         $result = xarClassMap::findHookObserver($module, $event);
                         if (!empty($result)) {
                             $classname = $result['classname'];
@@ -539,11 +539,16 @@ class xarEvents extends xarObject implements ixarEvents
                         $classkey = implode(':', [$info['event'], $info['module'], $info['type']]);
                         static::$classnames[$classkey] = $classname;
                     } else {
-                        //sys::import("xaraya.classmap");
-                        //$result = xarClassMap::findEventClassFile($info['type'], $module, $event);
-                        // import the file (raises exception if file not found)
-                        sys::import("modules.{$module}.class.{$type}.{$filename}");
-                        $classname = ucfirst($module) . $event . $suffix;
+                        $result = xarClassMap::findClassFile($info['type'], $module, $event);
+                        if (!empty($result)) {
+                            $classname = $result['classname'];
+                            // import the file (raises exception if file not found)
+                            require_once($result['filepath']);
+                        } else {
+                            // import the file (raises exception if file not found)
+                            sys::import("modules.{$module}.class.{$type}.{$filename}");
+                            $classname = ucfirst($module) . $event . $suffix;
+                        }
                     }
                 } else {
                     // import the file (raises exception if file not found)

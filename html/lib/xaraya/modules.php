@@ -1084,7 +1084,7 @@ class xarMod extends xarObject implements IxarMod
     {
         if (!array_key_exists($modName, self::$moduleClasses)) {
             sys::autoload();
-            sys::import("xaraya.classmap");
+            sys::import('xaraya.classmap');
             $result = xarClassMap::findModuleClass($modName);
             if (!empty($result) && class_exists($result['classname'])) {
                 $class = $result['classname'];

@@ -198,6 +198,35 @@ class xarBlock extends xarObject implements ixarBlock
             throw new BadParameterException($vars, $msg);        
         }
 
+        // use xarClassMap::findBlock() here
+        sys::import('xaraya.classmap');
+        $result = xarClassMap::findBlock($blockinfo['module'] ?? '', $blockinfo['type'], $interface);
+        if (!empty($result)) {
+            $classname = $result['classname'];
+            $filepath = $result['filepath'];
+            // require the file (raises error if file not found)
+            require_once($filepath);
+            // we need to set the actual $filepath here before constructing the object
+            $blockinfo['filepath'] = $filepath;
+
+            if (!class_exists($classname))
+                throw new ClassNotFoundException($classname);
+
+            if (!empty($method) && !method_exists($classname, $method))
+                throw new FunctionNotFoundException($classname.'::'.$method);
+
+            // Load the block language files
+            // What to do here? return doesnt seem right
+            if (!xarMLS::loadTranslations($filepath))
+                return;
+
+            $object = new $classname($blockinfo);
+
+            return $object;
+        }
+
+        // @deprecated 2.7.0 remove old code
+
         // @checkme do we want to foresee anything special for other interfaces, or always let them go through the search process below?
         // @checkme best would be to simply autoload the class, if we do know the actual $classname - otherwise we'll need $filepath too
         if ((empty($interface) || $interface == 'display') && !empty($blockinfo['classname']) && strpos($blockinfo['classname'], '\\') !== false && !empty($blockinfo['filepath']) && file_exists($blockinfo['filepath'])) {
@@ -220,8 +249,6 @@ class xarBlock extends xarObject implements ixarBlock
 
             return $object;
         }
-
-        // @todo use xarClassMap::findBlock() instead
 
         // $cls does not take into account possible namespace + it does not re-use what blocksapi getinfo() could give
         if (empty($blockinfo['module'])) {
@@ -280,7 +307,6 @@ class xarBlock extends xarObject implements ixarBlock
             $dps[] = "{$basedp}.{$blockinfo['type']}";
         }
 
-        sys::import("xaraya.classmap");
         $result = xarClassMap::findBlockByPath($paths);
         if (!empty($result['filepath']) && !empty($result['found'])) {
             $filepath = $result['filepath'];
