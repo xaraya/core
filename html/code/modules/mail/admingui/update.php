@@ -54,6 +54,6 @@ class UpdateMethod extends MethodClass
             return;
         }
 
-        return xarMod::guiFunc('dynamicdata', 'admin', 'update', $args);
+        return xarMod::guiFunc('dynamicdata', 'admin', 'update', $args, $this->getContext());
     }
 }

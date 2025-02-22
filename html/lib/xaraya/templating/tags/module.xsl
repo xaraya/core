@@ -16,6 +16,7 @@
         <xsl:text>echo $_bl_mainModuleOutput;</xsl:text>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:text>$context ??= null;&nl;</xsl:text>
         <!-- module attribute has a value -->
         <xsl:text>echo xarMod::guiFunc("</xsl:text>
         <xsl:call-template name="resolvePHP">
@@ -48,7 +49,7 @@
         <xsl:call-template name="atts2args">
           <xsl:with-param name="nodeset" select="@*[name()!='module' and name()!='func' and name()!='type']"/>
         </xsl:call-template>
-        <xsl:text>);</xsl:text>
+        <xsl:text>, $context);</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:processing-instruction>
