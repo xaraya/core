@@ -37,6 +37,7 @@ class ClassMapParser
             'eventobservers' => [],
             'hooksubjects' => [],
             'hookobservers' => [],
+            'middleware' => [],
             'others' => [],
         ];
     }
@@ -50,6 +51,9 @@ class ClassMapParser
         $this->classmap['autoload'] = ['classmap' => $file];
         if (!file_exists($file)) {
             return $this->classmap;
+        }
+        if ($this->checkClass) {
+            sys::autoload();
         }
         $defined = require $file;
         // we are only looking for xaraya code here, not lib, themes etc.
@@ -130,7 +134,7 @@ class ClassMapParser
                 $subDirs = explode('/', $dirName);
                 $dirName = array_shift($subDirs);
                 if ($dirName != 'class') {
-                    if (count($subDirs) > 0) {
+                    if (count($subDirs) > 0 || $dirName == 'tests') {
                         // @todo other module subdirs?
                         return;
                     }
@@ -180,7 +184,16 @@ class ClassMapParser
         if ($this->checkClass) {
             sys::import('xaraya.mapper.controllers.interfaces');
             $interface = \iController::class;
-            if (!is_subclass_of($className, $interface, true)) {
+            if (is_subclass_of($className, $interface, true)) {
+                $classType = 'controllers';
+                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+                return;
+            }
+            sys::import('xaraya.bridge.middleware.router');
+            $interface = \Xaraya\Bridge\Middleware\DefaultRouterInterface::class;
+            if (is_subclass_of($className, $interface, true)) {
+                $classType = 'middleware';
+                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }
         }

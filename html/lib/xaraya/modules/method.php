@@ -42,6 +42,7 @@ use Xaraya\Services\ParentServicesTrait;
 use sys;
 
 sys::import('xaraya.services.parentservicestrait');
+sys::import('xaraya.modules.servicestrait');
 
 /**
  * For documentation purposes only - available via MethodClass
