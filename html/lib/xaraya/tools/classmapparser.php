@@ -14,6 +14,7 @@
 namespace Xaraya\Tools;
 
 use sys;
+use Throwable;
 
 /**
  * Xaraya Class Map Parser of composer autoload_classmap
@@ -38,6 +39,8 @@ class ClassMapParser
             'hooksubjects' => [],
             'hookobservers' => [],
             'middleware' => [],
+            'dataobjects' => [],
+            'classes' => [],
             'others' => [],
         ];
     }
@@ -48,11 +51,16 @@ class ClassMapParser
      */
     public function parse(string $file): array
     {
-        $this->classmap['autoload'] = ['classmap' => $file];
+        $this->classmap['autoload'] = [
+            'classmap' => $file,
+            'generated' => date('c'),
+        ];
         if (!file_exists($file)) {
             return $this->classmap;
         }
+        $this->classmap['autoload']['updated'] = date('c', filemtime($file));
         if ($this->checkClass) {
+            // we need this to check PSR-15 middleware classes, where autoload is default
             sys::autoload();
         }
         $defined = require $file;
@@ -66,6 +74,10 @@ class ClassMapParser
                 $this->matchVendorFile($className, $filePath);
                 continue;
             }
+        }
+        ksort($this->classmap);
+        foreach (array_keys($this->classmap) as $key) {
+            ksort($this->classmap[$key]);
         }
         return $this->classmap;
     }
@@ -134,8 +146,10 @@ class ClassMapParser
                 $subDirs = explode('/', $dirName);
                 $dirName = array_shift($subDirs);
                 if ($dirName != 'class') {
+                    // skip test classes and more subdirs here
                     if (count($subDirs) > 0 || $dirName == 'tests') {
                         // @todo other module subdirs?
+                        //$classType = 'others/' . $dirName;
                         return;
                     }
                     // candidate method classes
@@ -146,12 +160,12 @@ class ClassMapParser
                 $classType = array_shift($subDirs);
                 if (empty($classType)) {
                     // regular class files
-                    $classType = 'others';
-                    $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+                    $this->addClassFile($className, $filePath, $modName, $fileType);
                     return;
                 }
                 if (!in_array($classType, ['eventsubjects', 'eventobservers', 'hooksubjects', 'hookobservers'])) {
                     // @todo other module class subdirs?
+                    //$classType = 'classes/' . $classType;
                     return;
                 }
                 $this->addClassType($classType, $className, $filePath, $modName, $fileType);
@@ -162,7 +176,11 @@ class ClassMapParser
     protected function addClassType(string $classType, string $className, string $filePath, string $modName, string $fileType): void
     {
         $this->classmap[$classType][$modName] ??= [];
-        $this->classmap[$classType][$modName][$fileType] = [$className => $filePath];
+        if (!array_key_exists($fileType, $this->classmap[$classType][$modName])) {
+            $this->classmap[$classType][$modName][$fileType] = [$className => $filePath];
+            return;
+        }
+        $this->classmap[$classType][$modName][$fileType] = array_merge($this->classmap[$classType][$modName][$fileType], [$className => $filePath]);
     }
 
     protected function addBlock(string $className, string $filePath, string $modName, string $fileType): void
@@ -170,7 +188,7 @@ class ClassMapParser
         if ($this->checkClass) {
             sys::import('xaraya.structures.containers.blocks.blocktype');
             $interface = \iBlockType::class;
-            if (!is_subclass_of($className, $interface, true)) {
+            if (!$this->checkInterface($className, $interface)) {
                 return;
             }
         }
@@ -184,18 +202,19 @@ class ClassMapParser
         if ($this->checkClass) {
             sys::import('xaraya.mapper.controllers.interfaces');
             $interface = \iController::class;
-            if (is_subclass_of($className, $interface, true)) {
+            if ($this->checkInterface($className, $interface)) {
                 $classType = 'controllers';
                 $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }
             sys::import('xaraya.bridge.middleware.router');
             $interface = \Xaraya\Bridge\Middleware\DefaultRouterInterface::class;
-            if (is_subclass_of($className, $interface, true)) {
+            if ($this->checkInterface($className, $interface)) {
                 $classType = 'middleware';
                 $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }
+            return;
         }
         $classType = 'controllers';
         $this->addClassType($classType, $className, $filePath, $modName, $fileType);
@@ -210,7 +229,7 @@ class ClassMapParser
         if ($this->checkClass) {
             sys::import('modules.dynamicdata.class.properties.interfaces');
             $interface = \iDataProperty::class;
-            if (!is_subclass_of($className, $interface, true)) {
+            if (!$this->checkInterface($className, $interface)) {
                 return;
             }
         }
@@ -228,7 +247,9 @@ class ClassMapParser
                 sys::import('xaraya.modules.servicestrait');
                 $interface = \Xaraya\Modules\ModuleServicesInterface::class;
             }
-            if (!is_subclass_of($className, $interface, true)) {
+            if (!$this->checkInterface($className, $interface)) {
+                $classType = 'others';
+                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }
         }
@@ -241,7 +262,11 @@ class ClassMapParser
         if ($this->checkClass) {
             sys::import('xaraya.modules.method');
             $interface = \Xaraya\Modules\MethodServicesInterface::class;
-            if (!is_subclass_of($className, $interface, true)) {
+            if (!$this->checkInterface($className, $interface)) {
+                // @todo put in others here?
+                $classType = 'others/' . $modType;
+                $this->classmap[$classType] ??= [];
+                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }
         }
@@ -251,5 +276,45 @@ class ClassMapParser
         $this->classmap[$classType][$modName] ??= [];
         $this->classmap[$classType][$modName][$modType] ??= [];
         $this->classmap[$classType][$modName][$modType][$fileType] = [$className => $filePath];
+    }
+
+    protected function addClassFile(string $className, string $filePath, string $modName, string $fileType): void
+    {
+        if ($this->checkClass) {
+            // @todo memory issue when trying to check all dataobject classes!? - not reliable here
+            $contents = file_get_contents($filePath);
+            if (str_contains($contents, ' extends DataObject')) {
+                unset($contents);
+                $classType = 'dataobjects';
+                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+                return;
+            }
+            unset($contents);
+            //sys::import('modules.dynamicdata.class.objects.interfaces');
+            //$interface = \iDataObject::class;
+            //if ($this->checkInterface($className, $interface)) {
+            //    $classType = 'dataobjects';
+            //    $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+            //    return;
+            //}
+            //$interface = \iDataObjectList::class;
+            //if ($this->checkInterface($className, $interface)) {
+            //    $classType = 'dataobjects';
+            //    $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+            //    return;
+            //}
+        }
+        $classType = 'classes';
+        $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+    }
+
+    protected function checkInterface(string $className, string $interface): bool
+    {
+        try {
+            return is_subclass_of($className, $interface, true);
+        } catch (Throwable $e) {
+            echo __METHOD__ . ': ' . $e->getMessage() . " for $className<br/>\n";
+            return false;
+        }
     }
 }

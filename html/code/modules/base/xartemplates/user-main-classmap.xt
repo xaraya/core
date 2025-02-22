@@ -29,7 +29,7 @@
                                             <xar:if condition="$classtype eq 'methods'">
                                                 #$type# (#count($items)#)
                                             <xar:else/>
-                                                #$type# =&gt; #array_key_first($items)#
+                                                #$type# =&gt; #implode(', ', array_keys($items))#
                                             </xar:if>
                                         </li>
                                     </xar:foreach>

@@ -6,8 +6,8 @@ final class ClassMapTest extends TestCase
 {
     public function testGetClassType(): void
     {
-        $classType = 'others';
-        $others = xarClassMap::getClassType($classType);
+        $classType = 'classes';
+        $classes = xarClassMap::getClassType($classType);
 
         $expected = [
             'authsystem' => [
@@ -18,8 +18,8 @@ final class ClassMapTest extends TestCase
         ];
         $modName = array_key_first($expected);
         $fileType = array_key_first($expected[$modName]);
-        $this->assertGreaterThan(1, count($others));
-        $this->assertEquals($expected[$modName][$fileType], $others[$modName][$fileType]);
+        $this->assertGreaterThan(1, count($classes));
+        $this->assertEquals($expected[$modName][$fileType], $classes[$modName][$fileType]);
     }
 
     public function testGetBlocks(): void
@@ -372,6 +372,73 @@ final class ClassMapTest extends TestCase
         $this->assertEquals($expected, $instance->getModName());
     }
 
+    public function testGetDataObjects(): void
+    {
+        $dataobjects = xarClassMap::getDataObjects();
+
+        $expected = [
+            'Role' => sys::code() . 'modules/roles/class/role.php',
+        ];
+        $classname = array_key_first($expected);
+        $this->assertArrayHasKey($classname, $dataobjects);
+        $this->assertEquals($expected[$classname], $dataobjects[$classname]);
+        $this->assertGreaterThan(3, count($dataobjects));
+
+        $modName = 'roles';
+        $dataobjects = xarClassMap::getDataObjects($modName, null);
+        $this->assertArrayHasKey($classname, $dataobjects);
+        $this->assertEquals($expected[$classname], $dataobjects[$classname]);
+        $this->assertCount(2, $dataobjects);
+
+        $type = 'role';
+        $dataobjects = xarClassMap::getDataObjects(null, $type);
+        $this->assertArrayHasKey($classname, $dataobjects);
+        $this->assertEquals($expected[$classname], $dataobjects[$classname]);
+        $this->assertCount(2, $dataobjects);
+
+        $dataobjects = xarClassMap::getDataObjects($modName, $type);
+        $this->assertArrayHasKey($classname, $dataobjects);
+        $this->assertEquals($expected[$classname], $dataobjects[$classname]);
+        $this->assertCount(2, $dataobjects);
+    }
+
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function testFindDataObject(): void
+    {
+        $modName = 'roles';
+        $type = 'role';
+        // we have 2 classes here: Role and RoleList - pick one based on $suffix
+        $suffix = 'RoleList';
+        $result = xarClassMap::findDataObject($modName, $type, $suffix);
+
+        $expected = [
+            'classname' => 'RoleList',
+            'filepath' => sys::code() . 'modules/roles/class/role.php',
+            'classtype' => 'dataobjects',
+            'module' => $modName,
+            'filetype' => $type,
+        ];
+        $this->assertEquals($expected, $result);
+
+        // we can instantiate dataobject instance without database (but not without objectdescriptor)
+        //$defaults = get_class_vars($result['classname']);
+        $defaults = [
+            'name' => 'roles_users',
+            'module' => 'roles',
+            'itemtype' => 1,
+        ];
+        $descriptor = new VirtualObjectDescriptor($defaults);
+        $instance = new $result['classname']($descriptor);
+        $this->assertInstanceOf($expected['classname'], $instance);
+
+        // we have 2 classes here: Role and RoleList - try without suffix to get duplicate exception
+        $this->expectException(DuplicateException::class);
+        $expected = 'Several "dataobjects" classes match module "roles" type "role"';
+        $this->expectExceptionMessage($expected);
+
+        $result = xarClassMap::findDataObject($modName, $type);
+    }
+
     public function testGetProperties(): void
     {
         $properties = xarClassMap::getProperties();
@@ -411,8 +478,9 @@ final class ClassMapTest extends TestCase
         $expected = [
             'classname' => 'ArrayProperty',
             'filepath' => sys::code() . 'modules/base/xarproperties/array.php',
+            'classtype' => 'properties',
             'module' => $modName,
-            'type' => $type,
+            'filetype' => $type,
         ];
         $this->assertEquals($expected, $result);
 
@@ -420,6 +488,7 @@ final class ClassMapTest extends TestCase
         $defaults = get_class_vars($result['classname']);
         $descriptor = new ObjectDescriptor($defaults);
         $instance = new $result['classname']($descriptor);
+        $this->assertInstanceOf($expected['classname'], $instance);
 
         $expected = $defaults;
         // these are set in ArrayProperty constructor
@@ -449,8 +518,9 @@ final class ClassMapTest extends TestCase
         $expected = [
             'classname' => 'ListingProperty',
             'filepath' => sys::code() . 'properties/listing/main.php',
+            'classtype' => 'properties',
             'module' => $modName,
-            'type' => $type,
+            'filetype' => $type,
         ];
         $this->assertEquals($expected, $result);
     }
@@ -494,8 +564,9 @@ final class ClassMapTest extends TestCase
         $expected = [
             'classname' => 'BaseShortController',
             'filepath' => sys::code() . 'modules/base/controllers/short.php',
+            'classtype' => 'controllers',
             'module' => $modName,
-            'type' => $type,
+            'filetype' => $type,
         ];
         $this->assertEquals($expected, $result);
 
@@ -509,6 +580,77 @@ final class ClassMapTest extends TestCase
 
         $expected = "/{$modName}/{$page}";
         $this->assertEquals($expected, $instance->encode($request));
+    }
+
+    public function testGetMiddleware(): void
+    {
+        $middleware = xarClassMap::getMiddleware();
+
+        // we have 2 classes here: DataObjectMiddleware and DataObjectApiMiddleware
+        $expected = [
+            'Xaraya\Bridge\Middleware\DataObjectMiddleware' => sys::code() . 'modules/dynamicdata/controllers/middleware.php',
+        ];
+        $classname = array_key_first($expected);
+        $this->assertArrayHasKey($classname, $middleware);
+        $this->assertEquals($expected[$classname], $middleware[$classname]);
+        $this->assertCount(6, $middleware);
+
+        $modName = 'dynamicdata';
+        $middleware = xarClassMap::getMiddleware($modName, null);
+        $this->assertArrayHasKey($classname, $middleware);
+        $this->assertEquals($expected[$classname], $middleware[$classname]);
+        $this->assertCount(3, $middleware);
+
+        $type = 'middleware';
+        $middleware = xarClassMap::getMiddleware(null, $type);
+        $this->assertArrayHasKey($classname, $middleware);
+        $this->assertEquals($expected[$classname], $middleware[$classname]);
+        $this->assertCount(4, $middleware);
+
+        $middleware = xarClassMap::getMiddleware($modName, $type);
+        $this->assertArrayHasKey($classname, $middleware);
+        $this->assertEquals($expected[$classname], $middleware[$classname]);
+        $this->assertCount(2, $middleware);
+    }
+
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function testFindMiddleware(): void
+    {
+        $modName = 'dynamicdata';
+        $type = 'middleware';
+        // we have 2 classes here: DataObjectMiddleware and DataObjectApiMiddleware - pick one based on $suffix
+        $suffix = 'DataObjectApiMiddleware';
+        $result = xarClassMap::findMiddleware($modName, $type, $suffix);
+
+        $expected = [
+            'classname' => 'Xaraya\Bridge\Middleware\DataObjectApiMiddleware',
+            'filepath' => sys::code() . 'modules/dynamicdata/controllers/middleware.php',
+            'classtype' => 'middleware',
+            'module' => $modName,
+            'filetype' => $type,
+        ];
+        $this->assertEquals($expected, $result);
+
+        // we can instantiate middleware instance without database (but not without response factory)
+        $responseFactory = new \Nyholm\Psr7\Factory\Psr17Factory();
+        $instance = new $result['classname']($responseFactory);
+        $this->assertInstanceOf($expected['classname'], $instance);
+
+        // we need database connection to run here
+        $result = $instance->run(['object' => 'sample']);
+
+        $expected = \Nyholm\Psr7\Response::class;
+        $this->assertInstanceOf($expected, $result);
+        $expected = 422;
+        $this->assertEquals($expected, $result->getStatusCode());
+        $expected = 'ResponseUtil Exception';
+        $this->assertEquals($expected, $result->getReasonPhrase());
+        $expected = 'Exception: No connection available';
+        $this->assertStringContainsString($expected, (string) $result->getBody());
+
+        // Note: error & exception handlers are set when importing xaraya.exceptions
+        //restore_error_handler();
+        //restore_exception_handler();
     }
 
     public function testGetModuleClasses(): void

@@ -53,9 +53,14 @@ class xarClassMap extends xarObject
         }
         $file = $root . '/vendor/composer/autoload_classmap.php';
         $classmap = [
-            'autoload' => ['classmap' => $file],
+            'autoload' => [
+                'classmap' => $file,
+                'generated' => date('c'),
+            ],
         ];
         if (!file_exists($file)) {
+            echo 'Invalid autoload classmap: ' . $file . "\n";
+            echo 'Please run `composer update` or `composer dump-autoload` first';
             return $classmap;
         }
         $cacheFile = sys::varpath() . '/cache/classmap_parsed.php';
@@ -99,7 +104,7 @@ class xarClassMap extends xarObject
      * @param string $classType class type like modules, blocks, hookobservers, eventsubjects etc.
      * @param ?string $modName (optional)
      * @param ?string $fileType (optional)
-     * @param bool $fuzzy use fuzzy match (optional)
+     * @param bool $fuzzy use fuzzy match (optional) for blocks
      * @return array<string, string>
      */
     public static function getClassFiles(string $classType, ?string $modName = null, ?string $fileType = null, bool $fuzzy = false): array
@@ -140,20 +145,28 @@ class xarClassMap extends xarObject
      * @param string $classType
      * @param string $modName
      * @param string $fileType
-     * @throws \ClassNotFoundException
+     * @param ?string $suffix (optional) for middleware, dataobjects etc.
+     * @throws \DuplicateException
      * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
      * @see xarEvents::fileLoad() not used except for hook observers
      */
-    public static function findClassFile(string $classType, string $modName, string $fileType): array|null
+    public static function findClassFile(string $classType, string $modName, string $fileType, ?string $suffix = null): array|null
     {
         $found = static::getClassFiles($classType, $modName, $fileType);
+        if (!empty($suffix) && count($found) > 1) {
+            $found = array_filter($found, function ($class) use ($suffix) {
+                return str_ends_with($class, $suffix);
+            }, ARRAY_FILTER_USE_KEY);
+        }
         if (count($found) == 1) {
             $filePath = reset($found);
             $className = array_key_first($found);
             return ['classname' => $className, 'filepath' => $filePath, 'classtype' => $classType, 'module' => $modName, 'filetype' => $fileType];
         }
         if (count($found) > 1) {
-            throw new ClassNotFoundException('Several ' . $classType . ' classes match ' . $modName . ' ' . $fileType);
+            $msg = 'Several "#(1)" classes match module "#(2)" type "#(3)"';
+            $vars = [$classType, $modName, $fileType];
+            throw new DuplicateException($vars, $msg);
         }
         return null;
     }
@@ -176,6 +189,7 @@ class xarClassMap extends xarObject
      * @param string $modName use empty string for stand-alone blocks
      * @param string $type
      * @param ?string $interface (optional)
+     * @throws \DuplicateException
      * @return array{classname: string, filepath: string, module: string, type: string, interface: string}|null
      */
     public static function findBlock(string $modName, string $type, ?string $interface = null): array|null
@@ -214,7 +228,9 @@ class xarClassMap extends xarObject
             return ['classname' => $className, 'filepath' => $filePath, 'module' => $modName, 'type' => $type, 'interface' => $interface];
         }
         if (count($found) > 1) {
-            throw new ClassNotFoundException('Several block classes match ' . $modName . ' ' . $type . ' ' . $interface);
+            $msg = 'Several "#(1)" classes match module "#(2)" type "#(3)"';
+            $vars = ['blocks', $modName, $type . $interface];
+            throw new DuplicateException($vars, $msg);
         }
         return null;
     }
@@ -309,6 +325,31 @@ class xarClassMap extends xarObject
     }
 
     /**
+     * Summary of getDataObjects - @todo not reliable here
+     * @param ?string $modName (optional)
+     * @param ?string $type dataobject type (optional)
+     * @return array<string, string>
+     */
+    public static function getDataObjects(?string $modName = null, ?string $type = null): array
+    {
+        // we can specify modName or type or both here
+        return static::getClassFiles('dataobjects', $modName, $type);
+    }
+
+    /**
+     * Summary of findDataObject - @todo not reliable here
+     * @param string $modName
+     * @param string $type dataobject type like role, category etc.
+     * @param ?string $suffix (optional) for middleware, dataobjects etc.
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
+     */
+    public static function findDataObject(string $modName, string $type, ?string $suffix = null)
+    {
+        // we have 2 classes here: Role and RoleList - pick one based on $suffix
+        return static::findClassFile('dataobjects', $modName, $type, $suffix);
+    }
+
+    /**
      * Summary of getProperties
      * @param ?string $modName (optional)
      * @param ?string $type property type (optional)
@@ -325,26 +366,14 @@ class xarClassMap extends xarObject
      * Summary of findProperty
      * @param string $modName use empty string for stand-alone properties
      * @param string $type property type
-     * @return array{classname: string, filepath: string, module: string, type: string}|null
+     * @throws \DuplicateException
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
      */
     public static function findProperty(string $modName, string $type): array|null
     {
-        $found = static::getProperties($modName, $type);
-        if (count($found) > 1) {
-            // Ignore installer classes of properties (they are extensions)
-            $found = array_filter($found, function ($class) {
-                return !str_ends_with($class, 'Install');
-            }, ARRAY_FILTER_USE_KEY);
-        }
-        if (count($found) == 1) {
-            $filePath = reset($found);
-            $className = array_key_first($found);
-            return ['classname' => $className, 'filepath' => $filePath, 'module' => $modName, 'type' => $type];
-        }
-        if (count($found) > 1) {
-            throw new ClassNotFoundException('Several property classes match ' . $modName . ' ' . $type);
-        }
-        return null;
+        // Ignore installer classes of properties (they are extensions)
+        $suffix = 'Property';
+        return static::findClassFile('properties', $modName, $type, $suffix);
     }
 
     /**
@@ -363,21 +392,37 @@ class xarClassMap extends xarObject
      * Summary of findController
      * @param string $modName
      * @param string $type route type like default, short etc.
-     * @return array{classname: string, filepath: string, module: string, type: string}|null
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
      * @see xarDispatcher::findController()
      */
     public static function findController(string $modName, string $type)
     {
-        $found = static::getControllers($modName, $type);
-        if (count($found) == 1) {
-            $filePath = reset($found);
-            $className = array_key_first($found);
-            return ['classname' => $className, 'filepath' => $filePath, 'module' => $modName, 'type' => $type];
-        }
-        if (count($found) > 1) {
-            throw new ClassNotFoundException('Several controller classes match ' . $modName . ' ' . $type);
-        }
-        return null;
+        return static::findClassFile('controllers', $modName, $type);
+    }
+
+    /**
+     * Summary of getMiddleware
+     * @param ?string $modName (optional)
+     * @param ?string $type middleware type like router, middleware etc. (optional)
+     * @return array<string, string>
+     */
+    public static function getMiddleware(?string $modName = null, ?string $type = null): array
+    {
+        // we can specify modName or type or both here
+        return static::getClassFiles('middleware', $modName, $type);
+    }
+
+    /**
+     * Summary of findMiddleware
+     * @param string $modName
+     * @param string $type middleware type like router, middleware etc.
+     * @param ?string $suffix (optional) for middleware, dataobjects etc.
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
+     */
+    public static function findMiddleware(string $modName, string $type, ?string $suffix = null)
+    {
+        // we have 2 classes here: DataObjectMiddleware and DataObjectApiMiddleware - pick one based on $suffix
+        return static::findClassFile('middleware', $modName, $type, $suffix);
     }
 
     /**
