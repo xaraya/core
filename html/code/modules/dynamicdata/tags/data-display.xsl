@@ -10,6 +10,7 @@
 
 <xsl:template match="xar:data-display">
   <xsl:processing-instruction name="php">
+      <xsl:text>$context ??= null;&nl;</xsl:text>
       <xsl:choose>
         <xsl:when test="not(@object)">
           <!-- No object passed in -->
@@ -25,7 +26,7 @@
               <xsl:value-of select="@definition"/>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:text>);</xsl:text>
+          <xsl:text>, $context);</xsl:text>
         </xsl:when>
         <xsl:otherwise>
           <xsl:choose>
@@ -41,7 +42,7 @@
               <xsl:value-of select="@object"/>
               <xsl:text>=DataObjectFactory::getObject(array('name'=>'</xsl:text>
               <xsl:value-of select="@object"/>
-              <xsl:text>'));</xsl:text>
+              <xsl:text>'), $context);</xsl:text>
               <xsl:text>echo </xsl:text>
               <xsl:text>$__</xsl:text>
               <xsl:value-of select="@object"/>

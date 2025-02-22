@@ -25,6 +25,7 @@
 
   <xsl:template match="xar:select">
     <xsl:processing-instruction name="php">
+      <xsl:text>$context ??= null;&nl;</xsl:text>
       <!-- First get the object whose the query we want to select from-->
       <xsl:text>$__object=</xsl:text>
       <xsl:choose>
@@ -36,7 +37,7 @@
          <xsl:text>sys::import('modules.dynamicdata.class.objects.factory');</xsl:text>
           <xsl:text>$__object=DataObjectFactory::getObjectList(array('name'=>'</xsl:text>
           <xsl:value-of select="@objectname"/>
-          <xsl:text>'));</xsl:text>
+          <xsl:text>'), $context);</xsl:text>
         </xsl:when>
         <xsl:otherwise>
           <xsl:text>throw new Exception('An object or objectname is required');</xsl:text>

@@ -10,6 +10,7 @@
 
 <xsl:template match="xar:data-view">
   <xsl:processing-instruction name="php">
+    <xsl:text>$context ??= null;&nl;</xsl:text>
     <xsl:choose>
       <!-- No object or objectname? Generate ourselves then -->
       <xsl:when test="not(@object) and not(@objectname)">
@@ -18,7 +19,7 @@
         <xsl:call-template name="atts2args">
           <xsl:with-param name="nodeset" select="@*"/>
         </xsl:call-template>
-        <xsl:text>);</xsl:text>
+        <xsl:text>, $context);</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
@@ -33,7 +34,7 @@
             <xsl:value-of select="@objectname"/>
             <xsl:text>=DataObjectFactory::getObjectList(array('name'=>'</xsl:text>
             <xsl:value-of select="@objectname"/>
-            <xsl:text>'));</xsl:text>
+            <xsl:text>'), $context);</xsl:text>
             <xsl:text>$__</xsl:text>
             <xsl:value-of select="@objectname"/>
             <xsl:text>-&gt;getItems(</xsl:text>

@@ -10,7 +10,8 @@
 
 <xsl:template match="xar:place-css">
   <xsl:processing-instruction name="php">
-    <xsl:text>echo xarMod::apiFunc('themes','user','deliver',array('method' =&gt; 'render','base' =&gt; 'theme'));</xsl:text>
+    <xsl:text>$context ??= null;&nl;</xsl:text>
+    <xsl:text>echo xarMod::apiFunc('themes','user','deliver',array('method' =&gt; 'render','base' =&gt; 'theme'), $context);</xsl:text>
   </xsl:processing-instruction>
 </xsl:template>
 
