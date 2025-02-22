@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="user-mod-head"/>
+    <div class="xar-mod-body">
+
+        <h2>Class Map</h2>
+        <p>This page allows you to explore the autoload class map for Xaraya modules</p>
+        <xar:set name="classmap">xarClassMap::getClassMap()</xar:set>
+        <xar:set name="dummy">xarVar::fetch('class', 'isset', $class, null, xarVar::NOT_REQUIRED)</xar:set>
+        <xar:set name="dummy">xarVar::fetch('mod', 'isset', $mod, null, xarVar::NOT_REQUIRED)</xar:set>
+
+        <ul>
+        <xar:foreach in="$classmap" key="$classtype" value="$values">
+            <li>
+                <xar:set name="url">xarServer::getCurrentURL(['class' => $classtype, 'mod' => null])</xar:set>
+                <xar:if condition="!empty($class) and $class eq $classtype">
+                    <a href="#$url#">#$classtype#</a>:
+                    <ul>
+                    <xar:foreach in="$values" key="$module" value="$types">
+                        <xar:set name="url">xarServer::getCurrentURL(['class' => $classtype, 'mod' => $module])</xar:set>
+                        <xar:if condition="is_array($types)">
+                            <li>
+                                <xar:if condition="isset($mod) and $mod eq $module">
+                                    #$module# (#count($types)#):
+                                    <ul>
+                                    <xar:foreach in="$types" key="$type" value="$items">
+                                        <li>
+                                            <xar:if condition="$classtype eq 'methods'">
+                                                #$type# (#count($items)#)
+                                            <xar:else/>
+                                                #$type# =&gt; #array_key_first($items)#
+                                            </xar:if>
+                                        </li>
+                                    </xar:foreach>
+                                    </ul>
+                                <xar:else/>
+                                    <a href="#$url#">#$module#&#160;</a> (#count($types)#)
+                                </xar:if>
+                            </li>
+                        <xar:else/>
+                            <li>
+                                <xar:if condition="isset($mod) and $mod eq $module">
+                                    #$module#:
+                                    #basename($types)#
+                                <xar:else/>
+                                    <a href="#$url#">#$module#</a>
+                                </xar:if>
+                            </li>
+                        </xar:if>
+                    </xar:foreach>
+                    </ul>
+                <xar:else/>
+                    <a href="#$url#">#$classtype#</a>
+                </xar:if>
+            </li>
+        </xar:foreach>
+        </ul>
+    </div>
+
+</xar:template>
