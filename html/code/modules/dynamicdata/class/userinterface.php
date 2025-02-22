@@ -12,9 +12,15 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+sys::import("xaraya.context.contexttrait");
 sys::import("xaraya.context.context");
+sys::import("xaraya.services.variables");
 use Xaraya\DataObject\Handlers\DefaultHandler;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
+use Xaraya\Services\ServiceFactory;
+use Xaraya\Services\VariablesInterface;
 
 /**
  * Dynamic Object User Interface (work in progress)
@@ -59,8 +65,10 @@ use Xaraya\Context\Context;
  * }
  *
  */
-class DataObjectUserInterface extends xarObject
+class DataObjectUserInterface extends xarObject implements ContextInterface
 {
+    use ContextTrait;
+
     // application framework we're working with
     public string $framework = 'xaraya';
 
@@ -82,6 +90,13 @@ class DataObjectUserInterface extends xarObject
     // current handler
     /** @var DefaultHandler|object|null */
     private $handler = null;
+    private ?VariablesInterface $xarVar = null;
+
+    protected function var(): VariablesInterface
+    {
+        $this->xarVar ??= ServiceFactory::getVariablesService($this);
+        return $this->xarVar;
+    }
 
     /**
      * Set up any initial parameters (all optional)
@@ -222,10 +237,11 @@ class DataObjectUserInterface extends xarObject
      */
     public function handle(array $args = [], ?Context $context = null)
     {
-        if (!xarVar::fetch('method', 'isset', $args['method'], null, xarVar::DONT_SET)) {
+        $this->setContext($context);
+        if (!$this->var()->check('method', $args['method'])) {
             return;
         }
-        if (!xarVar::fetch('itemid', 'isset', $args['itemid'], null, xarVar::DONT_SET)) {
+        if (!$this->var()->check('itemid', $args['itemid'])) {
             return;
         }
 
@@ -277,12 +293,13 @@ class DataObjectUserInterface extends xarObject
                 $this->args['nextmethod'] = $methodmap['nextmethod'];
             }
 
-            // create the new handler with the initial arguments
-            $this->handler = new $handlerclazz($this->args);
+            // create the new handler with the initial arguments and context
+            $this->handler = new $handlerclazz($this->args, $context);
+        } else {
+            // set the context for this handler call
+            $this->handler->setContext($context);
         }
         $context?->tracePath(__METHOD__ . ': ' . $this->handler::class . ' ' . $handlerfunc, $args);
-        // set the context for this handler call
-        $this->handler->setContext($context);
 
         // run the handler with any additional arguments and return the output
         return $this->handler->$handlerfunc($args);

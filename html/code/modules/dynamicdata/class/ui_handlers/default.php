@@ -21,6 +21,8 @@ use sys;
 
 sys::import('xaraya.objects');
 sys::import('modules.dynamicdata.class.ui_handlers.servicestrait');
+sys::import("xaraya.context.context");
+use Xaraya\Context\Context;
 
 /**
  * Dynamic Object User Interface Handler
@@ -61,11 +63,13 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
      *     $args['linkfunc'] main function handling all object method calls (= if we're not using object URLs)
      *     $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
      *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList() later on
+     * @param ?Context<string, mixed> $context optional context for the handler call (default = none)
      */
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], ?Context $context = null)
     {
         // set core services for access via methods - nothing to do here
         //$this->setCoreServices();
+        $this->setContext($context);
 
         // set a specific GUI module for now
         if (!empty($args['tplmodule'])) {
