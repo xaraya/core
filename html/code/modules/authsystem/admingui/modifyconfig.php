@@ -36,7 +36,7 @@ class ModifyconfigMethod extends MethodClass
     /**
      * Modify the configuration settings of this module
      * Standard GUI function to display and update the configuration settings of the module based on input data.
-     * @return array|string|void Returns display template data on success else an output string will be returned.
+     * @return array|string|true|void Returns display template data on success else an output string will be returned or true on redirect
      * @see AdminGui::modifyconfig()
      */
     public function __invoke(array $args = [])
@@ -64,33 +64,54 @@ class ModifyconfigMethod extends MethodClass
         switch (strtolower($phase)) {
             case 'modify':
             default:
+                $data = $this->modifyConfig($data);
                 break;
 
             case 'update':
-                // Confirm authorisation code. AJAX calls ignore this
-                if (!$this->sec()->confirmAuthKey()) {
-                    return $this->ctl()->badRequest('bad_author');
-                }
-                $isvalid = $data['module_settings']->checkInput();
-                if (!$isvalid) {
-                    // If this is an AJAX call, send back a message (and end)
-                    $this->ctl()->getRequest()->msgAjax($data['module_settings']->getInvalids());
-                    // No AJAX, just send the data to the template for display
-                    return $this->tpl()->module('authsystem', 'admin', 'modifyconfig', $data);
-                } else {
-                    $itemid = $data['module_settings']->updateItem();
-                }
-                xarModVars::set('authsystem', 'forwarding_page', $data['forwarding_page']);
-                xarModVars::set('authsystem', 'ask_forward', $data['ask_forward']);
-                xarModVars::set('authsystem', 'uselockout', $data['uselockout']);
-                xarModVars::set('authsystem', 'lockouttime', $data['lockouttime']);
-                xarModVars::set('authsystem', 'lockouttries', $data['lockouttries']);
-
-                // If this is an AJAX call, end here
-                $this->ctl()->getRequest()->exitAjax();
-                $this->ctl()->redirect($this->ctl()->getCurrentURL());
-                return true;
+                return $this->updateConfig($data);
         }
         return $data;
+    }
+
+    /**
+     * Summary of modifyConfig
+     * @param array<mixed> $data
+     * @return array<mixed>
+     */
+    public function modifyConfig(array $data)
+    {
+        return $data;
+    }
+
+    /**
+     * Summary of updateConfig
+     * @param array<mixed> $data
+     * @return string|true output display string if invalid data submitted or true on redirect
+     */
+    public function updateConfig(array $data)
+    {
+        // Confirm authorisation code. AJAX calls ignore this
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
+        }
+        $isvalid = $data['module_settings']->checkInput();
+        if (!$isvalid) {
+            // If this is an AJAX call, send back a message (and end)
+            $this->ctl()->getRequest()->msgAjax($data['module_settings']->getInvalids());
+            // No AJAX, just send the data to the template for display
+            return $this->tpl()->module('authsystem', 'admin', 'modifyconfig', $data);
+        } else {
+            $itemid = $data['module_settings']->updateItem();
+        }
+        xarModVars::set('authsystem', 'forwarding_page', $data['forwarding_page']);
+        xarModVars::set('authsystem', 'ask_forward', $data['ask_forward']);
+        xarModVars::set('authsystem', 'uselockout', $data['uselockout']);
+        xarModVars::set('authsystem', 'lockouttime', $data['lockouttime']);
+        xarModVars::set('authsystem', 'lockouttries', $data['lockouttries']);
+
+        // If this is an AJAX call, end here
+        $this->ctl()->getRequest()->exitAjax();
+        $this->ctl()->redirect($this->ctl()->getCurrentURL());
+        return true;
     }
 }
