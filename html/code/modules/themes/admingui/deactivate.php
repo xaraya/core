@@ -60,20 +60,19 @@ class DeactivateMethod extends MethodClass
             return xarController::badRequest('bad_author', $this->getContext());
         }
 
-        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }
-        xarVar::fetch(
+        $this->var()->find(
             'return_url',
-            'pre:trim:str:1:',
             $return_url,
-            '',
-            xarVar::NOT_REQUIRED
+            'pre:trim:str:1:',
+            ''
         );
 
         //Checking if the user has already passed thru the GUI:
-        xarVar::fetch('command', 'checkbox', $command, false, xarVar::NOT_REQUIRED);
+        $this->var()->find('command', $command, 'checkbox', false);
 
         // set the target location (anchor) to go to within the page
         $minfo = xarTheme::getInfo($id);

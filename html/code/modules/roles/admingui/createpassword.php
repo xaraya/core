@@ -41,6 +41,7 @@ class CreatepasswordMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
@@ -49,9 +50,9 @@ class CreatepasswordMethod extends MethodClass
         }
 
         // Get parameters
-        xarVar::fetch('state', 'isset', $state, null, xarVar::DONT_SET);
-        xarVar::fetch('groupid', 'int:0:', $groupid, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('id', 'isset', $id);
+        $this->var()->check('state', $state);
+        $this->var()->find('groupid', $groupid, 'int:0:', 0);
+        $this->var()->check('id', $id);
         if (empty($id)) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
             $vars = ['parameters', 'admin', 'createpassword', 'Roles'];

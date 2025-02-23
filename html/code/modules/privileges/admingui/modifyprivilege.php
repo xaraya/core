@@ -47,17 +47,17 @@ class ModifyprivilegeMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET);
-        xarVar::fetch('pname', 'isset', $name, null, xarVar::DONT_SET);
-        xarVar::fetch('prealm', 'isset', $realm, null, xarVar::DONT_SET);
-        xarVar::fetch('pmodule', 'isset', $pmodule, null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('pcomponent', 'isset', $component, null, xarVar::DONT_SET);
-        xarVar::fetch('poldcomponent', 'isset', $oldcomponent, null, xarVar::DONT_SET);
-        xarVar::fetch('ptype', 'isset', $type, null, xarVar::DONT_SET);
-        xarVar::fetch('plevel', 'isset', $level, null, xarVar::DONT_SET);
-        xarVar::fetch('pinstance', 'array', $instance, [], xarVar::NOT_REQUIRED);
+        $this->var()->check('id', $id);
+        $this->var()->check('pname', $name);
+        $this->var()->check('prealm', $realm);
+        $this->var()->find('pmodule', $pmodule);
+        $this->var()->check('pcomponent', $component);
+        $this->var()->check('poldcomponent', $oldcomponent);
+        $this->var()->check('ptype', $type);
+        $this->var()->check('plevel', $level);
+        $this->var()->find('pinstance', $instance, 'array', []);
 
-        xarVar::fetch('pparentid', 'isset', $pparentid, null, xarVar::DONT_SET);
+        $this->var()->check('pparentid', $pparentid);
 
         // Clear Session Vars
         xarSession::delVar('privileges_statusmsg');

@@ -45,6 +45,7 @@ class ViewMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
@@ -57,12 +58,11 @@ class ViewMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch(
+        $this->var()->check(
             'phase',
-            'pre:trim:lower:enum:update',
             $phase,
-            null,
-            xarVar::DONT_SET
+            'pre:trim:lower:enum:update',
+            null
         );
 
         // update default themes
@@ -72,19 +72,17 @@ class ViewMethod extends MethodClass
             }
             $old_user_theme = xarModVars::get('themes', 'default_theme');
             $old_admin_theme = xarModVars::get('themes', 'admin_theme');
-            xarVar::fetch(
+            $this->var()->check(
                 'user_theme',
-                'pre:trim:lower:str:1:',
                 $new_user_theme,
-                $old_user_theme,
-                xarVar::NOT_REQUIRED
-            );
-            xarVar::fetch(
-                'admin_theme',
                 'pre:trim:lower:str:1:',
+                $old_user_theme
+            );
+            $this->var()->check(
+                'admin_theme',
                 $new_admin_theme,
-                $old_admin_theme,
-                xarVar::NOT_REQUIRED
+                'pre:trim:lower:str:1:',
+                $old_admin_theme
             );
             if ($new_user_theme != $old_user_theme) {
                 $themeid = xarTheme::getIDFromName($new_user_theme);
@@ -135,36 +133,36 @@ class ViewMethod extends MethodClass
         // display phase
         $data = [];
 
-        xarVar::fetch(
+        $this->var()->check(
             'startnum',
-            'int:1:',
             $data['startnum'],
-            1,
-            xarVar::NOT_REQUIRED
+            'int:1:',
+            1
         );
 
-        xarVar::fetch(
+        $this->var()->check(
             'tab',
-            'pre:trim:lower:enum:plain:preview',
             $data['tab'],
-            null,
-            xarVar::DONT_SET
+            'pre:trim:lower:enum:plain:preview',
+            null
         );
-        xarVar::fetch(
+        $this->var()->check(
             'state',
-            'int',
             $data['state'],
-            null,
-            xarVar::DONT_SET
+            'int',
+            null
         );
-        xarVar::fetch('class', 'int:0:4', // 0=system, 1=utility, 2=user, 3=all
-            $data['class'], null, xarVar::DONT_SET);
-        xarVar::fetch(
+        $this->var()->check(
+            'class',
+            $data['class'],
+            'int:0:4', // 0=system, 1=utility, 2=user, 3=all
+            null
+        );
+        $this->var()->check(
             'sort',
-            'pre:trim:upper:enum:ASC:DESC',
             $data['sort'],
-            'ASC',
-            xarVar::NOT_REQUIRED
+            'pre:trim:upper:enum:ASC:DESC',
+            'ASC'
         );
 
         if (!isset($data['tab'])) {

@@ -82,7 +82,7 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
         /* <chris> removing this for now as it isn't used anywhere
         if (file_exists(sys::code() . 'modules/'.$thismodname.'/xaradmin/overview.php')) {
             if ($thisfuncname<>'overview' && $thisfuncname<>'main') {
-                $overviewlink = xarController::URL($thismodname,'admin','overview',array(),NULL,$thisfuncname);
+                $overviewlink = xarController::URL($thismodname,'admin','overview',array(),null,$thisfuncname);
             } else {
                 $overviewlink = xarController::URL($thismodname,'admin','overview');
             }

@@ -55,8 +55,8 @@ class RemovememberMethod extends MethodClass
         }
 
         // get input from any view of this page
-        xarVar::fetch('childid', 'int', $childid, null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('parentid', 'int', $parentid, null, xarVar::NOT_REQUIRED);
+        $this->var()->find('childid', $childid, 'int', null);
+        $this->var()->find('parentid', $parentid, 'int', null);
 
         // call the API function
         if (!$adminapi->removemember(['parentid' => $parentid, 'childid' => $childid])) {

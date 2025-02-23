@@ -46,7 +46,7 @@ class MainMethod extends MethodClass
         $data = [];
 
         $out = '';
-        xarVar::fetch('catid', 'isset', $catid, null, xarVar::DONT_SET);
+        $this->var()->check('catid', $catid);
         if (empty($catid) || !is_numeric($catid)) {
             // for DMOZ-like URLs
             // xarModVars::set('categories','enable_short_urls',1);

@@ -43,12 +43,12 @@ class ModifyMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $data = [];
-        xarVar::fetch('confirm', 'int', $confirm, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('id', 'id', $id, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('itemid', 'id', $data['itemid'], null, xarVar::DONT_SET);
+        $this->var()->find('confirm', $confirm, 'int', 0);
+        $this->var()->find('id', $id, 'id', 0);
+        $this->var()->check('itemid', $data['itemid'], 'id', null);
         $id = $data['itemid'] ?? $id;
 
-        xarVar::fetch('duvs', 'array', $data['duvs'], [], xarVar::NOT_REQUIRED);
+        $this->var()->find('duvs', $data['duvs'], 'array', []);
 
         $data['object'] = xarRoles::get($id);
         if (empty($data['object'])) {

@@ -46,12 +46,12 @@ class ComposerMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('setup', 'isset', $setup, null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('install', 'isset', $install, null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('update', 'isset', $update, null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('install_dir', 'str', $data['install_dir'], sys::lib(), xarVar::NOT_REQUIRED);
-        xarVar::fetch('package_dir', 'str', $data['package_dir'], 'vendor', xarVar::NOT_REQUIRED);
-        xarVar::fetch('install_com', 'str', $data['install_com'], 'php composer.phar update ', xarVar::NOT_REQUIRED);
+        $this->var()->find('setup', $setup);
+        $this->var()->find('install', $install);
+        $this->var()->find('update', $update);
+        $this->var()->find('install_dir', $data['install_dir'], 'str', sys::lib());
+        $this->var()->find('package_dir', $data['package_dir'], 'str', 'vendor');
+        $this->var()->find('install_com', $data['install_com'], 'str', 'php composer.phar update ');
 
         // Check that the libcurl extension is installed
         $data['libcurl']             = extension_loaded('curl');
@@ -141,7 +141,7 @@ class ComposerMethod extends MethodClass
             chdir($base_directory);
             $data['message'][] = 'success';
         } elseif ($update) {
-            xarVar::fetch('composer', 'str', $data['composer'], '', xarVar::NOT_REQUIRED);
+            $this->var()->find('composer', $data['composer'], 'str', '');
             $adminapi->write_file(['file' => $data['composer_file'], 'data' => $data['composer']]);
         }
 

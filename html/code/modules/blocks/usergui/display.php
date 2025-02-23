@@ -47,7 +47,7 @@ class DisplayMethod extends MethodClass
         foreach ($userapi->getall() as $bid => $binfo) {
             $benum .= ':' . $binfo['name'];
         }
-        xarVar::fetch('name', $benum, $name);
+        $this->var()->check('name', $name, $benum);
 
         // Template issues a wrapped xar:block tag.
         $data['name'] = $name;

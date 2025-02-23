@@ -55,14 +55,14 @@ class CreatemailMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('id', 'int:0:', $id, -1, xarVar::NOT_REQUIRED);
-        xarVar::fetch('ids', 'isset', $ids, null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('state', 'int:0:', $state, xarRoles::ROLES_STATE_ALL, xarVar::NOT_REQUIRED);
-        xarVar::fetch('startnum', 'int:1:', $startnum, 1, xarVar::NOT_REQUIRED);
-        xarVar::fetch('order', 'str:0:', $data['order'], 'name', xarVar::NOT_REQUIRED);
-        xarVar::fetch('includesubgroups', 'int:0:', $data['includesubgroups'], 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('mailtype', 'str:0:', $data['mailtype'], 'blank', xarVar::NOT_REQUIRED);
-        xarVar::fetch('selstyle', 'isset', $selstyle, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int:0:', -1);
+        $this->var()->find('ids', $ids);
+        $this->var()->find('state', $state, 'int:0:', xarRoles::ROLES_STATE_ALL);
+        $this->var()->find('startnum', $startnum, 'int:1:', 1);
+        $this->var()->find('order', $data['order'], 'str:0:', 'name');
+        $this->var()->find('includesubgroups', $data['includesubgroups'], 'int:0:', 0);
+        $this->var()->find('mailtype', $data['mailtype'], 'str:0:', 'blank');
+        $this->var()->find('selstyle', $selstyle, 'isset', 0);
 
         // what type of email: a selection or a single email?
         if ($id < 1) {

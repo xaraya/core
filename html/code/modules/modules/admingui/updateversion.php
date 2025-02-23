@@ -48,7 +48,7 @@ class UpdateversionMethod extends MethodClass
         }
 
         // Get parameters from input
-        xarVar::fetch('id', 'int:1', $regId, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $regId, 'int:1', 0);
         if (empty($regId)) {
             return xarController::notFound(null, $this->getContext());
         }

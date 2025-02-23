@@ -89,7 +89,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 $itemtype = xarVar::getCached('Blocks.categories','itemtype');
             } else {
                 // try to get itemtype from input
-                xarVar::fetch('itemtype', 'id', $itemtype, NULL, xarVar::DONT_SET);
+                $this->var()->check('itemtype', $itemtype, 'id', null);
             }
         }
         if (empty($itemtype)) {
@@ -102,7 +102,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 $itemid = xarVar::getCached('Blocks.categories','itemid');
             } else {
                 // try to get itemid from input
-                xarVar::fetch('itemid', 'id', $itemid, NULL, xarVar::DONT_SET);
+                $this->var()->check('itemid', $itemid, 'id', null);
             }
         }
         if (empty($itemid)) {
@@ -209,7 +209,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
         }
         if (empty($catid)) {
             // try to get catid from input
-            xarVar::fetch('catid', 'str', $catid, NULL, xarVar::DONT_SET);
+            $this->var()->check('catid', $catid, 'str', null);
         }
         // turn $catid into $cids array (and set $andcids flag)
         $istree = 0;
@@ -238,8 +238,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
             }
             if (empty($cids)) {
                 // try to get cids from input
-                xarVar::fetch('cids',    'isset', $cids,    NULL,  xarVar::DONT_SET);
-                xarVar::fetch('andcids', 'isset', $andcids, false, xarVar::NOT_REQUIRED);
+                $this->var()->find('cids', $cids);
+                $this->var()->find('andcids', $andcids, 'isset', false);
 
                 if (empty($cids)) {
                     $cids = array();

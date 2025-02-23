@@ -44,12 +44,12 @@ class SettingsMethod extends MethodClass
         }
 
         // form parameters
-        xarVar::fetch('hidecore', 'str:1:', $hidecore, '0', xarVar::NOT_REQUIRED);
-        xarVar::fetch('selstyle', 'str:1:', $selstyle, 'plain', xarVar::NOT_REQUIRED);
-        xarVar::fetch('selfilter', 'str:1:', $selfilter, 'xarTheme::STATE_ANY', xarVar::NOT_REQUIRED);
-        xarVar::fetch('selclass', 'str:1:', $selclass, 'all', xarVar::NOT_REQUIRED);
-        xarVar::fetch('regen', 'str:1:', $regen, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('useicons', 'checkbox', $useicons, false, xarVar::NOT_REQUIRED);
+        $this->var()->find('hidecore', $hidecore, 'str:1:', '0');
+        $this->var()->find('selstyle', $selstyle, 'str:1:', 'plain');
+        $this->var()->find('selfilter', $selfilter, 'str:1:', 'xarTheme::STATE_ANY');
+        $this->var()->find('selclass', $selclass, 'str:1:', 'all');
+        $this->var()->find('regen', $regen, 'str:1:', false);
+        $this->var()->find('useicons', $useicons, 'checkbox', false);
 
         if (!xarModUserVars::set('themes', 'hidecore', $hidecore)) {
             return;

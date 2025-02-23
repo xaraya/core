@@ -50,17 +50,17 @@ class NewMethod extends MethodClass
 
         $data = [];
 
-        xarVar::fetch('id', 'isset', $data['id'], '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('pname', 'isset', $data['pname'], '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('pparentid', 'isset', $data['pparentid'], '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('prealm', 'isset', $data['prealm'], 'All', xarVar::NOT_REQUIRED);
-        xarVar::fetch('pmodule', 'isset', $data['pmodule'], 'All', xarVar::NOT_REQUIRED);
-        xarVar::fetch('pcomponent', 'isset', $data['pcomponent'], 'All', xarVar::NOT_REQUIRED);
-        xarVar::fetch('pinstance', 'isset', $data['pinstance'], '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('plevel', 'isset', $data['plevel'], '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('ptype', 'isset', $data['ptype'], '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('show', 'isset', $data['show'], 'assigned', xarVar::NOT_REQUIRED);
-        xarVar::fetch('trees', 'isset', $trees, null, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $data['id'], 'isset', '');
+        $this->var()->find('pname', $data['pname'], 'isset', '');
+        $this->var()->find('pparentid', $data['pparentid'], 'isset', '');
+        $this->var()->find('prealm', $data['prealm'], 'isset', 'All');
+        $this->var()->find('pmodule', $data['pmodule'], 'isset', 'All');
+        $this->var()->find('pcomponent', $data['pcomponent'], 'isset', 'All');
+        $this->var()->find('pinstance', $data['pinstance'], 'isset', '');
+        $this->var()->find('plevel', $data['plevel'], 'isset', '');
+        $this->var()->find('ptype', $data['ptype'], 'isset', '');
+        $this->var()->find('show', $data['show'], 'isset', 'assigned');
+        $this->var()->find('trees', $trees);
 
         // Clear Session Vars
         xarSession::delVar('privileges_statusmsg');

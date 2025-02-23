@@ -46,7 +46,7 @@ class ToolsMethod extends MethodClass
 
         $data = [];
 
-        /*     xarVar::fetch('id', 'id', $id); */
+        /*     $this->var()->check('id', $id, 'id'); */
         /*     // obtain maximum information about module */
         /*     $modinfo = xarMod::getInfo($id); */
         /*      */

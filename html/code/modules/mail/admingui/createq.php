@@ -56,7 +56,7 @@ class CreateqMethod extends MethodClass
         }
 
         // What do we need to do
-        xarVar::fetch('name', 'str:1:12', $qName);
+        $this->var()->find('name', $qName, 'str:1:12');
 
         // Do we have the master ?
         if (!$qdefInfo = $adminapi->getqdef()) {

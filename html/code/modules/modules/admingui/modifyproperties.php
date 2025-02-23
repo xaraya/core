@@ -48,13 +48,13 @@ class ModifypropertiesMethod extends MethodClass
         extract($args);
 
         // xarVar::fetch does validation if not explicitly set to be not required
-        xarVar::fetch('id', 'int', $id, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int', 0);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }
 
-        xarVar::fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET);
-        xarVar::fetch('phase', 'pre:trim:str:1', $phase, 'form', xarVar::NOT_REQUIRED);
+        $this->var()->check('return_url', $return_url);
+        $this->var()->find('phase', $phase, 'pre:trim:str:1', 'form');
 
         $modInfo = xarMod::getInfo($id);
         if (!isset($modInfo)) {

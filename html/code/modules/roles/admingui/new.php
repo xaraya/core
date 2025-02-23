@@ -49,10 +49,10 @@ class NewMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('parentid', 'id', $data['parentid'], (int) xarModVars::get('roles', 'defaultgroup'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('itemtype', 'int', $data['itemtype'], xarRoles::ROLES_USERTYPE, xarVar::NOT_REQUIRED);
-        xarVar::fetch('duvs', 'array', $data['duvs'], [], xarVar::NOT_REQUIRED);
-        xarVar::fetch('confirm', 'str', $confirm, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('parentid', $data['parentid'], 'id', (int) xarModVars::get('roles', 'defaultgroup'));
+        $this->var()->find('itemtype', $data['itemtype'], 'int', xarRoles::ROLES_USERTYPE);
+        $this->var()->find('duvs', $data['duvs'], 'array', []);
+        $this->var()->find('confirm', $confirm, 'str', '');
 
         if ($data['itemtype'] == xarRoles::ROLES_USERTYPE) {
             $name = 'roles_users';

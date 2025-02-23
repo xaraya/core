@@ -67,18 +67,18 @@ class LoginMethod extends MethodClass
 
         extract($args);
 
-        xarVar::fetch('uname', 'str:0:64', $uname, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('uname', $uname, 'str:0:64', '');
         if (empty($uname)) {
             return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
         }
-        xarVar::fetch('pass', 'str:0:254', $pass, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('pass', $pass, 'str:0:254', '');
         if (empty($pass)) {
             return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
         }
 
         $redirect = xarServer::getBaseURL();
-        xarVar::fetch('rememberme', 'checkbox', $rememberme, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('redirecturl', 'str:1:254', $redirecturl, $redirect, xarVar::NOT_REQUIRED);
+        $this->var()->find('rememberme', $rememberme, 'checkbox', false);
+        $this->var()->find('redirecturl', $redirecturl, 'str:1:254', $redirect);
 
         // Defaults
         if (preg_match('/authsystem/', $redirecturl)) {

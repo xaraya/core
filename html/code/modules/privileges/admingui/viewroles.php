@@ -45,8 +45,8 @@ class ViewrolesMethod extends MethodClass
 
         $data = [];
 
-        xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET);
-        xarVar::fetch('show', 'isset', $data['show'], 'assigned', xarVar::NOT_REQUIRED);
+        $this->var()->check('id', $id);
+        $this->var()->find('show', $data['show'], 'isset', 'assigned');
 
         // Clear Session Vars
         xarSession::delVar('privileges_statusmsg');

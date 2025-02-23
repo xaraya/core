@@ -50,6 +50,7 @@ class NewInstanceMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var TypesApi $typesapi */
         $typesapi = $this->typesapi();
         /** @var BlocksApi $blocksapi */
@@ -64,19 +65,17 @@ class NewInstanceMethod extends MethodClass
 
         $data = [];
 
-        xarVar::fetch(
+        $this->var()->check(
             'type_id',
-            'int:1:',
             $data['type_id'],
-            null,
-            xarVar::NOT_REQUIRED
+            'int:1:',
+            null
         );
-        xarVar::fetch(
+        $this->var()->check(
             'phase',
-            'pre:trim:lower:str:1:',
             $phase,
-            'options',
-            xarVar::NOT_REQUIRED
+            'pre:trim:lower:str:1:',
+            'options'
         );
 
         /** @var AccessProperty $accessproperty */
@@ -114,47 +113,41 @@ class NewInstanceMethod extends MethodClass
             }
             if (empty($invalid)) {
                 // set defaults (form phase, 1st run) / fetch input (update phase)
-                xarVar::fetch(
+                $this->var()->find(
                     'name',
-                    'pre:trim:lower:str:1:64',
                     $data['name'],
-                    '',
-                    xarVar::NOT_REQUIRED
+                    'pre:trim:lower:str:1:64',
+                    ''
                 );
-                xarVar::fetch(
+                $this->var()->find(
                     'title',
-                    'pre:trim:str:0:254',
                     $data['title'],
-                    '',
-                    xarVar::NOT_REQUIRED
+                    'pre:trim:str:0:254',
+                    ''
                 );
-                xarVar::fetch(
+                $this->var()->find(
                     'state',
-                    'int:0:3',
                     $data['state'],
-                    null,
-                    xarVar::NOT_REQUIRED
+                    'int:0:3',
+                    null
                 );
-                xarVar::fetch(
+                $this->var()->find(
                     'block_template',
-                    'pre:trim:str:0:127',
                     $data['block_template'],
-                    null,
-                    xarVar::NOT_REQUIRED
-                );
-                xarVar::fetch(
-                    'box_template',
                     'pre:trim:str:0:127',
-                    $data['box_template'],
-                    null,
-                    xarVar::NOT_REQUIRED
+                    null
                 );
-                xarVar::fetch(
+                $this->var()->find(
+                    'box_template',
+                    $data['box_template'],
+                    'pre:trim:str:0:127',
+                    null
+                );
+                $this->var()->find(
                     'groups',
-                    'array',
                     $data['groups'],
-                    [],
-                    xarVar::NOT_REQUIRED
+                    'array',
+                    []
                 );
                 // get the block type object
                 $block_type = $blocksapi->getblock($type);

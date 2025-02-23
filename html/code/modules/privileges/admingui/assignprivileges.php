@@ -47,9 +47,9 @@ class AssignprivilegesMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'all', xarVar::NOT_REQUIRED);
-        xarVar::fetch('tabmodule', 'str:1:100', $tabmodule, 'All Modules', xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
+        $this->var()->find('tab', $data['tab'], 'str:1:100', 'all');
+        $this->var()->find('tabmodule', $tabmodule, 'str:1:100', 'All Modules');
 
         $installed = xarMod::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_INSTALLED]]);
         foreach ($installed as $module) {
@@ -86,9 +86,9 @@ class AssignprivilegesMethod extends MethodClass
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());
                 }
-                xarVar::fetch('role', 'int', $role_id, 0, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-                xarVar::fetch('rolename', 'str', $rolename, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-                xarVar::fetch('privilege', 'int', $privilege_id, 0, xarVar::NOT_REQUIRED);
+                $this->var()->find('role', $role_id, 'int', 0);
+                $this->var()->find('rolename', $rolename, 'str', '');
+                $this->var()->find('privilege', $privilege_id, 'int', 0);
 
                 if (empty($role_id) && !empty($rolename)) {
                     $user = xarMod::apiFunc('roles', 'user', 'get', ['uname' => $rolename]);
@@ -126,7 +126,7 @@ class AssignprivilegesMethod extends MethodClass
                 return true;
 
             case 'remove':
-                xarVar::fetch('assignment', 'str', $assignment, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+                $this->var()->find('assignment', $assignment, 'str', '');
                 $ids = explode(',', $assignment);
                 if ((count($ids) == 2) && !(empty($ids[0]) || empty($ids[1]))) {
                     $dbconn = xarDB::getConn();

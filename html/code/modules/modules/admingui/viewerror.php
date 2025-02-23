@@ -49,7 +49,7 @@ class ViewerrorMethod extends MethodClass
         }
 
         // Get parameters
-        xarVar::fetch('id', 'int', $regId, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $regId, 'int', 0);
         if (empty($regId)) {
             return xarController::notFound(null, $this->getContext());
         }

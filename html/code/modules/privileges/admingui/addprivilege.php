@@ -43,14 +43,14 @@ class AddprivilegeMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('pname', 'isset', $pname, null, xarVar::DONT_SET);
-        xarVar::fetch('prealm', 'isset', $prealm, 'All', xarVar::NOT_REQUIRED);
-        xarVar::fetch('pmodule', 'isset', $pmodule, 'All', xarVar::DONT_SET);
-        xarVar::fetch('pcomponent', 'isset', $pcomponent, null, xarVar::DONT_SET);
-        xarVar::fetch('ptype', 'isset', $type, null, xarVar::DONT_SET);
-        xarVar::fetch('plevel', 'isset', $plevel, null, xarVar::DONT_SET);
-        xarVar::fetch('pparentid', 'isset', $pparentid, null, xarVar::DONT_SET);
-        xarVar::fetch('pinstance', 'array', $pinstances, [], xarVar::NOT_REQUIRED);
+        $this->var()->check('pname', $pname);
+        $this->var()->find('prealm', $prealm, 'isset', 'All');
+        $this->var()->check('pmodule', $pmodule, 'isset', 'All');
+        $this->var()->check('pcomponent', $pcomponent);
+        $this->var()->check('ptype', $type);
+        $this->var()->check('plevel', $plevel);
+        $this->var()->check('pparentid', $pparentid);
+        $this->var()->find('pinstance', $pinstances, 'array', []);
 
         $instance = "";
         foreach ($pinstances as $pinstance) {

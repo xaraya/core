@@ -57,15 +57,15 @@ class AsknotificationMethod extends MethodClass
 
         $data = [];
         // Get parameters
-        xarVar::fetch('phase', 'str:0:', $data['phase'], 'display', xarVar::NOT_REQUIRED);
-        xarVar::fetch('mailtype', 'str:0:', $data['mailtype'], 'blank', xarVar::NOT_REQUIRED);
-        xarVar::fetch('id', 'isset', $id, null, xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $data['phase'], 'str:0:', 'display');
+        $this->var()->find('mailtype', $data['mailtype'], 'str:0:', 'blank');
+        $this->var()->find('id', $id);
         //Maybe some kind of return url will make this function available for other modules
-        xarVar::fetch('state', 'int:0:', $data['state'], xarRoles::ROLES_STATE_CURRENT, xarVar::NOT_REQUIRED);
-        xarVar::fetch('groupid', 'int:0:', $data['groupid'], 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('state', $data['state'], 'int:0:', xarRoles::ROLES_STATE_CURRENT);
+        $this->var()->find('groupid', $data['groupid'], 'int:0:', 0);
         //optional value
-        xarVar::fetch('pass', 'str:0:', $data['pass'], null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('ip', 'str:0:', $data['ip'], null, xarVar::NOT_REQUIRED);
+        $this->var()->find('pass', $data['pass'], 'str:0:', null);
+        $this->var()->find('ip', $data['ip'], 'str:0:', null);
         switch ($data['phase']) {
             case 'display':
                 $data['pass'] = xarSession::getVar('tmppass');
@@ -83,8 +83,8 @@ class AsknotificationMethod extends MethodClass
                     $data['message'] = $strings['message'];
                 }
                 //Display the notification form
-                xarVar::fetch('subject', 'str:1:', $data['subject'], $data['subject'], xarVar::NOT_REQUIRED);
-                xarVar::fetch('message', 'str:1:', $data['message'], $data['message'], xarVar::NOT_REQUIRED);
+                $this->var()->find('subject', $data['subject'], 'str:1:', $data['subject']);
+                $this->var()->find('message', $data['message'], 'str:1:', $data['message']);
                 $data['authid'] = xarSec::genAuthKey();
                 $data['id'] = base64_encode(serialize($id));
 
@@ -106,8 +106,8 @@ class AsknotificationMethod extends MethodClass
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());
                 }
-                xarVar::fetch('subject', 'str:1:', $data['subject'], null, xarVar::NOT_REQUIRED);
-                xarVar::fetch('message', 'str:1:', $data['message'], null, xarVar::NOT_REQUIRED);
+                $this->var()->find('subject', $data['subject'], 'str:1:', null);
+                $this->var()->find('message', $data['message'], 'str:1:', null);
 
                 // Need to convert %%var%% to #$var# so that we can compile the template
                 $data['message'] = preg_replace("/%%(.+)%%/", "#$\\1#", $data['message']);

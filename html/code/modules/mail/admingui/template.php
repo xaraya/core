@@ -47,9 +47,9 @@ class TemplateMethod extends MethodClass
         }
 
         extract($args);
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
         if (!isset($mailtype)) {
-            xarVar::fetch('mailtype', 'str:1:100', $data['mailtype'], 'createhook', xarVar::NOT_REQUIRED);
+            $this->var()->find('mailtype', $data['mailtype'], 'str:1:100', 'createhook');
         } else {
             $data['mailtype'] = $mailtype;
         }
@@ -68,8 +68,8 @@ class TemplateMethod extends MethodClass
                 break;
 
             case 'update':
-                xarVar::fetch('message', 'str:1:', $message);
-                xarVar::fetch('subject', 'str:1:', $subject);
+                $this->var()->find('message', $message, 'str:1:');
+                $this->var()->find('subject', $subject, 'str:1:');
                 // Confirm authorisation code
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());

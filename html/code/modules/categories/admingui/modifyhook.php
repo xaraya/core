@@ -134,7 +134,7 @@ class ModifyhookMethod extends MethodClass
                     $cids = $extrainfo['modify_cids'];
                 } else {
                     // try to get cids from input
-                    xarVar::fetch('modify_cids', 'list:int:1:', $cids, NULL, xarVar::NOT_REQUIRED);
+                    $this->var()->find('modify_cids', $cids, 'list:int:1:', null);
                     if (empty($cids) || !is_array($cids)) {
                         $links = $userapi->getlinks(array('iids' => array($objectid),
                                                      'itemtype' => $itemtype,
@@ -193,7 +193,7 @@ class ModifyhookMethod extends MethodClass
         ------------------------------- */
 
         // check if we're previewing some modified item
-        xarVar::fetch('preview', 'isset', $data['preview'], null, xarVar::DONT_SET);
+        $this->var()->check('preview', $data['preview']);
 
         return $data;
     }

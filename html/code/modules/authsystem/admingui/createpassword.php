@@ -45,11 +45,12 @@ class CreatepasswordMethod extends MethodClass
         if (!xarSecurity::check('EditAuthsystem')) {
             return;
         }
+        extract($args);
 
         // Get parameters
-        xarVar::fetch('state', 'isset', $state, null, xarVar::DONT_SET);
-        xarVar::fetch('groupid', 'int:0:', $groupid, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('id', 'isset', $id);
+        $this->var()->check('state', $state);
+        $this->var()->check('groupid', $groupid, 'int:0:', 0);
+        $this->var()->check('id', $id);
         if (empty($id)) {
             throw new BadParameterException(['parameters','admin','createpassword','roles'], xarML('Invalid #(1) for #(2) function #(3)() in module #(4)'));
         }

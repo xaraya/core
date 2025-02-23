@@ -52,6 +52,7 @@ class ModifyTypeMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var TypesApi $typesapi */
         $typesapi = $this->typesapi();
         /** @var UserApi $userapi */
@@ -60,12 +61,11 @@ class ModifyTypeMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch(
+        $this->var()->check(
             'type_id',
-            'int:1:',
             $type_id,
-            null,
-            xarVar::DONT_SET
+            'int:1:',
+            null
         );
 
         if (!isset($type_id)) {
@@ -89,26 +89,23 @@ class ModifyTypeMethod extends MethodClass
         $data = [];
 
         // determine the interface, method and phase
-        xarVar::fetch(
+        $this->var()->find(
             'interface',
-            'pre:trim:lower:str:1:',
             $interface,
-            'display',
-            xarVar::NOT_REQUIRED
+            'pre:trim:lower:str:1:',
+            'display'
         );
-        xarVar::fetch(
+        $this->var()->find(
             'block_method',
-            'pre:trim:lower:str:1:',
             $method,
-            null,
-            xarVar::NOT_REQUIRED
-        );
-        xarVar::fetch(
-            'phase',
             'pre:trim:lower:str:1:',
+            null
+        );
+        $this->var()->find(
+            'phase',
             $phase,
-            'display',
-            xarVar::NOT_REQUIRED
+            'pre:trim:lower:str:1:',
+            'display'
         );
 
         // show the status warning if the type isn't active
@@ -166,8 +163,8 @@ class ModifyTypeMethod extends MethodClass
                                 $invalid['check'] = xarML('Failed validating block type form input');
                             }
                             // fetch block subsystem configuration
-                            xarVar::fetch('type_block_template', 'pre:trim:str:1:127', $block_template, null, xarVar::NOT_REQUIRED);
-                            xarVar::fetch('type_box_template', 'pre:trim:str:1:127', $box_template, null, xarVar::NOT_REQUIRED);
+                            $this->var()->find('type_block_template', $block_template, 'pre:trim:str:1:127', null);
+                            $this->var()->find('type_box_template', $box_template, 'pre:trim:str:1:127', null);
                             // update block configuration
                             if (empty($invalid)) {
                                 if (!xarSec::confirmAuthKey()) {
@@ -222,10 +219,10 @@ class ModifyTypeMethod extends MethodClass
 
                     break;
                 case 'caching':
-                    xarVar::fetch('type_nocache', 'checkbox', $nocache, false, xarVar::NOT_REQUIRED);
-                    xarVar::fetch('type_pageshared', 'checkbox', $pageshared, false, xarVar::NOT_REQUIRED);
-                    xarVar::fetch('type_usershared', 'int:0:2', $usershared, 0, xarVar::NOT_REQUIRED);
-                    xarVar::fetch('type_cacheexpire', 'str:1:', $cacheexpire, null, xarVar::NOT_REQUIRED);
+                    $this->var()->find('type_nocache', $nocache, 'checkbox', false);
+                    $this->var()->find('type_pageshared', $pageshared, 'checkbox', false);
+                    $this->var()->find('type_usershared', $usershared, 'int:0:2', 0);
+                    $this->var()->find('type_cacheexpire', $cacheexpire, 'str:1:', null);
 
                     // convert cacheexpire from hh:mm:ss format to an integer
                     if (!empty($cacheexpire)) {
@@ -344,7 +341,7 @@ class ModifyTypeMethod extends MethodClass
                     return;
                 }
 
-                xarVar::fetch('return_url', 'pre:trim:str:1:', $return_url, '', xarVar::NOT_REQUIRED);
+                $this->var()->find('return_url', $return_url, 'pre:trim:str:1:', '');
                 if (empty($return_url)) {
                     $return_url = xarController::URL(
                         'blocks',

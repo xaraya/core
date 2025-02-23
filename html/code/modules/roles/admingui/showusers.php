@@ -59,15 +59,15 @@ class ShowusersMethod extends MethodClass
         xarVar::setCached('roles', 'defaultgroupid', $defaultgroupid);
 
         $data = [];
-        xarVar::fetch('id', 'int:0:', $id, $defaultgroupid, xarVar::NOT_REQUIRED);
-        xarVar::fetch('startnum', 'int:1:', $startnum, 1, xarVar::NOT_REQUIRED);
-        xarVar::fetch('state', 'int:0:', $data['state'], xarRoles::ROLES_STATE_CURRENT, xarVar::NOT_REQUIRED);
-        xarVar::fetch('selstyle', 'isset', $data['selstyle'], xarSession::getVar('rolesdisplay'), xarVar::DONT_SET);
-        xarVar::fetch('invalid', 'str:0:', $data['invalid'], null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('order', 'str:0:', $data['order'], 'name', xarVar::NOT_REQUIRED);
-        xarVar::fetch('search', 'str:0:', $data['search'], null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('reload', 'str:0:', $reload, null, xarVar::DONT_SET);
-        xarVar::fetch('numitems', 'int:1', $numitems, (int) xarModVars::get('roles', 'items_per_page'), xarVar::DONT_SET);
+        $this->var()->find('id', $id, 'int:0:', $defaultgroupid);
+        $this->var()->find('startnum', $startnum, 'int:1:', 1);
+        $this->var()->find('state', $data['state'], 'int:0:', xarRoles::ROLES_STATE_CURRENT);
+        $this->var()->check('selstyle', $data['selstyle'], 'isset', xarSession::getVar('rolesdisplay'));
+        $this->var()->find('invalid', $data['invalid'], 'str:0:', null);
+        $this->var()->find('order', $data['order'], 'str:0:', 'name');
+        $this->var()->find('search', $data['search'], 'str:0:', null);
+        $this->var()->check('reload', $reload, 'str:0:', null);
+        $this->var()->check('numitems', $numitems, 'int:1', (int) xarModVars::get('roles', 'items_per_page'));
         if (empty($data['selstyle'])) {
             $data['selstyle'] = 0;
         }

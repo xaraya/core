@@ -56,16 +56,15 @@ class InstallMethod extends MethodClass
         if (!xarSec::confirmAuthKey()) {
             return xarController::badRequest('bad_author', $this->getContext());
         }
-        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }
-        xarVar::fetch(
+        $this->var()->find(
             'return_url',
-            'pre:trim:str:1:',
             $return_url,
-            '',
-            xarVar::NOT_REQUIRED
+            'pre:trim:str:1:',
+            ''
         );
 
         $minfo = xarTheme::getInfo($id);

@@ -43,7 +43,7 @@ class ModifynoticeMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
         $hooks = [];
         switch (strtolower($phase)) {
             case 'modify':
@@ -64,11 +64,11 @@ class ModifynoticeMethod extends MethodClass
                 break;
 
             case 'update':
-                xarVar::fetch('askwelcomeemail', 'checkbox', $askwelcomeemail, false, xarVar::NOT_REQUIRED);
-                xarVar::fetch('askdeactivationemail', 'checkbox', $askdeactivationemail, false, xarVar::NOT_REQUIRED);
-                xarVar::fetch('askvalidationemail', 'checkbox', $askvalidationemail, false, xarVar::NOT_REQUIRED);
-                xarVar::fetch('askpendingemail', 'checkbox', $askpendingemail, false, xarVar::NOT_REQUIRED);
-                xarVar::fetch('askpasswordemail', 'checkbox', $askpasswordemail, false, xarVar::NOT_REQUIRED);
+                $this->var()->find('askwelcomeemail', $askwelcomeemail, 'checkbox', false);
+                $this->var()->find('askdeactivationemail', $askdeactivationemail, 'checkbox', false);
+                $this->var()->find('askvalidationemail', $askvalidationemail, 'checkbox', false);
+                $this->var()->find('askpendingemail', $askpendingemail, 'checkbox', false);
+                $this->var()->find('askpasswordemail', $askpasswordemail, 'checkbox', false);
                 // Confirm authorisation code
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());

@@ -51,7 +51,7 @@ class ModinfoMethod extends MethodClass
 
         $data = [];
 
-        xarVar::fetch('id', 'notempty', $id);
+        $this->var()->get('id', $id, 'notempty');
 
         // obtain maximum information about module
         $modinfo = xarMod::getInfo($id);

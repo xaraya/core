@@ -44,10 +44,10 @@ class DeleteMethod extends MethodClass
     {
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        xarVar::fetch('id', 'id', $id, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('itemid', 'id', $itemid, null, xarVar::DONT_SET);
-        xarVar::fetch('confirmation', 'str:1:', $confirmation, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('returnurl', 'str', $returnurl, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'id', 0);
+        $this->var()->check('itemid', $itemid, 'id', null);
+        $this->var()->find('confirmation', $confirmation, 'str:1:', '');
+        $this->var()->find('returnurl', $returnurl, 'str', '');
 
         $id = $itemid ?? $id;
 

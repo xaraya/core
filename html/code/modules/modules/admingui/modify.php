@@ -52,11 +52,11 @@ class ModifyMethod extends MethodClass
         extract($args);
 
         // xarVar::fetch does validation if not explicitly set to be not required
-        xarVar::fetch('id', 'int:1', $id, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int:1', 0);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }
-        xarVar::fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET);
+        $this->var()->check('return_url', $return_url);
 
         $modInfo = xarMod::getInfo($id);
         if (!isset($modInfo)) {

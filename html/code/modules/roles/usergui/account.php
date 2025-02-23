@@ -54,8 +54,8 @@ class AccountMethod extends MethodClass
         extract($args);
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        xarVar::fetch('moduleload', 'str', $moduleload, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('tab', 'pre:trim:str:1', $tab, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('moduleload', $moduleload, 'str', '');
+        $this->var()->find('tab', $tab, 'pre:trim:str:1', '');
 
         //let's make sure other modules that refer here get to a default and existing login or logout form
         $defaultauthdata      = $userapi->getdefaultauthdata();

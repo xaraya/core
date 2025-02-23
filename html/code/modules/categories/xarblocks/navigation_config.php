@@ -104,12 +104,12 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
      */
     public function configupdate(Array $vars=array())
     {
-        xarVar::fetch('layout',       'isset', $vars['layout'],       $this->layout, xarVar::DONT_SET);
-        xarVar::fetch('showcatcount', 'isset', $vars['showcatcount'], false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('showchildren', 'isset', $vars['showchildren'], $this->showchildren, xarVar::DONT_SET);
-        xarVar::fetch('showempty',    'checkbox', $vars['showempty'], false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('startmodule',  'isset', $vars['startmodule'],  $this->startmodule, xarVar::DONT_SET);
-        xarVar::fetch('dynamictitle', 'checkbox', $vars['dynamictitle'],  false, xarVar::NOT_REQUIRED);
+        $this->var()->check('layout', $vars['layout'], 'isset', $this->layout);
+        $this->var()->find('showcatcount', $vars['showcatcount'], 'isset', false);
+        $this->var()->check('showchildren', $vars['showchildren'], 'isset', $this->showchildren);
+        $this->var()->find('showempty', $vars['showempty'], 'checkbox', false);
+        $this->var()->check('startmodule', $vars['startmodule'], 'isset', $this->startmodule);
+        $this->var()->find('dynamictitle', $vars['dynamictitle'], 'checkbox', false);
         
         $this->setContent($vars);
         return true;

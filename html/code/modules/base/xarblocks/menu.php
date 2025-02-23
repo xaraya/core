@@ -242,7 +242,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 }
                 if (empty($ptid)) {
                     // try to get ptid from input
-                    xarVar::fetch('ptid', 'isset', $ptid, NULL, xarVar::DONT_SET);
+                    $this->var()->check('ptid', $ptid);
                 }
                 // if the current pubtype is active, then we are here
                 if ($line['url'][0] == $ptid) {
@@ -259,7 +259,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 }
                 if (empty($catid)) {
                     // try to get catid from input
-                    xarVar::fetch('catid', 'isset', $catid, NULL, xarVar::DONT_SET);
+                    $this->var()->check('catid', $catid);
                 }
                 if (empty($catid) && xarVar::isCached('Blocks.categories','cids')) {
                     $cids = xarVar::getCached('Blocks.categories','cids');

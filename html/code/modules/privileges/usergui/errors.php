@@ -36,8 +36,8 @@ class ErrorsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $data = [];
-        xarVar::fetch('layout', 'isset', $data['layout'], 'default', xarVar::DONT_SET);
-        xarVar::fetch('redirecturl', 'isset', $data['redirecturl'], 'local_halt', xarVar::DONT_SET);
+        $this->var()->check('layout', $data['layout'], 'isset', 'default');
+        $this->var()->check('redirecturl', $data['redirecturl'], 'isset', 'local_halt');
         if (!xarUser::isLoggedIn()) {
             return $data;
         } else {

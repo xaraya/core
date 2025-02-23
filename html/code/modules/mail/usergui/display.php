@@ -40,7 +40,7 @@ class DisplayMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        xarVar::fetch('itemid', 'int:1:', $itemid, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('itemid', $itemid, 'int:1:', 0);
         if (empty($itemid)) {
             return xarController::notFound(null, $this->getContext());
         }

@@ -57,50 +57,49 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('sitename', 'str', $data['sitename'], xarModVars::get('themes', 'SiteName'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('separator', 'str:1:', $data['separator'], xarModVars::get('themes', 'SiteTitleSeparator'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('pagetitle', 'str:1:', $data['pagetitle'], 'default', xarVar::NOT_REQUIRED);
-        xarVar::fetch('showphpcbit', 'checkbox', $data['showphpcbit'], (bool) xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('showtemplates', 'checkbox', $data['showtemplates'], (bool) xarModVars::get('themes', 'ShowTemplates'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('cachetemplates', 'checkbox', $data['cachetemplates'], xarConfigVars::get(null, 'Site.BL.CacheTemplates'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('memcachetemplates', 'checkbox', $data['memcachetemplates'], xarConfigVars::get(null, 'Site.BL.MemCacheTemplates'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('variable_dump', 'checkbox', $data['variable_dump'], (bool) xarModVars::get('themes', 'variable_dump'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('slogan', 'str', $data['slogan'], xarModVars::get('themes', 'SiteSlogan'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('footer', 'str', $data['footer'], xarModVars::get('themes', 'SiteFooter'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('copyright', 'str', $data['copyright'], xarModVars::get('themes', 'SiteCopyRight'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('AtomTag', 'str:1:', $data['atomtag'], (bool) xarModVars::get('themes', 'AtomTag'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('compresswhitespace', 'int', $data['compresswhitespace'], 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('doctype', 'str:1', $data['doctype'], 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('debugmode', 'int', $data['debugmode'], 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('exceptionsdisplay', 'int', $data['exceptionsdisplay'], 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
+        $this->var()->find('sitename', $data['sitename'], 'str', xarModVars::get('themes', 'SiteName'));
+        $this->var()->find('separator', $data['separator'], 'str:1:', xarModVars::get('themes', 'SiteTitleSeparator'));
+        $this->var()->find('pagetitle', $data['pagetitle'], 'str:1:', 'default');
+        $this->var()->find('showphpcbit', $data['showphpcbit'], 'checkbox', (bool) xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates'));
+        $this->var()->find('showtemplates', $data['showtemplates'], 'checkbox', (bool) xarModVars::get('themes', 'ShowTemplates'));
+        $this->var()->find('cachetemplates', $data['cachetemplates'], 'checkbox', xarConfigVars::get(null, 'Site.BL.CacheTemplates'));
+        $this->var()->find('memcachetemplates', $data['memcachetemplates'], 'checkbox', xarConfigVars::get(null, 'Site.BL.MemCacheTemplates'));
+        $this->var()->find('variable_dump', $data['variable_dump'], 'checkbox', (bool) xarModVars::get('themes', 'variable_dump'));
+        $this->var()->find('slogan', $data['slogan'], 'str', xarModVars::get('themes', 'SiteSlogan'));
+        $this->var()->find('footer', $data['footer'], 'str', xarModVars::get('themes', 'SiteFooter'));
+        $this->var()->find('copyright', $data['copyright'], 'str', xarModVars::get('themes', 'SiteCopyRight'));
+        $this->var()->find('AtomTag', $data['atomtag'], 'str:1:', (bool) xarModVars::get('themes', 'AtomTag'));
+        $this->var()->find('compresswhitespace', $data['compresswhitespace'], 'int', 0);
+        $this->var()->find('doctype', $data['doctype'], 'str:1', 0);
+        $this->var()->find('debugmode', $data['debugmode'], 'int', 0);
+        $this->var()->find('exceptionsdisplay', $data['exceptionsdisplay'], 'int', 0);
 
-        xarVar::fetch('themedir', 'str:1:', $data['defaultThemeDir'], 'themes', xarVar::NOT_REQUIRED);
-        xarVar::fetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], (bool) xarModVars::get('themes', 'adminpagemenu'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('userpagemenu', 'checkbox', $data['userpagemenu'], (bool) xarModVars::get('themes', 'userpagemenu'), xarVar::NOT_REQUIRED);
-        //    xarVar::fetch('usedashboard', 'checkbox', $data['usedashboard'], (bool)xarModVars::get('themes', 'usedashboard'), xarVar::NOT_REQUIRED);
-        //    xarVar::fetch('dashtemplate', 'str:1:', $data['dashtemplate'], trim(xarModVars::get('themes', 'dashtemplate')), xarVar::NOT_REQUIRED);
+        $this->var()->find('themedir', $data['defaultThemeDir'], 'str:1:', 'themes');
+        $this->var()->find('adminpagemenu', $data['adminpagemenu'], 'checkbox', (bool) xarModVars::get('themes', 'adminpagemenu'));
+        $this->var()->find('userpagemenu', $data['userpagemenu'], 'checkbox', (bool) xarModVars::get('themes', 'userpagemenu'));
+        //    $this->var()->find('usedashboard', $data['usedashboard'], 'checkbox', (bool)xarModVars::get('themes', 'usedashboard'));
+        //    $this->var()->find('dashtemplate', $data['dashtemplate'], 'str:1:', trim(xarModVars::get('themes', 'dashtemplate')));
 
-        xarVar::fetch('selsort', 'str:1:', $data['selsort'], 'plain', xarVar::NOT_REQUIRED);
-        xarVar::fetch('selfilter', 'int', $data['selfilter'], xarMod::STATE_ANY, xarVar::NOT_REQUIRED);
-        xarVar::fetch('hidecore', 'checkbox', $data['hidecore'], false, xarVar::DONT_SET);
-        xarVar::fetch('selstyle', 'str:1:', $data['selstyle'], 'plain', xarVar::NOT_REQUIRED);
+        $this->var()->find('selsort', $data['selsort'], 'str:1:', 'plain');
+        $this->var()->find('selfilter', $data['selfilter'], 'int', xarMod::STATE_ANY);
+        $this->var()->check('hidecore', $data['hidecore'], 'checkbox', false);
+        $this->var()->find('selstyle', $data['selstyle'], 'str:1:', 'plain');
 
         // experimental combine/compress css options
-        xarVar::fetch('combinecss', 'checkbox', $data['combinecss'], false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('compresscss', 'checkbox', $data['compresscss'], false, xarVar::NOT_REQUIRED);
+        $this->var()->find('combinecss', $data['combinecss'], 'checkbox', false);
+        $this->var()->find('compresscss', $data['compresscss'], 'checkbox', false);
         // can't compress if not combined :)
         if ($data['combinecss'] == false) {
             $data['compresscss'] = false;
         }
-        xarVar::fetch('allowajax', 'checkbox', $data['allowajax'], false, xarVar::NOT_REQUIRED);
+        $this->var()->find('allowajax', $data['allowajax'], 'checkbox', false);
 
-        xarVar::fetch(
+        $this->var()->find(
             'enable_user_menu',
-            'checkbox',
             $data['enable_user_menu'],
-            xarModVars::get('themes', 'enable_user_menu'),
-            xarVar::NOT_REQUIRED
+            'checkbox',
+            xarModVars::get('themes', 'enable_user_menu')
         );
 
 

@@ -164,7 +164,7 @@ class UpdatehooksMethod extends MethodClass
                 //if ($mod['systemid'] == $modinfo['systemid']) continue;
                 // Get selected value of hook (which is an array of all the itemtypes selected)
                 // hooked_$mod['name'][0] contains the global setting ( 0 -> not, 1 -> all, 2 -> some)
-                xarVar::fetch("hooked_" . $mod['name'], 'isset', $ishooked, '', xarVar::DONT_REUSE);
+                $this->var()->update("hooked_" . $mod['name'], $ishooked, 'isset', '');
                 // remove current assignments
                 xarHooks::detach($curhook, $mod['name'], -1);
                 // No setting or explicit NOT, skip it (note: empty shouldn't occur anymore

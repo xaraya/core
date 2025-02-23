@@ -43,11 +43,11 @@ class SettingsMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('hidecore', 'str:1:', $hidecore, '0', xarVar::NOT_REQUIRED);
-        xarVar::fetch('selstyle', 'str:1:', $selstyle, 'plain', xarVar::NOT_REQUIRED);
-        xarVar::fetch('selfilter', 'str:1:', $selfilter, 'xarMod::STATE_ANY', xarVar::NOT_REQUIRED);
-        xarVar::fetch('selsort', 'str:1:', $selsort, 'namedesc', xarVar::NOT_REQUIRED);
-        xarVar::fetch('regen', 'str:1:', $regen, xarVar::NOT_REQUIRED);
+        $this->var()->find('hidecore', $hidecore, 'str:1:', '0');
+        $this->var()->find('selstyle', $selstyle, 'str:1:', 'plain');
+        $this->var()->find('selfilter', $selfilter, 'str:1:', 'xarMod::STATE_ANY');
+        $this->var()->find('selsort', $selsort, 'str:1:', 'namedesc');
+        $this->var()->find('regen', $regen, 'str:1:');
 
         xarModUserVars::set('modules', 'hidecore', $hidecore);
         xarModUserVars::set('modules', 'selstyle', $selstyle);

@@ -49,9 +49,9 @@ class HooksMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('hook', 'isset', $curhook, null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('layout', 'pre:trim:lower:enum:bycat', $layout, 'bycat', xarVar::NOT_REQUIRED);
-        xarVar::fetch('return_url', 'str', $return_url, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('hook', $curhook);
+        $this->var()->find('layout', $layout, 'pre:trim:lower:enum:bycat', 'bycat');
+        $this->var()->find('return_url', $return_url, 'str', '');
         extract($args);
 
         // Get list of hook module(s) (observers) and the available hooks supplied

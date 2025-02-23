@@ -44,14 +44,14 @@ class SearchMethod extends MethodClass
     {
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        xarVar::fetch('startnum', 'isset', $startnum, null, xarVar::DONT_SET);
-        xarVar::fetch('email', 'isset', $email, null, xarVar::DONT_SET);
-        xarVar::fetch('uname', 'isset', $uname, null, xarVar::DONT_SET);
-        xarVar::fetch('name', 'isset', $name, null, xarVar::DONT_SET);
-        xarVar::fetch('q', 'isset', $q, null, xarVar::DONT_SET);
-        xarVar::fetch('bool', 'isset', $bool, null, xarVar::DONT_SET);
-        xarVar::fetch('sort', 'isset', $sort, null, xarVar::DONT_SET);
-        xarVar::fetch('author', 'isset', $author, null, xarVar::DONT_SET);
+        $this->var()->check('startnum', $startnum);
+        $this->var()->check('email', $email);
+        $this->var()->check('uname', $uname);
+        $this->var()->check('name', $name);
+        $this->var()->check('q', $q);
+        $this->var()->check('bool', $bool);
+        $this->var()->check('sort', $sort);
+        $this->var()->check('author', $author);
         $data = [];
         $data['users'] = [];
         // show the search form
@@ -112,7 +112,7 @@ class SearchMethod extends MethodClass
                 $where = [];
                 // see which properties we're supposed to search in
                 foreach (array_keys($object->properties) as $field) {
-                    xarVar::fetch($field, 'checkbox', $checkfield, null, xarVar::NOT_REQUIRED);
+                    $this->var()->find($field, $checkfield, 'checkbox');
                     if ($checkfield) {
                         $where[] = $field . " LIKE " . $quotedlike;
                         $where[] = $field . " LIKE " . $quotedupper;

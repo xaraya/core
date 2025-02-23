@@ -48,7 +48,7 @@ class ShowprivilegesMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }

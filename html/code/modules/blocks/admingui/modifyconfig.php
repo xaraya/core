@@ -48,8 +48,8 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
+        $this->var()->find('tab', $data['tab'], 'str:1:100', 'general');
 
         $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'blocks']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
@@ -78,7 +78,7 @@ class ModifyconfigMethod extends MethodClass
                     return xarTpl::module('blocks', 'admin', 'modifyconfig', $data);
                 } else {
                     $itemid = $data['module_settings']->updateItem();
-                    xarVar::fetch('noexceptions', 'int:0:1', $noexceptions, 0, xarVar::NOT_REQUIRED);
+                    $this->var()->find('noexceptions', $noexceptions, 'int:0:1', 0);
                     xarModVars::set('blocks', 'noexceptions', $noexceptions);
                     //    xarController::redirect(xarController::URL('blocks', 'admin', 'modifyconfig'), null, $this->getContext());
                     //    return true;

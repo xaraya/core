@@ -118,7 +118,7 @@ class NewhookMethod extends MethodClass
                     $cids = $extrainfo['new_cids'];
                 } else {
                     // try to get cids from input
-                    xarVar::fetch('new_cids', 'list:int:1:', $cids, NULL, xarVar::NOT_REQUIRED);
+                    $this->var()->find('new_cids', $cids, 'list:int:1:', null);
                     if (empty($cids) || !is_array($cids)) {
                         $cids = array();
                     }
@@ -171,7 +171,7 @@ class NewhookMethod extends MethodClass
         ------------------------------- */
 
         // check if we're previewing some new item
-        xarVar::fetch('preview', 'isset', $data['preview'], null, xarVar::DONT_SET);
+        $this->var()->check('preview', $data['preview']);
 
         return $data;
     }

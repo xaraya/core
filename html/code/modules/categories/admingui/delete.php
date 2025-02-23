@@ -46,8 +46,8 @@ class DeleteMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         $data = [];
-        xarVar::fetch('itemid', 'int:1:', $data['itemid'], 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('confirm', 'str:1:', $confirm, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('itemid', $data['itemid'], 'int:1:', 0);
+        $this->var()->find('confirm', $confirm, 'str:1:', '');
 
         // Security check
         if (!xarSecurity::check('ManageCategories', 1, 'category', "All:" . $data['itemid'])) {

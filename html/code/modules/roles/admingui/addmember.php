@@ -47,8 +47,8 @@ class AddmemberMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // get parameters
-        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('roleid', 'int:1:', $roleid, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int:1:', 0);
+        $this->var()->find('roleid', $roleid, 'int:1:', 0);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }

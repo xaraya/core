@@ -51,14 +51,14 @@ class UpdateprivilegeMethod extends MethodClass
             return xarController::badRequest('bad_author', $this->getContext());
         }
 
-        xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET);
-        xarVar::fetch('pname', 'isset', $name, null, xarVar::DONT_SET);
-        xarVar::fetch('prealm', 'isset', $realm, 'All', xarVar::NOT_REQUIRED);
-        xarVar::fetch('pmodule', 'isset', $pmodule, 'All', xarVar::NOT_REQUIRED);
-        xarVar::fetch('pcomponent', 'isset', $component, 'All', xarVar::DONT_SET);
-        xarVar::fetch('ptype', 'isset', $type, null, xarVar::DONT_SET);
-        xarVar::fetch('plevel', 'isset', $level, null, xarVar::DONT_SET);
-        xarVar::fetch('pinstance', 'isset', $pinstance, null, xarVar::NOT_REQUIRED);
+        $this->var()->check('id', $id);
+        $this->var()->check('pname', $name);
+        $this->var()->find('prealm', $realm, 'isset', 'All');
+        $this->var()->find('pmodule', $pmodule, 'isset', 'All');
+        $this->var()->check('pcomponent', $component, 'isset', 'All');
+        $this->var()->check('ptype', $type);
+        $this->var()->check('plevel', $level);
+        $this->var()->find('pinstance', $pinstance);
 
         $instance = "";
         if (!empty($pinstance)) {

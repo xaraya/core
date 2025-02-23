@@ -46,11 +46,11 @@ class UnlinkMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('modid', 'isset', $modid, null, xarVar::DONT_SET);
-        xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET);
-        xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET);
-        xarVar::fetch('catid', 'isset', $catid, null, xarVar::DONT_SET);
-        xarVar::fetch('confirm', 'str:1:', $confirm, '', xarVar::NOT_REQUIRED);
+        $this->var()->check('modid', $modid);
+        $this->var()->check('itemtype', $itemtype);
+        $this->var()->check('itemid', $itemid);
+        $this->var()->check('catid', $catid);
+        $this->var()->find('confirm', $confirm, 'str:1:', '');
 
         // Check for confirmation.
         if (empty($confirm)) {

@@ -46,7 +46,7 @@ class ViewqMethod extends MethodClass
         }
 
         extract($args);
-        xarVar::fetch('action', 'str', $action, '');
+        $this->var()->check('action', $action, 'str', '');
 
         $data = [];
         if (!empty($action)) {
@@ -64,7 +64,7 @@ class ViewqMethod extends MethodClass
                     break;
 
                 case 'view':
-                    xarVar::fetch('id', 'str', $id, '');
+                    $this->var()->find('id', $id, 'str', '');
                     if (!empty($id)) {
                         // retrieve the mail data
                         $maildata = xarModVars::get('mail', $id);
@@ -76,7 +76,7 @@ class ViewqMethod extends MethodClass
                     break;
 
                 case 'delete':
-                    xarVar::fetch('id', 'str', $id, '');
+                    $this->var()->find('id', $id, 'str', '');
                     if (!empty($id)) {
                         // get the waiting queue
                         $serialqueue = xarModVars::get('mail', 'queue');

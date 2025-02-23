@@ -87,7 +87,7 @@ class ParseuserhomeMethod extends MethodClass
                         }
                         if (empty($ptid)) {
                             // try to get ptid from input
-                            xarVar::fetch('ptid', 'isset', $ptid, null, xarVar::DONT_SET);
+                            $this->var()->check('ptid', $ptid);
                         }
                         // if the current pubtype is active, then we are here
                         if ($url[0] == $ptid) {
@@ -104,7 +104,7 @@ class ParseuserhomeMethod extends MethodClass
                         }
                         if (empty($catid)) {
                             // try to get catid from input
-                            xarVar::fetch('catid', 'isset', $catid, null, xarVar::DONT_SET);
+                            $this->var()->check('catid', $catid);
                         }
                         if (empty($catid) && xarVar::isCached('Blocks.categories', 'cids')) {
                             $cids = xarVar::getCached('Blocks.categories', 'cids');

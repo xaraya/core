@@ -38,8 +38,10 @@ class Base_FincludeBlockConfig extends Base_FincludeBlock implements iBlock
      */
     public function configupdate(Array $data=array())
     {
-        xarVar::fetch('url', 'pre:trim:str:1:', 
-            $url, xarML('Error - No Url Specified'), xarVar::NOT_REQUIRED);
+        $this->var()->find('url', 
+            $url,
+            'pre:trim:str:1:',
+            xarML('Error - No Url Specified'));
 
         $this->url = $url;
         return true;

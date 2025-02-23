@@ -82,16 +82,16 @@ class BuildTreeMethod extends MethodClass
         $verbose = false;
 
         $data = [];
-        xarVar::fetch('table', 'str', $data['table'], 'xar_categories', xarVar::NOT_REQUIRED);
-        xarVar::fetch('parent_id', 'str', $data['parent_id'], 'parent_id', xarVar::NOT_REQUIRED);
-        xarVar::fetch('left_id', 'str', $data['left_id'], 'left_id', xarVar::NOT_REQUIRED);
-        xarVar::fetch('right_id', 'str', $data['right_id'], 'right_id', xarVar::NOT_REQUIRED);
-        xarVar::fetch('name', 'str', $data['name'], 'name', xarVar::NOT_REQUIRED);
-        xarVar::fetch('root_name', 'str', $data['root_name'], 'Root', xarVar::NOT_REQUIRED);
+        $this->var()->find('table', $data['table'], 'str', 'xar_categories');
+        $this->var()->find('parent_id', $data['parent_id'], 'str', 'parent_id');
+        $this->var()->find('left_id', $data['left_id'], 'str', 'left_id');
+        $this->var()->find('right_id', $data['right_id'], 'str', 'right_id');
+        $this->var()->find('name', $data['name'], 'str', 'name');
+        $this->var()->find('root_name', $data['root_name'], 'str', 'Root');
 
         // Buttons
-        xarVar::fetch('check', 'isset', $data['check'], null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('build', 'isset', $data['build'], null, xarVar::NOT_REQUIRED);
+        $this->var()->find('check', $data['check']);
+        $this->var()->find('build', $data['build']);
 
         $data['message_warning'] = [];
         $data['message_error'] = [];

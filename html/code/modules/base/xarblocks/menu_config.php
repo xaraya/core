@@ -59,7 +59,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
         // Handle any methods specific to this block
         // CHECKME: is this the right place for handling this
-        xarVar::fetch('menumethod',  'str:1:255', $menumethod, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('menumethod', $menumethod, 'str:1:255', '');
         switch ($menumethod) {
             case  'linkorder':
                 $links = array_merge($vars, $this->linkorderupdate());
@@ -73,33 +73,33 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         }
 
         // display options
-        xarVar::fetch('showlogout',  'checkbox', $showlogout, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('logoutlabel',  'str:1:255', $logoutlabel, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('logouttitle',  'str:1:255', $logouttitle, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('displayrss',  'checkbox', $displayrss, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('rsslabel',  'str:1:255', $rsslabel, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('rsstitle',  'str:1:255', $rsstitle, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('displayprint','checkbox', $displayprint, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('printlabel',  'str:1:255', $printlabel, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('printtitle',  'str:1:255', $printtitle, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('marker',      'str:0',    $marker, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('showback',    'checkbox', $showback, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('backlabel',  'str:1:255', $backlabel, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('backtitle',  'str:1:255', $backtitle, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('showlogout', $showlogout, 'checkbox', false);
+        $this->var()->find('logoutlabel', $logoutlabel, 'str:1:255', '');
+        $this->var()->find('logouttitle', $logouttitle, 'str:1:255', '');
+        $this->var()->find('displayrss', $displayrss, 'checkbox', false);
+        $this->var()->find('rsslabel', $rsslabel, 'str:1:255', '');
+        $this->var()->find('rsstitle', $rsstitle, 'str:1:255', '');
+        $this->var()->find('displayprint', $displayprint, 'checkbox', false);
+        $this->var()->find('printlabel', $printlabel, 'str:1:255', '');
+        $this->var()->find('printtitle', $printtitle, 'str:1:255', '');
+        $this->var()->find('marker', $marker, 'str:0', '');
+        $this->var()->find('showback', $showback, 'checkbox', false);
+        $this->var()->find('backlabel', $backlabel, 'str:1:255', '');
+        $this->var()->find('backtitle', $backtitle, 'str:1:255', '');
         // userlinks
-        xarVar::fetch('userlinks',   'array',    $userlinks, array(), xarVar::NOT_REQUIRED);
-        xarVar::fetch('links_select', 'pre:trim:lower:enum:show:hide:delete', $links_select, 'none', xarVar::NOT_REQUIRED);
+        $this->var()->find('userlinks', $userlinks, 'array', array());
+        $this->var()->find('links_select', $links_select, 'pre:trim:lower:enum:show:hide:delete', 'none');
 
         // add new link
-        xarVar::fetch('links_new_url', 'str:1:254', $new_url, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('links_new_label', 'str:1:254', $new_label, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('links_new_title', 'str:1:254', $new_title, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('links_new_blank', 'checkbox', $new_blank, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('links_new_position', 'int:0:3', $new_position, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('links_new_relation', 'int:0:', $new_relation, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('links_new_url', $new_url, 'str:1:254', '');
+        $this->var()->find('links_new_label', $new_label, 'str:1:254', '');
+        $this->var()->find('links_new_title', $new_title, 'str:1:254', '');
+        $this->var()->find('links_new_blank', $new_blank, 'checkbox', '');
+        $this->var()->find('links_new_position', $new_position, 'int:0:3', 0);
+        $this->var()->find('links_new_relation', $new_relation, 'int:0:', 0);
 
         // modulelist
-        xarVar::fetch('modulelist',  'array',    $modulelist, array(), xarVar::NOT_REQUIRED);
+        $this->var()->find('modulelist', $modulelist, 'array', array());
 
         // handle user links
         // Build new link if we have any values for it
@@ -408,9 +408,9 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     public function linkorderupdate(Array $data=array())
     {
         $data = $this->getInfo();
-        xarVar::fetch('linkid', 'int:0:', $linkid, null, xarVar::DONT_SET);
-        xarVar::fetch('sublinkid', 'int:0:', $sublinkid, null, xarVar::DONT_SET);
-        xarVar::fetch('direction', 'pre:trim:lower:enum:up:down', $direction, null, xarVar::DONT_SET);
+        $this->var()->check('linkid', $linkid, 'int:0:', null);
+        $this->var()->check('sublinkid', $sublinkid, 'int:0:', null);
+        $this->var()->check('direction', $direction, 'pre:trim:lower:enum:up:down', null);
 
         if (!isset($linkid)) throw new EmptyParameterException('linkid');
         if (!isset($direction)) throw new EmptyParameterException('direction');

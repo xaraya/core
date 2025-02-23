@@ -44,9 +44,9 @@ class ModifyrealmMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('id', 'int', $id, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('confirmed', 'bool', $confirmed, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('name', 'str:1.20', $name, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int', '');
+        $this->var()->find('confirmed', $confirmed, 'bool', false);
+        $this->var()->find('name', $name, 'str:1.20', '');
 
         $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();
@@ -62,7 +62,7 @@ class ModifyrealmMethod extends MethodClass
                 [$result_id, $name] = $result->fields;
             }
         } else {
-            xarVar::fetch('newname', 'str:1.20', $newname, '', xarVar::NOT_REQUIRED);
+            $this->var()->find('newname', $newname, 'str:1.20', '');
             if (!xarSec::confirmAuthKey()) {
                 return xarController::badRequest('bad_author', $this->getContext());
             }

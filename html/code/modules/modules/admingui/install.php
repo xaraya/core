@@ -51,16 +51,15 @@ class InstallMethod extends MethodClass
         // TODO: check under what conditions this is needed
         //    if (!xarSec::confirmAuthKey()) return;
 
-        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }
-        xarVar::fetch(
+        $this->var()->find(
             'return_url',
-            'pre:trim:str:1:',
             $return_url,
-            '',
-            xarVar::NOT_REQUIRED
+            'pre:trim:str:1:',
+            ''
         );
 
         // First check for a proper core version
@@ -74,7 +73,7 @@ class InstallMethod extends MethodClass
             $installer->verifydependency($id);
 
             //Checking if the user has already passed thru the GUI:
-            xarVar::fetch('command', 'checkbox', $command, false, xarVar::NOT_REQUIRED);
+            $this->var()->find('command', $command, 'checkbox', false);
         } catch (ModuleNotFoundException $e) {
             $command = false;
         }
@@ -82,7 +81,7 @@ class InstallMethod extends MethodClass
         $data['moduledependencies'] = $installer->getalldependencies($id);
 
         // Finally check the property dependencies
-        xarVar::fetch('ignore_properties', 'int:1:', $ignore_properties, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('ignore_properties', $ignore_properties, 'int:1:', 0);
         $propdependencies['satisfied'] = [];
         $propdependencies['unsatisfiable'] = [];
         if (isset($data['moduledependencies']['satisfied'])) {

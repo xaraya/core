@@ -51,9 +51,9 @@ class ModifyemailMethod extends MethodClass
         }
 
         extract($args);
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
         if (!isset($mailtype)) {
-            xarVar::fetch('mailtype', 'str:1:100', $data['mailtype'], 'welcome', xarVar::NOT_REQUIRED);
+            $this->var()->find('mailtype', $data['mailtype'], 'str:1:100', 'welcome');
         } else {
             $data['mailtype'] = $mailtype;
         }
@@ -98,8 +98,8 @@ class ModifyemailMethod extends MethodClass
 
             case 'update':
 
-                xarVar::fetch('message', 'str:1:', $message);
-                xarVar::fetch('subject', 'str:1:', $subject);
+                $this->var()->find('message', $message, 'str:1:');
+                $this->var()->find('subject', $subject, 'str:1:');
                 // Confirm authorisation code
                 //            if (!xarSec::confirmAuthKey()) return;
                 //            xarModVars::set('roles', $data['mailtype'].'email', $message);

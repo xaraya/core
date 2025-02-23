@@ -43,7 +43,7 @@ class LogoutMethod extends MethodClass
         $redirect = xarServer::getBaseURL();
 
         // Get input parameters
-        xarVar::fetch('redirecturl', 'str:1:254', $redirecturl, $redirect, xarVar::NOT_REQUIRED);
+        $this->var()->find('redirecturl', $redirecturl, 'str:1:254', $redirect);
 
         $defaultauthdata = xarMod::apiFunc('roles', 'user', 'getdefaultauthdata');
         $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];

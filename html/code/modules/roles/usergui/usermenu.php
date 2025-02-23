@@ -62,8 +62,8 @@ class UsermenuMethod extends MethodClass
         }
         extract($args);
 
-        xarVar::fetch('moduleload', 'pre:trim:str:1', $moduleload, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('returnurl', 'pre:trim:str:1', $returnurl, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('moduleload', $moduleload, 'pre:trim:str:1', '');
+        $this->var()->find('returnurl', $returnurl, 'pre:trim:str:1', '');
         //let's make sure other modules that refer here get to a default and existing login or logout form
         $defaultauthdata      = $userapi->getdefaultauthdata();
         $defaultauthmodname   = $defaultauthdata['defaultauthmodname'];

@@ -42,6 +42,7 @@ class ViewTypesMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var TypesApi $typesapi */
         $typesapi = $this->typesapi();
         // Security - checkme: Edit vs Manage?
@@ -55,12 +56,11 @@ class ViewTypesMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch(
+        $this->var()->check(
             'startnum',
-            'int:1',
             $data['startnum'],
-            1,
-            xarVar::NOT_REQUIRED
+            'int:1',
+            1
         );
         $data['items_per_page'] = xarModVars::get('blocks', 'items_per_page');
         // get types from db

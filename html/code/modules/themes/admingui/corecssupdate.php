@@ -49,7 +49,7 @@ class CorecssupdateMethod extends MethodClass
         }
 
         // params
-        xarVar::fetch('linkoptions', 'str::', $linkoptions, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('linkoptions', $linkoptions, 'str::', '');
 
         // set modvars
         xarModVars::set('themes', 'csslinkoption', $linkoptions);

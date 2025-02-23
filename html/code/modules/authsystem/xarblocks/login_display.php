@@ -43,11 +43,15 @@ class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlo
                 return;
             }
         } elseif (xarServer::getVar('REQUEST_METHOD') == 'GET') {
-            xarVar::fetch('redirecturl',   'pre:trim:str:1:', 
-                $data['return_url']   , xarServer::getCurrentURL(array(),false), xarVar::NOT_REQUIRED);
+            $this->var()->find('redirecturl',
+               $data['return_url'],
+               'pre:trim:str:1:',
+               xarServer::getCurrentURL([], false));
         } else {
-            xarVar::fetch('redirecturl',   'pre:trim:str:1', 
-                $data['return_url']   , xarServer::getBaseURL(), xarVar::NOT_REQUIRED);
+            $this->var()->find('redirecturl', 
+                $data['return_url'],
+                'pre:trim:str:1',
+                xarServer::getBaseURL());
         }
         return $data;
     }

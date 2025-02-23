@@ -40,7 +40,7 @@ class ViewJslibsMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'local', xarVar::NOT_REQUIRED);
+        $this->var()->find('tab', $data['tab'], 'str:1:100', 'local');
 
         $data['object'] = DataObjectFactory::getObject(['name' => 'themes_jslibraries']);
 
@@ -58,10 +58,10 @@ class ViewJslibsMethod extends MethodClass
         $libobject->refresh();
 
         if ($data['tab'] == 'auto') {
-            xarVar::fetch('confirm', 'bool', $confirm, false, xarVar::DONT_SET);
+            $this->var()->check('confirm', $confirm, 'bool', false);
             if ($confirm) {
-                xarVar::fetch('dd_seq', 'array', $dd_seq, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_position', 'array', $dd_position, [], xarVar::DONT_SET);
+                $this->var()->check('dd_seq', $dd_seq, 'array', []);
+                $this->var()->check('dd_position', $dd_position, 'array', []);
                 foreach (array_keys($dd_seq) as $id) {
                     $libobject->default_libs[$id]['seq'] = $dd_seq[$id];
                     $libobject->default_libs[$id]['position'] = $dd_position[$id];
@@ -130,10 +130,10 @@ class ViewJslibsMethod extends MethodClass
                 array_multisort($templib, SORT_ASC, $tempversion, SORT_DESC, $data['fieldvalues']);
             }
 
-            xarVar::fetch('confirm', 'bool', $confirm, false, xarVar::DONT_SET);
+            $this->var()->check('confirm', $confirm, 'bool', false);
             if ($confirm) {
-                xarVar::fetch('dd_load', 'array', $dd_load, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_seq', 'array', $dd_seq, [], xarVar::DONT_SET);
+                $this->var()->check('dd_load', $dd_load, 'array', []);
+                $this->var()->check('dd_seq', $dd_seq, 'array', []);
 
                 // We remove the local auto loading libraries and then repopulate them
                 foreach ($libobject->default_libs as $key => $value) {
@@ -196,17 +196,17 @@ class ViewJslibsMethod extends MethodClass
                 $data['fieldvalues'][$row['id']] = $row;
             }
         } elseif ($data['tab'] == 'remote') {
-            xarVar::fetch('confirm', 'bool', $confirm, false, xarVar::DONT_SET);
+            $this->var()->check('confirm', $confirm, 'bool', false);
             if ($confirm) {
-                xarVar::fetch('dd_id', 'array', $dd_id, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_type', 'array', $dd_type, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_parent', 'array', $dd_parent, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_lib', 'array', $dd_lib, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_version', 'array', $dd_version, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_scope', 'array', $dd_scope, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_package', 'array', $dd_package, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_base', 'array', $dd_base, [], xarVar::DONT_SET);
-                xarVar::fetch('dd_src', 'array', $dd_src, [], xarVar::DONT_SET);
+                $this->var()->check('dd_id', $dd_id, 'array', []);
+                $this->var()->check('dd_type', $dd_type, 'array', []);
+                $this->var()->check('dd_parent', $dd_parent, 'array', []);
+                $this->var()->check('dd_lib', $dd_lib, 'array', []);
+                $this->var()->check('dd_version', $dd_version, 'array', []);
+                $this->var()->check('dd_scope', $dd_scope, 'array', []);
+                $this->var()->check('dd_package', $dd_package, 'array', []);
+                $this->var()->check('dd_base', $dd_base, 'array', []);
+                $this->var()->check('dd_src', $dd_src, 'array', []);
 
                 $libobject->remote_libs = [];
                 foreach ($dd_id as $id) {
@@ -231,17 +231,17 @@ class ViewJslibsMethod extends MethodClass
                 }
 
                 // Add a new remote library
-                xarVar::fetch('new_lib', 'str', $new_lib, '', xarVar::DONT_SET);
+                $this->var()->check('new_lib', $new_lib, 'str', '');
                 if (!empty($new_lib)) {
-                    xarVar::fetch('new_id', 'str', $new_id, '', xarVar::DONT_SET);
-                    xarVar::fetch('new_type', 'str', $new_type, '', xarVar::DONT_SET);
-                    xarVar::fetch('new_parent', 'str', $new_parent, '', xarVar::DONT_SET);
-                    xarVar::fetch('new_version', 'str', $new_version, '', xarVar::DONT_SET);
-                    xarVar::fetch('new_scope', 'str', $new_scope, '', xarVar::DONT_SET);
-                    xarVar::fetch('new_package', 'str', $new_package, '', xarVar::DONT_SET);
-                    xarVar::fetch('new_base', 'str', $new_base, '', xarVar::DONT_SET);
-                    xarVar::fetch('new_src', 'str', $new_src, '', xarVar::DONT_SET);
-                    xarVar::fetch('new_load', 'str', $new_load, '', xarVar::DONT_SET);
+                    $this->var()->check('new_id', $new_id, 'str', '');
+                    $this->var()->check('new_type', $new_type, 'str', '');
+                    $this->var()->check('new_parent', $new_parent, 'str', '');
+                    $this->var()->check('new_version', $new_version, 'str', '');
+                    $this->var()->check('new_scope', $new_scope, 'str', '');
+                    $this->var()->check('new_package', $new_package, 'str', '');
+                    $this->var()->check('new_base', $new_base, 'str', '');
+                    $this->var()->check('new_src', $new_src, 'str', '');
+                    $this->var()->check('new_load', $new_load, 'str', '');
                     $id = $new_type . "." . $new_lib . "." . $new_version . "." . $new_scope . "." . $new_base;
                     $libobject->remote_libs[$id]['id'] = $id;
                     $libobject->remote_libs[$id]['type'] = $new_type;

@@ -52,7 +52,7 @@ class SitelockMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('cmd', 'isset', $cmd, null, xarVar::DONT_SET);
+        $this->var()->check('cmd', $cmd);
 
         # --------------------------------------------------------
         # Get the configuration from the modvar
@@ -69,16 +69,16 @@ class SitelockMethod extends MethodClass
             # --------------------------------------------------------
             # We have a command; get the data from the template
             #
-            xarVar::fetch('serialroles', 'str', $serialroles, null, xarVar::NOT_REQUIRED);
+            $this->var()->find('serialroles', $serialroles, 'str', null);
             if (!isset($serialroles)) {
                 return xarTpl::module('roles', 'user', 'errors');
             }
             $roles = unserialize($serialroles);
             $rolesCount = count($roles);
-            xarVar::fetch('lockedoutmsg', 'str', $lockedoutmsg, null, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-            xarVar::fetch('notifymsg', 'str', $notifymsg, null, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-            xarVar::fetch('toggle', 'int', $toggle, 0, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-            xarVar::fetch('notify', 'array', $notify, [], xarVar::DONT_SET);
+            $this->var()->find('lockedoutmsg', $lockedoutmsg, 'str', null);
+            $this->var()->find('notifymsg', $notifymsg, 'str', null);
+            $this->var()->find('toggle', $toggle, 'int', 0);
+            $this->var()->check('notify', $notify, 'array', []);
 
             foreach ($roles as $key => $role) {
                 if (isset($notify[$role['id']])) {
@@ -91,7 +91,7 @@ class SitelockMethod extends MethodClass
             # We are deleting a user from the list of exceptions
             #
             if ($cmd == 'delete') {
-                xarVar::fetch('id', 'int', $id, null, xarVar::DONT_SET);
+                $this->var()->check('id', $id, 'int', null);
                 if (isset($id)) {
                     for ($i = 0; $i < $rolesCount; $i++) {
                         if ($roles[$i]['id'] == $id) {
@@ -111,7 +111,7 @@ class SitelockMethod extends MethodClass
                 # We are adding a user to the list of exceptions
                 #
             } elseif ($cmd == 'add') {
-                xarVar::fetch('newname', 'str', $newname, null, xarVar::DONT_SET);
+                $this->var()->check('newname', $newname, 'str', null);
                 if (isset($newname)) {
                     $r = xarRoles::ufindRole($newname);
                     if (!$r) {

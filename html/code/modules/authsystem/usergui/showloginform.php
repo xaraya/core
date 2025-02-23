@@ -42,7 +42,7 @@ class ShowloginformMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         extract($args);
-        xarVar::fetch('redirecturl', 'str:1:254', $redirecturl, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('redirecturl', $redirecturl, 'str:1:254', '');
         if (empty($redirecturl)) {
             $redirecturl = xarModVars::get('authsystem', 'forwarding_page');
             if (empty($redirecturl)) {

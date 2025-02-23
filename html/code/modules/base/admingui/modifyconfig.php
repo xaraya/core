@@ -68,8 +68,8 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'display', xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
+        $this->var()->find('tab', $data['tab'], 'str:1:100', 'display');
         if (empty($data['tab'])) {
             $data['tab'] = 'display';
         }
@@ -226,13 +226,13 @@ class ModifyconfigMethod extends MethodClass
                     case 'logging':
                         $filepath = $picker->initialization_basedirectory . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
                         // Delete the log file and create a new, empty one
-                        xarVar::fetch('clear', 'isset', $clear, null, xarVar::NOT_REQUIRED);
+                        $this->var()->find('clear', $clear);
                         if (isset($clear)) {
                             unlink($filepath);
                             touch($filepath);
                         }
                         // Rename the log file and create a new, empty one
-                        xarVar::fetch('clearsave', 'isset', $clear, null, xarVar::NOT_REQUIRED);
+                        $this->var()->find('clearsave', $clear);
                         if (isset($clear)) {
                             $newname = $filepath . "_" . time();
                             rename($filepath, $newname);
@@ -249,10 +249,10 @@ class ModifyconfigMethod extends MethodClass
             case 'update':
                 switch ($data['tab']) {
                     case 'setup':
-                        xarVar::fetch('middleware', 'str', $middleware, 'Creole', xarVar::NOT_REQUIRED);
+                        $this->var()->find('middleware', $middleware, 'str', 'Creole');
                         $variables = ['DB.Middleware' => $middleware];
                         $current_database = xarSystemVars::get(sys::CONFIG, 'DB.Name');
-                        xarVar::fetch('database', 'str', $database, $current_database, xarVar::NOT_REQUIRED);
+                        $this->var()->find('database', $database, 'str', $current_database);
                         $variables['DB.Name'] = $database;
                         xarMod::apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
                         xarController::redirect(xarController::URL(
@@ -263,15 +263,15 @@ class ModifyconfigMethod extends MethodClass
                         ), null, $this->getContext());
                         break;
                     case 'display':
-                        xarVar::fetch('alternatepagetemplate', 'checkbox', $alternatePageTemplate, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('alternatepagetemplatename', 'str', $alternatePageTemplateName, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('defaultmodule', 'str:1:', $defaultModuleName, xarModVars::get('modules', 'defaultmodule'), xarVar::NOT_REQUIRED);
-                        xarVar::fetch('defaulttype', 'str:1:', $defaultModuleType, xarModVars::get('modules', 'defaultmoduletype'), xarVar::NOT_REQUIRED);
-                        xarVar::fetch('defaultfunction', 'str:1:', $defaultModuleFunction, xarModVars::get('modules', 'defaultmodulefunction'), xarVar::NOT_REQUIRED);
-                        xarVar::fetch('defaultdatapath', 'str:1:', $defaultDataPath, xarModVars::get('modules', 'defaultdatapath'), xarVar::NOT_REQUIRED);
-                        xarVar::fetch('shorturl', 'str', $enableShortURLs, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('allowsslashes', 'checkbox', $allowsslashes, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('htmlentites', 'checkbox', $FixHTMLEntities, false, xarVar::NOT_REQUIRED);
+                        $this->var()->find('alternatepagetemplate', $alternatePageTemplate, 'checkbox', false);
+                        $this->var()->find('alternatepagetemplatename', $alternatePageTemplateName, 'str', '');
+                        $this->var()->find('defaultmodule', $defaultModuleName, 'str:1:', xarModVars::get('modules', 'defaultmodule'));
+                        $this->var()->find('defaulttype', $defaultModuleType, 'str:1:', xarModVars::get('modules', 'defaultmoduletype'));
+                        $this->var()->find('defaultfunction', $defaultModuleFunction, 'str:1:', xarModVars::get('modules', 'defaultmodulefunction'));
+                        $this->var()->find('defaultdatapath', $defaultDataPath, 'str:1:', xarModVars::get('modules', 'defaultdatapath'));
+                        $this->var()->find('shorturl', $enableShortURLs, 'str', false);
+                        $this->var()->find('allowsslashes', $allowsslashes, 'checkbox', false);
+                        $this->var()->find('htmlentites', $FixHTMLEntities, 'checkbox', false);
 
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
@@ -295,17 +295,17 @@ class ModifyconfigMethod extends MethodClass
                         xarConfigVars::set(null, 'Site.Core.FixHTMLEntities', $FixHTMLEntities);
                         break;
                     case 'security':
-                        xarVar::fetch('securitylevel', 'str:1:', $securityLevel);
-                        xarVar::fetch('sessionduration', 'int:1:', $sessionDuration, 30, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('sessiontimeout', 'int:1:', $sessionTimeout, 10, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('authmodule_order', 'str:1:', $authmodule_order, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('cookiename', 'str:1:', $cookieName, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('cookiepath', 'str:1:', $cookiePath, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('cookiedomain', 'str:1:', $cookieDomain, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('referercheck', 'str:1:', $refererCheck, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('secureserver', 'checkbox', $secureServer, true, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('sslport', 'int', $sslport, 443, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('cookietimeout', 'int:1:', $cookietimeout, '', xarVar::NOT_REQUIRED);
+                        $this->var()->find('securitylevel', $securityLevel, 'str:1:');
+                        $this->var()->find('sessionduration', $sessionDuration, 'int:1:', 30);
+                        $this->var()->find('sessiontimeout', $sessionTimeout, 'int:1:', 10);
+                        $this->var()->find('authmodule_order', $authmodule_order, 'str:1:', '');
+                        $this->var()->find('cookiename', $cookieName, 'str:1:', '');
+                        $this->var()->find('cookiepath', $cookiePath, 'str:1:', '');
+                        $this->var()->find('cookiedomain', $cookieDomain, 'str:1:', '');
+                        $this->var()->find('referercheck', $refererCheck, 'str:1:', '');
+                        $this->var()->find('secureserver', $secureServer, 'checkbox', true);
+                        $this->var()->find('sslport', $sslport, 'int', 443);
+                        $this->var()->find('cookietimeout', $cookietimeout, 'int:1:', '');
                         sys::import('modules.dynamicdata.class.properties.master');
                         /** @var OrderSelectProperty $orderselect */
                         $orderselect = DataPropertyMaster::getProperty(['name' => 'orderselect']);
@@ -331,13 +331,13 @@ class ModifyconfigMethod extends MethodClass
 
                         /*
                         // Encryption
-                        xarVar::fetch('cipher','str:1',$cipher,'blowfish',xarVar::NOT_REQUIRED);
-                        xarVar::fetch('mode','str:1',$mode,'cbc',xarVar::NOT_REQUIRED);
-                        xarVar::fetch('key','str:1',$key,'jamaica',xarVar::NOT_REQUIRED);
-                        xarVar::fetch('initvector','str:1',$initvector,'xaraya2x',xarVar::NOT_REQUIRED);
-                        xarVar::fetch('hint','str:1',$hint,'',xarVar::NOT_REQUIRED);
+                        $this->var()->find('cipher', $cipher, 'str:1', 'blowfish');
+                        $this->var()->find('mode', $mode, 'str:1', 'cbc');
+                        $this->var()->find('key', $key, 'str:1', 'jamaica');
+                        $this->var()->find('initvector', $initvector, 'str:1', 'xaraya2x');
+                        $this->var()->find('hint', $hint, 'str:1', '');
 
-                        xarVar::fetch('key','str:1',$key,'jamaica',xarVar::NOT_REQUIRED);
+                        $this->var()->find('key', $key, 'str:1', 'jamaica');
                         $keyholder = DataPropertyMaster::getProperty(array('type' => 'password'));
                         $keyholder->checkInput('key',$key);
                         $key = $keyholder->value;
@@ -360,8 +360,8 @@ class ModifyconfigMethod extends MethodClass
                         ), null, $this->getContext());
                         break;
                     case 'locales':
-                        xarVar::fetch('defaultlocale', 'str:1:', $defaultLocale);
-                        xarVar::fetch('mlsmode', 'str:1:', $MLSMode, 'SINGLE', xarVar::NOT_REQUIRED);
+                        $this->var()->find('defaultlocale', $defaultLocale, 'str:1:');
+                        $this->var()->find('mlsmode', $MLSMode, 'str:1:', 'SINGLE');
 
                         sys::import('modules.dynamicdata.class.properties.master');
                         $locales = DataPropertyMaster::getProperty(['name' => 'checkboxlist']);
@@ -396,7 +396,7 @@ class ModifyconfigMethod extends MethodClass
                         break;
                     case 'logging':
                         // The overall switch to enable logging
-                        xarVar::fetch('logenabled', 'int', $logenabled, 0, xarVar::NOT_REQUIRED);
+                        $this->var()->find('logenabled', $logenabled, 'int', 0);
                         // The loggers that can be made active
                         $data['logavailable']->checkInput('available_loggers');
                         // The log levels for the fallback logger
@@ -404,7 +404,7 @@ class ModifyconfigMethod extends MethodClass
                         $levels->checkInput('loglevel');
                         $loglevel = serialize($levels->value);
                         // The file name for the fallback logger
-                        xarVar::fetch('logfilename', 'str', $logfilename, '', xarVar::NOT_REQUIRED);
+                        $this->var()->find('logfilename', $logfilename, 'str', '');
 
                         // Update the config.system file
                         $variables = ['Log.Enabled' => $logenabled, 'Log.Available' => $data['logavailable']->value,'Log.Level' => $loglevel, 'Log.Filename' => $logfilename];
@@ -418,10 +418,10 @@ class ModifyconfigMethod extends MethodClass
                         ), null, $this->getContext());
                         break;
                     case 'other':
-                        xarVar::fetch('loadlegacy', 'checkbox', $loadLegacy, xarConfigVars::get(null, 'Site.Core.LoadLegacy'), xarVar::NOT_REQUIRED);
-                        xarVar::fetch('proxyhost', 'str:1:', $proxyhost, xarModVars::get('base', 'proxyhost'), xarVar::NOT_REQUIRED);
-                        xarVar::fetch('proxyport', 'int:1:', $proxyport, xarModVars::get('base', 'proxyport'), xarVar::NOT_REQUIRED);
-                        xarVar::fetch('releasenumber', 'int:1:', $releasenumber, xarModVars::get('base', 'releasenumber'), xarVar::NOT_REQUIRED);
+                        $this->var()->find('loadlegacy', $loadLegacy, 'checkbox', xarConfigVars::get(null, 'Site.Core.LoadLegacy'));
+                        $this->var()->find('proxyhost', $proxyhost, 'str:1:', xarModVars::get('base', 'proxyhost'));
+                        $this->var()->find('proxyport', $proxyport, 'int:1:', xarModVars::get('base', 'proxyport'));
+                        $this->var()->find('releasenumber', $releasenumber, 'int:1:', xarModVars::get('base', 'releasenumber'));
                         // Save these in normal module variables for now
                         xarModVars::set('base', 'proxyhost', $proxyhost);
                         xarModVars::set('base', 'proxyport', $proxyport);
@@ -429,8 +429,8 @@ class ModifyconfigMethod extends MethodClass
                         xarConfigVars::set(null, 'Site.Core.LoadLegacy', $loadLegacy);
 
                         // Timezone, offset and DST
-                        xarVar::fetch('hosttimezone', 'str:1:', $hosttimezone, 'UTC', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('sitetimezone', 'str:1:', $sitetimezone, 'UTC', xarVar::NOT_REQUIRED);
+                        $this->var()->find('hosttimezone', $hosttimezone, 'str:1:', 'UTC');
+                        $this->var()->find('sitetimezone', $sitetimezone, 'str:1:', 'UTC');
 
                         $tzobject = new DateTimeZone($hosttimezone);
                         $variables = ['SystemTimeZone' => !empty($tzobject) ? $hosttimezone : 'UTC'];

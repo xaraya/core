@@ -49,8 +49,8 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('tab', 'str:1', $data['tab'], 'general', xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
+        $this->var()->find('tab', $data['tab'], 'str:1', 'general');
 
         // Get encoding
         $data['encoding'] = xarModVars::get('mail', 'encoding');
@@ -111,12 +111,12 @@ class ModifyconfigMethod extends MethodClass
                 switch ($data['tab']) {
                     case 'general':
                         // new modvar in 2.0.0, only store the id of the designated admin
-                        xarVar::fetch('admin_outgoing', 'id', $admin_outgoing);
-                        xarVar::fetch('showtemplates', 'checkbox', $showtemplates, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('replyto', 'checkbox', $replyto, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('replytoname', 'str:1:', $replytoname, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('replytoemail', 'str:1:', $replytoemail, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('debugmode', 'checkbox', $debugmode, false, xarVar::NOT_REQUIRED);
+                        $this->var()->find('admin_outgoing', $admin_outgoing, 'id');
+                        $this->var()->find('showtemplates', $showtemplates, 'checkbox', false);
+                        $this->var()->find('replyto', $replyto, 'checkbox', false);
+                        $this->var()->find('replytoname', $replytoname, 'str:1:', '');
+                        $this->var()->find('replytoemail', $replytoemail, 'str:1:', '');
+                        $this->var()->find('debugmode', $debugmode, 'checkbox', false);
 
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
@@ -144,7 +144,7 @@ class ModifyconfigMethod extends MethodClass
 
                         // Suppoert for PHPMailer as an external library
                         if (file_exists(sys::lib() . 'PHPMailer')) {
-                            xarVar::fetch('use_external_lib', 'checkbox', $use_external_lib, false, xarVar::NOT_REQUIRED);
+                            $this->var()->find('use_external_lib', $use_external_lib, 'checkbox', false);
                             xarModVars::set('mail', 'use_external_lib', $use_external_lib);
                         }
 
@@ -152,31 +152,31 @@ class ModifyconfigMethod extends MethodClass
                     case 'incoming':
                         break;
                     case 'outgoing':
-                        xarVar::fetch('html', 'checkbox', $html, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('htmluseheadfoot', 'checkbox', $htmluseheadfoot, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('htmlheader', 'str:1:', $htmlheader, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('htmlfooter', 'str:1:', $htmlfooter, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('textuseheadfoot', 'checkbox', $textuseheadfoot, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('textheader', 'str:1:', $textheader, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('textfooter', 'str:1:', $textfooter, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('wordwrap', 'int:1:', $wordwrap, '50');
-                        xarVar::fetch('priority', 'str:1:', $priority, 'normal');
-                        xarVar::fetch('encoding', 'str:1:', $encoding);
-                        xarVar::fetch('embed_images', 'checkbox', $embed_images, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('server', 'str:1:', $server, 'mail');
-                        xarVar::fetch('smtpHost', 'str:1:', $smtpHost, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('smtpPort', 'int:1:', $smtpPort, '25', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('smtpSecure', 'str:1:', $smtpSecure, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('smtpAuth', 'checkbox', $smtpAuth, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('htmlheader', 'str:1:', $htmlheader, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('smtpUserName', 'str:1:', $smtpUserName, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('smtpPassword', 'str:1:', $smtpPassword, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('sendmailpath', 'str:1:', $sendmailpath, '/usr/sbin/sendmail', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('searchstrings', 'str:1', $searchstrings, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('replacestrings', 'str:1', $replacestrings, '', xarVar::NOT_REQUIRED);
-                        xarVar::fetch('suppresssending', 'checkbox', $suppresssending, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('redirectsending', 'checkbox', $redirectsending, false, xarVar::NOT_REQUIRED);
-                        xarVar::fetch('redirectaddress', 'str:1:', $redirectaddress, '', xarVar::NOT_REQUIRED);
+                        $this->var()->find('html', $html, 'checkbox', false);
+                        $this->var()->find('htmluseheadfoot', $htmluseheadfoot, 'checkbox', false);
+                        $this->var()->find('htmlheader', $htmlheader, 'str:1:', '');
+                        $this->var()->find('htmlfooter', $htmlfooter, 'str:1:', '');
+                        $this->var()->find('textuseheadfoot', $textuseheadfoot, 'checkbox', false);
+                        $this->var()->find('textheader', $textheader, 'str:1:', '');
+                        $this->var()->find('textfooter', $textfooter, 'str:1:', '');
+                        $this->var()->find('wordwrap', $wordwrap, 'int:1:', '50');
+                        $this->var()->find('priority', $priority, 'str:1:', 'normal');
+                        $this->var()->find('encoding', $encoding, 'str:1:');
+                        $this->var()->find('embed_images', $embed_images, 'checkbox', false);
+                        $this->var()->find('server', $server, 'str:1:', 'mail');
+                        $this->var()->find('smtpHost', $smtpHost, 'str:1:', '');
+                        $this->var()->find('smtpPort', $smtpPort, 'int:1:', '25');
+                        $this->var()->find('smtpSecure', $smtpSecure, 'str:1:', '');
+                        $this->var()->find('smtpAuth', $smtpAuth, 'checkbox', false);
+                        $this->var()->find('htmlheader', $htmlheader, 'str:1:', '');
+                        $this->var()->find('smtpUserName', $smtpUserName, 'str:1:', '');
+                        $this->var()->find('smtpPassword', $smtpPassword, 'str:1:', '');
+                        $this->var()->find('sendmailpath', $sendmailpath, 'str:1:', '/usr/sbin/sendmail');
+                        $this->var()->find('searchstrings', $searchstrings, 'str:1', '');
+                        $this->var()->find('replacestrings', $replacestrings, 'str:1', '');
+                        $this->var()->find('suppresssending', $suppresssending, 'checkbox', false);
+                        $this->var()->find('redirectsending', $redirectsending, 'checkbox', false);
+                        $this->var()->find('redirectaddress', $redirectaddress, 'str:1:', '');
 
                         // update the data
                         xarModVars::set('mail', 'html', $html);
@@ -208,7 +208,7 @@ class ModifyconfigMethod extends MethodClass
                         xarModVars::set('mail', 'redirectaddress', $redirectaddress);
 
                         if (xarMod::isAvailable('scheduler')) {
-                            xarVar::fetch('interval', 'str:1', $interval, '', xarVar::NOT_REQUIRED);
+                            $this->var()->find('interval', $interval, 'str:1', '');
                             // see if we have a scheduler job running to send queued mail
                             $job = xarMod::apiFunc(
                                 'scheduler',

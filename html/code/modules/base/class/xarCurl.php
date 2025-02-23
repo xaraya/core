@@ -66,7 +66,7 @@ class xarCurl extends xarObject
 
     // Result of a curl_getinfo() - cached so it is available even after the
     // session is closed.
-    public $info = NULL;
+    public $info = null;
 
     // Header information from the return message.
     public $header100 = array();
@@ -173,12 +173,12 @@ class xarCurl extends xarObject
         $this->setopt(CURLOPT_RETURNTRANSFER, 1);
 
         // Reset other properties of this object.
-        $this->url = NULL;
+        $this->url = null;
         $this->post = array();
         $this->get = array();
         $this->errno = 0;
         $this->error = '';
-        $this->info = NULL;
+        $this->info = null;
         $this->header100 = array();
         $this->header = array();
     }
@@ -432,7 +432,7 @@ class xarCurl extends xarObject
      * @param mixed $option
      * @return mixed
      */
-    public function getinfo($option = NULL)
+    public function getinfo($option = null)
     {
         // Info values and elements.
         // Some of these constants are only available on later
@@ -483,7 +483,7 @@ class xarCurl extends xarObject
         }
 
         curl_close($this->curl);
-        $this->curl = NULL;
+        $this->curl = null;
 
         return true;
     }

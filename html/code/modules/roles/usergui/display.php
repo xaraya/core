@@ -48,12 +48,12 @@ class DisplayMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
 
-        xarVar::fetch('id', 'id', $id, xarUser::getVar('id'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('itemid', 'int', $itemid, null, xarVar::DONT_SET);
-        xarVar::fetch('itemtype', 'int', $itemtype, 1, xarVar::NOT_REQUIRED);
-        xarVar::fetch('tplmodule', 'str', $args['tplmodule'], 'roles', xarVar::NOT_REQUIRED);
-        xarVar::fetch('template', 'str', $args['template'], 'account', xarVar::NOT_REQUIRED);
-        xarVar::fetch('layout', 'str', $args['layout'], '', xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'id', xarUser::getVar('id'));
+        $this->var()->check('itemid', $itemid, 'int', null);
+        $this->var()->find('itemtype', $itemtype, 'int', 1);
+        $this->var()->find('tplmodule', $args['tplmodule'], 'str', 'roles');
+        $this->var()->find('template', $args['template'], 'str', 'account');
+        $this->var()->find('layout', $args['layout'], 'str', '');
 
         $id = $itemid ?? $id;
 

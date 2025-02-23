@@ -32,8 +32,8 @@ class DisplayConfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $data = [];
-        xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('confirm', 'bool', $data['confirm'], false, xarVar::NOT_REQUIRED);
+        $this->var()->find('itemid', $data['itemid'], 'int', 0);
+        $this->var()->find('confirm', $data['confirm'], 'bool', false);
 
         $data['object'] = DataObjectFactory::getObject(['name' => 'themes_configurations']);
 

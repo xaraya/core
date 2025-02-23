@@ -43,7 +43,7 @@ class ViewprivilegesMethod extends MethodClass
 
         $data = [];
 
-        xarVar::fetch('show', 'isset', $data['show'], 'assigned', xarVar::NOT_REQUIRED);
+        $this->var()->find('show', $data['show'], 'isset', 'assigned');
 
         // Clear Session Vars
         xarSession::delVar('privileges_statusmsg');

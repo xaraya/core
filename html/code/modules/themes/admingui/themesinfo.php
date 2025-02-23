@@ -50,9 +50,9 @@ class ThemesinfoMethod extends MethodClass
 
         $data = [];
 
-        xarVar::fetch('id', 'int:1:', $themeid, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('exit', 'isset', $exit, null, xarVar::DONT_SET);
-        xarVar::fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET);
+        $this->var()->find('id', $themeid, 'int:1:', 0);
+        $this->var()->check('exit', $exit);
+        $this->var()->check('confirm', $confirm);
         if (empty($themeid)) {
             return xarController::notFound(null, $this->getContext());
         }

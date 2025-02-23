@@ -35,11 +35,11 @@ class ErrorsMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        xarVar::fetch('errortype', 'str', $errortype, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('errortype', $errortype, 'str', '');
         switch ($errortype) {
             case 'forbidden':
-                xarVar::fetch('message', 'str', $msg, '', xarVar::NOT_REQUIRED);
-                xarVar::fetch('template', 'str', $template, null, xarVar::NOT_REQUIRED);
+                $this->var()->find('message', $msg, 'str', '');
+                $this->var()->find('template', $template, 'str', null);
                 return xarController::forbidden($msg, $this->getContext(), $template);
             case 'exception':
             case 'systemerror':
@@ -47,8 +47,8 @@ class ErrorsMethod extends MethodClass
             case 'usererror':
             case 'notfound':
             default:
-                xarVar::fetch('message', 'str', $msg, '', xarVar::NOT_REQUIRED);
-                xarVar::fetch('template', 'str', $template, null, xarVar::NOT_REQUIRED);
+                $this->var()->find('message', $msg, 'str', '');
+                $this->var()->find('template', $template, 'str', null);
                 return xarController::notFound($msg, $this->getContext(), $template);
         }
     }

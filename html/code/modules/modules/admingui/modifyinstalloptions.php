@@ -47,7 +47,7 @@ class ModifyinstalloptionsMethod extends MethodClass
         sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();
         if (!$installer->getModuleStack()->size) {
-            xarVar::fetch('regid', 'int', $regid, null, xarVar::DONT_SET);
+            $this->var()->check('regid', $regid, 'int', null);
             if (!isset($regid)) {
                 throw new Exception('Missing id of module for installation options...aborting');
             }

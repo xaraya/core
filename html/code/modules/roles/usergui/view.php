@@ -54,14 +54,14 @@ class ViewMethod extends MethodClass
         }
         //    extract($args);
 
-        xarVar::fetch('startnum', 'int:1', $args['startnum'], null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('itemtype', 'int', $args['itemtype'], xarRoles::ROLES_USERTYPE, xarVar::NOT_REQUIRED);
-        xarVar::fetch('search', 'str:1:100', $args['search'], null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('order', 'str', $args['order'], null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('include', 'str', $args['include'], null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('exclude', 'str', $args['exclude'], null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('tplmodule', 'str', $args['tplmodule'], 'roles', xarVar::NOT_REQUIRED);
-        xarVar::fetch('template', 'str', $args['template'], '', xarVar::NOT_REQUIRED);
+        $this->var()->find('startnum', $args['startnum'], 'int:1', null);
+        $this->var()->find('itemtype', $args['itemtype'], 'int', xarRoles::ROLES_USERTYPE);
+        $this->var()->find('search', $args['search'], 'str:1:100', null);
+        $this->var()->find('order', $args['order'], 'str', null);
+        $this->var()->find('include', $args['include'], 'str', null);
+        $this->var()->find('exclude', $args['exclude'], 'str', null);
+        $this->var()->find('tplmodule', $args['tplmodule'], 'str', 'roles');
+        $this->var()->find('template', $args['template'], 'str', '');
 
         $data['items'] = [];
         $data['pager'] = '';

@@ -37,9 +37,9 @@ class ViewMethod extends MethodClass
     {
         $data = [];
         // Get parameters
-        xarVar::fetch('activetab', 'isset', $activetab, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('startnum', 'isset', $data['startnum'], 1, xarVar::NOT_REQUIRED);
-        xarVar::fetch('items_per_page', 'isset', $data['items_per_page'], xarModVars::get('categories', 'items_per_page'), xarVar::NOT_REQUIRED);
+        $this->var()->find('activetab', $activetab, 'isset', 0);
+        $this->var()->find('startnum', $data['startnum'], 'isset', 1);
+        $this->var()->find('items_per_page', $data['items_per_page'], 'isset', xarModVars::get('categories', 'items_per_page'));
 
         // Set a fallback value in case the modvar is empty
         if (empty($data['items_per_page'])) {

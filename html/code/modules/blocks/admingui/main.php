@@ -51,7 +51,7 @@ class MainMethod extends MethodClass
 
         if (((bool) xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
             $data = [];
-            xarVar::fetch('tab', 'pre:trim:lower:str:1:', $data['tab'], '', xarVar::NOT_REQUIRED);
+            $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1:', '');
             $data['context'] = $this->getContext();
             return xarTpl::module('blocks', 'admin', 'overview', $data);
         } else {

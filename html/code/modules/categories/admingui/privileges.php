@@ -52,18 +52,18 @@ class PrivilegesMethod extends MethodClass
         extract($args);
 
         // fixed params
-        xarVar::fetch('cid', 'isset', $cid, null, xarVar::DONT_SET);
-        xarVar::fetch('moduleid', 'isset', $moduleid, null, xarVar::DONT_SET);
-        xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET);
-        xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET);
-        xarVar::fetch('apply', 'isset', $apply, null, xarVar::DONT_SET);
-        xarVar::fetch('extpid', 'isset', $extpid, null, xarVar::DONT_SET);
-        xarVar::fetch('extname', 'isset', $extname, null, xarVar::DONT_SET);
-        xarVar::fetch('extrealm', 'isset', $extrealm, null, xarVar::DONT_SET);
-        xarVar::fetch('extmodule', 'isset', $extmodule, null, xarVar::DONT_SET);
-        xarVar::fetch('extcomponent', 'isset', $extcomponent, null, xarVar::DONT_SET);
-        xarVar::fetch('extinstance', 'isset', $extinstance, null, xarVar::DONT_SET);
-        xarVar::fetch('extlevel', 'isset', $extlevel, null, xarVar::DONT_SET);
+        $this->var()->check('cid', $cid);
+        $this->var()->check('moduleid', $moduleid);
+        $this->var()->check('itemtype', $itemtype);
+        $this->var()->check('itemid', $itemid);
+        $this->var()->check('apply', $apply);
+        $this->var()->check('extpid', $extpid);
+        $this->var()->check('extname', $extname);
+        $this->var()->check('extrealm', $extrealm);
+        $this->var()->check('extmodule', $extmodule);
+        $this->var()->check('extcomponent', $extcomponent);
+        $this->var()->check('extinstance', $extinstance);
+        $this->var()->check('extlevel', $extlevel);
 
         sys::import('modules.dynamicdata.class.properties.master');
         /** @var CategoriesProperty $categories */

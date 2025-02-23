@@ -54,13 +54,13 @@ class TestprivilegesMethod extends MethodClass
         }
 
         // Get Parameters
-        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }
-        xarVar::fetch('pmodule', 'int', $modRegId, xarSecurity::PRIVILEGES_ALL, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('name', 'str:1', $name, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('test', 'str:1:35:', $test, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        $this->var()->find('pmodule', $modRegId, 'int', xarSecurity::PRIVILEGES_ALL);
+        $this->var()->find('name', $name, 'str:1', '');
+        $this->var()->find('test', $test, 'str:1:35:', '');
 
         // Call the Roles class and get the role
         $role = xarRoles::get($id);

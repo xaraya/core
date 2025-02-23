@@ -34,15 +34,17 @@ class UpdatepropertiesMethod extends MethodClass
     /**
      * Update a module
      * @author Xaraya Development Team
-     * @param int id the module's registered id
-     * @param string newdisplayname the new display name
-     * @param bool admincapable the whether the module shows an admin menu
-     * @param bool usercapable the whether the module shows a user menu
+     * @param array<mixed> $args
+     * @var int id the module's registered id
+     * @var string newdisplayname the new display name
+     * @var bool admincapable the whether the module shows an admin menu
+     * @var bool usercapable the whether the module shows a user menu
      * @return mixed true on success, error message on failure
      * @see AdminGui::updateproperties()
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
@@ -55,11 +57,11 @@ class UpdatepropertiesMethod extends MethodClass
         }
 
         // Get parameters
-        xarVar::fetch('id', 'id', $regid);
-        xarVar::fetch('olddisplayname', 'str::', $olddisplayname);
-        xarVar::fetch('displayname', 'str::', $displayname);
-        xarVar::fetch('admincapable', 'isset', $admincapable, null, xarVar::DONT_SET);
-        xarVar::fetch('usercapable', 'isset', $usercapable, null, xarVar::DONT_SET);
+        $this->var()->get('id', $regid, 'id');
+        $this->var()->check('olddisplayname', $olddisplayname, 'str::');
+        $this->var()->check('displayname', $displayname, 'str::');
+        $this->var()->check('admincapable', $admincapable);
+        $this->var()->check('usercapable', $usercapable);
         $admincapable = isset($admincapable) ? true : false;
         $usercapable = isset($usercapable) ? true : false;
 
@@ -77,7 +79,7 @@ class UpdatepropertiesMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET);
+        $this->var()->check('return_url', $return_url);
         if (!empty($return_url)) {
             xarController::redirect($return_url, null, $this->getContext());
         } else {

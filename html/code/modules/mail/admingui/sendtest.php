@@ -50,14 +50,14 @@ class SendtestMethod extends MethodClass
         }
 
         // Get parameters from whatever input we need
-        xarVar::fetch('message', 'str:1:', $message);
-        xarVar::fetch('subject', 'str:1', $subject);
-        xarVar::fetch('email', 'email', $email, '');
-        xarVar::fetch('name', 'str:1', $name, '');
-        xarVar::fetch('emailcc', 'email', $emailcc, '');
-        xarVar::fetch('namecc', 'str:1', $namecc, '');
-        xarVar::fetch('emailbcc', 'email', $emailbcc, '');
-        xarVar::fetch('namebcc', 'str:1', $namebcc, '');
+        $this->var()->find('message', $message, 'str:1:');
+        $this->var()->find('subject', $subject, 'str:1:');
+        $this->var()->find('email', $email, 'email', '');
+        $this->var()->find('name', $name, 'str:1:', '');
+        $this->var()->find('emailcc', $emailcc, 'email', '');
+        $this->var()->find('namecc', $namecc, 'str:1:', '');
+        $this->var()->find('emailbcc', $emailbcc, 'email', '');
+        $this->var()->find('namebcc', $namebcc, 'str:1:', '');
 
         // Confirm authorisation code.
         if (!xarSec::confirmAuthKey()) {
@@ -70,7 +70,7 @@ class SendtestMethod extends MethodClass
             $name = xarModVars::get('mail', 'adminname');
         }
 
-        xarVar::fetch('when', 'str:1', $when, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('when', $when, 'str:1', '');
         if (!empty($when)) {
             $when .= ' GMT';
             $when = strtotime($when);

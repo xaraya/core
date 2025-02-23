@@ -46,6 +46,7 @@ class DeleteTypeMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var TypesApi $typesapi */
         $typesapi = $this->typesapi();
         /** @var InstancesApi $instancesapi */
@@ -54,12 +55,11 @@ class DeleteTypeMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch(
+        $this->var()->check(
             'type_id',
-            'int:1:',
             $type_id,
-            null,
-            xarVar::DONT_SET
+            'int:1:',
+            null
         );
 
 
@@ -82,12 +82,11 @@ class DeleteTypeMethod extends MethodClass
         if ($type['type_state'] == xarBlock::TYPE_STATE_MISSING ||
             $type['type_state'] == xarBlock::TYPE_STATE_MOD_UNAVAILABLE) {
 
-            xarVar::fetch(
+            $this->var()->find(
                 'confirm',
-                'checkbox',
                 $confirmed,
-                false,
-                xarVar::NOT_REQUIRED
+                'checkbox',
+                false
             );
 
             if ($confirmed) {
@@ -97,12 +96,11 @@ class DeleteTypeMethod extends MethodClass
                 if (!$typesapi->deleteitem(['type_id' => $type_id])) {
                     return;
                 }
-                xarVar::fetch(
+                $this->var()->find(
                     'return_url',
-                    'pre:trim:str:1:',
                     $return_url,
-                    '',
-                    xarVar::NOT_REQUIRED
+                    'pre:trim:str:1:',
+                    ''
                 );
                 if (empty($return_url)) {
                     $return_url = xarController::URL('blocks', 'admin', 'view_types');

@@ -54,14 +54,14 @@ class ViewInstancesMethod extends MethodClass
 
         $data = [];
 
-        xarVar::fetch('tab', 'pre:trim:lower:str:1:', $data['tab'], 'list', xarVar::NOT_REQUIRED);
+        $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1:', 'list');
 
         $access_property = DataPropertyMaster::getProperty(['name' => 'access']);
 
         switch ($data['tab']) {
             case 'list':
-                xarVar::fetch('startnum', 'int:1', $data['startnum'], 1, xarVar::NOT_REQUIRED);
-                xarVar::fetch('filter', 'pre:trim:str:1:', $data['filter'], null, xarVar::NOT_REQUIRED);
+                $this->var()->find('startnum', $data['startnum'], 'int:1', 1);
+                $this->var()->find('filter', $data['filter'], 'pre:trim:str:1:', null);
                 $data['items_per_page'] = xarModVars::get('blocks', 'items_per_page');
 
                 $data['total'] = $instancesapi->countitems([

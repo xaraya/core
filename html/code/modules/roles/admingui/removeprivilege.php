@@ -46,9 +46,9 @@ class RemoveprivilegeMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('privid', 'int:1:', $privid);
-        xarVar::fetch('roleid', 'int:1:', $roleid);
-        xarVar::fetch('confirmation', 'str:1:', $confirmation, '', xarVar::NOT_REQUIRED);
+        $this->var()->get('privid', $privid, 'int:1:');
+        $this->var()->get('roleid', $roleid, 'int:1:');
+        $this->var()->find('confirmation', $confirmation, 'str:1:', '');
         // Call the Roles class and get the role
         $role  = xarRoles::get($roleid);
 

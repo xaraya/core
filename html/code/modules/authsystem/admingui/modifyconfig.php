@@ -47,12 +47,15 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('uselockout', 'checkbox', $data['uselockout'], xarModVars::get('authsystem', 'uselockout'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('lockouttime', 'int:1:', $data['lockouttime'], (int) xarModVars::get('authsystem', 'lockouttime'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('lockouttries', 'int:1:', $data['lockouttries'], (int) xarModVars::get('authsystem', 'lockouttries'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('forwarding_page', 'str', $data['forwarding_page'], xarModVars::get('authsystem', 'forwarding_page'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('ask_forward', 'checkbox', $data['ask_forward'], xarModVars::get('authsystem', 'ask_forward'), xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
+        $this->var()->find('uselockout', $data['uselockout'], 'checkbox', xarModVars::get('authsystem', 'uselockout'));
+        $this->var()->find('lockouttime', $data['lockouttime'], 'int:1:', (int) xarModVars::get('authsystem', 'lockouttime'));
+        $this->var()->find('lockouttries', $data['lockouttries'], 'int:1:', (int) xarModVars::get('authsystem', 'lockouttries'));
+        $this->var()->find('forwarding_page', $data['forwarding_page'], 'str', xarModVars::get('authsystem', 'forwarding_page'));
+        $this->var()->find('ask_forward', $data['ask_forward'], 'checkbox', xarModVars::get('authsystem', 'ask_forward'));
+        if (!empty($data['forwarding_page'])) {
+            $data['forwarding_page'] = $this->var()->prep($data['forwarding_page']);
+        }
 
         $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'authsystem']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, frontend_page');

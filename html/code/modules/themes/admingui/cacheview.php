@@ -42,10 +42,10 @@ class CacheviewMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         /* Get parameters from whatever input we need. */
-        xarVar::fetch('action', 'str:1', $action, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('confirm', 'str:1:', $confirm, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('hashn', 'str:1:', $hashn, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('templn', 'str:1:', $templn, false, xarVar::NOT_REQUIRED);
+        $this->var()->find('action', $action, 'str:1', false);
+        $this->var()->find('confirm', $confirm, 'str:1:', '');
+        $this->var()->find('hashn', $hashn, 'str:1:', false);
+        $this->var()->find('templn', $templn, 'str:1:', false);
 
         /* Security check - important to do this as early as possible */
         if (!xarSecurity::check('AdminThemes')) {

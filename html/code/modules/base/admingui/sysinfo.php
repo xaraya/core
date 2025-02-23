@@ -40,7 +40,7 @@ class SysinfoMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch('what', 'int:-1:127', $what, INFO_GENERAL, xarVar::NOT_REQUIRED);
+        $this->var()->find('what', $what, 'int:-1:127', INFO_GENERAL);
         $data['what'] = $what;
         ob_start();
         phpinfo($what);

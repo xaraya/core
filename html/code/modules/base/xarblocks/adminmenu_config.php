@@ -62,11 +62,11 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
     {
         $data = parent::update($data);
 
-        xarVar::fetch('showlogout', 'int:0:1', $showlogout, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('menustyle' , 'pre:trim:lower:enum:byname:bycat' , $menustyle , 'bycat', xarVar::NOT_REQUIRED);
-        xarVar::fetch('showfront', 'int:0:1', $showfront, 0, xarVar::NOT_REQUIRED);
-        xarVar::fetch('marker',      'str:0',    $marker, '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('modulelist', 'array', $modulelist, array(), xarVar::NOT_REQUIRED);
+        $this->var()->find('showlogout', $showlogout, 'int:0:1', 0);
+        $this->var()->find('menustyle', $menustyle , 'pre:trim:lower:enum:byname:bycat' , 'bycat');
+        $this->var()->find('showfront', $showfront, 'int:0:1', 0);
+        $this->var()->find('marker', $marker, 'str:0', '');
+        $this->var()->find('modulelist', $modulelist, 'array', array());
 
         if (empty($modulelist)) $modulelist = array('modules' => array('visible' => 1));
 

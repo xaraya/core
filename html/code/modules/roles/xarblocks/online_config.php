@@ -40,10 +40,10 @@ class Roles_OnlineBlockConfig extends Roles_OnlineBlock
      */
     public function configupdate(array $args = [])
     {
-        xarVar::fetch('showusers',     'checkbox', $args['showusers'], false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('showusertotal', 'checkbox', $args['showusertotal'], false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('showanontotal', 'checkbox', $args['showanontotal'], false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('showlastuser',  'checkbox', $args['showlastuser'], false, xarVar::NOT_REQUIRED);
+        $this->var()->find('showusers', $args['showusers'], 'checkbox', false);
+        $this->var()->find('showusertotal', $args['showusertotal'], 'checkbox', false);
+        $this->var()->find('showanontotal', $args['showanontotal'], 'checkbox', false);
+        $this->var()->find('showlastuser', $args['showlastuser'], 'checkbox', false);
         $this->setContent($args);
         return true;
     }

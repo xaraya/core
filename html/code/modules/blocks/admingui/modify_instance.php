@@ -52,6 +52,7 @@ class ModifyInstanceMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var InstancesApi $instancesapi */
         $instancesapi = $this->instancesapi();
         /** @var TypesApi $typesapi */
@@ -69,12 +70,11 @@ class ModifyInstanceMethod extends MethodClass
             return;
         }
 
-        xarVar::fetch(
+        $this->var()->check(
             'block_id',
-            'int:1:',
             $block_id,
-            null,
-            xarVar::NOT_REQUIRED
+            'int:1:',
+            null
         );
 
         if (!isset($block_id)) {
@@ -94,9 +94,9 @@ class ModifyInstanceMethod extends MethodClass
         $data = [];
 
         // determine the interface, method and phase
-        xarVar::fetch('interface', 'pre:trim:lower:str:1:', $interface, 'display', xarVar::NOT_REQUIRED);
-        xarVar::fetch('block_method', 'pre:trim:lower:str:1:', $method, null, xarVar::NOT_REQUIRED);
-        xarVar::fetch('phase', 'pre:trim:lower:str:1:', $phase, 'display', xarVar::NOT_REQUIRED);
+        $this->var()->find('interface', $interface, 'pre:trim:lower:str:1:', 'display');
+        $this->var()->find('block_method', $method, 'pre:trim:lower:str:1:', null);
+        $this->var()->find('phase', $phase, 'pre:trim:lower:str:1:', 'display');
 
         // admin access is needed for some operations
         $isadmin = xarSecurity::check('', 0, 'Block', "$blockinfo[type]:$blockinfo[name]:$blockinfo[block_id]", $blockinfo['module'], '', 0, 800);
@@ -190,15 +190,15 @@ class ModifyInstanceMethod extends MethodClass
                     switch ($method) {
                         case 'config':
                             if ($isadmin) {
-                                xarVar::fetch('instance_name', 'pre:trim:str:1:', $name, '', xarVar::NOT_REQUIRED);
-                                xarVar::fetch('instance_title', 'pre:trim:str:0:', $title, '', xarVar::NOT_REQUIRED);
-                                xarVar::fetch('instance_state', 'int:0:4', $state, null, xarVar::NOT_REQUIRED);
-                                xarVar::fetch('instance_expire', 'pre:trim:str:0:20', $expire, 0, xarVar::NOT_REQUIRED);
-                                xarVar::fetch('instance_expire_reset', 'checkbox', $expire_reset, false, xarVar::NOT_REQUIRED);
-                                xarVar::fetch('instance_box_template', 'pre:trim:str:0:', $box_template, '', xarVar::NOT_REQUIRED);
-                                xarVar::fetch('instance_block_template', 'pre:trim:str:0:', $block_template, '', xarVar::NOT_REQUIRED);
-                                xarVar::fetch('instance_groups', 'array', $groups, [], xarVar::NOT_REQUIRED);
-                                xarVar::fetch('instance_attachgroup', 'int:1:', $attachgroup, null, xarVar::NOT_REQUIRED);
+                                $this->var()->find('instance_name', $name, 'pre:trim:str:1:', '');
+                                $this->var()->find('instance_title', $title, 'pre:trim:str:0:', '');
+                                $this->var()->find('instance_state', $state, 'int:0:4', null);
+                                $this->var()->find('instance_expire', $expire, 'pre:trim:str:0:20', 0);
+                                $this->var()->find('instance_expire_reset', $expire_reset, 'checkbox', false);
+                                $this->var()->find('instance_box_template', $box_template, 'pre:trim:str:0:', '');
+                                $this->var()->find('instance_block_template', $block_template, 'pre:trim:str:0:', '');
+                                $this->var()->find('instance_groups', $groups, 'array', []);
+                                $this->var()->find('instance_attachgroup', $attachgroup, 'int:1:', null);
 
                                 if (empty($name) || strlen($name) > 64) {
                                     $invalid['name'] = xarML('Name must be a string between 1 and 64 characters long');
@@ -390,33 +390,29 @@ class ModifyInstanceMethod extends MethodClass
                     break;
                 case 'caching':
 
-                    xarVar::fetch(
+                    $this->var()->find(
                         'instance_nocache',
-                        'checkbox',
                         $nocache,
-                        false,
-                        xarVar::NOT_REQUIRED
-                    );
-                    xarVar::fetch(
-                        'instance_pageshared',
                         'checkbox',
+                        false
+                    );
+                    $this->var()->find(
+                        'instance_pageshared',
                         $pageshared,
-                        false,
-                        xarVar::NOT_REQUIRED
+                        'checkbox',
+                        false
                     );
-                    xarVar::fetch(
+                    $this->var()->find(
                         'instance_usershared',
-                        'int:0:2',
                         $usershared,
-                        0,
-                        xarVar::NOT_REQUIRED
+                        'int:0:2',
+                        0
                     );
-                    xarVar::fetch(
+                    $this->var()->find(
                         'instance_cacheexpire',
-                        'str:1:',
                         $cacheexpire,
-                        null,
-                        xarVar::NOT_REQUIRED
+                        'str:1:',
+                        null
                     );
 
                     // convert cacheexpire from hh:mm:ss format to an integer
@@ -543,12 +539,11 @@ class ModifyInstanceMethod extends MethodClass
                     return;
                 }
 
-                xarVar::fetch(
+                $this->var()->find(
                     'return_url',
-                    'pre:trim:str:1:',
                     $return_url,
-                    '',
-                    xarVar::NOT_REQUIRED
+                    'pre:trim:str:1:',
+                    ''
                 );
                 if (empty($return_url)) {
                     $return_url = xarController::URL(

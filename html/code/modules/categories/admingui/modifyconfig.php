@@ -44,9 +44,9 @@ class ModifyconfigMethod extends MethodClass
             return;
         }
         $data = [];
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED);
-        xarVar::fetch('tabmodule', 'str:1:100', $tabmodule, 'categories', xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
+        $this->var()->find('tab', $data['tab'], 'str:1:100', 'general');
+        $this->var()->find('tabmodule', $tabmodule, 'str:1:100', 'categories');
 
         $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'categories']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
@@ -72,11 +72,11 @@ class ModifyconfigMethod extends MethodClass
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());
                 }
-                xarVar::fetch('usejsdisplay', 'checkbox', $usejsdisplay, xarModVars::get('categories', 'usejsdisplay'), xarVar::NOT_REQUIRED);
-                xarVar::fetch('numstats', 'int', $numstats, xarModVars::get('categories', 'numstats'), xarVar::NOT_REQUIRED);
-                xarVar::fetch('showtitle', 'checkbox', $showtitle, xarModVars::get('categories', 'showtitle'), xarVar::NOT_REQUIRED);
-                xarVar::fetch('allowbatch', 'checkbox', $allowbatch, xarModVars::get('categories', 'allowbatch'), xarVar::NOT_REQUIRED);
-                xarVar::fetch('categoriesobject', 'str', $categoriesobject, xarModVars::get('categories', 'categoriesobject'), xarVar::NOT_REQUIRED);
+                $this->var()->find('usejsdisplay', $usejsdisplay, 'checkbox', xarModVars::get('categories', 'usejsdisplay'));
+                $this->var()->find('numstats', $numstats, 'int', xarModVars::get('categories', 'numstats'));
+                $this->var()->find('showtitle', $showtitle, 'checkbox', xarModVars::get('categories', 'showtitle'));
+                $this->var()->find('allowbatch', $allowbatch, 'checkbox', xarModVars::get('categories', 'allowbatch'));
+                $this->var()->find('categoriesobject', $categoriesobject, 'str', xarModVars::get('categories', 'categoriesobject'));
 
                 $modvars = [
                     'usejsdisplay',

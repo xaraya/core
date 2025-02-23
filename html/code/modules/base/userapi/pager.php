@@ -66,7 +66,7 @@ class PagerMethod extends MethodClass
     {
         extract($args);
         if (empty($startnum) || !is_numeric($startnum)) {
-            xarVar::fetch('startnum', 'int:1', $startnum, 1, xarVar::NOT_REQUIRED);
+            $this->var()->find('startnum', $startnum, 'int:1', 1);
         }
 
         if (!isset($itemsperpage) || !is_numeric($itemsperpage)) {

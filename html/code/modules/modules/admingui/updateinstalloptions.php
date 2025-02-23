@@ -50,7 +50,7 @@ class UpdateinstalloptionsMethod extends MethodClass
 
         // TODO: check under what conditions this is needed
         //    if (!xarSec::confirmAuthKey()) return;
-        xarVar::fetch('regid', 'int', $regid, null, xarVar::DONT_SET);
+        $this->var()->check('regid', $regid, 'int', null);
         sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();
         if (!$installer->installmodule($regid)) {

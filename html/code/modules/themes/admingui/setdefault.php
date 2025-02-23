@@ -56,7 +56,7 @@ class SetdefaultMethod extends MethodClass
             return xarController::badRequest('bad_author', $this->getContext());
         }
 
-        xarVar::fetch('id', 'int:1:', $defaulttheme, 0, xarVar::NOT_REQUIRED);
+        $this->var()->find('id', $defaulttheme, 'int:1:', 0);
         if (empty($defaulttheme)) {
             return xarController::notFound(null, $this->getContext());
         }

@@ -55,8 +55,8 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED);
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
+        $this->var()->find('tab', $data['tab'], 'str:1:100', 'general');
 
         // get a list of everyone with admin privileges
         // TODO: find a more elegant way to do this
@@ -208,10 +208,10 @@ class ModifyconfigMethod extends MethodClass
                 }
                 switch ($data['tab']) {
                     case 'general':
-                        xarVar::fetch('defaultauthmodule', 'int:1:', $defaultauthmodule, xarMod::getRegID('authsystem'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-                        xarVar::fetch('defaultregmodule', 'int:1:', $defaultregmodule, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
-                        xarVar::fetch('siteadmin', 'int:1', $siteadmin, (int) xarModVars::get('roles', 'admin'), xarVar::NOT_REQUIRED);
-                        xarVar::fetch('defaultgroup', 'str:1', $defaultgroup, 'Users', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+                        $this->var()->find('defaultauthmodule', $defaultauthmodule, 'int:1:', xarMod::getRegID('authsystem'));
+                        $this->var()->find('defaultregmodule', $defaultregmodule, 'int:1:', '');
+                        $this->var()->find('siteadmin', $siteadmin, 'int:1', (int) xarModVars::get('roles', 'admin'));
+                        $this->var()->find('defaultgroup', $defaultgroup, 'str:1', 'Users');
 
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
@@ -258,7 +258,7 @@ class ModifyconfigMethod extends MethodClass
                         }
                         break;
                     case 'debugging':
-                        xarVar::fetch('debugadmins', 'str', $candidates, '', xarVar::NOT_REQUIRED);
+                        $this->var()->find('debugadmins', $candidates, 'str', '');
 
                         // Remove unwanted characters
                         $candidates = trim($candidates, " ,\n\r\t\v\0");
