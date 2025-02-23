@@ -45,7 +45,7 @@ interface CoreServicesInterface extends ContextInterface
     public function ctl(): ControllerInterface;
     public function log(): LoggerInterface;
     public function mls(): MultiLanguageInterface;
-    public function mod(): ModulesInterface;
+    public function mod(?string $modName = null): ModulesInterface;
     public function sec(): SecurityInterface;
     public function tpl(): TemplatingInterface;
     public function var(): VariablesInterface;
@@ -83,6 +83,8 @@ trait CoreServicesTrait
     protected ?LoggerInterface $xarLog = null;
     protected ?MultiLanguageInterface $xarMls = null;
     protected ?ModulesInterface $xarMod = null;
+    /** @var array<string, ModulesInterface> */
+    protected array $xarModClones = [];
     protected ?SecurityInterface $xarSec = null;
     protected ?TemplatingInterface $xarTpl = null;
     protected ?VariablesInterface $xarVar = null;
@@ -210,9 +212,17 @@ trait CoreServicesTrait
      * - getModType() for mod()->template()
      *
      */
-    public function mod(): ModulesInterface
+    public function mod(?string $modName = null): ModulesInterface
     {
         $this->xarMod ??= ServiceFactory::getModulesService($this);
+        if (isset($modName)) {
+            // @todo cache clones per modName too?
+            if (!array_key_exists($modName, $this->xarModClones)) {
+                $this->xarModClones[$modName] = clone $this->xarMod;
+                $this->xarModClones[$modName]->setCurrentModName($modName);
+            }
+            return $this->xarModClones[$modName];
+        }
         return $this->xarMod;
     }
 

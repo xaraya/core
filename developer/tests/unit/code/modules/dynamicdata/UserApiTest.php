@@ -2,6 +2,7 @@
 
 use Xaraya\Modules\TestHelper;
 use Xaraya\Modules\DynamicData\UserApi;
+use Xaraya\Services\ModulesInterface;
 
 final class UserApiTest extends TestHelper
 {
@@ -181,5 +182,43 @@ final class UserApiTest extends TestHelper
         $expected = 'The function "dynamicdata_oopsapi_getitemtypes" could not be found or not be loaded.';
         $this->expectExceptionMessage($expected);
         $result = xarMod::apiFunc('dynamicdata', 'oops', 'getitemtypes');
+    }
+
+    public function testModuleService(): void
+    {
+        $context = $this->createContext(['source' => __METHOD__]);
+        $userapi = xarMod::userapi('dynamicdata');
+        $userapi->setContext($context);
+
+        /** @var ModulesInterface $service1 */
+        $service1 = $userapi->mod();
+        $expected = 'dynamicdata';
+        $this->assertEquals($expected, $service1->getModName());
+
+        /** @var ModulesInterface $service2 */
+        $service2 = $userapi->mod('themes');
+        $expected = 'themes';
+        $this->assertEquals($expected, $service2->getModName());
+
+        /** @var ModulesInterface $service3 */
+        $service3 = $userapi->mod('themes');
+        $this->assertEquals($service2, $service3);
+
+        $context1 = $service1->getContext();
+        $this->assertEquals($context, $context1);
+        $context2 = $service2->getContext();
+        $this->assertEquals($context, $context2);
+
+        $expected = 'Your Site Slogan';
+        $result = $userapi->mod('themes')->getVar('SiteSlogan');
+        $this->assertEquals($expected, $result);
+
+        $expected = null;
+        $result = $userapi->mod()->getVar('SiteSlogan');
+        $this->assertEquals($expected, $result);
+
+        $expected = 'module_settings';
+        $result = $userapi->mod()->getVar('dd_objects');
+        $this->assertStringContainsString($expected, $result);
     }
 }

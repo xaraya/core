@@ -158,9 +158,9 @@ trait ParentServicesTrait
      * - getModType() for mod()->template()
      *
      */
-    public function mod(): ModulesInterface
+    public function mod(?string $modName = null): ModulesInterface
     {
-        return $this->getParent()->mod();
+        return $this->getParent()->mod($modName);
     }
 
     /**

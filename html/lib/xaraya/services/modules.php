@@ -79,6 +79,7 @@ interface ModulesInterface extends ServiceInterface
     public function callHooks(string $scope, string $action, mixed $itemid, mixed $extraInfo = null, ?string $callerModName = null, ?int $callerItemType = null): mixed;
     /** @param array<string, mixed> $info */
     public function notifyHooks(string $event, array $info = []): mixed;
+    public function setCurrentModName(?string $modName = null): void;
 }
 
 /**
@@ -520,12 +521,14 @@ class ModulesService implements ModulesInterface
 {
     use ModulesTrait;
 
+    protected ?string $currentModName = null;
+
     /**
      * Get name of the module from parent
      */
     public function getModName(): string
     {
-        return $this->getParent()->getModName();
+        return $this->currentModName ?? $this->getParent()->getModName();
     }
 
     /**
@@ -542,5 +545,15 @@ class ModulesService implements ModulesInterface
     public function getModType(): string
     {
         return $this->getParent()->getModType();
+    }
+
+    /**
+     * Override parent modName when called as $this->mod($modName)->...
+     * @param ?string $modName
+     * @return void
+     */
+    public function setCurrentModName(?string $modName = null): void
+    {
+        $this->currentModName = $modName;
     }
 }
