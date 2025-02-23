@@ -179,7 +179,7 @@ class AccessProperty extends DataProperty
 	 */
     function getgroupoptions()
     {
-        $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
+        $anonID = $this->config()->getVar('Site.User.AnonymousUID');
         $options = xarRoles::getgroups();
         $firstlines = array(
             array('id' => 0, 'name' => $this->ml('No requirement')),
@@ -442,7 +442,7 @@ class AccessProperty extends DataProperty
 	 */	    
     private function checkGroupArray(array $groups = [])
     {
-        $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
+        $anonID = $this->config()->getVar('Site.User.AnonymousUID');
         $access = false;
         foreach ($groups as $group) {
             $group = (int)$group;
@@ -527,7 +527,7 @@ class AccessPropertyInstall extends AccessProperty implements iDataPropertyInsta
         $dat_file = sys::code() . 'modules/privileges/xardata/privileges_access_configurations-dat.xml';
         $data = array('file' => $dat_file);
         try {
-            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+            $objectid = $this->mod()->apiFunc('dynamicdata','util','import', $data);
         } catch (Exception $e) {
             //
         }

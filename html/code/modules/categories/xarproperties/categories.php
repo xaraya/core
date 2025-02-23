@@ -127,7 +127,7 @@ class CategoriesProperty extends DataProperty
                     if (empty($category)) continue;
                     $catparts = explode('.',$category);
                     $category = (int)$catparts[0];
-                    $validcat = xarMod::apiFunc('categories','user','getcatinfo',array('cid' => $category));
+                    $validcat = $this->mod()->apiFunc('categories','user','getcatinfo',array('cid' => $category));
                     if (!$validcat) {
                         $this->invalid = $this->ml("The category #(1) is not valid", $category);
                         $this->log()->error($this->invalid);
@@ -185,7 +185,7 @@ class CategoriesProperty extends DataProperty
             return $this->updateLinks($itemid);
         }
         sys::import('xaraya.structures.query');
-        xarMod::apiLoad('categories');
+        $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
     
         // This property is standalone
@@ -245,7 +245,7 @@ class CategoriesProperty extends DataProperty
     public function deleteValue($itemid=0)
     {
         sys::import('xaraya.structures.query');
-        xarMod::apiLoad('categories');
+        $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
         
         if (isset($this->objectref)) {
@@ -279,9 +279,9 @@ class CategoriesProperty extends DataProperty
         // Set the module_id: case of a bound property
         if (isset($this->objectref)) $this->module_id = (int)$this->objectref->moduleid;
         // Override for a standalone property
-        if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
+        if (isset($data['module'])) $this->module_id = $this->mod()->getID($data['module']);
         // No hint at all, take the current module
-        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarMod::getName());
+        if (!isset($this->module_id)) $this->module_id = $this->mod()->getID($this->mod()->getName());
 
         // Do the same for itemtypes
         if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
@@ -377,7 +377,7 @@ class CategoriesProperty extends DataProperty
             if (!isset($data['value'])) {
                 // If we have no values passed, get an array of values (selected categories) for each tree
                 $data['value'] = [];
-                xarMod::apiLoad('categories');
+                $this->mod()->apiLoad('categories');
                 $xartable = $this->db()->getTables();
                 sys::import('xaraya.structures.query');
                 foreach ($data['base_category'] as $key => $value) {
@@ -433,9 +433,9 @@ class CategoriesProperty extends DataProperty
                 }
             }
             // Override or a standalone property
-            if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
+            if (isset($data['module'])) $this->module_id = $this->mod()->getID($data['module']);
             // No hint at all, take the current module
-            if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarMod::getName());
+            if (!isset($this->module_id)) $this->module_id = $this->mod()->getID($this->mod()->getName());
     
             // Do the same for itemtypes
             if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
@@ -487,7 +487,7 @@ class CategoriesProperty extends DataProperty
     public function mountValue($itemid=0)
     {    
         sys::import('xaraya.structures.query');
-        xarMod::apiLoad('categories');
+        $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
         $q = new Query('SELECT'); 
         $q->addtable( $xartable['categories'],'c');
@@ -518,7 +518,7 @@ class CategoriesProperty extends DataProperty
         if (empty($object)) throw new Exception($this->ml('No object found for the getItems method'));
         if (empty($this->itemid)) $this->itemid = $object->properties[$object->primary]->value;
         $prinaryfield = $object->properties[$object->primary]->source;
-        xarMod::load('categories');
+        $this->mod()->load('categories');
         $q = $object->dataquery;
         $tables = $this->db()->getTables();
         $q->addtable($tables['categories'],'c');
@@ -575,7 +575,7 @@ class CategoriesProperty extends DataProperty
         $tableprefix = $this->id . "_";
 
         // Assemble the links to the object's table
-        xarMod::load('categories');
+        $this->mod()->load('categories');
         $tables = $this->db()->getTables();
         $q->addTable($tables['categories_linkage'], $tableprefix . 'linkage');
         $q->leftjoin($primary_source, $tableprefix . 'linkage.item_id');
@@ -635,7 +635,7 @@ class CategoriesProperty extends DataProperty
     private function getLinks($itemid=0)
     {
         sys::import('xaraya.structures.query');
-        xarMod::apiLoad('categories');
+        $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
         
         $q = new Query('SELECT', $xartable['categories_linkage']); 
@@ -662,7 +662,7 @@ class CategoriesProperty extends DataProperty
     private function updateLinks($itemid=0)
     {
         sys::import('xaraya.structures.query');
-        xarMod::apiLoad('categories');
+        $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
         
         // This property is bound
@@ -781,7 +781,7 @@ class CategoriesPropertyInstall extends CategoriesProperty implements iDataPrope
         $files[] = sys::code() . 'modules/categories/xardata/categories_configurations-dat.xml';
         foreach ($files as $file) {
             try {
-                $objectid = xarMod::apiFunc('dynamicdata','util','import', array('file' => $file));
+                $objectid = $this->mod()->apiFunc('dynamicdata','util','import', array('file' => $file));
             } catch (Exception $e) {}
         }
         return true;

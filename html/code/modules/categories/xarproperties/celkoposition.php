@@ -292,7 +292,7 @@ class CelkoPositionProperty extends DataProperty
                 $parentItem = $this->getItem($this->reference_id);
                 
                 if ($parentItem == false) {
-                   xarSession::setVar('errormsg', $this->ml('The parent item does not exist'));
+                   $this->session()->setVar('errormsg', $this->ml('The parent item does not exist'));
                    return false;
                 }
                 $this->right = $parentItem[$this->initialization_celkoright_id];
@@ -336,7 +336,7 @@ class CelkoPositionProperty extends DataProperty
         $current_entry = $this->getItem($itemid);
 
         if ($current_entry == false) {
-            xarSession::setVar('errormsg', $this->ml('The entry you are updating does not exist'));
+            $this->session()->setVar('errormsg', $this->ml('The entry you are updating does not exist'));
             return false;
         }
 
@@ -729,7 +729,7 @@ class CelkoPositionProperty extends DataProperty
         if (isset($eid) && !is_array($eid) && $eid != false) {
            $ecat = $this->getItem($eid);
            if ($ecat == false) {
-               xarSession::setVar('errormsg', $this->ml('That item does not exist'));
+               $this->session()->setVar('errormsg', $this->ml('That item does not exist'));
                return [];
            }
            //$SQLquery .= " AND P1.left_id
@@ -948,7 +948,7 @@ class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDat
         $dat_file = sys::code() . 'modules/categories/xardata/celkoposition_configurations-dat.xml';
         $data = array('file' => $dat_file);
         try {
-            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+            $objectid = $this->mod()->apiFunc('dynamicdata','util','import', $data);
         } catch (Exception $e) {
             //
         }

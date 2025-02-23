@@ -176,7 +176,7 @@ class URLTitleProperty extends TextBoxProperty
         $url_parts = parse_url($link);
         if (!isset($url_parts['host'])) {
             $truecurrenturl = $this->ctl()->getCurrentURL([], false);
-            $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$link,'truecurrenturl'=>$truecurrenturl));
+            $urldata = $this->mod()->apiFunc('roles','user','parseuserhome',array('url'=>$link,'truecurrenturl'=>$truecurrenturl));
             $link = $urldata['redirecturl'];
         }
 

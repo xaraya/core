@@ -62,7 +62,7 @@ class ThemeProperty extends ObjectRefProperty
         }
         
         $options = [];
-        $items = xarMod::apiFunc('themes', 'admin', 'getlist',array('filter' => $this->filter));
+        $items = $this->mod()->apiFunc('themes', 'admin', 'getlist',array('filter' => $this->filter));
         foreach($items as $item) {
             try {
                 $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);

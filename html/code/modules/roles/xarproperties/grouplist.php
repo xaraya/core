@@ -79,7 +79,7 @@ class GroupListProperty extends SelectProperty
         
         if (!empty($value)) {
             // check if this is a valid group id
-            $group = xarMod::apiFunc('roles','user','get',
+            $group = $this->mod()->apiFunc('roles','user','get',
                                    array('id' => $value,
                                          'itemtype' => 2)); // we're looking for a group here
             if (!empty($group)) {
@@ -172,7 +172,7 @@ class GroupListProperty extends SelectProperty
         $value = 0;
         $basegroup = xarRoles::get($this->initialization_basegroup);
         if (!empty($basegroup)) {
-            xarMod::load('roles');
+            $this->mod()->load('roles');
             $xartables = $this->db()->getTables();
             $rolemembers = $xartables['rolemembers'];
             $bindvars = [];
@@ -263,7 +263,7 @@ class GroupListProperty extends SelectProperty
         }
         // TODO: handle large # of groups too (optional - less urgent than for users)
         $options = $this->getFirstline();
-        $options = array_merge($options,xarMod::apiFunc('roles', 'user', 'getallgroups', $select_options) ?? []);
+        $options = array_merge($options,$this->mod()->apiFunc('roles', 'user', 'getallgroups', $select_options) ?? []);
         return $options;
     }
 

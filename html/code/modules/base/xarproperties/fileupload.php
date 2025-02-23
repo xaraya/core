@@ -62,11 +62,11 @@ class FileUploadProperty extends DataProperty
             $this->UploadsModule_isHooked = TRUE;
         } else {
         // FIXME: this doesn't take into account the itemtype or non-main module objects
-            if (xarHooks::isAttached('uploads', xarMod::getName())) {
+            if ($this->mod()->isHooked('uploads', $this->mod()->getName())) {
                 $this->UploadsModule_isHooked = true;
             }
             /*
-            $list = xarHooks::getSubjectObservers(xarMod::getName(), 'ItemTransform');
+            $list = xarHooks::getSubjectObservers($this->mod()->getName(), 'ItemTransform');
             foreach ($list as $hook) {
                 if ($hook['module'] == 'uploads') {
                     $this->UploadsModule_isHooked = TRUE;
@@ -176,7 +176,7 @@ class FileUploadProperty extends DataProperty
                 $override = null;
             }
 
-            $return = xarMod::apiFunc('uploads','admin','validatevalue',
+            $return = $this->mod()->apiFunc('uploads','admin','validatevalue',
                                     array('id' => $name, // not $this->id
                                           'value' => $value,
                                           // pass the module id, item type and item id (if available) for associations
@@ -245,7 +245,7 @@ class FileUploadProperty extends DataProperty
 
                 // Run the file name through the sanitize filter if asked to
                 if ($this->validation_sanitize_filename) {
-                    $file['name'] = xarMod::apiFunc('base', 'admin', 'sanitize_filename', array('filename' => $file['name']));
+                    $file['name'] = $this->mod()->apiFunc('base', 'admin', 'sanitize_filename', array('filename' => $file['name']));
                 }
         
                 $filename = $file['name'];
@@ -393,7 +393,7 @@ class FileUploadProperty extends DataProperty
                 $override = null;
             }
             // @todo try to get rid of this
-            return xarMod::apiFunc('uploads','admin','showinput',
+            return $this->mod()->apiFunc('uploads','admin','showinput',
                                  array('id' => $data['name'], // not $this->id
                                        'value' => $data['value'],
                                        'multiple' => $this->initialization_multiple,
@@ -424,7 +424,7 @@ class FileUploadProperty extends DataProperty
 
         if ($this->UploadsModule_isHooked) {
             // @todo get rid of this one too
-            return xarMod::apiFunc('uploads','user','showoutput',
+            return $this->mod()->apiFunc('uploads','user','showoutput',
                                  array('value' => $value,
                                        'format' => 'fileupload',
                                        'multiple' => $this->initialization_multiple));

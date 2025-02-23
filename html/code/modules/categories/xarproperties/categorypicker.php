@@ -62,9 +62,9 @@ class CategoryPickerProperty extends ArrayProperty
         // Set the module_id: case of a bound property
         if (isset($this->objectref)) $this->module_id = (int)$this->objectref->moduleid;
         // Override or a standalone property
-        if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
+        if (isset($data['module'])) $this->module_id = $this->mod()->getID($data['module']);
         // No hint at all, take the current module
-        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarMod::getName());
+        if (!isset($this->module_id)) $this->module_id = $this->mod()->getID($this->mod()->getName());
 
         // Do the same for itemtypes
         if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;

@@ -59,7 +59,7 @@ class UserListProperty extends SelectProperty
         if (count($this->options) == 0) {
             $select_options = [];
             if (!empty($this->initialization_orderlist)) $select_options['order'] = explode(',', $this->initialization_orderlist);
-//            $users = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
+//            $users = $this->mod()->apiFunc('roles', 'user', 'getall', $select_options);
             // FIXME: this function needs to be reviewed
             $users = [];
             // Loop for each user retrieved and populate the options array.
@@ -171,7 +171,7 @@ class UserListProperty extends SelectProperty
         }
 
         // Get the candidates
-        $options = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
+        $options = $this->mod()->apiFunc('roles', 'user', 'getall', $select_options);
         
         // Adjust for the fields to show
         if (!empty($options) && !empty($this->display_showfields)) {        
@@ -217,7 +217,7 @@ class UserListPropertyInstall extends UserListProperty implements iDataPropertyI
         $dat_file = sys::code() . 'modules/roles/xardata/userlist_configurations-dat.xml';
         $data = array('file' => $dat_file);
         try {
-            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+            $objectid = $this->mod()->apiFunc('dynamicdata','util','import', $data);
         } catch (Exception $e) {
             //
         }
