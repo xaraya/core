@@ -60,7 +60,7 @@ class xarSec extends xarObject
      * @return string an encrypted key for use in authorisation of operations
      * @todo bring back possibility of extra security by using date (See code)
      */
-    public static function genAuthKey($modName = NULL)
+    public static function genAuthKey($modName = null)
     {
         if (empty($modName)) {
             $modName = xarController::getRequest()->getModule();
@@ -92,7 +92,7 @@ class xarSec extends xarObject
      * @throws ForbiddenOperationException
      * @todo bring back possibility of time authorized keys
      */
-    public static function confirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
+    public static function confirmAuthKey($modName = null, $authIdVarName = 'authid', $catch = false)
     {
         // We don't need this check for AJAX calls
         if (xarController::getRequest()->isAjax()) return true;

@@ -45,7 +45,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  * @return array<mixed>|bool|null locale data
  * @throws LocaleNotFoundException
  */
-function &xarMLSLoadLocaleData($locale = NULL)
+function &xarMLSLoadLocaleData($locale = null)
 {
     static $loaded = array(); // keep track of files we have loaded
     if (!isset($locale)) {
@@ -149,9 +149,9 @@ function &xarMLSLoadLocaleData($locale = NULL)
  * @return string representing a currency amount
  *
 **/
-function xarLocaleParseCurrency($currency, $localeData = NULL)
+function xarLocaleParseCurrency($currency, $localeData = null)
 {
-    if ($localeData == NULL) {
+    if ($localeData == null) {
         $localeData =& xarMLSLoadLocaleData();
     }
 
@@ -176,9 +176,9 @@ function xarLocaleParseCurrency($currency, $localeData = NULL)
  * @return string representing a number
  *
 **/
-function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
+function xarLocaleParseNumber($number, $localeData = null, $isCurrency = false)
 {
-    if ($localeData == NULL) {
+    if ($localeData == null) {
         $localeData =& xarMLSLoadLocaleData();
     }
     if ($isCurrency == true) $bp = 'monetary';
@@ -204,9 +204,9 @@ function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
  * @return string formatted currency
  *
 **/
-function xarLocaleFormatCurrency($currency, $localeData = NULL)
+function xarLocaleFormatCurrency($currency, $localeData = null)
 {
-    if ($localeData == NULL) {
+    if ($localeData == null) {
         $localeData =& xarMLSLoadLocaleData(); // rraymond : assign by reference for large array (memory issues)
     }
     $currencySym = $localeData['/monetary/currencySymbol'];
@@ -226,13 +226,13 @@ function xarLocaleFormatCurrency($currency, $localeData = NULL)
  * @return string formatted number
  *
 **/
-function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
+function xarLocaleFormatNumber($number, $localeData = null, $isCurrency = false)
 {
     if (!is_numeric($number)) {
         $number = (float) $number;
     }
 
-    if ($localeData == NULL) {
+    if ($localeData == null) {
         $localeData =& xarMLSLoadLocaleData(); // rraymond : assign by reference for large array (memory issues)
     }
 
@@ -830,23 +830,23 @@ class xarLocale extends xarObject
      * @throws LocaleNotFoundException
      * @todo   figure out why we go through this function for xarMod::isAvailable
      */
-    public static function loadData($locale = NULL)
+    public static function loadData($locale = null)
     {
         return xarMLSLoadLocaleData($locale);
     }
-    public static function parseCurrency($currency, $localeData = NULL)
+    public static function parseCurrency($currency, $localeData = null)
     {
         return xarLocaleParseCurrency($currency, $localeData);
     }
-    public static function parseNumber($number, $localeData = NULL, $isCurrency = false)
+    public static function parseNumber($number, $localeData = null, $isCurrency = false)
     {
         return xarLocaleParseNumber($number, $localeData, $isCurrency);
     }
-    public static function formatCurrency($currency, $localeData = NULL)
+    public static function formatCurrency($currency, $localeData = null)
     {
         return xarLocaleFormatCurrency($currency, $localeData);
     }
-    public static function formatNumber($number, $localeData = NULL, $isCurrency = false)
+    public static function formatNumber($number, $localeData = null, $isCurrency = false)
     {
         return xarLocaleFormatNumber($number, $localeData, $isCurrency);
     }

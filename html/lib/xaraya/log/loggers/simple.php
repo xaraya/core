@@ -74,7 +74,7 @@ class xarLogger_simple extends xarLogger
     // Integer holding the file handle.
     // NULL if the file is not open.
     // @var integer
-    protected $fp = NULL;
+    protected $fp = null;
 
     // Integer containing the logfile's permissions mode.
     // Written in octal, the permissions mimic the Unix 'chmod' format.
@@ -172,7 +172,7 @@ class xarLogger_simple extends xarLogger
         $this->buffer = '';
 
         if ($stop_logging) {
-            $this->filename = NULL;
+            $this->filename = null;
         }
     }
 
@@ -191,7 +191,7 @@ class xarLogger_simple extends xarLogger
         $this->closeLogfile();
 
         if ($stop_logging) {
-            $this->filename = NULL;
+            $this->filename = null;
         }
     }
 
@@ -273,7 +273,7 @@ class xarLogger_simple extends xarLogger
         if (!fclose($this->fp)) {
             return false;
         }
-        $this->fp = NULL;
+        $this->fp = null;
         return true;
     }
 

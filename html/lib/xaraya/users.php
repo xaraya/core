@@ -408,7 +408,7 @@ class xarUser extends xarObject
      * @todo add some security for getting to user variables (at least from another id)
      * @todo define clearly what the difference or similarity is with dd here
      */
-    static public function getVar($name, $userId = NULL)
+    static public function getVar($name, $userId = null)
     {
         if (empty($name)) throw new EmptyParameterException('name');
     

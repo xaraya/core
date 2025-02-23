@@ -87,7 +87,7 @@ function xarLog__dumpVariable (array $array)
             $str .= $blank."}\n\n";
         }
     } else {
-        if ($var === NULL) {
+        if ($var === null) {
             $var = 'NULL';
         } else if ($var === false) {
             $var = 'false';

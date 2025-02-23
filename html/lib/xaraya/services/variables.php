@@ -18,6 +18,7 @@ namespace Xaraya\Services;
 
 use xarVar;
 use xarCoreCache;
+use xarController;
 use sys;
 use EmptyParameterException;
 use VariableValidationException;
@@ -205,17 +206,26 @@ trait VariablesTrait
      */
     public function check($name, &$variable, $validation = 'isset', $defaultValue = null): true
     {
+        // use current value or get it by name if it is not already set
         if (!isset($variable)) {
-            // get value from context if any
+            // get variable from request if any
+            $variable = $this->getRequestVar($name);
         }
-        // validate value
-        // if not validated, use default value
+        // validate the variable but do not throw exception
+        $suppress = true;
+        $validated = $this->validate($validation, $variable, $suppress, $name);
+        // if not validated, use default value (can be null)
+        if (!$validated) {
+            $variable = $defaultValue;
+        }
+        return true;
         // Note: this should be restricted to gui methods
-        return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_SET, xarVar::PREP_FOR_NOTHING);
+        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_SET, xarVar::PREP_FOR_NOTHING);
     }
 
     /**
      * Find optional variable by name: set the value if there is one, and validate the variable
+     * Note: this is functionally the same as check(), except here we don't expect variable to have value yet
      *
      * ```
      * $this->var()->find($name, $variable, $validation='isset', $defaultValue=null)
@@ -232,8 +242,9 @@ trait VariablesTrait
      */
     public function find($name, &$variable, $validation = 'isset', $defaultValue = null): true
     {
+        return $this->check($name, $variable, $validation, $defaultValue);
         // Note: this should be restricted to gui methods
-        return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_NOTHING);
+        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_NOTHING);
     }
 
     /**
@@ -254,8 +265,21 @@ trait VariablesTrait
      */
     public function update($name, &$variable, $validation = 'isset', $defaultValue = null): true
     {
+        // set the value if there is one or reset it
+        $variable = $this->getRequestVar($name);
+        // validate the variable or throw exception unless we have default value
+        $suppress = false;
+        if (isset($defaultValue)) {
+            $suppress = true;
+        }
+        $validated = $this->validate($validation, $variable, $suppress, $name);
+        // if not validated, use default value (if not null)
+        if (!$validated) {
+            $variable = $defaultValue;
+        }
+        return true;
         // Note: this should be restricted to gui methods
-        return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_REUSE, xarVar::PREP_FOR_NOTHING);
+        //return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_REUSE, xarVar::PREP_FOR_NOTHING);
     }
 
     /**
@@ -272,6 +296,18 @@ trait VariablesTrait
     public function validate($validation, &$variable, $suppress = false, $name = ''): bool
     {
         return xarVar::validate($validation, $variable, $suppress, $name);
+    }
+
+    /**
+     * Summary of getRequestVar
+     * @param string $name
+     * @param ?string $allowOnlyMethod
+     * @return mixed
+     */
+    protected function getRequestVar(string $name, ?string $allowOnlyMethod = null): mixed
+    {
+        // @todo use context or ControllerService via parent someday?
+        return xarController::getVar($name, $allowOnlyMethod);
     }
 
     /**

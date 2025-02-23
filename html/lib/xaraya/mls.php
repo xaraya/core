@@ -766,9 +766,9 @@ class xarMLS extends xarObject
      * @access protected
      * @return bool true
      */
-    static public function iswritable($directory=NULL)
+    static public function iswritable($directory = null)
     {
-        if ($directory == NULL) {
+        if ($directory == null) {
             $directory = getcwd();
         }
     

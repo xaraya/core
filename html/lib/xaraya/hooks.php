@@ -508,7 +508,7 @@ class xarModHooks extends xarObject
      * @return mixed output from hooks, or null if there are no hooks
      * @throws BadParameterException
      */
-    public static function call($hookScope, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '', $context = null)
+    public static function call($hookScope, $hookAction, $hookId, $extraInfo = null, $callerModName = null, $callerItemType = '', $context = null)
     {
         // scope and action are concatenated to form the name of the hook event
         $event = ucfirst($hookScope) . ucfirst($hookAction);
@@ -553,7 +553,7 @@ class xarModHooks extends xarObject
      * @param $callerItemType string optional item type for the calling module (default = none)
      * @return mixed true if the module is hooked
      */
-    public static function isHooked($hookModName, $callerModName = NULL, $callerItemType = '')
+    public static function isHooked($hookModName, $callerModName = null, $callerItemType = '')
     {
         return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
     }

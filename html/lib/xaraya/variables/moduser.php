@@ -42,7 +42,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
     static function get($scope, $name, $itemid = null)
     {
         // If id not specified take the current user
-        if ($itemid == NULL) $itemid = xarUser::getVar('id');
+        if ($itemid == null) $itemid = xarUser::getVar('id');
 
         // Anonymous user always uses the module default setting
         if ($itemid == xarSession::getAnonId()) return xarModVars::get($scope, $name);

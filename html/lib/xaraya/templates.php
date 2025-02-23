@@ -362,7 +362,7 @@ class xarTpl extends xarObject
  * @todo   this needs to be moved into the templating domain somehow
  * @return boolean
  */
-    public static function setPageTitle($title = NULL, $module = NULL)
+    public static function setPageTitle($title = null, $module = null)
     {
         // keep track of page title when we're caching
         xarCache::setPageTitle($title, $module);
@@ -429,7 +429,7 @@ class xarTpl extends xarObject
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */
-    public static function module($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
+    public static function module($modName, $modType, $funcName, $tplData = array(), $templateName = null)
     {
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
             sys::import('xaraya.bridge.templates.twigtpl');
@@ -484,7 +484,7 @@ class xarTpl extends xarObject
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */
-    public static function block($modName, $blockType, $tplData = array(), $tplName = NULL, $tplBase = NULL, $tplModule = NULL)
+    public static function block($modName, $blockType, $tplData = array(), $tplName = null, $tplBase = null, $tplModule = null)
     {
         // use name of blocktype as base unless over-ridden
         $tplBase = empty($tplBase) ? $blockType : $tplBase;
@@ -684,7 +684,7 @@ class xarTpl extends xarObject
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */
-    public static function object($modName, $objectName, $tplType = 'showdisplay', $tplData = array(), $tplBase = NULL)
+    public static function object($modName, $objectName, $tplType = 'showdisplay', $tplData = array(), $tplBase = null)
     {
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
             sys::import('xaraya.bridge.templates.twigtpl');
@@ -729,7 +729,7 @@ class xarTpl extends xarObject
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */
-    public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
+    public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = null)
     {
         // @todo check and handle stand-alone properties with module 'auto' + adapt includes path
         if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
@@ -824,7 +824,7 @@ class xarTpl extends xarObject
  * @todo    XML encode absolute URIs too?
  * @todo    <chris/> Rewrite the above and document correct practice/examples elsewhere
 */
-    public static function getImage($fileName, $scope=NULL, $package=NULL)
+    public static function getImage($fileName, $scope=null, $package=null)
     {
         // return absolute URIs and URLs "as is"
         if (empty($fileName) || substr($fileName,0,1) == '/' || preg_match('/^https?\:\/\//',$fileName)) {
@@ -943,7 +943,7 @@ class xarTpl extends xarObject
  * @param   ?string $package the actual theme/module/property/block we're looking at
  * @return  string|null file url if it exists or NULL if not
 */
-public static function getFile($fileName, $scope=NULL, $package=NULL)
+public static function getFile($fileName, $scope=null, $package=null)
 {
     // return absolute URIs and URLs "as is"
     if (empty($fileName) || substr($fileName,0,1) == '/' || preg_match('/^https?\:\/\//',$fileName)) {
@@ -1126,7 +1126,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  * @todo the search logic for the templates can perhaps use the private function?
  * @todo implement common templates in cascade 
  */
-    public static function renderBlockBox($blockInfo, $templateName = NULL)
+    public static function renderBlockBox($blockInfo, $templateName = null)
     {
         if (!empty($blockInfo['context']) && !empty($blockInfo['context']['twig'])) {
             sys::import('xaraya.bridge.templates.twigtpl');

@@ -49,7 +49,7 @@ class KeyListValidation extends ValueValidations
 
             // NULL is a special case. Perform a 'soft' fail should we encounter a NULL
             // @todo What does that mean? Soft fail?
-            if ($subject === NULL) {
+            if ($subject === null) {
                 return false;
             }
             throw new VariableValidationException(null, $msg);

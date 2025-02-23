@@ -87,7 +87,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     protected $nocache             = 0; // 0 = caching on; 1 = caching off;
     protected $pageshared          = 1; // 0 = No sharing; 1 = Share across pages;
     protected $usershared          = 0; // 0 = Cache for all users;1=Cache per user group;2=Cache per user;
-    protected $cacheexpire         = NULL; // length of time before cached block is considered stale
+    protected $cacheexpire         = null; // length of time before cached block is considered stale
 
     // stop showing (expire) block after x minutes
     // cfr. Base module HTML Block, now for any block(group) :)

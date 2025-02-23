@@ -187,7 +187,7 @@ class xarVar extends xarObject
         foreach ($batch as $line) {
             $result_array[$line[2]] = array();
             try {
-                $result = self::fetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3])?$line[3]:NULL, isset($line[4])?$line[4]:self::GET_OR_POST);
+                $result = self::fetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3]) ? $line[3] : null, isset($line[4]) ? $line[4]  : self::GET_OR_POST);
                 $result_array[$line[2]]['error'] = '';
             } catch (ValidationExceptions $e) { // Only catch validation exceptions, the rest should be thrown
                 //Records the error presented in the given input variable
@@ -257,7 +257,7 @@ class xarVar extends xarObject
      * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
      * @todo  re-evaluate the prepping, prepforstore is deprecated for example, prep for display and prep for html are partially exclusive
     **/
-    public static function fetch($name, $validation, &$value, $defaultValue = NULL, $flags = self::GET_OR_POST, $prep = self::PREP_FOR_NOTHING)
+    public static function fetch($name, $validation, &$value, $defaultValue = null, $flags = self::GET_OR_POST, $prep = self::PREP_FOR_NOTHING)
     {
         assert(is_int($flags));
         assert(empty($name) || preg_match("/^[a-zA-Z0-9_\[\]\"\x7f-\xff][a-zA-Z0-9_\[\]\"\x7f-\xff]*$/", $name));
@@ -525,7 +525,7 @@ function xarVarPrepForDisplay()
 function xarVarPrepHTMLDisplay()
 {
 // <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
-    static $allowedtags = NULL;
+    static $allowedtags = null;
 
     if (!isset($allowedtags)) {
         $allowedHTML = array();
