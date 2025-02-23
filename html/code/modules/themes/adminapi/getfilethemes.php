@@ -53,7 +53,7 @@ class GetfilethemesMethod extends MethodClass
                     if (is_dir($basedir . "/" . $themeOsDir)) {
                         // no xartheme.php, no theme
                         $themeFileInfo = xarTheme::getFileInfo($themeOsDir);
-                        if (!isset($themeFileInfo)) {
+                        if (empty($themeFileInfo)) {
                             continue 2;
                         }
 

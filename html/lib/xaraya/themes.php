@@ -47,7 +47,7 @@ class xarTheme extends xarObject
         if (empty($themeName)) throw new EmptyParameterException('themeName');
 
         $themeBaseInfo = xarMod::getBaseInfo($themeName, 'theme');
-        if (!isset($themeBaseInfo)) return; // throw back
+        if (empty($themeBaseInfo)) return; // throw back
 
         return $themeBaseInfo[$id];
     }

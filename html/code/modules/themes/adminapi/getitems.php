@@ -152,7 +152,7 @@ class GetitemsMethod extends MethodClass
                 $this->var()->setCached('Theme.BaseInfos', $item['name'], $item);
 
                 $fileinfo = xarTheme::getFileInfo($item['osdirectory']);
-                if (isset($fileinfo)) {
+                if (!empty($fileinfo)) {
                     $item = array_merge($fileinfo, $item);
                     $this->var()->setCached('Theme.Infos', $item['regid'], $item);
                     switch ($item['state']) {

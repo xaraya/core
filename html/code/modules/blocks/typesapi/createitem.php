@@ -56,7 +56,7 @@ class CreateitemMethod extends MethodClass
         }
         if (!empty($module)) {
             $modinfo = $this->mod()->getBaseInfo($module);
-            if (!$modinfo) {
+            if (empty($modinfo)) {
                 $invalid[] = 'module';
             } else {
                 $module_id = $modinfo['systemid'];

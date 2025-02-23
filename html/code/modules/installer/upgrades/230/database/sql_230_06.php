@@ -44,7 +44,7 @@ function sql_230_06()
         while($result->next()) {
             list($regid,$directory) = $result->fields;
             $info = xarTheme::getFileInfo($directory);
-            if (!$info) continue; // skip themes missing a xartheme.php 
+            if (empty($info)) continue; // skip themes missing a xartheme.php 
             $query = "UPDATE $table
                       SET class = ? WHERE regid = ?";
             $bindvars = array($info['class'], $regid);

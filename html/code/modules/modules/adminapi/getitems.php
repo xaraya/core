@@ -142,7 +142,7 @@ class GetitemsMethod extends MethodClass
                 $this->var()->setCached('Mod.BaseInfos', $item['name'], $item);
 
                 $fileinfo = $this->mod()->getFileInfo($item['osdirectory']);
-                if (isset($fileinfo)) {
+                if (!empty($fileinfo)) {
                     $item = array_merge($fileinfo, $item);
                     $this->var()->setCached('Mod.Infos', $item['regid'], $item);
                     switch ($item['state']) {

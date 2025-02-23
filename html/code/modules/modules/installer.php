@@ -67,7 +67,7 @@ class Installer extends InstallerClass
                    class, category, admin_capable, user_capable, state )
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $modInfo = xarMod::getFileInfo('modules');
-            if (!isset($modInfo)) {
+            if (empty($modInfo)) {
                 return;
             } // throw back
             // Use version, since that's the only info likely to change
@@ -75,7 +75,7 @@ class Installer extends InstallerClass
             $bindvars = ['modules',1,'modules',(string) $modVersion,'Core Admin','System',true,false,3];
             $dbconn->Execute($query, $bindvars);
             $modInfo = xarMod::getFileInfo('base');
-            if (!isset($modInfo)) {
+            if (empty($modInfo)) {
                 return;
             } // throw back
             // Use version, since that's the only info likely to change

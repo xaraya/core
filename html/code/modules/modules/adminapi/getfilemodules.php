@@ -72,7 +72,7 @@ class GetfilemodulesMethod extends MethodClass
 
                         // no xarversion.php, no module
                         $modFileInfo = $this->mod()->getFileInfo($modOsDir);
-                        if (!isset($modFileInfo)) {
+                        if (empty($modFileInfo)) {
                             continue 2;
                         }
 

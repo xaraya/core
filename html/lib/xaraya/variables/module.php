@@ -60,7 +60,7 @@ class xarModVars extends xarVars implements IxarModVars
 
         // Still no luck, let's do the hard work then
         $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (!isset($modBaseInfo)) return;
+        if (empty($modBaseInfo)) return;
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -102,7 +102,7 @@ class xarModVars extends xarVars implements IxarModVars
         }
 
         $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (!isset($modBaseInfo)) return;
+        if (empty($modBaseInfo)) return;
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -303,7 +303,7 @@ class xarModVars extends xarVars implements IxarModVars
 
         // Retrieve module info, so we can decide where to look
         $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (!isset($modBaseInfo)) return; // throw back
+        if (empty($modBaseInfo)) return; // throw back
 
         if (xarCoreCache::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
             return xarCoreCache::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);

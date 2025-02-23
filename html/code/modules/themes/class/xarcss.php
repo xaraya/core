@@ -496,7 +496,7 @@ class xarCSS extends xarObject
                 if (empty($module))
                     $module = xarMod::getName();
                 $modInfo = xarMod::getBaseInfo($module);
-                if (!isset($modInfo)) return;
+                if (empty($modInfo)) return;
                 $tag['module'] = $module;
                 $modOsDir = $modInfo['osdirectory'];
                 

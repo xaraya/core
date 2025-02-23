@@ -74,7 +74,7 @@ class UpgradeMethod extends MethodClass
 
         // Get the new version information...
         $modFileInfo = $this->mod()->getFileInfo($modInfo['osdirectory']);
-        if (!isset($modFileInfo)) {
+        if (empty($modFileInfo)) {
             return;
         }
 

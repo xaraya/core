@@ -70,6 +70,9 @@ class ModifypropertiesMethod extends MethodClass
 
         $object = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => $modName]);
         $filesettings = $this->mod()->getFileInfo($modName);
+        if (empty($filesettings)) {
+            return;
+        }
 
         $fieldlist = [];
         if ($modInfo['admincapable'] && $filesettings['admin']) {

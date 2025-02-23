@@ -67,7 +67,7 @@ class UpgradeMethod extends MethodClass
 
         // Get the new version information...
         $themeFileInfo = xarTheme::getFileInfo($themeInfo['osdirectory']);
-        if (!isset($themeFileInfo)) {
+        if (empty($themeFileInfo)) {
             return;
         }
 

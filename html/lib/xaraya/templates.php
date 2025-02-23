@@ -858,7 +858,7 @@ class xarTpl extends xarObject
                 // @checkme: modules is a depency of templates, redundant check?
                 if (method_exists('xarMod', 'getBaseInfo')) {
                     $modBaseInfo = xarMod3::getBaseInfo($package);
-                    if (!isset($modBaseInfo)) return null;
+                    if (empty($modBaseInfo)) return null;
                     $modOsDir = $modBaseInfo['osdirectory'];
                 } else {
                     $modOsDir = xarVar3::prepPath($package);
@@ -973,7 +973,7 @@ public static function getFile($fileName, $scope=null, $package=null)
             // @checkme: modules is a depency of templates, redundant check?
             if (method_exists('xarMod', 'getBaseInfo')) {
                 $modBaseInfo = xarMod3::getBaseInfo($package);
-                if (!isset($modBaseInfo)) return null;
+                if (empty($modBaseInfo)) return null;
                 $modOsDir = $modBaseInfo['osdirectory'];
             } else {
                 $modOsDir = xarVar3::prepPath($package);

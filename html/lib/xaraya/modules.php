@@ -235,7 +235,7 @@ class xarMod extends xarObject implements IxarMod
 
         // For themes, kinda weird
         $modBaseInfo = self::getBaseInfo($modName, $type);
-        if (!isset($modBaseInfo)) {
+        if (empty($modBaseInfo)) {
             return;
         } // throw back
         return ['systemid' => $modBaseInfo['systemid'], 'regid' => $modBaseInfo['regid']];
@@ -308,7 +308,7 @@ class xarMod extends xarObject implements IxarMod
         $modBaseInfo = self::getBaseInfo($modName, $type);
 
         // Return false if the result wasn't set
-        if (!isset($modBaseInfo)) {
+        if (empty($modBaseInfo)) {
             return false;
         } // throw back
 
@@ -446,7 +446,7 @@ class xarMod extends xarObject implements IxarMod
                 break;
         }
 
-        if (!isset($modFileInfo)) {
+        if (empty($modFileInfo)) {
             // We couldn't get file info, fill in unknowns.
             // The exception for this is logged in getFileInfo
             $unknown = xarMLS3::translate('Unknown');
@@ -731,7 +731,7 @@ class xarMod extends xarObject implements IxarMod
         // Get the directory if we don't already have it
         if (empty($modDir)) {
             $modBaseInfo = self::getBaseInfo($modName, $type);
-            if (!isset($modBaseInfo)) {
+            if (empty($modBaseInfo)) {
                 return;
             } // throw back
             $modDir = xarVar::prepForOS($modBaseInfo['directory']);
@@ -873,7 +873,7 @@ class xarMod extends xarObject implements IxarMod
 
         // good thing this information is cached :)
         $modBaseInfo = self::getBaseInfo($modName);
-        if (!isset($modBaseInfo)) {
+        if (empty($modBaseInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
             if ($funcType == "api") {
                 throw new FunctionNotFoundException($modFunc);
@@ -1013,7 +1013,7 @@ class xarMod extends xarObject implements IxarMod
 
         $modBaseInfo = self::getBaseInfo($modName);
         // Not a valid module - throw exception
-        if (!isset($modBaseInfo)) {
+        if (empty($modBaseInfo)) {
             throw new ModuleNotFoundException($modName);
         }
 

@@ -845,7 +845,7 @@ class xarJS extends xarObject
                 if (empty($package))
                     $package = xarMod::getName();
                 $modInfo = xarMod::getBaseInfo($package);
-                if (!isset($modInfo)) return;
+                if (empty($modInfo)) return;
                 $modOsDir = $modInfo['osdirectory'];
                 // support legacy calls to base module scripts now moved to common/scripts
                 if ($package == 'base') {
