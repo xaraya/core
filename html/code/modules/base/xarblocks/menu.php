@@ -152,14 +152,14 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 if (isset($this->content['printurl'])) unset($this->content['printurl']);
 
                 // Add new properties to the content array
-                if (!isset($this->content['backlabel'])) $this->content['backlabel'] = xarML($this->backlabel);
-                if (!isset($this->content['backtitle'])) $this->content['backtitle'] = xarML($this->backtitle);
-                if (!isset($this->content['logoutlabel'])) $this->content['logoutlabel'] = xarML($this->logoutlabel);
-                if (!isset($this->content['logouttitle'])) $this->content['logouttitle'] = xarML($this->logouttitle);
-                if (!isset($this->content['rsslabel'])) $this->content['rsslabel'] = xarML($this->rsslabel);
-                if (!isset($this->content['rsstitle'])) $this->content['rsstitle'] = xarML($this->rsstitle);
-                if (!isset($this->content['printlabel'])) $this->content['printlabel'] = xarML($this->printlabel);
-                if (!isset($this->content['printtitle'])) $this->content['printtitle'] = xarML($this->printtitle);
+                if (!isset($this->content['backlabel'])) $this->content['backlabel'] = $this->ml($this->backlabel);
+                if (!isset($this->content['backtitle'])) $this->content['backtitle'] = $this->ml($this->backtitle);
+                if (!isset($this->content['logoutlabel'])) $this->content['logoutlabel'] = $this->ml($this->logoutlabel);
+                if (!isset($this->content['logouttitle'])) $this->content['logouttitle'] = $this->ml($this->logouttitle);
+                if (!isset($this->content['rsslabel'])) $this->content['rsslabel'] = $this->ml($this->rsslabel);
+                if (!isset($this->content['rsstitle'])) $this->content['rsstitle'] = $this->ml($this->rsstitle);
+                if (!isset($this->content['printlabel'])) $this->content['printlabel'] = $this->ml($this->printlabel);
+                if (!isset($this->content['printtitle'])) $this->content['printtitle'] = $this->ml($this->printtitle);
 
             // fall through to next upgrade...
             case '2.2.0': // upgrade from 2.2.0 comes here
@@ -208,11 +208,11 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                     $args[$key] = $val;
                 }
             }
-            $decoded_url = xarController::URL($modname, $modtype, $funcname, $args);
+            $decoded_url = $this->ctl()->getModuleURL($modname, $modtype, $funcname, $args);
 
         } elseif (xarMod::$genXmlUrls) {
             // regular url, prepped for xml display if necessary
-            $decoded_url = xarVar::prepForDisplay($url);
+            $decoded_url = $this->var()->prep($url);
         }
 
         // pass details of decode to calling function,
@@ -237,8 +237,8 @@ class Base_MenuBlock extends MenuBlock implements iBlock
             {
                 $line['url'] = explode(':', substr($line['url'], 1,  - 1));
                 // Get current pubtype type (if any)
-                if (xarVar::isCached('Blocks.articles', 'ptid')) {
-                    $ptid = xarVar::getCached('Blocks.articles', 'ptid');
+                if ($this->var()->isCached('Blocks.articles', 'ptid')) {
+                    $ptid = $this->var()->getCached('Blocks.articles', 'ptid');
                 }
                 if (empty($ptid)) {
                     // try to get ptid from input
@@ -248,26 +248,26 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 if ($line['url'][0] == $ptid) {
                     $here = 'true';
                 }
-                $line['url'] = xarController::URL('articles', 'user', 'view', array('ptid' => $line['url'][0]));
+                $line['url'] = $this->ctl()->getModuleURL('articles', 'user', 'view', array('ptid' => $line['url'][0]));
                 break;
             }
             case '(': // category link
             {
                 $line['url'] = explode(':', substr($line['url'], 1,  - 1));
-                if (xarVar::isCached('Blocks.categories','catid')) {
-                    $catid = xarVar::getCached('Blocks.categories','catid');
+                if ($this->var()->isCached('Blocks.categories','catid')) {
+                    $catid = $this->var()->getCached('Blocks.categories','catid');
                 }
                 if (empty($catid)) {
                     // try to get catid from input
                     $this->var()->check('catid', $catid);
                 }
-                if (empty($catid) && xarVar::isCached('Blocks.categories','cids')) {
-                    $cids = xarVar::getCached('Blocks.categories','cids');
+                if (empty($catid) && $this->var()->isCached('Blocks.categories','cids')) {
+                    $cids = $this->var()->getCached('Blocks.categories','cids');
                 } else {
                     $cids = array();
                 }
                 $catid = str_replace('_', '', $catid);
-                $ancestors = xarMod::apiFunc('categories','user','getancestors',
+                $ancestors = $this->mod()->apiFunc('categories','user','getancestors',
                                           array('cid' => $catid,
                                                 'cids' => $cids,
                                                 'return_itself' => true));
@@ -278,7 +278,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                         $here = 'true';
                     }
                 }
-                $line['url'] = xarController::URL('articles', 'user', 'view', array('catid' => $line['url'][0]));
+                $line['url'] = $this->ctl()->getModuleURL('articles', 'user', 'view', array('catid' => $line['url'][0]));
                 break;
             }
         */

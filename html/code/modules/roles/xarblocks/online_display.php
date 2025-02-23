@@ -45,7 +45,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
         $dbconn = $this->db()->getConn();
         $xartable = $this->db()->getTables();
         $sessioninfotable = $xartable['session_info'];
-        $activetime = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
+        $activetime = time() - ($this->config()->getVar('Site.Session.Duration') * 60);
         if($dbconn->databaseType == 'sqlite') {
             $sql = "SELECT COUNT(*)
                     FROM (SELECT DISTINCT role_id FROM $sessioninfotable
@@ -65,7 +65,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
         }
 
         // FIXME: there could be many active users, but we only want a handful of them.
-        $activeusers = xarMod::apiFunc('roles', 'user', 'getallactive',
+        $activeusers = $this->mod()->apiFunc('roles', 'user', 'getallactive',
             array(
                 'order' => 'name',
                 'startnum' => 0,
@@ -76,7 +76,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
         foreach ($activeusers as $key => $thisuser) {
             $data['activeusers'][$key] = array(
                 'name' => $thisuser['name'],
-                'userurl' => xarController::URL(
+                'userurl' => $this->ctl()->getModuleURL(
                     'roles', 'user', 'display',
                          array('id' => $thisuser['id'])
                 ),
@@ -86,18 +86,18 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
             );
 
             if ($thisuser['name'] == xarUser::getVar('name')) {
-                if (xarMod::isAvailable('messages')) {
-                    $data['activeusers'][$key]['total'] = xarMod::apiFunc(
+                if ($this->mod()->isAvailable('messages')) {
+                    $data['activeusers'][$key]['total'] = $this->mod()->apiFunc(
                         'messages', 'user', 'count_total',
                         array('id'=>$thisuser['id'])
                     );
 
-                    $data['activeusers'][$key]['unread'] = xarMod::apiFunc(
+                    $data['activeusers'][$key]['unread'] = $this->mod()->apiFunc(
                         'messages', 'user', 'count_unread',
                         array('id'=>$thisuser['id'])
                     );
 
-                    $data['activeusers'][$key]['messagesurl'] =xarController::URL(
+                    $data['activeusers'][$key]['messagesurl'] =$this->ctl()->getModuleURL(
                         'messages', 'user', 'display',
                         array('id'=>$thisuser['id'])
                     );
@@ -126,15 +126,15 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
 
         // Pluralise
         if ($data['numguests'] == 1) {
-             $data['guests'] = xarML('guest');
+             $data['guests'] = $this->ml('guest');
         } else {
-             $data['guests'] = xarML('guests');
+             $data['guests'] = $this->ml('guests');
         }
 
         if ($data['numusers'] == 1) {
-             $data['users'] = xarML('user');
+             $data['users'] = $this->ml('user');
         } else {
-             $data['users'] = xarML('users');
+             $data['users'] = $this->ml('users');
         }
 
         $id = xarModVars::get('roles', 'lastuser');
@@ -143,13 +143,13 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
         if (!empty($id)) {
             if(!is_numeric($id)) {
             //Remove this further down the line
-                $status = xarMod::apiFunc(
+                $status = $this->mod()->apiFunc(
                 'roles', 'user', 'get',
                 array('uname' => $id)
                 );
 
             } else {
-                $status = xarMod::apiFunc(
+                $status = $this->mod()->apiFunc(
                 'roles', 'user', 'get',
                 array('id' => $id)
                 );

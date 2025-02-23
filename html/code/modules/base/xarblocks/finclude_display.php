@@ -27,10 +27,10 @@ class Base_FincludeBlockDisplay extends Base_FincludeBlock implements iBlock
     {
         $data = $this->getContent();
         if (empty($this->url)) {
-            $data['url'] = xarML('Block has no file defined to include');
+            $data['url'] = $this->ml('Block has no file defined to include');
         } else {
             if (!file_exists($this->url)) {
-                $data['url'] = xarML('Warning: File to include does not exist. Check file definition in finclude block instance.');
+                $data['url'] = $this->ml('Warning: File to include does not exist. Check file definition in finclude block instance.');
             } else {
                 $data['url'] = file_get_contents($this->url);
             }

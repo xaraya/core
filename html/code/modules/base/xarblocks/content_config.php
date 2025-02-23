@@ -32,11 +32,11 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
         $data = $this->getContent();
         // Drop-down list defining content type.
         $content_types = array();
-        $content_types[] = array('value' => 'text', 'label' => xarML('Text'));
-        $content_types[] = array('value' => 'html', 'label' => xarML('HTML'));
-        $content_types[] = array('value' => 'bl', 'label'   => xarML('Blocklayout'));
-        $content_types[] = array('value' => 'php', 'label'  => xarML('PHP (echo capture)'));
-        $content_types[] = array('value' => 'data', 'label' => xarML('PHP (template data)'));
+        $content_types[] = array('value' => 'text', 'label' => $this->ml('Text'));
+        $content_types[] = array('value' => 'html', 'label' => $this->ml('HTML'));
+        $content_types[] = array('value' => 'bl', 'label'   => $this->ml('Blocklayout'));
+        $content_types[] = array('value' => 'php', 'label'  => $this->ml('PHP (echo capture)'));
+        $content_types[] = array('value' => 'data', 'label' => $this->ml('PHP (template data)'));
         $data['content_types'] = $content_types;
         return $data;
     }

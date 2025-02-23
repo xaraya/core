@@ -24,6 +24,6 @@ class Base_WaitingContentBlock extends BasicBlock implements iBlock
      */
     function display()
     {
-        return $data['output'] = xarMod::apiFunc('base', 'admin', 'waitingcontent');
+        return $data['output'] = $this->mod()->apiFunc('base', 'admin', 'waitingcontent');
     }
 }

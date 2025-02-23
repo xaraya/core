@@ -29,26 +29,26 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
     public function configmodify(Array $data=array())
     {
         if (!empty($this->group_instances))         
-            $group_instances = xarMod::apiFunc('blocks', 'instances', 'getitems', 
+            $group_instances = $this->mod()->apiFunc('blocks', 'instances', 'getitems', 
                 array('block_id' => $this->group_instances));
 
         $instances = array();
         
         if (!empty($group_instances)) {
-            $authid = xarSec::genAuthKey();
+            $authid = $this->sec()->genAuthKey();
             $i = 1;
             $numitems = count($group_instances);
             foreach ($this->group_instances as $id) {
                 if (!isset($group_instances[$id])) continue;
                 $instances[$id] = $group_instances[$id];
-                $instances[$id]['modifyurl'] = xarServer::getCurrentURL( array('block_id' => $id));
+                $instances[$id]['modifyurl'] = $this->ctl()->getCurrentURL( array('block_id' => $id));
                 // add in links to re-order blocks
                 if ($i < $numitems) {
-                    $instances[$id]['downurl'] = xarServer::getCurrentURL(
+                    $instances[$id]['downurl'] = $this->ctl()->getCurrentURL(
                         array('block_id' => $this->block_id, 'interface' => 'config', 'block_method' => 'order', 'move' => $id, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                 }
                 if ($i > 1) {
-                    $instances[$id]['upurl'] = xarServer::getCurrentURL(
+                    $instances[$id]['upurl'] = $this->ctl()->getCurrentURL(
                         array('block_id' => $this->block_id, 'interface' => 'config', 'block_method' => 'order', 'move' => $id, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
                 }
                 $i++;
@@ -56,16 +56,16 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
         }
         $data['instances'] = $instances;
         // State descriptions.
-        $data['state_desc'] = xarMod::apiFunc('blocks', 'instances', 'getstates');
+        $data['state_desc'] = $this->mod()->apiFunc('blocks', 'instances', 'getstates');
 
-        $blocks = xarMod::apiFunc('blocks', 'instances', 'getitems', array('type_category' => 'block'));
+        $blocks = $this->mod()->apiFunc('blocks', 'instances', 'getitems', array('type_category' => 'block'));
         $block_options = array();
-        $block_options[] = array('id' => '', 'name' => xarML('-- no new block --'));
+        $block_options[] = array('id' => '', 'name' => $this->ml('-- no new block --'));
         foreach ($blocks as $id => $block) {
             if ($block['block_id'] == $this->block_id || isset($instances[$block['block_id']])) continue;
             $block_options[] = array(
                 'id' => $block['block_id'],
-                'name' => xarVar::prepForDisplay($block['name']),
+                'name' => $this->var()->prep($block['name']),
             );
         }
         $data['block_options'] = $block_options;
@@ -84,15 +84,15 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
         // remove block(s) from this block group
         $this->var()->check('remove_block', $remove_block, 'array', null);
         if (!empty($remove_block)) {
-            $removes = xarMod::apiFunc('blocks', 'instances', 'getitems',
+            $removes = $this->mod()->apiFunc('blocks', 'instances', 'getitems',
                 array('block_id' => array_keys($remove_block)));
             if (!empty($removes)) {
                 foreach ($removes as $id => $remove) {
                     $this->detachInstance($remove['block_id']);
-                    $r_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $remove);
+                    $r_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $remove);
                     $r_block->detachGroup($this->block_id);
                     $remove['content'] = $r_block->storeContent();
-                    if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $remove)) return;
+                    if (!$this->mod()->apiFunc('blocks', 'instances', 'updateitem', $remove)) return;
                     unset($r_block);
                 }
             }
@@ -101,13 +101,13 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
         // add a block to this block group
         $this->var()->check('add_block', $add_block, 'int:1:', null);
         if (!empty($add_block)) {
-            $add = xarMod::apiFunc('blocks', 'instances', 'getitem', 
+            $add = $this->mod()->apiFunc('blocks', 'instances', 'getitem', 
                 array('block_id' => $add_block));
             $this->attachInstance($add['block_id']);
-            $a_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $add);
+            $a_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $add);
             $a_block->attachGroup($this->block_id);
             $add['content'] = $a_block->storeContent();
-            if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $add)) return;
+            if (!$this->mod()->apiFunc('blocks', 'instances', 'updateitem', $add)) return;
             unset($a_block);            
         }        
         return true;
@@ -126,7 +126,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
             $this->orderInstance($move, $direction);
         
         $data['content'] = $this->getContent();
-        $data['return_url'] = xarServer::getCurrentURL(array('interface' => 'config', 'block_method' => null, 'move' => null, 'direction' => null, 'authid' => null, 'phase' => null), null, 'group_members');
+        $data['return_url'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'block_method' => null, 'move' => null, 'direction' => null, 'authid' => null, 'phase' => null), null) . '#group_members';
 
         return $data;      
     }

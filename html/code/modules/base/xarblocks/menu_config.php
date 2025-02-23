@@ -65,8 +65,8 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 $links = array_merge($vars, $this->linkorderupdate());
                 $this->blockinfo['content']['userlinks'] = $links['userlinks'];
                 $this->setContent($links);
-                if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $this->blockinfo)) return;
-                xarController::redirect($links['return_url']);
+                if (!$this->mod()->apiFunc('blocks', 'instances', 'updateitem', $this->blockinfo)) return;
+                $this->ctl()->redirect($links['return_url']);
             break;
             default:
             break;
@@ -113,7 +113,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
             } elseif ($new_link['ismodlink'] && $new_position > 1) {
                 $new_link['ismodlink'] = 0;
                  if (empty($new_label)) {
-                    $new_label = xarMod::getDisplayName($new_link['modname']);
+                    $new_label = $this->mod()->getDisplayName($new_link['modname']);
                     $new_link['name'] = $new_link['modname'] . '_' . $new_link['modtype'] . '_main';
                 }
                 if (empty($new_title)) {
@@ -165,7 +165,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                     // module link, set name as module_type
                     $link['name'] = $link['modname'] . '_' . $link['modtype'];
                     /* @TODO: handle module menu links one day?
-                    $modlinks = xarMod::apiFunc('base', 'admin', 'loadmenuarray',
+                    $modlinks = $this->mod()->apiFunc('base', 'admin', 'loadmenuarray',
                         array(
                             'modname' => $link['modname'],
                             'modtype' => $this->menumodtype,
@@ -285,7 +285,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
         // handle modulelist input
         sys::import('modules.dynamicdata.class.properties.master');
-        $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+        $accessproperty = $this->prop()->getProperty(array('name' => 'access'));
         foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];
             if (empty($modulelist[$modname]['visible']))
@@ -328,7 +328,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     public function getUserLinks()
     {
         $userlinks = array();
-        $authid = xarSec::genAuthKey();
+        $authid = $this->sec()->genAuthKey();
         if (!empty($this->userlinks)) {
             $numlinks = count($this->userlinks);
             $i = 1;
@@ -344,16 +344,16 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 $link['url'] = $link['encodedurl'];
                 // Add order links to parent menu items
                 if ($i < $numlinks) {
-                    $link['downurl'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' =>  $linkid, 'direction' => 'down', 'authid' => $authid, 'this' => '0'));
+                    $link['downurl'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' =>  $linkid, 'direction' => 'down', 'authid' => $authid, 'this' => '0'));
                     /*
-                    $link['downurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
+                    $link['downurl'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                     */
                 }
                 if ($i > 1) {
-                    $link['upurl'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
+                    $link['upurl'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
                     /*
-                    $link['upurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
+                    $link['upurl'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
                     */
                 }
@@ -373,16 +373,16 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
                         // Add order links to child menu items
                         if ($j < $numsublinks) {
-                            $link['downurl'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
+                            $link['downurl'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
                             /*
-                            $sublink['downurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
+                            $sublink['downurl'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                             */
                         }
                         if ($j > 1) {
-                            $sublink['upurl'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
+                            $sublink['upurl'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
                             /*
-                            $sublink['upurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
+                            $sublink['upurl'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
                             */
                         }
@@ -449,10 +449,10 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
             }
         }
         $data['userlinks'] = $this->userlinks;
-        $data['return_url'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => null, 'authid' => null, 'direction' => null, 'sublinkid' => null, 'linkid' => null, 'phase' => null), null, 'menulinks_'.$this->block_id);
+        $data['return_url'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => null, 'authid' => null, 'direction' => null, 'sublinkid' => null, 'linkid' => null, 'phase' => null), null) . '#menulinks_'.$this->block_id;
         /* 
-        $data['return_url'] = xarController::URL('blocks', 'admin', 'modify_instance',
-            array('block_id' => $this->block_id, 'interface' => 'config'), null, 'menulinks_'.$this->block_id);
+        $data['return_url'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
+            array('block_id' => $this->block_id, 'interface' => 'config'), null) . '#menulinks_'.$this->block_id);
         */
         return $data;
     }

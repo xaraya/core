@@ -27,7 +27,7 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
 
         $data['modules'] = array();
         $data['modules'][] = array('id' => '',
-                                   'name' => xarML('Adapt dynamically to current page'));
+                                   'name' => $this->ml('Adapt dynamically to current page'));
 
         // List contains:
         // 0. option group for the module
@@ -44,7 +44,7 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
 
         foreach($allcatbases as $modulecatbases) {
             // Module label for the option group in the list.
-            $modlabel = xarML('#(1)', ucwords($modulecatbases['module']));
+            $modlabel = $this->ml('#(1)', ucwords($modulecatbases['module']));
             $data['modules'][] = array('label' => $modlabel);
     
             $indent = '&#160;&#160;&#160;';
@@ -67,7 +67,7 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
                     } else {
                         // Item types at one level deeper
                         $indent_level = 1;
-                        $itemtypelabel = ' -&gt; ' . xarML('#(1)', $itemtypecatbase['itemtype']['label']);
+                        $itemtypelabel = ' -&gt; ' . $this->ml('#(1)', $itemtypecatbase['itemtype']['label']);
                     }
     
                     // Module-Itemtype [all cats]

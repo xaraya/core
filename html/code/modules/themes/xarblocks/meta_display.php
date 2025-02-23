@@ -67,7 +67,7 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
         $xarmeta->register(array(
             'type' => 'http-equiv',
             'value' => 'Content-Type',
-            'content' => 'text/html; charset=' . xarMLS::getCharsetFromLocale(xarMLS::getCurrentLocale()),
+            'content' => 'text/html; charset=' . $this->mls()->getCharsetFromLocale($this->mls()->getCurrentLocale()),
             'lang' => '',
             'dir' => '',
             'scheme' => '',
@@ -75,11 +75,11 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
         // while we're here, handle modules setting meta refresh via the cache
         // NOTE: this functionality is deprecated, instead use the xar:meta tag, eg...
         // <xar:meta type="http-equiv" value="refresh" content="3; URL=http://www.example.com"/>
-        if (xarVar::isCached('Meta.refresh','url') && xarVar::isCached('Meta.refresh','time')) {
+        if ($this->var()->isCached('Meta.refresh','url') && $this->var()->isCached('Meta.refresh','time')) {
             $xarmeta->register(array(
                 'type' => 'http-equiv',
                 'value' => 'Refresh',
-                'content' => xarVar::getCached('Meta.refresh','time').'; URL='.xarVar::getCached('Meta.refresh','url'),
+                'content' => $this->var()->getCached('Meta.refresh','time').'; URL='.$this->var()->getCached('Meta.refresh','url'),
                 'lang' => '',
                 'dir' => '',
                 'scheme' => '',
@@ -90,8 +90,8 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
             $meta['linktags'] = $this->parseLinkTags();
 
          //Pager Buttons
-        $meta['first']          = xarVar::getCached('Pager.first','leftarrow');
-        $meta['last']           = xarVar::getCached('Pager.last','rightarrow');
+        $meta['first']          = $this->var()->getCached('Pager.first','leftarrow');
+        $meta['last']           = $this->var()->getCached('Pager.last','rightarrow');
 
         return $meta;
 

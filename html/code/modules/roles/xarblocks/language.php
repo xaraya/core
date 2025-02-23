@@ -57,13 +57,13 @@ class Roles_LanguageBlock extends BasicBlock
             );
         }
 
-        $data['form_action'] = xarController::URL('roles', 'user', 'changelanguage');
+        $data['form_action'] = $this->ctl()->getModuleURL('roles', 'user', 'changelanguage');
         $data['form_picker_name'] = 'locale';
         $data['locales'] = $locales;
 
         if (xarServer::getVar('REQUEST_METHOD') == 'GET') {
             // URL of this page
-            $data['return_url'] = xarServer::getCurrentURL();
+            $data['return_url'] = $this->ctl()->getCurrentURL();
         } else {
             // Base URL of the site
             $data['return_url'] = xarServer::getBaseURL();

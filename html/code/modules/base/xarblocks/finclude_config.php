@@ -41,7 +41,7 @@ class Base_FincludeBlockConfig extends Base_FincludeBlock implements iBlock
         $this->var()->find('url', 
             $url,
             'pre:trim:str:1:',
-            xarML('Error - No Url Specified'));
+            $this->ml('Error - No Url Specified'));
 
         $this->url = $url;
         return true;

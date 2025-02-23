@@ -32,7 +32,7 @@ class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iB
         $data = $this->getContent();
 
         if (empty($this->group_instances)) return;
-        $instances = xarMod::apiFunc('blocks', 'instances', 'getitems', 
+        $instances = $this->mod()->apiFunc('blocks', 'instances', 'getitems', 
             array(
                 'block_id' => $this->group_instances, 
                 'type_state' => xarBlock::TYPE_STATE_ACTIVE,

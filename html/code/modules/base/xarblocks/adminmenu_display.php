@@ -44,15 +44,15 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
             $link['modname'] = $modname;
             $link = self::getModuleLink($link);
             if (!$link) continue;
-            $link['title'] = xarML('Show administration options for module #(1)', $link['label']);
+            $link['title'] = $this->ml('Show administration options for module #(1)', $link['label']);
             switch ($data['menustyle']) {
                 case 'bycat':
                 default:
                     // determine category
                     if(!isset($mod['category']) or $mod['category'] == '0') {
-                        $mod['category'] = xarML('Unknown');
+                        $mod['category'] = $this->ml('Unknown');
                     }
-                    $cat = xarVar::prepForDisplay($mod['category']);
+                    $cat = $this->var()->prep($mod['category']);
                     // add module link to category
                     $categories[$cat][$modname] = $link;
                 break;
@@ -82,12 +82,12 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
         /* <chris> removing this for now as it isn't used anywhere
         if (file_exists(sys::code() . 'modules/'.$thismodname.'/xaradmin/overview.php')) {
             if ($thisfuncname<>'overview' && $thisfuncname<>'main') {
-                $overviewlink = xarController::URL($thismodname,'admin','overview',array(),null,$thisfuncname);
+                $overviewlink = $this->ctl()->getModuleURL($thismodname,'admin','overview',array(),null,$thisfuncname);
             } else {
-                $overviewlink = xarController::URL($thismodname,'admin','overview');
+                $overviewlink = $this->ctl()->getModuleURL($thismodname,'admin','overview');
             }
         } else { //no overview exists;
-            $overviewlink = xarController::URL('base','admin','overview',array('template'=>'nooverview'));
+            $overviewlink = $this->ctl()->getModuleURL('base','admin','overview',array('template'=>'nooverview'));
         }
         $data['overviewlink']=$overviewlink;
         */

@@ -46,7 +46,7 @@ class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlo
             $this->var()->find('redirecturl',
                $data['return_url'],
                'pre:trim:str:1:',
-               xarServer::getCurrentURL([], false));
+               $this->ctl()->getCurrentURL([], false));
         } else {
             $this->var()->find('redirecturl', 
                 $data['return_url'],

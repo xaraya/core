@@ -96,7 +96,7 @@ class Themes_MetaBlock extends BasicBlock
                 $metatags[] = array(
                     'type' => 'name',
                     'value' => 'generator',
-                    'content' => xarConfigVars::get(null, 'System.Core.VersionId') . ' :: ' . xarConfigVars::get(null, 'System.Core.VersionNum'),
+                    'content' => $this->config()->getVar('System.Core.VersionId') . ' :: ' . $this->config()->getVar('System.Core.VersionNum'),
                     'lang' => '',
                     'dir' => '',
                     'scheme' => '',
@@ -104,7 +104,7 @@ class Themes_MetaBlock extends BasicBlock
                 $metatags[] = array(
                     'type' => 'name',
                     'value' => 'rating',
-                    'content' => xarML('General'),
+                    'content' => $this->ml('General'),
                     'lang' => '',
                     'dir' => '',
                     'scheme' => '',
@@ -224,7 +224,7 @@ class Themes_MetaBlock extends BasicBlock
             $modinfo = explode(':', $sections[0]);
             $modname = $modinfo[0];
             if ($modname != 'baseurl' && $modname != 'currenturl') {
-                if (!xarMod::isAvailable($modname)) return;
+                if (!$this->mod()->isAvailable($modname)) return;
                 $modtype = !empty($modinfo[1]) ? $modinfo[1] : 'user';
                 $funcname = !empty($modinfo[2]) ? $modinfo[2] : 'main';
             }
@@ -258,15 +258,15 @@ class Themes_MetaBlock extends BasicBlock
                     $decoded_url = xarServer::getBaseURL() . $qstring;
                 break;
                 case 'currenturl':
-                    $decoded_url = xarServer::getCurrentURL($args);
+                    $decoded_url = $this->ctl()->getCurrentURL($args);
                 break;
                 default:
-                    $decoded_url = xarController::URL($modname, $modtype, $funcname, $args);
+                    $decoded_url = $this->ctl()->getModuleURL($modname, $modtype, $funcname, $args);
                 break;
             }            
         } else {
             // regular url, prepped for xml display if necessary
-            $decoded_url = xarMod::$genXmlUrls ? xarVar::prepForDisplay($url) : $url;
+            $decoded_url = xarMod::$genXmlUrls ? $this->var()->prep($url) : $url;
         } 
 
         return $decoded_url;
@@ -308,7 +308,7 @@ class Themes_MetaBlock extends BasicBlock
         $metatags[] = array(
             'type' => 'name',
             'value' => 'generator',
-            'content' => xarConfigVars::get(null, 'System.Core.VersionId') . ' :: ' . xarConfigVars::get(null, 'System.Core.VersionNum'),
+            'content' => $this->config()->getVar('System.Core.VersionId') . ' :: ' . $this->config()->getVar('System.Core.VersionNum'),
             'lang' => '',
             'dir' => '',
             'scheme' => '',
@@ -316,7 +316,7 @@ class Themes_MetaBlock extends BasicBlock
         $metatags[] = array(
             'type' => 'name',
             'value' => 'rating',
-            'content' => xarML('General'),
+            'content' => $this->ml('General'),
             'lang' => '',
             'dir' => '',
             'scheme' => '',
