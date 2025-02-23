@@ -203,7 +203,8 @@ class xarDDObject extends xarObject implements IxarDDObject
 
         sys::import('modules.dynamicdata.class.simpleinterface');
 
-        $interface = new SimpleObjectInterface($args);
+        // use context if available in method
+        $interface = new SimpleObjectInterface($args, $context);
 
         return $interface->handle($args, $context);
     }

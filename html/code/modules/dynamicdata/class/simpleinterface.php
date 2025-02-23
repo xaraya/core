@@ -21,10 +21,10 @@ use Xaraya\Context\Context;
   */
 class SimpleObjectInterface extends DefaultHandler
 {
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], ?Context $context = null)
     {
-        parent::__construct($args);
-        xarVar::fetch('tplmodule', 'isset', $args['tplmodule'], 'dynamicdata', xarVar::NOT_REQUIRED);
+        parent::__construct($args, $context);
+        $this->var()->check('tplmodule', $args['tplmodule'], 'isset', 'dynamicdata');
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
@@ -39,13 +39,13 @@ class SimpleObjectInterface extends DefaultHandler
      */
     public function handle(array $args = [], ?Context $context = null)
     {
-        xarVar::fetch('method', 'str', $args['method'], 'showDisplay', xarVar::NOT_REQUIRED);
-        xarVar::fetch('itemid', 'id', $args['itemid'], null, xarVar::DONT_SET);
-        // @todo maybe this should be done somewhere else ?
-        xarVar::fetch('qparam', 'str', $qparam, null, xarVar::DONT_SET);
-        xarVar::fetch('qstring', 'str', $qstring, null, xarVar::DONT_SET);
-        // set the context for this handler call
+        // set the context before checking any variables
         $this->setContext($context);
+        $this->var()->check('method', $args['method'], 'str', 'showDisplay');
+        $this->var()->check('itemid', $args['itemid'], 'id', null);
+        // @todo maybe this should be done somewhere else ?
+        $this->var()->find('qparam', $qparam, 'str', null);
+        $this->var()->find('qstring', $qstring, 'str', null);
 
         if (!empty($qparam) && !empty($qstring)) {
             $args['where'] = "$qparam LIKE '$qstring%'";
