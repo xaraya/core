@@ -42,13 +42,9 @@ class DisplayHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        if (!$this->var()->check('preview', $args['preview'])) {
-            return;
-        }
+        $this->var()->check('preview', $args['preview']);
 
-        if (!$this->var()->check('values', $args['values'])) {
-            return;
-        }
+        $this->var()->check('values', $args['values']);
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);

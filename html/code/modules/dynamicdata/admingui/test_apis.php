@@ -53,7 +53,7 @@ class TestApisMethod extends MethodClass
 
         extract($args);
 
-        $this->var()->find('tab', $tab);
+        $this->var()->check('tab', $tab);
         if (!empty($tab) && in_array($tab, ['swagger-ui', 'datatables', 'playground'])) {
             $testDir = dirname(__DIR__) . '/xartests/';
             $testFile = $testDir . $tab . '.html';
@@ -108,46 +108,46 @@ class TestApisMethod extends MethodClass
                 $this->exit();
             }
         }
-        $this->var()->find('restapi', $restapi, 'array', []);
-        $this->var()->find('graphql', $graphql, 'array', []);
-        $this->var()->find('object_new', $object_new, 'isset', '');
+        $this->var()->check('restapi', $restapi, 'array', []);
+        $this->var()->check('graphql', $graphql, 'array', []);
+        $this->var()->check('object_new', $object_new, 'isset', '');
         if (!empty($object_new)) {
-            $this->var()->find('restapi_new', $restapi_new, 'isset', '');
+            $this->var()->check('restapi_new', $restapi_new, 'isset', '');
             if (!empty($restapi_new)) {
                 $restapi[$object_new] = 'on';
             }
-            $this->var()->find('graphql_new', $graphql_new, 'isset', '');
+            $this->var()->check('graphql_new', $graphql_new, 'isset', '');
             if (!empty($graphql_new)) {
                 $graphql[$object_new] = 'on';
             }
         }
-        $this->var()->find('module_new', $module_new, 'isset', '');
+        $this->var()->check('module_new', $module_new, 'isset', '');
         if (!empty($module_new)) {
-            $this->var()->find('restapi_module', $restapi_module, 'isset', '');
+            $this->var()->check('restapi_module', $restapi_module, 'isset', '');
             if (!empty($restapi_module)) {
                 $restapi[$module_new] = 'on';
             }
-            $this->var()->find('graphql_module', $graphql_module, 'isset', '');
+            $this->var()->check('graphql_module', $graphql_module, 'isset', '');
             if (!empty($graphql_module)) {
                 $graphql[$module_new] = 'on';
             }
         }
-        $this->var()->find('tokenstorage', $storageType, 'isset', 'database');
-        $this->var()->find('tokenexpires', $tokenExpires, 'isset', '12:00:00');
+        $this->var()->check('tokenstorage', $storageType, 'isset', 'database');
+        $this->var()->check('tokenexpires', $tokenExpires, 'isset', '12:00:00');
         if (!empty($tokenExpires)) {
             [$hour, $min, $sec] = explode(':', $tokenExpires);
             $tokenExpires = (((intval($hour) * 60) + intval($min)) * 60) + intval($sec);
         } else {
             $tokenExpires = 12 * 60 * 60;  // 12 hours
         }
-        $this->var()->find('querycomplexity', $queryComplexity, 'isset', 0);
-        $this->var()->find('querydepth', $queryDepth, 'isset', 0);
-        $this->var()->find('enabletimer', $enableTimer, 'isset', false);
-        $this->var()->find('tracepath', $tracePath, 'isset', false);
-        $this->var()->find('enablecache', $enableCache, 'isset', false);
-        $this->var()->find('cacheplan', $cachePlan, 'isset', false);
-        $this->var()->find('cachedata', $cacheData, 'isset', false);
-        $this->var()->find('cacheoperation', $cacheOperation, 'isset', false);
+        $this->var()->check('querycomplexity', $queryComplexity, 'isset', 0);
+        $this->var()->check('querydepth', $queryDepth, 'isset', 0);
+        $this->var()->check('enabletimer', $enableTimer, 'isset', false);
+        $this->var()->check('tracepath', $tracePath, 'isset', false);
+        $this->var()->check('enablecache', $enableCache, 'isset', false);
+        $this->var()->check('cacheplan', $cachePlan, 'isset', false);
+        $this->var()->check('cachedata', $cacheData, 'isset', false);
+        $this->var()->check('cacheoperation', $cacheOperation, 'isset', false);
         $restapilist = [];
         $graphqllist = [];
         if (!empty($restapi) && !empty($graphql) && $this->sec()->confirmAuthKey()) {
@@ -192,18 +192,14 @@ class TestApisMethod extends MethodClass
         sys::import('xaraya.bridge.restapi.builder');
 
         RestAPIBuilder::init();
-        if (!$this->var()->find('create_rst', $create_rst, 'notempty', 0)) {
-            return;
-        }
+        $this->var()->check('create_rst', $create_rst, 'notempty', 0);
         if (!empty($create_rst)) {
             RestAPIBuilder::create_openapi($restapilist, $storageType, $tokenExpires, $enableTimer, $enableCache);
             $this->clearCacheFiles();
             $this->ctl()->redirect($this->ctl()->getCurrentURL(['create_rst' => null]));
             return true;
         }
-        if (!$this->var()->find('create_gql', $create_gql, 'notempty', 0)) {
-            return;
-        }
+        $this->var()->check('create_gql', $create_gql, 'notempty', 0);
         if (!empty($create_gql)) {
             sys::autoload();
             sys::import('xaraya.bridge.graphql.builder');

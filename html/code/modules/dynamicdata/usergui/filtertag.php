@@ -41,29 +41,16 @@ class FiltertagMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!$this->var()->find('filter_submitted', $filter_submitted, 'int:0', 0)) {
-            return;
-        }
+        extract($args);
+        $this->var()->check('filter_submitted', $filter_submitted, 'int:0', 0);
 
         if ($filter_submitted) {
-            if (!$this->var()->find('objectname', $objectname, 'str', '')) {
-                return;
-            }
-            if (!$this->var()->find('filtername', $filtername, 'str', '')) {
-                return;
-            }
-            if (!$this->var()->find('return_url', $return_url, 'str', '')) {
-                return;
-            }
-            if (!$this->var()->find('name', $names, 'array', [])) {
-                return;
-            }
-            if (!$this->var()->find('source', $source, 'array', [])) {
-                return;
-            }
-            if (!$this->var()->find('op', $op, 'array', [])) {
-                return;
-            }
+            $this->var()->check('objectname', $objectname, 'str', '');
+            $this->var()->check('filtername', $filtername, 'str', '');
+            $this->var()->check('return_url', $return_url, 'str', '');
+            $this->var()->check('name', $names, 'array', []);
+            $this->var()->check('source', $source, 'array', []);
+            $this->var()->check('op', $op, 'array', []);
 
             // Get an instance of the dataobject so that we can get at the dataproperties' checkInput() method
             $object = $this->data()->getObject(['name' => $objectname]);

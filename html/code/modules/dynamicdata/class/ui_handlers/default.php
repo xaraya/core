@@ -69,6 +69,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
     {
         // set core services for access via methods - nothing to do here
         //$this->setCoreServices();
+        // set the context before checking any variables
         $this->setContext($context);
 
         // set a specific GUI module for now
@@ -98,37 +99,17 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         }
 
         // get some common URL parameters
-        if (!$this->var()->check('object', $args['object'])) {
-            return;
-        }
-        if (!$this->var()->check('name', $args['name'])) {
-            return;
-        }
-        if (!$this->var()->check('module', $args['module'])) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $args['itemtype'])) {
-            return;
-        }
-        if (!$this->var()->check('table', $args['table'])) {
-            return;
-        }
-        if (!$this->var()->check('layout', $args['layout'])) {
-            return;
-        }
-        if (!$this->var()->check('template', $args['template'])) {
-            return;
-        }
-        if (!$this->var()->check('startnum', $args['startnum'])) {
-            return;
-        }
-        if (!$this->var()->check('numitems', $args['numitems'])) {
-            return;
-        }
+        $this->var()->check('object', $args['object']);
+        $this->var()->check('name', $args['name']);
+        $this->var()->check('module', $args['module']);
+        $this->var()->check('itemtype', $args['itemtype']);
+        $this->var()->check('table', $args['table']);
+        $this->var()->check('layout', $args['layout']);
+        $this->var()->check('template', $args['template']);
+        $this->var()->check('startnum', $args['startnum']);
+        $this->var()->check('numitems', $args['numitems']);
 
-        if (!$this->var()->check('fieldlist', $fieldlist)) {
-            return;
-        }
+        $this->var()->check('fieldlist', $fieldlist);
         // make fieldlist an array,
         // @todo should the object class do it?
         if (!empty($fieldlist)) {

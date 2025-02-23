@@ -59,9 +59,7 @@ class ItemNew extends DataObjectHookObserver
         }
 
         // if we are in preview mode, we need to check for any preview values
-        if (!$this->var()->check('preview', $preview)) {
-            return;
-        }
+        $this->var()->check('preview', $preview);
         if (!empty($preview)) {
             $object->checkInput();
         }

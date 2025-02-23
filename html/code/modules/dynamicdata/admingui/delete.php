@@ -52,40 +52,20 @@ class DeleteMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
 
-        if (!$this->var()->check('objectid', $objectid)) {
-            return;
-        }
-        if (!$this->var()->check('name', $name)) {
-            return;
-        }
-        if (!$this->var()->find('itemid', $itemid, 'int:1:', 0)) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid);
+        $this->var()->check('name', $name);
+        $this->var()->check('itemid', $itemid, 'int:1:', 0);
         if (empty($itemid)) {
             $msg = $this->ml('Data object not found');
             return $this->ctl()->notFound($msg);
         }
-        if (!$this->var()->check('confirm', $confirm)) {
-            return;
-        }
-        if (!$this->var()->check('noconfirm', $noconfirm)) {
-            return;
-        }
-        if (!$this->var()->check('join', $join)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
-        if (!$this->var()->check('tplmodule', $tplmodule)) {
-            return;
-        }
-        if (!$this->var()->check('template', $template)) {
-            return;
-        }
-        if (!$this->var()->check('return_url', $return_url)) {
-            return;
-        }
+        $this->var()->check('confirm', $confirm);
+        $this->var()->check('noconfirm', $noconfirm);
+        $this->var()->check('join', $join);
+        $this->var()->check('table', $table);
+        $this->var()->check('tplmodule', $tplmodule);
+        $this->var()->check('template', $template);
+        $this->var()->check('return_url', $return_url);
 
         // set context if available in function
         $myobject = $this->data()->getObject(

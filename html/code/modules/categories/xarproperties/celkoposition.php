@@ -109,8 +109,8 @@ class CelkoPositionProperty extends DataProperty
 	 */
     public function checkInput($name = '', $value = null)
     {
-        if (!$this->var()->get($name . '_reference_id', $reference_id, 'int:0')) return;
-        if (!$this->var()->get($name . '_position', $position, 'enum:1:2:3:4')) return;
+        $this->var()->get($name . '_reference_id', $reference_id, 'int:0');
+        $this->var()->get($name . '_position', $position, 'enum:1:2:3:4');
         switch (intval($position)) {
             case 1: // before - same level
                 $this->rightorleft = 'left';

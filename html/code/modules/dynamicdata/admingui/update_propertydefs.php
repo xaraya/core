@@ -45,9 +45,7 @@ class UpdatePropertydefsMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
 
-        if (!$this->var()->check('flushPropertyCache', $flushPropertyCache)) {
-            return;
-        }
+        $this->var()->check('flushPropertyCache', $flushPropertyCache);
 
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {

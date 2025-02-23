@@ -52,18 +52,10 @@ class ModifyStaticMethod extends MethodClass
         }
 
         $data = ['table' => '', 'field' => '', 'oldname' => '', 'confirm' => false];
-        if (!$this->var()->find('table', $data['table'], 'str:1', '')) {
-            return;
-        }
-        if (!$this->var()->find('field', $data['field'], 'str:1', '')) {
-            return;
-        }
-        if (!$this->var()->find('oldname', $data['oldname'], 'str:1', '')) {
-            return;
-        }
-        if (!$this->var()->find('confirm', $data['confirm'], 'bool', false)) {
-            return;
-        }
+        $this->var()->find('table', $data['table'], 'str:1', '');
+        $this->var()->find('field', $data['field'], 'str:1', '');
+        $this->var()->find('oldname', $data['oldname'], 'str:1', '');
+        $this->var()->find('confirm', $data['confirm'], 'bool', false);
 
         $data['object'] = $this->data()->getObject(['name' => 'dynamicdata_tablefields']);
         $data['authid'] = $this->sec()->genAuthKey();

@@ -73,9 +73,7 @@ class ShowfilterformMethod extends MethodClass
 
         // try getting the item id via input variables if necessary
         if (!isset($itemid) || !is_numeric($itemid)) {
-            if (!$this->var()->check('itemid', $args['itemid'])) {
-                return;
-            }
+            $this->var()->check('itemid', $args['itemid']);
         }
 
         // check the optional field list
@@ -107,7 +105,7 @@ class ShowfilterformMethod extends MethodClass
             $object->getItem();
         }
         // if we are in preview mode, we need to check for any preview values
-        //if (!$this->var()->check('preview', $preview)) {return;}
+        //$this->var()->check('preview', $preview);
         if (!empty($preview)) {
             $object->checkInput();
         }

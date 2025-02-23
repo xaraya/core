@@ -40,12 +40,9 @@ class PropertyMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!$this->var()->find('prop', $property, 'str', '')) {
-            return;
-        }
-        if (!$this->var()->find('act', $act, 'str', '')) {
-            return;
-        }
+        extract($args);
+        $this->var()->check('prop', $property, 'str', '');
+        $this->var()->check('act', $act, 'str', '');
         if (empty($property) || empty($act)) {
             $msg = $this->ml('Property not found');
             return $this->ctl()->notFound($msg);

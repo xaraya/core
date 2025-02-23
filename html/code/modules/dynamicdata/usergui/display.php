@@ -42,24 +42,12 @@ class DisplayMethod extends MethodClass
     {
         extract($args);
 
-        if (!$this->var()->check('objectid', $objectid)) {
-            return;
-        }
-        if (!$this->var()->check('name', $name)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $moduleid)) {
-            return;
-        }
-        if (!$this->var()->check('itemid', $itemid)) {
-            return;
-        }
-        if (!$this->var()->check('template', $template)) {
-            return;
-        }
-        if (!$this->var()->check('tplmodule', $tplmodule)) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid);
+        $this->var()->check('name', $name);
+        $this->var()->check('module_id', $moduleid);
+        $this->var()->check('itemid', $itemid);
+        $this->var()->check('template', $template);
+        $this->var()->check('tplmodule', $tplmodule);
 
         // set context if available in function
         $myobject = $this->data()->getObject(

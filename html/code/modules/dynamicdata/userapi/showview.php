@@ -71,27 +71,19 @@ class ShowviewMethod extends MethodClass
         //       used by the xar:data-view tag when no object or items are specified !
 
         if (!isset($itemids)) {
-            if (!$this->var()->check('itemids', $itemids)) {
-                return;
-            }
+            $this->var()->check('itemids', $itemids);
         }
 
         if (!isset($sort)) {
-            if (!$this->var()->check('sort', $sort)) {
-                return;
-            }
+            $this->var()->check('sort', $sort);
         }
 
         if (!isset($numitems)) {
-            if (!$this->var()->check('numitems', $numitems)) {
-                return;
-            }
+            $this->var()->check('numitems', $numitems);
         }
 
         if (!isset($startnum)) {
-            if (!$this->var()->check('startnum', $startnum)) {
-                return;
-            }
+            $this->var()->check('startnum', $startnum);
         }
 
         if (isset($table)) {

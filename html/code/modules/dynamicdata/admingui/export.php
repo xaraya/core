@@ -52,30 +52,14 @@ class ExportMethod extends MethodClass
 
         extract($args);
 
-        if (!$this->var()->check('objectid', $objectid, 'isset', 1)) {
-            return;
-        }
-        if (!$this->var()->check('name', $name)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $moduleid)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype)) {
-            return;
-        }
-        if (!$this->var()->check('itemid', $itemid)) {
-            return;
-        }
-        if (!$this->var()->check('tofile', $tofile)) {
-            return;
-        }
-        if (!$this->var()->check('convert', $convert)) {
-            return;
-        }
-        if (!$this->var()->check('format', $format, 'isset', 'xml')) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid, 'isset', 1);
+        $this->var()->check('name', $name);
+        $this->var()->check('module_id', $moduleid);
+        $this->var()->check('itemtype', $itemtype);
+        $this->var()->check('itemid', $itemid);
+        $this->var()->check('tofile', $tofile);
+        $this->var()->check('convert', $convert);
+        $this->var()->check('format', $format, 'isset', 'xml');
 
         $data = [];
         $data['menutitle'] = $this->ml('Dynamic Data Utilities');

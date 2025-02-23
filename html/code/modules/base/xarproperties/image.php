@@ -81,7 +81,7 @@ class ImageProperty extends TextBoxProperty
         if (isset($this->fieldname)) $name = $this->fieldname;
         else $name = 'dd_'.$this->id;
         $sourcename = $name . '_source';
-        if (!$this->var()->find($sourcename, $image_source, 'str:1:100')) return;
+        $this->var()->find($sourcename, $image_source, 'str:1:100');
         if (!empty($image_source)) $this->initialization_image_source = $image_source;
 
         if ($this->initialization_image_source == 'url') {

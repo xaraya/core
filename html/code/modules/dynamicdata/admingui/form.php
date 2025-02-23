@@ -45,27 +45,13 @@ class FormMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
 
-        if (!$this->var()->check('objectid', $objectid)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $module_id)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype)) {
-            return;
-        }
-        if (!$this->var()->check('itemid', $itemid)) {
-            return;
-        }
-        if (!$this->var()->check('preview', $preview)) {
-            return;
-        }
-        if (!$this->var()->check('join', $join)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid);
+        $this->var()->check('module_id', $module_id);
+        $this->var()->check('itemtype', $itemtype);
+        $this->var()->check('itemid', $itemid);
+        $this->var()->check('preview', $preview);
+        $this->var()->check('join', $join);
+        $this->var()->check('table', $table);
 
         if (empty($module_id)) {
             $module_id = $this->mod()->getRegID('dynamicdata');

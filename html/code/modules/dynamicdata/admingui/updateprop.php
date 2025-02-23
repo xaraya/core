@@ -48,49 +48,21 @@ class UpdatepropMethod extends MethodClass
         $userapi = $this->userapi();
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
-        if (!$this->var()->check('objectid', $objectid, 'isset', 1)) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid, 'isset', 1);
         /** @var int $objectid */
-        if (!$this->var()->check('module_id', $module_id)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype, 'int:1:', 0)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
-        if (!$this->var()->check('dd_name', $dd_name)) {
-            return;
-        }
-        if (!$this->var()->check('dd_label', $dd_label)) {
-            return;
-        }
-        if (!$this->var()->check('dd_type', $dd_type)) {
-            return;
-        }
-        if (!$this->var()->check('dd_default', $dd_defaultvalue)) {
-            return;
-        }
-        if (!$this->var()->check('dd_seq', $dd_seq)) {
-            return;
-        }
-        if (!$this->var()->check('dd_translatable', $dd_translatable)) {
-            return;
-        }
-        if (!$this->var()->check('dd_source', $dd_source)) {
-            return;
-        }
-        if (!$this->var()->check('display_dd_status', $display_dd_status)) {
-            return;
-        }
-        if (!$this->var()->check('input_dd_status', $input_dd_status)) {
-            return;
-        }
-        if (!$this->var()->check('dd_configuration', $dd_configuration)) {
-            return;
-        }
+        $this->var()->check('module_id', $module_id);
+        $this->var()->check('itemtype', $itemtype, 'int:1:', 0);
+        $this->var()->check('table', $table);
+        $this->var()->check('dd_name', $dd_name);
+        $this->var()->check('dd_label', $dd_label);
+        $this->var()->check('dd_type', $dd_type);
+        $this->var()->check('dd_default', $dd_defaultvalue);
+        $this->var()->check('dd_seq', $dd_seq);
+        $this->var()->check('dd_translatable', $dd_translatable);
+        $this->var()->check('dd_source', $dd_source);
+        $this->var()->check('display_dd_status', $display_dd_status);
+        $this->var()->check('input_dd_status', $input_dd_status);
+        $this->var()->check('dd_configuration', $dd_configuration);
 
         // Security
         if (!$this->sec()->checkAccess('AdminDynamicData')) {

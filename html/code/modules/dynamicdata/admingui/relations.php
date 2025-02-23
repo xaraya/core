@@ -61,60 +61,24 @@ class RelationsMethod extends MethodClass
             return;
         }
 
-        if (!$this->var()->check('module', $module)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $module_id)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype)) {
-            return;
-        }
-        if (!$this->var()->check('objectid', $objectid)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
-        if (!$this->var()->check('field', $field)) {
-            return;
-        }
-        if (!$this->var()->check('value', $value)) {
-            return;
-        }
-        if (!$this->var()->check('relation', $relation)) {
-            return;
-        }
-        if (!$this->var()->check('direction', $direction)) {
-            return;
-        }
-        if (!$this->var()->check('withobjectid', $withobjectid)) {
-            return;
-        }
-        if (!$this->var()->check('withtable', $withtable)) {
-            return;
-        }
-        if (!$this->var()->check('withfield', $withfield)) {
-            return;
-        }
-        if (!$this->var()->check('withvalue', $withvalue)) {
-            return;
-        }
-        if (!$this->var()->check('confirm', $confirm)) {
-            return;
-        }
-        if (!$this->var()->check('update', $update)) {
-            return;
-        }
-        if (!$this->var()->check('delete', $delete)) {
-            return;
-        }
-        if (!$this->var()->check('what', $what)) {
-            return;
-        }
-        if (!$this->var()->check('extra', $extra)) {
-            return;
-        }
+        $this->var()->check('module', $module);
+        $this->var()->check('module_id', $module_id);
+        $this->var()->check('itemtype', $itemtype);
+        $this->var()->check('objectid', $objectid);
+        $this->var()->check('table', $table);
+        $this->var()->check('field', $field);
+        $this->var()->check('value', $value);
+        $this->var()->check('relation', $relation);
+        $this->var()->check('direction', $direction);
+        $this->var()->check('withobjectid', $withobjectid);
+        $this->var()->check('withtable', $withtable);
+        $this->var()->check('withfield', $withfield);
+        $this->var()->check('withvalue', $withvalue);
+        $this->var()->check('confirm', $confirm);
+        $this->var()->check('update', $update);
+        $this->var()->check('delete', $delete);
+        $this->var()->check('what', $what);
+        $this->var()->check('extra', $extra);
 
         // filter out invalid tables
         $xartables =  $this->db()->getTables();
@@ -366,9 +330,7 @@ class RelationsMethod extends MethodClass
                 return true;
 
             } elseif (!empty($update)) {
-                if (!$this->var()->check('getlinkedobjects', $getlinkedobjects)) {
-                    return;
-                }
+                $this->var()->check('getlinkedobjects', $getlinkedobjects);
                 if (!empty($getlinkedobjects)) {
                     xarModItemVars::set('dynamicdata', 'getlinkedobjects', 1, $objectid);
                 } else {

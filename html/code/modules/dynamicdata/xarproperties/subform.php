@@ -69,13 +69,9 @@ class SubFormProperty extends DataProperty
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            if (!$this->var()->check($name, $value)) {
-                return;
-            }
+            $this->var()->check($name, $value);
         }
-        if (!$this->var()->check('fieldprefix', $this->fieldprefix)) {
-            return;
-        }
+        $this->var()->check('fieldprefix', $this->fieldprefix);
         return $this->validateValue($value);
     }
 
@@ -229,9 +225,7 @@ class SubFormProperty extends DataProperty
             }
 
             // if we don't know we're previewing, we don't really have a choice here
-            if (!$this->var()->check('preview', $preview)) {
-                return;
-            }
+            $this->var()->check('preview', $preview);
             if (empty($preview)) {
                 if (empty($value) || empty($object->itemid)) {
                     $itemid = $object->createItem();
@@ -329,9 +323,7 @@ class SubFormProperty extends DataProperty
             $this->invalid = null;
 
             // if we don't know we're previewing, we don't really have a choice here
-            if (!$this->var()->check('preview', $preview)) {
-                return;
-            }
+            $this->var()->check('preview', $preview);
             if (empty($preview)) {
                 foreach ($childitems as $id => $item) {
                     $item['itemid'] = $id;
@@ -428,9 +420,7 @@ class SubFormProperty extends DataProperty
 
             $value = [];
             // if we don't know we're previewing, we don't really have a choice here
-            if (!$this->var()->check('preview', $preview)) {
-                return;
-            }
+            $this->var()->check('preview', $preview);
             if (empty($preview)) {
                 foreach ($childitems as $id => $item) {
                     $item['itemid'] = $id;

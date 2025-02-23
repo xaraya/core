@@ -65,24 +65,12 @@ class ModifypropMethod extends MethodClass
         $utilapi = $this->utilapi();
         $data = $adminapi->menu();
 
-        if (!$this->var()->check('itemid', $itemid)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $module_id)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
-        if (!$this->var()->check('details', $details)) {
-            return;
-        }
-        if (!$this->var()->find('layout', $layout, 'str:1', 'default')) {
-            return;
-        }
+        $this->var()->check('itemid', $itemid);
+        $this->var()->check('module_id', $module_id);
+        $this->var()->check('itemtype', $itemtype);
+        $this->var()->check('table', $table);
+        $this->var()->check('details', $details);
+        $this->var()->check('layout', $layout, 'str:1', 'default');
 
         $args = $this->data()->getObjectID(
             [

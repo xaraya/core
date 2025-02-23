@@ -89,12 +89,8 @@ class FieldStatusProperty extends SelectProperty
         $display_status = null;
         $input_status = null;
         if (!isset($value)) {
-            if(!$this->var()->check($displayname, $display_status, 'int')) {
-                return;
-            }
-            if(!$this->var()->check($inputname, $input_status, 'int')) {
-                return;
-            }
+            $this->var()->check($displayname, $display_status, 'int');
+            $this->var()->check($inputname, $input_status, 'int');
         }
         $value = intval($display_status) + intval($input_status);
         return $this->validateValue($value);

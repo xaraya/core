@@ -64,9 +64,7 @@ class ConfigurationProperty extends TextAreaProperty
         }
 
         $data['configuration'] = null;
-        if (!$this->var()->find($data['name'], $data['configuration'])) {
-            return;
-        }
+        $this->var()->find($data['name'], $data['configuration']);
 
         if (!$property->updateConfiguration($data)) {
             return false;

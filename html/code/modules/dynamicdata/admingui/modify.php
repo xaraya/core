@@ -54,45 +54,21 @@ class ModifyMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
 
-        if (!$this->var()->check('objectid', $objectid, 'id')) {
-            return;
-        }
-        if (!$this->var()->check('name', $name)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $module_id)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype)) {
-            return;
-        }
-        if (!$this->var()->check('join', $join)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
-        if (!$this->var()->check('notfresh', $notfresh)) {
-            return;
-        }
-        if (!$this->var()->check('tplmodule', $tplmodule)) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid, 'id');
+        $this->var()->check('name', $name);
+        $this->var()->check('module_id', $module_id);
+        $this->var()->check('itemtype', $itemtype);
+        $this->var()->check('join', $join);
+        $this->var()->check('table', $table);
+        $this->var()->check('notfresh', $notfresh);
+        $this->var()->check('tplmodule', $tplmodule);
 
-        if (!$this->var()->check('itemid', $itemid)) {
-            return;
-        }
-        if (!$this->var()->check('template', $template)) {
-            return;
-        }
-        if (!$this->var()->check('preview', $preview)) {
-            return;
-        }
+        $this->var()->check('itemid', $itemid);
+        $this->var()->check('template', $template);
+        $this->var()->check('preview', $preview);
 
         $data = $adminapi->menu();
-        if (!$this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1', 'edit')) {
-            return;
-        }
+        $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1', 'edit');
 
         if (empty($objectid) && empty($name)) {
             $objectid = 1;

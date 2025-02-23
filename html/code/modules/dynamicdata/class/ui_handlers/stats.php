@@ -43,33 +43,17 @@ class StatsHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        if (!$this->var()->check('catid', $args['catid'])) {
-            return;
-        }
-        if (!$this->var()->check('sort', $args['sort'])) {
-            return;
-        }
-        if (!$this->var()->check('where', $args['where'])) {
-            return;
-        }
-        if (!$this->var()->check('startnum', $args['startnum'])) {
-            return;
-        }
+        $this->var()->check('catid', $args['catid']);
+        $this->var()->check('sort', $args['sort']);
+        $this->var()->check('where', $args['where']);
+        $this->var()->check('startnum', $args['startnum']);
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        if (!$this->var()->check('group', $args['group'])) {
-            return;
-        }
-        if (!$this->var()->check('field', $args['field'])) {
-            return;
-        }
-        if (!$this->var()->check('match', $args['match'])) {
-            return;
-        }
-        if (!$this->var()->check('report', $args['report'])) {
-            return;
-        }
+        $this->var()->check('group', $args['group']);
+        $this->var()->check('field', $args['field']);
+        $this->var()->check('match', $args['match']);
+        $this->var()->check('report', $args['report']);
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
@@ -288,9 +272,7 @@ class StatsHandler extends DefaultHandler
 
         // check if we need to save this report
         $save = null;
-        if (!$this->var()->check('save', $save)) {
-            return false;
-        }
+        $this->var()->check('save', $save);
 
         // nothing to show here
         if (empty($fieldlist)) {

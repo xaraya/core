@@ -51,9 +51,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
     public function checkInput($name = '', $value = null)
     {
         $name = !empty($name) ? $name : $this->propertyprefix . $this->id;
-        if (!$this->var()->find($name, $configuration)) {
-            return;
-        }
+        $this->var()->find($name, $configuration);
         $this->value = serialize($configuration);
         return true;
     }

@@ -55,43 +55,21 @@ class MigrateMethod extends MethodClass
         extract($args);
 
         // the actual from-to mapping
-        if (!$this->var()->check('from', $from)) {
-            return;
-        }
-        if (!$this->var()->check('to', $to)) {
-            return;
-        }
-        if (!$this->var()->check('fieldmap', $fieldmap)) {
-            return;
-        }
-        if (!$this->var()->check('hookmap', $hookmap)) {
-            return;
-        }
+        $this->var()->check('from', $from);
+        $this->var()->check('to', $to);
+        $this->var()->check('fieldmap', $fieldmap);
+        $this->var()->check('hookmap', $hookmap);
 
         // support for the Back and Finish buttons
-        if (!$this->var()->check('step', $step, 'int', 0)) {
-            return;
-        }
-        if (!$this->var()->check('back', $back, 'str')) {
-            return;
-        }
-        if (!$this->var()->check('test', $test, 'str')) {
-            return;
-        }
-        if (!$this->var()->check('confirm', $confirm, 'str')) {
-            return;
-        }
+        $this->var()->check('step', $step, 'int', 0);
+        $this->var()->check('back', $back, 'str');
+        $this->var()->check('test', $test, 'str');
+        $this->var()->check('confirm', $confirm, 'str');
 
         // support for loading/saving mappings
-        if (!$this->var()->check('load', $load, 'str')) {
-            return;
-        }
-        if (!$this->var()->check('save', $save, 'str')) {
-            return;
-        }
-        if (!$this->var()->check('map', $map, 'str')) {
-            return;
-        }
+        $this->var()->check('load', $load, 'str');
+        $this->var()->check('save', $save, 'str');
+        $this->var()->check('map', $map, 'str');
 
         if (!$this->sec()->checkAccess('AdminDynamicData')) {
             return;
@@ -458,9 +436,7 @@ class MigrateMethod extends MethodClass
 
         // save current map
         if (!empty($save)) {
-            if (!$this->var()->check('newmap', $newmap, 'str')) {
-                return;
-            }
+            $this->var()->check('newmap', $newmap, 'str');
             if (!empty($newmap)) {
                 $map = $newmap;
             }

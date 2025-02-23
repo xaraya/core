@@ -35,9 +35,7 @@ class Dynamicdata_FormBlockConfig extends Dynamicdata_FormBlock implements iBloc
      */
     public function configupdate()
     {
-        if (!$this->var()->find('objectid', $objectid, 'id', 0)) {
-            return;
-        }
+        $this->var()->find('objectid', $objectid, 'id', 0);
         $this->objectid = $objectid;
         return true;
     }

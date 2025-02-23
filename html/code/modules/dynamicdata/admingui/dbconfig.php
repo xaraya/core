@@ -46,12 +46,8 @@ class DbconfigMethod extends MethodClass
 
         extract($args);
 
-        if (!$this->var()->find('db', $db, 'notempty', '')) {
-            return;
-        }
-        if (!$this->var()->find('obj', $obj, 'notempty', '')) {
-            return;
-        }
+        $this->var()->check('db', $db, 'notempty', '');
+        $this->var()->check('obj', $obj, 'notempty', '');
         /** @var UtilApi $utilapi */
         $utilapi = $this->utilapi();
 

@@ -53,22 +53,12 @@ class OrderpropsMethod extends MethodClass
 
         // Get parameters from whatever input we need.  All arguments to this
         // function should be obtained from $this->var()->fetch()
-        if (!$this->var()->check('objectid', $objectid)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $module_id)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype, 'int:1:', 0)) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid);
+        $this->var()->check('module_id', $module_id);
+        $this->var()->check('itemtype', $itemtype, 'int:1:', 0);
 
-        if (!$this->var()->check('itemid', $itemid)) {
-            return;
-        }
-        if (!$this->var()->check('direction', $direction)) {
-            return;
-        }
+        $this->var()->check('itemid', $itemid);
+        $this->var()->check('direction', $direction);
 
         if (empty($direction)) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';

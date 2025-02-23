@@ -8,6 +8,7 @@ use Xaraya\Bridge\Middleware\RoutingHandler;
 use Xaraya\Context\SessionContext;
 use Xaraya\Requests\RequestHandler;
 
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 final class BridgeCombinedTest extends TestCase
 {
     protected static Psr17Factory $psr17Factory;

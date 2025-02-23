@@ -52,63 +52,27 @@ class QueryMethod extends MethodClass
 
         extract($args);
 
-        if (!$this->var()->find('query', $query, 'str', '')) {
-            return;
-        }
-        if (!$this->var()->find('oldquery', $oldquery, 'str', '')) {
-            return;
-        }
-        if (!$this->var()->find('newquery', $newquery, 'str', '')) {
-            return;
-        }
-        if (!$this->var()->find('table', $table, 'str', '')) {
-            return;
-        }
-        if (!$this->var()->find('oldtable', $oldtable, 'str', '')) {
-            return;
-        }
-        if (!$this->var()->find('itemid', $itemid, 'int', 0)) {
-            return;
-        }
-        if (!$this->var()->find('olditemid', $olditemid, 'int', 0)) {
-            return;
-        }
-        if (!$this->var()->find('join', $join, 'str', '')) {
-            return;
-        }
-        if (!$this->var()->find('oldjoin', $oldjoin, 'str', '')) {
-            return;
-        }
+        $this->var()->check('query', $query, 'str', '');
+        $this->var()->check('oldquery', $oldquery, 'str', '');
+        $this->var()->check('newquery', $newquery, 'str', '');
+        $this->var()->check('table', $table, 'str', '');
+        $this->var()->check('oldtable', $oldtable, 'str', '');
+        $this->var()->check('itemid', $itemid, 'int', 0);
+        $this->var()->check('olditemid', $olditemid, 'int', 0);
+        $this->var()->check('join', $join, 'str', '');
+        $this->var()->check('oldjoin', $oldjoin, 'str', '');
 
-        if (!$this->var()->check('field', $field)) {
-            return;
-        }
-        if (!$this->var()->check('where', $where)) {
-            return;
-        }
-        if (!$this->var()->check('value', $value)) {
-            return;
-        }
-        if (!$this->var()->check('sort', $sort)) {
-            return;
-        }
-        if (!$this->var()->check('numitems', $numitems)) {
-            return;
-        }
-        if (!$this->var()->check('startnum', $startnum)) {
-            return;
-        }
+        $this->var()->check('field', $field);
+        $this->var()->check('where', $where);
+        $this->var()->check('value', $value);
+        $this->var()->check('sort', $sort);
+        $this->var()->check('numitems', $numitems);
+        $this->var()->check('startnum', $startnum);
 
-        if (!$this->var()->check('groupby', $groupby)) {
-            return;
-        }
-        if (!$this->var()->check('operation', $operation)) {
-            return;
-        }
+        $this->var()->check('groupby', $groupby);
+        $this->var()->check('operation', $operation);
 
-        if (!$this->var()->check('cache', $cache, 'int', 0)) {
-            return;
-        }
+        $this->var()->check('cache', $cache, 'int', 0);
 
         $reset = false;
         // changed selected object

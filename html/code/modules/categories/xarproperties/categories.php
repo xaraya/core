@@ -86,13 +86,13 @@ class CategoriesProperty extends DataProperty
         $this->fieldname = $name;
 
         // Pull in local module and itemtype from the form and store for reuse
-        if (!$this->var()->find($name . '[itemtype]', $itemtype, 'int', 0)) return;
-        if (!$this->var()->find($name . '[module_id]', $module_id, 'int', 182)) return;
+        $this->var()->find($name . '[itemtype]', $itemtype, 'int', 0);
+        $this->var()->find($name . '[module_id]', $module_id, 'int', 182);
         $this->module_id = $module_id;
         $this->itemtype = $itemtype;
        
         // Get the base categories from the form
-        if (!$this->var()->find($name . '[base_category]', $basecats, 'array', [])) return;
+        $this->var()->find($name . '[base_category]', $basecats, 'array', []);
         $this->basecategories = $basecats;
         // Get the categories from the form
         // Select type of each tree can be different
@@ -101,10 +101,10 @@ class CategoriesProperty extends DataProperty
             $select_type = 3;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
-            if (!$this->var()->find($name . '[categories]', $categories, 'array', [])) return;
+            $this->var()->find($name . '[categories]', $categories, 'array', []);
         }
         */
-        if (!$this->var()->find($name . '[categories]', $categories, 'array', [])) return;
+        $this->var()->find($name . '[categories]', $categories, 'array', []);
         return $this->validateValue($categories);
     }
 

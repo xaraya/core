@@ -50,24 +50,12 @@ class MetaMethod extends MethodClass
 
         extract($args);
 
-        if (!$this->var()->find('export', $export, 'notempty', '')) {
-            return;
-        }
-        if (!$this->var()->find('table', $table, 'notempty', '')) {
-            return;
-        }
-        if (!$this->var()->find('showdb', $showdb, 'notempty', 0)) {
-            return;
-        }
-        if (!$this->var()->find('dbtype', $dbtype, 'notempty', $this->db()->getType())) {
-            return;
-        }
-        if (!$this->var()->find('db', $db, 'notempty', $this->db()->getName())) {
-            return;
-        }
-        if (!$this->var()->find('create', $create, 'notempty', '')) {
-            return;
-        }
+        $this->var()->check('export', $export, 'notempty', '');
+        $this->var()->check('table', $table, 'notempty', '');
+        $this->var()->check('showdb', $showdb, 'notempty', 0);
+        $this->var()->check('dbtype', $dbtype, 'notempty', $this->db()->getType());
+        $this->var()->check('db', $db, 'notempty', $this->db()->getName());
+        $this->var()->check('create', $create, 'notempty', '');
 
         $data = [];
 

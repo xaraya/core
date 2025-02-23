@@ -47,6 +47,7 @@ class SearchMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security Check
@@ -56,18 +57,10 @@ class SearchMethod extends MethodClass
 
         $data = [];
 
-        if (!$this->var()->check('q', $q)) {
-            return;
-        }
-        if (!$this->var()->check('dd_check', $dd_check)) {
-            return;
-        }
-        if (!$this->var()->find('startnum', $startnum, 'int:0')) {
-            return;
-        }
-        if (!$this->var()->find('numitems', $numitems, 'int:0')) {
-            return;
-        }
+        $this->var()->check('q', $q);
+        $this->var()->check('dd_check', $dd_check);
+        $this->var()->check('startnum', $startnum, 'int:0');
+        $this->var()->check('numitems', $numitems, 'int:0');
         if (empty($dd_check)) {
             $dd_check = [];
         }
@@ -79,12 +72,8 @@ class SearchMethod extends MethodClass
             $data['ishooked'] = 0;
             $data['q'] = isset($q) ? $this->var()->prep($q) : null;
 
-            if (!$this->var()->check('module_id', $module_id, 'int')) {
-                return;
-            }
-            if (!$this->var()->check('itemtype', $itemtype, 'int')) {
-                return;
-            }
+            $this->var()->check('module_id', $module_id, 'int');
+            $this->var()->check('itemtype', $itemtype, 'int');
             if (empty($module_id) && empty($itemtype)) {
                 $data['gotobject'] = 0;
             } else {

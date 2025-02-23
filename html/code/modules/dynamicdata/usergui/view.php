@@ -43,50 +43,25 @@ class ViewMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Old-style arguments
-        if (!$this->var()->check('objectid', $objectid, 'int')) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $module_id, 'int')) {
-            return;
-        }
-        if (!$this->var()->check('moduleid', $moduleid, 'int')) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype, 'int')) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid, 'int');
+        $this->var()->check('module_id', $module_id, 'int');
+        $this->var()->check('moduleid', $moduleid, 'int');
+        $this->var()->check('itemtype', $itemtype, 'int');
         // New-style arguments
-        if (!$this->var()->check('itemid', $itemid, 'int')) {
-            return;
-        }
-        if (!$this->var()->check('name', $name)) {
-            return;
-        }
+        $this->var()->check('itemid', $itemid, 'int');
+        $this->var()->check('name', $name);
 
-        if (!$this->var()->check('startnum', $startnum, 'int')) {
-            return;
-        }
-        if (!$this->var()->check('numitems', $numitems, 'int')) {
-            return;
-        }
-        if (!$this->var()->check('sort', $sort)) {
-            return;
-        }
-        if (!$this->var()->check('catid', $catid)) {
-            return;
-        }
-        if (!$this->var()->find('layout', $layout, 'str:1', 'default')) {
-            return;
-        }
-        if (!$this->var()->find('tplmodule', $tplmodule, 'isset', 'dynamicdata')) {
-            return;
-        }
-        if (!$this->var()->check('template', $template)) {
-            return;
-        }
+        $this->var()->check('startnum', $startnum, 'int');
+        $this->var()->check('numitems', $numitems, 'int');
+        $this->var()->check('sort', $sort);
+        $this->var()->check('catid', $catid);
+        $this->var()->check('layout', $layout, 'str:1', 'default');
+        $this->var()->check('tplmodule', $tplmodule, 'isset', 'dynamicdata');
+        $this->var()->check('template', $template);
 
         // Override if needed from argument array
         extract($args);

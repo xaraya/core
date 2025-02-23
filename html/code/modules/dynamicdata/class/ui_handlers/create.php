@@ -41,18 +41,10 @@ class CreateHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        if (!$this->var()->check('preview', $args['preview'])) {
-            return;
-        }
-        if (!$this->var()->check('confirm', $args['confirm'])) {
-            return;
-        }
-        if (!$this->var()->check('values', $args['values'])) {
-            return;
-        }
-        if (!$this->var()->check('return_url', $args['return_url'])) {
-            return;
-        }
+        $this->var()->check('preview', $args['preview']);
+        $this->var()->check('confirm', $args['confirm']);
+        $this->var()->check('values', $args['values']);
+        $this->var()->check('return_url', $args['return_url']);
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);

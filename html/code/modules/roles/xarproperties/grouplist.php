@@ -62,7 +62,7 @@ class GroupListProperty extends SelectProperty
         $this->fieldname = $name;
         
         // Get the previous group from the form
-        if (!$this->var()->find('previous_value_' . $name, $previous_value, 'int', 0)) return;
+        $this->var()->find('previous_value_' . $name, $previous_value, 'int', 0);
         $this->previous_groupid = $previous_value;
 
         return parent::checkInput();

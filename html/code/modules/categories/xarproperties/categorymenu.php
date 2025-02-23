@@ -33,7 +33,7 @@ class CategoryMenuProperty extends CategoryTreeProperty
 	 */
     public function showInput(array $data = [])
     {
-        if(!$this->var()->find('activetab', $data['activetab'], 'isset', 0)) {return;}
+        $this->var()->find('activetab', $data['activetab'], 'isset', 0);
 
         if (!isset($data['parent'])) $data['parent'] = 0;
         if (!isset($data['levels'])) $data['levels'] = 1;

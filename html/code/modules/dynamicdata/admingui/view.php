@@ -50,33 +50,15 @@ class ViewMethod extends MethodClass
             return;
         }
 
-        if (!$this->var()->check('itemid', $itemid, 'int', 1)) {
-            return;
-        }
-        if (!$this->var()->check('name', $name)) {
-            return;
-        }
-        if (!$this->var()->check('startnum', $startnum, 'int')) {
-            return;
-        }
-        if (!$this->var()->check('numitems', $numitems, 'int')) {
-            return;
-        }
-        if (!$this->var()->check('sort', $sort)) {
-            return;
-        }
-        if (!$this->var()->check('catid', $catid)) {
-            return;
-        }
-        if (!$this->var()->find('layout', $layout, 'str:1', 'default')) {
-            return;
-        }
-        if (!$this->var()->find('tplmodule', $tplmodule, 'isset', 'dynamicdata')) {
-            return;
-        }
-        if (!$this->var()->check('template', $template)) {
-            return;
-        }
+        $this->var()->check('itemid', $itemid, 'int', 1);
+        $this->var()->check('name', $name);
+        $this->var()->check('startnum', $startnum, 'int');
+        $this->var()->check('numitems', $numitems, 'int');
+        $this->var()->check('sort', $sort);
+        $this->var()->check('catid', $catid);
+        $this->var()->check('layout', $layout, 'str:1', 'default');
+        $this->var()->check('tplmodule', $tplmodule, 'isset', 'dynamicdata');
+        $this->var()->check('template', $template);
 
         // Override if needed from argument array
         extract($args);

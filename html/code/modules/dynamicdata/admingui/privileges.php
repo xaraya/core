@@ -48,42 +48,18 @@ class PrivilegesMethod extends MethodClass
 
         extract($args);
 
-        if (!$this->var()->find('objectid', $objectid, 'id')) {
-            return;
-        }
-        if (!$this->var()->find('moduleid', $moduleid, 'str', 0)) {
-            return;
-        } // empty, 'All', numeric or modulename
-        if (!$this->var()->find('itemtype', $itemtype, 'str', 0)) {
-            return;
-        } // empty, 'All', numeric
-        if (!$this->var()->find('itemid', $itemid, 'str', 0)) {
-            return;
-        } // empty, 'All', numeric
-        if (!$this->var()->find('apply', $apply, 'str', false)) {
-            return;
-        } // boolean?
-        if (!$this->var()->find('extpid', $extpid, 'str', '')) {
-            return;
-        } // empty, 'All', numeric ?
-        if (!$this->var()->find('extname', $extname, 'str', '')) {
-            return;
-        } // ?
-        if (!$this->var()->find('extrealm', $extrealm, 'str', '')) {
-            return;
-        } // ?
-        if (!$this->var()->find('extmodule', $extmodule, 'str', '')) {
-            return;
-        } // ?
-        if (!$this->var()->get('extcomponent', $extcomponent, 'enum:All:Item:Field:Type')) {
-            return;
-        } // FIXME: is 'Type' needed?
-        if (!$this->var()->find('extinstance', $extinstance, 'str:1', '')) {
-            return;
-        } // somthing:somthing:somthing or empty
-        if (!$this->var()->get('extlevel', $extlevel, 'str:1')) {
-            return;
-        }
+        $this->var()->find('objectid', $objectid, 'id');
+        $this->var()->find('moduleid', $moduleid, 'str', 0); // empty, 'All', numeric or modulename
+        $this->var()->find('itemtype', $itemtype, 'str', 0); // empty, 'All', numeric
+        $this->var()->find('itemid', $itemid, 'str', 0); // empty, 'All', numeric
+        $this->var()->find('apply', $apply, 'str', false); // boolean?
+        $this->var()->find('extpid', $extpid, 'str', ''); // empty, 'All', numeric ?
+        $this->var()->find('extname', $extname, 'str', ''); // ?
+        $this->var()->find('extrealm', $extrealm, 'str', ''); // ?
+        $this->var()->find('extmodule', $extmodule, 'str', ''); // ?
+        $this->var()->get('extcomponent', $extcomponent, 'enum:All:Item:Field:Type'); // FIXME: is 'Type' needed?
+        $this->var()->find('extinstance', $extinstance, 'str:1', ''); // somthing:somthing:somthing or empty
+        $this->var()->get('extlevel', $extlevel, 'str:1');
 
         // TODO: combine 'Item' and 'Type' instances someday ?
 

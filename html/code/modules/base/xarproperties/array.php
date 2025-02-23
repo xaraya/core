@@ -99,7 +99,7 @@ class ArrayProperty extends DataProperty
             if (!is_array($displayconfig)) $displayconfig = unserialize((string) $displayconfig);
             
             $columncount = isset($displayconfig) ? count($displayconfig) : 0;
-            if (!$this->var()->find($name, $elements,    'array', [])) return false;
+            $this->var()->find($name, $elements, 'array', []);
             // Get the number of rows we are saving
             $rows = count($elements);
 

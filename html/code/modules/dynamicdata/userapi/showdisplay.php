@@ -83,7 +83,7 @@ class ShowdisplayMethod extends MethodClass
             $object->getItem();
         }
         // if we are in preview mode, we need to check for any preview values
-        //if (!$this->var()->check('preview', $preview, 'isset',  NULL)) {return;}
+        //$this->var()->check('preview', $preview);
         if (!empty($preview)) {
             $object->checkInput();
         }

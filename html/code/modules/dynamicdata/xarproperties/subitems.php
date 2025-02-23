@@ -91,12 +91,8 @@ class SubItemsProperty extends DataProperty
         $newprefix = empty($oldprefix) ? $this->fieldprefix : $oldprefix . "_" . $this->fieldprefix;
         $this->prefixarray[] = $newprefix;
         // Get the list of item ids, both current and previous
-        if(!$this->var()->check('subitem_ids_' . $newprefix, $itemids, 'str', '')) {
-            return;
-        }
-        if(!$this->var()->check('subitem_previous_ids_' . $newprefix, $previous_itemids, 'str', '')) {
-            return;
-        }
+        $this->var()->check('subitem_ids_' . $newprefix, $itemids, 'str', '');
+        $this->var()->check('subitem_previous_ids_' . $newprefix, $previous_itemids, 'str', '');
         $itemids = ('' == $itemids) ? [] : explode(',', $itemids);
         $previous_itemids = ('' == $previous_itemids) ? [] : explode(',', $previous_itemids);
 

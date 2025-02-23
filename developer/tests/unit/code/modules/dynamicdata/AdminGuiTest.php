@@ -3,6 +3,7 @@
 use Xaraya\Modules\TestHelper;
 use Xaraya\Modules\DynamicData\AdminGui;
 
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 final class AdminGuiTest extends TestHelper
 {
     public function testAdminGui(): void

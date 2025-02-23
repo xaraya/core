@@ -47,18 +47,10 @@ class ImportpropsMethod extends MethodClass
             return;
         }
 
-        if (!$this->var()->check('objectid', $objectid)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $module_id)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid);
+        $this->var()->check('module_id', $module_id);
+        $this->var()->check('itemtype', $itemtype);
+        $this->var()->check('table', $table);
 
         if (empty($module_id)) {
             throw new EmptyParameterException('module_id');

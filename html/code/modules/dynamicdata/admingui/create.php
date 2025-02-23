@@ -64,30 +64,14 @@ class CreateMethod extends MethodClass
         // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
         //        or relies on $myobject or other stuff like that...
 
-        if (!$this->var()->check('objectid', $objectid)) {
-            return;
-        }
-        if (!$this->var()->find('itemid', $itemid, 'isset', 0)) {
-            return;
-        }
-        if (!$this->var()->find('preview', $preview, 'isset', 0)) {
-            return;
-        }
-        if (!$this->var()->check('return_url', $return_url)) {
-            return;
-        }
-        if (!$this->var()->check('join', $join)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
-        if (!$this->var()->check('template', $template)) {
-            return;
-        }
-        if (!$this->var()->find('tplmodule', $tplmodule, 'isset', 'dynamicdata')) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid);
+        $this->var()->check('itemid', $itemid, 'isset', 0);
+        $this->var()->check('preview', $preview, 'isset', 0);
+        $this->var()->check('return_url', $return_url);
+        $this->var()->check('join', $join);
+        $this->var()->check('table', $table);
+        $this->var()->check('template', $template);
+        $this->var()->check('tplmodule', $tplmodule, 'isset', 'dynamicdata');
 
         if (!$this->sec()->confirmAuthKey()) {
             return $this->ctl()->badRequest('bad_author');

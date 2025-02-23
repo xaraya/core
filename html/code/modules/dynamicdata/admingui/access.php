@@ -52,28 +52,16 @@ class AccessMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
 
-        if (!$this->var()->check('itemid', $itemid)) {
-            return;
-        }
+        $this->var()->check('itemid', $itemid);
         if (empty($itemid)) {
             $msg = $this->ml('Data object not found');
             return $this->ctl()->notFound($msg);
         }
-        if (!$this->var()->check('name', $name, 'isset', 'objects')) {
-            return;
-        }
-        if (!$this->var()->check('tplmodule', $tplmodule)) {
-            return;
-        }
-        if (!$this->var()->check('template', $template)) {
-            return;
-        }
-        if (!$this->var()->check('preview', $preview)) {
-            return;
-        }
-        if (!$this->var()->check('confirm', $confirm)) {
-            return;
-        }
+        $this->var()->check('name', $name, 'isset', 'objects');
+        $this->var()->check('tplmodule', $tplmodule);
+        $this->var()->check('template', $template);
+        $this->var()->check('preview', $preview);
+        $this->var()->check('confirm', $confirm);
 
         $data = $adminapi->menu();
 
@@ -150,16 +138,12 @@ class AccessMethod extends MethodClass
                         $objectaccess['access'][$level] = $accessproperty->value;
                     }
             */
-            if (!$this->var()->check('do_access', $do_access)) {
-                return;
-            }
+            $this->var()->check('do_access', $do_access);
 
             // define the new access list for each level
             $accesslist = [];
             if (!empty($do_access)) {
-                if (!$this->var()->check('access', $access, 'isset', [])) {
-                    return;
-                }
+                $this->var()->check('access', $access, 'isset', []);
 
                 foreach ($data['levels'] as $level => $info) {
                     if (empty($access[$level])) {
@@ -185,9 +169,7 @@ class AccessMethod extends MethodClass
 
             // define the new filter list
             $filterlist = [];
-            if (!$this->var()->check('filters', $filters, 'isset', [])) {
-                return;
-            }
+            $this->var()->check('filters', $filters, 'isset', []);
             foreach ($filters as $filterid => $filterinfo) {
                 if (empty($filterinfo['group']) || empty($filterinfo['prop']) || empty($filterinfo['match'])) {
                     continue;
@@ -209,9 +191,7 @@ class AccessMethod extends MethodClass
             $accessstring = serialize($objectaccess);
             $itemid = $object->updateItem(['access' => $accessstring]);
 
-            if (!$this->var()->check('return_url', $return_url)) {
-                return;
-            }
+            $this->var()->check('return_url', $return_url);
             if (!empty($return_url)) {
                 $this->ctl()->redirect($return_url);
             } else {

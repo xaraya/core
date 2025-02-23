@@ -40,12 +40,8 @@ class DeleteStaticTableMethod extends MethodClass
         }
 
         $data = ['table' => '', 'confirm' => false];
-        if (!$this->var()->find('table', $data['table'], 'str:1', '')) {
-            return;
-        }
-        if (!$this->var()->find('confirm', $data['confirm'], 'bool', false)) {
-            return;
-        }
+        $this->var()->find('table', $data['table'], 'str:1', '');
+        $this->var()->find('confirm', $data['confirm'], 'bool', false);
 
         $data['object'] = $this->data()->getObject(['name' => 'dynamicdata_tablefields']);
 

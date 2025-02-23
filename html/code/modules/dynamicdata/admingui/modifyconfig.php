@@ -49,12 +49,8 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = ['tab' => 'general'];
-        if (!$this->var()->find('phase', $phase, 'str:1:100', 'modify')) {
-            return;
-        }
-        if (!$this->var()->find('tab', $data['tab'], 'str:1', 'general')) {
-            return;
-        }
+        $this->var()->find('phase', $phase, 'str:1:100', 'modify');
+        $this->var()->find('tab', $data['tab'], 'str:1', 'general');
 
         $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'dynamicdata']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, use_module_icons');
@@ -70,22 +66,12 @@ class ModifyconfigMethod extends MethodClass
                 if (!$this->sec()->confirmAuthKey()) {
                     return $this->ctl()->badRequest('bad_author');
                 }
-                if (!$this->var()->find('debugmode', $debugmode, 'checkbox', $this->mod()->getVar('debugmode'))) {
-                    return;
-                }
-                if (!$this->var()->find('show_queries', $show_queries, 'checkbox', $this->config()->getVar('Site.BL.ShowQueries'))) {
-                    return;
-                }
-                if (!$this->var()->find('suppress_updates', $suppress_updates, 'checkbox', false)) {
-                    return;
-                }
-                // if (!$this->var()->find('administrators', $administrators, 'str', '')) return;
-                if (!$this->var()->find('caching', $caching, 'checkbox', $this->mod()->getVar('caching'))) {
-                    return;
-                }
-                if (!$this->var()->find('twig_support', $twig_support, 'checkbox', false)) {
-                    return;
-                }
+                $this->var()->find('debugmode', $debugmode, 'checkbox', $this->mod()->getVar('debugmode'));
+                $this->var()->find('show_queries', $show_queries, 'checkbox', $this->config()->getVar('Site.BL.ShowQueries'));
+                $this->var()->find('suppress_updates', $suppress_updates, 'checkbox', false);
+                // $this->var()->find('administrators', $administrators, 'str', '');
+                $this->var()->find('caching', $caching, 'checkbox', $this->mod()->getVar('caching'));
+                $this->var()->find('twig_support', $twig_support, 'checkbox', false);
 
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {

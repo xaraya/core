@@ -237,13 +237,10 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
      */
     public function handle(array $args = [], ?Context $context = null)
     {
+        // set the context before checking any variables
         $this->setContext($context);
-        if (!$this->var()->check('method', $args['method'])) {
-            return;
-        }
-        if (!$this->var()->check('itemid', $args['itemid'])) {
-            return;
-        }
+        $this->var()->check('method', $args['method']);
+        $this->var()->check('itemid', $args['itemid']);
 
         // default method is 'view' without itemid, or 'display' with an itemid
         if (empty($args['method'])) {

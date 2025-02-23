@@ -56,7 +56,7 @@ class CheckboxProperty extends DataProperty
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            if (!$this->var()->check($name, $value, 'isset',  NULL)) {return false;}
+            $this->var()->check($name, $value);
         }
         return $this->validateValue($value);
     }

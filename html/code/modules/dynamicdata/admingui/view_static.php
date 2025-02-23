@@ -46,24 +46,12 @@ class ViewStaticMethod extends MethodClass
             return;
         }
 
-        if (!$this->var()->check('module', $module)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $module_id)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table, 'isset', '')) {
-            return;
-        }
-        if (!$this->var()->check('newtable', $newtable, 'isset', '')) {
-            return;
-        }
-        if (!$this->var()->check('export', $export, 'isset', 0)) {
-            return;
-        }
+        $this->var()->check('module', $module);
+        $this->var()->check('module_id', $module_id);
+        $this->var()->check('itemtype', $itemtype);
+        $this->var()->check('table', $table, 'isset', '');
+        $this->var()->check('newtable', $newtable, 'isset', '');
+        $this->var()->check('export', $export, 'isset', 0);
 
         extract($args);
 

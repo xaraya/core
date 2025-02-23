@@ -44,6 +44,7 @@ class MainMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         $redirect = $this->mod()->getVar('frontend_page');
         if (!empty($redirect)) {
             $truecurrenturl = $this->ctl()->getCurrentURL([], false);
@@ -67,10 +68,10 @@ class MainMethod extends MethodClass
         }
 
         // define the list of main objects
-        $this->var()->find('update', $update);
+        $this->var()->check('update', $update);
         if ((empty($startlist) || !empty($update)) &&
             $this->sec()->checkAccess('AdminDynamicData', 0)) {
-            $this->var()->find('starter', $starter, 'array', []);
+            $this->var()->check('starter', $starter, 'array', []);
             if (is_array($starter) && $this->sec()->confirmAuthKey()) {
                 $startlist = array_keys($starter);
                 $this->mod()->setVar('starter_object_list', serialize($startlist));

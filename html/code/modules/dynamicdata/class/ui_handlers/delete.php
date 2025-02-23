@@ -41,15 +41,9 @@ class DeleteHandler extends DefaultHandler
      */
     public function run(array $args = [])
     {
-        if (!$this->var()->check('cancel', $args['cancel'])) {
-            return;
-        }
-        if (!$this->var()->check('confirm', $args['confirm'])) {
-            return;
-        }
-        if (!$this->var()->check('return_url', $args['return_url'])) {
-            return;
-        }
+        $this->var()->check('cancel', $args['cancel']);
+        $this->var()->check('confirm', $args['confirm']);
+        $this->var()->check('return_url', $args['return_url']);
         if (!empty($args['cancel'])) {
             if (empty($args['return_url'])) {
                 $args['return_url'] = $this->getReturnURL();

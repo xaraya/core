@@ -54,27 +54,13 @@ class ImportMethod extends MethodClass
         }
 
         $data = ['prefix' => null];
-        if (!$this->var()->check('basedir', $basedir)) {
-            return;
-        }
-        if (!$this->var()->check('import', $import)) {
-            return;
-        }
-        if (!$this->var()->check('xml', $xml)) {
-            return;
-        }
-        if (!$this->var()->check('refresh', $refresh)) {
-            return;
-        }
-        if (!$this->var()->check('keepitemid', $keepitemid)) {
-            return;
-        }
-        if (!$this->var()->check('overwrite', $overwrite, 'checkbox', false)) {
-            return;
-        }
-        if (!$this->var()->check('prefix', $data['prefix'], 'isset', $this->db()->getPrefix())) {
-            return;
-        }
+        $this->var()->check('basedir', $basedir);
+        $this->var()->check('import', $import);
+        $this->var()->check('xml', $xml);
+        $this->var()->check('refresh', $refresh);
+        $this->var()->check('keepitemid', $keepitemid);
+        $this->var()->check('overwrite', $overwrite, 'checkbox', false);
+        $this->var()->check('prefix', $data['prefix'], 'isset', $this->db()->getPrefix());
 
         extract($args);
 

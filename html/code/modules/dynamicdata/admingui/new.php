@@ -46,39 +46,17 @@ class NewMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
 
-        if (!$this->var()->check('objectid', $objectid, 'id', 1)) {
-            return;
-        }
-        if (!$this->var()->check('name', $name)) {
-            return;
-        }
-        if (!$this->var()->check('module_id', $module_id, 'id', 182)) {
-            return;
-        }
-        if (!$this->var()->check('itemtype', $itemtype, 'id', 0)) {
-            return;
-        }
-        if (!$this->var()->check('itemid', $itemid, 'isset', 0)) {
-            return;
-        }
-        if (!$this->var()->check('preview', $preview)) {
-            return;
-        }
-        if (!$this->var()->check('join', $join)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
-        if (!$this->var()->check('template', $template)) {
-            return;
-        }
-        if (!$this->var()->check('notfresh', $notfresh)) {
-            return;
-        }
-        if (!$this->var()->check('tplmodule', $tplmodule, 'str')) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid, 'id', 1);
+        $this->var()->check('name', $name);
+        $this->var()->check('module_id', $module_id, 'id', 182);
+        $this->var()->check('itemtype', $itemtype, 'id', 0);
+        $this->var()->check('itemid', $itemid, 'isset', 0);
+        $this->var()->check('preview', $preview);
+        $this->var()->check('join', $join);
+        $this->var()->check('table', $table);
+        $this->var()->check('template', $template);
+        $this->var()->check('notfresh', $notfresh);
+        $this->var()->check('tplmodule', $tplmodule, 'str');
 
         $data = $adminapi->menu();
 

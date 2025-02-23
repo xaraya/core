@@ -51,27 +51,17 @@ class ShowpropvalMethod extends MethodClass
         extract($args);
 
         // get the property id
-        if (!$this->var()->find('itemid', $itemid, 'id')) {
-            return;
-        }
-        if (!$this->var()->check('exit', $exit)) {
-            return;
-        }
-        if (!$this->var()->check('confirm', $confirm)) {
-            return;
-        }
-        if (!$this->var()->check('preview', $preview)) {
-            return;
-        }
+        $this->var()->check('itemid', $itemid, 'id');
+        $this->var()->check('exit', $exit);
+        $this->var()->check('confirm', $confirm);
+        $this->var()->check('preview', $preview);
 
         if (empty($itemid)) {
             // get the property type for sample configuration
-            if (!$this->var()->find('proptype', $proptype)) {
-                return;
-            }
+            $this->var()->check('proptype', $proptype);
 
             // show sample configuration for some property type
-            return $this->config_propval($proptype);
+            return $this->config_propval($proptype, $preview, $confirm);
         }
 
         // get the object corresponding to this dynamic property
@@ -137,9 +127,7 @@ class ShowpropvalMethod extends MethodClass
         $data['propertytype'] = $this->prop()->getProperty(['type' => $data['type']]);
 
         if (!empty($preview) || !empty($confirm) || !empty($exit)) {
-            if (!$this->var()->find($data['name'], $configuration)) {
-                return;
-            }
+            $this->var()->find($data['name'], $configuration);
 
             // pass the current value as configuration rule
             $data['configuration'] = $configuration ?? '';
@@ -166,9 +154,7 @@ class ShowpropvalMethod extends MethodClass
                     }
                 }
                 if (!empty($exit)) {
-                    if (!$this->var()->check('return_url', $return_url)) {
-                        return;
-                    }
+                    $this->var()->check('return_url', $return_url);
                     if (empty($return_url)) {
                         // return to modifyprop
                         $return_url = $this->mod()->getURL(
@@ -220,7 +206,7 @@ class ShowpropvalMethod extends MethodClass
      * Show sample configuration for some property type
      * @return array<mixed>|void
      */
-    public function config_propval($proptype)
+    public function config_propval($proptype, $preview, $confirm)
     {
         $data = [];
         if (empty($proptype)) {
@@ -237,16 +223,8 @@ class ShowpropvalMethod extends MethodClass
             return $data;
         }
 
-        if (!$this->var()->check('preview', $preview)) {
-            return;
-        }
-        if (!$this->var()->check('confirm', $confirm)) {
-            return;
-        }
         if (!empty($preview) || !empty($confirm)) {
-            if (!$this->var()->find($data['name'], $configuration)) {
-                return;
-            }
+            $this->var()->find($data['name'], $configuration);
 
             // pass the current value as configuration rule
             $data['configuration'] = $configuration ?? '';

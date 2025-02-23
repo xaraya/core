@@ -134,7 +134,7 @@ class FileUploadProperty extends DataProperty
         // Store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            $this->var()->check($name, $value, 'isset',  NULL);
+            $this->var()->check($name, $value);
         }
         return $this->validateValue($value);
     }
@@ -343,7 +343,7 @@ class FileUploadProperty extends DataProperty
             $this->value = $value;
         } else {
             // No file name entered, get previous value
-            $this->var()->check($name. '_previous', $value, 'isset',  NULL);
+            $this->var()->check($name. '_previous', $value);
             $this->value = $value;
         }
         return true;

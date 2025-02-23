@@ -147,9 +147,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         $data = ['id' => []];  // = $args; // @checkme is that what we want here?
         // First get the itemids
-        if (!$this->var()->find($this->primary, $data['id'], 'array', [])) {
-            return;
-        }
+        $this->var()->find($this->primary, $data['id'], 'array', []);
         if (empty($data['id'])) {
             return true;
         }

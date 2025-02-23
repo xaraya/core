@@ -65,31 +65,15 @@ class UpdateMethod extends MethodClass
         $admingui = $this->admingui();
         $data ??= [];
 
-        if (!$this->var()->check('objectid', $objectid)) {
-            return;
-        }
-        if (!$this->var()->check('itemid', $itemid)) {
-            return;
-        }
-        if (!$this->var()->check('join', $join)) {
-            return;
-        }
-        if (!$this->var()->check('table', $table)) {
-            return;
-        }
-        if (!$this->var()->find('tplmodule', $tplmodule, 'isset', 'dynamicdata')) {
-            return;
-        }
-        if (!$this->var()->check('return_url', $return_url)) {
-            return;
-        }
-        if (!$this->var()->find('preview', $preview, 'isset', 0)) {
-            return;
-        }
+        $this->var()->check('objectid', $objectid);
+        $this->var()->check('itemid', $itemid);
+        $this->var()->check('join', $join);
+        $this->var()->check('table', $table);
+        $this->var()->check('tplmodule', $tplmodule, 'isset', 'dynamicdata');
+        $this->var()->check('return_url', $return_url);
+        $this->var()->check('preview', $preview, 'isset', 0);
 
-        if (!$this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1', 'edit')) {
-            return;
-        }
+        $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1', 'edit');
 
         // Security
         if (!$this->sec()->checkAccess('EditDynamicData')) {
@@ -199,9 +183,7 @@ class UpdateMethod extends MethodClass
 
                 $name = $myobject->properties['name']->getValue();
                 $myobject->properties['name']->setValue();
-                if (!$this->var()->find('newname', $newname, 'str', "")) {
-                    return;
-                }
+                $this->var()->find('newname', $newname, 'str', "");
                 if (empty($newname)) {
                     $newname = $name . "_copy";
                 }

@@ -3,6 +3,7 @@
 use Xaraya\Modules\TestHelper;
 use Xaraya\Modules\DynamicData\UserGui;
 
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 final class UserGuiTest extends TestHelper
 {
     public function testUserGui(): void
