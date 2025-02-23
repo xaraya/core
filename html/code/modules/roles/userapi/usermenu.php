@@ -183,7 +183,7 @@ class UsermenuMethod extends MethodClass
                 // you could just return directly from here...
                 /*
                 // be sure to check for a returnurl
-                if (!xarVar::fetch('returnurl', 'pre:trim:str:1', $returnurl, '', xarVar::NOT_REQUIRED)) return;
+                xarVar::fetch('returnurl', 'pre:trim:str:1', $returnurl, '', xarVar::NOT_REQUIRED);
                 // the default returnurl should be roles user account with a moduleload of current module
                 if (empty($returnurl))
                     $returnurl = xarController::URL('roles', 'user', 'account', array('moduleload' => 'roles'));

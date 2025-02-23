@@ -59,9 +59,7 @@ class UpdateMethod extends MethodClass
         xarVar::fetch('newdisplayname', 'str::', $newDisplayName);
 
         // update hooks...
-        if (!xarVar::fetch('observers', 'array', $observers, [], xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('observers', 'array', $observers, [], xarVar::NOT_REQUIRED);
 
         if (!$adminapi->update([
             'regid' => $regId,

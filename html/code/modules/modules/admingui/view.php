@@ -61,22 +61,14 @@ class ViewMethod extends MethodClass
         $data = [];
 
         // Get the place at which we want to start disolaying
-        if (!xarVar::fetch('startnum', 'int:1:', $data['startnum'], 1, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('startnum', 'int:1:', $data['startnum'], 1, xarVar::NOT_REQUIRED);
         // Check for a state filter
-        if (!xarVar::fetch('state', 'int', $data['state'], null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('state', 'int', $data['state'], null, xarVar::DONT_SET);
         // Check for a module type filter
         // 0=all, 1=core only, 2=non-core only
-        if (!xarVar::fetch('modtype', 'int:0:2', $data['modtype'], null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('modtype', 'int:0:2', $data['modtype'], null, xarVar::DONT_SET);
         // Check for a sort: we can sort by name ASC or DESC
-        if (!xarVar::fetch('sort', 'pre:trim:upper:enum:ASC:DESC', $data['sort'], 'ASC', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('sort', 'pre:trim:upper:enum:ASC:DESC', $data['sort'], 'ASC', xarVar::NOT_REQUIRED);
 
         // Save the filters of this user
         if (!isset($data['state'])) {

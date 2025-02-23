@@ -50,39 +50,17 @@ class NewMethod extends MethodClass
 
         $data = [];
 
-        if (!xarVar::fetch('id', 'isset', $data['id'], '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('pname', 'isset', $data['pname'], '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('pparentid', 'isset', $data['pparentid'], '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('prealm', 'isset', $data['prealm'], 'All', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('pmodule', 'isset', $data['pmodule'], 'All', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('pcomponent', 'isset', $data['pcomponent'], 'All', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('pinstance', 'isset', $data['pinstance'], '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('plevel', 'isset', $data['plevel'], '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('ptype', 'isset', $data['ptype'], '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('show', 'isset', $data['show'], 'assigned', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('trees', 'isset', $trees, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'isset', $data['id'], '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('pname', 'isset', $data['pname'], '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('pparentid', 'isset', $data['pparentid'], '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('prealm', 'isset', $data['prealm'], 'All', xarVar::NOT_REQUIRED);
+        xarVar::fetch('pmodule', 'isset', $data['pmodule'], 'All', xarVar::NOT_REQUIRED);
+        xarVar::fetch('pcomponent', 'isset', $data['pcomponent'], 'All', xarVar::NOT_REQUIRED);
+        xarVar::fetch('pinstance', 'isset', $data['pinstance'], '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('plevel', 'isset', $data['plevel'], '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('ptype', 'isset', $data['ptype'], '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('show', 'isset', $data['show'], 'assigned', xarVar::NOT_REQUIRED);
+        xarVar::fetch('trees', 'isset', $trees, null, xarVar::NOT_REQUIRED);
 
         // Clear Session Vars
         xarSession::delVar('privileges_statusmsg');

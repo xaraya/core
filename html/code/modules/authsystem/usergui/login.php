@@ -67,26 +67,18 @@ class LoginMethod extends MethodClass
 
         extract($args);
 
-        if (!xarVar::fetch('uname', 'str:0:64', $uname, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('uname', 'str:0:64', $uname, '', xarVar::NOT_REQUIRED);
         if (empty($uname)) {
             return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
         }
-        if (!xarVar::fetch('pass', 'str:0:254', $pass, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('pass', 'str:0:254', $pass, '', xarVar::NOT_REQUIRED);
         if (empty($pass)) {
             return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
         }
 
         $redirect = xarServer::getBaseURL();
-        if (!xarVar::fetch('rememberme', 'checkbox', $rememberme, false, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('redirecturl', 'str:1:254', $redirecturl, $redirect, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('rememberme', 'checkbox', $rememberme, false, xarVar::NOT_REQUIRED);
+        xarVar::fetch('redirecturl', 'str:1:254', $redirecturl, $redirect, xarVar::NOT_REQUIRED);
 
         // Defaults
         if (preg_match('/authsystem/', $redirecturl)) {

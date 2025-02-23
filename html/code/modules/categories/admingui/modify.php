@@ -44,20 +44,12 @@ class ModifyMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         $data = [];
-        if (!xarVar::fetch('return_url', 'isset', $data['return_url'], null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('itemtype', 'int', $itemtype, 2, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('return_url', 'isset', $data['return_url'], null, xarVar::DONT_SET);
+        xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('itemtype', 'int', $itemtype, 2, xarVar::NOT_REQUIRED);
 
         // Support old cids for now
-        if (!xarVar::fetch('cid', 'int::', $cid, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('cid', 'int::', $cid, null, xarVar::DONT_SET);
         $data['itemid'] = !empty($data['itemid']) ? $data['itemid'] : $cid;
 
         // Security check

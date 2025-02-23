@@ -56,21 +56,11 @@ class SendmailMethod extends MethodClass
         }
 
         // Get parameters from whatever input we need
-        if (!xarVar::fetch('id', 'int:0:', $id, 0)) {
-            return;
-        }
-        if (!xarVar::fetch('state', 'int:0:', $state, xarRoles::ROLES_STATE_CURRENT)) {
-            return;
-        }
-        if (!xarVar::fetch('message', 'str:1:', $message, '')) {
-            return;
-        }
-        if (!xarVar::fetch('subject', 'str:1', $subject, '')) {
-            return;
-        }
-        if (!xarVar::fetch('includesubgroups', 'int:0:', $includesubgroups, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'int:0:', $id, 0);
+        xarVar::fetch('state', 'int:0:', $state, xarRoles::ROLES_STATE_CURRENT);
+        xarVar::fetch('message', 'str:1:', $message, '');
+        xarVar::fetch('subject', 'str:1', $subject, '');
+        xarVar::fetch('includesubgroups', 'int:0:', $includesubgroups, 0, xarVar::NOT_REQUIRED);
 
         // Confirm authorisation code.
         if (!xarSec::confirmAuthKey()) {

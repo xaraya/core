@@ -60,12 +60,8 @@ class PurgeMethod extends MethodClass
 
         $data = [];
         // Get parameters from whatever input we need
-        if (!xarVar::fetch('operation', 'str', $data['operation'], 'recall', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('confirmation', 'str', $confirmation, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('operation', 'str', $data['operation'], 'recall', xarVar::NOT_REQUIRED);
+        xarVar::fetch('confirmation', 'str', $confirmation, 0, xarVar::NOT_REQUIRED);
 
         extract($args);
 
@@ -82,24 +78,12 @@ class PurgeMethod extends MethodClass
         }
 
         if ($data['operation'] == 'recall') {
-            if (!xarVar::fetch('recallstate', 'int:1:', $data['recallstate'], null, xarVar::DONT_SET)) {
-                return;
-            }
-            if (!xarVar::fetch('recallsubmit', 'str', $recallsubmit, null, xarVar::DONT_SET)) {
-                return;
-            }
-            if (!xarVar::fetch('recallsearch', 'str', $data['recallsearch'], null, xarVar::DONT_SET)) {
-                return;
-            }
-            if (!xarVar::fetch('startnum', 'int:1:', $startnum, 1, xarVar::NOT_REQUIRED)) {
-                return;
-            }
-            if (!xarVar::fetch('recallids', 'isset', $recallids, [], xarVar::NOT_REQUIRED)) {
-                return;
-            }
-            if (!xarVar::fetch('groupid', 'int:1', $data['groupid'], 0, xarVar::NOT_REQUIRED)) {
-                return;
-            }
+            xarVar::fetch('recallstate', 'int:1:', $data['recallstate'], null, xarVar::DONT_SET);
+            xarVar::fetch('recallsubmit', 'str', $recallsubmit, null, xarVar::DONT_SET);
+            xarVar::fetch('recallsearch', 'str', $data['recallsearch'], null, xarVar::DONT_SET);
+            xarVar::fetch('startnum', 'int:1:', $startnum, 1, xarVar::NOT_REQUIRED);
+            xarVar::fetch('recallids', 'isset', $recallids, [], xarVar::NOT_REQUIRED);
+            xarVar::fetch('groupid', 'int:1', $data['groupid'], 0, xarVar::NOT_REQUIRED);
 
             if ($confirmation == xarML("Recall")) {
                 // --- recall users and groups
@@ -210,21 +194,11 @@ class PurgeMethod extends MethodClass
         }
         //--------------------------------------------------------
         elseif ($data['operation'] == 'purge') {
-            if (!xarVar::fetch('purgestate', 'int', $data['purgestate'], -1, xarVar::DONT_SET)) {
-                return;
-            }
-            if (!xarVar::fetch('purgesearch', 'str', $data['purgesearch'], null, xarVar::DONT_SET)) {
-                return;
-            }
-            if (!xarVar::fetch('purgesubmit', 'str', $purgesubmit, null, xarVar::DONT_SET)) {
-                return;
-            }
-            if (!xarVar::fetch('startnum', 'int:1:', $startnum, 1, xarVar::NOT_REQUIRED)) {
-                return;
-            }
-            if (!xarVar::fetch('purgeids', 'isset', $purgeids, [], xarVar::NOT_REQUIRED)) {
-                return;
-            }
+            xarVar::fetch('purgestate', 'int', $data['purgestate'], -1, xarVar::DONT_SET);
+            xarVar::fetch('purgesearch', 'str', $data['purgesearch'], null, xarVar::DONT_SET);
+            xarVar::fetch('purgesubmit', 'str', $purgesubmit, null, xarVar::DONT_SET);
+            xarVar::fetch('startnum', 'int:1:', $startnum, 1, xarVar::NOT_REQUIRED);
+            xarVar::fetch('purgeids', 'isset', $purgeids, [], xarVar::NOT_REQUIRED);
 
             // Check for confirmation.
             if ($confirmation == xarML("Purge")) {

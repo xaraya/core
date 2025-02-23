@@ -47,9 +47,7 @@ class TemplateMethod extends MethodClass
         }
 
         extract($args);
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
         if (!isset($mailtype)) {
             xarVar::fetch('mailtype', 'str:1:100', $data['mailtype'], 'createhook', xarVar::NOT_REQUIRED);
         } else {
@@ -70,12 +68,8 @@ class TemplateMethod extends MethodClass
                 break;
 
             case 'update':
-                if (!xarVar::fetch('message', 'str:1:', $message)) {
-                    return;
-                }
-                if (!xarVar::fetch('subject', 'str:1:', $subject)) {
-                    return;
-                }
+                xarVar::fetch('message', 'str:1:', $message);
+                xarVar::fetch('subject', 'str:1:', $subject);
                 // Confirm authorisation code
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());

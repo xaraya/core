@@ -43,9 +43,7 @@ class ModifynoticeMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED);
         $hooks = [];
         switch (strtolower($phase)) {
             case 'modify':
@@ -66,21 +64,11 @@ class ModifynoticeMethod extends MethodClass
                 break;
 
             case 'update':
-                if (!xarVar::fetch('askwelcomeemail', 'checkbox', $askwelcomeemail, false, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('askdeactivationemail', 'checkbox', $askdeactivationemail, false, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('askvalidationemail', 'checkbox', $askvalidationemail, false, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('askpendingemail', 'checkbox', $askpendingemail, false, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('askpasswordemail', 'checkbox', $askpasswordemail, false, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
+                xarVar::fetch('askwelcomeemail', 'checkbox', $askwelcomeemail, false, xarVar::NOT_REQUIRED);
+                xarVar::fetch('askdeactivationemail', 'checkbox', $askdeactivationemail, false, xarVar::NOT_REQUIRED);
+                xarVar::fetch('askvalidationemail', 'checkbox', $askvalidationemail, false, xarVar::NOT_REQUIRED);
+                xarVar::fetch('askpendingemail', 'checkbox', $askpendingemail, false, xarVar::NOT_REQUIRED);
+                xarVar::fetch('askpasswordemail', 'checkbox', $askpasswordemail, false, xarVar::NOT_REQUIRED);
                 // Confirm authorisation code
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());

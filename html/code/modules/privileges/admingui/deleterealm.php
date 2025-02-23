@@ -38,12 +38,8 @@ class DeleterealmMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('confirmed', 'isset', $confirmed, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET);
+        xarVar::fetch('confirmed', 'isset', $confirmed, null, xarVar::DONT_SET);
 
         $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();

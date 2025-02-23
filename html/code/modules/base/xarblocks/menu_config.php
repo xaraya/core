@@ -59,7 +59,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
         // Handle any methods specific to this block
         // CHECKME: is this the right place for handling this
-        if (!xarVar::fetch('menumethod',  'str:1:255', $menumethod, '', xarVar::NOT_REQUIRED)) return;
+        xarVar::fetch('menumethod',  'str:1:255', $menumethod, '', xarVar::NOT_REQUIRED);
         switch ($menumethod) {
             case  'linkorder':
                 $links = array_merge($vars, $this->linkorderupdate());
@@ -73,33 +73,33 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         }
 
         // display options
-        if (!xarVar::fetch('showlogout',  'checkbox', $showlogout, false, xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('logoutlabel',  'str:1:255', $logoutlabel, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('logouttitle',  'str:1:255', $logouttitle, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('displayrss',  'checkbox', $displayrss, false, xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('rsslabel',  'str:1:255', $rsslabel, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('rsstitle',  'str:1:255', $rsstitle, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('displayprint','checkbox', $displayprint, false, xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('printlabel',  'str:1:255', $printlabel, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('printtitle',  'str:1:255', $printtitle, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('marker',      'str:0',    $marker, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('showback',    'checkbox', $showback, false, xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('backlabel',  'str:1:255', $backlabel, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('backtitle',  'str:1:255', $backtitle, '', xarVar::NOT_REQUIRED)) return;
+        xarVar::fetch('showlogout',  'checkbox', $showlogout, false, xarVar::NOT_REQUIRED);
+        xarVar::fetch('logoutlabel',  'str:1:255', $logoutlabel, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('logouttitle',  'str:1:255', $logouttitle, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('displayrss',  'checkbox', $displayrss, false, xarVar::NOT_REQUIRED);
+        xarVar::fetch('rsslabel',  'str:1:255', $rsslabel, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('rsstitle',  'str:1:255', $rsstitle, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('displayprint','checkbox', $displayprint, false, xarVar::NOT_REQUIRED);
+        xarVar::fetch('printlabel',  'str:1:255', $printlabel, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('printtitle',  'str:1:255', $printtitle, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('marker',      'str:0',    $marker, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('showback',    'checkbox', $showback, false, xarVar::NOT_REQUIRED);
+        xarVar::fetch('backlabel',  'str:1:255', $backlabel, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('backtitle',  'str:1:255', $backtitle, '', xarVar::NOT_REQUIRED);
         // userlinks
-        if (!xarVar::fetch('userlinks',   'array',    $userlinks, array(), xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('links_select', 'pre:trim:lower:enum:show:hide:delete', $links_select, 'none', xarVar::NOT_REQUIRED)) return;
+        xarVar::fetch('userlinks',   'array',    $userlinks, array(), xarVar::NOT_REQUIRED);
+        xarVar::fetch('links_select', 'pre:trim:lower:enum:show:hide:delete', $links_select, 'none', xarVar::NOT_REQUIRED);
 
         // add new link
-        if (!xarVar::fetch('links_new_url', 'str:1:254', $new_url, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('links_new_label', 'str:1:254', $new_label, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('links_new_title', 'str:1:254', $new_title, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('links_new_blank', 'checkbox', $new_blank, '', xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('links_new_position', 'int:0:3', $new_position, 0, xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch('links_new_relation', 'int:0:', $new_relation, 0, xarVar::NOT_REQUIRED)) return;
+        xarVar::fetch('links_new_url', 'str:1:254', $new_url, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('links_new_label', 'str:1:254', $new_label, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('links_new_title', 'str:1:254', $new_title, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('links_new_blank', 'checkbox', $new_blank, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('links_new_position', 'int:0:3', $new_position, 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('links_new_relation', 'int:0:', $new_relation, 0, xarVar::NOT_REQUIRED);
 
         // modulelist
-        if (!xarVar::fetch('modulelist',  'array',    $modulelist, array(), xarVar::NOT_REQUIRED)) return;
+        xarVar::fetch('modulelist',  'array',    $modulelist, array(), xarVar::NOT_REQUIRED);
 
         // handle user links
         // Build new link if we have any values for it
@@ -408,9 +408,9 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     public function linkorderupdate(Array $data=array())
     {
         $data = $this->getInfo();
-        if (!xarVar::fetch('linkid', 'int:0:', $linkid, null, xarVar::DONT_SET)) return;
-        if (!xarVar::fetch('sublinkid', 'int:0:', $sublinkid, null, xarVar::DONT_SET)) return;
-        if (!xarVar::fetch('direction', 'pre:trim:lower:enum:up:down', $direction, null, xarVar::DONT_SET)) return;
+        xarVar::fetch('linkid', 'int:0:', $linkid, null, xarVar::DONT_SET);
+        xarVar::fetch('sublinkid', 'int:0:', $sublinkid, null, xarVar::DONT_SET);
+        xarVar::fetch('direction', 'pre:trim:lower:enum:up:down', $direction, null, xarVar::DONT_SET);
 
         if (!isset($linkid)) throw new EmptyParameterException('linkid');
         if (!isset($direction)) throw new EmptyParameterException('direction');

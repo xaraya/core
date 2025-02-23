@@ -43,9 +43,7 @@ class Phase3Method extends MethodClass
             throw new Exception('Already installed');
         }
         xarVar::fetch('install_language', 'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
-        if (!xarVar::fetch('agree', 'regexp:(agree|disagree)', $agree)) {
-            return;
-        }
+        xarVar::fetch('agree', 'regexp:(agree|disagree)', $agree);
 
         $retry = 1;
 

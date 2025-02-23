@@ -55,12 +55,8 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
-        if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED);
 
         // get a list of everyone with admin privileges
         // TODO: find a more elegant way to do this
@@ -212,18 +208,10 @@ class ModifyconfigMethod extends MethodClass
                 }
                 switch ($data['tab']) {
                     case 'general':
-                        if (!xarVar::fetch('defaultauthmodule', 'int:1:', $defaultauthmodule, xarMod::getRegID('authsystem'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-                            return;
-                        }
-                        if (!xarVar::fetch('defaultregmodule', 'int:1:', $defaultregmodule, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-                            return;
-                        }
-                        if (!xarVar::fetch('siteadmin', 'int:1', $siteadmin, (int) xarModVars::get('roles', 'admin'), xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
-                        if (!xarVar::fetch('defaultgroup', 'str:1', $defaultgroup, 'Users', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-                            return;
-                        }
+                        xarVar::fetch('defaultauthmodule', 'int:1:', $defaultauthmodule, xarMod::getRegID('authsystem'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+                        xarVar::fetch('defaultregmodule', 'int:1:', $defaultregmodule, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+                        xarVar::fetch('siteadmin', 'int:1', $siteadmin, (int) xarModVars::get('roles', 'admin'), xarVar::NOT_REQUIRED);
+                        xarVar::fetch('defaultgroup', 'str:1', $defaultgroup, 'Users', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
 
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
@@ -270,9 +258,7 @@ class ModifyconfigMethod extends MethodClass
                         }
                         break;
                     case 'debugging':
-                        if (!xarVar::fetch('debugadmins', 'str', $candidates, '', xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
+                        xarVar::fetch('debugadmins', 'str', $candidates, '', xarVar::NOT_REQUIRED);
 
                         // Remove unwanted characters
                         $candidates = trim($candidates, " ,\n\r\t\v\0");

@@ -39,12 +39,8 @@ class DeleteprivilegeMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('confirmation', 'isset', $confirmation, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET);
+        xarVar::fetch('confirmation', 'isset', $confirmation, null, xarVar::DONT_SET);
 
         // Clear Session Vars
         xarSession::delVar('privileges_statusmsg');

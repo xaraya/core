@@ -50,9 +50,7 @@ class UpdatehooksMethod extends MethodClass
             //return xarController::badRequest('bad_author', $this->getContext());
         }
         // Curhook contains module name
-        if (!xarVar::fetch('curhook', 'str:1:', $curhook)) {
-            return;
-        }
+        xarVar::fetch('curhook', 'str:1:', $curhook);
 
         $regId = xarMod::getRegID($curhook);
         if (!isset($curhook) || !isset($regId)) {
@@ -60,9 +58,7 @@ class UpdatehooksMethod extends MethodClass
             throw new Exception($msg);
         }
 
-        if (!xarVar::fetch('subjects', 'array', $subjects, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('subjects', 'array', $subjects, null, xarVar::NOT_REQUIRED);
 
 
 
@@ -79,9 +75,7 @@ class UpdatehooksMethod extends MethodClass
             }
         }
 
-        if (!xarVar::fetch('return_url', 'isset', $return_url, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('return_url', 'isset', $return_url, '', xarVar::NOT_REQUIRED);
         if (!empty($return_url)) {
             xarController::redirect($return_url, null, $this->getContext());
         } else {

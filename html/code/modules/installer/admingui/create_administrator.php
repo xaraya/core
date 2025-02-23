@@ -76,9 +76,7 @@ class CreateAdministratorMethod extends MethodClass
 
         $data['properties'] = $data['admin']->getProperties();
 
-        if (!xarVar::fetch('create', 'isset', $create, false, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('create', 'isset', $create, false, xarVar::NOT_REQUIRED);
         // Not creating yet. Just (re)display the page
         if (!$create) {
             return $data;

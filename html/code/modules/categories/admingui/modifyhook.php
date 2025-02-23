@@ -193,9 +193,7 @@ class ModifyhookMethod extends MethodClass
         ------------------------------- */
 
         // check if we're previewing some modified item
-        if (!xarVar::fetch('preview', 'isset', $data['preview'], null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('preview', 'isset', $data['preview'], null, xarVar::DONT_SET);
 
         return $data;
     }

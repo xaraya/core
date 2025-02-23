@@ -64,24 +64,20 @@ class NewInstanceMethod extends MethodClass
 
         $data = [];
 
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'type_id',
             'int:1:',
             $data['type_id'],
             null,
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
-        if (!xarVar::fetch(
+        );
+        xarVar::fetch(
             'phase',
             'pre:trim:lower:str:1:',
             $phase,
             'options',
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
+        );
 
         /** @var AccessProperty $accessproperty */
         $accessproperty = DataPropertyMaster::getProperty(['name' => 'access']);
@@ -118,60 +114,48 @@ class NewInstanceMethod extends MethodClass
             }
             if (empty($invalid)) {
                 // set defaults (form phase, 1st run) / fetch input (update phase)
-                if (!xarVar::fetch(
+                xarVar::fetch(
                     'name',
                     'pre:trim:lower:str:1:64',
                     $data['name'],
                     '',
                     xarVar::NOT_REQUIRED
-                )) {
-                    return;
-                }
-                if (!xarVar::fetch(
+                );
+                xarVar::fetch(
                     'title',
                     'pre:trim:str:0:254',
                     $data['title'],
                     '',
                     xarVar::NOT_REQUIRED
-                )) {
-                    return;
-                }
-                if (!xarVar::fetch(
+                );
+                xarVar::fetch(
                     'state',
                     'int:0:3',
                     $data['state'],
                     null,
                     xarVar::NOT_REQUIRED
-                )) {
-                    return;
-                }
-                if (!xarVar::fetch(
+                );
+                xarVar::fetch(
                     'block_template',
                     'pre:trim:str:0:127',
                     $data['block_template'],
                     null,
                     xarVar::NOT_REQUIRED
-                )) {
-                    return;
-                }
-                if (!xarVar::fetch(
+                );
+                xarVar::fetch(
                     'box_template',
                     'pre:trim:str:0:127',
                     $data['box_template'],
                     null,
                     xarVar::NOT_REQUIRED
-                )) {
-                    return;
-                }
-                if (!xarVar::fetch(
+                );
+                xarVar::fetch(
                     'groups',
                     'array',
                     $data['groups'],
                     [],
                     xarVar::NOT_REQUIRED
-                )) {
-                    return;
-                }
+                );
                 // get the block type object
                 $block_type = $blocksapi->getblock($type);
                 $instance_states = $instancesapi->getstates();

@@ -65,8 +65,8 @@ class Phase5Method extends MethodClass
         sys::import('xaraya.database');
         $init_args = xarDatabase::getConfig();
 
-        //    if (!xarVar::fetch('install_create_database',     'checkbox',$createDB,false,xarVar::NOT_REQUIRED)) return;
-        //    if (!xarVar::fetch('confirmDB','bool',$confirmDB,false,xarVar::NOT_REQUIRED)) return;
+        //    xarVar::fetch('install_create_database',     'checkbox',$createDB,false,xarVar::NOT_REQUIRED);
+        //    xarVar::fetch('confirmDB','bool',$confirmDB,false,xarVar::NOT_REQUIRED);
 
         //---------------------------------------------------------------------------
         // Some sanity checks

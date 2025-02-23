@@ -48,12 +48,8 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
-        if (!xarVar::fetch('disableoverview', 'checkbox', $data['disableoverview'], (bool) xarModVars::get('modules', 'disableoverview'), xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        xarVar::fetch('disableoverview', 'checkbox', $data['disableoverview'], (bool) xarModVars::get('modules', 'disableoverview'), xarVar::NOT_REQUIRED);
 
         $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'modules']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');

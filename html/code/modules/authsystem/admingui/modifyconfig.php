@@ -47,24 +47,12 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
-        if (!xarVar::fetch('uselockout', 'checkbox', $data['uselockout'], xarModVars::get('authsystem', 'uselockout'), xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('lockouttime', 'int:1:', $data['lockouttime'], (int) xarModVars::get('authsystem', 'lockouttime'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
-        if (!xarVar::fetch('lockouttries', 'int:1:', $data['lockouttries'], (int) xarModVars::get('authsystem', 'lockouttries'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
-        if (!xarVar::fetch('forwarding_page', 'str', $data['forwarding_page'], xarModVars::get('authsystem', 'forwarding_page'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
-        if (!xarVar::fetch('ask_forward', 'checkbox', $data['ask_forward'], xarModVars::get('authsystem', 'ask_forward'), xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        xarVar::fetch('uselockout', 'checkbox', $data['uselockout'], xarModVars::get('authsystem', 'uselockout'), xarVar::NOT_REQUIRED);
+        xarVar::fetch('lockouttime', 'int:1:', $data['lockouttime'], (int) xarModVars::get('authsystem', 'lockouttime'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        xarVar::fetch('lockouttries', 'int:1:', $data['lockouttries'], (int) xarModVars::get('authsystem', 'lockouttries'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        xarVar::fetch('forwarding_page', 'str', $data['forwarding_page'], xarModVars::get('authsystem', 'forwarding_page'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        xarVar::fetch('ask_forward', 'checkbox', $data['ask_forward'], xarModVars::get('authsystem', 'ask_forward'), xarVar::NOT_REQUIRED);
 
         $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'authsystem']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, frontend_page');

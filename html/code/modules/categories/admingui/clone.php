@@ -39,23 +39,13 @@ class CloneMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $data = [];
-        if (!xarVar::fetch('return_url', 'isset', $data['return_url'], null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('confirm', 'str:1:', $confirm, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('newname', 'str:1:', $newname, "", xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('return_url', 'isset', $data['return_url'], null, xarVar::DONT_SET);
+        xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('confirm', 'str:1:', $confirm, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('newname', 'str:1:', $newname, "", xarVar::NOT_REQUIRED);
 
         // Support old cids for now
-        if (!xarVar::fetch('cid', 'int::', $cid, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('cid', 'int::', $cid, null, xarVar::DONT_SET);
         $data['itemid'] = !empty($data['itemid']) ? $data['itemid'] : $cid;
 
         // Security check
@@ -76,9 +66,7 @@ class CloneMethod extends MethodClass
             }
 
             $data['name'] = $data['object']->properties['name']->value;
-            if (!xarVar::fetch('newname', 'str', $newname, "", xarVar::NOT_REQUIRED)) {
-                return;
-            }
+            xarVar::fetch('newname', 'str', $newname, "", xarVar::NOT_REQUIRED);
             if (empty($newname)) {
                 $newname = $data['name'] . "_copy";
             }

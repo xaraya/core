@@ -41,12 +41,8 @@ class AddprivilegeMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // get parameters
-        if (!xarVar::fetch('privid', 'int:1:', $privid, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('roleid', 'int:1:', $roleid, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('privid', 'int:1:', $privid, 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('roleid', 'int:1:', $roleid, 0, xarVar::NOT_REQUIRED);
         if (empty($privid)) {
             return xarController::notFound(null, $this->getContext());
         }
@@ -91,9 +87,7 @@ class AddprivilegeMethod extends MethodClass
         $pargs['itemid']   = $roleid;
         xarModHooks::call('item', 'update', $roleid, $pargs);
 
-        if (!xarVar::fetch('return_url', 'isset', $return_url, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('return_url', 'isset', $return_url, '', xarVar::NOT_REQUIRED);
 
         if (empty($return_url)) {
             $return_url = xarController::URL(

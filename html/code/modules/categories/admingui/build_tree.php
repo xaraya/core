@@ -82,32 +82,16 @@ class BuildTreeMethod extends MethodClass
         $verbose = false;
 
         $data = [];
-        if (!xarVar::fetch('table', 'str', $data['table'], 'xar_categories', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('parent_id', 'str', $data['parent_id'], 'parent_id', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('left_id', 'str', $data['left_id'], 'left_id', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('right_id', 'str', $data['right_id'], 'right_id', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('name', 'str', $data['name'], 'name', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('root_name', 'str', $data['root_name'], 'Root', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('table', 'str', $data['table'], 'xar_categories', xarVar::NOT_REQUIRED);
+        xarVar::fetch('parent_id', 'str', $data['parent_id'], 'parent_id', xarVar::NOT_REQUIRED);
+        xarVar::fetch('left_id', 'str', $data['left_id'], 'left_id', xarVar::NOT_REQUIRED);
+        xarVar::fetch('right_id', 'str', $data['right_id'], 'right_id', xarVar::NOT_REQUIRED);
+        xarVar::fetch('name', 'str', $data['name'], 'name', xarVar::NOT_REQUIRED);
+        xarVar::fetch('root_name', 'str', $data['root_name'], 'Root', xarVar::NOT_REQUIRED);
 
         // Buttons
-        if (!xarVar::fetch('check', 'isset', $data['check'], null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('build', 'isset', $data['build'], null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('check', 'isset', $data['check'], null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('build', 'isset', $data['build'], null, xarVar::NOT_REQUIRED);
 
         $data['message_warning'] = [];
         $data['message_error'] = [];

@@ -49,13 +49,10 @@ class CreatepasswordMethod extends MethodClass
         }
 
         // Get parameters
-        if (!xarVar::fetch('state', 'isset', $state, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('groupid', 'int:0:', $groupid, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('id', 'isset', $id)) {
+        xarVar::fetch('state', 'isset', $state, null, xarVar::DONT_SET);
+        xarVar::fetch('groupid', 'int:0:', $groupid, 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('id', 'isset', $id);
+        if (empty($id)) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
             $vars = ['parameters', 'admin', 'createpassword', 'Roles'];
             throw new BadParameterException($vars, $msg);

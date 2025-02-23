@@ -38,9 +38,9 @@ interface VariablesInterface extends ServiceInterface
      * @param mixed $defaultValue the default value (default null)
      * @param integer $flags bitmask which modify the behaviour of function (default xarVar::GET_OR_POST)
      * @param integer $prep will prep the value with xarVar::prepForDisplay, xarVar::prepHTMLDisplay, or dbconn->qstr()
-     * @return mixed
+     * @return true
      */
-    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): mixed;
+    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): true;
 
     /**
      * Get required variable by name: set the value if there is one, and validate the variable or throw excception
@@ -50,9 +50,9 @@ interface VariablesInterface extends ServiceInterface
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (required here)
      * @param mixed $defaultValue the default value
-     * @return mixed
+     * @return true
      */
-    public function get($name, &$variable, $validation, $defaultValue = null): mixed;
+    public function get($name, &$variable, $validation, $defaultValue = null): true;
 
     /**
      * Check existing variable by name: use current value or get it by name if it is not already set, and validate the variable
@@ -61,9 +61,9 @@ interface VariablesInterface extends ServiceInterface
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
      * @param mixed $defaultValue the default value (default null)
-     * @return mixed
+     * @return true
      */
-    public function check($name, &$variable, $validation = 'isset', $defaultValue = null): mixed;
+    public function check($name, &$variable, $validation = 'isset', $defaultValue = null): true;
 
     /**
      * Find optional variable by name: set the value if there is one, and validate the variable
@@ -72,9 +72,9 @@ interface VariablesInterface extends ServiceInterface
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
      * @param mixed $defaultValue the default value (default null)
-     * @return mixed
+     * @return true
      */
-    public function find($name, &$variable, $validation = 'isset', $defaultValue = null): mixed;
+    public function find($name, &$variable, $validation = 'isset', $defaultValue = null): true;
 
     /**
      * Update required variable by name: set the value if there is one or reset it, and validate the variable or throw exception
@@ -83,9 +83,9 @@ interface VariablesInterface extends ServiceInterface
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
      * @param mixed $defaultValue the default value
-     * @return mixed
+     * @return true
      */
-    public function update($name, &$variable, $validation = 'isset', $defaultValue = null): mixed;
+    public function update($name, &$variable, $validation = 'isset', $defaultValue = null): true;
 
     /**
      * Validates a variable performing the $validation test type on $variable.
@@ -98,7 +98,7 @@ interface VariablesInterface extends ServiceInterface
      * @throws VariableValidationException
      * @return bool true if the $variable validates correctly, false otherwise
      */
-    public function validate($validation, &$variable, $suppress = false, $name = '');
+    public function validate($validation, &$variable, $suppress = false, $name = ''): bool;
 
     /**
      * Prepare text for display, and convert all html special characters
@@ -157,9 +157,9 @@ trait VariablesTrait
      * @param mixed $defaultValue the default value (default null)
      * @param integer $flags bitmask which modify the behaviour of function (default xarVar::GET_OR_POST)
      * @param integer $prep will prep the value with xarVar::prepForDisplay, xarVar::prepHTMLDisplay, or dbconn->qstr()
-     * @return mixed
+     * @return true
      */
-    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): mixed
+    public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): true
     {
         // Note: this should be restricted to gui methods
         return xarVar::fetch($name, $validation, $variable, $defaultValue, $flags, $prep);
@@ -179,9 +179,9 @@ trait VariablesTrait
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (required here)
      * @param mixed $defaultValue the default value (default null)
-     * @return mixed
+     * @return true
      */
-    public function get($name, &$variable, $validation, $defaultValue = null): mixed
+    public function get($name, &$variable, $validation, $defaultValue = null): true
     {
         // Note: this should be restricted to gui methods
         return xarVar::fetch($name, $validation, $variable, $defaultValue);
@@ -201,10 +201,15 @@ trait VariablesTrait
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
      * @param mixed $defaultValue the default value (default null)
-     * @return mixed
+     * @return true
      */
-    public function check($name, &$variable, $validation = 'isset', $defaultValue = null): mixed
+    public function check($name, &$variable, $validation = 'isset', $defaultValue = null): true
     {
+        if (!isset($variable)) {
+            // get value from context if any
+        }
+        // validate value
+        // if not validated, use default value
         // Note: this should be restricted to gui methods
         return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_SET, xarVar::PREP_FOR_NOTHING);
     }
@@ -223,9 +228,9 @@ trait VariablesTrait
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
      * @param mixed $defaultValue the default value (default null)
-     * @return mixed
+     * @return true
      */
-    public function find($name, &$variable, $validation = 'isset', $defaultValue = null): mixed
+    public function find($name, &$variable, $validation = 'isset', $defaultValue = null): true
     {
         // Note: this should be restricted to gui methods
         return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_NOTHING);
@@ -245,9 +250,9 @@ trait VariablesTrait
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param string $validation the validation to be performed (default 'isset')
      * @param mixed $defaultValue the default value (default null)
-     * @return mixed
+     * @return true
      */
-    public function update($name, &$variable, $validation = 'isset', $defaultValue = null): mixed
+    public function update($name, &$variable, $validation = 'isset', $defaultValue = null): true
     {
         // Note: this should be restricted to gui methods
         return xarVar::fetch($name, $validation, $variable, $defaultValue, xarVar::DONT_REUSE, xarVar::PREP_FOR_NOTHING);
@@ -264,7 +269,7 @@ trait VariablesTrait
      * @throws VariableValidationException
      * @return bool true if the $variable validates correctly, false otherwise
      */
-    public function validate($validation, &$variable, $suppress = false, $name = '')
+    public function validate($validation, &$variable, $suppress = false, $name = ''): bool
     {
         return xarVar::validate($validation, $variable, $suppress, $name);
     }

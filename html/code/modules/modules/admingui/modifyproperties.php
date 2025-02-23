@@ -48,9 +48,7 @@ class ModifypropertiesMethod extends MethodClass
         extract($args);
 
         // xarVar::fetch does validation if not explicitly set to be not required
-        if (!xarVar::fetch('id', 'int', $id, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'int', $id, 0, xarVar::NOT_REQUIRED);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }

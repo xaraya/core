@@ -49,12 +49,8 @@ class RemovebranchMethod extends MethodClass
         }
 
         // get input from any view of this page
-        if (!xarVar::fetch('childid', 'int', $childid, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('parentid', 'int', $parentid, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('childid', 'int', $childid, null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('parentid', 'int', $parentid, null, xarVar::NOT_REQUIRED);
         if (empty($childid)) {
             return xarController::notFound(null, $this->getContext());
         }

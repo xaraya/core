@@ -47,15 +47,9 @@ class AssignprivilegesMethod extends MethodClass
         }
 
         $data = [];
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
-        if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'all', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('tabmodule', 'str:1:100', $tabmodule, 'All Modules', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'all', xarVar::NOT_REQUIRED);
+        xarVar::fetch('tabmodule', 'str:1:100', $tabmodule, 'All Modules', xarVar::NOT_REQUIRED);
 
         $installed = xarMod::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_INSTALLED]]);
         foreach ($installed as $module) {
@@ -92,15 +86,9 @@ class AssignprivilegesMethod extends MethodClass
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());
                 }
-                if (!xarVar::fetch('role', 'int', $role_id, 0, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-                    return;
-                }
-                if (!xarVar::fetch('rolename', 'str', $rolename, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-                    return;
-                }
-                if (!xarVar::fetch('privilege', 'int', $privilege_id, 0, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
+                xarVar::fetch('role', 'int', $role_id, 0, xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+                xarVar::fetch('rolename', 'str', $rolename, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+                xarVar::fetch('privilege', 'int', $privilege_id, 0, xarVar::NOT_REQUIRED);
 
                 if (empty($role_id) && !empty($rolename)) {
                     $user = xarMod::apiFunc('roles', 'user', 'get', ['uname' => $rolename]);
@@ -138,9 +126,7 @@ class AssignprivilegesMethod extends MethodClass
                 return true;
 
             case 'remove':
-                if (!xarVar::fetch('assignment', 'str', $assignment, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-                    return;
-                }
+                xarVar::fetch('assignment', 'str', $assignment, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
                 $ids = explode(',', $assignment);
                 if ((count($ids) == 2) && !(empty($ids[0]) || empty($ids[1]))) {
                     $dbconn = xarDB::getConn();

@@ -140,18 +140,21 @@ function xarWebservicesMain()
         case  'trackback':
             if (xarMod::isAvailable('trackback')) {
                 $error = array();
-                if (!xarVar::fetch('url', 'str:1:', $url)) {
+                xarVar::fetch('url', 'str:1:', $url);
+                if (empty($url)) {
                     // Gots to return the proper error reply
                     $error['errordata'] = xarMLS::translate('No URL Supplied');
                 }
                 // These are the specifics ;-)
                 xarVar::fetch('title', 'str:1', $title, '', xarVar::NOT_REQUIRED);
                 xarVar::fetch('blog_name', 'str:1', $blogname, '', xarVar::NOT_REQUIRED);
-                if (!xarVar::fetch('excerpt', 'str:1:255', $excerpt, '', xarVar::NOT_REQUIRED)) {
+                xarVar::fetch('excerpt', 'str:1:255', $excerpt, '', xarVar::NOT_REQUIRED);
+                if (empty($excerpt)) {
                     // Gots to return the proper error reply
                     $error['errordata'] = xarMLS::translate('Excerpt longer that 255 characters');
                 }
-                if (!xarVar::fetch('id','str:1:',$id)){
+                xarVar::fetch('id','str:1:',$id);
+                if (empty($id)) {
                     // Gots to return the proper error reply
                     $error['errordata'] = xarMLS::translate('Bad TrackBack URL.');
                 }

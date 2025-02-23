@@ -82,7 +82,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
     {
 
         // remove block(s) from this block group
-        if (!xarVar::fetch('remove_block', 'array', $remove_block, NULL, xarVar::DONT_SET)) return;
+        xarVar::fetch('remove_block', 'array', $remove_block, NULL, xarVar::DONT_SET);
         if (!empty($remove_block)) {
             $removes = xarMod::apiFunc('blocks', 'instances', 'getitems',
                 array('block_id' => array_keys($remove_block)));
@@ -99,7 +99,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
         }
 
         // add a block to this block group
-        if (!xarVar::fetch('add_block', 'int:1:', $add_block, NULL, xarVar::DONT_SET)) return;
+        xarVar::fetch('add_block', 'int:1:', $add_block, NULL, xarVar::DONT_SET);
         if (!empty($add_block)) {
             $add = xarMod::apiFunc('blocks', 'instances', 'getitem', 
                 array('block_id' => $add_block));
@@ -120,8 +120,8 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
     {
         $data = $this->getInfo();
         // re-order block instances
-        if (!xarVar::fetch('move', 'int:1:', $move, NULL, xarVar::DONT_SET)) return;
-        if (!xarVar::fetch('direction', 'pre:trim:lower:enum:up:down', $direction, NULL, xarVar::DONT_SET)) return;
+        xarVar::fetch('move', 'int:1:', $move, NULL, xarVar::DONT_SET);
+        xarVar::fetch('direction', 'pre:trim:lower:enum:up:down', $direction, NULL, xarVar::DONT_SET);
         if (!empty($move) && !empty($direction)) 
             $this->orderInstance($move, $direction);
         

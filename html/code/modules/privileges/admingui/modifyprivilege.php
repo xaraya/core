@@ -47,37 +47,17 @@ class ModifyprivilegeMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('pname', 'isset', $name, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('prealm', 'isset', $realm, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('pmodule', 'isset', $pmodule, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('pcomponent', 'isset', $component, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('poldcomponent', 'isset', $oldcomponent, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('ptype', 'isset', $type, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('plevel', 'isset', $level, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('pinstance', 'array', $instance, [], xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET);
+        xarVar::fetch('pname', 'isset', $name, null, xarVar::DONT_SET);
+        xarVar::fetch('prealm', 'isset', $realm, null, xarVar::DONT_SET);
+        xarVar::fetch('pmodule', 'isset', $pmodule, null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('pcomponent', 'isset', $component, null, xarVar::DONT_SET);
+        xarVar::fetch('poldcomponent', 'isset', $oldcomponent, null, xarVar::DONT_SET);
+        xarVar::fetch('ptype', 'isset', $type, null, xarVar::DONT_SET);
+        xarVar::fetch('plevel', 'isset', $level, null, xarVar::DONT_SET);
+        xarVar::fetch('pinstance', 'array', $instance, [], xarVar::NOT_REQUIRED);
 
-        if (!xarVar::fetch('pparentid', 'isset', $pparentid, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('pparentid', 'isset', $pparentid, null, xarVar::DONT_SET);
 
         // Clear Session Vars
         xarSession::delVar('privileges_statusmsg');

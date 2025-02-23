@@ -43,21 +43,11 @@ class SettingsMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('hidecore', 'str:1:', $hidecore, '0', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('selstyle', 'str:1:', $selstyle, 'plain', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('selfilter', 'str:1:', $selfilter, 'xarMod::STATE_ANY', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('selsort', 'str:1:', $selsort, 'namedesc', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('regen', 'str:1:', $regen, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('hidecore', 'str:1:', $hidecore, '0', xarVar::NOT_REQUIRED);
+        xarVar::fetch('selstyle', 'str:1:', $selstyle, 'plain', xarVar::NOT_REQUIRED);
+        xarVar::fetch('selfilter', 'str:1:', $selfilter, 'xarMod::STATE_ANY', xarVar::NOT_REQUIRED);
+        xarVar::fetch('selsort', 'str:1:', $selsort, 'namedesc', xarVar::NOT_REQUIRED);
+        xarVar::fetch('regen', 'str:1:', $regen, xarVar::NOT_REQUIRED);
 
         xarModUserVars::set('modules', 'hidecore', $hidecore);
         xarModUserVars::set('modules', 'selstyle', $selstyle);

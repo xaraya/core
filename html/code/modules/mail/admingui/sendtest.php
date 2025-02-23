@@ -50,30 +50,14 @@ class SendtestMethod extends MethodClass
         }
 
         // Get parameters from whatever input we need
-        if (!xarVar::fetch('message', 'str:1:', $message)) {
-            return;
-        }
-        if (!xarVar::fetch('subject', 'str:1', $subject)) {
-            return;
-        }
-        if (!xarVar::fetch('email', 'email', $email, '')) {
-            return;
-        }
-        if (!xarVar::fetch('name', 'str:1', $name, '')) {
-            return;
-        }
-        if (!xarVar::fetch('emailcc', 'email', $emailcc, '')) {
-            return;
-        }
-        if (!xarVar::fetch('namecc', 'str:1', $namecc, '')) {
-            return;
-        }
-        if (!xarVar::fetch('emailbcc', 'email', $emailbcc, '')) {
-            return;
-        }
-        if (!xarVar::fetch('namebcc', 'str:1', $namebcc, '')) {
-            return;
-        }
+        xarVar::fetch('message', 'str:1:', $message);
+        xarVar::fetch('subject', 'str:1', $subject);
+        xarVar::fetch('email', 'email', $email, '');
+        xarVar::fetch('name', 'str:1', $name, '');
+        xarVar::fetch('emailcc', 'email', $emailcc, '');
+        xarVar::fetch('namecc', 'str:1', $namecc, '');
+        xarVar::fetch('emailbcc', 'email', $emailbcc, '');
+        xarVar::fetch('namebcc', 'str:1', $namebcc, '');
 
         // Confirm authorisation code.
         if (!xarSec::confirmAuthKey()) {
@@ -86,9 +70,7 @@ class SendtestMethod extends MethodClass
             $name = xarModVars::get('mail', 'adminname');
         }
 
-        if (!xarVar::fetch('when', 'str:1', $when, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('when', 'str:1', $when, '', xarVar::NOT_REQUIRED);
         if (!empty($when)) {
             $when .= ' GMT';
             $when = strtotime($when);

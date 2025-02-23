@@ -41,15 +41,9 @@ class AliasesMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('name', 'str', $modname, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('remove', 'str', $removealias, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('add', 'str', $addalias, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('name', 'str', $modname, null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('remove', 'str', $removealias, null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('add', 'str', $addalias, null, xarVar::NOT_REQUIRED);
         if (!empty($removealias) && !empty($modname)) {
             xarModAlias::delete($removealias, $modname);
         } elseif (!empty($addalias) && !empty($modname)) {

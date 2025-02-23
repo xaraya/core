@@ -52,42 +52,18 @@ class PrivilegesMethod extends MethodClass
         extract($args);
 
         // fixed params
-        if (!xarVar::fetch('cid', 'isset', $cid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('moduleid', 'isset', $moduleid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('apply', 'isset', $apply, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('extpid', 'isset', $extpid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('extname', 'isset', $extname, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('extrealm', 'isset', $extrealm, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('extmodule', 'isset', $extmodule, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('extcomponent', 'isset', $extcomponent, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('extinstance', 'isset', $extinstance, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('extlevel', 'isset', $extlevel, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('cid', 'isset', $cid, null, xarVar::DONT_SET);
+        xarVar::fetch('moduleid', 'isset', $moduleid, null, xarVar::DONT_SET);
+        xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET);
+        xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET);
+        xarVar::fetch('apply', 'isset', $apply, null, xarVar::DONT_SET);
+        xarVar::fetch('extpid', 'isset', $extpid, null, xarVar::DONT_SET);
+        xarVar::fetch('extname', 'isset', $extname, null, xarVar::DONT_SET);
+        xarVar::fetch('extrealm', 'isset', $extrealm, null, xarVar::DONT_SET);
+        xarVar::fetch('extmodule', 'isset', $extmodule, null, xarVar::DONT_SET);
+        xarVar::fetch('extcomponent', 'isset', $extcomponent, null, xarVar::DONT_SET);
+        xarVar::fetch('extinstance', 'isset', $extinstance, null, xarVar::DONT_SET);
+        xarVar::fetch('extlevel', 'isset', $extlevel, null, xarVar::DONT_SET);
 
         sys::import('modules.dynamicdata.class.properties.master');
         /** @var CategoriesProperty $categories */

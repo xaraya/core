@@ -171,9 +171,7 @@ class NewhookMethod extends MethodClass
         ------------------------------- */
 
         // check if we're previewing some new item
-        if (!xarVar::fetch('preview', 'isset', $data['preview'], null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('preview', 'isset', $data['preview'], null, xarVar::DONT_SET);
 
         return $data;
     }

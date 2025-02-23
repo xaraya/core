@@ -45,12 +45,8 @@ class NewrealmMethod extends MethodClass
 
         $data = [];
 
-        if (!xarVar::fetch('name', 'str:1:20', $name, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('confirmed', 'bool', $confirmed, false, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('name', 'str:1:20', $name, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('confirmed', 'bool', $confirmed, false, xarVar::NOT_REQUIRED);
 
         if ($confirmed) {
             if (!xarSec::confirmAuthKey()) {

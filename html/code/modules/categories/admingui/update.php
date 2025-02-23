@@ -41,17 +41,11 @@ class UpdateMethod extends MethodClass
     {
         $data = [];
         //Checkbox work for submit buttons too
-        if (!xarVar::fetch('itemtype', 'int', $itemtype, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('itemtype', 'int', $itemtype, 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED);
 
         // Support old cids for now
-        if (!xarVar::fetch('cid', 'int::', $cid, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('cid', 'int::', $cid, null, xarVar::DONT_SET);
         $data['itemid'] = !empty($data['itemid']) ? $data['itemid'] : $cid;
 
         // Confirm authorisation code

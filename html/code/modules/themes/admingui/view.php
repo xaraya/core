@@ -57,15 +57,13 @@ class ViewMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'phase',
             'pre:trim:lower:enum:update',
             $phase,
             null,
             xarVar::DONT_SET
-        )) {
-            return;
-        }
+        );
 
         // update default themes
         if ($phase == 'update') {
@@ -74,24 +72,20 @@ class ViewMethod extends MethodClass
             }
             $old_user_theme = xarModVars::get('themes', 'default_theme');
             $old_admin_theme = xarModVars::get('themes', 'admin_theme');
-            if (!xarVar::fetch(
+            xarVar::fetch(
                 'user_theme',
                 'pre:trim:lower:str:1:',
                 $new_user_theme,
                 $old_user_theme,
                 xarVar::NOT_REQUIRED
-            )) {
-                return;
-            }
-            if (!xarVar::fetch(
+            );
+            xarVar::fetch(
                 'admin_theme',
                 'pre:trim:lower:str:1:',
                 $new_admin_theme,
                 $old_admin_theme,
                 xarVar::NOT_REQUIRED
-            )) {
-                return;
-            }
+            );
             if ($new_user_theme != $old_user_theme) {
                 $themeid = xarTheme::getIDFromName($new_user_theme);
                 if ($themeid) {
@@ -141,47 +135,37 @@ class ViewMethod extends MethodClass
         // display phase
         $data = [];
 
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'startnum',
             'int:1:',
             $data['startnum'],
             1,
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
+        );
 
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'tab',
             'pre:trim:lower:enum:plain:preview',
             $data['tab'],
             null,
             xarVar::DONT_SET
-        )) {
-            return;
-        }
-        if (!xarVar::fetch(
+        );
+        xarVar::fetch(
             'state',
             'int',
             $data['state'],
             null,
             xarVar::DONT_SET
-        )) {
-            return;
-        }
-        if (!xarVar::fetch('class', 'int:0:4', // 0=system, 1=utility, 2=user, 3=all
-            $data['class'], null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch(
+        );
+        xarVar::fetch('class', 'int:0:4', // 0=system, 1=utility, 2=user, 3=all
+            $data['class'], null, xarVar::DONT_SET);
+        xarVar::fetch(
             'sort',
             'pre:trim:upper:enum:ASC:DESC',
             $data['sort'],
             'ASC',
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
+        );
 
         if (!isset($data['tab'])) {
             $data['tab'] = xarModUserVars::get('themes', 'selstyle');

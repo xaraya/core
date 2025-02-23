@@ -46,24 +46,12 @@ class StatsMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('modid', 'isset', $modid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('sort', 'isset', $sort, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('startnum', 'isset', $startnum, 1, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('catid', 'isset', $catid, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('modid', 'isset', $modid, null, xarVar::DONT_SET);
+        xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET);
+        xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET);
+        xarVar::fetch('sort', 'isset', $sort, null, xarVar::DONT_SET);
+        xarVar::fetch('startnum', 'isset', $startnum, 1, xarVar::NOT_REQUIRED);
+        xarVar::fetch('catid', 'isset', $catid, null, xarVar::DONT_SET);
 
         $data = [];
 

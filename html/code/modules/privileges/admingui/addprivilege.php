@@ -43,30 +43,14 @@ class AddprivilegeMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('pname', 'isset', $pname, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('prealm', 'isset', $prealm, 'All', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('pmodule', 'isset', $pmodule, 'All', xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('pcomponent', 'isset', $pcomponent, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('ptype', 'isset', $type, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('plevel', 'isset', $plevel, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('pparentid', 'isset', $pparentid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('pinstance', 'array', $pinstances, [], xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('pname', 'isset', $pname, null, xarVar::DONT_SET);
+        xarVar::fetch('prealm', 'isset', $prealm, 'All', xarVar::NOT_REQUIRED);
+        xarVar::fetch('pmodule', 'isset', $pmodule, 'All', xarVar::DONT_SET);
+        xarVar::fetch('pcomponent', 'isset', $pcomponent, null, xarVar::DONT_SET);
+        xarVar::fetch('ptype', 'isset', $type, null, xarVar::DONT_SET);
+        xarVar::fetch('plevel', 'isset', $plevel, null, xarVar::DONT_SET);
+        xarVar::fetch('pparentid', 'isset', $pparentid, null, xarVar::DONT_SET);
+        xarVar::fetch('pinstance', 'array', $pinstances, [], xarVar::NOT_REQUIRED);
 
         $instance = "";
         foreach ($pinstances as $pinstance) {

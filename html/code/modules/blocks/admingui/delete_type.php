@@ -54,15 +54,13 @@ class DeleteTypeMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'type_id',
             'int:1:',
             $type_id,
             null,
             xarVar::DONT_SET
-        )) {
-            return;
-        }
+        );
 
 
         if (!isset($type_id)) {
@@ -84,15 +82,13 @@ class DeleteTypeMethod extends MethodClass
         if ($type['type_state'] == xarBlock::TYPE_STATE_MISSING ||
             $type['type_state'] == xarBlock::TYPE_STATE_MOD_UNAVAILABLE) {
 
-            if (!xarVar::fetch(
+            xarVar::fetch(
                 'confirm',
                 'checkbox',
                 $confirmed,
                 false,
                 xarVar::NOT_REQUIRED
-            )) {
-                return;
-            }
+            );
 
             if ($confirmed) {
                 if (!xarSec::confirmAuthKey()) {
@@ -101,15 +97,13 @@ class DeleteTypeMethod extends MethodClass
                 if (!$typesapi->deleteitem(['type_id' => $type_id])) {
                     return;
                 }
-                if (!xarVar::fetch(
+                xarVar::fetch(
                     'return_url',
                     'pre:trim:str:1:',
                     $return_url,
                     '',
                     xarVar::NOT_REQUIRED
-                )) {
-                    return;
-                }
+                );
                 if (empty($return_url)) {
                     $return_url = xarController::URL('blocks', 'admin', 'view_types');
                 }

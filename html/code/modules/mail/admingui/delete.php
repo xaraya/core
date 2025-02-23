@@ -53,12 +53,8 @@ class DeleteMethod extends MethodClass
         }
 
         // Required parameters
-        if (!xarVar::fetch('itemid', 'int:1:', $itemid, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('objectid', 'int:1:', $objectid, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('itemid', 'int:1:', $itemid, 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('objectid', 'int:1:', $objectid, 0, xarVar::NOT_REQUIRED);
         if (empty($itemid) || empty($objectid)) {
             return xarController::notFound(null, $this->getContext());
         }

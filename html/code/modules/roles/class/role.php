@@ -120,7 +120,7 @@ class Role extends DataObject
         }
 
         // add the duvs
-        if (!xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED)) return;
+        xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED);
         foreach($duvs as $key => $value) {
             xarModUserVars::set('roles',$key, $value, $id);
         }
@@ -137,7 +137,7 @@ class Role extends DataObject
     public function updateItem(Array $data = array())
     {
         $id = parent::updateItem($data);
-        if (!xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED)) return;
+        xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED);
         foreach($duvs as $key => $value) {
             xarModUserVars::set('roles',$key, $value, $id);
         }

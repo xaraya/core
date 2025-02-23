@@ -49,9 +49,7 @@ class MainMethod extends MethodClass
 
         /* fetch some optional 'page' argument or parameter */
         extract($args);
-        if (!xarVar::fetch('page', 'str', $page, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('page', 'str', $page, '', xarVar::NOT_REQUIRED);
         if (!empty($page)) {
             xarTpl::setPageTitle($page);
             /* Cache the custom page name so it is accessible elsewhere */

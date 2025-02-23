@@ -43,12 +43,8 @@ class NewMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         $data = [];
-        if (!xarVar::fetch('return_url', 'isset', $data['return_url'], null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('repeat', 'int:1:', $data['repeat'], 1, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('return_url', 'isset', $data['return_url'], null, xarVar::DONT_SET);
+        xarVar::fetch('repeat', 'int:1:', $data['repeat'], 1, xarVar::NOT_REQUIRED);
 
         if (!xarSecurity::check('AddCategories')) {
             return;

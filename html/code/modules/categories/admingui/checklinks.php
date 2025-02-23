@@ -50,12 +50,8 @@ class ChecklinksMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('modid', 'isset', $modid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('modid', 'isset', $modid, null, xarVar::DONT_SET);
+        xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET);
 
         $data = [];
 
@@ -186,9 +182,7 @@ class ChecklinksMethod extends MethodClass
                 $data['catinfo'] = [];
             }
 
-            if (!xarVar::fetch('confirm', 'str:1:', $confirm, '', xarVar::NOT_REQUIRED)) {
-                return;
-            }
+            xarVar::fetch('confirm', 'str:1:', $confirm, '', xarVar::NOT_REQUIRED);
             if (!empty($seencid) && !empty($confirm)) {
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());

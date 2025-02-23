@@ -50,9 +50,7 @@ class ComposeMethod extends MethodClass
         $data['email']   = xarModVars::get('mail', 'adminmail');
         $data['name']    = xarModVars::get('mail', 'adminname');
 
-        if (!xarVar::fetch('confirm', 'int', $confirm, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('confirm', 'int', $confirm, 0, xarVar::NOT_REQUIRED);
 
         $data['message'] = '';
         if ($confirm) {

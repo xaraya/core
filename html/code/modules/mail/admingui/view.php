@@ -57,9 +57,7 @@ class ViewMethod extends MethodClass
             return $this->OfferCreate(null, $this->getContext());
         } else {
             $data['qdef'] = $qdefInfo;
-            if (!xarVar::fetch('itemid', 'int:1:', $data['itemid'], 0, xarVar::NOT_REQUIRED)) {
-                return;
-            }
+            xarVar::fetch('itemid', 'int:1:', $data['itemid'], 0, xarVar::NOT_REQUIRED);
             return $data;
         }
     }

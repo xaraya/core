@@ -44,30 +44,14 @@ class SearchMethod extends MethodClass
     {
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        if (!xarVar::fetch('startnum', 'isset', $startnum, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('email', 'isset', $email, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('uname', 'isset', $uname, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('q', 'isset', $q, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('bool', 'isset', $bool, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('sort', 'isset', $sort, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('author', 'isset', $author, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('startnum', 'isset', $startnum, null, xarVar::DONT_SET);
+        xarVar::fetch('email', 'isset', $email, null, xarVar::DONT_SET);
+        xarVar::fetch('uname', 'isset', $uname, null, xarVar::DONT_SET);
+        xarVar::fetch('name', 'isset', $name, null, xarVar::DONT_SET);
+        xarVar::fetch('q', 'isset', $q, null, xarVar::DONT_SET);
+        xarVar::fetch('bool', 'isset', $bool, null, xarVar::DONT_SET);
+        xarVar::fetch('sort', 'isset', $sort, null, xarVar::DONT_SET);
+        xarVar::fetch('author', 'isset', $author, null, xarVar::DONT_SET);
         $data = [];
         $data['users'] = [];
         // show the search form
@@ -128,9 +112,7 @@ class SearchMethod extends MethodClass
                 $where = [];
                 // see which properties we're supposed to search in
                 foreach (array_keys($object->properties) as $field) {
-                    if (!xarVar::fetch($field, 'checkbox', $checkfield, null, xarVar::NOT_REQUIRED)) {
-                        return;
-                    }
+                    xarVar::fetch($field, 'checkbox', $checkfield, null, xarVar::NOT_REQUIRED);
                     if ($checkfield) {
                         $where[] = $field . " LIKE " . $quotedlike;
                         $where[] = $field . " LIKE " . $quotedupper;

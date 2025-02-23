@@ -42,12 +42,8 @@ class DisplayMethod extends MethodClass
     {
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        if (!xarVar::fetch('itemtype', 'id', $itemtype, 1, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('itemtype', 'id', $itemtype, 1, xarVar::NOT_REQUIRED);
+        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }

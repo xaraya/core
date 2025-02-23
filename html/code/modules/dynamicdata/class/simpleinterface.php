@@ -24,9 +24,7 @@ class SimpleObjectInterface extends DefaultHandler
     public function __construct(array $args = [])
     {
         parent::__construct($args);
-        if (!xarVar::fetch('tplmodule', 'isset', $args['tplmodule'], 'dynamicdata', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('tplmodule', 'isset', $args['tplmodule'], 'dynamicdata', xarVar::NOT_REQUIRED);
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
@@ -41,19 +39,11 @@ class SimpleObjectInterface extends DefaultHandler
      */
     public function handle(array $args = [], ?Context $context = null)
     {
-        if (!xarVar::fetch('method', 'str', $args['method'], 'showDisplay', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('itemid', 'id', $args['itemid'], null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('method', 'str', $args['method'], 'showDisplay', xarVar::NOT_REQUIRED);
+        xarVar::fetch('itemid', 'id', $args['itemid'], null, xarVar::DONT_SET);
         // @todo maybe this should be done somewhere else ?
-        if (!xarVar::fetch('qparam', 'str', $qparam, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('qstring', 'str', $qstring, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('qparam', 'str', $qparam, null, xarVar::DONT_SET);
+        xarVar::fetch('qstring', 'str', $qstring, null, xarVar::DONT_SET);
         // set the context for this handler call
         $this->setContext($context);
 

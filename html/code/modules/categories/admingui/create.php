@@ -45,15 +45,9 @@ class CreateMethod extends MethodClass
 
         $data = [];
         //Checkbox work for submit buttons too
-        if (!xarVar::fetch('return_url', 'isset', $data['return_url'], null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('reassign', 'checkbox', $reassign, false, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('repeat', 'int:1:100', $data['repeat'], 1, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('return_url', 'isset', $data['return_url'], null, xarVar::DONT_SET);
+        xarVar::fetch('reassign', 'checkbox', $reassign, false, xarVar::NOT_REQUIRED);
+        xarVar::fetch('repeat', 'int:1:100', $data['repeat'], 1, xarVar::NOT_REQUIRED);
         if ($reassign) {
             xarController::redirect(xarController::URL('categories', 'admin', 'new', ['repeat' => $data['repeat']]), null, $this->getContext());
             return true;

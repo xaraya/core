@@ -56,9 +56,7 @@ class InitialiseMethod extends MethodClass
             return xarController::badRequest('bad_author', $this->getContext());
         }
 
-        if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }

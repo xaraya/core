@@ -35,17 +35,11 @@ class ErrorsMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!xarVar::fetch('errortype', 'str', $errortype, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('errortype', 'str', $errortype, '', xarVar::NOT_REQUIRED);
         switch ($errortype) {
             case 'forbidden':
-                if (!xarVar::fetch('message', 'str', $msg, '', xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('template', 'str', $template, null, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
+                xarVar::fetch('message', 'str', $msg, '', xarVar::NOT_REQUIRED);
+                xarVar::fetch('template', 'str', $template, null, xarVar::NOT_REQUIRED);
                 return xarController::forbidden($msg, $this->getContext(), $template);
             case 'exception':
             case 'systemerror':
@@ -53,12 +47,8 @@ class ErrorsMethod extends MethodClass
             case 'usererror':
             case 'notfound':
             default:
-                if (!xarVar::fetch('message', 'str', $msg, '', xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('template', 'str', $template, null, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
+                xarVar::fetch('message', 'str', $msg, '', xarVar::NOT_REQUIRED);
+                xarVar::fetch('template', 'str', $template, null, xarVar::NOT_REQUIRED);
                 return xarController::notFound($msg, $this->getContext(), $template);
         }
     }

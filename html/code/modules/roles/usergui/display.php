@@ -48,24 +48,12 @@ class DisplayMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
 
-        if (!xarVar::fetch('id', 'id', $id, xarUser::getVar('id'), xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('itemid', 'int', $itemid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('itemtype', 'int', $itemtype, 1, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('tplmodule', 'str', $args['tplmodule'], 'roles', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('template', 'str', $args['template'], 'account', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('layout', 'str', $args['layout'], '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'id', $id, xarUser::getVar('id'), xarVar::NOT_REQUIRED);
+        xarVar::fetch('itemid', 'int', $itemid, null, xarVar::DONT_SET);
+        xarVar::fetch('itemtype', 'int', $itemtype, 1, xarVar::NOT_REQUIRED);
+        xarVar::fetch('tplmodule', 'str', $args['tplmodule'], 'roles', xarVar::NOT_REQUIRED);
+        xarVar::fetch('template', 'str', $args['template'], 'account', xarVar::NOT_REQUIRED);
+        xarVar::fetch('layout', 'str', $args['layout'], '', xarVar::NOT_REQUIRED);
 
         $id = $itemid ?? $id;
 

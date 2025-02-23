@@ -62,9 +62,7 @@ class LostpasswordMethod extends MethodClass
 
         xarTpl::setPageTitle(xarVar::prepForDisplay(xarML('Lost Password')));
 
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'request', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:1:100', $phase, 'request', xarVar::NOT_REQUIRED);
 
         switch (strtolower($phase)) {
 
@@ -75,12 +73,8 @@ class LostpasswordMethod extends MethodClass
 
             case 'send':
 
-                if (!xarVar::fetch('uname', 'str:1:100', $uname, '', xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('email', 'str:1:100', $email, '', xarVar::NOT_REQUIRED)) {
-                    return;
-                }
+                xarVar::fetch('uname', 'str:1:100', $uname, '', xarVar::NOT_REQUIRED);
+                xarVar::fetch('email', 'str:1:100', $email, '', xarVar::NOT_REQUIRED);
 
                 // Confirm authorisation code.
                 if (!xarSec::confirmAuthKey()) {

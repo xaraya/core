@@ -59,21 +59,11 @@ class UpdatestateMethod extends MethodClass
 
         $data = [];
         // Get parameters
-        if (!xarVar::fetch('status', 'int:0:', $data['status'], null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('state', 'int:0:', $data['state'], 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('groupid', 'int:0:', $data['groupid'], 1, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('updatephase', 'str:1:', $updatephase, 'update', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('ids', 'isset', $ids, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('status', 'int:0:', $data['status'], null, xarVar::DONT_SET);
+        xarVar::fetch('state', 'int:0:', $data['state'], 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('groupid', 'int:0:', $data['groupid'], 1, xarVar::NOT_REQUIRED);
+        xarVar::fetch('updatephase', 'str:1:', $updatephase, 'update', xarVar::NOT_REQUIRED);
+        xarVar::fetch('ids', 'isset', $ids, null, xarVar::NOT_REQUIRED);
 
         $data['authid'] = xarSec::genAuthKey();
         // invalid fields (we'll check this below)

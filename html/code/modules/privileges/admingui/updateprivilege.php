@@ -51,30 +51,14 @@ class UpdateprivilegeMethod extends MethodClass
             return xarController::badRequest('bad_author', $this->getContext());
         }
 
-        if (!xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('pname', 'isset', $name, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('prealm', 'isset', $realm, 'All', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('pmodule', 'isset', $pmodule, 'All', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('pcomponent', 'isset', $component, 'All', xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('ptype', 'isset', $type, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('plevel', 'isset', $level, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('pinstance', 'isset', $pinstance, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET);
+        xarVar::fetch('pname', 'isset', $name, null, xarVar::DONT_SET);
+        xarVar::fetch('prealm', 'isset', $realm, 'All', xarVar::NOT_REQUIRED);
+        xarVar::fetch('pmodule', 'isset', $pmodule, 'All', xarVar::NOT_REQUIRED);
+        xarVar::fetch('pcomponent', 'isset', $component, 'All', xarVar::DONT_SET);
+        xarVar::fetch('ptype', 'isset', $type, null, xarVar::DONT_SET);
+        xarVar::fetch('plevel', 'isset', $level, null, xarVar::DONT_SET);
+        xarVar::fetch('pinstance', 'isset', $pinstance, null, xarVar::NOT_REQUIRED);
 
         $instance = "";
         if (!empty($pinstance)) {

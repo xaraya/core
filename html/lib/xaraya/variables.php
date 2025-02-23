@@ -152,8 +152,8 @@ class xarVar extends xarObject
     /**
      * Fetches and validates in a Batch.
      *
-     *   if (!xarVar::fetch('reassign', 'checkbox',  $reassign, false, xarVar::NOT_REQUIRED)) return;
-     *   if (!xarVar::fetch('repeat',   'int:1:100', $repeat,   1,     xarVar::NOT_REQUIRED)) return;
+     *   xarVar::fetch('reassign', 'checkbox',  $reassign, false, xarVar::NOT_REQUIRED);
+     *   xarVar::fetch('repeat',   'int:1:100', $repeat,   1,     xarVar::NOT_REQUIRED);
      *
      *  Can be done thru xarVar::batchFetch with:
      *
@@ -250,7 +250,9 @@ class xarVar extends xarObject
      * @param mixed $defaultValue the default value
      * @param integer $flags bitmask which modify the behaviour of function
      * @param integer $prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
-     * @return mixed
+     * @throws EmptyParameterException
+     * @throws VariableValidationException
+     * @return true
      * @todo  get rid of the explicit value of xarVar::GET_OR_POST, use the bitmas (i.e. GET_OR_POST = GET + POST)
      * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
      * @todo  re-evaluate the prepping, prepforstore is deprecated for example, prep for display and prep for html are partially exclusive

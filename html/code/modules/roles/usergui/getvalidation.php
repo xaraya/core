@@ -73,18 +73,10 @@ class GetvalidationMethod extends MethodClass
             return true;
         }
 
-        if (!xarVar::fetch('uname', 'str:1:100', $uname, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('valcode', 'str:1:100', $valcode, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('sent', 'int:0:2', $sent, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'startvalidation', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('uname', 'str:1:100', $uname, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('valcode', 'str:1:100', $valcode, '', xarVar::NOT_REQUIRED);
+        xarVar::fetch('sent', 'int:0:2', $sent, 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('phase', 'str:1:100', $phase, 'startvalidation', xarVar::NOT_REQUIRED);
 
         xarTpl::setPageTitle(xarML('Validate Your Account'));
         /* This function to be provided with support functions to ensure we have got a default regmodule,

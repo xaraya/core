@@ -42,9 +42,7 @@ class ViewrealmsMethod extends MethodClass
 
         $data = [];
 
-        if (!xarVar::fetch('show', 'isset', $data['show'], 'assigned', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('show', 'isset', $data['show'], 'assigned', xarVar::NOT_REQUIRED);
 
         $dbconn = xarDB::getConn();
         $xartable = xarDB::getTables();

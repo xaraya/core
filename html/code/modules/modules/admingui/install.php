@@ -51,21 +51,17 @@ class InstallMethod extends MethodClass
         // TODO: check under what conditions this is needed
         //    if (!xarSec::confirmAuthKey()) return;
 
-        if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'return_url',
             'pre:trim:str:1:',
             $return_url,
             '',
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
+        );
 
         // First check for a proper core version
         if (!$installer->checkCore($id)) {
@@ -86,9 +82,7 @@ class InstallMethod extends MethodClass
         $data['moduledependencies'] = $installer->getalldependencies($id);
 
         // Finally check the property dependencies
-        if (!xarVar::fetch('ignore_properties', 'int:1:', $ignore_properties, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('ignore_properties', 'int:1:', $ignore_properties, 0, xarVar::NOT_REQUIRED);
         $propdependencies['satisfied'] = [];
         $propdependencies['unsatisfiable'] = [];
         if (isset($data['moduledependencies']['satisfied'])) {

@@ -57,16 +57,12 @@ class EmailMethod extends MethodClass
 
         extract($args);
 
-        if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }
 
-        if (!xarVar::fetch('phase', 'enum:modify:confirm', $phase, 'modify', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'enum:modify:confirm', $phase, 'modify', xarVar::NOT_REQUIRED);
 
         // If this validation fails, then do NOT send an e-mail, but
         // re-present the form to the user with an error message. Don't redirect,
@@ -112,9 +108,9 @@ class EmailMethod extends MethodClass
 
             case 'confirm':
                 // Bug 3342: don't allow arbitrary sender and recipient name details to be passed in.
-                //if (!xarVar::fetch('fname','str:1:100',$fname)) return;
-                //if (!xarVar::fetch('femail','str:1:100',$femail)) return;
-                //if (!xarVar::fetch('name', 'str:1:100', $name)) return;
+                //xarVar::fetch('fname','str:1:100',$fname);
+                //xarVar::fetch('femail','str:1:100',$femail);
+                //xarVar::fetch('name', 'str:1:100', $name);
 
                 // Confirm authorisation code.
                 if (!xarSec::confirmAuthKey()) {

@@ -44,15 +44,9 @@ class ModifyconfigMethod extends MethodClass
             return;
         }
         $data = [];
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
-        if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('tabmodule', 'str:1:100', $tabmodule, 'categories', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED);
+        xarVar::fetch('tabmodule', 'str:1:100', $tabmodule, 'categories', xarVar::NOT_REQUIRED);
 
         $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'categories']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
@@ -78,21 +72,11 @@ class ModifyconfigMethod extends MethodClass
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());
                 }
-                if (!xarVar::fetch('usejsdisplay', 'checkbox', $usejsdisplay, xarModVars::get('categories', 'usejsdisplay'), xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('numstats', 'int', $numstats, xarModVars::get('categories', 'numstats'), xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('showtitle', 'checkbox', $showtitle, xarModVars::get('categories', 'showtitle'), xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('allowbatch', 'checkbox', $allowbatch, xarModVars::get('categories', 'allowbatch'), xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('categoriesobject', 'str', $categoriesobject, xarModVars::get('categories', 'categoriesobject'), xarVar::NOT_REQUIRED)) {
-                    return;
-                }
+                xarVar::fetch('usejsdisplay', 'checkbox', $usejsdisplay, xarModVars::get('categories', 'usejsdisplay'), xarVar::NOT_REQUIRED);
+                xarVar::fetch('numstats', 'int', $numstats, xarModVars::get('categories', 'numstats'), xarVar::NOT_REQUIRED);
+                xarVar::fetch('showtitle', 'checkbox', $showtitle, xarModVars::get('categories', 'showtitle'), xarVar::NOT_REQUIRED);
+                xarVar::fetch('allowbatch', 'checkbox', $allowbatch, xarModVars::get('categories', 'allowbatch'), xarVar::NOT_REQUIRED);
+                xarVar::fetch('categoriesobject', 'str', $categoriesobject, xarModVars::get('categories', 'categoriesobject'), xarVar::NOT_REQUIRED);
 
                 $modvars = [
                     'usejsdisplay',

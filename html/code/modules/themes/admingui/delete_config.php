@@ -33,12 +33,8 @@ class DeleteConfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $data = [];
-        if (!xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('confirm', 'int', $data['confirm'], 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('confirm', 'int', $data['confirm'], 0, xarVar::NOT_REQUIRED);
 
         $data['object'] = DataObjectFactory::getObject(['name' => 'themes_configurations']);
         $data['object']->getItem(['itemid' => $data['itemid']]);

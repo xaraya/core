@@ -53,12 +53,8 @@ class AddmemberMethod extends MethodClass
             return xarController::badRequest('bad_author', $this->getContext());
         }
 
-        if (!xarVar::fetch('ppid', 'isset', $id, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('privid', 'isset', $privid, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('ppid', 'isset', $id, null, xarVar::DONT_SET);
+        xarVar::fetch('privid', 'isset', $privid, null, xarVar::DONT_SET);
 
         if (empty($id) || empty($privid)) {
             xarController::redirect(xarController::URL(

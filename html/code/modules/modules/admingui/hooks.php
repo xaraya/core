@@ -49,15 +49,9 @@ class HooksMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('hook', 'isset', $curhook, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('layout', 'pre:trim:lower:enum:bycat', $layout, 'bycat', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('return_url', 'str', $return_url, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('hook', 'isset', $curhook, null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('layout', 'pre:trim:lower:enum:bycat', $layout, 'bycat', xarVar::NOT_REQUIRED);
+        xarVar::fetch('return_url', 'str', $return_url, '', xarVar::NOT_REQUIRED);
         extract($args);
 
         // Get list of hook module(s) (observers) and the available hooks supplied

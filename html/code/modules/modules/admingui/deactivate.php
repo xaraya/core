@@ -59,21 +59,17 @@ class DeactivateMethod extends MethodClass
             return xarController::badRequest('bad_author', $this->getContext());
         }
 
-        if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'return_url',
             'pre:trim:str:1:',
             $return_url,
             '',
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
+        );
 
         //Checking if the user has already passed thru the GUI:
         xarVar::fetch('command', 'checkbox', $command, false, xarVar::NOT_REQUIRED);

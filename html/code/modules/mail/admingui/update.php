@@ -47,12 +47,8 @@ class UpdateMethod extends MethodClass
         }
 
         // Need to pass object en itemid ourselves now as update has the 'object_' prefix apparently, doh!
-        if (!xarVar::fetch('objectid', 'isset', $args['objectid'], null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('itemid', 'isset', $args['itemid'], null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('objectid', 'isset', $args['objectid'], null, xarVar::DONT_SET);
+        xarVar::fetch('itemid', 'isset', $args['itemid'], null, xarVar::DONT_SET);
 
         return xarMod::guiFunc('dynamicdata', 'admin', 'update', $args, $this->getContext());
     }

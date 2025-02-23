@@ -46,15 +46,11 @@ class CssconfigMethod extends MethodClass
         $data['authid'] = xarSec::genAuthKey();
 
         // where are we?
-        if (!xarVar::fetch('component', 'str::', $component, '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('component', 'str::', $component, '', xarVar::NOT_REQUIRED);
 
         $data['component'] = $component;
         // is configurable enabled?
-        if (!xarVar::fetch('configurable', 'checkbox', $configurable, false, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('configurable', 'checkbox', $configurable, false, xarVar::NOT_REQUIRED);
         $data['configurable'] = $configurable;
 
         // labels and defaults

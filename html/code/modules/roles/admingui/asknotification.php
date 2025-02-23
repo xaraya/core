@@ -57,29 +57,15 @@ class AsknotificationMethod extends MethodClass
 
         $data = [];
         // Get parameters
-        if (!xarVar::fetch('phase', 'str:0:', $data['phase'], 'display', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('mailtype', 'str:0:', $data['mailtype'], 'blank', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('id', 'isset', $id, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:0:', $data['phase'], 'display', xarVar::NOT_REQUIRED);
+        xarVar::fetch('mailtype', 'str:0:', $data['mailtype'], 'blank', xarVar::NOT_REQUIRED);
+        xarVar::fetch('id', 'isset', $id, null, xarVar::NOT_REQUIRED);
         //Maybe some kind of return url will make this function available for other modules
-        if (!xarVar::fetch('state', 'int:0:', $data['state'], xarRoles::ROLES_STATE_CURRENT, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('groupid', 'int:0:', $data['groupid'], 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('state', 'int:0:', $data['state'], xarRoles::ROLES_STATE_CURRENT, xarVar::NOT_REQUIRED);
+        xarVar::fetch('groupid', 'int:0:', $data['groupid'], 0, xarVar::NOT_REQUIRED);
         //optional value
-        if (!xarVar::fetch('pass', 'str:0:', $data['pass'], null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('ip', 'str:0:', $data['ip'], null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('pass', 'str:0:', $data['pass'], null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('ip', 'str:0:', $data['ip'], null, xarVar::NOT_REQUIRED);
         switch ($data['phase']) {
             case 'display':
                 $data['pass'] = xarSession::getVar('tmppass');
@@ -97,12 +83,8 @@ class AsknotificationMethod extends MethodClass
                     $data['message'] = $strings['message'];
                 }
                 //Display the notification form
-                if (!xarVar::fetch('subject', 'str:1:', $data['subject'], $data['subject'], xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('message', 'str:1:', $data['message'], $data['message'], xarVar::NOT_REQUIRED)) {
-                    return;
-                }
+                xarVar::fetch('subject', 'str:1:', $data['subject'], $data['subject'], xarVar::NOT_REQUIRED);
+                xarVar::fetch('message', 'str:1:', $data['message'], $data['message'], xarVar::NOT_REQUIRED);
                 $data['authid'] = xarSec::genAuthKey();
                 $data['id'] = base64_encode(serialize($id));
 
@@ -124,12 +106,8 @@ class AsknotificationMethod extends MethodClass
                 if (!xarSec::confirmAuthKey()) {
                     return xarController::badRequest('bad_author', $this->getContext());
                 }
-                if (!xarVar::fetch('subject', 'str:1:', $data['subject'], null, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
-                if (!xarVar::fetch('message', 'str:1:', $data['message'], null, xarVar::NOT_REQUIRED)) {
-                    return;
-                }
+                xarVar::fetch('subject', 'str:1:', $data['subject'], null, xarVar::NOT_REQUIRED);
+                xarVar::fetch('message', 'str:1:', $data['message'], null, xarVar::NOT_REQUIRED);
 
                 // Need to convert %%var%% to #$var# so that we can compile the template
                 $data['message'] = preg_replace("/%%(.+)%%/", "#$\\1#", $data['message']);

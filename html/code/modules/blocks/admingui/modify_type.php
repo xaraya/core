@@ -60,15 +60,13 @@ class ModifyTypeMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'type_id',
             'int:1:',
             $type_id,
             null,
             xarVar::DONT_SET
-        )) {
-            return;
-        }
+        );
 
         if (!isset($type_id)) {
             $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';
@@ -91,33 +89,27 @@ class ModifyTypeMethod extends MethodClass
         $data = [];
 
         // determine the interface, method and phase
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'interface',
             'pre:trim:lower:str:1:',
             $interface,
             'display',
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
-        if (!xarVar::fetch(
+        );
+        xarVar::fetch(
             'block_method',
             'pre:trim:lower:str:1:',
             $method,
             null,
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
-        if (!xarVar::fetch(
+        );
+        xarVar::fetch(
             'phase',
             'pre:trim:lower:str:1:',
             $phase,
             'display',
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
+        );
 
         // show the status warning if the type isn't active
         if ($type['type_state'] != xarBlock::TYPE_STATE_ACTIVE) {
@@ -174,12 +166,8 @@ class ModifyTypeMethod extends MethodClass
                                 $invalid['check'] = xarML('Failed validating block type form input');
                             }
                             // fetch block subsystem configuration
-                            if (!xarVar::fetch('type_block_template', 'pre:trim:str:1:127', $block_template, null, xarVar::NOT_REQUIRED)) {
-                                return;
-                            }
-                            if (!xarVar::fetch('type_box_template', 'pre:trim:str:1:127', $box_template, null, xarVar::NOT_REQUIRED)) {
-                                return;
-                            }
+                            xarVar::fetch('type_block_template', 'pre:trim:str:1:127', $block_template, null, xarVar::NOT_REQUIRED);
+                            xarVar::fetch('type_box_template', 'pre:trim:str:1:127', $box_template, null, xarVar::NOT_REQUIRED);
                             // update block configuration
                             if (empty($invalid)) {
                                 if (!xarSec::confirmAuthKey()) {
@@ -234,18 +222,10 @@ class ModifyTypeMethod extends MethodClass
 
                     break;
                 case 'caching':
-                    if (!xarVar::fetch('type_nocache', 'checkbox', $nocache, false, xarVar::NOT_REQUIRED)) {
-                        return;
-                    }
-                    if (!xarVar::fetch('type_pageshared', 'checkbox', $pageshared, false, xarVar::NOT_REQUIRED)) {
-                        return;
-                    }
-                    if (!xarVar::fetch('type_usershared', 'int:0:2', $usershared, 0, xarVar::NOT_REQUIRED)) {
-                        return;
-                    }
-                    if (!xarVar::fetch('type_cacheexpire', 'str:1:', $cacheexpire, null, xarVar::NOT_REQUIRED)) {
-                        return;
-                    }
+                    xarVar::fetch('type_nocache', 'checkbox', $nocache, false, xarVar::NOT_REQUIRED);
+                    xarVar::fetch('type_pageshared', 'checkbox', $pageshared, false, xarVar::NOT_REQUIRED);
+                    xarVar::fetch('type_usershared', 'int:0:2', $usershared, 0, xarVar::NOT_REQUIRED);
+                    xarVar::fetch('type_cacheexpire', 'str:1:', $cacheexpire, null, xarVar::NOT_REQUIRED);
 
                     // convert cacheexpire from hh:mm:ss format to an integer
                     if (!empty($cacheexpire)) {
@@ -364,9 +344,7 @@ class ModifyTypeMethod extends MethodClass
                     return;
                 }
 
-                if (!xarVar::fetch('return_url', 'pre:trim:str:1:', $return_url, '', xarVar::NOT_REQUIRED)) {
-                    return;
-                }
+                xarVar::fetch('return_url', 'pre:trim:str:1:', $return_url, '', xarVar::NOT_REQUIRED);
                 if (empty($return_url)) {
                     $return_url = xarController::URL(
                         'blocks',

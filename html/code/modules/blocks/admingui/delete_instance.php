@@ -56,15 +56,13 @@ class DeleteInstanceMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'block_id',
             'int:1:',
             $block_id,
             null,
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
+        );
 
         if (!isset($block_id)) {
             $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';
@@ -101,15 +99,13 @@ class DeleteInstanceMethod extends MethodClass
             return xarController::badRequest('no_privileges', $this->getContext());
         }
 
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'confirm',
             'checkbox',
             $confirmed,
             false,
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
+        );
 
         if ($confirmed) {
             if (!xarSec::confirmAuthKey()) {

@@ -45,15 +45,9 @@ class RemoveroleMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('roleid', 'isset', $roleid, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('confirmation', 'isset', $confirmation, null, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET);
+        xarVar::fetch('roleid', 'isset', $roleid, null, xarVar::DONT_SET);
+        xarVar::fetch('confirmation', 'isset', $confirmation, null, xarVar::DONT_SET);
         if (empty($id)) {
             return xarController::notFound(null, $this->getContext());
         }

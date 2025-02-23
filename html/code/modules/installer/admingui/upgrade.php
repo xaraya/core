@@ -43,9 +43,7 @@ class UpgradeMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $data = [];
-        if (!xarVar::fetch('phase', 'int', $data['phase'], 1, xarVar::DONT_SET)) {
-            return;
-        }
+        xarVar::fetch('phase', 'int', $data['phase'], 1, xarVar::DONT_SET);
 
         // Version information
         $fileversion = xarCore::VERSION_NUM;
@@ -99,12 +97,8 @@ class UpgradeMethod extends MethodClass
 
             // Get the password from the last page, either entered by the user (and needs to be encrypted)
             // or stored on a previous page
-            if (!xarVar::fetch('password', 'str', $data['password'], '', xarVar::NOT_REQUIRED)) {
-                return;
-            }
-            if (!xarVar::fetch('pass', 'str', $pass, '', xarVar::NOT_REQUIRED)) {
-                return;
-            }
+            xarVar::fetch('password', 'str', $data['password'], '', xarVar::NOT_REQUIRED);
+            xarVar::fetch('pass', 'str', $pass, '', xarVar::NOT_REQUIRED);
 
             // Encrypt if needed using the encryption scheme of the roles module
             if (!empty($pass)) {
@@ -123,9 +117,7 @@ class UpgradeMethod extends MethodClass
 
         if ($data['phase'] == 1) {
             $data['active_step'] = 1;
-            if (!xarVar::fetch('error', 'int', $data['error'], 0, xarVar::NOT_REQUIRED)) {
-                return;
-            }
+            xarVar::fetch('error', 'int', $data['error'], 0, xarVar::NOT_REQUIRED);
 
         } elseif ($data['phase'] == 2) {
             $data['active_step'] = 2;

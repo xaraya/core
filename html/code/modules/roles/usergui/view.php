@@ -54,30 +54,14 @@ class ViewMethod extends MethodClass
         }
         //    extract($args);
 
-        if (!xarVar::fetch('startnum', 'int:1', $args['startnum'], null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('itemtype', 'int', $args['itemtype'], xarRoles::ROLES_USERTYPE, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('search', 'str:1:100', $args['search'], null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('order', 'str', $args['order'], null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('include', 'str', $args['include'], null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('exclude', 'str', $args['exclude'], null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('tplmodule', 'str', $args['tplmodule'], 'roles', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('template', 'str', $args['template'], '', xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('startnum', 'int:1', $args['startnum'], null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('itemtype', 'int', $args['itemtype'], xarRoles::ROLES_USERTYPE, xarVar::NOT_REQUIRED);
+        xarVar::fetch('search', 'str:1:100', $args['search'], null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('order', 'str', $args['order'], null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('include', 'str', $args['include'], null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('exclude', 'str', $args['exclude'], null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('tplmodule', 'str', $args['tplmodule'], 'roles', xarVar::NOT_REQUIRED);
+        xarVar::fetch('template', 'str', $args['template'], '', xarVar::NOT_REQUIRED);
 
         $data['items'] = [];
         $data['pager'] = '';

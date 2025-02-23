@@ -48,18 +48,10 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data = [];
-        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
-            return;
-        }
-        if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('testergroup', 'int', $testergroup, xarModVars::get('privileges', 'testergroup'), xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('tester', 'int', $tester, xarModVars::get('privileges', 'tester'), xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED);
+        xarVar::fetch('testergroup', 'int', $testergroup, xarModVars::get('privileges', 'testergroup'), xarVar::NOT_REQUIRED);
+        xarVar::fetch('tester', 'int', $tester, xarModVars::get('privileges', 'tester'), xarVar::NOT_REQUIRED);
 
         switch ($data['tab']) {
             case 'lastresort':
@@ -141,15 +133,9 @@ class ModifyconfigMethod extends MethodClass
                 }
                 switch ($data['tab']) {
                     case 'general':
-                        if (!xarVar::fetch('inheritdeny', 'checkbox', $inheritdeny, false, xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
-                        if (!xarVar::fetch('lastresort', 'checkbox', $lastresort, false, xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
-                        if (!xarVar::fetch('exceptionredirect', 'checkbox', $data['exceptionredirect'], false, xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
+                        xarVar::fetch('inheritdeny', 'checkbox', $inheritdeny, false, xarVar::NOT_REQUIRED);
+                        xarVar::fetch('lastresort', 'checkbox', $lastresort, false, xarVar::NOT_REQUIRED);
+                        xarVar::fetch('exceptionredirect', 'checkbox', $data['exceptionredirect'], false, xarVar::NOT_REQUIRED);
 
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
@@ -168,19 +154,11 @@ class ModifyconfigMethod extends MethodClass
 
                         break;
                     case 'realms':
-                        if (!xarVar::fetch('enablerealms', 'checkbox', $data['enablerealms'], false, xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
+                        xarVar::fetch('enablerealms', 'checkbox', $data['enablerealms'], false, xarVar::NOT_REQUIRED);
                         xarModVars::set('privileges', 'showrealms', $data['enablerealms']);
-                        if (!xarVar::fetch('realmvalue', 'str', $realmvalue, 'none', xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
-                        if (!xarVar::fetch('realmcomparison', 'str', $realmcomparison, 'exact', xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
-                        if (!xarVar::fetch('textvalue', 'str', $textvalue, '', xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
+                        xarVar::fetch('realmvalue', 'str', $realmvalue, 'none', xarVar::NOT_REQUIRED);
+                        xarVar::fetch('realmcomparison', 'str', $realmcomparison, 'exact', xarVar::NOT_REQUIRED);
+                        xarVar::fetch('textvalue', 'str', $textvalue, '', xarVar::NOT_REQUIRED);
                         if ($realmvalue == 'string') {
                             $realmvalue = empty($textvalue) ? 'none' : 'string:' . $textvalue;
                         }
@@ -188,15 +166,9 @@ class ModifyconfigMethod extends MethodClass
                         xarModVars::set('privileges', 'realmcomparison', $realmcomparison);
                         break;
                     case 'lastresort':
-                        if (!xarVar::fetch('name', 'str', $name, '', xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
-                        if (!xarVar::fetch('password', 'str', $password, '', xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
-                        if (!xarVar::fetch('password2', 'str', $password2, '', xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
+                        xarVar::fetch('name', 'str', $name, '', xarVar::NOT_REQUIRED);
+                        xarVar::fetch('password', 'str', $password, '', xarVar::NOT_REQUIRED);
+                        xarVar::fetch('password2', 'str', $password2, '', xarVar::NOT_REQUIRED);
 
                         // rudimentary check for valid password for now - fix so nicer presentation to user
                         if (strcmp($password, $password2) != 0) {
@@ -217,21 +189,13 @@ class ModifyconfigMethod extends MethodClass
                         xarModVars::set('privileges', 'lastresort', serialize($secret));
                         break;
                     case 'testing':
-                        if (!xarVar::fetch('tester', 'int', $data['tester'], xarModVars::get('privileges', 'tester'), xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
+                        xarVar::fetch('tester', 'int', $data['tester'], xarModVars::get('privileges', 'tester'), xarVar::NOT_REQUIRED);
                         xarModVars::set('privileges', 'tester', $data['tester']);
-                        if (!xarVar::fetch('test', 'checkbox', $test, false, xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
+                        xarVar::fetch('test', 'checkbox', $test, false, xarVar::NOT_REQUIRED);
                         xarModVars::set('privileges', 'test', $test);
-                        if (!xarVar::fetch('testdeny', 'checkbox', $testdeny, false, xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
+                        xarVar::fetch('testdeny', 'checkbox', $testdeny, false, xarVar::NOT_REQUIRED);
                         xarModVars::set('privileges', 'testdeny', $testdeny);
-                        if (!xarVar::fetch('testmask', 'str', $testmask, 'All', xarVar::NOT_REQUIRED)) {
-                            return;
-                        }
+                        xarVar::fetch('testmask', 'str', $testmask, 'All', xarVar::NOT_REQUIRED);
                         xarModVars::set('privileges', 'testmask', $testmask);
                         xarModVars::set('privileges', 'testergroup', $testergroup);
                         break;

@@ -39,17 +39,13 @@ class NewConfigMethod extends MethodClass
         }
 
         $data = [];
-        if (!xarVar::fetch('confirm', 'bool', $data['confirm'], false, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('confirm', 'bool', $data['confirm'], false, xarVar::NOT_REQUIRED);
 
         $data['object'] = DataObjectFactory::getObject(['name' => 'themes_configurations']);
         if ($data['confirm']) {
 
             // we only retrieve 'preview' from the input here - the rest is handled by checkInput()
-            if (!xarVar::fetch('preview', 'str', $preview, null, xarVar::DONT_SET)) {
-                return;
-            }
+            xarVar::fetch('preview', 'str', $preview, null, xarVar::DONT_SET);
 
             // Check for a valid confirmation key
             if (!xarSec::confirmAuthKey()) {

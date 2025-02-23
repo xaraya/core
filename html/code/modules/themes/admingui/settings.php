@@ -44,24 +44,12 @@ class SettingsMethod extends MethodClass
         }
 
         // form parameters
-        if (!xarVar::fetch('hidecore', 'str:1:', $hidecore, '0', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('selstyle', 'str:1:', $selstyle, 'plain', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('selfilter', 'str:1:', $selfilter, 'xarTheme::STATE_ANY', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('selclass', 'str:1:', $selclass, 'all', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('regen', 'str:1:', $regen, false, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('useicons', 'checkbox', $useicons, false, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('hidecore', 'str:1:', $hidecore, '0', xarVar::NOT_REQUIRED);
+        xarVar::fetch('selstyle', 'str:1:', $selstyle, 'plain', xarVar::NOT_REQUIRED);
+        xarVar::fetch('selfilter', 'str:1:', $selfilter, 'xarTheme::STATE_ANY', xarVar::NOT_REQUIRED);
+        xarVar::fetch('selclass', 'str:1:', $selclass, 'all', xarVar::NOT_REQUIRED);
+        xarVar::fetch('regen', 'str:1:', $regen, false, xarVar::NOT_REQUIRED);
+        xarVar::fetch('useicons', 'checkbox', $useicons, false, xarVar::NOT_REQUIRED);
 
         if (!xarModUserVars::set('themes', 'hidecore', $hidecore)) {
             return;

@@ -59,21 +59,15 @@ class CreateqdefMethod extends MethodClass
         }
 
         // First determine whether we need to look at the name entered, or the object chosen
-        if (!xarVar::fetch('qdef_choose', 'int:1', $qdef_choose, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('qdef_choose', 'int:1', $qdef_choose, 0, xarVar::NOT_REQUIRED);
         switch ($qdef_choose) {
             case 1:  // Name entered
                 $qdefNew = true;
-                if (!xarVar::fetch('qdef_name_enter', 'str:1:12', $qdefName)) {
-                    return;
-                }
+                xarVar::fetch('qdef_name_enter', 'str:1:12', $qdefName);
                 break;
             case 2:  // Object chosen
                 $qdefNew = false;
-                if (!xarVar::fetch('qdef_name_choose', 'int:1:', $qdefObjectId)) {
-                    return;
-                }
+                xarVar::fetch('qdef_name_choose', 'int:1:', $qdefObjectId);
                 if (empty($qdefObjectId)) {
                     return xarController::notFound(null, $this->getContext());
                 }

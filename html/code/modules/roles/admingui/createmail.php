@@ -55,30 +55,14 @@ class CreatemailMethod extends MethodClass
         }
 
         $data = [];
-        if (!xarVar::fetch('id', 'int:0:', $id, -1, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('ids', 'isset', $ids, null, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('state', 'int:0:', $state, xarRoles::ROLES_STATE_ALL, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('startnum', 'int:1:', $startnum, 1, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('order', 'str:0:', $data['order'], 'name', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('includesubgroups', 'int:0:', $data['includesubgroups'], 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('mailtype', 'str:0:', $data['mailtype'], 'blank', xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('selstyle', 'isset', $selstyle, 0, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'int:0:', $id, -1, xarVar::NOT_REQUIRED);
+        xarVar::fetch('ids', 'isset', $ids, null, xarVar::NOT_REQUIRED);
+        xarVar::fetch('state', 'int:0:', $state, xarRoles::ROLES_STATE_ALL, xarVar::NOT_REQUIRED);
+        xarVar::fetch('startnum', 'int:1:', $startnum, 1, xarVar::NOT_REQUIRED);
+        xarVar::fetch('order', 'str:0:', $data['order'], 'name', xarVar::NOT_REQUIRED);
+        xarVar::fetch('includesubgroups', 'int:0:', $data['includesubgroups'], 0, xarVar::NOT_REQUIRED);
+        xarVar::fetch('mailtype', 'str:0:', $data['mailtype'], 'blank', xarVar::NOT_REQUIRED);
+        xarVar::fetch('selstyle', 'isset', $selstyle, 0, xarVar::NOT_REQUIRED);
 
         // what type of email: a selection or a single email?
         if ($id < 1) {

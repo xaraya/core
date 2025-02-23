@@ -55,15 +55,13 @@ class ViewTypesMethod extends MethodClass
         }
 
         $data = [];
-        if (!xarVar::fetch(
+        xarVar::fetch(
             'startnum',
             'int:1',
             $data['startnum'],
             1,
             xarVar::NOT_REQUIRED
-        )) {
-            return;
-        }
+        );
         $data['items_per_page'] = xarModVars::get('blocks', 'items_per_page');
         // get types from db
         $items = $typesapi->getitems([

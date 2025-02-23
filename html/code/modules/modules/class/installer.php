@@ -493,8 +493,8 @@ class InstallerTool extends xarObject
         }
 
         // return url may have been supplied 
-        if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
-            $return_url, '', xarVar::NOT_REQUIRED)) return;
+        xarVar::fetch('return_url', 'pre:trim:str:1:',
+            $return_url, '', xarVar::NOT_REQUIRED);
         if (empty($return_url))
             $return_url = xarController::URL($this->extType, 'admin', 'list', array('state' => 0), null, $extInfo['name']);
 

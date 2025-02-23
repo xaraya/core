@@ -47,12 +47,8 @@ class RemovememberMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // get input from any view of this page
-        if (!xarVar::fetch('parentid', 'int', $parentid, xarVar::NOT_REQUIRED)) {
-            return;
-        }
-        if (!xarVar::fetch('childid', 'int', $childid, xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('parentid', 'int', $parentid, xarVar::NOT_REQUIRED);
+        xarVar::fetch('childid', 'int', $childid, xarVar::NOT_REQUIRED);
         // call the Roles class and get the parent and child objects
         $role   = xarRoles::get($parentid);
         $member = xarRoles::get($childid);

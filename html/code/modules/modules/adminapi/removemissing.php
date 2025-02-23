@@ -46,7 +46,7 @@ class RemovemissingMethod extends MethodClass
         // tables actually belong to the module being removed, and so the cleanup is incomplete
         // For now just remove the entry in the modules table
 
-        //    if (!xarVar::fetch('remove', 'str', $remove, NULL, xarVar::NOT_REQUIRED)) return;
+        //    xarVar::fetch('remove', 'str', $remove, NULL, xarVar::NOT_REQUIRED);
         // Get module information
         //    $modinfo = xarMod::getInfo($regid);
         $dbconn = xarDB::getConn();

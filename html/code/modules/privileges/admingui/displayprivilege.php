@@ -44,12 +44,8 @@ class DisplayprivilegeMethod extends MethodClass
             return;
         }
 
-        if (!xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!xarVar::fetch('pinstance', 'array', $instance, [], xarVar::NOT_REQUIRED)) {
-            return;
-        }
+        xarVar::fetch('id', 'isset', $id, null, xarVar::DONT_SET);
+        xarVar::fetch('pinstance', 'array', $instance, [], xarVar::NOT_REQUIRED);
 
         //Call the Privileges class and get the privilege to be modified
         sys::import('modules.privileges.class.privileges');
