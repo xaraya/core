@@ -142,7 +142,7 @@ class StatsMethod extends MethodClass
                 $data['numitems'] = 0;
                 $data['numlinks'] = '';
             }
-            $numstats = xarModVars::get('categories', 'numstats');
+            $numstats = $this->mod()->getVar('numstats');
             if (empty($numstats)) {
                 $numstats = 100;
             }
@@ -171,7 +171,7 @@ class StatsMethod extends MethodClass
                 'startnum' => $startnum,
                 'sort' => $sort,
                 'catid' => $catid]);
-            $showtitle = xarModVars::get('categories', 'showtitle');
+            $showtitle = $this->mod()->getVar('showtitle');
             if (!empty($getitems) && !empty($showtitle)) {
                 $itemids = array_keys($getitems);
                 try {

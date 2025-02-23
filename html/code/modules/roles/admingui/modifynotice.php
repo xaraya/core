@@ -48,7 +48,7 @@ class ModifynoticeMethod extends MethodClass
         switch (strtolower($phase)) {
             case 'modify':
             default:
-                $ips = xarModVars::get('roles', 'disallowedips');
+                $ips = $this->mod()->getVar('disallowedips');
                 $data['ips'] = empty($ips) ? '' : unserialize($ips);
                 $data['authid'] = $this->sec()->genAuthKey();
                 $data['updatelabel'] = $this->ml('Update Notification Configuration');
@@ -74,11 +74,11 @@ class ModifynoticeMethod extends MethodClass
                     return $this->ctl()->badRequest('bad_author');
                 }
                 // Update module variables
-                xarModVars::set('roles', 'askwelcomeemail', $askwelcomeemail);
-                xarModVars::set('roles', 'askdeactivationemail', $askdeactivationemail);
-                xarModVars::set('roles', 'askvalidationemail', $askvalidationemail);
-                xarModVars::set('roles', 'askpendingemail', $askpendingemail);
-                xarModVars::set('roles', 'askpasswordemail', $askpasswordemail);
+                $this->mod()->setVar('askwelcomeemail', $askwelcomeemail);
+                $this->mod()->setVar('askdeactivationemail', $askdeactivationemail);
+                $this->mod()->setVar('askvalidationemail', $askvalidationemail);
+                $this->mod()->setVar('askpendingemail', $askpendingemail);
+                $this->mod()->setVar('askpasswordemail', $askpasswordemail);
 
                 $this->mod()->callHooks(
                     'module',

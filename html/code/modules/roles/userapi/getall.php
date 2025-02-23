@@ -211,7 +211,7 @@ class GetallMethod extends MethodClass
         $stmt = $dbconn->prepareStatement($query);
 
         // cfr. cachemanager - this approach might change later
-        $expire = xarModVars::get('roles', 'cache.userapi.getall');
+        $expire = $this->mod()->getVar('cache.userapi.getall');
 
         if ($startnum > 0) {
             $stmt->setLimit($numitems);

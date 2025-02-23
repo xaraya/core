@@ -71,7 +71,7 @@ class PurgeMethod extends MethodClass
         $rolestable = $xartable['roles'];
 
         $deleted = '[' . $this->ml('deleted') . ']';
-        $numitems = (int) xarModVars::get('roles', 'items_per_page');
+        $numitems = (int) $this->mod()->getVar('items_per_page');
         // Make sure a value was retrieved for items_per_page
         if (empty($numitems)) {
             $numitems = -1;
@@ -164,7 +164,7 @@ class PurgeMethod extends MethodClass
                         }
                         $role['uname'] = $uname1[0];
                         // now check that email is unique if this has to be checked (fix for nonexisting Bug)
-                        if (xarModVars::get('roles', 'uniqueemail')) {
+                        if ($this->mod()->getVar('uniqueemail')) {
                             $existinguser = $userapi->get(['email' => $email[0], 'state' => xarRoles::ROLES_STATE_CURRENT]);
                             if (is_array($existinguser)) {
                                 $unique = 0;
@@ -209,7 +209,7 @@ class PurgeMethod extends MethodClass
                 foreach ($purgeids as $id => $val) {
                     // --- skip if we are trying to remove the designated site admin.
                     // TODO: insert error feedabck here somehow
-                    if($id == xarModVars::get('roles', 'admin')) {
+                    if($id == $this->mod()->getVar('admin')) {
                         continue;
                     }
                     // --- do this in 2 stages. First, delete the role: this will update the user

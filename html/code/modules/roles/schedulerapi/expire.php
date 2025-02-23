@@ -37,7 +37,7 @@ class ExpireMethod extends MethodClass
     {
 
         // TODO: get some configuration info here if necessary
-        // $whatever = xarModVars::get('roles','whatever');
+        // $whatever = $this->mod()->getVar('whatever');
         // ...
         // TODO: we need some API function here (not a GUI function)
         //       It may return true (or some logging text) if it succeeds, and null if it fails

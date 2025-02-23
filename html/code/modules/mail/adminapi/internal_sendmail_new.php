@@ -70,7 +70,7 @@ class InternalSendmailNewMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (xarModVars::get('mail', 'suppresssending')) {
+        if ($this->mod()->getVar('suppresssending')) {
             return true;
         }
         // Get arguments from argument array
@@ -129,7 +129,7 @@ class InternalSendmailNewMethod extends MethodClass
 
         // If we are in debug mode, then make the appropriate calls to the class
         // We will be outputting html to the browser
-        if (xarModVars::get('mail', 'debugmode') && xarUser::isDebugAdmin()) {
+        if ($this->mod()->getVar('debugmode') && xarUser::isDebugAdmin()) {
             $mail->SMTPDebug = 4;
             $mail->Debugoutput = 'html';
         }
@@ -140,7 +140,7 @@ class InternalSendmailNewMethod extends MethodClass
         $mail->SetLanguage("en", sys::code() . "modules/mail/class/language/");
 
         // Get type of mail server
-        $serverType = xarModVars::get('mail', 'server');
+        $serverType = $this->mod()->getVar('server');
 
         switch ($serverType) {
             case 'smtp':
@@ -152,28 +152,28 @@ class InternalSendmailNewMethod extends MethodClass
 
                 // If we are in debug mode, then make the appropriate calls to the class
                 // We will be outputting html to the browser
-                if (xarModVars::get('mail', 'debugmode') && xarUser::isDebugAdmin()) {
+                if ($this->mod()->getVar('debugmode') && xarUser::isDebugAdmin()) {
                     $mail->SMTPDebug = 4;
                     $mail->Debugoutput = 'html';
                 }
 
                 $mail->IsSMTP(); // telling the class to use SMTP
-                $mail->Host = xarModVars::get('mail', 'smtpHost'); // SMTP server
-                $mail->Port = xarModVars::get('mail', 'smtpPort'); // SMTP Port default 25.
+                $mail->Host = $this->mod()->getVar('smtpHost'); // SMTP server
+                $mail->Port = $this->mod()->getVar('smtpPort'); // SMTP Port default 25.
                 $mail->Helo = xarServer::getVar('SERVER_NAME'); // identification string sent to MTA at smtpHost
 
                 // the smtp server might require authentication
-                if (xarModVars::get('mail', 'smtpAuth')) {
+                if ($this->mod()->getVar('smtpAuth')) {
                     $mail->SMTPAuth = true; // turn on SMTP authentication
-                    $mail->SMTPSecure = xarModVars::get('mail', 'smtpSecure'); // SMTP secure configuration
-                    $mail->Username = xarModVars::get('mail', 'smtpUserName'); // SMTP username
-                    $mail->Password = xarModVars::get('mail', 'smtpPassword'); // SMTP password
+                    $mail->SMTPSecure = $this->mod()->getVar('smtpSecure'); // SMTP secure configuration
+                    $mail->Username = $this->mod()->getVar('smtpUserName'); // SMTP username
+                    $mail->Password = $this->mod()->getVar('smtpPassword'); // SMTP password
                 }
                 break;
 
             case 'sendmail':
                 $mail->IsSendmail();
-                $mail->Sendmail = xarModVars::get('mail', 'sendmailpath'); // Use the correct path to sendmail
+                $mail->Sendmail = $this->mod()->getVar('sendmailpath'); // Use the correct path to sendmail
                 break;
 
             case 'qmail':
@@ -193,8 +193,8 @@ class InternalSendmailNewMethod extends MethodClass
         $mail->Sender = $from;
         $mail->FromName = $fromname;
 
-        if (xarModVars::get('mail', 'replyto')) {
-            $mail->AddReplyTo(xarModVars::get('mail', 'replytoemail'), xarModVars::get('mail', 'replytoname'));
+        if ($this->mod()->getVar('replyto')) {
+            $mail->AddReplyTo($this->mod()->getVar('replytoemail'), $this->mod()->getVar('replytoname'));
         }
 
         // The parameters below are the bare minimum sent to the API.
@@ -209,9 +209,9 @@ class InternalSendmailNewMethod extends MethodClass
         if (!isset($redirectaddress)) {
             $redirectaddress = [];
         }
-        if (xarModVars::get('mail', 'redirectsending')) {
-            $redirectsending = xarModVars::get('mail', 'redirectsending');
-            $redirectaddress = explode(',', xarModVars::get('mail', 'redirectaddress'));
+        if ($this->mod()->getVar('redirectsending')) {
+            $redirectsending = $this->mod()->getVar('redirectsending');
+            $redirectaddress = explode(',', $this->mod()->getVar('redirectaddress'));
         }
 
         if ($redirectsending) {
@@ -320,12 +320,12 @@ class InternalSendmailNewMethod extends MethodClass
         // Set IsHTML - this is true for HTML mail
         $mail->IsHTML($htmlmail);
 
-        $mailShowTemplates  = xarModVars::get('mail', 'ShowTemplates');
+        $mailShowTemplates  = $this->mod()->getVar('ShowTemplates');
 
         // If mailShowTemplates is undefined, then the modvar is missing for some reason
         // If so, we assume off, since the GUI will also show off in this case
         if (!isset($mailShowTemplates)) {
-            xarModVars::set('mail', 'ShowTemplates', false);
+            $this->mod()->setVar('ShowTemplates', false);
             $mailShowTemplates = false;
         }
 
@@ -364,7 +364,7 @@ class InternalSendmailNewMethod extends MethodClass
                 $mail->Body = $htmlmessage;
             }
 
-            $embed_images = xarModVars::get('mail', 'embed_images');
+            $embed_images = $this->mod()->getVar('embed_images');
             if (!empty($embed_images)) {
                 //TODO:Handle the code for embedding images in the mail.
                 //Parse a html body for getting the no of images used in the body.

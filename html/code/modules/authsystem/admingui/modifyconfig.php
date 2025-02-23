@@ -48,11 +48,11 @@ class ModifyconfigMethod extends MethodClass
 
         $data = [];
         $this->var()->find('phase', $phase, 'str:1:100', 'modify');
-        $this->var()->find('uselockout', $data['uselockout'], 'checkbox', xarModVars::get('authsystem', 'uselockout'));
-        $this->var()->find('lockouttime', $data['lockouttime'], 'int:1:', (int) xarModVars::get('authsystem', 'lockouttime'));
-        $this->var()->find('lockouttries', $data['lockouttries'], 'int:1:', (int) xarModVars::get('authsystem', 'lockouttries'));
-        $this->var()->find('forwarding_page', $data['forwarding_page'], 'str', xarModVars::get('authsystem', 'forwarding_page'));
-        $this->var()->find('ask_forward', $data['ask_forward'], 'checkbox', xarModVars::get('authsystem', 'ask_forward'));
+        $this->var()->find('uselockout', $data['uselockout'], 'checkbox', $this->mod()->getVar('uselockout'));
+        $this->var()->find('lockouttime', $data['lockouttime'], 'int:1:', (int) $this->mod()->getVar('lockouttime'));
+        $this->var()->find('lockouttries', $data['lockouttries'], 'int:1:', (int) $this->mod()->getVar('lockouttries'));
+        $this->var()->find('forwarding_page', $data['forwarding_page'], 'str', $this->mod()->getVar('forwarding_page'));
+        $this->var()->find('ask_forward', $data['ask_forward'], 'checkbox', $this->mod()->getVar('ask_forward'));
         if (!empty($data['forwarding_page'])) {
             $data['forwarding_page'] = $this->var()->prep($data['forwarding_page']);
         }
@@ -103,11 +103,11 @@ class ModifyconfigMethod extends MethodClass
         } else {
             $itemid = $data['module_settings']->updateItem();
         }
-        xarModVars::set('authsystem', 'forwarding_page', $data['forwarding_page']);
-        xarModVars::set('authsystem', 'ask_forward', $data['ask_forward']);
-        xarModVars::set('authsystem', 'uselockout', $data['uselockout']);
-        xarModVars::set('authsystem', 'lockouttime', $data['lockouttime']);
-        xarModVars::set('authsystem', 'lockouttries', $data['lockouttries']);
+        $this->mod()->setVar('forwarding_page', $data['forwarding_page']);
+        $this->mod()->setVar('ask_forward', $data['ask_forward']);
+        $this->mod()->setVar('uselockout', $data['uselockout']);
+        $this->mod()->setVar('lockouttime', $data['lockouttime']);
+        $this->mod()->setVar('lockouttries', $data['lockouttries']);
 
         // If this is an AJAX call, end here
         $this->ctl()->getRequest()->exitAjax();

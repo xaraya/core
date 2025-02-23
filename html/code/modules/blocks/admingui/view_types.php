@@ -62,7 +62,7 @@ class ViewTypesMethod extends MethodClass
             'int:1',
             1
         );
-        $data['items_per_page'] = xarModVars::get('blocks', 'items_per_page');
+        $data['items_per_page'] = $this->mod()->getVar('items_per_page');
         // get types from db
         $items = $typesapi->getitems([
             'startnum' => $data['startnum'],

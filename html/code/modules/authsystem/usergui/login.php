@@ -58,10 +58,10 @@ class LoginMethod extends MethodClass
         }
 
         $unlockTime  = (int) $this->session()->getVar('authsystem.login.lockedout');
-        $lockouttime = xarModVars::get('authsystem', 'lockouttime') ? xarModVars::get('authsystem', 'lockouttime') : 15;
-        $lockouttries = xarModVars::get('authsystem', 'lockouttries') ? xarModVars::get('authsystem', 'lockouttries') : 3;
+        $lockouttime = $this->mod()->getVar('lockouttime') ? $this->mod()->getVar('lockouttime') : 15;
+        $lockouttries = $this->mod()->getVar('lockouttries') ? $this->mod()->getVar('lockouttries') : 3;
 
-        if ((time() < $unlockTime) && (xarModVars::get('authsystem', 'uselockout') == true)) {
+        if ((time() < $unlockTime) && ($this->mod()->getVar('uselockout') == true)) {
             return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'locked_out', 'lockouttime' => $lockouttime]);
         }
 
@@ -251,7 +251,7 @@ class LoginMethod extends MethodClass
                     // Cast the result to an int in case VOID is returned
                     $attempts = (int) $this->session()->getVar('authsystem.login.attempts');
 
-                    if (($attempts >= $lockouttries) && (xarModVars::get('authsystem', 'uselockout') == true)) {
+                    if (($attempts >= $lockouttries) && ($this->mod()->getVar('uselockout') == true)) {
                         // Set the time for fifteen minutes from now
                         $this->session()->setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
                         $this->session()->setVar('authsystem.login.attempts', 0);

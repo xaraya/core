@@ -55,7 +55,7 @@ class ReleaseMethod extends MethodClass
         }
 
         //number of releases to show
-        $releasenumber = (int) xarModVars::get('base', 'releasenumber');
+        $releasenumber = (int) $this->mod()->getVar('releasenumber');
 
         if (!isset($releasenumber) || $releasenumber == 0) {
             $releasenumber = 10;

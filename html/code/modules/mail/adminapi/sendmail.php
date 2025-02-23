@@ -78,7 +78,7 @@ class SendmailMethod extends MethodClass
 
         // Check if HTML mail has been configured by the admin
         // and send to sendhtmlmail()
-        if ((bool) xarModVars::get('mail', 'html')) {
+        if ((bool) $this->mod()->getVar('html')) {
             return $adminapi->sendhtmlmail($args);
         } else {
             // Check info
@@ -119,36 +119,36 @@ class SendmailMethod extends MethodClass
             }
             // Check from
             if (empty($from)) {
-                $from = xarModVars::get('mail', 'adminmail');
+                $from = $this->mod()->getVar('adminmail');
             }
             // Check fromname
             if (empty($fromname)) {
-                $fromname = xarModVars::get('mail', 'adminname');
+                $fromname = $this->mod()->getVar('adminname');
             }
             // Check wordwrap
             if (!isset($wordwrap)) {
-                $wordwrap = xarModVars::get('mail', 'wordwrap');
+                $wordwrap = $this->mod()->getVar('wordwrap');
             }
             // Check priority
             if (!isset($priority)) {
-                $priority = xarModVars::get('mail', 'priority');
+                $priority = $this->mod()->getVar('priority');
             }
             // Check encoding
             if (!isset($encoding)) {
-                $encoding = xarModVars::get('mail', 'encoding');
+                $encoding = $this->mod()->getVar('encoding');
             }
             // Check if using mail templates - default is true
             if (!isset($usetemplates)) {
                 $usetemplates = true;
             }
             // Check if headers/footers have been configured by the admin
-            $textheadfoot = xarModVars::get('mail', 'textuseheadfoot');
+            $textheadfoot = $this->mod()->getVar('textuseheadfoot');
             if (!empty($textheadfoot)) {
-                $header = xarModVars::get('mail', 'textheader');
+                $header = $this->mod()->getVar('textheader');
                 if (!empty($header)) {
                     $message = $header . $message;
                 }
-                $footer = xarModVars::get('mail', 'textfooter');
+                $footer = $this->mod()->getVar('textfooter');
                 if (!empty($footer)) {
                     $message .= $footer;
                 }

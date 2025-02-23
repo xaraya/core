@@ -125,9 +125,9 @@ class RemoveMethod extends MethodClass
         */
         // this is now handled by the modules module ModRemove event observer
         /*
-        $defaultmod = xarModVars::get('modules', 'defaultmodule');
+        $defaultmod = $this->mod()->getVar('defaultmodule');
         if ($modinfo['name'] == $defaultmod) {
-            xarModVars::set('modules', 'defaultmodule','base');
+            $this->mod()->setVar('defaultmodule','base');
         }
         */
 

@@ -110,23 +110,23 @@ class SendhtmlmailMethod extends MethodClass
         }
         // Check from
         if (empty($from)) {
-            $from = xarModVars::get('mail', 'adminmail');
+            $from = $this->mod()->getVar('adminmail');
         }
         // Check fromname
         if (empty($fromname)) {
-            $fromname = xarModVars::get('mail', 'adminname');
+            $fromname = $this->mod()->getVar('adminname');
         }
         // Check wordwrap
         if (!isset($wordwrap)) {
-            $wordwrap = xarModVars::get('mail', 'wordwrap');
+            $wordwrap = $this->mod()->getVar('wordwrap');
         }
         // Check priority
         if (!isset($priority)) {
-            $priority = xarModVars::get('mail', 'priority');
+            $priority = $this->mod()->getVar('priority');
         }
         // Check encoding
         if (!isset($encoding)) {
-            $encoding = xarModVars::get('mail', 'encoding');
+            $encoding = $this->mod()->getVar('encoding');
         }
         // Check if using mail templates - default is true
         if (!isset($usetemplates)) {
@@ -140,11 +140,11 @@ class SendhtmlmailMethod extends MethodClass
             // Set the html version of the message
 
             // Check if headers/footers have been configured by the admin
-            $htmlheadfoot = xarModVars::get('mail', 'htmluseheadfoot');
+            $htmlheadfoot = $this->mod()->getVar('htmluseheadfoot');
 
-            $parsedmessage .= $htmlheadfoot ? xarModVars::get('mail', 'htmlheader') : '';
+            $parsedmessage .= $htmlheadfoot ? $this->mod()->getVar('htmlheader') : '';
             $parsedmessage .= $htmlmessage;
-            $parsedmessage .= $htmlheadfoot ? xarModVars::get('mail', 'htmlfooter') : '';
+            $parsedmessage .= $htmlheadfoot ? $this->mod()->getVar('htmlfooter') : '';
 
         } else {
             // If the module did not send us an html version of the
@@ -152,12 +152,12 @@ class SendhtmlmailMethod extends MethodClass
             // then we have to play around with this one a bit by adding some <pre> tags
 
             // Check if headers/footers have been configured by the admin
-            $textheadfoot = xarModVars::get('mail', 'textuseheadfoot');
+            $textheadfoot = $this->mod()->getVar('textuseheadfoot');
 
             $parsedmessage .= '<pre>';
-            $parsedmessage .= $textheadfoot ? xarModVars::get('mail', 'textheader') : '';
+            $parsedmessage .= $textheadfoot ? $this->mod()->getVar('textheader') : '';
             $parsedmessage .= $message;
-            $parsedmessage .= $textheadfoot ? xarModVars::get('mail', 'textfooter') : '';
+            $parsedmessage .= $textheadfoot ? $this->mod()->getVar('textfooter') : '';
             $parsedmessage .= '</pre>';
 
         }

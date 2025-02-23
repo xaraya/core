@@ -59,7 +59,7 @@ class GetuserhomeMethod extends MethodClass
             $notdone = true;
             $userhome = "";
             try {
-                $settings = explode(',', xarModVars::get('roles', 'duvsettings'));
+                $settings = explode(',', $this->mod()->getVar('duvsettings'));
                 if (in_array('primaryparent', $settings)) {
                     // go for the primary parent's userhome
                     $parentid = xarModItemVars::get('roles', 'primaryparent', $itemid);

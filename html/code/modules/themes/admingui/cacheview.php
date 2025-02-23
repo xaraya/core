@@ -51,13 +51,13 @@ class CacheviewMethod extends MethodClass
         if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
-        xarModVars::set('themes', 'templcachepath', sys::varpath() . "/cache/templates");
+        $this->mod()->setVar('templcachepath', sys::varpath() . "/cache/templates");
 
-        $cachedir  = xarModVars::get('themes', 'templcachepath');
+        $cachedir  = $this->mod()->getVar('templcachepath');
         if (!file_exists($cachedir)) {
             $cachedir = sys::varpath() . "/cache/templates";
         }
-        $cachefile = xarModVars::get('themes', 'templcachepath') . '/CACHEKEYS';
+        $cachefile = $this->mod()->getVar('templcachepath') . '/CACHEKEYS';
         if (!file_exists($cachefile)) {
             $cachefile = sys::varpath() . "/cache/templates/CACHEKEYS";
         }

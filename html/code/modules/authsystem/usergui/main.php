@@ -41,7 +41,7 @@ class MainMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $redirect = xarModVars::get('authsystem', 'frontend_page');
+        $redirect = $this->mod()->getVar('frontend_page');
         if (!empty($redirect)) {
             $truecurrenturl = $this->ctl()->getCurrentURL([], false);
             $urldata = $this->mod()->apiFunc('roles', 'user', 'parseuserhome', ['url' => $redirect,'truecurrenturl' => $truecurrenturl]);

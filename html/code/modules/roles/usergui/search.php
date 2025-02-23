@@ -150,7 +150,7 @@ class SearchMethod extends MethodClass
         $selection .= "(name LIKE " . $quotedlike . ")";
         $selection .= " OR (uname LIKE " . $quotedlike . ")";
 
-        if (xarModVars::get('roles', 'searchbyemail')) {
+        if ($this->mod()->getVar('searchbyemail')) {
             $selection .= " OR (email LIKE " . $quotedlike . ")";
         }
 
@@ -170,7 +170,7 @@ class SearchMethod extends MethodClass
         $users = $userapi->getall(['startnum'          => $startnum,
             'selection'         => $selection,
             'include_anonymous' => false,
-            'numitems'          => (int) xarModVars::get('roles', 'items_per_page')]);
+            'numitems'          => (int) $this->mod()->getVar('items_per_page')]);
 
         // combine search results with DD
         if (!empty($users) && count($data['users']) > 0) {

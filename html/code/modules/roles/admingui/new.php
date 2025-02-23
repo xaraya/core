@@ -49,7 +49,7 @@ class NewMethod extends MethodClass
         }
 
         $data = [];
-        $this->var()->find('parentid', $data['parentid'], 'id', (int) xarModVars::get('roles', 'defaultgroup'));
+        $this->var()->find('parentid', $data['parentid'], 'id', (int) $this->mod()->getVar('defaultgroup'));
         $this->var()->find('itemtype', $data['itemtype'], 'int', xarRoles::ROLES_USERTYPE);
         $this->var()->find('duvs', $data['duvs'], 'array', []);
         $this->var()->find('confirm', $confirm, 'str', '');

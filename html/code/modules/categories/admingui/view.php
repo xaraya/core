@@ -39,7 +39,7 @@ class ViewMethod extends MethodClass
         // Get parameters
         $this->var()->find('activetab', $activetab, 'isset', 0);
         $this->var()->find('startnum', $data['startnum'], 'isset', 1);
-        $this->var()->find('items_per_page', $data['items_per_page'], 'isset', xarModVars::get('categories', 'items_per_page'));
+        $this->var()->find('items_per_page', $data['items_per_page'], 'isset', $this->mod()->getVar('items_per_page'));
 
         // Set a fallback value in case the modvar is empty
         if (empty($data['items_per_page'])) {

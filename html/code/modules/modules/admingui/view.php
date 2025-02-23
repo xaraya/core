@@ -83,8 +83,8 @@ class ViewMethod extends MethodClass
         if (!isset($data['modtype'])) {
             $data['modtype'] = 0;
         }
-        $data['items_per_page'] = xarModVars::get('modules', 'items_per_page');
-        $data['useicons'] = xarModVars::get('modules', 'use_module_icons');
+        $data['items_per_page'] = $this->mod()->getVar('items_per_page');
+        $data['useicons'] = $this->mod()->getVar('use_module_icons');
 
         $itemargs = [
             'state' => $data['state'],

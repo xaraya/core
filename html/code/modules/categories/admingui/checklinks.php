@@ -134,7 +134,7 @@ class ChecklinksMethod extends MethodClass
                 $data['numitems'] = 0;
                 $data['numlinks'] = '';
             }
-            $numstats = xarModVars::get('categories', 'numstats');
+            $numstats = $this->mod()->getVar('numstats');
             if (empty($numstats)) {
                 $numstats = 100;
             }
@@ -143,7 +143,7 @@ class ChecklinksMethod extends MethodClass
             $getitems = $userapi->getorphanlinks(['modid' => $modid,
                 'itemtype' => $itemtype]);
             $data['numorphans'] = count($getitems);
-            $showtitle = xarModVars::get('categories', 'showtitle');
+            $showtitle = $this->mod()->getVar('showtitle');
             if (!empty($getitems) && !empty($showtitle)) {
                 $itemids = array_keys($getitems);
                 try {

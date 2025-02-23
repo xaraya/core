@@ -55,8 +55,8 @@ class MainMethod extends MethodClass
             /* Cache the custom page name so it is accessible elsewhere */
             $this->var()->setCached('Base.pages', 'page', $page);
         } else {
-            $pageTemplate = xarModVars::get('base', 'AlternatePageTemplateName');
-            if (xarModVars::get('base', 'UseAlternatePageTemplate') != '' &&
+            $pageTemplate = $this->mod()->getVar('AlternatePageTemplateName');
+            if ($this->mod()->getVar('UseAlternatePageTemplate') != '' &&
                 $pageTemplate != '') {
                 $this->tpl()->setPageTemplateName($pageTemplate);
             }

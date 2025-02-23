@@ -102,8 +102,8 @@ class ModifyemailMethod extends MethodClass
                 $this->var()->find('subject', $subject, 'str:1:');
                 // Confirm authorisation code
                 //            if (!$this->sec()->confirmAuthKey()) return;
-                //            xarModVars::set('roles', $data['mailtype'].'email', $message);
-                //            xarModVars::set('roles', $data['mailtype'].'title', $subject);
+                //            $this->mod()->setVar($data['mailtype'].'email', $message);
+                //            $this->mod()->setVar($data['mailtype'].'title', $subject);
 
                 $messaginghome = sys::varpath() . "/messaging/roles";
                 $filebase = $messaginghome . "/" . $data['mailtype'] . "-";

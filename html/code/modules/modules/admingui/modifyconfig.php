@@ -49,7 +49,7 @@ class ModifyconfigMethod extends MethodClass
 
         $data = [];
         $this->var()->find('phase', $phase, 'str:1:100', 'modify');
-        $this->var()->find('disableoverview', $data['disableoverview'], 'checkbox', (bool) xarModVars::get('modules', 'disableoverview'));
+        $this->var()->find('disableoverview', $data['disableoverview'], 'checkbox', (bool) $this->mod()->getVar('disableoverview'));
 
         $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'modules']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
@@ -71,7 +71,7 @@ class ModifyconfigMethod extends MethodClass
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                 }
-                xarModVars::set('modules', 'disableoverview', $data['disableoverview']);
+                $this->mod()->setVar('disableoverview', $data['disableoverview']);
                 break;
         }
         return $data;

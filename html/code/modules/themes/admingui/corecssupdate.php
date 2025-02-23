@@ -52,7 +52,7 @@ class CorecssupdateMethod extends MethodClass
         $this->var()->find('linkoptions', $linkoptions, 'str::', '');
 
         // set modvars
-        xarModVars::set('themes', 'csslinkoption', $linkoptions);
+        $this->mod()->setVar('csslinkoption', $linkoptions);
 
         $this->ctl()->redirect($this->ctl()->getModuleURL(
             'themes',

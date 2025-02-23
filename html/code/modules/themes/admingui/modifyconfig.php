@@ -58,28 +58,28 @@ class ModifyconfigMethod extends MethodClass
 
         $data = [];
         $this->var()->find('phase', $phase, 'str:1:100', 'modify');
-        $this->var()->find('sitename', $data['sitename'], 'str', xarModVars::get('themes', 'SiteName'));
-        $this->var()->find('separator', $data['separator'], 'str:1:', xarModVars::get('themes', 'SiteTitleSeparator'));
+        $this->var()->find('sitename', $data['sitename'], 'str', $this->mod()->getVar('SiteName'));
+        $this->var()->find('separator', $data['separator'], 'str:1:', $this->mod()->getVar('SiteTitleSeparator'));
         $this->var()->find('pagetitle', $data['pagetitle'], 'str:1:', 'default');
-        $this->var()->find('showphpcbit', $data['showphpcbit'], 'checkbox', (bool) xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates'));
-        $this->var()->find('showtemplates', $data['showtemplates'], 'checkbox', (bool) xarModVars::get('themes', 'ShowTemplates'));
+        $this->var()->find('showphpcbit', $data['showphpcbit'], 'checkbox', (bool) $this->mod()->getVar('ShowPHPCommentBlockInTemplates'));
+        $this->var()->find('showtemplates', $data['showtemplates'], 'checkbox', (bool) $this->mod()->getVar('ShowTemplates'));
         $this->var()->find('cachetemplates', $data['cachetemplates'], 'checkbox', $this->config()->getVar('Site.BL.CacheTemplates'));
         $this->var()->find('memcachetemplates', $data['memcachetemplates'], 'checkbox', $this->config()->getVar('Site.BL.MemCacheTemplates'));
-        $this->var()->find('variable_dump', $data['variable_dump'], 'checkbox', (bool) xarModVars::get('themes', 'variable_dump'));
-        $this->var()->find('slogan', $data['slogan'], 'str', xarModVars::get('themes', 'SiteSlogan'));
-        $this->var()->find('footer', $data['footer'], 'str', xarModVars::get('themes', 'SiteFooter'));
-        $this->var()->find('copyright', $data['copyright'], 'str', xarModVars::get('themes', 'SiteCopyRight'));
-        $this->var()->find('AtomTag', $data['atomtag'], 'str:1:', (bool) xarModVars::get('themes', 'AtomTag'));
+        $this->var()->find('variable_dump', $data['variable_dump'], 'checkbox', (bool) $this->mod()->getVar('variable_dump'));
+        $this->var()->find('slogan', $data['slogan'], 'str', $this->mod()->getVar('SiteSlogan'));
+        $this->var()->find('footer', $data['footer'], 'str', $this->mod()->getVar('SiteFooter'));
+        $this->var()->find('copyright', $data['copyright'], 'str', $this->mod()->getVar('SiteCopyRight'));
+        $this->var()->find('AtomTag', $data['atomtag'], 'str:1:', (bool) $this->mod()->getVar('AtomTag'));
         $this->var()->find('compresswhitespace', $data['compresswhitespace'], 'int', 0);
         $this->var()->find('doctype', $data['doctype'], 'str:1', 0);
         $this->var()->find('debugmode', $data['debugmode'], 'int', 0);
         $this->var()->find('exceptionsdisplay', $data['exceptionsdisplay'], 'int', 0);
 
         $this->var()->find('themedir', $data['defaultThemeDir'], 'str:1:', 'themes');
-        $this->var()->find('adminpagemenu', $data['adminpagemenu'], 'checkbox', (bool) xarModVars::get('themes', 'adminpagemenu'));
-        $this->var()->find('userpagemenu', $data['userpagemenu'], 'checkbox', (bool) xarModVars::get('themes', 'userpagemenu'));
-        //    $this->var()->find('usedashboard', $data['usedashboard'], 'checkbox', (bool)xarModVars::get('themes', 'usedashboard'));
-        //    $this->var()->find('dashtemplate', $data['dashtemplate'], 'str:1:', trim(xarModVars::get('themes', 'dashtemplate')));
+        $this->var()->find('adminpagemenu', $data['adminpagemenu'], 'checkbox', (bool) $this->mod()->getVar('adminpagemenu'));
+        $this->var()->find('userpagemenu', $data['userpagemenu'], 'checkbox', (bool) $this->mod()->getVar('userpagemenu'));
+        //    $this->var()->find('usedashboard', $data['usedashboard'], 'checkbox', (bool)$this->mod()->getVar('usedashboard'));
+        //    $this->var()->find('dashtemplate', $data['dashtemplate'], 'str:1:', trim($this->mod()->getVar('dashtemplate')));
 
         $this->var()->find('selsort', $data['selsort'], 'str:1:', 'plain');
         $this->var()->find('selfilter', $data['selfilter'], 'int', xarMod::STATE_ANY);
@@ -99,7 +99,7 @@ class ModifyconfigMethod extends MethodClass
             'enable_user_menu',
             $data['enable_user_menu'],
             'checkbox',
-            xarModVars::get('themes', 'enable_user_menu')
+            $this->mod()->getVar('enable_user_menu')
         );
 
 
@@ -115,7 +115,7 @@ class ModifyconfigMethod extends MethodClass
         sys::import('modules.dynamicdata.class.properties.master');
         $data['user_themes'] = $this->prop()->getProperty(['name' => 'checkboxlist']);
         $data['user_themes']->options = $adminapi->dropdownlist(['Class' => 2]);
-        $data['user_themes']->setValue(xarModVars::get('themes', 'user_themes'));
+        $data['user_themes']->setValue($this->mod()->getVar('user_themes'));
         $data['user_themes']->layout = 'vertical';
         switch (strtolower($phase)) {
             case 'modify':
@@ -135,25 +135,25 @@ class ModifyconfigMethod extends MethodClass
                     return $this->tpl()->module('themes', 'admin', 'modifyconfig', $data);
                 } else {
                     $itemid = $data['module_settings']->updateItem();
-                    xarModVars::set('themes', 'enable_user_menu', $data['enable_user_menu']);
+                    $this->mod()->setVar('enable_user_menu', $data['enable_user_menu']);
                     if (isset($data['user_themes']->value)) {
-                        xarModVars::set('themes', 'user_themes', $data['user_themes']->value);
+                        $this->mod()->setVar('user_themes', $data['user_themes']->value);
                     }
                 }
-                xarModVars::set('themes', 'SiteName', $data['sitename']);
-                xarModVars::set('themes', 'SiteTitleSeparator', $data['separator']);
-                xarModVars::set('themes', 'SiteTitleOrder', $data['pagetitle']);
-                xarModVars::set('themes', 'SiteSlogan', $data['slogan']);
-                xarModVars::set('themes', 'SiteCopyRight', $data['copyright']);
-                xarModVars::set('themes', 'SiteFooter', $data['footer']);
-                xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', $data['showphpcbit']);
-                xarModVars::set('themes', 'ShowTemplates', $data['showtemplates']);
-                xarModVars::set('themes', 'AtomTag', $data['atomtag']);
-                xarModVars::set('themes', 'variable_dump', $data['variable_dump']);
-                xarModVars::set('themes', 'adminpagemenu', $data['adminpagemenu']);
-                xarModVars::set('themes', 'userpagemenu', $data['userpagemenu']);
-                //            xarModVars::set('themes', 'usedashboard', $data['usedashboard']);
-                //            xarModVars::set('themes', 'dashtemplate', $data['dashtemplate']);
+                $this->mod()->setVar('SiteName', $data['sitename']);
+                $this->mod()->setVar('SiteTitleSeparator', $data['separator']);
+                $this->mod()->setVar('SiteTitleOrder', $data['pagetitle']);
+                $this->mod()->setVar('SiteSlogan', $data['slogan']);
+                $this->mod()->setVar('SiteCopyRight', $data['copyright']);
+                $this->mod()->setVar('SiteFooter', $data['footer']);
+                $this->mod()->setVar('ShowPHPCommentBlockInTemplates', $data['showphpcbit']);
+                $this->mod()->setVar('ShowTemplates', $data['showtemplates']);
+                $this->mod()->setVar('AtomTag', $data['atomtag']);
+                $this->mod()->setVar('variable_dump', $data['variable_dump']);
+                $this->mod()->setVar('adminpagemenu', $data['adminpagemenu']);
+                $this->mod()->setVar('userpagemenu', $data['userpagemenu']);
+                //            $this->mod()->setVar('usedashboard', $data['usedashboard']);
+                //            $this->mod()->setVar('dashtemplate', $data['dashtemplate']);
                 // <chris/> Instead of setting the base theme config var dir directly,
                 // let xarTpl take care of it, it'll complain if the directory doesn't
                 // exist or the current theme isn't in the directory specified
@@ -165,21 +165,21 @@ class ModifyconfigMethod extends MethodClass
                 $this->config()->setVar('Site.BL.DocType', $data['doctype']);
                 $this->config()->setVar('Site.BL.ExceptionDisplay', $data['exceptionsdisplay']);
                 $this->config()->setVar('Site.Core.AllowAJAX', $data['allowajax']);
-                xarModVars::set('themes', 'hidecore', $data['hidecore']);
-                xarModVars::set('themes', 'selstyle', $data['selstyle']);
-                xarModVars::set('themes', 'selfilter', $data['selfilter']);
-                xarModVars::set('themes', 'selsort', $data['selsort']);
+                $this->mod()->setVar('hidecore', $data['hidecore']);
+                $this->mod()->setVar('selstyle', $data['selstyle']);
+                $this->mod()->setVar('selfilter', $data['selfilter']);
+                $this->mod()->setVar('selsort', $data['selsort']);
 
                 // css combine/compress options
-                xarModVars::set('themes', 'css.combined', $data['combinecss']);
-                xarModVars::set('themes', 'css.compressed', $data['compresscss']);
+                $this->mod()->setVar('css.combined', $data['combinecss']);
+                $this->mod()->setVar('css.compressed', $data['compresscss']);
 
-                xarModVars::set('themes', 'debugmode', $data['debugmode']);
+                $this->mod()->setVar('debugmode', $data['debugmode']);
 
                 sys::import('modules.dynamicdata.class.properties.master');
                 $caches = $this->prop()->getProperty(['name' => 'checkboxlist']);
                 $caches->checkInput('flushcaches');
-                xarModVars::set('themes', 'flushcaches', $caches->value);
+                $this->mod()->setVar('flushcaches', $caches->value);
 
                 // Flush the caches
                 $cachestoflush = $caches->getValue();
@@ -204,7 +204,7 @@ class ModifyconfigMethod extends MethodClass
                 sys::import('modules.dynamicdata.class.properties.master');
                 $caches = $this->prop()->getProperty(['name' => 'checkboxlist']);
                 $caches->checkInput('flushcaches');
-                xarModVars::set('themes', 'flushcaches', $caches->value);
+                $this->mod()->setVar('flushcaches', $caches->value);
                 // Flush the caches
                 $cachestoflush = $caches->getValue();
                 /** @var FilePickerProperty $picker */
@@ -233,7 +233,7 @@ class ModifyconfigMethod extends MethodClass
 
                 // Empty the cache_data table in the database
                 $caches->checkInput('flushdbcaches');
-                xarModVars::set('themes', 'flushdbcaches', $caches->value);
+                $this->mod()->setVar('flushdbcaches', $caches->value);
                 $cachestoflush = $caches->getValue();
                 sys::import('xaraya.structures.query');
                 foreach ($cachestoflush as $cachetoflush) {

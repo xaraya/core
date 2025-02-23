@@ -47,8 +47,8 @@ class ComposeMethod extends MethodClass
         $data['authid']         = $this->sec()->genAuthKey();
 
         // Get the admin email address
-        $data['email']   = xarModVars::get('mail', 'adminmail');
-        $data['name']    = xarModVars::get('mail', 'adminname');
+        $data['email']   = $this->mod()->getVar('adminmail');
+        $data['name']    = $this->mod()->getVar('adminname');
 
         $this->var()->find('confirm', $confirm, 'int', 0);
 

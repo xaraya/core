@@ -50,13 +50,13 @@ class ModifyconfigMethod extends MethodClass
         $data = [];
         $this->var()->find('phase', $phase, 'str:1:100', 'modify');
         $this->var()->find('tab', $data['tab'], 'str:1:100', 'general');
-        $this->var()->find('testergroup', $testergroup, 'int', xarModVars::get('privileges', 'testergroup'));
-        $this->var()->find('tester', $tester, 'int', xarModVars::get('privileges', 'tester'));
+        $this->var()->find('testergroup', $testergroup, 'int', $this->mod()->getVar('testergroup'));
+        $this->var()->find('tester', $tester, 'int', $this->mod()->getVar('tester'));
 
         switch ($data['tab']) {
             case 'lastresort':
                 //Check for existence of a last resort admin for feedback to user
-                $lastresort  = xarModVars::get('privileges', 'lastresort');
+                $lastresort  = $this->mod()->getVar('lastresort');
                 if (($lastresort) && strlen(trim($lastresort)) > 1) {
                     //could just be true, we want to know if the name is set
                     $islastresort = unserialize($lastresort);
@@ -68,8 +68,8 @@ class ModifyconfigMethod extends MethodClass
                 }
                 break;
             case 'realms':
-                $data['showrealms'] = xarModVars::get('privileges', 'showrealms');
-                $realmvalue = xarModVars::get('privileges', 'realmvalue');
+                $data['showrealms'] = $this->mod()->getVar('showrealms');
+                $realmvalue = $this->mod()->getVar('realmvalue');
                 if (strpos($realmvalue, 'string:') === 0) {
                     $textvalue = substr($realmvalue, 7);
                     $realmvalue = 'string';
@@ -81,7 +81,7 @@ class ModifyconfigMethod extends MethodClass
                 break;
 
             case 'testing':
-                $settestergroup = xarModVars::get('privileges', 'testergroup');
+                $settestergroup = $this->mod()->getVar('testergroup');
                 if (!isset($settestergroupp) || empty($settestergroup)) {
                     $settestergrouprole = xarRoles::findRole('Administrators');
                     $settestergroup = $settestergrouprole->getID();
@@ -99,7 +99,7 @@ class ModifyconfigMethod extends MethodClass
 
                 $data['testusers'] = $testusers; //array
 
-                $settester = xarModVars::get('privileges', 'tester'); //id
+                $settester = $this->mod()->getVar('tester'); //id
                 if (!isset($settester) || empty($settester)) {
                     $settester = $defaultadminid; //bug 5832 set it to the default admin, cannot assume it is Administrator
                 }
@@ -123,7 +123,7 @@ class ModifyconfigMethod extends MethodClass
                 if (!isset($phase)) {
                     $this->session()->setVar('statusmsg', '');
                 }
-                $data['inheritdeny'] = xarModVars::get('privileges', 'inheritdeny');
+                $data['inheritdeny'] = $this->mod()->getVar('inheritdeny');
                 break;
 
             case 'update':
@@ -145,25 +145,25 @@ class ModifyconfigMethod extends MethodClass
                             $itemid = $data['module_settings']->updateItem();
                         }
 
-                        xarModVars::set('privileges', 'inheritdeny', $inheritdeny);
-                        xarModVars::set('privileges', 'lastresort', $lastresort);
+                        $this->mod()->setVar('inheritdeny', $inheritdeny);
+                        $this->mod()->setVar('lastresort', $lastresort);
                         if (!$lastresort) {
-                            xarModVars::delete('privileges', 'lastresort');
+                            $this->mod()->delVar('lastresort');
                         }
-                        xarModVars::set('privileges', 'exceptionredirect', $data['exceptionredirect']);
+                        $this->mod()->setVar('exceptionredirect', $data['exceptionredirect']);
 
                         break;
                     case 'realms':
                         $this->var()->find('enablerealms', $data['enablerealms'], 'checkbox', false);
-                        xarModVars::set('privileges', 'showrealms', $data['enablerealms']);
+                        $this->mod()->setVar('showrealms', $data['enablerealms']);
                         $this->var()->find('realmvalue', $realmvalue, 'str', 'none');
                         $this->var()->find('realmcomparison', $realmcomparison, 'str', 'exact');
                         $this->var()->find('textvalue', $textvalue, 'str', '');
                         if ($realmvalue == 'string') {
                             $realmvalue = empty($textvalue) ? 'none' : 'string:' . $textvalue;
                         }
-                        xarModVars::set('privileges', 'realmvalue', $realmvalue);
-                        xarModVars::set('privileges', 'realmcomparison', $realmcomparison);
+                        $this->mod()->setVar('realmvalue', $realmvalue);
+                        $this->mod()->setVar('realmcomparison', $realmcomparison);
                         break;
                     case 'lastresort':
                         $this->var()->find('name', $name, 'str', '');
@@ -186,18 +186,18 @@ class ModifyconfigMethod extends MethodClass
                             'password' => MD5($password),
                         ];
                         $this->session()->setVar('statusmsg', $this->ml('Last Resort Administrator successfully created!'));
-                        xarModVars::set('privileges', 'lastresort', serialize($secret));
+                        $this->mod()->setVar('lastresort', serialize($secret));
                         break;
                     case 'testing':
-                        $this->var()->find('tester', $data['tester'], 'int', xarModVars::get('privileges', 'tester'));
-                        xarModVars::set('privileges', 'tester', $data['tester']);
+                        $this->var()->find('tester', $data['tester'], 'int', $this->mod()->getVar('tester'));
+                        $this->mod()->setVar('tester', $data['tester']);
                         $this->var()->find('test', $test, 'checkbox', false);
-                        xarModVars::set('privileges', 'test', $test);
+                        $this->mod()->setVar('test', $test);
                         $this->var()->find('testdeny', $testdeny, 'checkbox', false);
-                        xarModVars::set('privileges', 'testdeny', $testdeny);
+                        $this->mod()->setVar('testdeny', $testdeny);
                         $this->var()->find('testmask', $testmask, 'str', 'All');
-                        xarModVars::set('privileges', 'testmask', $testmask);
-                        xarModVars::set('privileges', 'testergroup', $testergroup);
+                        $this->mod()->setVar('testmask', $testmask);
+                        $this->mod()->setVar('testergroup', $testergroup);
                         break;
                 }
                 break;

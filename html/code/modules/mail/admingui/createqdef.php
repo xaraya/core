@@ -92,7 +92,7 @@ class CreateqdefMethod extends MethodClass
 
             // The file contained itemtype -1 which needs to be corrected now.
             // We created the object successfully, register it as soon as possible (getitemtypes depends on it, for one)
-            xarModVars::set('mail', 'queue-definition', $qdefName);
+            $this->mod()->setVar('queue-definition', $qdefName);
             // Get the itemtypes of the mail module
             $itemtypes = $userapi->getitemtypes();
             // Get the max value from the keys and add one
@@ -108,7 +108,7 @@ class CreateqdefMethod extends MethodClass
 
         } else {
             // All went well, we can set the modvar now
-            xarModVars::set('mail', 'queue-definition', $qdefName);
+            $this->mod()->setVar('queue-definition', $qdefName);
         }
         $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'view'));
         return true;

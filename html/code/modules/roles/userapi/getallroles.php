@@ -57,7 +57,7 @@ class GetallrolesMethod extends MethodClass
             $startnum = 1;
         }
         if (!isset($numitems)) {
-            $numitems = (int) xarModVars::get('roles', 'items_per_page');
+            $numitems = (int) $this->mod()->getVar('items_per_page');
         }
 
         sys::import('xaraya.structures.query');
@@ -142,7 +142,7 @@ class GetallrolesMethod extends MethodClass
         }
 
         // cfr. cachemanager - this approach might change later
-        $expire = xarModVars::get('roles', 'cache.userapi.getallroles');
+        $expire = $this->mod()->getVar('cache.userapi.getallroles');
         if (!empty($expire)) {
             $expire = unserialize($expire);
             $q = $expire;

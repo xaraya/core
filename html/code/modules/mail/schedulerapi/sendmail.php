@@ -43,7 +43,7 @@ class SendmailMethod extends MethodClass
 
         // TODO: use separate xar_mail_queue table here someday
         // get the waiting queue
-        $serialqueue = xarModVars::get('mail', 'queue');
+        $serialqueue = $this->mod()->getVar('queue');
         if (!empty($serialqueue)) {
             $queue = unserialize($serialqueue);
         } else {
@@ -59,7 +59,7 @@ class SendmailMethod extends MethodClass
 
             $log .= $this->ml('Sending mail #(1)', $id) . ' ';
             // retrieve the mail data
-            $data = xarModVars::get('mail', $id);
+            $data = $this->mod()->getVar($id);
             if (empty($data)) {
                 $log .= $this->ml('empty') . "\n";
                 $sent[] = $id;
@@ -70,12 +70,12 @@ class SendmailMethod extends MethodClass
             // send it with the internal _sendmail API function
             if ($adminapi->internal_sendmail($args)) {
                 $log .= $this->ml('succeeded');
-                xarModVars::delete('mail', $id);
+                $this->mod()->delVar($id);
                 $sent[] = $id;
             } else {
                 $log .= $this->ml('failed');
                 // CHECKME: do we try again later or not ? That should probably depend on the error ;)
-                xarModVars::delete('mail', $id);
+                $this->mod()->delVar($id);
                 $sent[] = $id;
             }
             $log .= "\n";
@@ -92,7 +92,7 @@ class SendmailMethod extends MethodClass
         $this->var()->delCached('Mod.Variables.mail', 'queue');
 
         // get the current waiting queue
-        $serialqueue = xarModVars::get('mail', 'queue');
+        $serialqueue = $this->mod()->getVar('queue');
         if (!empty($serialqueue)) {
             $queue = unserialize($serialqueue);
         } else {
@@ -106,7 +106,7 @@ class SendmailMethod extends MethodClass
         }
         // update the waiting queue
         $serialqueue = serialize($queue);
-        xarModVars::set('mail', 'queue', $serialqueue);
+        $this->mod()->setVar('queue', $serialqueue);
 
         return $log;
     }

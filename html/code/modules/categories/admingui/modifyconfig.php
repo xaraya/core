@@ -72,11 +72,11 @@ class ModifyconfigMethod extends MethodClass
                 if (!$this->sec()->confirmAuthKey()) {
                     return $this->ctl()->badRequest('bad_author');
                 }
-                $this->var()->find('usejsdisplay', $usejsdisplay, 'checkbox', xarModVars::get('categories', 'usejsdisplay'));
-                $this->var()->find('numstats', $numstats, 'int', xarModVars::get('categories', 'numstats'));
-                $this->var()->find('showtitle', $showtitle, 'checkbox', xarModVars::get('categories', 'showtitle'));
-                $this->var()->find('allowbatch', $allowbatch, 'checkbox', xarModVars::get('categories', 'allowbatch'));
-                $this->var()->find('categoriesobject', $categoriesobject, 'str', xarModVars::get('categories', 'categoriesobject'));
+                $this->var()->find('usejsdisplay', $usejsdisplay, 'checkbox', $this->mod()->getVar('usejsdisplay'));
+                $this->var()->find('numstats', $numstats, 'int', $this->mod()->getVar('numstats'));
+                $this->var()->find('showtitle', $showtitle, 'checkbox', $this->mod()->getVar('showtitle'));
+                $this->var()->find('allowbatch', $allowbatch, 'checkbox', $this->mod()->getVar('allowbatch'));
+                $this->var()->find('categoriesobject', $categoriesobject, 'str', $this->mod()->getVar('categoriesobject'));
 
                 $modvars = [
                     'usejsdisplay',

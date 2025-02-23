@@ -62,7 +62,7 @@ class UsermenuMethod extends MethodClass
         }
 
         // edit account is disabled?
-        if ((bool) xarModVars::get('roles', 'usereditaccount') == false) {
+        if ((bool) $this->mod()->getVar('usereditaccount') == false) {
             // show the user their profile display
             $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'account'));
         }
@@ -85,14 +85,14 @@ class UsermenuMethod extends MethodClass
         }
         // only get the fields we need
         $fieldlist = [];
-        $settings = explode(',', xarModVars::get('roles', 'duvsettings'));
-        if ((bool) xarModVars::get('roles', 'allowemail')) {
+        $settings = explode(',', $this->mod()->getVar('duvsettings'));
+        if ((bool) $this->mod()->getVar('allowemail')) {
             $fieldlist[] = 'allowemail';
         }
         if (in_array('usertimezone', $settings)) {
             $fieldlist[] = 'usertimezone';
         }
-        if (in_array('userhome', $settings) && (bool) xarModVars::get('roles', 'allowuserhomeedit')) {
+        if (in_array('userhome', $settings) && (bool) $this->mod()->getVar('allowuserhomeedit')) {
             $fieldlist[] = 'userhome';
         }
         if (in_array('useremailformat', $settings)) {
@@ -145,11 +145,11 @@ class UsermenuMethod extends MethodClass
             case 'checkinput':
                 $isvalid = $object->checkInput();
 
-                if (!empty($object->properties['userhome']) && (bool) xarModVars::get('roles', 'allowuserhomeedit')) {
+                if (!empty($object->properties['userhome']) && (bool) $this->mod()->getVar('allowuserhomeedit')) {
                     $home = $object->properties['userhome']->getValue();
-                    if ((bool) xarModVars::get('roles', 'allowuserhomeedit')) { // users can edit user home
+                    if ((bool) $this->mod()->getVar('allowuserhomeedit')) { // users can edit user home
                         // Check if external urls are allowed in home page
-                        $allowexternalurl = (bool) xarModVars::get('roles', 'allowexternalurl');
+                        $allowexternalurl = (bool) $this->mod()->getVar('allowexternalurl');
                         $url_parts = parse_url($home);
                         if (!$allowexternalurl) {
                             if ((preg_match("%^http://%", $home, $matches)) &&

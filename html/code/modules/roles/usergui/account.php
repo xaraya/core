@@ -90,7 +90,7 @@ class AccountMethod extends MethodClass
 
             $menumods = [];
             // only display edit tabs if edit account is enabled
-            if ((bool) xarModVars::get('roles', 'usereditaccount')) {
+            if ((bool) $this->mod()->getVar('usereditaccount')) {
                 // get a list of modules with user menu enabled
                 $allmods = $this->mod()->apiFunc('modules', 'admin', 'getlist');
                 foreach ($allmods as $modinfo) {
@@ -169,7 +169,7 @@ class AccountMethod extends MethodClass
                 if (empty($tab) || $tab == 'profile') {
                 } elseif ($tab == 'basic') {
                     // set up the roles_user object for edit
-                    if (xarModVars::get('roles', 'setuserlastlogin')) {
+                    if ($this->mod()->getVar('setuserlastlogin')) {
                         //only display it for current user or admin
                         if (xarUser::isLoggedIn() && xarUser::getVar('id') == $id) { //they should be but ..
                             $userlastlogin = $this->session()->getVar('roles_thislastlogin');

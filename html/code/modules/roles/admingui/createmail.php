@@ -123,7 +123,7 @@ class CreatemailMethod extends MethodClass
             $q->eq('r.itemtype', xarRoles::ROLES_USERTYPE);
             $q->ne('r.email', '');
             // Set the paging and order stuff for this particular page
-            $numitems = (int) xarModVars::get('roles', 'items_per_page');
+            $numitems = (int) $this->mod()->getVar('items_per_page');
             $q->setrowstodo($numitems);
             $q->setstartat($startnum);
             $q->setorder($data['order']);

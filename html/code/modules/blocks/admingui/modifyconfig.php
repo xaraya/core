@@ -57,7 +57,7 @@ class ModifyconfigMethod extends MethodClass
         switch (strtolower($phase)) {
             case 'modify':
             default:
-                $noexceptions = (int) xarModVars::get('blocks', 'noexceptions');
+                $noexceptions = (int) $this->mod()->getVar('noexceptions');
                 $data['noexceptions'] = (!isset($noexceptions)) ? 1 : $noexceptions;
 
                 $data['exceptionoptions'] = [
@@ -79,7 +79,7 @@ class ModifyconfigMethod extends MethodClass
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                     $this->var()->find('noexceptions', $noexceptions, 'int:0:1', 0);
-                    xarModVars::set('blocks', 'noexceptions', $noexceptions);
+                    $this->mod()->setVar('noexceptions', $noexceptions);
                     //    $this->ctl()->redirect($this->ctl()->getModuleURL('blocks', 'admin', 'modifyconfig'));
                     //    return true;
                 }

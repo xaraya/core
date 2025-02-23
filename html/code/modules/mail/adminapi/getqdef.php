@@ -42,7 +42,7 @@ class GetqdefMethod extends MethodClass
     {
         extract($args);
 
-        $qDef = xarModVars::get('mail', 'queue-definition');
+        $qDef = $this->mod()->getVar('queue-definition');
         if ($qDef != null) {
             // Modvar has a value, fetch the info
             $qdefInfo = $this->data()->getObjectInfo(['name' => $qDef]);

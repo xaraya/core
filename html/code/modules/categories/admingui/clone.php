@@ -55,7 +55,7 @@ class CloneMethod extends MethodClass
 
         // Setting up necessary data.
         sys::import('modules.dynamicdata.class.objects.factory');
-        $data['object'] = $this->data()->getObject(['name' => xarModVars::get('categories', 'categoriesobject')]);
+        $data['object'] = $this->data()->getObject(['name' => $this->mod()->getVar('categoriesobject')]);
         $data['object']->getItem(['itemid' => $data['itemid']]);
 
         if ($confirm) {

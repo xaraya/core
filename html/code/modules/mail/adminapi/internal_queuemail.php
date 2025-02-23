@@ -61,10 +61,10 @@ class InternalQueuemailMethod extends MethodClass
         // create a unique id for this mail
         $id = md5($data);
         // store the mail for later
-        xarModVars::set('mail', $id, $data);
+        $this->mod()->setVar($id, $data);
 
         // put it in the waiting queue, together with when it should be sent
-        $serialqueue = xarModVars::get('mail', 'queue');
+        $serialqueue = $this->mod()->getVar('queue');
         if (!empty($serialqueue)) {
             $queue = unserialize($serialqueue);
         } else {
@@ -72,7 +72,7 @@ class InternalQueuemailMethod extends MethodClass
         }
         $queue[$id] = $args['when'];
         $serialqueue = serialize($queue);
-        xarModVars::set('mail', 'queue', $serialqueue);
+        $this->mod()->setVar('queue', $serialqueue);
 
         return true;
     }

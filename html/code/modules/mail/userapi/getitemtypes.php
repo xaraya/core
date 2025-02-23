@@ -45,7 +45,7 @@ class GetitemtypesMethod extends MethodClass
         // to a specific queue.
         //
         // Use dd to retrieve the items of the mailqueue object
-        $qdefName = xarModVars::get('mail', 'queue-definition');
+        $qdefName = $this->mod()->getVar('queue-definition');
         if (!$qdefName) {
             return $itemtypes;
             //throw new Exception('Mail queue definition does not exist');

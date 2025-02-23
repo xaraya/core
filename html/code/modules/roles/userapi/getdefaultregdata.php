@@ -40,7 +40,7 @@ class GetdefaultregdataMethod extends MethodClass
         $defaultregdata      = [];
         $defaultregmodname   = '';
         $defaultregmodactive = false;
-        $defaultregmodname    = xarModVars::get('roles', 'defaultregmodule');
+        $defaultregmodname    = $this->mod()->getVar('defaultregmodule');
 
         if (!empty($defaultregmodname)) {
             //check the module is available

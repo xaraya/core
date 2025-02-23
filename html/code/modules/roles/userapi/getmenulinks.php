@@ -39,7 +39,7 @@ class GetmenulinksMethod extends MethodClass
     {
         //If we have turned on role list (memberlist) display and users have requisite level to see them
         $menulinks = [];
-        if ((bool) xarModVars::get('roles', 'displayrolelist')) {
+        if ((bool) $this->mod()->getVar('displayrolelist')) {
             $menulinks[] = [
                 'url'   => $this->ctl()->getModuleURL('roles', 'user', 'view'),
                 'title' => $this->ml('View All Users'),

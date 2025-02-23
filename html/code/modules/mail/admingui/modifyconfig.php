@@ -53,10 +53,10 @@ class ModifyconfigMethod extends MethodClass
         $this->var()->find('tab', $data['tab'], 'str:1', 'general');
 
         // Get encoding
-        $data['encoding'] = xarModVars::get('mail', 'encoding');
+        $data['encoding'] = $this->mod()->getVar('encoding');
 
         // Redirect address - ensure it's set
-        $address = trim(xarModVars::get('mail', 'redirectaddress') ?? '');
+        $address = trim($this->mod()->getVar('redirectaddress') ?? '');
         if (isset($address) && !empty($address)) {
             $data['redirectaddress'] = $this->var()->prep($address);
         } else {
@@ -86,7 +86,7 @@ class ModifyconfigMethod extends MethodClass
                 $data['interval'] = $job['interval'];
             }
             // get the waiting queue
-            $serialqueue = xarModVars::get('mail', 'queue');
+            $serialqueue = $this->mod()->getVar('queue');
             if (!empty($serialqueue)) {
                 $queue = unserialize($serialqueue);
             } else {
@@ -127,25 +127,25 @@ class ModifyconfigMethod extends MethodClass
                         }
 
                         if (isset($admin_outgoing)) {
-                            xarModVars::set('mail', 'admin_outgoing', $admin_outgoing);
+                            $this->mod()->setVar('admin_outgoing', $admin_outgoing);
                         }
                         // set the modvars used by sendmail as default from name, address
                         $adminname = xarUser::getVar('name', $admin_outgoing);
                         $adminmail = xarUser::getVar('email', $admin_outgoing);
-                        xarModVars::set('mail', 'adminname', $adminname);
-                        xarModVars::set('mail', 'adminmail', $adminmail);
+                        $this->mod()->setVar('adminname', $adminname);
+                        $this->mod()->setVar('adminmail', $adminmail);
 
-                        xarModVars::set('mail', 'ShowTemplates', $showtemplates);
-                        xarModVars::set('mail', 'replyto', $replyto);
-                        xarModVars::set('mail', 'replytoname', $replytoname);
-                        xarModVars::set('mail', 'replytoemail', $replytoemail);
+                        $this->mod()->setVar('ShowTemplates', $showtemplates);
+                        $this->mod()->setVar('replyto', $replyto);
+                        $this->mod()->setVar('replytoname', $replytoname);
+                        $this->mod()->setVar('replytoemail', $replytoemail);
 
-                        xarModVars::set('mail', 'debugmode', $debugmode);
+                        $this->mod()->setVar('debugmode', $debugmode);
 
                         // Suppoert for PHPMailer as an external library
                         if (file_exists(sys::lib() . 'PHPMailer')) {
                             $this->var()->find('use_external_lib', $use_external_lib, 'checkbox', false);
-                            xarModVars::set('mail', 'use_external_lib', $use_external_lib);
+                            $this->mod()->setVar('use_external_lib', $use_external_lib);
                         }
 
                         break;
@@ -179,33 +179,33 @@ class ModifyconfigMethod extends MethodClass
                         $this->var()->find('redirectaddress', $redirectaddress, 'str:1:', '');
 
                         // update the data
-                        xarModVars::set('mail', 'html', $html);
-                        xarModVars::set('mail', 'htmluseheadfoot', $htmluseheadfoot);
-                        xarModVars::set('mail', 'htmlheader', $htmlheader);
-                        xarModVars::set('mail', 'htmlfooter', $htmlfooter);
-                        xarModVars::set('mail', 'textuseheadfoot', $textuseheadfoot);
-                        xarModVars::set('mail', 'textheader', $textheader);
-                        xarModVars::set('mail', 'textfooter', $textfooter);
-                        xarModVars::set('mail', 'priority', $priority);
-                        xarModVars::set('mail', 'encoding', $encoding);
-                        xarModVars::set('mail', 'embed_images', $embed_images);
-                        xarModVars::set('mail', 'wordwrap', $wordwrap);
-                        xarModVars::set('mail', 'server', $server);
-                        xarModVars::set('mail', 'smtpHost', $smtpHost);
-                        xarModVars::set('mail', 'smtpPort', $smtpPort);
-                        xarModVars::set('mail', 'smtpAuth', $smtpAuth);
-                        xarModVars::set('mail', 'smtpSecure', $smtpSecure);
-                        xarModVars::set('mail', 'smtpUserName', $smtpUserName);
+                        $this->mod()->setVar('html', $html);
+                        $this->mod()->setVar('htmluseheadfoot', $htmluseheadfoot);
+                        $this->mod()->setVar('htmlheader', $htmlheader);
+                        $this->mod()->setVar('htmlfooter', $htmlfooter);
+                        $this->mod()->setVar('textuseheadfoot', $textuseheadfoot);
+                        $this->mod()->setVar('textheader', $textheader);
+                        $this->mod()->setVar('textfooter', $textfooter);
+                        $this->mod()->setVar('priority', $priority);
+                        $this->mod()->setVar('encoding', $encoding);
+                        $this->mod()->setVar('embed_images', $embed_images);
+                        $this->mod()->setVar('wordwrap', $wordwrap);
+                        $this->mod()->setVar('server', $server);
+                        $this->mod()->setVar('smtpHost', $smtpHost);
+                        $this->mod()->setVar('smtpPort', $smtpPort);
+                        $this->mod()->setVar('smtpAuth', $smtpAuth);
+                        $this->mod()->setVar('smtpSecure', $smtpSecure);
+                        $this->mod()->setVar('smtpUserName', $smtpUserName);
                         if (!empty($smtpPassword)) {
-                            xarModVars::set('mail', 'smtpPassword', $smtpPassword);
+                            $this->mod()->setVar('smtpPassword', $smtpPassword);
                         }
 
-                        xarModVars::set('mail', 'sendmailpath', $sendmailpath);
-                        xarModVars::set('mail', 'searchstrings', serialize($searchstrings));
-                        xarModVars::set('mail', 'replacestrings', serialize($replacestrings));
-                        xarModVars::set('mail', 'suppresssending', $suppresssending);
-                        xarModVars::set('mail', 'redirectsending', $redirectsending);
-                        xarModVars::set('mail', 'redirectaddress', $redirectaddress);
+                        $this->mod()->setVar('sendmailpath', $sendmailpath);
+                        $this->mod()->setVar('searchstrings', serialize($searchstrings));
+                        $this->mod()->setVar('replacestrings', serialize($replacestrings));
+                        $this->mod()->setVar('suppresssending', $suppresssending);
+                        $this->mod()->setVar('redirectsending', $redirectsending);
+                        $this->mod()->setVar('redirectaddress', $redirectaddress);
 
                         if ($this->mod()->isAvailable('scheduler')) {
                             $this->var()->find('interval', $interval, 'str:1', '');

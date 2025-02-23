@@ -67,7 +67,7 @@ class ViewqMethod extends MethodClass
                     $this->var()->find('id', $id, 'str', '');
                     if (!empty($id)) {
                         // retrieve the mail data
-                        $maildata = xarModVars::get('mail', $id);
+                        $maildata = $this->mod()->getVar($id);
                         if (!empty($maildata)) {
                             $data['id'] = $id;
                             $data['mail'] = unserialize($maildata);
@@ -79,21 +79,21 @@ class ViewqMethod extends MethodClass
                     $this->var()->find('id', $id, 'str', '');
                     if (!empty($id)) {
                         // get the waiting queue
-                        $serialqueue = xarModVars::get('mail', 'queue');
+                        $serialqueue = $this->mod()->getVar('queue');
                         if (!empty($serialqueue)) {
                             $queue = unserialize($serialqueue);
                         } else {
                             $queue = [];
                         }
                         // delete the mail data
-                        xarModVars::delete('mail', $id);
+                        $this->mod()->delVar($id);
                         // remove the selected mail from the queue
                         if (isset($queue[$id])) {
                             unset($queue[$id]);
                         }
                         // update the waiting queue
                         $serialqueue = serialize($queue);
-                        xarModVars::set('mail', 'queue', $serialqueue);
+                        $this->mod()->setVar('queue', $serialqueue);
 
                         $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'viewq'));
                         return true;
@@ -107,7 +107,7 @@ class ViewqMethod extends MethodClass
 
         // TODO: use separate xar_mail_queue table here someday
         // get the waiting queue
-        $serialqueue = xarModVars::get('mail', 'queue');
+        $serialqueue = $this->mod()->getVar('queue');
         if (!empty($serialqueue)) {
             $queue = unserialize($serialqueue);
         } else {

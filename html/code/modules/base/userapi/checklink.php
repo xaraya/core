@@ -95,9 +95,9 @@ class ChecklinkMethod extends MethodClass
         }
 
         // see if we need to go through a proxy
-        $proxyhost = xarModVars::get('base', 'proxyhost');
+        $proxyhost = $this->mod()->getVar('proxyhost');
         if (!empty($proxyhost) && !$islocal) {
-            $proxyport = xarModVars::get('base', 'proxyport');
+            $proxyport = $this->mod()->getVar('proxyport');
             $fp = @fsockopen($proxyhost, $proxyport, $errno, $errstr, 10);
             if (!$fp) {
                 return $this->ml('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);

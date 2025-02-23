@@ -64,10 +64,10 @@ class SendtestMethod extends MethodClass
             //return $this->ctl()->badRequest('bad_author');
         }
         if (empty($email)) {
-            $email = xarModVars::get('mail', 'adminmail');
+            $email = $this->mod()->getVar('adminmail');
         }
         if (empty($name)) {
-            $name = xarModVars::get('mail', 'adminname');
+            $name = $this->mod()->getVar('adminname');
         }
 
         $this->var()->find('when', $when, 'str:1', '');

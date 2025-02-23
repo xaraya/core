@@ -209,7 +209,7 @@ class GetcatMethod extends MethodClass
         $SQLquery .= " ORDER BY P1.left_id";
 
         // cfr. cachemanager - this approach might change later
-        $expire = xarModVars::get('categories', 'cache.userapi.getcat');
+        $expire = $this->mod()->getVar('cache.userapi.getcat');
         if (is_numeric($items_per_page) && $items_per_page > 0 && is_numeric($startnum) && $startnum > -1) {
             if (!empty($expire)) {
                 $result = $dbconn->CacheSelectLimit($expire, $SQLquery, $items_per_page, $startnum, $bindvars);

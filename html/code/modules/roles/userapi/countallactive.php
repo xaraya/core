@@ -94,7 +94,7 @@ class CountallactiveMethod extends MethodClass
         $bindvars[] = xarRoles::ROLES_USERTYPE;
 
         // cfr. cachemanager - this approach might change later
-        $expire = xarModVars::get('roles', 'cache.userapi.countallactive');
+        $expire = $this->mod()->getVar('cache.userapi.countallactive');
         if (!empty($expire)) {
             $result = $dbconn->CacheExecute($expire, $query, $bindvars);
         } else {

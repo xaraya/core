@@ -44,7 +44,7 @@ class ShowloginformMethod extends MethodClass
         extract($args);
         $this->var()->find('redirecturl', $redirecturl, 'str:1:254', '');
         if (empty($redirecturl)) {
-            $redirecturl = xarModVars::get('authsystem', 'forwarding_page');
+            $redirecturl = $this->mod()->getVar('forwarding_page');
             if (empty($redirecturl)) {
                 $redirecturl = xarServer::getBaseURL();
             }
@@ -55,7 +55,7 @@ class ShowloginformMethod extends MethodClass
         $data['redirecturl'] = $urldata['redirecturl'];
 
         // If we don't ask to forward, then forward immediately
-        if (!(int) xarModVars::get('authsystem', 'ask_forward') && xarUser::isLoggedIn()) {
+        if (!(int) $this->mod()->getVar('ask_forward') && xarUser::isLoggedIn()) {
             $this->ctl()->redirect($data['redirecturl']);
             return true;
         }

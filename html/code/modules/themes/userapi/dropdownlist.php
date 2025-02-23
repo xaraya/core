@@ -81,9 +81,9 @@ class DropdownlistMethod extends MethodClass
         $adminapi = $this->adminapi();
         $options = [];
 
-        if ((bool) xarModVars::get('themes', 'enable_user_menu')) {
+        if ((bool) $this->mod()->getVar('enable_user_menu')) {
             $themelist = $adminapi->getthemelist($args);
-            $user_themes = xarModVars::get('themes', 'user_themes');
+            $user_themes = $this->mod()->getVar('user_themes');
             $user_themes = !empty($user_themes) ? explode(',', $user_themes) : [];
             if (!empty($themelist) && !empty($user_themes)) {
                 foreach ($themelist as $theme) {

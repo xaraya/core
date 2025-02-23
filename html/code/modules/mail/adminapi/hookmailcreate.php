@@ -86,15 +86,15 @@ class HookmailcreateMethod extends MethodClass
         // we will have to include the following security check and make sure the appropriate privileges are assigned
 
         // Set up variables
-        $wordwrap = xarModVars::get('mail', 'wordwrap');
-        $priority = xarModVars::get('mail', 'priority');
-        $encoding = xarModVars::get('mail', 'encoding');
+        $wordwrap = $this->mod()->getVar('wordwrap');
+        $priority = $this->mod()->getVar('priority');
+        $encoding = $this->mod()->getVar('encoding');
         if (empty($encoding)) {
             $encoding = '8bit';
-            xarModVars::set('mail', 'encoding', $encoding);
+            $this->mod()->setVar('encoding', $encoding);
         }
-        $from = xarModVars::get('mail', 'adminmail');
-        $fromname = xarModVars::get('mail', 'adminname');
+        $from = $this->mod()->getVar('adminmail');
+        $fromname = $this->mod()->getVar('adminname');
 
         // Get the templates for this message
         $strings = $adminapi->getmessagestrings(['module' => 'mail',
@@ -112,8 +112,8 @@ class HookmailcreateMethod extends MethodClass
         $data = [
             'sitename'   => xarModVars::get('themes', 'SiteName'),
             'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),
-            'siteadmin'  => xarModVars::get('mail', 'adminname'),
-            'adminmail'  => xarModVars::get('mail', 'adminmail'),
+            'siteadmin'  => $this->mod()->getVar('adminname'),
+            'adminmail'  => $this->mod()->getVar('adminmail'),
             'siteurl'    => xarServer::getBaseURL(),
             'myname'     => xarUser::getVar('name'),
             'myuname'    => xarUser::getVar('uname'),
@@ -143,7 +143,7 @@ class HookmailcreateMethod extends MethodClass
             'from' => $from,
             'fromname' => $fromname];
         // Check if HTML mail has been configured by the admin
-        if ((bool) xarModVars::get('mail', 'html')) {
+        if ((bool) $this->mod()->getVar('html')) {
             $adminapi->sendhtmlmail($mailargs);
         } else {
             $adminapi->sendmail($mailargs);

@@ -84,10 +84,10 @@ class DeleteMethod extends MethodClass
             return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_nonempty_group', 'user' => $role->getName()]);
         }
         // Prohibit removal of any groups or users the system needs
-        if ($id == (int) xarModVars::get('roles', 'admin')) {
+        if ($id == (int) $this->mod()->getVar('admin')) {
             return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_siteadmin', 'user' => $role->getUName()]);
         }
-        if ($id == (int) xarModVars::get('roles', 'defaultgroup')) {
+        if ($id == (int) $this->mod()->getVar('defaultgroup')) {
             return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'default_usergroup', 'group' => $role->getName()]);
         }
 

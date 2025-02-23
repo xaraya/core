@@ -62,7 +62,7 @@ class ViewInstancesMethod extends MethodClass
             case 'list':
                 $this->var()->find('startnum', $data['startnum'], 'int:1', 1);
                 $this->var()->find('filter', $data['filter'], 'pre:trim:str:1:', null);
-                $data['items_per_page'] = xarModVars::get('blocks', 'items_per_page');
+                $data['items_per_page'] = $this->mod()->getVar('items_per_page');
 
                 $data['total'] = $instancesapi->countitems([
                     'filter' => $data['filter'],

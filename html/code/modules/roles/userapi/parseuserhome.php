@@ -131,7 +131,7 @@ class ParseuserhomeMethod extends MethodClass
                         break;
                     }
                 default: // standard URL
-                    $allowexternalurl = (bool) xarModVars::get('roles', 'allowexternalurl');
+                    $allowexternalurl = (bool) $this->mod()->getVar('allowexternalurl');
                     $url_parts = parse_url($url);
                     if (isset($url_parts['host'])) { //if not we don't have to worry
                         if (($url_parts['host'] != xarServer::getVar("SERVER_NAME")) &&

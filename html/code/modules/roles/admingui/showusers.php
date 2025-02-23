@@ -54,7 +54,7 @@ class ShowusersMethod extends MethodClass
         if ($this->var()->isCached('roles', 'defaultgroupid')) {
             $defaultgroupid = $this->var()->getCached('roles', 'defaultgroupid');
         } else {
-            $defaultgroupid = xarModVars::get('roles', 'defaultgroup');
+            $defaultgroupid = $this->mod()->getVar('defaultgroup');
         }
         $this->var()->setCached('roles', 'defaultgroupid', $defaultgroupid);
 
@@ -67,7 +67,7 @@ class ShowusersMethod extends MethodClass
         $this->var()->find('order', $data['order'], 'str:0:', 'name');
         $this->var()->find('search', $data['search'], 'str:0:', null);
         $this->var()->check('reload', $reload, 'str:0:', null);
-        $this->var()->check('numitems', $numitems, 'int:1', (int) xarModVars::get('roles', 'items_per_page'));
+        $this->var()->check('numitems', $numitems, 'int:1', (int) $this->mod()->getVar('items_per_page'));
         if (empty($data['selstyle'])) {
             $data['selstyle'] = 0;
         }

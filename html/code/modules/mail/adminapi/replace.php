@@ -41,7 +41,7 @@ class ReplaceMethod extends MethodClass
 
         $sitename   = xarModVars::get('themes', 'SiteName');
         $siteslogan = xarModVars::get('themes', 'SiteSlogan');
-        $siteadmin  = xarModVars::get('mail', 'adminname');
+        $siteadmin  = $this->mod()->getVar('adminname');
         $siteurl    = xarServer::getBaseURL();
 
         $name = xarUser::getVar('name');
@@ -61,7 +61,7 @@ class ReplaceMethod extends MethodClass
             "$id",
             "$siteadmin"];
 
-        $searchstrings = xarModVars::get('mail', 'searchstrings');
+        $searchstrings = $this->mod()->getVar('searchstrings');
         if (!empty($searchstrings)) {
             $searchstrings = unserialize($searchstrings);
             $searchstrings = explode("\r\n", $searchstrings);
@@ -70,7 +70,7 @@ class ReplaceMethod extends MethodClass
             }
         }
 
-        $replacestrings = xarModVars::get('mail', 'replacestrings');
+        $replacestrings = $this->mod()->getVar('replacestrings');
         if (!empty($replacestrings)) {
             $replacestrings = unserialize($replacestrings);
             $replacestrings = explode("\r\n", $replacestrings);

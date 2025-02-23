@@ -101,7 +101,7 @@ class UsermenuMethod extends MethodClass
                 if ($isvalid) {
                     $email = $object->properties['email']->value;
                     if ($oldemail != $email) {
-                        if (xarModVars::get('roles', 'uniqueemail')) {
+                        if ($this->mod()->getVar('uniqueemail')) {
                             // check for duplicate email address
                             $user = $userapi->get(['email' => $email]);
                             if ($user != false) {
@@ -113,7 +113,7 @@ class UsermenuMethod extends MethodClass
                         }
                         if ($isvalid) {
                             // check for disallowed email addresses
-                            $disallowedemails = xarModVars::get('roles', 'disallowedemails');
+                            $disallowedemails = $this->mod()->getVar('disallowedemails');
                             if (!empty($disallowedemails)) {
                                 $disallowedemails = unserialize($disallowedemails);
                                 $disallowedemails = explode("\r\n", $disallowedemails);
@@ -155,7 +155,7 @@ class UsermenuMethod extends MethodClass
                            5) Display appropriate message
                         */
                         // Step 1a Check for validation required or not
-                        $requireValidation = (bool) xarModVars::get('roles', 'requirevalidation');
+                        $requireValidation = (bool) $this->mod()->getVar('requirevalidation');
                         if ($requireValidation || (xarUser::getVar('uname') != 'admin')) {
 
                             // Step 1
@@ -199,7 +199,7 @@ class UsermenuMethod extends MethodClass
                     $object->tplmodule = 'roles';
                     $object->template = 'account';
 
-                    if (xarModVars::get('roles', 'setuserlastlogin')) {
+                    if ($this->mod()->getVar('setuserlastlogin')) {
                         //only display it for current user or admin
                         if (xarUser::isLoggedIn() && xarUser::getVar('id') == $id) { //they should be but ..
                             $userlastlogin = $this->session()->getVar('roles_thislastlogin');
@@ -357,7 +357,7 @@ class UsermenuMethod extends MethodClass
                 ];
 
                 $menumods = [];
-                if ((bool) xarModVars::get('roles', 'usereditaccount')) {
+                if ((bool) $this->mod()->getVar('usereditaccount')) {
                     // get a list of modules with user menu enabled
                     $allmods = $this->mod()->apiFunc('modules', 'admin', 'getlist');
                     foreach ($allmods as $modinfo) {

@@ -62,7 +62,7 @@ class UpdateMethod extends MethodClass
         //Look at bug #997
 
         sys::import('modules.dynamicdata.class.objects.factory');
-        $data['object'] = $this->data()->getObject(['name' => xarModVars::get('categories', 'categoriesobject')]);
+        $data['object'] = $this->data()->getObject(['name' => $this->mod()->getVar('categoriesobject')]);
         $isvalid = $data['object']->checkInput();
 
         if (!$isvalid) {

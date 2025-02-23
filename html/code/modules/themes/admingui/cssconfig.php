@@ -61,12 +61,12 @@ class CssconfigMethod extends MethodClass
         switch ($component) {
             case "common":
                 // get and verify modvars and files - all reporting inline in the form
-                $data['csslinkoption'] = xarModVars::get('themes', 'csslinkoption');
+                $data['csslinkoption'] = $this->mod()->getVar('csslinkoption');
                 $cssfilepath = sys::code() . 'modules/themes/xarstyles/';
                 $filemissing = $this->ml('none (missing)');
                 $notlinked = $this->ml('none - use for template debugging only!!');
                 if ($data['csslinkoption'] == '') {
-                    xarModVars::set('themes', 'csslinkoption', 'static');
+                    $this->mod()->setVar('csslinkoption', 'static');
                     if (file_exists($cssfilepath . 'core.css')) {
                         $data['currentcssfile'] = $this->var()->prep($cssfilepath . 'core.css');
                     } else {
@@ -84,7 +84,7 @@ class CssconfigMethod extends MethodClass
                 } elseif ($data['csslinkoption'] == 'dynamic') {
                     if (file_exists($cssfilepath . 'corecss.php')) {
                         $data['currentcssfile'] = $this->var()->prep($cssfilepath . 'corecss.php');
-                        $data['csssource'] = xarModVars::get('themes', 'corecss');
+                        $data['csssource'] = $this->mod()->getVar('corecss');
                     } else {
                         $data['currentcssfile'] = $this->var()->prep($filemissing);
                     }

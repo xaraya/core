@@ -70,8 +70,8 @@ class ViewMethod extends MethodClass
             if (!$this->sec()->confirmAuthKey()) {
                 return $this->ctl()->badRequest('bad_author');
             }
-            $old_user_theme = xarModVars::get('themes', 'default_theme');
-            $old_admin_theme = xarModVars::get('themes', 'admin_theme');
+            $old_user_theme = $this->mod()->getVar('default_theme');
+            $old_admin_theme = $this->mod()->getVar('admin_theme');
             $this->var()->check(
                 'user_theme',
                 $new_user_theme,
@@ -101,7 +101,7 @@ class ViewMethod extends MethodClass
                 } else {
                     $new_user_theme = $old_user_theme;
                 }
-                xarModVars::set('themes', 'default_theme', $new_user_theme);
+                $this->mod()->setVar('default_theme', $new_user_theme);
             }
             if ($new_admin_theme != $old_admin_theme) {
                 $themeid = xarTheme::getIDFromName($new_admin_theme);
@@ -124,7 +124,7 @@ class ViewMethod extends MethodClass
                 if (is_null($new_admin_theme)) {
                     $new_admin_theme = $new_user_theme;
                 }
-                xarModVars::set('themes', 'admin_theme', $new_admin_theme);
+                $this->mod()->setVar('admin_theme', $new_admin_theme);
             }
             $return_url = $this->ctl()->getModuleURL('themes', 'admin', 'view');
             $this->ctl()->redirect($return_url);
@@ -179,7 +179,7 @@ class ViewMethod extends MethodClass
             $data['class'] = strtr($data['class'], ['system' => 0, 'utility' => 1, 'user' => 2, 'all' => 3]);
         }
 
-        $data['items_per_page'] = xarModVars::get('themes', 'items_per_page');
+        $data['items_per_page'] = $this->mod()->getVar('items_per_page');
 
         $authid = $this->sec()->genAuthKey();
         $themes = $adminapi->getitems([
@@ -195,8 +195,8 @@ class ViewMethod extends MethodClass
             'class' => $data['class'],
         ]);
 
-        $data['user_theme'] = xarModVars::get('themes', 'default_theme');
-        $data['admin_theme'] = xarModVars::get('themes', 'admin_theme');
+        $data['user_theme'] = $this->mod()->getVar('default_theme');
+        $data['admin_theme'] = $this->mod()->getVar('admin_theme');
 
         foreach ($themes as $key => $theme) {
             $theme['info_url'] = $this->ctl()->getModuleURL(
@@ -275,7 +275,7 @@ class ViewMethod extends MethodClass
         }
 
         $data['themes'] = $themes;
-        $data['useicons'] = xarModVars::get('themes', 'use_module_icons');
+        $data['useicons'] = $this->mod()->getVar('use_module_icons');
         $data['authid'] = $authid;
 
         $data['states'] = [

@@ -275,8 +275,8 @@ class ModifyconfigMethod extends MethodClass
         xarModVars::set('modules', 'defaultmoduletype', $defaultModuleType);
         xarModVars::set('modules', 'defaultmodulefunction', $defaultModuleFunction);
         xarModVars::set('modules', 'defaultdatapath', $defaultDataPath);
-        xarModVars::set('base', 'UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
-        xarModVars::set('base', 'AlternatePageTemplateName', $alternatePageTemplateName);
+        $this->mod()->setVar('UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
+        $this->mod()->setVar('AlternatePageTemplateName', $alternatePageTemplateName);
 
         xarModUserVars::set('roles', 'userhome', $this->ctl()->getModuleURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction), 1);
         $this->config()->setVar('Site.Core.EnableShortURLsSupport', $enableShortURLs);
@@ -652,7 +652,7 @@ class ModifyconfigMethod extends MethodClass
         $tzobject = new DateTimeZone($this->config()->getVar('Site.Core.TimeZone'));
         $data['sitedatetime']->setTimezone($tzobject);
 
-        $data['releasenumber'] = xarModVars::get('base', 'releasenumber');
+        $data['releasenumber'] = $this->mod()->getVar('releasenumber');
 
         return $data;
     }
@@ -665,13 +665,13 @@ class ModifyconfigMethod extends MethodClass
     public function updateOther(array $data)
     {
         $this->var()->find('loadlegacy', $loadLegacy, 'checkbox', $this->config()->getVar('Site.Core.LoadLegacy'));
-        $this->var()->find('proxyhost', $proxyhost, 'str:1:', xarModVars::get('base', 'proxyhost'));
-        $this->var()->find('proxyport', $proxyport, 'int:1:', xarModVars::get('base', 'proxyport'));
-        $this->var()->find('releasenumber', $releasenumber, 'int:1:', xarModVars::get('base', 'releasenumber'));
+        $this->var()->find('proxyhost', $proxyhost, 'str:1:', $this->mod()->getVar('proxyhost'));
+        $this->var()->find('proxyport', $proxyport, 'int:1:', $this->mod()->getVar('proxyport'));
+        $this->var()->find('releasenumber', $releasenumber, 'int:1:', $this->mod()->getVar('releasenumber'));
         // Save these in normal module variables for now
-        xarModVars::set('base', 'proxyhost', $proxyhost);
-        xarModVars::set('base', 'proxyport', $proxyport);
-        xarModVars::set('base', 'releasenumber', $releasenumber);
+        $this->mod()->setVar('proxyhost', $proxyhost);
+        $this->mod()->setVar('proxyport', $proxyport);
+        $this->mod()->setVar('releasenumber', $releasenumber);
         $this->config()->setVar('Site.Core.LoadLegacy', $loadLegacy);
 
         // Timezone, offset and DST

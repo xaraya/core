@@ -62,7 +62,7 @@ class SetdefaultMethod extends MethodClass
         }
 
 
-        $whatwasbefore = xarModVars::get('themes', 'default_theme');
+        $whatwasbefore = $this->mod()->getVar('default_theme');
 
         if (!isset($defaulttheme)) {
             $defaulttheme = $whatwasbefore;
@@ -85,7 +85,7 @@ class SetdefaultMethod extends MethodClass
 
         // update the data
         xarTpl::setThemeDir($themeInfo['directory']);
-        xarModVars::set('themes', 'default_theme', $themeInfo['directory']);
+        $this->mod()->setVar('default_theme', $themeInfo['directory']);
 
         // set the target location (anchor) to go to within the page
         $target = $themeInfo['name'];

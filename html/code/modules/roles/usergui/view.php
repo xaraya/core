@@ -49,7 +49,7 @@ class ViewMethod extends MethodClass
         }
 
         // members list disabled? only show to roles admins
-        if ((bool) xarModVars::get('roles', 'displayrolelist') == false && !$this->sec()->checkAccess('AdminRoles', 0)) {
+        if ((bool) $this->mod()->getVar('displayrolelist') == false && !$this->sec()->checkAccess('AdminRoles', 0)) {
             $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'main'));
         }
         //    extract($args);
@@ -93,10 +93,10 @@ class ViewMethod extends MethodClass
         }
         $data['startnum'] = (!isset($args['startnum'])) ? 1 : $args['startnum'];
         if (!isset($numitems)) {
-            $numitems = (int) xarModVars::get('roles', 'items_per_page');
+            $numitems = (int) $this->mod()->getVar('items_per_page');
         }
 
-        $numitems = (int) xarModVars::get('roles', 'items_per_page');
+        $numitems = (int) $this->mod()->getVar('items_per_page');
         $pagerfilter['order'] = $data['order'];
         $pagerfilter['search'] = $data['search'];
         $pagerfilter['startnum'] = '%%';

@@ -135,7 +135,7 @@ class UpdatestateMethod extends MethodClass
         }
         $ids = $idnotify;
         // Success
-        if ((!xarModVars::get('roles', 'ask' . $mailtype . 'email')) || (count($idnotify) == 0)) {
+        if ((!$this->mod()->getVar('ask' . $mailtype . 'email')) || (count($idnotify) == 0)) {
             $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',

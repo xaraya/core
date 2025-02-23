@@ -88,7 +88,7 @@ class GetvalidationMethod extends MethodClass
         */
 
         // What module are we using for registration?
-        $regmodule = xarModVars::get('roles', 'defaultregmodule');
+        $regmodule = $this->mod()->getVar('defaultregmodule');
         if (empty($regmodule) || !$this->mod()->isAvailable($regmodule)) {
             return $this->tpl()->module('grader', 'user', 'errors', ['layout' => 'no_permission', 'message' => $this->ml('No registration module defined in the roles module')]);
         }
@@ -155,7 +155,7 @@ class GetvalidationMethod extends MethodClass
                     }
                     $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'main'));
 
-                } elseif ($pending == 1 && ($status['id'] != xarModVars::get('roles', 'admin'))) {
+                } elseif ($pending == 1 && ($status['id'] != $this->mod()->getVar('admin'))) {
                     // This is a new user and the site requires admin approval
                     // Update the user status table to reflect a pending account.
                     if (!$userapi->updatestatus(['uname' => $uname,
@@ -221,7 +221,7 @@ class GetvalidationMethod extends MethodClass
                         return; // TODO ...something here if the email is not sent..
                     }
 
-                } elseif ((bool) xarModVars::get('roles', 'requirevalidation') && !$newuser && xarModVars::get('roles', 'askwelcomeemail')) {
+                } elseif ((bool) $this->mod()->getVar('requirevalidation') && !$newuser && $this->mod()->getVar('askwelcomeemail')) {
                     //send this email if we know for sure email validation only is required, not validation for new users - a roles function
 
                     $adminname = xarModVars::get('mail', 'adminname');
@@ -245,7 +245,7 @@ class GetvalidationMethod extends MethodClass
                     }
                 }
 
-                xarModVars::set('roles', 'lastuser', $status['id']);
+                $this->mod()->setVar('lastuser', $status['id']);
 
                 $data = $this->tpl()->module('roles', 'user', 'getvalidation', $tplvars);
 

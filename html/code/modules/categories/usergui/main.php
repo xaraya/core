@@ -49,7 +49,7 @@ class MainMethod extends MethodClass
         $this->var()->check('catid', $catid);
         if (empty($catid) || !is_numeric($catid)) {
             // for DMOZ-like URLs
-            // xarModVars::set('categories','enable_short_urls',1);
+            // $this->mod()->setVar('enable_short_urls',1);
             // replace with DMOZ top cid
             $catid = 0;
         }

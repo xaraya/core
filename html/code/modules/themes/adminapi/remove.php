@@ -58,7 +58,7 @@ class RemoveMethod extends MethodClass
             $regid = xarTheme::getRegID($name);
         }
         $themeInfo = xarTheme::getInfo($regid);
-        $defaultTheme = xarModVars::get('themes', 'default_theme');
+        $defaultTheme = $this->mod()->getVar('default_theme');
 
         // Bail out if we're trying to remove the default theme
         if ($defaultTheme == $themeInfo['name']) {

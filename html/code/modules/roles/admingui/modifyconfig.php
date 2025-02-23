@@ -61,7 +61,7 @@ class ModifyconfigMethod extends MethodClass
         // get a list of everyone with admin privileges
         // TODO: find a more elegant way to do this
         // first find the id of the admin privilege
-        $role  = xarRoles::get(xarModVars::get('roles', 'admin'));
+        $role  = xarRoles::get($this->mod()->getVar('admin'));
         $privs = array_merge($role->getInheritedPrivileges(), $role->getAssignedPrivileges());
         foreach ($privs as $priv) {
             if ($priv->getLevel() == 800) {
@@ -103,13 +103,13 @@ class ModifyconfigMethod extends MethodClass
             }
         }
 
-        $checkip = xarModVars::get('roles', 'disallowedips');
+        $checkip = $this->mod()->getVar('disallowedips');
         if (empty($checkip)) {
             $ip = serialize('10.0.0.1'); // <mrb> why 10.0.0.1 ?
-            xarModVars::set('roles', 'disallowedips', $ip);
+            $this->mod()->setVar('disallowedips', $ip);
         }
         $data['siteadmins']   = $siteadmins;
-        $data['defaultgroup'] = (int) xarModVars::get('roles', 'defaultgroup');
+        $data['defaultgroup'] = (int) $this->mod()->getVar('defaultgroup');
 
         $hooks = [];
 
@@ -146,7 +146,7 @@ class ModifyconfigMethod extends MethodClass
                 $data['module_settings']->getItem();
 
                 $data['user_settings'] = $this->mod()->apiFunc('base', 'admin', 'getusersettings', ['module' => 'roles', 'itemid' => 0]);
-                $settings = explode(',', xarModVars::get('roles', 'duvsettings'));
+                $settings = explode(',', $this->mod()->getVar('duvsettings'));
                 $required = ['usereditaccount', 'primaryparent', 'allowemail', 'emailformat', 'requirevalidation', 'displayrolelist', 'searchbyemail'];
                 $skiplist = ['userhome', 'passwordupdate', 'duvsettings', 'userlastlogin', 'usertimezone', 'useremailformat'];
                 $homelist = ['allowuserhomeedit', 'allowexternalurl', 'loginredirect'];
@@ -174,10 +174,10 @@ class ModifyconfigMethod extends MethodClass
         }
 
         $data['hooks'] = $hooks;
-        $data['defaultauthmod']    = xarModVars::get('roles', 'defaultauthmodule');
-        $data['defaultregmod']     = xarModVars::get('roles', 'defaultregmodule');
-        $data['allowuserhomeedit'] = (bool) xarModVars::get('roles', 'allowuserhomeedit');
-        $data['requirevalidation'] = (bool) xarModVars::get('roles', 'requirevalidation');
+        $data['defaultauthmod']    = $this->mod()->getVar('defaultauthmodule');
+        $data['defaultregmod']     = $this->mod()->getVar('defaultregmodule');
+        $data['allowuserhomeedit'] = (bool) $this->mod()->getVar('allowuserhomeedit');
+        $data['requirevalidation'] = (bool) $this->mod()->getVar('requirevalidation');
 
         switch (strtolower($phase)) {
             case 'modify':
@@ -210,7 +210,7 @@ class ModifyconfigMethod extends MethodClass
                     case 'general':
                         $this->var()->find('defaultauthmodule', $defaultauthmodule, 'int:1:', $this->mod()->getRegID('authsystem'));
                         $this->var()->find('defaultregmodule', $defaultregmodule, 'int:1:', '');
-                        $this->var()->find('siteadmin', $siteadmin, 'int:1', (int) xarModVars::get('roles', 'admin'));
+                        $this->var()->find('siteadmin', $siteadmin, 'int:1', (int) $this->mod()->getVar('admin'));
                         $this->var()->find('defaultgroup', $defaultgroup, 'str:1', 'Users');
 
                         $isvalid = $data['module_settings']->checkInput();
@@ -221,10 +221,10 @@ class ModifyconfigMethod extends MethodClass
                             $itemid = $data['module_settings']->updateItem();
                         }
 
-                        xarModVars::set('roles', 'defaultauthmodule', $defaultauthmodule);
-                        xarModVars::set('roles', 'defaultregmodule', $defaultregmodule);
-                        xarModVars::set('roles', 'defaultgroup', $defaultgroup);
-                        xarModVars::set('roles', 'admin', $siteadmin);
+                        $this->mod()->setVar('defaultauthmodule', $defaultauthmodule);
+                        $this->mod()->setVar('defaultregmodule', $defaultregmodule);
+                        $this->mod()->setVar('defaultgroup', $defaultgroup);
+                        $this->mod()->setVar('admin', $siteadmin);
 
                         // no break
                     case 'hooks':

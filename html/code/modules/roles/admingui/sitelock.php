@@ -57,7 +57,7 @@ class SitelockMethod extends MethodClass
         # --------------------------------------------------------
         # Get the configuration from the modvar
         #
-        $lockvars = unserialize((string) xarModVars::get('roles', 'lockdata'));
+        $lockvars = unserialize((string) $this->mod()->getVar('lockdata'));
         $toggle = $lockvars['locked'];
         $roles = $lockvars['roles'];
         $lockedoutmsg = (!isset($lockvars['message']) || $lockvars['message'] == '') ? $this->ml('The site is currently locked. Thank you for your patience.') : $lockvars['message'];
@@ -104,7 +104,7 @@ class SitelockMethod extends MethodClass
                         'message'   => $lockedoutmsg,
                         'locked'    => $toggle,
                         'notifymsg' => $notifymsg];
-                    xarModVars::set('roles', 'lockdata', serialize($lockdata));
+                    $this->mod()->setVar('lockdata', serialize($lockdata));
                 }
 
                 # --------------------------------------------------------
@@ -134,14 +134,14 @@ class SitelockMethod extends MethodClass
                         'message'   => $lockedoutmsg,
                         'locked'    => $toggle,
                         'notifymsg' => $notifymsg];
-                    xarModVars::set('roles', 'lockdata', serialize($lockdata));
+                    $this->mod()->setVar('lockdata', serialize($lockdata));
                 }
             } elseif ($cmd == 'save') {
                 $lockdata = ['roles'     => $roles,
                     'message'   => $lockedoutmsg,
                     'locked'    => $toggle,
                     'notifymsg' => $notifymsg];
-                xarModVars::set('roles', 'lockdata', serialize($lockdata));
+                $this->mod()->setVar('lockdata', serialize($lockdata));
                 // Refresh by jumping to the same page
                 $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'sitelock'));
 
@@ -153,7 +153,7 @@ class SitelockMethod extends MethodClass
                 $toggle = (int) $toggle ? 0 : 1;
 
                 // Get the roles
-                $lockdata = unserialize((string) xarModVars::get('roles', 'lockdata'));
+                $lockdata = unserialize((string) $this->mod()->getVar('lockdata'));
                 var_dump($lockdata);
                 $rolesarray = $lockdata['roles'];
                 foreach ($rolesarray as $thisrole) {
@@ -176,7 +176,7 @@ class SitelockMethod extends MethodClass
                     }
                 }
 
-                $admin = xarRoles::get(xarModVars::get('roles', 'admin'));
+                $admin = xarRoles::get($this->mod()->getVar('admin'));
                 $mailinfo = ['subject' => 'Site Lock',
                     'from' => $admin->getEmail(),
                 ];
@@ -214,9 +214,9 @@ class SitelockMethod extends MethodClass
                 }
 
                 // Save the locked value
-                $lockdata = unserialize((string) xarModVars::get('roles', 'lockdata'));
+                $lockdata = unserialize((string) $this->mod()->getVar('lockdata'));
                 $lockdata['locked'] = $toggle;
-                xarModVars::set('roles', 'lockdata', serialize($lockdata));
+                $this->mod()->setVar('lockdata', serialize($lockdata));
 
                 if ($badmails) {
                     return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'mail_failed', 'badmails' => $badmails]);
