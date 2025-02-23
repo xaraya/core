@@ -48,14 +48,14 @@ class UnlinkMethod extends MethodClass
         extract($args);
 
         if (!empty($confirm)) {
-            if (!xarSecurity::check('AdminCategories')) {
+            if (!$this->sec()->checkAccess('AdminCategories')) {
                 return;
             }
         } else {
             // Argument check
             if ((empty($modid)) || !is_numeric($modid) ||
                 (empty($iid)) || !is_numeric($iid)) {
-                $msg = xarML('Invalid Parameter Count', '', 'admin', 'unlink', 'categories');
+                $msg = $this->ml('Invalid Parameter Count', '', 'admin', 'unlink', 'categories');
                 throw new BadParameterException(null, $msg);
             }
 
@@ -91,8 +91,8 @@ class UnlinkMethod extends MethodClass
         }
 
         // Get datbase setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $categorieslinkagetable = $xartable['categories_linkage'];
 
         // Delete the link
@@ -101,7 +101,7 @@ class UnlinkMethod extends MethodClass
 
         if (!empty($modid)) {
             if (!is_numeric($modid)) {
-                $msg = xarML(
+                $msg = $this->ml(
                     'Invalid #(1) for #(2) function #(3)() in module #(4)',
                     'module id',
                     'admin',

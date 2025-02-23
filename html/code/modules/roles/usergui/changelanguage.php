@@ -39,7 +39,7 @@ class ChangelanguageMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $this->var()->find('locale', $locale, 'str:1:', xarMLS::getCurrentLocale());
+        $this->var()->find('locale', $locale, 'str:1:', $this->mls()->getCurrentLocale());
         $this->var()->find('return_url', $return_url, 'str:1:', xarServer::getVar('HTTP_REFERER'));
 
         $locales = xarMLS::listSiteLocales();
@@ -56,7 +56,7 @@ class ChangelanguageMethod extends MethodClass
             // <paul> throw an exception. trap it later if we want it to look nice,
             // that's the whole point of exceptions.
         }
-        xarController::redirect($return_url, null, $this->getContext());
+        $this->ctl()->redirect($return_url);
         return true;
     }
 }

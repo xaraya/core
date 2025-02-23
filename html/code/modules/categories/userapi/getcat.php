@@ -58,8 +58,8 @@ class GetcatMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         if (!isset($return_itself)) {
             $return_itself = false;
@@ -78,7 +78,7 @@ class GetcatMethod extends MethodClass
         if (!isset($startnum)) {
             $startnum = 0;
         } elseif (!is_numeric($startnum)) {
-            xarSession::setVar('errormsg', xarML('Bad numeric arguments for API function'));
+            $this->session()->setVar('errormsg', $this->ml('Bad numeric arguments for API function'));
             return false;
         } else {
             //The pager starts counting from 1
@@ -88,7 +88,7 @@ class GetcatMethod extends MethodClass
         if (!isset($items_per_page)) {
             $items_per_page = 0;
         } elseif (!is_numeric($items_per_page)) {
-            xarSession::setVar('errormsg', xarML('Bad numeric arguments for API function'));
+            $this->session()->setVar('errormsg', $this->ml('Bad numeric arguments for API function'));
             return false;
         }
 
@@ -131,7 +131,7 @@ class GetcatMethod extends MethodClass
                 // to know its left and right values
                 $cat = $userapi->getcatinfo(['cid' => $cid]);
                 if ($cat == false) {
-                    xarSession::setVar('errormsg', xarML('Category does not exist'));
+                    $this->session()->setVar('errormsg', $this->ml('Category does not exist'));
                     return [];
                 }
                 // If not returning itself we need to take the appropriate
@@ -177,7 +177,7 @@ class GetcatMethod extends MethodClass
         if (isset($eid) && !is_array($eid) && $eid != false) {
             $ecat = $userapi->getcatinfo(['cid' => $eid]);
             if ($ecat == false) {
-                xarSession::setVar('errormsg', xarML('That category does not exist'));
+                $this->session()->setVar('errormsg', $this->ml('That category does not exist'));
                 return [];
             }
             //$SQLquery .= " AND P1.left_id

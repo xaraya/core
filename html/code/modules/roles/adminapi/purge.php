@@ -48,7 +48,7 @@ class PurgeMethod extends MethodClass
 
 
         if ($state == xarRoles::ROLES_STATE_ACTIVE) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'purge_active_user']);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'purge_active_user']);
         }
 
         $items = $userapi->getall(['state' => $state]);
@@ -73,7 +73,7 @@ class PurgeMethod extends MethodClass
             $item['module'] = 'roles';
             $item['itemid'] = $item['id'];
             $item['method'] = 'purge';
-            xarModHooks::call('item', 'delete', $id, $item);
+            $this->mod()->callHooks('item', 'delete', $id, $item);
         }
 
         //finished successfully

@@ -54,17 +54,17 @@ class CountallactiveMethod extends MethodClass
 
         // Optional arguments.
         if (empty($filter)) {
-            $filter = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
+            $filter = time() - ($this->config()->getVar('Site.Session.Duration') * 60);
         }
 
         // Security Check
-        if (!xarSecurity::check('ReadRoles')) {
+        if (!$this->sec()->checkAccess('ReadRoles')) {
             return;
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $sessioninfoTable = $xartable['session_info'];
         $rolestable = $xartable['roles'];

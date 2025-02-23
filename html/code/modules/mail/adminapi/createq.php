@@ -39,7 +39,7 @@ class CreateqMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security Check
-        if (!xarSecurity::check('AdminMail')) {
+        if (!$this->sec()->checkAccess('AdminMail')) {
             return;
         }
 
@@ -47,7 +47,7 @@ class CreateqMethod extends MethodClass
 
         // Create a new queue storage object from the xml definition
         $xmlDef = file_get_contents(sys::code() . 'modules/mail/xardata/qdatadef.xml');
-        $qdataObjectId = xarMod::apiFunc('dynamicdata', 'util', 'import', ['objectname' => 'q_' . $name, 'xml' => $xmlDef]);
+        $qdataObjectId = $this->mod()->apiFunc('dynamicdata', 'util', 'import', ['objectname' => 'q_' . $name, 'xml' => $xmlDef]);
         if (!isset($qdataObjectId)) {
             return;
         }

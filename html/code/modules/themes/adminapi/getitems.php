@@ -61,8 +61,8 @@ class GetitemsMethod extends MethodClass
         }
 
         // Determine the tables we are going to use
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
         $themes_table = $tables['themes'];
 
         $select   = [];
@@ -141,20 +141,20 @@ class GetitemsMethod extends MethodClass
                 $item[$field] = array_shift($result->fields);
             }
 
-            if (xarCoreCache::isCached('Theme.Infos', $item['regid'])) {
+            if ($this->var()->isCached('Theme.Infos', $item['regid'])) {
                 // merge cached info with db info
-                $item += xarCoreCache::getCached('Theme.Infos', $item['regid']);
+                $item += $this->var()->getCached('Theme.Infos', $item['regid']);
             } else {
                 $item['displayname'] = $item['name'];
                 // Shortcut for os prepared directory
-                $item['osdirectory'] = xarVar::prepForOS($item['directory']);
+                $item['osdirectory'] = $this->var()->prepPath($item['directory']);
 
-                xarCoreCache::setCached('Theme.BaseInfos', $item['name'], $item);
+                $this->var()->setCached('Theme.BaseInfos', $item['name'], $item);
 
                 $fileinfo = xarTheme::getFileInfo($item['osdirectory']);
                 if (isset($fileinfo)) {
                     $item = array_merge($fileinfo, $item);
-                    xarCoreCache::setCached('Theme.Infos', $item['regid'], $item);
+                    $this->var()->setCached('Theme.Infos', $item['regid'], $item);
                     switch ($item['state']) {
                         case xarTheme::STATE_MISSING_FROM_UNINITIALISED:
                             $item['state'] = xarTheme::STATE_UNINITIALISED;

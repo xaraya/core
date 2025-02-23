@@ -47,7 +47,7 @@ class ViewMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
@@ -108,21 +108,21 @@ class ViewMethod extends MethodClass
 
         $items = $adminapi->getitems($itemargs);
 
-        $authid = xarSec::genAuthKey();
+        $authid = $this->sec()->genAuthKey();
 
         foreach ($items as $key => $item) {
             $item['iscore'] = in_array($item['name'], $coremods);
-            $item['info_url'] = xarController::URL(
+            $item['info_url'] = $this->ctl()->getModuleURL(
                 'modules',
                 'admin',
                 'modinfo',
                 ['id' => $item['regid']]
             );
-            $return_url = xarServer::getCurrentURL(['state' => $data['state'] != 0 ? 0 : null], false, $item['name']);
+            $return_url = $this->ctl()->getCurrentURL(['state' => $data['state'] != 0 ? 0 : null], false, $item['name']);
             $return_url = urlencode($return_url);
             switch ($item['state']) {
                 case xarMod::STATE_UNINITIALISED: // 1
-                    $item['init_url'] = xarController::URL(
+                    $item['init_url'] = $this->ctl()->getModuleURL(
                         'modules',
                         'admin',
                         'install',
@@ -130,13 +130,13 @@ class ViewMethod extends MethodClass
                     );
                     break;
                 case xarMod::STATE_INACTIVE:  // 2
-                    $item['activate_url'] = xarController::URL(
+                    $item['activate_url'] = $this->ctl()->getModuleURL(
                         'modules',
                         'admin',
                         'install',
                         ['id' => $item['regid'], 'authid' => $authid, 'return_url' => $return_url]
                     );
-                    $item['remove_url'] = xarController::URL(
+                    $item['remove_url'] = $this->ctl()->getModuleURL(
                         'modules',
                         'admin',
                         'remove',
@@ -145,7 +145,7 @@ class ViewMethod extends MethodClass
                     break;
                 case xarMod::STATE_ACTIVE:  // 3
                     if (!$item['iscore']) {
-                        $item['deactivate_url'] = xarController::URL(
+                        $item['deactivate_url'] = $this->ctl()->getModuleURL(
                             'modules',
                             'admin',
                             'deactivate',
@@ -153,9 +153,9 @@ class ViewMethod extends MethodClass
                         );
                     }
                     if (!empty($item['admin_capable'])) {
-                        $item['admin_url'] = xarController::URL($item['name'], 'admin');
+                        $item['admin_url'] = $this->ctl()->getModuleURL($item['name'], 'admin');
                     }
-                    $item['hooks_url'] = xarController::URL(
+                    $item['hooks_url'] = $this->ctl()->getModuleURL(
                         'modules',
                         'admin',
                         'modify',
@@ -163,7 +163,7 @@ class ViewMethod extends MethodClass
                     );
                     break;
                 case xarMod::STATE_UPGRADED: // 5
-                    $item['upgrade_url'] = xarController::URL(
+                    $item['upgrade_url'] = $this->ctl()->getModuleURL(
                         'modules',
                         'admin',
                         'upgrade',
@@ -174,7 +174,7 @@ class ViewMethod extends MethodClass
                 case xarMod::STATE_MISSING_FROM_INACTIVE: // 7
                 case xarMod::STATE_MISSING_FROM_ACTIVE: // 8
                 case xarMod::STATE_MISSING_FROM_UPGRADED: // 9
-                    $item['remove_url'] = xarController::URL(
+                    $item['remove_url'] = $this->ctl()->getModuleURL(
                         'modules',
                         'admin',
                         'remove',
@@ -185,7 +185,7 @@ class ViewMethod extends MethodClass
                 case xarMod::STATE_ERROR_INACTIVE: // 11
                 case xarMod::STATE_ERROR_ACTIVE: // 12
                 case xarMod::STATE_ERROR_UPGRADED: // 13
-                    $item['error_url'] = xarController::URL(
+                    $item['error_url'] = $this->ctl()->getModuleURL(
                         'modules',
                         'admin',
                         'viewerror',
@@ -193,7 +193,7 @@ class ViewMethod extends MethodClass
                     );
                     break;
                 default:
-                    $item['remove_url'] = xarController::URL(
+                    $item['remove_url'] = $this->ctl()->getModuleURL(
                         'modules',
                         'admin',
                         'remove',
@@ -209,39 +209,39 @@ class ViewMethod extends MethodClass
 
         $data['states'] = [
             xarMod::STATE_ANY =>
-                ['id' => xarMod::STATE_ANY, 'name' => xarML('All')],
+                ['id' => xarMod::STATE_ANY, 'name' => $this->ml('All')],
             xarMod::STATE_INSTALLED =>
-                ['id' => xarMod::STATE_INSTALLED, 'name' => xarML('Installed')],
+                ['id' => xarMod::STATE_INSTALLED, 'name' => $this->ml('Installed')],
             xarMod::STATE_ACTIVE =>
-                ['id' => xarMod::STATE_ACTIVE, 'name' => xarML('Active')],
+                ['id' => xarMod::STATE_ACTIVE, 'name' => $this->ml('Active')],
             xarMod::STATE_UPGRADED =>
-                ['id' => xarMod::STATE_UPGRADED, 'name' => xarML('Upgraded')],
+                ['id' => xarMod::STATE_UPGRADED, 'name' => $this->ml('Upgraded')],
             xarMod::STATE_INACTIVE =>
-                ['id' => xarMod::STATE_INACTIVE, 'name' => xarML('Inactive')],
+                ['id' => xarMod::STATE_INACTIVE, 'name' => $this->ml('Inactive')],
             xarMod::STATE_UNINITIALISED =>
-                ['id' => xarMod::STATE_UNINITIALISED, 'name' => xarML('Not Installed')],
+                ['id' => xarMod::STATE_UNINITIALISED, 'name' => $this->ml('Not Installed')],
             xarMod::STATE_MISSING_FROM_ACTIVE =>
-                ['id' => xarMod::STATE_MISSING_FROM_ACTIVE, 'name' => xarML('Missing (Active)')],
+                ['id' => xarMod::STATE_MISSING_FROM_ACTIVE, 'name' => $this->ml('Missing (Active)')],
             xarMod::STATE_MISSING_FROM_UPGRADED =>
-                ['id' => xarMod::STATE_MISSING_FROM_UPGRADED, 'name' => xarML('Missing (Upgraded)')],
+                ['id' => xarMod::STATE_MISSING_FROM_UPGRADED, 'name' => $this->ml('Missing (Upgraded)')],
             xarMod::STATE_MISSING_FROM_INACTIVE =>
-                ['id' => xarMod::STATE_MISSING_FROM_INACTIVE, 'name' => xarML('Missing (Inactive)')],
+                ['id' => xarMod::STATE_MISSING_FROM_INACTIVE, 'name' => $this->ml('Missing (Inactive)')],
             xarMod::STATE_MISSING_FROM_UNINITIALISED =>
-                ['id' => xarMod::STATE_MISSING_FROM_UNINITIALISED, 'name' => xarML('Missing (Not Installed)')],
+                ['id' => xarMod::STATE_MISSING_FROM_UNINITIALISED, 'name' => $this->ml('Missing (Not Installed)')],
             xarMod::STATE_ERROR_ACTIVE =>
-                ['id' => xarMod::STATE_ERROR_ACTIVE, 'name' => xarML('Error (Active)')],
+                ['id' => xarMod::STATE_ERROR_ACTIVE, 'name' => $this->ml('Error (Active)')],
             xarMod::STATE_ERROR_UPGRADED =>
-                ['id' => xarMod::STATE_ERROR_UPGRADED, 'name' => xarML('Error (Upgraded)')],
+                ['id' => xarMod::STATE_ERROR_UPGRADED, 'name' => $this->ml('Error (Upgraded)')],
             xarMod::STATE_ERROR_INACTIVE =>
-                ['id' => xarMod::STATE_ERROR_INACTIVE, 'name' => xarML('Error (Inactive)')],
+                ['id' => xarMod::STATE_ERROR_INACTIVE, 'name' => $this->ml('Error (Inactive)')],
             xarMod::STATE_ERROR_UNINITIALISED =>
-                ['id' => xarMod::STATE_ERROR_UNINITIALISED, 'name' => xarML('Error (Not Installed)')],
+                ['id' => xarMod::STATE_ERROR_UNINITIALISED, 'name' => $this->ml('Error (Not Installed)')],
         ];
 
         $data['modtypes'] = [
-            0 => ['id' => 0, 'name' => xarML('All')],
-            1 => ['id' => 1, 'name' => xarML('Core')],
-            2 => ['id' => 2, 'name' => xarML('Non-core')],
+            0 => ['id' => 0, 'name' => $this->ml('All')],
+            1 => ['id' => 1, 'name' => $this->ml('Core')],
+            2 => ['id' => 2, 'name' => $this->ml('Non-core')],
         ];
 
         // Remember filter selections for current user
@@ -251,15 +251,15 @@ class ViewMethod extends MethodClass
         $count = count($items);
         if ($data['state'] == xarMod::STATE_ANY) {
             if ($data['modtype'] == 0) {
-                $searched = xarML('Showing #(1) modules', $count);
+                $searched = $this->ml('Showing #(1) modules', $count);
             } else {
-                $searched = xarML('Showing #(1) #(2) modules', $count, $data['modtypes'][$data['modtype']]['name']);
+                $searched = $this->ml('Showing #(1) #(2) modules', $count, $data['modtypes'][$data['modtype']]['name']);
             }
         } else {
             if ($data['modtype'] == 0) {
-                $searched = xarML('Showing #(1) modules in #(2) state', $count, $data['states'][$data['state']]['name']);
+                $searched = $this->ml('Showing #(1) modules in #(2) state', $count, $data['states'][$data['state']]['name']);
             } else {
-                $searched = xarML('Showing #(1) #(2) modules in #(3) state', $count, $data['modtypes'][$data['modtype']]['name'], $data['states'][$data['state']]['name']);
+                $searched = $this->ml('Showing #(1) #(2) modules in #(3) state', $count, $data['modtypes'][$data['modtype']]['name'], $data['states'][$data['state']]['name']);
             }
         }
         $data['searched'] = $searched;

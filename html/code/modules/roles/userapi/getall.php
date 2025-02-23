@@ -61,13 +61,13 @@ class GetallMethod extends MethodClass
         }
 
         // Security check - need overview level to see that the roles exist
-        if (!xarSecurity::check('ViewRoles')) {
+        if (!$this->sec()->checkAccess('ViewRoles')) {
             return;
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $rolestable = $xartable['roles'];
         $rolemembtable = $xartable['rolemembers'];
@@ -167,7 +167,7 @@ class GetallMethod extends MethodClass
         }
 
         // Hide pending users from non-admins
-        if (!xarSecurity::check('AdminRoles', 0)) {
+        if (!$this->sec()->checkAccess('AdminRoles', 0)) {
             $where_clause[] = 'roletab.state <> ?';
             $bindvars[] = (int) xarRoles::ROLES_STATE_PENDING;
         }

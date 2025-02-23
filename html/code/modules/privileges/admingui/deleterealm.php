@@ -41,15 +41,15 @@ class DeleterealmMethod extends MethodClass
         $this->var()->check('id', $id);
         $this->var()->check('confirmed', $confirmed);
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $bindvars = [];
         $tbl = $xartable['security_realms'];
         $query = "SELECT id, name FROM $tbl WHERE id = ?";
         $bindvars[] = $id;
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
         if (!$result) {
             return;
         }
@@ -59,35 +59,35 @@ class DeleterealmMethod extends MethodClass
 
         // Security
         if (empty($name)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         if (!xarSecurity::check('ManagePrivileges', 0, 'Realm', $name)) {
             return;
         }
 
         if (empty($confirmed)) {
-            $data['authid'] = xarSec::genAuthKey();
+            $data['authid'] = $this->sec()->genAuthKey();
             $data['id'] = $id;
             $data['name'] = $name;
             return $data;
         }
 
         // Check for authorization code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $bindvars = [];
         $query = "DELETE FROM $tbl WHERE id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $bindvars[] = $result_id;
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
 
         // Hmm... what do we do about hooks?
-        //xarModHooks::call('item', 'delete', $id, '');
+        //$this->mod()->callHooks('item', 'delete', $id, '');
 
         // redirect to the next page
-        xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('privileges', 'admin', 'viewrealms'));
         return true;
     }
 }

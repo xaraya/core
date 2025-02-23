@@ -48,17 +48,17 @@ class InstallMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
         // Security and sanity checks
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $this->var()->find(
             'return_url',
@@ -75,10 +75,10 @@ class InstallMethod extends MethodClass
         // set the target location (anchor) to go to within the page
         $target = $minfo['name'];
         if (empty($return_url)) {
-            $return_url = xarController::URL('themes', 'admin', 'view', ['state' => xarTheme::STATE_ANY], null, $target);
+            $return_url = $this->ctl()->getModuleURL('themes', 'admin', 'view', ['state' => xarTheme::STATE_ANY], null) . '#' . $target;
         }
 
-        xarController::redirect($return_url, null, $this->getContext());
+        $this->ctl()->redirect($return_url);
         return true;
     }
 }

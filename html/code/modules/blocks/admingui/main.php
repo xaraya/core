@@ -43,7 +43,7 @@ class MainMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditBlocks')) {
+        if (!$this->sec()->checkAccess('EditBlocks')) {
             return;
         }
 
@@ -53,9 +53,9 @@ class MainMethod extends MethodClass
             $data = [];
             $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1:', '');
             $data['context'] = $this->getContext();
-            return xarTpl::module('blocks', 'admin', 'overview', $data);
+            return $this->tpl()->module('blocks', 'admin', 'overview', $data);
         } else {
-            xarController::redirect(xarController::URL('blocks', 'admin', 'view_instances'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('blocks', 'admin', 'view_instances'));
             return true;
         }
     }

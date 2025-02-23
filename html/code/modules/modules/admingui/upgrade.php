@@ -50,18 +50,18 @@ class UpgradeMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         // Security and sanity checks
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $this->var()->find(
             'return_url',
@@ -82,7 +82,7 @@ class UpgradeMethod extends MethodClass
         // TODO: give the user the opportunity to upgrade the dependancies automatically.
         try {
             $installer->verifydependency($id);
-            $minfo = xarMod::getInfo($id);
+            $minfo = $this->mod()->getInfo($id);
             //Bail if we've lost our module
             if ($minfo['state'] != xarMod::STATE_MISSING_FROM_UPGRADED) {
                 // Upgrade module
@@ -96,12 +96,12 @@ class UpgradeMethod extends MethodClass
         // set the target location (anchor) to go to within the page
         $target = $minfo['name'];
         if (empty($return_url)) {
-            $return_url = xarController::URL('modules', 'admin', 'list', ['state' => 0], null, $target);
+            $return_url = $this->ctl()->getModuleURL('modules', 'admin', 'list', ['state' => 0], null) . '#' . $target;
         }
         // Hmmm, I wonder if the target adding is considered a hack
         // it certainly depends on the implementation of xarController::URL
-        //    xarController::redirect(xarController::URL('modules', 'admin', "list#$target"), null, $this->getContext());
-        xarController::redirect($return_url, null, $this->getContext());
+        //    $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', "list#$target"));
+        $this->ctl()->redirect($return_url);
 
         return true;
     }

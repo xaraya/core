@@ -51,18 +51,18 @@ class RemoveMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         // Security and sanity checks
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $this->var()->find(
             'return_url',
@@ -74,12 +74,12 @@ class RemoveMethod extends MethodClass
         //Checking if the user has already passed thru the GUI:
         $this->var()->find('command', $command, 'checkbox', false);
 
-        $minfo = xarMod::getInfo($id);
+        $minfo = $this->mod()->getInfo($id);
 
         // set the target location (anchor) to go to within the page
         $target = $minfo['name'];
         if (empty($return_url)) {
-            $return_url = xarController::URL('modules', 'admin', 'list', ['state' => 0], null, $target);
+            $return_url = $this->ctl()->getModuleURL('modules', 'admin', 'list', ['state' => 0], null) . '#' . $target;
         }
 
         sys::import('modules.modules.class.installer');
@@ -94,12 +94,12 @@ class RemoveMethod extends MethodClass
                 }
                 // Clear the property cache
                 PropertyRegistration::importPropertyTypes(true);
-                xarController::redirect($return_url, null, $this->getContext());
+                $this->ctl()->redirect($return_url);
             } else {
                 // There are dependents, let's build a GUI
                 $data                 = [];
                 $data['id']           = $id;
-                $data['authid']       = xarSec::genAuthKey();
+                $data['authid']       = $this->sec()->genAuthKey();
                 $data['dependencies'] = $dependents;
                 $data['return_url']   = $return_url;
                 return $data;
@@ -110,7 +110,7 @@ class RemoveMethod extends MethodClass
         // Removes with dependents, first remove the necessary dependents then the module itself
         if (!$installer->removewithdependents($id)) {
             //Call exception
-            xarLog::message('Missing module since last generation!', xarLog::LEVEL_WARNING);
+            $this->log()->message('Missing module since last generation!', xarLog::LEVEL_WARNING);
             return;
         } // Else
 
@@ -119,8 +119,8 @@ class RemoveMethod extends MethodClass
 
         // Hmmm, I wonder if the target adding is considered a hack
         // it certainly depends on the implementation of xarController::URL
-        //    xarController::redirect(xarController::URL('modules', 'admin', "list#$target"), null, $this->getContext());
-        xarController::redirect($return_url, null, $this->getContext());
+        //    $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', "list#$target"));
+        $this->ctl()->redirect($return_url);
         // Never reached
         return true;
     }

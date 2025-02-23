@@ -45,7 +45,7 @@ class LogoutMethod extends MethodClass
         // Get input parameters
         $this->var()->find('redirecturl', $redirecturl, 'str:1:254', $redirect);
 
-        $defaultauthdata = xarMod::apiFunc('roles', 'user', 'getdefaultauthdata');
+        $defaultauthdata = $this->mod()->apiFunc('roles', 'user', 'getdefaultauthdata');
         $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
         $authmodule = $defaultauthdata['defaultauthmodname'];
         // Defaults
@@ -56,9 +56,9 @@ class LogoutMethod extends MethodClass
 
         // Log user out
         if (!xarUser::logOut($this->getContext())) {
-            throw new ForbiddenOperationException(['authsystem', 'logout'], xarML('Problem Logging Out.  Module #(1) Function #(2)'), $this->getContext());
+            throw new ForbiddenOperationException(['authsystem', 'logout'], $this->ml('Problem Logging Out.  Module #(1) Function #(2)'), $this->getContext());
         }
-        xarController::redirect($redirecturl, null, $this->getContext());
+        $this->ctl()->redirect($redirecturl);
         return true;
     }
 }

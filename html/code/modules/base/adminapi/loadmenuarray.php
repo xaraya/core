@@ -61,7 +61,7 @@ class LoadmenuarrayMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         if (!isset($args['modname']) || !isset($args['modtype']) || !isset($args['funcname'])) {
-            $urlinfo = xarController::getRequest()->getInfo();
+            $urlinfo = $this->ctl()->getRequest()->getInfo();
             if (empty($args['modname'])) {
                 $args['modname'] = $urlinfo[0];
             }
@@ -96,7 +96,7 @@ class LoadmenuarrayMethod extends MethodClass
             foreach ($args['phpdata'] as $menuitem) {
                 $url       = isset($menuitem['url']) ? trim((string) $menuitem['url']) : null;
                 $target    = isset($menuitem['target']) ? trim((string) $menuitem['target']) : null;
-                $label     = isset($menuitem['label']) ? trim((string) $menuitem['label']) : xarML('Missing label');
+                $label     = isset($menuitem['label']) ? trim((string) $menuitem['label']) : $this->ml('Missing label');
                 $title     = isset($menuitem['title']) ? trim((string) $menuitem['title']) : $label;
                 $mask      = isset($menuitem['mask']) ? trim((string) $menuitem['mask']) : null;
                 $condition = isset($menuitem['condition']) ? trim((string) $menuitem['condition']) : null;
@@ -112,7 +112,7 @@ class LoadmenuarrayMethod extends MethodClass
                     $args['urlargs'][$menu['variable']] = $value;
                 }
                 if (!isset($url)) {
-                    $url = xarController::URL($args['modname'], $type, $target, $args['urlargs']);
+                    $url = $this->ctl()->getModuleURL($args['modname'], $type, $target, $args['urlargs']);
                 }
                 $menulinks[] = [
                     'label'       => $label,
@@ -132,14 +132,14 @@ class LoadmenuarrayMethod extends MethodClass
 
                 if (isset($xml->menutitle)) {
                     $menutitle = $xml->menutitle;
-                    $menu['label'] = isset($menutitle->label) ? trim((string) $menutitle->label) : xarML('Actions');
-                    $menu['title'] = isset($menutitle->title) ? trim((string) $menutitle->title) : xarML('Choose an action to perform');
+                    $menu['label'] = isset($menutitle->label) ? trim((string) $menutitle->label) : $this->ml('Actions');
+                    $menu['title'] = isset($menutitle->title) ? trim((string) $menutitle->title) : $this->ml('Choose an action to perform');
                     $menu['variable'] = isset($menutitle->variable) ? trim((string) $menutitle->variable) : '';
                 }
 
                 foreach ($xml->menuitems->children() as $menuitem) {
                     $target    = isset($menuitem->target) ? trim((string) $menuitem->target) : null;
-                    $label     = isset($menuitem->label) ? trim((string) $menuitem->label) : xarML('Missing label');
+                    $label     = isset($menuitem->label) ? trim((string) $menuitem->label) : $this->ml('Missing label');
                     $title     = isset($menuitem->title) ? trim((string) $menuitem->title) : $label;
                     $mask      = isset($menuitem->mask) ? trim((string) $menuitem->mask) : null;
                     $condition = isset($menuitem->condition) ? trim((string) $menuitem->condition) : null;
@@ -159,7 +159,7 @@ class LoadmenuarrayMethod extends MethodClass
                     if (!empty($menu['variable'])) {
                         $args['urlargs'][$menu['variable']] = $value;
                     }
-                    $url = xarController::URL($args['modname'], $type, $target, $args['urlargs']);
+                    $url = $this->ctl()->getModuleURL($args['modname'], $type, $target, $args['urlargs']);
                     $menulinks[] = [
                         'label'       => $label,
                         'title'       => $title,
@@ -179,7 +179,7 @@ class LoadmenuarrayMethod extends MethodClass
 
         } elseif (empty($args['nolinks'])) {
             try {
-                $menulinks = xarMod::apiFunc($args['modname'], $args['modtype'], 'getmenulinks');
+                $menulinks = $this->mod()->apiFunc($args['modname'], $args['modtype'], 'getmenulinks');
             } catch (Exception $e) {
 
             }
@@ -187,10 +187,10 @@ class LoadmenuarrayMethod extends MethodClass
 
         // set active link
         if (!empty($menulinks)) {
-            $currenturl = xarServer::getCurrentURL();
+            $currenturl = $this->ctl()->getCurrentURL();
             foreach ($menulinks as $k => $v) {
                 // Security check
-                if (!empty($v['mask']) && !xarSecurity::check($v['mask'], 0)) {
+                if (!empty($v['mask']) && !$this->sec()->checkAccess($v['mask'], 0)) {
                     unset($menulinks[$k]);
                     continue;
                 }
@@ -221,8 +221,8 @@ class LoadmenuarrayMethod extends MethodClass
         if ($args['layout'] == 'tabs') {
             // if we didn't get title info, set some defaults
             if (empty($menu)) {
-                $menu['label'] = xarML('Actions');
-                $menu['title'] = xarML('Choose an action to perform');
+                $menu['label'] = $this->ml('Actions');
+                $menu['title'] = $this->ml('Choose an action to perform');
             }
             $menu['menulinks'] = $menulinks;
             return $menu;

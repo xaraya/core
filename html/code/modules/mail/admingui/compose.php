@@ -39,12 +39,12 @@ class ComposeMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('ManageMail')) {
+        if (!$this->sec()->checkAccess('ManageMail')) {
             return;
         }
 
         // Generate a one-time authorisation code for this operation
-        $data['authid']         = xarSec::genAuthKey();
+        $data['authid']         = $this->sec()->genAuthKey();
 
         // Get the admin email address
         $data['email']   = xarModVars::get('mail', 'adminmail');
@@ -54,7 +54,7 @@ class ComposeMethod extends MethodClass
 
         $data['message'] = '';
         if ($confirm) {
-            $data['message'] = xarML('Message sent');
+            $data['message'] = $this->ml('Message sent');
         }
         // everything else happens in the template for now
         return $data;

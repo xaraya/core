@@ -52,14 +52,14 @@ class InitialiseMethod extends MethodClass
 
         // Argument check
         if (isset($name)) {
-            $regid = xarMod::getRegID($name, 'module');
+            $regid = $this->mod()->getRegID($name);
         }
         if (!isset($regid)) {
             throw new EmptyParameterException('regid');
         }
 
         // Get module information
-        $modInfo = xarMod::getInfo($regid);
+        $modInfo = $this->mod()->getInfo($regid);
         if (!isset($modInfo)) {
             throw new ModuleNotFoundException($regid, 'Module (regid: $regid) does not exist.');
         }
@@ -69,8 +69,8 @@ class InitialiseMethod extends MethodClass
         $installer = InstallerTool::getInstance();
         if (!$installer->verifydependency($regid)) {
             //TODO: Add description of the dependencies
-            $msg = xarML('The dependencies to initialise the module "#(1)" were not met.', $modInfo['displayname']);
-            xarCore::exit($msg);
+            $msg = $this->ml('The dependencies to initialise the module "#(1)" were not met.', $modInfo['displayname']);
+             $this->exit($msg);
             return;
         }
 
@@ -87,7 +87,7 @@ class InitialiseMethod extends MethodClass
 
         // debug($set);
         if (!isset($set)) {
-            $msg = xarML('Module state change failed');
+            $msg = $this->ml('Module state change failed');
             throw new Exception($msg);
         }
         // notify any observers that this module was initialised

@@ -63,7 +63,7 @@ class ModifyconfigMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminBase')) {
+        if (!$this->sec()->checkAccess('AdminBase')) {
             return;
         }
 
@@ -92,10 +92,10 @@ class ModifyconfigMethod extends MethodClass
         $data['hostdatetime']->setTimezone($tzobject);
 
         $data['sitedatetime'] = new DateTime();
-        $tzobject = new DateTimeZone(xarConfigVars::get(null, 'Site.Core.TimeZone'));
+        $tzobject = new DateTimeZone($this->config()->getVar('Site.Core.TimeZone'));
         $data['sitedatetime']->setTimezone($tzobject);
 
-        $data['allowedlocales'] = xarConfigVars::get(null, 'Site.MLS.AllowedLocales');
+        $data['allowedlocales'] = $this->config()->getVar('Site.MLS.AllowedLocales');
         foreach ($locales as $locale) {
             if (in_array($locale, $data['allowedlocales'])) {
                 $active = true;
@@ -108,32 +108,32 @@ class ModifyconfigMethod extends MethodClass
         $data['releasenumber'] = xarModVars::get('base', 'releasenumber');
 
         // TODO: delete after new backend testing
-        // $data['translationsBackend'] = xarConfigVars::get(null, 'Site.MLS.TranslationsBackend');
-        $data['authid'] = xarSec::genAuthKey();
-        $data['updatelabel'] = xarML('Update Base Configuration');
+        // $data['translationsBackend'] = $this->config()->getVar('Site.MLS.TranslationsBackend');
+        $data['authid'] = $this->sec()->genAuthKey();
+        $data['updatelabel'] = $this->ml('Update Base Configuration');
 
         $data['module_settings'] = $adminapi->getmodulesettings(['module' => 'base']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, user_menu_link');
         $data['module_settings']->getItem();
 
         /** @var FilePickerProperty $picker */
-        $picker = DataPropertyMaster::getProperty(['name' => 'filepicker']);
+        $picker = $this->prop()->getProperty(['name' => 'filepicker']);
         $picker->initialization_basedirectory = sys::varpath() . "/logs/";
         $picker->setExtensions('txt,html');
         $picker->display_fullname = true;
         $data['logfiles'] = $picker->getOptions();
 
-        $data['logavailable'] = DataPropertyMaster::getProperty(['name' => 'checkboxlist']);
+        $data['logavailable'] = $this->prop()->getProperty(['name' => 'checkboxlist']);
         $data['logavailable']->options = [
-            ['id' => 'simple', 'name' => xarML('Simple')],
-            ['id' => 'mail', 'name' => xarML('Mail')],
-            ['id' => 'error_log', 'name' => xarML('Error Log')],
-            ['id' => 'html', 'name' => xarML('HTML')],
-            ['id' => 'javascript', 'name' => xarML('Javascript')],
-            ['id' => 'mozilla', 'name' => xarML('Mozilla')],
-            ['id' => 'sql', 'name' => xarML('SQL')],
-            ['id' => 'syslog', 'name' => xarML('Syslog')],
-            ['id' => 'winsyslog', 'name' => xarML('WinSyslog')],
+            ['id' => 'simple', 'name' => $this->ml('Simple')],
+            ['id' => 'mail', 'name' => $this->ml('Mail')],
+            ['id' => 'error_log', 'name' => $this->ml('Error Log')],
+            ['id' => 'html', 'name' => $this->ml('HTML')],
+            ['id' => 'javascript', 'name' => $this->ml('Javascript')],
+            ['id' => 'mozilla', 'name' => $this->ml('Mozilla')],
+            ['id' => 'sql', 'name' => $this->ml('SQL')],
+            ['id' => 'syslog', 'name' => $this->ml('Syslog')],
+            ['id' => 'winsyslog', 'name' => $this->ml('WinSyslog')],
         ];
         $data['available_loggers'] = xarLog::availables();
 
@@ -141,7 +141,7 @@ class ModifyconfigMethod extends MethodClass
             case 'modify':
             default:
                 if (!isset($phase)) {
-                    xarSession::setVar('statusmsg', '');
+                    $this->session()->setVar('statusmsg', '');
                 }
                 $data['inheritdeny'] = xarModVars::get('privileges', 'inheritdeny');
 
@@ -254,13 +254,13 @@ class ModifyconfigMethod extends MethodClass
                         $current_database = xarSystemVars::get(sys::CONFIG, 'DB.Name');
                         $this->var()->find('database', $database, 'str', $current_database);
                         $variables['DB.Name'] = $database;
-                        xarMod::apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
-                        xarController::redirect(xarController::URL(
+                        $this->mod()->apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
+                        $this->ctl()->redirect($this->ctl()->getModuleURL(
                             'base',
                             'admin',
                             'modifyconfig',
                             ['tab' => 'setup']
-                        ), null, $this->getContext());
+                        ));
                         break;
                     case 'display':
                         $this->var()->find('alternatepagetemplate', $alternatePageTemplate, 'checkbox', false);
@@ -276,7 +276,7 @@ class ModifyconfigMethod extends MethodClass
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
                             $data['context'] ??= $this->getContext();
-                            return xarTpl::module('base', 'admin', 'modifyconfig', $data);
+                            return $this->tpl()->module('base', 'admin', 'modifyconfig', $data);
                         } else {
                             $itemid = $data['module_settings']->updateItem();
                         }
@@ -288,11 +288,11 @@ class ModifyconfigMethod extends MethodClass
                         xarModVars::set('base', 'UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
                         xarModVars::set('base', 'AlternatePageTemplateName', $alternatePageTemplateName);
 
-                        xarModUserVars::set('roles', 'userhome', xarController::URL($defaultModuleName, $defaultModuleType, $defaultModuleFunction), 1);
-                        xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', $enableShortURLs);
-                        xarConfigVars::set(null, 'Site.Core.WebserverAllowsSlashes', $allowsslashes);
+                        xarModUserVars::set('roles', 'userhome', $this->ctl()->getModuleURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction), 1);
+                        $this->config()->setVar('Site.Core.EnableShortURLsSupport', $enableShortURLs);
+                        $this->config()->setVar('Site.Core.WebserverAllowsSlashes', $allowsslashes);
                         // enable short urls for the base module itself too
-                        xarConfigVars::set(null, 'Site.Core.FixHTMLEntities', $FixHTMLEntities);
+                        $this->config()->setVar('Site.Core.FixHTMLEntities', $FixHTMLEntities);
                         break;
                     case 'security':
                         $this->var()->find('securitylevel', $securityLevel, 'str:1:');
@@ -308,25 +308,25 @@ class ModifyconfigMethod extends MethodClass
                         $this->var()->find('cookietimeout', $cookietimeout, 'int:1:', '');
                         sys::import('modules.dynamicdata.class.properties.master');
                         /** @var OrderSelectProperty $orderselect */
-                        $orderselect = DataPropertyMaster::getProperty(['name' => 'orderselect']);
+                        $orderselect = $this->prop()->getProperty(['name' => 'orderselect']);
                         $orderselect->checkInput('authmodules');
 
                         //Filtering Options
                         // Security Levels
-                        xarConfigVars::set(null, 'Site.Session.SecurityLevel', $securityLevel);
-                        xarConfigVars::set(null, 'Site.Session.Duration', $sessionDuration);
-                        xarConfigVars::set(null, 'Site.Session.InactivityTimeout', $sessionTimeout);
-                        xarConfigVars::set(null, 'Site.Session.CookieName', $cookieName);
-                        xarConfigVars::set(null, 'Site.Session.CookiePath', $cookiePath);
-                        xarConfigVars::set(null, 'Site.Session.CookieDomain', $cookieDomain);
-                        xarConfigVars::set(null, 'Site.Session.RefererCheck', $refererCheck);
-                        xarConfigVars::set(null, 'Site.Core.EnableSecureServer', $secureServer);
-                        xarConfigVars::set(null, 'Site.Core.SecureServerPort', $sslport);
-                        xarConfigVars::set(null, 'Site.Session.CookieTimeout', $cookietimeout);
+                        $this->config()->setVar('Site.Session.SecurityLevel', $securityLevel);
+                        $this->config()->setVar('Site.Session.Duration', $sessionDuration);
+                        $this->config()->setVar('Site.Session.InactivityTimeout', $sessionTimeout);
+                        $this->config()->setVar('Site.Session.CookieName', $cookieName);
+                        $this->config()->setVar('Site.Session.CookiePath', $cookiePath);
+                        $this->config()->setVar('Site.Session.CookieDomain', $cookieDomain);
+                        $this->config()->setVar('Site.Session.RefererCheck', $refererCheck);
+                        $this->config()->setVar('Site.Core.EnableSecureServer', $secureServer);
+                        $this->config()->setVar('Site.Core.SecureServerPort', $sslport);
+                        $this->config()->setVar('Site.Session.CookieTimeout', $cookietimeout);
 
                         // Authentication modules
                         if (!empty($orderselect->order)) {
-                            xarConfigVars::set(null, 'Site.User.AuthenticationModules', $orderselect->order);
+                            $this->config()->setVar('Site.User.AuthenticationModules', $orderselect->order);
                         }
 
                         /*
@@ -338,7 +338,7 @@ class ModifyconfigMethod extends MethodClass
                         $this->var()->find('hint', $hint, 'str:1', '');
 
                         $this->var()->find('key', $key, 'str:1', 'jamaica');
-                        $keyholder = DataPropertyMaster::getProperty(array('type' => 'password'));
+                        $keyholder = $this->prop()->getProperty(array('type' => 'password'));
                         $keyholder->checkInput('key',$key);
                         $key = $keyholder->value;
 
@@ -350,21 +350,21 @@ class ModifyconfigMethod extends MethodClass
                             'hint' => $hint,
                             'initvector' => $initvector,
                         );
-                        xarMod::apiFunc('installer','admin','modifysystemvars', $args);
+                        $this->mod()->apiFunc('installer','admin','modifysystemvars', $args);
                         */
-                        xarController::redirect(xarController::URL(
+                        $this->ctl()->redirect($this->ctl()->getModuleURL(
                             'base',
                             'admin',
                             'modifyconfig',
                             ['tab' => 'security']
-                        ), null, $this->getContext());
+                        ));
                         break;
                     case 'locales':
                         $this->var()->find('defaultlocale', $defaultLocale, 'str:1:');
                         $this->var()->find('mlsmode', $MLSMode, 'str:1:', 'SINGLE');
 
                         sys::import('modules.dynamicdata.class.properties.master');
-                        $locales = DataPropertyMaster::getProperty(['name' => 'checkboxlist']);
+                        $locales = $this->prop()->getProperty(['name' => 'checkboxlist']);
                         $locales->checkInput('active');
                         $localesList = $locales->getValue();
                         if (!in_array($defaultLocale, $localesList)) {
@@ -372,25 +372,25 @@ class ModifyconfigMethod extends MethodClass
                         }
                         sort($localesList);
                         if ($MLSMode == 'UNBOXED') {
-                            if (xarMLS::getCharsetFromLocale($defaultLocale) != 'utf-8') {
+                            if ($this->mls()->getCharsetFromLocale($defaultLocale) != 'utf-8') {
                                 throw new ConfigurationException(null, 'You should select utf-8 locale as default before selecting UNBOXED mode');
                             }
                         }
 
                         // Locales
-                        xarConfigVars::set(null, 'Site.MLS.MLSMode', $MLSMode);
-                        xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $defaultLocale);
-                        xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $localesList);
+                        $this->config()->setVar('Site.MLS.MLSMode', $MLSMode);
+                        $this->config()->setVar('Site.MLS.DefaultLocale', $defaultLocale);
+                        $this->config()->setVar('Site.MLS.AllowedLocales', $localesList);
                         // Also set the following modvar.
                         // It sets the navigation locale for all logged in users who have not explicitly chosen one
                         xarModVars::set('roles', 'locale', $defaultLocale);
 
-                        xarController::redirect(xarController::URL(
+                        $this->ctl()->redirect($this->ctl()->getModuleURL(
                             'base',
                             'admin',
                             'modifyconfig',
                             ['tab' => 'locales']
-                        ), null, $this->getContext());
+                        ));
                         break;
                     case 'caching':
                         break;
@@ -400,7 +400,7 @@ class ModifyconfigMethod extends MethodClass
                         // The loggers that can be made active
                         $data['logavailable']->checkInput('available_loggers');
                         // The log levels for the fallback logger
-                        $levels = DataPropertyMaster::getProperty(['name' => 'checkboxlist']);
+                        $levels = $this->prop()->getProperty(['name' => 'checkboxlist']);
                         $levels->checkInput('loglevel');
                         $loglevel = serialize($levels->value);
                         // The file name for the fallback logger
@@ -408,17 +408,17 @@ class ModifyconfigMethod extends MethodClass
 
                         // Update the config.system file
                         $variables = ['Log.Enabled' => $logenabled, 'Log.Available' => $data['logavailable']->value,'Log.Level' => $loglevel, 'Log.Filename' => $logfilename];
-                        xarMod::apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
+                        $this->mod()->apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
 
-                        xarController::redirect(xarController::URL(
+                        $this->ctl()->redirect($this->ctl()->getModuleURL(
                             'base',
                             'admin',
                             'modifyconfig',
                             ['tab' => 'logging']
-                        ), null, $this->getContext());
+                        ));
                         break;
                     case 'other':
-                        $this->var()->find('loadlegacy', $loadLegacy, 'checkbox', xarConfigVars::get(null, 'Site.Core.LoadLegacy'));
+                        $this->var()->find('loadlegacy', $loadLegacy, 'checkbox', $this->config()->getVar('Site.Core.LoadLegacy'));
                         $this->var()->find('proxyhost', $proxyhost, 'str:1:', xarModVars::get('base', 'proxyhost'));
                         $this->var()->find('proxyport', $proxyport, 'int:1:', xarModVars::get('base', 'proxyport'));
                         $this->var()->find('releasenumber', $releasenumber, 'int:1:', xarModVars::get('base', 'releasenumber'));
@@ -426,7 +426,7 @@ class ModifyconfigMethod extends MethodClass
                         xarModVars::set('base', 'proxyhost', $proxyhost);
                         xarModVars::set('base', 'proxyport', $proxyport);
                         xarModVars::set('base', 'releasenumber', $releasenumber);
-                        xarConfigVars::set(null, 'Site.Core.LoadLegacy', $loadLegacy);
+                        $this->config()->setVar('Site.Core.LoadLegacy', $loadLegacy);
 
                         // Timezone, offset and DST
                         $this->var()->find('hosttimezone', $hosttimezone, 'str:1:', 'UTC');
@@ -434,31 +434,31 @@ class ModifyconfigMethod extends MethodClass
 
                         $tzobject = new DateTimeZone($hosttimezone);
                         $variables = ['SystemTimeZone' => !empty($tzobject) ? $hosttimezone : 'UTC'];
-                        xarMod::apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
+                        $this->mod()->apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
 
                         $tzobject = new DateTimeZone($sitetimezone);
                         if (!empty($tzobject)) {
                             $datetime = new DateTime();
-                            xarConfigVars::set(null, 'Site.Core.TimeZone', $sitetimezone);
-                            xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', $tzobject->getOffset($datetime));
+                            $this->config()->setVar('Site.Core.TimeZone', $sitetimezone);
+                            $this->config()->setVar('Site.MLS.DefaultTimeOffset', $tzobject->getOffset($datetime));
                         } else {
-                            xarConfigVars::set(null, 'Site.Core.TimeZone', "UTC");
-                            xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
+                            $this->config()->setVar('Site.Core.TimeZone', "UTC");
+                            $this->config()->setVar('Site.MLS.DefaultTimeOffset', 0);
                         }
-                        xarModVars::set('roles', 'usertimezone', xarConfigVars::get(null, 'Site.Core.TimeZone'));
-                        xarController::redirect(xarController::URL(
+                        xarModVars::set('roles', 'usertimezone', $this->config()->getVar('Site.Core.TimeZone'));
+                        $this->ctl()->redirect($this->ctl()->getModuleURL(
                             'base',
                             'admin',
                             'modifyconfig',
                             ['tab' => 'other']
-                        ), null, $this->getContext());
+                        ));
                         break;
                 }
                 // save to cache if enabled
-                xarConfigVars::cache();
+                $this->config()->cache();
 
                 // Call updateconfig hooks
-                xarModHooks::call('module', 'updateconfig', 'base', ['module' => 'base']);
+                $this->mod()->callHooks('module', 'updateconfig', 'base', ['module' => 'base']);
         }
         return $data;
     }

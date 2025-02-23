@@ -44,7 +44,7 @@ class GetmessagestringsMethod extends MethodClass
         }
 
         if (!isset($module)) {
-            $module = xarController::getRequest()->getModule();
+            $module = $this->ctl()->getRequest()->getModule();
         }
 
         if (!isset($tpl_path)) {

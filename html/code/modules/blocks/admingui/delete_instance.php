@@ -52,7 +52,7 @@ class DeleteInstanceMethod extends MethodClass
         $instancesapi = $this->instancesapi();
         /** @var BlocksApi $blocksapi */
         $blocksapi = $this->blocksapi();
-        if (!xarSecurity::check('ManageBlocks')) {
+        if (!$this->sec()->checkAccess('ManageBlocks')) {
             return;
         }
 
@@ -80,7 +80,7 @@ class DeleteInstanceMethod extends MethodClass
         // admin access is needed for some operations
         $isadmin = xarSecurity::check('', 0, 'Block', "$instance[type]:$instance[name]:$instance[block_id]", $instance['module'], '', 0, 800);
         /** @var AccessProperty $accessproperty */
-        $accessproperty = DataPropertyMaster::getProperty(['name' => 'access']);
+        $accessproperty = $this->prop()->getProperty(['name' => 'access']);
         // check delete access
         if ($isadmin) {
             $candelete = true;
@@ -95,7 +95,7 @@ class DeleteInstanceMethod extends MethodClass
             $candelete = $accessproperty->check($args);
         }
         if (!$candelete) {
-            return xarController::badRequest('no_privileges', $this->getContext());
+            return $this->ctl()->badRequest('no_privileges');
         }
 
         $this->var()->find(
@@ -106,8 +106,8 @@ class DeleteInstanceMethod extends MethodClass
         );
 
         if ($confirmed) {
-            if (!xarSec::confirmAuthKey()) {
-                return xarController::badRequest('bad_author', $this->getContext());
+            if (!$this->sec()->confirmAuthKey()) {
+                return $this->ctl()->badRequest('bad_author');
             }
 
             // delete instance from db
@@ -122,8 +122,8 @@ class DeleteInstanceMethod extends MethodClass
                 throw $e;
             }
 
-            $return_url = xarController::URL('blocks', 'admin', 'view_instances');
-            xarController::redirect($return_url, null, $this->getContext());
+            $return_url = $this->ctl()->getModuleURL('blocks', 'admin', 'view_instances');
+            $this->ctl()->redirect($return_url);
         }
 
         $data = [];

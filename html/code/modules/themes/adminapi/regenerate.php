@@ -45,7 +45,7 @@ class RegenerateMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security Check
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
@@ -75,7 +75,7 @@ class RegenerateMethod extends MethodClass
         /*             // Get theme ID */
         /*             $regId = $themeInfo['regid']; */
         /*             // Set state of theme to 'missing' */
-        /*             $set = xarMod::apiFunc('themes', */
+        /*             $set = $this->mod()->apiFunc('themes', */
         /*                                 'admin', */
         /*                                 'setstate', */
         /*                                 array('regid'=> $regId, */
@@ -105,8 +105,8 @@ class RegenerateMethod extends MethodClass
             }
         }
         //Setup database object for theme insertion
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         // See if we have gained any themes since last generation,
         // or if any current themes have been upgraded
         foreach ($fileThemes as $name => $themeInfo) {

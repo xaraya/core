@@ -49,30 +49,30 @@ class UpdateMethod extends MethodClass
         $data['itemid'] = !empty($data['itemid']) ? $data['itemid'] : $cid;
 
         // Confirm authorisation code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // Root category cannot be modified except by the site admin
         if (($cid == 1) && (!xarUser::isSiteAdmin())) {
-            return xarController::badRequest('no_privileges', $this->getContext());
+            return $this->ctl()->badRequest('no_privileges');
         }
 
         //Reverses the order of cids with the 'last children' option:
         //Look at bug #997
 
         sys::import('modules.dynamicdata.class.objects.factory');
-        $data['object'] = DataObjectFactory::getObject(['name' => xarModVars::get('categories', 'categoriesobject')]);
+        $data['object'] = $this->data()->getObject(['name' => xarModVars::get('categories', 'categoriesobject')]);
         $isvalid = $data['object']->checkInput();
 
         if (!$isvalid) {
-            $data['authid'] = xarSec::genAuthKey();
+            $data['authid'] = $this->sec()->genAuthKey();
             $data['context'] ??= $this->getContext();
-            return xarTpl::module('categories', 'admin', 'modfiy', $data);
+            return $this->tpl()->module('categories', 'admin', 'modfiy', $data);
         }
 
         $itemid = $data['object']->updateItem(['itemid' => $data['itemid']]);
-        xarController::redirect(xarController::URL('categories', 'admin', 'view'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('categories', 'admin', 'view'));
         return true;
     }
 }

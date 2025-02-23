@@ -57,21 +57,21 @@ class SetstateMethod extends MethodClass
         }
 
         // Security Check
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         // Clear cache to make sure we get newest values
-        if (xarVar::isCached('Mod.Infos', $regid)) {
-            xarVar::delCached('Mod.Infos', $regid);
+        if ($this->var()->isCached('Mod.Infos', $regid)) {
+            $this->var()->delCached('Mod.Infos', $regid);
         }
 
         //Get module info
-        $modInfo = xarMod::getInfo($regid);
+        $modInfo = $this->mod()->getInfo($regid);
 
         //Set up database object
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $oldState = $modInfo['state'];
         $state = (int) $state;
@@ -99,7 +99,7 @@ class SetstateMethod extends MethodClass
                     ($oldState != xarMod::STATE_MISSING_FROM_INACTIVE) &&
                     ($oldState != xarMod::STATE_ERROR_INACTIVE) &&
                     ($oldState != xarMod::STATE_UPGRADED)) {
-                    xarSession::setVar('errormsg', xarML('Invalid module state transition'));
+                    $this->session()->setVar('errormsg', $this->ml('Invalid module state transition'));
                     return false;
                 }
                 break;
@@ -107,7 +107,7 @@ class SetstateMethod extends MethodClass
                 if (($oldState != xarMod::STATE_INACTIVE) &&
                     ($oldState != xarMod::STATE_ERROR_ACTIVE) &&
                     ($oldState != xarMod::STATE_MISSING_FROM_ACTIVE)) {
-                    xarSession::setVar('errormsg', xarML('Invalid module state transition'));
+                    $this->session()->setVar('errormsg', $this->ml('Invalid module state transition'));
                     throw new Exception("Setting from $oldState to $state for module $regid failed");
                 }
                 break;
@@ -116,7 +116,7 @@ class SetstateMethod extends MethodClass
                     ($oldState != xarMod::STATE_ACTIVE) &&
                     ($oldState != xarMod::STATE_ERROR_UPGRADED) &&
                     ($oldState != xarMod::STATE_MISSING_FROM_UPGRADED)) {
-                    xarSession::setVar('errormsg', xarML('Invalid module state transition'));
+                    $this->session()->setVar('errormsg', $this->ml('Invalid module state transition'));
                     return false;
                 }
                 break;
@@ -130,8 +130,8 @@ class SetstateMethod extends MethodClass
         // We're update module state here we must update at least
         // the base info in the cache.
         $modInfo['state'] = $state;
-        xarVar::setCached('Mod.Infos', $regid, $modInfo);
-        xarVar::setCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
+        $this->var()->setCached('Mod.Infos', $regid, $modInfo);
+        $this->var()->setCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
         return $state;
     }

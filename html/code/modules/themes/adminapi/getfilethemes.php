@@ -38,7 +38,7 @@ class GetfilethemesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $fileThemes = [];
-        $basedir = xarConfigVars::get(null, 'Site.BL.ThemesDirectory');
+        $basedir = $this->config()->getVar('Site.BL.ThemesDirectory');
 
         $dh = opendir($basedir);
         while ($themeOsDir = readdir($dh)) {
@@ -77,13 +77,13 @@ class GetfilethemesMethod extends MethodClass
 
                         // TODO: beautify :-)
                         if (!isset($regId)) {
-                            xarSession::setVar('errormsg', "Theme '$name' doesn't seem to have a registered theme ID defined in xarversion.php - skipping...\nPlease register your theme at http://www.xaraya.com/index.php?module=release&func=addid if you haven't done so yet, and add \$themeversion['id'] = 'your ID'; in xarversion.php");
+                            $this->session()->setVar('errormsg', "Theme '$name' doesn't seem to have a registered theme ID defined in xarversion.php - skipping...\nPlease register your theme at http://www.xaraya.com/index.php?module=release&func=addid if you haven't done so yet, and add \$themeversion['id'] = 'your ID'; in xarversion.php");
                             continue 2;
                         }
 
                         // TODO: beautify :-)
-                        if (!isset($regId) || xarVar::prepForOS($directory) != $themeOsDir) {
-                            xarSession::setVar(
+                        if (!isset($regId) || $this->var()->prepPath($directory) != $themeOsDir) {
+                            $this->session()->setVar(
                                 'errormsg',
                                 "Theme '$name' exists in $basedir/$themeOsDir " .
                               "but should be in $basedir/$directory according to $basedir/$themeOsDir/xartheme.php... Skipping this theme until resolved."

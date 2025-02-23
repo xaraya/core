@@ -42,12 +42,12 @@ class UpgradeMethod extends MethodClass
          * @todo change feed url once release module is moved
          */
         // Security
-        if (!xarSecurity::check('AdminBase')) {
+        if (!$this->sec()->checkAccess('AdminBase')) {
             return;
         }
 
         $fileversion = xarCore::VERSION_NUM;
-        $dbversion = xarConfigVars::get(null, 'System.Core.VersionNum');
+        $dbversion = $this->config()->getVar('System.Core.VersionNum');
         sys::import('xaraya.version');
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
         return $data;

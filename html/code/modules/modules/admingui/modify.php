@@ -54,11 +54,11 @@ class ModifyMethod extends MethodClass
         // xarVar::fetch does validation if not explicitly set to be not required
         $this->var()->find('id', $id, 'int:1', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $this->var()->check('return_url', $return_url);
 
-        $modInfo = xarMod::getInfo($id);
+        $modInfo = $this->mod()->getInfo($id);
         if (!isset($modInfo)) {
             return;
         }
@@ -73,7 +73,7 @@ class ModifyMethod extends MethodClass
 
         // Get the list of all item types for this module (if any)
         try {
-            $itemtypes = xarMod::apiFunc($modname, 'user', 'getitemtypes', []);
+            $itemtypes = $this->mod()->apiFunc($modname, 'user', 'getitemtypes', []);
         } catch (FunctionNotFoundException $e) {
             $itemtypes = [];
             // No worries
@@ -169,7 +169,7 @@ class ModifyMethod extends MethodClass
         $data['observers'] = $observers;
         $data['module'] = $modname;
         $data['displayname'] = $displayName;
-        $data['authid'] = xarSec::genAuthKey('modules');
+        $data['authid'] = $this->sec()->genAuthKey('modules');
 
         if (!empty($return_url)) {
             $data['return_url'] = $return_url;

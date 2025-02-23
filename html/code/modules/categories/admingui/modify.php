@@ -59,12 +59,12 @@ class ModifyMethod extends MethodClass
 
         // Root category cannot be modified except by the site admin
         if (($cid == 1) && (!xarUser::isSiteAdmin())) {
-            return xarController::badRequest('no_privileges', $this->getContext());
+            return $this->ctl()->badRequest('no_privileges');
         }
 
         // Setting up necessary data.
         sys::import('modules.dynamicdata.class.objects.factory');
-        $data['object'] = DataObjectFactory::getObject(['name' => xarModVars::get('categories', 'categoriesobject')]);
+        $data['object'] = $this->data()->getObject(['name' => xarModVars::get('categories', 'categoriesobject')]);
         $data['object']->getItem(['itemid' => $data['itemid']]);
 
         $data['category'] = $data['object']->getFieldValues();
@@ -77,7 +77,7 @@ class ModifyMethod extends MethodClass
         $catinfo['module'] = 'categories';
         $catinfo['itemtype'] = $itemtype;
         $catinfo['itemid'] = $data['itemid'];
-        $hooks = xarModHooks::call('item', 'modify', $cid, $catinfo);
+        $hooks = $this->mod()->callHooks('item', 'modify', $cid, $catinfo);
         if (empty($hooks)) {
             $data['hooks'] = '';
         } else {

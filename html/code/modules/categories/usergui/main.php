@@ -54,7 +54,7 @@ class MainMethod extends MethodClass
             $catid = 0;
         }
 
-        if (!xarMod::apiLoad('categories', 'user')) {
+        if (!$this->mod()->apiLoad('categories', 'user')) {
             return;
         }
 
@@ -70,15 +70,15 @@ class MainMethod extends MethodClass
                     $info['module'] = 'categories';
                     $info['itemtype'] = 0;
                     $info['itemid'] = $catid;
-                    $info['returnurl'] = xarController::URL('categories', 'user', 'main', ['catid' => $catid]);
-                    $hooks = xarModHooks::call('item', 'display', $catid, $info);
+                    $info['returnurl'] = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $catid]);
+                    $hooks = $this->mod()->callHooks('item', 'display', $catid, $info);
                     if (!empty($hooks) && is_array($hooks)) {
                         // TODO: do something specific with pubsub, hitcount, comments etc.
                         $data['hooks'] = join('', $hooks);
                     }
                     $data['parents'][] = ['catid' => $catid, 'name' => $info['name'], 'link' => ''];
                 } else {
-                    $link = xarController::URL('categories', 'user', 'main', ['catid' => $id]);
+                    $link = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $id]);
                     $data['parents'][] = ['catid' => $info['cid'], 'name' => $info['name'], 'link' => $link];
                     $title .= ' > ';
                 }
@@ -87,7 +87,7 @@ class MainMethod extends MethodClass
 
         // set the page title to the current category
         if (!empty($title)) {
-            xarTpl::setPageTitle(xarVar::prepForDisplay($title));
+            $this->tpl()->setPageTitle($this->var()->prep($title));
         }
 
         $children = $userapi->getchildren(['cid' => $catid]);
@@ -102,9 +102,9 @@ class MainMethod extends MethodClass
         }
 
         /* test only - requires *_categories_symlinks table for symbolic links :
-            $xartable = xarDB::getTables();
+            $xartable = $this->db()->getTables();
             if (empty($xartable['categories_symlinks'])) {
-                $xartable['categories_symlinks'] = xarDB::getPrefix() . '_categories_symlinks';
+                $xartable['categories_symlinks'] = $this->db()->getPrefix() . '_categories_symlinks';
             }
             // created by DMOZ import script
         //    $query = "CREATE TABLE $xartable[categories_symlinks] (
@@ -115,7 +115,7 @@ class MainMethod extends MethodClass
         //              )";
 
             // Symbolic links
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
 
             $query = "SELECT id, name FROM $xartable[categories_symlinks] WHERE parent_id = '$catid'";
             $result = $dbconn->Execute($query);
@@ -133,7 +133,7 @@ class MainMethod extends MethodClass
             asort($letter);
             reset($letter);
             foreach ($letter as $id => $name) {
-                $link = xarController::URL('categories', 'user', 'main', ['catid' => $id]);
+                $link = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $id]);
                 $data['letters'][] = ['catid' => $id, 'name' => $name, 'link' => $link];
             }
         }
@@ -143,7 +143,7 @@ class MainMethod extends MethodClass
             reset($category);
             foreach ($category as $id => $name) {
                 $name = preg_replace('/_/', ' ', $name);
-                $link = xarController::URL('categories', 'user', 'main', ['catid' => $id]);
+                $link = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $id]);
                 $data['categories'][] = ['catid' => $id, 'name' => $name, 'link' => $link];
             }
         }
@@ -156,10 +156,10 @@ class MainMethod extends MethodClass
         $modlist = $userapi->getmodules(['cid' => $catid]);
         if (count($modlist) > 0) {
             foreach ($modlist as $modid => $itemtypes) {
-                $modinfo = xarMod::getInfo($modid);
+                $modinfo = $this->mod()->getInfo($modid);
                 // Get the list of all item types for this module (if any)
                 try {
-                    $mytypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+                    $mytypes = $this->mod()->apiFunc($modinfo['name'], 'user', 'getitemtypes');
                 } catch (Exception $e) {
                     $mytypes = [];
                 }
@@ -167,14 +167,14 @@ class MainMethod extends MethodClass
                     $moditem = [];
                     if ($itemtype == 0) {
                         $moditem['name'] = ucwords($modinfo['displayname']);
-                        $moditem['link'] = xarController::URL($modinfo['name'], 'user', 'main');
+                        $moditem['link'] = $this->ctl()->getModuleURL($modinfo['name'], 'user', 'main');
                     } else {
                         if (isset($mytypes) && !empty($mytypes[$itemtype])) {
                             $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype . ' - ' . $mytypes[$itemtype]['label'];
                             $moditem['link'] = $mytypes[$itemtype]['url'];
                         } else {
                             $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-                            $moditem['link'] = xarController::URL($modinfo['name'], 'user', 'view', ['itemtype' => $itemtype]);
+                            $moditem['link'] = $this->ctl()->getModuleURL($modinfo['name'], 'user', 'view', ['itemtype' => $itemtype]);
                         }
                     }
                     $moditem['numitems'] = $stats['items'];
@@ -187,7 +187,7 @@ class MainMethod extends MethodClass
                     $moditem['items'] = [];
                     if (!empty($links[$catid])) {
                         try {
-                            $itemlinks = xarMod::apiFunc(
+                            $itemlinks = $this->mod()->apiFunc(
                                 $modinfo['name'],
                                 'user',
                                 'getitemlinks',
@@ -202,14 +202,14 @@ class MainMethod extends MethodClass
                         } else {
                             // we're dealing with unknown items - skip this if you prefer
                             foreach ($links[$catid] as $iid) {
-                                $moditem['items'][$iid] = ['url'   => xarController::URL(
+                                $moditem['items'][$iid] = ['url'   => $this->ctl()->getModuleURL(
                                     $modinfo['name'],
                                     'user',
                                     'display',
                                     ['objectid' => $iid]
                                 ),
-                                    'title' => xarML('Display Item'),
-                                    'label' => xarML('item #(1)', $iid)];
+                                    'title' => $this->ml('Display Item'),
+                                    'label' => $this->ml('item #(1)', $iid)];
                             }
                         }
                     }

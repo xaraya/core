@@ -37,7 +37,7 @@ class UpdateconfighookMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         sys::import('modules.dynamicdata.class.properties.master');
-        $picker = DataPropertyMaster::getProperty(['name' => 'categorypicker']);
+        $picker = $this->prop()->getProperty(['name' => 'categorypicker']);
         $picker->checkInput('basecid');
 
         extract($args);

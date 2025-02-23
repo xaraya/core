@@ -44,7 +44,7 @@ class StandardinstallMethod extends MethodClass
         if (isset($objects)) {
             // FIXME: Data loss risk!!
             sys::import('modules.dynamicdata.class.objects.factory');
-            $existing_objects  = DataObjectFactory::getObjects();
+            $existing_objects  = $this->data()->getObjects();
             foreach ($existing_objects as $objectid => $objectinfo) {
                 if (in_array($objectinfo['name'], $objects)) {
                     if (!DataObjectFactory::deleteObject(['objectid' => $objectid])) {
@@ -70,7 +70,7 @@ class StandardinstallMethod extends MethodClass
 
                 // check for $name-def.xml file if available
                 if (file_exists($def_file)) {
-                    $objectid = xarMod::apiFunc('dynamicdata', 'util', 'import', $data);
+                    $objectid = $this->mod()->apiFunc('dynamicdata', 'util', 'import', $data);
                     if (!$objectid) {
                         return;
                     } else {
@@ -81,7 +81,7 @@ class StandardinstallMethod extends MethodClass
                     if (file_exists($dat_file)) {
                         $data['file'] = $dat_file;
                         // And allow it to fail for now
-                        $objectid = xarMod::apiFunc('dynamicdata', 'util', 'import', $data);
+                        $objectid = $this->mod()->apiFunc('dynamicdata', 'util', 'import', $data);
                     }
                     continue;
                 }
@@ -92,7 +92,7 @@ class StandardinstallMethod extends MethodClass
                 }
                 $def_file = str_replace('.xml', '.php', $def_file);
                 $data = ['file' => $def_file, 'format' => 'php'];
-                $objectid = xarMod::apiFunc('dynamicdata', 'util', 'import', $data);
+                $objectid = $this->mod()->apiFunc('dynamicdata', 'util', 'import', $data);
                 if (!$objectid) {
                     return;
                 } else {
@@ -104,7 +104,7 @@ class StandardinstallMethod extends MethodClass
                 if (file_exists($dat_file)) {
                     $data['file'] = $dat_file;
                     // And allow it to fail for now
-                    $objectid = xarMod::apiFunc('dynamicdata', 'util', 'import', $data);
+                    $objectid = $this->mod()->apiFunc('dynamicdata', 'util', 'import', $data);
                 }
             }
             xarModVars::set($module, 'dd_objects', serialize($dd_objects));
@@ -115,7 +115,7 @@ class StandardinstallMethod extends MethodClass
                 $def_file = sys::code() . 'modules/' . $module . '/xardata/' . $name . '-def.xml';
                 $data = ['file' => $def_file];
 
-                $blockid = xarMod::apiFunc('blocks', 'admin', 'import', $data);
+                $blockid = $this->mod()->apiFunc('blocks', 'admin', 'import', $data);
                 if (!$blockid) {
                     return;
                 } else {

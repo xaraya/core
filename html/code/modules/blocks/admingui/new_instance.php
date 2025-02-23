@@ -79,23 +79,23 @@ class NewInstanceMethod extends MethodClass
         );
 
         /** @var AccessProperty $accessproperty */
-        $accessproperty = DataPropertyMaster::getProperty(['name' => 'access']);
+        $accessproperty = $this->prop()->getProperty(['name' => 'access']);
 
         // always validate type in form and update phase
         if ($phase == 'form' || $phase == 'update') {
             if (empty($data['type_id'])) {
                 // gotta have a type_id
-                $invalid['type_id'] = xarML('You must select a block type for this instance');
+                $invalid['type_id'] = $this->ml('You must select a block type for this instance');
             } else {
                 // get the type
                 $type = $typesapi->getitem(['type_id' => $data['type_id']]);
                 if (!$type) {
                     // type may have been removed since last phase
-                    $invalid['type_id'] = xarML('Block type id "#(1)" does not exist', $data['type_id']);
+                    $invalid['type_id'] = $this->ml('Block type id "#(1)" does not exist', $data['type_id']);
                 } else {
                     if ($type['type_state'] != xarBlock::TYPE_STATE_ACTIVE) {
                         // type state may have changed since last phase
-                        $invalid['type_id'] = xarML('Selected block type for this instance is not active');
+                        $invalid['type_id'] = $this->ml('Selected block type for this instance is not active');
                     } elseif (!empty($type['type_info']['add_access'])) {
                         // Decide whether the current user can create blocks of this type
                         $args = [
@@ -106,7 +106,7 @@ class NewInstanceMethod extends MethodClass
                         ];
                         if (!$accessproperty->check($args)) {
                             // access may have changed since last phase
-                            $invalid['type_id'] = xarML('You do not have permission to create blocks of this type');
+                            $invalid['type_id'] = $this->ml('You do not have permission to create blocks of this type');
                         }
                     }
                 }
@@ -167,15 +167,15 @@ class NewInstanceMethod extends MethodClass
         // deal with update phase - at this point we have a valid type which user can create instances of
         if ($phase == 'update') {
             // validations
-            if (!xarSec::confirmAuthKey()) {
-                return xarController::badRequest('bad_author', $this->getContext());
+            if (!$this->sec()->confirmAuthKey()) {
+                return $this->ctl()->badRequest('bad_author');
             }
             // groups, optional, if supplied must be valid block groups
             // validated here because createitem has no knowledge of them
             if (!empty($data['groups'])) {
                 foreach ($data['groups'] as $group_id) {
                     if (!isset($block_groups[$group_id])) {
-                        $invalid['groups'] = xarML('Unknown block group selected');
+                        $invalid['groups'] = $this->ml('Unknown block group selected');
                         break;
                     }
                 }
@@ -229,23 +229,23 @@ class NewInstanceMethod extends MethodClass
                     // something wrong with args, see what it was
                     // block name, required, can't be empty
                     if (empty($data['name']) || strlen($data['name']) > 64) {
-                        $invalid['name'] = xarML('Name must be a string between 1 and 64 characters long');
+                        $invalid['name'] = $this->ml('Name must be a string between 1 and 64 characters long');
                     } elseif (!preg_match('!^([a-z0-9_])*$!', $data['name'])) {
-                        $invalid['name'] = xarML('Name can only contain the characters [a-z0-9_]');
+                        $invalid['name'] = $this->ml('Name can only contain the characters [a-z0-9_]');
                     }
                     // state, required, must be a known state
                     if (!isset($data['state']) || !isset($instance_states[$data['state']])) {
-                        $invalid['state'] = xarML('Unknown block state selected');
+                        $invalid['state'] = $this->ml('Unknown block state selected');
                     }
                 } catch (DuplicateException $e) {
                     // block instance with supplied name already exists
-                    $invalid['name'] = xarML('A block instance named "#(1)" already exists, name must be unique', $data['name']);
+                    $invalid['name'] = $this->ml('A block instance named "#(1)" already exists, name must be unique', $data['name']);
                 } catch (IDNotFoundException $e) {
                     // block type id doesn't exist
                     // for this to happen here, the block type must have been deleted right after
                     // we checked earlier and just before we called createitem, unlikely
                     // however, since we can handle it if it does happen, let's do that
-                    $invalid['type_id'] = xarML('Block type id "#(1)" does not exist', $data['type_id']);
+                    $invalid['type_id'] = $this->ml('Block type id "#(1)" does not exist', $data['type_id']);
                 } catch (Exception $e) {
                     // if we're here, likely a db error, not much else we can do
                     throw $e;
@@ -254,14 +254,14 @@ class NewInstanceMethod extends MethodClass
 
             if (empty($invalid)) {
                 if (empty($return_url)) {
-                    $return_url = xarController::URL(
+                    $return_url = $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'modify_instance',
                         ['block_id' => $block_id]
                     );
                 }
-                xarController::redirect($return_url, null, $this->getContext());
+                $this->ctl()->redirect($return_url);
 
             } else {
                 // redisplay with invalid messages

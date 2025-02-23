@@ -66,7 +66,7 @@ class DeleteitemMethod extends MethodClass
         if (!empty($type_instances)) {
             foreach (array_keys($type_instances) as $block_id) {
                 try {
-                    if (!xarMod::apiFunc(
+                    if (!$this->mod()->apiFunc(
                         'types',
                         'instances',
                         'deleteitem',
@@ -85,8 +85,8 @@ class DeleteitemMethod extends MethodClass
         }
         unset($type, $type_instances);
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
         $types_table = $tables['block_types'];
 
         $query = "DELETE FROM $types_table
@@ -105,7 +105,7 @@ class DeleteitemMethod extends MethodClass
             'itemid' => $args['type_id'],
             'itemtype' => 1,
         );
-        xarHooks::notify('BlockDelete', $item);
+        $this->mod()->notifyHooks('BlockDelete', $item);
         */
 
         return $args['type_id'];

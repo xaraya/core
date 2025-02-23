@@ -41,7 +41,7 @@ class RemoveroleMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditPrivileges')) {
+        if (!$this->sec()->checkAccess('EditPrivileges')) {
             return;
         }
 
@@ -49,10 +49,10 @@ class RemoveroleMethod extends MethodClass
         $this->var()->check('roleid', $roleid);
         $this->var()->check('confirmation', $confirmation);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         if (empty($roleid)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
         //Call the Roles class and get the role to be removed
@@ -71,7 +71,7 @@ class RemoveroleMethod extends MethodClass
         }
 
         // Clear Session Vars
-        xarSession::delVar('privileges_statusmsg');
+        $this->session()->delVar('privileges_statusmsg');
 
         // get the names of the role and privilege for display purposes
         $rolename = $role->getName();
@@ -80,7 +80,7 @@ class RemoveroleMethod extends MethodClass
         if (empty($confirmation)) {
 
             //Load Template
-            $data['authid'] = xarSec::genAuthKey();
+            $data['authid'] = $this->sec()->genAuthKey();
             $data['roleid'] = $roleid;
             $data['id'] = $id;
             $data['ptype'] = $role->getType();
@@ -91,8 +91,8 @@ class RemoveroleMethod extends MethodClass
         } else {
 
             // Check for authorization code
-            if (!xarSec::confirmAuthKey()) {
-                return xarController::badRequest('bad_author', $this->getContext());
+            if (!$this->sec()->confirmAuthKey()) {
+                return $this->ctl()->badRequest('bad_author');
             }
 
             //Try to remove the privilege and bail if an error was thrown
@@ -100,18 +100,18 @@ class RemoveroleMethod extends MethodClass
                 return;
             }
 
-            xarSession::setVar('privileges_statusmsg', xarML(
+            $this->session()->setVar('privileges_statusmsg', $this->ml(
                 'Role Removed',
                 'privileges'
             ));
 
             // redirect to the next page
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'privileges',
                 'admin',
                 'viewroles',
                 ['id' => $id]
-            ), null, $this->getContext());
+            ));
             return true;
         }
 

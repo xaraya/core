@@ -51,7 +51,7 @@ class DeleteTypeMethod extends MethodClass
         $typesapi = $this->typesapi();
         /** @var InstancesApi $instancesapi */
         $instancesapi = $this->instancesapi();
-        if (!xarSecurity::check('AdminBlocks')) {
+        if (!$this->sec()->checkAccess('AdminBlocks')) {
             return;
         }
 
@@ -90,8 +90,8 @@ class DeleteTypeMethod extends MethodClass
             );
 
             if ($confirmed) {
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 if (!$typesapi->deleteitem(['type_id' => $type_id])) {
                     return;
@@ -103,9 +103,9 @@ class DeleteTypeMethod extends MethodClass
                     ''
                 );
                 if (empty($return_url)) {
-                    $return_url = xarController::URL('blocks', 'admin', 'view_types');
+                    $return_url = $this->ctl()->getModuleURL('blocks', 'admin', 'view_types');
                 }
-                xarController::redirect($return_url, null, $this->getContext());
+                $this->ctl()->redirect($return_url);
             }
 
         }

@@ -40,7 +40,7 @@ class ModifyinstalloptionsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
@@ -51,8 +51,8 @@ class ModifyinstalloptionsMethod extends MethodClass
             if (!isset($regid)) {
                 throw new Exception('Missing id of module for installation options...aborting');
             }
-            $modInfo = xarMod::getInfo($regid);
-            $data['authid'] = xarSec::genAuthKey('modules');
+            $modInfo = $this->mod()->getInfo($regid);
+            $data['authid'] = $this->sec()->genAuthKey('modules');
             $data['regid'] = $modInfo['regid'];
             $data['modname'] = $modInfo['name'];
             $data['displayname'] = $modInfo['displayname'];

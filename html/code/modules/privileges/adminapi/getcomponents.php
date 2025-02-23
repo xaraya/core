@@ -50,7 +50,7 @@ class GetcomponentsMethod extends MethodClass
             $components[] = ['id' => -2,
                 'name' => 'All'];
         } else {
-            $module = xarMod::getName($modid);
+            $module = $this->mod()->getName($modid);
 
             // @checkme where is getcomponents() supposed to come from?
             // Do we have the components in a file?
@@ -60,11 +60,11 @@ class GetcomponentsMethod extends MethodClass
             } catch (Exception $e) {
             }
 
-            $modid = xarMod::getID($module);
+            $modid = $this->mod()->getID($module);
         }
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $query = "SELECT DISTINCT component
                       FROM " . $xartable['security_instances'] . "
                       WHERE module_id = ?

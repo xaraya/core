@@ -49,12 +49,12 @@ class InstallallMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         //Testing it directly for now... Insert this back when it is put into the template
-        //    if (!xarSec::confirmAuthKey()) return;
+        //    if (!$this->sec()->confirmAuthKey()) return;
 
         //This is a very lenghty process
         @set_time_limit(600);
@@ -85,7 +85,7 @@ class InstallallMethod extends MethodClass
             }
         }
 
-        xarController::redirect(xarController::URL('modules', 'admin', 'list', ['state' => 0], null), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', 'list', ['state' => 0], null));
         return true;
     }
 }

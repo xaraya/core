@@ -38,29 +38,29 @@ class GetitemtypesMethod extends MethodClass
     {
         $itemtypes = [];
 
-        if (xarSecurity::check('EditBlocks', 0)) {
+        if ($this->sec()->checkAccess('EditBlocks', 0)) {
             $showurl = true;
         } else {
             $showurl = false;
         }
 
-        $name = xarML('Block Types');
-        $itemtypes[1] = ['label' => xarVar::prepForDisplay($name),
-            'title' => xarVar::prepForDisplay(xarML('Display #(1)', $name)),
-            'url'   => $showurl ? xarController::URL('blocks', 'admin', 'view_types') : '',
+        $name = $this->ml('Block Types');
+        $itemtypes[1] = ['label' => $this->var()->prep($name),
+            'title' => $this->var()->prep($this->ml('Display #(1)', $name)),
+            'url'   => $showurl ? $this->ctl()->getModuleURL('blocks', 'admin', 'view_types') : '',
         ];
 
-        $name = xarML('Block Groups');
-        $itemtypes[2] = ['label' => xarVar::prepForDisplay($name),
-            'title' => xarVar::prepForDisplay(xarML('Display #(1)', $name)),
-            //'url'   => $showurl ? xarController::URL('blocks','admin','view_groups') : ''
+        $name = $this->ml('Block Groups');
+        $itemtypes[2] = ['label' => $this->var()->prep($name),
+            'title' => $this->var()->prep($this->ml('Display #(1)', $name)),
+            //'url'   => $showurl ? $this->ctl()->getModuleURL('blocks','admin','view_groups') : ''
             'url'   => '',
         ];
 
-        $name = xarML('Block Instances');
-        $itemtypes[3] = ['label' => xarVar::prepForDisplay($name),
-            'title' => xarVar::prepForDisplay(xarML('Display #(1)', $name)),
-            'url'   => $showurl ? xarController::URL('blocks', 'admin', 'view_instances') : '',
+        $name = $this->ml('Block Instances');
+        $itemtypes[3] = ['label' => $this->var()->prep($name),
+            'title' => $this->var()->prep($this->ml('Display #(1)', $name)),
+            'url'   => $showurl ? $this->ctl()->getModuleURL('blocks', 'admin', 'view_instances') : '',
         ];
 
         return $itemtypes;

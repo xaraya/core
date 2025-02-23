@@ -44,11 +44,11 @@ class DeleteMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Are we legitimally here?
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
         // Security
-        if (!xarSecurity::check('ManageMail')) {
+        if (!$this->sec()->checkAccess('ManageMail')) {
             return;
         }
 
@@ -56,7 +56,7 @@ class DeleteMethod extends MethodClass
         $this->var()->find('itemid', $itemid, 'int:1:', 0);
         $this->var()->find('objectid', $objectid, 'int:1:', 0);
         if (empty($itemid) || empty($objectid)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
         $qdefObject = $this->data()->getObject(['objectid' => $objectid]);
@@ -69,6 +69,6 @@ class DeleteMethod extends MethodClass
             return;
         }
 
-        return xarController::redirect(xarController::URL('mail', 'admin', 'view'), null, $this->getContext());
+        return $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'view'));
     }
 }

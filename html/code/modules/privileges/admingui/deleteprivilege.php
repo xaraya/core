@@ -43,13 +43,13 @@ class DeleteprivilegeMethod extends MethodClass
         $this->var()->check('confirmation', $confirmation);
 
         // Clear Session Vars
-        xarSession::delVar('privileges_statusmsg');
+        $this->session()->delVar('privileges_statusmsg');
 
         //Call the Privileges class and get the privilege to be deleted
         sys::import('modules.privileges.class.privileges');
         $priv = xarPrivileges::getprivilege($id);
         if (empty($priv)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $name = $priv->getName();
 
@@ -67,7 +67,7 @@ class DeleteprivilegeMethod extends MethodClass
                     'parentname' => $parent->getName()];
             }
             //Load Template
-            $data['authid'] = xarSec::genAuthKey();
+            $data['authid'] = $this->sec()->genAuthKey();
             $data['id'] = $id;
             $data['pname'] = $name;
             $data['parents'] = $parents;
@@ -76,8 +76,8 @@ class DeleteprivilegeMethod extends MethodClass
         }
 
         // Check for authorization code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         //Try to remove the privilege and bail if an error was thrown
@@ -85,15 +85,15 @@ class DeleteprivilegeMethod extends MethodClass
             return;
         }
 
-        xarModHooks::call('item', 'delete', $id, '');
+        $this->mod()->callHooks('item', 'delete', $id, '');
 
-        xarSession::setVar('privileges_statusmsg', xarML(
+        $this->session()->setVar('privileges_statusmsg', $this->ml(
             'Privilege Removed',
             'privileges'
         ));
 
         // redirect to the next page
-        xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('privileges', 'admin', 'viewprivileges'));
         return true;
     }
 }

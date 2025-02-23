@@ -41,17 +41,17 @@ class GetmenulinksMethod extends MethodClass
         $menulinks = [];
         if ((bool) xarModVars::get('roles', 'displayrolelist')) {
             $menulinks[] = [
-                'url'   => xarController::URL('roles', 'user', 'view'),
-                'title' => xarML('View All Users'),
-                'label' => xarML('Memberslist'),
+                'url'   => $this->ctl()->getModuleURL('roles', 'user', 'view'),
+                'title' => $this->ml('View All Users'),
+                'label' => $this->ml('Memberslist'),
                 'active' => ['view'],
             ];
         }
         if (xarUser::isLoggedIn()) {
             $menulinks[] = [
-                'url'   => xarController::URL('roles', 'user', 'account'),
-                'title' => xarML('Your Custom Configuration'),
-                'label' => xarML('Your Account'),
+                'url'   => $this->ctl()->getModuleURL('roles', 'user', 'account'),
+                'title' => $this->ml('Your Custom Configuration'),
+                'label' => $this->ml('Your Account'),
                 'active' => ['account'],
             ];
         }

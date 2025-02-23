@@ -49,18 +49,18 @@ class LostpasswordMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security check
-        if (!xarSecurity::check('ViewRoles')) {
+        if (!$this->sec()->checkAccess('ViewRoles')) {
             return;
         }
 
         //If a user is already logged in, no reason to see this.
         //We are going to send them to their account.
         if (xarUser::isLoggedIn()) {
-            xarController::redirect(xarController::URL('roles', 'user', 'account'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'account'));
             return true;
         }
 
-        xarTpl::setPageTitle(xarVar::prepForDisplay(xarML('Lost Password')));
+        $this->tpl()->setPageTitle($this->var()->prep($this->ml('Lost Password')));
 
         $this->var()->find('phase', $phase, 'str:1:100', 'request');
 
@@ -77,8 +77,8 @@ class LostpasswordMethod extends MethodClass
                 $this->var()->find('email', $email, 'str:1:100', '');
 
                 // Confirm authorisation code.
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
 
                 $data['showmessage'] = 0;
@@ -105,7 +105,7 @@ class LostpasswordMethod extends MethodClass
                 // We need to tell some hooks that we are coming from the lost password screen
                 // and not the update the actual roles screen.  Right now, the keywords vanish
                 // into thin air.  Bug 1960 and 3161
-                xarVar::setCached('Hooks.all', 'noupdate', 1);
+                $this->var()->setCached('Hooks.all', 'noupdate', 1);
 
                 //Update user password
                 $role = xarRoles::get($user['id']);
@@ -121,7 +121,7 @@ class LostpasswordMethod extends MethodClass
 
                 // Let user know that they have an email on the way.
                 $data['context'] ??= $this->getContext();
-                $data = xarTpl::module('roles', 'user', 'requestpwconfirm', $data);
+                $data = $this->tpl()->module('roles', 'user', 'requestpwconfirm', $data);
                 break;
         }
         return $data;

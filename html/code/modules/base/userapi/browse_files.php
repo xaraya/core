@@ -121,7 +121,7 @@ class BrowseFilesMethod extends MethodClass
         // If the module is set, then find its home.
         if (!empty($module)) {
             // Assume for now that we are looking only in the module home directory.
-            $modinfo = xarMod::getInfo(xarMod::getRegID($module));
+            $modinfo = $this->mod()->getInfo($this->mod()->getRegID($module));
             if (!empty($modinfo)) {
                 $rootdir = './modules/' . $modinfo['directory'];
             }

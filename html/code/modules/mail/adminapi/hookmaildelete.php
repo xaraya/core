@@ -65,11 +65,11 @@ class HookmaildeleteMethod extends MethodClass
             if (!empty($extrainfo['module'])) {
                 $modname = $extrainfo['module'];
             } else {
-                $modname = xarMod::getName();
+                $modname = $this->mod()->getName();
             }
         }
 
-        $modid = xarMod::getRegID($modname);
+        $modid = $this->mod()->getRegID($modname);
         if (empty($modid)) {
             throw new IDNotFoundException("modid for $modname");
         }

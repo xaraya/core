@@ -42,7 +42,7 @@ class TemplateMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminMail')) {
+        if (!$this->sec()->checkAccess('AdminMail')) {
             return;
         }
 
@@ -64,15 +64,15 @@ class TemplateMethod extends MethodClass
                     'template' => $data['mailtype']]);
                 $data['subject'] = $strings['subject'];
                 $data['message'] = $strings['message'];
-                $data['authid'] = xarSec::genAuthKey();
+                $data['authid'] = $this->sec()->genAuthKey();
                 break;
 
             case 'update':
                 $this->var()->find('message', $message, 'str:1:');
                 $this->var()->find('subject', $subject, 'str:1:');
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
 
                 if (!$adminapi->updatemessagestrings(['module' => 'mail',
@@ -82,17 +82,17 @@ class TemplateMethod extends MethodClass
                     return;
                 }
 
-                xarController::redirect(xarController::URL(
+                $this->ctl()->redirect($this->ctl()->getModuleURL(
                     'mail',
                     'admin',
                     'template',
                     ['mailtype' => $data['mailtype']]
-                ), null, $this->getContext());
+                ));
                 return true;
         }
 
         $data['settings'] = [];
-        $hookedmodules = xarMod::apiFunc(
+        $hookedmodules = $this->mod()->apiFunc(
             'modules',
             'admin',
             'gethookedmodules',
@@ -104,7 +104,7 @@ class TemplateMethod extends MethodClass
                 if (!isset($value[0])) {
                     // Get the list of all item types for this module (if any)
                     try {
-                        $mytypes = xarMod::apiFunc($modname, 'user', 'getitemtypes');
+                        $mytypes = $this->mod()->apiFunc($modname, 'user', 'getitemtypes');
                     } catch (Exception $e) {
                         $mytypes = [];
                     }
@@ -113,8 +113,8 @@ class TemplateMethod extends MethodClass
                             $type = $mytypes[$itemtype]['label'];
                             $link = $mytypes[$itemtype]['url'];
                         } else {
-                            $type = xarML('type #(1)', $itemtype);
-                            $link = xarController::URL($modname, 'user', 'view', ['itemtype' => $itemtype]);
+                            $type = $this->ml('type #(1)', $itemtype);
+                            $link = $this->ctl()->getModuleURL($modname, 'user', 'view', ['itemtype' => $itemtype]);
                         }
                         $data['settings']["$modname.$itemtype"] = ['modname' => $modname,
                             'type' => $type,
@@ -122,7 +122,7 @@ class TemplateMethod extends MethodClass
                     }
                 } else {
                     $type = '';
-                    $link = xarController::URL($modname, 'user', 'main');
+                    $link = $this->ctl()->getModuleURL($modname, 'user', 'main');
                     $data['settings'][$modname] = ['modname' => $modname,
                         'type' => $type,
                         'link' => $link];

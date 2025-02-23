@@ -37,7 +37,7 @@ class ViewprivilegesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditPrivileges')) {
+        if (!$this->sec()->checkAccess('EditPrivileges')) {
             return;
         }
 
@@ -46,10 +46,10 @@ class ViewprivilegesMethod extends MethodClass
         $this->var()->find('show', $data['show'], 'isset', 'assigned');
 
         // Clear Session Vars
-        xarSession::delVar('privileges_statusmsg');
+        $this->session()->delVar('privileges_statusmsg');
 
-        $data['authid'] = xarSec::genAuthKey();
-        $data['refreshlabel'] = xarML('Refresh');
+        $data['authid'] = $this->sec()->genAuthKey();
+        $data['refreshlabel'] = $this->ml('Refresh');
         return $data;
     }
 }

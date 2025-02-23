@@ -52,7 +52,7 @@ class CountitemsMethod extends MethodClass
         }
 
         // Determine the tables we are going to use
-        $tables = xarDB::getTables();
+        $tables = $this->db()->getTables();
         $q = new Query('SELECT', $tables['modules']);
 
         if (!empty($regid)) {

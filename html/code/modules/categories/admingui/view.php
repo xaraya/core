@@ -47,7 +47,7 @@ class ViewMethod extends MethodClass
         }
 
         // Security check
-        if (!xarSecurity::check('ManageCategories')) {
+        if (!$this->sec()->checkAccess('ManageCategories')) {
             return;
         }
 

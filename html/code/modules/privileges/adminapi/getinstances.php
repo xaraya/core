@@ -50,13 +50,13 @@ class GetinstancesMethod extends MethodClass
             return [];
         }
         try {
-            $modid = xarMod::getID($module);
+            $modid = $this->mod()->getID($module);
         } catch (Exception $e) {
             $modid = 0;
         }
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $query = "SELECT header, query, ddlimit
                       FROM " . $xartable['security_instances'] . "
                       WHERE module_id = ? AND component = ?
@@ -78,7 +78,7 @@ class GetinstancesMethod extends MethodClass
 
             // check if the query is there
             if ($selection == '') {
-                $msg = xarML('A query is missing in component #(1) of module #(2)', $component, xarMod::getName($modid));
+                $msg = $this->ml('A query is missing in component #(1) of module #(2)', $component, $this->mod()->getName($modid));
                 // TODO: make it descendent from xarExceptions.
                 throw new Exception($msg);
             }

@@ -45,13 +45,13 @@ class RemoveMethod extends MethodClass
     {
         extract($args);
 
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
         // Remove variables and theme
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
 
         // Get theme information
         if (isset($name)) {

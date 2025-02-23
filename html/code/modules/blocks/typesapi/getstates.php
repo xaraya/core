@@ -38,13 +38,13 @@ class GetstatesMethod extends MethodClass
 
         return [
             xarBlock::TYPE_STATE_ACTIVE =>
-                ['id' => xarBlock::TYPE_STATE_ACTIVE, 'name' => xarML('Active')],
+                ['id' => xarBlock::TYPE_STATE_ACTIVE, 'name' => $this->ml('Active')],
             xarBlock::TYPE_STATE_MISSING =>
-                ['id' => xarBlock::TYPE_STATE_MISSING, 'name' => xarML('Missing')],
+                ['id' => xarBlock::TYPE_STATE_MISSING, 'name' => $this->ml('Missing')],
             xarBlock::TYPE_STATE_ERROR =>
-                ['id' => xarBlock::TYPE_STATE_ERROR, 'name' => xarML('Error')],
+                ['id' => xarBlock::TYPE_STATE_ERROR, 'name' => $this->ml('Error')],
             xarBlock::TYPE_STATE_MOD_UNAVAILABLE =>
-                ['id' => xarBlock::TYPE_STATE_MOD_UNAVAILABLE, 'name' => xarML('Unavailable')],
+                ['id' => xarBlock::TYPE_STATE_MOD_UNAVAILABLE, 'name' => $this->ml('Unavailable')],
         ];
 
     }

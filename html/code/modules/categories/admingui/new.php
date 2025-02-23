@@ -46,13 +46,13 @@ class NewMethod extends MethodClass
         $this->var()->check('return_url', $data['return_url']);
         $this->var()->find('repeat', $data['repeat'], 'int:1:', 1);
 
-        if (!xarSecurity::check('AddCategories')) {
+        if (!$this->sec()->checkAccess('AddCategories')) {
             return;
         }
 
         sys::import('modules.dynamicdata.class.objects.factory');
         for ($i = 1;$i <= $data['repeat'];$i++) {
-            $data['objects'][$i] = DataObjectFactory::getObject(['name' => xarModVars::get('categories', 'categoriesobject'), 'fieldprefix' => $i]);
+            $data['objects'][$i] = $this->data()->getObject(['name' => xarModVars::get('categories', 'categoriesobject'), 'fieldprefix' => $i]);
         }
 
         // Setting up necessary data.
@@ -62,7 +62,7 @@ class NewMethod extends MethodClass
         $catinfo = [];
         $catinfo['module'] = 'categories';
         $catinfo['itemid'] = '';
-        $hooks = xarModHooks::call('item', 'new', '', $catinfo);
+        $hooks = $this->mod()->callHooks('item', 'new', '', $catinfo);
         if (empty($hooks)) {
             $data['hooks'] = '';
         } else {
@@ -92,7 +92,7 @@ class NewMethod extends MethodClass
         }
 
         $data['categories'] = $categories;
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         return $data;
     }
 }

@@ -38,11 +38,11 @@ class TimesinceMethod extends MethodClass
         extract($args);
         //expecting a var named $originaltime
 
-        $mlyear = xarML('year');
-        $mlmonth = xarML('month');
-        $mlweek = xarML('week');
-        $mlday  = xarML('day');
-        $mlhour = xarML('hour');
+        $mlyear = $this->ml('year');
+        $mlmonth = $this->ml('month');
+        $mlweek = $this->ml('week');
+        $mlday  = $this->ml('day');
+        $mlhour = $this->ml('hour');
         $mlminute = xarMl('minute');
         // array of time period chunks
         $chunks = [

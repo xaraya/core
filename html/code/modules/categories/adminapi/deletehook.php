@@ -46,21 +46,21 @@ class DeletehookMethod extends MethodClass
         }
 
         if (!isset($objectid) || !is_numeric($objectid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 'object ID', 'admin', 'deletehook', 'categories');
+            $msg = $this->ml('Invalid #(1) for #(2) function #(3)() in module #(4)', 'object ID', 'admin', 'deletehook', 'categories');
             throw new BadParameterException(null, $msg);
         }
 
         // When called via hooks, the module name may be empty, so we get it from
         // the current module
         if (empty($extrainfo['module'])) {
-            $modname = xarMod::getName();
+            $modname = $this->mod()->getName();
         } else {
             $modname = $extrainfo['module'];
         }
 
-        $modid = xarMod::getRegID($modname);
+        $modid = $this->mod()->getRegID($modname);
         if (empty($modid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 'module name', 'admin', 'deletehook', 'categories');
+            $msg = $this->ml('Invalid #(1) for #(2) function #(3)() in module #(4)', 'module name', 'admin', 'deletehook', 'categories');
             throw new BadParameterException(null, $msg);
         }
         if (isset($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {

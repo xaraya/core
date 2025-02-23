@@ -44,25 +44,25 @@ class AddmemberMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AddPrivileges')) {
+        if (!$this->sec()->checkAccess('AddPrivileges')) {
             return;
         }
 
         // Check for authorization code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $this->var()->check('ppid', $id);
         $this->var()->check('privid', $privid);
 
         if (empty($id) || empty($privid)) {
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'privileges',
                 'admin',
                 'modifyprivilege',
                 ['id' => $id]
-            ), null, $this->getContext());
+            ));
             return true;
         }
 
@@ -100,17 +100,17 @@ class AddmemberMethod extends MethodClass
         }
 
         // set the session variable
-        xarSession::setVar('privileges_statusmsg', xarML(
+        $this->session()->setVar('privileges_statusmsg', $this->ml(
             'Added to Privilege',
             'privileges'
         ));
         // redirect to the next page
-        xarController::redirect(xarController::URL(
+        $this->ctl()->redirect($this->ctl()->getModuleURL(
             'privileges',
             'admin',
             'modifyprivilege',
             ['id' => $id]
-        ), null, $this->getContext());
+        ));
         return true;
     }
 }

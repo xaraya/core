@@ -103,7 +103,7 @@ class GetblockMethod extends MethodClass
             }
     
             // Load the block language files
-            if (!xarMLS::loadTranslations($typepath)) {
+            if (!$this->mls()->loadTranslations($typepath)) {
                 // What to do here? return doesnt seem right
                 return;
             }
@@ -203,7 +203,7 @@ class GetblockMethod extends MethodClass
         }
 
         // Load the block language files
-        if (!xarMLS::loadTranslations($typepath)) {
+        if (!$this->mls()->loadTranslations($typepath)) {
             // What to do here? return doesnt seem right
             return;
         }

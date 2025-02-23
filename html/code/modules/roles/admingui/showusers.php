@@ -47,22 +47,22 @@ class ShowusersMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if (!xarSecurity::check('EditRoles')) {
+        if (!$this->sec()->checkAccess('EditRoles')) {
             return;
         }
 
-        if (xarVar::isCached('roles', 'defaultgroupid')) {
-            $defaultgroupid = xarVar::getCached('roles', 'defaultgroupid');
+        if ($this->var()->isCached('roles', 'defaultgroupid')) {
+            $defaultgroupid = $this->var()->getCached('roles', 'defaultgroupid');
         } else {
             $defaultgroupid = xarModVars::get('roles', 'defaultgroup');
         }
-        xarVar::setCached('roles', 'defaultgroupid', $defaultgroupid);
+        $this->var()->setCached('roles', 'defaultgroupid', $defaultgroupid);
 
         $data = [];
         $this->var()->find('id', $id, 'int:0:', $defaultgroupid);
         $this->var()->find('startnum', $startnum, 'int:1:', 1);
         $this->var()->find('state', $data['state'], 'int:0:', xarRoles::ROLES_STATE_CURRENT);
-        $this->var()->check('selstyle', $data['selstyle'], 'isset', xarSession::getVar('rolesdisplay'));
+        $this->var()->check('selstyle', $data['selstyle'], 'isset', $this->session()->getVar('rolesdisplay'));
         $this->var()->find('invalid', $data['invalid'], 'str:0:', null);
         $this->var()->find('order', $data['order'], 'str:0:', 'name');
         $this->var()->find('search', $data['search'], 'str:0:', null);
@@ -71,7 +71,7 @@ class ShowusersMethod extends MethodClass
         if (empty($data['selstyle'])) {
             $data['selstyle'] = 0;
         }
-        xarSession::setVar('rolesdisplay', $data['selstyle']);
+        $this->session()->setVar('rolesdisplay', $data['selstyle']);
 
         // Get information on the group we're at
         $data['groups']     = $userapi->getallgroups();
@@ -91,7 +91,7 @@ class ShowusersMethod extends MethodClass
                     'id' => $ancestor->getID()];
             }
         } else {
-            $data['title'] = xarML('All ') . " ";
+            $data['title'] = $this->ml('All ') . " ";
             $data['groupname'] = '';
             $data['itemtype'] = 0;
         }
@@ -103,7 +103,7 @@ class ShowusersMethod extends MethodClass
         $q = '';
 
         if (empty($q) || isset($reload)) {
-            $xartable = xarDB::getTables();
+            $xartable = $this->db()->getTables();
             $q = new Query('SELECT');
             $q->addtable($xartable['roles'], 'r');
             $q->addfields(['r.id AS id','r.name AS name']);
@@ -163,33 +163,33 @@ class ShowusersMethod extends MethodClass
             case xarRoles::ROLES_STATE_CURRENT :
             default:
                 if ($data['totalselect'] == 0) {
-                    $data['message'] = xarML('There are no users');
+                    $data['message'] = $this->ml('There are no users');
                 }
-                $data['title'] .= xarML('Users');
+                $data['title'] .= $this->ml('Users');
                 break;
             case xarRoles::ROLES_STATE_INACTIVE:
                 if ($data['totalselect'] == 0) {
-                    $data['message'] = xarML('There are no inactive users');
+                    $data['message'] = $this->ml('There are no inactive users');
                 }
-                $data['title'] .= xarML('Inactive Users');
+                $data['title'] .= $this->ml('Inactive Users');
                 break;
             case xarRoles::ROLES_STATE_NOTVALIDATED:
                 if ($data['totalselect'] == 0) {
-                    $data['message'] = xarML('There are no users waiting for validation');
+                    $data['message'] = $this->ml('There are no users waiting for validation');
                 }
-                $data['title'] .= xarML('Users Waiting for Validation');
+                $data['title'] .= $this->ml('Users Waiting for Validation');
                 break;
             case xarRoles::ROLES_STATE_ACTIVE:
                 if ($data['totalselect'] == 0) {
-                    $data['message'] = xarML('There are no active users');
+                    $data['message'] = $this->ml('There are no active users');
                 }
-                $data['title'] .= xarML('Active Users');
+                $data['title'] .= $this->ml('Active Users');
                 break;
             case xarRoles::ROLES_STATE_PENDING:
                 if ($data['totalselect'] == 0) {
-                    $data['message'] = xarML('There are no pending users');
+                    $data['message'] = $this->ml('There are no pending users');
                 }
-                $data['title'] .= xarML('Pending Users');
+                $data['title'] .= $this->ml('Pending Users');
                 break;
         }
         // assemble the info for the display
@@ -202,23 +202,23 @@ class ShowusersMethod extends MethodClass
 
         }
         if ($id != 0) {
-            $data['title'] .= " " . xarML('of Group') . " ";
+            $data['title'] .= " " . $this->ml('of Group') . " ";
         }
 
         //selstyle
-        $data['style'] = ['0' => xarML('Simple'),
-            '1' => xarML('Tree'),
-            '2' => xarML('Tabbed'),
+        $data['style'] = ['0' => $this->ml('Simple'),
+            '1' => $this->ml('Tree'),
+            '2' => $this->ml('Tabbed'),
         ];
 
-        $object = DataObjectFactory::getObjectList(['name' => 'roles_users']);
+        $object = $this->data()->getObjectList(['name' => 'roles_users']);
 
         // Load Template
         $data['id']        = $id;
         $data['users']      = $users;
         $data['object']     = $object;
-        $data['authid']     = xarSec::genAuthKey();
-        $data['removeurl']  = xarController::URL('roles', 'admin', 'delete', ['id' => $id]);
+        $data['authid']     = $this->sec()->genAuthKey();
+        $data['removeurl']  = $this->ctl()->getModuleURL('roles', 'admin', 'delete', ['id' => $id]);
         $filter['startnum'] = '%%';
         $filter['id']      = $id;
         $filter['state']    = $data['state'];
@@ -227,7 +227,7 @@ class ShowusersMethod extends MethodClass
 
         $data['startnum'] = $startnum;
         $data['itemsperpage'] = $numitems;
-        $data['urltemplate'] = xarController::URL('roles', 'admin', 'showusers', $filter);
+        $data['urltemplate'] = $this->ctl()->getModuleURL('roles', 'admin', 'showusers', $filter);
         $data['urlitemmatch'] = '%%';
 
         return $data;

@@ -43,11 +43,11 @@ class MainMethod extends MethodClass
     {
         $redirect = xarModVars::get('authsystem', 'frontend_page');
         if (!empty($redirect)) {
-            $truecurrenturl = xarServer::getCurrentURL([], false);
-            $urldata = xarMod::apiFunc('roles', 'user', 'parseuserhome', ['url' => $redirect,'truecurrenturl' => $truecurrenturl]);
-            xarController::redirect($urldata['redirecturl'], null, $this->getContext());
+            $truecurrenturl = $this->ctl()->getCurrentURL([], false);
+            $urldata = $this->mod()->apiFunc('roles', 'user', 'parseuserhome', ['url' => $redirect,'truecurrenturl' => $truecurrenturl]);
+            $this->ctl()->redirect($urldata['redirecturl']);
         } else {
-            xarController::redirect(xarController::URL('authsystem', 'user', 'showloginform'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('authsystem', 'user', 'showloginform'));
         }
         return true;
     }

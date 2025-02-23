@@ -52,14 +52,14 @@ class ModifyconfighookMethod extends MethodClass
         // When called via hooks, the module name may be empty, so we get it from
         // the current module
         if (empty($extrainfo['module'])) {
-            $modname = xarMod::getName();
+            $modname = $this->mod()->getName();
         } else {
             $modname = $extrainfo['module'];
         }
 
-        $modid = xarMod::getRegID($modname);
+        $modid = $this->mod()->getRegID($modname);
         if (empty($modid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 'module name', 'admin', 'modifyconfighook', 'categories');
+            $msg = $this->ml('Invalid #(1) for #(2) function #(3)() in module #(4)', 'module name', 'admin', 'modifyconfighook', 'categories');
             throw new BadParameterException(null, $msg);
         }
 
@@ -125,8 +125,8 @@ class ModifyconfighookMethod extends MethodClass
             }
             unset($item);
         -----------------------------------*/
-        if (xarSecurity::check('AddCategories', 0)) {
-            $newcat = xarML('new');
+        if ($this->sec()->checkAccess('AddCategories', 0)) {
+            $newcat = $this->ml('new');
         } else {
             $newcat = '';
         }
@@ -139,6 +139,6 @@ class ModifyconfighookMethod extends MethodClass
         $data['itemtype'] = $extrainfo['itemtype'];
 
         $data['context'] ??= $this->getContext();
-        return xarTpl::module('categories', 'admin', 'modifyconfighook', $data);
+        return $this->tpl()->module('categories', 'admin', 'modifyconfighook', $data);
     }
 }

@@ -41,7 +41,7 @@ class ExpireMethod extends MethodClass
         // ...
         // TODO: we need some API function here (not a GUI function)
         //       It may return true (or some logging text) if it succeeds, and null if it fails
-        // return xarMod::apiFunc('roles','admin','...',
+        // return $this->mod()->apiFunc('roles','admin','...',
         //                      array('whatever' => $whatever));
 
         return true;

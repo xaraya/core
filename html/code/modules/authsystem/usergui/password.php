@@ -35,6 +35,6 @@ class PasswordMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        return xarMod::guiFunc('roles', 'user', 'lostpassword', $args, $this->getContext());
+        return $this->mod()->guiFunc('roles', 'user', 'lostpassword', $args);
     }
 }

@@ -43,7 +43,7 @@ class ModifyconfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
@@ -51,7 +51,7 @@ class ModifyconfigMethod extends MethodClass
         $this->var()->find('phase', $phase, 'str:1:100', 'modify');
         $this->var()->find('disableoverview', $data['disableoverview'], 'checkbox', (bool) xarModVars::get('modules', 'disableoverview'));
 
-        $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'modules']);
+        $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'modules']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
         $data['module_settings']->getItem();
         switch (strtolower($phase)) {
@@ -61,13 +61,13 @@ class ModifyconfigMethod extends MethodClass
 
             case 'update':
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
                     $data['context'] ??= $this->getContext();
-                    return xarTpl::module('modules', 'admin', 'modifyconfig', $data);
+                    return $this->tpl()->module('modules', 'admin', 'modifyconfig', $data);
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                 }

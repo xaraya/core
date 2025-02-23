@@ -42,7 +42,7 @@ class UnlinkMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security Check
-        if (!xarSecurity::check('AdminCategories')) {
+        if (!$this->sec()->checkAccess('AdminCategories')) {
             return;
         }
 
@@ -61,13 +61,13 @@ class UnlinkMethod extends MethodClass
 
             $what = '';
             if (!empty($modid)) {
-                $modinfo = xarMod::getInfo($modid);
+                $modinfo = $this->mod()->getInfo($modid);
                 if (empty($itemtype)) {
                     $data['modname'] = ucwords($modinfo['displayname']);
                 } else {
                     // Get the list of all item types for this module (if any)
                     try {
-                        $mytypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+                        $mytypes = $this->mod()->apiFunc($modinfo['name'], 'user', 'getitemtypes');
                     } catch (Exception $e) {
                         $mytypes = [];
                     }
@@ -78,19 +78,19 @@ class UnlinkMethod extends MethodClass
                     }
                 }
             }
-            $data['confirmbutton'] = xarML('Confirm');
+            $data['confirmbutton'] = $this->ml('Confirm');
             // Generate a one-time authorisation code for this operation
-            $data['authid'] = xarSec::genAuthKey();
+            $data['authid'] = $this->sec()->genAuthKey();
             // Return the template variables defined in this function
             return $data;
         }
 
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
         // unlink API does not support deleting all category links for all modules
         if (!empty($modid)) {
-            $modinfo = xarMod::getInfo($modid);
+            $modinfo = $this->mod()->getInfo($modid);
             if (!$adminapi->unlink(['modid' => $modid,
                 'itemtype' => $itemtype,
                 'iid' => $itemid,
@@ -99,7 +99,7 @@ class UnlinkMethod extends MethodClass
             }
             // TODO: support deleting all links for a category too (cfr. checklinks)
         }
-        xarController::redirect(xarController::URL('categories', 'admin', 'stats'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('categories', 'admin', 'stats'));
         return true;
     }
 }

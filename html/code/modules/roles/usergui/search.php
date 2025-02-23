@@ -56,7 +56,7 @@ class SearchMethod extends MethodClass
         $data['users'] = [];
         // show the search form
         if (!isset($q)) {
-            if (xarHooks::isAttached('dynamicdata', 'roles')) {
+            if ($this->mod()->isHooked('dynamicdata', 'roles')) {
                 // get the DataObject defined for this module
                 /** @var DataObject $object */
                 $object = $this->data()->getObject(['module' => 'roles']);
@@ -79,22 +79,22 @@ class SearchMethod extends MethodClass
         }
 
         // Need the database connection for quoting strings.
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
 
         // TODO: support wild cards / boolean / quotes / ... (cfr. articles) ?
 
         // remember what we selected before
         $data['checked'] = [];
 
-        if (xarHooks::isAttached('dynamicdata', 'roles')) {
+        if ($this->mod()->isHooked('dynamicdata', 'roles')) {
             // make sure the DD classes are loaded
-            if (!xarMod::apiLoad('dynamicdata', 'user')) {
+            if (!$this->mod()->apiLoad('dynamicdata', 'user')) {
                 return $data;
             }
 
             // @todo load the right object for roles here
             // get a new object list for roles
-            $descriptor = new DataObjectDescriptor(['moduleid'  => xarMod::getRegID('roles')]);
+            $descriptor = new DataObjectDescriptor(['moduleid'  => $this->mod()->getRegID('roles')]);
             $object = new DataObjectList($descriptor);
 
             if (isset($object) && !empty($object->objectid)) {
@@ -161,7 +161,7 @@ class SearchMethod extends MethodClass
 
         if (!$data['total']) {
             if (count($data['users']) == 0) {
-                $data['status'] = xarML('No Users Found Matching Search Criteria');
+                $data['status'] = $this->ml('No Users Found Matching Search Criteria');
             }
             $data['total'] = count($data['users']);
             return $data;
@@ -186,7 +186,7 @@ class SearchMethod extends MethodClass
         }
 
         if (count($data['users']) == 0) {
-            $data['status'] = xarML('No Users Found Matching Search Criteria');
+            $data['status'] = $this->ml('No Users Found Matching Search Criteria');
         }
         return $data;
     }

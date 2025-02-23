@@ -50,7 +50,7 @@ class ReleaseMethod extends MethodClass
          * @todo change feed url once release module is moved
          */
         // Security
-        if (!xarSecurity::check('ManageBase')) {
+        if (!$this->sec()->checkAccess('ManageBase')) {
             return;
         }
 
@@ -81,7 +81,7 @@ class ReleaseMethod extends MethodClass
                 'refresh' => 604800,
                 'extension' => '.xml']);
         } catch (Exception $e) {
-            return xarController::notFound(xarML('No release feed is currently available'), $this->getContext());
+            return $this->ctl()->notFound($this->ml('No release feed is currently available'));
         }
 
         if (!$feeddata) {
@@ -118,7 +118,7 @@ class ReleaseMethod extends MethodClass
             $data['chanlink']   =   $info['channel']['link'];
             $data['chandesc']   =   $info['channel']['description'];
         } else {
-            return xarController::notFound(xarML('No release feed is currently available'), $this->getContext());
+            return $this->ctl()->notFound($this->ml('No release feed is currently available'));
         }
         $data['releasenumber'] = $releasenumber;
         $data['feedcontent'] = $feedcontent;

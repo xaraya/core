@@ -34,7 +34,7 @@ class CreateMethod extends MethodClass
     {
         // Make sure we have all the required values
         if (empty($args['name'])) {
-            $args['name'] = xarML('New Category');
+            $args['name'] = $this->ml('New Category');
         }
         // This makes the root category to be the parent of this new one
         if (empty($args['parent_id'])) {
@@ -46,7 +46,7 @@ class CreateMethod extends MethodClass
         }
 
         sys::import('modules.dynamicdata.class.objects.factory');
-        $category = DataObjectFactory::getObject(['name' => 'categories']);
+        $category = $this->data()->getObject(['name' => 'categories']);
         $id = $category->createItem($args);
         return $id;
     }

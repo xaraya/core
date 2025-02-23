@@ -50,13 +50,13 @@ class ModifypropertiesMethod extends MethodClass
         // xarVar::fetch does validation if not explicitly set to be not required
         $this->var()->find('id', $id, 'int', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
         $this->var()->check('return_url', $return_url);
         $this->var()->find('phase', $phase, 'pre:trim:str:1', 'form');
 
-        $modInfo = xarMod::getInfo($id);
+        $modInfo = $this->mod()->getInfo($id);
         if (!isset($modInfo)) {
             return;
         }
@@ -68,8 +68,8 @@ class ModifypropertiesMethod extends MethodClass
             return;
         }
 
-        $object = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => $modName]);
-        $filesettings = xarMod::getFileInfo($modName);
+        $object = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => $modName]);
+        $filesettings = $this->mod()->getFileInfo($modName);
 
         $fieldlist = [];
         if ($modInfo['admincapable'] && $filesettings['admin']) {
@@ -91,9 +91,9 @@ class ModifypropertiesMethod extends MethodClass
                 if ($isvalid) {
                     $object->updateItem();
                     if (empty($return_url)) {
-                        $return_url = xarController::URL('modules', 'admin', 'modifyproperties', ['id' => $id]);
+                        $return_url = $this->ctl()->getModuleURL('modules', 'admin', 'modifyproperties', ['id' => $id]);
                     }
-                    xarController::redirect($return_url, null, $this->getContext());
+                    $this->ctl()->redirect($return_url);
                 }
             }
         }
@@ -103,9 +103,9 @@ class ModifypropertiesMethod extends MethodClass
         $data['usercapable'] = $modInfo['usercapable'];
         $data['adminallowed'] = $filesettings['admin'];
         $data['userallowed'] = $filesettings['user'];
-        $data['savechangeslabel'] = xarML('Save Changes');
+        $data['savechangeslabel'] = $this->ml('Save Changes');
         $data['object'] = $object;
-        $data['authid'] = xarSec::genAuthKey('modules');
+        $data['authid'] = $this->sec()->genAuthKey('modules');
         $data['id'] = $id;
         $data['displayname'] = $modInfo['displayname'];
         if (!empty($return_url)) {

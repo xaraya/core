@@ -48,7 +48,7 @@ class SitelockMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('ManageRoles')) {
+        if (!$this->sec()->checkAccess('ManageRoles')) {
             return;
         }
 
@@ -60,7 +60,7 @@ class SitelockMethod extends MethodClass
         $lockvars = unserialize((string) xarModVars::get('roles', 'lockdata'));
         $toggle = $lockvars['locked'];
         $roles = $lockvars['roles'];
-        $lockedoutmsg = (!isset($lockvars['message']) || $lockvars['message'] == '') ? xarML('The site is currently locked. Thank you for your patience.') : $lockvars['message'];
+        $lockedoutmsg = (!isset($lockvars['message']) || $lockvars['message'] == '') ? $this->ml('The site is currently locked. Thank you for your patience.') : $lockvars['message'];
         $notifymsg = $lockvars['notifymsg'];
         //        echo "<pre>";var_dump($lockvars);
 
@@ -71,7 +71,7 @@ class SitelockMethod extends MethodClass
             #
             $this->var()->find('serialroles', $serialroles, 'str', null);
             if (!isset($serialroles)) {
-                return xarTpl::module('roles', 'user', 'errors');
+                return $this->tpl()->module('roles', 'user', 'errors');
             }
             $roles = unserialize($serialroles);
             $rolesCount = count($roles);
@@ -143,7 +143,7 @@ class SitelockMethod extends MethodClass
                     'notifymsg' => $notifymsg];
                 xarModVars::set('roles', 'lockdata', serialize($lockdata));
                 // Refresh by jumping to the same page
-                xarController::redirect(xarController::URL('roles', 'admin', 'sitelock'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'sitelock'));
 
                 # --------------------------------------------------------
                 # We are locking or unlocking the site
@@ -189,7 +189,7 @@ class SitelockMethod extends MethodClass
                     try {
                         xarSession::clear(array_keys($spared));
                     } catch (Exception $e) {
-                        $msg = xarML('Could not clear sessions table');
+                        $msg = $this->ml('Could not clear sessions table');
                         throw new Exception($msg);
                     }
                     $mailinfo['message'] = 'The site ' . xarModVars::get('themes', 'SiteName') . ' has been locked.';
@@ -208,7 +208,7 @@ class SitelockMethod extends MethodClass
                         continue;
                     }
                     $mailinfo['info'] = $recipient['role']->getEmail();
-                    if (!xarMod::apiFunc('mail', 'admin', 'sendmail', $mailinfo)) {
+                    if (!$this->mod()->apiFunc('mail', 'admin', 'sendmail', $mailinfo)) {
                         $badmails++;
                     }
                 }
@@ -219,10 +219,10 @@ class SitelockMethod extends MethodClass
                 xarModVars::set('roles', 'lockdata', serialize($lockdata));
 
                 if ($badmails) {
-                    return xarTpl::module('roles', 'user', 'errors', ['layout' => 'mail_failed', 'badmails' => $badmails]);
+                    return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'mail_failed', 'badmails' => $badmails]);
                 }
                 // Refresh by jumping to the same page
-                xarController::redirect(xarController::URL('roles', 'admin', 'sitelock'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'sitelock'));
             }
         }
 
@@ -230,20 +230,20 @@ class SitelockMethod extends MethodClass
         # Send the data to the template for display
         #
         $data['roles']        = $roles;
-        $data['serialroles']  = xarVar::prepForDisplay(serialize($roles));
+        $data['serialroles']  = $this->var()->prep(serialize($roles));
         $data['lockedoutmsg'] = $lockedoutmsg;
         $data['notifymsg']    = $notifymsg;
         $data['toggle']       = $toggle;
         if ($toggle == 1) {
-            $data['togglelabel']   = xarML('Unlock the Site');
-            $data['statusmessage'] = xarML('The site is locked');
+            $data['togglelabel']   = $this->ml('Unlock the Site');
+            $data['statusmessage'] = $this->ml('The site is locked');
         } else {
-            $data['togglelabel']   = xarML('Lock the Site');
-            $data['statusmessage'] = xarML('The site is unlocked');
+            $data['togglelabel']   = $this->ml('Lock the Site');
+            $data['statusmessage'] = $this->ml('The site is unlocked');
         }
-        $data['addlabel']    = xarML('Add a role');
-        $data['deletelabel'] = xarML('Remove');
-        $data['savelabel']   = xarML('Save the configuration');
+        $data['addlabel']    = $this->ml('Add a role');
+        $data['deletelabel'] = $this->ml('Remove');
+        $data['savelabel']   = $this->ml('Save the configuration');
 
         return $data;
     }

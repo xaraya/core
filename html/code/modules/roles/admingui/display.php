@@ -45,7 +45,7 @@ class DisplayMethod extends MethodClass
         $this->var()->find('itemtype', $itemtype, 'id', 1);
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
 
@@ -84,17 +84,17 @@ class DisplayMethod extends MethodClass
         $item['exclude_module'] = ['dynamicdata'];
         $item['module'] = 'roles';
         $item['itemtype'] = $data['itemtype']; // handle groups differently someday ?
-        $item['returnurl'] = xarController::URL(
+        $item['returnurl'] = $this->ctl()->getModuleURL(
             'roles',
             'user',
             'display',
             ['id' => $id]
         );
         $hooks = [];
-        $hooks = xarModHooks::call('item', 'display', $id, $item);
+        $hooks = $this->mod()->callHooks('item', 'display', $id, $item);
         $data['hooks'] = $hooks;
         $data['object'] = $role;
-        xarTpl::setPageTitle(xarVar::prepForDisplay($data['name']));
+        $this->tpl()->setPageTitle($this->var()->prep($data['name']));
         return $data;
     }
 }

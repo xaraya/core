@@ -87,7 +87,7 @@ class GetancestorsMethod extends MethodClass
         if (empty($cids)) {
             // TODO: can the exception handling system support us better here?
             // We shouldn't have to set our own error stacks.
-            xarSession::setVar('errormsg', xarML('Bad arguments for API function'));
+            $this->session()->setVar('errormsg', $this->ml('Bad arguments for API function'));
             return false;
         }
 
@@ -105,7 +105,7 @@ class GetancestorsMethod extends MethodClass
 
         // Only do the database stuff if there are uncached cids to fetch.
         if (!empty($dbcids)) {
-            $xartable = xarDB::getTables();
+            $xartable = $this->db()->getTables();
             $categoriestable = $xartable['categories'];
 
             // TODO : evaluate alternative with 2 queries
@@ -138,7 +138,7 @@ class GetancestorsMethod extends MethodClass
             //$SQLquery .= ' ORDER BY P1.left_id';
 
             // Get database connection info and execute the query.
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $result = $dbconn->Execute($SQLquery);
             if (!$result) {
                 return;

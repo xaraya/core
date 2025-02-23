@@ -50,7 +50,7 @@ class RemoveMethod extends MethodClass
         extract($args);
 
         // Security Check
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
@@ -58,9 +58,9 @@ class RemoveMethod extends MethodClass
 
         // Get module information
         if (isset($name)) {
-            $regid = xarMod::getRegID($name, 'module');
+            $regid = $this->mod()->getRegID($name);
         }
-        $modinfo = xarMod::getInfo($regid);
+        $modinfo = $this->mod()->getInfo($regid);
 
         //TODO: Add check if there is any dependents
         // Make the whole thing atomic
@@ -78,8 +78,8 @@ class RemoveMethod extends MethodClass
 
             // Remove the module itself
             try {
-                $dbconn = xarDB::getConn();
-                $tables = xarDB::getTables();
+                $dbconn = $this->db()->getConn();
+                $tables = $this->db()->getTables();
                 $dbconn->begin();
                 $query = "DELETE FROM $tables[modules] WHERE regid = ?";
                 $dbconn->Execute($query, [$modinfo['regid']]);
@@ -105,7 +105,7 @@ class RemoveMethod extends MethodClass
         // this is now handled by the modules module ModRemove event observer
         // xarMasks::removemasks($modinfo['name']);
         // this is now handled by the modules module ModRemove event observer
-        // xarModHooks::call('module','remove',$modinfo['name'],'',$modinfo['name']);
+        // $this->mod()->callHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
 
         //
         // Delete block details for this module.
@@ -113,13 +113,13 @@ class RemoveMethod extends MethodClass
         // Get block types.
         // this is now handled by the modules module ModRemove event observer
         /*
-        $blocktypes = xarMod::apiFunc('blocks', 'user', 'getallblocktypes',
+        $blocktypes = $this->mod()->apiFunc('blocks', 'user', 'getallblocktypes',
                                     array('module' => $modinfo['name']));
 
         // Delete block types.
         if (is_array($blocktypes) && !empty($blocktypes)) {
             foreach($blocktypes as $blocktype) {
-                xarMod::apiFunc('blocks', 'admin', 'delete_type', $blocktype);
+                $this->mod()->apiFunc('blocks', 'admin', 'delete_type', $blocktype);
             }
         }
         */

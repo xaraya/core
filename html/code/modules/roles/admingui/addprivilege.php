@@ -44,15 +44,15 @@ class AddprivilegeMethod extends MethodClass
         $this->var()->find('privid', $privid, 'int:1:', 0);
         $this->var()->find('roleid', $roleid, 'int:1:', 0);
         if (empty($privid)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         if (empty($roleid)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
         // Check for authorization code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // Call the Roles class and get the role
@@ -78,19 +78,19 @@ class AddprivilegeMethod extends MethodClass
         // We need to tell some hooks that we are coming from the add privilege screen
         // and not the update the actual roles screen.  Right now, the keywords vanish
         // into thin air.  Bug 1960 and 3161
-        xarVar::setCached('Hooks.all', 'noupdate', 1);
+        $this->var()->setCached('Hooks.all', 'noupdate', 1);
 
         // CHECKME: do we really want to do that here (other than for flushing the cache) ?
         // call update hooks and let them know that the role has changed
         $pargs['module']   = 'roles';
         $pargs['itemtype'] = $role->getType();
         $pargs['itemid']   = $roleid;
-        xarModHooks::call('item', 'update', $roleid, $pargs);
+        $this->mod()->callHooks('item', 'update', $roleid, $pargs);
 
         $this->var()->find('return_url', $return_url, 'isset', '');
 
         if (empty($return_url)) {
-            $return_url = xarController::URL(
+            $return_url = $this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'showprivileges',
@@ -99,7 +99,7 @@ class AddprivilegeMethod extends MethodClass
         }
 
         // redirect to the next page
-        xarController::redirect($return_url, null, $this->getContext());
+        $this->ctl()->redirect($return_url);
         return true;
     }
 }

@@ -52,13 +52,13 @@ class RemovehookMethod extends MethodClass
         // When called via hooks, we should get the real module name from objectid
         // here, because the current module is probably going to be 'modules' !!!
         if (!isset($objectid) || !is_string($objectid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 'object ID (= module name)', 'admin', 'removehook', 'categories');
+            $msg = $this->ml('Invalid #(1) for #(2) function #(3)() in module #(4)', 'object ID (= module name)', 'admin', 'removehook', 'categories');
             throw new BadParameterException(null, $msg);
         }
 
-        $modid = xarMod::getRegID($objectid);
+        $modid = $this->mod()->getRegID($objectid);
         if (empty($modid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 'module ID', 'admin', 'removehook', 'categories');
+            $msg = $this->ml('Invalid #(1) for #(2) function #(3)() in module #(4)', 'module ID', 'admin', 'removehook', 'categories');
             throw new BadParameterException(null, $msg);
         }
 
@@ -67,17 +67,17 @@ class RemovehookMethod extends MethodClass
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $categorieslinkagetable = $xartable['categories_linkage'];
 
         // Delete the link
         $sql = "DELETE FROM $categorieslinkagetable
                 WHERE module_id = ?";
-        $dbconn->Execute($sql, [xarMod::getID($objectid)]);
+        $dbconn->Execute($sql, [$this->mod()->getID($objectid)]);
 
         if ($dbconn->ErrorNo() != 0) {
-            $msg = xarML('Database error for #(1) function #(2)() in module #(3)', 'admin', 'removehook', 'categories');
+            $msg = $this->ml('Database error for #(1) function #(2)() in module #(3)', 'admin', 'removehook', 'categories');
             throw new BadParameterException(null, $msg);
         }
 

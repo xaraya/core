@@ -63,11 +63,11 @@ class StandarddeinstallMethod extends MethodClass
         #
         # Remove database tables
         #
-        $dbconn = xarDB::getConn();
-        $xartables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartables = $this->db()->getTables();
 
-        xarMod::apiLoad($module);
-        $tablenameprefix = xarDB::getPrefix() . '_' . $module;
+        $this->mod()->apiLoad($module);
+        $tablenameprefix = $this->db()->getPrefix() . '_' . $module;
         foreach ($xartables as $table) {
             if (is_array($table)) {
                 continue;
@@ -89,7 +89,7 @@ class StandarddeinstallMethod extends MethodClass
             $blocks = unserialize(xarModVars::get($module, 'blocks'));
 
             foreach ($blocks as $blockid) {
-                xarMod::apiFunc('blocks', 'instances', 'deleteitem', ['block_id' => $blockid]);
+                $this->mod()->apiFunc('blocks', 'instances', 'deleteitem', ['block_id' => $blockid]);
             }
         } catch (Exception $e) {
         }
@@ -122,7 +122,7 @@ class StandarddeinstallMethod extends MethodClass
 
         // Remove the categories created by this module
         try {
-            xarMod::apiFunc(
+            $this->mod()->apiFunc(
                 'categories',
                 'admin',
                 'deletecat',

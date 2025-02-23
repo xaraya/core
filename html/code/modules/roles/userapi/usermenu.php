@@ -50,21 +50,21 @@ class UsermenuMethod extends MethodClass
         // not logged in?
         if (!xarUser::isLoggedIn()) {
             // redirect user to their account page after login
-            $redirecturl = xarController::URL('roles', 'user', 'account');
+            $redirecturl = $this->ctl()->getModuleURL('roles', 'user', 'account');
             $defaultauthdata = $userapi->getdefaultauthdata();
             $defaultloginmodname = $defaultauthdata['defaultloginmodname'];
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 $defaultloginmodname,
                 'user',
                 'showloginform',
                 ['redirecturl' => $redirecturl]
-            ), null, $this->getContext());
+            ));
         }
 
         // edit account is disabled?
         if ((bool) xarModVars::get('roles', 'usereditaccount') == false) {
             // show the user their profile display
-            xarController::redirect(xarController::URL('roles', 'user', 'account'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'account'));
         }
 
         // Get arguments from argument array
@@ -81,7 +81,7 @@ class UsermenuMethod extends MethodClass
         }
 
         if (!isset($object)) {
-            $object = xarMod::apiFunc('base', 'admin', 'getusersettings', ['module' => 'roles', 'itemid' => $id]);
+            $object = $this->mod()->apiFunc('base', 'admin', 'getusersettings', ['module' => 'roles', 'itemid' => $id]);
         }
         // only get the fields we need
         $fieldlist = [];
@@ -127,14 +127,14 @@ class UsermenuMethod extends MethodClass
                 // if you want to provide your own update function, you can specify
                 // the form action url to be used. When the form is POSTed your function
                 // will be used. (see roles user usermenu for an example).
-                $data['formaction'] = xarController::URL('roles', 'user', 'usermenu');
+                $data['formaction'] = $this->ctl()->getModuleURL('roles', 'user', 'usermenu');
                 // not necessary, but for completeness pass back any fields you changed
                 $data['tplmodule'] = 'roles';
                 $data['template'] = 'usermenu';
                 $data['layout'] = 'roles_user_settings';
                 // pass the module name in when setting the authkey, this avoids clashes
                 // when the output contained within another modules display (eg in xarpages)
-                $data['authid'] = xarSec::genAuthKey('roles');
+                $data['authid'] = $this->sec()->genAuthKey('roles');
                 // finally return data to the calling function
                 return $data;
 
@@ -155,7 +155,7 @@ class UsermenuMethod extends MethodClass
                             if ((preg_match("%^http://%", $home, $matches)) &&
                             ($url_parts['host'] != xarServer::getVar("SERVER_NAME")) &&
                             ($url_parts['host'] != xarServer::getVar("HTTP_HOST"))) {
-                                $msg  = xarML('<span class="xar-alert">&#160;External URLs such as #(1) are not permitted as your home page.</span>', $home);
+                                $msg  = $this->ml('<span class="xar-alert">&#160;External URLs such as #(1) are not permitted as your home page.</span>', $home);
                                 $object->properties['userhome']->invalid .= $msg;
                                 $isvalid = false;
                             }
@@ -175,7 +175,7 @@ class UsermenuMethod extends MethodClass
             case 'updateitem':
                 // if you added the module name when you generated the authkey,
                 // be sure to use it here when confirming :)
-                if (!xarSec::confirmAuthKey('roles')) {
+                if (!$this->sec()->confirmAuthKey('roles')) {
                     return;
                 }
                 // data is already validated, go ahead and update the item
@@ -186,8 +186,8 @@ class UsermenuMethod extends MethodClass
                 $this->var()->find('returnurl', $returnurl, 'pre:trim:str:1', '');
                 // the default returnurl should be roles user account with a moduleload of current module
                 if (empty($returnurl))
-                    $returnurl = xarController::URL('roles', 'user', 'account', array('moduleload' => 'roles'));
-                return xarController::redirect($returnurl, null, $this->getContext());
+                    $returnurl = $this->ctl()->getModuleURL('roles', 'user', 'account', array('moduleload' => 'roles'));
+                return $this->ctl()->redirect($returnurl);
                 */
                 // let the calling function know the update was a success
                 return true;

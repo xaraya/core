@@ -51,7 +51,7 @@ class IsdescendantMethod extends MethodClass
         if (empty($cid) && empty($cids)) {
             // TODO: try the query parameter 'catid'
 
-            xarSession::setVar('errormsg', xarML('Bad arguments for API function'));
+            $this->session()->setVar('errormsg', $this->ml('Bad arguments for API function'));
             return false;
         }
 
@@ -84,8 +84,8 @@ class IsdescendantMethod extends MethodClass
             return true;
         }
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $categoriestable = $xartable['categories'];
 

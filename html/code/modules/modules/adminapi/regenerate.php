@@ -69,8 +69,8 @@ class RegenerateMethod extends MethodClass
         }
 
         //Setup database object for module insertion
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $modules_table = & $xartable['modules'];
 
         // See if we have gained any modules since last generation,
@@ -224,8 +224,8 @@ class RegenerateMethod extends MethodClass
                         }
 
                         // Clear cache to make sure we set the correct states
-                        //if (xarVar::isCached('Mod.Infos', $modinfo['regid'])) {
-                        //    xarVar::delCached('Mod.Infos', $modinfo['regid']);
+                        //if ($this->var()->isCached('Mod.Infos', $modinfo['regid'])) {
+                        //    $this->var()->delCached('Mod.Infos', $modinfo['regid']);
                         //}
 
                         // Set error state

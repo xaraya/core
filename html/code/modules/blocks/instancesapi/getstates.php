@@ -37,11 +37,11 @@ class GetstatesMethod extends MethodClass
     {
         return [
             xarBlock::BLOCK_STATE_INACTIVE =>
-                ['id' => xarBlock::BLOCK_STATE_INACTIVE, 'name' => xarML('Inactive')],
+                ['id' => xarBlock::BLOCK_STATE_INACTIVE, 'name' => $this->ml('Inactive')],
             xarBlock::BLOCK_STATE_HIDDEN =>
-                ['id' => xarBlock::BLOCK_STATE_HIDDEN, 'name' => xarML('Hidden')],
+                ['id' => xarBlock::BLOCK_STATE_HIDDEN, 'name' => $this->ml('Hidden')],
             xarBlock::BLOCK_STATE_VISIBLE =>
-                ['id' => xarBlock::BLOCK_STATE_VISIBLE, 'name' => xarML('Visible')],
+                ['id' => xarBlock::BLOCK_STATE_VISIBLE, 'name' => $this->ml('Visible')],
         ];
     }
 }

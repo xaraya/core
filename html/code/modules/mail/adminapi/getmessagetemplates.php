@@ -40,7 +40,7 @@ class GetmessagetemplatesMethod extends MethodClass
         extract($args);
 
         if (empty($module)) {
-            $module = xarController::getRequest()->getModule();
+            $module = $this->ctl()->getRequest()->getModule();
         }
 
         $messaginghome = sys::varpath() . "/messaging/" . $module;

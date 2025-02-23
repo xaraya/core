@@ -39,7 +39,7 @@ class ModifynoticeMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminRoles')) {
+        if (!$this->sec()->checkAccess('AdminRoles')) {
             return;
         }
 
@@ -50,10 +50,10 @@ class ModifynoticeMethod extends MethodClass
             default:
                 $ips = xarModVars::get('roles', 'disallowedips');
                 $data['ips'] = empty($ips) ? '' : unserialize($ips);
-                $data['authid'] = xarSec::genAuthKey();
-                $data['updatelabel'] = xarML('Update Notification Configuration');
+                $data['authid'] = $this->sec()->genAuthKey();
+                $data['updatelabel'] = $this->ml('Update Notification Configuration');
 
-                $hooks = xarModHooks::call(
+                $hooks = $this->mod()->callHooks(
                     'module',
                     'modifyconfig',
                     'roles',
@@ -70,8 +70,8 @@ class ModifynoticeMethod extends MethodClass
                 $this->var()->find('askpendingemail', $askpendingemail, 'checkbox', false);
                 $this->var()->find('askpasswordemail', $askpasswordemail, 'checkbox', false);
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 // Update module variables
                 xarModVars::set('roles', 'askwelcomeemail', $askwelcomeemail);
@@ -80,14 +80,14 @@ class ModifynoticeMethod extends MethodClass
                 xarModVars::set('roles', 'askpendingemail', $askpendingemail);
                 xarModVars::set('roles', 'askpasswordemail', $askpasswordemail);
 
-                xarModHooks::call(
+                $this->mod()->callHooks(
                     'module',
                     'updateconfig',
                     'roles',
                     ['module' => 'roles']
                 );
 
-                xarController::redirect(xarController::URL('roles', 'admin', 'modifynotice'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'modifynotice'));
                 // Return
                 return true;
         }

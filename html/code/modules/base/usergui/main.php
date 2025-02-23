@@ -43,7 +43,7 @@ class MainMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security Check
-        if (!xarSecurity::check('ViewBase')) {
+        if (!$this->sec()->checkAccess('ViewBase')) {
             return;
         }
 
@@ -51,16 +51,16 @@ class MainMethod extends MethodClass
         extract($args);
         $this->var()->find('page', $page, 'str', '');
         if (!empty($page)) {
-            xarTpl::setPageTitle($page);
+            $this->tpl()->setPageTitle($page);
             /* Cache the custom page name so it is accessible elsewhere */
-            xarVar::setCached('Base.pages', 'page', $page);
+            $this->var()->setCached('Base.pages', 'page', $page);
         } else {
             $pageTemplate = xarModVars::get('base', 'AlternatePageTemplateName');
             if (xarModVars::get('base', 'UseAlternatePageTemplate') != '' &&
                 $pageTemplate != '') {
-                xarTpl::setPageTemplateName($pageTemplate);
+                $this->tpl()->setPageTemplateName($pageTemplate);
             }
-            xarTpl::setPageTitle(xarML('Welcome'));
+            $this->tpl()->setPageTitle($this->ml('Welcome'));
         }
         /**
          * if you want to include different pages in your user-main template,
@@ -69,11 +69,11 @@ class MainMethod extends MethodClass
         // return ['page' => $page];
         /**
          * if you want to use different user-main-<page> templates,
-         * call xarTpl::module() yourself and pass along the context
+         * call $this->tpl()->module() yourself and pass along the context
          */
         $data = [];
-        // Pass along the context for xarTpl::module() if needed
+        // Pass along the context for $this->tpl()->module() if needed
         $data['context'] = $this->getContext();
-        return xarTpl::module('base', 'user', 'main', $data, $page);
+        return $this->tpl()->module('base', 'user', 'main', $data, $page);
     }
 }

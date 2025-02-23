@@ -56,7 +56,7 @@ class DeleteMethod extends MethodClass
 
         // Root category cannot be deleted except by the site admin
         if (($data['itemid'] == 1) && (!xarUser::isSiteAdmin())) {
-            return xarController::badRequest('no_privileges', $this->getContext());
+            return $this->ctl()->badRequest('no_privileges');
         }
 
         // Check for confirmation
@@ -66,14 +66,14 @@ class DeleteMethod extends MethodClass
             $cat = $userapi->getcatinfo(['cid' => $data['itemid']]);
 
             if ($cat == false) {
-                $msg = xarML('The category to be deleted does not exist', 'categories');
+                $msg = $this->ml('The category to be deleted does not exist', 'categories');
                 throw new BadParameterException(null, $msg);
             }
 
 
             $data['cid'] = $data['itemid'];
             $data['name'] = $cat['name'];
-            $data['authkey'] = xarSec::genAuthKey();
+            $data['authkey'] = $this->sec()->genAuthKey();
 
             $data['numcats'] = $userapi->countcats($cat);
             $data['numcats'] -= 1;
@@ -85,15 +85,15 @@ class DeleteMethod extends MethodClass
 
 
         // Confirm Auth Key
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $result = $worker->delete($data['itemid']);
 
-        xarController::redirect(xarController::URL('categories', 'admin', 'view', []), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('categories', 'admin', 'view', []));
         return true;
     }
 }

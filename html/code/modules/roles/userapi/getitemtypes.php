@@ -35,6 +35,6 @@ class GetitemtypesMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        return xarMod::apiFunc('dynamicdata', 'user', 'getmoduleitemtypes', ['moduleid' => 27, 'native' => false]);
+        return $this->mod()->apiFunc('dynamicdata', 'user', 'getmoduleitemtypes', ['moduleid' => 27, 'native' => false]);
     }
 }

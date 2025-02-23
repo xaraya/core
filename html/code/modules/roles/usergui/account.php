@@ -65,26 +65,26 @@ class AccountMethod extends MethodClass
 
         if (!xarUser::isLoggedIn()) {
             // bring the user back here after login :)
-            $redirecturl = xarController::URL('roles', 'user', 'account');
-            xarController::redirect(xarController::URL(
+            $redirecturl = $this->ctl()->getModuleURL('roles', 'user', 'account');
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 $defaultloginmodname,
                 'user',
                 'showloginform',
                 ['redirecturl' => urlencode($redirecturl)]
-            ), null, $this->getContext());
+            ));
         }
 
         $id = xarUser::getVar('id');
 
         if ($id == xarUser::LAST_RESORT) {
-            $message = xarML('You are logged in as the last resort administrator.');
+            $message = $this->ml('You are logged in as the last resort administrator.');
         } else {
 
             $menutabs = [];
             $menutabs[] = [
-                'label' => xarML('Display Profile'),
-                'title' => xarML('View your profile as it is seen by other site users'),
-                'url' => xarController::URL('roles', 'user', 'account', ['tab' => 'profile']),
+                'label' => $this->ml('Display Profile'),
+                'title' => $this->ml('View your profile as it is seen by other site users'),
+                'url' => $this->ctl()->getModuleURL('roles', 'user', 'account', ['tab' => 'profile']),
                 'active' => (empty($tab) || $tab == 'profile') && empty($moduleload) ? true : false,
             ];
 
@@ -92,7 +92,7 @@ class AccountMethod extends MethodClass
             // only display edit tabs if edit account is enabled
             if ((bool) xarModVars::get('roles', 'usereditaccount')) {
                 // get a list of modules with user menu enabled
-                $allmods = xarMod::apiFunc('modules', 'admin', 'getlist');
+                $allmods = $this->mod()->apiFunc('modules', 'admin', 'getlist');
                 foreach ($allmods as $modinfo) {
                     if (xarModVars::get($modinfo['name'], 'enable_user_menu') != 1) {
                         continue;
@@ -101,22 +101,22 @@ class AccountMethod extends MethodClass
                 }
                 // add a link to edit this users profile
                 $menutabs[] = [
-                    'label' => xarML('Edit Account'),
-                    'title' => xarML('Edit your basic account information'),
-                    'url' => xarController::URL('roles', 'user', 'account', ['tab' => 'basic']),
+                    'label' => $this->ml('Edit Account'),
+                    'title' => $this->ml('Edit your basic account information'),
+                    'url' => $this->ctl()->getModuleURL('roles', 'user', 'account', ['tab' => 'basic']),
                     'active' => $tab == 'basic' ? true : false,
                 ];
             }
 
             if (!empty($menumods)) {
                 foreach ($menumods as $modname) {
-                    $user_settings = xarMod::apiFunc('base', 'admin', 'getusersettings', ['module' => $modname, 'itemid' => $id]);
+                    $user_settings = $this->mod()->apiFunc('base', 'admin', 'getusersettings', ['module' => $modname, 'itemid' => $id]);
                     if (isset($user_settings)) {
                         $isactive = $moduleload == $modname ? true : false;
                         $menutabs[] = [
                             'label' => $user_settings->label,
                             'title' => $user_settings->label,
-                            'url' => xarController::URL('roles', 'user', 'account', ['moduleload' => $modname]),
+                            'url' => $this->ctl()->getModuleURL('roles', 'user', 'account', ['moduleload' => $modname]),
                             'active' => $isactive,
                         ];
                         if ($isactive) {
@@ -127,9 +127,9 @@ class AccountMethod extends MethodClass
                 }
             }
             $menutabs[] = [
-                'label' => xarML('Logout'),
-                'title' => xarML('Logout from the site'),
-                'url' => xarController::URL($defaultlogoutmodname, 'user', 'logout'),
+                'label' => $this->ml('Logout'),
+                'title' => $this->ml('Logout from the site'),
+                'url' => $this->ctl()->getModuleURL($defaultlogoutmodname, 'user', 'logout'),
                 'active' => false,
             ];
 
@@ -138,7 +138,7 @@ class AccountMethod extends MethodClass
                 // see if the current module has any form data for us
                 try {
                     // if function exists, use it to populate the data array
-                    $data = xarMod::apiFunc($moduleload, 'user', 'usermenu', ['phase' => 'showform', 'object' => $object]);
+                    $data = $this->mod()->apiFunc($moduleload, 'user', 'usermenu', ['phase' => 'showform', 'object' => $object]);
                 } catch (Exception $e) {
                     // no function, build the data as we go along
                     $data = [];
@@ -158,12 +158,12 @@ class AccountMethod extends MethodClass
                     $data['object']->layout = ''; // default
                 }
                 if (empty($data['authid'])) {
-                    $data['authid'] = xarSec::genAuthKey($moduleload);
+                    $data['authid'] = $this->sec()->genAuthKey($moduleload);
                 }
                 // no settings, we're dealing with the roles_user object
             } else {
                 sys::import('modules.dynamicdata.class.objects');
-                $object = DataObjectFactory::getObject(['name' => 'roles_users']);
+                $object = $this->data()->getObject(['name' => 'roles_users']);
                 $object->tplmodule = 'roles';   // roles/xartemplates/objects/
                 $object->template = 'account';  // showdisplay- || showform- account.xt
                 if (empty($tab) || $tab == 'profile') {
@@ -172,7 +172,7 @@ class AccountMethod extends MethodClass
                     if (xarModVars::get('roles', 'setuserlastlogin')) {
                         //only display it for current user or admin
                         if (xarUser::isLoggedIn() && xarUser::getVar('id') == $id) { //they should be but ..
-                            $userlastlogin = xarSession::getVar('roles_thislastlogin');
+                            $userlastlogin = $this->session()->getVar('roles_thislastlogin');
                             $usercurrentlogin = xarModUserVars::get('roles', 'userlastlogin', $id);
                         } elseif (xarSecurity::check('AdminRoles', 0, 'Roles', $name) && xarModUserVars::get('roles', 'userlastlogin', $id)) {
                             $usercurrentlogin = '';
@@ -194,7 +194,7 @@ class AccountMethod extends MethodClass
                     $item['module'] = 'roles';
                     $item['itemtype'] = xarRoles::ROLES_USERTYPE;
 
-                    $hooks = xarModHooks::call('item', 'modify', $id, $item);
+                    $hooks = $this->mod()->callHooks('item', 'modify', $id, $item);
                     if (isset($hooks['dynamicdata'])) {
                         unset($hooks['dynamicdata']);
                     }
@@ -218,10 +218,10 @@ class AccountMethod extends MethodClass
             }
             // set some sensible defaults for common stuff
             if (empty($data['formaction'])) {
-                $data['formaction'] = xarController::URL('roles', 'user', 'usermenu');
+                $data['formaction'] = $this->ctl()->getModuleURL('roles', 'user', 'usermenu');
             }
             if (empty($data['submitlabel'])) {
-                $data['submitlabel'] = xarML('Update Settings');
+                $data['submitlabel'] = $this->ml('Update Settings');
             }
             if (empty($data['returnurl'])) {
                 $data['returnurl'] = xarServer::GetCurrentURL();
@@ -230,7 +230,7 @@ class AccountMethod extends MethodClass
                 $data['formdata'] = [];
             }
             if (empty($data['authid'])) {
-                $data['authid'] = xarSec::genAuthKey('roles');
+                $data['authid'] = $this->sec()->genAuthKey('roles');
             }
             $data['menutabs'] = $menutabs;
 

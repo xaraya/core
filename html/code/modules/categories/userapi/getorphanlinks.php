@@ -55,7 +55,7 @@ class GetorphanlinksMethod extends MethodClass
         }
 
         sys::import('xaraya.structures.query');
-        $tables = xarDB::getTables();
+        $tables = $this->db()->getTables();
         $q = new Query();
         $q->addtable($tables['categories'], 'c');
         $q->addtable($tables['categories_linkage'], 'cl');
@@ -91,15 +91,15 @@ class GetorphanlinksMethod extends MethodClass
         uasort($catlist, [$this, 'getorphanlinks_sortbyleft']);
 
         // Security check
-        if (!xarSecurity::check('ViewCategoryLink')) {
+        if (!$this->sec()->checkAccess('ViewCategoryLink')) {
             return;
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
 
         // Table definition
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         $categoriestable = $xartable['categories'];
         $categorieslinkagetable = $xartable['categories_linkage'];
 

@@ -44,7 +44,7 @@ class GetallactiveMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security Check
-        if (!xarSecurity::check('ViewRoles')) {
+        if (!$this->sec()->checkAccess('ViewRoles')) {
             return;
         }
 
@@ -53,7 +53,7 @@ class GetallactiveMethod extends MethodClass
         $startnum = 1;
         $numitems = -1;
         $order = "name";
-        $filter = time() - (xarConfigVars::get(null, 'Site.Session.Duration') * 60);
+        $filter = time() - ($this->config()->getVar('Site.Session.Duration') * 60);
 
         // See if the arguments said otherwise
         extract($args);
@@ -61,8 +61,8 @@ class GetallactiveMethod extends MethodClass
         $include_anonymous = (bool) $include_anonymous;
 
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $sessioninfoTable = $xartable['session_info'];
         $rolestable = $xartable['roles'];

@@ -45,12 +45,12 @@ class RegenerateMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // Regenerate modules
@@ -61,7 +61,7 @@ class RegenerateMethod extends MethodClass
         }
 
         // Redirect
-        xarController::redirect(xarController::URL('modules', 'admin', 'list'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', 'list'));
 
         return true;
     }

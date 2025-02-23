@@ -64,8 +64,8 @@ class UpdateitemMethod extends MethodClass
             throw new BadParameterException($vars, $msg);
         }
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
         $blocks_table = $tables['block_instances'];
         $set = [];
         $where = [];

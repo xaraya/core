@@ -50,7 +50,7 @@ class CreatemailMethod extends MethodClass
         $adminapi = $this->adminapi();
         // TODO allow selection by group or user or all users.
         // Security
-        if (!xarSecurity::check('MailRoles')) {
+        if (!$this->sec()->checkAccess('MailRoles')) {
             return;
         }
 
@@ -73,7 +73,7 @@ class CreatemailMethod extends MethodClass
         }
 
         sys::import('xaraya.structures.query');
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         if ($type == 'single') {
             $id = $role->getID();
             $data['users'][$role->getID()] =
@@ -98,7 +98,7 @@ class CreatemailMethod extends MethodClass
                 'r.state AS state',
                 'r.date_reg AS date_reg']);
             $q->eq('r.id', $id);
-            xarSession::setVar('rolesquery', serialize($q));
+            $this->session()->setVar('rolesquery', serialize($q));
         } else {
             if ($selstyle == 0) {
                 $selstyle = 1;
@@ -107,7 +107,7 @@ class CreatemailMethod extends MethodClass
             // Get the current query or create a new one if need be
             if ($id == -1) {
                 $q = new Query();
-                $stored = xarSession::getVar('rolesquery') ?? 'a:0:{}';
+                $stored = $this->session()->getVar('rolesquery') ?? 'a:0:{}';
                 $q = unserialize($stored);
             }
             if (empty($q->tables)) {
@@ -153,7 +153,7 @@ class CreatemailMethod extends MethodClass
             }
 
             // Save the query so we can reuse it somewhere
-            xarSession::setVar('rolesquery', serialize($q));
+            $this->session()->setVar('rolesquery', serialize($q));
             // open a connection and run the query
             $q->run();
 
@@ -199,7 +199,7 @@ class CreatemailMethod extends MethodClass
         }
 
         $dd = opendir($messaginghome);
-        $templates = [['key' => 'blank', 'value' => xarML('Empty')]];
+        $templates = [['key' => 'blank', 'value' => $this->ml('Empty')]];
         while ($filename = readdir($dd)) {
             if (!is_dir($messaginghome . "/" . $filename)) {
                 $pos = strpos($filename, '-message.xt');
@@ -217,11 +217,11 @@ class CreatemailMethod extends MethodClass
         $data['selstyle']  = $selstyle;
         $data['id']       = $id;
         $data['state']     = $state;
-        $data['authid']    = xarSec::genAuthKey();
+        $data['authid']    = $this->sec()->genAuthKey();
         $data['groups']    = $userapi->getallgroups();
         //selstyle
-        $data['style'] = ['1' => xarML('No'),
-            '2' => xarML('Yes'),
+        $data['style'] = ['1' => $this->ml('No'),
+            '2' => $this->ml('Yes'),
         ];
         if (isset($data['users'])) {
             $data['totalselected'] = count($data['users']);

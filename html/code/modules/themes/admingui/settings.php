@@ -39,7 +39,7 @@ class SettingsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
@@ -67,12 +67,12 @@ class SettingsMethod extends MethodClass
             return;
         }
 
-        xarController::redirect(xarController::URL(
+        $this->ctl()->redirect($this->ctl()->getModuleURL(
             'themes',
             'admin',
             'view',
             ['regen' => $regen = 1]
-        ), null, $this->getContext());
+        ));
         return true;
     }
 }

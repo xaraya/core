@@ -85,7 +85,7 @@ class SenduseremailMethod extends MethodClass
             }
 
             $validationlink = isset($user['valcode']) ?
-                xarController::URL(
+                $this->ctl()->getModuleURL(
                     'roles',
                     'user',
                     'getvalidation',
@@ -121,7 +121,7 @@ class SenduseremailMethod extends MethodClass
 
             // get the DataObject defined for this module and item id
             sys::import('modules.dynamicdata.class.objects.factory');
-            $object = DataObjectFactory::getObject(['name' => 'roles_users']);
+            $object = $this->data()->getObject(['name' => 'roles_users']);
             if (isset($object) && !empty($object->objectid)) {
                 // retrieve the item itself
                 $itemid = $object->getItem(['itemid' => $userid]);
@@ -141,7 +141,7 @@ class SenduseremailMethod extends MethodClass
             $message = xarTpl::string($message, $data);
             // TODO Make HTML Message.
             // Send confirmation email
-            if (!xarMod::apiFunc(
+            if (!$this->mod()->apiFunc(
                 'mail',
                 'admin',
                 'sendmail',

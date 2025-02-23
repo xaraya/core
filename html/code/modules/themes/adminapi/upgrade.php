@@ -54,7 +54,7 @@ class UpgradeMethod extends MethodClass
         // Get theme information
         $themeInfo = xarTheme::getInfo($regid);
         if (empty($themeInfo)) {
-            xarSession::setVar('errormsg', xarML('No such theme'));
+            $this->session()->setVar('errormsg', $this->ml('No such theme'));
             return false;
         }
 
@@ -72,8 +72,8 @@ class UpgradeMethod extends MethodClass
         }
 
         // Note the changes in the database...
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $sql = "UPDATE $xartable[themes] SET version = ? WHERE regid = ?";
         $bindvars = [$themeFileInfo['version'],
@@ -82,7 +82,7 @@ class UpgradeMethod extends MethodClass
         $dbconn->Execute($sql, $bindvars);
 
         // Message
-        xarSession::setVar('statusmsg', xarML('Theme has been upgraded, now inactive'));
+        $this->session()->setVar('statusmsg', $this->ml('Theme has been upgraded, now inactive'));
 
         // Success
         return true;

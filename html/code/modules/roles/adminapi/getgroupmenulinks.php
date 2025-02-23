@@ -37,27 +37,27 @@ class GetgroupmenulinksMethod extends MethodClass
     {
 
         // Security Check
-        if (xarSecurity::check('AddRoles', 0)) {
+        if ($this->sec()->checkAccess('AddRoles', 0)) {
 
-            $menulinks[] = ['url'   => xarController::URL(
+            $menulinks[] = ['url'   => $this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'newgroup'
             ),
-                'title' => xarML('Add a new user group'),
-                'label' => xarML('Add')];
+                'title' => $this->ml('Add a new user group'),
+                'label' => $this->ml('Add')];
         }
 
         // Security Check
-        if (xarSecurity::check('EditRoles', 0)) {
+        if ($this->sec()->checkAccess('EditRoles', 0)) {
 
-            $menulinks[] = ['url'   => xarController::URL(
+            $menulinks[] = ['url'   => $this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'viewallgroups'
             ),
-                'title' => xarML('View and edit user groups'),
-                'label' => xarML('View')];
+                'title' => $this->ml('View and edit user groups'),
+                'label' => $this->ml('View')];
         }
 
 

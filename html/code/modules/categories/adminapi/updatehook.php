@@ -45,13 +45,13 @@ class UpdatehookMethod extends MethodClass
         }
 
         if (!isset($objectid) || !is_numeric($objectid)) {
-            $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)', 'object ID', 'admin', 'createhook', 'categories');
+            $msg = $this->ml('Invalid #(1) for #(2) function #(3)() in module #(4)', 'object ID', 'admin', 'createhook', 'categories');
             throw new BadParameterException(null, $msg);
         }
 
         sys::import('modules.dynamicdata.class.properties.master');
         /** @var CategoriesProperty $categories */
-        $categories = DataPropertyMaster::getProperty(['name' => 'categories']);
+        $categories = $this->prop()->getProperty(['name' => 'categories']);
         if ($categories->checkInput('hookedcategories')) {
             // CHECKME: aren't we supposed to save the categories here ?
             $categories->updateValue($objectid);

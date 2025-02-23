@@ -50,10 +50,10 @@ class AddmemberMethod extends MethodClass
         $this->var()->find('id', $id, 'int:1:', 0);
         $this->var()->find('roleid', $roleid, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         if (empty($roleid)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         // call the Roles class and get the parent and child objects
         $role   = xarRoles::get($roleid);
@@ -65,23 +65,23 @@ class AddmemberMethod extends MethodClass
         }
 
         // Check for authorization code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // check that this assignment hasn't already been made
         if ($member->isEqual($role)) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'self_assignment']);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'self_assignment']);
         }
 
         // check that this assignment hasn't already been made
         if ($member->isParent($role)) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'duplicate_assignment']);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'duplicate_assignment']);
         }
 
         // check that the parent is not already a child of the child
         if ($role->isAncestor($member)) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'circular_assignment']);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'circular_assignment']);
         }
 
         // assign the child to the parent and bail if an error was thrown
@@ -90,12 +90,12 @@ class AddmemberMethod extends MethodClass
         }
 
         // redirect to the next page
-        xarController::redirect(xarController::URL(
+        $this->ctl()->redirect($this->ctl()->getModuleURL(
             'roles',
             'admin',
             'modify',
             ['id' => $id]
-        ), null, $this->getContext());
+        ));
         return true;
     }
 }

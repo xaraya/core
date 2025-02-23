@@ -45,7 +45,7 @@ class PrivilegesMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security Check
-        if (!xarSecurity::check('AdminCategories')) {
+        if (!$this->sec()->checkAccess('AdminCategories')) {
             return;
         }
 
@@ -67,7 +67,7 @@ class PrivilegesMethod extends MethodClass
 
         sys::import('modules.dynamicdata.class.properties.master');
         /** @var CategoriesProperty $categories */
-        $categories = DataPropertyMaster::getProperty(['name' => 'categories']);
+        $categories = $this->prop()->getProperty(['name' => 'categories']);
         // @checkme is this what you need here?
         //$cids = $categories->returnInput('privcategories');
         $cids = [];
@@ -135,12 +135,12 @@ class PrivilegesMethod extends MethodClass
                 }
 
                 // redirect to the privilege
-                xarController::redirect(xarController::URL(
+                $this->ctl()->redirect($this->ctl()->getModuleURL(
                     'privileges',
                     'admin',
                     'modifyprivilege',
                     ['pid' => $pid]
-                ), null, $this->getContext());
+                ));
                 return true;
             }
 
@@ -152,7 +152,7 @@ class PrivilegesMethod extends MethodClass
                 'extmodule'    => $extmodule,
                 'extcomponent' => $extcomponent,
                 'extlevel'     => $extlevel,
-                'extinstance'  => xarVar::prepForDisplay(join(':', $newinstance)),
+                'extinstance'  => $this->var()->prep(join(':', $newinstance)),
             ];
 
             $seencid = [];
@@ -161,8 +161,8 @@ class PrivilegesMethod extends MethodClass
             }
             $data['cids'] = $cids;
 
-            $data['refreshlabel'] = xarML('Refresh');
-            $data['applylabel'] = xarML('Finish and Apply to Privilege');
+            $data['refreshlabel'] = $this->ml('Refresh');
+            $data['applylabel'] = $this->ml('Finish and Apply to Privilege');
 
             return $data;
         }
@@ -185,7 +185,7 @@ class PrivilegesMethod extends MethodClass
         }
 
         // Get the list of all modules currently hooked to categories
-        $hookedmodlist = xarMod::apiFunc(
+        $hookedmodlist = $this->mod()->apiFunc(
             'modules',
             'admin',
             'gethookedmodules',
@@ -201,16 +201,16 @@ class PrivilegesMethod extends MethodClass
             if (empty($modname)) {
                 continue;
             }
-            $modid = xarMod::getRegID($modname);
+            $modid = $this->mod()->getRegID($modname);
             if (empty($modid)) {
                 continue;
             }
-            $modinfo = xarMod::getInfo($modid);
+            $modinfo = $this->mod()->getInfo($modid);
             $modlist[$modid] = $modinfo['displayname'];
             if (!empty($moduleid) && $moduleid == $modid) {
                 // Get the list of all item types for this module (if any)
                 try {
-                    $mytypes = xarMod::apiFunc($modname, 'user', 'getitemtypes');
+                    $mytypes = $this->mod()->apiFunc($modname, 'user', 'getitemtypes');
                 } catch (Exception $e) {
                     $mytypes = [];
                 }
@@ -226,7 +226,7 @@ class PrivilegesMethod extends MethodClass
                         if (isset($mytypes[$id])) {
                             $type = $mytypes[$id]['label'];
                         } else {
-                            $type = xarML('type #(1)', $id);
+                            $type = $this->ml('type #(1)', $id);
                         }
                         $typelist[$id] = $type;
                     }
@@ -274,12 +274,12 @@ class PrivilegesMethod extends MethodClass
             }
 
             // redirect to the privilege
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'privileges',
                 'admin',
                 'modifyprivilege',
                 ['pid' => $pid]
-            ), null, $this->getContext());
+            ));
             return true;
         }
 
@@ -289,7 +289,7 @@ class PrivilegesMethod extends MethodClass
                 'cids'  => (empty($cid) ? null : [$cid]),
             ]);
         } else {
-            $numitems = xarML('probably');
+            $numitems = $this->ml('probably');
         }
 
         $data = [
@@ -306,12 +306,12 @@ class PrivilegesMethod extends MethodClass
             'extmodule'    => $extmodule,
             'extcomponent' => $extcomponent,
             'extlevel'     => $extlevel,
-            'extinstance'  => xarVar::prepForDisplay(join(':', $newinstance)),
+            'extinstance'  => $this->var()->prep(join(':', $newinstance)),
         ];
 
         $catlist = [];
         if (!empty($moduleid)) {
-            $modinfo = xarMod::getInfo($moduleid);
+            $modinfo = $this->mod()->getInfo($moduleid);
             $modname = $modinfo['name'];
             sys::import('modules.categories.class.worker');
             $worker = new CategoryWorker();
@@ -344,8 +344,8 @@ class PrivilegesMethod extends MethodClass
         }
 
         $data['cids'] = $cids;
-        $data['refreshlabel'] = xarML('Refresh');
-        $data['applylabel'] = xarML('Finish and Apply to Privilege');
+        $data['refreshlabel'] = $this->ml('Refresh');
+        $data['applylabel'] = $this->ml('Finish and Apply to Privilege');
 
         return $data;
     }

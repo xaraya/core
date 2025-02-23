@@ -61,7 +61,7 @@ class FindPointOfInsertionMethod extends MethodClass
                         break;
 
                     default:
-                        $msg = xarML('Valid values: IN or OUT');
+                        $msg = $this->ml('Valid values: IN or OUT');
                         throw new BadParameterException(null, $msg);
                 }
 
@@ -77,12 +77,12 @@ class FindPointOfInsertionMethod extends MethodClass
                         break;
 
                     default:
-                        $msg = xarML('Valid values: IN or OUT');
+                        $msg = $this->ml('Valid values: IN or OUT');
                         throw new BadParameterException(null, $msg);
                 }
                 break;
             default:
-                $msg = xarML('Valid values: RIGHT or LEFT');
+                $msg = $this->ml('Valid values: RIGHT or LEFT');
                 throw new BadParameterException(null, $msg);
         }
         return $point_of_insertion;

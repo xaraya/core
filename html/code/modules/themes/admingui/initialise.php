@@ -47,18 +47,18 @@ class InitialiseMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
         // Security and sanity checks
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
         // Initialise theme
@@ -68,7 +68,7 @@ class InitialiseMethod extends MethodClass
             return;
         }
 
-        xarController::redirect(xarController::URL('themes', 'admin', 'view'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'view'));
         return true;
     }
 }

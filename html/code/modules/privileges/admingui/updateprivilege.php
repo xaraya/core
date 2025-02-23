@@ -39,16 +39,16 @@ class UpdateprivilegeMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditPrivileges')) {
+        if (!$this->sec()->checkAccess('EditPrivileges')) {
             return;
         }
 
         // Clear Session Vars
-        xarSession::delVar('privileges_statusmsg');
+        $this->session()->delVar('privileges_statusmsg');
 
         // Check for authorization code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $this->var()->check('id', $id);
@@ -105,20 +105,20 @@ class UpdateprivilegeMethod extends MethodClass
             return;
         }
 
-        xarModHooks::call('item', 'update', $id, '');
+        $this->mod()->callHooks('item', 'update', $id, '');
 
-        xarSession::setVar('privileges_statusmsg', xarML(
+        $this->session()->setVar('privileges_statusmsg', $this->ml(
             'Privilege Modified',
             'privileges'
         ));
 
         // redirect to the next page
-        xarController::redirect(xarController::URL(
+        $this->ctl()->redirect($this->ctl()->getModuleURL(
             'privileges',
             'admin',
             'modifyprivilege',
             ['id' => $id]
-        ), null, $this->getContext());
+        ));
         return true;
     }
 }

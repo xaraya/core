@@ -44,13 +44,13 @@ class ViewMethod extends MethodClass
     {
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        if (!xarSecurity::check('ViewRoles')) {
+        if (!$this->sec()->checkAccess('ViewRoles')) {
             return;
         }
 
         // members list disabled? only show to roles admins
-        if ((bool) xarModVars::get('roles', 'displayrolelist') == false && !xarSecurity::check('AdminRoles', 0)) {
-            xarController::redirect(xarController::URL('roles', 'user', 'main'), null, $this->getContext());
+        if ((bool) xarModVars::get('roles', 'displayrolelist') == false && !$this->sec()->checkAccess('AdminRoles', 0)) {
+            $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'main'));
         }
         //    extract($args);
 
@@ -72,8 +72,8 @@ class ViewMethod extends MethodClass
 
         // keep track of the selected id's
 
-        $itemlabels = [xarML('ID'),xarML('Name'),xarML('Itemtype'),xarML('Users'),xarML('User Name'),xarML('Password'),xarML('Email'),xarML('Date Registered'),xarML('State'),xarML('Validation Code'),xarML('Created By'),];
-        $ddlabels = xarMod::apiFunc('dynamicdata', 'user', 'getitemfields', ['modid' => 27, 'itemtype' => $args['itemtype']]);
+        $itemlabels = [$this->ml('ID'),$this->ml('Name'),$this->ml('Itemtype'),$this->ml('Users'),$this->ml('User Name'),$this->ml('Password'),$this->ml('Email'),$this->ml('Date Registered'),$this->ml('State'),$this->ml('Validation Code'),$this->ml('Created By'),];
+        $ddlabels = $this->mod()->apiFunc('dynamicdata', 'user', 'getitemfields', ['modid' => 27, 'itemtype' => $args['itemtype']]);
         foreach ($ddlabels as $label) {
             $itemlabels[] = $label['label'];
         }
@@ -102,10 +102,10 @@ class ViewMethod extends MethodClass
         $pagerfilter['startnum'] = '%%';
 
         $data['itemsperpage'] = $numitems;
-        $data['urltemplate'] = xarController::URL('roles', 'user', 'view', $pagerfilter);
+        $data['urltemplate'] = $this->ctl()->getModuleURL('roles', 'user', 'view', $pagerfilter);
         $data['urlitemmatch'] = '%%';
 
         $data['context'] ??= $this->getContext();
-        return xarTpl::module($args['tplmodule'], 'user', 'view', $data, $args['template']);
+        return $this->tpl()->module($args['tplmodule'], 'user', 'view', $data, $args['template']);
     }
 }

@@ -63,9 +63,9 @@ class GetcatinfotagMethod extends MethodClass
             // Return the formatted category array.
             // Pass all the arguments in too, allowing for a 'passthrough' from
             // the original theme tag.
-            // @todo Pass along the context for xarTpl::module() if needed
+            // @todo Pass along the context for $this->tpl()->module() if needed
             //$data['context'] ??= $this->getContext();
-            return xarTpl::module(
+            return $this->tpl()->module(
                 'categories',
                 'user',
                 'catinfo',
@@ -79,11 +79,11 @@ class GetcatinfotagMethod extends MethodClass
         // Set default module.
         if (empty($args['modid']) || !is_numeric($args['modid'])) {
             if (empty($args['module'])) {
-                $args['module'] = xarMod::getName();
+                $args['module'] = $this->mod()->getName();
             }
 
             if (!empty($args['module'])) {
-                $args['modid'] = xarMod::getRegID($args['module']);
+                $args['modid'] = $this->mod()->getRegID($args['module']);
             }
         }
 
@@ -121,7 +121,7 @@ class GetcatinfotagMethod extends MethodClass
         // details when executed from the tenplate.
         $params[] = "'runtime'=>true";
 
-        $out = "echo xarMod::apiFunc("
+        $out = "echo xarMod" . "::apiFunc("
             . "'categories', 'user', 'getcatinfotag', "
             . "array(" . implode(', ', $params) . ")); ";
 

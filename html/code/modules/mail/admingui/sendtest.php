@@ -45,7 +45,7 @@ class SendtestMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('ManageMail')) {
+        if (!$this->sec()->checkAccess('ManageMail')) {
             return;
         }
 
@@ -60,8 +60,8 @@ class SendtestMethod extends MethodClass
         $this->var()->find('namebcc', $namebcc, 'str:1:', '');
 
         // Confirm authorisation code.
-        if (!xarSec::confirmAuthKey()) {
-            //return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            //return $this->ctl()->badRequest('bad_author');
         }
         if (empty($email)) {
             $email = xarModVars::get('mail', 'adminmail');
@@ -95,7 +95,7 @@ class SendtestMethod extends MethodClass
         }
 
         // lets update status and display updated configuration
-        xarController::redirect(xarController::URL('mail', 'admin', 'compose', ['confirm' => 1]), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'compose', ['confirm' => 1]));
         return true;
     }
 }

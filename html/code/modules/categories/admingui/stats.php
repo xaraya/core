@@ -42,7 +42,7 @@ class StatsMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security Check
-        if (!xarSecurity::check('AdminCategories')) {
+        if (!$this->sec()->checkAccess('AdminCategories')) {
             return;
         }
 
@@ -62,10 +62,10 @@ class StatsMethod extends MethodClass
             $data['numitems'] = 0;
             $data['numlinks'] = 0;
             foreach ($modlist as $modid => $itemtypes) {
-                $modinfo = xarMod::getInfo($modid);
+                $modinfo = $this->mod()->getInfo($modid);
                 // Get the list of all item types for this module (if any)
                 try {
-                    $mytypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+                    $mytypes = $this->mod()->apiFunc($modinfo['name'], 'user', 'getitemtypes');
                 } catch (Exception $e) {
                     $mytypes = [];
                 }
@@ -76,24 +76,24 @@ class StatsMethod extends MethodClass
                     $moditem['numlinks'] = $stats['links'];
                     if ($itemtype == 0) {
                         $moditem['name'] = ucwords($modinfo['displayname']);
-                        //    $moditem['link'] = xarController::URL($modinfo['name'],'user','main');
+                        //    $moditem['link'] = $this->ctl()->getModuleURL($modinfo['name'],'user','main');
                     } else {
                         if (isset($mytypes) && !empty($mytypes[$itemtype])) {
                             $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype . ' - ' . $mytypes[$itemtype]['label'];
                             //    $moditem['link'] = $mytypes[$itemtype]['url'];
                         } else {
                             $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-                            //    $moditem['link'] = xarController::URL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
+                            //    $moditem['link'] = $this->ctl()->getModuleURL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
                         }
                     }
-                    $moditem['link'] = xarController::URL(
+                    $moditem['link'] = $this->ctl()->getModuleURL(
                         'categories',
                         'admin',
                         'stats',
                         ['modid' => $modid,
                             'itemtype' => empty($itemtype) ? null : $itemtype]
                     );
-                    $moditem['delete'] = xarController::URL(
+                    $moditem['delete'] = $this->ctl()->getModuleURL(
                         'categories',
                         'admin',
                         'unlink',
@@ -105,9 +105,9 @@ class StatsMethod extends MethodClass
                     $data['numlinks'] += $moditem['numlinks'];
                 }
             }
-            $data['delete'] = xarController::URL('categories', 'admin', 'unlink');
+            $data['delete'] = $this->ctl()->getModuleURL('categories', 'admin', 'unlink');
         } else {
-            $modinfo = xarMod::getInfo($modid);
+            $modinfo = $this->mod()->getInfo($modid);
             $data['module'] = $modinfo['name'];
             if (empty($itemtype)) {
                 $data['itemtype'] = 0;
@@ -120,7 +120,7 @@ class StatsMethod extends MethodClass
                 $data['itemtype'] = $itemtype;
                 // Get the list of all item types for this module (if any)
                 try {
-                    $mytypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+                    $mytypes = $this->mod()->apiFunc($modinfo['name'], 'user', 'getitemtypes');
                 } catch (Exception $e) {
                     $mytypes = [];
                 }
@@ -129,7 +129,7 @@ class StatsMethod extends MethodClass
                     //    $data['modlink'] = $mytypes[$itemtype]['url'];
                 } else {
                     $data['modname'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-                    //    $data['modlink'] = xarController::URL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
+                    //    $data['modlink'] = $this->ctl()->getModuleURL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
                 }
                 if (isset($modlist[$modid][$itemtype])) {
                     $stats = $modlist[$modid][$itemtype];
@@ -151,7 +151,7 @@ class StatsMethod extends MethodClass
                     'itemtype' => $itemtype,
                     'catid' => $catid]);
             }
-            $data['url'] = xarController::URL(
+            $data['url'] = $this->ctl()->getModuleURL(
                 'categories',
                 'admin',
                 'stats',
@@ -175,7 +175,7 @@ class StatsMethod extends MethodClass
             if (!empty($getitems) && !empty($showtitle)) {
                 $itemids = array_keys($getitems);
                 try {
-                    $itemlinks = xarMod::apiFunc(
+                    $itemlinks = $this->mod()->apiFunc(
                         $modinfo['name'],
                         'user',
                         'getitemlinks',
@@ -197,7 +197,7 @@ class StatsMethod extends MethodClass
                 foreach ($cids as $cid) {
                     $seencid[$cid] = 1;
                 }
-                $data['moditems'][$itemid]['delete'] = xarController::URL(
+                $data['moditems'][$itemid]['delete'] = $this->ctl()->getModuleURL(
                     'categories',
                     'admin',
                     'unlink',
@@ -217,7 +217,7 @@ class StatsMethod extends MethodClass
             } else {
                 $data['catinfo'] = [];
             }
-            $data['delete'] = xarController::URL(
+            $data['delete'] = $this->ctl()->getModuleURL(
                 'categories',
                 'admin',
                 'unlink',
@@ -228,7 +228,7 @@ class StatsMethod extends MethodClass
             if (empty($sort) || $sort == 'itemid') {
                 $data['sortlink']['itemid'] = '';
             } else {
-                $data['sortlink']['itemid'] = xarController::URL(
+                $data['sortlink']['itemid'] = $this->ctl()->getModuleURL(
                     'categories',
                     'admin',
                     'stats',
@@ -239,7 +239,7 @@ class StatsMethod extends MethodClass
             if (!empty($sort) && $sort == 'numlinks') {
                 $data['sortlink']['numlinks'] = '';
             } else {
-                $data['sortlink']['numlinks'] = xarController::URL(
+                $data['sortlink']['numlinks'] = $this->ctl()->getModuleURL(
                     'categories',
                     'admin',
                     'stats',

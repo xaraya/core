@@ -50,7 +50,7 @@ class ModifyconfigMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if (!xarSecurity::check('AdminRoles')) {
+        if (!$this->sec()->checkAccess('AdminRoles')) {
             return;
         }
 
@@ -73,9 +73,9 @@ class ModifyconfigMethod extends MethodClass
             throw new Exception('The designated site admin does not have administration privileges');
         }
 
-        $dbconn   = xarDB::getConn();
-        $xartable = xarDB::getTables();
-        $acltable = xarDB::getPrefix() . '_security_acl';
+        $dbconn   = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
+        $acltable = $this->db()->getPrefix() . '_security_acl';
         $query    = "SELECT role_id FROM $acltable
                      WHERE privilege_id  = ?";
         $stmt = $dbconn->prepareStatement($query);
@@ -117,35 +117,35 @@ class ModifyconfigMethod extends MethodClass
 
             case 'hooks':
                 $item = ['module' => 'roles', 'itemtype' => xarRoles::ROLES_USERTYPE];
-                $hooks = xarHooks::notify('ModuleModifyconfig', $item);
+                $hooks = $this->mod()->notifyHooks('ModuleModifyconfig', $item);
                 /*
                 // Item type 1 is the default itemtype for 'user' roles.
-                $hooks = xarModHooks::call('module', 'modifyconfig', 'roles',
+                $hooks = $this->mod()->callHooks('module', 'modifyconfig', 'roles',
                                          array('module' => 'roles',
                                                'itemtype' => xarRoles::ROLES_USERTYPE));
                 */
                 break;
             case 'grouphooks':
                 $item = ['module' => 'roles', 'itemtype' => xarRoles::ROLES_GROUPTYPE];
-                $hooks = xarHooks::notify('ModuleModifyconfig', $item);
+                $hooks = $this->mod()->notifyHooks('ModuleModifyconfig', $item);
                 /*
                 // Item type 2 is the itemtype for 'group' roles.
-                $hooks = xarModHooks::call('module', 'modifyconfig', 'roles',
+                $hooks = $this->mod()->callHooks('module', 'modifyconfig', 'roles',
                                          array('module' => 'roles',
                                                'itemtype' => xarRoles::ROLES_GROUPTYPE));
                 */
                 break;
             case 'duvs':
-                $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', ['module' => 'roles', 'itemid' => 0]);
+                $data['user_settings'] = $this->mod()->apiFunc('base', 'admin', 'getusersettings', ['module' => 'roles', 'itemid' => 0]);
                 $data['user_settings']->setFieldList('duvsettings');
                 $data['user_settings']->getItem();
                 break;
             default:
-                $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'roles']);
+                $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'roles']);
                 $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, enable_user_menu, user_menu_link');
                 $data['module_settings']->getItem();
 
-                $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', ['module' => 'roles', 'itemid' => 0]);
+                $data['user_settings'] = $this->mod()->apiFunc('base', 'admin', 'getusersettings', ['module' => 'roles', 'itemid' => 0]);
                 $settings = explode(',', xarModVars::get('roles', 'duvsettings'));
                 $required = ['usereditaccount', 'primaryparent', 'allowemail', 'emailformat', 'requirevalidation', 'displayrolelist', 'searchbyemail'];
                 $skiplist = ['userhome', 'passwordupdate', 'duvsettings', 'userlastlogin', 'usertimezone', 'useremailformat'];
@@ -184,7 +184,7 @@ class ModifyconfigMethod extends MethodClass
                 switch ($data['tab']) {
                     case 'debugging':
                         $debugadmins = [];
-                        $candidates = xarConfigVars::get(null, 'Site.User.DebugAdmins');
+                        $candidates = $this->config()->getVar('Site.User.DebugAdmins');
                         foreach ($candidates as $candidate) {
                             try {
                                 $admin = $userapi->get(['id' => (int) $candidate]);
@@ -203,12 +203,12 @@ class ModifyconfigMethod extends MethodClass
 
             case 'update':
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 switch ($data['tab']) {
                     case 'general':
-                        $this->var()->find('defaultauthmodule', $defaultauthmodule, 'int:1:', xarMod::getRegID('authsystem'));
+                        $this->var()->find('defaultauthmodule', $defaultauthmodule, 'int:1:', $this->mod()->getRegID('authsystem'));
                         $this->var()->find('defaultregmodule', $defaultregmodule, 'int:1:', '');
                         $this->var()->find('siteadmin', $siteadmin, 'int:1', (int) xarModVars::get('roles', 'admin'));
                         $this->var()->find('defaultgroup', $defaultgroup, 'str:1', 'Users');
@@ -216,7 +216,7 @@ class ModifyconfigMethod extends MethodClass
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
                             $data['context'] ??= $this->getContext();
-                            return xarTpl::module('roles', 'admin', 'modifyconfig', $data);
+                            return $this->tpl()->module('roles', 'admin', 'modifyconfig', $data);
                         } else {
                             $itemid = $data['module_settings']->updateItem();
                         }
@@ -229,7 +229,7 @@ class ModifyconfigMethod extends MethodClass
                         // no break
                     case 'hooks':
                         // Role type 'user' (itemtype 1).
-                        xarModHooks::call(
+                        $this->mod()->callHooks(
                             'module',
                             'updateconfig',
                             'roles',
@@ -239,7 +239,7 @@ class ModifyconfigMethod extends MethodClass
                         break;
                     case 'grouphooks':
                         // Role type 'group' (itemtype 2).
-                        xarModHooks::call(
+                        $this->mod()->callHooks(
                             'module',
                             'updateconfig',
                             'roles',
@@ -252,7 +252,7 @@ class ModifyconfigMethod extends MethodClass
                         $isvalid = $data['user_settings']->checkInput();
                         if (!$isvalid) {
                             $data['context'] ??= $this->getContext();
-                            return xarTpl::module('roles', 'admin', 'modifyconfig', $data);
+                            return $this->tpl()->module('roles', 'admin', 'modifyconfig', $data);
                         } else {
                             $itemid = $data['user_settings']->updateItem();
                         }
@@ -276,15 +276,15 @@ class ModifyconfigMethod extends MethodClass
                                 $debugadmins[] = (int) $admin['id'];
                             }
                         }
-                        xarConfigVars::set(null, 'Site.User.DebugAdmins', $debugadmins);
+                        $this->config()->setVar('Site.User.DebugAdmins', $debugadmins);
                         break;
                 }
-                xarController::redirect(xarController::URL(
+                $this->ctl()->redirect($this->ctl()->getModuleURL(
                     'roles',
                     'admin',
                     'modifyconfig',
                     ['tab' => $data['tab']]
-                ), null, $this->getContext());
+                ));
                 break;
         }
         return $data;

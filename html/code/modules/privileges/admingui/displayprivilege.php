@@ -40,7 +40,7 @@ class DisplayprivilegeMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('EditPrivileges')) {
+        if (!$this->sec()->checkAccess('EditPrivileges')) {
             return;
         }
 

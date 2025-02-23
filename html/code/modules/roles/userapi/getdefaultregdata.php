@@ -44,7 +44,7 @@ class GetdefaultregdataMethod extends MethodClass
 
         if (!empty($defaultregmodname)) {
             //check the module is available
-            if (xarMod::isAvailable($defaultregmodname)) {
+            if ($this->mod()->isAvailable($defaultregmodname)) {
                 //We can't really assume people will want this module as registration
                 //Rethink - what we need to avert this problem
                 if (xarModVars::get($defaultregmodname, 'allowregistration') == 1) {
@@ -54,7 +54,7 @@ class GetdefaultregdataMethod extends MethodClass
                 }
             }
         } else {
-            if (xarMod::isAvailable('registration')) {
+            if ($this->mod()->isAvailable('registration')) {
                 //for now - set the registration module but don't make it the active registration
                 //the case where somehow the defautlregmodule modvar is unset or empty
                 $defaultregmodname   = 'registration';

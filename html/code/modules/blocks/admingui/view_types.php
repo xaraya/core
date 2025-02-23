@@ -46,7 +46,7 @@ class ViewTypesMethod extends MethodClass
         /** @var TypesApi $typesapi */
         $typesapi = $this->typesapi();
         // Security - checkme: Edit vs Manage?
-        if (!xarSecurity::check('ManageBlocks')) {
+        if (!$this->sec()->checkAccess('ManageBlocks')) {
             return;
         }
 
@@ -70,13 +70,13 @@ class ViewTypesMethod extends MethodClass
         ]);
         $data['total'] = $typesapi->countitems();
 
-        $access_property = DataPropertyMaster::getProperty(['name' => 'access']);
+        $access_property = $this->prop()->getProperty(['name' => 'access']);
 
         foreach ($items as $type_id => $item) {
             $item['info_link'] = [
-                'label' => xarML('Info'),
-                'title' => xarML('View detail information about this block type'),
-                'url' => xarController::URL(
+                'label' => $this->ml('Info'),
+                'title' => $this->ml('View detail information about this block type'),
+                'url' => $this->ctl()->getModuleURL(
                     'blocks',
                     'admin',
                     'modify_type',
@@ -84,10 +84,10 @@ class ViewTypesMethod extends MethodClass
                 ),
             ];
             $item['modify_link'] = [
-                'label' => xarML('Config'),
-                'title' => xarML('View or modify default configuration for this block type'),
-                'url' => !xarSecurity::check('AdminBlocks', 0) ? '' :
-                    xarController::URL(
+                'label' => $this->ml('Config'),
+                'title' => $this->ml('View or modify default configuration for this block type'),
+                'url' => !$this->sec()->checkAccess('AdminBlocks', 0) ? '' :
+                    $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'modify_type',
@@ -95,10 +95,10 @@ class ViewTypesMethod extends MethodClass
                     ),
             ];
             $item['preview_link'] = [
-                'label' => xarML('Preview'),
-                'title' => xarML('View a preview of this block type'),
+                'label' => $this->ml('Preview'),
+                'title' => $this->ml('View a preview of this block type'),
                 'url' => empty($item['type_info']['show_preview']) ? '' :
-                    xarController::URL(
+                    $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'modify_type',
@@ -106,10 +106,10 @@ class ViewTypesMethod extends MethodClass
                     ),
             ];
             $item['help_link'] = [
-                'label' => xarML('Help'),
-                'title' => xarML('View help information about this block type'),
+                'label' => $this->ml('Help'),
+                'title' => $this->ml('View help information about this block type'),
                 'url' => empty($item['type_info']['show_help']) ? '' :
-                    xarController::URL(
+                    $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'modify_type',
@@ -125,10 +125,10 @@ class ViewTypesMethod extends MethodClass
                 'level' => $item['type_info']['add_access']['level'],
             ];
             $item['add_link'] = [
-                'label' => xarML('Add'),
-                'title' => xarML('Create a new instance of this block type'),
+                'label' => $this->ml('Add'),
+                'title' => $this->ml('Create a new instance of this block type'),
                 'url' => (!$access_property->check($access) || $item['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ? '' :
-                    xarController::URL(
+                    $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'new_instance',

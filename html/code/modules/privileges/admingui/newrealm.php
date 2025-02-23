@@ -49,12 +49,12 @@ class NewrealmMethod extends MethodClass
         $this->var()->find('confirmed', $confirmed, 'bool', false);
 
         if ($confirmed) {
-            if (!xarSec::confirmAuthKey()) {
-                return xarController::badRequest('bad_author', $this->getContext());
+            if (!$this->sec()->confirmAuthKey()) {
+                return $this->ctl()->badRequest('bad_author');
             }
 
-            $dbconn = xarDB::getConn();
-            $xartable = xarDB::getTables();
+            $dbconn = $this->db()->getConn();
+            $xartable = $this->db()->getTables();
             $bindvars = [];
             $tbl = $xartable['security_realms'];
             $query = "SELECT name FROM $tbl WHERE name = ?";
@@ -77,10 +77,10 @@ class NewrealmMethod extends MethodClass
             $result = $stmt->executeQuery($bindvars);
 
             //Redirect to view page
-            xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('privileges', 'admin', 'viewrealms'));
         }
 
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         return $data;
     }
 }

@@ -44,7 +44,7 @@ class MappingMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if (!xarSecurity::check('AdminMail')) {
+        if (!$this->sec()->checkAccess('AdminMail')) {
             return;
         }
 

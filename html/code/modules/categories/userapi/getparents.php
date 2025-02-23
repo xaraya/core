@@ -43,7 +43,7 @@ class GetparentsMethod extends MethodClass
         extract($args);
 
         if (!isset($cid) && !isset($cids)) {
-            xarSession::setVar('errormsg', xarML('Bad arguments for API function'));
+            $this->session()->setVar('errormsg', $this->ml('Bad arguments for API function'));
             return false;
         }
         $info = [];
@@ -51,8 +51,8 @@ class GetparentsMethod extends MethodClass
             return $info;
         }
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $categoriestable = $xartable['categories'];
 

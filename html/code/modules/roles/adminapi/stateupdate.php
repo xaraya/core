@@ -64,8 +64,8 @@ class StateupdateMethod extends MethodClass
             throw new IDNotFoundException($id);
         }
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $rolesTable = $xartable['roles'];
 

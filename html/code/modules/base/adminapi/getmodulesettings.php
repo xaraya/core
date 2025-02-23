@@ -38,10 +38,10 @@ class GetmodulesettingsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         if (empty($args['module'])) {
-            throw new Exception(xarML('The getmodulesettings function requires a module parameter'));
+            throw new Exception($this->ml('The getmodulesettings function requires a module parameter'));
         }
         sys::import('modules.dynamicdata.class.objects.factory');
-        $object = DataObjectFactory::getObject(['name' => 'module_settings']);
+        $object = $this->data()->getObject(['name' => 'module_settings']);
 
         foreach ($object->properties as $name => $property) {
             $object->properties[$name]->source = 'module variables: ' . $args['module'];

@@ -38,12 +38,12 @@ class CssconfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminThemes', 0)) {
+        if (!$this->sec()->checkAccess('AdminThemes', 0)) {
             return;
         }
 
         // Generate security key
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
 
         // where are we?
         $this->var()->find('component', $component, 'str::', '');
@@ -54,42 +54,42 @@ class CssconfigMethod extends MethodClass
         $data['configurable'] = $configurable;
 
         // labels and defaults
-        $data['submitbutton'] = xarVar::prepForDisplay(xarML('Submit'));
-        $data['resetbutton'] = xarVar::prepForDisplay(xarML('Reset to defaults'));
-        $data['unmanagednote'] = xarVar::prepForDisplay(xarML('No configurable options are available in unmanaged mode.'));
+        $data['submitbutton'] = $this->var()->prep($this->ml('Submit'));
+        $data['resetbutton'] = $this->var()->prep($this->ml('Reset to defaults'));
+        $data['unmanagednote'] = $this->var()->prep($this->ml('No configurable options are available in unmanaged mode.'));
 
         switch ($component) {
             case "common":
                 // get and verify modvars and files - all reporting inline in the form
                 $data['csslinkoption'] = xarModVars::get('themes', 'csslinkoption');
                 $cssfilepath = sys::code() . 'modules/themes/xarstyles/';
-                $filemissing = xarML('none (missing)');
-                $notlinked = xarML('none - use for template debugging only!!');
+                $filemissing = $this->ml('none (missing)');
+                $notlinked = $this->ml('none - use for template debugging only!!');
                 if ($data['csslinkoption'] == '') {
                     xarModVars::set('themes', 'csslinkoption', 'static');
                     if (file_exists($cssfilepath . 'core.css')) {
-                        $data['currentcssfile'] = xarVar::prepForDisplay($cssfilepath . 'core.css');
+                        $data['currentcssfile'] = $this->var()->prep($cssfilepath . 'core.css');
                     } else {
-                        $data['currentcssfile'] = xarVar::prepForDisplay($filemissing);
+                        $data['currentcssfile'] = $this->var()->prep($filemissing);
                     }
                 } elseif ($data['csslinkoption'] == 'static') {
                     if (file_exists($cssfilepath . '/core.css')) {
-                        $data['currentcssfile'] = xarVar::prepForDisplay($cssfilepath . 'core.css');
+                        $data['currentcssfile'] = $this->var()->prep($cssfilepath . 'core.css');
                         $handle = fopen($cssfilepath . '/core.css', 'r');
                         $data['csssource'] = fread($handle, filesize($cssfilepath . '/core.css'));
                         fclose($handle);
                     } else {
-                        $data['currentcssfile'] = xarVar::prepForDisplay($filemissing);
+                        $data['currentcssfile'] = $this->var()->prep($filemissing);
                     }
                 } elseif ($data['csslinkoption'] == 'dynamic') {
                     if (file_exists($cssfilepath . 'corecss.php')) {
-                        $data['currentcssfile'] = xarVar::prepForDisplay($cssfilepath . 'corecss.php');
+                        $data['currentcssfile'] = $this->var()->prep($cssfilepath . 'corecss.php');
                         $data['csssource'] = xarModVars::get('themes', 'corecss');
                     } else {
-                        $data['currentcssfile'] = xarVar::prepForDisplay($filemissing);
+                        $data['currentcssfile'] = $this->var()->prep($filemissing);
                     }
                 } else {
-                    $data['currentcssfile'] = xarVar::prepForDisplay($notlinked);
+                    $data['currentcssfile'] = $this->var()->prep($notlinked);
                 }
 
 

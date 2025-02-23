@@ -83,7 +83,7 @@ class RefreshMethod extends MethodClass
             }
             $update = [];
             // if the block belongs to a module, check the module is active
-            if (!empty($type['module']) && !xarMod::isAvailable($type['module'])) {
+            if (!empty($type['module']) && !$this->mod()->isAvailable($type['module'])) {
                 $state = xarBlock::TYPE_STATE_MOD_UNAVAILABLE;
             } else {
                 try {

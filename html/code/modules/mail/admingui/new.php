@@ -39,7 +39,7 @@ class NewMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        xarController::redirect(xarController::URL('mail', 'admin', 'view'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'view'));
         return true;
     }
 }

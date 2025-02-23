@@ -39,13 +39,13 @@ class CorecssupdateMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
         // Confirm authorisation code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // params
@@ -54,12 +54,12 @@ class CorecssupdateMethod extends MethodClass
         // set modvars
         xarModVars::set('themes', 'csslinkoption', $linkoptions);
 
-        xarController::redirect(xarController::URL(
+        $this->ctl()->redirect($this->ctl()->getModuleURL(
             'themes',
             'admin',
             'cssconfig',
             ['component' => 'core']
-        ), null, $this->getContext());
+        ));
         // Return
         return true;
     }

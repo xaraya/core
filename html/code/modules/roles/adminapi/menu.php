@@ -37,7 +37,7 @@ class MenuMethod extends MethodClass
         $menu = [];
 
         // Specify the menu title to be used in your blocklayout template
-        $menu['menutitle'] = xarML('Roles Administration');
+        $menu['menutitle'] = $this->ml('Roles Administration');
 
         // Preset some status variable
         $menu['status'] = '';

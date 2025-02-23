@@ -48,13 +48,13 @@ class UpdatestatusMethod extends MethodClass
             throw new EmptyParameterException('state');
         }
 
-        if (!xarSecurity::check('ViewRoles')) {
+        if (!$this->sec()->checkAccess('ViewRoles')) {
             return;
         }
 
         // Get DB Set-up
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $rolesTable = $xartable['roles'];
 

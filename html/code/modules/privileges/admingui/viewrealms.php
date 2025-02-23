@@ -44,15 +44,15 @@ class ViewrealmsMethod extends MethodClass
 
         $this->var()->find('show', $data['show'], 'isset', 'assigned');
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $rolesobjects = $xartable['security_realms'];
         $bindvars = [];
         $query = "SELECT id AS id, name AS name FROM $rolesobjects ";
 
         $query .= " ORDER BY name ";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
         if (!$result) {
             return;
         }

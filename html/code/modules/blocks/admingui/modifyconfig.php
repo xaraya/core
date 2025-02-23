@@ -43,7 +43,7 @@ class ModifyconfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminBlocks')) {
+        if (!$this->sec()->checkAccess('AdminBlocks')) {
             return;
         }
 
@@ -51,7 +51,7 @@ class ModifyconfigMethod extends MethodClass
         $this->var()->find('phase', $phase, 'str:1:100', 'modify');
         $this->var()->find('tab', $data['tab'], 'str:1:100', 'general');
 
-        $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'blocks']);
+        $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'blocks']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
         $data['module_settings']->getItem();
         switch (strtolower($phase)) {
@@ -61,31 +61,31 @@ class ModifyconfigMethod extends MethodClass
                 $data['noexceptions'] = (!isset($noexceptions)) ? 1 : $noexceptions;
 
                 $data['exceptionoptions'] = [
-                    ['id' => 1, 'name' => xarML('Fail Silently')],
-                    ['id' => 0, 'name' => xarML('Raise Exception')],
+                    ['id' => 1, 'name' => $this->ml('Fail Silently')],
+                    ['id' => 0, 'name' => $this->ml('Raise Exception')],
                 ];
                 break;
 
             case 'update':
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
-                    xarController::getRequest()->msgAjax($data['module_settings']->getInvalids());
+                    $this->ctl()->getRequest()->msgAjax($data['module_settings']->getInvalids());
                     $data['context'] ??= $this->getContext();
-                    return xarTpl::module('blocks', 'admin', 'modifyconfig', $data);
+                    return $this->tpl()->module('blocks', 'admin', 'modifyconfig', $data);
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                     $this->var()->find('noexceptions', $noexceptions, 'int:0:1', 0);
                     xarModVars::set('blocks', 'noexceptions', $noexceptions);
-                    //    xarController::redirect(xarController::URL('blocks', 'admin', 'modifyconfig'), null, $this->getContext());
+                    //    $this->ctl()->redirect($this->ctl()->getModuleURL('blocks', 'admin', 'modifyconfig'));
                     //    return true;
                 }
                 // If this is an AJAX call, end here
-                xarController::getRequest()->exitAjax();
-                xarController::redirect(xarServer::getCurrentURL(), null, $this->getContext());
+                $this->ctl()->getRequest()->exitAjax();
+                $this->ctl()->redirect($this->ctl()->getCurrentURL());
                 return true;
         }
         return $data;

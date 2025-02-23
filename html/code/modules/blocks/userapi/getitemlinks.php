@@ -58,7 +58,7 @@ class GetitemlinksMethod extends MethodClass
         }
         $itemlinks = [];
 
-        if (xarSecurity::check('EditBlocks', 0)) {
+        if ($this->sec()->checkAccess('EditBlocks', 0)) {
             $showurl = true;
         } else {
             $showurl = false;
@@ -79,9 +79,9 @@ class GetitemlinksMethod extends MethodClass
                         continue;
                     }
                     $label = $types[$itemid]['module'] . '/' . $types[$itemid]['type'];
-                    $itemlinks[$itemid] = ['label' => xarVar::prepForDisplay($label),
-                        'title' => xarML('Modify Block Type'),
-                        'url'   => $showurl ? xarController::URL(
+                    $itemlinks[$itemid] = ['label' => $this->var()->prep($label),
+                        'title' => $this->ml('Modify Block Type'),
+                        'url'   => $showurl ? $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_type',
@@ -103,9 +103,9 @@ class GetitemlinksMethod extends MethodClass
                     foreach ($itemids as $itemid) {
                         if (!isset($groups[$itemid])) continue;
                         $label = $groups[$itemid]['name'];
-                        $itemlinks[$itemid] = array('label' => xarVar::prepForDisplay($label),
-                                                    'title' => xarML('View Block Group'),
-                                                    'url'   => $showurl ? xarController::URL('blocks', 'admin', 'view_groups',
+                        $itemlinks[$itemid] = array('label' => $this->var()->prep($label),
+                                                    'title' => $this->ml('View Block Group'),
+                                                    'url'   => $showurl ? $this->ctl()->getModuleURL('blocks', 'admin', 'view_groups',
                                                                                     array('id' => $itemid)) : '');
                     }
                     break;
@@ -125,9 +125,9 @@ class GetitemlinksMethod extends MethodClass
                         continue;
                     }
                     $label = $instances[$itemid]['name'];
-                    $itemlinks[$itemid] = ['label' => xarVar::prepForDisplay($label),
-                        'title' => xarML('Modify Block Instance'),
-                        'url'   => $showurl ? xarController::URL(
+                    $itemlinks[$itemid] = ['label' => $this->var()->prep($label),
+                        'title' => $this->ml('Modify Block Instance'),
+                        'url'   => $showurl ? $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',

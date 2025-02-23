@@ -46,7 +46,7 @@ class ChecklinksMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security Check
-        if (!xarSecurity::check('AdminCategories')) {
+        if (!$this->sec()->checkAccess('AdminCategories')) {
             return;
         }
 
@@ -62,10 +62,10 @@ class ChecklinksMethod extends MethodClass
             $data['numitems'] = 0;
             $data['numlinks'] = 0;
             foreach ($modlist as $modid => $itemtypes) {
-                $modinfo = xarMod::getInfo($modid);
+                $modinfo = $this->mod()->getInfo($modid);
                 // Get the list of all item types for this module (if any)
                 try {
-                    $mytypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+                    $mytypes = $this->mod()->apiFunc($modinfo['name'], 'user', 'getitemtypes');
                 } catch (Exception $e) {
                     $mytypes = [];
                 }
@@ -76,17 +76,17 @@ class ChecklinksMethod extends MethodClass
                     $moditem['numlinks'] = $stats['links'];
                     if ($itemtype == 0) {
                         $moditem['name'] = ucwords($modinfo['displayname']);
-                        //    $moditem['link'] = xarController::URL($modinfo['name'],'user','main');
+                        //    $moditem['link'] = $this->ctl()->getModuleURL($modinfo['name'],'user','main');
                     } else {
                         if (isset($mytypes) && !empty($mytypes[$itemtype])) {
                             $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype . ' - ' . $mytypes[$itemtype]['label'];
                             //    $moditem['link'] = $mytypes[$itemtype]['url'];
                         } else {
                             $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-                            //    $moditem['link'] = xarController::URL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
+                            //    $moditem['link'] = $this->ctl()->getModuleURL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
                         }
                     }
-                    $moditem['link'] = xarController::URL(
+                    $moditem['link'] = $this->ctl()->getModuleURL(
                         'categories',
                         'admin',
                         'checklinks',
@@ -99,7 +99,7 @@ class ChecklinksMethod extends MethodClass
                 }
             }
         } else {
-            $modinfo = xarMod::getInfo($modid);
+            $modinfo = $this->mod()->getInfo($modid);
             $data['module'] = $modinfo['name'];
             if (empty($itemtype)) {
                 $data['itemtype'] = 0;
@@ -112,7 +112,7 @@ class ChecklinksMethod extends MethodClass
                 $data['itemtype'] = $itemtype;
                 // Get the list of all item types for this module (if any)
                 try {
-                    $mytypes = xarMod::apiFunc($modinfo['name'], 'user', 'getitemtypes');
+                    $mytypes = $this->mod()->apiFunc($modinfo['name'], 'user', 'getitemtypes');
                 } catch (Exception $e) {
                     $mytypes = [];
                 }
@@ -121,7 +121,7 @@ class ChecklinksMethod extends MethodClass
                     //    $data['modlink'] = $mytypes[$itemtype]['url'];
                 } else {
                     $data['modname'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-                    //    $data['modlink'] = xarController::URL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
+                    //    $data['modlink'] = $this->ctl()->getModuleURL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
                 }
                 if (isset($modlist[$modid][$itemtype])) {
                     $stats = $modlist[$modid][$itemtype];
@@ -147,7 +147,7 @@ class ChecklinksMethod extends MethodClass
             if (!empty($getitems) && !empty($showtitle)) {
                 $itemids = array_keys($getitems);
                 try {
-                    $itemlinks = xarMod::apiFunc(
+                    $itemlinks = $this->mod()->apiFunc(
                         $modinfo['name'],
                         'user',
                         'getitemlinks',
@@ -184,20 +184,20 @@ class ChecklinksMethod extends MethodClass
 
             $this->var()->find('confirm', $confirm, 'str:1:', '');
             if (!empty($seencid) && !empty($confirm)) {
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 if (!$adminapi->unlinkcids(['modid' => $modid,
                     'itemtype' => $itemtype,
                     'cids' => array_keys($seencid)])) {
                     return;
                 }
-                xarController::redirect(xarController::URL('categories', 'admin', 'checklinks'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('categories', 'admin', 'checklinks'));
                 return true;
             }
 
             // Generate a one-time authorisation code for this operation
-            $data['authid'] = xarSec::genAuthKey();
+            $data['authid'] = $this->sec()->genAuthKey();
         }
 
         return $data;

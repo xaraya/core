@@ -44,12 +44,12 @@ class UpdateinstalloptionsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         // TODO: check under what conditions this is needed
-        //    if (!xarSec::confirmAuthKey()) return;
+        //    if (!$this->sec()->confirmAuthKey()) return;
         $this->var()->check('regid', $regid, 'int', null);
         sys::import('modules.modules.class.installer');
         $installer = InstallerTool::getInstance();

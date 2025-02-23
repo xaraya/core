@@ -38,7 +38,7 @@ class GethooklistMethod extends MethodClass
     {
         // Security Check
         // @CHECKME: is this info not useful to other modules?
-        if (!xarSecurity::check('ManageModules')) {
+        if (!$this->sec()->checkAccess('ManageModules')) {
             return;
         }
 

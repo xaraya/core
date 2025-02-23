@@ -37,10 +37,10 @@ class WaitingcontentMethod extends MethodClass
 
         // Hooks (we specify that we want the ones for adminpanels here)
         $output = [];
-        $output = xarModHooks::call('item', 'waitingcontent', '', ['module' => 'base']);
+        $output = $this->mod()->callHooks('item', 'waitingcontent', '', ['module' => 'base']);
 
         if (empty($output)) {
-            $message = xarML('Waiting Content has not been configured');
+            $message = $this->ml('Waiting Content has not been configured');
         }
 
         if (empty($message)) {

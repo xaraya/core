@@ -46,7 +46,7 @@ class ModifyemailMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('EditRoles')) {
+        if (!$this->sec()->checkAccess('EditRoles')) {
             return;
         }
 
@@ -66,7 +66,7 @@ class ModifyemailMethod extends MethodClass
 
         $dd = opendir($messaginghome);
         // FIXME: what's the blank template supposed to do ?
-        //$templates = array(array('key' => 'blank', 'value' => xarML('Empty')));
+        //$templates = array(array('key' => 'blank', 'value' => $this->ml('Empty')));
         $templates = [];
         while (($filename = readdir($dd)) !== false) {
             if (!is_dir($messaginghome . "/" . $filename)) {
@@ -87,9 +87,9 @@ class ModifyemailMethod extends MethodClass
                 $strings = $adminapi->getmessagestrings(['template' => $data['mailtype']]);
                 $data['subject'] = $strings['subject'];
                 $data['message'] = $strings['message'];
-                $data['authid'] = xarSec::genAuthKey();
+                $data['authid'] = $this->sec()->genAuthKey();
 
-                $object = DataObjectFactory::getObject(['name' => 'roles_users']);
+                $object = $this->data()->getObject(['name' => 'roles_users']);
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object
                     $data['properties'] = &$object->getProperties();
@@ -101,7 +101,7 @@ class ModifyemailMethod extends MethodClass
                 $this->var()->find('message', $message, 'str:1:');
                 $this->var()->find('subject', $subject, 'str:1:');
                 // Confirm authorisation code
-                //            if (!xarSec::confirmAuthKey()) return;
+                //            if (!$this->sec()->confirmAuthKey()) return;
                 //            xarModVars::set('roles', $data['mailtype'].'email', $message);
                 //            xarModVars::set('roles', $data['mailtype'].'title', $subject);
 
@@ -136,12 +136,12 @@ class ModifyemailMethod extends MethodClass
                     $msg = 'The messaging template "#(1)" is not writable or it is not allowed to delete files from #(2)';
                     throw new ConfigurationException([$filename,$messaginghome], $msg);
                 }
-                xarController::redirect(xarController::URL(
+                $this->ctl()->redirect($this->ctl()->getModuleURL(
                     'roles',
                     'admin',
                     'modifyemail',
                     ['mailtype' => $data['mailtype']]
-                ), null, $this->getContext());
+                ));
                 return true;
         }
         return $data;

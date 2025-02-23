@@ -41,7 +41,7 @@ class ComposerMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('ManageBase')) {
+        if (!$this->sec()->checkAccess('ManageBase')) {
             return;
         }
 
@@ -125,12 +125,12 @@ class ComposerMethod extends MethodClass
                     $data['message'][] = $output;
                 }
                 if (empty($data['message'])) {
-                    xarController::redirect(xarServer::getCurrentURL(), null, $this->getContext());
+                    $this->ctl()->redirect($this->ctl()->getCurrentURL());
                 }
             }
         } elseif ($install) {
             if (empty($data['install_com'])) {
-                $data['message'][] = xarML('No install command entered');
+                $data['message'][] = $this->ml('No install command entered');
                 return $data;
             }
 

@@ -40,7 +40,7 @@ class InternalQueuemailMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // see if we have a scheduler job running to send queued mail
-        $job = xarMod::apiFunc(
+        $job = $this->mod()->apiFunc(
             'scheduler',
             'user',
             'get',

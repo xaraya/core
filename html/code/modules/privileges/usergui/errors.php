@@ -44,7 +44,7 @@ class ErrorsMethod extends MethodClass
             if ($data['redirecturl'] == 'local_halt') {
                 return $data;
             } else {
-                xarController::redirect($data['redirecturl'], null, $this->getContext());
+                $this->ctl()->redirect($data['redirecturl']);
                 return true;
             }
         }

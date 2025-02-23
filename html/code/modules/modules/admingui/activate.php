@@ -47,18 +47,18 @@ class ActivateMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         // Security and sanity checks
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $this->var()->find(
             'return_url',
@@ -74,14 +74,14 @@ class ActivateMethod extends MethodClass
         if (!isset($activated)) {
             return;
         }
-        $minfo = xarMod::getInfo($id);
+        $minfo = $this->mod()->getInfo($id);
         // set the target location (anchor) to go to within the page
         $target = $minfo['name'];
         if (empty($return_url)) {
-            $return_url = xarController::URL('modules', 'admin', 'list', ['state' => 0], null, $target);
+            $return_url = $this->ctl()->getModuleURL('modules', 'admin', 'list', ['state' => 0], null) . '#' . $target;
         }
 
-        xarController::redirect($return_url, null, $this->getContext());
+        $this->ctl()->redirect($return_url);
         return true;
     }
 }

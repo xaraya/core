@@ -50,7 +50,7 @@ class GetitemtypesMethod extends MethodClass
             return $itemtypes;
             //throw new Exception('Mail queue definition does not exist');
         }
-        $qdefObjectInfo = DataObjectFactory::getObjectInfo(['name' => $qdefName]);
+        $qdefObjectInfo = $this->data()->getObjectInfo(['name' => $qdefName]);
         if (!$qdefObjectInfo) {
             return $itemtypes;
         }
@@ -59,8 +59,8 @@ class GetitemtypesMethod extends MethodClass
         // (we should takes this as a baseline/augmentation for getitemtypes for all mods really)
 
         // Get objects
-        $objects = xarMod::apiFunc('dynamicdata', 'user', 'getobjects');
-        $modid = xarMod::getRegID('mail');
+        $objects = $this->mod()->apiFunc('dynamicdata', 'user', 'getobjects');
+        $modid = $this->mod()->getRegID('mail');
         foreach ($objects as $id => $object) {
             // skip any object that doesn't belong to mail itself
             if ($modid != $object['moduleid']) {
@@ -68,9 +68,9 @@ class GetitemtypesMethod extends MethodClass
             }
             // Should we skip the "internal" mail objects (i.e. the queue-definition)?
             // if ($object['objectid'] == $qdefObjectInfo['objectid'] ) continue;
-            $itemtypes[$object['itemtype']] = ['label' => xarVar::prepForDisplay($object['label']),
-                'title' => xarVar::prepForDisplay(xarML('View #(1)', $object['label'])),
-                'url'   => xarController::URL('mail', 'user', 'view', ['itemtype' => $object['itemtype']]),
+            $itemtypes[$object['itemtype']] = ['label' => $this->var()->prep($object['label']),
+                'title' => $this->var()->prep($this->ml('View #(1)', $object['label'])),
+                'url'   => $this->ctl()->getModuleURL('mail', 'user', 'view', ['itemtype' => $object['itemtype']]),
                 'info'  => $object,
             ];
         }

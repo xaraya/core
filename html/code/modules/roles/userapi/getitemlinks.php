@@ -43,7 +43,7 @@ class GetitemlinksMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         $itemlinks = [];
-        if (!xarSecurity::check('ViewRoles', 0)) {
+        if (!$this->sec()->checkAccess('ViewRoles', 0)) {
             return $itemlinks;
         }
 
@@ -52,14 +52,14 @@ class GetitemlinksMethod extends MethodClass
             if (!isset($item)) {
                 return;
             }
-            $itemlinks[$itemid] = ['url' => xarController::URL(
+            $itemlinks[$itemid] = ['url' => $this->ctl()->getModuleURL(
                 'roles',
                 'user',
                 'display',
                 ['id' => $itemid]
             ),
-                'title' => xarML('Display User'),
-                'label' => xarVar::prepForDisplay($item['name'])];
+                'title' => $this->ml('Display User'),
+                'label' => $this->var()->prep($item['name'])];
         }
         return $itemlinks;
     }

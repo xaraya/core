@@ -58,8 +58,8 @@ class GetsourcefilenameMethod extends MethodClass
 
         unset($sourceFileName);
 
-        xarLog::message("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt", xarLog::LEVEL_INFO);
-        xarLog::message("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xt", xarLog::LEVEL_INFO);
+        $this->log()->message("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt", xarLog::LEVEL_INFO);
+        $this->log()->message("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xt", xarLog::LEVEL_INFO);
 
         if (!empty($templateName) &&
             file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt")) {
@@ -74,7 +74,7 @@ class GetsourcefilenameMethod extends MethodClass
             file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart.xt")) {
 
         } else {
-            throw new FileNotFoundException(xarML('No template was found corresponding to #(1) #(2)', $templateName, $messagepart));
+            throw new FileNotFoundException($this->ml('No template was found corresponding to #(1) #(2)', $templateName, $messagepart));
         }
         $sourceFileName = str_replace('//', '/', $sourceFileName);
         // assert(isset($sourceFileName), /* The source file for the template has no value in xarTpl::module */);

@@ -51,7 +51,7 @@ class AsknotificationMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('EditRoles')) {
+        if (!$this->sec()->checkAccess('EditRoles')) {
             return;
         }
 
@@ -68,8 +68,8 @@ class AsknotificationMethod extends MethodClass
         $this->var()->find('ip', $data['ip'], 'str:0:', null);
         switch ($data['phase']) {
             case 'display':
-                $data['pass'] = xarSession::getVar('tmppass');
-                xarSession::delVar('tmppass');
+                $data['pass'] = $this->session()->getVar('tmppass');
+                $this->session()->delVar('tmppass');
                 if ($data['mailtype'] == 'blank') {
                     $data['subject'] = '';
                     $data['message'] = '';
@@ -85,12 +85,12 @@ class AsknotificationMethod extends MethodClass
                 //Display the notification form
                 $this->var()->find('subject', $data['subject'], 'str:1:', $data['subject']);
                 $this->var()->find('message', $data['message'], 'str:1:', $data['message']);
-                $data['authid'] = xarSec::genAuthKey();
+                $data['authid'] = $this->sec()->genAuthKey();
                 $data['id'] = base64_encode(serialize($id));
 
                 // dynamic properties (if any)
                 $data['properties'] = null;
-                if (xarMod::isAvailable('dynamicdata')) {
+                if ($this->mod()->isAvailable('dynamicdata')) {
                     // get the DataObject defined for this module (and itemtype, if relevant)
                     /** @var DataObject $object */
                     $object = $this->data()->getObject(['module' => 'roles']);
@@ -103,8 +103,8 @@ class AsknotificationMethod extends MethodClass
 
             case 'notify':
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 $this->var()->find('subject', $data['subject'], 'str:1:', null);
                 $this->var()->find('message', $data['message'], 'str:1:', null);
@@ -120,14 +120,14 @@ class AsknotificationMethod extends MethodClass
                 //Send notification
                 $id = unserialize(base64_decode($id));
                 if (!$adminapi->senduseremail([ 'id' => $id, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']])) {
-                    return xarTpl::module('roles', 'user', 'errors', ['layout' => 'mail_failed']);
+                    return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'mail_failed']);
                 }
-                xarController::redirect(xarController::URL(
+                $this->ctl()->redirect($this->ctl()->getModuleURL(
                     'roles',
                     'admin',
                     'showusers',
                     ['id' => $data['groupid'], 'state' => $data['state']]
-                ), null, $this->getContext());
+                ));
                 return true;
         }
     }

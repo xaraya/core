@@ -33,7 +33,7 @@ class ErrorsMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!xarSecurity::check('EditModules')) {
+        if (!$this->sec()->checkAccess('EditModules')) {
             return;
         }
         $data['layout'] = 'general';

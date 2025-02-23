@@ -42,7 +42,7 @@ class CreatepasswordMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditAuthsystem')) {
+        if (!$this->sec()->checkAccess('EditAuthsystem')) {
             return;
         }
         extract($args);
@@ -52,16 +52,16 @@ class CreatepasswordMethod extends MethodClass
         $this->var()->check('groupid', $groupid, 'int:0:', 0);
         $this->var()->check('id', $id);
         if (empty($id)) {
-            throw new BadParameterException(['parameters','admin','createpassword','roles'], xarML('Invalid #(1) for #(2) function #(3)() in module #(4)'));
+            throw new BadParameterException(['parameters','admin','createpassword','roles'], $this->ml('Invalid #(1) for #(2) function #(3)() in module #(4)'));
         }
 
-        $pass = xarMod::apiFunc(
+        $pass = $this->mod()->apiFunc(
             'roles',
             'user',
             'makepass'
         );
         if (empty($pass)) {
-            throw new BadParameterException(null, xarML('Problem generating new password'));
+            throw new BadParameterException(null, $this->ml('Problem generating new password'));
         }
         $role = xarRoles::get($id);
         $modifiedstatus = $role->setPass($pass);
@@ -70,22 +70,22 @@ class CreatepasswordMethod extends MethodClass
             return;
         }
         if (!xarModVars::get('roles', 'askpasswordemail')) {
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'showusers',
                 ['id' => $groupid, 'state' => $state]
-            ), null, $this->getContext());
+            ));
             return true;
         } else {
 
-            xarSession::setVar('tmppass', $pass);
-            xarController::redirect(xarController::URL(
+            $this->session()->setVar('tmppass', $pass);
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'asknotification',
                 ['id' => [$id => '1'], 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state]
-            ), null, $this->getContext());
+            ));
         }
     }
 }

@@ -45,7 +45,7 @@ class ModinfoMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('ViewModules')) {
+        if (!$this->sec()->checkAccess('ViewModules')) {
             return;
         }
 
@@ -54,36 +54,36 @@ class ModinfoMethod extends MethodClass
         $this->var()->get('id', $id, 'notempty');
 
         // obtain maximum information about module
-        $modinfo = xarMod::getInfo($id);
+        $modinfo = $this->mod()->getInfo($id);
 
         // data vars for template
-        $data['modid']              = xarVar::prepForDisplay($id);
-        $data['modname']            = xarVar::prepForDisplay($modinfo['name']);
-        $data['moddescr']           = xarVar::prepForDisplay($modinfo['description']);
-        $data['moddispname']        = xarVar::prepForDisplay($modinfo['displayname']);
-        $data['moddispdesc']        = xarVar::prepForDisplay($modinfo['displaydescription']);
-        $data['modlisturl']         = xarController::URL('modules', 'admin', 'list');
+        $data['modid']              = $this->var()->prep($id);
+        $data['modname']            = $this->var()->prep($modinfo['name']);
+        $data['moddescr']           = $this->var()->prep($modinfo['description']);
+        $data['moddispname']        = $this->var()->prep($modinfo['displayname']);
+        $data['moddispdesc']        = $this->var()->prep($modinfo['displaydescription']);
+        $data['modlisturl']         = $this->ctl()->getModuleURL('modules', 'admin', 'list');
 
-        $aliasesMap = xarConfigVars::get(null, 'System.ModuleAliases');
+        $aliasesMap = $this->config()->getVar('System.ModuleAliases');
         $aliases = [];
         foreach ($aliasesMap as $key => $value) {
             if ($value == $data['modname']) {
                 $aliases[] = $key;
             }
         }
-        $data['aliases']            = !empty($aliases) ? implode(', ', $aliases) : xarML('None');
-        $data['moddir']             = sys::code() . 'modules/' . xarVar::prepForDisplay($modinfo['directory']);
-        $data['modclass']           = xarVar::prepForDisplay($modinfo['class']);
-        $data['modcat']             = xarVar::prepForDisplay($modinfo['category']);
-        $data['modver']             = xarVar::prepForDisplay($modinfo['version']);
-        $data['modauthor']          = xarVar::prepForDisplay($modinfo['author']);
-        $data['modcontact']         = xarVar::prepForDisplay($modinfo['contact']);
+        $data['aliases']            = !empty($aliases) ? implode(', ', $aliases) : $this->ml('None');
+        $data['moddir']             = sys::code() . 'modules/' . $this->var()->prep($modinfo['directory']);
+        $data['modclass']           = $this->var()->prep($modinfo['class']);
+        $data['modcat']             = $this->var()->prep($modinfo['category']);
+        $data['modver']             = $this->var()->prep($modinfo['version']);
+        $data['modauthor']          = $this->var()->prep($modinfo['author']);
+        $data['modcontact']         = $this->var()->prep($modinfo['contact']);
         if (!empty($modinfo['dependencyinfo'])) {
 
             $dependencies = [];
             foreach ($modinfo['dependencyinfo'] as $key => $value) {
                 if ($key != 0) {
-                    $data['link'] = xarController::URL('modules', 'admin', 'modinfo', ['id' => $key]);
+                    $data['link'] = $this->ctl()->getModuleURL('modules', 'admin', 'modinfo', ['id' => $key]);
                     $dependencies[] = '<a href="' . $data["link"] . '">' . $value['name'] . '</a>';
                 } else {
                     $dependencies[] = $value['name'];
@@ -91,7 +91,7 @@ class ModinfoMethod extends MethodClass
                 $data['moddependencies'] = implode(', ', $dependencies);
             }
         } else {
-            $data['moddependencies']             = xarML('None');
+            $data['moddependencies']             = $this->ml('None');
         }
 
         $data['namespace'] = $modinfo['namespace'] ?? '';

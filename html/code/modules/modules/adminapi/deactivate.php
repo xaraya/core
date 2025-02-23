@@ -48,13 +48,13 @@ class DeactivateMethod extends MethodClass
 
         // Argument check
         if (isset($name)) {
-            $regid = xarMod::getRegID($name, 'module');
+            $regid = $this->mod()->getRegID($name);
         }
         if (!isset($regid)) {
             throw new EmptyParameterException('regid');
         }
 
-        $modInfo = xarMod::getInfo($regid);
+        $modInfo = $this->mod()->getInfo($regid);
 
         //Shouldnt we check first if the module is alredy ACTIVATED????
         //What should we do with UPGRADED STATE? What is it meant to?

@@ -58,7 +58,7 @@ class LeftjoinMethod extends MethodClass
         }
 
         // Security check
-        if (!xarSecurity::check('ViewRoles', 0)) {
+        if (!$this->sec()->checkAccess('ViewRoles', 0)) {
             return;
         }
 
@@ -70,7 +70,7 @@ class LeftjoinMethod extends MethodClass
         }
 
         // Table definition
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         $rolestable = $xartable['roles'];
 
         $leftjoin = [];

@@ -54,7 +54,7 @@ class PurgeMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if(!xarSecurity::check('ManageRoles')) {
+        if(!$this->sec()->checkAccess('ManageRoles')) {
             return;
         }
 
@@ -66,11 +66,11 @@ class PurgeMethod extends MethodClass
         extract($args);
 
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $rolestable = $xartable['roles'];
 
-        $deleted = '[' . xarML('deleted') . ']';
+        $deleted = '[' . $this->ml('deleted') . ']';
         $numitems = (int) xarModVars::get('roles', 'items_per_page');
         // Make sure a value was retrieved for items_per_page
         if (empty($numitems)) {
@@ -85,9 +85,9 @@ class PurgeMethod extends MethodClass
             $this->var()->find('recallids', $recallids, 'isset', []);
             $this->var()->find('groupid', $data['groupid'], 'int:1', 0);
 
-            if ($confirmation == xarML("Recall")) {
+            if ($confirmation == $this->ml("Recall")) {
                 // --- recall users and groups
-                if(!xarSecurity::check('ManageRoles')) {
+                if(!$this->sec()->checkAccess('ManageRoles')) {
                     return;
                 }
                 if ($data['groupid'] != 0) {
@@ -131,7 +131,7 @@ class PurgeMethod extends MethodClass
             $data['totalselect'] = count($roles);
 
             if ($data['totalselect'] == 0) {
-                $data['recallmessage'] = xarML('There are no deleted groups/users ');
+                $data['recallmessage'] = $this->ml('There are no deleted groups/users ');
             } else {
                 $data['recallmessage']         = '';
             }
@@ -140,7 +140,7 @@ class PurgeMethod extends MethodClass
             foreach ($roles as $role) {
                 // check each role's user name
                 if (empty($role['uname'])) {
-                    $msg = xarML('Execution halted: the role with id #(1) has an empty name. This needs to be corrected manually in the database.', $role['id']);
+                    $msg = $this->ml('Execution halted: the role with id #(1) has an empty name. This needs to be corrected manually in the database.', $role['id']);
                     throw new Exception($msg);
                 }
                 if (xarSecurity::check('ReadRoles', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
@@ -184,10 +184,10 @@ class PurgeMethod extends MethodClass
             $recallfilter['startnum'] = '%%';
             $filter['state']         = $data['recallstate'];
             $recallfilter['recallsearch']   = $data['recallsearch'];
-            $data['submitRecall']    = xarML('Recall');
+            $data['submitRecall']    = $this->ml('Recall');
             $data['recallroles']     = $recallroles;
             $data['startnum'] = $startnum;
-            $data['urltemplate'] = xarController::URL('roles', 'admin', 'purge', $recallfilter);
+            $data['urltemplate'] = $this->ctl()->getModuleURL('roles', 'admin', 'purge', $recallfilter);
             $data['urlitemmatch'] = '%%';
             $data['itemsperpage'] = $numitems;
 
@@ -201,9 +201,9 @@ class PurgeMethod extends MethodClass
             $this->var()->find('purgeids', $purgeids, 'isset', []);
 
             // Check for confirmation.
-            if ($confirmation == xarML("Purge")) {
+            if ($confirmation == $this->ml("Purge")) {
                 // --- purge users
-                if(!xarSecurity::check('AdminRoles')) {
+                if(!$this->sec()->checkAccess('AdminRoles')) {
                     return;
                 }
                 foreach ($purgeids as $id => $val) {
@@ -226,13 +226,13 @@ class PurgeMethod extends MethodClass
                     $bindvars[] = 0;
                     $bindvars[] = xarRoles::ROLES_STATE_DELETED;
                     $bindvars[] = $id;
-                    $dbconn = xarDB::getConn();
+                    $dbconn = $this->db()->getConn();
                     $result = $dbconn->Execute($query, $bindvars);
                     // --- Let any hooks know that we have purged this user.
                     $item['module'] = 'roles';
                     $item['itemid'] = $id;
                     $item['method'] = 'purge';
-                    xarModHooks::call('item', 'delete', $id, $item);
+                    $this->mod()->callHooks('item', 'delete', $id, $item);
                 }
             }
 
@@ -299,7 +299,7 @@ class PurgeMethod extends MethodClass
             }
 
             if ($data['totalselect'] == 0) {
-                $data['purgemessage'] = xarML('There are no users selected');
+                $data['purgemessage'] = $this->ml('There are no users selected');
             } else {
                 $data['purgemessage']         = '';
             }
@@ -309,7 +309,7 @@ class PurgeMethod extends MethodClass
                 [$id, $uname, $name, $email, $state, $date_reg] = $result->fields;
                 // check each role's name and user name
                 if (empty($name) || empty($uname)) {
-                    $msg = xarML('Execution halted: the role with id #(1) has an empty name or user name. This needs to be corrected manually in the database.', $id);
+                    $msg = $this->ml('Execution halted: the role with id #(1) has an empty name or user name. This needs to be corrected manually in the database.', $id);
                     throw new Exception($msg);
                 }
                 switch ($state):
@@ -342,17 +342,17 @@ class PurgeMethod extends MethodClass
             $purgefilter['startnum'] = '%%';
             $purgefilter['purgesearch'] = $data['purgesearch'];
 
-            $data['submitPurge'] = xarML('Purge');
+            $data['submitPurge'] = $this->ml('Purge');
             $data['purgeusers']  = $purgeusers;
             $data['startnum'] = $startnum;
-            $data['urltemplate'] = xarController::URL('roles', 'admin', 'purge', $purgefilter);
+            $data['urltemplate'] = $this->ctl()->getModuleURL('roles', 'admin', 'purge', $purgefilter);
             $data['urlitemmatch'] = '%%';
             $data['itemsperpage'] = $numitems;
 
         } // end elseif
 
         // --- finish up
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         // Return
         return $data;
     }

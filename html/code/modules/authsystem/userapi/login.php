@@ -44,7 +44,7 @@ class LoginMethod extends MethodClass
 
         // FIXME: this should be removed as far as possible
         if (isset($passwd) && !isset($pass)) {
-            xarCore::exit("authsystem_userapi_login: authsystem_userapi_login prototype has changed, " .
+             $this->exit("authsystem_userapi_login: authsystem_userapi_login prototype has changed, " .
                 "you should use pass instead of passwd to " .
                 "avoid this message being displayed");
             return false;
@@ -56,7 +56,7 @@ class LoginMethod extends MethodClass
 
         if ((!isset($uname)) ||
             (!isset($pass))) {
-            throw new BadParameterException(null, xarML('Wrong arguments to authsystem_userapi_login.'));
+            throw new BadParameterException(null, $this->ml('Wrong arguments to authsystem_userapi_login.'));
         }
 
         return xarUser::logIn($uname, $pass, $rememberme, $this->getContext());

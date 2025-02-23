@@ -53,26 +53,26 @@ class AddModuleAliasMethod extends MethodClass
         }
 
         // Check if the module name we want to define is already in use
-        if (xarMod::getBaseInfo($aliasModName)) {
+        if ($this->mod()->getBaseInfo($aliasModName)) {
             throw new DuplicateException(['module alias',$aliasModName]);
         } else {
             // We did not find the base info, that is good, no?
         }
 
         // Check if the alias we want to set it to *does* exist
-        if (!xarMod::getBaseInfo($modName)) {
+        if (!$this->mod()->getBaseInfo($modName)) {
             return;
         }
 
         // Get the list of current aliases
-        $aliases = xarConfigVars::get(null, 'System.ModuleAliases');
+        $aliases = $this->config()->getVar('System.ModuleAliases');
         if (!empty($aliases[$aliasModName]) && $aliases[$aliasModName] != $modName) {
             throw new DuplicateException([$aliasModName,$aliases[$aliasModName]], 'Module alias #(1) is already used by module #(2)');
         }
 
         // the direction is fake module name -> true module, not the reverse !
         $aliases[$aliasModName] = $modName;
-        xarConfigVars::set(null, 'System.ModuleAliases', $aliases);
+        $this->config()->setVar('System.ModuleAliases', $aliases);
 
         return true;
     }

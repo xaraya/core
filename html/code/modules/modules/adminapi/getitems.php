@@ -56,7 +56,7 @@ class GetitemsMethod extends MethodClass
         }
 
         // Determine the table we are going to use
-        $tables = xarDB::getTables();
+        $tables = $this->db()->getTables();
         sys::import('xaraya.structures.query');
         $q = new Query('SELECT', $tables['modules']);
         $q->addfields("id, regid, name, directory, version, class, category, state, user_capable, admin_capable");
@@ -130,21 +130,21 @@ class GetitemsMethod extends MethodClass
             // Add systemid as alternative to id CHECKME: can we settle on id?
             $item['systemid'] = $item['id'];
 
-            if (xarVar::isCached('Mod.Infos', $item['regid'])) {
+            if ($this->var()->isCached('Mod.Infos', $item['regid'])) {
                 // Merge cached info with db info
-                $item += xarVar::getCached('Mod.Infos', $item['regid']);
+                $item += $this->var()->getCached('Mod.Infos', $item['regid']);
             } else {
-                $item['displayname'] = xarMod::getDisplayName($item['name']);
+                $item['displayname'] = $this->mod()->getDisplayName($item['name']);
                 $item['displaydescription'] = xarMod::getDisplayDescription($item['name']);
                 // Shortcut for os prepared directory
-                $item['osdirectory'] = xarVar::prepForOS($item['directory']);
+                $item['osdirectory'] = $this->var()->prepPath($item['directory']);
 
-                xarVar::setCached('Mod.BaseInfos', $item['name'], $item);
+                $this->var()->setCached('Mod.BaseInfos', $item['name'], $item);
 
-                $fileinfo = xarMod::getFileInfo($item['osdirectory']);
+                $fileinfo = $this->mod()->getFileInfo($item['osdirectory']);
                 if (isset($fileinfo)) {
                     $item = array_merge($fileinfo, $item);
-                    xarVar::setCached('Mod.Infos', $item['regid'], $item);
+                    $this->var()->setCached('Mod.Infos', $item['regid'], $item);
                     switch ($item['state']) {
                         case xarMod::STATE_MISSING_FROM_UNINITIALISED:
                             $item['state'] = xarMod::STATE_UNINITIALISED;

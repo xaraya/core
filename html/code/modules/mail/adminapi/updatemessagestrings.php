@@ -48,7 +48,7 @@ class UpdatemessagestringsMethod extends MethodClass
         }
 
         if (empty($module)) {
-            $module = xarController::getRequest()->getModule();
+            $module = $this->ctl()->getRequest()->getModule();
         }
         if (empty($subject)) {
             $subject = '';

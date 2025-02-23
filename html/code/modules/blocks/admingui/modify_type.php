@@ -57,7 +57,7 @@ class ModifyTypeMethod extends MethodClass
         $typesapi = $this->typesapi();
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        if (!xarSecurity::check('ManageBlocks')) {
+        if (!$this->sec()->checkAccess('ManageBlocks')) {
             return;
         }
 
@@ -116,7 +116,7 @@ class ModifyTypeMethod extends MethodClass
         } else {
             // admins only beyond the display interface methods
             if ($interface != 'display') {
-                if (!xarSecurity::check('AdminBlocks')) {
+                if (!$this->sec()->checkAccess('AdminBlocks')) {
                     return;
                 }
             }
@@ -131,7 +131,7 @@ class ModifyTypeMethod extends MethodClass
             $invalid = [];
             switch ($interface) {
                 case 'display':
-                    $invalid['phase'] = xarML('Update phase not supported in display interface');
+                    $invalid['phase'] = $this->ml('Update phase not supported in display interface');
                     // fall through to display phase
                     $phase = 'display';
                     break;
@@ -157,18 +157,18 @@ class ModifyTypeMethod extends MethodClass
                                     $result = $block->update();
                                 }
                                 if (isset($result) && $result == false) {
-                                    $invalid['update'] = xarML('Failed updating block type configuration');
+                                    $invalid['update'] = $this->ml('Failed updating block type configuration');
                                 }
                             } else {
-                                $invalid['check'] = xarML('Failed validating block type form input');
+                                $invalid['check'] = $this->ml('Failed validating block type form input');
                             }
                             // fetch block subsystem configuration
                             $this->var()->find('type_block_template', $block_template, 'pre:trim:str:1:127', null);
                             $this->var()->find('type_box_template', $box_template, 'pre:trim:str:1:127', null);
                             // update block configuration
                             if (empty($invalid)) {
-                                if (!xarSec::confirmAuthKey()) {
-                                    return xarController::badRequest('bad_author', $this->getContext());
+                                if (!$this->sec()->confirmAuthKey()) {
+                                    return $this->ctl()->badRequest('bad_author');
                                 }
                                 if (isset($result) && is_array($result)) {
                                     if (!empty($result['content'])) {
@@ -193,16 +193,16 @@ class ModifyTypeMethod extends MethodClass
                                 if (xarBlock::hasMethod($block, $update_method, true)) {
                                     $result = $block->$update_method();
                                     if (empty($result)) {
-                                        $invalid['update'] = xarML('Failed updating block type configuration');
+                                        $invalid['update'] = $this->ml('Failed updating block type configuration');
                                     }
                                 }
                             } else {
-                                $invalid['check'] = xarML('Failed validating block type form input');
+                                $invalid['check'] = $this->ml('Failed validating block type form input');
                             }
                             // update block configuration
                             if (empty($invalid)) {
-                                if (!xarSec::confirmAuthKey()) {
-                                    return xarController::badRequest('bad_author', $this->getContext());
+                                if (!$this->sec()->confirmAuthKey()) {
+                                    return $this->ctl()->badRequest('bad_author');
                                 }
                                 if (!empty($result) && is_array($result)) {
                                     if (!empty($result['content'])) {
@@ -237,17 +237,17 @@ class ModifyTypeMethod extends MethodClass
                         if (xarBlock::hasMethod($block, $update_method, true)) {
                             $result = $block->$update_method();
                             if (empty($result)) {
-                                $invalid['update'] = xarML('Failed updating block type caching configuration');
+                                $invalid['update'] = $this->ml('Failed updating block type caching configuration');
                             }
                         }
                     } else {
-                        $invalid['check'] = xarML('Failed validating block type caching form input');
+                        $invalid['check'] = $this->ml('Failed validating block type caching form input');
                     }
 
                     // update block configuration
                     if (empty($invalid)) {
-                        if (!xarSec::confirmAuthKey()) {
-                            return xarController::badRequest('bad_author', $this->getContext());
+                        if (!$this->sec()->confirmAuthKey()) {
+                            return $this->ctl()->badRequest('bad_author');
                         }
                         if (!empty($result) && is_array($result)) {
                             if (!empty($result['content'])) {
@@ -273,17 +273,17 @@ class ModifyTypeMethod extends MethodClass
                         if (xarBlock::hasMethod($block, $update_method, true)) {
                             $result = $block->$update_method();
                             if (empty($result)) {
-                                $invalid['update'] = xarML('Failed updating block type caching configuration');
+                                $invalid['update'] = $this->ml('Failed updating block type caching configuration');
                             }
                         }
                     } else {
-                        $invalid['check'] = xarML('Failed validating block type caching form input');
+                        $invalid['check'] = $this->ml('Failed validating block type caching form input');
                     }
 
                     // update block configuration
                     if (empty($invalid)) {
-                        if (!xarSec::confirmAuthKey()) {
-                            return xarController::badRequest('bad_author', $this->getContext());
+                        if (!$this->sec()->confirmAuthKey()) {
+                            return $this->ctl()->badRequest('bad_author');
                         }
                         if (!empty($result) && is_array($result)) {
                             if (!empty($result['content'])) {
@@ -293,7 +293,7 @@ class ModifyTypeMethod extends MethodClass
                                 $return_url = $result['return_url'];
                             }
                         }
-                        $accessproperty = DataPropertyMaster::getProperty(['name' => 'access']);
+                        $accessproperty = $this->prop()->getProperty(['name' => 'access']);
                         $isvalid = $accessproperty->checkInput('type_add_access');
                         $block->setAccess('add', $accessproperty->value);
                     }
@@ -310,16 +310,16 @@ class ModifyTypeMethod extends MethodClass
                         if (xarBlock::hasMethod($block, $update_method, true)) {
                             $result = $block->$update_method();
                             if (empty($result)) {
-                                $invalid['update'] = xarML('Failed updating block type caching configuration');
+                                $invalid['update'] = $this->ml('Failed updating block type caching configuration');
                             }
                         }
                     } else {
-                        $invalid['check'] = xarML('Failed validating block type caching form input');
+                        $invalid['check'] = $this->ml('Failed validating block type caching form input');
                     }
                     // update block configuration
                     if (empty($invalid)) {
-                        if (!xarSec::confirmAuthKey()) {
-                            return xarController::badRequest('bad_author', $this->getContext());
+                        if (!$this->sec()->confirmAuthKey()) {
+                            return $this->ctl()->badRequest('bad_author');
                         }
                         if (!empty($result) && is_array($result)) {
                             if (!empty($result['content'])) {
@@ -343,7 +343,7 @@ class ModifyTypeMethod extends MethodClass
 
                 $this->var()->find('return_url', $return_url, 'pre:trim:str:1:', '');
                 if (empty($return_url)) {
-                    $return_url = xarController::URL(
+                    $return_url = $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'modify_type',
@@ -354,7 +354,7 @@ class ModifyTypeMethod extends MethodClass
                         ]
                     );
                 }
-                xarController::redirect($return_url, null, $this->getContext());
+                $this->ctl()->redirect($return_url);
             }
             $data['invalid'] = $invalid;
 
@@ -473,9 +473,9 @@ class ModifyTypeMethod extends MethodClass
                 }
 
                 $data['usershared_options'] = [
-                    ['id' => 0, 'name' => xarML('No Sharing')],
-                    ['id' => 1, 'name' => xarML('Group Members')],
-                    ['id' => 2, 'name' => xarML('All Users')],
+                    ['id' => 0, 'name' => $this->ml('No Sharing')],
+                    ['id' => 1, 'name' => $this->ml('Group Members')],
+                    ['id' => 2, 'name' => $this->ml('All Users')],
                 ];
                 // show additional caching info if supplied by block type
                 if (xarBlock::hasMethod($block, 'cachingmodify', true)) {
@@ -505,45 +505,45 @@ class ModifyTypeMethod extends MethodClass
         $data['type_states'] = $typesapi->getstates();
         $interfaces = [];
         $interfaces[] = [
-            'url' => xarServer::getCurrentURL(['interface' => 'display', 'block_method' => null]),
-            'label' => xarML('Info'),
-            'title' => xarML('Display information about this block type'),
+            'url' => $this->ctl()->getCurrentURL(['interface' => 'display', 'block_method' => null]),
+            'label' => $this->ml('Info'),
+            'title' => $this->ml('Display information about this block type'),
             'active' => ($interface == 'display' && $method == 'info'),
         ];
         if ($interface != 'display' || $method != 'status') {
-            if (xarSecurity::check('AdminBlocks', 0)) {
+            if ($this->sec()->checkAccess('AdminBlocks', 0)) {
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'config', 'block_method' => null]),
-                    'label' => xarML('Config'),
-                    'title' => xarML('Modify default configuration for this block type'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'config', 'block_method' => null]),
+                    'label' => $this->ml('Config'),
+                    'title' => $this->ml('Modify default configuration for this block type'),
                     'active' => ($interface == 'config'),
                 ];
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'caching', 'block_method' => null]),
-                    'label' => xarML('Caching'),
-                    'title' => xarML('Modify default caching configuration for this block type'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'caching', 'block_method' => null]),
+                    'label' => $this->ml('Caching'),
+                    'title' => $this->ml('Modify default caching configuration for this block type'),
                     'active' => ($interface == 'caching'),
                 ];
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'access', 'block_method' => null]),
-                    'label' => xarML('Access'),
-                    'title' => xarML('Modify default access configuration for this block type'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'access', 'block_method' => null]),
+                    'label' => $this->ml('Access'),
+                    'title' => $this->ml('Modify default access configuration for this block type'),
                     'active' => ($interface == 'access'),
                 ];
             }
             if ($block->show_preview) {
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'display', 'block_method' => 'preview']),
-                    'label' => xarML('Preview'),
-                    'title' => xarML('Show a preview of this block type'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'display', 'block_method' => 'preview']),
+                    'label' => $this->ml('Preview'),
+                    'title' => $this->ml('Show a preview of this block type'),
                     'active' => ($interface == 'display' && $method == 'preview'),
                 ];
             }
             if ($block->show_help) {
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'display', 'block_method' => 'help']),
-                    'label' => xarML('Help'),
-                    'title' => xarML('View block type help information'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'display', 'block_method' => 'help']),
+                    'label' => $this->ml('Help'),
+                    'title' => $this->ml('View block type help information'),
                     'active' => ($interface == 'display' && $method == 'help'),
                 ];
             }

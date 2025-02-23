@@ -48,11 +48,11 @@ class RemovemissingMethod extends MethodClass
 
         //    $this->var()->find('remove', $remove, 'str', null);
         // Get module information
-        //    $modinfo = xarMod::getInfo($regid);
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        //    $modinfo = $this->mod()->getInfo($regid);
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
 
-        $modInfo = xarMod::getInfo($regid);
+        $modInfo = $this->mod()->getInfo($regid);
         $modId = $modInfo['systemid'];
         // Make what we do at least atomic
         try {

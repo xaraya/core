@@ -41,7 +41,7 @@ class MainMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditAuthsystem')) {
+        if (!$this->sec()->checkAccess('EditAuthsystem')) {
             return;
         }
 
@@ -49,9 +49,9 @@ class MainMethod extends MethodClass
 
         if (((bool) xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
             $data = ['context' => $this->getContext()];
-            return xarTpl::module('authsystem', 'admin', 'overview', $data);
+            return $this->tpl()->module('authsystem', 'admin', 'overview', $data);
         } else {
-            xarController::redirect(xarController::URL('authsystem', 'admin', 'modifyconfig'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('authsystem', 'admin', 'modifyconfig'));
             return true;
         }
     }

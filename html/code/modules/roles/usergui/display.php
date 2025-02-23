@@ -68,7 +68,7 @@ class DisplayMethod extends MethodClass
 
             $currentid = xarUser::getVar('id');
             if ($currentid == $id) {
-                xarController::redirect(xarController::URL('roles', 'user', 'account'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'account'));
             }
 
             $name = $role->getName();
@@ -84,7 +84,7 @@ class DisplayMethod extends MethodClass
             //get the data for a user
             if ($data['itemtype'] == xarRoles::ROLES_USERTYPE) {
                 sys::import('modules.dynamicdata.class.objects.factory');
-                $object = DataObjectFactory::getObject(['name' => 'roles_users']);
+                $object = $this->data()->getObject(['name' => 'roles_users']);
                 $object->tplmodule = $args['tplmodule'];   // roles/xartemplates/objects/
                 $object->template = $args['template'];  // showdisplay-account.xt
                 $object->layout = $args['layout'];
@@ -99,15 +99,15 @@ class DisplayMethod extends MethodClass
             $item['module'] = 'roles';
             $item['itemtype'] = $data['itemtype'];
             $item['itemid'] = $id;
-            $item['returnurl'] = xarController::URL(
+            $item['returnurl'] = $this->ctl()->getModuleURL(
                 'roles',
                 'user',
                 'display',
                 ['id' => $id]
             );
-            $data['hooks'] = xarModHooks::call('item', 'display', $id, $item);
+            $data['hooks'] = $this->mod()->callHooks('item', 'display', $id, $item);
 
-            xarTpl::setPageTitle(xarVar::prepForDisplay($data['name']));
+            $this->tpl()->setPageTitle($this->var()->prep($data['name']));
         } else {
             $data['id'] = $id;
             $data['uname'] = '';
@@ -118,6 +118,6 @@ class DisplayMethod extends MethodClass
         $data['layout'] = $args['layout'];
 
         $data['context'] ??= $this->getContext();
-        return xarTpl::module($args['tplmodule'], 'user', 'display', $data, $args['template']);
+        return $this->tpl()->module($args['tplmodule'], 'user', 'display', $data, $args['template']);
     }
 }

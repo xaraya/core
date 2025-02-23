@@ -36,18 +36,18 @@ class DeleteConfigMethod extends MethodClass
         $this->var()->find('itemid', $data['itemid'], 'int', 0);
         $this->var()->find('confirm', $data['confirm'], 'int', 0);
 
-        $data['object'] = DataObjectFactory::getObject(['name' => 'themes_configurations']);
+        $data['object'] = $this->data()->getObject(['name' => 'themes_configurations']);
         $data['object']->getItem(['itemid' => $data['itemid']]);
 
         // Security
         if (!$data['object']->checkAccess('delete')) {
-            return xarController::forbidden(xarML('Delete #(1) is forbidden', $data['object']->label), $this->getContext());
+            return $this->ctl()->forbidden($this->ml('Delete #(1) is forbidden', $data['object']->label));
         }
 
         if ($data['confirm']) {
 
             // Check for a valid confirmation key
-            if (!xarSec::confirmAuthKey()) {
+            if (!$this->sec()->confirmAuthKey()) {
                 return;
             }
 
@@ -55,7 +55,7 @@ class DeleteConfigMethod extends MethodClass
             $item = $data['object']->deleteItem();
 
             // Jump to the next page
-            xarController::redirect(xarController::URL('themes', 'admin', 'view_configs'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'view_configs'));
             return true;
         }
         return $data;

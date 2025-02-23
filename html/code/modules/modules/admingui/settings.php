@@ -39,7 +39,7 @@ class SettingsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
@@ -54,7 +54,7 @@ class SettingsMethod extends MethodClass
         xarModUserVars::set('modules', 'selfilter', $selfilter);
         xarModUserVars::set('modules', 'selsort', $selsort);
 
-        xarController::redirect(xarController::URL('modules', 'admin', 'list', ['regen' => $regen]), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', 'list', ['regen' => $regen]));
         return true;
     }
 }

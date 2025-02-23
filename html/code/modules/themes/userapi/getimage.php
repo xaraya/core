@@ -54,13 +54,13 @@ class GetimageMethod extends MethodClass
             // @todo: support theme param to specify a theme to look in other than current/common ?
             $package = !empty($theme) ? $theme : null;
         } elseif ($scope == 'module') {
-            $package = empty($module) ? xarMod::getName() : $module;
+            $package = empty($module) ? $this->mod()->getName() : $module;
         } elseif ($scope == 'property') {
             if (empty($property)) {
                 return '';
             }
             $package = $property;
         }
-        return xarTpl::getImage($file, $scope, $package);
+        return $this->tpl()->getImage($file, $scope, $package);
     }
 }

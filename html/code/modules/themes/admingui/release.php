@@ -42,7 +42,7 @@ class ReleaseMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditThemes')) {
+        if (!$this->sec()->checkAccess('EditThemes')) {
             return;
         }
 
@@ -60,7 +60,7 @@ class ReleaseMethod extends MethodClass
         // Need to change the url once release module is moved to
         $feedfile = "http://www.xaraya.com/index.php/articles/rnid/c69/?theme=rss";
         // Get the feed file (from cache or from the remote site)
-        $feeddata = xarMod::apiFunc(
+        $feeddata = $this->mod()->apiFunc(
             'base',
             'user',
             'getfile',
@@ -105,7 +105,7 @@ class ReleaseMethod extends MethodClass
             $data['chanlink']   =   $info['channel']['link'];
             $data['chandesc']   =   $info['channel']['description'];
         } else {
-            $msg = xarML('There is a problem with a feed.');
+            $msg = $this->ml('There is a problem with a feed.');
             throw new Exception($msg);
         }
         $data['feedcontent'] = $feedcontent;

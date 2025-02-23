@@ -123,8 +123,8 @@ class DeleteitemMethod extends MethodClass
         }
         unset($instance, $block);
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
         $block_table = $tables['block_instances'];
 
         $query = "DELETE FROM $block_table
@@ -143,7 +143,7 @@ class DeleteitemMethod extends MethodClass
             'itemid' => $args['block_id'],
             'itemtype' => 3,
         );
-        xarHooks::notify('BlockDelete', $item);
+        $this->mod()->notifyHooks('BlockDelete', $item);
         */
         return true;
 

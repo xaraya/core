@@ -44,13 +44,13 @@ class ShowprivilegesMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if (!xarSecurity::check('EditRoles')) {
+        if (!$this->sec()->checkAccess('EditRoles')) {
             return;
         }
 
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
         // Call the Roles class and get the role
@@ -240,20 +240,20 @@ class ShowprivilegesMethod extends MethodClass
         $data['inherited'] = $inherited;
         $data['privileges'] = $currentprivileges;
         $data['directassigned'] = $directassigned;
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         $data['groups'] = xarRoles::getgroups();
-        $data['removeurl'] = xarController::URL(
+        $data['removeurl'] = $this->ctl()->getModuleURL(
             'roles',
             'admin',
             'removeprivilege',
             ['roleid' => $id]
         );
-        $data['groupurl'] = xarController::URL(
+        $data['groupurl'] = $this->ctl()->getModuleURL(
             'roles',
             'admin',
             'showprivileges'
         );
-        $data['addlabel'] = xarML('Add');
+        $data['addlabel'] = $this->ml('Add');
         return $data;
     }
 }

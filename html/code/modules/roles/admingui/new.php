@@ -44,7 +44,7 @@ class NewMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AddRoles')) {
+        if (!$this->sec()->checkAccess('AddRoles')) {
             return;
         }
 
@@ -60,18 +60,18 @@ class NewMethod extends MethodClass
             $name = 'roles_groups';
         }
 
-        $data['object'] = DataObjectFactory::getObject(['name'   => $name]);
+        $data['object'] = $this->data()->getObject(['name'   => $name]);
 
         // call item new hooks
         $item = $data;
         $item['exclude_module'] = ['dynamicdata'];
         $item['module'] = 'roles';
         $item['itemtype'] = $data['itemtype'];
-        $data['hooks'] = xarModHooks::call('item', 'new', '', $item);
+        $data['hooks'] = $this->mod()->callHooks('item', 'new', '', $item);
 
         if ($confirm) {
             // Check for a valid confirmation key
-            if (!xarSec::confirmAuthKey()) {
+            if (!$this->sec()->confirmAuthKey()) {
                 return;
             }
 
@@ -84,13 +84,13 @@ class NewMethod extends MethodClass
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
                 $data['context'] ??= $this->getContext();
-                return xarTpl::module('roles', 'admin', 'new', $data);
+                return $this->tpl()->module('roles', 'admin', 'new', $data);
             } else {
                 // Good data: create the item
                 $itemid = $data['object']->createItem();
 
                 // Jump to the next page
-                xarController::redirect(xarController::URL('roles', 'admin', 'new'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'new'));
                 return true;
             }
         }

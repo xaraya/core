@@ -81,7 +81,7 @@ class ModulecodeMethod extends MethodClass
             // @fixme replace with right javascript code or drop function
             // A failure to find a file is recorded, but does not stop subsequent files.
             //$result = $result & xarTplAddJavaScript($position, 'code', $code, $filePath);
-            $result = $result & xarMod::apiFunc('themes', 'user', 'registerjs', ['position' => $position, 'code' => $code, 'filename' => $filePath]);
+            $result = $result & $this->mod()->apiFunc('themes', 'user', 'registerjs', ['position' => $position, 'code' => $code, 'filename' => $filePath]);
         }
 
         // False if any one file is not found.

@@ -39,7 +39,7 @@ class SendmailMethod extends MethodClass
     {
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
-        $log = xarML('Starting to send queued mail') . "\n";
+        $log = $this->ml('Starting to send queued mail') . "\n";
 
         // TODO: use separate xar_mail_queue table here someday
         // get the waiting queue
@@ -57,11 +57,11 @@ class SendmailMethod extends MethodClass
                 continue;
             }
 
-            $log .= xarML('Sending mail #(1)', $id) . ' ';
+            $log .= $this->ml('Sending mail #(1)', $id) . ' ';
             // retrieve the mail data
             $data = xarModVars::get('mail', $id);
             if (empty($data)) {
-                $log .= xarML('empty') . "\n";
+                $log .= $this->ml('empty') . "\n";
                 $sent[] = $id;
                 continue;
             }
@@ -69,18 +69,18 @@ class SendmailMethod extends MethodClass
             unset($args['when']);
             // send it with the internal _sendmail API function
             if ($adminapi->internal_sendmail($args)) {
-                $log .= xarML('succeeded');
+                $log .= $this->ml('succeeded');
                 xarModVars::delete('mail', $id);
                 $sent[] = $id;
             } else {
-                $log .= xarML('failed');
+                $log .= $this->ml('failed');
                 // CHECKME: do we try again later or not ? That should probably depend on the error ;)
                 xarModVars::delete('mail', $id);
                 $sent[] = $id;
             }
             $log .= "\n";
         }
-        $log .= xarML('Finished sending queued mail');
+        $log .= $this->ml('Finished sending queued mail');
 
         // we didn't send anything, so return now
         if (count($sent) == 0) {
@@ -89,7 +89,7 @@ class SendmailMethod extends MethodClass
 
         // Trick : make sure we're dealing with up-to-date information here,
         //         because sending all those mails may have taken a while...
-        xarVar::delCached('Mod.Variables.mail', 'queue');
+        $this->var()->delCached('Mod.Variables.mail', 'queue');
 
         // get the current waiting queue
         $serialqueue = xarModVars::get('mail', 'queue');

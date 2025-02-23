@@ -52,8 +52,8 @@ class CountitemsMethod extends MethodClass
         } // any
 
         // Determine the tables we are going to use
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
         $themes_table = $tables['themes'];
 
         $where = [];

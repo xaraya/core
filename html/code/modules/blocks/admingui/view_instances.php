@@ -48,7 +48,7 @@ class ViewInstancesMethod extends MethodClass
         $instancesapi = $this->instancesapi();
         /** @var TypesApi $typesapi */
         $typesapi = $this->typesapi();
-        if (!xarSecurity::check('ManageBlocks')) {
+        if (!$this->sec()->checkAccess('ManageBlocks')) {
             return;
         }
 
@@ -56,7 +56,7 @@ class ViewInstancesMethod extends MethodClass
 
         $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1:', 'list');
 
-        $access_property = DataPropertyMaster::getProperty(['name' => 'access']);
+        $access_property = $this->prop()->getProperty(['name' => 'access']);
 
         switch ($data['tab']) {
             case 'list':
@@ -83,15 +83,15 @@ class ViewInstancesMethod extends MethodClass
                     }
                     // all managers can view info about instances
                     $item['info_link'] = [
-                        'label' => xarML('Info'),
-                        'title' => xarML('View detail information about this block instance'),
-                        'url' => xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $block_id]),
+                        'label' => $this->ml('Info'),
+                        'title' => $this->ml('View detail information about this block instance'),
+                        'url' => $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance', ['block_id' => $block_id]),
                     ];
                     // all managers can view info about types
                     $item['type_link'] = [
-                        'label' => xarML('Type Info'),
-                        'title' => xarML('View detail information about this block type'),
-                        'url' => xarController::URL('blocks', 'admin', 'modify_type', ['type_id' => $item['type_id']]),
+                        'label' => $this->ml('Type Info'),
+                        'title' => $this->ml('View detail information about this block type'),
+                        'url' => $this->ctl()->getModuleURL('blocks', 'admin', 'modify_type', ['type_id' => $item['type_id']]),
                     ];
                     // check modify access
                     $args = [
@@ -102,41 +102,41 @@ class ViewInstancesMethod extends MethodClass
                         'level' => $item['content']['modify_access']['level'],
                     ];
                     $modify_link = (!$access_property->check($args)) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
                             ['block_id' => $block_id, 'interface' => 'config']
                         );
                     $item['modify_link'] = [
-                        'label' => xarML('Config'),
-                        'title' => xarML('View or modify configuration of this block instance'),
+                        'label' => $this->ml('Config'),
+                        'title' => $this->ml('View or modify configuration of this block instance'),
                         'url' => $modify_link,
                     ];
                     // check if this block type supports previews
                     $preview_link = (empty($item['type_info']['show_preview'])) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
                             ['block_id' => $block_id, 'interface' => 'display', 'block_method' => 'preview']
                         );
                     $item['preview_link'] = [
-                        'label' => xarML('Preview'),
-                        'title' => xarML('Display preview of this block instance'),
+                        'label' => $this->ml('Preview'),
+                        'title' => $this->ml('Display preview of this block instance'),
                         'url' => $preview_link,
                     ];
                     // check if this block type supplies help
                     $help_link = (empty($item['type_info']['show_help'])) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
                             ['block_id' => $block_id, 'interface' => 'display', 'block_method' => 'help']
                         );
                     $item['help_link'] = [
-                        'label' => xarML('Help'),
-                        'title' => xarML('Display help information about this block type'),
+                        'label' => $this->ml('Help'),
+                        'title' => $this->ml('Display help information about this block type'),
                         'url' => $help_link,
                     ];
                     // check delete access
@@ -148,15 +148,15 @@ class ViewInstancesMethod extends MethodClass
                         'level' => $item['content']['delete_access']['level'],
                     ];
                     $delete_link = (!$access_property->check($args)) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'delete_instance',
                             ['block_id' => $block_id]
                         );
                     $item['delete_link'] = [
-                        'label' => xarML('Delete'),
-                        'title' => xarML('Delete this block instance'),
+                        'label' => $this->ml('Delete'),
+                        'title' => $this->ml('Delete this block instance'),
                         'url' => $delete_link,
                     ];
 
@@ -178,15 +178,15 @@ class ViewInstancesMethod extends MethodClass
 
                     // all managers can view info about instances
                     $group['info_link'] = [
-                        'label' => xarML('Info'),
-                        'title' => xarML('View detail information about this block instance'),
-                        'url' => xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $group_id]),
+                        'label' => $this->ml('Info'),
+                        'title' => $this->ml('View detail information about this block instance'),
+                        'url' => $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance', ['block_id' => $group_id]),
                     ];
                     // all managers can view info about types
                     $group['type_link'] = [
-                        'label' => xarML('Type Info'),
-                        'title' => xarML('View detail information about this block type'),
-                        'url' => xarController::URL('blocks', 'admin', 'modify_type', ['type_id' => $group['type_id']]),
+                        'label' => $this->ml('Type Info'),
+                        'title' => $this->ml('View detail information about this block type'),
+                        'url' => $this->ctl()->getModuleURL('blocks', 'admin', 'modify_type', ['type_id' => $group['type_id']]),
                     ];
                     // check modify access
                     $args = [
@@ -197,41 +197,41 @@ class ViewInstancesMethod extends MethodClass
                         'level' => $group['content']['modify_access']['level'],
                     ];
                     $modify_link = (!$access_property->check($args)) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
                             ['block_id' => $group_id, 'interface' => 'config']
                         );
                     $group['modify_link'] = [
-                        'label' => xarML('Config'),
-                        'title' => xarML('View or modify configuration of this block instance'),
+                        'label' => $this->ml('Config'),
+                        'title' => $this->ml('View or modify configuration of this block instance'),
                         'url' => $modify_link,
                     ];
                     // check if this block type supports previews
                     $preview_link = (empty($group['type_info']['show_preview'])) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
                             ['block_id' => $group_id, 'interface' => 'display', 'block_method' => 'preview']
                         );
                     $group['preview_link'] = [
-                        'label' => xarML('Preview'),
-                        'title' => xarML('Display preview of this block instance'),
+                        'label' => $this->ml('Preview'),
+                        'title' => $this->ml('Display preview of this block instance'),
                         'url' => $preview_link,
                     ];
                     // check if this block type supplies help
                     $help_link = (empty($group['type_info']['show_help'])) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
                             ['block_id' => $group_id, 'interface' => 'display', 'block_method' => 'help']
                         );
                     $group['help_link'] = [
-                        'label' => xarML('Help'),
-                        'title' => xarML('Display help information about this block type'),
+                        'label' => $this->ml('Help'),
+                        'title' => $this->ml('Display help information about this block type'),
                         'url' => $help_link,
                     ];
                     // check delete access
@@ -243,15 +243,15 @@ class ViewInstancesMethod extends MethodClass
                         'level' => $group['content']['delete_access']['level'],
                     ];
                     $delete_link = (!$access_property->check($args)) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'delete_instance',
                             ['block_id' => $group_id]
                         );
                     $group['delete_link'] = [
-                        'label' => xarML('Delete'),
-                        'title' => xarML('Delete this block instance'),
+                        'label' => $this->ml('Delete'),
+                        'title' => $this->ml('Delete this block instance'),
                         'url' => $delete_link,
                     ];
 
@@ -263,15 +263,15 @@ class ViewInstancesMethod extends MethodClass
                             $block = $blocks[$block_id];
                             // all managers can view info about instances
                             $block['info_link'] = [
-                                'label' => xarML('Info'),
-                                'title' => xarML('View detail information about this block instance'),
-                                'url' => xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $block_id]),
+                                'label' => $this->ml('Info'),
+                                'title' => $this->ml('View detail information about this block instance'),
+                                'url' => $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance', ['block_id' => $block_id]),
                             ];
                             // all managers can view info about types
                             $block['type_link'] = [
-                                'label' => xarML('Type Info'),
-                                'title' => xarML('View detail information about this block type'),
-                                'url' => xarController::URL('blocks', 'admin', 'modify_type', ['type_id' => $block['type_id']]),
+                                'label' => $this->ml('Type Info'),
+                                'title' => $this->ml('View detail information about this block type'),
+                                'url' => $this->ctl()->getModuleURL('blocks', 'admin', 'modify_type', ['type_id' => $block['type_id']]),
                             ];
                             // check modify access
                             $args = [
@@ -282,41 +282,41 @@ class ViewInstancesMethod extends MethodClass
                                 'level' => $block['content']['modify_access']['level'],
                             ];
                             $modify_link = (!$access_property->check($args)) ? '' :
-                                xarController::URL(
+                                $this->ctl()->getModuleURL(
                                     'blocks',
                                     'admin',
                                     'modify_instance',
                                     ['block_id' => $block_id, 'interface' => 'config']
                                 );
                             $block['modify_link'] = [
-                                'label' => xarML('Config'),
-                                'title' => xarML('View or modify configuration of this block instance'),
+                                'label' => $this->ml('Config'),
+                                'title' => $this->ml('View or modify configuration of this block instance'),
                                 'url' => $modify_link,
                             ];
                             // check if this block type supports previews
                             $preview_link = (empty($block['type_info']['show_preview'])) ? '' :
-                                xarController::URL(
+                                $this->ctl()->getModuleURL(
                                     'blocks',
                                     'admin',
                                     'modify_instance',
                                     ['block_id' => $block_id, 'interface' => 'display', 'block_method' => 'preview']
                                 );
                             $block['preview_link'] = [
-                                'label' => xarML('Preview'),
-                                'title' => xarML('Display preview of this block instance'),
+                                'label' => $this->ml('Preview'),
+                                'title' => $this->ml('Display preview of this block instance'),
                                 'url' => $preview_link,
                             ];
                             // check if this block type supplies help
                             $help_link = (empty($block['type_info']['show_help'])) ? '' :
-                                xarController::URL(
+                                $this->ctl()->getModuleURL(
                                     'blocks',
                                     'admin',
                                     'modify_instance',
                                     ['block_id' => $block_id, 'interface' => 'display', 'block_method' => 'help']
                                 );
                             $block['help_link'] = [
-                                'label' => xarML('Help'),
-                                'title' => xarML('Display help information about this block type'),
+                                'label' => $this->ml('Help'),
+                                'title' => $this->ml('Display help information about this block type'),
                                 'url' => $help_link,
                             ];
                             // check delete access
@@ -328,15 +328,15 @@ class ViewInstancesMethod extends MethodClass
                                 'level' => $block['content']['delete_access']['level'],
                             ];
                             $delete_link = (!$access_property->check($args)) ? '' :
-                                xarController::URL(
+                                $this->ctl()->getModuleURL(
                                     'blocks',
                                     'admin',
                                     'delete_instance',
                                     ['block_id' => $block_id]
                                 );
                             $block['delete_link'] = [
-                                'label' => xarML('Delete'),
-                                'title' => xarML('Delete this block instance'),
+                                'label' => $this->ml('Delete'),
+                                'title' => $this->ml('Delete this block instance'),
                                 'url' => $delete_link,
                             ];
                             $group['instances'][$block_id] = $block;
@@ -351,9 +351,9 @@ class ViewInstancesMethod extends MethodClass
                 $types = $typesapi->getitems();
                 foreach ($types as $type_id => $item) {
                     $item['info_link'] = [
-                        'label' => xarML('Info'),
-                        'title' => xarML('View detail information about this block type'),
-                        'url' => xarController::URL(
+                        'label' => $this->ml('Info'),
+                        'title' => $this->ml('View detail information about this block type'),
+                        'url' => $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_type',
@@ -361,10 +361,10 @@ class ViewInstancesMethod extends MethodClass
                         ),
                     ];
                     $item['modify_link'] = [
-                        'label' => xarML('Config'),
-                        'title' => xarML('View or modify default configuration for this block type'),
-                        'url' => !xarSecurity::check('AdminBlocks', 0) ? '' :
-                            xarController::URL(
+                        'label' => $this->ml('Config'),
+                        'title' => $this->ml('View or modify default configuration for this block type'),
+                        'url' => !$this->sec()->checkAccess('AdminBlocks', 0) ? '' :
+                            $this->ctl()->getModuleURL(
                                 'blocks',
                                 'admin',
                                 'modify_type',
@@ -372,10 +372,10 @@ class ViewInstancesMethod extends MethodClass
                             ),
                     ];
                     $item['preview_link'] = [
-                        'label' => xarML('Preview'),
-                        'title' => xarML('View a preview of this block type'),
+                        'label' => $this->ml('Preview'),
+                        'title' => $this->ml('View a preview of this block type'),
                         'url' => empty($item['type_info']['show_preview']) ? '' :
-                            xarController::URL(
+                            $this->ctl()->getModuleURL(
                                 'blocks',
                                 'admin',
                                 'modify_type',
@@ -383,10 +383,10 @@ class ViewInstancesMethod extends MethodClass
                             ),
                     ];
                     $item['help_link'] = [
-                        'label' => xarML('Help'),
-                        'title' => xarML('View help information about this block type'),
+                        'label' => $this->ml('Help'),
+                        'title' => $this->ml('View help information about this block type'),
                         'url' => empty($item['type_info']['show_help']) ? '' :
-                            xarController::URL(
+                            $this->ctl()->getModuleURL(
                                 'blocks',
                                 'admin',
                                 'modify_type',
@@ -402,10 +402,10 @@ class ViewInstancesMethod extends MethodClass
                         'level' => $item['type_info']['add_access']['level'],
                     ];
                     $item['add_link'] = [
-                        'label' => xarML('Add'),
-                        'title' => xarML('Create a new instance of this block type'),
+                        'label' => $this->ml('Add'),
+                        'title' => $this->ml('Create a new instance of this block type'),
                         'url' => (!$access_property->check($access) || $item['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ? '' :
-                            xarController::URL(
+                            $this->ctl()->getModuleURL(
                                 'blocks',
                                 'admin',
                                 'new_instance',
@@ -427,15 +427,15 @@ class ViewInstancesMethod extends MethodClass
                     }
                     // all managers can view info about instances
                     $item['info_link'] = [
-                        'label' => xarML('Info'),
-                        'title' => xarML('View detail information about this block instance'),
-                        'url' => xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $block_id]),
+                        'label' => $this->ml('Info'),
+                        'title' => $this->ml('View detail information about this block instance'),
+                        'url' => $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance', ['block_id' => $block_id]),
                     ];
                     // all managers can view info about types
                     $item['type_link'] = [
-                        'label' => xarML('Type Info'),
-                        'title' => xarML('View detail information about this block type'),
-                        'url' => xarController::URL('blocks', 'admin', 'modify_type', ['type_id' => $item['type_id']]),
+                        'label' => $this->ml('Type Info'),
+                        'title' => $this->ml('View detail information about this block type'),
+                        'url' => $this->ctl()->getModuleURL('blocks', 'admin', 'modify_type', ['type_id' => $item['type_id']]),
                     ];
                     // check modify access
                     $args = [
@@ -446,41 +446,41 @@ class ViewInstancesMethod extends MethodClass
                         'level' => $item['content']['modify_access']['level'],
                     ];
                     $modify_link = (!$access_property->check($args)) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
                             ['block_id' => $block_id, 'interface' => 'config']
                         );
                     $item['modify_link'] = [
-                        'label' => xarML('Config'),
-                        'title' => xarML('View or modify configuration of this block instance'),
+                        'label' => $this->ml('Config'),
+                        'title' => $this->ml('View or modify configuration of this block instance'),
                         'url' => $modify_link,
                     ];
                     // check if this block type supports previews
                     $preview_link = (empty($item['type_info']['show_preview'])) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
                             ['block_id' => $block_id, 'interface' => 'display', 'block_method' => 'preview']
                         );
                     $item['preview_link'] = [
-                        'label' => xarML('Preview'),
-                        'title' => xarML('Display preview of this block instance'),
+                        'label' => $this->ml('Preview'),
+                        'title' => $this->ml('Display preview of this block instance'),
                         'url' => $preview_link,
                     ];
                     // check if this block type supplies help
                     $help_link = (empty($item['type_info']['show_help'])) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
                             ['block_id' => $block_id, 'interface' => 'display', 'block_method' => 'help']
                         );
                     $item['help_link'] = [
-                        'label' => xarML('Help'),
-                        'title' => xarML('Display help information about this block type'),
+                        'label' => $this->ml('Help'),
+                        'title' => $this->ml('Display help information about this block type'),
                         'url' => $help_link,
                     ];
                     // check delete access
@@ -492,15 +492,15 @@ class ViewInstancesMethod extends MethodClass
                         'level' => $item['content']['delete_access']['level'],
                     ];
                     $delete_link = (!$access_property->check($args)) ? '' :
-                        xarController::URL(
+                        $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'delete_instance',
                             ['block_id' => $block_id]
                         );
                     $item['delete_link'] = [
-                        'label' => xarML('Delete'),
-                        'title' => xarML('Delete this block instance'),
+                        'label' => $this->ml('Delete'),
+                        'title' => $this->ml('Delete this block instance'),
                         'url' => $delete_link,
                     ];
                     $types[$item['type_id']]['instances'][$block_id] = $item;
@@ -517,25 +517,25 @@ class ViewInstancesMethod extends MethodClass
         $data['instance_states'] = $instancesapi->getstates();
         $data['blocktabs'] = [
             'list' => [
-                'url' => xarServer::getCurrentURL(['tab' => 'list']),
-                'label' => xarML('List'),
-                'title' => xarML('View list of block instances'),
+                'url' => $this->ctl()->getCurrentURL(['tab' => 'list']),
+                'label' => $this->ml('List'),
+                'title' => $this->ml('View list of block instances'),
             ],
             'bygroup' => [
-                'url' => xarServer::getCurrentURL(['tab' => 'bygroup']),
-                'label' => xarML('By Group'),
-                'title' => xarML('View list of block instances grouped by block group'),
+                'url' => $this->ctl()->getCurrentURL(['tab' => 'bygroup']),
+                'label' => $this->ml('By Group'),
+                'title' => $this->ml('View list of block instances grouped by block group'),
             ],
             'bytype' => [
-                'url' => xarServer::getCurrentURL(['tab' => 'bytype']),
-                'label' => xarML('By Type'),
-                'title' => xarML('View list of block instances grouped by block type'),
+                'url' => $this->ctl()->getCurrentURL(['tab' => 'bytype']),
+                'label' => $this->ml('By Type'),
+                'title' => $this->ml('View list of block instances grouped by block type'),
             ],
             /* drop this, we can revisit if anyone complains
             'compact' => array(
-                'url' => xarServer::getCurrentURL(array('tab' => 'compact')),
-                'label' => xarML('Compact'),
-                'title' => xarML('View a compact list of block instances'),
+                'url' => $this->ctl()->getCurrentURL(array('tab' => 'compact')),
+                'label' => $this->ml('Compact'),
+                'title' => $this->ml('View a compact list of block instances'),
             ),
             */
         ];

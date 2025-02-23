@@ -39,8 +39,8 @@ class CreateMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Confirm authorisation code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $data = [];
@@ -49,28 +49,28 @@ class CreateMethod extends MethodClass
         $this->var()->find('reassign', $reassign, 'checkbox', false);
         $this->var()->find('repeat', $data['repeat'], 'int:1:100', 1);
         if ($reassign) {
-            xarController::redirect(xarController::URL('categories', 'admin', 'new', ['repeat' => $data['repeat']]), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('categories', 'admin', 'new', ['repeat' => $data['repeat']]));
             return true;
         }
 
         sys::import('modules.dynamicdata.class.objects.factory');
         for ($i = 1;$i <= $data['repeat'];$i++) {
-            $data['objects'][$i] = DataObjectFactory::getObject(['name' => xarModVars::get('categories', 'categoriesobject'), 'fieldprefix' => $i]);
+            $data['objects'][$i] = $this->data()->getObject(['name' => xarModVars::get('categories', 'categoriesobject'), 'fieldprefix' => $i]);
             $isvalid = $data['objects'][$i]->checkInput();
         }
 
         if (!$isvalid) {
-            $data['authid'] = xarSec::genAuthKey();
+            $data['authid'] = $this->sec()->genAuthKey();
             $data['context'] ??= $this->getContext();
-            return xarTpl::module('categories', 'admin', 'new', $data);
+            return $this->tpl()->module('categories', 'admin', 'new', $data);
         }
 
         for ($i = 1;$i <= $data['repeat'];$i++) {
             $data['objects'][$i]->createItem();
         }
 
-        xarController::redirect(xarController::URL('categories', 'admin', 'view'), null, $this->getContext());
-        //    xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('categories', 'admin', 'view'));
+        //    $this->ctl()->redirect($this->ctl()->getModuleURL('categories','admin','new',array('repeat' => $data['repeat'])));
         return true;
     }
 }

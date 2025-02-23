@@ -59,7 +59,7 @@ class EmailMethod extends MethodClass
 
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
         $this->var()->find('phase', $phase, 'enum:modify:confirm', 'modify');
@@ -81,7 +81,7 @@ class EmailMethod extends MethodClass
         }
 
         // Security Check
-        if (!xarSecurity::check('ReadRoles')) {
+        if (!$this->sec()->checkAccess('ReadRoles')) {
             return;
         }
 
@@ -101,9 +101,9 @@ class EmailMethod extends MethodClass
                 $data['message'] = $message;
                 $data['error_message'] = $error_message;
 
-                $data['authid'] = xarSec::genAuthKey();
+                $data['authid'] = $this->sec()->genAuthKey();
 
-                xarTpl::setPageTitle(xarML('Mail User'));
+                $this->tpl()->setPageTitle($this->ml('Mail User'));
                 break;
 
             case 'confirm':
@@ -113,12 +113,12 @@ class EmailMethod extends MethodClass
                 //$this->var()->find('name', $name, 'str:1:100');
 
                 // Confirm authorisation code.
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
 
                 // Security Check
-                if (!xarSecurity::check('ReadRoles')) {
+                if (!$this->sec()->checkAccess('ReadRoles')) {
                     return;
                 }
 
@@ -130,7 +130,7 @@ class EmailMethod extends MethodClass
                     $femail = xarUser::getVar('email');
                 }
 
-                [$message] = xarModHooks::call('item', 'transform', $id, [$message]);
+                [$message] = $this->mod()->callHooks('item', 'transform', $id, [$message]);
 
                 // Get user information
                 $data = $userapi->get(['id' => $id]);
@@ -139,7 +139,7 @@ class EmailMethod extends MethodClass
                     return;
                 }
 
-                if (!xarMod::apiFunc(
+                if (!$this->mod()->apiFunc(
                     'mail',
                     'admin',
                     'sendmail',
@@ -156,7 +156,7 @@ class EmailMethod extends MethodClass
                 }
 
                 // lets update status and display updated configuration
-                xarController::redirect(xarController::URL('roles', 'user', 'viewlist'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'viewlist'));
 
                 break;
         }

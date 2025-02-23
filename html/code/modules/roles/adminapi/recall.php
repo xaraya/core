@@ -50,11 +50,11 @@ class RecallMethod extends MethodClass
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $rolestable = $xartable['roles'];
 
-        $deleted = '[' . xarML('deleted') . ']';
+        $deleted = '[' . $this->ml('deleted') . ']';
 
         $role = xarRoles::get($id);
         $uname = explode($deleted, $role->getUser());
@@ -70,7 +70,7 @@ class RecallMethod extends MethodClass
         $item['module'] = 'roles';
         $item['itemid'] = $id;
         $item['method'] = 'recall';
-        xarModHooks::call('item', 'create', $id, $item);
+        $this->mod()->callHooks('item', 'create', $id, $item);
 
         //finished successfully
         return true;

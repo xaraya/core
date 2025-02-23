@@ -36,7 +36,7 @@ class SysinfoMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminBase')) {
+        if (!$this->sec()->checkAccess('AdminBase')) {
             return;
         }
 

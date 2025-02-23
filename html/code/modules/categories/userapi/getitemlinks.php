@@ -49,14 +49,14 @@ class GetitemlinksMethod extends MethodClass
             if (!isset($catlist[$itemid])) {
                 continue;
             }
-            $itemlinks[$itemid] = ['url'   => xarController::URL(
+            $itemlinks[$itemid] = ['url'   => $this->ctl()->getModuleURL(
                 'categories',
                 'user',
                 'main',
                 ['catid' => $itemid]
             ),
-                'title' => xarVar::prepForDisplay($catlist[$itemid]['name']),
-                'label' => xarVar::prepForDisplay($catlist[$itemid]['description'])];
+                'title' => $this->var()->prep($catlist[$itemid]['name']),
+                'label' => $this->var()->prep($catlist[$itemid]['description'])];
         }
         return $itemlinks;
     }

@@ -101,8 +101,8 @@ class CreateitemMethod extends MethodClass
             $content = $type['type_info'];
         }
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
         $blocks_table = $tables['block_instances'];
 
         $query = "INSERT INTO $blocks_table    

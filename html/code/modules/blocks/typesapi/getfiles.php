@@ -54,7 +54,7 @@ class GetfilesMethod extends MethodClass
         $paths[] = sys::code() . 'blocks/';
 
         // look for blocks belonging to modules
-        $modules = xarMod::apiFunc(
+        $modules = $this->mod()->apiFunc(
             'modules',
             'admin',
             'getlist',

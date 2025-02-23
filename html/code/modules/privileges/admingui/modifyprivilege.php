@@ -43,7 +43,7 @@ class ModifyprivilegeMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('EditPrivileges')) {
+        if (!$this->sec()->checkAccess('EditPrivileges')) {
             return;
         }
 
@@ -60,7 +60,7 @@ class ModifyprivilegeMethod extends MethodClass
         $this->var()->check('pparentid', $pparentid);
 
         // Clear Session Vars
-        xarSession::delVar('privileges_statusmsg');
+        $this->session()->delVar('privileges_statusmsg');
 
         //Call the Privileges class and get the privilege to be modified
         sys::import('modules.privileges.class.privileges');
@@ -181,13 +181,13 @@ class ModifyprivilegeMethod extends MethodClass
         }
 
         $data['oldcomponent'] = $component;
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         $data['parents'] = $parents;
         $data['privileges'] = $privileges;
         $data['realms'] = xarPrivileges::getrealms();
         ;
-        $data['components'] = $adminapi->getcomponents(['modid' => xarMod::getRegID($data['pmodule'])]);
-        $data['refreshlabel'] = xarML('Refresh');
+        $data['components'] = $adminapi->getcomponents(['modid' => $this->mod()->getRegID($data['pmodule'])]);
+        $data['refreshlabel'] = $this->ml('Refresh');
         return $data;
     }
 }

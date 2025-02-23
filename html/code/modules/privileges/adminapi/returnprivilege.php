@@ -55,7 +55,7 @@ class ReturnprivilegeMethod extends MethodClass
             $pargs = ['name' => $name,
                 'realm' => $realm,
                 'module' => $module,
-                'module_id' => xarMod::getID($module),
+                'module_id' => $this->mod()->getID($module),
                 'component' => $component,
                 'instance' => $instance,
                 'level' => $level,

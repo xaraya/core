@@ -43,10 +43,10 @@ class GetallgroupsMethod extends MethodClass
         extract($args);
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
 
         // Security Check
-        if (!xarSecurity::check('ViewRoles')) {
+        if (!$this->sec()->checkAccess('ViewRoles')) {
             return;
         }
 

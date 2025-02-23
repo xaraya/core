@@ -56,7 +56,7 @@ class DeleteMethod extends MethodClass
         // get the role to be deleted
         $role = xarRoles::get($id);
         if (empty($role)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $itemtype = $role->getType();
 
@@ -81,14 +81,14 @@ class DeleteMethod extends MethodClass
 
         // Prohibit removal of any groups that have children
         if ($role->countChildren()) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'remove_nonempty_group', 'user' => $role->getName()]);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_nonempty_group', 'user' => $role->getName()]);
         }
         // Prohibit removal of any groups or users the system needs
         if ($id == (int) xarModVars::get('roles', 'admin')) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'remove_siteadmin', 'user' => $role->getUName()]);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_siteadmin', 'user' => $role->getUName()]);
         }
         if ($id == (int) xarModVars::get('roles', 'defaultgroup')) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'default_usergroup', 'group' => $role->getName()]);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'default_usergroup', 'group' => $role->getName()]);
         }
 
         $types = $userapi->getitemtypes();
@@ -98,16 +98,16 @@ class DeleteMethod extends MethodClass
             // Load Template
             $data['itemtype'] = $itemtype;
             $types = $userapi->getitemtypes();
-            $data['authid'] = xarSec::genAuthKey();
+            $data['authid'] = $this->sec()->genAuthKey();
             $data['id'] = $id;
             $data['ptype'] = $role->getType();
-            $data['deletelabel'] = xarML('Delete');
+            $data['deletelabel'] = $this->ml('Delete');
             $data['name'] = $name;
             $data['returnurl'] = $returnurl;
             return $data;
         } else {
-            if (!xarSec::confirmAuthKey()) {
-                return xarController::badRequest('bad_author', $this->getContext());
+            if (!$this->sec()->confirmAuthKey()) {
+                return $this->ctl()->badRequest('bad_author');
             }
             // Check to make sure the user is not active on the site.
             $check = $userapi->getactive(['id' => $id]);
@@ -124,15 +124,15 @@ class DeleteMethod extends MethodClass
                 $pargs['module'] = 'roles';
                 $pargs['itemtype'] = $itemtype;
                 $pargs['itemid'] = $id;
-                xarModHooks::call('item', 'delete', $id, $pargs);
+                $this->mod()->callHooks('item', 'delete', $id, $pargs);
             } else {
-                return xarTpl::module('roles', 'user', 'errors', ['layout' => 'remove_active_session', 'user' => $role->getName()]);
+                return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_active_session', 'user' => $role->getName()]);
             }
             // redirect to the next page
             if (empty($returnurl)) {
-                xarController::redirect(xarController::URL('roles', 'admin', 'showusers'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'showusers'));
             } else {
-                xarController::redirect($returnurl, null, $this->getContext());
+                $this->ctl()->redirect($returnurl);
             }
             return true;
         }

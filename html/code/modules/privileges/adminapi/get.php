@@ -44,7 +44,7 @@ class GetMethod extends MethodClass
             throw new VariableValidationException(['itemid',$itemid,'numeric']);
         }
 
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         $query = "SELECT p.id, p.name, p.realm_id,
                          m.regid, p.component, p.instance,
                          p.level,  p.description
@@ -57,7 +57,7 @@ class GetMethod extends MethodClass
         if (isset($name)) {
             $query .= " AND p.name = " . $name;
         }
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery();
         $privilege = [];

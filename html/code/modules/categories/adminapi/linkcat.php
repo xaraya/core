@@ -64,7 +64,7 @@ class LinkcatMethod extends MethodClass
             (!isset($args['iids'])) ||
             (!isset($args['modid']))
         ) {
-            $msg = xarML('Invalid Parameter Count');
+            $msg = $this->ml('Invalid Parameter Count');
             throw new BadParameterException(null, $msg);
         }
         $basecids = $args['basecids'] ?? [];
@@ -89,15 +89,15 @@ class LinkcatMethod extends MethodClass
                     ]
                 );
                 if ($cat == false) {
-                    $msg = xarML('Unknown Category');
+                    $msg = $this->ml('Unknown Category');
                     throw new BadParameterException(null, $msg);
                 }
             }
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $categorieslinkagetable = $xartable['categories_linkage'];
 
         if ($clean_first) {

@@ -38,7 +38,7 @@ class LeftjoinMethod extends MethodClass
      *           $more
      *           WHERE ...
      *               AND $where // this includes module_id = <your module ID>
-     * @param mixed $args ['modid'] your module ID (use xarMod::getRegID('mymodule'))
+     * @param mixed $args ['modid'] your module ID (use $this->mod()->getRegID('mymodule'))
      * @param mixed $args ['itemtype'] your item type (default is none) or array of itemtypes
      * @param mixed $args ['iids'] optional array of item ids that we are selecting on
      * @param mixed $args ['cids'] optional array of cids we're counting for (OR/AND)
@@ -65,11 +65,11 @@ class LeftjoinMethod extends MethodClass
         // Get arguments from argument array
         extract($args);
 
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
 
         // Required argument ?
         if (!isset($modid) || !is_numeric($modid)) {
-            $msg = xarML(
+            $msg = $this->ml(
                 'Missing parameter #(1) for #(2)',
                 'modid',
                 'categories'
@@ -104,7 +104,7 @@ class LeftjoinMethod extends MethodClass
         }
 
         // Security check
-        if (!xarSecurity::check('ViewCategoryLink', 0)) {
+        if (!$this->sec()->checkAccess('ViewCategoryLink', 0)) {
             return [];
         }
 
@@ -149,7 +149,7 @@ class LeftjoinMethod extends MethodClass
         }
 
         // Table definition
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         $categorieslinkagetable = $xartable['categories_linkage'];
 
         $leftjoin = [];

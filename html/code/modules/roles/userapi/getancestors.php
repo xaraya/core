@@ -44,7 +44,7 @@ class GetancestorsMethod extends MethodClass
             throw new EmptyParameterException('id');
         }
 
-        if (!xarSecurity::check('ReadRoles')) {
+        if (!$this->sec()->checkAccess('ReadRoles')) {
             return;
         }
 

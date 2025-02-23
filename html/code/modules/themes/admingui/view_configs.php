@@ -32,17 +32,17 @@ class ViewConfigsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditThemes')) {
+        if (!$this->sec()->checkAccess('EditThemes')) {
             return;
         }
 
-        $data['object'] = DataObjectFactory::getObjectList(['name' => 'themes_configurations']);
+        $data['object'] = $this->data()->getObjectList(['name' => 'themes_configurations']);
 
         if (!isset($data['object'])) {
             return;
         }
         if (!$data['object']->checkAccess('view')) {
-            return xarController::forbidden(xarML('View #(1) is forbidden', $data['object']->label), $this->getContext());
+            return $this->ctl()->forbidden($this->ml('View #(1) is forbidden', $data['object']->label));
         }
 
         // Count the number of items matching the preset arguments - do this before getItems()

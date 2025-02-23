@@ -42,7 +42,7 @@ class RemoveprivilegeMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditRoles')) {
+        if (!$this->sec()->checkAccess('EditRoles')) {
             return;
         }
 
@@ -67,7 +67,7 @@ class RemoveprivilegeMethod extends MethodClass
         if ((($roleid == 1) && ($privid == 1)) ||
             (($roleid == 2) && ($privid == 6)) ||
             (($roleid == 4) && ($privid == 2))) {
-            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'remove_privilege']);
+            return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_privilege']);
         }
 
         // some info for the template display
@@ -76,18 +76,18 @@ class RemoveprivilegeMethod extends MethodClass
 
         if (empty($confirmation)) {
             // Load Template
-            $data['authid']   = xarSec::genAuthKey();
+            $data['authid']   = $this->sec()->genAuthKey();
             $data['roleid']   = $roleid;
             $data['privid']   = $privid;
             $data['ptype']    = $role->getType();
             $data['privname'] = $privname;
             $data['rolename'] = $rolename;
-            $data['removelabel'] = xarML('Remove');
+            $data['removelabel'] = $this->ml('Remove');
             return $data;
         } else {
             // Check for authorization code
-            if (!xarSec::confirmAuthKey()) {
-                return xarController::badRequest('bad_author', $this->getContext());
+            if (!$this->sec()->confirmAuthKey()) {
+                return $this->ctl()->badRequest('bad_author');
             }
             // Try to remove the privilege and bail if an error was thrown
             if (!$role->removePrivilege($priv)) {
@@ -97,21 +97,21 @@ class RemoveprivilegeMethod extends MethodClass
             // We need to tell some hooks that we are coming from the add privilege screen
             // and not the update the actual roles screen.  Right now, the keywords vanish
             // into thin air.  Bug 1960 and 3161
-            xarVar::setCached('Hooks.all', 'noupdate', 1);
+            $this->var()->setCached('Hooks.all', 'noupdate', 1);
 
             // CHECKME: do we really want to do that here (other than for flushing the cache) ?
             // call update hooks and let them know that the role has changed
             $pargs['module'] = 'roles';
             $pargs['itemid'] = $roleid;
-            xarModHooks::call('item', 'update', $roleid, $pargs);
+            $this->mod()->callHooks('item', 'update', $roleid, $pargs);
 
             // redirect to the next page
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'showprivileges',
                 ['id' => $roleid]
-            ), null, $this->getContext());
+            ));
             return true;
         }
     }

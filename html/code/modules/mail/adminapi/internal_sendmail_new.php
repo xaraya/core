@@ -90,7 +90,7 @@ class InternalSendmailNewMethod extends MethodClass
             throw new EmptyParameterException('message');
         }
 
-        if (!empty($when) && $when > time() && xarMod::isAvailable('scheduler')) {
+        if (!empty($when) && $when > time() && $this->mod()->isAvailable('scheduler')) {
             if ($adminapi->internal_queuemail($args)) {
                 // we're done here
                 return true;
@@ -98,7 +98,7 @@ class InternalSendmailNewMethod extends MethodClass
         }
 
         // Global search and replace %%text%%
-        $replace = xarMod::apiFunc(
+        $replace = $this->mod()->apiFunc(
             'mail',
             'admin',
             'replace',
@@ -188,7 +188,7 @@ class InternalSendmailNewMethod extends MethodClass
         $mail->WordWrap = $wordwrap;
         $mail->Priority = $priority;
         $mail->Encoding = $encoding;
-        $mail->CharSet = xarMLS::getCharsetFromLocale(xarMLS::getCurrentLocale());
+        $mail->CharSet = $this->mls()->getCharsetFromLocale($this->mls()->getCurrentLocale());
         $mail->From = $from;
         $mail->Sender = $from;
         $mail->FromName = $fromname;
@@ -218,7 +218,7 @@ class InternalSendmailNewMethod extends MethodClass
             $mail->ClearAddresses();
             $recipients = [];
             if (!empty($redirectaddress)) {
-                $name = xarML('Xaraya Mail Debugging');
+                $name = $this->ml('Xaraya Mail Debugging');
                 // Make sure we have an array
                 if (!is_array($redirectaddress)) {
                     $redirectaddress = [$redirectaddress];
@@ -342,7 +342,7 @@ class InternalSendmailNewMethod extends MethodClass
             // capability such as mutt. Clients that can read HTML will view the normal Body.
             /*if (!empty($message)) {
                 if ($usetemplates) {
-                    $mail->AltBody = xarTpl::module('mail',
+                    $mail->AltBody = $this->tpl()->module('mail',
                                                 'admin',
                                                 'sendmail',
                                                 array('message'=>$message),
@@ -353,7 +353,7 @@ class InternalSendmailNewMethod extends MethodClass
             }*/
             // HTML message body
             if ($usetemplates) {
-                $mail->Body = xarTpl::module(
+                $mail->Body = $this->tpl()->module(
                     'mail',
                     'admin',
                     'sendmail',
@@ -406,7 +406,7 @@ class InternalSendmailNewMethod extends MethodClass
             }
         } else {
             if ($usetemplates) {
-                $mail->Body = xarTpl::module(
+                $mail->Body = $this->tpl()->module(
                     'mail',
                     'admin',
                     'sendmail',
@@ -438,7 +438,7 @@ class InternalSendmailNewMethod extends MethodClass
                         $mail->AddStringAttachment($attachment['string'], $attachment['name']);
                     } else {
                         // For now just do nothing
-                        // throw new EmptyParameterExeption(xarML('Missing a filename for an attachment'));
+                        // throw new EmptyParameterExeption($this->ml('Missing a filename for an attachment'));
                     }
                 } else {
                 }

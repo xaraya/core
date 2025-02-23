@@ -47,7 +47,7 @@ class GetallrolesMethod extends MethodClass
     {
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
-        if (!xarSecurity::check('ReadRoles')) {
+        if (!$this->sec()->checkAccess('ReadRoles')) {
             return;
         }
         extract($args);
@@ -62,7 +62,7 @@ class GetallrolesMethod extends MethodClass
 
         sys::import('xaraya.structures.query');
         $q = new Query();
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         $q->addtable($xartable['roles'], 'r');
 
         // Order
@@ -168,7 +168,7 @@ class GetallrolesMethod extends MethodClass
             case 3: $name = "roles_groups";
                 break;
         }
-        $object = DataObjectFactory::getObjectList(['name' => $name]);
+        $object = $this->data()->getObjectList(['name' => $name]);
         $items['dditems'] = $object->getItems(['itemids' => $itemids,'getobject' => true]);
         /*    for ($i = 0, $max = count($items); $i < $max; $i++) {
                 if (!isset($properties[$items[$i]['id']])) continue;

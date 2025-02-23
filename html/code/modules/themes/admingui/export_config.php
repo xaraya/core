@@ -35,14 +35,14 @@ class ExportConfigMethod extends MethodClass
         $this->var()->find('itemid', $data['itemid'], 'int', 0);
         $this->var()->find('confirm', $data['confirm'], 'bool', false);
 
-        $data['object'] = DataObjectFactory::getObjectList(['name' => 'themes_configurations']);
+        $data['object'] = $this->data()->getObjectList(['name' => 'themes_configurations']);
 
         // Security
         if (empty($data['object'])) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         if (!$data['object']->checkAccess('config')) {
-            return xarController::forbidden(xarML('Export #(1) is forbidden', $data['object']->label), $this->getContext());
+            return $this->ctl()->forbidden($this->ml('Export #(1) is forbidden', $data['object']->label));
         }
 
         $where = "theme_id = " . $data['itemid'];
@@ -59,7 +59,7 @@ class ExportConfigMethod extends MethodClass
                             // don't replace anything in the serialized value
                             $xml .= "    <$name>" . $value;
                         } else {
-                            $xml .= "    <$name>" . xarVar::prepForDisplay($value);
+                            $xml .= "    <$name>" . $this->var()->prep($value);
                         }
                     } else {
                         $xml .= "    <$name>";

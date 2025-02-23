@@ -42,9 +42,9 @@ class DisplayMethod extends MethodClass
     {
         $this->var()->find('itemid', $itemid, 'int:1:', 0);
         if (empty($itemid)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
-        xarController::redirect(xarController::URL('mail', 'admin', 'view', ['itemid' => $itemid]), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'view', ['itemid' => $itemid]));
         return true;
     }
 }

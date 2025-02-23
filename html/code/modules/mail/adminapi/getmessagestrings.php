@@ -45,7 +45,7 @@ class GetmessagestringsMethod extends MethodClass
         }
 
         if (!isset($module)) {
-            $module = xarController::getRequest()->getModule();
+            $module = $this->ctl()->getRequest()->getModule();
         }
 
         $messaginghome = sys::varpath() . "/messaging/" . $module;

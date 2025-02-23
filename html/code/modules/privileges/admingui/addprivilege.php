@@ -39,7 +39,7 @@ class AddprivilegeMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AddPrivileges')) {
+        if (!$this->sec()->checkAccess('AddPrivileges')) {
             return;
         }
 
@@ -63,8 +63,8 @@ class AddprivilegeMethod extends MethodClass
         }
 
         // Check for authorization code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         if ($type == "empty") {
@@ -100,13 +100,13 @@ class AddprivilegeMethod extends MethodClass
             return;
         }
 
-        xarSession::setVar('privileges_statusmsg', xarML(
+        $this->session()->setVar('privileges_statusmsg', $this->ml(
             'Privilege Added',
             'privileges'
         ));
 
         // redirect to the next page
-        xarController::redirect(xarController::URL('privileges', 'admin', 'new'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('privileges', 'admin', 'new'));
         return true;
     }
 }

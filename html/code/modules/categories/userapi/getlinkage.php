@@ -44,12 +44,12 @@ class GetlinkageMethod extends MethodClass
             return [];
         }
         if (empty($module)) {
-            $module = xarMod::getName();
+            $module = $this->mod()->getName();
         }
 
-        $modid = xarMod::getID($module);
+        $modid = $this->mod()->getID($module);
 
-        $tables = xarDB::getTables();
+        $tables = $this->db()->getTables();
         sys::import('xaraya.structures.query');
         $q = new Query('SELECT');
         $q->addtable($tables['categories_linkage'], 'cl');

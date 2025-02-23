@@ -42,7 +42,7 @@ class UpdateMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditMail')) {
+        if (!$this->sec()->checkAccess('EditMail')) {
             return;
         }
 
@@ -50,6 +50,6 @@ class UpdateMethod extends MethodClass
         $this->var()->check('objectid', $args['objectid']);
         $this->var()->check('itemid', $args['itemid']);
 
-        return xarMod::guiFunc('dynamicdata', 'admin', 'update', $args, $this->getContext());
+        return $this->mod()->guiFunc('dynamicdata', 'admin', 'update', $args);
     }
 }

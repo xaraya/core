@@ -43,14 +43,14 @@ class UpdateversionMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         // Get parameters from input
         $this->var()->find('id', $regId, 'int:1', 0);
         if (empty($regId)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
 
@@ -66,7 +66,7 @@ class UpdateversionMethod extends MethodClass
         }
 
         // Redirect to module list
-        xarController::redirect(xarController::URL('modules', 'admin', 'list'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', 'list'));
 
         return true;
     }

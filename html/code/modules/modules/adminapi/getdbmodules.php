@@ -44,8 +44,8 @@ class GetdbmodulesMethod extends MethodClass
             $modregid = $regId;
         }
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $dbModules = [];
 

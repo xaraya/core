@@ -34,21 +34,21 @@ class NewConfigMethod extends MethodClass
 
     public function __invoke(array $args = [])
     {
-        if (!xarSecurity::check('AddThemes')) {
+        if (!$this->sec()->checkAccess('AddThemes')) {
             return;
         }
 
         $data = [];
         $this->var()->find('confirm', $data['confirm'], 'bool', false);
 
-        $data['object'] = DataObjectFactory::getObject(['name' => 'themes_configurations']);
+        $data['object'] = $this->data()->getObject(['name' => 'themes_configurations']);
         if ($data['confirm']) {
 
             // we only retrieve 'preview' from the input here - the rest is handled by checkInput()
             $this->var()->check('preview', $preview, 'str', null);
 
             // Check for a valid confirmation key
-            if (!xarSec::confirmAuthKey()) {
+            if (!$this->sec()->confirmAuthKey()) {
                 return;
             }
 
@@ -58,13 +58,13 @@ class NewConfigMethod extends MethodClass
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
                 $data['context'] ??= $this->getContext();
-                return xarTpl::module('themes', 'admin', 'new_config', $data);
+                return $this->tpl()->module('themes', 'admin', 'new_config', $data);
             } else {
                 // Good data: create the item
                 $itemid = $data['object']->createItem();
 
                 // Jump to the next page
-                xarController::redirect(xarController::URL('themes', 'admin', 'view_configs'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'view_configs'));
                 return true;
             }
         }

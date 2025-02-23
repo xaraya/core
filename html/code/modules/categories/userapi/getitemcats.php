@@ -54,12 +54,12 @@ class GetitemcatsMethod extends MethodClass
 
         // Default the module name.
         if (empty($modid) && empty($module)) {
-            $module = xarMod::getName();
+            $module = $this->mod()->getName();
         }
 
         // Get module ID if only a name provided.
         if (empty($modid) && !empty($module)) {
-            $args['modid'] = xarMod::getRegID($module);
+            $args['modid'] = $this->mod()->getRegID($module);
         }
 
         // Get the list of assigned categories for this module item.

@@ -55,7 +55,7 @@ class UpdatepropertiesMethod extends MethodClass
         }
 
         // Update
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         $q = 'UPDATE ' . $xartable['modules'] . ' SET ';
         $uparts = [];
         $bindvars = [];
@@ -84,7 +84,7 @@ class UpdatepropertiesMethod extends MethodClass
             // We have something to update
             $q .= join(',', $uparts) . ' WHERE regid=?';
             $bindvars[] = $regid;
-            $dbconn = xarDB::getConn();
+            $dbconn = $this->db()->getConn();
             $dbconn->Execute($q, $bindvars);
         }
         return true;

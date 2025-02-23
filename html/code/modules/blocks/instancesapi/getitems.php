@@ -101,12 +101,12 @@ class GetitemsMethod extends MethodClass
             if (empty($module)) {
                 $module_id = 0;
             } elseif (!is_string($module) ||
-                (!xarMod::isAvailable($module) &&
-                    (!xarVar::isCached('Blocks.event', 'modremove') || xarVar::getCached('Blocks.event', 'modremove') != $module))
+                (!$this->mod()->isAvailable($module) &&
+                    (!$this->var()->isCached('Blocks.event', 'modremove') || $this->var()->getCached('Blocks.event', 'modremove') != $module))
             ) {
                 $invalid[] = 'module';
             } else {
-                $modinfo = xarMod::getBaseInfo($module);
+                $modinfo = $this->mod()->getBaseInfo($module);
                 $module_id = $modinfo['systemid'];
             }
         }
@@ -142,8 +142,8 @@ class GetitemsMethod extends MethodClass
             throw new BadParameterException($vars, $msg);
         }
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
         $blocks_table  = $tables['block_instances'];
         $types_table   = $tables['block_types'];
         $modules_table = $tables['modules'];
@@ -251,7 +251,7 @@ class GetitemsMethod extends MethodClass
             }
             $stmt->setOffset($startnum - 1);
         }
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
         if (!$result) {
             return;
         }

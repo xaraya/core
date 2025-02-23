@@ -55,14 +55,14 @@ class CloneMethod extends MethodClass
 
         // Setting up necessary data.
         sys::import('modules.dynamicdata.class.objects.factory');
-        $data['object'] = DataObjectFactory::getObject(['name' => xarModVars::get('categories', 'categoriesobject')]);
+        $data['object'] = $this->data()->getObject(['name' => xarModVars::get('categories', 'categoriesobject')]);
         $data['object']->getItem(['itemid' => $data['itemid']]);
 
         if ($confirm) {
             $access = xarSecurity::check('', 0, 'All', "All:" . $data['object']->name . ":" . "All", 0, '', 0, 700);
 
             if (!$access) {
-                return xarController::badRequest('no_privileges', $this->getContext());
+                return $this->ctl()->badRequest('no_privileges');
             }
 
             $data['name'] = $data['object']->properties['name']->value;
@@ -82,7 +82,7 @@ class CloneMethod extends MethodClass
             // Change the name of the top level category we added
             $data['object']->updateItem(['itemid' => $toplevel, 'name' => $newname]);
 
-            xarController::redirect(xarController::URL('categories', 'admin', 'view'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('categories', 'admin', 'view'));
             return true;
         }
         return $data;

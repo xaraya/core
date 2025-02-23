@@ -55,18 +55,18 @@ class RemovememberMethod extends MethodClass
 
         // Security
         if (empty($role)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         if (empty($member)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         if (!xarSecurity::check('RemoveRole', 1, 'Relation', $role->getName() . ":" . $member->getName())) {
             return;
         }
 
         // Check for authorization code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // remove the child from the parent and bail if an error was thrown
@@ -78,15 +78,15 @@ class RemovememberMethod extends MethodClass
         $pargs['module']   = 'roles';
         $pargs['itemtype'] = $role->getType(); // we might have something separate for groups later on
         $pargs['itemid']   = $parentid;
-        xarModHooks::call('item', 'unlink', $parentid, $pargs);
+        $this->mod()->callHooks('item', 'unlink', $parentid, $pargs);
 
         // redirect to the next page
-        xarController::redirect(xarController::URL(
+        $this->ctl()->redirect($this->ctl()->getModuleURL(
             'roles',
             'admin',
             'modify',
             ['id' => $childid]
-        ), null, $this->getContext());
+        ));
         return true;
     }
 }

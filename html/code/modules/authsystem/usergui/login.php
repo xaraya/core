@@ -54,26 +54,26 @@ class LoginMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         if (empty($args) && !$_COOKIE) {
-            return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'no_cookies']);
+            return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'no_cookies']);
         }
 
-        $unlockTime  = (int) xarSession::getVar('authsystem.login.lockedout');
+        $unlockTime  = (int) $this->session()->getVar('authsystem.login.lockedout');
         $lockouttime = xarModVars::get('authsystem', 'lockouttime') ? xarModVars::get('authsystem', 'lockouttime') : 15;
         $lockouttries = xarModVars::get('authsystem', 'lockouttries') ? xarModVars::get('authsystem', 'lockouttries') : 3;
 
         if ((time() < $unlockTime) && (xarModVars::get('authsystem', 'uselockout') == true)) {
-            return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'locked_out', 'lockouttime' => $lockouttime]);
+            return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'locked_out', 'lockouttime' => $lockouttime]);
         }
 
         extract($args);
 
         $this->var()->find('uname', $uname, 'str:0:64', '');
         if (empty($uname)) {
-            return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
+            return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
         }
         $this->var()->find('pass', $pass, 'str:0:254', '');
         if (empty($pass)) {
-            return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
+            return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
         }
 
         $redirect = xarServer::getBaseURL();
@@ -84,8 +84,8 @@ class LoginMethod extends MethodClass
         if (preg_match('/authsystem/', $redirecturl)) {
             $redirecturl = $redirect;
         }
-        $redirecturl = xarVar::prepHTMLDisplay($redirecturl);
-        $rememberme = xarVar::prepHTMLDisplay($rememberme);
+        $redirecturl = $this->var()->prepHTML($redirecturl);
+        $rememberme = $this->var()->prepHTML($rememberme);
 
         // Scan authentication modules and set user state appropriately
         $extAuthentication = false;
@@ -137,20 +137,19 @@ class LoginMethod extends MethodClass
                         }
                     }
                     // check for user and grab id if exists
-                    $user = xarMod::apiFunc('roles', 'user', 'get', ['uname' => $uname], $this->getContext());
+                    $user = $this->mod()->apiFunc('roles', 'user', 'get', ['uname' => $uname]);
 
                     // Make sure we haven't already found authldap module
                     if (empty($user) && ($extAuthentication == false)) {
-                        return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'bad_data']);
+                        return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'bad_data']);
                     } elseif (empty($user)) {
                         // Check if user has been deleted.
                         try {
-                            $user = xarMod::apiFunc(
+                            $user = $this->mod()->apiFunc(
                                 'roles',
                                 'user',
                                 'getdeleteduser',
-                                ['uname' => $uname],
-                                $this->getContext()
+                                ['uname' => $uname]
                             );
                         } catch (xarExceptions $e) {
                             //getdeleteduser raised an exception
@@ -189,16 +188,16 @@ class LoginMethod extends MethodClass
             case xarRoles::ROLES_STATE_DELETED:
 
                 // User is deleted by all means.  Return a message that says the same.
-                return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'account_deleted']);
+                return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'account_deleted']);
 
             case xarRoles::ROLES_STATE_INACTIVE:
 
                 // User is inactive.  Return message stating.
-                return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'account_inactive']);
+                return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'account_inactive']);
 
             case xarRoles::ROLES_STATE_NOTVALIDATED:
                 //User still must validate
-                xarController::redirect(xarController::URL('roles', 'user', 'getvalidation', ['uname' => $uname, 'valcode' => $pass, 'phase' => 'getvalidate']), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'getvalidation', ['uname' => $uname, 'valcode' => $pass, 'phase' => 'getvalidate']));
                 break;
 
             case xarRoles::ROLES_STATE_ACTIVE:
@@ -235,8 +234,8 @@ class LoginMethod extends MethodClass
 
                     if (!$letthru) {
                         // If there is a locked.xt page then use that, otherwise show the default.xt page
-                        xarTpl::setPageTemplateName('locked');
-                        return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'site_locked', 'message'  => $lockvars['message']]);
+                        $this->tpl()->setPageTemplateName('locked');
+                        return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'site_locked', 'message'  => $lockvars['message']]);
                     }
                 }
 
@@ -250,24 +249,24 @@ class LoginMethod extends MethodClass
                     // TODO - work out flow, put in appropriate HTML
 
                     // Cast the result to an int in case VOID is returned
-                    $attempts = (int) xarSession::getVar('authsystem.login.attempts');
+                    $attempts = (int) $this->session()->getVar('authsystem.login.attempts');
 
                     if (($attempts >= $lockouttries) && (xarModVars::get('authsystem', 'uselockout') == true)) {
                         // Set the time for fifteen minutes from now
-                        xarSession::setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
-                        xarSession::setVar('authsystem.login.attempts', 0);
-                        return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime]);
+                        $this->session()->setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
+                        $this->session()->setVar('authsystem.login.attempts', 0);
+                        return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime]);
                     } else {
                         $newattempts = $attempts + 1;
-                        xarSession::setVar('authsystem.login.attempts', $newattempts);
-                        return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'bad_try', 'attempts' => $newattempts]);
+                        $this->session()->setVar('authsystem.login.attempts', $newattempts);
+                        return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'bad_try', 'attempts' => $newattempts]);
                     }
                 }
                 //FR for last login - first capture the last login for this user
                 $thislastlogin = xarModUserVars::get('roles', 'userlastlogin');
                 if (!empty($thislastlogin)) {
                     //move this to a session var for this user
-                    xarSession::setVar('roles_thislastlogin', $thislastlogin);
+                    $this->session()->setVar('roles_thislastlogin', $thislastlogin);
                 }
                 xarModUserVars::set('roles', 'userlastlogin', time()); //this is what everyone else will see
 
@@ -276,16 +275,16 @@ class LoginMethod extends MethodClass
                     //$redirecturl = $redirecturl;
                 } else {
                     if ((bool) xarModVars::get('roles', 'loginredirect')) {
-                        $truecurrenturl = xarServer::getCurrentURL([], false);
-                        $url = xarMod::apiFunc('roles', 'user', 'getuserhome', ['itemid' => $user['id']], $this->getContext());
+                        $truecurrenturl = $this->ctl()->getCurrentURL([], false);
+                        $url = $this->mod()->apiFunc('roles', 'user', 'getuserhome', ['itemid' => $user['id']]);
                         if (empty($url)) {
-                            $urldata['redirecturl'] = xarController::URL(xarModVars::get('modules', 'defaultmodule'), xarModVars::get('modules', 'defaulttypename'), xarModVars::get('modules', 'defaultfuncname'));
+                            $urldata['redirecturl'] = $this->ctl()->getModuleURL(xarModVars::get('modules', 'defaultmodule'), xarModVars::get('modules', 'defaulttypename'), xarModVars::get('modules', 'defaultfuncname'));
                             $urldata['externalurl'] = false;
                         } else {
                             try {
-                                $urldata = xarMod::apiFunc('roles', 'user', 'parseuserhome', ['url' => $url,'truecurrenturl' => $truecurrenturl], $this->getContext());
+                                $urldata = $this->mod()->apiFunc('roles', 'user', 'parseuserhome', ['url' => $url,'truecurrenturl' => $truecurrenturl]);
                             } catch (Exception $e) {
-                                return xarTpl::module('roles', 'user', 'errors', ['layout' => 'bad_userhome', 'message' => $e->getMessage()]);
+                                return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'bad_userhome', 'message' => $e->getMessage()]);
                             }
                         }
                         $data = [];
@@ -303,12 +302,12 @@ class LoginMethod extends MethodClass
                 if ($externalurl) {
                     /* Open in IFrame - works if you need it */
                     /* $data['page'] = $redirecturl;
-                       $data['title'] = xarML('Home Page');
-                       return xarTpl::module('roles','user','homedisplay', $data);
+                       $data['title'] = $this->ml('Home Page');
+                       return $this->tpl()->module('roles','user','homedisplay', $data);
                      */
-                    xarController::redirect($redirecturl, null, $this->getContext());
+                    $this->ctl()->redirect($redirecturl);
                 } else {
-                    xarController::redirect($redirecturl, null, $this->getContext());
+                    $this->ctl()->redirect($redirecturl);
                 }
 
                 return true;
@@ -316,7 +315,7 @@ class LoginMethod extends MethodClass
             case xarRoles::ROLES_STATE_PENDING:
 
                 // User is pending activation
-                return xarTpl::module('authsystem', 'user', 'errors', ['layout' => 'account_pending']);
+                return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'account_pending']);
         }
 
         return true;

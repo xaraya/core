@@ -44,13 +44,13 @@ class CountallMethod extends MethodClass
         $userapi = $this->userapi();
 
         // Security check
-        if (!xarSecurity::check('ReadRoles')) {
+        if (!$this->sec()->checkAccess('ReadRoles')) {
             return;
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $rolestable = $xartable['roles'];
 
@@ -64,7 +64,7 @@ class CountallMethod extends MethodClass
         }
 
         //suppress display of pending users to non-admins
-        if (!xarSecurity::check("AdminRole", 0)) {
+        if (!$this->sec()->checkAccess("AdminRole", 0)) {
             $query .= " AND state != ?";
             $bindvars[] = xarRoles::ROLES_STATE_PENDING;
         }

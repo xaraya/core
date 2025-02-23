@@ -44,7 +44,7 @@ class ModifyconfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminMail')) {
+        if (!$this->sec()->checkAccess('AdminMail')) {
             return;
         }
 
@@ -58,21 +58,21 @@ class ModifyconfigMethod extends MethodClass
         // Redirect address - ensure it's set
         $address = trim(xarModVars::get('mail', 'redirectaddress') ?? '');
         if (isset($address) && !empty($address)) {
-            $data['redirectaddress'] = xarVar::prepForDisplay($address);
+            $data['redirectaddress'] = $this->var()->prep($address);
         } else {
             $data['redirectaddress'] = '';
         }
 
         $data['library_exists'] = file_exists(sys::lib() . 'PHPMailer');
 
-        if (xarMod::isAvailable('scheduler')) {
-            $intervals = xarMod::apiFunc('scheduler', 'user', 'intervals');
-            $data['intervals'][] = ['id' => '', 'name' => xarML('not supported')];
+        if ($this->mod()->isAvailable('scheduler')) {
+            $intervals = $this->mod()->apiFunc('scheduler', 'user', 'intervals');
+            $data['intervals'][] = ['id' => '', 'name' => $this->ml('not supported')];
             foreach ($intervals as $id => $name) {
                 $data['intervals'][] = ['id' => $id, 'name' => $name];
             }
             // see if we have a scheduler job running to send queued mail
-            $job = xarMod::apiFunc(
+            $job = $this->mod()->apiFunc(
                 'scheduler',
                 'user',
                 'get',
@@ -95,7 +95,7 @@ class ModifyconfigMethod extends MethodClass
             $data['unsent'] = count($queue);
         }
 
-        $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'mail']);
+        $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'mail']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
         $data['module_settings']->getItem();
         switch (strtolower($phase)) {
@@ -105,8 +105,8 @@ class ModifyconfigMethod extends MethodClass
 
             case 'update':
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 switch ($data['tab']) {
                     case 'general':
@@ -121,7 +121,7 @@ class ModifyconfigMethod extends MethodClass
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
                             $data['context'] ??= $this->getContext();
-                            return xarTpl::module('mail', 'admin', 'modifyconfig', $data);
+                            return $this->tpl()->module('mail', 'admin', 'modifyconfig', $data);
                         } else {
                             $itemid = $data['module_settings']->updateItem();
                         }
@@ -207,10 +207,10 @@ class ModifyconfigMethod extends MethodClass
                         xarModVars::set('mail', 'redirectsending', $redirectsending);
                         xarModVars::set('mail', 'redirectaddress', $redirectaddress);
 
-                        if (xarMod::isAvailable('scheduler')) {
+                        if ($this->mod()->isAvailable('scheduler')) {
                             $this->var()->find('interval', $interval, 'str:1', '');
                             // see if we have a scheduler job running to send queued mail
-                            $job = xarMod::apiFunc(
+                            $job = $this->mod()->apiFunc(
                                 'scheduler',
                                 'user',
                                 'get',
@@ -221,7 +221,7 @@ class ModifyconfigMethod extends MethodClass
                             if (empty($job) || empty($job['interval'])) {
                                 if (!empty($interval)) {
                                     // create a scheduler job
-                                    xarMod::apiFunc(
+                                    $this->mod()->apiFunc(
                                         'scheduler',
                                         'admin',
                                         'create',
@@ -233,7 +233,7 @@ class ModifyconfigMethod extends MethodClass
                                 }
                             } elseif (empty($interval)) {
                                 // delete the scheduler job
-                                xarMod::apiFunc(
+                                $this->mod()->apiFunc(
                                     'scheduler',
                                     'admin',
                                     'delete',
@@ -243,7 +243,7 @@ class ModifyconfigMethod extends MethodClass
                                 );
                             } elseif ($interval != $job['interval']) {
                                 // update the scheduler job
-                                xarMod::apiFunc(
+                                $this->mod()->apiFunc(
                                     'scheduler',
                                     'admin',
                                     'update',

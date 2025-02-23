@@ -35,8 +35,8 @@ class CountitemsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $rolestable = $xartable['roles'];
 

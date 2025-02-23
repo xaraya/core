@@ -43,7 +43,7 @@ class ModifyconfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminPrivileges')) {
+        if (!$this->sec()->checkAccess('AdminPrivileges')) {
             return;
         }
 
@@ -94,7 +94,7 @@ class ModifyconfigMethod extends MethodClass
                 $grouplist = xarRoles::getgroups();
                 $data['grouplist'] = $grouplist;
 
-                $testusers = xarMod::apiFunc('roles', 'user', 'getUsers', ['id' => $testergroup]);
+                $testusers = $this->mod()->apiFunc('roles', 'user', 'getUsers', ['id' => $testergroup]);
                 $defaultadminid = (int) xarModVars::get('roles', 'admin');
 
                 $data['testusers'] = $testusers; //array
@@ -110,7 +110,7 @@ class ModifyconfigMethod extends MethodClass
                 break;
 
             default:
-                $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'privileges']);
+                $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'privileges']);
                 $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
                 $data['module_settings']->getItem();
                 break;
@@ -121,15 +121,15 @@ class ModifyconfigMethod extends MethodClass
             case 'modify':
             default:
                 if (!isset($phase)) {
-                    xarSession::setVar('statusmsg', '');
+                    $this->session()->setVar('statusmsg', '');
                 }
                 $data['inheritdeny'] = xarModVars::get('privileges', 'inheritdeny');
                 break;
 
             case 'update':
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 switch ($data['tab']) {
                     case 'general':
@@ -140,7 +140,7 @@ class ModifyconfigMethod extends MethodClass
                         $isvalid = $data['module_settings']->checkInput();
                         if (!$isvalid) {
                             $data['context'] ??= $this->getContext();
-                            return xarTpl::module('privileges', 'admin', 'modifyconfig', $data);
+                            return $this->tpl()->module('privileges', 'admin', 'modifyconfig', $data);
                         } else {
                             $itemid = $data['module_settings']->updateItem();
                         }
@@ -172,20 +172,20 @@ class ModifyconfigMethod extends MethodClass
 
                         // rudimentary check for valid password for now - fix so nicer presentation to user
                         if (strcmp($password, $password2) != 0) {
-                            $msg = xarML('Last Resort Admin Creation failed! <br />The two password entries are not the same, please try again.');
-                            xarSession::setVar('statusmsg', $msg);
-                            xarController::redirect(xarController::URL(
+                            $msg = $this->ml('Last Resort Admin Creation failed! <br />The two password entries are not the same, please try again.');
+                            $this->session()->setVar('statusmsg', $msg);
+                            $this->ctl()->redirect($this->ctl()->getModuleURL(
                                 'privileges',
                                 'admin',
                                 'modifyconfig',
                                 ['tab' => $data['tab']]
-                            ), null, $this->getContext());
+                            ));
                         }
                         $secret = [
                             'name' => MD5($name),
                             'password' => MD5($password),
                         ];
-                        xarSession::setVar('statusmsg', xarML('Last Resort Administrator successfully created!'));
+                        $this->session()->setVar('statusmsg', $this->ml('Last Resort Administrator successfully created!'));
                         xarModVars::set('privileges', 'lastresort', serialize($secret));
                         break;
                     case 'testing':

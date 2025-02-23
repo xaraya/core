@@ -40,17 +40,17 @@ class GetitemtypesMethod extends MethodClass
         $itemtypes = [];
 
         /* itemtype 0 not used, means "All". Itemtype 1 not used, would be a category object without properties*/
-        $itemtypes[1] = ['label' => xarML('Bare Category'),
-            'title' => xarML('View Bare Category'),
-            'url'   => xarController::URL('categories', 'admin', 'view'),
+        $itemtypes[1] = ['label' => $this->ml('Bare Category'),
+            'title' => $this->ml('View Bare Category'),
+            'url'   => $this->ctl()->getModuleURL('categories', 'admin', 'view'),
         ];
-        $itemtypes[2] = ['label' => xarML('Category'),
-            'title' => xarML('View Category'),
-            'url'   => xarController::URL('categories', 'admin', 'view'),
+        $itemtypes[2] = ['label' => $this->ml('Category'),
+            'title' => $this->ml('View Category'),
+            'url'   => $this->ctl()->getModuleURL('categories', 'admin', 'view'),
         ];
 
         try {
-            $extensionitemtypes = xarMod::apiFunc('dynamicdata', 'user', 'getmoduleitemtypes', ['moduleid' => 147, 'native' => false]);
+            $extensionitemtypes = $this->mod()->apiFunc('dynamicdata', 'user', 'getmoduleitemtypes', ['moduleid' => 147, 'native' => false]);
         } catch (Exception $e) {
             $extensionitemtypes = [];
         }

@@ -57,7 +57,7 @@ class ImportMethod extends MethodClass
         $typesapi = $this->typesapi();
 
         if (!isset($prefix)) {
-            $prefix = xarDB::getPrefix();
+            $prefix = $this->db()->getPrefix();
         }
         $prefix .= '_';
         if (!isset($overwrite)) {
@@ -68,7 +68,7 @@ class ImportMethod extends MethodClass
             throw new EmptyParameterException('xml or file');
         } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/', $file))) {
             // check if we tried to load a file using an old path
-            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true && strpos($file, 'modules/') === 0) {
+            if ($this->config()->getVar('Site.Core.LoadLegacy') == true && strpos($file, 'modules/') === 0) {
                 $file = sys::code() . $file;
                 if (!file_exists($file)) {
                     throw new BadParameterException($file, 'Invalid importfile "#(1)"');
@@ -80,7 +80,7 @@ class ImportMethod extends MethodClass
 
         if (!empty($file)) {
             $xmlobject = simplexml_load_file($file);
-            xarLog::message('Blocks: import file ' . $file, xarLog::LEVEL_INFO);
+            $this->log()->message('Blocks: import file ' . $file, xarLog::LEVEL_INFO);
 
         } elseif (!empty($xml)) {
             // remove garbage from the end
@@ -105,7 +105,7 @@ class ImportMethod extends MethodClass
             $args = [];
             // Get the object's name
             $args['name'] = (string) ($xmlobject->attributes()->name);
-            xarLog::message('Blocks: importing ' . $args['name'], xarLog::LEVEL_INFO);
+            $this->log()->message('Blocks: importing ' . $args['name'], xarLog::LEVEL_INFO);
 
             // Check if the block exists
             // Strictly speaking we could have the same name for blocks in different states, but lets not allow that here
@@ -113,7 +113,7 @@ class ImportMethod extends MethodClass
             $dupexists = !empty($info);
             if ($dupexists) {
                 $msg = 'Duplicate definition for #(1) #(2)';
-                $vars = ['block',xarVar::prepForDisplay($args['name'])];
+                $vars = ['block',$this->var()->prep($args['name'])];
                 throw new DuplicateException(null, $args['name']);
             }
 
@@ -136,13 +136,13 @@ class ImportMethod extends MethodClass
                         $args[$field] = $value;
                     }
                 } else {
-                    xarCore::exit(xarML('Missing #(1) field', $field));
+                     $this->exit($this->ml('Missing #(1) field', $field));
                     return false;
                 }
             }
 
             // Oddly enough there is no blocks dd object, so do a direct SQL insert
-            $tables = xarDB::getTables();
+            $tables = $this->db()->getTables();
             sys::import('xaraya.structures.query');
             $q = new Query('INSERT', $tables['block_instances']);
             $q->addfield('name', $args['name']);

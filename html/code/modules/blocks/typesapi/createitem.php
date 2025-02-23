@@ -55,7 +55,7 @@ class CreateitemMethod extends MethodClass
             $module = '';
         }
         if (!empty($module)) {
-            $modinfo = xarMod::getBaseInfo($module);
+            $modinfo = $this->mod()->getBaseInfo($module);
             if (!$modinfo) {
                 $invalid[] = 'module';
             } else {
@@ -110,8 +110,8 @@ class CreateitemMethod extends MethodClass
 
         unset($blocktype);
 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $tables = $this->db()->getTables();
         $types_table = $tables['block_types'];
 
         // we need to save the actual $classname and $filepath for getitems() - requires UPGRADE due to table change

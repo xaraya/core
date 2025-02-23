@@ -59,17 +59,17 @@ class FindfileMethod extends MethodClass
 
         // Use the current module if none supplied.
         if (empty($module) && empty($modid)) {
-            $module = xarController::getRequest()->getModule();
+            $module = $this->ctl()->getRequest()->getModule();
         }
 
         // Get the module ID from the module name.
         if (empty($modid) && !empty($module)) {
-            $modid = xarMod::getRegID($module);
+            $modid = $this->mod()->getRegID($module);
         }
 
         // Get details for the module if we have a valid module id.
         if (!empty($modid)) {
-            $modInfo = xarMod::getInfo($modid);
+            $modInfo = $this->mod()->getInfo($modid);
 
             // Get module directory if we have a valid module.
             if (!empty($modInfo)) {

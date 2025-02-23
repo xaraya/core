@@ -75,7 +75,7 @@ class BuildTreeMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security Check
-        if (!xarSecurity::check('AdminCategories')) {
+        if (!$this->sec()->checkAccess('AdminCategories')) {
             return;
         }
 
@@ -103,19 +103,19 @@ class BuildTreeMethod extends MethodClass
         # Check that we have all the data we need
         #
         if (empty($data['table'])) {
-            $data['message_warning'][] = xarML('Missing table');
+            $data['message_warning'][] = $this->ml('Missing table');
         }
         if (empty($data['parent_id'])) {
-            $data['message_warning'][] = xarML('Missing parent ID');
+            $data['message_warning'][] = $this->ml('Missing parent ID');
         }
         if (empty($data['left_id'])) {
-            $data['message_warning'][] = xarML('Missing left ID');
+            $data['message_warning'][] = $this->ml('Missing left ID');
         }
         if (empty($data['right_id'])) {
-            $data['message_warning'][] = xarML('Missing right ID');
+            $data['message_warning'][] = $this->ml('Missing right ID');
         }
         if (empty($data['name'])) {
-            $data['message_warning'][] = xarML('Missing name field');
+            $data['message_warning'][] = $this->ml('Missing name field');
         }
         $isvalid = empty($data['message_warning']);
 
@@ -137,7 +137,7 @@ class BuildTreeMethod extends MethodClass
         $q->addfield($data['right_id']);
         $q->addfield($data['name']);
         if (!$q->run()) {
-            $data['message_error'][] = xarML('Could not read the table #(1), $table');
+            $data['message_error'][] = $this->ml('Could not read the table #(1), $table');
             return $data;
         }
         $all_rows = $q->output();
@@ -179,17 +179,17 @@ class BuildTreeMethod extends MethodClass
                 // Find the top level
                 if ((int) $row[$data['left_id']] == 1) {
                     if (isset($row[$data['name']])) {
-                        $data['message_info'][] = xarML('The top level is #(1) (ID #(2))', $row[$data['name']], $row['id']);
+                        $data['message_info'][] = $this->ml('The top level is #(1) (ID #(2))', $row[$data['name']], $row['id']);
                     } else {
-                        $data['message_info'][] = xarML('The top level is ID #(1)', $row['id']);
+                        $data['message_info'][] = $this->ml('The top level is ID #(1)', $row['id']);
                     }
                 }
             }
-            $data['message_info'][] = xarML('Sanity checks OK');
+            $data['message_info'][] = $this->ml('Sanity checks OK');
             $data['message_info'][] = '--------------------------------------------';
-            $data['message_info'][] = xarML('Checking uniqueness of left and right values');
+            $data['message_info'][] = $this->ml('Checking uniqueness of left and right values');
             $unique_values = count($ids);
-            $data['message_info'][] = xarML('Found #(1) left and right values in #(2) rows', $unique_values, count($all_rows));
+            $data['message_info'][] = $this->ml('Found #(1) left and right values in #(2) rows', $unique_values, count($all_rows));
 
             // Display duplicate values
             $duplicates = $left_nulls + $right_nulls;
@@ -198,18 +198,18 @@ class BuildTreeMethod extends MethodClass
 
             foreach ($counts as $key => $value) {
                 if ($value != 1) {
-                    $data['message_error'][] = xarML('Found #(1) instances of left or right ID #(2) ', $value, $key);
+                    $data['message_error'][] = $this->ml('Found #(1) instances of left or right ID #(2) ', $value, $key);
                     $duplicates += $value - 1;
                 }
             }
             if ($left_nulls != 0) {
-                $data['message_error'][] = xarML('Found #(1) instances of left ID NULL ', $left_nulls);
+                $data['message_error'][] = $this->ml('Found #(1) instances of left ID NULL ', $left_nulls);
             }
             if ($right_nulls != 0) {
-                $data['message_error'][] = xarML('Found #(1) instances of right ID NULL ', $right_nulls);
+                $data['message_error'][] = $this->ml('Found #(1) instances of right ID NULL ', $right_nulls);
             }
             if ($parent_nulls != 0) {
-                $data['message_error'][] = xarML('Found #(1) instances of parent ID NULL ', $parent_nulls);
+                $data['message_error'][] = $this->ml('Found #(1) instances of parent ID NULL ', $parent_nulls);
             }
 
             $keys = array_flip($ids);
@@ -218,7 +218,7 @@ class BuildTreeMethod extends MethodClass
             for ($i = 1;$i <= $id_count;$i++) {
                 $index++;
                 if (!isset($keys[$i])) {
-                    $data['message_error'][] = xarML('Did not find a left or right ID value #(1)', $i);
+                    $data['message_error'][] = $this->ml('Did not find a left or right ID value #(1)', $i);
                 }
             }
 
@@ -231,9 +231,9 @@ class BuildTreeMethod extends MethodClass
             // Check the top level
             $top_level = $all_rows[0];
             if (($top_level[$data['left_id']] != 1) || ($top_level[$data['right_id']] != 2 * count($all_rows)) || ($top_level[$data['parent_id']] != 0)) {
-                $data['message_error'][] = xarML('The top level entry (ID #(1)) is incorrect', $top_level['id']);
+                $data['message_error'][] = $this->ml('The top level entry (ID #(1)) is incorrect', $top_level['id']);
             } else {
-                $data['message_info'][] = xarML('The top level entry (ID #(1)) is correct', $top_level['id']);
+                $data['message_info'][] = $this->ml('The top level entry (ID #(1)) is correct', $top_level['id']);
             }
 
             # --------------------------------------------------------
@@ -269,7 +269,7 @@ class BuildTreeMethod extends MethodClass
                 $this_parent_id = $parent_stack->peek();
 
                 if ($verbose) {
-                    $data['message_error'][] = xarML('    Previous Right ID: #(1)', $previous_right_id);
+                    $data['message_error'][] = $this->ml('    Previous Right ID: #(1)', $previous_right_id);
                 }
                 // No children: don't need this entry on the stack
                 if ($this_right_id == $this_left_id + 1) {
@@ -278,7 +278,7 @@ class BuildTreeMethod extends MethodClass
                 }
                 //Sanity check for each entry
                 if ($this_left_id > $this_right_id) {
-                    $data['message_error'][] = xarML('    Bad IDs at entry ID #(3): Left (#(1)) is greater than right ID (#(2))', $this_right_id, $this_right_id, $this_id);
+                    $data['message_error'][] = $this->ml('    Bad IDs at entry ID #(3): Left (#(1)) is greater than right ID (#(2))', $this_right_id, $this_right_id, $this_id);
                 }
 
                 // We're already past this bad right ID, throw it away
@@ -287,7 +287,7 @@ class BuildTreeMethod extends MethodClass
                 }
                 // Check for bad right IDs
                 if (($right_sequence_stack->peek() != null) && ($this_right_id > $right_sequence_stack->peek())) {
-                    $data['message_error'][] = xarML('    Bad Right ID at entry ID #(3): #(1) when looking for #(2)', $this_right_id, $right_sequence_stack->peek(), $this_id);
+                    $data['message_error'][] = $this->ml('    Bad Right ID at entry ID #(3): #(1) when looking for #(2)', $this_right_id, $right_sequence_stack->peek(), $this_id);
                 }
 
                 // This entry has children, add its right ID to the list for checking
@@ -296,16 +296,16 @@ class BuildTreeMethod extends MethodClass
                 }
 
                 if ($verbose) {
-                    $data['message_error'][] = xarML('    Running ID: #(1)', $this_id);
+                    $data['message_error'][] = $this->ml('    Running ID: #(1)', $this_id);
                 }
                 if ($verbose) {
-                    $data['message_error'][] = xarML('    Running Parent ID: #(1)', $this_parent_id);
+                    $data['message_error'][] = $this->ml('    Running Parent ID: #(1)', $this_parent_id);
                 }
                 if ($verbose) {
-                    $data['message_error'][] = xarML('    Running Left ID: #(1)', $this_left_id);
+                    $data['message_error'][] = $this->ml('    Running Left ID: #(1)', $this_left_id);
                 }
                 if ($verbose) {
-                    $data['message_error'][] = xarML('    Running Right ID: #(1)<br/>', $this_right_id);
+                    $data['message_error'][] = $this->ml('    Running Right ID: #(1)<br/>', $this_right_id);
                 }
 
                 if ($this_left_id == $previous_left_id + 1) {
@@ -314,7 +314,7 @@ class BuildTreeMethod extends MethodClass
                     // The parent should therefore be the previous row's ID
 
                     if ($previous_id != $this_parent_id) {
-                        $data['message_error'][] = xarML('The parent of ID #(3) is #(1), but should be #(2)', $this_parent_id, $previous_id, $row['id']);
+                        $data['message_error'][] = $this->ml('The parent of ID #(3) is #(1), but should be #(2)', $this_parent_id, $previous_id, $row['id']);
                     }
 
                 } elseif ($this_left_id == $previous_right_id + 1) {
@@ -322,43 +322,43 @@ class BuildTreeMethod extends MethodClass
                     // This row is on the same level as the last
                     // It should have the the same parent as the last row
                     if ($previous_parent_id != $this_parent_id) {
-                        $data['message_error'][] = xarML('The parent of ID #(3) is #(1), but should be #(2)', $this_parent_id, $previous_parent_id, $this_id);
+                        $data['message_error'][] = $this->ml('The parent of ID #(3) is #(1), but should be #(2)', $this_parent_id, $previous_parent_id, $this_id);
                         if ($verbose) {
-                            $data['message_error'][] = xarML('    ID: #(1)', $this_id);
+                            $data['message_error'][] = $this->ml('    ID: #(1)', $this_id);
                         }
                         if ($verbose) {
-                            $data['message_error'][] = xarML('    Parent ID: #(1)', $this_parent_id);
+                            $data['message_error'][] = $this->ml('    Parent ID: #(1)', $this_parent_id);
                         }
                         if ($verbose) {
-                            $data['message_error'][] = xarML('    Left ID: #(1)', $this_left_id);
+                            $data['message_error'][] = $this->ml('    Left ID: #(1)', $this_left_id);
                         }
                         if ($verbose) {
-                            $data['message_error'][] = xarML('    Right ID: #(1)', $this_right_id);
+                            $data['message_error'][] = $this->ml('    Right ID: #(1)', $this_right_id);
                         }
                         if ($verbose) {
-                            $data['message_error'][] = xarML('    Previous Right ID: #(1)', $previous_right_id);
+                            $data['message_error'][] = $this->ml('    Previous Right ID: #(1)', $previous_right_id);
                         }
                     }
 
                 } elseif ($this_right_id <= $this_left_id) {
                     // Corrupted case
-                    $data['message_error'][] = xarML('The right ID must be bigger that the left ID');
-                    $data['message_error'][] = xarML('    This ID: #(1)', $this_id);
-                    $data['message_error'][] = xarML('    This Parent ID: #(1)', $this_parent_id);
-                    $data['message_error'][] = xarML('    This Left ID: #(1)', $this_left_id);
-                    $data['message_error'][] = xarML('    This Right ID: #(1)<br/>', $this_right_id);
+                    $data['message_error'][] = $this->ml('The right ID must be bigger that the left ID');
+                    $data['message_error'][] = $this->ml('    This ID: #(1)', $this_id);
+                    $data['message_error'][] = $this->ml('    This Parent ID: #(1)', $this_parent_id);
+                    $data['message_error'][] = $this->ml('    This Left ID: #(1)', $this_left_id);
+                    $data['message_error'][] = $this->ml('    This Right ID: #(1)<br/>', $this_right_id);
                 } else {
                     /*
                         // Something went wrong
-                        $data['message_error'][] = xarML('Something went wrong');
-                        $data['message_error'][] = xarML('    Previous ID: #(1)', $previous_id);
-                        $data['message_error'][] = xarML('    Previous Parent ID: #(1)', $previous_parent_id);
-                        $data['message_error'][] = xarML('    Previous Left ID: #(1)', $previous_left_id);
-                        $data['message_error'][] = xarML('    Previous Right ID: #(1)', $previous_right_id);
-                        $data['message_error'][] = xarML('    This ID: #(1)', $this_id);
-                        $data['message_error'][] = xarML('    This Parent ID: #(1)', $this_parent_id);
-                        $data['message_error'][] = xarML('    This Left ID: #(1)', $this_left_id);
-                        $data['message_error'][] = xarML('    This Right ID: #(1)<br/>', $this_right_id);
+                        $data['message_error'][] = $this->ml('Something went wrong');
+                        $data['message_error'][] = $this->ml('    Previous ID: #(1)', $previous_id);
+                        $data['message_error'][] = $this->ml('    Previous Parent ID: #(1)', $previous_parent_id);
+                        $data['message_error'][] = $this->ml('    Previous Left ID: #(1)', $previous_left_id);
+                        $data['message_error'][] = $this->ml('    Previous Right ID: #(1)', $previous_right_id);
+                        $data['message_error'][] = $this->ml('    This ID: #(1)', $this_id);
+                        $data['message_error'][] = $this->ml('    This Parent ID: #(1)', $this_parent_id);
+                        $data['message_error'][] = $this->ml('    This Left ID: #(1)', $this_left_id);
+                        $data['message_error'][] = $this->ml('    This Right ID: #(1)<br/>', $this_right_id);
                     */
                 }
 
@@ -373,10 +373,10 @@ class BuildTreeMethod extends MethodClass
                             // Yes, the stashed right_id is the parent of this one
                             // We are closing out, so remove the stashed values and adjust the right_id
                             if ($verbose) {
-                                $data['message_error'][] = xarML('    Popping right ID: #(1)', $right_stack->pop());
+                                $data['message_error'][] = $this->ml('    Popping right ID: #(1)', $right_stack->pop());
                             }
                             if ($verbose) {
-                                $data['message_error'][] = xarML('    Popping parent ID: #(1)', $parent_stack->pop());
+                                $data['message_error'][] = $this->ml('    Popping parent ID: #(1)', $parent_stack->pop());
                             }
                             $right_stack->pop();
                             $parent_stack->pop();
@@ -387,10 +387,10 @@ class BuildTreeMethod extends MethodClass
                     }
                 }
                 if ($verbose) {
-                    $data['message_error'][] = xarML('The right stack top element: #(1)', $right_stack->peek());
+                    $data['message_error'][] = $this->ml('The right stack top element: #(1)', $right_stack->peek());
                 }
                 if ($verbose) {
-                    $data['message_error'][] = xarML('The parent stack top element: #(1)', $parent_stack->peek());
+                    $data['message_error'][] = $this->ml('The parent stack top element: #(1)', $parent_stack->peek());
                 }
             }
 
@@ -400,20 +400,20 @@ class BuildTreeMethod extends MethodClass
                 while ($right_stack->peek() != null) {
                     $stack[] = $right_stack->pop();
                 }
-                $data['message_error'][] = xarML('The right stack elements: #(1)', implode(',', $stack));
+                $data['message_error'][] = $this->ml('The right stack elements: #(1)', implode(',', $stack));
             }
             if ($parent_stack->peek() != null) {
                 $stack = [];
                 while ($parent_stack->peek() != null) {
                     $stack[] = $parent_stack->pop();
                 }
-                $data['message_error'][] = xarML('The parent stack elements: #(1)', implode(',', $stack));
+                $data['message_error'][] = $this->ml('The parent stack elements: #(1)', implode(',', $stack));
             }
 
-            $data['message_success'][] = xarML('Number of rows: #(1)', count($all_rows));
-            $data['message_success'][] = xarML('Number of indices: #(1)', $id_count);
+            $data['message_success'][] = $this->ml('Number of rows: #(1)', count($all_rows));
+            $data['message_success'][] = $this->ml('Number of indices: #(1)', $id_count);
             if (empty($data['message_error'])) {
-                $data['message_success'][] = xarML('The Celko indices are correct');
+                $data['message_success'][] = $this->ml('The Celko indices are correct');
             }
 
             $data['all_rows'] = $all_rows;
@@ -458,9 +458,9 @@ class BuildTreeMethod extends MethodClass
                 }
             }
             if (!$found) {
-                $data['message_error'][] = xarML('Did not find a root entry named: #(1)', $data['root_name']);
+                $data['message_error'][] = $this->ml('Did not find a root entry named: #(1)', $data['root_name']);
             } else {
-                $data['message_success'][] = xarML('The top level entry ID is: #(1)', $root_entry['id']);
+                $data['message_success'][] = $this->ml('The top level entry ID is: #(1)', $root_entry['id']);
             }
 
             // Begin construction
@@ -622,7 +622,7 @@ class BuildTreeMethod extends MethodClass
             for ($i = 1;$i <= $id_count;$i++) {
                 $index++;
                 if (!isset($keys[$i])) {
-                    $data['message_error'][] = xarML('Did not find a left/right value #(1)', $i);
+                    $data['message_error'][] = $this->ml('Did not find a left/right value #(1)', $i);
                     $no_errors = false;
                 }
             }

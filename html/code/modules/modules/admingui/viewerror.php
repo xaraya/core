@@ -44,17 +44,17 @@ class ViewerrorMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         // Get parameters
         $this->var()->find('id', $regId, 'int', 0);
         if (empty($regId)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
-        //if (!xarSec::confirmAuthKey()) return;
+        //if (!$this->sec()->confirmAuthKey()) return;
 
         // Get module information from the database
         $dbModule = $adminapi->getdbmodules(['regId' => $regId]);
@@ -98,6 +98,6 @@ class ViewerrorMethod extends MethodClass
 
         // Return the template variables to BL
         $data['context'] ??= $this->getContext();
-        return xarTpl::module('modules', 'admin', $template, $data);
+        return $this->tpl()->module('modules', 'admin', $template, $data);
     }
 }

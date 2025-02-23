@@ -39,7 +39,7 @@ class RefreshTypesMethod extends MethodClass
     {
         /** @var TypesApi $typesapi */
         $typesapi = $this->typesapi();
-        if (!xarSecurity::check('AdminBlocks')) {
+        if (!$this->sec()->checkAccess('AdminBlocks')) {
             return;
         }
 

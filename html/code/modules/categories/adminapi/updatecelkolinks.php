@@ -41,7 +41,7 @@ class UpdatecelkolinksMethod extends MethodClass
 
         // Argument check
         if (!isset($cid)) {
-            $msg = xarML('Invalid Parameter Count');
+            $msg = $this->ml('Invalid Parameter Count');
             throw new BadParameterException(null, $msg);
         }
 
@@ -56,8 +56,8 @@ class UpdatecelkolinksMethod extends MethodClass
         if ($type == 'create') {
 
             // Get database setup
-            $dbconn = xarDB::getConn();
-            $xartable = xarDB::getTables();
+            $dbconn = $this->db()->getConn();
+            $xartable = $this->db()->getTables();
             $categoriestable = $xartable['categories'];
             $bindvars = [];
             $bindvars[1] = [];

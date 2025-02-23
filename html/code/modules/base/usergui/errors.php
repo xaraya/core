@@ -40,7 +40,7 @@ class ErrorsMethod extends MethodClass
             case 'forbidden':
                 $this->var()->find('message', $msg, 'str', '');
                 $this->var()->find('template', $template, 'str', null);
-                return xarController::forbidden($msg, $this->getContext(), $template);
+                return $this->ctl()->forbidden($msg, $template);
             case 'exception':
             case 'systemerror':
             case 'systeminfo':
@@ -49,7 +49,7 @@ class ErrorsMethod extends MethodClass
             default:
                 $this->var()->find('message', $msg, 'str', '');
                 $this->var()->find('template', $template, 'str', null);
-                return xarController::notFound($msg, $this->getContext(), $template);
+                return $this->ctl()->notFound($msg, $template);
         }
     }
 }

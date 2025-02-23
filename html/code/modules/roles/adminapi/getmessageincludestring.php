@@ -45,7 +45,7 @@ class GetmessageincludestringMethod extends MethodClass
         }
 
         if (!isset($module)) {
-            $module = xarController::getRequest()->getModule();
+            $module = $this->ctl()->getRequest()->getModule();
         }
 
         // Get the template that defines the substitution vars

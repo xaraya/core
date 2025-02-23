@@ -47,18 +47,18 @@ class UpgradeMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
         // Security and sanity checks
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $this->var()->find(
             'return_url',
@@ -76,9 +76,9 @@ class UpgradeMethod extends MethodClass
         }
 
         if (empty($return_url)) {
-            $return_url = xarController::URL('themes', 'admin', 'view');
+            $return_url = $this->ctl()->getModuleURL('themes', 'admin', 'view');
         }
-        xarController::redirect($return_url, null, $this->getContext());
+        $this->ctl()->redirect($return_url);
         return true;
     }
 }

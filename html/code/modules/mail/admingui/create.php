@@ -41,7 +41,7 @@ class CreateMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AddMail')) {
+        if (!$this->sec()->checkAccess('AddMail')) {
             return;
         }
 
@@ -50,6 +50,6 @@ class CreateMethod extends MethodClass
         // 1. Create a queue for storage if needed
         // 2. Create a 'record' in the Queue definition object
         // If the first fails for some reason, we do not do the second and return to the edit screen if possible
-        return xarMod::guiFunc('dynamicdata', 'admin', 'create', $args, $this->getContext());
+        return $this->mod()->guiFunc('dynamicdata', 'admin', 'create', $args);
     }
 }

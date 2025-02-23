@@ -45,7 +45,7 @@ class HooksMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('ManageModules')) {
+        if (!$this->sec()->checkAccess('ManageModules')) {
             return;
         }
 
@@ -81,7 +81,7 @@ class HooksMethod extends MethodClass
                 // check if hooked to all itemtypes
                 $hookstate = 0;
                 try {
-                    $itemtypes = xarMod::apiFunc($modname, 'user', 'getitemtypes', []);
+                    $itemtypes = $this->mod()->apiFunc($modname, 'user', 'getitemtypes', []);
                 } catch (FunctionNotFoundException $e) {
                     $itemtypes = [];
                 }
@@ -162,7 +162,7 @@ class HooksMethod extends MethodClass
 
         $data['observers'] = $hookmods;
         $data['curhook'] = $curhook;
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
 
         if (empty($return_url)) {
             $return_url = null;

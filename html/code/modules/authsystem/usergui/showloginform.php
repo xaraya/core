@@ -49,14 +49,14 @@ class ShowloginformMethod extends MethodClass
                 $redirecturl = xarServer::getBaseURL();
             }
         }
-        $redirecturl = xarVar::prepHTMLDisplay($redirecturl);
-        $truecurrenturl = xarServer::getCurrentURL([], false);
-        $urldata = xarMod::apiFunc('roles', 'user', 'parseuserhome', ['url' => $redirecturl,'truecurrenturl' => $truecurrenturl]);
+        $redirecturl = $this->var()->prepHTML($redirecturl);
+        $truecurrenturl = $this->ctl()->getCurrentURL([], false);
+        $urldata = $this->mod()->apiFunc('roles', 'user', 'parseuserhome', ['url' => $redirecturl,'truecurrenturl' => $truecurrenturl]);
         $data['redirecturl'] = $urldata['redirecturl'];
 
         // If we don't ask to forward, then forward immediately
         if (!(int) xarModVars::get('authsystem', 'ask_forward') && xarUser::isLoggedIn()) {
-            xarController::redirect($data['redirecturl'], null, $this->getContext());
+            $this->ctl()->redirect($data['redirecturl']);
             return true;
         }
 

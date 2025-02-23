@@ -40,7 +40,7 @@ class ToolsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
@@ -48,41 +48,41 @@ class ToolsMethod extends MethodClass
 
         /*     $this->var()->check('id', $id, 'id'); */
         /*     // obtain maximum information about module */
-        /*     $modinfo = xarMod::getInfo($id); */
+        /*     $modinfo = $this->mod()->getInfo($id); */
         /*      */
         /*     // data vars for template */
-        /*     $data['modid']              = xarVar::prepForDisplay($id); */
-        /*     $data['modname']            = xarVar::prepForDisplay($modinfo['name']); */
-        /*     $data['moddescr']           = xarVar::prepForDisplay($modinfo['description']); */
-        /*     $data['moddispname']        = xarVar::prepForDisplay($modinfo['displayname']); */
-        /*     $data['modlisturl']         = xarController::URL('modules', 'admin', 'list'); */
+        /*     $data['modid']              = $this->var()->prep($id); */
+        /*     $data['modname']            = $this->var()->prep($modinfo['name']); */
+        /*     $data['moddescr']           = $this->var()->prep($modinfo['description']); */
+        /*     $data['moddispname']        = $this->var()->prep($modinfo['displayname']); */
+        /*     $data['modlisturl']         = $this->ctl()->getModuleURL('modules', 'admin', 'list'); */
         /*     // check for proper icon, if not found display default */
         /*     // also displaying a generic icon now, if it was provided */
         /*     // additionally showing a short message if the icon is missing.. */
         /*     $modicon = sys::code() . 'modules/'.$modinfo['directory'].'/xarimages/admin.gif'; */
         /*     $modicongeneric = sys::code() . 'modules/'.$modinfo['directory'].'/xarimages/admin_generic.gif'; */
         /*     if(file_exists($modicon)){ */
-        /*         $data['modiconurl']     = xarVar::prepForDisplay($modicon); */
-        /*         $data['modiconmsg'] = xarVar::prepForDisplay(xarML('as provided by the author')); */
+        /*         $data['modiconurl']     = $this->var()->prep($modicon); */
+        /*         $data['modiconmsg'] = $this->var()->prep($this->ml('as provided by the author')); */
         /*     }elseif(file_exists($modicongeneric)){ */
-        /*         $data['modiconurl']     = xarVar::prepForDisplay($modicongeneric); */
-        /*         $data['modiconmsg'] = xarVar::prepForDisplay(xarML('Only generic icon has been provided')); */
+        /*         $data['modiconurl']     = $this->var()->prep($modicongeneric); */
+        /*         $data['modiconmsg'] = $this->var()->prep($this->ml('Only generic icon has been provided')); */
         /*     }else{ */
-        /*         $data['modiconurl']     = xarVar::prepForDisplay('modules/modules/xarimages/admin_generic.gif'); */
-        /*         $data['modiconmsg'] = xarVar::prepForDisplay(xarML('[Original icon is missing.. please ask this module developer to provide one in accordance with MDG]')); */
+        /*         $data['modiconurl']     = $this->var()->prep('modules/modules/xarimages/admin_generic.gif'); */
+        /*         $data['modiconmsg'] = $this->var()->prep($this->ml('[Original icon is missing.. please ask this module developer to provide one in accordance with MDG]')); */
         /*     } */
-        /*     $data['moddir']             = xarVar::prepForDisplay($modinfo['directory']); */
-        /*     $data['modclass']           = xarVar::prepForDisplay($modinfo['class']); */
-        /*     $data['modcat']             = xarVar::prepForDisplay($modinfo['category']); */
-        /*     $data['modver']             = xarVar::prepForDisplay($modinfo['version']); */
-        /*     $data['modauthor']          = preg_replace('/,/', '<br />', xarVar::prepForDisplay($modinfo['author'])); */
-        /*     $data['modcontact']         = preg_replace('/,/', '<br />',xarVar::prepForDisplay($modinfo['contact'])); */
+        /*     $data['moddir']             = $this->var()->prep($modinfo['directory']); */
+        /*     $data['modclass']           = $this->var()->prep($modinfo['class']); */
+        /*     $data['modcat']             = $this->var()->prep($modinfo['category']); */
+        /*     $data['modver']             = $this->var()->prep($modinfo['version']); */
+        /*     $data['modauthor']          = preg_replace('/,/', '<br />', $this->var()->prep($modinfo['author'])); */
+        /*     $data['modcontact']         = preg_replace('/,/', '<br />',$this->var()->prep($modinfo['contact'])); */
         /*     if(!empty($modinfo['dependency'])){ */
-        /*         $dependency             = xarML('Working on it...'); */
+        /*         $dependency             = $this->ml('Working on it...'); */
         /*     } else { */
-        /*         $dependency             = xarML('None'); */
+        /*         $dependency             = $this->ml('None'); */
         /*     } */
-        /*     $data['moddependency']      = xarVar::prepForDisplay($dependency); */
+        /*     $data['moddependency']      = $this->var()->prep($dependency); */
 
         // done
         return $data;

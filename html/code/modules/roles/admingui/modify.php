@@ -52,7 +52,7 @@ class ModifyMethod extends MethodClass
 
         $data['object'] = xarRoles::get($id);
         if (empty($data['object'])) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $data['object']->properties['name']->display_layout = 'single';
         $data['itemtype'] = $data['object']->getType();
@@ -83,8 +83,8 @@ class ModifyMethod extends MethodClass
             }
         }
 
-        xarSession::setVar('ddcontext.roles', [
-            'return_url' => xarServer::getCurrentURL(),
+        $this->session()->setVar('ddcontext.roles', [
+            'return_url' => $this->ctl()->getCurrentURL(),
             'parents' => $parents,
             'groups' => $groups,
             'basetype' => $data['itemtype'],
@@ -103,7 +103,7 @@ class ModifyMethod extends MethodClass
         $item['module'] = 'roles';
         $item['itemtype'] = $data['object']->getType();
         $item['itemid'] = $id;
-        $data['hooks'] = xarModHooks::call('item', 'modify', $id, $item);
+        $data['hooks'] = $this->mod()->callHooks('item', 'modify', $id, $item);
 
         $data['groups'] = $groups;
         $data['parents'] = $parents;
@@ -111,7 +111,7 @@ class ModifyMethod extends MethodClass
         if ($confirm) {
 
             // Check for a valid confirmation key
-            if (!xarSec::confirmAuthKey()) {
+            if (!$this->sec()->confirmAuthKey()) {
                 return;
             }
 
@@ -124,18 +124,18 @@ class ModifyMethod extends MethodClass
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
                 $data['context'] ??= $this->getContext();
-                return xarTpl::module('roles', 'admin', 'modify', $data);
+                return $this->tpl()->module('roles', 'admin', 'modify', $data);
             } else {
                 // Good data: create the item
                 $itemid = $data['object']->updateItem(['itemid' => $data['itemid']]);
 
                 // Jump to the next page
-                xarController::redirect(xarController::URL(
+                $this->ctl()->redirect($this->ctl()->getModuleURL(
                     'roles',
                     'admin',
                     'modify',
                     ['itemid' => $data['itemid']]
-                ), null, $this->getContext());
+                ));
                 return true;
             }
         }

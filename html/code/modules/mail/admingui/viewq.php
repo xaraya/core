@@ -41,7 +41,7 @@ class ViewqMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminMail')) {
+        if (!$this->sec()->checkAccess('AdminMail')) {
             return;
         }
 
@@ -51,13 +51,13 @@ class ViewqMethod extends MethodClass
         $data = [];
         if (!empty($action)) {
             // Confirm authorisation code
-            if (!xarSec::confirmAuthKey()) {
-                return xarController::badRequest('bad_author', $this->getContext());
+            if (!$this->sec()->confirmAuthKey()) {
+                return $this->ctl()->badRequest('bad_author');
             }
 
             switch ($action) {
                 case 'process':
-                    $data['log'] = xarMod::apiFunc('mail', 'scheduler', 'sendmail');
+                    $data['log'] = $this->mod()->apiFunc('mail', 'scheduler', 'sendmail');
                     if (!isset($data['log'])) {
                         return;
                     }
@@ -95,7 +95,7 @@ class ViewqMethod extends MethodClass
                         $serialqueue = serialize($queue);
                         xarModVars::set('mail', 'queue', $serialqueue);
 
-                        xarController::redirect(xarController::URL('mail', 'admin', 'viewq'), null, $this->getContext());
+                        $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'viewq'));
                         return true;
                     }
                     break;
@@ -119,7 +119,7 @@ class ViewqMethod extends MethodClass
         $data['items'] = $queue;
         // TODO: add a pager (once it exists in BL)
         $data['pager'] = '';
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
 
         // return the template variables defined in this template
         return $data;

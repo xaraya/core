@@ -57,7 +57,7 @@ class UsermenuMethod extends MethodClass
         $userapi = $this->userapi();
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
-        if (!xarSecurity::check('ViewRoles')) {
+        if (!$this->sec()->checkAccess('ViewRoles')) {
             return;
         }
         extract($args);
@@ -71,7 +71,7 @@ class UsermenuMethod extends MethodClass
         $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
         if (!xarUser::isLoggedIn()) {
-            xarController::redirect(xarController::URL($defaultloginmodname, 'user', 'showloginform'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL($defaultloginmodname, 'user', 'showloginform'));
         }
 
         $id = xarUser::getVar('id');
@@ -90,7 +90,7 @@ class UsermenuMethod extends MethodClass
 
                 sys::import('modules.dynamicdata.class.objects.factory');
 
-                $object = DataObjectFactory::getObject(['name' => 'roles_users']);
+                $object = $this->data()->getObject(['name' => 'roles_users']);
                 $object->getItem(['itemid' => $id]);
 
                 $oldpass = $object->properties['password']->value;
@@ -107,7 +107,7 @@ class UsermenuMethod extends MethodClass
                             if ($user != false) {
                                 unset($user);
                                 //throw new DuplicateException(array('email address',$email));
-                                $object->properties['email']->invalid = xarML('Email address must be unique to this site');
+                                $object->properties['email']->invalid = $this->ml('Email address must be unique to this site');
                                 $isvalid = false;
                             }
                         }
@@ -119,7 +119,7 @@ class UsermenuMethod extends MethodClass
                                 $disallowedemails = explode("\r\n", $disallowedemails);
                                 if (in_array($email, $disallowedemails)) {
                                     $msg = 'That email address is either reserved or not allowed on this website';
-                                    $object->properties['email']->invalid = xarML($msg);
+                                    $object->properties['email']->invalid = $this->ml($msg);
                                     $isvalid = false;
                                     //throw new ForbiddenOperationException(null,$msg);
                                 }
@@ -129,8 +129,8 @@ class UsermenuMethod extends MethodClass
                 }
 
                 if ($isvalid) {
-                    if (!xarSec::confirmAuthKey('roles')) {
-                        return xarController::badRequest('bad_author', $this->getContext());
+                    if (!$this->sec()->confirmAuthKey('roles')) {
+                        return $this->ctl()->badRequest('bad_author');
                     }
 
                     $newpass = $object->properties['password']->value;
@@ -175,7 +175,7 @@ class UsermenuMethod extends MethodClass
                             //Send validation email
                             if (!$adminapi->senduseremail(['id' => [$id => '1'], 'mailtype' => 'validation'])) {
 
-                                $msg = xarML('Problem sending confirmation email');
+                                $msg = $this->ml('Problem sending confirmation email');
                                 throw new Exception($msg);
                             }
 
@@ -185,14 +185,14 @@ class UsermenuMethod extends MethodClass
 
                             //Step 5
                             //Show a nice message for the person about email validation
-                            $data = xarTpl::module('roles', 'user', 'waitingconfirm');
+                            $data = $this->tpl()->module('roles', 'user', 'waitingconfirm');
                             return $data;
                         }
                     }
                     if (empty($returnurl)) {
-                        $returnurl = xarController::URL('roles', 'user', 'account', ['tab' => 'basic']);
+                        $returnurl = $this->ctl()->getModuleURL('roles', 'user', 'account', ['tab' => 'basic']);
                     }
-                    return xarController::redirect($returnurl, null, $this->getContext());
+                    return $this->ctl()->redirect($returnurl);
                 } else {
                     // invalid, we need to show the form data again
                     $data = [];
@@ -202,7 +202,7 @@ class UsermenuMethod extends MethodClass
                     if (xarModVars::get('roles', 'setuserlastlogin')) {
                         //only display it for current user or admin
                         if (xarUser::isLoggedIn() && xarUser::getVar('id') == $id) { //they should be but ..
-                            $userlastlogin = xarSession::getVar('roles_thislastlogin');
+                            $userlastlogin = $this->session()->getVar('roles_thislastlogin');
                             $usercurrentlogin = xarModUserVars::get('roles', 'userlastlogin', $id);
                         } elseif (xarSecurity::check('AdminRoles', 0, 'Roles', $name) && xarModUserVars::get('roles', 'userlastlogin', $id)) {
                             $usercurrentlogin = '';
@@ -215,7 +215,7 @@ class UsermenuMethod extends MethodClass
                         $userlastlogin = '';
                         $usercurrentlogin = '';
                     }
-                    $authid = xarSec::genAuthKey('roles');
+                    $authid = $this->sec()->genAuthKey('roles');
 
                     $upasswordupdate = xarModUserVars::get('roles', 'passwordupdate');
                     $usertimezonedata = xarModUserVars::get('roles', 'usertimezone');
@@ -224,7 +224,7 @@ class UsermenuMethod extends MethodClass
                     $item['module'] = 'roles';
                     $item['itemtype'] = xarRoles::ROLES_USERTYPE;
 
-                    $hooks = xarModHooks::call('item', 'modify', $id, $item);
+                    $hooks = $this->mod()->callHooks('item', 'modify', $id, $item);
                     if (isset($hooks['dynamicdata'])) {
                         unset($hooks['dynamicdata']);
                     }
@@ -242,22 +242,22 @@ class UsermenuMethod extends MethodClass
 
                     $data['formdata'] = $formdata;
                     $data['object'] = $object;
-                    $data['formaction'] = xarController::URL('roles', 'user', 'usermenu');
+                    $data['formaction'] = $this->ctl()->getModuleURL('roles', 'user', 'usermenu');
                     $data['tplmodule'] = 'roles';
                     $data['template'] = 'account';
                     $menutabs = [];
                     $menutabs[] = [
-                        'label' => xarML('Display Profile'),
-                        'title' => xarML('View your profile as it is seen by other site users'),
-                        'url' => xarController::URL('roles', 'user', 'account', ['tab' => 'profile']),
+                        'label' => $this->ml('Display Profile'),
+                        'title' => $this->ml('View your profile as it is seen by other site users'),
+                        'url' => $this->ctl()->getModuleURL('roles', 'user', 'account', ['tab' => 'profile']),
                         'active' => false,
                     ];
 
                     $menumods = [];
                     // for now, roles must be hooked to roles in order for usermenus to be available
-                    if (xarHooks::isAttached('roles', 'roles')) {
+                    if ($this->mod()->isHooked('roles', 'roles')) {
                         // get a list of modules with user menu enabled
-                        $allmods = xarMod::apiFunc('modules', 'admin', 'getlist');
+                        $allmods = $this->mod()->apiFunc('modules', 'admin', 'getlist');
                         foreach ($allmods as $modinfo) {
                             if (xarModVars::get($modinfo['name'], 'enable_user_menu') != 1) {
                                 continue;
@@ -266,34 +266,34 @@ class UsermenuMethod extends MethodClass
                         }
                         // add a link to edit this users profile
                         $menutabs[] = [
-                            'label' => xarML('Edit Account'),
-                            'title' => xarML('Edit your basic account information'),
-                            'url' => xarController::URL('roles', 'user', 'account', ['tab' => 'basic']),
+                            'label' => $this->ml('Edit Account'),
+                            'title' => $this->ml('Edit your basic account information'),
+                            'url' => $this->ctl()->getModuleURL('roles', 'user', 'account', ['tab' => 'basic']),
                             'active' => true,
                         ];
                     }
 
                     if (!empty($menumods)) {
                         foreach ($menumods as $modname) {
-                            $user_settings = xarMod::apiFunc('base', 'admin', 'getusersettings', ['module' => $modname, 'itemid' => $id]);
+                            $user_settings = $this->mod()->apiFunc('base', 'admin', 'getusersettings', ['module' => $modname, 'itemid' => $id]);
                             if (isset($user_settings)) {
                                 $menutabs[] = [
                                     'label' => $user_settings->label,
                                     'title' => $user_settings->label,
-                                    'url' => xarController::URL('roles', 'user', 'account', ['moduleload' => $modname]),
+                                    'url' => $this->ctl()->getModuleURL('roles', 'user', 'account', ['moduleload' => $modname]),
                                     'active' => false,
                                 ];
                             }
                         }
                     }
                     $menutabs[] = [
-                        'label' => xarML('Logout'),
-                        'title' => xarML('Logout from the site'),
-                        'url' => xarController::URL($defaultlogoutmodname, 'user', 'logout'),
+                        'label' => $this->ml('Logout'),
+                        'title' => $this->ml('Logout from the site'),
+                        'url' => $this->ctl()->getModuleURL($defaultlogoutmodname, 'user', 'logout'),
                         'active' => false,
                     ];
                     $data['menutabs'] = $menutabs;
-                    $data['authid'] = xarSec::genAuthKey('roles');
+                    $data['authid'] = $this->sec()->genAuthKey('roles');
                     $data['id']          = xarUser::getVar('id');
                     $data['name']         = xarUser::getVar('name');
                     $data['logoutmodule'] = $defaultlogoutmodname;
@@ -305,17 +305,17 @@ class UsermenuMethod extends MethodClass
                         $data['message'] = '';
                     }
                     if (empty($returnurl)) {
-                        $returnurl = xarController::URL('roles', 'user', 'account', ['tab' => 'basic']);
+                        $returnurl = $this->ctl()->getModuleURL('roles', 'user', 'account', ['tab' => 'basic']);
                     }
                     $data['returnurl'] = $returnurl;
-                    $data['submitlabel'] = xarML('Update Settings');
+                    $data['submitlabel'] = $this->ml('Update Settings');
                     $data['context'] ??= $this->getContext();
-                    return xarTpl::module('roles', 'user', 'account', $data);
+                    return $this->tpl()->module('roles', 'user', 'account', $data);
                 }
 
                 // no break
             case 'updatesettings':
-                $object = xarMod::apiFunc('base', 'admin', 'getusersettings', ['module' => $moduleload, 'itemid' => $id]);
+                $object = $this->mod()->apiFunc('base', 'admin', 'getusersettings', ['module' => $moduleload, 'itemid' => $id]);
 
                 // Disable any fields that aren't set by the users
                 $skipped = ['primaryparent'];
@@ -328,38 +328,38 @@ class UsermenuMethod extends MethodClass
                 }
                 $object->setFieldList($fieldlist);
                 try {
-                    $isvalid = xarMod::apiFunc($moduleload, 'user', 'usermenu', ['phase' => 'checkinput', 'object' => $object]);
+                    $isvalid = $this->mod()->apiFunc($moduleload, 'user', 'usermenu', ['phase' => 'checkinput', 'object' => $object]);
                 } catch (Exception $e) {
                     $isvalid = $object->checkInput();
                 }
                 if ($isvalid) {
                     try {
-                        xarMod::apiFunc($moduleload, 'user', 'usermenu', ['phase' => 'updateitem', 'object' => $object]);
+                        $this->mod()->apiFunc($moduleload, 'user', 'usermenu', ['phase' => 'updateitem', 'object' => $object]);
                     } catch (Exception $e) {
-                        if (!xarSec::confirmAuthKey($moduleload)) {
-                            return xarController::badRequest('bad_author', $this->getContext());
+                        if (!$this->sec()->confirmAuthKey($moduleload)) {
+                            return $this->ctl()->badRequest('bad_author');
                         }
                         $object->updateItem();
                     }
                     if (empty($returnurl)) {
-                        $returnurl = xarController::URL('roles', 'user', 'account', ['moduleload' => $moduleload]);
+                        $returnurl = $this->ctl()->getModuleURL('roles', 'user', 'account', ['moduleload' => $moduleload]);
                     }
-                    return xarController::redirect($returnurl, null, $this->getContext());
+                    return $this->ctl()->redirect($returnurl);
                 }
 
                 // must have invalid data, show the form again
                 $menutabs = [];
                 $menutabs[] = [
-                    'label' => xarML('Display Profile'),
-                    'title' => xarML('View your profile as it is seen by other site users'),
-                    'url' => xarController::URL('roles', 'user', 'account', ['tab' => 'profile']),
+                    'label' => $this->ml('Display Profile'),
+                    'title' => $this->ml('View your profile as it is seen by other site users'),
+                    'url' => $this->ctl()->getModuleURL('roles', 'user', 'account', ['tab' => 'profile']),
                     'active' => false,
                 ];
 
                 $menumods = [];
                 if ((bool) xarModVars::get('roles', 'usereditaccount')) {
                     // get a list of modules with user menu enabled
-                    $allmods = xarMod::apiFunc('modules', 'admin', 'getlist');
+                    $allmods = $this->mod()->apiFunc('modules', 'admin', 'getlist');
                     foreach ($allmods as $modinfo) {
                         if (xarModVars::get($modinfo['name'], 'enable_user_menu') != 1) {
                             continue;
@@ -368,36 +368,36 @@ class UsermenuMethod extends MethodClass
                     }
                     // add a link to edit this users profile
                     $menutabs[] = [
-                        'label' => xarML('Edit Account'),
-                        'title' => xarML('Edit your basic account information'),
-                        'url' => xarController::URL('roles', 'user', 'account', ['tab' => 'basic']),
+                        'label' => $this->ml('Edit Account'),
+                        'title' => $this->ml('Edit your basic account information'),
+                        'url' => $this->ctl()->getModuleURL('roles', 'user', 'account', ['tab' => 'basic']),
                         'active' => false,
                     ];
                 }
 
                 if (!empty($menumods)) {
                     foreach ($menumods as $modname) {
-                        $user_settings = xarMod::apiFunc('base', 'admin', 'getusersettings', ['module' => $modname, 'itemid' => $id]);
+                        $user_settings = $this->mod()->apiFunc('base', 'admin', 'getusersettings', ['module' => $modname, 'itemid' => $id]);
                         if (isset($user_settings)) {
                             $isactive = $moduleload == $modname ? true : false;
                             $menutabs[] = [
                                 'label' => $user_settings->label,
                                 'title' => $user_settings->label,
-                                'url' => xarController::URL('roles', 'user', 'account', ['moduleload' => $modname]),
+                                'url' => $this->ctl()->getModuleURL('roles', 'user', 'account', ['moduleload' => $modname]),
                                 'active' => $isactive,
                             ];
                         }
                     }
                 }
                 $menutabs[] = [
-                    'label' => xarML('Logout'),
-                    'title' => xarML('Logout from the site'),
-                    'url' => xarController::URL($defaultlogoutmodname, 'user', 'logout'),
+                    'label' => $this->ml('Logout'),
+                    'title' => $this->ml('Logout from the site'),
+                    'url' => $this->ctl()->getModuleURL($defaultlogoutmodname, 'user', 'logout'),
                     'active' => false,
                 ];
 
                 try {
-                    $data = xarMod::apiFunc($moduleload, 'user', 'usermenu', ['phase' => 'showform', 'object' => $object]);
+                    $data = $this->mod()->apiFunc($moduleload, 'user', 'usermenu', ['phase' => 'showform', 'object' => $object]);
                 } catch (Exception $e) {
                     $data = [];
                 }
@@ -417,15 +417,15 @@ class UsermenuMethod extends MethodClass
                     $data['object']->layout = '';
                 }
                 if (empty($data['authid'])) {
-                    $data['authid'] = xarSec::genAuthKey($moduleload);
+                    $data['authid'] = $this->sec()->genAuthKey($moduleload);
                 }
 
                 // and set some sensible defaults for common stuff
                 if (empty($data['formaction'])) {
-                    $data['formaction'] = xarController::URL('roles', 'user', 'usermenu');
+                    $data['formaction'] = $this->ctl()->getModuleURL('roles', 'user', 'usermenu');
                 }
                 if (empty($data['submitlabel'])) {
-                    $data['submitlabel'] = xarML('Update Settings');
+                    $data['submitlabel'] = $this->ml('Update Settings');
                 }
                 if (empty($data['returnurl'])) {
                     $data['returnurl'] = xarServer::GetCurrentURL();
@@ -445,7 +445,7 @@ class UsermenuMethod extends MethodClass
                     $data['message'] = '';
                 }
                 $data['context'] ??= $this->getContext();
-                return xarTpl::module('roles', 'user', 'account', $data);
+                return $this->tpl()->module('roles', 'user', 'account', $data);
 
         }
 

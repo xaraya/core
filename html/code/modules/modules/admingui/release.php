@@ -40,7 +40,7 @@ class ReleaseMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditModules')) {
+        if (!$this->sec()->checkAccess('EditModules')) {
             return;
         }
 
@@ -55,7 +55,7 @@ class ReleaseMethod extends MethodClass
         // Check and see if a feed has been supplied to us.
         $feedfile = "https://packagist.org/search.json?type=xaraya-module&per_page=100";
         // Get the feed file (from cache or from the remote site)
-        $feeddata = xarMod::apiFunc(
+        $feeddata = $this->mod()->apiFunc(
             'base',
             'user',
             'getfile',
@@ -77,7 +77,7 @@ class ReleaseMethod extends MethodClass
             $data['chanlink']   =   'https://packagist.org/?type=xaraya-module';
             $data['chandesc']   =   $data['chantitle'];
         } else {
-            $msg = xarML('There is a problem with a feed.');
+            $msg = $this->ml('There is a problem with a feed.');
             throw new Exception($msg);
         }
         $data['feedcontent'] = $feedcontent;

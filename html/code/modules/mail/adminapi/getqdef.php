@@ -45,7 +45,7 @@ class GetqdefMethod extends MethodClass
         $qDef = xarModVars::get('mail', 'queue-definition');
         if ($qDef != null) {
             // Modvar has a value, fetch the info
-            $qdefInfo = DataObjectFactory::getObjectInfo(['name' => $qDef]);
+            $qdefInfo = $this->data()->getObjectInfo(['name' => $qDef]);
             if (isset($qdefInfo)) {
                 return $qdefInfo;
             }

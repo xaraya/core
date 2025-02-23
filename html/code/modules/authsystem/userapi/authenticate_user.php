@@ -47,8 +47,8 @@ class AuthenticateUserMethod extends MethodClass
 
         assert(!empty($uname) && isset($pass));
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         // Get user information
         $rolestable = $xartable['roles'];

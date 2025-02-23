@@ -71,7 +71,7 @@ class GetfilemodulesMethod extends MethodClass
                     if (is_dir(sys::code() . "modules/$modOsDir")) {
 
                         // no xarversion.php, no module
-                        $modFileInfo = xarMod::getFileInfo($modOsDir);
+                        $modFileInfo = $this->mod()->getFileInfo($modOsDir);
                         if (!isset($modFileInfo)) {
                             continue 2;
                         }
@@ -93,30 +93,30 @@ class GetfilemodulesMethod extends MethodClass
 
                         // TODO: beautify :-)
                         if (!isset($regId)) {
-                            xarSession::setVar('errormsg', "Module '$name' doesn't seem to have a registered module ID defined in xarversion.php - skipping...\nPlease register your module at http://www.xaraya.com");
+                            $this->session()->setVar('errormsg', "Module '$name' doesn't seem to have a registered module ID defined in xarversion.php - skipping...\nPlease register your module at http://www.xaraya.com");
                             continue 2;
                         }
 
                         //Check for duplicates
                         foreach ($fileModules as $module) {
                             if ($regId == $module['regid']) {
-                                $msg = xarML('The same registered ID (#(1)) was found in two different modules, #(2) and #(3). Please remove one of the modules and regenerate the list.', $regId, $name, $module['name']);
-                                xarController::redirect(xarController::URL(
+                                $msg = $this->ml('The same registered ID (#(1)) was found in two different modules, #(2) and #(3). Please remove one of the modules and regenerate the list.', $regId, $name, $module['name']);
+                                $this->ctl()->redirect($this->ctl()->getModuleURL(
                                     'modules',
                                     'user',
                                     'errors',
                                     ['message' => urlencode($msg)]
-                                ), null, $this->getContext());
+                                ));
                                 return true;
                             }
                             if ($nameinfile == $module['nameinfile']) {
-                                $msg = xarML('The module #(1) was found under two different registered IDs, #(2) and #(3). Please remove one of the modules and regenerate the list', $nameinfile, $regId, $module['regid']);
-                                xarController::redirect(xarController::URL(
+                                $msg = $this->ml('The module #(1) was found under two different registered IDs, #(2) and #(3). Please remove one of the modules and regenerate the list', $nameinfile, $regId, $module['regid']);
+                                $this->ctl()->redirect($this->ctl()->getModuleURL(
                                     'modules',
                                     'user',
                                     'errors',
                                     ['message' => urlencode($msg)]
-                                ), null, $this->getContext());
+                                ));
                                 return true;
                             }
                         }

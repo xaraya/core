@@ -72,9 +72,9 @@ class ParseuserhomeMethod extends MethodClass
                         if (empty($url[2])) {
                             $url[2] = "main";
                         }
-                        $url = xarController::URL($url[0], $url[1], $url[2]);
+                        $url = $this->ctl()->getModuleURL($url[0], $url[1], $url[2]);
                         if (isset($sections[1])) {
-                            $url .= xarVar::prepForDisplay($sections[1]);
+                            $url .= $this->var()->prep($sections[1]);
                         }
                         break;
                     }
@@ -82,8 +82,8 @@ class ParseuserhomeMethod extends MethodClass
                     {
                         $url = explode(':', substr($url, 1, - 1));
                         // Get current pubtype type (if any)
-                        if (xarVar::isCached('Blocks.articles', 'ptid')) {
-                            $ptid = xarVar::getCached('Blocks.articles', 'ptid');
+                        if ($this->var()->isCached('Blocks.articles', 'ptid')) {
+                            $ptid = $this->var()->getCached('Blocks.articles', 'ptid');
                         }
                         if (empty($ptid)) {
                             // try to get ptid from input
@@ -93,26 +93,26 @@ class ParseuserhomeMethod extends MethodClass
                         if ($url[0] == $ptid) {
                             $here = 'true';
                         }
-                        $url = xarController::URL('articles', 'user', 'view', ['ptid' => $url[0]]);
+                        $url = $this->ctl()->getModuleURL('articles', 'user', 'view', ['ptid' => $url[0]]);
                         break;
                     }
                 case '(': // category link
                     {
                         $url = explode(':', substr($url, 1, - 1));
-                        if (xarVar::isCached('Blocks.categories', 'catid')) {
-                            $catid = xarVar::getCached('Blocks.categories', 'catid');
+                        if ($this->var()->isCached('Blocks.categories', 'catid')) {
+                            $catid = $this->var()->getCached('Blocks.categories', 'catid');
                         }
                         if (empty($catid)) {
                             // try to get catid from input
                             $this->var()->check('catid', $catid);
                         }
-                        if (empty($catid) && xarVar::isCached('Blocks.categories', 'cids')) {
-                            $cids = xarVar::getCached('Blocks.categories', 'cids');
+                        if (empty($catid) && $this->var()->isCached('Blocks.categories', 'cids')) {
+                            $cids = $this->var()->getCached('Blocks.categories', 'cids');
                         } else {
                             $cids = [];
                         }
                         $catid = str_replace('_', '', $catid);
-                        $ancestors = xarMod::apiFunc(
+                        $ancestors = $this->mod()->apiFunc(
                             'categories',
                             'user',
                             'getancestors',
@@ -127,7 +127,7 @@ class ParseuserhomeMethod extends MethodClass
                                 $here = 'true';
                             }
                         }
-                        $url = xarController::URL('articles', 'user', 'view', ['catid' => $url[0]]);
+                        $url = $this->ctl()->getModuleURL('articles', 'user', 'view', ['catid' => $url[0]]);
                         break;
                     }
                 default: // standard URL
@@ -144,9 +144,9 @@ class ParseuserhomeMethod extends MethodClass
                             throw new BadParameterException($url, $msg);
                         }
                     }
-                    // BUG 2023: Make sure manual URLs are prepped for XML, consistent with xarController::URL()
+                    // BUG 2023: Make sure manual URLs are prepped for XML, consistent with $this->ctl()->getModuleURL()
                     if (!empty(xarMod::$genXmlUrls)) {
-                        $url = xarVar::prepForDisplay($url);
+                        $url = $this->var()->prep($url);
                     }
             }
         }

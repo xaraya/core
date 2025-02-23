@@ -40,7 +40,7 @@ class ModifyconfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security Check
-        if (!xarSecurity::check('AdminCategories')) {
+        if (!$this->sec()->checkAccess('AdminCategories')) {
             return;
         }
         $data = [];
@@ -48,11 +48,11 @@ class ModifyconfigMethod extends MethodClass
         $this->var()->find('tab', $data['tab'], 'str:1:100', 'general');
         $this->var()->find('tabmodule', $tabmodule, 'str:1:100', 'categories');
 
-        $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'categories']);
+        $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'categories']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
         $data['module_settings']->getItem();
 
-        $regid = xarMod::getRegID($tabmodule);
+        $regid = $this->mod()->getRegID($tabmodule);
         switch (strtolower($phase)) {
             case 'modify':
             default:
@@ -69,8 +69,8 @@ class ModifyconfigMethod extends MethodClass
 
             case 'update':
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 $this->var()->find('usejsdisplay', $usejsdisplay, 'checkbox', xarModVars::get('categories', 'usejsdisplay'));
                 $this->var()->find('numstats', $numstats, 'int', xarModVars::get('categories', 'numstats'));
@@ -89,17 +89,17 @@ class ModifyconfigMethod extends MethodClass
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
                     $data['context'] ??= $this->getContext();
-                    return xarTpl::module('categories', 'admin', 'modifyconfig', $data);
+                    return $this->tpl()->module('categories', 'admin', 'modifyconfig', $data);
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                 }
 
-                xarController::redirect(xarController::URL(
+                $this->ctl()->redirect($this->ctl()->getModuleURL(
                     'categories',
                     'admin',
                     'modifyconfig',
                     ['tabmodule' => $tabmodule, 'tab' => $data['tab']]
-                ), null, $this->getContext());
+                ));
                 // Return
                 return true;
 

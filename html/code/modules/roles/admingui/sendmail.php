@@ -51,7 +51,7 @@ class SendmailMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('MailRoles')) {
+        if (!$this->sec()->checkAccess('MailRoles')) {
             return;
         }
 
@@ -63,14 +63,14 @@ class SendmailMethod extends MethodClass
         $this->var()->find('includesubgroups', $includesubgroups, 'int:0:', 0);
 
         // Confirm authorisation code.
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
         // Get user information
         // Get the current query
         sys::import('xaraya.structures.query');
         $q = new Query();
-        $q = unserialize((string) xarSession::getVar('rolesquery'));
+        $q = unserialize((string) $this->session()->getVar('rolesquery'));
 
         // only need the id, name and email fields
         $q->clearfields();
@@ -137,7 +137,7 @@ class SendmailMethod extends MethodClass
             $mailsubject = xarTpl::string($subject, $data);
             $mailmessage = xarTpl::string($message, $data);
 
-            if (!xarMod::apiFunc(
+            if (!$this->mod()->apiFunc(
                 'mail',
                 'admin',
                 'sendmail',
@@ -152,7 +152,7 @@ class SendmailMethod extends MethodClass
         // If it was on, turn it back on
         xarModVars::set('themes', 'ShowTemplates', $themecomments);
 
-        xarController::redirect(xarController::URL('roles', 'admin', 'createmail'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'createmail'));
         return true;
     }
 }

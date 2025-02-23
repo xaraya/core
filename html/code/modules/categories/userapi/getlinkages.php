@@ -46,18 +46,18 @@ class GetlinkagesMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (!xarSecurity::check('ViewCategoryLink')) {
+        if (!$this->sec()->checkAccess('ViewCategoryLink')) {
             return;
         }
 
         // Get arguments from argument array
         extract($args);
 
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         sys::import('xaraya.structures.query');
         $q = new Query('SELECT', $xartable['categories_linkage']);
         if (!empty($module)) {
-            $q->eq('module_id', xarMod::getID($module));
+            $q->eq('module_id', $this->mod()->getID($module));
         }
         if (!empty($itemtype)) {
             $q->eq('itemtype', $itemtype);

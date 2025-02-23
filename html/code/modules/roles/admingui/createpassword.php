@@ -45,7 +45,7 @@ class CreatepasswordMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if (!xarSecurity::check('EditRoles')) {
+        if (!$this->sec()->checkAccess('EditRoles')) {
             return;
         }
 
@@ -70,20 +70,20 @@ class CreatepasswordMethod extends MethodClass
         }
 
         if (!xarModVars::get('roles', 'askpasswordemail')) {
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'showusers',
                 ['id' => $groupid, 'state' => $state]
-            ), null, $this->getContext());
+            ));
         } else {
-            xarSession::setVar('tmppass', $pass);
-            xarController::redirect(xarController::URL(
+            $this->session()->setVar('tmppass', $pass);
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'asknotification',
                 ['id' => [$id => '1'], 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state]
-            ), null, $this->getContext());
+            ));
         }
         return true;
     }

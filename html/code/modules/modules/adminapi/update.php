@@ -56,7 +56,7 @@ class UpdateMethod extends MethodClass
 
         if (!empty($observers)) {
             foreach ($observers as $hookmod => $subjects) {
-                $observer_id = xarMod::getRegID($hookmod);
+                $observer_id = $this->mod()->getRegID($hookmod);
                 if (!$adminapi->updatehooks([
                     'regid' => $observer_id,
                     'subjects' => $subjects,

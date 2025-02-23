@@ -43,7 +43,7 @@ class ExecuteinitfunctionMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security Check
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
@@ -53,7 +53,7 @@ class ExecuteinitfunctionMethod extends MethodClass
         }
 
         // Get module information
-        $modInfo = xarMod::getInfo($args['regid']);
+        $modInfo = $this->mod()->getInfo($args['regid']);
 
         if (!isset($modInfo['osdirectory']) ||
             empty($modInfo['osdirectory']) ||
@@ -65,7 +65,7 @@ class ExecuteinitfunctionMethod extends MethodClass
         }
 
         // Get module database info, they might be needed in the function to be called
-        xarMod::loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
+        $this->mod()->loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
 
         $xarinitfile = '';
         if (file_exists(sys::code() . 'modules/' . $modInfo['osdirectory'] . '/xarinit.php')) {
@@ -92,7 +92,7 @@ class ExecuteinitfunctionMethod extends MethodClass
         ob_end_clean();
 
         if (empty($r) || !$r) {
-            $msg = xarML("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $xarinitfile, $error_msg);
+            $msg = $this->ml("Could not load file: [#(1)].\n\n Error Caught:\n #(2)", $xarinitfile, $error_msg);
             throw new Exception($msg);
         }
 
@@ -116,10 +116,10 @@ class ExecuteinitfunctionMethod extends MethodClass
         }
 
         if ($result === false) {
-            $msg = xarML('While changing state of the #(1) module, the function #(2) returned a false value when executed.', $modInfo['name'], $func);
+            $msg = $this->ml('While changing state of the #(1) module, the function #(2) returned a false value when executed.', $modInfo['name'], $func);
             throw new Exception($msg);
         } elseif ($result != true) {
-            $msg = xarML('An error ocurred while changing state of the #(1) module, executing function #(2)', $modInfo['name'], $func);
+            $msg = $this->ml('An error ocurred while changing state of the #(1) module, executing function #(2)', $modInfo['name'], $func);
             throw new Exception($msg);
         }
     }

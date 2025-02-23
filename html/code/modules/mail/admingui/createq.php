@@ -47,12 +47,12 @@ class CreateqMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminMail')) {
+        if (!$this->sec()->checkAccess('AdminMail')) {
             return;
         }
 
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // What do we need to do
@@ -61,7 +61,7 @@ class CreateqMethod extends MethodClass
         // Do we have the master ?
         if (!$qdefInfo = $adminapi->getqdef()) {
             // Redirect to the view page, which offers to create one
-            xarController::redirect(xarController::URL('mail', 'admin', 'view'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'view'));
             return true;
         }
 
@@ -72,7 +72,7 @@ class CreateqMethod extends MethodClass
         } // exception
 
         // Show the status screen again,
-        xarController::redirect(xarController::URL('mail', 'admin', 'qstatus'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'qstatus'));
         return true;
     }
 }

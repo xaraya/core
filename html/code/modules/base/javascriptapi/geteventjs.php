@@ -36,10 +36,10 @@ class GeteventjsMethod extends MethodClass
      * Add an 'onload' trigger to the page (both examples do the same thing):
      *   <xar:javascript position="body" type="onload" code="alert('hello, world')"/>
      *   xarTplAddJavaScript('body', 'onload', "alert('hello, world')");
-     *   xarMod::apiFunc('themes','user','registerjs', array('position'=>'body', 'type'=>'onload', 'code'=>"alert('hello, world')");
+     *   $this->mod()->apiFunc('themes','user','registerjs', array('position'=>'body', 'type'=>'onload', 'code'=>"alert('hello, world')");
      *
      * Get all the JavaScript for the 'onload' trigger (this can be fetched in a page template):
-     *   xarMod::apiFunc('base', 'javascript', 'geteventjs', array('position'=>'body', 'type'=>'onload'));
+     *   $this->mod()->apiFunc('base', 'javascript', 'geteventjs', array('position'=>'body', 'type'=>'onload'));
      *
      * TODO: investigate whether it is worthwhile putting all these JS functions into a
      * dedicated xarJS.php script. Going through the APIs is cumbersome, and on the whole
@@ -74,7 +74,7 @@ class GeteventjsMethod extends MethodClass
         // @fixme replace with right javascript code or drop function
         // Concatenate the JavaScript trigger code fragments.
         // Only pick up the event type JavaScript.
-        $positionjs = xarMod::apiFunc('themes', 'user', 'renderjs', ['position' => $position, 'type' => $type]);
+        $positionjs = $this->mod()->apiFunc('themes', 'user', 'renderjs', ['position' => $position, 'type' => $type]);
 
         if (!empty($positionjs)) {
             foreach ($positionjs as $positionjs_item) {

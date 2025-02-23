@@ -50,12 +50,12 @@ class CountitemsMethod extends MethodClass
         }
 
         // Security check
-        if (!xarSecurity::check('ViewCategoryLink')) {
+        if (!$this->sec()->checkAccess('ViewCategoryLink')) {
             return;
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
 
         // Get the field names and LEFT JOIN ... ON ... parts from categories
         // By passing on the $args, we can let leftjoin() create the WHERE for

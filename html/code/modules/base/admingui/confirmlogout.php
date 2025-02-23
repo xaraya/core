@@ -35,7 +35,7 @@ class ConfirmlogoutMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditBase')) {
+        if (!$this->sec()->checkAccess('EditBase')) {
             return;
         }
 

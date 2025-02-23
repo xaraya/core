@@ -47,7 +47,7 @@ class DeleteModuleAliasMethod extends MethodClass
             throw new EmptyParameterException('aliasModName');
         }
 
-        $aliases = xarConfigVars::get(null, 'System.ModuleAliases');
+        $aliases = $this->config()->getVar('System.ModuleAliases');
         if (!isset($aliases[$aliasModName])) {
             return false;
         }
@@ -56,7 +56,7 @@ class DeleteModuleAliasMethod extends MethodClass
             return false;
         }
         unset($aliases[$aliasModName]);
-        xarConfigVars::set(null, 'System.ModuleAliases', $aliases);
+        $this->config()->setVar('System.ModuleAliases', $aliases);
 
         return true;
     }

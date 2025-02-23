@@ -38,10 +38,10 @@ class GetstatesMethod extends MethodClass
     {
         sys::import('modules.roles.class.roles');
         return [
-            ['id' => xarRoles::ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')],
-            ['id' => xarRoles::ROLES_STATE_NOTVALIDATED, 'name'  => xarML('Not Validated')],
-            ['id' => xarRoles::ROLES_STATE_ACTIVE, 'name'  => xarML('Active')],
-            ['id' => xarRoles::ROLES_STATE_PENDING, 'name'  => xarML('Pending')],
+            ['id' => xarRoles::ROLES_STATE_INACTIVE, 'name' => $this->ml('Inactive')],
+            ['id' => xarRoles::ROLES_STATE_NOTVALIDATED, 'name'  => $this->ml('Not Validated')],
+            ['id' => xarRoles::ROLES_STATE_ACTIVE, 'name'  => $this->ml('Active')],
+            ['id' => xarRoles::ROLES_STATE_PENDING, 'name'  => $this->ml('Pending')],
         ];
     }
 }

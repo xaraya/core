@@ -66,7 +66,7 @@ class ModifyInstanceMethod extends MethodClass
          *
          * @TODO Need to sperate this out to API calls.
          */
-        if (!xarSecurity::check('ManageBlocks')) {
+        if (!$this->sec()->checkAccess('ManageBlocks')) {
             return;
         }
 
@@ -108,7 +108,7 @@ class ModifyInstanceMethod extends MethodClass
             $phase = 'display';
         } else {
             /** @var AccessProperty $accessproperty */
-            $accessproperty = DataPropertyMaster::getProperty(['name' => 'access']);
+            $accessproperty = $this->prop()->getProperty(['name' => 'access']);
             // check modify access
             if ($isadmin) {
                 $canmodify = true;
@@ -132,14 +132,14 @@ class ModifyInstanceMethod extends MethodClass
                 case 'caching':
                 case 'access':
                     if (!$isadmin) {
-                        return xarController::badRequest('no_privileges', $this->getContext());
+                        return $this->ctl()->badRequest('no_privileges');
                     }
                     $method = $interface;
                     // no break
                 case 'config':
                 default:
                     if (!$canmodify) {
-                        return xarController::badRequest('no_privileges', $this->getContext());
+                        return $this->ctl()->badRequest('no_privileges');
                     }
                     if (empty($method)) {
                         $method = $interface;
@@ -179,7 +179,7 @@ class ModifyInstanceMethod extends MethodClass
             $invalid = [];
             switch ($interface) {
                 case 'display':
-                    $invalid['phase'] = xarML('Update phase not supported in display interface');
+                    $invalid['phase'] = $this->ml('Update phase not supported in display interface');
                     // fall through to display phase
                     $phase = 'display';
                     break;
@@ -201,30 +201,30 @@ class ModifyInstanceMethod extends MethodClass
                                 $this->var()->find('instance_attachgroup', $attachgroup, 'int:1:', null);
 
                                 if (empty($name) || strlen($name) > 64) {
-                                    $invalid['name'] = xarML('Name must be a string between 1 and 64 characters long');
+                                    $invalid['name'] = $this->ml('Name must be a string between 1 and 64 characters long');
                                 } elseif (!preg_match('!^([a-z0-9_])*$!', $name)) {
-                                    $invalid['name'] = xarML('Name can only contain the characters [a-z0-9_]');
+                                    $invalid['name'] = $this->ml('Name can only contain the characters [a-z0-9_]');
                                 } elseif ($name != $blockinfo['name']) {
                                     $check = $instancesapi->getitem(['name' => $name]);
                                     if ($check && $check['block_id'] != $blockinfo['block_id']) {
-                                        $invalid['name'] = xarML('A block instance named "#(1)" already exists', $name);
+                                        $invalid['name'] = $this->ml('A block instance named "#(1)" already exists', $name);
                                     }
                                 }
 
                                 if (!empty($title) && strlen($title) > 254) {
-                                    $invalid['title'] = xarML('Title must be a string no more than 254 characters long');
+                                    $invalid['title'] = $this->ml('Title must be a string no more than 254 characters long');
                                 }
 
 
                                 if (!isset($instance_states[$state])) {
-                                    $invalid['state'] = xarML('Unknown block instance state');
+                                    $invalid['state'] = $this->ml('Unknown block instance state');
                                 }
 
                                 if (!empty($box_template) && strlen($box_template) > 127) {
-                                    $invalid['templates'] = xarML('Template must be a string no more than 127 characters long');
+                                    $invalid['templates'] = $this->ml('Template must be a string no more than 127 characters long');
                                 }
                                 if (!empty($block_template) && strlen($block_template) > 127) {
-                                    $invalid['templates'] = xarML('Template must be a string no more than 127 characters long');
+                                    $invalid['templates'] = $this->ml('Template must be a string no more than 127 characters long');
                                 }
 
                                 $blockinfo_groups = [];
@@ -248,15 +248,15 @@ class ModifyInstanceMethod extends MethodClass
                                         $blockinfo_groups[$group_id] = $tpls;
                                     }
                                     if (!empty($badtemplates)) {
-                                        $invalid['templates'] = xarML('Template must be a string no more than 127 characters long');
+                                        $invalid['templates'] = $this->ml('Template must be a string no more than 127 characters long');
                                     }
                                 }
 
                                 if (!empty($attachgroup)) {
                                     if (!isset($block_groups[$attachgroup])) {
-                                        $invalid['attachgroup'] = xarML('Specified block group does not exist');
+                                        $invalid['attachgroup'] = $this->ml('Specified block group does not exist');
                                     } elseif (isset($blockinfo_groups[$attachgroup])) {
-                                        $invalid['attachgroup'] = xarML('Instance is already a member of #(1) group', $blockinfo_groups[$attachgroup]['name']);
+                                        $invalid['attachgroup'] = $this->ml('Instance is already a member of #(1) group', $blockinfo_groups[$attachgroup]['name']);
                                     }
                                     if (!empty($invalid['attachgroup'])) {
                                         $attachgroup = null;
@@ -284,16 +284,16 @@ class ModifyInstanceMethod extends MethodClass
                                     $result = $block->update();
                                 }
                                 if (isset($result) && $result == false) {
-                                    $invalid['update'] = xarML('Failed updating block instance configuration');
+                                    $invalid['update'] = $this->ml('Failed updating block instance configuration');
                                 }
                             } else {
-                                $invalid['check'] = xarML('Failed validating block instance form input');
+                                $invalid['check'] = $this->ml('Failed validating block instance form input');
                             }
 
                             if (empty($invalid)) {
 
-                                if (!xarSec::confirmAuthKey()) {
-                                    return xarController::badRequest('bad_author', $this->getContext());
+                                if (!$this->sec()->confirmAuthKey()) {
+                                    return $this->ctl()->badRequest('bad_author');
                                 }
 
                                 if (isset($result) && is_array($result)) {
@@ -365,16 +365,16 @@ class ModifyInstanceMethod extends MethodClass
                                 if (xarBlock::hasMethod($block, $update_method, true)) {
                                     $result = $block->$update_method();
                                     if (empty($result)) {
-                                        $invalid['update'] = xarML('Failed updating block instance configuration');
+                                        $invalid['update'] = $this->ml('Failed updating block instance configuration');
                                     }
                                 }
                             } else {
-                                $invalid['check'] = xarML('Failed validating block instance form input');
+                                $invalid['check'] = $this->ml('Failed validating block instance form input');
                             }
                             // update block configuration
                             if (empty($invalid)) {
-                                if (!xarSec::confirmAuthKey()) {
-                                    return xarController::badRequest('bad_author', $this->getContext());
+                                if (!$this->sec()->confirmAuthKey()) {
+                                    return $this->ctl()->badRequest('bad_author');
                                 }
                                 if (!empty($result) && is_array($result)) {
                                     if (!empty($result['content'])) {
@@ -428,17 +428,17 @@ class ModifyInstanceMethod extends MethodClass
                         if (xarBlock::hasMethod($block, $update_method, true)) {
                             $result = $block->$update_method();
                             if (empty($result)) {
-                                $invalid['update'] = xarML('Failed updating block instance caching configuration');
+                                $invalid['update'] = $this->ml('Failed updating block instance caching configuration');
                             }
                         }
                     } else {
-                        $invalid['check'] = xarML('Failed validating block instance caching form input');
+                        $invalid['check'] = $this->ml('Failed validating block instance caching form input');
                     }
 
                     // update block configuration
                     if (empty($invalid)) {
-                        if (!xarSec::confirmAuthKey()) {
-                            return xarController::badRequest('bad_author', $this->getContext());
+                        if (!$this->sec()->confirmAuthKey()) {
+                            return $this->ctl()->badRequest('bad_author');
                         }
                         if (!empty($result) && is_array($result)) {
                             if (!empty($result['content'])) {
@@ -465,17 +465,17 @@ class ModifyInstanceMethod extends MethodClass
                         if (xarBlock::hasMethod($block, $update_method, true)) {
                             $result = $block->$update_method();
                             if (empty($result)) {
-                                $invalid['update'] = xarML('Failed updating block instance access configuration');
+                                $invalid['update'] = $this->ml('Failed updating block instance access configuration');
                             }
                         }
                     } else {
-                        $invalid['check'] = xarML('Failed validating block instance access form input');
+                        $invalid['check'] = $this->ml('Failed validating block instance access form input');
                     }
 
                     // update block configuration
                     if (empty($invalid)) {
-                        if (!xarSec::confirmAuthKey()) {
-                            return xarController::badRequest('bad_author', $this->getContext());
+                        if (!$this->sec()->confirmAuthKey()) {
+                            return $this->ctl()->badRequest('bad_author');
                         }
                         if (!empty($result) && is_array($result)) {
                             if (!empty($result['content'])) {
@@ -507,16 +507,16 @@ class ModifyInstanceMethod extends MethodClass
                         if (xarBlock::hasMethod($block, $update_method, true)) {
                             $result = $block->$update_method();
                             if (empty($result)) {
-                                $invalid['update'] = xarML('Failed updating block type caching configuration');
+                                $invalid['update'] = $this->ml('Failed updating block type caching configuration');
                             }
                         }
                     } else {
-                        $invalid['check'] = xarML('Failed validating block type caching form input');
+                        $invalid['check'] = $this->ml('Failed validating block type caching form input');
                     }
                     // update block configuration
                     if (empty($invalid)) {
-                        if (!xarSec::confirmAuthKey()) {
-                            return xarController::badRequest('bad_author', $this->getContext());
+                        if (!$this->sec()->confirmAuthKey()) {
+                            return $this->ctl()->badRequest('bad_author');
                         }
                         if (!empty($result) && is_array($result)) {
                             if (!empty($result['content'])) {
@@ -546,7 +546,7 @@ class ModifyInstanceMethod extends MethodClass
                     ''
                 );
                 if (empty($return_url)) {
-                    $return_url = xarController::URL(
+                    $return_url = $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'modify_instance',
@@ -557,7 +557,7 @@ class ModifyInstanceMethod extends MethodClass
                         ]
                     );
                 }
-                xarController::redirect($return_url, null, $this->getContext());
+                $this->ctl()->redirect($return_url);
             }
             // failed to validate, pass the invalid messages back to the form
             $data['invalid'] = $invalid;
@@ -710,9 +710,9 @@ class ModifyInstanceMethod extends MethodClass
                     $blockinfo['content']['cacheexpire'] = $userapi->convertseconds(['direction' => 'from', 'starttime' => $blockinfo['content']['cacheexpire']]);
                 }
                 $data['usershared_options'] = [
-                    ['id' => 0, 'name' => xarML('No Sharing')],
-                    ['id' => 1, 'name' => xarML('Group Members')],
-                    ['id' => 2, 'name' => xarML('All Users')],
+                    ['id' => 0, 'name' => $this->ml('No Sharing')],
+                    ['id' => 1, 'name' => $this->ml('Group Members')],
+                    ['id' => 2, 'name' => $this->ml('All Users')],
                 ];
                 break;
             case 'access':
@@ -731,7 +731,7 @@ class ModifyInstanceMethod extends MethodClass
 
                     if (is_array($value)) {/*
                             foreach ($value as $k => $v) {
-                                $v = xarVar::prepForDisplay($v);
+                                $v = $this->var()->prep($v);
                                 $value[$k] = $v;
                             }*/
                         $xml .= "  <$key>";
@@ -765,55 +765,55 @@ class ModifyInstanceMethod extends MethodClass
         $data['type_states'] = $type_states;
         $interfaces = [];
         $interfaces[] = [
-            'url' => xarServer::getCurrentURL(['interface' => 'display', 'block_method' => null]),
-            'label' => xarML('Info'),
-            'title' => xarML('Display information about this block type'),
+            'url' => $this->ctl()->getCurrentURL(['interface' => 'display', 'block_method' => null]),
+            'label' => $this->ml('Info'),
+            'title' => $this->ml('Display information about this block type'),
             'active' => ($interface == 'display' && $method == 'info'),
         ];
         if ($interface != 'display' || $method != 'status') {
             if ($canmodify) {
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'config', 'block_method' => null]),
-                    'label' => xarML('Config'),
-                    'title' => xarML('Modify default configuration for this block type'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'config', 'block_method' => null]),
+                    'label' => $this->ml('Config'),
+                    'title' => $this->ml('Modify default configuration for this block type'),
                     'active' => ($interface == 'config'),
                 ];
             }
             if ($isadmin) {
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'caching', 'block_method' => null]),
-                    'label' => xarML('Caching'),
-                    'title' => xarML('Modify default caching configuration for this block type'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'caching', 'block_method' => null]),
+                    'label' => $this->ml('Caching'),
+                    'title' => $this->ml('Modify default caching configuration for this block type'),
                     'active' => ($interface == 'caching'),
                 ];
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'access', 'block_method' => null]),
-                    'label' => xarML('Access'),
-                    'title' => xarML('Modify default access configuration for this block type'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'access', 'block_method' => null]),
+                    'label' => $this->ml('Access'),
+                    'title' => $this->ml('Modify default access configuration for this block type'),
                     'active' => ($interface == 'access'),
                 ];
             }
             if ($block->show_preview) {
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'display', 'block_method' => 'preview']),
-                    'label' => xarML('Preview'),
-                    'title' => xarML('Show a preview of this block type'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'display', 'block_method' => 'preview']),
+                    'label' => $this->ml('Preview'),
+                    'title' => $this->ml('Show a preview of this block type'),
                     'active' => ($interface == 'display' && $method == 'preview'),
                 ];
             }
             if ($isadmin) {
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'export', 'block_method' => null]),
-                    'label' => xarML('Export'),
-                    'title' => xarML('Export the data of this block to a XML file'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'export', 'block_method' => null]),
+                    'label' => $this->ml('Export'),
+                    'title' => $this->ml('Export the data of this block to a XML file'),
                     'active' => ($interface == 'export'),
                 ];
             }
             if ($block->show_help) {
                 $interfaces[] = [
-                    'url' => xarServer::getCurrentURL(['interface' => 'display', 'block_method' => 'help']),
-                    'label' => xarML('Help'),
-                    'title' => xarML('View block type help information'),
+                    'url' => $this->ctl()->getCurrentURL(['interface' => 'display', 'block_method' => 'help']),
+                    'label' => $this->ml('Help'),
+                    'title' => $this->ml('View block type help information'),
                     'active' => ($interface == 'display' && $method == 'help'),
                 ];
             }

@@ -38,10 +38,10 @@ class GetqueuetypesMethod extends MethodClass
         // the definition object changing.
         // This function is called by dd on the validation of the type property
         // of the queues object we are using.
-        $qTypes[1] = xarML('Incoming mail');
-        $qTypes[2] = xarML('Outgoing mail');
-        $qTypes[3] = xarML('Demote  (black hole)');
-        $qTypes[4] = xarML('Promote (redispatch)');
+        $qTypes[1] = $this->ml('Incoming mail');
+        $qTypes[2] = $this->ml('Outgoing mail');
+        $qTypes[3] = $this->ml('Demote  (black hole)');
+        $qTypes[4] = $this->ml('Promote (redispatch)');
         return $qTypes;
     }
 }

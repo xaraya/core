@@ -53,7 +53,7 @@ class UpdatestateMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('EditRoles')) {
+        if (!$this->sec()->checkAccess('EditRoles')) {
             return;
         }
 
@@ -65,17 +65,17 @@ class UpdatestateMethod extends MethodClass
         $this->var()->find('updatephase', $updatephase, 'str:1:', 'update');
         $this->var()->find('ids', $ids);
 
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         // invalid fields (we'll check this below)
         // check if the username is empty
         //Note : We should not provide xarML here. (should be in the template for better translation)
         //Might be additionnal advice about the invalid var (but no xarML..)
         if (!isset($ids)) {
-            $invalid = xarML('You must choose the users to change their state');
+            $invalid = $this->ml('You must choose the users to change their state');
         }
         if (isset($invalid)) {
             // if so, return to the previous template
-            return xarController::redirect(xarController::URL(
+            return $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'showusers',
@@ -83,7 +83,7 @@ class UpdatestateMethod extends MethodClass
                     'state'   => $data['state'],
                     'invalid' => $invalid,
                     'id'     => $data['groupid']]
-            ), null, $this->getContext());
+            ));
         }
         //Get the notice message
         switch ($data['status']) {
@@ -136,19 +136,19 @@ class UpdatestateMethod extends MethodClass
         $ids = $idnotify;
         // Success
         if ((!xarModVars::get('roles', 'ask' . $mailtype . 'email')) || (count($idnotify) == 0)) {
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'showusers',
                 ['id' => $data['groupid'], 'state' => $data['state']]
-            ), null, $this->getContext());
+            ));
         } else {
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',
                 'asknotification',
                 ['id' => $ids, 'mailtype' => $mailtype, 'groupid' => $data['groupid'], 'state' => $data['state']]
-            ), null, $this->getContext());
+            ));
         }
         return true;
     }

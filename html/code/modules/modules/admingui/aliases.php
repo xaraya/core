@@ -37,7 +37,7 @@ class AliasesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
@@ -50,7 +50,7 @@ class AliasesMethod extends MethodClass
             xarModAlias::set($addalias, $modname);
         }
         $data['modname'] = $modname;
-        $data['aliasesMap'] = xarConfigVars::get(null, 'System.ModuleAliases');
+        $data['aliasesMap'] = $this->config()->getVar('System.ModuleAliases');
         ksort($data['aliasesMap']);
         return $data;
     }

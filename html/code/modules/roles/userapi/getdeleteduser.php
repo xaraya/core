@@ -60,13 +60,13 @@ class GetdeleteduserMethod extends MethodClass
             $itemtype = xarRoles::ROLES_USERTYPE;
         }
 
-        if (!xarSecurity::check('ReadRoles')) {
+        if (!$this->sec()->checkAccess('ReadRoles')) {
             return;
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $rolestable = $xartable['roles'];
 
@@ -92,7 +92,7 @@ class GetdeleteduserMethod extends MethodClass
             $bindvars[] = $name;
         } elseif (!empty($uname)) {
             // Need to add 'deleted' string to username
-            $deleted = '[' . xarML('deleted') . ']';
+            $deleted = '[' . $this->ml('deleted') . ']';
             $query .= " AND uname LIKE ?";
             $bindvars[] = $uname . $deleted . "%";
         } elseif (!empty($email)) {

@@ -47,12 +47,12 @@ class UpdateMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('EditModules')) {
+        if (!$this->sec()->checkAccess('EditModules')) {
             return;
         }
 
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // Get parameters
@@ -73,9 +73,9 @@ class UpdateMethod extends MethodClass
 
         $this->var()->check('return_url', $return_url);
         if (!empty($return_url)) {
-            xarController::redirect($return_url, null, $this->getContext());
+            $this->ctl()->redirect($return_url);
         } else {
-            xarController::redirect(xarController::URL('modules', 'admin', 'modify', ['id' => $regId]), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', 'modify', ['id' => $regId]));
         }
 
         return true;

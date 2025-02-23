@@ -39,7 +39,7 @@ class GetlistMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $apilist = [];
-        // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
         $apilist['getitems'] = [
             'type' => 'instances',  // default = rest, other $type options are user, admin, ... as usual
             'path' => 'instances',  // path to use in REST API operation /modules/{module}/{path} with path parameter
@@ -48,7 +48,7 @@ class GetlistMethod extends MethodClass
             'description' => 'Call instances api function getitems() in module blocks',
             'parameters' => ['type', 'module', 'type_category'],  // optional parameter(s)
         ];
-        // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
         $apilist['getinfo'] = [
             'type' => 'blocks',  // default = rest, other $type options are user, admin, ... as usual
             'path' => 'instances/{instance}',  // path to use in REST API operation /modules/{module}/{path} with path parameter
@@ -57,7 +57,7 @@ class GetlistMethod extends MethodClass
             'description' => 'Call blocks api function getinfo() in module blocks',
             'parameters' => ['state', 'type_state'],  // optional parameter(s)
         ];
-        // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
         $apilist['render'] = [
             //'type' => 'rest',  // default = rest, other $type options are user, admin, ... as usual
             'path' => 'render/{instance}',  // path to use in REST API operation /modules/{module}/{path} with path parameter

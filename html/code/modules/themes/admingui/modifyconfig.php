@@ -52,7 +52,7 @@ class ModifyconfigMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
@@ -63,8 +63,8 @@ class ModifyconfigMethod extends MethodClass
         $this->var()->find('pagetitle', $data['pagetitle'], 'str:1:', 'default');
         $this->var()->find('showphpcbit', $data['showphpcbit'], 'checkbox', (bool) xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates'));
         $this->var()->find('showtemplates', $data['showtemplates'], 'checkbox', (bool) xarModVars::get('themes', 'ShowTemplates'));
-        $this->var()->find('cachetemplates', $data['cachetemplates'], 'checkbox', xarConfigVars::get(null, 'Site.BL.CacheTemplates'));
-        $this->var()->find('memcachetemplates', $data['memcachetemplates'], 'checkbox', xarConfigVars::get(null, 'Site.BL.MemCacheTemplates'));
+        $this->var()->find('cachetemplates', $data['cachetemplates'], 'checkbox', $this->config()->getVar('Site.BL.CacheTemplates'));
+        $this->var()->find('memcachetemplates', $data['memcachetemplates'], 'checkbox', $this->config()->getVar('Site.BL.MemCacheTemplates'));
         $this->var()->find('variable_dump', $data['variable_dump'], 'checkbox', (bool) xarModVars::get('themes', 'variable_dump'));
         $this->var()->find('slogan', $data['slogan'], 'str', xarModVars::get('themes', 'SiteSlogan'));
         $this->var()->find('footer', $data['footer'], 'str', xarModVars::get('themes', 'SiteFooter'));
@@ -108,12 +108,12 @@ class ModifyconfigMethod extends MethodClass
         //        $data['dashtemplate']='dashboard';
         //    }
 
-        $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'themes']);
+        $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'themes']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
         $data['module_settings']->getItem();
 
         sys::import('modules.dynamicdata.class.properties.master');
-        $data['user_themes'] = DataPropertyMaster::getProperty(['name' => 'checkboxlist']);
+        $data['user_themes'] = $this->prop()->getProperty(['name' => 'checkboxlist']);
         $data['user_themes']->options = $adminapi->dropdownlist(['Class' => 2]);
         $data['user_themes']->setValue(xarModVars::get('themes', 'user_themes'));
         $data['user_themes']->layout = 'vertical';
@@ -124,15 +124,15 @@ class ModifyconfigMethod extends MethodClass
 
             case 'update':
                 // Confirm authorisation code
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 $isvalid = $data['module_settings']->checkInput();
                 $andvalid = ($data['enable_user_menu'] != false) ? $data['user_themes']->checkInput('user_themes') : true;
 
                 if (!$isvalid || !$andvalid) {
                     $data['context'] ??= $this->getContext();
-                    return xarTpl::module('themes', 'admin', 'modifyconfig', $data);
+                    return $this->tpl()->module('themes', 'admin', 'modifyconfig', $data);
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                     xarModVars::set('themes', 'enable_user_menu', $data['enable_user_menu']);
@@ -157,14 +157,14 @@ class ModifyconfigMethod extends MethodClass
                 // <chris/> Instead of setting the base theme config var dir directly,
                 // let xarTpl take care of it, it'll complain if the directory doesn't
                 // exist or the current theme isn't in the directory specified
-                // xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
+                // $this->config()->setVar('Site.BL.ThemesDirectory', $data['defaultThemeDir']);
                 xarTpl::setBaseDir($data['defaultThemeDir']);
-                xarConfigVars::set(null, 'Site.BL.CacheTemplates', $data['cachetemplates']);
-                xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', $data['memcachetemplates']);
-                xarConfigVars::set(null, 'Site.BL.CompressWhitespace', $data['compresswhitespace']);
-                xarConfigVars::set(null, 'Site.BL.DocType', $data['doctype']);
-                xarConfigVars::set(null, 'Site.BL.ExceptionDisplay', $data['exceptionsdisplay']);
-                xarConfigVars::set(null, 'Site.Core.AllowAJAX', $data['allowajax']);
+                $this->config()->setVar('Site.BL.CacheTemplates', $data['cachetemplates']);
+                $this->config()->setVar('Site.BL.MemCacheTemplates', $data['memcachetemplates']);
+                $this->config()->setVar('Site.BL.CompressWhitespace', $data['compresswhitespace']);
+                $this->config()->setVar('Site.BL.DocType', $data['doctype']);
+                $this->config()->setVar('Site.BL.ExceptionDisplay', $data['exceptionsdisplay']);
+                $this->config()->setVar('Site.Core.AllowAJAX', $data['allowajax']);
                 xarModVars::set('themes', 'hidecore', $data['hidecore']);
                 xarModVars::set('themes', 'selstyle', $data['selstyle']);
                 xarModVars::set('themes', 'selfilter', $data['selfilter']);
@@ -177,14 +177,14 @@ class ModifyconfigMethod extends MethodClass
                 xarModVars::set('themes', 'debugmode', $data['debugmode']);
 
                 sys::import('modules.dynamicdata.class.properties.master');
-                $caches = DataPropertyMaster::getProperty(['name' => 'checkboxlist']);
+                $caches = $this->prop()->getProperty(['name' => 'checkboxlist']);
                 $caches->checkInput('flushcaches');
                 xarModVars::set('themes', 'flushcaches', $caches->value);
 
                 // Flush the caches
                 $cachestoflush = $caches->getValue();
                 /** @var FilePickerProperty $picker */
-                $picker = DataPropertyMaster::getProperty(['name' => 'filepicker']);
+                $picker = $this->prop()->getProperty(['name' => 'filepicker']);
                 foreach ($cachestoflush as $cachetoflush) {
                     $picker->initialization_basedirectory = sys::varpath() . "/cache/" . $cachetoflush;
                     if (!file_exists($picker->initialization_basedirectory)) {
@@ -196,19 +196,19 @@ class ModifyconfigMethod extends MethodClass
                     }
                 }
 
-                xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'), null, $this->getContext());
+                $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'modifyconfig'));
                 return true;
 
             case 'flush':
                 // Flush the cache directories
                 sys::import('modules.dynamicdata.class.properties.master');
-                $caches = DataPropertyMaster::getProperty(['name' => 'checkboxlist']);
+                $caches = $this->prop()->getProperty(['name' => 'checkboxlist']);
                 $caches->checkInput('flushcaches');
                 xarModVars::set('themes', 'flushcaches', $caches->value);
                 // Flush the caches
                 $cachestoflush = $caches->getValue();
                 /** @var FilePickerProperty $picker */
-                $picker = DataPropertyMaster::getProperty(['name' => 'filepicker']);
+                $picker = $this->prop()->getProperty(['name' => 'filepicker']);
                 foreach ($cachestoflush as $cachetoflush) {
                     $picker->initialization_basedirectory = sys::varpath() . "/cache/" . $cachetoflush;
                     if (!file_exists($picker->initialization_basedirectory)) {
@@ -238,7 +238,7 @@ class ModifyconfigMethod extends MethodClass
                 sys::import('xaraya.structures.query');
                 foreach ($cachestoflush as $cachetoflush) {
                     if ($cachetoflush == 'dynamicdata') {
-                        $q = new Query('DELETE', xarDB::getPrefix() . '_cache_data');
+                        $q = new Query('DELETE', $this->db()->getPrefix() . '_cache_data');
                         $q->run();
                     }
                 }

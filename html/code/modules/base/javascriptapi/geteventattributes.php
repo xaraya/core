@@ -39,7 +39,7 @@ class GeteventattributesMethod extends MethodClass
      *   xarTplAddJavaScript('body', 'onload', "alert('hello, world')");
      *
      * Get all the event attributes for all body tag events (this can be fetched in a page template):
-     *   xarMod::apiFunc('base', 'javascript', 'geteventjs', array('position'=>'body', 'type'=>'onload,onunload'));
+     *   $this->mod()->apiFunc('base', 'javascript', 'geteventjs', array('position'=>'body', 'type'=>'onload,onunload'));
      *
      * TODO: investigate whether it is worthwhile putting all these JS functions into a
      * dedicated xarJS.php script. Going through the APIs is cumbersome, and on the whole

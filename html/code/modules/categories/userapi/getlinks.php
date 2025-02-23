@@ -57,12 +57,12 @@ class GetlinksMethod extends MethodClass
         }
 
         // Security check
-        if (!xarSecurity::check('ViewCategoryLink', 0)) {
+        if (!$this->sec()->checkAccess('ViewCategoryLink', 0)) {
             return [];
         }
 
         // Get database setup
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
 
         // Get the field names and LEFT JOIN ... ON ... parts from categories
         // By passing on the $args, we can let leftjoin() create the WHERE for

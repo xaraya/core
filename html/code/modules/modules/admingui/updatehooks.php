@@ -43,19 +43,19 @@ class UpdatehooksMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('ManageModules')) {
+        if (!$this->sec()->checkAccess('ManageModules')) {
             return;
         }
 
-        if (!xarSec::confirmAuthKey()) {
-            //return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            //return $this->ctl()->badRequest('bad_author');
         }
         // Curhook contains module name
         $this->var()->check('curhook', $curhook, 'str:1:');
 
-        $regId = xarMod::getRegID($curhook);
+        $regId = $this->mod()->getRegID($curhook);
         if (!isset($curhook) || !isset($regId)) {
-            $msg = xarML('Invalid hook');
+            $msg = $this->ml('Invalid hook');
             throw new Exception($msg);
         }
 
@@ -65,8 +65,8 @@ class UpdatehooksMethod extends MethodClass
 
         $data = [];
         // Only update if the module is active.
-        $modinfo = xarMod::getInfo($regId);
-        if (!empty($modinfo) && xarMod::isAvailable($modinfo['name'])) {
+        $modinfo = $this->mod()->getInfo($regId);
+        if (!empty($modinfo) && $this->mod()->isAvailable($modinfo['name'])) {
             $data['regid'] = $regId;
             if (!empty($subjects)) {
                 $data['subjects'] = $subjects;
@@ -78,14 +78,14 @@ class UpdatehooksMethod extends MethodClass
 
         $this->var()->find('return_url', $return_url, 'isset', '');
         if (!empty($return_url)) {
-            xarController::redirect($return_url, null, $this->getContext());
+            $this->ctl()->redirect($return_url);
         } else {
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'modules',
                 'admin',
                 'hooks',
                 ['hook' => $curhook]
-            ), null, $this->getContext());
+            ));
         }
         return true;
     }

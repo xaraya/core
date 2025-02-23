@@ -44,7 +44,7 @@ class UnlinkcidsMethod extends MethodClass
 
         // Argument check
         if (empty($modid) || !is_numeric($modid)) {
-            $msg = xarML('Invalid Parameter Count');
+            $msg = $this->ml('Invalid Parameter Count');
             throw new BadParameterException(null, $msg);
         }
 
@@ -54,7 +54,7 @@ class UnlinkcidsMethod extends MethodClass
         }
 
         // Set up the DELETE query and run
-        $xartable = xarDB::getTables();
+        $xartable = $this->db()->getTables();
         sys::import('xaraya.structures.query');
         $q = new Query('DELETE', $xartable['categories_linkage']);
         $q->eq('module_id', (int) $modid);

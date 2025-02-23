@@ -34,7 +34,7 @@ class HooksMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security check
-        if (!xarSecurity::check('ManageCategories')) {
+        if (!$this->sec()->checkAccess('ManageCategories')) {
             return;
         }
 

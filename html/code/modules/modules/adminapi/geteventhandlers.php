@@ -91,7 +91,7 @@ class GeteventhandlersMethod extends MethodClass
             }
         }
         // this gets serialized internally
-        xarConfigVars::set(null, 'Site.Evt.Handlers', $handlers);
+        $this->config()->setVar('Site.Evt.Handlers', $handlers);
 
         $check = true;
 

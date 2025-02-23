@@ -47,13 +47,13 @@ class CountcatsMethod extends MethodClass
         extract($args);
 
         // Security check
-        if (!xarSecurity::check('ViewCategories')) {
+        if (!$this->sec()->checkAccess('ViewCategories')) {
             return;
         }
 
         // Database information
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $categoriestable = $xartable['categories'];
         $bindvars = [];
 

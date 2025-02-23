@@ -49,14 +49,14 @@ class TestprivilegesMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if (!xarSecurity::check('EditRoles')) {
+        if (!$this->sec()->checkAccess('EditRoles')) {
             return;
         }
 
         // Get Parameters
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $this->var()->find('pmodule', $modRegId, 'int', xarSecurity::PRIVILEGES_ALL);
         $this->var()->find('name', $name, 'str:1', '');
@@ -86,7 +86,7 @@ class TestprivilegesMethod extends MethodClass
             $testresult = xarSecurity::check($name, 0, $component, 'All', $mask->getModule(), $role->getName());
             // test failed
             if (!$testresult) {
-                $resultdisplay = xarML('Privilege: none found');
+                $resultdisplay = $this->ml('Privilege: none found');
             }
             // test returned an object
             else {
@@ -117,7 +117,7 @@ class TestprivilegesMethod extends MethodClass
             }
             $data['testmasks'] = $testmaskarray;
             $modName = $mask->getModule();
-            $modRegId = xarMod::getRegID($modName);
+            $modRegId = $this->mod()->getRegID($modName);
         }
         // no test yet
         // Load Template
@@ -129,15 +129,15 @@ class TestprivilegesMethod extends MethodClass
         $data['itemtypename'] = $types[$thistype]['label'];
         $data['pmodule'] = $modRegId;
         $data['id'] = $id;
-        $data['testlabel'] = xarML('Test');
+        $data['testlabel'] = $this->ml('Test');
         if (!empty($modRegId) && $modRegId != xarSecurity::PRIVILEGES_ALL) {
             // Note: xarMasks::getmasks() expects the internal system modid, not the registered modid
-            $modInfo = xarMod::getInfo($modRegId);
+            $modInfo = $this->mod()->getInfo($modRegId);
             $data['masks'] = xarMasks::getmasks($modInfo['systemid']);
         } else {
             $data['masks'] = xarMasks::getmasks(xarSecurity::PRIVILEGES_ALL);
         }
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         return $data;
     }
 }

@@ -58,7 +58,7 @@ class RemovememberMethod extends MethodClass
         }
 
         // set the session variable
-        xarSession::setVar('privileges_statusmsg', xarML(
+        $this->session()->setVar('privileges_statusmsg', $this->ml(
             'Removed from Privilege',
             'privileges'
         ));

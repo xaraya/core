@@ -59,21 +59,21 @@ class SetstateMethod extends MethodClass
         }
 
         // Security Check
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
         // Clear cache to make sure we get newest values
-        if (xarCoreCache::isCached('Theme.Infos', $regid)) {
-            xarCoreCache::delCached('Theme.Infos', $regid);
+        if ($this->var()->isCached('Theme.Infos', $regid)) {
+            $this->var()->delCached('Theme.Infos', $regid);
         }
 
         //Get theme info
         $themeInfo = xarTheme::getInfo($regid);
 
         //Set up database object
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $themesTable = $xartable['themes'];
 
         $oldState = $themeInfo['state'];
@@ -93,14 +93,14 @@ class SetstateMethod extends MethodClass
                     ($oldState != xarTheme::STATE_ACTIVE) &&
                     ($oldState != xarTheme::STATE_MISSING_FROM_INACTIVE) &&
                     ($oldState != xarTheme::STATE_UPGRADED)) {
-                    xarSession::setVar('errormsg', xarML('Invalid theme state transition'));
+                    $this->session()->setVar('errormsg', $this->ml('Invalid theme state transition'));
                     return false;
                 }
                 break;
             case xarTheme::STATE_ACTIVE:
                 if (($oldState != xarTheme::STATE_INACTIVE) &&
                     ($oldState != xarTheme::STATE_MISSING_FROM_ACTIVE)) {
-                    xarSession::setVar('errormsg', xarML('Invalid theme state transition'));
+                    $this->session()->setVar('errormsg', $this->ml('Invalid theme state transition'));
                     return false;
                 }
                 break;
@@ -108,7 +108,7 @@ class SetstateMethod extends MethodClass
                 if (($oldState != xarTheme::STATE_INACTIVE) &&
                     ($oldState != xarTheme::STATE_ACTIVE) &&
                     $oldState != xarTheme::STATE_MISSING_FROM_UPGRADED) {
-                    xarSession::setVar('errormsg', xarML('Invalid theme state transition'));
+                    $this->session()->setVar('errormsg', $this->ml('Invalid theme state transition'));
                     return false;
                 }
                 break;

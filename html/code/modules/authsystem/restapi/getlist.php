@@ -34,7 +34,7 @@ class GetlistMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $apilist = [];
-        // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
         $apilist['honeypot'] = [
             //'type' => 'rest',  // default = rest, other $type options are user, admin, ... as usual
             'path' => 'login',  // path to use in REST API operation /modules/{module}/{path}

@@ -30,7 +30,7 @@ class ModuleinlineMethod extends MethodClass
      * Base JavaScript management functions
      * Include a section of inline JavaScript code in a page.
      * Used when a module needs to generate custom JS on-the-fly,
-     * such as "var lang_msg = xarML('error - aborted');"
+     * such as "var lang_msg = $this->ml('error - aborted');"
      * @author Jason Judge
      * @param mixed $args ['position'] position on the page; generally 'head' or 'body'
      * @param mixed $args ['code'] the JavaScript code fragment
@@ -59,6 +59,6 @@ class ModuleinlineMethod extends MethodClass
 
         // @fixme replace with right javascript code or drop function
         //return xarTplAddJavaScript($position, 'code', $code, $index);
-        return xarMod::apiFunc('themes', 'user', 'registerjs', ['position' => $position, 'code' => $code, 'index' => $index]);
+        return $this->mod()->apiFunc('themes', 'user', 'registerjs', ['position' => $position, 'code' => $code, 'index' => $index]);
     }
 }

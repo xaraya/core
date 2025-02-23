@@ -35,10 +35,10 @@ class GetmenulinksMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        if (xarMod::isAvailable('scheduler')) {
-            $menulinks[] = ['url' => xarController::URL('mail', 'admin', 'viewq'),
-                'title' => xarML('View all mails scheduled to be sent later'),
-                'label' => xarML('View Mail Queue')];
+        if ($this->mod()->isAvailable('scheduler')) {
+            $menulinks[] = ['url' => $this->ctl()->getModuleURL('mail', 'admin', 'viewq'),
+                'title' => $this->ml('View all mails scheduled to be sent later'),
+                'label' => $this->ml('View Mail Queue')];
         }
         return $menulinks;
     }

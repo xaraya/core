@@ -48,7 +48,7 @@ class CacheviewMethod extends MethodClass
         $this->var()->find('templn', $templn, 'str:1:', false);
 
         /* Security check - important to do this as early as possible */
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
         xarModVars::set('themes', 'templcachepath', sys::varpath() . "/cache/templates");
@@ -66,7 +66,7 @@ class CacheviewMethod extends MethodClass
         $data['popup'] = false;
 
         /* Check for confirmation. */
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         if (empty($action)) {
             /* No action set yet - display cache file list and await action */
             $data['showfiles'] = false;
@@ -92,7 +92,7 @@ class CacheviewMethod extends MethodClass
                 foreach ($hashname as $filen) {
                     $hashn = htmlspecialchars($filen[0]);
                     $templn = htmlspecialchars($filen[1]);
-                    $fullnurl = xarController::URL(
+                    $fullnurl = $this->ctl()->getModuleURL(
                         'themes',
                         'admin',
                         'cacheview',
@@ -127,7 +127,7 @@ class CacheviewMethod extends MethodClass
             return $data;
         }
 
-        xarController::redirect(xarController::URL('themes', 'admin', 'cacheview'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'cacheview'));
         /*  Return */
         return true;
     }

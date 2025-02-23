@@ -47,18 +47,18 @@ class SetdefaultMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
         // Security and sanity checks
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $this->var()->find('id', $defaulttheme, 'int:1:', 0);
         if (empty($defaulttheme)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
 
@@ -71,16 +71,16 @@ class SetdefaultMethod extends MethodClass
         $themeInfo = xarTheme::getInfo($defaulttheme);
 
         if ($themeInfo['class'] != 2) {
-            xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'modifyconfig'));
         }
 
-        if (xarVar::isCached('Mod.Variables.themes', 'default_theme')) {
-            xarVar::delCached('Mod.Variables.themes', 'default_theme');
+        if ($this->var()->isCached('Mod.Variables.themes', 'default_theme')) {
+            $this->var()->delCached('Mod.Variables.themes', 'default_theme');
         }
 
         //update the database - activate the theme
         if (!$adminapi->install(['regid' => $defaulttheme])) {
-            xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'modifyconfig'));
         }
 
         // update the data
@@ -89,14 +89,13 @@ class SetdefaultMethod extends MethodClass
 
         // set the target location (anchor) to go to within the page
         $target = $themeInfo['name'];
-        xarController::redirect(xarController::URL(
+        $this->ctl()->redirect($this->ctl()->getModuleURL(
             'themes',
             'admin',
             'view',
             ['state' => 0],
-            null,
-            $target
-        ), null, $this->getContext());
+            null
+        )) . '#' . $target;
         return true;
     }
 }

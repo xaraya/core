@@ -52,9 +52,9 @@ class UpgradeMethod extends MethodClass
         }
 
         // Get module information
-        $modInfo = xarMod::getInfo($regid);
+        $modInfo = $this->mod()->getInfo($regid);
         if (empty($modInfo)) {
-            xarSession::setVar('errormsg', xarML('No such module'));
+            $this->session()->setVar('errormsg', $this->ml('No such module'));
             return false;
         }
 
@@ -73,13 +73,13 @@ class UpgradeMethod extends MethodClass
         }
 
         // Get the new version information...
-        $modFileInfo = xarMod::getFileInfo($modInfo['osdirectory']);
+        $modFileInfo = $this->mod()->getFileInfo($modInfo['osdirectory']);
         if (!isset($modFileInfo)) {
             return;
         }
 
         // Bug 1671 - Invalid SQL
-        // If the module fields returned from xarMod::getFileInfo()
+        // If the module fields returned from $this->mod()->getFileInfo()
         // are set to false, then they must be set to a some valid value
         // or a SQL error will occur due to null and zero length fields.
         if (!$modFileInfo['admin_capable']) {
@@ -96,8 +96,8 @@ class UpgradeMethod extends MethodClass
         }
 
         // Note the changes in the database...
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $sql = "UPDATE $xartable[modules]
                 SET version = ?, admin_capable = ?, user_capable = ?,
@@ -109,13 +109,13 @@ class UpgradeMethod extends MethodClass
         $dbconn->Execute($sql, $bindvars);
 
         // Message to display in the module list view (only for core modules atm)
-        if (!xarSession::getVar('statusmsg')) {
+        if (!$this->session()->getVar('statusmsg')) {
             if (substr($modFileInfo['class'], 0, 4)  == 'Core') {
-                xarSession::setVar('statusmsg', $modInfo['name']);
+                $this->session()->setVar('statusmsg', $modInfo['name']);
             }
         } else {
             if (substr($modFileInfo['class'], 0, 4)  == 'Core') {
-                xarSession::setVar('statusmsg', xarSession::getVar('statusmsg') . ', ' . $modInfo['name']);
+                $this->session()->setVar('statusmsg', $this->session()->getVar('statusmsg') . ', ' . $modInfo['name']);
             }
         }
         // Success

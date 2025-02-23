@@ -49,13 +49,13 @@ class CreateqdefMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if (!xarSecurity::check('AdminMail')) {
+        if (!$this->sec()->checkAccess('AdminMail')) {
             return;
         }
 
         // Are we legitimately here
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // First determine whether we need to look at the name entered, or the object chosen
@@ -69,7 +69,7 @@ class CreateqdefMethod extends MethodClass
                 $qdefNew = false;
                 $this->var()->find('qdef_name_choose', $qdefObjectId, 'int:1:');
                 if (empty($qdefObjectId)) {
-                    return xarController::notFound(null, $this->getContext());
+                    return $this->ctl()->notFound();
                 }
                 // Get the name of the object from dd
                 $qdefObject = $this->data()->getObject(['objectid' => $qdefObjectId]);
@@ -79,13 +79,13 @@ class CreateqdefMethod extends MethodClass
                 $qdefName = $qdefObject->name;
                 break;
             default:
-                return xarController::notFound(null, $this->getContext());
+                return $this->ctl()->notFound();
         }
 
         if ($qdefNew) {
             $xmlDef = @file_get_contents(sys::code() . 'modules/mail/xardata/qdef.xml'); // if it fails, sane check will catch it.
             // Take the xml and the objectname and try to create the object
-            $qdefObjectId = xarMod::apiFunc('dynamicdata', 'util', 'import', ['objectname' => $qdefName, 'xml' => $xmlDef]);
+            $qdefObjectId = $this->mod()->apiFunc('dynamicdata', 'util', 'import', ['objectname' => $qdefName, 'xml' => $xmlDef]);
             if (!isset($qdefObjectId)) {
                 return;
             }
@@ -110,7 +110,7 @@ class CreateqdefMethod extends MethodClass
             // All went well, we can set the modvar now
             xarModVars::set('mail', 'queue-definition', $qdefName);
         }
-        xarController::redirect(xarController::URL('mail', 'admin', 'view'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'view'));
         return true;
     }
 }

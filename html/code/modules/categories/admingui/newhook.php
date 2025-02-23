@@ -53,16 +53,16 @@ class NewhookMethod extends MethodClass
         // When called via hooks, the module name may be empty, so we get it from
         // the current module
         if (empty($extrainfo['module'])) {
-            $modname = xarMod::getName();
+            $modname = $this->mod()->getName();
         } else {
             $modname = $extrainfo['module'];
         }
         $data['module'] = $modname;
-        $modid = xarMod::getRegID($modname);
+        $modid = $this->mod()->getRegID($modname);
 
         /* ---------------------------- TODO: Remove
             if (empty($modid)) {
-                $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)','module name', 'admin', 'modifyhook', 'categories');
+                $msg = $this->ml('Invalid #(1) for #(2) function #(3)() in module #(4)','module name', 'admin', 'modifyhook', 'categories');
                 throw new BadParameterException(null, $msg);
             }
 
@@ -159,12 +159,12 @@ class NewhookMethod extends MethodClass
 
             $labels = array();
             if ($numcats > 1) {
-                $labels['categories'] = xarML('Categories');
+                $labels['categories'] = $this->ml('Categories');
             } else {
-                $labels['categories'] = xarML('Category');
+                $labels['categories'] = $this->ml('Category');
             }
 
-            return xarTpl::module('categories','admin','newhook',
+            return $this->tpl()->module('categories','admin','newhook',
                                  array('labels' => $labels,
                                        'numcats' => $numcats,
                                        'items' => $items));

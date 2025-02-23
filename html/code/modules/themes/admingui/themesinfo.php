@@ -44,7 +44,7 @@ class ThemesinfoMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditThemes')) {
+        if (!$this->sec()->checkAccess('EditThemes')) {
             return;
         }
 
@@ -54,7 +54,7 @@ class ThemesinfoMethod extends MethodClass
         $this->var()->check('exit', $exit);
         $this->var()->check('confirm', $confirm);
         if (empty($themeid)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
         // obtain maximum information about a theme
@@ -62,7 +62,7 @@ class ThemesinfoMethod extends MethodClass
 
         // get the theme object corresponding to this theme
         sys::import('modules.dynamicdata.class.objects.factory');
-        $theme = DataObjectFactory::getObject(['name'   => 'themes']);
+        $theme = $this->data()->getObject(['name'   => 'themes']);
         $id = $theme->getItem(['itemid' => $info['systemid']]);
         if (empty($theme)) {
             return;
@@ -75,7 +75,7 @@ class ThemesinfoMethod extends MethodClass
         if ($confirm || $exit) {
 
             // Check for a valid confirmation key
-            if (!xarSec::confirmAuthKey()) {
+            if (!$this->sec()->confirmAuthKey()) {
                 return;
             }
 
@@ -84,42 +84,42 @@ class ThemesinfoMethod extends MethodClass
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
                 $data['context'] ??= $this->getContext();
-                return xarTpl::module('themes', 'admin', 'themesinfo', $data);
+                return $this->tpl()->module('themes', 'admin', 'themesinfo', $data);
             } else {
                 // Good data: create the item
                 $itemid = $data['theme']->updateItem(['itemid' => $info['systemid']]);
 
                 // Jump to the next page
                 if ($exit) {
-                    xarController::redirect(xarController::URL('themes', 'admin', 'view'), null, $this->getContext());
+                    $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'view'));
                 } else {
-                    xarController::redirect(xarController::URL(
+                    $this->ctl()->redirect($this->ctl()->getModuleURL(
                         'themes',
                         'admin',
                         'themesinfo',
                         ['id' => $themeid]
-                    ), null, $this->getContext());
+                    ));
                 }
                 return true;
             }
         }
 
-        $data['themename']            = xarVar::prepForDisplay($info['name']);
-        $data['themedescr']           = xarVar::prepForDisplay($info['description']);
-        //$data['themedispname']        = xarVar::prepForDisplay($themeinfo['displayname']);
-        $data['themelisturl']         = xarController::URL('themes', 'admin', 'view');
+        $data['themename']            = $this->var()->prep($info['name']);
+        $data['themedescr']           = $this->var()->prep($info['description']);
+        //$data['themedispname']        = $this->var()->prep($themeinfo['displayname']);
+        $data['themelisturl']         = $this->ctl()->getModuleURL('themes', 'admin', 'view');
 
-        $data['themedir']             = xarVar::prepForDisplay($info['directory']);
-        $data['themeclass']           = xarVar::prepForDisplay($info['class']);
-        $data['themever']             = xarVar::prepForDisplay($info['version']);
+        $data['themedir']             = $this->var()->prep($info['directory']);
+        $data['themeclass']           = $this->var()->prep($info['class']);
+        $data['themever']             = $this->var()->prep($info['version']);
         $data['themestate']           = $info['state'];
-        $data['themeauthor']          = preg_replace('/,/', '<br />', xarVar::prepForDisplay($info['author']));
+        $data['themeauthor']          = preg_replace('/,/', '<br />', $this->var()->prep($info['author']));
         if (!empty($info['dependency'])) {
-            $dependency             = xarML('Working on it...');
+            $dependency             = $this->ml('Working on it...');
         } else {
-            $dependency             = xarML('None');
+            $dependency             = $this->ml('None');
         }
-        $data['themedependency']      = xarVar::prepForDisplay($dependency);
+        $data['themedependency']      = $this->var()->prep($dependency);
 
         return $data;
     }

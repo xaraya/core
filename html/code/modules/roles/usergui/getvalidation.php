@@ -57,19 +57,19 @@ class GetvalidationMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security check
-        if (!xarSecurity::check('ViewRoles')) {
+        if (!$this->sec()->checkAccess('ViewRoles')) {
             return;
         }
 
         //If a user is already logged in, no reason to see this.
         //We are going to send them to their account.
         if (xarUser::isLoggedIn()) {
-            xarController::redirect(xarController::URL(
+            $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'user',
                 'account',
                 ['id' => xarUser::getVar('id')]
-            ), null, $this->getContext());
+            ));
             return true;
         }
 
@@ -78,7 +78,7 @@ class GetvalidationMethod extends MethodClass
         $this->var()->find('sent', $sent, 'int:0:2', 0);
         $this->var()->find('phase', $phase, 'str:1:100', 'startvalidation');
 
-        xarTpl::setPageTitle(xarML('Validate Your Account'));
+        $this->tpl()->setPageTitle($this->ml('Validate Your Account'));
         /* This function to be provided with support functions to ensure we have got a default regmodule,
             if we need it. Tis should make it easier to move the User registration validation out of
             email revalidation soon, once we have all the registration default module instances captured in the new function.
@@ -89,10 +89,10 @@ class GetvalidationMethod extends MethodClass
 
         // What module are we using for registration?
         $regmodule = xarModVars::get('roles', 'defaultregmodule');
-        if (empty($regmodule) || !xarMod::isAvailable($regmodule)) {
-            return xarTpl::module('grader', 'user', 'errors', ['layout' => 'no_permission', 'message' => xarML('No registration module defined in the roles module')]);
+        if (empty($regmodule) || !$this->mod()->isAvailable($regmodule)) {
+            return $this->tpl()->module('grader', 'user', 'errors', ['layout' => 'no_permission', 'message' => $this->ml('No registration module defined in the roles module')]);
         }
-        $modinfo = xarMod::getInfo($regmodule);
+        $modinfo = $this->mod()->getInfo($regmodule);
         $regmodule = $modinfo['name'];
 
         $defaultauthdata = $userapi->getdefaultauthdata();
@@ -101,7 +101,7 @@ class GetvalidationMethod extends MethodClass
 
         //Set some general vars that we need in various options
         $pending = xarModVars::get($regmodule, 'explicitapproval');
-        $loginlink = xarController::URL($defaultloginmodname, 'user', 'main');
+        $loginlink = $this->ctl()->getModuleURL($defaultloginmodname, 'user', 'main');
 
         $tplvars = [];
         $tplvars['loginlink'] = $loginlink;
@@ -111,7 +111,7 @@ class GetvalidationMethod extends MethodClass
 
             case 'startvalidation':
             default:
-                $data = xarTpl::module(
+                $data = $this->tpl()->module(
                     $regmodule,
                     'user',
                     'startvalidation',
@@ -119,8 +119,8 @@ class GetvalidationMethod extends MethodClass
                         'uname'   => $uname,
                         'sent'    => $sent,
                         'valcode' => $valcode,
-                        'validatelabel' => xarML('Validate Your Account'),
-                        'resendlabel' => xarML('Resend Validation Information')]
+                        'validatelabel' => $this->ml('Validate Your Account'),
+                        'resendlabel' => $this->ml('Resend Validation Information')]
                 );
                 break;
 
@@ -131,13 +131,13 @@ class GetvalidationMethod extends MethodClass
 
                 // Trick the system when a user has double validated.
                 if (empty($status['valcode'])) {
-                    $data = xarTpl::module('roles', 'user', 'getvalidation', $tplvars);
+                    $data = $this->tpl()->module('roles', 'user', 'getvalidation', $tplvars);
                     return $data;
                 }
 
                 // Check Validation codes to ensure a match.
                 if ($valcode != $status['valcode']) {
-                    return xarTpl::module('roles', 'user', 'errors', ['layout' => 'bad_validation']);
+                    return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'bad_validation']);
                 }
 
                 // Check if this is a new user
@@ -153,7 +153,7 @@ class GetvalidationMethod extends MethodClass
                         'state' => xarRoles::ROLES_STATE_ACTIVE])) {
                         return;
                     }
-                    xarController::redirect(xarController::URL('roles', 'user', 'main'), null, $this->getContext());
+                    $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'main'));
 
                 } elseif ($pending == 1 && ($status['id'] != xarModVars::get('roles', 'admin'))) {
                     // This is a new user and the site requires admin approval
@@ -162,7 +162,7 @@ class GetvalidationMethod extends MethodClass
                         'state' => xarRoles::ROLES_STATE_PENDING]));
 
                     /*Send Pending Email toggable ?   User email
-                    if (!xarMod::apiFunc( 'authentication',
+                    if (!$this->mod()->apiFunc( 'authentication',
                                     'admin',
                                     'sendpendingemail',
                                     array('id'     => $status["id"],
@@ -187,11 +187,11 @@ class GetvalidationMethod extends MethodClass
                         }
                     }
 
-                    $url = xarController::URL('roles', 'user', 'main');
+                    $url = $this->ctl()->getModuleURL('roles', 'user', 'main');
 
                     $time = '4';
-                    xarVar::setCached('Meta.refresh', 'url', $url);
-                    xarVar::setCached('Meta.refresh', 'time', $time);
+                    $this->var()->setCached('Meta.refresh', 'url', $url);
+                    $this->var()->setCached('Meta.refresh', 'time', $time);
                 }
 
                 //TODO : This registration and validation processes need to be totally revamped and clearly defined - make do for now
@@ -203,7 +203,7 @@ class GetvalidationMethod extends MethodClass
 
                     if (xarModVars::get('registration', 'showterms') == 1) {
                         // User has agreed to the terms and conditions.
-                        $terms = xarML('This user has agreed to the site terms and conditions.');
+                        $terms = $this->ml('This user has agreed to the site terms and conditions.');
                     }
 
                     $status = $userapi->get(['uname' => $uname]); //check status as it may have changed
@@ -217,7 +217,7 @@ class GetvalidationMethod extends MethodClass
                         'id'          => $status['id'],
                         'userstatus'   => $status['state'],
                     ];
-                    if (!xarMod::apiFunc('registration', 'user', 'notifyadmin', $emailargs)) {
+                    if (!$this->mod()->apiFunc('registration', 'user', 'notifyadmin', $emailargs)) {
                         return; // TODO ...something here if the email is not sent..
                     }
 
@@ -226,13 +226,13 @@ class GetvalidationMethod extends MethodClass
 
                     $adminname = xarModVars::get('mail', 'adminname');
                     $adminemail = xarModVars::get('mail', 'adminmail');
-                    $message = "" . xarML('A user has revalidated their changed email address.  Here are the details') . " \n\n";
-                    $message .= "" . xarML('Username') . " = $status[name]\n";
-                    $message .= "" . xarML('Email Address') . " = $status[email]";
+                    $message = "" . $this->ml('A user has revalidated their changed email address.  Here are the details') . " \n\n";
+                    $message .= "" . $this->ml('Username') . " = $status[name]\n";
+                    $message .= "" . $this->ml('Email Address') . " = $status[email]";
 
-                    $messagetitle = "" . xarML('A user has updated information') . "";
+                    $messagetitle = "" . $this->ml('A user has updated information') . "";
 
-                    if (!xarMod::apiFunc(
+                    if (!$this->mod()->apiFunc(
                         'mail',
                         'admin',
                         'sendmail',
@@ -247,7 +247,7 @@ class GetvalidationMethod extends MethodClass
 
                 xarModVars::set('roles', 'lastuser', $status['id']);
 
-                $data = xarTpl::module('roles', 'user', 'getvalidation', $tplvars);
+                $data = $this->tpl()->module('roles', 'user', 'getvalidation', $tplvars);
 
                 break;
 
@@ -257,20 +257,20 @@ class GetvalidationMethod extends MethodClass
 
                 if (!$adminapi->senduseremail(['id' => [$status['id'] => '1'],
                     'mailtype' => 'confirmation',
-                    'ip' => xarML('Cannot resend IP'),
-                    'pass' => xarML('Can Not Resend Password')])) {
+                    'ip' => $this->ml('Cannot resend IP'),
+                    'pass' => $this->ml('Can Not Resend Password')])) {
                     throw new GeneralException(null, 'Problem resending confirmation email');
                 }
 
-                $data = xarTpl::module('roles', 'user', 'getvalidation', $tplvars);
+                $data = $this->tpl()->module('roles', 'user', 'getvalidation', $tplvars);
 
                 // Redirect
-                xarController::redirect(xarController::URL(
+                $this->ctl()->redirect($this->ctl()->getModuleURL(
                     'roles',
                     'user',
                     'getvalidation',
                     ['sent' => 1]
-                ), null, $this->getContext());
+                ));
 
         }
 

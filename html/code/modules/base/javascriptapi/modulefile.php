@@ -65,7 +65,7 @@ class ModulefileMethod extends MethodClass
             // A failure to find a file is recorded, but does not stop subsequent files.
             if (!empty($filePath)) {
                 //$result = $result & xarTplAddJavaScript($position, 'src', xarServer::getBaseURL() . $filePath, $filePath);
-                $result = $result & xarMod::apiFunc('themes', 'user', 'registerjs', ['position' => $position, 'src' => xarServer::getBaseURL() . $filePath, 'filename' => $filePath]);
+                $result = $result & $this->mod()->apiFunc('themes', 'user', 'registerjs', ['position' => $position, 'src' => xarServer::getBaseURL() . $filePath, 'filename' => $filePath]);
 
             } else {
                 $result = false;

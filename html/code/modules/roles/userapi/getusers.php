@@ -48,7 +48,7 @@ class GetusersMethod extends MethodClass
         }
 
         // Security Check
-        if (!xarSecurity::check('ReadRoles')) {
+        if (!$this->sec()->checkAccess('ReadRoles')) {
             return;
         }
 

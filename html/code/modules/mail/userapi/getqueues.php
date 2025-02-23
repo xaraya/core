@@ -44,11 +44,11 @@ class GetqueuesMethod extends MethodClass
         // Do we have the master ?
         if (!$qdefInfo = $adminapi->getqdef()) {
             // Redirect to the view page, which offers to create one
-            xarController::redirect(xarController::URL('mail', 'admin', 'view'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'view'));
             return true;
         }
         $params = ['modid' => $qdefInfo['moduleid'],'itemtype' => $qdefInfo['itemtype']];
-        $queues = xarMod::apiFunc('dynamicdata', 'user', 'getitems', $params);
+        $queues = $this->mod()->apiFunc('dynamicdata', 'user', 'getitems', $params);
 
         return $queues;
     }

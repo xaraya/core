@@ -44,7 +44,7 @@ class NewMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AddPrivileges')) {
+        if (!$this->sec()->checkAccess('AddPrivileges')) {
             return;
         }
 
@@ -63,7 +63,7 @@ class NewMethod extends MethodClass
         $this->var()->find('trees', $trees);
 
         // Clear Session Vars
-        xarSession::delVar('privileges_statusmsg');
+        $this->session()->delVar('privileges_statusmsg');
 
         // remove duplicate entries from the list of privileges
         $privileges = [];
@@ -94,10 +94,10 @@ class NewMethod extends MethodClass
             $data['levels'][] = ['id' => $key, 'name' => $value];
         }
 
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         $data['realms'] = xarPrivileges::getrealms();
         $data['privileges'] = $privileges;
-        $data['components'] = $adminapi->getcomponents(['modid' => xarMod::getRegID($data['pmodule'])]);
+        $data['components'] = $adminapi->getcomponents(['modid' => $this->mod()->getRegID($data['pmodule'])]);
         return $data;
     }
 }

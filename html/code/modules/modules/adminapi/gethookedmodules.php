@@ -43,7 +43,7 @@ class GethookedmodulesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security Check (called by other modules, so we can't use one this here)
-        //    if(!xarSecurity::check('ManageModules')) return;
+        //    if(!$this->sec()->checkAccess('ManageModules')) return;
 
         // Get arguments from argument array
         extract($args);

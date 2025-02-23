@@ -47,13 +47,13 @@ class ActivateMethod extends MethodClass
 
         // Argument check
         if (isset($name)) {
-            $regid = xarMod::getRegID($name, 'module');
+            $regid = $this->mod()->getRegID($name);
         }
         if (!isset($regid)) {
             throw new EmptyParameterException('regid');
         }
 
-        $modInfo = xarMod::getInfo($regid);
+        $modInfo = $this->mod()->getInfo($regid);
 
         if ($modInfo['state'] == xarMod::STATE_UNINITIALISED) {
             throw new Exception("Calling activate function while module is uninitialised");
@@ -61,7 +61,7 @@ class ActivateMethod extends MethodClass
         // Module activate function
         if (!$adminapi->executeinitfunction(['regid'    => $regid,
             'function' => 'activate'])) {
-            $msg = xarML('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']);
+            $msg = $this->ml('Unable to execute "activate" function in the xarinit.php file of module (#(1))', $modInfo['displayname']);
             throw new Exception($msg);
         }
 

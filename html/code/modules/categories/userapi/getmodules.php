@@ -39,7 +39,7 @@ class GetmodulesMethod extends MethodClass
         extract($args);
 
         // Security check
-        if (!xarSecurity::check('ViewCategoryLink')) {
+        if (!$this->sec()->checkAccess('ViewCategoryLink')) {
             return;
         }
 
@@ -48,10 +48,10 @@ class GetmodulesMethod extends MethodClass
         }
 
         // Database information
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $linkagetable = $xartable['categories_linkage'];
-        $prefix = xarDB::getPrefix();
+        $prefix = $this->db()->getPrefix();
         $modulestable = $prefix . '_modules';
 
         if ($dbconn->databaseType == 'sqlite') {

@@ -59,8 +59,8 @@ class GetMethod extends MethodClass
             $itemid = $id;
         }
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $rolestable = $xartable['roles'];
 
         // Get user
@@ -134,7 +134,7 @@ class GetMethod extends MethodClass
             $query .= $queryWhere;
         }
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
         // Check for no rows found, and if so return
         $result->next();
         $user = $result->getRow();

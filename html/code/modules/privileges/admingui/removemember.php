@@ -45,13 +45,13 @@ class RemovememberMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('EditPrivileges')) {
+        if (!$this->sec()->checkAccess('EditPrivileges')) {
             return;
         }
 
         // Check for authorization code
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         // get input from any view of this page
@@ -63,12 +63,12 @@ class RemovememberMethod extends MethodClass
         }
 
         // redirect to the next page
-        xarController::redirect(xarController::URL(
+        $this->ctl()->redirect($this->ctl()->getModuleURL(
             'privileges',
             'admin',
             'modifyprivilege',
             ['id' => $childid]
-        ), null, $this->getContext());
+        ));
         return true;
     }
 }

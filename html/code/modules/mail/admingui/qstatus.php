@@ -51,7 +51,7 @@ class QstatusMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if (!xarSecurity::check('AdminMail')) {
+        if (!$this->sec()->checkAccess('AdminMail')) {
             return;
         }
 
@@ -60,7 +60,7 @@ class QstatusMethod extends MethodClass
         // Do we have the master ?
         if (!$qdefInfo = $adminapi->getqdef()) {
             // Redirect to the view page, which offers to create one
-            xarController::redirect(xarController::URL('mail', 'admin', 'view'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('mail', 'admin', 'view'));
             return true;
         }
         // Retrieve the queues
@@ -70,13 +70,13 @@ class QstatusMethod extends MethodClass
         foreach ($queues as $index => $qInfo) {
             // Get some info on the Q
             $qName = 'q_' . $qInfo['name'];
-            $qStore = DataObjectFactory::getObjectInfo(['name' => $qName]);
+            $qStore = $this->data()->getObjectInfo(['name' => $qName]);
             if (!isset($qStore)) {
                 // Not there, we know enough
                 $queues[$index]['status'] = 'problematic';
                 $queues[$index]['count'] = 0;
-                $queues[$index]['msg'] = xarML('The storage object of this queue cannot be found ( #(1) )', $qName);
-                $measures[$qInfo['name']][] = ['action' => 'createq', 'text' => xarML('Create storage and link to queue')];
+                $queues[$index]['msg'] = $this->ml('The storage object of this queue cannot be found ( #(1) )', $qName);
+                $measures[$qInfo['name']][] = ['action' => 'createq', 'text' => $this->ml('Create storage and link to queue')];
             } else {
                 // We have some qInfo, retrieve details
                 // We have an object, so we can count the items in it.
@@ -87,19 +87,19 @@ class QstatusMethod extends MethodClass
                 if (!$userapi->qisactive($qInfo)) {
                     // Queue is inactive
                     $queues[$index]['status'] = 'inactive';
-                    $queues[$index]['msg'] = xarML('Queue is not activated');
-                    $measures[$qInfo['name']][] = ['action' => 'activate', 'text' => xarML('Activate the queue')];
+                    $queues[$index]['msg'] = $this->ml('Queue is not activated');
+                    $measures[$qInfo['name']][] = ['action' => 'activate', 'text' => $this->ml('Activate the queue')];
                 } else {
                     // Queue is active
                     $queues[$index]['status'] = 'active';
-                    $measures[$qInfo['name']][] = ['action' => 'deactivate', 'text' => xarML('Deactivate the queue')];
+                    $measures[$qInfo['name']][] = ['action' => 'deactivate', 'text' => $this->ml('Deactivate the queue')];
 
                     $queues[$index]['msg'] = 'No msg yet';
                 }
 
             }
         }
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         $data['queues'] = $queues;
         $data['measures'] = $measures;
         return $data;

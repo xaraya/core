@@ -35,13 +35,13 @@ class DisplayConfigMethod extends MethodClass
         $this->var()->find('itemid', $data['itemid'], 'int', 0);
         $this->var()->find('confirm', $data['confirm'], 'bool', false);
 
-        $data['object'] = DataObjectFactory::getObject(['name' => 'themes_configurations']);
+        $data['object'] = $this->data()->getObject(['name' => 'themes_configurations']);
 
         if (!isset($data['object'])) {
             return;
         }
         if (!$data['object']->checkAccess('display')) {
-            return xarController::forbidden(xarML('Display #(1) is forbidden', $data['object']->label), $this->getContext());
+            return $this->ctl()->forbidden($this->ml('Display #(1) is forbidden', $data['object']->label));
         }
 
         $data['object']->getItem(['itemid' => $data['itemid']]);

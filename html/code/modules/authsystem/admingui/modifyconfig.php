@@ -42,7 +42,7 @@ class ModifyconfigMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminAuthsystem')) {
+        if (!$this->sec()->checkAccess('AdminAuthsystem')) {
             return;
         }
 
@@ -57,7 +57,7 @@ class ModifyconfigMethod extends MethodClass
             $data['forwarding_page'] = $this->var()->prep($data['forwarding_page']);
         }
 
-        $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'authsystem']);
+        $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'authsystem']);
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, frontend_page');
         $data['module_settings']->getItem();
 
@@ -68,15 +68,15 @@ class ModifyconfigMethod extends MethodClass
 
             case 'update':
                 // Confirm authorisation code. AJAX calls ignore this
-                if (!xarSec::confirmAuthKey()) {
-                    return xarController::badRequest('bad_author', $this->getContext());
+                if (!$this->sec()->confirmAuthKey()) {
+                    return $this->ctl()->badRequest('bad_author');
                 }
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
                     // If this is an AJAX call, send back a message (and end)
-                    xarController::getRequest()->msgAjax($data['module_settings']->getInvalids());
+                    $this->ctl()->getRequest()->msgAjax($data['module_settings']->getInvalids());
                     // No AJAX, just send the data to the template for display
-                    return xarTpl::module('authsystem', 'admin', 'modifyconfig', $data);
+                    return $this->tpl()->module('authsystem', 'admin', 'modifyconfig', $data);
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                 }
@@ -87,8 +87,8 @@ class ModifyconfigMethod extends MethodClass
                 xarModVars::set('authsystem', 'lockouttries', $data['lockouttries']);
 
                 // If this is an AJAX call, end here
-                xarController::getRequest()->exitAjax();
-                xarController::redirect(xarServer::getCurrentURL(), null, $this->getContext());
+                $this->ctl()->getRequest()->exitAjax();
+                $this->ctl()->redirect($this->ctl()->getCurrentURL());
                 return true;
         }
         return $data;

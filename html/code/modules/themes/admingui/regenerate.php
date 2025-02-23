@@ -45,13 +45,13 @@ class RegenerateMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminThemes')) {
+        if (!$this->sec()->checkAccess('AdminThemes')) {
             return;
         }
 
         // Security check
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
         // Regenerate themes
         $regenerated = $adminapi->regenerate();
@@ -60,7 +60,7 @@ class RegenerateMethod extends MethodClass
             return;
         }
         // Redirect
-        xarController::redirect(xarController::URL('themes', 'admin', 'view'), null, $this->getContext());
+        $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'view'));
         return true;
     }
 }

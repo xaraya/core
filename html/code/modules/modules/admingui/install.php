@@ -42,18 +42,18 @@ class InstallMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         $installer = InstallerTool::getInstance();
         // Security and sanity checks
         // TODO: check under what conditions this is needed
-        //    if (!xarSec::confirmAuthKey()) return;
+        //    if (!$this->sec()->confirmAuthKey()) return;
 
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $this->var()->find(
             'return_url',
@@ -64,7 +64,7 @@ class InstallMethod extends MethodClass
 
         // First check for a proper core version
         if (!$installer->checkCore($id)) {
-            return xarTpl::module('modules', 'user', 'errors', ['layout' => 'invalid_core', 'modname' => xarMod::getName($id)]);
+            return $this->tpl()->module('modules', 'user', 'errors', ['layout' => 'invalid_core', 'modname' => $this->mod()->getName($id)]);
         }
 
         // Next check the modules dependencies
@@ -109,7 +109,7 @@ class InstallMethod extends MethodClass
             //3rd has only 'regid' key with the ID of the module
 
             // get any dependency info on this module for a better message if something is missing
-            $thisinfo = xarMod::getInfo($id);
+            $thisinfo = $this->mod()->getInfo($id);
             $data['displayname'] = $thisinfo['displayname'];
             if (!empty($thisinfo['dependencyinfo'])) {
                 $data['dependencyinfo'] = $thisinfo['dependencyinfo'];
@@ -119,7 +119,7 @@ class InstallMethod extends MethodClass
                 $data['dependencyinfo'] = [];
             }
 
-            $data['authid']       = xarSec::genAuthKey();
+            $data['authid']       = $this->sec()->genAuthKey();
             $data['return_url'] = $return_url;
             return $data;
         }
@@ -133,9 +133,9 @@ class InstallMethod extends MethodClass
             return;
         }
 
-        xarSession::setVar('installing', true);
+        $this->session()->setVar('installing', true);
 
-        $minfo = xarMod::getInfo($id);
+        $minfo = $this->mod()->getInfo($id);
 
         //Bail if we've lost our module
         if ($minfo['state'] != xarMod::STATE_MISSING_FROM_INACTIVE) {
@@ -145,7 +145,7 @@ class InstallMethod extends MethodClass
         }
         // Note: if the module installed successfully, the above method will have already redirected,
         // and thus the following won't be executed
-        xarSession::delVar('installing');
+        $this->session()->delVar('installing');
 
         // set the target location (anchor) to go to within the page
         $target = $minfo['name'];
@@ -163,10 +163,10 @@ class InstallMethod extends MethodClass
         }
 
         if (empty($return_url)) {
-            $return_url = xarController::URL('modules', 'admin', 'list', ['state' => 0], null, $target);
+            $return_url = $this->ctl()->getModuleURL('modules', 'admin', 'list', ['state' => 0], null) . '#' . $target;
         }
 
-        xarController::redirect($return_url, null, $this->getContext());
+        $this->ctl()->redirect($return_url);
         return true;
     }
 }

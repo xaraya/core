@@ -48,8 +48,8 @@ class ModifyrealmMethod extends MethodClass
         $this->var()->find('confirmed', $confirmed, 'bool', false);
         $this->var()->find('name', $name, 'str:1.20', '');
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         if (empty($confirmed)) {
             $bindvars = [];
@@ -63,8 +63,8 @@ class ModifyrealmMethod extends MethodClass
             }
         } else {
             $this->var()->find('newname', $newname, 'str:1.20', '');
-            if (!xarSec::confirmAuthKey()) {
-                return xarController::badRequest('bad_author', $this->getContext());
+            if (!$this->sec()->confirmAuthKey()) {
+                return $this->ctl()->badRequest('bad_author');
             }
 
             $bindvars = [];
@@ -90,13 +90,13 @@ class ModifyrealmMethod extends MethodClass
             $bindvars[] = $id;
             $result = $stmt->executeQuery($bindvars);
 
-            xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'), null, $this->getContext());
+            $this->ctl()->redirect($this->ctl()->getModuleURL('privileges', 'admin', 'viewrealms'));
         }
 
         $data['id'] = $id;
         $data['name'] = $name;
         $data['newname'] = '';
-        $data['authid'] = xarSec::genAuthKey();
+        $data['authid'] = $this->sec()->genAuthKey();
         return $data;
     }
 }

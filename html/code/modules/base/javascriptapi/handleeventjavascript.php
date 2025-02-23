@@ -65,7 +65,7 @@ class HandleeventjavascriptMethod extends MethodClass
         // Only pick up the event type JavaScript.
 
         return "
-            echo htmlspecialchars(xarMod::apiFunc('base', 'javascript', 'geteventjs', array('position'=>'$position', 'type'=>'$type')));
+            echo htmlspecialchars(xarMod" . "::apiFunc('base', 'javascript', 'geteventjs', array('position'=>'$position', 'type'=>'$type')));
         ";
     }
 }

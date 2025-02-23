@@ -42,7 +42,7 @@ class ListMethod extends MethodClass
         extract($args);
 
         // Security Check
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 

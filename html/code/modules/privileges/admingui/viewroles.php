@@ -39,7 +39,7 @@ class ViewrolesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditRoles')) {
+        if (!$this->sec()->checkAccess('EditRoles')) {
             return;
         }
 
@@ -49,7 +49,7 @@ class ViewrolesMethod extends MethodClass
         $this->var()->find('show', $data['show'], 'isset', 'assigned');
 
         // Clear Session Vars
-        xarSession::delVar('privileges_statusmsg');
+        $this->session()->delVar('privileges_statusmsg');
 
         //Call the Privileges class and get the privilege
         sys::import('modules.privileges.class.privileges');
@@ -75,7 +75,7 @@ class ViewrolesMethod extends MethodClass
         $data['pname'] = $priv->getName();
         $data['id'] = $id;
         $data['roles'] = $curroles;
-        $data['removeurl'] = xarController::URL(
+        $data['removeurl'] = $this->ctl()->getModuleURL(
             'privileges',
             'admin',
             'removerole',
@@ -83,7 +83,7 @@ class ViewrolesMethod extends MethodClass
         );
 
         $data['parents'] = $parents;
-        $data['groups'] = xarMod::apiFunc('roles', 'user', 'getallgroups');
+        $data['groups'] = $this->mod()->apiFunc('roles', 'user', 'getallgroups');
         return $data;
     }
 }

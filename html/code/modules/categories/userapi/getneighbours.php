@@ -43,7 +43,7 @@ class GetneighboursMethod extends MethodClass
         extract($args);
 
         if (!isset($left) || !isset($right) || !is_numeric($left) || !is_numeric($right)) {
-            xarSession::setVar('errormsg', xarML('Bad arguments for API function'));
+            $this->session()->setVar('errormsg', $this->ml('Bad arguments for API function'));
             return false;
         }
 
@@ -57,8 +57,8 @@ class GetneighboursMethod extends MethodClass
         //        return array();
         //    }
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $categoriestable = $xartable['categories'];
 
@@ -93,7 +93,7 @@ class GetneighboursMethod extends MethodClass
         }
 
         if ($result->EOF) {
-            xarSession::setVar('errormsg', xarML('Unknown Category'));
+            $this->session()->setVar('errormsg', $this->ml('Unknown Category'));
             return false;
         }
 

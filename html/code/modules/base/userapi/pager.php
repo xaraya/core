@@ -31,7 +31,7 @@ class PagerMethod extends MethodClass
     /** functions imported by bermuda_cleanup */
 
     /**
-     * Wrapper for xarTplPager::getPager() (see modules/base/class/pager.php)
+     * Wrapper for $this->tpl()->getPager() (see modules/base/class/pager.php)
      * Used by the base-pager template tag
      * Returns a pager based on url, startnum, itemsperpage and totalitems
      * Usage, eg <xar:pager startnum="1" itemsperpage="10" total="30"/>
@@ -71,7 +71,7 @@ class PagerMethod extends MethodClass
 
         if (!isset($itemsperpage) || !is_numeric($itemsperpage)) {
             if (empty($module)) {
-                $module = xarController::getRequest()->getModule();
+                $module = $this->ctl()->getRequest()->getModule();
             }
             if (!empty($module)) {
                 // @TODO: setting per itemtype?
@@ -113,9 +113,9 @@ class PagerMethod extends MethodClass
         if (empty($template)) {
             $template = 'default';
         }
-        // Pass along the context for xarTpl::module() if needed - from pager tag
+        // Pass along the context for $this->tpl()->module() if needed - from pager tag
         $blockoptions['context'] ??= $this->getContext();
 
-        return xarTplPager::getPager($startnum, $total, $urltemplate, $itemsperpage, $blockoptions, $template, $tplmodule);
+        return $this->tpl()->getPager($startnum, $total, $urltemplate, $itemsperpage, $blockoptions, $template, $tplmodule);
     }
 }

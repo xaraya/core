@@ -37,7 +37,7 @@ class ChecklinkMethod extends MethodClass
      * boolean $args['skiplocal'] Indicates if we want to skip checking local URLs (default is true)<br/>
      * string  $args['referer'] Optional referer (default is base URL of your site)<br/>
      * boolean $args['follow'] Indicates if we want to follow redirects or not (default is true)<br/>
-     * @return int Status of the link
+     * @return int|string Status of the link
      * @see UserApi::checklink()
      */
     public function __invoke(array $args = [])
@@ -87,7 +87,7 @@ class ChecklinkMethod extends MethodClass
             $islocal = true;
         }
         if ($invalid) {
-            return xarML('Invalid URL [#(1)]', $url);
+            return $this->ml('Invalid URL [#(1)]', $url);
         }
 
         if ($skiplocal && $islocal) {
@@ -100,7 +100,7 @@ class ChecklinkMethod extends MethodClass
             $proxyport = xarModVars::get('base', 'proxyport');
             $fp = @fsockopen($proxyhost, $proxyport, $errno, $errstr, 10);
             if (!$fp) {
-                return xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
+                return $this->ml('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
             }
             // avoid unnecessary redirects
             $info = parse_url($url);
@@ -123,7 +123,7 @@ class ChecklinkMethod extends MethodClass
 
             $fp = @fsockopen($info['host'], $info['port'], $errno, $errstr, 10);
             if (!$fp) {
-                return xarML('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
+                return $this->ml('Socket error #(1) : #(2) while retrieving URL #(3)', $errno, $errstr, $url);
             }
             $uri = $info['path'];
             if (!empty($info['query'])) {
@@ -134,7 +134,7 @@ class ChecklinkMethod extends MethodClass
 
         $size = fwrite($fp, $request);
         if (!$size) {
-            return xarML('Error sending request for URL #(1)', $url);
+            return $this->ml('Error sending request for URL #(1)', $url);
         }
         $content = '';
         while (!feof($fp)) {
@@ -146,7 +146,7 @@ class ChecklinkMethod extends MethodClass
             if (!preg_match('/<html(\s+|>)/is', $content) &&
                 !preg_match('/<body(\s+|>)/is', $content)) {
                 $header = preg_replace('/\r\n\r\n.*$/s', '', $content);
-                return xarML('Invalid response headers for URL #(1) : #(2)', $url, $header);
+                return $this->ml('Invalid response headers for URL #(1) : #(2)', $url, $header);
             }
             // let's assume this is somewhat OK if there's some HTML in there
             $status = 203; // Non-Authoritative Information

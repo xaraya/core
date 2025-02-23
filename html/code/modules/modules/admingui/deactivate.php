@@ -50,18 +50,18 @@ class DeactivateMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('AdminModules')) {
+        if (!$this->sec()->checkAccess('AdminModules')) {
             return;
         }
 
         // Security and sanity checks
-        if (!xarSec::confirmAuthKey()) {
-            return xarController::badRequest('bad_author', $this->getContext());
+        if (!$this->sec()->confirmAuthKey()) {
+            return $this->ctl()->badRequest('bad_author');
         }
 
         $this->var()->find('id', $id, 'int:1:', 0);
         if (empty($id)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         $this->var()->find(
             'return_url',
@@ -74,10 +74,10 @@ class DeactivateMethod extends MethodClass
         $this->var()->find('command', $command, 'checkbox', false);
 
         // set the target location (anchor) to go to within the page
-        $minfo = xarMod::getInfo($id);
+        $minfo = $this->mod()->getInfo($id);
         $target = $minfo['name'];
         if (empty($return_url)) {
-            $return_url = xarController::URL('modules', 'admin', 'list', ['state' => 0], null, $target);
+            $return_url = $this->ctl()->getModuleURL('modules', 'admin', 'list', ['state' => 0], null) . '#' . $target;
         }
 
         sys::import('modules.modules.class.installer');
@@ -93,7 +93,7 @@ class DeactivateMethod extends MethodClass
                 $data['id'] = $id;
                 //They come in 2 arrays: active, initialised
                 //Both have $name => $modInfo under them foreach
-                $data['authid']       = xarSec::genAuthKey();
+                $data['authid']       = $this->sec()->genAuthKey();
                 $data['dependencies'] = $dependents;
                 return $data;
             } else {
@@ -101,7 +101,7 @@ class DeactivateMethod extends MethodClass
                 if (!$adminapi->deactivate(['regid' => $id])) {
                     return;
                 }
-                xarController::redirect($return_url, null, $this->getContext());
+                $this->ctl()->redirect($return_url);
             }
         }
 
@@ -122,7 +122,7 @@ class DeactivateMethod extends MethodClass
 
         // Hmmm, I wonder if the target adding is considered a hack
         // it certainly depends on the implementation of xarController::URL
-        xarController::redirect($return_url, null, $this->getContext());
+        $this->ctl()->redirect($return_url);
 
         return true;
     }

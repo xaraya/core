@@ -34,7 +34,7 @@ class UpdateConfigMethod extends MethodClass
 
     public function __invoke(array $args = [])
     {
-        if (!xarSecurity::check('EditThemes')) {
+        if (!$this->sec()->checkAccess('EditThemes')) {
             return;
         }
 
@@ -43,13 +43,13 @@ class UpdateConfigMethod extends MethodClass
         $this->var()->find('confirm', $data['confirm'], 'bool', false);
         $this->var()->find('update', $data['update'], 'str', false);
 
-        $data['object'] = DataObjectFactory::getObject(['name' => 'themes_configurations']);
+        $data['object'] = $this->data()->getObject(['name' => 'themes_configurations']);
         $data['object']->getItem(['itemid' => $data['itemid']]);
 
         if ($data['confirm']) {
 
             // Check for a valid confirmation key
-            if (!xarSec::confirmAuthKey()) {
+            if (!$this->sec()->confirmAuthKey()) {
                 return;
             }
 
@@ -59,16 +59,16 @@ class UpdateConfigMethod extends MethodClass
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
                 $data['context'] ??= $this->getContext();
-                return xarTpl::module('themes', 'admin', 'update_config', $data);
+                return $this->tpl()->module('themes', 'admin', 'update_config', $data);
             } else {
 
                 // Good data: create the item
                 $itemid = $data['object']->updateItem(['itemid' => $data['itemid']]);
                 if ($data['update']) {
-                    xarController::redirect(xarController::URL('themes', 'admin', 'view_configs'), null, $this->getContext());
+                    $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'view_configs'));
                     return true;
                 } else {
-                    xarController::redirect(xarController::URL('themes', 'admin', 'update_config', $data), null, $this->getContext());
+                    $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'update_config', $data));
                     return true;
                 }
             }

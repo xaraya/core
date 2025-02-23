@@ -44,7 +44,7 @@ class RemovebranchMethod extends MethodClass
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
         // Security
-        if (!xarSecurity::check('EditPrivileges')) {
+        if (!$this->sec()->checkAccess('EditPrivileges')) {
             return;
         }
 
@@ -52,10 +52,10 @@ class RemovebranchMethod extends MethodClass
         $this->var()->find('childid', $childid, 'int', null);
         $this->var()->find('parentid', $parentid, 'int', null);
         if (empty($childid)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
         if (empty($parentid)) {
-            return xarController::notFound(null, $this->getContext());
+            return $this->ctl()->notFound();
         }
 
         // call the API function
@@ -63,11 +63,11 @@ class RemovebranchMethod extends MethodClass
         }
 
         // redirect to the next page
-        xarController::redirect(xarController::URL(
+        $this->ctl()->redirect($this->ctl()->getModuleURL(
             'privileges',
             'admin',
             'viewprivileges'
-        ), null, $this->getContext());
+        ));
         return true;
     }
 }
