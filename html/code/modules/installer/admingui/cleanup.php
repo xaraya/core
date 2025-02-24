@@ -49,31 +49,31 @@ class CleanupMethod extends MethodClass
         if (!file_exists('install.php')) {
             throw new Exception('Already installed');
         }
-        xarVar::fetch('install_language', 'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
+        $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
         xarTpl::setThemeName('installer');
 
-        xarVar::fetch('remove', 'checkbox', $remove, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('rename', 'checkbox', $rename, false, xarVar::NOT_REQUIRED);
-        xarVar::fetch('newname', 'str', $newname, '', xarVar::NOT_REQUIRED);
+        $this->var()->find('remove', $remove, 'checkbox', false);
+        $this->var()->find('rename', $rename, 'checkbox', false);
+        $this->var()->find('newname', $newname, 'str', '');
 
         if ($remove) {
             try {
                 unlink('install.php');
             } catch (Exception $e) {
-                return xarTpl::module('installer', 'user', 'errors', ['layout' => 'no_permission_delete', 'filename' => 'install.php']);
+                return $this->tpl()->module('installer', 'user', 'errors', ['layout' => 'no_permission_delete', 'filename' => 'install.php']);
             }
         } elseif ($rename) {
             if (empty($newname)) {
                 try {
                     unlink('install.php');
                 } catch (Exception $e) {
-                    return xarTpl::module('installer', 'user', 'errors', ['layout' => 'no_permission_delete', 'filename' => 'install.php']);
+                    return $this->tpl()->module('installer', 'user', 'errors', ['layout' => 'no_permission_delete', 'filename' => 'install.php']);
                 }
             } else {
                 try {
                     rename('install.php', $newname . '.php');
                 } catch (Exception $e) {
-                    return xarTpl::module('installer', 'user', 'errors', ['layout' => 'no_permission_rename', 'filename' => 'install.php']);
+                    return $this->tpl()->module('installer', 'user', 'errors', ['layout' => 'no_permission_rename', 'filename' => 'install.php']);
                 }
             }
         }
@@ -86,12 +86,12 @@ class CleanupMethod extends MethodClass
          * The following code takes care of setting up groups and block instances
         **/
         // refresh block types (auto registers available solo/module block types)
-        if (!xarMod::apiFunc('blocks', 'types', 'refresh', ['refresh' => true])) {
+        if (!$this->mod()->apiFunc('blocks', 'types', 'refresh', ['refresh' => true])) {
             return;
         }
 
         // get the default blockgroup block type info
-        $group_type = xarMod::apiFunc(
+        $group_type = $this->mod()->apiFunc(
             'blocks',
             'types',
             'getitem',
@@ -109,10 +109,10 @@ class CleanupMethod extends MethodClass
         ];
 
         foreach ($groups as $name => $template) {
-            if (!xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => $name])) {
+            if (!$this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => $name])) {
                 $content = $group_type['type_info'];
                 $content['box_template'] = $template;
-                if (!xarMod::apiFunc(
+                if (!$this->mod()->apiFunc(
                     'blocks',
                     'instances',
                     'createitem',
@@ -130,23 +130,23 @@ class CleanupMethod extends MethodClass
         }
 
         // get info for left group instance
-        $left_group = xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => 'left']);
+        $left_group = $this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => 'left']);
 
         // see if we have a menu instance
-        if (!xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => 'mainmenu'])) {
+        if (!$this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => 'mainmenu'])) {
             // get the default menu block type info
-            $menu_type = xarMod::apiFunc(
+            $menu_type = $this->mod()->apiFunc(
                 'blocks',
                 'types',
                 'getitem',
                 ['type' => 'menu', 'module' => 'base']
             );
             // get an instance of the menu block type
-            $menu_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $menu_type);
+            $menu_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $menu_type);
             // attach the left group to the menu instance
             $menu_block->attachGroup($left_group['block_id']);
             // create menu instance
-            if (!$menu_id = xarMod::apiFunc(
+            if (!$menu_id = $this->mod()->apiFunc(
                 'blocks',
                 'instances',
                 'createitem',
@@ -164,11 +164,11 @@ class CleanupMethod extends MethodClass
         // add menu instance to left block
         if (!empty($menu_id)) {
             // get an instance of the left group
-            $left_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $left_group);
+            $left_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $left_group);
             // attach menu block to left group instance
             $left_block->attachInstance($menu_id);
             // update left block instance
-            if (!xarMod::apiFunc(
+            if (!$this->mod()->apiFunc(
                 'blocks',
                 'instances',
                 'updateitem',
@@ -182,23 +182,23 @@ class CleanupMethod extends MethodClass
         }
 
         // get info for right group instance
-        $right_group = xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => 'right']);
+        $right_group = $this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => 'right']);
 
         // see if we have a login instance
-        if (!xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => 'login'])) {
+        if (!$this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => 'login'])) {
             // get the default login block type info
-            $login_type = xarMod::apiFunc(
+            $login_type = $this->mod()->apiFunc(
                 'blocks',
                 'types',
                 'getitem',
                 ['type' => 'login', 'module' => 'authsystem']
             );
             // get an instance of the login block type
-            $login_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $login_type);
+            $login_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $login_type);
             // attach the right group to the login instance
             $login_block->attachGroup($right_group['block_id']);
             // create login instance
-            if (!$login_id = xarMod::apiFunc(
+            if (!$login_id = $this->mod()->apiFunc(
                 'blocks',
                 'instances',
                 'createitem',
@@ -216,11 +216,11 @@ class CleanupMethod extends MethodClass
         // add login instance to right block
         if (!empty($login_id)) {
             // get an instance of the right group
-            $right_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $right_group);
+            $right_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $right_group);
             // attach login block to right group instance
             $right_block->attachInstance($login_id);
             // update right block instance
-            if (!xarMod::apiFunc(
+            if (!$this->mod()->apiFunc(
                 'blocks',
                 'instances',
                 'updateitem',
@@ -234,23 +234,23 @@ class CleanupMethod extends MethodClass
         }
 
         // get info for header group instance
-        $header_group = xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => 'header']);
+        $header_group = $this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => 'header']);
 
         // see if we have a meta instance
-        if (!xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => 'meta'])) {
+        if (!$this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => 'meta'])) {
             // get the default meta block type info
-            $meta_type = xarMod::apiFunc(
+            $meta_type = $this->mod()->apiFunc(
                 'blocks',
                 'types',
                 'getitem',
                 ['type' => 'meta', 'module' => 'themes']
             );
             // get an instance of the meta block type
-            $meta_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $meta_type);
+            $meta_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $meta_type);
             // attach the header group to the meta instance
             $meta_block->attachGroup($header_group['block_id']);
             // create meta instance
-            if (!$meta_id = xarMod::apiFunc(
+            if (!$meta_id = $this->mod()->apiFunc(
                 'blocks',
                 'instances',
                 'createitem',
@@ -267,11 +267,11 @@ class CleanupMethod extends MethodClass
         // add meta instance to header block
         if (!empty($meta_id)) {
             // get an instance of the header group
-            $header_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $header_group);
+            $header_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $header_group);
             // attach meta block to header group instance
             $header_block->attachInstance($meta_id);
             // update header block instance
-            if (!xarMod::apiFunc(
+            if (!$this->mod()->apiFunc(
                 'blocks',
                 'instances',
                 'updateitem',
@@ -285,23 +285,23 @@ class CleanupMethod extends MethodClass
         }
 
         // get info for admin group instance
-        $admin_group = xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => 'admin']);
+        $admin_group = $this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => 'admin']);
 
         // see if we have an adminmenu instance
-        if (!xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => 'adminpanel'])) {
+        if (!$this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => 'adminpanel'])) {
             // get the default adminmenu block type info
-            $adminmenu_type = xarMod::apiFunc(
+            $adminmenu_type = $this->mod()->apiFunc(
                 'blocks',
                 'types',
                 'getitem',
                 ['type' => 'adminmenu', 'module' => 'base']
             );
             // get an instance of the adminmenu block type
-            $adminmenu_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $adminmenu_type);
+            $adminmenu_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $adminmenu_type);
             // attach the admin group to the adminmenu instance
             $adminmenu_block->attachGroup($admin_group['block_id']);
             // create adminmenu instance
-            if (!$adminmenu_id = xarMod::apiFunc(
+            if (!$adminmenu_id = $this->mod()->apiFunc(
                 'blocks',
                 'instances',
                 'createitem',
@@ -318,16 +318,16 @@ class CleanupMethod extends MethodClass
         }
 
         // if install.php still exists, set a reminder instance
-        if (!xarMod::apiFunc('blocks', 'instances', 'getitem', ['name' => 'reminder']) && (file_exists('install.php') || file_exists('upgrade.php'))) {
+        if (!$this->mod()->apiFunc('blocks', 'instances', 'getitem', ['name' => 'reminder']) && (file_exists('install.php') || file_exists('upgrade.php'))) {
             // get the default reminder block type info
-            $reminder_type = xarMod::apiFunc(
+            $reminder_type = $this->mod()->apiFunc(
                 'blocks',
                 'types',
                 'getitem',
                 ['type' => 'content', 'module' => 'base']
             );
             // get an instance of the reminder block type
-            $reminder_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $reminder_type);
+            $reminder_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $reminder_type);
             // attach the admin group to the reminder instance
             $reminder_block->attachGroup($admin_group['block_id']);
             // set content
@@ -337,7 +337,7 @@ class CleanupMethod extends MethodClass
             $reminder_content['content_type'] = 'php';
             $reminder_content['expire'] = time() + 259200;
             // create reminder instance
-            if (!$reminder_id = xarMod::apiFunc(
+            if (!$reminder_id = $this->mod()->apiFunc(
                 'blocks',
                 'instances',
                 'createitem',
@@ -356,7 +356,7 @@ class CleanupMethod extends MethodClass
         // add adminmenu and/or reminder instance to admin block
         if (!empty($adminmenu_id) || !empty($reminder_id)) {
             // get an instance of the admin group
-            $admin_block = xarMod::apiFunc('blocks', 'blocks', 'getblock', $admin_group);
+            $admin_block = $this->mod()->apiFunc('blocks', 'blocks', 'getblock', $admin_group);
             // attach reminder block to admin group instance
             if (!empty($reminder_id)) {
                 $admin_block->attachInstance($reminder_id);
@@ -366,7 +366,7 @@ class CleanupMethod extends MethodClass
                 $admin_block->attachInstance($adminmenu_id);
             }
             // update admin block instance
-            if (!xarMod::apiFunc(
+            if (!$this->mod()->apiFunc(
                 'blocks',
                 'instances',
                 'updateitem',
@@ -384,22 +384,22 @@ class CleanupMethod extends MethodClass
 
         xarUser::logOut();
         // log in admin user
-        $uname = xarModVars::get('roles', 'lastuser');
-        $pass = xarModVars::get('roles', 'adminpass');
+        $uname = $this->mod('roles')->getVar('lastuser');
+        $pass = $this->mod('roles')->getVar('adminpass');
 
         if (!xarUser::logIn($uname, $pass, 0)) {
-            $msg = xarML('Cannot log in the default administrator. Check your setup.');
+            $msg = $this->ml('Cannot log in the default administrator. Check your setup.');
             throw new Exception($msg);
         }
 
-        xarModVars::delete('roles', 'adminpass');
+        $this->mod('roles')->delVar('adminpass');
 
-        xarMod::apiFunc('dynamicdata', 'admin', 'importpropertytypes', ['flush' => true]);
+        $this->mod()->apiFunc('dynamicdata', 'admin', 'importpropertytypes', ['flush' => true]);
 
         $data['language']    = $install_language;
         $data['phase'] = 10;
-        $data['phase_label'] = xarML('Step Ten');
-        $data['finalurl'] = xarController::URL('installer', 'admin', 'finish');
+        $data['phase_label'] = $this->ml('Step Ten');
+        $data['finalurl'] = $this->ctl()->getModuleURL('installer', 'admin', 'finish');
 
         return $data;
     }

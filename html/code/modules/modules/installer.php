@@ -44,7 +44,7 @@ class Installer extends InstallerClass
     public function init()
     {
         // Create tables inside a transaction
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
 
         try {
             $dbconn->begin();
@@ -58,7 +58,7 @@ class Installer extends InstallerClass
         }
 
         // Get database information
-        $tables = xarDB::getTables();
+        $tables = $this->db()->getTables();
         try {
             $dbconn->begin();
             // Manually Insert the Base and Modules module into modules table
@@ -66,7 +66,7 @@ class Installer extends InstallerClass
                   (name, regid, directory, version,
                    class, category, admin_capable, user_capable, state )
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $modInfo = xarMod::getFileInfo('modules');
+            $modInfo = $this->mod()->getFileInfo('modules');
             if (empty($modInfo)) {
                 return;
             } // throw back
@@ -74,7 +74,7 @@ class Installer extends InstallerClass
             $modVersion = $modInfo['version'];
             $bindvars = ['modules',1,'modules',(string) $modVersion,'Core Admin','System',true,false,3];
             $dbconn->Execute($query, $bindvars);
-            $modInfo = xarMod::getFileInfo('base');
+            $modInfo = $this->mod()->getFileInfo('base');
             if (empty($modInfo)) {
                 return;
             } // throw back
@@ -82,7 +82,7 @@ class Installer extends InstallerClass
             $modVersion = $modInfo['version'];
             $bindvars = ['base',68,'base',(string) $modVersion,'Core Admin','System',true,true,3];
             $dbconn->Execute($query, $bindvars);
-            $modulesmodid = xarMod::getID('modules');
+            $modulesmodid = $this->mod()->getID('modules');
             $sql = "INSERT INTO " . $tables['module_vars'] . " (module_id, name, value)
                     VALUES (?,?,?)";
             $stmt = $dbconn->prepareStatement($sql);
@@ -127,24 +127,24 @@ class Installer extends InstallerClass
     public function activate()
     {
         // make sure we dont miss empty variables (which were not passed thru)
-        $selstyle = xarModVars::get('modules', 'hidecore');
-        $selstyle = xarModVars::get('modules', 'selstyle');
-        $selstyle = xarModVars::get('modules', 'selfilter');
-        $selstyle = xarModVars::get('modules', 'selsort');
+        $selstyle = $this->mod()->getVar('hidecore');
+        $selstyle = $this->mod()->getVar('selstyle');
+        $selstyle = $this->mod()->getVar('selfilter');
+        $selstyle = $this->mod()->getVar('selsort');
         if (empty($hidecore)) {
-            xarModVars::set('modules', 'hidecore', 0);
+            $this->mod()->setVar('hidecore', 0);
         }
         if (empty($selstyle)) {
-            xarModVars::set('modules', 'selstyle', 'plain');
+            $this->mod()->setVar('selstyle', 'plain');
         }
         if (empty($selfilter)) {
-            xarModVars::set('modules', 'selfilter', xarMod::STATE_ANY);
+            $this->mod()->setVar('selfilter', xarMod::STATE_ANY);
         }
         if (empty($selsort)) {
-            xarModVars::set('modules', 'selsort', 'nameasc');
+            $this->mod()->setVar('selsort', 'nameasc');
         }
         // New in 1.1.x series but not used
-        xarModVars::set('modules', 'disableoverview', 0);
+        $this->mod()->setVar('disableoverview', 0);
         return true;
     }
 
@@ -152,8 +152,8 @@ class Installer extends InstallerClass
     {
         switch ($oldversion) {
             case '2.0.0':
-                $dbconn = xarDB::getConn();
-                $xartable = xarDB::getTables();
+                $dbconn = $this->db()->getConn();
+                $xartable = $this->db()->getTables();
                 //Load Table Maintainance API
                 sys::import('xaraya.tableddl');
                 $hookstable = $xartable['hooks'];
@@ -166,9 +166,9 @@ class Installer extends InstallerClass
                 }
                 // no break
             case '2.0.1':
-                $dbconn = xarDB::getConn();
-                $tables = ['eventsystem' => xarDB::getPrefix() . '_eventsystem'];
-                xarDB::importTables($tables);
+                $dbconn = $this->db()->getConn();
+                $tables = ['eventsystem' => $this->db()->getPrefix() . '_eventsystem'];
+                $this->db()->importTables($tables);
                 // Register base module event subjects
                 // Base module inits before modules, so we have to register events for it here
                 xarEvents::registerSubject('Event', 'event', 'base');

@@ -39,12 +39,12 @@ class Phase2Method extends MethodClass
         if (!file_exists('install.php')) {
             throw new Exception('Already installed');
         }
-        xarVar::fetch('install_language', 'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
-        xarVar::fetch('retry', 'int:1', $data['retry'], null, xarVar::NOT_REQUIRED);
+        $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
+        $this->var()->find('retry', $data['retry'], 'int:1', null);
 
         $data['language'] = $install_language;
         $data['phase'] = 2;
-        $data['phase_label'] = xarML('Step Two');
+        $data['phase_label'] = $this->ml('Step Two');
 
         return $data;
     }

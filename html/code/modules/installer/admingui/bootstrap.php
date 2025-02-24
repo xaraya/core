@@ -40,8 +40,8 @@ class BootstrapMethod extends MethodClass
         if (!file_exists('install.php')) {
             throw new Exception('Already installed');
         }
-        xarVar::fetch('install_language', 'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
-        xarVar::setCached('installer', 'installing', true);
+        $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
+        $this->var()->setCached('installer', 'installing', true);
 
         # --------------------------------------------------------
         # Create DD configuration and sample objects
@@ -53,7 +53,7 @@ class BootstrapMethod extends MethodClass
             'module_settings',
         ];
 
-        if (!xarMod::apiFunc('modules', 'admin', 'standardinstall', ['module' => 'dynamicdata', 'objects' => $objects])) {
+        if (!$this->mod()->apiFunc('modules', 'admin', 'standardinstall', ['module' => 'dynamicdata', 'objects' => $objects])) {
             return;
         }
         # --------------------------------------------------------
@@ -64,7 +64,7 @@ class BootstrapMethod extends MethodClass
             //                   'modules_hooks',
             //                   'modules_modvars',
         ];
-        if (!xarMod::apiFunc('modules', 'admin', 'standardinstall', ['module' => 'modules', 'objects' => $objects])) {
+        if (!$this->mod()->apiFunc('modules', 'admin', 'standardinstall', ['module' => 'modules', 'objects' => $objects])) {
             return;
         }
 
@@ -75,7 +75,7 @@ class BootstrapMethod extends MethodClass
             'roles_user_settings',
         ];
 
-        if (!xarMod::apiFunc('modules', 'admin', 'standardinstall', ['module' => 'roles', 'objects' => $objects])) {
+        if (!$this->mod()->apiFunc('modules', 'admin', 'standardinstall', ['module' => 'roles', 'objects' => $objects])) {
             return;
         }
 
@@ -86,7 +86,7 @@ class BootstrapMethod extends MethodClass
             'themes_jslibraries',
             'themes_csslibraries',
         ];
-        if (!xarMod::apiFunc('modules', 'admin', 'standardinstall', ['module' => 'themes', 'objects' => $objects])) {
+        if (!$this->mod()->apiFunc('modules', 'admin', 'standardinstall', ['module' => 'themes', 'objects' => $objects])) {
             return;
         }
 
@@ -94,7 +94,7 @@ class BootstrapMethod extends MethodClass
             'categories',
             'categories_linkages',
         ];
-        if (!xarMod::apiFunc('modules', 'admin', 'standardinstall', ['module' => 'categories', 'objects' => $objects])) {
+        if (!$this->mod()->apiFunc('modules', 'admin', 'standardinstall', ['module' => 'categories', 'objects' => $objects])) {
             return;
         }
 
@@ -103,7 +103,7 @@ class BootstrapMethod extends MethodClass
             'privileges_privileges',
         ];
 
-        if (!xarMod::apiFunc('modules', 'admin', 'standardinstall', ['module' => 'privileges', 'objects' => $objects])) {
+        if (!$this->mod()->apiFunc('modules', 'admin', 'standardinstall', ['module' => 'privileges', 'objects' => $objects])) {
             return;
         }
 
@@ -125,14 +125,14 @@ class BootstrapMethod extends MethodClass
         ];
 
         foreach ($modules as $module) {
-            $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => $module]);
+            $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => $module]);
             $data['module_settings']->initialize();
         }
 
         $modlist = ['roles'];
         foreach ($modlist as $mod) {
-            $regid = xarMod::getRegID($mod);
-            if (!xarMod::apiFunc(
+            $regid = $this->mod()->getRegID($mod);
+            if (!$this->mod()->apiFunc(
                 'modules',
                 'admin',
                 'activate',
@@ -143,12 +143,12 @@ class BootstrapMethod extends MethodClass
         }
 
         // load modules into *_modules table
-        if (!xarMod::apiFunc('modules', 'admin', 'regenerate')) {
+        if (!$this->mod()->apiFunc('modules', 'admin', 'regenerate')) {
             return;
         }
 
         // load themes into *_themes table
-        if (!xarMod::apiFunc('themes', 'admin', 'regenerate')) {
+        if (!$this->mod()->apiFunc('themes', 'admin', 'regenerate')) {
             throw new Exception("themes regeneration failed");
         }
 
@@ -158,17 +158,17 @@ class BootstrapMethod extends MethodClass
             // Set state to inactive
             $regid = xarTheme::getIDFromName($theme);
             if (isset($regid)) {
-                if (!xarMod::apiFunc('themes', 'admin', 'setstate', ['regid' => $regid,'state' => xarTheme::STATE_INACTIVE])) {
+                if (!$this->mod()->apiFunc('themes', 'admin', 'setstate', ['regid' => $regid,'state' => xarTheme::STATE_INACTIVE])) {
                     throw new Exception("Setting state of theme with regid: $regid failed");
                 }
                 // Activate the theme
-                if (!xarMod::apiFunc('themes', 'admin', 'activate', ['regid' => $regid])) {
+                if (!$this->mod()->apiFunc('themes', 'admin', 'activate', ['regid' => $regid])) {
                     throw new Exception("Activation of theme with regid: $regid failed");
                 }
             }
         }
 
-        xarController::redirect(xarController::URL('installer', 'admin', 'create_administrator', ['install_language' => $install_language]));
+        $this->ctl()->redirect($this->ctl()->getModuleURL('installer', 'admin', 'create_administrator', ['install_language' => $install_language]));
         return true;
     }
 }

@@ -197,13 +197,13 @@ class Installer extends InstallerClass
         #
         # Set up modvars
         #
-        xarModVars::set('dynamicdata', 'items_per_page', 20);
-        xarModVars::set('dynamicdata', 'use_module_alias', 0);
-        xarModVars::set('dynamicdata', 'module_alias_name', 'Query');
-        xarModVars::set('dynamicdata', 'debugmode', 0);
-        xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
-        xarModVars::set('dynamicdata', 'caching', 0);
-        xarModVars::set('dynamicdata', 'suppress_updates', 0);
+        $this->mod()->setVar('items_per_page', 20);
+        $this->mod()->setVar('use_module_alias', 0);
+        $this->mod()->setVar('module_alias_name', 'Query');
+        $this->mod()->setVar('debugmode', 0);
+        $this->mod()->setVar('getlinkedobjects', 0);
+        $this->mod()->setVar('caching', 0);
+        $this->mod()->setVar('suppress_updates', 0);
         /**
          * Register hooks
          */

@@ -39,7 +39,7 @@ class Installer extends InstallerClass
      */
     public function init()
     {
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
             sys::import('xaraya.tableddl');
@@ -57,17 +57,17 @@ class Installer extends InstallerClass
     public function activate()
     {
         // On activation, set our variables
-        xarModVars::set('privileges', 'showrealms', false);
-        xarModVars::set('privileges', 'inheritdeny', true);
-        xarModVars::set('privileges', 'tester', 0);
-        xarModVars::set('privileges', 'test', false);
-        xarModVars::set('privileges', 'testdeny', false);
-        xarModVars::set('privileges', 'testmask', 'All');
-        xarModVars::set('privileges', 'realmvalue', 'none');
-        xarModVars::set('privileges', 'realmcomparison', 'exact');
-        xarModVars::set('privileges', 'exceptionredirect', false);
-        xarModVars::set('privileges', 'maskbasedsecurity', false);
-        xarModVars::set('privileges', 'clearcache', time());
+        $this->mod()->setVar('showrealms', false);
+        $this->mod()->setVar('inheritdeny', true);
+        $this->mod()->setVar('tester', 0);
+        $this->mod()->setVar('test', false);
+        $this->mod()->setVar('testdeny', false);
+        $this->mod()->setVar('testmask', 'All');
+        $this->mod()->setVar('realmvalue', 'none');
+        $this->mod()->setVar('realmcomparison', 'exact');
+        $this->mod()->setVar('exceptionredirect', false);
+        $this->mod()->setVar('maskbasedsecurity', false);
+        $this->mod()->setVar('clearcache', time());
         return true;
     }
 

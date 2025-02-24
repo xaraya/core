@@ -42,8 +42,8 @@ class Phase3Method extends MethodClass
         if (!file_exists('install.php')) {
             throw new Exception('Already installed');
         }
-        xarVar::fetch('install_language', 'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
-        xarVar::fetch('agree', 'regexp:(agree|disagree)', $agree);
+        $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
+        $this->var()->find('agree', $agree, 'regexp:(agree|disagree)');
 
         $retry = 1;
 
@@ -91,7 +91,7 @@ class Phase3Method extends MethodClass
         $xmlLanguageFilesIsWritable = xarMLS::iswritable($xmlLanguageDir);
         $maxexectime = trim(ini_get('max_execution_time'));
         $memLimit = trim(ini_get('memory_limit'));
-        $memLimit = empty($memLimit) ? xarML('Undetermined') : $memLimit;
+        $memLimit = empty($memLimit) ? $this->ml('Undetermined') : $memLimit;
         $memVal = intval(substr($memLimit, 0, strlen($memLimit) - 1));
         switch (strtolower($memLimit[strlen($memLimit) - 1])) {
             case 'g': $memVal *= 1024;
@@ -132,12 +132,12 @@ class Phase3Method extends MethodClass
         $data['maxexectime']                = $maxexectime;
         $data['maxexectimepass']            = $maxexectime <= 30;
         $data['memory_limit']               = $memLimit;
-        $data['memory_warning']             = $memLimit == xarML('Undetermined');
+        $data['memory_warning']             = $memLimit == $this->ml('Undetermined');
         $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024 || $memLimit == '-1' || $data['memory_warning'];
 
         $data['language']    = $install_language;
         $data['phase']       = 3;
-        $data['phase_label'] = xarML('Step Three');
+        $data['phase_label'] = $this->ml('Step Three');
 
         // Check the loaded database extensions
         if ($data['mysqliextension']) {

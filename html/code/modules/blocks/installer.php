@@ -43,7 +43,7 @@ class Installer extends InstallerClass
     public function init()
     {
         // Get database information
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
             sys::import('xaraya.tableddl');
@@ -54,10 +54,10 @@ class Installer extends InstallerClass
             $dbconn->rollback();
             throw $e;
         }
-        $prefix = xarDB::getPrefix();
+        $prefix = $this->db()->getPrefix();
 
-        xarModVars::set('blocks', 'selstyle', 'plain');
-        xarModVars::set('blocks', 'noexceptions', 1);
+        $this->mod()->setVar('selstyle', 'plain');
+        $this->mod()->setVar('noexceptions', 1);
 
         // checkme: <chris/> The following note seems like a 1x thing
         /* There are old block instances defined previously in privs xarsetup.php file and used in the Block module.

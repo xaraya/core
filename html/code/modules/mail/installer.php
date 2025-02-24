@@ -39,23 +39,23 @@ class Installer extends InstallerClass
      */
     public function init()
     {
-        xarModVars::set('mail', 'server', 'mail');
-        xarModVars::set('mail', 'replyto', '0');
-        xarModVars::set('mail', 'wordwrap', '78');
-        xarModVars::set('mail', 'priority', '3');
-        xarModVars::set('mail', 'smtpPort', '25');
-        xarModVars::set('mail', 'smtpHost', 'Your SMTP Host');
-        xarModVars::set('mail', 'encoding', '8bit');
-        xarModVars::set('mail', 'smtpAuth', '');
-        xarModVars::set('mail', 'smtpSecure', '');
-        xarModVars::set('mail', 'smtpUserName', '');
-        xarModVars::set('mail', 'smtpPassword', '');
-        xarModVars::set('mail', 'html', false);
-        xarModVars::set('mail', 'searchstrings', serialize('%%Search%%'));
-        xarModVars::set('mail', 'replacestrings', serialize('Replace %%Search%% with this text'));
-        xarModVars::set('mail', 'use_external_lib', false);
-        xarModVars::set('mail', 'embed_images', false);
-        xarModVars::set('mail', 'debug', false);
+        $this->mod()->setVar('server', 'mail');
+        $this->mod()->setVar('replyto', '0');
+        $this->mod()->setVar('wordwrap', '78');
+        $this->mod()->setVar('priority', '3');
+        $this->mod()->setVar('smtpPort', '25');
+        $this->mod()->setVar('smtpHost', 'Your SMTP Host');
+        $this->mod()->setVar('encoding', '8bit');
+        $this->mod()->setVar('smtpAuth', '');
+        $this->mod()->setVar('smtpSecure', '');
+        $this->mod()->setVar('smtpUserName', '');
+        $this->mod()->setVar('smtpPassword', '');
+        $this->mod()->setVar('html', false);
+        $this->mod()->setVar('searchstrings', serialize('%%Search%%'));
+        $this->mod()->setVar('replacestrings', serialize('Replace %%Search%% with this text'));
+        $this->mod()->setVar('use_external_lib', false);
+        $this->mod()->setVar('embed_images', false);
+        $this->mod()->setVar('debug', false);
 
         xarModHooks::register('item', 'create', 'API', 'mail', 'admin', 'hookmailcreate');
         xarModHooks::register('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');

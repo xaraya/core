@@ -44,7 +44,7 @@ class Installer extends InstallerClass
      */
     public function init()
     {
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
             sys::import('xaraya.tableddl');
@@ -55,7 +55,7 @@ class Installer extends InstallerClass
             $dbconn->rollback();
             throw $e;
         }
-        $prefix = xarDB::getPrefix();
+        $prefix = $this->db()->getPrefix();
         // Start Configuration Unit
         sys::import('xaraya.variables');
         $systemArgs = [];
@@ -64,10 +64,10 @@ class Installer extends InstallerClass
         /****************************************************************
          * Set System Configuration Variables
          *****************************************************************/
-        xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
-        xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
-        xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
-        xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
+        $this->config()->setVar('System.Core.VersionNum', xarCore::VERSION_NUM);
+        $this->config()->setVar('System.Core.VersionId', xarCore::VERSION_ID);
+        $this->config()->setVar('System.Core.VersionSub', xarCore::VERSION_SUB);
+        $this->config()->setVar('System.Core.VersionRev', xarCore::VERSION_REV);
         $allowedAPITypes = [];
         /*****************************************************************
          * Set site configuration variables
@@ -78,14 +78,14 @@ class Installer extends InstallerClass
             'marquee' => 0, 'ol' => 2, 'p' => 2, 'pre' => 2, 'span' => 0,'strong' => 2,
             'tt' => 2, 'ul' => 2, 'table' => 2, 'td' => 2, 'th' => 2, 'tr' => 2];
 
-        xarConfigVars::set(null, 'Site.Core.AllowableHTML', $allowableHTML);
-        xarConfigVars::set(null, 'Site.BL.CacheTemplates', true);
-        xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
-        xarConfigVars::set(null, 'Site.BL.ThemesDirectory', 'themes');
-        xarConfigVars::set(null, 'Site.Core.FixHTMLEntities', true);
-        xarConfigVars::set(null, 'Site.Core.TimeZone', 'Etc/UTC');
-        xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', false);
-        xarConfigVars::set(null, 'Site.Core.WebserverAllowsSlashes', false);
+        $this->config()->setVar('Site.Core.AllowableHTML', $allowableHTML);
+        $this->config()->setVar('Site.BL.CacheTemplates', true);
+        $this->config()->setVar('Site.BL.MemCacheTemplates', false);
+        $this->config()->setVar('Site.BL.ThemesDirectory', 'themes');
+        $this->config()->setVar('Site.Core.FixHTMLEntities', true);
+        $this->config()->setVar('Site.Core.TimeZone', 'Etc/UTC');
+        $this->config()->setVar('Site.Core.EnableShortURLsSupport', false);
+        $this->config()->setVar('Site.Core.WebserverAllowsSlashes', false);
 
         // when installing via https, we assume that we want to support that :)
         $HTTPS = xarServer::getVar('HTTPS');
@@ -97,37 +97,37 @@ class Installer extends InstallerClass
         $REQ_URI = parse_url(xarServer::getVar('HTTP_REFERER'));
         // IIS seems to set HTTPS = off for some reason (cfr. xarServer::getProtocol)
         if (!empty($HTTPS) && $HTTPS != 'off' && $REQ_URI['scheme'] == 'https') {
-            xarConfigVars::set(null, 'Site.Core.EnableSecureServer', true);
+            $this->config()->setVar('Site.Core.EnableSecureServer', true);
         } else {
-            xarConfigVars::set(null, 'Site.Core.EnableSecureServer', false);
+            $this->config()->setVar('Site.Core.EnableSecureServer', false);
         }
-        xarConfigVars::set(null, 'Site.Core.SecureServerPort', "443");
+        $this->config()->setVar('Site.Core.SecureServerPort', "443");
 
-        xarConfigVars::set(null, 'Site.Core.LoadLegacy', false);
-        xarConfigVars::set(null, 'Site.Session.SecurityLevel', 'Medium');
-        xarConfigVars::set(null, 'Site.Session.Duration', 7);
-        xarConfigVars::set(null, 'Site.Session.InactivityTimeout', 90);
-        xarConfigVars::set(null, 'Site.Session.CookieTimeout', 30);
+        $this->config()->setVar('Site.Core.LoadLegacy', false);
+        $this->config()->setVar('Site.Session.SecurityLevel', 'Medium');
+        $this->config()->setVar('Site.Session.Duration', 7);
+        $this->config()->setVar('Site.Session.InactivityTimeout', 90);
+        $this->config()->setVar('Site.Session.CookieTimeout', 30);
         // use current defaults in includes/xarSession.php
-        xarConfigVars::set(null, 'Site.Session.CookieName', '');
-        xarConfigVars::set(null, 'Site.Session.CookiePath', '');
-        xarConfigVars::set(null, 'Site.Session.CookieDomain', '');
-        xarConfigVars::set(null, 'Site.Session.RefererCheck', '');
-        xarConfigVars::set(null, 'Site.MLS.TranslationsBackend', 'xml2php');
+        $this->config()->setVar('Site.Session.CookieName', '');
+        $this->config()->setVar('Site.Session.CookiePath', '');
+        $this->config()->setVar('Site.Session.CookieDomain', '');
+        $this->config()->setVar('Site.Session.RefererCheck', '');
+        $this->config()->setVar('Site.MLS.TranslationsBackend', 'xml2php');
         // FIXME: <marco> Temporary config vars, ask them at install time
-        xarConfigVars::set(null, 'Site.MLS.MLSMode', 'SINGLE');
+        $this->config()->setVar('Site.MLS.MLSMode', 'SINGLE');
 
         // The installer should now set the default locale based on the
         // chosen language, let's make sure that is true
-        xarConfigVars::get(null, 'Site.MLS.DefaultLocale', 'en_US.utf-8');
+        $this->config()->getVar('Site.MLS.DefaultLocale', 'en_US.utf-8');
         $allowedLocales = ['en_US.utf-8'];
-        xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $allowedLocales);
+        $this->config()->setVar('Site.MLS.AllowedLocales', $allowedLocales);
 
         // Minimal information for timezone offset handling (see also Site.Core.TimeZone)
-        xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
+        $this->config()->setVar('Site.MLS.DefaultTimeOffset', 0);
 
         $authModules = ['authsystem'];
-        xarConfigVars::set(null, 'Site.User.AuthenticationModules', $authModules);
+        $this->config()->setVar('Site.User.AuthenticationModules', $authModules);
 
         // Start Modules Support
         $systemArgs = ['enableShortURLsSupport' => false,

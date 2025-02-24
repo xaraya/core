@@ -45,44 +45,44 @@ class FinishMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        xarVar::fetch('returnurl', 'str', $returnurl, 'site', xarVar::NOT_REQUIRED);
+        $this->var()->find('returnurl', $returnurl, 'str', 'site');
 
         // Default debug admin @fixme this was just configured by the user, and could be anything...
-        $admin = xarMod::apiFunc('roles', 'user', 'get', ['uname' => 'admin']);
+        $admin = $this->mod()->apiFunc('roles', 'user', 'get', ['uname' => 'admin']);
         if (!empty($admin) && !empty($admin['id'])) {
-            xarConfigVars::set(null, 'Site.User.DebugAdmins', [$admin['id']]);
+            $this->config()->setVar('Site.User.DebugAdmins', [$admin['id']]);
         }
 
         // Default for the site time zone is the system time zone
-        xarConfigVars::set(null, 'Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
+        $this->config()->setVar('Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
 
         // Defaults for templating engine options
-        xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
-        xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
+        $this->config()->setVar('Site.BL.CompressWhitespace', 1);
+        $this->config()->setVar('Site.BL.MemCacheTemplates', false);
 
         // Default for AJAX calls
-        xarConfigVars::set(null, 'Site.Core.AllowAJAX', true);
+        $this->config()->setVar('Site.Core.AllowAJAX', true);
 
         // Display variable values in exceptions?
-        xarConfigVars::set(null, 'Site.BL.ExceptionDisplay', false);
+        $this->config()->setVar('Site.BL.ExceptionDisplay', false);
 
         // Declare the installation a success
         $variables = ['DB.Installation' => 3];
-        xarMod::apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
+        $this->mod()->apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
 
         switch ($returnurl) {
             case ('base'):
-                xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig'));
+                $this->ctl()->redirect($this->ctl()->getModuleURL('base', 'admin', 'modifyconfig'));
                 // no break
             case ('modules'):
-                xarController::redirect(xarController::URL('modules', 'admin', 'list'));
+                $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', 'list'));
                 // no break
             case ('blocks'):
-                xarController::redirect(xarController::URL('blocks', 'admin', 'view_instances'));
+                $this->ctl()->redirect($this->ctl()->getModuleURL('blocks', 'admin', 'view_instances'));
                 // no break
             case ('site'):
             default:
-                xarController::redirect('index.php');
+                $this->ctl()->redirect('index.php');
         }
         return true;
     }

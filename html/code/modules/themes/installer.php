@@ -42,7 +42,7 @@ class Installer extends InstallerClass
     public function init()
     {
         // Get database information
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
             sys::import('xaraya.tableddl');
@@ -53,8 +53,8 @@ class Installer extends InstallerClass
             $dbconn->rollback();
             throw $e;
         }
-        xarModVars::set('themes', 'default_theme', 'default');
-        xarModVars::set('themes', 'selsort', 'nameasc');
+        $this->mod()->setVar('default_theme', 'default');
+        $this->mod()->setVar('selsort', 'nameasc');
         // Make sure we dont miss empty variables (which were not passed thru)
         // FIXME: how would these values ever be passed in?
         if (empty($selstyle)) {
@@ -67,35 +67,35 @@ class Installer extends InstallerClass
         if (empty($hidecore)) {
             $hidecore = 0;
         }
-        xarModVars::set('themes', 'hidecore', $hidecore);
-        xarModVars::set('themes', 'selstyle', $selstyle);
-        xarModVars::set('themes', 'selfilter', $selfilter);
-        xarModVars::set('themes', 'selclass', 'all');
-        xarModVars::set('themes', 'useicons', false);
-        xarModVars::set('themes', 'SiteName', 'Your Site Name');
-        xarModVars::set('themes', 'SiteSlogan', 'Your Site Slogan');
-        xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright 2013 ');
-        xarModVars::set('themes', 'SiteTitleSeparator', ' :: ');
-        xarModVars::set('themes', 'SiteTitleOrder', 'default');
-        xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.info"><img src="themes/common/images/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder"/></a>');
-        xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', false);
-        xarModVars::set('themes', 'ShowTemplates', false);
-        xarModVars::set('themes', 'variable_dump', false);
-        xarModVars::set('themes', 'AtomTag', false);
+        $this->mod()->setVar('hidecore', $hidecore);
+        $this->mod()->setVar('selstyle', $selstyle);
+        $this->mod()->setVar('selfilter', $selfilter);
+        $this->mod()->setVar('selclass', 'all');
+        $this->mod()->setVar('useicons', false);
+        $this->mod()->setVar('SiteName', 'Your Site Name');
+        $this->mod()->setVar('SiteSlogan', 'Your Site Slogan');
+        $this->mod()->setVar('SiteCopyRight', '&copy; Copyright 2013 ');
+        $this->mod()->setVar('SiteTitleSeparator', ' :: ');
+        $this->mod()->setVar('SiteTitleOrder', 'default');
+        $this->mod()->setVar('SiteFooter', '<a href="http://www.xaraya.info"><img src="themes/common/images/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder"/></a>');
+        $this->mod()->setVar('ShowPHPCommentBlockInTemplates', false);
+        $this->mod()->setVar('ShowTemplates', false);
+        $this->mod()->setVar('variable_dump', false);
+        $this->mod()->setVar('AtomTag', false);
         //Moved here in 1.1.x series
-        xarModVars::set('themes', 'usedashboard', false);
-        xarModVars::set('themes', 'dashtemplate', 'dashboard');
-        xarModVars::set('themes', 'adminpagemenu', true);
-        xarModVars::set('themes', 'userpagemenu', true);
+        $this->mod()->setVar('usedashboard', false);
+        $this->mod()->setVar('dashtemplate', 'dashboard');
+        $this->mod()->setVar('adminpagemenu', true);
+        $this->mod()->setVar('userpagemenu', true);
         xarMasks::register('ViewThemes', 'All', 'themes', 'All', 'All', 'ACCESS_OVERVIEW');
         xarMasks::register('EditThemes', 'All', 'themes', 'All', 'All', 'ACCESS_EDIT');
         xarMasks::register('AddThemes', 'All', 'themes', 'All', 'All', 'ACCESS_ADD');
         xarMasks::register('ManageThemes', 'All', 'themes', 'All', 'All', 'ACCESS_DELETE');
         xarMasks::register('AdminThemes', 'All', 'themes', 'All', 'All', 'ACCESS_ADMIN');
-        xarModVars::set('themes', 'selclass', 'all');
-        xarModVars::set('themes', 'useicons', false);
-        xarModVars::set('themes', 'flushcaches', '');
-        xarModVars::set('themes', 'templcachepath', sys::varpath() . "/cache/templates");
+        $this->mod()->setVar('selclass', 'all');
+        $this->mod()->setVar('useicons', false);
+        $this->mod()->setVar('flushcaches', '');
+        $this->mod()->setVar('templcachepath', sys::varpath() . "/cache/templates");
         // Installation complete; check for upgrades
         return $this->upgrade('2.0.0');
     }

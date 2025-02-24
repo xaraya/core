@@ -58,26 +58,26 @@ class Phase5Method extends MethodClass
         if (!file_exists('install.php')) {
             throw new Exception('Already installed');
         }
-        xarVar::fetch('install_language', 'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
-        xarVar::setCached('installer', 'installing', true);
+        $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
+        $this->var()->setCached('installer', 'installing', true);
 
         // Get the database connection configuration from the configuration file
         sys::import('xaraya.database');
         $init_args = xarDatabase::getConfig();
 
-        //    xarVar::fetch('install_create_database',     'checkbox',$createDB,false,xarVar::NOT_REQUIRED);
-        //    xarVar::fetch('confirmDB','bool',$confirmDB,false,xarVar::NOT_REQUIRED);
+        //    $this->var()->find('install_create_database', $createDB, 'checkbox', false);
+        //    $this->var()->find('confirmDB', $confirmDB, 'bool', false);
 
         //---------------------------------------------------------------------------
         // Some sanity checks
         // We need a database name
         if ($init_args['databaseName'] == '') {
-            return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'no_database']);
+            return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'no_database']);
         }
 
         // Allow only a-z 0-9 and _ in the table prefix
         if (!preg_match('/^\w*$/', $init_args['prefix'])) {
-            return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'bad_character']);
+            return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'bad_character']);
         }
         //---------------------------------------------------------------------------
         // Cater to SQLite before trying to connect
@@ -100,14 +100,14 @@ class Phase5Method extends MethodClass
             // Check whether the database already exists
             if (file_exists($dbpath)) {
                 // We already have a database with this name
-                return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'database_exists', 'database_name' => $dbpath]);
+                return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'database_exists', 'database_name' => $dbpath]);
             } else {
                 // No prior database, so let's create it
                 try {
                     $db = new SQLite3($dbpath);
                 } catch (Exception $e) {
                     echo $e->getMessage();
-                    xarCore::exit();
+                     $this->exit();
                     return;
                 }
             }
@@ -155,12 +155,12 @@ class Phase5Method extends MethodClass
                         $init_args['databaseName'] = $name;
                     } catch (Exception $e) {
                         // It failed without dbname, too
-                        return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'no_connection', 'message' => $e->getMessage()]);
+                        return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'no_connection', 'message' => $e->getMessage()]);
                     }
                 }
                 if ($dbExists) {
                     // We already have a database with this name
-                    return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'database_exists', 'database_name' => $init_args['databaseName']]);
+                    return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'database_exists', 'database_name' => $init_args['databaseName']]);
                 }
                 break;
             case 'pgsql':
@@ -191,16 +191,16 @@ class Phase5Method extends MethodClass
                         $init_args['userName'] = $user;
                     } catch (Exception $e) {
                         // It failed with the default dbname, too
-                        return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'no_connection', 'message' => $e->getMessage()]);
+                        return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'no_connection', 'message' => $e->getMessage()]);
                     }
                 }
                 if ($dbExists) {
                     // We already have a database with this name
-                    return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'database_exists', 'database_name' => $init_args['databaseName']]);
+                    return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'database_exists', 'database_name' => $init_args['databaseName']]);
                 }
                 break;
             default:
-                throw new Exception(xarML("Unknown database type: '#(1)'", $init_args['databaseType']));
+                throw new Exception($this->ml("Unknown database type: '#(1)'", $init_args['databaseType']));
         }
 
         //---------------------------------------------------------------------------
@@ -225,7 +225,7 @@ class Phase5Method extends MethodClass
         }
 
         if (!$version_ok) {
-            return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'bad version']);
+            return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'bad version']);
         }
 
         //---------------------------------------------------------------------------
@@ -253,12 +253,12 @@ class Phase5Method extends MethodClass
                 $init_args['databaseCharset']
             ))) {
                 //if (!xarInstall::apiFunc('createdb', $config_args)) {
-                return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'cannot_create', 'database_name' => $init_args['databaseName']]);
+                return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'cannot_create', 'database_name' => $init_args['databaseName']]);
             }
 
             // Now that we have a database and a full set of $init_args, remove the connection we created above
             // and replace it with a new proper one.
-            // From here on xarDB::getConn() will always get this new one
+            // From here on $this->db()->getConn() will always get this new one
             xarDB::removeConn();
             $dbconn = xarDB::newConn($init_args);
 
@@ -322,7 +322,7 @@ class Phase5Method extends MethodClass
             try {
                 xarInstall::apiFunc('initialise', ['directory' => $module,'initfunc'  => 'init']);
             } catch (Exception $e) {
-                return xarTpl::module('installer', 'admin', 'errors', ['layout' => 'general_exception', 'message' => $e->getMessage()]);
+                return $this->tpl()->module('installer', 'admin', 'errors', ['layout' => 'general_exception', 'message' => $e->getMessage()]);
             }
         }
 
@@ -330,16 +330,16 @@ class Phase5Method extends MethodClass
         sys::import('xaraya.variables');
         $a = [];
         xarVar::init($a);
-        xarConfigVars::set(null, 'System.ModuleAliases', []);
-        xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
-        xarConfigVars::set(null, 'Site.BL.DocType', 'xhtml1-strict');
+        $this->config()->setVar('System.ModuleAliases', []);
+        $this->config()->setVar('Site.MLS.DefaultLocale', $install_language);
+        $this->config()->setVar('Site.BL.DocType', 'xhtml1-strict');
         // Display query strings for debugging?
-        xarConfigVars::set(null, 'Site.BL.ShowQueries', false);
+        $this->config()->setVar('Site.BL.ShowQueries', false);
 
         // 3. Load the definitions of all the modules in the modules table
-        $prefix = xarDB::getPrefix();
+        $prefix = $this->db()->getPrefix();
         $modulesTable = $prefix . '_modules';
-        $tables = xarDB::getTables();
+        $tables = $this->db()->getTables();
 
         $newModSql   = "INSERT INTO $modulesTable
                         (name, regid, directory,
@@ -383,7 +383,7 @@ class Phase5Method extends MethodClass
                 $tablefunc = $module . '_xartables';
                 // pass along the DB prefix to $tablefunc
                 if (function_exists($tablefunc)) {
-                    xarDB::importTables($tablefunc($prefix));
+                    $this->db()->importTables($tablefunc($prefix));
                 }
             }
             if (!xarInstall::apiFunc('initialise', ['directory' => $module, 'initfunc'  => 'init'])) {
@@ -410,7 +410,7 @@ class Phase5Method extends MethodClass
         privileges_initializeSetup();
 
         // TODO: is this is correct place for a default value for a modvar?
-        xarModVars::set('base', 'AlternatePageTemplate', 'homepage');
+        $this->mod('base')->setVar('AlternatePageTemplate', 'homepage');
 
         // If we are here, the base system has completed
         // We can now pass control to xaraya.
@@ -421,11 +421,11 @@ class Phase5Method extends MethodClass
         $install_locale  = [$install_language];
         $allowed_locales = array_merge($necessaryLocale, $install_locale);
 
-        xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $allowed_locales);
+        $this->config()->setVar('Site.MLS.AllowedLocales', $allowed_locales);
         $data['language'] = $install_language;
 
         $data['phase'] = 5;
-        $data['phase_label'] = xarML('Step Five');
+        $data['phase_label'] = $this->ml('Step Five');
 
         return $data;
     }

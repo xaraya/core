@@ -45,15 +45,15 @@ class Installer extends InstallerClass
     public function init()
     {
         //Set the default authmodule if not already set
-        $isdefaultauth = xarModVars::get('roles', 'defaultauthmodule');
+        $isdefaultauth = $this->mod('roles')->getVar('defaultauthmodule');
         if (empty($isdefaultauth)) {
-            xarModVars::get('roles', 'defaultauthmodule', 'authsystem');
+            $this->mod('roles')->setVar('defaultauthmodule', 'authsystem');
         }
 
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
-        $modulesTable = xarDB::getPrefix() . '_modules';
-        $modid = xarMod::getRegID('authsystem');
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
+        $modulesTable = $this->db()->getPrefix() . '_modules';
+        $modid = $this->mod()->getRegID('authsystem');
         // update the modversion class and admin capable
         $query = "UPDATE $modulesTable SET class=?, admin_capable=?
                  WHERE regid = ?";
@@ -89,9 +89,9 @@ class Installer extends InstallerClass
         xarMasks::register('AdminAuthsystem', 'All', 'authsystem', 'All', 'All', 'ACCESS_ADMIN');
 
         /* Define Module vars */
-        xarModVars::set('authsystem', 'lockouttime', 15);
-        xarModVars::set('authsystem', 'lockouttries', 3);
-        xarModVars::set('authsystem', 'uselockout', false);
+        $this->mod()->setVar('lockouttime', 15);
+        $this->mod()->setVar('lockouttries', 3);
+        $this->mod()->setVar('uselockout', false);
 
         // Installation complete; check for upgrades
         return $this->upgrade('2.0.0');

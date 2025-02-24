@@ -43,11 +43,11 @@ class UpgradeMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $data = [];
-        xarVar::fetch('phase', 'int', $data['phase'], 1, xarVar::DONT_SET);
+        $this->var()->check('phase', $data['phase'], 'int', 1);
 
         // Version information
         $fileversion = xarCore::VERSION_NUM;
-        $dbversion = xarConfigVars::get(null, 'System.Core.VersionNum');
+        $dbversion = $this->config()->getVar('System.Core.VersionNum');
         sys::import('xaraya.version');
 
         // Versions prior to 2.1.0 had the revision number as version number, or something else
@@ -88,17 +88,17 @@ class UpgradeMethod extends MethodClass
 
         if ($data['phase'] != 1) {
             // Get the password of the designated site administrator
-            $adminid = xarModVars::get('roles', 'admin');
+            $adminid = $this->mod('roles')->getVar('admin');
             sys::import('modules.dynamicdata.class.objects.factory');
-            $role = DataObjectFactory::getObject(['name' => 'roles_users']);
+            $role = $this->data()->getObject(['name' => 'roles_users']);
             $role->getItem(['itemid' => $adminid]);
             $adminpass = $role->properties['password']->value;
             $role->properties['password']->value = '';
 
             // Get the password from the last page, either entered by the user (and needs to be encrypted)
             // or stored on a previous page
-            xarVar::fetch('password', 'str', $data['password'], '', xarVar::NOT_REQUIRED);
-            xarVar::fetch('pass', 'str', $pass, '', xarVar::NOT_REQUIRED);
+            $this->var()->find('password', $data['password'], 'str', '');
+            $this->var()->find('pass', $pass, 'str', '');
 
             // Encrypt if needed using the encryption scheme of the roles module
             if (!empty($pass)) {
@@ -110,14 +110,14 @@ class UpgradeMethod extends MethodClass
 
             // If they don't coincide, bail
             if ($adminpass != $userpass) {
-                xarController::redirect(xarServer::getCurrentURL(['phase' => 1, 'error' => 1]));
+                $this->ctl()->redirect($this->ctl()->getCurrentURL(['phase' => 1, 'error' => 1]));
             }
             $data['password'] = $adminpass;
         }
 
         if ($data['phase'] == 1) {
             $data['active_step'] = 1;
-            xarVar::fetch('error', 'int', $data['error'], 0, xarVar::NOT_REQUIRED);
+            $this->var()->find('error', $data['error'], 'int', 0);
 
         } elseif ($data['phase'] == 2) {
             $data['active_step'] = 2;
@@ -137,7 +137,7 @@ class UpgradeMethod extends MethodClass
                     continue;
                 }
                 if (!Upgrader::loadFile('upgrades/' . $abbr_version . '/main.php')) {
-                    $upgrades[$upgrade_version]['message'] = xarML('There are no upgrades for version #(1)', $upgrade_version);
+                    $upgrades[$upgrade_version]['message'] = $this->ml('There are no upgrades for version #(1)', $upgrade_version);
                     $upgrades[$upgrade_version]['tasks'] = [];
                     //return $data;
                 } else {
@@ -151,13 +151,13 @@ class UpgradeMethod extends MethodClass
         } elseif ($data['phase'] == 4) {
             $data['active_step'] = 4;
             // Flush the property cache as a matter of course
-            $success = xarMod::apiFunc('dynamicdata', 'admin', 'importpropertytypes');
+            $success = $this->mod()->apiFunc('dynamicdata', 'admin', 'importpropertytypes');
 
             // Align the db and filesystem version info
-            xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
-            xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
-            xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
-            xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::$build);
+            $this->config()->setVar('System.Core.VersionId', xarCore::VERSION_ID);
+            $this->config()->setVar('System.Core.VersionNum', xarCore::VERSION_NUM);
+            $this->config()->setVar('System.Core.VersionSub', xarCore::VERSION_SUB);
+            $this->config()->setVar('System.Core.VersionRev', xarCore::$build);
 
             sys::import('xaraya.version');
             // Get the list of version checks
@@ -170,7 +170,7 @@ class UpgradeMethod extends MethodClass
                 // @checkme <chris/> only run checks for current version ?
                 // if (xarVersion::compare($check_version, $dbversion) != 0) continue;
                 if (!Upgrader::loadFile('checks/' . $abbr_version . '/main.php')) {
-                    $checks[$check_version]['message'] = xarML('There are no checks for version #(1)', $check_version);
+                    $checks[$check_version]['message'] = $this->ml('There are no checks for version #(1)', $check_version);
                     $checks[$check_version]['tasks'] = [];
                     //return $data;
                 } else {
@@ -183,7 +183,7 @@ class UpgradeMethod extends MethodClass
 
         } elseif ($data['phase'] == 5) {
             $data['active_step'] = 5;
-            //        xarController::redirect(xarServer::getCurrentURL(array('phase' => 5)));
+            //        $this->ctl()->redirect($this->ctl()->getCurrentURL(array('phase' => 5)));
         }
         return $data;
     }

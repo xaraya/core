@@ -46,7 +46,7 @@ class Installer extends InstallerClass
     public function init()
     {
         // Create tables inside a transaction
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
             sys::import('xaraya.tableddl');
@@ -58,25 +58,25 @@ class Installer extends InstallerClass
             throw $e;
         }
         // Create some modvars
-        xarConfigVars::set(null, 'Site.User.DebugAdmins', ['admin']);
-        xarModVars::set('roles', 'defaultauthmodule', 'authsystem');
-        xarModVars::set('roles', 'defaultregmodule', '');
-        xarModVars::set('roles', 'rolesdisplay', 'tabbed');
-        xarModVars::set('roles', 'locale', '');
-        xarModVars::set('roles', 'duvsettings', '');
-        xarModVars::set('roles', 'userhome', 'undefined');
-        xarModVars::set('roles', 'userlastlogin', 0);
-        xarModVars::set('roles', 'passwordupdate', 0);
-        xarModVars::set('roles', 'usertimezone', xarConfigVars::get(null, 'Site.Core.TimeZone'));
-        xarModVars::set('roles', 'useremailformat', 'text');
-        xarModVars::set('roles', 'displayrolelist', false);
-        xarModVars::set('roles', 'usereditaccount', true);
-        xarModVars::set('roles', 'allowuserhomeedit', false);
-        xarModVars::set('roles', 'loginredirect', true);
-        xarModVars::set('roles', 'allowexternalurl', false);
-        xarModVars::set('roles', 'searchbyemail', false);
-        xarModVars::set('roles', 'allowemail', false);
-        xarModVars::set('roles', 'requirevalidation', true);
+        $this->config()->setVar('Site.User.DebugAdmins', ['admin']);
+        $this->mod()->setVar('defaultauthmodule', 'authsystem');
+        $this->mod()->setVar('defaultregmodule', '');
+        $this->mod()->setVar('rolesdisplay', 'tabbed');
+        $this->mod()->setVar('locale', '');
+        $this->mod()->setVar('duvsettings', '');
+        $this->mod()->setVar('userhome', 'undefined');
+        $this->mod()->setVar('userlastlogin', 0);
+        $this->mod()->setVar('passwordupdate', 0);
+        $this->mod()->setVar('usertimezone', $this->config()->getVar('Site.Core.TimeZone'));
+        $this->mod()->setVar('useremailformat', 'text');
+        $this->mod()->setVar('displayrolelist', false);
+        $this->mod()->setVar('usereditaccount', true);
+        $this->mod()->setVar('allowuserhomeedit', false);
+        $this->mod()->setVar('loginredirect', true);
+        $this->mod()->setVar('allowexternalurl', false);
+        $this->mod()->setVar('searchbyemail', false);
+        $this->mod()->setVar('allowemail', false);
+        $this->mod()->setVar('requirevalidation', true);
         //Database Initialisation successful
         return true;
     }
@@ -103,18 +103,18 @@ class Installer extends InstallerClass
             'regdate' => time(),
             'state' => xarRoles::ROLES_STATE_ACTIVE,
             'valcode' => 'createdbysystem',
-            'authmodule' => (int) xarMod::getID('roles'),
+            'authmodule' => (int) $this->mod()->getID('roles'),
         ];
-        $group = DataObjectFactory::getObject(['name' => 'roles_groups']);
+        $group = $this->data()->getObject(['name' => 'roles_groups']);
         $rolefields['role_type'] = xarRoles::ROLES_GROUPTYPE;
-        xarModVars::set('roles', 'defaultgroup', 0);
+        $this->mod()->setVar('defaultgroup', 0);
         // The top level group Everybody
         $rolefields['name'] = 'Everybody';
         $rolefields['uname'] = 'everybody';
         $rolefields['parentid'] = 0;
         $topid = $group->createItem($rolefields);
-        xarModVars::set('roles', 'everybody', $topid);
-        xarModVars::set('roles', 'primaryparent', $topid);
+        $this->mod()->setVar('everybody', $topid);
+        $this->mod()->setVar('primaryparent', $topid);
         xarModUserVars::set('roles', 'userhome', '[base]', $topid);
         // The Administrators group
         $rolefields['name'] = 'Administrators';
@@ -127,7 +127,7 @@ class Installer extends InstallerClass
             'message' => '',
             'locked' => 0,
             'notifymsg' => ''];
-        xarModVars::set('roles', 'lockdata', serialize($lockdata));
+        $this->mod()->setVar('lockdata', serialize($lockdata));
         // The SiteManagers group
         $rolefields['name'] = 'SiteManagers';
         $rolefields['uname'] = 'sitemanagers';
@@ -138,29 +138,29 @@ class Installer extends InstallerClass
         $rolefields['uname'] = 'users';
         $rolefields['parentid'] = $topid;
         $usergroup = $group->createItem($rolefields);
-        xarModVars::set('roles', 'defaultgroup', $usergroup);
-        $user = DataObjectFactory::getObject(['name' => 'roles_users']);
+        $this->mod()->setVar('defaultgroup', $usergroup);
+        $user = $this->data()->getObject(['name' => 'roles_users']);
         $rolefields['role_type'] = xarRoles::ROLES_USERTYPE;
         // The Anonymous user
         $rolefields['name'] = 'Anonymous';
         $rolefields['uname'] = 'anonymous';
         $rolefields['parentid'] = $topid;
         $anonid = $user->createItem($rolefields);
-        xarConfigVars::set(null, 'Site.User.AnonymousUID', $anonid);
+        $this->config()->setVar('Site.User.AnonymousUID', $anonid);
         // The Administrator
         $rolefields['name'] = 'Administrator';
         $rolefields['uname'] = 'admin';
         $rolefields['email'] = 'none@none.com';
         $rolefields['parentid'] = $admingroup;
         $adminid = $user->createItem($rolefields);
-        xarModVars::set('roles', 'admin', $adminid);
+        $this->mod()->setVar('admin', $adminid);
         // The SiteManager
         $rolefields['name'] = 'SiteManager';
         $rolefields['uname'] = 'manager';
         $rolefields['email'] = 'none@none.com';
         $rolefields['parentid'] = $mgrgroup;
         $mgrid = $user->createItem($rolefields);
-        xarModVars::set('roles', 'manager', $mgrid);
+        $this->mod()->setVar('manager', $mgrid);
         // Installation complete; check for upgrades
         return $this->upgrade('2.0.0');
     }

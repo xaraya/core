@@ -48,7 +48,7 @@ class Installer extends InstallerClass
         # Set up tables
         #
         // Get database information
-        $dbconn = xarDB::getConn();
+        $dbconn = $this->db()->getConn();
         try {
             $dbconn->begin();
             sys::import('xaraya.tableddl');
@@ -142,10 +142,10 @@ class Installer extends InstallerClass
         #
         # Set up modvars
         #
-        xarModVars::set('categories', 'usejsdisplay', 0);
-        xarModVars::set('categories', 'numstats', 100);
-        xarModVars::set('categories', 'showtitle', 1);
-        xarModVars::set('categories', 'categoriesobject', 'categories');
+        $this->mod()->setVar('usejsdisplay', 0);
+        $this->mod()->setVar('numstats', 100);
+        $this->mod()->setVar('showtitle', 1);
+        $this->mod()->setVar('categoriesobject', 'categories');
         // Initialisation successful
         return true;
     }
@@ -161,8 +161,8 @@ class Installer extends InstallerClass
     public function upgrade($oldversion)
     {
         // Get database information
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         // Upgrade dependent on old version number
         switch ($oldversion) {

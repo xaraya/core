@@ -40,7 +40,7 @@ class Phase1Method extends MethodClass
         if (!file_exists('install.php')) {
             throw new Exception('Already installed');
         }
-        xarVar::fetch('install_language', 'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
+        $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
 
         // Get the installed locales
         $locales = xarMLS::listSiteLocales();
@@ -65,7 +65,7 @@ class Phase1Method extends MethodClass
         $data['install_language'] = $install_language;
         $data['languages'] = $languages;
         $data['phase'] = 1;
-        $data['phase_label'] = xarML('Step One');
+        $data['phase_label'] = $this->ml('Step One');
 
         return $data;
     }

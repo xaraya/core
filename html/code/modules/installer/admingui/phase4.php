@@ -42,18 +42,18 @@ class Phase4Method extends MethodClass
         if (!file_exists('install.php')) {
             throw new Exception('Already installed');
         }
-        xarVar::fetch('install_language', 'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
-        xarVar::fetch('continue', 'isset', $continue, null, xarVar::NOT_REQUIRED);
+        $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
+        $this->var()->find('continue', $continue, 'isset', null);
 
         $data = [];
-        xarVar::fetch('install_database_host', 'str::', $data['database_host'], xarSystemVars::get(sys::CONFIG, 'DB.Host'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('install_database_middleware', 'str::', $data['database_middleware'], xarSystemVars::get(sys::CONFIG, 'DB.Middleware'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('install_database_type', 'str::', $data['database_type'], xarSystemVars::get(sys::CONFIG, 'DB.Type'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('install_database_name', 'str::', $data['database_name'], xarSystemVars::get(sys::CONFIG, 'DB.Name'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('install_database_username', 'str::', $data['database_username'], xarSystemVars::get(sys::CONFIG, 'DB.UserName'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('install_database_password', 'str::', $data['database_password'], '', xarVar::NOT_REQUIRED);
-        xarVar::fetch('install_database_prefix', 'str::', $data['database_prefix'], xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'), xarVar::NOT_REQUIRED);
-        xarVar::fetch('install_database_charset', 'str::', $data['database_charset'], xarSystemVars::get(sys::CONFIG, 'DB.Charset'), xarVar::NOT_REQUIRED);
+        $this->var()->find('install_database_host', $data['database_host'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Host'));
+        $this->var()->find('install_database_middleware', $data['database_middleware'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Middleware'));
+        $this->var()->find('install_database_type', $data['database_type'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Type'));
+        $this->var()->find('install_database_name', $data['database_name'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Name'));
+        $this->var()->find('install_database_username', $data['database_username'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.UserName'));
+        $this->var()->find('install_database_password', $data['database_password'], 'str::', '');
+        $this->var()->find('install_database_prefix', $data['database_prefix'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
+        $this->var()->find('install_database_charset', $data['database_charset'], 'str::', xarSystemVars::get(sys::CONFIG, 'DB.Charset'));
 
         // Supported Middleware:
         $data['database_middleware_packages']  = ['Creole' => ['name' => 'Creole', 'available' => true],
@@ -80,13 +80,13 @@ class Phase4Method extends MethodClass
             xarInstall::apifunc('modifysystemvars', ['variables' => $variables]);
 
             // Jump to the next page
-            xarController::redirect(xarServer::getCurrentURL(['install_phase' => 5]));
+            $this->ctl()->redirect($this->ctl()->getCurrentURL(['install_phase' => 5]));
             return true;
         }
 
         $data['language'] = $install_language;
         $data['phase'] = 4;
-        $data['phase_label'] = xarML('Step Four');
+        $data['phase_label'] = $this->ml('Step Four');
 
         return $data;
     }
