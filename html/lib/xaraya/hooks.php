@@ -309,6 +309,7 @@ class xarHooks extends xarEvents
 
     /**
      * See if a hook module (observer) is attached (hooked) to specific module (subject) (+ itemtype)
+     * @return bool true if the observer is attached, false otherwise (for any reason)
     **/
     public static function isAttached($observer, $subject, $itemtype=null, $scope="0")
     {
@@ -323,9 +324,9 @@ class xarHooks extends xarEvents
             throw new EmptyParameterException('scope');
                     
         $observer_id = xarMod3::getRegID($observer);
-        if (empty($observer_id)) return;
+        if (empty($observer_id)) return false;
         $subject_id = xarMod3::getRegID($subject);
-        if (empty($subject_id)) return;
+        if (empty($subject_id)) return false;
         
         if (empty($itemtype)) $itemtype = 0;
         if (empty($scope)) $scope = 0;
@@ -353,8 +354,8 @@ class xarHooks extends xarEvents
         }
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
-        if (!$result) return;
-        if (!$result->next()) return;
+        if (!$result) return false;
+        if (!$result->next()) return false;
         return true;        
     }
     
@@ -551,7 +552,7 @@ class xarModHooks extends xarObject
      * @param $hookModName string name of the hook module we're looking for
      * @param $callerModName string name of the calling module (default = current)
      * @param $callerItemType string optional item type for the calling module (default = none)
-     * @return mixed true if the module is hooked
+     * @return bool true if the module is hooked, false otherwise (for any reason)
      */
     public static function isHooked($hookModName, $callerModName = null, $callerItemType = '')
     {

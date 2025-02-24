@@ -104,8 +104,8 @@ $databases = [
         // ...other DB params for mysql/mariadb
     ],
 ];
-xarModVars::set($module, 'databases', serialize($databases));
-xarModVars::set($module, 'dbName', 'test');
+$this->mod($module)->setVar('databases', serialize($databases));
+$this->mod($module)->setVar('dbName', 'test');
 ```
 
 In DD objects, you can specify the DB connection args by setting config: see [Dynamic Data Objects README](../../../code/modules/dynamicdata/README.md#database-connections) for details

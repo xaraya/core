@@ -16,8 +16,8 @@
  *         // ...other DB params for mysql/mariadb
  *     ],
  * ];
- * xarModVars::set($modName, 'databases', serialize($databases));
- * xarModVars::set($modName, 'dbName', 'test');
+ * $this->mod($modName)->setVar('databases', serialize($databases));
+ * $this->mod($modName)->setVar('dbName', 'test');
  * ```
  *
  * In objects, you can specify the DB connection args by setting config: (work in progress)
