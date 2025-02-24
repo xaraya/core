@@ -30,7 +30,7 @@ class Themes_SkinBlockDisplay extends Themes_SkinBlock implements iBlock
     {
         
         if (!xarUser::isLoggedIn() ||
-            (bool) xarModVars::get('themes', 'enable_user_menu') == false) return;
+            (bool) $this->mod('themes')->getVar('enable_user_menu') == false) return;
         
         $data = $this->getContent();
         $data['user_themes'] = $this->mod()->apiFunc('themes', 'user', 'dropdownlist');

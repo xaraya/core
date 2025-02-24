@@ -95,7 +95,7 @@ class ModifyconfigMethod extends MethodClass
                 $data['grouplist'] = $grouplist;
 
                 $testusers = $this->mod()->apiFunc('roles', 'user', 'getUsers', ['id' => $testergroup]);
-                $defaultadminid = (int) xarModVars::get('roles', 'admin');
+                $defaultadminid = (int) $this->mod('roles')->getVar('admin');
 
                 $data['testusers'] = $testusers; //array
 

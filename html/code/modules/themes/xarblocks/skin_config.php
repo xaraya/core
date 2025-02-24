@@ -35,7 +35,7 @@ class Themes_SkinBlockConfig extends Themes_SkinBlock implements iBlock
     public function configmodify()
     {
         $data = $this->getContent();
-        $data['enable_user_menu'] = xarModVars::get('themes', 'enable_user_menu');
+        $data['enable_user_menu'] = $this->mod('themes')->getVar('enable_user_menu');
         return $data;
     }
 	

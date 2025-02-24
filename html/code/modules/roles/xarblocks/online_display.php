@@ -137,7 +137,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
              $data['users'] = $this->ml('users');
         }
 
-        $id = xarModVars::get('roles', 'lastuser');
+        $id = $this->mod('roles')->getVar('lastuser');
 
         // Make sure we have a lastuser
         if (!empty($id)) {

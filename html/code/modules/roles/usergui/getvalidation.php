@@ -100,7 +100,7 @@ class GetvalidationMethod extends MethodClass
         $authmodule = $defaultauthdata['defaultauthmodname'];
 
         //Set some general vars that we need in various options
-        $pending = xarModVars::get($regmodule, 'explicitapproval');
+        $pending = $this->mod($regmodule)->getVar('explicitapproval');
         $loginlink = $this->ctl()->getModuleURL($defaultloginmodname, 'user', 'main');
 
         $tplvars = [];
@@ -180,7 +180,7 @@ class GetvalidationMethod extends MethodClass
                         return;
                     }
                     //send welcome email (option)
-                    if (xarModVars::get($regmodule, 'sendwelcomeemail')) {
+                    if ($this->mod($regmodule)->getVar('sendwelcomeemail')) {
                         if (!$adminapi->senduseremail(['id' => [$status['id'] => '1'],
                             'mailtype' => 'welcome'])) {
                             throw new GeneralException(null, 'Problem sending welcome email');
@@ -198,18 +198,18 @@ class GetvalidationMethod extends MethodClass
                 /* use the $newuser var to test for new user - no other way atm afaik as the process is shared for the new user
                                          process and the change email process and they may be totally separate
                                       */
-                if (isset($regmodule) && (xarModVars::get($regmodule, 'sendnotice') == 1) && $newuser) { // send the registration email for new
+                if (isset($regmodule) && ($this->mod($regmodule)->getVar('sendnotice') == 1) && $newuser) { // send the registration email for new
                     $terms = '';
 
-                    if (xarModVars::get('registration', 'showterms') == 1) {
+                    if ($this->mod('registration')->getVar('showterms') == 1) {
                         // User has agreed to the terms and conditions.
                         $terms = $this->ml('This user has agreed to the site terms and conditions.');
                     }
 
                     $status = $userapi->get(['uname' => $uname]); //check status as it may have changed
 
-                    $emailargs =  ['adminname'    => xarModVars::get('mail', 'adminname'),
-                        'adminemail'   => xarModVars::get('registration', 'notifyemail'),
+                    $emailargs =  ['adminname'    => $this->mod('mail')->getVar('adminname'),
+                        'adminemail'   => $this->mod('registration')->getVar('notifyemail'),
                         'userrealname' => $status['name'],
                         'username'     => $status['uname'],
                         'useremail'    => $status['email'],
@@ -224,8 +224,8 @@ class GetvalidationMethod extends MethodClass
                 } elseif ((bool) $this->mod()->getVar('requirevalidation') && !$newuser && $this->mod()->getVar('askwelcomeemail')) {
                     //send this email if we know for sure email validation only is required, not validation for new users - a roles function
 
-                    $adminname = xarModVars::get('mail', 'adminname');
-                    $adminemail = xarModVars::get('mail', 'adminmail');
+                    $adminname = $this->mod('mail')->getVar('adminname');
+                    $adminemail = $this->mod('mail')->getVar('adminmail');
                     $message = "" . $this->ml('A user has revalidated their changed email address.  Here are the details') . " \n\n";
                     $message .= "" . $this->ml('Username') . " = $status[name]\n";
                     $message .= "" . $this->ml('Email Address') . " = $status[email]";

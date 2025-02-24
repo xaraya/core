@@ -68,9 +68,9 @@ class ModifyconfighookMethod extends MethodClass
             if (empty($extrainfo['number_of_categories'])) {
                 // try to get number of categories from current settings
                 if (!empty($extrainfo['itemtype'])) {
-                    $numcats = (int) xarModVars::get($modname, 'number_of_categories.'.$extrainfo['itemtype']);
+                    $numcats = (int) $this->mod($modname)->getVar('number_of_categories.'.$extrainfo['itemtype']);
                 } else {
-                    $numcats = (int) xarModVars::get($modname, 'number_of_categories');
+                    $numcats = (int) $this->mod($modname)->getVar('number_of_categories');
                 }
             } else {
                 $numcats = (int) $extrainfo['number_of_categories'];
@@ -82,9 +82,9 @@ class ModifyconfighookMethod extends MethodClass
             if (empty($extrainfo['mastercids']) || !is_array($extrainfo['mastercids'])) {
                 // try to get cids from current settings
                 if (!empty($extrainfo['itemtype'])) {
-                    $cidlist = xarModVars::get($modname,'mastercids.'.$extrainfo['itemtype']);
+                    $cidlist = $this->mod($modname)->getVar('mastercids.'.$extrainfo['itemtype']);
                 } else {
-                    $cidlist = xarModVars::get($modname,'mastercids');
+                    $cidlist = $this->mod($modname)->getVar('mastercids');
                 }
                 if (empty($cidlist)) {
                     $mastercids = array();

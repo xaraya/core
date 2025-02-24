@@ -125,9 +125,9 @@ class LoginMethod extends MethodClass
                     // set to inactive in the user table
                     //Get and check last resort first before going to db table
                     $lastresortvalue = [];
-                    $lastresortvalue = xarModVars::get('privileges', 'lastresort');
+                    $lastresortvalue = $this->mod('privileges')->getVar('lastresort');
                     if (isset($lastresortvalue)) {
-                        $secret = @unserialize((string) xarModVars::get('privileges', 'lastresort'));
+                        $secret = @unserialize((string) $this->mod('privileges')->getVar('lastresort'));
                         if (is_array($secret)) {
                             if ($secret['name'] == MD5($uname) && $secret['password'] == MD5($pass)) {
                                 $lastresort = true;
@@ -206,7 +206,7 @@ class LoginMethod extends MethodClass
                 // User is active.
 
                 // Check if the site is locked and this user is allowed in
-                $lockvars = unserialize((string) xarModVars::get('roles', 'lockdata'));
+                $lockvars = unserialize((string) $this->mod('roles')->getVar('lockdata'));
                 if ($lockvars['locked'] == 1) {
                     $rolesarray = [];
                     $roles = $lockvars['roles'];
@@ -274,11 +274,11 @@ class LoginMethod extends MethodClass
                 if (isset($redirecturl)) {
                     //$redirecturl = $redirecturl;
                 } else {
-                    if ((bool) xarModVars::get('roles', 'loginredirect')) {
+                    if ((bool) $this->mod('roles')->getVar('loginredirect')) {
                         $truecurrenturl = $this->ctl()->getCurrentURL([], false);
                         $url = $this->mod()->apiFunc('roles', 'user', 'getuserhome', ['itemid' => $user['id']]);
                         if (empty($url)) {
-                            $urldata['redirecturl'] = $this->ctl()->getModuleURL(xarModVars::get('modules', 'defaultmodule'), xarModVars::get('modules', 'defaulttypename'), xarModVars::get('modules', 'defaultfuncname'));
+                            $urldata['redirecturl'] = $this->ctl()->getModuleURL($this->mod('modules')->getVar('defaultmodule'), $this->mod('modules')->getVar('defaulttypename'), $this->mod('modules')->getVar('defaultfuncname'));
                             $urldata['externalurl'] = false;
                         } else {
                             try {

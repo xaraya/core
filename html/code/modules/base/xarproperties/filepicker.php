@@ -73,10 +73,10 @@ class FilePickerProperty extends SelectProperty
     {
         if (!$basedir) $basedir = $this->initialization_basedirectory;
         if (strpos($basedir, '{user_theme}') !== false) {
-            $basedir = str_replace('{user_theme}',"themes/".xarModVars::get('themes', 'default_theme'),$basedir);
+            $basedir = str_replace('{user_theme}',"themes/".$this->mod('themes')->getVar('default_theme'),$basedir);
         }
         if (strpos($basedir, '{admin_theme}') !== false) {
-            $basedir = str_replace('{admin_theme}',"themes/".xarModVars::get('themes', 'admin_theme'),$basedir);
+            $basedir = str_replace('{admin_theme}',"themes/".$this->mod('themes')->getVar('admin_theme'),$basedir);
         }
         if (strpos($basedir, '{theme}') !== false) {
             $basedir = str_replace('{theme}',xarTpl::getThemeDir(),$basedir);

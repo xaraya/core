@@ -69,7 +69,7 @@ class CreatepasswordMethod extends MethodClass
         if (!$modifiedrole) {
             return;
         }
-        if (!xarModVars::get('roles', 'askpasswordemail')) {
+        if (!$this->mod('roles')->getVar('askpasswordemail')) {
             $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'admin',

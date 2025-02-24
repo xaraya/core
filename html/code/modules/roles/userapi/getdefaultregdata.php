@@ -47,7 +47,7 @@ class GetdefaultregdataMethod extends MethodClass
             if ($this->mod()->isAvailable($defaultregmodname)) {
                 //We can't really assume people will want this module as registration
                 //Rethink - what we need to avert this problem
-                if (xarModVars::get($defaultregmodname, 'allowregistration') == 1) {
+                if ($this->mod($defaultregmodname)->getVar('allowregistration') == 1) {
                     $defaultregmodactive = true;
                 } else {
                     $defaultregmodactive = false;

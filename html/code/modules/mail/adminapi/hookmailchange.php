@@ -112,8 +112,8 @@ class HookmailchangeMethod extends MethodClass
         // Define the variables automatically available to all templates
         // LEGACY
         $data = [
-            'sitename'   => xarModVars::get('themes', 'SiteName'),
-            'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),
+            'sitename'   => $this->mod('themes')->getVar('SiteName'),
+            'siteslogan' => $this->mod('themes')->getVar('SiteSlogan'),
             'siteadmin'  => $this->mod()->getVar('adminname'),
             'adminmail'  => $this->mod()->getVar('adminmail'),
             'siteurl'    => xarServer::getBaseURL(),

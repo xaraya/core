@@ -67,12 +67,14 @@ class Themes_MetaBlock extends BasicBlock
         switch ($oldversion) {
             case '0.0.0':
 
+                $author = $this->mod('themes')->getVar('SiteName');
+                $generator = $this->config()->getVar('System.Core.VersionId') . ' :: ' . $this->config()->getVar('System.Core.VersionNum');
                 // build metatags array from current settings
                 $metatags = array();
                 $metatags[] = array(
                     'type' => 'name', 
                     'value' => 'author', 
-                    'content' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY),
+                    'content' => $this->var()->prep($author),
                     'lang' => '',
                     'dir' => '',
                     'scheme' => '',
@@ -96,7 +98,7 @@ class Themes_MetaBlock extends BasicBlock
                 $metatags[] = array(
                     'type' => 'name',
                     'value' => 'generator',
-                    'content' => $this->config()->getVar('System.Core.VersionId') . ' :: ' . $this->config()->getVar('System.Core.VersionNum'),
+                    'content' => $generator,
                     'lang' => '',
                     'dir' => '',
                     'scheme' => '',
@@ -131,7 +133,7 @@ class Themes_MetaBlock extends BasicBlock
                     $metatags[] = array(
                         'type' => 'name',
                         'value' => 'DC.title',
-                        'content' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY),
+                        'content' => $this->var()->prep($author),
                         'lang' => '',
                         'dir' => '',
                         'scheme' => '',
@@ -147,12 +149,13 @@ class Themes_MetaBlock extends BasicBlock
                 
                 $data['metatags'] = $this->metatags = $metatags;
                 // set the modvar to make tags available to xarMeta class early
-                xarModVars::set('themes','meta.tags', serialize($metatags));
+                $this->mod('themes')->setVar('meta.tags', serialize($metatags));
 
             case '2.2.0':
+                $author = $this->mod('themes')->getVar('SiteName');
                 // upgrades from 2.2.0 go here...
                 $linktags = array(
-                    array('rel' => 'author', 'href' => !empty($data['authorpage']) ? $data['authorpage'] : '[baseurl]', 'title' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY), 'type' => 'text/html'),
+                    array('rel' => 'author', 'href' => !empty($data['authorpage']) ? $data['authorpage'] : '[baseurl]', 'title' => $this->var()->prep($author), 'type' => 'text/html'),
                     array('rel' => 'copyright', 'href' => !empty($data['copyrightpage']) ? $data['copyrightpage'] : '', 'title' => '', 'type' => 'text/html'),
                     array('rel' => 'help', 'href' => !empty($data['helppage']) ? $data['helppage'] : '' , 'title' => '', 'type' => 'text/html'),
                     array('rel' => 'glossary', 'href' => !empty($data['glossary']) ? $data['glossary'] : '', 'title' => '', 'type' => 'text/html'),                                                    
@@ -279,12 +282,14 @@ class Themes_MetaBlock extends BasicBlock
 	 */
     public function default_metatags()
     {
+        $author = $this->mod('themes')->getVar('SiteName');
+        $generator = $this->config()->getVar('System.Core.VersionId') . ' :: ' . $this->config()->getVar('System.Core.VersionNum');
         // metatags array
         $metatags = array();
         $metatags[] = array(
             'type' => 'name', 
             'value' => 'author', 
-            'content' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY),
+            'content' => $this->var()->prep($author),
             'lang' => '',
             'dir' => '',
             'scheme' => '',
@@ -308,7 +313,7 @@ class Themes_MetaBlock extends BasicBlock
         $metatags[] = array(
             'type' => 'name',
             'value' => 'generator',
-            'content' => $this->config()->getVar('System.Core.VersionId') . ' :: ' . $this->config()->getVar('System.Core.VersionNum'),
+            'content' => $generator,
             'lang' => '',
             'dir' => '',
             'scheme' => '',
@@ -339,8 +344,9 @@ class Themes_MetaBlock extends BasicBlock
 	 */
     public function default_linktags()
     {
+        $author = $this->mod('themes')->getVar('SiteName');
         $linktags = array(
-            array('rel' => 'author', 'href' => '[baseurl]', 'title' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY), 'type' => 'text/html'),
+            array('rel' => 'author', 'href' => '[baseurl]', 'title' => $this->var()->prep($author), 'type' => 'text/html'),
             array('rel' => 'copyright', 'href' => '', 'title' => '', 'type' => 'text/html'),
             array('rel' => 'help', 'href' => '' , 'title' => '', 'type' => 'text/html'),
             array('rel' => 'glossary', 'href' => '', 'title' => '', 'type' => 'text/html'),                            

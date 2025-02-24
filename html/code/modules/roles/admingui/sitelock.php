@@ -192,11 +192,11 @@ class SitelockMethod extends MethodClass
                         $msg = $this->ml('Could not clear sessions table');
                         throw new Exception($msg);
                     }
-                    $mailinfo['message'] = 'The site ' . xarModVars::get('themes', 'SiteName') . ' has been locked.';
+                    $mailinfo['message'] = 'The site ' . $this->mod('themes')->getVar('SiteName') . ' has been locked.';
 
                     // We unlocked the site
                 } else {
-                    $mailinfo['message'] = 'The site ' . xarModVars::get('themes', 'SiteName') . ' has been unlocked.';
+                    $mailinfo['message'] = 'The site ' . $this->mod('themes')->getVar('SiteName') . ' has been unlocked.';
                 }
 
                 $mailinfo['message'] .= "\n\n" . $notifymsg;

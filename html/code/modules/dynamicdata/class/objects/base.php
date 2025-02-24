@@ -232,7 +232,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
         if (!empty($badnames)) {
             $this->log()->error('Bad properties', $badnames);
-            if ($this->mod()->getVar('debugmode', 'dynamicdata') && xarUser::isDebugAdmin()) {
+            if ($this->mod('dynamicdata')->getVar('debugmode') && xarUser::isDebugAdmin()) {
                 echo "Bad properties: ";
                 echo $this->name . ": " . implode(', ', $badnames);
                 echo "<br />";
@@ -400,7 +400,7 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         $this->log()->info("DataObject::createItem: Creating an item of object " . $this->name);
 
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod()->getVar('suppress_updates', 'dynamicdata')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod('dynamicdata')->getVar('suppress_updates')) {
             // We are testing/debugging: return a zero
             return 0;
         }
@@ -494,7 +494,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->itemid = $this->properties[$this->primary]->getValue();
         }
 
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod()->getVar('suppress_updates', 'dynamicdata')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod('dynamicdata')->getVar('suppress_updates')) {
             // We are testing/debugging: return the ID of this item
             return $this->itemid;
         }
@@ -559,7 +559,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
 
-        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod()->getVar('suppress_updates', 'dynamicdata')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && $this->mod('dynamicdata')->getVar('suppress_updates')) {
             // Call delete hooks for this item
             $this->callHooks('delete');
 
@@ -656,7 +656,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             if (empty($nameparts[1])) {
                 throw new Exception($this->ml('Incorrect source: #(1)', $this->properties[$name]->source));
             }
-            $test = $this->mod()->getVar($this->properties[$name]->name, $nameparts[1]);
+            $test = $this->mod($nameparts[1])->getVar($this->properties[$name]->name);
             if ($test === null) {
                 $this->mod()->setVar($this->properties[$name]->name, $this->properties[$name]->defaultvalue, $nameparts[1]);
             }

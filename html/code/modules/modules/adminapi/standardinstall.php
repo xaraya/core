@@ -107,7 +107,7 @@ class StandardinstallMethod extends MethodClass
                     $objectid = $this->mod()->apiFunc('dynamicdata', 'util', 'import', $data);
                 }
             }
-            xarModVars::set($module, 'dd_objects', serialize($dd_objects));
+            $this->mod($module)->setVar('dd_objects', serialize($dd_objects));
 
         } elseif (isset($blocks)) {
             $installed_blocks = [];
@@ -122,7 +122,7 @@ class StandardinstallMethod extends MethodClass
                     $installed_blocks[$name] = $blockid;
                 }
             }
-            xarModVars::set($module, 'blocks', serialize($installed_blocks));
+            $this->mod($module)->setVar('blocks', serialize($installed_blocks));
 
         } else {
             return false;

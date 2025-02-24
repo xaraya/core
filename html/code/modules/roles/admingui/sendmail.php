@@ -105,8 +105,8 @@ class SendmailMethod extends MethodClass
 
         // To prevent the template comments from being sent with the mail
         // messages, we turn it off temporarily
-        $themecomments = xarModVars::get('themes', 'ShowTemplates');
-        xarModVars::set('themes', 'ShowTemplates', 0);
+        $themecomments = $this->mod('themes')->getVar('ShowTemplates');
+        $this->mod('themes')->setVar('ShowTemplates', 0);
 
         // Add root tage and compile the subject and message
         $subject  = xarTpl::compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $subject . '</xar:template>');
@@ -115,10 +115,10 @@ class SendmailMethod extends MethodClass
         // Define the variables automatically available to all templates
         // LEGACY
         $data = [
-            'sitename'   => xarModVars::get('themes', 'SiteName'),
-            'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),
-            'siteadmin'  => xarModVars::get('mail', 'adminname'),
-            'adminmail'  => xarModVars::get('mail', 'adminmail'),
+            'sitename'   => $this->mod('themes')->getVar('SiteName'),
+            'siteslogan' => $this->mod('themes')->getVar('SiteSlogan'),
+            'siteadmin'  => $this->mod('mail')->getVar('adminname'),
+            'adminmail'  => $this->mod('mail')->getVar('adminmail'),
             'siteurl'    => xarServer::getBaseURL(),
             'myname'     => xarUser::getVar('name'),
             'myuname'    => xarUser::getVar('uname'),
@@ -150,7 +150,7 @@ class SendmailMethod extends MethodClass
             }
         }
         // If it was on, turn it back on
-        xarModVars::set('themes', 'ShowTemplates', $themecomments);
+        $this->mod('themes')->setVar('ShowTemplates', $themecomments);
 
         $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'createmail'));
         return true;

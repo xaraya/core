@@ -52,7 +52,7 @@ class StandarddeinstallMethod extends MethodClass
         # Delete all DD objects created by this module
         #
         try {
-            $dd_objects = unserialize(xarModVars::get($module, 'dd_objects'));
+            $dd_objects = unserialize($this->mod($module)->getVar('dd_objects'));
             foreach ($dd_objects as $key => $value) {
                 $result = DataObjectFactory::deleteObject(['objectid' => $value]);
             }
@@ -86,7 +86,7 @@ class StandarddeinstallMethod extends MethodClass
         # Remove all blocks created by this module
         #
         try {
-            $blocks = unserialize(xarModVars::get($module, 'blocks'));
+            $blocks = unserialize($this->mod($module)->getVar('blocks'));
 
             foreach ($blocks as $blockid) {
                 $this->mod()->apiFunc('blocks', 'instances', 'deleteitem', ['block_id' => $blockid]);
@@ -126,7 +126,7 @@ class StandarddeinstallMethod extends MethodClass
                 'categories',
                 'admin',
                 'deletecat',
-                ['cid' => xarModVars::get($module, 'basecategory')]
+                ['cid' => $this->mod($module)->getVar('basecategory')]
             );
         } catch (Exception $e) {
         }

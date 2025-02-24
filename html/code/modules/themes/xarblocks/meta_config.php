@@ -88,7 +88,7 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
         } 
         $vars['metatags'] = $newtags;
         // store the tags for use by the xarMeta class 
-        xarModVars::set('themes','meta.tags', serialize($newtags));
+        $this->mod('themes')->setVar('meta.tags', serialize($newtags));
         
         // fetch the array of link tags from input
         $this->var()->find('linktags', $linktags, 'array', array());

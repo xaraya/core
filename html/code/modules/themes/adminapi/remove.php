@@ -68,7 +68,7 @@ class RemoveMethod extends MethodClass
 
         // Bail out if we're trying to remove while one of our users
         // has it set to their default theme
-        $mvid = xarModVars::getID('themes', 'default_theme');
+        $mvid = $this->mod('themes')->getVarID('default_theme');
         $sql = "SELECT COUNT(*) FROM $tables[module_itemvars] WHERE module_var_id =? AND value = ?";
         $result = $dbconn->Execute($sql, [$mvid,$defaultTheme]);
 

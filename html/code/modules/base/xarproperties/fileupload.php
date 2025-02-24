@@ -95,8 +95,8 @@ class FileUploadProperty extends DataProperty
         if (empty($this->validation_file_extensions)) $this->validation_file_extensions = '';
 
         // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory
-        $this->initialization_basedirectory = preg_replace('/\{user_theme\}/',"themes/".xarModVars::get('themes', 'default_theme'),$this->initialization_basedirectory);
-        $this->initialization_basedirectory = preg_replace('/\{admin_theme\}/',"themes/".xarModVars::get('themes', 'admin_theme'),$this->initialization_basedirectory);
+        $this->initialization_basedirectory = preg_replace('/\{user_theme\}/',"themes/".$this->mod('themes')->getVar('default_theme'),$this->initialization_basedirectory);
+        $this->initialization_basedirectory = preg_replace('/\{admin_theme\}/',"themes/".$this->mod('themes')->getVar('admin_theme'),$this->initialization_basedirectory);
         $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
 
         // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123

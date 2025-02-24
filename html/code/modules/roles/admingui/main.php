@@ -46,7 +46,7 @@ class MainMethod extends MethodClass
 
         $samemodule = xarController::isRefererSameModule();
 
-        if (((bool) xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
+        if (((bool) $this->mod('modules')->getVar('disableoverview') == false) || $samemodule) {
             $data = ['context' => $this->getContext()];
             return $this->tpl()->module('roles', 'admin', 'overview', $data);
         } else {

@@ -117,7 +117,7 @@ class UtilApi extends UserApi implements DatabaseInterface
         $all_modules = $this->mod()->apiFunc('modules', 'admin', 'getitems');
         $all_databases = [];
         foreach ($all_modules as $item) {
-            $databases = $this->mod()->getVar('databases', $item['name']);
+            $databases = $this->mod($item['name'])->getVar('databases');
             if (empty($databases)) {
                 continue;
             }

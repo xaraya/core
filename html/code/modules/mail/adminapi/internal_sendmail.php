@@ -312,8 +312,8 @@ class InternalSendmailMethod extends MethodClass
 
         // go ahead and override the show *theme* templates value,
         // using the mail modules settings instead :-)
-        $oldShowTemplates = xarModVars::get('themes', 'ShowTemplates');
-        xarModVars::set('themes', 'ShowTemplates', $mailShowTemplates);
+        $oldShowTemplates = $this->mod('themes')->getVar('ShowTemplates');
+        $this->mod('themes')->setVar('ShowTemplates', $mailShowTemplates);
 
         // Check if this is HTML mail and set Body appropriately
         if ($htmlmail) {
@@ -400,7 +400,7 @@ class InternalSendmailMethod extends MethodClass
         }
 
         // Set the showTemplates back to what it was previously
-        xarModVars::set('themes', 'ShowTemplates', $oldShowTemplates);
+        $this->mod('themes')->setVar('ShowTemplates', $oldShowTemplates);
 
         // We are now setting up the advance options that can be used by the modules
         // Add Attachment will look to see if there is a var passed called

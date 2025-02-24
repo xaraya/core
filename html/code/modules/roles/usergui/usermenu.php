@@ -259,7 +259,7 @@ class UsermenuMethod extends MethodClass
                         // get a list of modules with user menu enabled
                         $allmods = $this->mod()->apiFunc('modules', 'admin', 'getlist');
                         foreach ($allmods as $modinfo) {
-                            if (xarModVars::get($modinfo['name'], 'enable_user_menu') != 1) {
+                            if ($this->mod($modinfo['name'])->getVar('enable_user_menu') != 1) {
                                 continue;
                             }
                             $menumods[] = $modinfo['name'];
@@ -361,7 +361,7 @@ class UsermenuMethod extends MethodClass
                     // get a list of modules with user menu enabled
                     $allmods = $this->mod()->apiFunc('modules', 'admin', 'getlist');
                     foreach ($allmods as $modinfo) {
-                        if (xarModVars::get($modinfo['name'], 'enable_user_menu') != 1) {
+                        if ($this->mod($modinfo['name'])->getVar('enable_user_menu') != 1) {
                             continue;
                         }
                         $menumods[] = $modinfo['name'];

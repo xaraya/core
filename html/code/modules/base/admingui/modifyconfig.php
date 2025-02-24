@@ -100,7 +100,7 @@ class ModifyconfigMethod extends MethodClass
      */
     public function modifyConfig(array $data)
     {
-        $data['inheritdeny'] = xarModVars::get('privileges', 'inheritdeny');
+        $data['inheritdeny'] = $this->mod('privileges')->getVar('inheritdeny');
 
         switch ($data['tab']) {
             case 'setup':
@@ -255,10 +255,10 @@ class ModifyconfigMethod extends MethodClass
     {
         $this->var()->find('alternatepagetemplate', $alternatePageTemplate, 'checkbox', false);
         $this->var()->find('alternatepagetemplatename', $alternatePageTemplateName, 'str', '');
-        $this->var()->find('defaultmodule', $defaultModuleName, 'str:1:', xarModVars::get('modules', 'defaultmodule'));
-        $this->var()->find('defaulttype', $defaultModuleType, 'str:1:', xarModVars::get('modules', 'defaultmoduletype'));
-        $this->var()->find('defaultfunction', $defaultModuleFunction, 'str:1:', xarModVars::get('modules', 'defaultmodulefunction'));
-        $this->var()->find('defaultdatapath', $defaultDataPath, 'str:1:', xarModVars::get('modules', 'defaultdatapath'));
+        $this->var()->find('defaultmodule', $defaultModuleName, 'str:1:', $this->mod('modules')->getVar('defaultmodule'));
+        $this->var()->find('defaulttype', $defaultModuleType, 'str:1:', $this->mod('modules')->getVar('defaultmoduletype'));
+        $this->var()->find('defaultfunction', $defaultModuleFunction, 'str:1:', $this->mod('modules')->getVar('defaultmodulefunction'));
+        $this->var()->find('defaultdatapath', $defaultDataPath, 'str:1:', $this->mod('modules')->getVar('defaultdatapath'));
         $this->var()->find('shorturl', $enableShortURLs, 'str', false);
         $this->var()->find('allowsslashes', $allowsslashes, 'checkbox', false);
         $this->var()->find('htmlentites', $FixHTMLEntities, 'checkbox', false);
@@ -271,10 +271,10 @@ class ModifyconfigMethod extends MethodClass
         }
         $itemid = $data['module_settings']->updateItem();
 
-        xarModVars::set('modules', 'defaultmodule', $defaultModuleName);
-        xarModVars::set('modules', 'defaultmoduletype', $defaultModuleType);
-        xarModVars::set('modules', 'defaultmodulefunction', $defaultModuleFunction);
-        xarModVars::set('modules', 'defaultdatapath', $defaultDataPath);
+        $this->mod('modules')->setVar('defaultmodule', $defaultModuleName);
+        $this->mod('modules')->setVar('defaultmoduletype', $defaultModuleType);
+        $this->mod('modules')->setVar('defaultmodulefunction', $defaultModuleFunction);
+        $this->mod('modules')->setVar('defaultdatapath', $defaultDataPath);
         $this->mod()->setVar('UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
         $this->mod()->setVar('AlternatePageTemplateName', $alternatePageTemplateName);
 
@@ -439,7 +439,7 @@ class ModifyconfigMethod extends MethodClass
         $this->config()->setVar('Site.MLS.AllowedLocales', $localesList);
         // Also set the following modvar.
         // It sets the navigation locale for all logged in users who have not explicitly chosen one
-        xarModVars::set('roles', 'locale', $defaultLocale);
+        $this->mod('roles')->setVar('locale', $defaultLocale);
 
         $this->ctl()->redirect($this->ctl()->getModuleURL(
             'base',
@@ -691,7 +691,7 @@ class ModifyconfigMethod extends MethodClass
             $this->config()->setVar('Site.Core.TimeZone', "UTC");
             $this->config()->setVar('Site.MLS.DefaultTimeOffset', 0);
         }
-        xarModVars::set('roles', 'usertimezone', $this->config()->getVar('Site.Core.TimeZone'));
+        $this->mod('roles')->setVar('usertimezone', $this->config()->getVar('Site.Core.TimeZone'));
         $this->ctl()->redirect($this->ctl()->getModuleURL(
             'base',
             'admin',

@@ -49,7 +49,7 @@ class MainMethod extends MethodClass
 
         $samemodule = xarController::isRefererSameModule();
 
-        if (((bool) xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
+        if (((bool) $this->mod('modules')->getVar('disableoverview') == false) || $samemodule) {
             $data = [];
             $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1:', '');
             $data['context'] = $this->getContext();

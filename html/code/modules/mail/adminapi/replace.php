@@ -39,8 +39,8 @@ class ReplaceMethod extends MethodClass
     {
         extract($args);
 
-        $sitename   = xarModVars::get('themes', 'SiteName');
-        $siteslogan = xarModVars::get('themes', 'SiteSlogan');
+        $sitename   = $this->mod('themes')->getVar('SiteName');
+        $siteslogan = $this->mod('themes')->getVar('SiteSlogan');
         $siteadmin  = $this->mod()->getVar('adminname');
         $siteurl    = xarServer::getBaseURL();
 
