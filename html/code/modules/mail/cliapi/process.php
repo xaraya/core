@@ -44,7 +44,7 @@ class ProcessMethod extends MethodClass
     {
         /** @var AdminApi $adminapi */
         $adminapi = $this->adminapi();
-        $this->log()->message("MAIL: processing incoming message", xarLog::LEVEL_INFO);
+        $this->log()->info("MAIL: processing incoming message");
         extract($args);
         assert($argc > 0 && $argv[1] == "mail");
 

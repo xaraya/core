@@ -110,7 +110,7 @@ class RemoveMethod extends MethodClass
         // Removes with dependents, first remove the necessary dependents then the module itself
         if (!$installer->removewithdependents($id)) {
             //Call exception
-            $this->log()->message('Missing module since last generation!', xarLog::LEVEL_WARNING);
+            $this->log()->warning('Missing module since last generation!');
             return;
         } // Else
 

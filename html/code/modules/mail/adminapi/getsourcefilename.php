@@ -58,8 +58,8 @@ class GetsourcefilenameMethod extends MethodClass
 
         unset($sourceFileName);
 
-        $this->log()->message("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt", xarLog::LEVEL_INFO);
-        $this->log()->message("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xt", xarLog::LEVEL_INFO);
+        $this->log()->info("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt");
+        $this->log()->info("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xt");
 
         if (!empty($templateName) &&
             file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt")) {

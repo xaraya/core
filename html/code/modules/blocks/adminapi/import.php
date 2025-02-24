@@ -80,7 +80,7 @@ class ImportMethod extends MethodClass
 
         if (!empty($file)) {
             $xmlobject = simplexml_load_file($file);
-            $this->log()->message('Blocks: import file ' . $file, xarLog::LEVEL_INFO);
+            $this->log()->info('Blocks: import file ' . $file);
 
         } elseif (!empty($xml)) {
             // remove garbage from the end
@@ -105,7 +105,7 @@ class ImportMethod extends MethodClass
             $args = [];
             // Get the object's name
             $args['name'] = (string) ($xmlobject->attributes()->name);
-            $this->log()->message('Blocks: importing ' . $args['name'], xarLog::LEVEL_INFO);
+            $this->log()->info('Blocks: importing ' . $args['name']);
 
             // Check if the block exists
             // Strictly speaking we could have the same name for blocks in different states, but lets not allow that here
