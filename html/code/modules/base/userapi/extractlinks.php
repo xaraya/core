@@ -60,8 +60,9 @@ class ExtractlinksMethod extends MethodClass
             $server = $matches[2]; // possibly with port number
             $protocol = $matches[1];
         } else {
-            $server = xarServer::getHost();
-            $protocol = xarServer::getProtocol();
+            $parsed = parse_url($this->ctl()->getBaseURL());
+            $server = $parsed['host'];
+            $protocol = $parsed['scheme'];
         }
 
         $links = [];

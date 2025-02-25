@@ -233,10 +233,10 @@ class XarayaCoreExtension extends XarayaTwigExtension
     {
         $date = '';
         if (!empty($dateFormat)) {
-            $date .= xarLocale::getFormattedDate($dateFormat, $timestamp) . ' ';
+            $date .= $this->mls()->getFormattedDate($dateFormat, $timestamp) . ' ';
         }
         if (!empty($timeFormat)) {
-            $date .= xarLocale::getFormattedTime($timeFormat, $timestamp);
+            $date .= $this->mls()->getFormattedTime($timeFormat, $timestamp);
         }
         return $date;
     }

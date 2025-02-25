@@ -111,7 +111,7 @@ class CalendarProperty extends DataProperty
             }
         }
 
-        // $timeval = xarLocale::formatDate($dateformat, $value);
+        // $timeval = $this->mls()->formatDate($dateformat, $value);
         $data['baseuri']    = $this->ctl()->getBaseURI();
         $data['dateformat'] = $dateformat;
         $data['jsID']       = str_replace(array('[', ']'), '_', $id);
@@ -153,7 +153,7 @@ class CalendarProperty extends DataProperty
 
         $data['dateformat'] = $dateformat;
         $data['value'] = $value;
-        // $data['returnvalue']= xarLocale::formatDate($dateformat, $value);
+        // $data['returnvalue']= $this->mls()->formatDate($dateformat, $value);
         return parent::showOutput($data);
     }
 	

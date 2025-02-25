@@ -91,6 +91,7 @@ class GetfileMethod extends MethodClass
         $invalid = false;
         $islocal = false;
 
+        $baseurl = $this->ctl()->getBaseURL();
         if (empty($url)) {
             $invalid = true;
         } elseif (strstr($url, '://')) {
@@ -98,17 +99,18 @@ class GetfileMethod extends MethodClass
             if (substr($url, 0, 8) != 'https://' && substr($url, 0, 7) != 'http://' && substr($url, 0, 6) != 'ftp://') {
                 $invalid = true;
             }
-            $server = xarServer::getHost();
+            $parsed = parse_url($baseurl);
+            $server = $parsed['host'];
             if (preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!", $url)) {
                 $islocal = true;
             }
         } elseif (substr($url, 0, 1) == '/') {
-            $server = xarServer::getHost();
-            $protocol = xarServer::getProtocol();
+            $parsed = parse_url($baseurl);
+            $server = $parsed['host'];
+            $protocol = $parsed['scheme'];
             $url = $protocol . '://' . $server . $url;
             $islocal = true;
         } else {
-            $baseurl = $this->ctl()->getBaseURL();
             $url = $baseurl . $url;
             $islocal = true;
         }

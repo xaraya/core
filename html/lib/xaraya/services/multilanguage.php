@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use xarMLS;
+use xarLocale;
 use sys;
 
 sys::import('xaraya.services.servicetrait');
@@ -35,6 +36,40 @@ interface MultiLanguageInterface extends ServiceInterface
      * Get the charset component from a locale
      */
     public function getCharsetFromLocale(string $locale): string;
+
+    /**
+     * Load locale data
+     * @param ?string $locale
+     * @return array<mixed> locale data
+     */
+    public function loadLocale(?string $locale = null): array;
+
+    /**
+     * Format a date/time according to the current locale
+     * @param ?string $format
+     * @param mixed $timestamp
+     * @param bool $addoffset
+     * @return string
+     */
+    public function formatDate(?string $format = null, mixed $timestamp = null, bool $addoffset = true): string;
+
+    /**
+     * Get formatted date according to the current locale
+     * @param string $length
+     * @param mixed $timestamp
+     * @param bool $addoffset
+     * @return string
+     */
+    public function getFormattedDate(string $length = 'short', mixed $timestamp = null, bool $addoffset = true): string;
+
+    /**
+     * Get formatted time according to the current locale
+     * @param string $length
+     * @param mixed $timestamp
+     * @param bool $addoffset
+     * @return string
+     */
+    public function getFormattedTime(string $length = 'short', mixed $timestamp = null, bool $addoffset = true): string;
 
     /**
      * Translate string with optional arguments
@@ -92,6 +127,53 @@ trait MultiLanguageTrait
     }
 
     /**
+     * Load locale data
+     * @param ?string $locale
+     * @return array<mixed> locale data
+     */
+    public function loadLocale(?string $locale = null): array
+    {
+        $locale ??= $this->getCurrentLocale();
+        return xarLocale::loadData($locale);
+    }
+
+    /**
+     * Format a date/time according to the current locale
+     * @param ?string $format
+     * @param mixed $timestamp
+     * @param bool $addoffset
+     * @return string
+     */
+    public function formatDate(?string $format = null, mixed $timestamp = null, bool $addoffset = true): string
+    {
+        return xarLocale::formatDate($format, $timestamp, $addoffset);
+    }
+
+    /**
+     * Get formatted date according to the current locale
+     * @param string $length
+     * @param mixed $timestamp
+     * @param bool $addoffset
+     * @return string
+     */
+    public function getFormattedDate(string $length = 'short', mixed $timestamp = null, bool $addoffset = true): string
+    {
+        return xarLocale::getFormattedDate($length, $timestamp, $addoffset);
+    }
+
+    /**
+     * Get formatted time according to the current locale
+     * @param string $length
+     * @param mixed $timestamp
+     * @param bool $addoffset
+     * @return string
+     */
+    public function getFormattedTime(string $length = 'short', mixed $timestamp = null, bool $addoffset = true): string
+    {
+        return xarLocale::getFormattedTime($length, $timestamp, $addoffset);
+    }
+
+    /**
      * Translate string with optional arguments
      * @uses xarMLS::translate()
      * @param string $rawstring
@@ -144,8 +226,15 @@ trait MultiLanguageTrait
  * Access xarMLS::* Multi-Language System methods (translate, ...)
  *
  * Available methods:
+ * - getCurrentLocale()
+ * - getCharsetFromLocale()
+ * - loadLocale()
+ * - formatDate()
+ * - getFormattedDate()
+ * - getFormattedTime()
  * - translate()
  * - loadTranslations()
+ * - loadModuleTranslations()
  * - loadObjectTranslations()
  * - ...
  *

@@ -1624,6 +1624,10 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarMLS::loadTranslations\(/' => '\$this->mls()->loadTranslations(',
             '/xarMLS::getCurrentLocale\(/' => '\$this->mls()->getCurrentLocale(',
             '/xarMLS::getCharsetFromLocale\(/' => '\$this->mls()->getCharsetFromLocale(',
+            '/xarLocale::loadData\(/' => '\$this->mls()->loadLocale(',
+            '/xarLocale::formatDate\(/' => '\$this->mls()->formatDate(',
+            '/xarLocale::getFormattedDate\(/' => '\$this->mls()->getFormattedDate(',
+            '/xarLocale::getFormattedTime\(/' => '\$this->mls()->getFormattedTime(',
             // @todo differentiate based on xarLog::* level
             '/xarLog::message\(/' => '\$this->log()->message(',
             '/xarLog::variable\(/' => '\$this->log()->variable(',

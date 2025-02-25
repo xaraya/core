@@ -38,7 +38,7 @@ class LanguageListProperty extends SelectProperty
         asort($list);
 
         foreach ($list as $locale) {
-            $locale_data = xarLocale::loadData($locale);
+            $locale_data = $this->mls()->loadLocale($locale);
             $name = $locale_data['/language/display'] . " (" . $locale_data['/country/display'] . ")";
             $options[] = array('id'   => $locale,
                                      'name' => $name,

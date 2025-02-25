@@ -119,8 +119,15 @@ trait ParentServicesTrait
      * Access xarMLS::* Multi-Language System methods (translate, ...)
      *
      * Available methods:
+     * - getCurrentLocale()
+     * - getCharsetFromLocale()
+     * - loadLocale()
+     * - formatDate()
+     * - getFormattedDate()
+     * - getFormattedTime()
      * - translate()
      * - loadTranslations()
+     * - loadModuleTranslations()
      * - loadObjectTranslations()
      * - ...
      *
