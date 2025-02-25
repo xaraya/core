@@ -145,6 +145,12 @@ trait ParentServicesTrait
      * - setVar()
      * - delVar()
      * - getVarID()
+     * - getUserVar()
+     * - setUserVar()
+     * - delUserVar()
+     * - getItemVar()
+     * - setItemVar()
+     * - delItemVar()
      * - disableOverview()
      * - getURL() for current module - or use ctl()->getModuleURL() in general with modName
      * - template() for current module type - or use tpl()->module() in general with modName modType
@@ -365,6 +371,24 @@ trait ParentServicesTrait
     public function session(): SessionInterface
     {
         return $this->getParent()->session();
+    }
+
+    /**
+     * Access xarUser::* User methods (getVar, setVar, ...)
+     *
+     * Available methods:
+     * - getVar()
+     * - setVar()
+     * - getId()
+     * - isLoggedIn()
+     * - isDebugAdmin()
+     * - isSiteAdmin()
+     * - ...
+     *
+     */
+    public function user(?int $userId = null): UserInterface
+    {
+        return $this->getParent()->user($userId);
     }
 
     /**

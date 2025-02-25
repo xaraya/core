@@ -49,10 +49,10 @@ class SettingsMethod extends MethodClass
         $this->var()->find('selsort', $selsort, 'str:1:', 'namedesc');
         $this->var()->find('regen', $regen, 'str:1:');
 
-        xarModUserVars::set('modules', 'hidecore', $hidecore);
-        xarModUserVars::set('modules', 'selstyle', $selstyle);
-        xarModUserVars::set('modules', 'selfilter', $selfilter);
-        xarModUserVars::set('modules', 'selsort', $selsort);
+        $this->mod()->setUserVar('hidecore', $hidecore);
+        $this->mod()->setUserVar('selstyle', $selstyle);
+        $this->mod()->setUserVar('selfilter', $selfilter);
+        $this->mod()->setUserVar('selsort', $selsort);
 
         $this->ctl()->redirect($this->ctl()->getModuleURL('modules', 'admin', 'list', ['regen' => $regen]));
         return true;

@@ -51,19 +51,19 @@ class SettingsMethod extends MethodClass
         $this->var()->find('regen', $regen, 'str:1:', false);
         $this->var()->find('useicons', $useicons, 'checkbox', false);
 
-        if (!xarModUserVars::set('themes', 'hidecore', $hidecore)) {
+        if (!$this->mod()->setUserVar('hidecore', $hidecore)) {
             return;
         }
-        if (!xarModUserVars::set('themes', 'selstyle', $selstyle)) {
+        if (!$this->mod()->setUserVar('selstyle', $selstyle)) {
             return;
         }
-        if (!xarModUserVars::set('themes', 'selfilter', $selfilter)) {
+        if (!$this->mod()->setUserVar('selfilter', $selfilter)) {
             return;
         }
-        if (!xarModUserVars::set('themes', 'selclass', $selclass)) {
+        if (!$this->mod()->setUserVar('selclass', $selclass)) {
             return;
         }
-        if (!xarModUserVars::set('themes', 'useicons', $useicons)) {
+        if (!$this->mod()->setUserVar('useicons', $useicons)) {
             return;
         }
 

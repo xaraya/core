@@ -58,7 +58,7 @@ class ModifyMethod extends MethodClass
         }
 
         // Root category cannot be modified except by the site admin
-        if (($cid == 1) && (!xarUser::isSiteAdmin())) {
+        if (($cid == 1) && (!$this->user()->isSiteAdmin())) {
             return $this->ctl()->badRequest('no_privileges');
         }
 

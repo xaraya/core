@@ -29,13 +29,13 @@ class Themes_SkinBlockDisplay extends Themes_SkinBlock implements iBlock
     function display(Array $data=array())
     {
         
-        if (!xarUser::isLoggedIn() ||
+        if (!$this->user()->isLoggedIn() ||
             (bool) $this->mod('themes')->getVar('enable_user_menu') == false) return;
         
         $data = $this->getContent();
         $data['user_themes'] = $this->mod()->apiFunc('themes', 'user', 'dropdownlist');
         if ($data['user_themes'] <= 1) return;
-        $data['default_theme'] = xarModUserVars::get('themes', 'default_theme');
+        $data['default_theme'] = $this->mod('themes')->getUserVar('default_theme');
         $data['return_url'] = ($this->ctl()->getRequestMethod() == 'GET') ?
             $this->ctl()->getCurrentURL() : $this->ctl()->getBaseURL();
 

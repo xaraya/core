@@ -272,7 +272,7 @@ class AccessProperty extends DataProperty
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if (xarRoles::isParent($allowed, xarUser::getVar('uname'))) return true;
+            if (xarRoles::isParent($allowed, $this->user()->getUser())) return true;
         }
         
         // We need to be in the correct realm
@@ -332,7 +332,7 @@ class AccessProperty extends DataProperty
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if (xarRoles::isParent($allowed, xarUser::getVar('uname'))) return true;
+            if (xarRoles::isParent($allowed, $this->user()->getUser())) return true;
         }
 
         if (isset($data['exclusive'])) $exclusive = $data['exclusive'];
@@ -449,9 +449,9 @@ class AccessProperty extends DataProperty
             if ($group == $this->myself) {
                 $access = true;
             } elseif ($group == $anonID) {
-                if (!xarUser::isLoggedIn()) $access = true;
+                if (!$this->user()->isLoggedIn()) $access = true;
             } elseif ($group == -$anonID) {
-                if (xarUser::isLoggedIn()) $access = true;
+                if ($this->user()->isLoggedIn()) $access = true;
             } elseif ($group) {
                 $rolesgroup = xarRoles::getRole($group);
                 $thisuser = xarRoles::current();

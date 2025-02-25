@@ -206,8 +206,11 @@ class xarLogger_simple extends xarLogger
         if (file_exists($this->filename)) {
             if (!is_writable($this->filename)) {
                 $err = error_get_last();
-                throw new LoggerException('Unable to write to logger file: ' . $this->filename
+                if ($err) {
+                    throw new LoggerException('Unable to write to logger file: ' . $this->filename
                     .  ' (' . $err['message'] . ')' );
+                }
+                throw new LoggerException('Unable to write to logger file: ' . $this->filename);
             }
         } else {
             if (!is_writable(dirname($this->filename))) {

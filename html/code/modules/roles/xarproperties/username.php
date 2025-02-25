@@ -35,7 +35,7 @@ class UsernameProperty extends TextBoxProperty
         $this->filepath   = 'modules/roles/xarproperties';
 
         // Cater to a common case
-        if ($this->value == 'myself') $this->value = xarUser::getVar('id');        
+        if ($this->value == 'myself') $this->value = $this->user()->getId();        
     }
 
 	/**
@@ -54,7 +54,7 @@ class UsernameProperty extends TextBoxProperty
         if (!parent::validateValue($value)) return false;
 
         // We set an empty value to the id of the current user
-        if (empty($value) || ($value == 'myself')) $value = xarUser::getVar('uname');
+        if (empty($value) || ($value == 'myself')) $value = $this->user()->getUser();
 
         // We allow the special value [All]
         
@@ -109,7 +109,7 @@ class UsernameProperty extends TextBoxProperty
         if (isset($data['user'])) {
             // Cater to a common case
             if ($data['user'] == 'myself') {
-                $this->value = xarUser::getVar('id');
+                $this->value = $this->user()->getId();
                 $role = xarRoles::get($this->value);
                 $data['value'] = $role->getUser();
             } else {
@@ -138,9 +138,9 @@ class UsernameProperty extends TextBoxProperty
             // Cater to a common case
             if ($data['user'] == 'myself') {
                 if ($this->initialization_display_name == 'name')
-                    $data['value'] = xarUser::getVar('name');
+                    $data['value'] = $this->user()->getName();
                 else
-                    $data['value'] = xarUser::getVar('uname');
+                    $data['value'] = $this->user()->getUser();
             } else {
                 $data['value'] = $data['user'];
             }
@@ -156,8 +156,8 @@ class UsernameProperty extends TextBoxProperty
             $this->value = $data['value'];
             $data['value'] = $this->getValue();
         } else {
-            $this->value = xarUser::getVar('id');
-            $data['value'] = xarUser::getVar('uname');
+            $this->value = $this->user()->getId();
+            $data['value'] = $this->user()->getUser();
         }
 
         if ($this->display_linkurl) {
@@ -197,7 +197,7 @@ class UsernameProperty extends TextBoxProperty
         if ($this->initialization_store_type == 'id') {
             if(!is_numeric($this->value)) return $this->value;
             if ($this->value == 0) return '[All]';
-            return xarUser::getVar('uname',$this->value);
+            return $this->user($this->value)->getUser();
         } else {
             if (empty($this->value)) return '';
             return $this->value;

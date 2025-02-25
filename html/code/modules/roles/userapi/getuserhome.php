@@ -52,7 +52,7 @@ class GetuserhomeMethod extends MethodClass
 
         // the last resort admin always goes to the base main page
         $lastresortvalue = $this->mod('privileges')->getVar('lastresort');
-        $userhome = !empty($lastresort) ? '[base]' : xarModUserVars::get('roles', 'userhome', $itemid);
+        $userhome = !empty($lastresort) ? '[base]' : $this->mod()->getUserVar('userhome', $itemid);
 
         // otherwise look for the role's userhome
         if (empty($userhome) || ($userhome == 'undefined')) {
@@ -62,7 +62,7 @@ class GetuserhomeMethod extends MethodClass
                 $settings = explode(',', $this->mod()->getVar('duvsettings'));
                 if (in_array('primaryparent', $settings)) {
                     // go for the primary parent's userhome
-                    $parentid = xarModItemVars::get('roles', 'primaryparent', $itemid);
+                    $parentid = $this->mod()->getUserVar('primaryparent', $itemid);
                     if (!empty($parentid)) {
                         return $userapi->getuserhome(['itemid' => $parentid]);
                     }

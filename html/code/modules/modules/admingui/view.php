@@ -72,13 +72,13 @@ class ViewMethod extends MethodClass
 
         // Save the filters of this user
         if (!isset($data['state'])) {
-            $data['state'] = xarModUserVars::get('modules', 'selfilter');
+            $data['state'] = $this->mod()->getUserVar('selfilter');
         }
         if (!isset($data['state'])) {
             $data['state'] = xarMod::STATE_ANY;
         }
         if (!isset($data['modtype'])) {
-            $data['modtype'] = xarModUserVars::get('modules', 'hidecore');
+            $data['modtype'] = $this->mod()->getUserVar('hidecore');
         }
         if (!isset($data['modtype'])) {
             $data['modtype'] = 0;
@@ -118,7 +118,7 @@ class ViewMethod extends MethodClass
                 'modinfo',
                 ['id' => $item['regid']]
             );
-            $return_url = $this->ctl()->getCurrentURL(['state' => $data['state'] != 0 ? 0 : null], false, $item['name']);
+            $return_url = $this->ctl()->getCurrentURL(['state' => $data['state'] != 0 ? 0 : null], false) . '#' . $item['name'];
             $return_url = urlencode($return_url);
             switch ($item['state']) {
                 case xarMod::STATE_UNINITIALISED: // 1
@@ -245,8 +245,8 @@ class ViewMethod extends MethodClass
         ];
 
         // Remember filter selections for current user
-        xarModUserVars::set('modules', 'selfilter', $data['state']);
-        xarModUserVars::set('modules', 'hidecore', $data['modtype']);
+        $this->mod()->setUserVar('selfilter', $data['state']);
+        $this->mod()->setUserVar('hidecore', $data['modtype']);
 
         $count = count($items);
         if ($data['state'] == xarMod::STATE_ANY) {

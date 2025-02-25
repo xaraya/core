@@ -166,13 +166,13 @@ class ViewMethod extends MethodClass
         );
 
         if (!isset($data['tab'])) {
-            $data['tab'] = xarModUserVars::get('themes', 'selstyle');
+            $data['tab'] = $this->mod()->getUserVar('selstyle');
         }
         if (!isset($data['state'])) {
-            $data['state'] = xarModUserVars::get('themes', 'selfilter');
+            $data['state'] = $this->mod()->getUserVar('selfilter');
         }
         if (!isset($data['class'])) {
-            $data['class'] = xarModUserVars::get('themes', 'selclass');
+            $data['class'] = $this->mod()->getUserVar('selclass');
         }
         // support legacy use of class name instead of id (2.2.x > 2.3.0)
         if (isset($data['class']) && (!is_numeric($data['class']) && is_string($data['class']))) {
@@ -313,9 +313,9 @@ class ViewMethod extends MethodClass
         ];
 
         // remember filter selections for current user
-        xarModUserVars::set('themes', 'selstyle', $data['tab']);
-        xarModUserVars::set('themes', 'selfilter', $data['state']);
-        xarModUserVars::set('themes', 'selclass', $data['class']);
+        $this->mod()->setUserVar('selstyle', $data['tab']);
+        $this->mod()->setUserVar('selfilter', $data['state']);
+        $this->mod()->setUserVar('selclass', $data['class']);
 
         $count = count($themes);
         if ($data['state'] == xarTheme::STATE_ANY) {

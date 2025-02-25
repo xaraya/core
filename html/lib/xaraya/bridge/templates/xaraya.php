@@ -149,12 +149,12 @@ class XarayaCoreExtension extends XarayaTwigExtension
 
     public function xar_username($userId)
     {
-        return xarUser::getVar('name', $userId);
+        return $this->user($userId)->getName();
     }
 
     public function xar_uservar($name = 'id', $userId = null)
     {
-        return xarUser::getVar($name, $userId);
+        return $this->user($userId)->getVar($name);
     }
 
     public function xar_configvar($name)
@@ -186,7 +186,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
         $result = match ($args['scope']) {
             'local' => $args['name'],
             'module' => $this->mod()->getVar($args['name'], $args['module']),
-            'user' => xarUser::getVar($args['name'], $args['user'] ?? null),
+            'user' => $this->user($args['user'] ?? null)->getVar($args['name']),
             'config' => $this->config()->getVar($args['name']),
             'session' => $this->session()->getVar($args['name']),
             'request' => $this->ctl()->getRequestVar($args['name']),
@@ -205,7 +205,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_userid($context = null)
     {
         // @todo use context to get user id
-        if (!xarUser::isLoggedIn()) {
+        if (!$this->user()->isLoggedIn()) {
             return false;
         }
         if (isset($context)) {

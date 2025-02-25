@@ -51,7 +51,7 @@ class EmailMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // we can only send emails to other members if we are logged in
-        if (!xarUser::isLoggedIn()) {
+        if (!$this->user()->isLoggedIn()) {
             throw new ForbiddenOperationException(null, 'You are not logged in, sending emails is not allowed', $this->getContext());
         }
 
@@ -126,8 +126,8 @@ class EmailMethod extends MethodClass
                 // fetch them from the current user now.
                 if (!isset($fname) || !isset($femail)) {
                     // Get details of the sender.
-                    $fname = xarUser::getVar('name');
-                    $femail = xarUser::getVar('email');
+                    $fname = $this->user()->getName();
+                    $femail = $this->user()->getEmail();
                 }
 
                 [$message] = $this->mod()->callHooks('item', 'transform', $id, [$message]);

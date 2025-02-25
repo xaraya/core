@@ -129,7 +129,7 @@ class InternalSendmailNewMethod extends MethodClass
 
         // If we are in debug mode, then make the appropriate calls to the class
         // We will be outputting html to the browser
-        if ($this->mod()->getVar('debugmode') && xarUser::isDebugAdmin()) {
+        if ($this->mod()->getVar('debugmode') && $this->user()->isDebugAdmin()) {
             $mail->SMTPDebug = 4;
             $mail->Debugoutput = 'html';
         }
@@ -152,7 +152,7 @@ class InternalSendmailNewMethod extends MethodClass
 
                 // If we are in debug mode, then make the appropriate calls to the class
                 // We will be outputting html to the browser
-                if ($this->mod()->getVar('debugmode') && xarUser::isDebugAdmin()) {
+                if ($this->mod()->getVar('debugmode') && $this->user()->isDebugAdmin()) {
                     $mail->SMTPDebug = 4;
                     $mail->Debugoutput = 'html';
                 }

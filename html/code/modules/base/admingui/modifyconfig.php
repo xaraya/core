@@ -278,7 +278,7 @@ class ModifyconfigMethod extends MethodClass
         $this->mod()->setVar('UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
         $this->mod()->setVar('AlternatePageTemplateName', $alternatePageTemplateName);
 
-        xarModUserVars::set('roles', 'userhome', $this->ctl()->getModuleURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction), 1);
+        $this->mod('roles')->setUserVar('userhome', $this->ctl()->getModuleURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction), 1);
         $this->config()->setVar('Site.Core.EnableShortURLsSupport', $enableShortURLs);
         $this->config()->setVar('Site.Core.WebserverAllowsSlashes', $allowsslashes);
         // enable short urls for the base module itself too

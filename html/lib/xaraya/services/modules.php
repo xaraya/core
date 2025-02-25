@@ -21,6 +21,8 @@ use Xaraya\Modules\ModuleInterface;
 use xarMod;
 use xarModAlias;
 use xarModVars;
+use xarModItemVars;
+use xarModUserVars;
 use xarController;
 use xarTpl;
 use xarHooks;
@@ -39,6 +41,12 @@ interface ModulesInterface extends ServiceInterface
     public function setVar(string $varName, mixed $value, ?string $modName = null): bool;
     public function delVar(string $varName, ?string $modName = null): bool;
     public function getVarID(string $varName, ?string $modName = null): int;
+    public function getUserVar(string $varName, ?int $userId = null, ?string $modName = null): mixed;
+    public function setUserVar(string $varName, mixed $value, ?int $userId = null, ?string $modName = null): bool;
+    public function delUserVar(string $varName, ?int $userId = null, ?string $modName = null): bool;
+    public function getItemVar(string $varName, mixed $itemid = null, ?string $modName = null): mixed;
+    public function setItemVar(string $varName, mixed $value, mixed $itemid = null, ?string $modName = null): bool;
+    public function delItemVar(string $varName, mixed $itemid = null, ?string $modName = null): bool;
     public function disableOverview(): bool;
     /** @param array<string, mixed> $args */
     public function getURL(string $modType = 'user', string $funcName = 'main', array $args = [], ?string $modName = null): string;
@@ -80,7 +88,7 @@ interface ModulesInterface extends ServiceInterface
     public function callHooks(string $scope, string $action, mixed $itemid, mixed $extraInfo = null, ?string $callerModName = null, ?int $callerItemType = null): mixed;
     /** @param array<string, mixed> $info */
     public function notifyHooks(string $event, array $info = []): mixed;
-    public function setCurrentModName(?string $modName = null): void;
+    public function setCurrentModName(string $modName): void;
 }
 
 /**
@@ -127,6 +135,42 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         return xarModVars::getID($modName, $varName);
+    }
+
+    public function getUserVar(string $varName, ?int $userId = null, ?string $modName = null): mixed
+    {
+        $modName ??= $this->getModName();
+        return xarModUserVars::get($modName, $varName, $userId);
+    }
+
+    public function setUserVar(string $varName, mixed $value, ?int $userId = null, ?string $modName = null): bool
+    {
+        $modName ??= $this->getModName();
+        return xarModUserVars::set($modName, $varName, $value, $userId);
+    }
+
+    public function delUserVar(string $varName, ?int $userId = null, ?string $modName = null): bool
+    {
+        $modName ??= $this->getModName();
+        return xarModUserVars::delete($modName, $varName, $userId);
+    }
+
+    public function getItemVar(string $varName, mixed $itemid = null, ?string $modName = null): mixed
+    {
+        $modName ??= $this->getModName();
+        return xarModItemVars::get($modName, $varName, $itemid);
+    }
+
+    public function setItemVar(string $varName, mixed $value, mixed $itemid = null, ?string $modName = null): bool
+    {
+        $modName ??= $this->getModName();
+        return xarModItemVars::set($modName, $varName, $value, $itemid);
+    }
+
+    public function delItemVar(string $varName, mixed $itemid = null, ?string $modName = null): bool
+    {
+        $modName ??= $this->getModName();
+        return xarModItemVars::delete($modName, $varName, $itemid);
     }
 
     /**
@@ -502,6 +546,12 @@ trait ModulesTrait
  * - setVar()
  * - delVar()
  * - getVarID()
+ * - getUserVar()
+ * - setUserVar()
+ * - delUserVar()
+ * - getItemVar()
+ * - setItemVar()
+ * - delItemVar()
  * - disableOverview()
  * - getURL() for current module - or use ctl()->getModuleURL() in general with modName
  * - template() for current module type - or use tpl()->module() in general with modName modType
@@ -561,10 +611,10 @@ class ModulesService implements ModulesInterface
 
     /**
      * Override parent modName when called as $this->mod($modName)->...
-     * @param ?string $modName
+     * @param string $modName
      * @return void
      */
-    public function setCurrentModName(?string $modName = null): void
+    public function setCurrentModName(string $modName): void
     {
         $this->currentModName = $modName;
     }

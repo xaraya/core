@@ -55,7 +55,7 @@ class LostpasswordMethod extends MethodClass
 
         //If a user is already logged in, no reason to see this.
         //We are going to send them to their account.
-        if (xarUser::isLoggedIn()) {
+        if ($this->user()->isLoggedIn()) {
             $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'account'));
             return true;
         }

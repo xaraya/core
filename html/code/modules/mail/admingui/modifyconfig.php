@@ -130,8 +130,8 @@ class ModifyconfigMethod extends MethodClass
                             $this->mod()->setVar('admin_outgoing', $admin_outgoing);
                         }
                         // set the modvars used by sendmail as default from name, address
-                        $adminname = xarUser::getVar('name', $admin_outgoing);
-                        $adminmail = xarUser::getVar('email', $admin_outgoing);
+                        $adminname = $this->user($admin_outgoing)->getName();
+                        $adminmail = $this->user($admin_outgoing)->getEmail();
                         $this->mod()->setVar('adminname', $adminname);
                         $this->mod()->setVar('adminmail', $adminmail);
 

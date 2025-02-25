@@ -107,7 +107,7 @@ class Role extends DataObject
         $id = parent::createItem($data);
 
         // Set the email useage for this user to false
-        xarModUserVars::set('roles','allowemail', false, $id);
+        $this->mod()->setUserVar('allowemail', false, $id);
 
         // Get a value for the parent id
         if (empty($data['parentid'])) xarVar::fetch('parentid',  'int', $data['parentid'],  NULL, xarVar::DONT_SET);
@@ -122,7 +122,7 @@ class Role extends DataObject
         // add the duvs
         xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED);
         foreach($duvs as $key => $value) {
-            xarModUserVars::set('roles',$key, $value, $id);
+            $this->mod()->setUserVar($key, $value, $id);
         }
 
         // Let any hooks know that we have created a new user.
@@ -139,7 +139,7 @@ class Role extends DataObject
         $id = parent::updateItem($data);
         xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED);
         foreach($duvs as $key => $value) {
-            xarModUserVars::set('roles',$key, $value, $id);
+            $this->mod()->setUserVar($key, $value, $id);
         }
         $item['module'] = 'roles';
         $item['itemtype'] = $this->getType();

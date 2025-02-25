@@ -90,7 +90,7 @@ class UserListProperty extends SelectProperty
         if (!empty($value)) {
             // check if this is a valid user id
             try {
-                $uname = xarUser::getVar('uname', $value);
+                $uname = $this->user($value)->getUser();
                 if (isset($uname)) {
                     return true;
                 }
@@ -135,9 +135,9 @@ class UserListProperty extends SelectProperty
             $user = '';
         } else {
             try {
-                $user = xarUser::getVar('name', $value);
+                $user = $this->user($value)->getName();
                 if (empty($user)) {
-                    $user = xarUser::getVar('uname', $value);
+                    $user = $this->user($value)->getUser();
                 }
             } catch (Exception $e) {
                 $user = '';

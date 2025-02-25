@@ -115,9 +115,9 @@ class HookmailcreateMethod extends MethodClass
             'siteadmin'  => $this->mod()->getVar('adminname'),
             'adminmail'  => $this->mod()->getVar('adminmail'),
             'siteurl'    => $this->ctl()->getBaseURL(),
-            'myname'     => xarUser::getVar('name'),
-            'myuname'    => xarUser::getVar('uname'),
-            'myuid'      => xarUser::getVar('id'),
+            'myname'     => $this->user()->getName(),
+            'myuname'    => $this->user()->getUser(),
+            'myuid'      => $this->user()->getId(),
         ];
 
         // Substitute the dynamic vars in the template

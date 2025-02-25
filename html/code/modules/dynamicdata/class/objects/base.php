@@ -232,7 +232,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
         if (!empty($badnames)) {
             $this->log()->error('Bad properties', $badnames);
-            if ($this->mod('dynamicdata')->getVar('debugmode') && xarUser::isDebugAdmin()) {
+            if ($this->mod('dynamicdata')->getVar('debugmode') && $this->user()->isDebugAdmin()) {
                 echo "Bad properties: ";
                 echo $this->name . ": " . implode(', ', $badnames);
                 echo "<br />";

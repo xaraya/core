@@ -38,7 +38,7 @@ class ErrorsMethod extends MethodClass
         $data = [];
         $this->var()->check('layout', $data['layout'], 'isset', 'default');
         $this->var()->check('redirecturl', $data['redirecturl'], 'isset', 'local_halt');
-        if (!xarUser::isLoggedIn()) {
+        if (!$this->user()->isLoggedIn()) {
             return $data;
         } else {
             if ($data['redirecturl'] == 'local_halt') {

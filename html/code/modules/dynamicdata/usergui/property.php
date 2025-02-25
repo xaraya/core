@@ -54,7 +54,7 @@ class PropertyMethod extends MethodClass
             $function();
             return true;
         } catch (Exception $e) {
-            if ($this->mod()->getVar('debugmode') && xarUser::isDebugAdmin()) {
+            if ($this->mod()->getVar('debugmode') && $this->user()->isDebugAdmin()) {
                 echo "<pre>";
                 print($e->__toString());
             } else {

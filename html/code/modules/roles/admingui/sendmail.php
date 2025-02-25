@@ -120,9 +120,9 @@ class SendmailMethod extends MethodClass
             'siteadmin'  => $this->mod('mail')->getVar('adminname'),
             'adminmail'  => $this->mod('mail')->getVar('adminmail'),
             'siteurl'    => $this->ctl()->getBaseURL(),
-            'myname'     => xarUser::getVar('name'),
-            'myuname'    => xarUser::getVar('uname'),
-            'myuid'      => xarUser::getVar('id'),
+            'myname'     => $this->user()->getName(),
+            'myuname'    => $this->user()->getUser(),
+            'myuid'      => $this->user()->getId(),
         ];
 
         // now send the mails

@@ -48,7 +48,7 @@ class MainMethod extends MethodClass
         $loginmodule = $defaultauthdata['defaultloginmodname'];
         $authmodule = $defaultauthdata['defaultauthmodname'];
 
-        if (xarUser::isLoggedIn()) {
+        if ($this->user()->isLoggedIn()) {
             $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'account'));
         } else {
             $this->ctl()->redirect($this->ctl()->getModuleURL($loginmodule, 'user', 'showloginform'));

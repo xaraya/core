@@ -244,7 +244,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             }
             return $property->showInput($params);
         } catch (Exception $e) {
-            if ($this->mod()->getVar('debugmode', 'dynamicdata') && xarUser::isDebugAdmin()) {
+            if ($this->mod()->getVar('debugmode', 'dynamicdata') && $this->user()->isDebugAdmin()) {
                 return "<pre>" . $e->getMessage() . "</pre>";
             }
             return '<pre>' . $e . '</pre>';
@@ -277,7 +277,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
             }
             return $property->showFilter($params);
         } catch (Exception $e) {
-            if ($this->mod()->getVar('debugmode', 'dynamicdata') && xarUser::isDebugAdmin()) {
+            if ($this->mod()->getVar('debugmode', 'dynamicdata') && $this->user()->isDebugAdmin()) {
                 return "<pre>" . $e->getMessage() . "</pre>";
             }
             return '';

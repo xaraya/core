@@ -439,7 +439,7 @@ class InternalSendmailMethod extends MethodClass
         try {
             $result = $mail->Send();
         } catch (Exception $e) {
-            if ($this->mod()->getVar('debugmode') && xarUser::isDebugAdmin()) {
+            if ($this->mod()->getVar('debugmode') && $this->user()->isDebugAdmin()) {
                 echo '<pre>',$e->getMessage(),'</pre>';
             }
             $result = false;

@@ -70,11 +70,11 @@ class UsermenuMethod extends MethodClass
         $defaultloginmodname  = $defaultauthdata['defaultloginmodname'];
         $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
-        if (!xarUser::isLoggedIn()) {
+        if (!$this->user()->isLoggedIn()) {
             $this->ctl()->redirect($this->ctl()->getModuleURL($defaultloginmodname, 'user', 'showloginform'));
         }
 
-        $id = xarUser::getVar('id');
+        $id = $this->user()->getId();
 
         if (empty($moduleload)) {
             // we're updating basic user details (roles_user object)
@@ -156,7 +156,7 @@ class UsermenuMethod extends MethodClass
                         */
                         // Step 1a Check for validation required or not
                         $requireValidation = (bool) $this->mod()->getVar('requirevalidation');
-                        if ($requireValidation || (xarUser::getVar('uname') != 'admin')) {
+                        if ($requireValidation || ($this->user()->getUser() != 'admin')) {
 
                             // Step 1
                             // Create confirmation code and time registered
@@ -201,12 +201,12 @@ class UsermenuMethod extends MethodClass
 
                     if ($this->mod()->getVar('setuserlastlogin')) {
                         //only display it for current user or admin
-                        if (xarUser::isLoggedIn() && xarUser::getVar('id') == $id) { //they should be but ..
+                        if ($this->user()->isLoggedIn() && $this->user()->getId() == $id) { //they should be but ..
                             $userlastlogin = $this->session()->getVar('roles_thislastlogin');
-                            $usercurrentlogin = xarModUserVars::get('roles', 'userlastlogin', $id);
-                        } elseif (xarSecurity::check('AdminRoles', 0, 'Roles', $name) && xarModUserVars::get('roles', 'userlastlogin', $id)) {
+                            $usercurrentlogin = $this->mod()->getUserVar('userlastlogin');
+                        } elseif (xarSecurity::check('AdminRoles', 0, 'Roles', $name) && $this->mod()->getUserVar('userlastlogin')) {
                             $usercurrentlogin = '';
-                            $userlastlogin = xarModUserVars::get('roles', 'userlastlogin', $id);
+                            $userlastlogin = $this->mod()->getUserVar('userlastlogin');
                         } else {
                             $userlastlogin = '';
                             $usercurrentlogin = '';
@@ -217,8 +217,8 @@ class UsermenuMethod extends MethodClass
                     }
                     $authid = $this->sec()->genAuthKey('roles');
 
-                    $upasswordupdate = xarModUserVars::get('roles', 'passwordupdate');
-                    $usertimezonedata = xarModUserVars::get('roles', 'usertimezone');
+                    $upasswordupdate = $this->mod()->getUserVar('passwordupdate');
+                    $usertimezonedata = $this->mod()->getUserVar('usertimezone');
                     $utimezone = $usertimezonedata['timezone'];
 
                     $item['module'] = 'roles';
@@ -294,8 +294,8 @@ class UsermenuMethod extends MethodClass
                     ];
                     $data['menutabs'] = $menutabs;
                     $data['authid'] = $this->sec()->genAuthKey('roles');
-                    $data['id']          = xarUser::getVar('id');
-                    $data['name']         = xarUser::getVar('name');
+                    $data['id']          = $this->user()->getId();
+                    $data['name']         = $this->user()->getName();
                     $data['logoutmodule'] = $defaultlogoutmodname;
                     $data['loginmodule']  = $defaultloginmodname;
                     $data['authmodule']   = $defaultauthmodname;
@@ -435,7 +435,7 @@ class UsermenuMethod extends MethodClass
                 }
                 $data['menutabs'] = $menutabs;
                 $data['id']          = $id;
-                $data['name']         = xarUser::getVar('name');
+                $data['name']         = $this->user()->getName();
                 $data['logoutmodule'] = $defaultlogoutmodname;
                 $data['loginmodule']  = $defaultloginmodname;
                 $data['authmodule']   = $defaultauthmodname;

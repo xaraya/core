@@ -75,8 +75,8 @@ class PagerMethod extends MethodClass
             }
             if (!empty($module)) {
                 // @TODO: setting per itemtype?
-                // if (!empty($itemtype)) $itemsperpage = xarModUserVars::get($module, 'items_per_page'.$itemtype);
-                $itemsperpage = xarModUserVars::get($module, 'items_per_page');
+                // if (!empty($itemtype)) $itemsperpage = $this->mod($module)->getUserVar('items_per_page'.$itemtype);
+                $itemsperpage = $this->mod($module)->getUserVar('items_per_page');
             }
         }
         if ((empty($itemsperpage) || (empty($total) || !is_numeric($total))) || ($total <= $itemsperpage)) {

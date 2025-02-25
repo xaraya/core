@@ -44,7 +44,7 @@ class GetprimaryparentMethod extends MethodClass
             throw new VariableValidationException(['itemid',$itemid,'numeric']);
         }
 
-        $parentid = xarModItemVars::get('roles', 'primaryparent', $itemid);
+        $parentid = $this->mod()->getUserVar('primaryparent', $itemid);
         $role = xarRoles::get($itemid);
         $parents = $role->getParents();
         //CHECKME: the better way would be to have the default primary parent modvar be null, rather than Everybody

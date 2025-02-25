@@ -36,29 +36,29 @@ class SetPrefDefaultsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // no beating around the bush here
-        if (xarModUserVars::get('modules', 'hidecore')) {
-            xarModUserVars::delete('modules', 'hidecore');
+        if ($this->mod()->getUserVar('hidecore')) {
+            $this->mod()->delUserVar('hidecore');
         }
-        if (xarModUserVars::get('modules', 'regen')) {
-            xarModUserVars::delete('modules', 'regen');
+        if ($this->mod()->getUserVar('regen')) {
+            $this->mod()->delUserVar('regen');
         }
-        if (xarModUserVars::get('modules', 'selstyle')) {
-            xarModUserVars::delete('modules', 'selstyle');
+        if ($this->mod()->getUserVar('selstyle')) {
+            $this->mod()->delUserVar('selstyle');
         }
-        if (xarModUserVars::get('modules', 'selfilter')) {
-            xarModUserVars::delete('modules', 'selfilter');
+        if ($this->mod()->getUserVar('selfilter')) {
+            $this->mod()->delUserVar('selfilter');
         }
-        if (xarModUserVars::get('modules', 'selsort')) {
-            xarModUserVars::delete('modules', 'selsort');
+        if ($this->mod()->getUserVar('selsort')) {
+            $this->mod()->delUserVar('selsort');
         }
-        if (xarModUserVars::get('modules', 'hidestats')) {
-            xarModUserVars::delete('modules', 'hidestats');
+        if ($this->mod()->getUserVar('hidestats')) {
+            $this->mod()->delUserVar('hidestats');
         }
-        if (xarModUserVars::get('modules', 'selmax')) {
-            xarModUserVars::delete('modules', 'selmax');
+        if ($this->mod()->getUserVar('selmax')) {
+            $this->mod()->delUserVar('selmax');
         }
-        if (xarModUserVars::get('modules', 'startpage')) {
-            xarModUserVars::delete('modules', 'startpage');
+        if ($this->mod()->getUserVar('startpage')) {
+            $this->mod()->delUserVar('startpage');
         }
 
         // all done

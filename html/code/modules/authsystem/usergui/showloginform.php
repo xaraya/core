@@ -55,7 +55,7 @@ class ShowloginformMethod extends MethodClass
         $data['redirecturl'] = $urldata['redirecturl'];
 
         // If we don't ask to forward, then forward immediately
-        if (!(int) $this->mod()->getVar('ask_forward') && xarUser::isLoggedIn()) {
+        if (!(int) $this->mod()->getVar('ask_forward') && $this->user()->isLoggedIn()) {
             $this->ctl()->redirect($data['redirecturl']);
             return true;
         }

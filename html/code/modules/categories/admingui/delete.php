@@ -55,7 +55,7 @@ class DeleteMethod extends MethodClass
         }
 
         // Root category cannot be deleted except by the site admin
-        if (($data['itemid'] == 1) && (!xarUser::isSiteAdmin())) {
+        if (($data['itemid'] == 1) && (!$this->user()->isSiteAdmin())) {
             return $this->ctl()->badRequest('no_privileges');
         }
 

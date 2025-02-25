@@ -48,7 +48,7 @@ class UsermenuMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // not logged in?
-        if (!xarUser::isLoggedIn()) {
+        if (!$this->user()->isLoggedIn()) {
             // redirect user to their account page after login
             $redirecturl = $this->ctl()->getModuleURL('roles', 'user', 'account');
             $defaultauthdata = $userapi->getdefaultauthdata();
@@ -77,7 +77,7 @@ class UsermenuMethod extends MethodClass
         }
 
         if (empty($id) || !is_numeric($id)) {
-            $id = xarUser::getVar('id');
+            $id = $this->user()->getId();
         }
 
         if (!isset($object)) {

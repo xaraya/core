@@ -47,7 +47,7 @@ class GetmenulinksMethod extends MethodClass
                 'active' => ['view'],
             ];
         }
-        if (xarUser::isLoggedIn()) {
+        if ($this->user()->isLoggedIn()) {
             $menulinks[] = [
                 'url'   => $this->ctl()->getModuleURL('roles', 'user', 'account'),
                 'title' => $this->ml('Your Custom Configuration'),

@@ -44,8 +44,8 @@ class ReplaceMethod extends MethodClass
         $siteadmin  = $this->mod()->getVar('adminname');
         $siteurl    = $this->ctl()->getBaseURL();
 
-        $name = xarUser::getVar('name');
-        $id = xarUser::getVar('id');
+        $name = $this->user()->getName();
+        $id = $this->user()->getId();
 
         $search = ['/%%name%%/',
             '/%%sitename%%/',

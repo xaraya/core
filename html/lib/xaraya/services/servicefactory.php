@@ -143,6 +143,15 @@ class ServiceFactory
     }
 
     /**
+     * Summary of getUserService
+     */
+    public static function getUserService(object|string|null $parent = null): UserInterface
+    {
+        self::log(__METHOD__, $parent);
+        return UserService::create($parent);
+    }
+
+    /**
      * Summary of getExitCallable
      */
     public static function getExitCallable(ServicesInterface $parent): callable

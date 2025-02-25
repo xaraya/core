@@ -48,7 +48,7 @@ class DisplayMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
 
-        $this->var()->find('id', $id, 'id', xarUser::getVar('id'));
+        $this->var()->find('id', $id, 'id', $this->user()->getId());
         $this->var()->check('itemid', $itemid, 'int', null);
         $this->var()->find('itemtype', $itemtype, 'int', 1);
         $this->var()->find('tplmodule', $args['tplmodule'], 'str', 'roles');
@@ -66,7 +66,7 @@ class DisplayMethod extends MethodClass
                 return;
             }
 
-            $currentid = xarUser::getVar('id');
+            $currentid = $this->user()->getId();
             if ($currentid == $id) {
                 $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'account'));
             }

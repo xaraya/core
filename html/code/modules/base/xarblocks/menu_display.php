@@ -41,7 +41,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
     {
         $data = $this->getContent();
 
-        if (xarUser::isLoggedIn()) {
+        if ($this->user()->isLoggedIn()) {
             if (!empty($data['showlogout'])) {
                 $authmoduledata = $this->mod()->apiFunc('roles','user','getdefaultauthdata');
                 $authmodlogout = $authmoduledata['defaultloginmodname'];

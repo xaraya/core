@@ -63,12 +63,12 @@ class GetvalidationMethod extends MethodClass
 
         //If a user is already logged in, no reason to see this.
         //We are going to send them to their account.
-        if (xarUser::isLoggedIn()) {
+        if ($this->user()->isLoggedIn()) {
             $this->ctl()->redirect($this->ctl()->getModuleURL(
                 'roles',
                 'user',
                 'account',
-                ['id' => xarUser::getVar('id')]
+                ['id' => $this->user()->getId()]
             ));
             return true;
         }
@@ -142,7 +142,7 @@ class GetvalidationMethod extends MethodClass
 
                 // Check if this is a new user
                 $newuser = false;
-                $lastlogin = xarModUserVars::get('roles', 'userlastlogin', $status['id']);
+                $lastlogin = $this->mod()->getUserVar('userlastlogin', $status['id']);
                 if (!isset($lastlogin) || empty($lastlogin)) {
                     $newuser = true;
                 }

@@ -82,7 +82,7 @@ class MigrateMethod extends MethodClass
         if (empty($from) && empty($to)) {
             $steps = [];
         } else {
-            $steps = xarModUserVars::get('dynamicdata', 'migratesteps');
+            $steps = $this->mod()->getUserVar('migratesteps');
             if (!empty($steps)) {
                 $steps = unserialize($steps);
             } else {
@@ -395,7 +395,7 @@ class MigrateMethod extends MethodClass
         // preserve current step
         $steps[$step] = ['from' => $data['from'], 'to' => $data['to'],
             'fieldmap' => $data['fieldmap'], 'hookmap' => $data['hookmap']];
-        xarModUserVars::set('dynamicdata', 'migratesteps', serialize($steps));
+        $this->mod()->setUserVar('migratesteps', serialize($steps));
         $data['step'] = $step;
 
         // see if we have everything we need to finish if necessary

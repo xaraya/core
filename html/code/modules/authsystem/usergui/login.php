@@ -263,12 +263,12 @@ class LoginMethod extends MethodClass
                     }
                 }
                 //FR for last login - first capture the last login for this user
-                $thislastlogin = xarModUserVars::get('roles', 'userlastlogin');
+                $thislastlogin = $this->mod('roles')->getUserVar('userlastlogin');
                 if (!empty($thislastlogin)) {
                     //move this to a session var for this user
                     $this->session()->setVar('roles_thislastlogin', $thislastlogin);
                 }
-                xarModUserVars::set('roles', 'userlastlogin', time()); //this is what everyone else will see
+                $this->mod('roles')->setUserVar('userlastlogin', time()); //this is what everyone else will see
 
                 $externalurl = false; //used as a flag for userhome external url
                 if (isset($redirecturl)) {

@@ -63,7 +63,7 @@ class AccountMethod extends MethodClass
         $defaultloginmodname  = $defaultauthdata['defaultloginmodname'];
         $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
-        if (!xarUser::isLoggedIn()) {
+        if (!$this->user()->isLoggedIn()) {
             // bring the user back here after login :)
             $redirecturl = $this->ctl()->getModuleURL('roles', 'user', 'account');
             $this->ctl()->redirect($this->ctl()->getModuleURL(
@@ -74,7 +74,7 @@ class AccountMethod extends MethodClass
             ));
         }
 
-        $id = xarUser::getVar('id');
+        $id = $this->user()->getId();
 
         if ($id == xarUser::LAST_RESORT) {
             $message = $this->ml('You are logged in as the last resort administrator.');
@@ -171,12 +171,12 @@ class AccountMethod extends MethodClass
                     // set up the roles_user object for edit
                     if ($this->mod()->getVar('setuserlastlogin')) {
                         //only display it for current user or admin
-                        if (xarUser::isLoggedIn() && xarUser::getVar('id') == $id) { //they should be but ..
+                        if ($this->user()->isLoggedIn() && $this->user()->getId() == $id) { //they should be but ..
                             $userlastlogin = $this->session()->getVar('roles_thislastlogin');
-                            $usercurrentlogin = xarModUserVars::get('roles', 'userlastlogin', $id);
-                        } elseif (xarSecurity::check('AdminRoles', 0, 'Roles', $name) && xarModUserVars::get('roles', 'userlastlogin', $id)) {
+                            $usercurrentlogin = $this->mod()->getUserVar('userlastlogin');
+                        } elseif (xarSecurity::check('AdminRoles', 0, 'Roles', $name) && $this->mod()->getUserVar('userlastlogin')) {
                             $usercurrentlogin = '';
-                            $userlastlogin = xarModUserVars::get('roles', 'userlastlogin', $id);
+                            $userlastlogin = $this->mod()->getUserVar('userlastlogin');
                         } else {
                             $userlastlogin = '';
                             $usercurrentlogin = '';
@@ -186,11 +186,11 @@ class AccountMethod extends MethodClass
                         $usercurrentlogin = '';
                     }
 
-                    $upasswordupdate = xarModUserVars::get('roles', 'passwordupdate');
+                    $upasswordupdate = $this->mod()->getUserVar('passwordupdate');
                     // <chris> timezone is stored as a string not an array
-                    //$usertimezonedata = xarModUserVars::get('roles','usertimezone');
+                    //$usertimezonedata = $this->mod()->getUserVar('usertimezone');
                     //$utimezone = $usertimezonedata['timezone'];
-                    $utimezone = xarModUserVars::get('roles', 'usertimezone');
+                    $utimezone = $this->mod()->getUserVar('usertimezone');
                     $item['module'] = 'roles';
                     $item['itemtype'] = xarRoles::ROLES_USERTYPE;
 
@@ -235,8 +235,8 @@ class AccountMethod extends MethodClass
             $data['menutabs'] = $menutabs;
 
         }
-        $data['id']           = xarUser::getVar('id');
-        $data['name']         = xarUser::getVar('name');
+        $data['id']           = $this->user()->getId();
+        $data['name']         = $this->user()->getName();
         $data['logoutmodule'] = $defaultlogoutmodname;
         $data['loginmodule']  = $defaultloginmodname;
         $data['authmodule']   = $defaultauthmodname;

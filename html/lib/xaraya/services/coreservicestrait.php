@@ -55,6 +55,7 @@ interface CoreServicesInterface extends ContextInterface
     public function cache(): CachingInterface;
     public function config(): ConfigInterface;
     public function session(): SessionInterface;
+    public function user(?int $userId = null): UserInterface;
     public function db(): DatabaseInterface;
     /**
      * Call exit() - override for non-blocking servers, php unit tests or elsewhere
@@ -94,6 +95,9 @@ trait CoreServicesTrait
     protected ?CachingInterface $xarCache = null;
     protected ?ConfigInterface $xarConfig = null;
     protected ?SessionInterface $xarSession = null;
+    protected ?UserInterface $xarUser = null;
+    /** @var array<string, UserInterface> */
+    protected array $xarUserClones = [];
     protected ?DatabaseInterface $xarDb = null;
     /** @var ?callable */
     protected $xarExit = null;
@@ -104,7 +108,7 @@ trait CoreServicesTrait
      */
     public function setCoreServices(array $args = []): void
     {
-        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'config', 'session', 'db', 'exit'];
+        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'config', 'session', 'user', 'db', 'exit'];
         foreach ($args as $name => $service) {
             if (!in_array($name, $supported)) {
                 throw new Exception('Unsupported service ' . $name);
@@ -199,6 +203,12 @@ trait CoreServicesTrait
      * - setVar()
      * - delVar()
      * - getVarID()
+     * - getUserVar()
+     * - setUserVar()
+     * - delUserVar()
+     * - getItemVar()
+     * - setItemVar()
+     * - delItemVar()
      * - disableOverview()
      * - getURL() for current module - or use ctl()->getModuleURL() in general with modName
      * - template() for current module type - or use tpl()->module() in general with modName modType
@@ -437,6 +447,33 @@ trait CoreServicesTrait
     {
         $this->xarSession ??= ServiceFactory::getSessionService($this);
         return $this->xarSession;
+    }
+
+    /**
+     * Access xarUser::* User methods (getVar, setVar, ...)
+     *
+     * Available methods:
+     * - getVar()
+     * - setVar()
+     * - getId()
+     * - isLoggedIn()
+     * - isDebugAdmin()
+     * - isSiteAdmin()
+     * - ...
+     *
+     */
+    public function user(?int $userId = null): UserInterface
+    {
+        $this->xarUser ??= ServiceFactory::getUserService($this);
+        if (isset($userId)) {
+            // @todo cache clones per userId too?
+            if (!array_key_exists($userId, $this->xarUserClones)) {
+                $this->xarUserClones[$userId] = clone $this->xarUser;
+                $this->xarUserClones[$userId]->setCurrentId($userId);
+            }
+            return $this->xarUserClones[$userId];
+        }
+        return $this->xarUser;
     }
 
     /**

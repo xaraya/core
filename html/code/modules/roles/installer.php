@@ -115,7 +115,7 @@ class Installer extends InstallerClass
         $topid = $group->createItem($rolefields);
         $this->mod()->setVar('everybody', $topid);
         $this->mod()->setVar('primaryparent', $topid);
-        xarModUserVars::set('roles', 'userhome', '[base]', $topid);
+        $this->mod()->setUserVar('userhome', '[base]', $topid);
         // The Administrators group
         $rolefields['name'] = 'Administrators';
         $rolefields['uname'] = 'administrators';

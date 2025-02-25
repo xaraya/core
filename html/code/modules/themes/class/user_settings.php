@@ -18,7 +18,7 @@ class ThemesUserSettings extends DataObject
     function updateItem(Array $data = array())
     {
         foreach ($this->properties as $name => $setting) {
-            xarModUserVars::set('themes', $name, $setting->value);
+            $this->mod('themes')->setUserVar($name, $setting->value);
         }
     }
 }
