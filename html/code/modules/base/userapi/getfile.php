@@ -108,7 +108,7 @@ class GetfileMethod extends MethodClass
             $url = $protocol . '://' . $server . $url;
             $islocal = true;
         } else {
-            $baseurl = xarServer::getBaseURL();
+            $baseurl = $this->ctl()->getBaseURL();
             $url = $baseurl . $url;
             $islocal = true;
         }
@@ -191,7 +191,7 @@ class GetfileMethod extends MethodClass
                     throw new BadParameterException([$errno,$errstr,$url], 'Socket error #(1) : #(2) while retrieving URL #(3)');
                 }
             }
-            $baseurl = xarServer::getBaseURL();
+            $baseurl = $this->ctl()->getBaseURL();
             $request = "GET $url HTTP/1.0\r\nHost: $proxyhost\r\nUser-Agent: Xaraya (http://www.xaraya.info/)\r\nReferer: $baseurl\r\nConnection: close\r\n\r\n";
             $size = fwrite($fp, $request);
             if (!$size) {

@@ -126,13 +126,13 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_baseurl()
     {
         // avoid double-encoding URLs
-        return xarServer::getBaseURL();
+        return $this->ctl()->getBaseURL();
     }
 
     public function xar_baseuri()
     {
         // avoid double-encoding URLs
-        return xarServer::getBaseURI();
+        return $this->ctl()->getBaseURI();
     }
 
     public function xar_imageurl($fileName, $scope = null, $package = null)

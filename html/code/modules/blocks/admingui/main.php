@@ -47,9 +47,9 @@ class MainMethod extends MethodClass
             return;
         }
 
-        $samemodule = xarController::isRefererSameModule();
+        $samemodule = $this->ctl()->isSameReferer();
 
-        if (((bool) $this->mod('modules')->getVar('disableoverview') == false) || $samemodule) {
+        if (!$this->mod()->disableOverview() || $samemodule) {
             $data = [];
             $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1:', '');
             $data['context'] = $this->getContext();

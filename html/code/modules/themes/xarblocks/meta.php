@@ -258,7 +258,7 @@ class Themes_MetaBlock extends BasicBlock
             
             switch ($modname) {
                 case 'baseurl':
-                    $decoded_url = xarServer::getBaseURL() . $qstring;
+                    $decoded_url = $this->ctl()->getBaseURL() . $qstring;
                 break;
                 case 'currenturl':
                     $decoded_url = $this->ctl()->getCurrentURL($args);

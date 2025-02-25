@@ -119,7 +119,7 @@ class SendmailMethod extends MethodClass
             'siteslogan' => $this->mod('themes')->getVar('SiteSlogan'),
             'siteadmin'  => $this->mod('mail')->getVar('adminname'),
             'adminmail'  => $this->mod('mail')->getVar('adminmail'),
-            'siteurl'    => xarServer::getBaseURL(),
+            'siteurl'    => $this->ctl()->getBaseURL(),
             'myname'     => xarUser::getVar('name'),
             'myuname'    => xarUser::getVar('uname'),
             'myuid'      => xarUser::getVar('id'),

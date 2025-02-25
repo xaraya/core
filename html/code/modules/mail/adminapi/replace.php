@@ -42,7 +42,7 @@ class ReplaceMethod extends MethodClass
         $sitename   = $this->mod('themes')->getVar('SiteName');
         $siteslogan = $this->mod('themes')->getVar('SiteSlogan');
         $siteadmin  = $this->mod()->getVar('adminname');
-        $siteurl    = xarServer::getBaseURL();
+        $siteurl    = $this->ctl()->getBaseURL();
 
         $name = xarUser::getVar('name');
         $id = xarUser::getVar('id');

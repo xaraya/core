@@ -41,9 +41,9 @@ class MainMethod extends MethodClass
             return;
         }
 
-        $samemodule = xarController::isRefererSameModule();
+        $samemodule = $this->ctl()->isSameReferer();
 
-        if (((bool) $this->mod('modules')->getVar('disableoverview') == false) || $samemodule) {
+        if (!$this->mod()->disableOverview() || $samemodule) {
             return [];
         } else {
             $this->ctl()->redirect($this->ctl()->getModuleURL('categories', 'admin', 'view'));

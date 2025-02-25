@@ -42,16 +42,28 @@ interface ControllerInterface extends ServiceInterface
     public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = [], ?bool $generateXMLURL = null): string;
 
     /**
+     * Generate URL for a specific action on an object - the format will depend on the linktype
+     * @param array<string, mixed> $extra extra arguments to pass to the URL
+     */
+    public function getActionURL(object $object, string $action = '', mixed $itemid = null, array $extra = []): string;
+
+    /**
      * Get current url
      * @param array<string, mixed> $args
      */
     public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string;
 
     /**
-     * Generate URL for a specific action on an object - the format will depend on the linktype
-     * @param array<string, mixed> $extra extra arguments to pass to the URL
+     * Get base url
      */
-    public function getActionURL(object $object, string $action = '', mixed $itemid = null, array $extra = []): string;
+    public function getBaseURL(): string;
+
+    /**
+     * Get base uri
+     */
+    public function getBaseURI(): string;
+
+    public function getServerVar(string $varName): mixed;
 
     /**
      * Get current request
@@ -60,6 +72,10 @@ interface ControllerInterface extends ServiceInterface
     public function getRequest(): xarRequest;
 
     public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed;
+
+    public function getRequestMethod(): string;
+
+    public function isSameReferer(): bool;
 
     /**
      * Send redirect to url and exit
@@ -112,15 +128,6 @@ trait ControllerTrait
     }
 
     /**
-     * Get current url
-     * @param array<string, mixed> $args
-     */
-    public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string
-    {
-        return xarServer::getCurrentURL($args, $generateXMLURL);
-    }
-
-    /**
      * Generate URL for a specific action on an object - the format will depend on the linktype
      *
      * @param object $object the object or object list we want to create an URL for
@@ -132,6 +139,40 @@ trait ControllerTrait
     public function getActionURL(object $object, string $action = '', mixed $itemid = null, array $extra = []): string
     {
         return xarDDObject::getActionURL($object, $action, $itemid, $extra);
+    }
+
+    /**
+     * Get current url
+     * @param array<string, mixed> $args
+     */
+    public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string
+    {
+        return xarServer::getCurrentURL($args, $generateXMLURL);
+    }
+
+    /**
+     * Get base url
+     */
+    public function getBaseURL(): string
+    {
+        return xarServer::getBaseURL();
+    }
+
+    /**
+     * Get base uri
+     */
+    public function getBaseURI(): string
+    {
+        return xarServer::getBaseURI();
+    }
+
+    /**
+     * Get a server variable
+     * @return mixed
+     */
+    public function getServerVar(string $varName): mixed
+    {
+        return xarServer::getVar($varName);
     }
 
     /**
@@ -150,6 +191,16 @@ trait ControllerTrait
     public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed
     {
         return xarController::getVar($varName, $allowOnlyMethod);
+    }
+
+    public function getRequestMethod(): string
+    {
+        return xarServer::getVar('REQUEST_METHOD') ?? 'GET';
+    }
+
+    public function isSameReferer(): bool
+    {
+        return xarController::isRefererSameModule();
     }
 
     /**
@@ -198,7 +249,13 @@ trait ControllerTrait
  * - getObjectURL() - or use data()->getURL() for current object
  * - getActionURL() - or use $object->getActionURL() with actual object
  * - getCurrentURL()
+ * - getBaseURL()
+ * - getBaseURI()
+ * - getServerVar()
  * - getRequest()
+ * - getRequestVar()
+ * - getRequestMethod()
+ * - isSameReferer()
  * - redirect()
  * - forbidden()
  * - notFound()

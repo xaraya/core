@@ -46,7 +46,7 @@ class ShowloginformMethod extends MethodClass
         if (empty($redirecturl)) {
             $redirecturl = $this->mod()->getVar('forwarding_page');
             if (empty($redirecturl)) {
-                $redirecturl = xarServer::getBaseURL();
+                $redirecturl = $this->ctl()->getBaseURL();
             }
         }
         $redirecturl = $this->var()->prepHTML($redirecturl);

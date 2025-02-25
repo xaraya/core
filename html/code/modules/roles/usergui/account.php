@@ -224,7 +224,7 @@ class AccountMethod extends MethodClass
                 $data['submitlabel'] = $this->ml('Update Settings');
             }
             if (empty($data['returnurl'])) {
-                $data['returnurl'] = xarServer::GetCurrentURL();
+                $data['returnurl'] = $this->ctl()->getCurrentURL();
             }
             if (empty($data['formdata'])) {
                 $data['formdata'] = [];

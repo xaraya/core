@@ -36,8 +36,8 @@ class Themes_SkinBlockDisplay extends Themes_SkinBlock implements iBlock
         $data['user_themes'] = $this->mod()->apiFunc('themes', 'user', 'dropdownlist');
         if ($data['user_themes'] <= 1) return;
         $data['default_theme'] = xarModUserVars::get('themes', 'default_theme');
-        $data['return_url'] = (xarServer::getVar('REQUEST_METHOD') == 'GET') ?
-            $this->ctl()->getCurrentURL() : xarServer::getBaseURL();
+        $data['return_url'] = ($this->ctl()->getRequestMethod() == 'GET') ?
+            $this->ctl()->getCurrentURL() : $this->ctl()->getBaseURL();
 
         return $data;
 

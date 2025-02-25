@@ -46,9 +46,9 @@ class MainMethod extends MethodClass
             return;
         }
 
-        $samemodule = xarController::isRefererSameModule();
+        $samemodule = $this->ctl()->isSameReferer();
 
-        if (((bool) $this->mod('modules')->getVar('disableoverview') == false) || $samemodule) {
+        if (!$this->mod()->disableOverview() || $samemodule) {
             $data = ['context' => $this->getContext()];
             return $this->tpl()->module('base', 'admin', 'overview', $data);
         } else {

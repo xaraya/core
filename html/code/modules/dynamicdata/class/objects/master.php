@@ -890,7 +890,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         //        $this->hookvalues['itemtype'] = $this->itemtype;
         //        $this->hookvalues['itemid'] = $this->itemid;
         // CHECKME: is this sufficient in most cases, or do we need an explicit xarController::URL() ?
-        $this->hookvalues['returnurl'] = xarServer::getCurrentURL();
+        $this->hookvalues['returnurl'] = $this->ctl()->getCurrentURL();
 
         // Use the standard method to call hooks
         if ($this instanceof DataObject) {

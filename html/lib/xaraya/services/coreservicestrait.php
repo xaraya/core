@@ -125,7 +125,13 @@ trait CoreServicesTrait
      * - getObjectURL() - or use data()->getURL() for current object
      * - getActionURL() - or use $object->getActionURL() with actual object
      * - getCurrentURL()
+     * - getBaseURL()
+     * - getBaseURI()
+     * - getServerVar()
      * - getRequest()
+     * - getRequestVar()
+     * - getRequestMethod()
+     * - isSameReferer()
      * - redirect()
      * - forbidden()
      * - notFound()
@@ -184,6 +190,9 @@ trait CoreServicesTrait
      * Available methods:
      * - getVar()
      * - setVar()
+     * - delVar()
+     * - getVarID()
+     * - disableOverview()
      * - getURL() for current module - or use ctl()->getModuleURL() in general with modName
      * - template() for current module type - or use tpl()->module() in general with modName modType
      * - prepare() for current module itemtype

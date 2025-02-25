@@ -76,7 +76,7 @@ class LoginMethod extends MethodClass
             return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'missing_data', 'lockouttime' => $lockouttime]);
         }
 
-        $redirect = xarServer::getBaseURL();
+        $redirect = $this->ctl()->getBaseURL();
         $this->var()->find('rememberme', $rememberme, 'checkbox', false);
         $this->var()->find('redirecturl', $redirecturl, 'str:1:254', $redirect);
 
@@ -290,7 +290,7 @@ class LoginMethod extends MethodClass
                         $data = [];
                         if (!is_array($urldata) || !$urldata) {
                             $externalurl = false;
-                            $redirecturl = xarServer::getBaseURL();
+                            $redirecturl = $this->ctl()->getBaseURL();
 
                         } else {
                             $externalurl = $urldata['externalurl'];

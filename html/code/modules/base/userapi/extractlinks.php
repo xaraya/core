@@ -54,7 +54,7 @@ class ExtractlinksMethod extends MethodClass
         } elseif (preg_match('!<base[^>]*?\shref="([^"]+)"!im', $args['content'], $matches)) {
             $baseurl = $matches[1];
         } else {
-            $baseurl = xarServer::getBaseURL();
+            $baseurl = $this->ctl()->getBaseURL();
         }
         if (preg_match('!^(https?)://([^/]+)/!', $baseurl, $matches)) {
             $server = $matches[2]; // possibly with port number

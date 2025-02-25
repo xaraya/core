@@ -1663,6 +1663,9 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarServer::getCurrentURL\(/' => '\$this->ctl()->getCurrentURL(',
             // @todo or use $this->data()->getURL()
             '/xarServer::getObjectURL\(/' => '\$this->ctl()->getObjectURL(',
+            '/xarServer::getBaseURL\(/' => '\$this->ctl()->getBaseURL(',
+            '/xarServer::getBaseURI\(/' => '\$this->ctl()->getBaseURI(',
+            '/xarServer::getVar\(/' => '\$this->ctl()->getServerVar(',
             '/xarController::getRequest\(\)/' => '\$this->ctl()->getRequest()',
             '/xarController::getVar\(/' => '\$this->ctl()->getRequestVar(',
             // @todo check xarTpl::module() against current modName modType for mod()->template()
@@ -1792,6 +1795,11 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
     public function replace_block_services($module, $replace = false)
     {
         return $this->replace_core_services($module, '', '/xarblocks/', '', $replace);
+    }
+
+    public function replace_installer_services($module, $replace = false)
+    {
+        return $this->replace_core_services($module, '', 'installer.php', '', $replace);
     }
 
     public function replace_internal_methods($module, $type = '', $update = false)

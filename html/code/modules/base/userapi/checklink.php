@@ -56,7 +56,7 @@ class ChecklinkMethod extends MethodClass
             $skiplocal = true;
         }
         if (!isset($referer)) {
-            $referer = xarServer::getBaseURL();
+            $referer = $this->ctl()->getBaseURL();
         }
         if (!isset($follow)) {
             $follow = true;
@@ -82,7 +82,7 @@ class ChecklinkMethod extends MethodClass
             $url = $protocol . '://' . $server . $url;
             $islocal = true;
         } else {
-            $baseurl = xarServer::getBaseURL();
+            $baseurl = $this->ctl()->getBaseURL();
             $url = $baseurl . $url;
             $islocal = true;
         }

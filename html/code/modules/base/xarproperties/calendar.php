@@ -112,7 +112,7 @@ class CalendarProperty extends DataProperty
         }
 
         // $timeval = xarLocale::formatDate($dateformat, $value);
-        $data['baseuri']    = xarServer::getBaseURI();
+        $data['baseuri']    = $this->ctl()->getBaseURI();
         $data['dateformat'] = $dateformat;
         $data['jsID']       = str_replace(array('[', ']'), '_', $id);
         // $data['timeval']    = $timeval;

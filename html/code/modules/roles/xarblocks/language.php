@@ -61,12 +61,12 @@ class Roles_LanguageBlock extends BasicBlock
         $data['form_picker_name'] = 'locale';
         $data['locales'] = $locales;
 
-        if (xarServer::getVar('REQUEST_METHOD') == 'GET') {
+        if ($this->ctl()->getRequestMethod() == 'GET') {
             // URL of this page
             $data['return_url'] = $this->ctl()->getCurrentURL();
         } else {
             // Base URL of the site
-            $data['return_url'] = xarServer::getBaseURL();
+            $data['return_url'] = $this->ctl()->getBaseURL();
         }
         return $data;
     }

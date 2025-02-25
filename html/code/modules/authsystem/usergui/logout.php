@@ -40,7 +40,7 @@ class LogoutMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $redirect = xarServer::getBaseURL();
+        $redirect = $this->ctl()->getBaseURL();
 
         // Get input parameters
         $this->var()->find('redirecturl', $redirecturl, 'str:1:254', $redirect);

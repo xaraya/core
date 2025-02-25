@@ -42,7 +42,7 @@ class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlo
             } else {
                 return;
             }
-        } elseif (xarServer::getVar('REQUEST_METHOD') == 'GET') {
+        } elseif ($this->ctl()->getRequestMethod() == 'GET') {
             $this->var()->find('redirecturl',
                $data['return_url'],
                'pre:trim:str:1:',
@@ -51,7 +51,7 @@ class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlo
             $this->var()->find('redirecturl', 
                 $data['return_url'],
                 'pre:trim:str:1',
-                xarServer::getBaseURL());
+                $this->ctl()->getBaseURL());
         }
         return $data;
     }

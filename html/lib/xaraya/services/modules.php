@@ -39,6 +39,7 @@ interface ModulesInterface extends ServiceInterface
     public function setVar(string $varName, mixed $value, ?string $modName = null): bool;
     public function delVar(string $varName, ?string $modName = null): bool;
     public function getVarID(string $varName, ?string $modName = null): int;
+    public function disableOverview(): bool;
     /** @param array<string, mixed> $args */
     public function getURL(string $modType = 'user', string $funcName = 'main', array $args = [], ?string $modName = null): string;
     /** @param array<string, mixed> $tplData */
@@ -126,6 +127,14 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         return xarModVars::getID($modName, $varName);
+    }
+
+    /**
+     * Utility method to check if module overview is disabled
+     */
+    public function disableOverview(): bool
+    {
+        return xarModVars::get('modules', 'disableoverview') ? true :  false;
     }
 
     /**
@@ -491,6 +500,9 @@ trait ModulesTrait
  * Available methods:
  * - getVar()
  * - setVar()
+ * - delVar()
+ * - getVarID()
+ * - disableOverview()
  * - getURL() for current module - or use ctl()->getModuleURL() in general with modName
  * - template() for current module type - or use tpl()->module() in general with modName modType
  * - prepare() for current module itemtype
