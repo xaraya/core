@@ -75,12 +75,24 @@ class XarayaCoreExtension extends XarayaTwigExtension
             new TwigFunction('xar_configvar', $this->xar_configvar(...)),
             new TwigFunction('xar_modulevar', $this->xar_modulevar(...)),
             new TwigFunction('xar_moduleid', $this->xar_moduleid(...)),
+            new TwigFunction('xar_moduservar', $this->xar_moduservar(...)),
+            new TwigFunction('xar_moditemvar', $this->xar_moditemvar(...)),
+            new TwigFunction('xar_requestvar', $this->xar_requestvar(...)),
+            new TwigFunction('xar_servervar', $this->xar_servervar(...)),
+            new TwigFunction('xar_sessionvar', $this->xar_sessionvar(...)),
+            new TwigFunction('xar_systemvar', $this->xar_systemvar(...)),
+            new TwigFunction('xar_findvar', $this->xar_findvar(...)),
             new TwigFunction('xar_var', $this->xar_var(...)),
+            new TwigFunction('xar_isloggedin', $this->xar_isloggedin(...)),
             new TwigFunction('xar_userid', $this->xar_userid(...)),
             new TwigFunction('xar_modname', $this->xar_modname(...)),
+            new TwigFunction('xar_modisavailable', $this->xar_modisavailable(...)),
+            new TwigFunction('xar_modishooked', $this->xar_modishooked(...)),
+            new TwigFunction('xar_redirect', $this->xar_redirect(...)),
             new TwigFunction('xar_request', $this->xar_request(...)),
             new TwigFunction('xar_translate', $this->xar_translate(...)),
             new TwigFunction('xar_localedate', $this->xar_localedate(...)),
+            new TwigFunction('xar_formatdate', $this->xar_formatdate(...)),
             // <xar:sec mask="..." catch="false">
             new TwigFunction('xar_security_check', $this->xar_security_check(...)),
             new TwigFunction('xar_security_authkey', $this->xar_security_authkey(...)),
@@ -162,14 +174,69 @@ class XarayaCoreExtension extends XarayaTwigExtension
         return $this->config()->getVar($name);
     }
 
-    public function xar_modulevar($scope, $name)
+    public function xar_modulevar($scope, $name, $value = null)
     {
+        if (isset($value)) {
+            return $this->mod()->setVar($name, $value, $scope);
+        }
         return $this->mod()->getVar($name, $scope);
     }
 
     public function xar_moduleid($modName)
     {
         return $this->mod()->getRegID($modName);
+    }
+
+    public function xar_moduservar($scope, $name, $userId = null, $value = null)
+    {
+        if (isset($value)) {
+            return $this->mod()->setUserVar($name, $value, $userId, $scope);
+        }
+        return $this->mod()->getUserVar($name, $userId, $scope);
+    }
+
+    public function xar_moditemvar($scope, $name, $userId = null, $value = null)
+    {
+        if (isset($value)) {
+            return $this->mod()->setItemVar($name, $value, $userId, $scope);
+        }
+        return $this->mod()->getItemVar($name, $userId, $scope);
+    }
+
+    public function xar_requestvar($name)
+    {
+        return $this->ctl()->getRequestVar($name);
+    }
+
+    public function xar_servervar($name)
+    {
+        return $this->ctl()->getServerVar($name);
+    }
+
+    public function xar_sessionvar($name, $value = null)
+    {
+        if (isset($value)) {
+            return $this->session()->setVar($name, $value);
+        }
+        return $this->session()->getVar($name);
+    }
+
+    public function xar_systemvar($name)
+    {
+        return $this->ctl()->getSystemVar($name);
+    }
+
+    /**
+     * We cannot pass $variable by reference because it's set in the Twig $context,
+     * so we need to return the updated value to update it in the template here
+     * {% set itemid = xar_findvar('itemid', itemid, 'notempty', 1) %}
+     * As an alternative, we could pass along the Twig $context and update it directly
+     * @see https://stackoverflow.com/questions/59247917/twig-variables-as-references
+     */
+    public function xar_findvar($name, $variable, $validation = 'isset', $defaultValue = null)
+    {
+        $this->var()->find($name, $variable, $validation, $defaultValue);
+        return $variable;
     }
 
     /**
@@ -198,6 +265,11 @@ class XarayaCoreExtension extends XarayaTwigExtension
         return $result;
     }
 
+    public function xar_isloggedin()
+    {
+        return $this->user()->isLoggedIn();
+    }
+
     /**
      * Get the current user id
      * @return int|false current user id or false if anonymous
@@ -217,6 +289,21 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_modname($regId = null)
     {
         return $this->mod()->getName($regId);
+    }
+
+    public function xar_modisavailable($modName)
+    {
+        return $this->mod()->isAvailable($modName);
+    }
+
+    public function xar_modishooked($hookModName, $callerModName, $callerItemType = null)
+    {
+        return $this->mod()->isHooked($hookModName, $callerModName, $callerItemType);
+    }
+
+    public function xar_redirect(string $url)
+    {
+        return $this->ctl()->redirect($url);
     }
 
     public function xar_request()
@@ -239,6 +326,11 @@ class XarayaCoreExtension extends XarayaTwigExtension
             $date .= $this->mls()->getFormattedTime($timeFormat, $timestamp);
         }
         return $date;
+    }
+
+    public function xar_formatdate($format = null, $timestamp = null, $addoffset = true)
+    {
+        return $this->mls()->formatDate($format, $timestamp, $addoffset);
     }
 
     public function xar_security_check($mask, $catch = 0, $component = '', $instance = '', $module = '', $rolename = '', $realm = 0, $level = 0)

@@ -267,7 +267,7 @@ trait ModulesTrait
         // avoid getting module id from xarMod::getRegID() here
         //return xarMod::getRegID($this->getModName());
         $fileInfo = $this->getFileInfo($modName);
-        return (int) $fileInfo['regid'];
+        return (int) ($fileInfo['regid'] ?? 0);
     }
 
     /**

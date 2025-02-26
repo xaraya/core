@@ -19,6 +19,7 @@ namespace Xaraya\Services;
 use xarController;
 use xarRequest;
 use xarServer;
+use xarSystemVars;
 use xarDDObject;
 use sys;
 
@@ -65,6 +66,8 @@ interface ControllerInterface extends ServiceInterface
 
     public function getServerVar(string $varName): mixed;
 
+    public function getSystemVar(string $varName): mixed;
+
     /**
      * Get current request
      * @return xarRequest
@@ -74,6 +77,8 @@ interface ControllerInterface extends ServiceInterface
     public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed;
 
     public function getRequestMethod(): string;
+
+    public function isLocalReferer(): bool;
 
     public function isSameReferer(): bool;
 
@@ -176,6 +181,15 @@ trait ControllerTrait
     }
 
     /**
+     * Get a system config variable
+     * @return mixed
+     */
+    public function getSystemVar(string $varName): mixed
+    {
+        return xarSystemVars::get(sys::CONFIG, $varName);
+    }
+
+    /**
      * Get current request
      * @return xarRequest
      */
@@ -196,6 +210,11 @@ trait ControllerTrait
     public function getRequestMethod(): string
     {
         return xarServer::getVar('REQUEST_METHOD') ?? 'GET';
+    }
+
+    public function isLocalReferer(): bool
+    {
+        return xarController::isLocalReferer();
     }
 
     public function isSameReferer(): bool
