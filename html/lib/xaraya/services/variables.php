@@ -118,6 +118,14 @@ interface VariablesInterface extends ServiceInterface
     public function prepHTML(...$args);
 
     /**
+     * Prepare obfuscated e-mail output
+     *
+     * @param string ...$args
+     * @return mixed
+     */
+    public function prepEmail(...$args);
+
+    /**
      * Prepare text for operating system path, and convert all special characters
      *
      * @param string ...$args
@@ -330,6 +338,17 @@ trait VariablesTrait
     public function prepHTML(...$args)
     {
         return xarVar::prepHTMLDisplay(...$args);
+    }
+
+    /**
+     * Prepare obfuscated e-mail output
+     *
+     * @param string ...$args
+     * @return mixed
+     */
+    public function prepEmail(...$args)
+    {
+        return xarVar::prepEmailDisplay(...$args);
     }
 
     /**

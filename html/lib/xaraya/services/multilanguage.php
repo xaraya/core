@@ -72,6 +72,12 @@ interface MultiLanguageInterface extends ServiceInterface
     public function getFormattedTime(string $length = 'short', mixed $timestamp = null, bool $addoffset = true): string;
 
     /**
+     * Get timestamp adjusted to current user timezone
+     * @return int
+     */
+    public function userTime(): int;
+
+    /**
      * Translate string with optional arguments
      * @param string $rawstring
      * @param mixed ...$args
@@ -171,6 +177,15 @@ trait MultiLanguageTrait
     public function getFormattedTime(string $length = 'short', mixed $timestamp = null, bool $addoffset = true): string
     {
         return xarLocale::getFormattedTime($length, $timestamp, $addoffset);
+    }
+
+    /**
+     * Get timestamp adjusted to current user timezone
+     * @return int
+     */
+    public function userTime(): int
+    {
+        return xarMLS::userTime();
     }
 
     /**

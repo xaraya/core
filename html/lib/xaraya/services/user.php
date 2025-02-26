@@ -111,22 +111,22 @@ trait UserTrait
 
     public function getLocale(): mixed
     {
-        return xaruser::getNavigationLocale();
+        return xarUser::getNavigationLocale();
     }
 
     public function setLocale(string $locale): bool
     {
-        return xaruser::setNavigationLocale($locale);
+        return xarUser::setNavigationLocale($locale);
     }
 
     public function getThemeName(): mixed
     {
-        return xaruser::getNavigationThemeName();
+        return xarUser::getNavigationThemeName();
     }
 
     public function setThemeName(string $themeName): void
     {
-        xaruser::setNavigationThemeName($themeName);
+        xarUser::setNavigationThemeName($themeName);
     }
 
     /**

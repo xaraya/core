@@ -67,6 +67,8 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
             new TwigFunction('xar_prep_display', $this->xar_prep_display(...), ['is_safe' => ['html']]),
             // @todo do we even want this with autoescape enabled?
             new TwigFunction('xar_prep_html', $this->xar_prep_html(...), ['is_safe' => ['html']]),
+            // @todo do we even want this with autoescape enabled?
+            new TwigFunction('xar_prep_email', $this->xar_prep_email(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -202,5 +204,10 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
     public function xar_prep_html(...$args)
     {
         return $this->var()->prepHTML(...$args);
+    }
+
+    public function xar_prep_email(...$args)
+    {
+        return $this->var()->prepEmail(...$args);
     }
 }

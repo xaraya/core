@@ -59,6 +59,7 @@ class UpgradeMethod extends MethodClass
             $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
             $data['upgradable'] = xarVersion::compare($fileversion, '2.0.0') > 0;
         }
+        $data['xarCoreBuild'] = xarCore::$build;
 
         // @checkme <chris/> what are these for?
         // Core modules

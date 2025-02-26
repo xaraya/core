@@ -582,6 +582,7 @@ class ModifyconfigMethod extends MethodClass
 
         $data['logavailable'] = $this->getLogAvailable();
         $data['available_loggers'] = xarLog::availables();
+        $data['fallback_possible'] = xarLog::fallbackPossible();
 
         $filepath = $picker->initialization_basedirectory . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
         // Delete the log file and create a new, empty one

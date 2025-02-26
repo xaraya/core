@@ -39,9 +39,15 @@ interface TemplatingInterface extends ServiceInterface
     /** @param array<string, mixed> $tplData */
     public function property(string $modName, string $propertyName, string $tplType = 'showoutput', array $tplData = [], ?string $tplBase = null): string;
 
+    public function getPageTitle(): string;
+
     public function setPageTitle(string $title, ?string $modName = null): bool;
 
+    public function getPageTemplateName(): string;
+
     public function setPageTemplateName(string $templateName): bool;
+
+    public function getThemeDir(?string $theme = null): string;
 
     public function getImage(string $fileName, ?string $scope = null, ?string $package = null): string|null;
 
@@ -168,6 +174,14 @@ trait TemplatingTrait
     }
 
     /**
+     * Get page title
+     */
+    public function getPageTitle(): string
+    {
+        return xarTpl::getPageTitle();
+    }
+
+    /**
      * Set page title
      * @uses xarTpl::setPageTitle()
      * @param string $title
@@ -181,6 +195,14 @@ trait TemplatingTrait
     }
 
     /**
+     * Get page template name
+     */
+    public function getPageTemplateName(): string
+    {
+        return xarTpl::getPageTemplateName();
+    }
+
+    /**
      * Set page template name
      * @uses xarTpl::setPageTemplateName()
      * @param  string $templateName Name of the page template
@@ -189,6 +211,14 @@ trait TemplatingTrait
     public function setPageTemplateName(string $templateName): bool
     {
         return xarTpl::setPageTemplateName($templateName);
+    }
+
+    /**
+     * Get theme directory
+     */
+    public function getThemeDir(?string $theme = null): string
+    {
+        return xarTpl::getThemeDir($theme);
     }
 
     /**

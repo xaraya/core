@@ -71,6 +71,8 @@ class XarayaCoreExtension extends XarayaTwigExtension
             new TwigFunction('xar_imageurl', $this->xar_imageurl(...), ['is_safe' => ['html']]),
             new TwigFunction('xar_fileurl', $this->xar_fileurl(...), ['is_safe' => ['html']]),
             new TwigFunction('xar_username', $this->xar_username(...)),
+            new TwigFunction('xar_userlocale', $this->xar_userlocale(...)),
+            new TwigFunction('xar_usertime', $this->xar_usertime(...)),
             new TwigFunction('xar_uservar', $this->xar_uservar(...)),
             new TwigFunction('xar_configvar', $this->xar_configvar(...)),
             new TwigFunction('xar_modulevar', $this->xar_modulevar(...)),
@@ -81,11 +83,14 @@ class XarayaCoreExtension extends XarayaTwigExtension
             new TwigFunction('xar_servervar', $this->xar_servervar(...)),
             new TwigFunction('xar_sessionvar', $this->xar_sessionvar(...)),
             new TwigFunction('xar_systemvar', $this->xar_systemvar(...)),
+            new TwigFunction('xar_varcache', $this->xar_varcache(...)),
             new TwigFunction('xar_findvar', $this->xar_findvar(...)),
             new TwigFunction('xar_var', $this->xar_var(...)),
             new TwigFunction('xar_isloggedin', $this->xar_isloggedin(...)),
             new TwigFunction('xar_userid', $this->xar_userid(...)),
             new TwigFunction('xar_modname', $this->xar_modname(...)),
+            new TwigFunction('xar_modinfo', $this->xar_modinfo(...)),
+            new TwigFunction('xar_moddisplay', $this->xar_moddisplay(...)),
             new TwigFunction('xar_modisavailable', $this->xar_modisavailable(...)),
             new TwigFunction('xar_modishooked', $this->xar_modishooked(...)),
             new TwigFunction('xar_redirect', $this->xar_redirect(...)),
@@ -93,6 +98,9 @@ class XarayaCoreExtension extends XarayaTwigExtension
             new TwigFunction('xar_translate', $this->xar_translate(...)),
             new TwigFunction('xar_localedate', $this->xar_localedate(...)),
             new TwigFunction('xar_formatdate', $this->xar_formatdate(...)),
+            new TwigFunction('xar_pagetitle', $this->xar_pagetitle(...)),
+            new TwigFunction('xar_pagetemplate', $this->xar_pagetemplate(...)),
+            new TwigFunction('xar_themedir', $this->xar_themedir(...)),
             // <xar:sec mask="..." catch="false">
             new TwigFunction('xar_security_check', $this->xar_security_check(...)),
             new TwigFunction('xar_security_authkey', $this->xar_security_authkey(...)),
@@ -164,6 +172,17 @@ class XarayaCoreExtension extends XarayaTwigExtension
         return $this->user($userId)->getName();
     }
 
+    public function xar_userlocale()
+    {
+        return $this->user()->getLocale();
+    }
+
+    public function xar_usertime()
+    {
+        // @todo this is in multilanguage
+        return $this->mls()->userTime();
+    }
+
     public function xar_uservar($name = 'id', $userId = null)
     {
         return $this->user($userId)->getVar($name);
@@ -177,6 +196,10 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_modulevar($scope, $name, $value = null)
     {
         if (isset($value)) {
+            // @todo find some other way to delete vs. set :-)
+            if ($value == 'DELETE_ME') {
+                return $this->mod()->delVar($name, $scope);
+            }
             return $this->mod()->setVar($name, $value, $scope);
         }
         return $this->mod()->getVar($name, $scope);
@@ -224,6 +247,19 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_systemvar($name)
     {
         return $this->ctl()->getSystemVar($name);
+    }
+
+    public function xar_varcache($scope, $name, $value = null)
+    {
+        if (!isset($value)) {
+            return $this->var()->getCached($scope, $name);
+        }
+        // @todo find some other way to delete vs. set :-)
+        if ($value == 'DELETE_ME') {
+            $this->var()->delCached($scope, $name);
+        } else {
+            $this->var()->setCached($scope, $name, $value);
+        }
     }
 
     /**
@@ -291,6 +327,16 @@ class XarayaCoreExtension extends XarayaTwigExtension
         return $this->mod()->getName($regId);
     }
 
+    public function xar_modinfo($regId)
+    {
+        return $this->mod()->getInfo($regId);
+    }
+
+    public function xar_moddisplay($modName)
+    {
+        return $this->mod()->getDisplayName($modName);
+    }
+
     public function xar_modisavailable($modName)
     {
         return $this->mod()->isAvailable($modName);
@@ -331,6 +377,27 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_formatdate($format = null, $timestamp = null, $addoffset = true)
     {
         return $this->mls()->formatDate($format, $timestamp, $addoffset);
+    }
+
+    public function xar_pagetitle($title = null)
+    {
+        if (!isset($title)) {
+            return $this->tpl()->getPageTitle();
+        }
+        return $this->tpl()->setPageTitle($title);
+    }
+
+    public function xar_pagetemplate($templateName = null)
+    {
+        if (!isset($templateName)) {
+            return $this->tpl()->getPageTemplateName();
+        }
+        return $this->tpl()->setPageTemplateName($templateName);
+    }
+
+    public function xar_themedir($theme = null)
+    {
+        return $this->tpl()->getThemeDir($theme);
     }
 
     public function xar_security_check($mask, $catch = 0, $component = '', $instance = '', $module = '', $rolename = '', $realm = 0, $level = 0)
