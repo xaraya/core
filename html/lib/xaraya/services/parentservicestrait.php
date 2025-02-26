@@ -419,6 +419,14 @@ trait ParentServicesTrait
     }
 
     /**
+     * Access sys::* methods (code, varpath, ...) as instance methods in templates
+     */
+    public function sys(): sys
+    {
+        return $this->getParent()->sys();
+    }
+
+    /**
      * Translate string with optional arguments
      * = short-hand version for $this->mls()->translate()
      * @param string $rawstring

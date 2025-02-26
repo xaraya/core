@@ -41,7 +41,7 @@ sys::import('xaraya.modules.userapi');
  * @method mixed getprimaryparent(array $args = [])
  * @method mixed getstates(array $args = []) Get States
  * @method mixed getuserhome(array $args = [])
- * @method mixed getusers(array $args = []) getUsers - view users in group
+ * @method mixed getusers(array $args = []) getusers - view users in group
  * @method mixed leftjoin(array $args = []) return the field names and correct values for joining on users table - example : SELECT ..., $name, $email,... -           FROM ... -           LEFT JOIN $table -               ON $field = <name of userid field> -           WHERE ... -               AND $email LIKE '%xaraya.com' -               AND $where
  * @method mixed makepass(array $args = [])
  * @method mixed parseuserhome(array $args = [])

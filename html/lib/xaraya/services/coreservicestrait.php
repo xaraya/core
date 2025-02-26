@@ -62,6 +62,7 @@ interface CoreServicesInterface extends ContextInterface
      * @return void|never
      */
     public function exit(int|string $status = 0);
+    public function sys(): sys;
     /**
      * Translate string with optional arguments
      * = short-hand version for $this->mls()->translate()
@@ -101,6 +102,7 @@ trait CoreServicesTrait
     protected ?DatabaseInterface $xarDb = null;
     /** @var ?callable */
     protected $xarExit = null;
+    protected ?sys $xarSys = null;
 
     /**
      * Set core services for access via methods
@@ -504,6 +506,19 @@ trait CoreServicesTrait
         $this->xarExit ??= ServiceFactory::getExitCallable($this);
         // call exit callable :-)
         call_user_func($this->xarExit, $status);
+    }
+
+    /**
+     * Access sys::* methods (code, varpath, ...) as instance methods in templates
+     */
+    public function sys(): sys
+    {
+        if (!isset($this->xarSys)) {
+            // bypass private constructor for final class
+            $class = new \ReflectionClass(sys::class);
+            $this->xarSys = $class->newInstanceWithoutConstructor();
+        }
+        return $this->xarSys;
     }
 
     /**

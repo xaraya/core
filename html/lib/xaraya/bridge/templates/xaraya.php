@@ -107,6 +107,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
             // {% set infolink = attribute('xarServer', 'getObjectURL', ['workflow_tracker', 'display', {'itemid': item['id']}]) %}
             // @todo placeholder until corresponding functions have been added
             new TwigFunction('xar_coremethod', $this->xar_coremethod(...)),
+            new TwigFunction('xar_sys', $this->xar_sys(...)),
         ];
     }
 
@@ -429,7 +430,13 @@ class XarayaCoreExtension extends XarayaTwigExtension
         //if (!in_array($class, $allowed)) {
         //    throw new Exception('Class ' . $class . ' is not allowed');
         //}
-        return $class::$method(...$params);
+        if (method_exists($class, $method)) {
+            return $class::$method(...$params);
+        }
+        if (property_exists($class, $method)) {
+            return $class::${$method};
+        }
+        throw new Exception('Unknown method or property ' . $method . ' for class ' . $class);
     }
 
     public function xar_ctl(): \Xaraya\Services\ControllerInterface
@@ -514,6 +521,15 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_exit(int|string $status = 0)
     {
         $this->exit($status);
+    }
+
+    /**
+     * Access sys::* methods (code, varpath, ...) as instance methods in templates
+     * {{ xar_sys().code() }}
+     */
+    public function xar_sys(): sys
+    {
+        return $this->sys();
     }
 
     /**

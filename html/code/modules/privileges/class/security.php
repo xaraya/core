@@ -662,12 +662,12 @@ class xarSecurity extends xarObject
 
     static function present($privilege)
     {
-        $display = $privilege['name'];
-        $display .= "-" . strtolower($privilege['level']);
-        $display .= ":" . strtolower($privilege['realm']);
-        $display .= ":" . strtolower($privilege['module']);
-        $display .= ":" . strtolower($privilege['component']);
-        $display .= ":" . strtolower(implode(',',$privilege['instance']));
+        $display = $privilege['name'] ?? '';
+        $display .= "-" . strtolower($privilege['level'] ?? '');
+        $display .= ":" . strtolower($privilege['realm'] ?? '');
+        $display .= ":" . strtolower($privilege['module'] ?? '');
+        $display .= ":" . strtolower($privilege['component'] ?? '');
+        $display .= ":" . strtolower(implode(',',$privilege['instance'] ?? []));
         return $display;
     }
 
