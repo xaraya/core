@@ -85,7 +85,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
             new TwigFunction('xar_systemvar', $this->xar_systemvar(...)),
             new TwigFunction('xar_varcache', $this->xar_varcache(...)),
             new TwigFunction('xar_findvar', $this->xar_findvar(...)),
-            new TwigFunction('xar_var', $this->xar_var(...)),
+            // new TwigFunction('xar_oldvar', $this->xar_oldvar(...)),
             new TwigFunction('xar_isloggedin', $this->xar_isloggedin(...)),
             new TwigFunction('xar_userid', $this->xar_userid(...)),
             new TwigFunction('xar_modname', $this->xar_modname(...)),
@@ -282,7 +282,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
      * @todo use context where relevant
      * @deprecated 2.5.0 use specific xar_*var() function instead
      */
-    public function xar_var($args = [])
+    public function xar_oldvar($args = [])
     {
         // @todo not sure how this is supposed to work
         $args['scope'] ??= 'local';
@@ -430,5 +430,100 @@ class XarayaCoreExtension extends XarayaTwigExtension
         //    throw new Exception('Class ' . $class . ' is not allowed');
         //}
         return $class::$method(...$params);
+    }
+
+    public function xar_ctl(): \Xaraya\Services\ControllerInterface
+    {
+        return $this->ctl();
+    }
+
+    public function xar_log(): \Xaraya\Services\LoggerInterface
+    {
+        return $this->log();
+    }
+
+    public function xar_mls(): \Xaraya\Services\MultiLanguageInterface
+    {
+        return $this->mls();
+    }
+
+    public function xar_mod(?string $modName = null): \Xaraya\Services\ModulesInterface
+    {
+        return $this->mod($modName);
+    }
+
+    public function xar_sec(): \Xaraya\Services\SecurityInterface
+    {
+        return $this->sec();
+    }
+
+    public function xar_tpl(): \Xaraya\Services\TemplatingInterface
+    {
+        return $this->tpl();
+    }
+
+    public function xar_var(): \Xaraya\Services\VariablesInterface
+    {
+        return $this->var();
+    }
+
+    public function xar_block(): \Xaraya\Services\BlocksInterface
+    {
+        return $this->block();
+    }
+
+    public function xar_data(): \Xaraya\Services\DataObjectInterface
+    {
+        return $this->data();
+    }
+
+    public function xar_prop(): \Xaraya\Services\DataPropertyInterface
+    {
+        return $this->prop();
+    }
+
+    public function xar_cache(): \Xaraya\Services\CachingInterface
+    {
+        return $this->cache();
+    }
+
+    public function xar_config(): \Xaraya\Services\ConfigInterface
+    {
+        return $this->config();
+    }
+
+    public function xar_session(): \Xaraya\Services\SessionInterface
+    {
+        return $this->session();
+    }
+
+    public function xar_user(?int $userId = null): \Xaraya\Services\UserInterface
+    {
+        return $this->user($userId);
+    }
+
+    public function xar_db(): \Xaraya\Services\DatabaseInterface
+    {
+        return $this->db();
+    }
+
+    /**
+     * Call exit() - override for non-blocking servers, php unit tests or elsewhere
+     * @return void|never
+     */
+    public function xar_exit(int|string $status = 0)
+    {
+        $this->exit($status);
+    }
+
+    /**
+     * Translate string with optional arguments
+     * = short-hand version for $this->mls()->translate()
+     * @param string $rawstring
+     * @param mixed ...$args
+     */
+    public function xar_ml($rawstring, ...$args): string
+    {
+        return $this->ml($rawstring, ...$args);
     }
 }
