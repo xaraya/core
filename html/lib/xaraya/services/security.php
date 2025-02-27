@@ -36,7 +36,7 @@ interface SecurityInterface extends ServiceInterface
     /**
      * Full xarSecurity::check() with mask, catch, component, instance, module, rolename, realm, level
      */
-    public function check(string $mask, int $catch = 1, string $component = '', string $instance = '', string $module = '', string $rolename, int $realm = 0, int $level = 0): bool;
+    public function check(string $mask, int $catch = 1, string $component = '', string $instance = '', string $module = '', string $rolename = '', int $realm = 0, int $level = 0): bool;
 
     /**
      * Generate authorisation key for this module
@@ -86,7 +86,7 @@ trait SecurityTrait
         return xarSecurity::check($mask, $catch) ? true : false;
     }
 
-    public function check(string $mask, int $catch = 1, string $component = '', string $instance = '', string $module = '', string $rolename, int $realm = 0, int $level = 0): bool
+    public function check(string $mask, int $catch = 1, string $component = '', string $instance = '', string $module = '', string $rolename = '', int $realm = 0, int $level = 0): bool
     {
         // @todo handle redirect() + exit() in case of failure
         return xarSecurity::check($mask, $catch, $component, $instance, $module, $rolename, $realm, $level) ? true : false;
