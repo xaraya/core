@@ -313,6 +313,8 @@ class DeferredItemProperty extends DataProperty
         if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], $data['value'])) {
             $field = $this->fieldlist[0];
             $data['value'] = $data['value'][$field];
+            // @todo use getViewOptions() here?
+            //$data['link'] = str_replace('[itemid]', (string) $value, $this->displaylink);
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;

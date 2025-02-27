@@ -242,6 +242,7 @@ class DeferredListProperty extends DeferredItemProperty
             $first = reset($values);
             $field = $this->fieldlist[0];
             $values = [];
+            //$links = [];
             if (!empty($first) && array_key_exists($field, $first)) {
                 foreach ($data['value'] as $key => $props) {
                     if (is_array($props)) {
@@ -249,9 +250,12 @@ class DeferredListProperty extends DeferredItemProperty
                     } else {
                         $values[$key] = null;
                     }
+                    // @todo use getViewOptions() here?
+                    //$links[$key] = str_replace('[itemid]', (string) $key, $this->displaylink);
                 }
             }
             $data['value'] = $values;
+            //$data['link'] = $links;
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;

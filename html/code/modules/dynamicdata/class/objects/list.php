@@ -729,7 +729,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // reset cached urls
             $this->cached_urls = [];
             foreach(array_keys($this->items) as $itemid) {
-                $args['links'][$itemid] = $this->getViewOptions($itemid);
+                $args['links'][$itemid] = $this->getViewOptions($itemid, $this->items[$itemid]);
             }
         }
 
@@ -808,7 +808,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
       *
       * @todo make this smarter
       */
-    public function getViewOptions($itemid = null)
+    public function getViewOptions($itemid = null, $item = null)
     {
         $options = [];
 

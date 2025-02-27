@@ -7,6 +7,7 @@ namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\TwigFunction;
 use Twig\TwigTest;
+use Throwable;
 
 /**
  * PHP Functions, Filters, Tests etc.
@@ -84,7 +85,11 @@ class PHPOtherExtension extends XarayaTwigExtension
     public function xar_json_pretty($var)
     {
         if (is_string($var)) {
-            $var = json_decode($var, true);
+            try {
+                $var = json_decode($var, true, 512, JSON_THROW_ON_ERROR);
+            } catch (Throwable $e) {
+                // $var = $e->getMessage();
+            }
         }
         return json_encode($var, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
     }
@@ -92,7 +97,14 @@ class PHPOtherExtension extends XarayaTwigExtension
     public function xar_unserialize($var)
     {
         if (is_string($var)) {
-            $var = unserialize($var);
+            try {
+                $value = unserialize($var);
+                if ($value !== false) {
+                    $var = $value;
+                }
+            } catch (Throwable $e) {
+                // $var = $e->getMessage();
+            }
         }
         return $var;
     }

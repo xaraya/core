@@ -48,7 +48,7 @@ interface iDataObjectList
     public function &getItems(array $data = []);
     public function countItems(array $data = []);
     public function showView(array $data = []);
-    public function getViewOptions($itemid = null);
+    public function getViewOptions($itemid = null, $item = null);
     public function &getViewValues(array $data = []);
     public function getSortURL($currenturl = null);
 }
