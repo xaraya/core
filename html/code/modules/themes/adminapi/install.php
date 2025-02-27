@@ -46,7 +46,7 @@ class InstallMethod extends MethodClass
 
         // Security Check
         // need to specify the module because this function is called by the installer module
-        if (!xarSecurity::check('AdminThemes', 1, 'All', 'All', 'themes')) {
+        if (!$this->sec()->check('AdminThemes', 1, 'All', 'All', 'themes')) {
             return;
         }
 

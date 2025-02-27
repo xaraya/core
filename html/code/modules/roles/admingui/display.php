@@ -68,11 +68,11 @@ class DisplayMethod extends MethodClass
         $name = $role->getName();
 
         // Security
-        if (!xarSecurity::check('EditRoles', 1, 'Roles', $name)) {
+        if (!$this->sec()->check('EditRoles', 1, 'Roles', $name)) {
             return;
         }
 
-        $data['frozen'] = xarSecurity::check('ViewRoles', 0, 'Roles', $name);
+        $data['frozen'] = $this->sec()->check('ViewRoles', 0, 'Roles', $name);
 
         $data['id'] = $id;
 

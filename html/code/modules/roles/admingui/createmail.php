@@ -165,7 +165,7 @@ class CreatemailMethod extends MethodClass
                         'email'    => $role['email'],
                         'status'   => $role['state'],
                         'date_reg' => $role['date_reg'],
-                        'frozen'   => !xarSecurity::check('EditRoles', 0, 'Roles', $role['name']),
+                        'frozen'   => !$this->sec()->check('EditRoles', 0, 'Roles', $role['name']),
                     ];
             }
 
@@ -176,7 +176,7 @@ class CreatemailMethod extends MethodClass
                 $descendants = $parentgroup->getDescendants($state);
 
                 foreach ($descendants as $key => $user) {
-                    if (xarSecurity::check('EditRoles', 0, 'Roles', $user->getName())) {
+                    if ($this->sec()->check('EditRoles', 0, 'Roles', $user->getName())) {
                         if (in_array($state, [$user->getState(),xarRoles::ROLES_STATE_ALL])) {
                             $data['users'][$user->getID()] =
                                 ['id'      => $user->getID(),

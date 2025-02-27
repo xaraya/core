@@ -49,7 +49,7 @@ class CloneMethod extends MethodClass
         $data['itemid'] = !empty($data['itemid']) ? $data['itemid'] : $cid;
 
         // Security check
-        if (!xarSecurity::check('AddCategories', 1, 'All', "All:$cid")) {
+        if (!$this->sec()->check('AddCategories', 1, 'All', "All:$cid")) {
             return;
         }
 
@@ -59,7 +59,7 @@ class CloneMethod extends MethodClass
         $data['object']->getItem(['itemid' => $data['itemid']]);
 
         if ($confirm) {
-            $access = xarSecurity::check('', 0, 'All', "All:" . $data['object']->name . ":" . "All", 0, '', 0, 700);
+            $access = $this->sec()->check('', 0, 'All', "All:" . $data['object']->name . ":" . "All", 0, '', 0, 700);
 
             if (!$access) {
                 return $this->ctl()->badRequest('no_privileges');

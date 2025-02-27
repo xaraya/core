@@ -62,7 +62,7 @@ class RemovehookMethod extends MethodClass
             throw new BadParameterException(null, $msg);
         }
 
-        if (!xarSecurity::check('ManageCategoryLink', 1, 'Link', "$modid:All:All:All")) {
+        if (!$this->sec()->check('ManageCategoryLink', 1, 'Link', "$modid:All:All:All")) {
             return;
         }
 

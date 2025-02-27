@@ -143,7 +143,7 @@ class PurgeMethod extends MethodClass
                     $msg = $this->ml('Execution halted: the role with id #(1) has an empty name. This needs to be corrected manually in the database.', $role['id']);
                     throw new Exception($msg);
                 }
-                if (xarSecurity::check('ReadRoles', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
+                if ($this->sec()->check('ReadRoles', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
                     $skip = 0;
                     $unique = 1;
                     $thisrole = xarRoles::get($role['id']);

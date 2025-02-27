@@ -1237,9 +1237,9 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         if (!empty($roleid)) {
             $role = xarRoles::get($roleid);
             $rolename = $role->getName();
-            return xarSecurity::check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid, '', $rolename);
+            return $this->sec()->check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid, '', $rolename);
         } else {
-            return xarSecurity::check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid);
+            return $this->sec()->check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid);
         }
     }
 

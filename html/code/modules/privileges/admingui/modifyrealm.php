@@ -40,7 +40,7 @@ class ModifyrealmMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('EditPrivileges', 0, 'Realm')) {
+        if (!$this->sec()->check('EditPrivileges', 0, 'Realm')) {
             return;
         }
 

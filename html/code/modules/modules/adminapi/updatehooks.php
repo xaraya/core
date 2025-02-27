@@ -52,7 +52,7 @@ class UpdatehooksMethod extends MethodClass
         }
 
         // Security Check
-        if (!xarSecurity::check('ManageModules', 0, 'All', "All:All:$regid")) {
+        if (!$this->sec()->check('ManageModules', 0, 'All', "All:All:$regid")) {
             return;
         }
 

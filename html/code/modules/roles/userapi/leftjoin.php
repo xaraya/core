@@ -64,7 +64,7 @@ class LeftjoinMethod extends MethodClass
 
         // TODO: check this !
         foreach ($ids as $id) {
-            if (!xarSecurity::check('ReadRoles', 0, 'All', "All:All:$id")) {
+            if (!$this->sec()->check('ReadRoles', 0, 'All', "All:All:$id")) {
                 return;
             }
         }

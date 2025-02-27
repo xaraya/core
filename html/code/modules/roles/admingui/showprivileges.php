@@ -135,7 +135,7 @@ class ShowprivilegesMethod extends MethodClass
         $currentprivileges = [];
         foreach ($curprivileges as $priv) {
             $priv->normalize();
-            $frozen = !xarSecurity::check('ManagePrivileges', 0, 'Privileges', $priv->getName());
+            $frozen = !$this->sec()->check('ManagePrivileges', 0, 'Privileges', $priv->getName());
             if ($priv->getModule() == null) {
                 $currentprivileges[] = ['privid' => $priv->getID(),
                     'name' => $priv->getName(),

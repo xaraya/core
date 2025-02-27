@@ -198,7 +198,7 @@ class ShowusersMethod extends MethodClass
         $ids = [];
 
         foreach ($q->output() as $row) {
-            $users[$row['id']]['frozen'] = !xarSecurity::check('EditRoles', 0, 'Roles', $row['name']);
+            $users[$row['id']]['frozen'] = !$this->sec()->check('EditRoles', 0, 'Roles', $row['name']);
 
         }
         if ($id != 0) {

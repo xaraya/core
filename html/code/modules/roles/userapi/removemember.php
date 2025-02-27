@@ -56,7 +56,7 @@ class RemovememberMethod extends MethodClass
         $user = xarRoles::get($id);
 
         // Security Check
-        if (!xarSecurity::check('RemoveRole', 1, 'Relation', $group->getName() . ":" . $user->getName())) {
+        if (!$this->sec()->check('RemoveRole', 1, 'Relation', $group->getName() . ":" . $user->getName())) {
             return;
         }
 

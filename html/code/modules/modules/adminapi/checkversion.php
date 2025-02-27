@@ -47,7 +47,7 @@ class CheckversionMethod extends MethodClass
 
         // Security Check
         // need to specify the module because this function is called by the installer module
-        if (!xarSecurity::check('AdminModules', 1, 'All', 'All', 'modules')) {
+        if (!$this->sec()->check('AdminModules', 1, 'All', 'All', 'modules')) {
             return;
         }
 

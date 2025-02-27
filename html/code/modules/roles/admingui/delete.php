@@ -73,11 +73,11 @@ class DeleteMethod extends MethodClass
         $name = $role->getName();
 
         // Security
-        if (!xarSecurity::check('ManageRoles', 1, 'Roles', $name)) {
+        if (!$this->sec()->check('ManageRoles', 1, 'Roles', $name)) {
             return;
         }
 
-        $data['frozen'] = !xarSecurity::check('ManageRoles', 0, 'Roles', $name);
+        $data['frozen'] = !$this->sec()->check('ManageRoles', 0, 'Roles', $name);
 
         // Prohibit removal of any groups that have children
         if ($role->countChildren()) {

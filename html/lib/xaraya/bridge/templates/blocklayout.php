@@ -6,11 +6,6 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\TwigFunction;
-use xarBlock;
-use xarMLS;
-use xarMod;
-use xarTpl;
-use xarVar;
 use Exception;
 
 /**

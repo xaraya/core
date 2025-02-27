@@ -61,7 +61,7 @@ class ModifyMethod extends MethodClass
         $names = [];
 
         foreach ($data['object']->getParents() as $parent) {
-            if (xarSecurity::check('RemoveRole', 0, 'Relation', $parent->getName() . ":" . $data['object']->getName())) {
+            if ($this->sec()->check('RemoveRole', 0, 'Relation', $parent->getName() . ":" . $data['object']->getName())) {
                 $parents[] = ['parentid' => $parent->getID(),
                     'parentname' => $parent->getName(),
                     'parentuname' => $parent->getUname()];
@@ -73,7 +73,7 @@ class ModifyMethod extends MethodClass
         foreach (xarRoles::getgroups() as $temp) {
             $nam = $temp['name'];
             // TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
-            if (!xarSecurity::check('AttachRole', 0, 'Relation', $nam . ":" . $data['object']->getName())) {
+            if (!$this->sec()->check('AttachRole', 0, 'Relation', $nam . ":" . $data['object']->getName())) {
                 continue;
             }
             if (!in_array($nam, $names) && $temp['id'] != $id) {
@@ -91,8 +91,8 @@ class ModifyMethod extends MethodClass
         ]);
 
         // Security
-        if (!xarSecurity::check('EditRole', 0, 'Roles', $data['object']->getName())) {
-            if (!xarSecurity::check('ReadRoles', 1, 'Roles', $data['object']->getName())) {
+        if (!$this->sec()->check('EditRole', 0, 'Roles', $data['object']->getName())) {
+            if (!$this->sec()->check('ReadRoles', 1, 'Roles', $data['object']->getName())) {
                 return;
             }
         }

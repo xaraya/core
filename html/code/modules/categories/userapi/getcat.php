@@ -243,7 +243,7 @@ class GetcatMethod extends MethodClass
                     $right,
                     $state
                 ] = $row;
-                if (!xarSecurity::check('ViewCategories', 0, 'Category', "$name:$cid")) {
+                if (!$this->sec()->check('ViewCategories', 0, 'Category', "$name:$cid")) {
                     continue;
                 }
 
@@ -304,7 +304,7 @@ class GetcatMethod extends MethodClass
                 ] = $result->fields;
                 $result->MoveNext();
 
-                if (!xarSecurity::check('ViewCategories', 0, 'Category', "$name:$cid")) {
+                if (!$this->sec()->check('ViewCategories', 0, 'Category', "$name:$cid")) {
                     continue;
                 }
 

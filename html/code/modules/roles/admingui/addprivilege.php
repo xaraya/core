@@ -63,7 +63,7 @@ class AddprivilegeMethod extends MethodClass
         $priv = xarPrivileges::getPrivilege($privid);
 
         // Security
-        if (!xarSecurity::check('ManagePrivileges', 0, 'Privileges', $priv->getName())) {
+        if (!$this->sec()->check('ManagePrivileges', 0, 'Privileges', $priv->getName())) {
             return;
         }
 

@@ -67,7 +67,7 @@ class ModifyMethod extends MethodClass
         $displayName = $modInfo['displayname'];
 
         // Security
-        if (!xarSecurity::check('AdminModules', 0, 'All', "$modname::$id")) {
+        if (!$this->sec()->check('AdminModules', 0, 'All', "$modname::$id")) {
             return;
         }
 

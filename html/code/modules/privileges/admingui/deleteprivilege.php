@@ -54,7 +54,7 @@ class DeleteprivilegeMethod extends MethodClass
         $name = $priv->getName();
 
         // Security
-        if (!xarSecurity::check('ManagePrivileges', 0, 'Privileges', $name)) {
+        if (!$this->sec()->check('ManagePrivileges', 0, 'Privileges', $name)) {
             return;
         }
 

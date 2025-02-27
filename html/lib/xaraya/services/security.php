@@ -31,7 +31,12 @@ interface SecurityInterface extends ServiceInterface
     /**
      * Check access based on security mask or module action
      */
-    public function checkAccess(string $mask, string|int $action = '', mixed $instance = null, ?string $modName = null): bool;
+    public function checkAccess(string $mask, string|int $action = '', ?string $modName = null): bool;
+
+    /**
+     * Full xarSecurity::check() with mask, catch, component, instance, module, rolename, realm, level
+     */
+    public function check(string $mask, int $catch = 1, string $component = '', string $instance = '', string $module = '', string $rolename, int $realm = 0, int $level = 0): bool;
 
     /**
      * Generate authorisation key for this module
@@ -54,7 +59,7 @@ trait SecurityTrait
     /**
      * Check access based on security mask or module action
      */
-    public function checkAccess(string $mask, string|int $action = '', mixed $instance = null, ?string $modName = null): bool
+    public function checkAccess(string $mask, string|int $action = '', ?string $modName = null): bool
     {
         // if the mask is empty, use xarMod::checkAccess() - currently not used
         if (empty($mask) && !empty($action) && is_string($action)) {
@@ -66,11 +71,6 @@ trait SecurityTrait
             // we don't want to redirect here
             return $this->callSecurityCheck($mask, 0);
         }
-        // xarSecurity::check('ReadHitcountItem', 1, 'Item', "$modname:$itemtype:$objectid") etc.
-        //if (is_string($action)) {
-        //    // @todo how do we deal with $catch here? we have both 0 and 1 in modules
-        //    return $this->callSecurityCheck($mask, 1, $action, $instance);
-        //}
         return $this->callSecurityCheck($mask);
     }
 
@@ -80,10 +80,16 @@ trait SecurityTrait
      * @param int $catch
      * @return bool|never
      */
-    protected function callSecurityCheck(string $mask, int $catch = 1, string $component = '', string $instance = '')
+    protected function callSecurityCheck(string $mask, int $catch = 1): bool
     {
         // @todo handle redirect() + exit() in case of failure
-        return xarSecurity::check($mask, $catch, $component, $instance) ? true : false;
+        return xarSecurity::check($mask, $catch) ? true : false;
+    }
+
+    public function check(string $mask, int $catch = 1, string $component = '', string $instance = '', string $module = '', string $rolename, int $realm = 0, int $level = 0): bool
+    {
+        // @todo handle redirect() + exit() in case of failure
+        return xarSecurity::check($mask, $catch, $component, $instance, $module, $rolename, $realm, $level) ? true : false;
     }
 
     /**

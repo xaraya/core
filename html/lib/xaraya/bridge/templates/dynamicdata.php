@@ -6,15 +6,7 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\TwigFunction;
-use DataObjectFactory;
-use DataPropertyMaster;
 use AccessProperty;
-use xarConfigVars;
-use xarMod;
-use xarModVars;
-use xarTpl;
-use xarUser;
-use xarVar;
 use Exception;
 
 /**
@@ -364,7 +356,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
 
     public function xar_access($args = [], $exclusive = 1)
     {
-        /** @var AccessProperty $access */
+        /** @var \AccessProperty $access */
         $access = $this->prop()->getProperty(['type' => 'access']);
         return $access->checkAccessTag($args, $exclusive);
     }

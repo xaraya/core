@@ -107,7 +107,7 @@ class ModifyhookMethod extends MethodClass
             $modtype = 'All';
             $data['itemtype'] = 0;
         }
-        if (!xarSecurity::check('EditCategoryLink', 0, 'Link', "$modid:$modtype:All:All")) {
+        if (!$this->sec()->check('EditCategoryLink', 0, 'Link', "$modid:$modtype:All:All")) {
             return '';
         }
 

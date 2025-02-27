@@ -83,7 +83,7 @@ class TestprivilegesMethod extends MethodClass
             $mask = xarSecurity::getMask($name);
             $component = $mask->getComponent();
             // test the mask against the role
-            $testresult = xarSecurity::check($name, 0, $component, 'All', $mask->getModule(), $role->getName());
+            $testresult = $this->sec()->check($name, 0, $component, 'All', $mask->getModule(), $role->getName());
             // test failed
             if (!$testresult) {
                 $resultdisplay = $this->ml('Privilege: none found');

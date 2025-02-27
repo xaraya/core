@@ -64,7 +64,7 @@ class ModifypropertiesMethod extends MethodClass
         $modName     = $modInfo['name'];
 
         // Security
-        if (!xarSecurity::check('AdminModules', 0, 'All', "$modName::$id")) {
+        if (!$this->sec()->check('AdminModules', 0, 'All', "$modName::$id")) {
             return;
         }
 

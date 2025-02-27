@@ -85,7 +85,7 @@ class HookmaildeleteMethod extends MethodClass
         // Security Check
         //TODO: if we add to the hook to allow sending of mail to OTHER recipients than the admin
         // we will have to include the following security check and make sure the appropriate privileges are assigned
-        //    if (!xarSecurity::check('ManageMail', 0, 'All', "$modname::$objectid", 'mail')) return;
+        //    if (!$this->sec()->check('ManageMail', 0, 'All', "$modname::$objectid", 'mail')) return;
 
         // Set up variables
         $wordwrap = $this->mod()->getVar('wordwrap');

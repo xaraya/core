@@ -224,7 +224,7 @@ class GetallMethod extends MethodClass
         $roles = [];
         while ($result->next()) {
             [$id, $uname, $name, $email, $pass, $state, $date_reg] = $result->fields;
-            if (xarSecurity::check('ReadRoles', 0, 'Roles', "$uname")) {
+            if ($this->sec()->check('ReadRoles', 0, 'Roles', "$uname")) {
 
                 if (!empty($idlist)) {
                     $roles[$id] = [
@@ -247,7 +247,7 @@ class GetallMethod extends MethodClass
                         'date_reg'  => $date_reg,
                     ];
                 }
-            } elseif (xarSecurity::check('ViewRoles', 0, 'Roles', "$uname")) {
+            } elseif ($this->sec()->check('ViewRoles', 0, 'Roles', "$uname")) {
                 // If we only have overview privilege, then supply more restricted information.
                 if (!empty($idlist)) {
                     $roles[$id] = [

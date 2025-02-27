@@ -224,7 +224,7 @@ class AccessMethod extends MethodClass
             foreach ($data['levels'] as $level => $info) {
                 $data['access'][$level] = [];
                 foreach ($data['grouplist'] as $roleid => $rolename) {
-                    if (xarSecurity::check($info['mask'], 0, 'Item', $instance, '', $rolename, 0, 0)) {
+                    if ($this->sec()->check($info['mask'], 0, 'Item', $instance, '', $rolename, 0, 0)) {
                         // build list of groups that have access at this level
                         array_push($data['access'][$level], $roleid);
                     }

@@ -175,7 +175,7 @@ class UpdateMethod extends MethodClass
 
             case 'clone':
                 // only admins can change access rules
-                $adminaccess = xarSecurity::check('', 0, 'All', $myobject->objectid . ":" . $myobject->name . ":" . "All", '', '', 0, 800);
+                $adminaccess = $this->sec()->check('', 0, 'All', $myobject->objectid . ":" . $myobject->name . ":" . "All", '', '', 0, 800);
 
                 if (!$adminaccess) {
                     return $this->ctl()->badRequest('no_privileges');

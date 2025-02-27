@@ -39,7 +39,7 @@ class NewrealmMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AddPrivileges', 0, 'Realm')) {
+        if (!$this->sec()->check('AddPrivileges', 0, 'Realm')) {
             return;
         }
 

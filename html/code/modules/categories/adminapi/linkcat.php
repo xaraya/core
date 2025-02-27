@@ -110,7 +110,7 @@ class LinkcatMethod extends MethodClass
                 // Security check
                 foreach ($args['iids'] as $iid) {
                     foreach (array_keys($childiids) as $cid) {
-                        if (!xarSecurity::check('EditCategoryLink', 1, 'Link', "$args[modid]:$modtype:$iid:$cid")) {
+                        if (!$this->sec()->check('EditCategoryLink', 1, 'Link', "$args[modid]:$modtype:$iid:$cid")) {
                             return;
                         }
                     }
@@ -128,7 +128,7 @@ class LinkcatMethod extends MethodClass
             } else {
                 // Security check
                 foreach ($args['iids'] as $iid) {
-                    if (!xarSecurity::check('SubmitCategoryLink', 1, 'Link', "$args[modid]:$modtype:$iid:All")) {
+                    if (!$this->sec()->check('SubmitCategoryLink', 1, 'Link', "$args[modid]:$modtype:$iid:All")) {
                         return;
                     }
                 }
@@ -142,7 +142,7 @@ class LinkcatMethod extends MethodClass
             $i = 0;
             foreach ($args['cids'] as $cid) {
                 // Security check
-                if (!xarSecurity::check('SubmitCategoryLink', 1, 'Link', "$args[modid]:$modtype:$iid:$cid")) {
+                if (!$this->sec()->check('SubmitCategoryLink', 1, 'Link', "$args[modid]:$modtype:$iid:$cid")) {
                     return;
                 }
 

@@ -108,7 +108,7 @@ class GetallactiveMethod extends MethodClass
 
         while ($result->next()) {
             [$id, $uname, $name, $email, $date_reg, $ipaddr] = $result->fields;
-            if (xarSecurity::check('ViewRoles', 0, 'All', "$uname:All:$id")) {
+            if ($this->sec()->check('ViewRoles', 0, 'All', "$uname:All:$id")) {
                 $sessions[] = ['id'       => (int) $id,
                     'name'      => $name,
                     'uname'     => $uname,

@@ -167,7 +167,7 @@ class ModifyMethod extends MethodClass
 
             case 'clone':
                 // user needs admin access to change the access rules
-                $data['adminaccess'] = xarSecurity::check('', 0, 'All', $object->objectid . ":" . $name . ":" . "$itemid", '', '', 0, 800);
+                $data['adminaccess'] = $this->sec()->check('', 0, 'All', $object->objectid . ":" . $name . ":" . "$itemid", '', '', 0, 800);
                 $data['name'] = $object->properties['name']->value;
                 if ($object->objectid == 1) {
                     $data['label'] = $object->properties['label']->value;

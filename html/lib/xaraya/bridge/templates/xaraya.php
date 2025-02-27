@@ -6,19 +6,6 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\TwigFunction;
-use xarConfigVars;
-use xarController;
-use xarLocale;
-use xarMLS;
-use xarMod;
-use xarModVars;
-use xarSec;
-use xarSecurity;
-use xarServer;
-use xarSession;
-use xarTpl;
-use xarUser;
-use xarVar;
 use sys;
 use Exception;
 
@@ -108,6 +95,24 @@ class XarayaCoreExtension extends XarayaTwigExtension
             // @todo placeholder until corresponding functions have been added
             new TwigFunction('xar_coremethod', $this->xar_coremethod(...)),
             new TwigFunction('xar_sys', $this->xar_sys(...)),
+            // core services
+            new TwigFunction('xar_ctl', $this->xar_ctl(...)),
+            new TwigFunction('xar_log', $this->xar_log(...)),
+            new TwigFunction('xar_mls', $this->xar_mls(...)),
+            new TwigFunction('xar_mod', $this->xar_mod(...)),
+            new TwigFunction('xar_sec', $this->xar_sec(...)),
+            new TwigFunction('xar_tpl', $this->xar_tpl(...)),
+            new TwigFunction('xar_var', $this->xar_var(...)),
+            new TwigFunction('xar_block', $this->xar_block(...)),
+            new TwigFunction('xar_data', $this->xar_data(...)),
+            new TwigFunction('xar_prop', $this->xar_prop(...)),
+            new TwigFunction('xar_cache', $this->xar_cache(...)),
+            new TwigFunction('xar_config', $this->xar_config(...)),
+            new TwigFunction('xar_session', $this->xar_session(...)),
+            new TwigFunction('xar_user', $this->xar_user(...)),
+            new TwigFunction('xar_db', $this->xar_db(...)),
+            new TwigFunction('xar_exit', $this->xar_exit(...)),
+            new TwigFunction('xar_ml', $this->xar_ml(...)),
         ];
     }
 
@@ -403,7 +408,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
 
     public function xar_security_check($mask, $catch = 0, $component = '', $instance = '', $module = '', $rolename = '', $realm = 0, $level = 0)
     {
-        return xarSecurity::check($mask, $catch, $component, $instance, $module, $rolename, $realm, $level);
+        return $this->sec()->check($mask, $catch, $component, $instance, $module, $rolename, $realm, $level);
     }
 
     public function xar_security_authkey($modName = null)

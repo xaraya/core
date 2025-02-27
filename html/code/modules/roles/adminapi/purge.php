@@ -59,7 +59,7 @@ class PurgeMethod extends MethodClass
             $user = $userapi->get(['id' => $item['id']]);
 
             // Security check
-            if (!xarSecurity::check('ManageRoles', 0, 'Item', "$item[name]::$item[id]")) {
+            if (!$this->sec()->check('ManageRoles', 0, 'Item', "$item[name]::$item[id]")) {
                 return;
             }
 

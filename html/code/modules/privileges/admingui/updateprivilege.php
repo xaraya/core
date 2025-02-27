@@ -74,7 +74,7 @@ class UpdateprivilegeMethod extends MethodClass
         }
 
         // Security Check
-        if (!xarSecurity::check('EditPrivileges', 0, 'Privileges', $name)) {
+        if (!$this->sec()->check('EditPrivileges', 0, 'Privileges', $name)) {
             return;
         }
 

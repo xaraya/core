@@ -174,7 +174,7 @@ class AccountMethod extends MethodClass
                         if ($this->user()->isLoggedIn() && $this->user()->getId() == $id) { //they should be but ..
                             $userlastlogin = $this->session()->getVar('roles_thislastlogin');
                             $usercurrentlogin = $this->mod()->getUserVar('userlastlogin');
-                        } elseif (xarSecurity::check('AdminRoles', 0, 'Roles', $name) && $this->mod()->getUserVar('userlastlogin')) {
+                        } elseif ($this->sec()->check('AdminRoles', 0, 'Roles', $name) && $this->mod()->getUserVar('userlastlogin')) {
                             $usercurrentlogin = '';
                             $userlastlogin = $this->mod()->getUserVar('userlastlogin');
                         } else {

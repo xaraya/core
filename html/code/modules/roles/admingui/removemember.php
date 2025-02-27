@@ -60,7 +60,7 @@ class RemovememberMethod extends MethodClass
         if (empty($member)) {
             return $this->ctl()->notFound();
         }
-        if (!xarSecurity::check('RemoveRole', 1, 'Relation', $role->getName() . ":" . $member->getName())) {
+        if (!$this->sec()->check('RemoveRole', 1, 'Relation', $role->getName() . ":" . $member->getName())) {
             return;
         }
 

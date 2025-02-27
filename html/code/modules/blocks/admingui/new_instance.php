@@ -59,7 +59,7 @@ class NewInstanceMethod extends MethodClass
         $instancesapi = $this->instancesapi();
         // @checkme: Add here vs Manage elsewhere ?
         // @checkme: Instance mask still relevent with anon masks in play?
-        if (!xarSecurity::check('AddBlocks', 1, 'Instance')) {
+        if (!$this->sec()->check('AddBlocks', 1, 'Instance')) {
             return;
         }
 

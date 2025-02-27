@@ -32,9 +32,9 @@ class XarayaTwigExtension extends AbstractExtension implements ServicesInterface
     public string $moduleName;
     public string $moduleType;
     public int $itemtype = 0;
-    /** @var DataObject|DataObjectList|null */
+    /** @var \DataObject|\DataObjectList|null */
     public $object;
-    /** @var DataProperty|null */
+    /** @var \DataProperty|null */
     public $property;
 
     /**

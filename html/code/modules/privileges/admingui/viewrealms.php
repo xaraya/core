@@ -36,7 +36,7 @@ class ViewrealmsMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         // Security
-        if (!xarSecurity::check('AdminPrivileges', 0, 'Realm')) {
+        if (!$this->sec()->check('AdminPrivileges', 0, 'Realm')) {
             return;
         }
 

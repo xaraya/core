@@ -99,7 +99,7 @@ class ModifyInstanceMethod extends MethodClass
         $this->var()->find('phase', $phase, 'pre:trim:lower:str:1:', 'display');
 
         // admin access is needed for some operations
-        $isadmin = xarSecurity::check('', 0, 'Block', "$blockinfo[type]:$blockinfo[name]:$blockinfo[block_id]", $blockinfo['module'], '', 0, 800);
+        $isadmin = $this->sec()->check('', 0, 'Block', "$blockinfo[type]:$blockinfo[name]:$blockinfo[block_id]", $blockinfo['module'], '', 0, 800);
 
         // show the status warning if the type isn't active
         if ($blockinfo['type_state'] != xarBlock::TYPE_STATE_ACTIVE) {

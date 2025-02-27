@@ -98,7 +98,7 @@ class ModifyprivilegeMethod extends MethodClass
         $data['pname'] = $name;
 
         // Security Check
-        $data['frozen'] = !xarSecurity::check('EditPrivileges', 0, 'Privileges', $name);
+        $data['frozen'] = !$this->sec()->check('EditPrivileges', 0, 'Privileges', $name);
 
         if (isset($realm)) {
             $data['prealm'] = $realm;

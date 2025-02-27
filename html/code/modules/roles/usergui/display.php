@@ -73,7 +73,7 @@ class DisplayMethod extends MethodClass
 
             $name = $role->getName();
             // Security Check
-            if (!xarSecurity::check('ViewRoles', 0, 'Roles', $name)) {
+            if (!$this->sec()->check('ViewRoles', 0, 'Roles', $name)) {
                 return;
             }
 

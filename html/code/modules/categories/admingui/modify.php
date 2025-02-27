@@ -53,7 +53,7 @@ class ModifyMethod extends MethodClass
         $data['itemid'] = !empty($data['itemid']) ? $data['itemid'] : $cid;
 
         // Security check
-        if (!xarSecurity::check('EditCategories', 1, 'All', "All:$cid")) {
+        if (!$this->sec()->check('EditCategories', 1, 'All', "All:$cid")) {
             return;
         }
 

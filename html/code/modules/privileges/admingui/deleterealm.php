@@ -61,7 +61,7 @@ class DeleterealmMethod extends MethodClass
         if (empty($name)) {
             return $this->ctl()->notFound();
         }
-        if (!xarSecurity::check('ManagePrivileges', 0, 'Realm', $name)) {
+        if (!$this->sec()->check('ManagePrivileges', 0, 'Realm', $name)) {
             return;
         }
 

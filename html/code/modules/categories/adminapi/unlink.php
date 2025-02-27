@@ -84,7 +84,7 @@ class UnlinkMethod extends MethodClass
             // Note : yes, edit is enough here (cfr. updatehook)
             $cids = array_keys($childiids);
             foreach ($cids as $cid) {
-                if (!xarSecurity::check('EditCategoryLink', 1, 'Link', "$modid:$modtype:$iid:$cid")) {
+                if (!$this->sec()->check('EditCategoryLink', 1, 'Link', "$modid:$modtype:$iid:$cid")) {
                     return;
                 }
             }

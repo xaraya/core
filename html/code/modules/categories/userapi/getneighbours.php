@@ -101,7 +101,7 @@ class GetneighboursMethod extends MethodClass
         $info = [];
         while (!$result->EOF) {
             [$cid, $name, $description, $image, $parent, $cleft, $cright] = $result->fields;
-            if (!xarSecurity::check('ViewCategories', 0, 'Category', "$name:$cid")) {
+            if (!$this->sec()->check('ViewCategories', 0, 'Category', "$name:$cid")) {
                 $result->MoveNext();
                 continue;
             }

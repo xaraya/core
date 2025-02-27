@@ -78,7 +78,7 @@ class DeleteInstanceMethod extends MethodClass
         }
 
         // admin access is needed for some operations
-        $isadmin = xarSecurity::check('', 0, 'Block', "$instance[type]:$instance[name]:$instance[block_id]", $instance['module'], '', 0, 800);
+        $isadmin = $this->sec()->check('', 0, 'Block', "$instance[type]:$instance[name]:$instance[block_id]", $instance['module'], '', 0, 800);
         /** @var AccessProperty $accessproperty */
         $accessproperty = $this->prop()->getProperty(['name' => 'access']);
         // check delete access

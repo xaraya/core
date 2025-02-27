@@ -50,7 +50,7 @@ class DeleteMethod extends MethodClass
         $this->var()->find('confirm', $confirm, 'str:1:', '');
 
         // Security check
-        if (!xarSecurity::check('ManageCategories', 1, 'category', "All:" . $data['itemid'])) {
+        if (!$this->sec()->check('ManageCategories', 1, 'category', "All:" . $data['itemid'])) {
             return;
         }
 

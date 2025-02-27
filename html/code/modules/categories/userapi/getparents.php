@@ -86,7 +86,7 @@ class GetparentsMethod extends MethodClass
 
         while (!$result->EOF) {
             [$pid, $name, $description, $image, $parent, $left, $right] = $result->fields;
-            if (!xarSecurity::check('ViewCategories', 0, 'Category', "$name:$cid")) {
+            if (!$this->sec()->check('ViewCategories', 0, 'Category', "$name:$cid")) {
                 $result->MoveNext();
                 continue;
             }

@@ -50,7 +50,7 @@ class UpdateMethod extends MethodClass
         }
 
         // Security Check
-        if (!xarSecurity::check('AdminModules', 0, 'All', "All:All:$regid")) {
+        if (!$this->sec()->check('AdminModules', 0, 'All', "All:All:$regid")) {
             return;
         }
 

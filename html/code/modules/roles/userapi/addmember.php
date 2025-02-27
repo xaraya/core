@@ -57,7 +57,7 @@ class AddmemberMethod extends MethodClass
         $user = xarRoles::get($id);
 
         // Security Check
-        if (!xarSecurity::check('AttachRole', 1, 'Relation', $group->getName() . ":" . $user->getName())) {
+        if (!$this->sec()->check('AttachRole', 1, 'Relation', $group->getName() . ":" . $user->getName())) {
             return;
         }
 

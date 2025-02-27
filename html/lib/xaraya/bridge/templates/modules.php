@@ -6,7 +6,6 @@
 namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\TwigFunction;
-use xarMod;
 
 /**
  * Other Module Tags
