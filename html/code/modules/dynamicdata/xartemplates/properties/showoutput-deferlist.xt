@@ -15,7 +15,11 @@
                         <div class="xar-col">
                         <xar:if condition="is_array($val)">
                         <xar:if condition="!empty($link)">
-                            <xar:set name="itemlink">str_replace('[itemid]', $key, $link)</xar:set>
+                            <xar:if condition="is_array($link)">
+                                <xar:set name="itemlink">$link[$key]</xar:set>
+                            <xar:else/>
+                                <xar:set name="itemlink">str_replace('[itemid]', $key, $link)</xar:set>
+                            </xar:if>
                             <label title="" style=""><a href="#$itemlink#">#$key#</a>.</label>&#160;
                         <xar:else/>
                             <label title="" style="">#$key#.</label>&#160;
@@ -32,7 +36,11 @@
                             </div>
                         <xar:elseif condition="!empty($link)"/>
                             <xar:comment><!-- label title="" style="">#$key#.</label>&#160; --></xar:comment>
-                            <xar:set name="itemlink">str_replace('[itemid]', $key, $link)</xar:set>
+                            <xar:if condition="is_array($link)">
+                                <xar:set name="itemlink">$link[$key]</xar:set>
+                            <xar:else/>
+                                <xar:set name="itemlink">str_replace('[itemid]', $key, $link)</xar:set>
+                            </xar:if>
                             <xar:if condition="!empty($val)">
                                 <a href="#$itemlink#">#$val#</a>
                             <xar:else/>
@@ -49,14 +57,22 @@
                 </xar:if>
             <xar:elseif condition="!empty($link)"/>
                 <xar:foreach in="$value" value="$val">
-                     <xar:set name="itemlink">str_replace('[itemid]', $val, $link)</xar:set>
-                     <a href="#$itemlink#">#$val#</a>&#160;</xar:foreach>
+                    <xar:if condition="is_array($link)">
+                        <xar:set name="itemlink">$link[$val]</xar:set>
+                    <xar:else/>
+                        <xar:set name="itemlink">str_replace('[itemid]', $val, $link)</xar:set>
+                    </xar:if>
+                    <a href="#$itemlink#">#$val#</a>&#160;</xar:foreach>
             <xar:else/>
                 <xar:set name="val">implode('&#160;', $value)</xar:set>
                 <xar:var name="val"/>
             </xar:if>
         <xar:elseif condition="!empty($link)"/>
-            <xar:set name="itemlink">str_replace('[itemid]', $value, $link)</xar:set>
+            <xar:if condition="is_array($link)">
+                <xar:set name="itemlink">$link[$value]</xar:set>
+            <xar:else/>
+                <xar:set name="itemlink">str_replace('[itemid]', $value, $link)</xar:set>
+            </xar:if>
             <a href="#$itemlink#">#$value#</a>
         <xar:else/>
             <xar:var name="value"/>

@@ -863,7 +863,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if ($allow_read) {
                 $options['display'] = ['otitle' => $this->ml('Display'),
                                             'oicon'  => 'display.png',
-                                            'olink'  => $this->getActionURL('display', $itemid),
+                                            'olink'  => $this->getDisplayLink($itemid, $item),
                                             'ojoin'  => ''];
             }
             if ($allow_edit) {

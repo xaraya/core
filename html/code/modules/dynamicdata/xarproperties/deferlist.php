@@ -226,7 +226,6 @@ class DeferredListProperty extends DeferredItemProperty
             $this->value = $data['value'];
             return $data;
         }
-        //$data['link'] = $this->ctl()->getObjectURL($this->objectname, 'display', array('itemid' => $value));
         // see if we can use a fixed template for display links here - replace itemid in template per value in array
         if (!isset($data['link']) && !empty($this->displaylink)) {
             $data['link'] = $this->displaylink;
@@ -247,11 +246,12 @@ class DeferredListProperty extends DeferredItemProperty
                 foreach ($data['value'] as $key => $props) {
                     if (is_array($props)) {
                         $values[$key] = $props[$field] ?? null;
+                        // @todo use getDisplayLink() here?
+                        //$links[$key] = $this->getDeferredLoader()->objectlist->getDisplayLink($key, $props);
                     } else {
                         $values[$key] = null;
+                        //$links[$key] = null;
                     }
-                    // @todo use getViewOptions() here?
-                    //$links[$key] = str_replace('[itemid]', (string) $key, $this->displaylink);
                 }
             }
             $data['value'] = $values;

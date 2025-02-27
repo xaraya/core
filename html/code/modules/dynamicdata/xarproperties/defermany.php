@@ -341,7 +341,6 @@ class DeferredManyProperty extends DeferredItemProperty
         }
         // see if we can use a fixed template for display links - replace itemid in template per value in array
         if (!isset($data['link']) && !empty($this->displaylink) && !empty($itemid)) {
-            //$data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
             $data['link'] = $this->displaylink;
         }
         if ($this->setContext) {
@@ -355,16 +354,22 @@ class DeferredManyProperty extends DeferredItemProperty
             $first = reset($values);
             $field = $this->fieldlist[0];
             $values = [];
+            $target = $this->getDeferredLoader()->getTarget();
             //$links = [];
             if (!empty($first) && array_key_exists($field, $first)) {
                 foreach ($data['value'] as $key => $props) {
                     if (is_array($props)) {
                         $values[$key] = $props[$field] ?? null;
+                        // @todo use getDisplayLink() here?
+                        //if (!empty($target)) {
+                        //    $links[$key] = $target->objectlist->getDisplayLink($key, $props);
+                        //} else {
+                        //    $links[$key] = str_replace('[itemid]', (string) $key, $this->displaylink);
+                        //}
                     } else {
                         $values[$key] = null;
+                        //$links[$key] = null;
                     }
-                    // @todo use getViewOptions() here?
-                    //$links[$key] = str_replace('[itemid]', (string) $key, $this->displaylink);
                 }
             }
             $data['value'] = $values;
@@ -372,7 +377,6 @@ class DeferredManyProperty extends DeferredItemProperty
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;
-            $target = $this->getDeferredLoader()->getTarget();
             if (!empty($target)) {
                 $data['object'] = & $target->objectlist;
                 $data['fieldlist'] = $target->fieldlist;

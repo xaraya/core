@@ -299,22 +299,22 @@ class DeferredItemProperty extends DataProperty
             $this->value = $data['value'];
             return $data;
         }
-        //$data['link'] = $this->ctl()->getObjectURL($this->objectname, 'display', array('itemid' => $value));
         // see if we can use a fixed template for display links here
         if (!isset($data['link']) && !empty($this->displaylink)) {
-            $data['link'] = str_replace('[itemid]', (string) $value, $this->displaylink);
-            $data['source'] = $value;
+            //$data['link'] = str_replace('[itemid]', (string) $value, $this->displaylink);
+            $data['link'] = $this->displaylink;
         }
         if ($this->setContext) {
             $this->getDeferredLoader()->setContext($this->objectref?->getContext());
             $this->setContext = false;
         }
+        $data['source'] = $value;
         $data['value'] = $this->getDeferredLoader()->get($value);
         if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], $data['value'])) {
             $field = $this->fieldlist[0];
             $data['value'] = $data['value'][$field];
-            // @todo use getViewOptions() here?
-            //$data['link'] = str_replace('[itemid]', (string) $value, $this->displaylink);
+            // @todo use getDisplayLink() here?
+            //$data['link'] = $this->getDeferredLoader()->objectlist->getDisplayLink($value, $data['value']);
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;

@@ -807,6 +807,20 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     }
 
     /**
+     * Generate display link for item - override in custom objects or adapt templates
+     *
+     * @param mixed $itemid
+     * @param mixed $item
+     * @param mixed $extra
+     * @return string
+     */
+    public function getDisplayLink($itemid = null, $item = null, $extra = [])
+    {
+        // do something with item here, e.g. add title to extra params for nicer links
+        return $this->getActionURL('display', $itemid, $extra);
+    }
+
+    /**
      * Call $action hooks for this object (= notify observers in observer pattern)
      *
      * @param string $action the hook action ('create', 'display', ...)

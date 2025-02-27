@@ -9,9 +9,14 @@
         <xar:else/>
         <div class="xar-form-container">
             <xar:if condition="!empty($link) and !empty($source)">
+                <xar:if condition="str_contains($link, '[itemid]')">
+                    <xar:set name="itemlink">str_replace('[itemid]', $source, $link)</xar:set>
+                <xar:else/>
+                    <xar:set name="itemlink">$link</xar:set>
+                </xar:if>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label title="" style=""><a href="#$link#">#$source#</a>:</label>&#160;
+                        <label title="" style=""><a href="#$itemlink#">#$source#</a>:</label>&#160;
                     </div>
                 </div>
             </xar:if>
@@ -26,7 +31,12 @@
         </div>
         </xar:if>
         <xar:elseif condition="!empty($link)"/>
-            <a href="#$link#">#$value#</a>
+            <xar:if condition="str_contains($link, '[itemid]')">
+                <xar:set name="itemlink">str_replace('[itemid]', $source, $link)</xar:set>
+            <xar:else/>
+                <xar:set name="itemlink">$link</xar:set>
+            </xar:if>
+            <a href="#$itemlink#">#$value#</a>
         <xar:else/>
             <xar:var name="value"/>
         </xar:if>
