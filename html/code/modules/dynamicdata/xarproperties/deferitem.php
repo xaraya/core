@@ -310,11 +310,19 @@ class DeferredItemProperty extends DataProperty
         }
         $data['source'] = $value;
         $data['value'] = $this->getDeferredLoader()->get($value);
+        if (!empty($this->getDeferredLoader()->objectlist)) {
+            $this->getDeferredLoader()->objectlist->linktype = $this->objectref->linktype;
+            $this->getDeferredLoader()->objectlist->linkfunc = $this->objectref->linkfunc;
+        }
         if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], $data['value'])) {
             $field = $this->fieldlist[0];
-            $data['value'] = $data['value'][$field];
             // @todo use getDisplayLink() here?
-            //$data['link'] = $this->getDeferredLoader()->objectlist->getDisplayLink($value, $data['value']);
+            if (!empty($this->getDeferredLoader()->objectlist)) {
+                $data['link'] = $this->getDeferredLoader()->objectlist->getDisplayLink($value, $data['value']);
+            } else {
+                $data['link'] = str_replace('[itemid]', (string) $value, $this->displaylink);
+            }
+            $data['value'] = $data['value'][$field];
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;

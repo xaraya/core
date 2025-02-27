@@ -348,32 +348,38 @@ class DeferredManyProperty extends DeferredItemProperty
             $this->setContext = false;
         }
         $data['value'] = $this->getDeferredLoader()->get($itemid);
+        $target = $this->getDeferredLoader()->getTarget();
+        if (!empty($target) && !empty($target->objectlist)) {
+            $target->objectlist->linktype = $this->objectref->linktype;
+            $target->objectlist->linkfunc = $this->objectref->linkfunc;
+        }
         if ($this->singlevalue && is_array($data['value'])) {
             // pick the first non-empty assoc array value in the result
             $values = array_filter(array_values($data['value']));
             $first = reset($values);
             $field = $this->fieldlist[0];
             $values = [];
-            $target = $this->getDeferredLoader()->getTarget();
-            //$links = [];
+            $links = [];
             if (!empty($first) && array_key_exists($field, $first)) {
                 foreach ($data['value'] as $key => $props) {
                     if (is_array($props)) {
                         $values[$key] = $props[$field] ?? null;
                         // @todo use getDisplayLink() here?
-                        //if (!empty($target)) {
-                        //    $links[$key] = $target->objectlist->getDisplayLink($key, $props);
-                        //} else {
-                        //    $links[$key] = str_replace('[itemid]', (string) $key, $this->displaylink);
-                        //}
+                        if (!empty($target) && !empty($target->objectlist)) {
+                            $links[$key] = $target->objectlist->getDisplayLink($key, $props);
+                        } else {
+                            $links[$key] = str_replace('[itemid]', (string) $key, $this->displaylink);
+                        }
                     } else {
                         $values[$key] = null;
-                        //$links[$key] = null;
+                        $links[$key] = null;
                     }
                 }
             }
             $data['value'] = $values;
-            //$data['link'] = $links;
+            if (!empty($links)) {
+                $data['link'] = $links;
+            }
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;

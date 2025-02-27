@@ -235,27 +235,37 @@ class DeferredListProperty extends DeferredItemProperty
             $this->setContext = false;
         }
         $data['value'] = $this->getDeferredLoader()->get($values);
+        if (!empty($this->getDeferredLoader()->objectlist)) {
+            $this->getDeferredLoader()->objectlist->linktype = $this->objectref->linktype;
+            $this->getDeferredLoader()->objectlist->linkfunc = $this->objectref->linkfunc;
+        }
         if ($this->singlevalue && is_array($data['value'])) {
             // pick the first non-empty assoc array value in the result
             $values = array_filter(array_values($data['value']));
             $first = reset($values);
             $field = $this->fieldlist[0];
             $values = [];
-            //$links = [];
+            $links = [];
             if (!empty($first) && array_key_exists($field, $first)) {
                 foreach ($data['value'] as $key => $props) {
                     if (is_array($props)) {
                         $values[$key] = $props[$field] ?? null;
                         // @todo use getDisplayLink() here?
-                        //$links[$key] = $this->getDeferredLoader()->objectlist->getDisplayLink($key, $props);
+                        if (!empty($this->getDeferredLoader()->objectlist)) {
+                            $links[$key] = $this->getDeferredLoader()->objectlist->getDisplayLink($key, $props);
+                        } else {
+                            $links[$key] = str_replace('[itemid]', (string) $key, $this->displaylink);
+                        }
                     } else {
                         $values[$key] = null;
-                        //$links[$key] = null;
+                        $links[$key] = null;
                     }
                 }
             }
             $data['value'] = $values;
-            //$data['link'] = $links;
+            if (!empty($links)) {
+                $data['link'] = $links;
+            }
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;
