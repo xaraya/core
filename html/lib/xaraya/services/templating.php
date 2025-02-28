@@ -191,7 +191,7 @@ trait TemplatingTrait
     public function setPageTitle(string $title, ?string $modName = null): bool
     {
         $modName ??= $this->getModName();
-        return xarTpl::setPageTitle($title, $modName);
+        return xarTpl::setPageTitle($title, ucwords($modName));
     }
 
     /**

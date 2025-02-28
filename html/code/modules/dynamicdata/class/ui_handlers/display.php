@@ -120,6 +120,7 @@ class DisplayHandler extends DefaultHandler
             'context' => $this->getContext(),
             'hooks'  => $this->object->hookoutput,
             'tpltitle' => $this->tpltitle,
+            'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
         $output = $this->data()->template(

@@ -310,6 +310,7 @@ class StatsHandler extends DefaultHandler
             'stats'  => $stats,
             'result' => $result,
             'tpltitle' => $this->tpltitle,
+            'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
         $output = $this->data()->template(
@@ -395,6 +396,7 @@ class StatsHandler extends DefaultHandler
             'report' => $report,
             'result' => $result,
             'tpltitle' => $this->tpltitle,
+            'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
         $output = $this->data()->template(

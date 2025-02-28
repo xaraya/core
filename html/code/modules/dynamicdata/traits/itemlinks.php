@@ -202,11 +202,15 @@ trait ItemLinksTrait
 
         // TODO: make configurable
         $titlefield = '';
-        foreach ($properties as $name => $property) {
-            // let's use the first textbox property we find for now...
-            if ($property->type == 2) {
-                $titlefield = $name;
-                break;
+        if (property_exists($object, 'titlefield') && !empty($object->titlefield)) {
+            $titlefield = $object->titlefield;
+        } else {
+            foreach ($properties as $name => $property) {
+                // let's use the first textbox property we find for now...
+                if ($property->type == 2) {
+                    $titlefield = $name;
+                    break;
+                }
             }
         }
 
@@ -221,6 +225,7 @@ trait ItemLinksTrait
             } else {
                 $label = $this->mls()->translate('Item #(1)', $itemid);
             }
+            // @todo use getDisplayLink() here
             // $object->getActionURL('display', $itemid)
             if ($linktype == 'object') {
                 $url = $this->ctl()->getObjectURL($object->name, $linkfunc, ['itemid' => $itemid]);

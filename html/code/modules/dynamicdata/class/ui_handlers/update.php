@@ -133,6 +133,7 @@ class UpdateHandler extends DefaultHandler
             'authid'  => $this->sec()->genAuthKey(),
             'hooks'   => $this->object->hookoutput,
             'tpltitle' => $this->tpltitle,
+            'modtitle' => ucwords($this->object->tplmodule),
             'return_url' => $args['return_url'],
         ]);
 

@@ -145,6 +145,7 @@ class ViewHandler extends DefaultHandler
             'object'   => $this->object,
             'context'  => $this->getContext(),
             'tpltitle' => $this->tpltitle,
+            'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
         $output = $this->data()->template(

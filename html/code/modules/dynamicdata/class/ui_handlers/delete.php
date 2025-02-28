@@ -116,6 +116,7 @@ class DeleteHandler extends DefaultHandler
             'context' => $this->getContext(),
             'authid' => $this->sec()->genAuthKey(),
             'tpltitle' => $this->tpltitle,
+            'modtitle' => ucwords($this->object->tplmodule),
             'return_url' => $args['return_url'],
         ]);
 

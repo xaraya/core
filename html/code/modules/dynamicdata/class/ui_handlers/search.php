@@ -227,6 +227,7 @@ class SearchHandler extends DefaultHandler
             'search' => $search,
             'result' => $result,
             'tpltitle' => $this->tpltitle,
+            'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
         return $this->data()->template(
@@ -402,6 +403,7 @@ class SearchHandler extends DefaultHandler
             'query'  => $query,
             'result' => $result,
             'tpltitle' => $this->tpltitle,
+            'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
         return $this->data()->template(

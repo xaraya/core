@@ -230,6 +230,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
             'context'  => $this->getContext(),
             'output'   => $output,
             'tpltitle' => $this->tpltitle,
+            'modtitle' => ucwords($this->object->tplmodule),
         ]);
 
         return $this->data()->template(
