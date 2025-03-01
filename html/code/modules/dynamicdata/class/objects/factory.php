@@ -348,7 +348,7 @@ class DataObjectFactory extends xarObject
     }
 
     /**
-     * Class method to retrieve a particular object definition, with sub-classing
+     * Class method to retrieve a particular data object instance, with sub-classing
      * (= the same as creating a new Dynamic Object with itemid = null)
      *
      * @param array<string, mixed> $args
@@ -357,7 +357,7 @@ class DataObjectFactory extends xarObject
      *     $args['name'] name of the object you're looking for
      *     $args['class'] optional classname (e.g. <module>_DataObject)
      * @param mixed $context optional context for the DataObject (default = none)
-     * @return DataObject|null the requested object definition
+     * @return DataObject|null the requested data object instance
     **/
     public static function getObject(array $args = [], $context = null)
     {
@@ -430,7 +430,7 @@ class DataObjectFactory extends xarObject
     }
 
     /**
-     * Class method to retrieve a particular object list definition, with sub-classing
+     * Class method to retrieve a particular object list instance, with sub-classing
      * (= the same as creating a new Dynamic Object List)
      *
      * @param array<string, mixed> $args
@@ -439,7 +439,7 @@ class DataObjectFactory extends xarObject
      *     $args['name'] name of the object you're looking for
      *     $args['class'] optional classname (e.g. <module>_DataObject[_List])
      * @param mixed $context optional context for the DataObjectList (default = none)
-     * @return DataObjectList|null the requested object definition
+     * @return DataObjectList|null the requested object list instance
      * @todo   get rid of the classname munging, use typing
     **/
     public static function getObjectList(array $args = [], $context = null)
@@ -541,17 +541,18 @@ class DataObjectFactory extends xarObject
     }
 
     /**
-     * Class method to retrieve a particular object interface definition, with sub-classing
+     * Class method to retrieve a particular data object user interface instance, with sub-classing
      * (= the same as creating a new Dynamic Object User Interface)
      *
      * @param array<string, mixed> $args
      * with
      *     $args['objectid'] id of the object you're looking for, or
+     *     $args['object'] name of the object you're looking for, or
      *     $args['name'] name of the object you're looking for, or
      *     $args['moduleid'] module id of the object to retrieve +
      *     $args['itemtype'] item type of the object to retrieve
      *     $args['class'] optional classname (e.g. <module>_DataObject[_Interface])
-     * @return object the requested object definition
+     * @return object the requested data object user interface instance
      * @todo  get rid of the classname munging
     **/
     public static function &getObjectInterface(array $args = [])

@@ -230,13 +230,13 @@ class VirtualObjectFactory extends xarObject
     protected static bool $loaded = false;
 
     /**
-     * Class method to retrieve a particular object definition, with sub-classing
+     * Class method to retrieve a particular data object instance, with sub-classing
      *
      * @param array<string, mixed> $args
      * with
      *     $args['name'] name of the object you're looking for
      * @param mixed $context optional context for the DataObject (default = none)
-     * @return DataObject|null the requested object definition
+     * @return DataObject|null the requested data object instance
      */
     public static function getObject(array $args = [], $context = null)
     {
@@ -263,7 +263,7 @@ class VirtualObjectFactory extends xarObject
      * with
      *     $args['name'] name of the object you're looking for
      * @param mixed $context optional context for the DataObjectList (default = none)
-     * @return DataObjectList|null the requested object definition
+     * @return DataObjectList|null the requested object list definition
      */
     public static function getObjectList(array $args = [], $context = null)
     {
@@ -310,11 +310,11 @@ class VirtualObjectFactory extends xarObject
     }
 
     /**
-     * Make a particular object definition, with sub-classing
+     * Make a particular data object instance, with sub-classing
      *
      * @param DataObjectDescriptor $descriptor
      * @param mixed $context optional context for the DataObject (default = none)
-     * @return DataObject|null the requested object definition
+     * @return DataObject|null the requested data object instance
      */
     public static function makeObject($descriptor, $context = null)
     {
@@ -336,11 +336,11 @@ class VirtualObjectFactory extends xarObject
     }
 
     /**
-     * Make a particular object list definition, with sub-classing
+     * Make a particular object list instance, with sub-classing
      *
      * @param DataObjectDescriptor $descriptor
      * @param mixed $context optional context for the DataObjectList (default = none)
-     * @return DataObjectList|null the requested object definition
+     * @return DataObjectList|null the requested object list instance
      */
     public static function makeObjectList($descriptor, $context = null)
     {

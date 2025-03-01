@@ -73,6 +73,13 @@ interface DataObjectInterface extends ServiceInterface
     public function getObjectInfo(array $args = []);
 
     /**
+     * Summary of getObjectInterface
+     * @param array<string, mixed> $args
+     * @return object
+     */
+    public function getObjectInterface(array $args = []);
+
+    /**
      * Get info about all data objects
      * @param array<string, mixed> $args with optional ['moduleid' => '...']
      * @return array<mixed> containing the objectid => object definition
@@ -171,6 +178,16 @@ trait DataObjectTrait
     public function getObjectInfo(array $args = [])
     {
         return DataObjectFactory::getObjectInfo($args);
+    }
+
+    /**
+     * Get data object user interface
+     * @param array<string, mixed> $args
+     * @return object
+     */
+    public function getObjectInterface(array $args = [])
+    {
+        return DataObjectFactory::getObjectInterface($args);
     }
 
     /**
