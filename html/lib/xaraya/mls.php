@@ -473,6 +473,16 @@ class xarMLS extends xarObject
     }
 
     /**
+     * Create URL-friendly slug for string and locale - basic version
+     * @see \Symfony\Component\String\Slugger\AsciiSlugger
+     */
+    public static function getSlug(string $text, string $separator = '_', ?string $locale = null): string
+    {
+        $text = str_replace(' ', $separator, $text);
+        return rawurlencode($text);
+    }
+
+    /**
      * Loads translations for the specified context
      *
      * @author Marco Canini <marco@xaraya.com>

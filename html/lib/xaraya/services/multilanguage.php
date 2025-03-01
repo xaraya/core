@@ -84,6 +84,8 @@ interface MultiLanguageInterface extends ServiceInterface
      */
     public function translate($rawstring, ...$args): string;
 
+    public function getSlug(string $text, string $separator = '_', ?string $locale = null): string;
+
     /**
      * Load translations for a file by path
      * @param string $path
@@ -197,6 +199,15 @@ trait MultiLanguageTrait
     public function translate($rawstring, ...$args): string
     {
         return xarMLS::translate($rawstring, ...$args);
+    }
+
+    /**
+     * Create URL-friendly slug for string and locale - basic version
+     * @see \Symfony\Component\String\Slugger\AsciiSlugger
+     */
+    public function getSlug(string $text, string $separator = '_', ?string $locale = null): string
+    {
+        return xarMLS::getSlug($text, $separator, $locale);
     }
 
     /**
