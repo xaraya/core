@@ -46,21 +46,38 @@ class ModuleAPIRoutes extends RestAPIRoutes
         $name = $namePrefix . 'getModuleApis';
         $routes[$name] = ['GET', $path, [$restHandler, 'getModuleApis'], $extra];
 
-        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-        $path = $pathPrefix . '/{module}/{path}[/{more:.+}]';
+        // support optional part(s) after path, either with {path}/{more:.+} or with {path:.+}
+        $path = $pathPrefix . '/{module}/{path}';
         $name = $namePrefix . 'getModuleCall';
         $routes[$name] = ['GET', $path, [$restHandler, 'getModuleCall'], $extra];
 
-        $path = $pathPrefix . '/{module}/{path}[/{more:.+}]';
+        // with symfony routing we need to use a separate route for optional parameters
+        $path = $pathPrefix . '/{module}/{path}/{more:.+}';
+        $name = $namePrefix . 'getModuleCallMore';
+        $routes[$name] = ['GET', $path, [$restHandler, 'getModuleCall'], $extra];
+
+        $path = $pathPrefix . '/{module}/{path}';
         $name = $namePrefix . 'postModuleCall';
         $routes[$name] = ['POST', $path, [$restHandler, 'postModuleCall'], $extra];
 
-        $path = $pathPrefix . '/{module}/{path}[/{more:.+}]';
+        $path = $pathPrefix . '/{module}/{path}/{more:.+}';
+        $name = $namePrefix . 'postModuleCallMore';
+        $routes[$name] = ['POST', $path, [$restHandler, 'postModuleCall'], $extra];
+
+        $path = $pathPrefix . '/{module}/{path}';
         $name = $namePrefix . 'putModuleCall';
         $routes[$name] = ['PUT', $path, [$restHandler, 'putModuleCall'], $extra];
 
-        $path = $pathPrefix . '/{module}/{path}[/{more:.+}]';
+        $path = $pathPrefix . '/{module}/{path}/{more:.+}';
+        $name = $namePrefix . 'putModuleCallMore';
+        $routes[$name] = ['PUT', $path, [$restHandler, 'putModuleCall'], $extra];
+
+        $path = $pathPrefix . '/{module}/{path}';
         $name = $namePrefix . 'deleteModuleCall';
+        $routes[$name] = ['DELETE', $path, [$restHandler, 'deleteModuleCall'], $extra];
+
+        $path = $pathPrefix . '/{module}/{path}/{more:.+}';
+        $name = $namePrefix . 'deleteModuleCallMore';
         $routes[$name] = ['DELETE', $path, [$restHandler, 'deleteModuleCall'], $extra];
 
         return $routes;

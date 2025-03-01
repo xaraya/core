@@ -149,7 +149,7 @@ class GraphQLModules
         $item['result'] = $item['response'] ?? 'mixed';
         if (str_contains($item['path'], '/')) {
             $name = $module . '_' . $api;
-            // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+            // support optional part(s) after path, either with {path}/{more:.+} or with {path:.+}
             if (str_contains($item['path'], '{')) {
                 $found = preg_match_all('/\{([^}]+)\}/', $item['path'], $matches);
                 if (empty($found)) {

@@ -232,7 +232,7 @@ trait DataObjectBridgeTrait
             unset($vars['module']);
             unset($vars['type']);
         }
-        // path = /{object}[/{itemid}[/{method}]] or /{object}/{method}
+        // path = /{object}/{itemid}/{method} or /{object}/{method}
         // dispatcher doesn't provide query params by default
         $query = $this->getQueryParams($request);
         // add remaining query params to path vars

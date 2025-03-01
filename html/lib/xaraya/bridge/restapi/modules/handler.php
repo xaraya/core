@@ -104,7 +104,7 @@ class ModuleAPIHandler extends RestAPIHandler
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
-        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        // support optional part(s) after path, either with {path}/{more:.+} or with {path:.+}
         // see workflow restapi: 'path' => 'tracker/{workflow}/{subjectId}/{trackerId}'
         $more = $args['path']['more'] ?? '';
         $func = $this->getModuleApiFunc($module, $path, 'get', $more);
@@ -170,7 +170,7 @@ class ModuleAPIHandler extends RestAPIHandler
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
-        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        // support optional part(s) after path, either with {path}/{more:.+} or with {path:.+}
         $more = $args['path']['more'] ?? '';
         $func = $this->getModuleApiFunc($module, $path, 'post', $more);
         if (empty($func)) {
@@ -226,7 +226,7 @@ class ModuleAPIHandler extends RestAPIHandler
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
-        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        // support optional part(s) after path, either with {path}/{more:.+} or with {path:.+}
         $more = $args['path']['more'] ?? '';
         $func = $this->getModuleApiFunc($module, $path, 'put', $more);
         if (empty($func)) {
@@ -245,7 +245,7 @@ class ModuleAPIHandler extends RestAPIHandler
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
-        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        // support optional part(s) after path, either with {path}/{more:.+} or with {path:.+}
         $more = $args['path']['more'] ?? '';
         $func = $this->getModuleApiFunc($module, $path, 'delete', $more);
         if (empty($func)) {
@@ -317,7 +317,7 @@ class ModuleAPIHandler extends RestAPIHandler
                 $item['caching'] ??= ($method == 'get') ? true : false;
                 return $item;
             }
-            // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+            // support optional part(s) after path, either with {path}/{more:.+} or with {path:.+}
             // see workflow restapi: 'path' => 'tracker/{workflow}/{subjectId}/{trackerId}'
             if (!empty($more) && strncmp($item['path'], $path . '/', strlen($path) + 1) === 0 && $item['method'] == $method) {
                 // @checkme assuming only more path parameter(s) in module paths for now... {type}/{key}/{code}
