@@ -90,7 +90,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     public $linktype = 'user';          // optional link type for use in getActionURL() (defaults to 'user' for module URLs, 'object' for object URLs, 'other' for middleware)
     /** @var string|callable */
     public $linkfunc = 'display';       // optional link function for use in getActionURL() (defaults to 'display', unused for object URLs, callable for middleware)
-    protected $cached_urls  = [];    // cached URLs for use in getActionURL()
+    public $titlefield = '';            // optional title field to include in getDisplayLink() - set in config or override in dataobjectlist class
+    protected $cached_urls  = [];       // cached URLs for use in getActionURL()
 
     public $primary = null;             // primary key is item id (or objectid in the case of the objects object)
     public $secondary = null;           // secondary key could be item type (e.g. for articles)
@@ -817,6 +818,10 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     public function getDisplayLink($itemid = null, $item = null, $extra = [])
     {
         // do something with item here, e.g. add title to extra params for nicer links
+        //if (!empty($item) && !empty($item[$this->titlefield])) {
+        //    $slug = $this->mls()->slug($item[$this->titlefield]);
+        //    $extra = array_merge($extra, ['title' => $slug]);
+        //}
         return $this->getActionURL('display', $itemid, $extra);
     }
 

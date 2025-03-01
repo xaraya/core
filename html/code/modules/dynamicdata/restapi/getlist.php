@@ -78,6 +78,32 @@ class GetlistMethod extends MethodClass
             //'paging' => false,  // add optional paging parameters
         ];
         // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
+        $apilist['getitemtypes'] = [
+            'type' => 'user',  // default = rest, other options are user, admin, ... as usual
+            'path' => 'itemtypes',  // path to use in REST API operation /modules/{module}/{path}
+            'method' => 'get',  // method to use in REST API operation
+            'security' => 'ReadDynamicDataItem',  // optional security mask depending on the api
+            'description' => 'Call existing module userapi function (getitemtypes) via REST API',
+            //'parameters' => ['moduleid'],  // optional query parameter(s)
+            // @todo transform assoc array("$itemid" => $item) to list of $item or not?
+            'response' => ['type' => 'array', 'items' => ['type' => 'object']],  // optional response schema
+            //'caching' => false,  // optional disabling of caching e.g. if it overlaps with variable caching already
+            //'paging' => false,  // add optional paging parameters
+        ];
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
+        $apilist['getitemlinks'] = [
+            'type' => 'user',  // default = rest, other options are user, admin, ... as usual
+            'path' => 'itemlinks/{itemtype}',  // path to use in REST API operation /modules/{module}/{path}
+            'method' => 'get',  // method to use in REST API operation
+            'security' => 'ReadDynamicDataItem',  // optional security mask depending on the api
+            'description' => 'Call existing module userapi function (getitemlinks) via REST API with path parameter',
+            //'parameters' => ['moduleid'],  // optional query parameter(s)
+            // @todo transform assoc array("$itemid" => $item) to list of $item or not?
+            'response' => ['type' => 'array', 'items' => ['type' => 'object']],  // optional response schema
+            //'caching' => false,  // optional disabling of caching e.g. if it overlaps with variable caching already
+            //'paging' => false,  // add optional paging parameters
+        ];
+        // $func name as used in $this->mod()->apiFunc($module, $type, $func, $args)
         $apilist['export'] = [
             'type' => 'util',  // default = rest, other options are user, admin, ... as usual
             'path' => 'export',  // path to use in REST API operation /modules/{module}/{path}

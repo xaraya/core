@@ -200,9 +200,9 @@ trait ItemLinksTrait
             return $itemlinks;
         }
 
-        // TODO: make configurable
+        // set titlefield in dataobject config or dataobjectlist class
         $titlefield = '';
-        if (property_exists($object, 'titlefield') && !empty($object->titlefield)) {
+        if (!empty($object->titlefield)) {
             $titlefield = $object->titlefield;
         } else {
             foreach ($properties as $name => $property) {
@@ -225,10 +225,13 @@ trait ItemLinksTrait
             } else {
                 $label = $this->mls()->translate('Item #(1)', $itemid);
             }
-            // @todo use getDisplayLink() here
             // $object->getActionURL('display', $itemid)
             if ($linktype == 'object') {
-                $url = $this->ctl()->getObjectURL($object->name, $linkfunc, ['itemid' => $itemid]);
+                if (!empty($object->titlefield) && $linkfunc == 'display') {
+                    $url = $object->getDisplayLink($itemid, $items[$itemid]);
+                } else {
+                    $url = $this->ctl()->getObjectURL($object->name, $linkfunc, ['itemid' => $itemid]);
+                }
             } else {
                 // adapted from xarMod::apiFunc('dynamicdata', 'user', 'getitemlinks')
                 $url = $this->ctl()->getModuleURL($tplmodule, $linktype, $linkfunc, ['name' => $args['name'], 'itemid' => $itemid]);

@@ -861,6 +861,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $modname = $this->mod()->getName();
         if ($modname == 'dynamicdata' || $modname == 'object') {
             if ($allow_read) {
+                // @todo override getDisplayLink() to do something with $item, e.g. include title in links
                 $options['display'] = ['otitle' => $this->ml('Display'),
                                             'oicon'  => 'display.png',
                                             'olink'  => $this->getDisplayLink($itemid, $item),

@@ -96,7 +96,7 @@ final class DataObjectTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Depends('testPrepareOutput')]
     public function testShowView(): void
     {
-        $params = ['name' => 'sample', 'fieldlist' => null];
+        $params = ['name' => 'sample', 'fieldlist' => null, 'linktype' => 'object'];
         $objectlist = DataObjectFactory::getObjectList($params);
         $expected = 'Sample Object';
         $this->assertEquals($expected, $objectlist->label);
@@ -112,7 +112,7 @@ final class DataObjectTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Depends('testPrepareOutput')]
     public function testObjectInterface(): void
     {
-        $params = ['object' => 'sample'];
+        $params = ['object' => 'sample', 'linktype' => 'object'];
         $interface = DataObjectFactory::getObjectInterface($params);
         $expected = 'sample';
         $this->assertEquals($expected, $interface->args['object']);
