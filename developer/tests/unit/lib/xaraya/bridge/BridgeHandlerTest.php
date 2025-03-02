@@ -3,6 +3,7 @@
 use Xaraya\Modules\TestHelper;
 use Xaraya\Routing\Routing;
 use Xaraya\Modules\DynamicData\DynamicDataHandler;
+use Xaraya\Modules\Base\BaseHandler;
 
 final class BridgeHandlerTest extends TestHelper
 {
@@ -20,8 +21,10 @@ final class BridgeHandlerTest extends TestHelper
         $expected = ['_route' => 'dynamicdata-main'];
         $this->assertEquals($expected, $vars);
 
+        $context = $this->createContext();
         [$handlerClass, $method] = $handler;
         $instance = new $handlerClass();
+        $instance->setContext($context);
         [$result, $context] = $instance->callHandler($handler, $vars);
 
         $expected = [
@@ -59,8 +62,10 @@ final class BridgeHandlerTest extends TestHelper
         ];
         $this->assertEquals($expected, $vars);
 
+        $context = $this->createContext();
         [$handlerClass, $method] = $handler;
         $instance = new $handlerClass();
+        $instance->setContext($context);
         [$result, $context] = $instance->callHandler($handler, $vars);
 
         $output = $instance->output($result);
@@ -129,5 +134,75 @@ final class BridgeHandlerTest extends TestHelper
 
         $expected = $path;
         $this->assertEquals($expected, $uri);
+    }
+
+    public function testHandlerBaseRoutes(): void
+    {
+        $params = [
+            'module' => 'base',
+            'type' => 'user',
+            'func' => 'main',
+        ];
+        $name = BaseHandler::findRoute($params);
+
+        $expected = 'base-main';
+        $this->assertEquals($expected, $name);
+
+        $params['page'] = 'docs';
+        $name = BaseHandler::findRoute($params);
+
+        $expected = 'base-page';
+        $this->assertEquals($expected, $name);
+
+        // unsupported: overlaps with /base/{page}
+        $params['func'] = 'other';
+        $name = BaseHandler::findRoute($params);
+
+        $expected = null;
+        $this->assertEquals($expected, $name);
+
+        $params['more'] = 'more';
+        $name = BaseHandler::findRoute($params);
+
+        $expected = 'base-user-more';
+        $this->assertEquals($expected, $name);
+
+        $params['type'] = 'admin';
+        $name = BaseHandler::findRoute($params);
+
+        $expected = 'base-admin-more';
+        $this->assertEquals($expected, $name);
+    }
+
+    public function testHandlerBasePage(): void
+    {
+        xarTpl::init();
+
+        $router = new Routing(function () {
+            return BaseHandler::getRoutes();
+        });
+        $path = '/base/docs';
+        [$handler, $vars] = $router->match($path);
+
+        $expected = [BaseHandler::class, 'main'];
+        $this->assertEquals($expected, $handler);
+
+        $expected = [
+            '_route' => 'base-page',
+            'page' => 'docs',
+        ];
+        $this->assertEquals($expected, $vars);
+
+        $context = $this->createContext();
+        [$handlerClass, $method] = $handler;
+        $instance = new $handlerClass();
+        $instance->setContext($context);
+        [$result, $context] = $instance->callHandler($handler, $vars);
+
+        $output = $instance->output($result);
+        $output = preg_replace('/<!--.*?-->/s', '', $output);
+
+        $expected = '<h2>Welcome to Xaraya Documentation</h2>';
+        $this->assertStringContainsString($expected, $output);
     }
 }

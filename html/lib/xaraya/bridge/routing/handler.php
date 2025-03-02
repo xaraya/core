@@ -38,6 +38,11 @@ interface HandlerInterface extends ContextInterface
      * @param array<string, mixed> $vars
      */
     public function callHandler(mixed $handler, array $vars = []): mixed;
+
+    /**
+     * Create output for result
+     */
+    public function output(mixed $result, mixed $transform = null): string;
 }
 
 /**
@@ -64,7 +69,7 @@ class ModuleHandler implements HandlerInterface
 
     public static string $moduleName = '';
     public static string $objectName = '';
-    /** @var class-string */
+    /** @var class-string<ModuleServicesInterface> */
     public static string $handlerClass = '';
     protected ModuleServicesInterface $instance;
 
@@ -79,13 +84,17 @@ class ModuleHandler implements HandlerInterface
         $extra = [];
         $routes = [];
 
-        $path = $pathPrefix . '/' . static::$moduleName;
-        $name = $namePrefix . static::$moduleName . '-';
-        $routes = array_merge($routes, static::getModuleRoutes($path, $name, $handler, $extra));
+        if (!empty(static::$moduleName)) {
+            $path = $pathPrefix . '/' . static::$moduleName;
+            $name = $namePrefix . static::$moduleName . '-';
+            $routes = array_merge($routes, static::getModuleRoutes($path, $name, $handler, $extra));
+        }
 
-        $path = $pathPrefix . '/' . static::$objectName;
-        $name = $namePrefix . static::$objectName . '-';
-        $routes = array_merge($routes, static::getObjectRoutes($path, $name, $handler, $extra));
+        if (!empty(static::$objectName)) {
+            $path = $pathPrefix . '/' . static::$objectName;
+            $name = $namePrefix . static::$objectName . '-';
+            $routes = array_merge($routes, static::getObjectRoutes($path, $name, $handler, $extra));
+        }
 
         return $routes;
     }
@@ -196,10 +205,13 @@ class ModuleHandler implements HandlerInterface
         if (!empty($params['module']) && $params['module'] != static::$moduleName) {
             return null;
         }
+        $route = null;
         // find module route name or dataobject route name
-        $namePrefix = static::$moduleName . '-';
-        $route = static::findModuleRoute($namePrefix, $params);
-        if (!isset($route)) {
+        if (!isset($route) && !empty(static::$moduleName)) {
+            $namePrefix = static::$moduleName . '-';
+            $route = static::findModuleRoute($namePrefix, $params);
+        }
+        if (!isset($route) && !empty(static::$objectName)) {
             $namePrefix = static::$objectName . '-';
             $route = static::findObjectRoute($namePrefix, $params);
         }
@@ -213,12 +225,14 @@ class ModuleHandler implements HandlerInterface
      */
     public static function findModuleRoute(string $namePrefix = '', array $params = []): string|null
     {
+        // module admin func
         if (!empty($params['type']) && $params['type'] == 'admin') {
             if (!empty($params['func']) && !empty($params['more'])) {
                 return $namePrefix . 'admin-more';
             }
             return $namePrefix . 'admin';
         }
+        // module user func
         if (!empty($params['type']) && $params['type'] == 'user') {
             if (!empty($params['func']) && !empty($params['more'])) {
                 return $namePrefix . 'user-more';
@@ -275,6 +289,7 @@ class ModuleHandler implements HandlerInterface
      */
     public function callHandler(mixed $handler, array $vars = []): mixed
     {
+        $this->getContext()?->tracePath(__METHOD__, $handler);
         $handler = $this->getHandler($handler);
         if ($handler[1] == 'admin') {
             // ... replace usergui instance with admingui instance
@@ -291,7 +306,7 @@ class ModuleHandler implements HandlerInterface
      * @param mixed $handler
      * @see \Xaraya\Bridge\Routing\RoutingBridge::getHandler()
      */
-    public function getHandler(mixed $handler)
+    public function getHandler(mixed $handler): mixed
     {
         $handler[0] = $this->getInstance();
         return $handler;
@@ -303,9 +318,9 @@ class ModuleHandler implements HandlerInterface
     public function getInstance(): ModuleServicesInterface
     {
         $module = static::getModule();
-        $handler = new (static::$handlerClass)(static::$moduleName, $module);
-        $handler->setContext($this->getContext());
-        return $handler;
+        $instance = new (static::$handlerClass)(static::$moduleName, $module);
+        $instance->setContext($this->getContext());
+        return $instance;
     }
 
     /**
@@ -314,19 +329,17 @@ class ModuleHandler implements HandlerInterface
     public function getModule(): ModuleInterface
     {
         $result = xarClassMap::findModuleClass(static::$moduleName);
+        /** @var ModuleInterface $module */
         $module = new $result['classname'](static::$moduleName);
         $module->setContext($this->getContext());
         return $module;
     }
 
     /**
-     * Summary of output
-     * @param mixed $result
-     * @param mixed $transform
-     * @return string
+     * Create output for result - @todo
      * @see \Xaraya\Bridge\Routing\RoutingBridge::output()
      */
-    public function output($result, $transform = null)
+    public function output(mixed $result, mixed $transform = null): string
     {
         if (is_string($result)) {
             return $result;

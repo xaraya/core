@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
-use xarClassMap;
 
 /**
  * Routing based on Symfony Routing component (test)
@@ -174,51 +173,6 @@ class Routing implements RouterInterface
             throw $e;
         }
         return $url;
-    }
-
-    /**
-     * Basic route builder for object/module requests e.g. in response output or templates - using route names here
-     * @see \Xaraya\Bridge\Middleware\DefaultRouter::buildUri()
-     * @see \Xaraya\Bridge\Requests\BasicBridgeTrait::prepareController()
-     */
-    public function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string
-    {
-        $route = null;
-        if (!empty($extra['_route'])) {
-            $route = $extra['_route'];
-            unset($extra['_route']);
-        } else {
-            $handlers = [];
-            if (!empty($arg1)) {
-                $handlers = xarClassMap::getHandlers($arg1);
-            }
-            if (empty($handlers)) {
-                $handlers = xarClassMap::getHandlers();
-            }
-            foreach ($handlers as $className => $filePath) {
-                $route = $className::findRoute($extra);
-                if (isset($route)) {
-                    break;
-                }
-            }
-        }
-        if (!empty($route)) {
-            // clean up current module
-            if (!empty($arg1) && !empty($extra['module']) && $extra['module'] == $arg1) {
-                unset($extra['module']);
-            }
-            // clean up default action
-            if (!empty($extra['entity']) && !empty($extra['action']) && in_array($extra['action'], ['view', 'display'])) {
-                unset($extra['action']);
-            }
-            try {
-                return $this->generate($route, $extra);
-            } catch (RouteNotFoundException $e) {
-                // ...
-            }
-        }
-        // @todo find route based on args
-        return "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));
     }
 
     /**

@@ -664,7 +664,7 @@ final class ClassMapTest extends TestCase
         $classname = array_key_first($expected);
         $this->assertArrayHasKey($classname, $handlers);
         $this->assertEquals($expected[$classname], $handlers[$classname]);
-        $this->assertGreaterThan(0, count($handlers));
+        $this->assertGreaterThan(1, count($handlers));
 
         $modName = 'dynamicdata';
         $handlers = xarClassMap::getHandlers($modName, null);
@@ -676,7 +676,7 @@ final class ClassMapTest extends TestCase
         $handlers = xarClassMap::getHandlers(null, $type);
         $this->assertArrayHasKey($classname, $handlers);
         $this->assertEquals($expected[$classname], $handlers[$classname]);
-        $this->assertGreaterThan(0, count($handlers));
+        $this->assertGreaterThan(1, count($handlers));
 
         $handlers = xarClassMap::getHandlers($modName, $type);
         $this->assertArrayHasKey($classname, $handlers);
