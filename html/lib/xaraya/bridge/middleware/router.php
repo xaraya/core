@@ -64,7 +64,9 @@ abstract class DefaultRouter extends BasicBridge implements DefaultRouterInterfa
      * Basic route builder for object/module requests e.g. in response output or templates - assuming short url format here
      *
      * @checkme signature might be different for other routers - keep it generic here
-     * public function buildUri(string $object, string $method = '', string|int|null $itemid = null, array $extra = []): string;
+     * public function buildUri(?string $object = null, ?string $method = null, string|int|null $itemid = null, array $extra = []): string
+     * public function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
+     * public function buildUri(?string $source = null, ?string $folder = null, string|int|null $file = null, array $extra = [], string $prefix = ''): string
      * public function buildUri($modName = null, $modType = 'user', $funcName = 'main', $args = []): string;
      */
     abstract public function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string;

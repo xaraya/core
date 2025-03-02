@@ -39,6 +39,7 @@ class ClassMapParser
             'hooksubjects' => [],
             'hookobservers' => [],
             'middleware' => [],
+            'handlers' => [],
             'dataobjects' => [],
             'classes' => [],
             'others' => [],
@@ -211,6 +212,13 @@ class ClassMapParser
             $interface = \Xaraya\Bridge\Middleware\DefaultRouterInterface::class;
             if ($this->checkInterface($className, $interface)) {
                 $classType = 'middleware';
+                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+                return;
+            }
+            sys::import('xaraya.bridge.routing.handler');
+            $interface = \Xaraya\Routing\HandlerInterface::class;
+            if ($this->checkInterface($className, $interface)) {
+                $classType = 'handlers';
                 $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }

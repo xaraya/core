@@ -653,6 +653,69 @@ final class ClassMapTest extends TestCase
         //restore_exception_handler();
     }
 
+    public function testGetHandlers(): void
+    {
+        $handlers = xarClassMap::getHandlers();
+
+        // we only have 1 handler class per module for the moment
+        $expected = [
+            'Xaraya\\Modules\\DynamicData\\DynamicDataHandler' => sys::code() . 'modules/dynamicdata/controllers/handler.php',
+        ];
+        $classname = array_key_first($expected);
+        $this->assertArrayHasKey($classname, $handlers);
+        $this->assertEquals($expected[$classname], $handlers[$classname]);
+        $this->assertGreaterThan(0, count($handlers));
+
+        $modName = 'dynamicdata';
+        $handlers = xarClassMap::getHandlers($modName, null);
+        $this->assertArrayHasKey($classname, $handlers);
+        $this->assertEquals($expected[$classname], $handlers[$classname]);
+        $this->assertCount(1, $handlers);
+
+        $type = 'handler';
+        $handlers = xarClassMap::getHandlers(null, $type);
+        $this->assertArrayHasKey($classname, $handlers);
+        $this->assertEquals($expected[$classname], $handlers[$classname]);
+        $this->assertGreaterThan(0, count($handlers));
+
+        $handlers = xarClassMap::getHandlers($modName, $type);
+        $this->assertArrayHasKey($classname, $handlers);
+        $this->assertEquals($expected[$classname], $handlers[$classname]);
+        $this->assertCount(1, $handlers);
+    }
+
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function testFindHandler(): void
+    {
+        $modName = 'dynamicdata';
+        // we only have 1 handler class per module for the moment
+        $type = null;
+        $result = xarClassMap::findHandler($modName, $type);
+
+        $expected = [
+            'classname' => 'Xaraya\Modules\DynamicData\DynamicDataHandler',
+            'filepath' => sys::code() . 'modules/dynamicdata/controllers/handler.php',
+            'classtype' => 'handlers',
+            'module' => $modName,
+            'filetype' => $type,
+        ];
+        $this->assertEquals($expected, $result);
+
+        // we can instantiate handler instance without database
+        $expected = $result['classname'];
+        $instance = new $result['classname']($modName);
+        $this->assertInstanceOf($expected, $instance);
+
+        // but we can't call or get the actual module handler - UserGui relies on xarMod::load() in configure()
+        $expected = 'No connection available';
+        $this->expectExceptionMessage($expected);
+
+        $handler = ['dummy', 'main'];
+        $handler = $instance->getHandler($handler);
+        $vars = [];
+        [$result, $context] = $instance->callHandler($handler, $vars);
+    }
+
     public function testGetModuleClasses(): void
     {
         $modules = xarClassMap::getModuleClasses();

@@ -19,11 +19,19 @@ use xarClassMap;
  */
 interface HandlerInterface extends ContextInterface
 {
+    public const ROUTE_PARAM = '_route';
+
     /**
      * Get supported handler routes (in generic format)
      * @return array<mixed> array of name => [method(s), path, handler, options = []]
      */
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array;
+
+    /**
+     * Find route name based on params
+     * @param array<string, mixed> $params
+     */
+    public static function findRoute(array $params): string|null;
 
     /**
      * Call the right handler after matching the route
@@ -37,19 +45,25 @@ interface HandlerInterface extends ContextInterface
  *
  * Supported URLs :
  *
+ * ```
  * $pathPrefix/$moduleName/
- * $pathPrefix/$moduleName/admin/... (not used here)
- * $pathPrefix/$moduleName/{entity}/
- * $pathPrefix/$moduleName/{entity}/{itemid} (numeric)
- * $pathPrefix/$moduleName/{entity}/{itemid}/{title}
- * $pathPrefix/$moduleName/{entity}/{action} (non-numeric)
- * $pathPrefix/$moduleName/{entity}/{action}/{itemid}
+ * $pathPrefix/$moduleName/admin/{func} (not used here)
+ * $pathPrefix/$moduleName/admin/{func}/{more} (not used here)
+ * $pathPrefix/$moduleName[/user]/{func} (not used here)
+ * $pathPrefix/$moduleName[/user]/{func}/{more} (not used here)
+ * $pathPrefix/$objectName/{entity}/
+ * $pathPrefix/$objectName/{entity}/{itemid} (numeric)
+ * $pathPrefix/$objectName/{entity}/{itemid}/{title}
+ * $pathPrefix/$objectName/{entity}/{action} (non-numeric)
+ * $pathPrefix/$objectName/{entity}/{action}/{itemid}
+ * ```
  */
 class ModuleHandler implements HandlerInterface
 {
     use ContextTrait;
 
     public static string $moduleName = '';
+    public static string $objectName = '';
     /** @var class-string */
     public static string $handlerClass = '';
     protected ModuleServicesInterface $instance;
@@ -60,11 +74,33 @@ class ModuleHandler implements HandlerInterface
      */
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array
     {
-        $pathPrefix .= '/' . static::$moduleName;
-        $namePrefix .= static::$moduleName . '-';
         //$handler = static::$handlerClass;
         $handler = static::class;
         $extra = [];
+        $routes = [];
+
+        $path = $pathPrefix . '/' . static::$moduleName;
+        $name = $namePrefix . static::$moduleName . '-';
+        $routes = array_merge($routes, static::getModuleRoutes($path, $name, $handler, $extra));
+
+        $path = $pathPrefix . '/' . static::$objectName;
+        $name = $namePrefix . static::$objectName . '-';
+        $routes = array_merge($routes, static::getObjectRoutes($path, $name, $handler, $extra));
+
+        return $routes;
+    }
+
+    /**
+     * Summary of getModuleRoutes
+     * @param string $pathPrefix incl. moduleName
+     * @param string $namePrefix incl. moduleName
+     * @param mixed $handler
+     * @param array<string, mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getModuleRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    {
+        $handler ??= static::class;
         $routes = [];
 
         // with trailing /
@@ -73,10 +109,54 @@ class ModuleHandler implements HandlerInterface
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'main'], $extra];
 
         // not supported here
-        $path = $pathPrefix . '/admin/{more:.+}';
+        $path = $pathPrefix . '/admin/{func}';
         $name = $namePrefix . 'admin';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admin'], $extra];
 
+        // not supported here
+        $path = $pathPrefix . '/admin/{func}/{more:.+}';
+        $name = $namePrefix . 'admin-more';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admin'], $extra];
+
+        if (static::$moduleName != static::$objectName) {
+            // if there is no overlap between module user func and dataobject entity, e.g. dynamicdata
+            $path = $pathPrefix . '/{func}';
+            $name = $namePrefix . 'user';
+            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'user'], $extra];
+
+            $path = $pathPrefix . '/{func}/{more:.+}';
+            $name = $namePrefix . 'user-more';
+            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'user'], $extra];
+        } else {
+            // if there is overlap between module user func and dataobject entity, e.g. library
+            $path = $pathPrefix . '/user/{func}';
+            $name = $namePrefix . 'user';
+            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'user'], $extra];
+
+            $path = $pathPrefix . '/user/{func}/{more:.+}';
+            $name = $namePrefix . 'user-more';
+            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'user'], $extra];
+        }
+
+        // @todo add some /api routes here too?
+
+        return $routes;
+    }
+
+    /**
+     * Summary of getObjectRoutes
+     * @param string $pathPrefix incl. objectName
+     * @param string $namePrefix incl. objectName
+     * @param mixed $handler
+     * @param array<string, mixed> $extra
+     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getObjectRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    {
+        $handler ??= static::class;
+        $routes = [];
+
+        // use entity and action to avoid conflict with module & func or object & method
         $path = $pathPrefix . '/{entity}/';
         $name = $namePrefix . 'entity';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handle'], $extra];
@@ -99,9 +179,88 @@ class ModuleHandler implements HandlerInterface
         $name = $namePrefix . 'entity-action-itemid';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handle'], $extra];
 
-        // @todo add some /api routes here too?
-
         return $routes;
+    }
+
+    /**
+     * Find route name based on params
+     * @param array<string, mixed> $params
+     */
+    public static function findRoute(array $params): string|null
+    {
+        // we have a route already
+        if (!empty($params[HandlerInterface::ROUTE_PARAM])) {
+            return $params[HandlerInterface::ROUTE_PARAM];
+        }
+        // this is not the right module
+        if (!empty($params['module']) && $params['module'] != static::$moduleName) {
+            return null;
+        }
+        // find module route name or dataobject route name
+        $namePrefix = static::$moduleName . '-';
+        $route = static::findModuleRoute($namePrefix, $params);
+        if (!isset($route)) {
+            $namePrefix = static::$objectName . '-';
+            $route = static::findObjectRoute($namePrefix, $params);
+        }
+        return $route;
+    }
+
+    /**
+     * Find module route name based on params
+     * @param string $namePrefix incl. moduleName
+     * @param array<string, mixed> $params
+     */
+    public static function findModuleRoute(string $namePrefix = '', array $params = []): string|null
+    {
+        if (!empty($params['type']) && $params['type'] == 'admin') {
+            if (!empty($params['func']) && !empty($params['more'])) {
+                return $namePrefix . 'admin-more';
+            }
+            return $namePrefix . 'admin';
+        }
+        if (!empty($params['type']) && $params['type'] == 'user') {
+            if (!empty($params['func']) && !empty($params['more'])) {
+                return $namePrefix . 'user-more';
+            }
+            if (!empty($params['func']) && $params['func'] != 'main') {
+                return $namePrefix . 'user';
+            }
+            return $namePrefix . 'main';
+        }
+        // module user main
+        if (empty($params['entity'])) {
+            return $namePrefix . 'main';
+        }
+        return null;
+    }
+
+    /**
+     * Find dataobject route name based on params
+     * @param string $namePrefix incl. objectName
+     * @param array<string, mixed> $params
+     */
+    public static function findObjectRoute(string $namePrefix = '', array $params = []): string|null
+    {
+        if (empty($params['entity'])) {
+            return $namePrefix . 'main';
+        }
+        // dataobject display
+        if (!empty($params['itemid'])) {
+            if (!empty($params['action']) && $params['action'] != 'display') {
+                return $namePrefix . 'entity-action-itemid';
+            }
+            if (!empty($params['title'])) {
+                return $namePrefix . 'entity-itemid-title';
+            }
+            return $namePrefix . 'entity-itemid';
+        }
+        // dataobject other
+        if (!empty($params['action']) && $params['action'] != 'view') {
+            return $namePrefix . 'entity-action';
+        }
+        // dataobject view
+        return $namePrefix . 'entity';
     }
 
     public function __construct()
@@ -117,6 +276,12 @@ class ModuleHandler implements HandlerInterface
     public function callHandler(mixed $handler, array $vars = []): mixed
     {
         $handler = $this->getHandler($handler);
+        if ($handler[1] == 'admin') {
+            // ... replace usergui instance with admingui instance
+        }
+        if ($handler[1] == 'user') {
+            // ... replace method with $vars['func']
+        }
         $result = $handler($vars);
         return [$result, $this->getContext()];
     }

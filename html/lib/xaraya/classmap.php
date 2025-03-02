@@ -426,6 +426,31 @@ class xarClassMap extends xarObject
     }
 
     /**
+     * Summary of getHandlers
+     * @param ?string $modName (optional)
+     * @param ?string $type handler type (optional) - not used
+     * @return array<string, string>
+     */
+    public static function getHandlers(?string $modName = null, ?string $type = null): array
+    {
+        // we can specify modName or type or both here
+        return static::getClassFiles('handlers', $modName, $type);
+    }
+
+    /**
+     * Summary of findHandler
+     * @param string $modName
+     * @param ?string $type handler type (optional) - not used
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
+     */
+    public static function findHandler(string $modName, ?string $type = null)
+    {
+        // we only have 1 handler class per module for the moment
+        $type ??= '';
+        return static::findClassFile('handlers', $modName, $type);
+    }
+
+    /**
      * Summary of getModuleClasses
      * @param ?string $modName (optional)
      * @return array<string, array{classname: string, filepath: string, module: string}>
