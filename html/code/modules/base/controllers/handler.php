@@ -64,17 +64,17 @@ class BaseHandler extends ModuleHandler
         // not supported here
         $path = $pathPrefix . '/admin/{func}';
         $name = $namePrefix . 'admin';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admin'], $extra];
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admingui'], $extra];
 
         // not supported here
         $path = $pathPrefix . '/admin/{func}/{more:.+}';
         $name = $namePrefix . 'admin-more';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admin'], $extra];
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admingui'], $extra];
 
         // if there is no overlap between module user func and dataobject entity, e.g. base
         $path = $pathPrefix . '/{func}/{more:.+}';
         $name = $namePrefix . 'user-more';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'user'], $extra];
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
 
         return $routes;
     }
