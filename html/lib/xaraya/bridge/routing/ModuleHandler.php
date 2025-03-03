@@ -1,49 +1,18 @@
 <?php
 
 /**
- * Generic handler interface for routing & dispatching outside Xaraya
+ * Module handler class for routing & dispatching outside Xaraya
  *
  * @todo experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Routing;
 
-use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Modules\ModuleInterface;
 use Xaraya\Modules\ModuleServicesInterface;
 use xarClassMap;
-
-/**
- * Generic handler interface for routing & dispatching outside Xaraya
- */
-interface HandlerInterface extends ContextInterface
-{
-    public const ROUTE_PARAM = '_route';
-
-    /**
-     * Get supported handler routes (in generic format)
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
-     */
-    public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array;
-
-    /**
-     * Find route name based on params
-     * @param array<string, mixed> $params
-     */
-    public static function findRoute(array $params): string|null;
-
-    /**
-     * Call the right handler after matching the route
-     * @param array<string, mixed> $vars
-     */
-    public function callHandler(mixed $handler, array $vars = []): mixed;
-
-    /**
-     * Create output for result
-     */
-    public function output(mixed $result, mixed $transform = null): string;
-}
+use FunctionNotFoundException;
 
 /**
  * Module handler class for routing & dispatching outside Xaraya
@@ -72,6 +41,7 @@ class ModuleHandler implements HandlerInterface
     /** @var class-string<ModuleServicesInterface> */
     public static string $handlerClass = '';
     protected ModuleServicesInterface $instance;
+    protected string $funcName;
 
     /**
      * Get supported handler routes (in generic format)
@@ -120,31 +90,31 @@ class ModuleHandler implements HandlerInterface
         // not supported here
         $path = $pathPrefix . '/admin/{func}';
         $name = $namePrefix . 'admin';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admin'], $extra];
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admingui'], $extra];
 
         // not supported here
         $path = $pathPrefix . '/admin/{func}/{more:.+}';
         $name = $namePrefix . 'admin-more';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admin'], $extra];
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admingui'], $extra];
 
         if (static::$moduleName != static::$objectName) {
             // if there is no overlap between module user func and dataobject entity, e.g. dynamicdata
             $path = $pathPrefix . '/{func}';
             $name = $namePrefix . 'user';
-            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'user'], $extra];
+            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
 
             $path = $pathPrefix . '/{func}/{more:.+}';
             $name = $namePrefix . 'user-more';
-            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'user'], $extra];
+            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
         } else {
             // if there is overlap between module user func and dataobject entity, e.g. library
             $path = $pathPrefix . '/user/{func}';
             $name = $namePrefix . 'user';
-            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'user'], $extra];
+            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
 
             $path = $pathPrefix . '/user/{func}/{more:.+}';
             $name = $namePrefix . 'user-more';
-            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'user'], $extra];
+            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
         }
 
         // @todo add some /api routes here too?
@@ -291,25 +261,47 @@ class ModuleHandler implements HandlerInterface
     {
         $this->getContext()?->tracePath(__METHOD__, $handler);
         $handler = $this->getHandler($handler);
-        if ($handler[1] == 'admin') {
+        // assuming $handler[0] is \Xaraya\Modules\...\UserGui class here
+        if ($handler[1] == 'admingui') {
             // ... replace usergui instance with admingui instance
+            $handler[0] = $handler[0]->admingui();
+            if (empty($handler[0])) {
+                throw new FunctionNotFoundException('AdminGui');
+            }
+            $this->instance = $handler[0];
+            $handler[1] = $vars['func'] ?? 'main';
+            if (!$handler[0]->hasMethod($handler[1], 'gui')) {
+                throw new FunctionNotFoundException($handler[1]);
+            }
+            $this->funcName = $handler[1];
         }
-        if ($handler[1] == 'user') {
+        if ($handler[1] == 'usergui') {
             // ... replace method with $vars['func']
+            $handler[1] = $vars['func'] ?? 'main';
+            if (!$handler[0]->hasMethod($handler[1], 'gui')) {
+                throw new FunctionNotFoundException($handler[1]);
+            }
+            $this->funcName = $handler[1];
         }
         $result = $handler($vars);
+        // @todo do not apply template here (yet)?
+        if (is_array($result)) {
+            $result = $handler[0]->mod()->template($handler[1], $result);
+        }
         return [$result, $this->getContext()];
     }
 
     /**
      * Summary of getHandler
      * @param mixed $handler
+     * @return array{0: ModuleServicesInterface, 1: string}
      * @see \Xaraya\Bridge\Routing\RoutingBridge::getHandler()
      */
     public function getHandler(mixed $handler): mixed
     {
-        $handler[0] = $this->getInstance();
-        return $handler;
+        $this->instance = $this->getInstance();
+        $this->funcName = $handler[1];
+        return [$this->instance, $this->funcName];
     }
 
     /**
@@ -341,6 +333,10 @@ class ModuleHandler implements HandlerInterface
      */
     public function output(mixed $result, mixed $transform = null): string
     {
+        // @todo apply template here?
+        //if (is_array($result)) {
+        //    $result = $this->instance->mod()->template($this->funcName, $result);
+        //}
         if (is_string($result)) {
             return $result;
         }

@@ -215,7 +215,7 @@ class ClassMapParser
                 $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }
-            sys::import('xaraya.bridge.routing.handler');
+            sys::import('xaraya.bridge.routing.HandlerInterface');
             $interface = \Xaraya\Routing\HandlerInterface::class;
             if ($this->checkInterface($className, $interface)) {
                 $classType = 'handlers';

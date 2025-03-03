@@ -124,12 +124,13 @@ class DefaultHandler extends ModuleHandler
     /**
      * Summary of getHandler
      * @param mixed $handler
+     * @return array{0: HandlerInterface, 1: string}
      */
     public function getHandler(mixed $handler): mixed
     {
         // handle default routes here
-        $handler[0] = $this;
-        return $handler;
+        $this->funcName = $handler[1];
+        return [$this, $this->funcName];
     }
 
     /**
@@ -146,10 +147,12 @@ class DefaultHandler extends ModuleHandler
         unset($args['module']);
         unset($args['type']);
         unset($args['func']);
+        // parent for modules service here
         $this->modName = $modName;
         $this->modType = $modType;
         $xarMod = ServiceFactory::getModulesService($this);
         $result = $xarMod->guiMethod($modName, $modType, $funcName, $args);
+        // always apply template here
         if (is_array($result)) {
             $result = $xarMod->template($funcName, $result);
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Routing based on Symfony Routing component (test)
  */

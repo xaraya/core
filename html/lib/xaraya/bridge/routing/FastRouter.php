@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Routing based on nikic/fast-route library
  * @see https://github.com/nikic/FastRoute

@@ -132,7 +132,6 @@ class Dispatcher
      */
     public function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string
     {
-        echo "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));
         $route = null;
         if (!empty($extra['_route'])) {
             $route = $extra['_route'];
@@ -170,6 +169,14 @@ class Dispatcher
             // clean up current module
             if (!empty($arg1) && !empty($extra['module']) && $extra['module'] == $arg1) {
                 unset($extra['module']);
+            }
+            // clean up default type
+            if (!empty($extra['type']) && $extra['type'] == 'user') {
+                unset($extra['type']);
+                // clean up default func
+                if (!empty($extra['func']) && $extra['func'] == 'main') {
+                    unset($extra['func']);
+                }
             }
             // clean up default action
             if (!empty($extra['entity']) && !empty($extra['action']) && in_array($extra['action'], ['view', 'display'])) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Common router interface for FastRouter and Symfony Routing
  */
