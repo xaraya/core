@@ -59,12 +59,14 @@ class UsermenuMethod extends MethodClass
                 'showloginform',
                 ['redirecturl' => $redirecturl]
             ));
+            return true;
         }
 
         // edit account is disabled?
         if ((bool) $this->mod()->getVar('usereditaccount') == false) {
             // show the user their profile display
             $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'account'));
+            return true;
         }
 
         // Get arguments from argument array

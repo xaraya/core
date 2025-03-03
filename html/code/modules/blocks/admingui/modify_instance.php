@@ -558,6 +558,7 @@ class ModifyInstanceMethod extends MethodClass
                     );
                 }
                 $this->ctl()->redirect($return_url);
+                return true;
             }
             // failed to validate, pass the invalid messages back to the form
             $data['invalid'] = $invalid;

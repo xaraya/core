@@ -106,6 +106,7 @@ class DeleteTypeMethod extends MethodClass
                     $return_url = $this->ctl()->getModuleURL('blocks', 'admin', 'view_types');
                 }
                 $this->ctl()->redirect($return_url);
+                return true;
             }
 
         }

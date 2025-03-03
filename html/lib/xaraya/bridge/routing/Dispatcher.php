@@ -10,19 +10,22 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Xaraya\Context\Context;
 use xarClassMap;
 use xarController;
+use xarServer;
 use Exception;
+use FunctionNotFoundException;
 
 /**
  * Module dispatcher for routing & dispatching outside Xaraya
  */
 class Dispatcher
 {
+    public string $baseUri = '';
     public ?RouterInterface $router;
     public ?HandlerInterface $handler;
 
-    public function __construct()
+    public function __construct(string $baseUri = 'http://localhost/')
     {
-        // ...
+        $this->baseUri = $baseUri;
     }
 
     public function dispatch(string $path, string $method = 'GET', array $params = [])
@@ -31,7 +34,7 @@ class Dispatcher
         if (empty($handler)) {
             return [$vars, null];
         }
-        xarController::setCallback('buildUri', [$this, 'buildUri']);
+        $this->prepareController($this->baseUri);
         if (!empty($params)) {
             $vars = array_merge($vars, $params);
         }
@@ -66,6 +69,7 @@ class Dispatcher
         foreach ($handlers as $className => $filePath) {
             $routes = array_merge($routes, $className::getRoutes());
         }
+        $routes = array_merge($routes, DefaultHandler::getRoutes());
         return $routes;
     }
 
@@ -89,7 +93,11 @@ class Dispatcher
         }
         $this->handler = new $handlerClass();
         $this->handler->setContext($context);
-        [$result, $context] = $this->handler->callHandler($handler, $vars);
+        try {
+            [$result, $context] = $this->handler->callHandler($handler, $vars);
+        } catch (FunctionNotFoundException $e) {
+            $result = $this->notFound($e->getMessage(), $context);
+        }
         return [$result, $context];
     }
 
@@ -103,13 +111,28 @@ class Dispatcher
     }
 
     /**
+     * Summary of prepareController
+     * @return void
+     * @see \Xaraya\Bridge\Requests\BasicBridgeTrait::prepareController()
+     */
+    public function prepareController(string $baseUri)
+    {
+        xarServer::setBaseURL($baseUri);
+        xarController::setCallback('buildUri', [$this, 'buildUri']);
+        xarController::setCallback('redirectTo', [$this, 'redirect']);
+        xarController::setCallback('forbiddenTo', [$this, 'forbidden']);
+        xarController::setCallback('notFoundTo', [$this, 'notFound']);
+        xarController::setCallback('badRequestTo', [$this, 'badRequest']);
+    }
+
+    /**
      * Basic route builder for object/module requests e.g. in response output or templates - using route names here
      * @param array<string, mixed> $extra
      * @see \Xaraya\Bridge\Middleware\DefaultRouter::buildUri()
-     * @see \Xaraya\Bridge\Requests\BasicBridgeTrait::prepareController()
      */
     public function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string
     {
+        echo "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));
         $route = null;
         if (!empty($extra['_route'])) {
             $route = $extra['_route'];
@@ -126,14 +149,15 @@ class Dispatcher
                         $extra['action'] = $extra['itemid'];
                         unset($extra['itemid']);
                     }
+                } else {
+                    $extra['module'] ??= $arg1;
+                    $extra['type'] ??= $arg2;
+                    $extra['func'] ??= $arg3;
                 }
                 $handlers = xarClassMap::getHandlers($arg1);
             }
             if (empty($handlers)) {
                 $handlers = xarClassMap::getHandlers();
-                if (!empty($arg1)) {
-                    $extra['module'] ??= $arg1;
-                }
             }
             foreach ($handlers as $className => $filePath) {
                 $route = $className::findRoute($extra);
@@ -151,14 +175,69 @@ class Dispatcher
             if (!empty($extra['entity']) && !empty($extra['action']) && in_array($extra['action'], ['view', 'display'])) {
                 unset($extra['action']);
             }
-            try {
-                return $this->getRouter()->generate($route, $extra);
-                // @todo replace 1234567890 with [itemid] for defer* properties
-            } catch (RouteNotFoundException $e) {
-                // ...
+        } else {
+            $route = DefaultHandler::findRoute($extra);
+            // clean up default type
+            if (!empty($extra['type']) && $extra['type'] == 'user') {
+                unset($extra['type']);
             }
+        }
+        try {
+            return $this->getRouter()->generate($route, $extra);
+            // @todo replace 1234567890 with [itemid] for defer* properties
+        } catch (RouteNotFoundException $e) {
+            // ...
         }
         // @todo find route based on args
         return "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));
+    }
+
+    /**
+     * Summary of redirect
+     * @param mixed $redirectURL
+     * @param mixed $httpResponse
+     * @param mixed $context
+     * @return null
+     */
+    public function redirect($redirectURL, $httpResponse, $context)
+    {
+        echo "Redirect: $redirectURL ($httpResponse)";
+        return null;
+    }
+
+    /**
+     * Summary of forbidden
+     * @param mixed $msg
+     * @param mixed $context
+     * @return null
+     */
+    public function forbidden($msg, $context)
+    {
+        echo "Forbidden: $msg";
+        return null;
+    }
+
+    /**
+     * Summary of notFound
+     * @param mixed $msg
+     * @param mixed $context
+     * @return null
+     */
+    public function notFound($msg, $context)
+    {
+        echo "Not Found: $msg";
+        return null;
+    }
+
+    /**
+     * Summary of badRequest
+     * @param mixed $layout
+     * @param mixed $context
+     * @return null
+     */
+    public function badRequest($layout, $context)
+    {
+        echo "Bad Request: $layout";
+        return null;
     }
 }

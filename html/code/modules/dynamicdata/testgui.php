@@ -43,12 +43,13 @@ class TestGui extends AdminGui
     /**
      * Test method to verify that we can override redirect()
      * @param array<string, mixed> $args
-     * @return array<mixed>|void
+     * @return array<mixed>|true
      */
     public function test_with_redirect(array $args = [])
     {
         $url = $this->mod()->getURL('admin', 'main', $args);
         $this->ctl()->redirect($url, 301);
+        return true;
     }
 
     /**

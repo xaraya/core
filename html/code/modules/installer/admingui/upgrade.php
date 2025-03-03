@@ -37,7 +37,7 @@ class UpgradeMethod extends MethodClass
 
     /**
      *
-     * @return array|void data for the template display
+     * @return array|bool|void data for the template display
      * @see AdminGui::upgrade()
      */
     public function __invoke(array $args = [])
@@ -112,6 +112,7 @@ class UpgradeMethod extends MethodClass
             // If they don't coincide, bail
             if ($adminpass != $userpass) {
                 $this->ctl()->redirect($this->ctl()->getCurrentURL(['phase' => 1, 'error' => 1]));
+                return true;
             }
             $data['password'] = $adminpass;
         }

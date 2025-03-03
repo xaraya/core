@@ -154,6 +154,7 @@ class GetvalidationMethod extends MethodClass
                         return;
                     }
                     $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'main'));
+                    return true;
 
                 } elseif ($pending == 1 && ($status['id'] != $this->mod()->getVar('admin'))) {
                     // This is a new user and the site requires admin approval
@@ -271,6 +272,7 @@ class GetvalidationMethod extends MethodClass
                     'getvalidation',
                     ['sent' => 1]
                 ));
+                return true;
 
         }
 

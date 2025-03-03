@@ -285,7 +285,7 @@ class ModifyconfigMethod extends MethodClass
                     'modifyconfig',
                     ['tab' => $data['tab']]
                 ));
-                break;
+                return true;
         }
         return $data;
     }

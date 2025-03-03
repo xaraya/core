@@ -67,9 +67,9 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 $this->setContent($links);
                 if (!$this->mod()->apiFunc('blocks', 'instances', 'updateitem', $this->blockinfo)) return;
                 $this->ctl()->redirect($links['return_url']);
-            break;
+                return true;
             default:
-            break;
+                break;
         }
 
         // display options

@@ -97,6 +97,7 @@ class ModifypropertiesMethod extends MethodClass
                         $return_url = $this->ctl()->getModuleURL('modules', 'admin', 'modifyproperties', ['id' => $id]);
                     }
                     $this->ctl()->redirect($return_url);
+                    return true;
                 }
             }
         }

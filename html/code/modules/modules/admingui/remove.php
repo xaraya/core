@@ -95,6 +95,7 @@ class RemoveMethod extends MethodClass
                 // Clear the property cache
                 PropertyRegistration::importPropertyTypes(true);
                 $this->ctl()->redirect($return_url);
+                return true;
             } else {
                 // There are dependents, let's build a GUI
                 $data                 = [];

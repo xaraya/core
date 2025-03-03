@@ -91,6 +91,7 @@ class ModifyrealmMethod extends MethodClass
             $result = $stmt->executeQuery($bindvars);
 
             $this->ctl()->redirect($this->ctl()->getModuleURL('privileges', 'admin', 'viewrealms'));
+            return true;
         }
 
         $data['id'] = $id;

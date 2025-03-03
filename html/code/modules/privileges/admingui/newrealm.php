@@ -78,6 +78,7 @@ class NewrealmMethod extends MethodClass
 
             //Redirect to view page
             $this->ctl()->redirect($this->ctl()->getModuleURL('privileges', 'admin', 'viewrealms'));
+            return true;
         }
 
         $data['authid'] = $this->sec()->genAuthKey();

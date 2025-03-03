@@ -158,7 +158,7 @@ class EmailMethod extends MethodClass
                 // lets update status and display updated configuration
                 $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'viewlist'));
 
-                break;
+                return true;
         }
 
         return $data;

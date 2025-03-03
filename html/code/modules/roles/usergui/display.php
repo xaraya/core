@@ -69,6 +69,7 @@ class DisplayMethod extends MethodClass
             $currentid = $this->user()->getId();
             if ($currentid == $id) {
                 $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'account'));
+                return true;
             }
 
             $name = $role->getName();

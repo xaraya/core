@@ -102,6 +102,7 @@ class DeactivateMethod extends MethodClass
                     return;
                 }
                 $this->ctl()->redirect($return_url);
+                return true;
             }
         }
 

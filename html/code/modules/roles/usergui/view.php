@@ -51,6 +51,7 @@ class ViewMethod extends MethodClass
         // members list disabled? only show to roles admins
         if ((bool) $this->mod()->getVar('displayrolelist') == false && !$this->sec()->checkAccess('AdminRoles', 0)) {
             $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'main'));
+            return true;
         }
         //    extract($args);
 

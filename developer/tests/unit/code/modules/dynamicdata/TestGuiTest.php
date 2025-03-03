@@ -136,7 +136,7 @@ final class TestGuiTest extends TestHelper
         $args = ['hello' => 'world'];
         $data = $testgui->test_with_redirect($args);
 
-        $expected = null;
+        $expected = true;
         $this->assertEquals($expected, $data);
     }
 

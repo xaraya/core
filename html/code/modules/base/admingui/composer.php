@@ -126,6 +126,7 @@ class ComposerMethod extends MethodClass
                 }
                 if (empty($data['message'])) {
                     $this->ctl()->redirect($this->ctl()->getCurrentURL());
+                    return true;
                 }
             }
         } elseif ($install) {

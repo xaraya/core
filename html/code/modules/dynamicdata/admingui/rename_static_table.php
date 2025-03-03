@@ -55,6 +55,7 @@ class RenameStaticTableMethod extends MethodClass
                     'view_static',
                     ['table' => $data['table']]
                 ));
+                return true;
             }
             $query = 'RENAME TABLE ' . $data['table'] . ' TO ' . $data['newtable'];
             $dbconn = $this->db()->getConn();

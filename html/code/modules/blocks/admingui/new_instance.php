@@ -262,6 +262,7 @@ class NewInstanceMethod extends MethodClass
                     );
                 }
                 $this->ctl()->redirect($return_url);
+                return true;
 
             } else {
                 // redisplay with invalid messages

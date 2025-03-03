@@ -45,7 +45,7 @@ class AccountMethod extends MethodClass
      * Currently does not work, due to design
      * of menu not in place, and DD not in place.
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array|void data for the template display
+     * @return array|bool|void data for the template display
      * @todo Finish this function.
      * @see UserGui::account()
      */
@@ -72,6 +72,7 @@ class AccountMethod extends MethodClass
                 'showloginform',
                 ['redirecturl' => urlencode($redirecturl)]
             ));
+            return true;
         }
 
         $id = $this->user()->getId();

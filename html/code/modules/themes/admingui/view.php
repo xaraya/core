@@ -128,6 +128,7 @@ class ViewMethod extends MethodClass
             }
             $return_url = $this->ctl()->getModuleURL('themes', 'admin', 'view');
             $this->ctl()->redirect($return_url);
+            return true;
         }
 
         // display phase

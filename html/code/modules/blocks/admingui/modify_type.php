@@ -355,6 +355,7 @@ class ModifyTypeMethod extends MethodClass
                     );
                 }
                 $this->ctl()->redirect($return_url);
+                return true;
             }
             $data['invalid'] = $invalid;
 

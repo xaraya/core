@@ -198,7 +198,7 @@ class LoginMethod extends MethodClass
             case xarRoles::ROLES_STATE_NOTVALIDATED:
                 //User still must validate
                 $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'user', 'getvalidation', ['uname' => $uname, 'valcode' => $pass, 'phase' => 'getvalidate']));
-                break;
+                return true;
 
             case xarRoles::ROLES_STATE_ACTIVE:
             default:
@@ -317,8 +317,6 @@ class LoginMethod extends MethodClass
                 // User is pending activation
                 return $this->tpl()->module('authsystem', 'user', 'errors', ['layout' => 'account_pending']);
         }
-
-        return true;
 
     }
 }

@@ -124,6 +124,7 @@ class DeleteInstanceMethod extends MethodClass
 
             $return_url = $this->ctl()->getModuleURL('blocks', 'admin', 'view_instances');
             $this->ctl()->redirect($return_url);
+            return true;
         }
 
         $data = [];

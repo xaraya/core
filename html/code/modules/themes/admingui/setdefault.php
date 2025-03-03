@@ -72,6 +72,7 @@ class SetdefaultMethod extends MethodClass
 
         if ($themeInfo['class'] != 2) {
             $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'modifyconfig'));
+            return true;
         }
 
         if ($this->var()->isCached('Mod.Variables.themes', 'default_theme')) {
@@ -81,6 +82,7 @@ class SetdefaultMethod extends MethodClass
         //update the database - activate the theme
         if (!$adminapi->install(['regid' => $defaulttheme])) {
             $this->ctl()->redirect($this->ctl()->getModuleURL('themes', 'admin', 'modifyconfig'));
+            return true;
         }
 
         // update the data

@@ -180,6 +180,7 @@ class ModifyconfigMethod extends MethodClass
                                 'modifyconfig',
                                 ['tab' => $data['tab']]
                             ));
+                            return true;
                         }
                         $secret = [
                             'name' => MD5($name),

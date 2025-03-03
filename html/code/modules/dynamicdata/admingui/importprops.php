@@ -78,5 +78,6 @@ class ImportpropsMethod extends MethodClass
             ['module_id' => $module_id,
                 'itemtype' => $itemtype]
         ));
+        return true;
     }
 }

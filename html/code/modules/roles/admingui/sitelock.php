@@ -144,6 +144,7 @@ class SitelockMethod extends MethodClass
                 $this->mod()->setVar('lockdata', serialize($lockdata));
                 // Refresh by jumping to the same page
                 $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'sitelock'));
+                return true;
 
                 # --------------------------------------------------------
                 # We are locking or unlocking the site
@@ -223,6 +224,7 @@ class SitelockMethod extends MethodClass
                 }
                 // Refresh by jumping to the same page
                 $this->ctl()->redirect($this->ctl()->getModuleURL('roles', 'admin', 'sitelock'));
+                return true;
             }
         }
 

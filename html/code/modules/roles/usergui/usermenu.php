@@ -72,6 +72,7 @@ class UsermenuMethod extends MethodClass
 
         if (!$this->user()->isLoggedIn()) {
             $this->ctl()->redirect($this->ctl()->getModuleURL($defaultloginmodname, 'user', 'showloginform'));
+            return true;
         }
 
         $id = $this->user()->getId();
