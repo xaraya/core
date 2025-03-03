@@ -34,11 +34,17 @@ final class BridgeHandlerTest extends TestHelper
             'update' => null,
             'context' => null,
         ];
-        $this->assertEquals(array_keys($expected), array_keys($result));
+        // @todo depends on whether we apply template in callHandler() or output()
+        if (is_array($result)) {
+            $this->assertEquals(array_keys($expected), array_keys($result));
+        } else {
+            $expected = 'Sample Object';
+            $this->assertStringContainsString($expected, $result);
+        }
 
         $output = $instance->output($result);
 
-        $expected = '    "sample"';
+        $expected = 'Sample Object';
         $this->assertStringContainsString($expected, $output);
     }
 
@@ -82,9 +88,9 @@ final class BridgeHandlerTest extends TestHelper
         return [
             // uri => [route, callable, path, params]
             '/dynamicdata/' => ['dynamicdata-main', [$class, 'main'], '/dynamicdata/', ['module' => $moduleName]],
-            '/dynamicdata/admin/func' => ['dynamicdata-admin', [$class, 'admin'], '/dynamicdata/admin/func', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func']],
-            '/dynamicdata/admin/func/more' => ['dynamicdata-admin-more', [$class, 'admin'], '/dynamicdata/admin/func/more', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func', 'more' => 'more']],
-            '/dynamicdata/search' => ['dynamicdata-user', [$class, 'user'], '/dynamicdata/search', ['module' => $moduleName, 'type' => 'user', 'func' => 'search']],
+            '/dynamicdata/admin/func' => ['dynamicdata-admin', [$class, 'admingui'], '/dynamicdata/admin/func', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func']],
+            '/dynamicdata/admin/func/more' => ['dynamicdata-admin-more', [$class, 'admingui'], '/dynamicdata/admin/func/more', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func', 'more' => 'more']],
+            '/dynamicdata/search' => ['dynamicdata-user', [$class, 'usergui'], '/dynamicdata/search', ['module' => $moduleName, 'type' => 'user', 'func' => 'search']],
             '/object/sample/' => ['object-entity', [$class, 'handle'], '/object/sample/', ['module' => $moduleName, 'entity' => 'sample']],
             '/object/sample/1' => ['object-entity-itemid', [$class, 'handle'], '/object/sample/1', ['module' => $moduleName, 'entity' => 'sample', 'itemid' => '1']],
             '/object/sample/1/Johnny' => ['object-entity-itemid-title', [$class, 'handle'], '/object/sample/1/Johnny', ['module' => $moduleName, 'entity' => 'sample', 'itemid' => '1', 'title' => 'Johnny']],
