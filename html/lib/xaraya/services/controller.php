@@ -90,21 +90,21 @@ interface ControllerInterface extends ServiceInterface
 
     /**
      * Return a 403 Forbidden header and fill in the 'message-forbidden.xt' template
-     * @return string output display string
+     * @return string|null output display string
      */
-    public function forbidden(string $msg = '', ?string $template = null): string;
+    public function forbidden(string $msg = '', ?string $template = null): string|null;
 
     /**
      * Return a 404 Not Found header and fill in the 'message-notfound.xt' template
-     * @return string output display string
+     * @return string|null output display string
      */
-    public function notFound(string $msg = '', ?string $template = null): string;
+    public function notFound(string $msg = '', ?string $template = null): string|null;
 
     /**
      * Return a 400 Bad Request header and fill in the 'user-errors.xt' template with optional layout
-     * @return string output display string
+     * @return string|null output display string
      */
-    public function badRequest(?string $layout = null): string;
+    public function badRequest(?string $layout = null): string|null;
 }
 
 /**
@@ -234,27 +234,27 @@ trait ControllerTrait
 
     /**
      * Return a 403 Forbidden header and fill in the 'message-forbidden.xt' template
-     * @return string output display string
+     * @return string|null output display string
      */
-    public function forbidden(string $msg = '', ?string $template = null): string
+    public function forbidden(string $msg = '', ?string $template = null): string|null
     {
         return xarController::forbidden($msg, $this->getContext(), $template);
     }
 
     /**
      * Return a 404 Not Found header and fill in the 'message-notfound.xt' template
-     * @return string output display string
+     * @return string|null output display string
      */
-    public function notFound(string $msg = '', ?string $template = null): string
+    public function notFound(string $msg = '', ?string $template = null): string|null
     {
         return xarController::notFound($msg, $this->getContext(), $template);
     }
 
     /**
      * Return a 400 Bad Request header and fill in the 'user-errors.xt' template with optional layout
-     * @return string output display string
+     * @return string|null output display string
      */
-    public function badRequest(?string $layout = null): string
+    public function badRequest(?string $layout = null): string|null
     {
         return xarController::badRequest($layout, $this->getContext());
     }

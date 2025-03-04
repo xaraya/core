@@ -27,7 +27,7 @@ interface HandlerInterface extends ContextInterface
      * Find route name based on params
      * @param array<string, mixed> $params
      */
-    public static function findRoute(array $params): string|null;
+    public static function findRoute(RouterInterface $router, array $params): string|null;
 
     /**
      * Call the right handler after matching the route

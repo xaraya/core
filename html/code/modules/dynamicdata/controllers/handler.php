@@ -9,6 +9,7 @@
 namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Routing\ModuleHandler;
+use Xaraya\Routing\RouterInterface;
 
 /**
  * DynamicData handler class for routing & dispatching outside Xaraya
@@ -42,5 +43,14 @@ class DynamicDataHandler extends ModuleHandler
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array
     {
         return parent::getRoutes($pathPrefix, $namePrefix);
+    }
+
+    /**
+     * Find route uri based on params
+     * @param array<string, mixed> $params
+     */
+    public static function findRoute(RouterInterface $router, array $params): string|null
+    {
+        return parent::findRoute($router, $params);
     }
 }

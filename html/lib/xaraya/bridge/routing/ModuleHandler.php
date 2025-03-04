@@ -8,6 +8,7 @@
 
 namespace Xaraya\Routing;
 
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Modules\ModuleInterface;
 use Xaraya\Modules\ModuleServicesInterface;
@@ -162,89 +163,145 @@ class ModuleHandler implements HandlerInterface
     }
 
     /**
-     * Find route name based on params
+     * Find route uri based on params
      * @param array<string, mixed> $params
      */
-    public static function findRoute(array $params): string|null
+    public static function findRoute(RouterInterface $router, array $params): string|null
     {
         // we have a route already
         if (!empty($params[HandlerInterface::ROUTE_PARAM])) {
-            return $params[HandlerInterface::ROUTE_PARAM];
+            $route = $params[HandlerInterface::ROUTE_PARAM];
+            // clean up current route
+            unset($params[HandlerInterface::ROUTE_PARAM]);
+            return static::makeUri($router, $route, $params);
         }
         // this is not the right module
         if (!empty($params['module']) && $params['module'] != static::$moduleName) {
             return null;
         }
+        // clean up current module
+        unset($params['module']);
         $route = null;
-        // find module route name or dataobject route name
+        // find module route uri or dataobject route uri
         if (!isset($route) && !empty(static::$moduleName)) {
             $namePrefix = static::$moduleName . '-';
-            $route = static::findModuleRoute($namePrefix, $params);
+            $route = static::findModuleRoute($router, $namePrefix, $params);
         }
         if (!isset($route) && !empty(static::$objectName)) {
             $namePrefix = static::$objectName . '-';
-            $route = static::findObjectRoute($namePrefix, $params);
+            $route = static::findObjectRoute($router, $namePrefix, $params);
         }
         return $route;
     }
 
     /**
-     * Find module route name based on params
+     * Find module route uri based on params
      * @param string $namePrefix incl. moduleName
      * @param array<string, mixed> $params
      */
-    public static function findModuleRoute(string $namePrefix = '', array $params = []): string|null
+    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): string|null
     {
-        // module admin func
-        if (!empty($params['type']) && $params['type'] == 'admin') {
-            if (!empty($params['func']) && !empty($params['more'])) {
-                return $namePrefix . 'admin-more';
-            }
-            return $namePrefix . 'admin';
+        $params['type'] ??= 'user';
+        $params['func'] ??= 'main';
+        $route = null;
+        switch ($params['type']) {
+            case 'admin':
+                // module admin func
+                if (!empty($params['more'])) {
+                    $route = $namePrefix . 'admin-more';
+                } else {
+                    $route = $namePrefix . 'admin';
+                }
+                break;
+
+            case 'user':
+                // find dataobject route for this module - @todo with any user func here?
+                if (!empty(static::$objectName) && !empty($params['entity'])) {
+                    return null;
+                }
+                // module user func
+                if (!empty($params['more'])) {
+                    $route = $namePrefix . 'user-more';
+                } elseif ($params['func'] != 'main') {
+                    $route = $namePrefix . 'user';
+                } else {
+                    // module user main
+                    $route = $namePrefix . 'main';
+                    // clean up default func
+                    unset($params['func']);
+                }
+                break;
+
+            default:
+                // module other func
+                return null;
         }
-        // module user func
-        if (!empty($params['type']) && $params['type'] == 'user') {
-            if (!empty($params['func']) && !empty($params['more'])) {
-                return $namePrefix . 'user-more';
-            }
-            if (!empty($params['func']) && $params['func'] != 'main') {
-                return $namePrefix . 'user';
-            }
-            return $namePrefix . 'main';
-        }
-        // module user main
-        if (empty($params['entity'])) {
-            return $namePrefix . 'main';
-        }
-        return null;
+        // clean up current type
+        unset($params['type']);
+        return static::makeUri($router, $route, $params);
     }
 
     /**
-     * Find dataobject route name based on params
+     * Find dataobject route uri based on params
      * @param string $namePrefix incl. objectName
      * @param array<string, mixed> $params
      */
-    public static function findObjectRoute(string $namePrefix = '', array $params = []): string|null
+    public static function findObjectRoute(RouterInterface $router, string $namePrefix = '', array $params = []): string|null
     {
+        // no dataobject here
         if (empty($params['entity'])) {
-            return $namePrefix . 'main';
+            $route = $namePrefix . 'main';
+            return static::makeUri($router, $route, $params);
         }
-        // dataobject display
+        // clean up default type
+        if (!empty($params['type']) && $params['type'] == 'user') {
+            unset($params['type']);
+            // clean up current func - @todo with any user func here?
+            unset($params['func']);
+        }
+        // dataobject display or action
         if (!empty($params['itemid'])) {
             if (!empty($params['action']) && $params['action'] != 'display') {
-                return $namePrefix . 'entity-action-itemid';
+                $route = $namePrefix . 'entity-action-itemid';
+            } elseif (!empty($params['title'])) {
+                $route = $namePrefix . 'entity-itemid-title';
+                // clean up default action
+                unset($params['action']);
+            } else {
+                $route = $namePrefix . 'entity-itemid';
+                // clean up default action
+                unset($params['action']);
             }
-            if (!empty($params['title'])) {
-                return $namePrefix . 'entity-itemid-title';
-            }
-            return $namePrefix . 'entity-itemid';
+            return static::makeUri($router, $route, $params);
         }
         // dataobject other
         if (!empty($params['action']) && $params['action'] != 'view') {
-            return $namePrefix . 'entity-action';
+            $route = $namePrefix . 'entity-action';
+        } else {
+            // dataobject view
+            $route = $namePrefix . 'entity';
+            // clean up default action
+            unset($params['action']);
         }
-        // dataobject view
-        return $namePrefix . 'entity';
+        return static::makeUri($router, $route, $params);
+    }
+
+    /**
+     * Summary of makeUri
+     * @param array<string, mixed> $params
+     */
+    public static function makeUri(RouterInterface $router, string $route, array $params = []): string|null
+    {
+        if (empty($route)) {
+            return null;
+        }
+        try {
+            return $router->generate($route, $params);
+            // @todo replace 1234567890 with [itemid] for defer* properties
+        } catch (RouteNotFoundException $e) {
+            // ...
+            return null;
+        }
     }
 
     public function __construct()

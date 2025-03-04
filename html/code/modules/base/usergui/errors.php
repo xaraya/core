@@ -35,11 +35,12 @@ class ErrorsMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
-        $this->var()->find('errortype', $errortype, 'str', '');
+        extract($args);
+        $this->var()->check('errortype', $errortype, 'str', '');
         switch ($errortype) {
             case 'forbidden':
-                $this->var()->find('message', $msg, 'str', '');
-                $this->var()->find('template', $template, 'str', null);
+                $this->var()->check('message', $msg, 'str', '');
+                $this->var()->check('template', $template, 'str', null);
                 return $this->ctl()->forbidden($msg, $template);
             case 'exception':
             case 'systemerror':
@@ -47,8 +48,8 @@ class ErrorsMethod extends MethodClass
             case 'usererror':
             case 'notfound':
             default:
-                $this->var()->find('message', $msg, 'str', '');
-                $this->var()->find('template', $template, 'str', null);
+                $this->var()->check('message', $msg, 'str', '');
+                $this->var()->check('template', $template, 'str', null);
                 return $this->ctl()->notFound($msg, $template);
         }
     }

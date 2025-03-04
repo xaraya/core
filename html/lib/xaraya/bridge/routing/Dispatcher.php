@@ -22,6 +22,8 @@ class Dispatcher
     public string $baseUri = '';
     public ?RouterInterface $router;
     public ?HandlerInterface $handler;
+    /** @var ?Context<string, mixed> */
+    protected $context = null;
 
     public function __construct(string $baseUri = 'http://localhost/')
     {
@@ -38,7 +40,8 @@ class Dispatcher
         if (!empty($params)) {
             $vars = array_merge($vars, $params);
         }
-        [$result, $context] = $this->callHandler($handler, $vars);
+        $this->context = new Context(['source' => __METHOD__]);
+        [$result, $context] = $this->callHandler($handler, $vars, $this->context);
         return [$result, $context];
     }
 
@@ -48,6 +51,10 @@ class Dispatcher
      */
     public function output(mixed $result, mixed $transform = null): string
     {
+        if (is_null($result)) {
+            $result = $this->context?->getArrayCopy();
+            //return '';
+        }
         if (is_string($result)) {
             return $result;
         }
@@ -132,71 +139,53 @@ class Dispatcher
      */
     public function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string
     {
-        $route = null;
+        $router = $this->getRouter();
         if (!empty($extra['_route'])) {
             $route = $extra['_route'];
             unset($extra['_route']);
-        } else {
-            $handlers = [];
-            if (!empty($arg1)) {
-                if ($arg1 == 'object') {
-                    $arg1 = 'dynamicdata';
-                    $extra['entity'] ??= $arg2;
-                    $extra['action'] ??= $arg3;
-                    // @todo replace [itemid] with 1234567890 for defer* properties
-                    if (!empty($extra['itemid']) && $extra['itemid'] == '[itemid]') {
-                        $extra['action'] = $extra['itemid'];
-                        unset($extra['itemid']);
-                    }
-                } else {
-                    $extra['module'] ??= $arg1;
-                    $extra['type'] ??= $arg2;
-                    $extra['func'] ??= $arg3;
-                }
-                $handlers = xarClassMap::getHandlers($arg1);
-            }
-            if (empty($handlers)) {
-                $handlers = xarClassMap::getHandlers();
-            }
-            foreach ($handlers as $className => $filePath) {
-                $route = $className::findRoute($extra);
-                if (isset($route)) {
-                    break;
-                }
+            try {
+                return $router->generate($route, $extra);
+                // @todo replace 1234567890 with [itemid] for defer* properties
+            } catch (RouteNotFoundException $e) {
+                // ...
             }
         }
-        if (!empty($route)) {
-            // clean up current module
-            if (!empty($arg1) && !empty($extra['module']) && $extra['module'] == $arg1) {
-                unset($extra['module']);
-            }
-            // clean up default type
-            if (!empty($extra['type']) && $extra['type'] == 'user') {
-                unset($extra['type']);
-                // clean up default func
-                if (!empty($extra['func']) && $extra['func'] == 'main') {
-                    unset($extra['func']);
+        $handlers = [];
+        if (!empty($arg1)) {
+            if ($arg1 == 'object') {
+                $arg1 = 'dynamicdata';
+                $extra['entity'] ??= $arg2;
+                $extra['action'] ??= $arg3;
+                // @todo replace [itemid] with 1234567890 for defer* properties
+                if (!empty($extra['itemid']) && $extra['itemid'] == '[itemid]') {
+                    $extra['action'] = $extra['itemid'];
+                    unset($extra['itemid']);
                 }
+            } else {
+                $extra['module'] ??= $arg1;
+                $extra['type'] ??= $arg2;
+                $extra['func'] ??= $arg3;
             }
-            // clean up default action
-            if (!empty($extra['entity']) && !empty($extra['action']) && in_array($extra['action'], ['view', 'display'])) {
-                unset($extra['action']);
-            }
-        } else {
-            $route = DefaultHandler::findRoute($extra);
-            // clean up default type
-            if (!empty($extra['type']) && $extra['type'] == 'user') {
-                unset($extra['type']);
+            $handlers = xarClassMap::getHandlers($arg1);
+        }
+        if (empty($handlers)) {
+            $handlers = xarClassMap::getHandlers();
+        }
+        $uri = null;
+        foreach ($handlers as $className => $filePath) {
+            $uri = $className::findRoute($router, $extra);
+            if (isset($uri)) {
+                break;
             }
         }
-        try {
-            return $this->getRouter()->generate($route, $extra);
-            // @todo replace 1234567890 with [itemid] for defer* properties
-        } catch (RouteNotFoundException $e) {
-            // ...
+        if (is_null($uri)) {
+            $uri = DefaultHandler::findRoute($router, $extra);
+            if (is_null($uri)) {
+                // @todo find route based on args
+                return "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));
+            }
         }
-        // @todo find route based on args
-        return "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));
+        return $uri;
     }
 
     /**
@@ -232,7 +221,7 @@ class Dispatcher
      */
     public function notFound($msg, $context)
     {
-        echo "Not Found: $msg";
+        echo "Not Found: $msg (404)";
         return null;
     }
 
@@ -244,7 +233,7 @@ class Dispatcher
      */
     public function badRequest($layout, $context)
     {
-        echo "Bad Request: $layout";
+        echo "Bad Request: $layout (400)";
         return null;
     }
 }

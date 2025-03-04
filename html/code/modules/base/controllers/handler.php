@@ -9,6 +9,7 @@
 namespace Xaraya\Modules\Base;
 
 use Xaraya\Routing\ModuleHandler;
+use Xaraya\Routing\RouterInterface;
 
 /**
  * Base handler class for routing & dispatching outside Xaraya
@@ -57,6 +58,10 @@ class BaseHandler extends ModuleHandler
         $name = $namePrefix . 'main';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'main'], $extra];
 
+        $path = $pathPrefix . '/errors';
+        $name = $namePrefix . 'errors';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'errors'], $extra];
+
         $path = $pathPrefix . '/{page}';
         $name = $namePrefix . 'page';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'main'], $extra];
@@ -80,34 +85,63 @@ class BaseHandler extends ModuleHandler
     }
 
     /**
+     * Find route uri based on params
+     * @param array<string, mixed> $params
+     */
+    public static function findRoute(RouterInterface $router, array $params): string|null
+    {
+        return parent::findRoute($router, $params);
+    }
+
+    /**
      * Find module route name based on params
      * @param string $namePrefix incl. moduleName
      * @param array<string, mixed> $params
      */
-    public static function findModuleRoute(string $namePrefix = '', array $params = []): string|null
+    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): string|null
     {
-        // module admin func
-        if (!empty($params['type']) && $params['type'] == 'admin') {
-            if (!empty($params['func']) && !empty($params['more'])) {
-                return $namePrefix . 'admin-more';
-            }
-            return $namePrefix . 'admin';
-        }
-        // module user func
-        if (!empty($params['type']) && $params['type'] == 'user') {
-            if (!empty($params['func']) && !empty($params['more'])) {
-                return $namePrefix . 'user-more';
-            }
-            if (!empty($params['func']) && $params['func'] != 'main') {
-                // unsupported: overlaps with /base/{page} here
-                //return $namePrefix . 'user';
+        $params['type'] ??= 'user';
+        $params['func'] ??= 'main';
+        $route = null;
+        switch ($params['type']) {
+            case 'admin':
+                // module admin func
+                if (!empty($params['more'])) {
+                    $route = $namePrefix . 'admin-more';
+                } else {
+                    $route = $namePrefix . 'admin';
+                }
+                break;
+
+            case 'user':
+                // module user func
+                if (!empty($params['more'])) {
+                    $route = $namePrefix . 'user-more';
+                } elseif ($params['func'] == 'errors') {
+                    $route = $namePrefix . 'errors';
+                    // clean up current func
+                    unset($params['func']);
+                } elseif ($params['func'] != 'main') {
+                    // unsupported: overlaps with /base/{page} here
+                    //$route = $namePrefix . 'user';
+                    return null;
+                } elseif (!empty($params['page'])) {
+                    $route = $namePrefix . 'page';
+                    // clean up default func
+                    unset($params['func']);
+                } else {
+                    $route = $namePrefix . 'main';
+                    // clean up default func
+                    unset($params['func']);
+                }
+                break;
+
+            default:
+                // module other func
                 return null;
-            }
         }
-        // module user main
-        if (!empty($params['page'])) {
-            return $namePrefix . 'page';
-        }
-        return $namePrefix . 'main';
+        // clean up current type
+        unset($params['type']);
+        return static::makeUri($router, $route, $params);
     }
 }

@@ -84,41 +84,52 @@ class DefaultHandler extends ModuleHandler
     }
 
     /**
-     * Find route name based on params
+     * Find route uri based on params
      * @param array<string, mixed> $params
      */
-    public static function findRoute(array $params): string|null
+    public static function findRoute(RouterInterface $router, array $params): string|null
     {
         // we have a route already
         if (!empty($params[HandlerInterface::ROUTE_PARAM])) {
-            return $params[HandlerInterface::ROUTE_PARAM];
+            $route = $params[HandlerInterface::ROUTE_PARAM];
+            // clean up current route
+            unset($params[HandlerInterface::ROUTE_PARAM]);
+            return static::makeUri($router, $route, $params);
         }
         // for any module that doesn't have its own handler
         $namePrefix = static::$moduleName . '-';
-        $route = static::findModuleRoute($namePrefix, $params);
+        $route = static::findModuleRoute($router, $namePrefix, $params);
         return $route;
     }
 
     /**
-     * Find module route name based on params
+     * Find module route uri based on params
      * @param string $namePrefix incl. moduleName
      * @param array<string, mixed> $params
      */
-    public static function findModuleRoute(string $namePrefix = '', array $params = []): string|null
+    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): string|null
     {
         // we have no module
         if (empty($params['module'])) {
-            return $namePrefix . 'home';
+            $route = $namePrefix . 'home';
+            return static::makeUri($router, $route, $params);
         }
         // module user func
         if (empty($params['type']) || $params['type'] == 'user') {
             if (empty($params['func']) || $params['func'] == 'main') {
-                return $namePrefix . 'main';
+                $route = $namePrefix . 'main';
+                // clean up default func
+                unset($params['func']);
+            } else {
+                $route = $namePrefix . 'func';
             }
-            return $namePrefix . 'func';
+            // clean up default type
+            unset($params['type']);
+            return static::makeUri($router, $route, $params);
         }
         // module other func
-        return $namePrefix . 'type-func';
+        $route = $namePrefix . 'type-func';
+        return static::makeUri($router, $route, $params);
     }
 
     /**

@@ -1,14 +1,27 @@
 <?php
 
 use Xaraya\Modules\TestHelper;
+use Xaraya\Routing\Dispatcher;
+use Xaraya\Routing\RouterInterface;
 use Xaraya\Routing\Routing;
 use Xaraya\Modules\DynamicData\DynamicDataHandler;
 use Xaraya\Modules\Base\BaseHandler;
 
 final class BridgeHandlerTest extends TestHelper
 {
+    private static RouterInterface $router;
+
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        $dispatcher = new Dispatcher();
+        self::$router = $dispatcher->getRouter();
+    }
+
     public function testHandlerMain(): void
     {
+        xarTpl::init();
+
         $router = new Routing(function () {
             return DynamicDataHandler::getRoutes();
         });
@@ -122,10 +135,10 @@ final class BridgeHandlerTest extends TestHelper
     #[\PHPUnit\Framework\Attributes\DataProvider('getRouteProvider')]
     public function testHandlerFindRoute(string $route, array $callable, string $path, array $params): void
     {
-        $name = DynamicDataHandler::findRoute($params);
+        $uri = DynamicDataHandler::findRoute(self::$router, $params);
 
-        $expected = $route;
-        $this->assertEquals($expected, $name);
+        $expected = $path;
+        $this->assertEquals($expected, $uri);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getRouteProvider')]
@@ -149,35 +162,42 @@ final class BridgeHandlerTest extends TestHelper
             'type' => 'user',
             'func' => 'main',
         ];
-        $name = BaseHandler::findRoute($params);
+        $uri = BaseHandler::findRoute(self::$router, $params);
 
-        $expected = 'base-main';
-        $this->assertEquals($expected, $name);
+        $expected = '/base/';
+        $this->assertEquals($expected, $uri);
 
         $params['page'] = 'docs';
-        $name = BaseHandler::findRoute($params);
+        $uri = BaseHandler::findRoute(self::$router, $params);
+        unset($params['page']);
 
-        $expected = 'base-page';
-        $this->assertEquals($expected, $name);
+        $expected = '/base/docs';
+        $this->assertEquals($expected, $uri);
 
         // unsupported: overlaps with /base/{page}
         $params['func'] = 'other';
-        $name = BaseHandler::findRoute($params);
+        $uri = BaseHandler::findRoute(self::$router, $params);
 
         $expected = null;
-        $this->assertEquals($expected, $name);
+        $this->assertEquals($expected, $uri);
 
         $params['more'] = 'more';
-        $name = BaseHandler::findRoute($params);
+        $uri = BaseHandler::findRoute(self::$router, $params);
 
-        $expected = 'base-user-more';
-        $this->assertEquals($expected, $name);
+        $expected = '/base/other/more';
+        $this->assertEquals($expected, $uri);
 
         $params['type'] = 'admin';
-        $name = BaseHandler::findRoute($params);
+        $uri = BaseHandler::findRoute(self::$router, $params);
 
-        $expected = 'base-admin-more';
-        $this->assertEquals($expected, $name);
+        $expected = '/base/admin/other/more';
+        $this->assertEquals($expected, $uri);
+
+        unset($params['more']);
+        $uri = BaseHandler::findRoute(self::$router, $params);
+
+        $expected = '/base/admin/other';
+        $this->assertEquals($expected, $uri);
     }
 
     public function testHandlerBasePage(): void
