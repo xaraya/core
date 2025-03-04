@@ -69,14 +69,15 @@ class ViewMethod extends MethodClass
 
         $roles = $userapi->getallroles($args);
         $items = $roles['nativeitems'];
+        // @todo template expects an objectlist, but getallroles() returns items array
         $objectlists = $roles['dditems'];
 
         // keep track of the selected id's
 
         $itemlabels = [$this->ml('ID'),$this->ml('Name'),$this->ml('Itemtype'),$this->ml('Users'),$this->ml('User Name'),$this->ml('Password'),$this->ml('Email'),$this->ml('Date Registered'),$this->ml('State'),$this->ml('Validation Code'),$this->ml('Created By'),];
         $ddlabels = $this->mod()->apiFunc('dynamicdata', 'user', 'getitemfields', ['modid' => 27, 'itemtype' => $args['itemtype']]);
-        foreach ($ddlabels as $label) {
-            $itemlabels[] = $label['label'];
+        foreach ($ddlabels as $field => $label) {
+            $itemlabels[] = $label;
         }
 
         $data['total'] = count($items);

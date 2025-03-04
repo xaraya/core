@@ -56,7 +56,7 @@ class ChangelanguageMethod extends MethodClass
             // <paul> throw an exception. trap it later if we want it to look nice,
             // that's the whole point of exceptions.
         }
-        $this->ctl()->redirect($return_url);
+        $this->ctl()->redirect($return_url ?: $this->mod()->getURL());
         return true;
     }
 }

@@ -161,11 +161,9 @@ class GetallrolesMethod extends MethodClass
             $itemids[] = $item['id'];
         }
         switch ($itemtype) {
-            case 1: $name = "roles_roles";
+            case 1: $name = "roles_users";
                 break;
-            case 2: $name = "roles_users";
-                break;
-            case 3: $name = "roles_groups";
+            case 2: $name = "roles_groups";
                 break;
         }
         $object = $this->data()->getObjectList(['name' => $name]);
