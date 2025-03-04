@@ -38,7 +38,7 @@ function sql_210_21()
             SELECT i.id, i.content FROM $table[block_instances] i, $table[block_types] t WHERE i.type_id = t.id AND t.name = '" . $type . "';
             ";
             $result = $dbconn->Execute($data['sql']);
-            while(!$result->EOF){
+            while ($result->next()) {
                 list($id, $content) = $result->fields;
                 $temp = unserialize($content);
                 $temp['content_type'] = $type;
@@ -47,7 +47,6 @@ function sql_210_21()
                 UPDATE $table[block_instances] SET content = '$content' WHERE id = $id;
                 ";
                 $dbconn->Execute($data['sql']);
-                $result->MoveNext();
             }
 
         }

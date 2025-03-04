@@ -41,11 +41,11 @@ class MainMethod extends MethodClass
      */
     public function __invoke(array $args = [])
     {
+        extract($args);
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         $data = [];
 
-        $out = '';
         $this->var()->check('catid', $catid);
         if (empty($catid) || !is_numeric($catid)) {
             // for DMOZ-like URLs
@@ -54,35 +54,37 @@ class MainMethod extends MethodClass
             $catid = 0;
         }
 
-        if (!$this->mod()->apiLoad('categories', 'user')) {
-            return;
-        }
-
         $parents = $userapi->getparents(['cid' => $catid]);
         $data['parents'] = [];
         $data['hooks'] = '';
+        $path = '';
         $title = '';
         if (count($parents) > 0) {
             foreach ($parents as $id => $info) {
+                $path .= rawurlencode($info['name']);
                 $info['name'] = preg_replace('/_/', ' ', $info['name']);
                 $title .= $info['name'];
                 if ($id == $catid) {
                     $info['module'] = 'categories';
                     $info['itemtype'] = 0;
                     $info['itemid'] = $catid;
-                    $info['returnurl'] = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $catid]);
+                    $info['returnurl'] = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $catid, 'path' => $path]);
                     $hooks = $this->mod()->callHooks('item', 'display', $catid, $info);
                     if (!empty($hooks) && is_array($hooks)) {
                         // TODO: do something specific with pubsub, hitcount, comments etc.
                         $data['hooks'] = join('', $hooks);
                     }
-                    $data['parents'][] = ['catid' => $catid, 'name' => $info['name'], 'link' => ''];
+                    $data['parents'][] = ['catid' => $catid, 'name' => $info['name'], 'link' => '', 'path' => $path];
                 } else {
-                    $link = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $id]);
-                    $data['parents'][] = ['catid' => $info['cid'], 'name' => $info['name'], 'link' => $link];
+                    $link = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $id, 'path' => $path]);
+                    $data['parents'][] = ['catid' => $info['cid'], 'name' => $info['name'], 'link' => $link, 'path' => $path];
                     $title .= ' > ';
+                    $path .= '/';
                 }
             }
+        }
+        if (!empty($path)) {
+            $path .= '/';
         }
 
         // set the page title to the current category
@@ -120,10 +122,10 @@ class MainMethod extends MethodClass
             $query = "SELECT id, name FROM $xartable[categories_symlinks] WHERE parent_id = '$catid'";
             $result = $dbconn->Execute($query);
             if (!$result) return;
-            for (; !$result->EOF; $result->MoveNext()) {
+            while ($result->next()) {
                 list($id,$name) = $result->fields;
                 $category[$id] = $name . '@';
-                }
+            }
 
             $result->Close();
         */
@@ -133,8 +135,9 @@ class MainMethod extends MethodClass
             asort($letter);
             reset($letter);
             foreach ($letter as $id => $name) {
-                $link = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $id]);
-                $data['letters'][] = ['catid' => $id, 'name' => $name, 'link' => $link];
+                $here = $path . rawurlencode($name);
+                $link = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $id, 'path' => $here]);
+                $data['letters'][] = ['catid' => $id, 'name' => $name, 'link' => $link, 'path' => $here];
             }
         }
         $data['categories'] = [];
@@ -142,9 +145,10 @@ class MainMethod extends MethodClass
             asort($category);
             reset($category);
             foreach ($category as $id => $name) {
+                $here = $path . rawurlencode($name);
                 $name = preg_replace('/_/', ' ', $name);
-                $link = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $id]);
-                $data['categories'][] = ['catid' => $id, 'name' => $name, 'link' => $link];
+                $link = $this->ctl()->getModuleURL('categories', 'user', 'main', ['catid' => $id, 'path' => $here]);
+                $data['categories'][] = ['catid' => $id, 'name' => $name, 'link' => $link, 'path' => $here];
             }
         }
 

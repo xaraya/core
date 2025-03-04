@@ -84,10 +84,9 @@ class GetparentsMethod extends MethodClass
             return;
         }
 
-        while (!$result->EOF) {
+        while ($result->next()) {
             [$pid, $name, $description, $image, $parent, $left, $right] = $result->fields;
             if (!$this->sec()->check('ViewCategories', 0, 'Category', "$name:$cid")) {
-                $result->MoveNext();
                 continue;
             }
 
@@ -102,7 +101,6 @@ class GetparentsMethod extends MethodClass
                     "right"       => $right,
                 ];
             }
-            $result->MoveNext();
         }
         return $info;
     }

@@ -798,11 +798,9 @@ class CelkoPositionProperty extends DataProperty
 			// Hello, Creole
 			
 			if (!$result) return;
-			if ($result->EOF) return Array();
 			$items = [];
 			$index = -1;
-			$result->first();
-			while (!$result->EOF) {
+			while ($result->next()) {
 				list($indentation,
 						$id,
 						$name,
@@ -810,7 +808,6 @@ class CelkoPositionProperty extends DataProperty
 						$left,
 						$right
 					   ) = $result->fields;
-				$result->next();
 
 				if ($indexby == 'cid') {
 					$index = $id;

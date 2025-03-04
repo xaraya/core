@@ -110,7 +110,7 @@ class CategoryTreeNode extends TreeNode
 
         sys::import('xaraya.structures.sets.collection');
         $collection = new BasicSet();
-        while (!$result->EOF) {
+        while ($result->next()) {
             $c = new CategoryTreeNode();
             list($c->id, $c->name, $c->description, $c->image, $c->template, $c->child_object, $c->parent, $c->left, $c->right) = $result->fields;
             $collection->add($c);
@@ -175,7 +175,7 @@ class CategoryTreeNode extends TreeNode
         $result = $dbconn->SelectLimit($query, 1);
         if (!$result) {return;}
 
-        if (!$result->EOF) {
+        if ($result->first()) {
             return true;
         } else {
             return false;

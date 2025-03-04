@@ -144,7 +144,7 @@ class GetancestorsMethod extends MethodClass
                 return;
             }
 
-            while (!$result->EOF) {
+            while ($result->next()) {
                 [$dbcid, $name, $description, $image, $parent, $left, $right] = $result->fields;
 
                 // Add the category into the cache where necessary.
@@ -159,7 +159,6 @@ class GetancestorsMethod extends MethodClass
                         "right"       => (int) $right,
                     ];
                 }
-                $result->MoveNext();
             }
         }
 

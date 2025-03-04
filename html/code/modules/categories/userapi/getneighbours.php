@@ -99,10 +99,9 @@ class GetneighboursMethod extends MethodClass
 
         //    $curparent = $parent;
         $info = [];
-        while (!$result->EOF) {
+        while ($result->next()) {
             [$cid, $name, $description, $image, $parent, $cleft, $cright] = $result->fields;
             if (!$this->sec()->check('ViewCategories', 0, 'Category', "$name:$cid")) {
-                $result->MoveNext();
                 continue;
             }
             //        if ($cid == $curparent) {
@@ -133,7 +132,6 @@ class GetneighboursMethod extends MethodClass
                 "right"       => $cright,
                 "link"        => $link,
             ];
-            $result->MoveNext();
         }
         return $info;
     }

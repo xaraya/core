@@ -105,9 +105,8 @@ class AssignprivilegesMethod extends MethodClass
                     }
 
                     $found = false;
-                    while (!$result->EOF) {
+                    if ($result->first()) {
                         $found = true;
-                        break;
                     }
                     if (!$found) {
                         $query = "INSERT INTO " . $xartable['security_acl'] . " VALUES (?,?)";

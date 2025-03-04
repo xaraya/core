@@ -289,7 +289,7 @@ class GetcatMethod extends MethodClass
             $categories = [];
 
             $index = -1;
-            while (!$result->EOF) {
+            while ($result->next()) {
                 [$indentation,
                     $cid,
                     $name,
@@ -302,7 +302,6 @@ class GetcatMethod extends MethodClass
                     $right,
                     $state
                 ] = $result->fields;
-                $result->MoveNext();
 
                 if (!$this->sec()->check('ViewCategories', 0, 'Category', "$name:$cid")) {
                     continue;

@@ -104,7 +104,7 @@ class IsdescendantMethod extends MethodClass
             return;
         }
 
-        if (!$result->EOF) {
+        if ($result->first()) {
             return true;
         } else {
             return false;

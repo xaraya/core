@@ -75,13 +75,12 @@ class GetmodulesMethod extends MethodClass
             }
 
             $modlist = [];
-            while (!$result->EOF) {
+            while ($result->next()) {
                 [$regid, $itemtype, $numlinks] = $result->fields;
                 if (!isset($modlist[$regid])) {
                     $modlist[$regid] = [];
                 }
                 $modlist[$regid][$itemtype] = ['items' => 0, 'cats' => 0, 'links' => $numlinks];
-                $result->MoveNext();
             }
             $result->close();
 
@@ -101,10 +100,9 @@ class GetmodulesMethod extends MethodClass
                 return;
             }
 
-            while (!$result->EOF) {
+            while ($result->next()) {
                 [$regid, $itemtype, $numitems] = $result->fields;
                 $modlist[$regid][$itemtype]['items'] = $numitems;
-                $result->MoveNext();
             }
             $result->close();
 
@@ -124,10 +122,9 @@ class GetmodulesMethod extends MethodClass
                 return;
             }
 
-            while (!$result->EOF) {
+            while ($result->next()) {
                 [$modid, $itemtype, $numcats] = $result->fields;
                 $modlist[$modid][$itemtype]['cats'] = $numcats;
-                $result->MoveNext();
             }
             $result->close();
 
@@ -149,13 +146,12 @@ class GetmodulesMethod extends MethodClass
             }
 
             $modlist = [];
-            while (!$result->EOF) {
+            while ($result->next()) {
                 [$regid, $itemtype, $numlinks, $numitems, $numcats] = $result->fields;
                 if (!isset($modlist[$regid])) {
                     $modlist[$regid] = [];
                 }
                 $modlist[$regid][$itemtype] = ['items' => $numitems, 'cats' => $numcats, 'links' => $numlinks];
-                $result->MoveNext();
             }
             $result->close();
         }

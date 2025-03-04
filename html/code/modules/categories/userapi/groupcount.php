@@ -108,13 +108,12 @@ class GroupcountMethod extends MethodClass
         }
 
         $count = [];
-        while (!$result->EOF) {
+        while ($result->next()) {
             $fields = $result->fields;
             $num = array_pop($fields);
             // TODO: use multi-level array for multi-category grouping ?
             $id = join('+', $fields);
             $count[$id] = (int) $num;
-            $result->MoveNext();
         }
 
         $result->Close();

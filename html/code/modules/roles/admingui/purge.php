@@ -116,7 +116,7 @@ class PurgeMethod extends MethodClass
             $result = $dbconn->SelectLimit($query, $numitems, $startnum - 1, $bindvars);
             $roles = [];
 
-            while(!$result->EOF) {
+            while ($result->next()) {
                 [$id, $uname, $name, $email, $itemtype, $date_reg] = $result->fields;
                 $roles[] = [
                     'id' => $id,
@@ -126,7 +126,6 @@ class PurgeMethod extends MethodClass
                     'itemtype' => $itemtype,
                     'date_reg' => $date_reg,
                 ];
-                $result->next();
             }
             $data['totalselect'] = count($roles);
 

@@ -147,7 +147,7 @@ class GetorphanlinksMethod extends MethodClass
         // Makes the linkages array to be returned
         $answer = [];
 
-        for (; !$result->EOF; $result->MoveNext()) {
+        while ($result->next()) {
             $fields = $result->fields;
             $iid = array_pop($fields);
             $answer[$iid][] = $fields[0];
