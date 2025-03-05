@@ -72,9 +72,10 @@ class SearchMethod extends MethodClass
             $data['ishooked'] = 0;
             $data['q'] = isset($q) ? $this->var()->prep($q) : null;
 
+            $this->var()->check('name', $name, 'str:1');
             $this->var()->check('module_id', $module_id, 'int');
             $this->var()->check('itemtype', $itemtype, 'int');
-            if (empty($module_id) && empty($itemtype)) {
+            if (empty($name) && empty($module_id) && empty($itemtype)) {
                 $data['gotobject'] = 0;
             } else {
                 $data['gotobject'] = 1;
@@ -98,10 +99,18 @@ class SearchMethod extends MethodClass
         if (empty($data['ishooked']) && !empty($data['gotobject'])) {
             // get the selected object
             $objects = [];
-            $object = $this->data()->getObjectInfo(
-                ['moduleid' => $module_id,
-                    'itemtype' => $itemtype]
-            );
+            if (empty($name)) {
+                $info = $this->data()->getObjectID([
+                    'moduleid' => $module_id,
+                    'itemtype' => $itemtype,
+                ]);
+                $name = $info['name'];
+                if (empty($name)) {
+                    $msg = $this->ml('Unknown dynamic data object');
+                    return $this->ctl()->notFound($msg);
+                }
+            }
+            $object = $this->data()->getObjectInfo(['name' => $name]);
             if (!empty($object)) {
                 $objects[$object['objectid']] = $object;
                 $label = $object['label'];
@@ -115,6 +124,8 @@ class SearchMethod extends MethodClass
             $this->tpl()->setPageTitle($this->ml('Search #(1)', $label));
         }
 
+        $data['startnum'] = $startnum;
+        $data['numitems'] = $numitems;
         $data['items'] = [];
         $mymodid = $this->mod()->getRegID('dynamicdata');
         if ($data['ishooked']) {
@@ -129,7 +140,7 @@ class SearchMethod extends MethodClass
         }
         foreach ($objects as $itemid => $object) {
             // skip the internal objects
-            if ($itemid < 3) {
+            if ($itemid < 4) {
                 continue;
             }
             $module_id = $object['moduleid'];
@@ -137,17 +148,16 @@ class SearchMethod extends MethodClass
             if ($module_id != $mymodid) {
                 continue;
             }
+            $name = $object['name'];
             $label = $object['label'];
             $itemtype = $object['itemtype'];
-            $fields = $userapi->getprop(['module_id' => $module_id,
-                    'itemtype' => $itemtype]
-            );
+            $fields = $userapi->getprop(['name' => $name]);
             $wherelist = [];
-            foreach ($fields as $name => $field) {
+            foreach ($fields as $prop => $field) {
                 if (!empty($dd_check[$field['id']])) {
-                    $fields[$name]['checked'] = 1;
+                    $fields[$prop]['checked'] = 1;
                     if (!empty($q)) {
-                        $wherelist[$name] = " LIKE '%" . $quoted . "%'";
+                        $wherelist[$prop] = " LIKE '%" . $quoted . "%'";
                     }
                 }
             }
@@ -157,15 +167,14 @@ class SearchMethod extends MethodClass
                 $pagerurl = $this->mod()->getURL(
                     'user',
                     'search',
-                    ['module_id' => ($module_id == $mymodid) ? null : $module_id,
-                        'itemtype' => empty($itemtype) ? null : $itemtype,
+                    ['name' => $name,
                         'q' => $q,
                         'dd_check' => $dd_check]
                 );
                 // get the object
                 // set context if available in function
-                $object = $userapi->getobjectlist(['module_id' => $module_id,
-                        'itemtype' => $itemtype,
+                $object = $userapi->getobjectlist([
+                        'name' => $name,
                         //'where' => $where,
                         'startnum' => $startnum,
                         'numitems' => $numitems,
@@ -177,8 +186,8 @@ class SearchMethod extends MethodClass
                 }
                 // add the where clauses directly here to avoid quoting issues
                 $join = '';
-                foreach ($wherelist as $name => $clause) {
-                    $object->addWhere($name, $clause, $join);
+                foreach ($wherelist as $prop => $clause) {
+                    $object->addWhere($prop, $clause, $join);
                     $join = 'or';
                 }
                 // count the items
@@ -201,9 +210,9 @@ class SearchMethod extends MethodClass
                 'link'     => $this->mod()->getURL(
                     'user',
                     $myfunc,
-                    ['module_id' => $module_id,
-                        'itemtype' => $itemtype]
+                    ['name' => $name]
                 ),
+                'name'    => $name,
                 'label'    => $label,
                 'module_id'    => $module_id,
                 'itemtype' => $itemtype,

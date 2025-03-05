@@ -79,6 +79,17 @@ class ViewMethod extends MethodClass
         if (empty($itemtype)) {
             $itemtype = 0;
         }
+        if (empty($name)) {
+            $info = $this->data()->getObjectID([
+                'moduleid' => $module_id,
+                'itemtype' => $itemtype,
+            ]);
+            $name = $info['name'];
+            if (empty($name)) {
+                $msg = $this->ml('Unknown dynamic data object');
+                return $this->ctl()->notFound($msg);
+            }
+        }
 
         // Default number of items per page in user view
         if (empty($numitems)) {
