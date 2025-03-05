@@ -20,8 +20,6 @@ use Xaraya\Routing\RouterInterface;
  * /base/
  * /base/{page}
  * /base/admin/{func} (not used here)
- * /base/admin/{func}/{more} (not used here)
- * /base/{func}/{more} (not used here)
  * ```
  */
 class BaseHandler extends ModuleHandler
@@ -71,16 +69,6 @@ class BaseHandler extends ModuleHandler
         $name = $namePrefix . 'admin';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admingui'], $extra];
 
-        // not supported here
-        $path = $pathPrefix . '/admin/{func}/{more:.+}';
-        $name = $namePrefix . 'admin-more';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admingui'], $extra];
-
-        // if there is no overlap between module user func and dataobject entity, e.g. base
-        $path = $pathPrefix . '/{func}/{more:.+}';
-        $name = $namePrefix . 'user-more';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
-
         return $routes;
     }
 
@@ -106,18 +94,12 @@ class BaseHandler extends ModuleHandler
         switch ($params['type']) {
             case 'admin':
                 // module admin func
-                if (!empty($params['more'])) {
-                    $route = $namePrefix . 'admin-more';
-                } else {
-                    $route = $namePrefix . 'admin';
-                }
+                $route = $namePrefix . 'admin';
                 break;
 
             case 'user':
                 // module user func
-                if (!empty($params['more'])) {
-                    $route = $namePrefix . 'user-more';
-                } elseif ($params['func'] == 'errors') {
+                if ($params['func'] == 'errors') {
                     $route = $namePrefix . 'errors';
                     // clean up current func
                     unset($params['func']);

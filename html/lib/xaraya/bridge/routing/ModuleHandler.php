@@ -192,9 +192,6 @@ class ModuleHandler implements HandlerInterface
         switch ($params['type']) {
             case 'admin':
                 // module admin func
-                //if (!empty($params['more'])) {
-                //    $route = $namePrefix . 'admin-more';
-                //}
                 $route = $namePrefix . 'admin';
                 break;
 
@@ -204,9 +201,6 @@ class ModuleHandler implements HandlerInterface
                     return null;
                 }
                 // module user func
-                //if (!empty($params['more'])) {
-                //    $route = $namePrefix . 'user-more';
-                //}
                 if ($params['func'] != 'main') {
                     $route = $namePrefix . 'user';
                 } else {

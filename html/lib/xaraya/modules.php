@@ -1193,7 +1193,8 @@ class xarMod extends xarObject implements IxarMod
                 $callType = 'api';
             } else {
                 $callType = 'gui';
-                $type .= 'gui';
+                // make sure configure() adds 'type' as well as 'typegui' to call types
+                //$type .= 'gui';
             }
             $callable = self::getModuleClassMethod($tplmodule, $type, $func, $callType);
             if (!empty($callable)) {

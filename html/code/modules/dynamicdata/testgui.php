@@ -28,7 +28,7 @@ class TestGui extends AdminGui
 {
     public function configure()
     {
-        $this->setModType('testgui');
+        $this->setModType('test');
         // don't call xarMod:load() for dynamicdata test GUI
     }
 

@@ -464,9 +464,10 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
-            $modType .= 'gui';
-        }
+        // make sure configure() adds 'modtype' as well as 'modtypegui' to call types
+        //if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
+        //    $modType .= 'gui';
+        //}
         $callable = xarMod::getModuleClassMethod($modName, $modType, $funcName, 'gui');
         if (empty($callable)) {
             throw new FunctionNotFoundException($funcName);

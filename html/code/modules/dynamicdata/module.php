@@ -29,6 +29,7 @@ class Module extends ModuleClass
     {
         parent::setClassTypes();
         // add other class types for this module
+        $this->classtypes['test'] = 'TestGui';
         $this->classtypes['testgui'] = 'TestGui';
         $this->classtypes['utilapi'] = 'UtilApi';
         $this->classtypes['dataapi'] = 'DataApi';

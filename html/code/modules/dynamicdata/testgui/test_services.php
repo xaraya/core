@@ -36,7 +36,7 @@ class TestServicesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         $args['method'] = __METHOD__;
-        $args['return_url'] = $this->mod()->getURL('testgui', 'other', $args);
+        $args['return_url'] = $this->mod()->getURL('test', 'other', $args);
         return $this->mod()->prepare($args);
     }
 }

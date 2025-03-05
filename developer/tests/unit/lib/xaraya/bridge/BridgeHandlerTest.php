@@ -102,7 +102,7 @@ final class BridgeHandlerTest extends TestHelper
             // uri => [route, callable, path, params]
             '/dynamicdata/' => ['dynamicdata-main', [$class, 'main'], '/dynamicdata/', ['module' => $moduleName]],
             '/dynamicdata/admin/func' => ['dynamicdata-admin', [$class, 'admingui'], '/dynamicdata/admin/func', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func']],
-            '/dynamicdata/admin/func/more' => ['dynamicdata-admin-more', [$class, 'admingui'], '/dynamicdata/admin/func/more', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func', 'more' => 'more']],
+            '/dynamicdata/admin/func?more=more' => ['dynamicdata-admin', [$class, 'admingui'], '/dynamicdata/admin/func?more=more', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func', 'more' => 'more']],
             '/dynamicdata/search' => ['dynamicdata-user', [$class, 'usergui'], '/dynamicdata/search', ['module' => $moduleName, 'type' => 'user', 'func' => 'search']],
             '/object/sample/' => ['object-entity', [$class, 'handle'], '/object/sample/', ['module' => $moduleName, 'entity' => 'sample']],
             '/object/sample/1' => ['object-entity-itemid', [$class, 'handle'], '/object/sample/1', ['module' => $moduleName, 'entity' => 'sample', 'itemid' => '1']],
@@ -118,7 +118,14 @@ final class BridgeHandlerTest extends TestHelper
         $router = new Routing(function () {
             return DynamicDataHandler::getRoutes();
         });
+        $query = parse_url($path, PHP_URL_QUERY);
+        $path = parse_url($path, PHP_URL_PATH);
         [$handler, $vars] = $router->match($path);
+        if (!empty($query)) {
+            $extra = [];
+            parse_str($query, $extra);
+            $vars = array_merge($vars, $extra);
+        }
 
         $expected = $callable;
         $this->assertEquals($expected, $handler);
@@ -184,13 +191,13 @@ final class BridgeHandlerTest extends TestHelper
         $params['more'] = 'more';
         $uri = BaseHandler::findRoute(self::$router, $params);
 
-        $expected = '/base/other/more';
+        $expected = null;
         $this->assertEquals($expected, $uri);
 
         $params['type'] = 'admin';
         $uri = BaseHandler::findRoute(self::$router, $params);
 
-        $expected = '/base/admin/other/more';
+        $expected = '/base/admin/other?more=more';
         $this->assertEquals($expected, $uri);
 
         unset($params['more']);

@@ -22,7 +22,7 @@ final class AdminGuiTest extends TestHelper
         xarController::setCallback('redirectTo', [$this, 'hello']);
 
         $context = $this->createContext();
-        /** @var AdminGui $testgui */
+        /** @var AdminGui $admingui */
         $admingui = $this->createMockWithAccess('dynamicdata', AdminGui::class);
         $admingui->setContext($context);
 

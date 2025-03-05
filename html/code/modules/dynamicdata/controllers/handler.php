@@ -19,9 +19,7 @@ use Xaraya\Routing\RouterInterface;
  * ```
  * /dynamicdata/
  * /dynamicdata/admin/{func} (not used here)
- * /dynamicdata/admin/{func}/{more} (not used here)
  * /dynamicdata/{func} (not used here)
- * /dynamicdata/{func}/{more} (not used here)
  * /object/{entity}/
  * /object/{entity}/{itemid} (numeric)
  * /object/{entity}/{itemid}/{title}
