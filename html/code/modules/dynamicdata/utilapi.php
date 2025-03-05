@@ -72,6 +72,12 @@ class UtilApi extends UserApi implements DatabaseInterface
         parent::__construct($modName, $parent);
     }
 
+    public function configure()
+    {
+        $this->setModType('util');
+        // don't call xarMod:apiLoad() for dynamicdata util API
+    }
+
     /**
      * Summary of getObjectConfig
      * @param string $objectname

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="user-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>Test Services</h2>
+        <p>Source: #$context['source']#</p>
+        <p>Method: #$method#</p>
+        <p>Return: #$return_url#</p>
+    </div>
+</xar:template>

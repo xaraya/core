@@ -26,6 +26,12 @@ sys::import('modules.dynamicdata.admingui');
  */
 class TestGui extends AdminGui
 {
+    public function configure()
+    {
+        $this->setModType('testgui');
+        // don't call xarMod:load() for dynamicdata test GUI
+    }
+
     /**
      * Test method to verify that we can override checkAccess()
      * @param array<string, mixed> $args

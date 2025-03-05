@@ -23,9 +23,7 @@ use FunctionNotFoundException;
  * ```
  * $pathPrefix/$moduleName/
  * $pathPrefix/$moduleName/admin/{func} (not used here)
- * $pathPrefix/$moduleName/admin/{func}/{more} (not used here)
  * $pathPrefix/$moduleName[/user]/{func} (not used here)
- * $pathPrefix/$moduleName[/user]/{func}/{more} (not used here)
  * $pathPrefix/$objectName/{entity}/
  * $pathPrefix/$objectName/{entity}/{itemid} (numeric)
  * $pathPrefix/$objectName/{entity}/{itemid}/{title}
@@ -93,32 +91,19 @@ class ModuleHandler implements HandlerInterface
         $name = $namePrefix . 'admin';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admingui'], $extra];
 
-        // not supported here
-        $path = $pathPrefix . '/admin/{func}/{more:.+}';
-        $name = $namePrefix . 'admin-more';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'admingui'], $extra];
-
         if (static::$moduleName != static::$objectName) {
             // if there is no overlap between module user func and dataobject entity, e.g. dynamicdata
             $path = $pathPrefix . '/{func}';
             $name = $namePrefix . 'user';
-            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
-
-            $path = $pathPrefix . '/{func}/{more:.+}';
-            $name = $namePrefix . 'user-more';
             $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
         } else {
             // if there is overlap between module user func and dataobject entity, e.g. library
             $path = $pathPrefix . '/user/{func}';
             $name = $namePrefix . 'user';
             $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
-
-            $path = $pathPrefix . '/user/{func}/{more:.+}';
-            $name = $namePrefix . 'user-more';
-            $routes[$name] = [['GET', 'POST'], $path, [$handler, 'usergui'], $extra];
         }
 
-        // @todo add some /api routes here too?
+        // Note: {module}/{type}/{func} is handled by the DefaultHandler if not in dataobject routes
 
         return $routes;
     }
@@ -207,11 +192,10 @@ class ModuleHandler implements HandlerInterface
         switch ($params['type']) {
             case 'admin':
                 // module admin func
-                if (!empty($params['more'])) {
-                    $route = $namePrefix . 'admin-more';
-                } else {
-                    $route = $namePrefix . 'admin';
-                }
+                //if (!empty($params['more'])) {
+                //    $route = $namePrefix . 'admin-more';
+                //}
+                $route = $namePrefix . 'admin';
                 break;
 
             case 'user':
@@ -220,9 +204,10 @@ class ModuleHandler implements HandlerInterface
                     return null;
                 }
                 // module user func
-                if (!empty($params['more'])) {
-                    $route = $namePrefix . 'user-more';
-                } elseif ($params['func'] != 'main') {
+                //if (!empty($params['more'])) {
+                //    $route = $namePrefix . 'user-more';
+                //}
+                if ($params['func'] != 'main') {
                     $route = $namePrefix . 'user';
                 } else {
                     // module user main
@@ -318,6 +303,18 @@ class ModuleHandler implements HandlerInterface
     {
         $this->getContext()?->tracePath(__METHOD__, $handler);
         $handler = $this->getHandler($handler);
+        // @todo allow overriding {module}-main route with $vars['type'] and/or $vars['func'] here?
+        if (!empty($vars['_route']) && str_ends_with($vars['_route'], '-main')) {
+            if (!empty($vars['type']) && $vars['type'] != 'user') {
+                $module = $handler[0]->getModule();
+                $classType = $module->getClassType($vars['type']);
+                if (!empty($classType) && $module->hasComponent($classType)) {
+                    $handler[0] = $module->getComponent($classType);
+                    $handler[1] = $vars['func'] ?? 'main';
+                }
+            }
+        }
+        unset($vars['_route']);
         // assuming $handler[0] is \Xaraya\Modules\...\UserGui class here
         if ($handler[1] == 'admingui') {
             // ... replace usergui instance with admingui instance
