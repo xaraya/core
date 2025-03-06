@@ -3,7 +3,7 @@
 /**
  * Generic handler interface for routing & dispatching outside Xaraya
  *
- * @todo experiment using module classes and methods as handler
+ * Experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Routing;

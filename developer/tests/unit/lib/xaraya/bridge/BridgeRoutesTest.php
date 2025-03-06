@@ -4,10 +4,10 @@ use Xaraya\Modules\TestHelper;
 use Xaraya\Routing\Dispatcher;
 use Xaraya\Routing\RouterInterface;
 use Xaraya\Routing\Routing;
-use Xaraya\Modules\DynamicData\DynamicDataHandler;
-use Xaraya\Modules\Base\BaseHandler;
+use Xaraya\Modules\DynamicData\DynamicDataRoutes;
+use Xaraya\Modules\Base\BaseRoutes;
 
-final class BridgeHandlerTest extends TestHelper
+final class BridgeRoutesTest extends TestHelper
 {
     private static RouterInterface $router;
 
@@ -18,26 +18,26 @@ final class BridgeHandlerTest extends TestHelper
         self::$router = $dispatcher->getRouter();
     }
 
-    public function testHandlerMain(): void
+    public function testRoutesMain(): void
     {
         xarTpl::init();
 
         $router = new Routing(function () {
-            return DynamicDataHandler::getRoutes();
+            return DynamicDataRoutes::getRoutes();
         });
         $path = '/dynamicdata/';
         [$handler, $vars] = $router->match($path);
 
-        $expected = [DynamicDataHandler::class, 'main'];
+        $expected = [DynamicDataRoutes::class, 'main'];
         $this->assertEquals($expected, $handler);
 
-        $expected = ['_route' => 'dynamicdata-main'];
+        $route = 'dynamicdata-main';
+        $expected = ['_route' => $route];
         $this->assertEquals($expected, $vars);
 
         $context = $this->createContext();
         [$handlerClass, $method] = $handler;
-        $instance = new $handlerClass();
-        $instance->setContext($context);
+        $instance = $handlerClass::getHandler($route, $context);
         [$result, $context] = $instance->callHandler($handler, $vars);
 
         $expected = [
@@ -61,21 +61,22 @@ final class BridgeHandlerTest extends TestHelper
         $this->assertStringContainsString($expected, $output);
     }
 
-    public function testHandlerEntity(): void
+    public function testRoutesEntity(): void
     {
         xarTpl::init();
 
         $router = new Routing(function () {
-            return DynamicDataHandler::getRoutes();
+            return DynamicDataRoutes::getRoutes();
         });
         $path = '/object/sample/1';
         [$handler, $vars] = $router->match($path);
 
-        $expected = [DynamicDataHandler::class, 'handle'];
+        $expected = [DynamicDataRoutes::class, 'handle'];
         $this->assertEquals($expected, $handler);
 
+        $route = 'object-entity-itemid';
         $expected = [
-            '_route' => 'object-entity-itemid',
+            '_route' => $route,
             'entity' => 'sample',
             'itemid' => '1',
         ];
@@ -83,8 +84,7 @@ final class BridgeHandlerTest extends TestHelper
 
         $context = $this->createContext();
         [$handlerClass, $method] = $handler;
-        $instance = new $handlerClass();
-        $instance->setContext($context);
+        $instance = $handlerClass::getHandler($route, $context);
         [$result, $context] = $instance->callHandler($handler, $vars);
 
         $output = $instance->output($result);
@@ -97,14 +97,14 @@ final class BridgeHandlerTest extends TestHelper
     public static function getRouteProvider(): array
     {
         $moduleName = 'dynamicdata';
-        $class = DynamicDataHandler::class;
+        $class = DynamicDataRoutes::class;
         return [
             // uri => [route, callable, path, params]
             '/dynamicdata/' => ['dynamicdata-main', [$class, 'main'], '/dynamicdata/', ['module' => $moduleName]],
             '/dynamicdata/admin/func' => ['dynamicdata-admin', [$class, 'admingui'], '/dynamicdata/admin/func', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func']],
             '/dynamicdata/admin/func?more=more' => ['dynamicdata-admin', [$class, 'admingui'], '/dynamicdata/admin/func?more=more', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func', 'more' => 'more']],
             '/dynamicdata/search' => ['dynamicdata-user', [$class, 'usergui'], '/dynamicdata/search', ['module' => $moduleName, 'type' => 'user', 'func' => 'search']],
-            '/object/sample/' => ['object-entity', [$class, 'handle'], '/object/sample/', ['module' => $moduleName, 'entity' => 'sample']],
+            '/object/sample' => ['object-entity', [$class, 'handle'], '/object/sample', ['module' => $moduleName, 'entity' => 'sample']],
             '/object/sample/1' => ['object-entity-itemid', [$class, 'handle'], '/object/sample/1', ['module' => $moduleName, 'entity' => 'sample', 'itemid' => '1']],
             '/object/sample/1/Johnny' => ['object-entity-itemid-title', [$class, 'handle'], '/object/sample/1/Johnny', ['module' => $moduleName, 'entity' => 'sample', 'itemid' => '1', 'title' => 'Johnny']],
             '/object/sample/search' => ['object-entity-action', [$class, 'handle'], '/object/sample/search', ['module' => $moduleName, 'entity' => 'sample', 'action' => 'search']],
@@ -113,10 +113,10 @@ final class BridgeHandlerTest extends TestHelper
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getRouteProvider')]
-    public function testHandlerMatch(string $route, array $callable, string $path, array $params): void
+    public function testRoutesMatch(string $route, array $callable, string $path, array $params): void
     {
         $router = new Routing(function () {
-            return DynamicDataHandler::getRoutes();
+            return DynamicDataRoutes::getRoutes();
         });
         $query = parse_url($path, PHP_URL_QUERY);
         $path = parse_url($path, PHP_URL_PATH);
@@ -140,19 +140,19 @@ final class BridgeHandlerTest extends TestHelper
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getRouteProvider')]
-    public function testHandlerFindRoute(string $route, array $callable, string $path, array $params): void
+    public function testRoutesFindRoute(string $route, array $callable, string $path, array $params): void
     {
-        $uri = DynamicDataHandler::findRoute(self::$router, $params);
+        $uri = DynamicDataRoutes::findRoute(self::$router, $params);
 
         $expected = $path;
         $this->assertEquals($expected, $uri);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getRouteProvider')]
-    public function testHandlerGenerate(string $route, array $callable, string $path, array $params): void
+    public function testRoutesGenerate(string $route, array $callable, string $path, array $params): void
     {
         $router = new Routing(function () {
-            return DynamicDataHandler::getRoutes();
+            return DynamicDataRoutes::getRoutes();
         });
         unset($params['module']);
         unset($params['type']);
@@ -162,20 +162,20 @@ final class BridgeHandlerTest extends TestHelper
         $this->assertEquals($expected, $uri);
     }
 
-    public function testHandlerBaseRoutes(): void
+    public function testRoutesBaseRoutes(): void
     {
         $params = [
             'module' => 'base',
             'type' => 'user',
             'func' => 'main',
         ];
-        $uri = BaseHandler::findRoute(self::$router, $params);
+        $uri = BaseRoutes::findRoute(self::$router, $params);
 
         $expected = '/base/';
         $this->assertEquals($expected, $uri);
 
         $params['page'] = 'docs';
-        $uri = BaseHandler::findRoute(self::$router, $params);
+        $uri = BaseRoutes::findRoute(self::$router, $params);
         unset($params['page']);
 
         $expected = '/base/docs';
@@ -183,53 +183,53 @@ final class BridgeHandlerTest extends TestHelper
 
         // unsupported: overlaps with /base/{page}
         $params['func'] = 'other';
-        $uri = BaseHandler::findRoute(self::$router, $params);
+        $uri = BaseRoutes::findRoute(self::$router, $params);
 
         $expected = null;
         $this->assertEquals($expected, $uri);
 
         $params['more'] = 'more';
-        $uri = BaseHandler::findRoute(self::$router, $params);
+        $uri = BaseRoutes::findRoute(self::$router, $params);
 
         $expected = null;
         $this->assertEquals($expected, $uri);
 
         $params['type'] = 'admin';
-        $uri = BaseHandler::findRoute(self::$router, $params);
+        $uri = BaseRoutes::findRoute(self::$router, $params);
 
         $expected = '/base/admin/other?more=more';
         $this->assertEquals($expected, $uri);
 
         unset($params['more']);
-        $uri = BaseHandler::findRoute(self::$router, $params);
+        $uri = BaseRoutes::findRoute(self::$router, $params);
 
         $expected = '/base/admin/other';
         $this->assertEquals($expected, $uri);
     }
 
-    public function testHandlerBasePage(): void
+    public function testRoutesBasePage(): void
     {
         xarTpl::init();
 
         $router = new Routing(function () {
-            return BaseHandler::getRoutes();
+            return BaseRoutes::getRoutes();
         });
         $path = '/base/docs';
         [$handler, $vars] = $router->match($path);
 
-        $expected = [BaseHandler::class, 'main'];
+        $expected = [BaseRoutes::class, 'main'];
         $this->assertEquals($expected, $handler);
 
+        $route = 'base-page';
         $expected = [
-            '_route' => 'base-page',
+            '_route' => $route,
             'page' => 'docs',
         ];
         $this->assertEquals($expected, $vars);
 
         $context = $this->createContext();
         [$handlerClass, $method] = $handler;
-        $instance = new $handlerClass();
-        $instance->setContext($context);
+        $instance = $handlerClass::getHandler($route, $context);
         [$result, $context] = $instance->callHandler($handler, $vars);
 
         $output = $instance->output($result);

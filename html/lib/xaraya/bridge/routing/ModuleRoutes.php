@@ -3,7 +3,7 @@
 /**
  * Module routes class for routing & dispatching outside Xaraya
  *
- * @todo experiment using module classes and methods as handler
+ * Experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Routing;
@@ -23,7 +23,7 @@ use xarClassMap;
  * $pathPrefix/$moduleName/
  * $pathPrefix/$moduleName/admin/{func} (not used here)
  * $pathPrefix/$moduleName[/user]/{func} (not used here)
- * $pathPrefix/$objectName/{entity}/
+ * $pathPrefix/$objectName/{entity}
  * $pathPrefix/$objectName/{entity}/{itemid} (numeric)
  * $pathPrefix/$objectName/{entity}/{itemid}/{title}
  * $pathPrefix/$objectName/{entity}/{action} (non-numeric)
@@ -118,7 +118,7 @@ class ModuleRoutes implements RoutesInterface
         $routes = [];
 
         // use entity and action to avoid conflict with module & func or object & method
-        $path = $pathPrefix . '/{entity}/';
+        $path = $pathPrefix . '/{entity}';
         $name = $namePrefix . 'entity';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handle'], $extra];
 
@@ -280,12 +280,14 @@ class ModuleRoutes implements RoutesInterface
     }
 
     /**
-     * Summary of getHandler
-     * @param Context<string, mixed> $context
-     * @return ModuleHandler
+     * Get route handler for module UserGui class instance
+     * @param string $route
+     * @param ?Context<string, mixed> $context
+     * @return HandlerInterface
      */
-    public static function getHandler(Context $context): HandlerInterface
+    public static function getHandler(string $route, ?Context $context): HandlerInterface
     {
+        // we could provide different instance or handler based on route here
         $instance = static::getInstance($context);
         $handler = new ModuleHandler($instance);
         $handler->setContext($context);
@@ -293,11 +295,10 @@ class ModuleRoutes implements RoutesInterface
     }
 
     /**
-     * Summary of getInstance
-     * @param Context<string, mixed> $context
-     * @return mixed
+     * Get module UserGui class instance
+     * @param ?Context<string, mixed> $context
      */
-    public static function getInstance(Context $context): mixed
+    public static function getInstance(?Context $context): ModuleServicesInterface
     {
         $module = static::getModule();
         $module->setContext($context);
@@ -307,7 +308,7 @@ class ModuleRoutes implements RoutesInterface
     }
 
     /**
-     * Summary of getModule
+     * Get module class
      */
     public static function getModule(): ModuleInterface
     {

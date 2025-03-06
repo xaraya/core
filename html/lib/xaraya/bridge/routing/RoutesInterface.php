@@ -3,10 +3,12 @@
 /**
  * Generic routes interface for routing & dispatching outside Xaraya
  *
- * @todo experiment using module classes and methods as handler
+ * Experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Routing;
+
+use Xaraya\Context\Context;
 
 /**
  * Generic routes interface for routing & dispatching outside Xaraya
@@ -26,4 +28,10 @@ interface RoutesInterface
      * @param array<string, mixed> $params
      */
     public static function findRoute(RouterInterface $router, array $params): string|null;
+
+    /**
+     * Get route handler for module UserGui class instance
+     * @param ?Context<string, mixed> $context
+     */
+    public static function getHandler(string $route, ?Context $context): HandlerInterface;
 }

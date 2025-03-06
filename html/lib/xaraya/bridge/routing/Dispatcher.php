@@ -94,7 +94,7 @@ class Dispatcher
     {
         $routes = [];
         $handlers = xarClassMap::getRoutes();
-        /** @var RoutesInterface $className */
+        /** @var class-string<RoutesInterface> $className */
         foreach ($handlers as $className => $filePath) {
             $routes = array_merge($routes, $className::getRoutes());
         }
@@ -103,7 +103,7 @@ class Dispatcher
     }
 
     /**
-     * Instantiate and call the handler returned by match() if it has HandlerInterface
+     * Instantiate and call the handler returned by match() if it has RoutesInterface
      * @param mixed $handler
      * @param array<string, mixed> $vars
      * @param ?Context<string, mixed> $context
@@ -120,7 +120,9 @@ class Dispatcher
         if (!is_subclass_of($handlerClass, RoutesInterface::class)) {
             throw new Exception('Unknown routes class ' . $handlerClass);
         }
-        $this->handler = $handlerClass::getHandler($context);
+        /** @var class-string<RoutesInterface> $handlerClass */
+        $route = $vars[RoutesInterface::ROUTE_PARAM] ?? '';
+        $this->handler = $handlerClass::getHandler($route, $context);
         $this->handler->setContext($context);
         try {
             [$result, $context] = $this->handler->callHandler($handler, $vars);
@@ -194,7 +196,7 @@ class Dispatcher
             $handlers = xarClassMap::getRoutes();
         }
         $uri = null;
-        /** @var RoutesInterface $className */
+        /** @var class-string<RoutesInterface> $className */
         foreach ($handlers as $className => $filePath) {
             $uri = $className::findRoute($router, $extra);
             if (isset($uri)) {

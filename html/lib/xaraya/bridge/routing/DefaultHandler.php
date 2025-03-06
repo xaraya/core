@@ -3,7 +3,7 @@
 /**
  * Default handler class for routing & dispatching outside Xaraya
  *
- * @todo experiment using module classes and methods as handler
+ * Experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Routing;
@@ -25,8 +25,6 @@ use Xaraya\Services\ServiceFactory;
  */
 class DefaultHandler extends ModuleHandler
 {
-    public static string $moduleName = 'default';
-    public static string $objectName = '';
     // parent for modules service here
     protected string $modName = '';
     protected string $modType = '';
@@ -34,7 +32,7 @@ class DefaultHandler extends ModuleHandler
 
     public function __construct()
     {
-        // ...
+        // ... no module class instance here
     }
 
     /**

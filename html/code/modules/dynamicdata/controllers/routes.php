@@ -3,13 +3,15 @@
 /**
  * DynamicData routes class for routing & dispatching outside Xaraya
  *
- * @todo experiment using module classes and methods as handler
+ * Experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Routing\ModuleRoutes;
 use Xaraya\Routing\RouterInterface;
+use Xaraya\Routing\HandlerInterface;
+use Xaraya\Context\Context;
 
 /**
  * DynamicData routes class for routing & dispatching outside Xaraya
@@ -25,7 +27,7 @@ use Xaraya\Routing\RouterInterface;
  * /dynamicdata/search/{name}
  * /dynamicdata/admin/{func} (not used here)
  * /dynamicdata/{func} (not used here)
- * /object/{entity}/
+ * /object/{entity}
  * /object/{entity}/{itemid} (numeric)
  * /object/{entity}/{itemid}/{title}
  * /object/{entity}/{action} (non-numeric)
@@ -163,5 +165,17 @@ class DynamicDataRoutes extends ModuleRoutes
                 break;
         }
         return null;
+    }
+
+    /**
+     * Get route handler for module UserGui class instance
+     * @param string $route
+     * @param ?Context<string, mixed> $context
+     * @return HandlerInterface
+     */
+    public static function getHandler(string $route, ?Context $context): HandlerInterface
+    {
+        // we could provide different instance or handler based on route here
+        return parent::getHandler($route, $context);
     }
 }

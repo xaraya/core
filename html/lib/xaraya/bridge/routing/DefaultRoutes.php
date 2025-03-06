@@ -3,7 +3,7 @@
 /**
  * Default routes class for routing & dispatching outside Xaraya
  *
- * @todo experiment using module classes and methods as handler
+ * Experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Routing;
@@ -27,8 +27,6 @@ class DefaultRoutes extends ModuleRoutes
 {
     public static string $moduleName = 'default';
     public static string $objectName = '';
-    /** @var class-string<HandlerInterface> */
-    public static string $handlerClass = DefaultHandler::class;
 
     /**
      * Get supported handler routes (in generic format)
@@ -132,12 +130,16 @@ class DefaultRoutes extends ModuleRoutes
     }
 
     /**
-     * Summary of getHandler
-     * @param Context<string, mixed> $context
-     * @return ModuleHandler
+     * Get route handler for default routes here
+     * @param string $route
+     * @param ?Context<string, mixed> $context
+     * @return HandlerInterface
      */
-    public static function getHandler(Context $context): HandlerInterface
+    public static function getHandler(string $route, ?Context $context): HandlerInterface
     {
-        return new DefaultHandler();
+        // we could provide different instance or handler based on route here
+        $handler = new DefaultHandler();
+        $handler->setContext($context);
+        return $handler;
     }
 }

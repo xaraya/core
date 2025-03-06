@@ -3,7 +3,7 @@
 /**
  * Categories routes class for routing & dispatching outside Xaraya
  *
- * @todo experiment using module classes and methods as handler
+ * Experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Modules\Categories;

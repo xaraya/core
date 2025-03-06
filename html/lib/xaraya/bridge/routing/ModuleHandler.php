@@ -3,7 +3,7 @@
 /**
  * Module handler class for routing & dispatching outside Xaraya
  *
- * @todo experiment using module classes and methods as handler
+ * Experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Routing;
@@ -21,7 +21,7 @@ use FunctionNotFoundException;
  * $pathPrefix/$moduleName/
  * $pathPrefix/$moduleName/admin/{func} (not used here)
  * $pathPrefix/$moduleName[/user]/{func} (not used here)
- * $pathPrefix/$objectName/{entity}/
+ * $pathPrefix/$objectName/{entity}
  * $pathPrefix/$objectName/{entity}/{itemid} (numeric)
  * $pathPrefix/$objectName/{entity}/{itemid}/{title}
  * $pathPrefix/$objectName/{entity}/{action} (non-numeric)
