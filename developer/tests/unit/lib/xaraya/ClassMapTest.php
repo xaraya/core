@@ -657,7 +657,6 @@ final class ClassMapTest extends TestCase
 
     public function testGetHandlers(): void
     {
-        $this->markTestSkipped('Handler classes replaced by routes');
         $handlers = xarClassMap::getHandlers();
 
         // we only have 1 handler class per module for the moment
@@ -667,7 +666,7 @@ final class ClassMapTest extends TestCase
         $classname = array_key_first($expected);
         $this->assertArrayHasKey($classname, $handlers);
         $this->assertEquals($expected[$classname], $handlers[$classname]);
-        $this->assertGreaterThan(1, count($handlers));
+        $this->assertGreaterThan(0, count($handlers));
 
         $modName = 'dynamicdata';
         $handlers = xarClassMap::getHandlers($modName, null);
@@ -679,7 +678,7 @@ final class ClassMapTest extends TestCase
         $handlers = xarClassMap::getHandlers(null, $type);
         $this->assertArrayHasKey($classname, $handlers);
         $this->assertEquals($expected[$classname], $handlers[$classname]);
-        $this->assertGreaterThan(1, count($handlers));
+        $this->assertGreaterThan(0, count($handlers));
 
         $handlers = xarClassMap::getHandlers($modName, $type);
         $this->assertArrayHasKey($classname, $handlers);
@@ -690,7 +689,6 @@ final class ClassMapTest extends TestCase
     #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
     public function testFindHandler(): void
     {
-        $this->markTestSkipped('Handler classes replaced by routes');
         $modName = 'dynamicdata';
         // we only have 1 handler class per module for the moment
         $type = null;
@@ -705,14 +703,15 @@ final class ClassMapTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        // we can instantiate handler instance without database
-        $expected = $result['classname'];
-        $instance = new $result['classname']($modName);
-        $this->assertInstanceOf($expected, $instance);
-
-        // but we can't call or get the actual module handler - UserGui relies on xarMod::load() in configure()
+        // we can't get an instance without database here - UserGui relies on xarMod::load() in configure()
         $expected = 'No connection available';
         $this->expectExceptionMessage($expected);
+
+        $instance = new \Xaraya\Modules\DynamicData\UserGui('dynamicdata');
+
+        $expected = $result['classname'];
+        $handler = new $result['classname']($instance);
+        $this->assertInstanceOf($expected, $handler);
 
         $handler = ['dummy', 'main'];
         $handler = $instance->getHandler($handler);
@@ -768,16 +767,25 @@ final class ClassMapTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        // we can't get an instance without database here - UserGui relies on xarMod::load() in configure()
-        $expected = 'No connection available';
-        $this->expectExceptionMessage($expected);
+        // check custom routes supported by DynamicDataRoutes
+        $params = [
+            'func' => 'view',
+            'name' => 'sample',
+        ];
+        $expected = 'view-name';
+        $route = $result['classname']::findCustomRouteName($params);
+        $this->assertEquals($expected, $route);
 
+        // we can't get an instance without database here - UserGui relies on xarMod::load() in configure()
+        //$expected = 'No connection available';
+        //$this->expectExceptionMessage($expected);
+        xarDatabase::init();
+
+        $route = 'dynamicdata-view-name';
         $context = new \Xaraya\Context\Context(['source' => __METHOD__]);
-        //$expected = $result['classname'];
-        //$instance = new $result['classname']($modName);
         $expected = \Xaraya\Modules\DynamicData\UserGui::class;
-        $instance = $result['classname']::getInstance($context);
-        $this->assertInstanceOf($expected, $instance);
+        $handler = $result['classname']::getHandler($route, $context);
+        $this->assertInstanceOf($expected, $handler->getInstance());
     }
 
     public function testGetModuleClasses(): void

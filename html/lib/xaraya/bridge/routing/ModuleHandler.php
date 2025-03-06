@@ -106,6 +106,14 @@ class ModuleHandler implements HandlerInterface
     }
 
     /**
+     * Summary of getInstance
+     */
+    public function getInstance(): ModuleServicesInterface
+    {
+        return $this->instance;
+    }
+
+    /**
      * Create output for result - @todo
      * @see \Xaraya\Bridge\Routing\RoutingBridge::output()
      */

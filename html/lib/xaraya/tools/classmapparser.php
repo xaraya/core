@@ -209,23 +209,6 @@ class ClassMapParser
                 $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }
-            // @todo moved to html/lib/xaraya/bridge/middleware/...
-            sys::import('xaraya.bridge.middleware.router');
-            $interface = \Xaraya\Bridge\Middleware\DefaultRouterInterface::class;
-            if ($this->checkInterface($className, $interface)) {
-                $classType = 'middleware';
-                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
-                return;
-            }
-            /**
-            sys::import('xaraya.bridge.routing.HandlerInterface');
-            $interface = \Xaraya\Routing\HandlerInterface::class;
-            if ($this->checkInterface($className, $interface)) {
-                $classType = 'handlers';
-                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
-                return;
-            }
-             */
             sys::import('xaraya.bridge.routing.RoutesInterface');
             $interface = \Xaraya\Routing\RoutesInterface::class;
             if ($this->checkInterface($className, $interface)) {
@@ -233,6 +216,24 @@ class ClassMapParser
                 $this->addClassType($classType, $className, $filePath, $modName, $fileType);
                 return;
             }
+            // not really used, but see example in dynamicdata
+            sys::import('xaraya.bridge.routing.HandlerInterface');
+            $interface = \Xaraya\Routing\HandlerInterface::class;
+            if ($this->checkInterface($className, $interface)) {
+                $classType = 'handlers';
+                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+                return;
+            }
+            /**
+            // moved to html/lib/xaraya/bridge/middleware/...
+            sys::import('xaraya.bridge.middleware.router');
+            $interface = \Xaraya\Bridge\Middleware\DefaultRouterInterface::class;
+            if ($this->checkInterface($className, $interface)) {
+                $classType = 'middleware';
+                $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+                return;
+            }
+             */
             return;
         }
         $classType = 'controllers';

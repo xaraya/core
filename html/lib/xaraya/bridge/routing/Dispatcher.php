@@ -123,7 +123,6 @@ class Dispatcher
         /** @var class-string<RoutesInterface> $handlerClass */
         $route = $vars[RoutesInterface::ROUTE_PARAM] ?? '';
         $this->handler = $handlerClass::getHandler($route, $context);
-        $this->handler->setContext($context);
         try {
             [$result, $context] = $this->handler->callHandler($handler, $vars);
         } catch (FunctionNotFoundException $e) {
