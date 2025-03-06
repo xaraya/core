@@ -16,6 +16,7 @@ namespace Xaraya\Bridge\RestAPI;
 
 /**
  * Class to define REST API routes
+ * @phpstan-type RouteDef array{0: string|array<string>, 1: string, 2: mixed, 3: array<string, mixed>}
  */
 class RestAPIRoutes
 {
@@ -60,7 +61,7 @@ class RestAPIRoutes
      * @param string $namePrefix
      * @param mixed $restHandler
      * @param array<mixed> $extra
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $restHandler = null, array $extra = []): array
     {

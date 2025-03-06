@@ -47,7 +47,7 @@ trait BasicBridgeTrait
         xarSystemVars::set(sys::LAYOUT, 'BaseModURL', $entryPoint);
         xarController::$entryPoint = $entryPoint;
         // @todo get xarServer::getBaseURL() working correctly for ReactPHP etc.
-        //sys::import('modules.modules.controllers.router');
+        //sys::import('xaraya.bridge.middleware.modules.router');
         //ModuleRouter::setBaseUri($baseUri);
         xarController::setCallback('buildUri', [$this, 'buildUri']);
         //xarController::$buildUri = [ModuleRequestHandler::class, 'buildModulePath'];

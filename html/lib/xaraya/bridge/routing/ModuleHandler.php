@@ -30,6 +30,7 @@ use FunctionNotFoundException;
  * $pathPrefix/$objectName/{entity}/{action} (non-numeric)
  * $pathPrefix/$objectName/{entity}/{action}/{itemid}
  * ```
+ * @phpstan-type RouteDef array{0: string|array<string>, 1: string, 2: mixed, 3: array<string, mixed>}
  */
 class ModuleHandler implements HandlerInterface
 {
@@ -44,7 +45,7 @@ class ModuleHandler implements HandlerInterface
 
     /**
      * Get supported handler routes (in generic format)
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array
     {
@@ -72,11 +73,11 @@ class ModuleHandler implements HandlerInterface
      * Summary of getModuleRoutes
      * @param string $pathPrefix incl. moduleName
      * @param string $namePrefix incl. moduleName
-     * @param mixed $handler
+     * @param ?string $handler
      * @param array<string, mixed> $extra
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
-    public static function getModuleRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    public static function getModuleRoutes(string $pathPrefix = '', string $namePrefix = '', ?string $handler = null, array $extra = []): array
     {
         $handler ??= static::class;
         $routes = [];
@@ -112,11 +113,12 @@ class ModuleHandler implements HandlerInterface
      * Summary of getObjectRoutes
      * @param string $pathPrefix incl. objectName
      * @param string $namePrefix incl. objectName
-     * @param mixed $handler
+     * @param ?string $handler
      * @param array<string, mixed> $extra
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
+     * @see \Xaraya\Modules\DynamicData\Traits\UserGuiTrait::handle()
      */
-    public static function getObjectRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    public static function getObjectRoutes(string $pathPrefix = '', string $namePrefix = '', ?string $handler = null, array $extra = []): array
     {
         $handler ??= static::class;
         $routes = [];
@@ -317,20 +319,17 @@ class ModuleHandler implements HandlerInterface
                 throw new FunctionNotFoundException('AdminGui');
             }
             $this->instance = $handler[0];
+            // ... replace method with $vars['func']
             $handler[1] = $vars['func'] ?? 'main';
-            if (!$handler[0]->hasMethod($handler[1], 'gui')) {
-                throw new FunctionNotFoundException($handler[1]);
-            }
-            $this->funcName = $handler[1];
         }
         if ($handler[1] == 'usergui') {
             // ... replace method with $vars['func']
             $handler[1] = $vars['func'] ?? 'main';
-            if (!$handler[0]->hasMethod($handler[1], 'gui')) {
-                throw new FunctionNotFoundException($handler[1]);
-            }
-            $this->funcName = $handler[1];
         }
+        if (!$handler[0]->hasMethod($handler[1], 'gui')) {
+            throw new FunctionNotFoundException($handler[1]);
+        }
+        $this->funcName = $handler[1];
         $result = $handler($vars);
         // @todo do not apply template here (yet)?
         if (is_array($result)) {

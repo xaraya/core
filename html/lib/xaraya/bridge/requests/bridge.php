@@ -16,6 +16,7 @@ use Xaraya\Routing\RouterInterface;
 
 /**
  * Bridge for generic requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
+ * @phpstan-type RouteDef array{0: string|array<string>, 1: string, 2: mixed, 3: array<string, mixed>}
  */
 class BasicBridge extends BasicRequest implements BasicBridgeInterface
 {
@@ -36,5 +37,16 @@ class BasicBridge extends BasicRequest implements BasicBridgeInterface
     public function getRouter()
     {
         return $this->router;
+    }
+
+    /**
+     * Get basic handler routes (in generic format)
+     * @param string $pathPrefix
+     * @param string $namePrefix
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
+     */
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array
+    {
+        return [];
     }
 }

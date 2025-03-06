@@ -1,7 +1,7 @@
 <?php
 /**
- * Experiment with PSR-7 and PSR-15 compatible middleware controller for DataObject
- * Uses request attributes 'object', 'method', 'itemid' from DataObjectRouter::matchRequest()
+ * Experiment with PSR-7 and PSR-15 compatible middleware controller for modules
+ * Uses request attributes 'module', 'type', 'func' from ModuleRouter::matchRequest()
  *
  * Note: single-pass middleware, see https://www.php-fig.org/psr/psr-15/meta/
  */
@@ -19,19 +19,18 @@ use Exception;
 use sys;
 
 sys::import('xaraya.bridge.middleware.router');
-sys::import('modules.dynamicdata.controllers.router');
-sys::import('modules.dynamicdata.class.userinterface');
-sys::import('xaraya.bridge.requests.dataobject');
-use Xaraya\Bridge\Requests\DataObjectRequestHandler;
+sys::import('xaraya.bridge.middleware.modules.router');
+sys::import('xaraya.bridge.requests.module');
+use Xaraya\Bridge\Requests\ModuleRequestHandler;
 
 /**
- * PSR-15 compatible middleware for DataObject UI methods (view, display, search, ...)
+ * PSR-15 compatible middleware for module GUI functions (user main, admin modifyconfig, ...)
  */
-class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInterface, MiddlewareInterface
+class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, MiddlewareInterface
 {
     /** @var array<string> */
-    protected array $attributes = ['object', 'method', 'itemid'];
-    protected DataObjectRequestHandler $handler;
+    protected array $attributes = ['module', 'type', 'func'];
+    protected ModuleRequestHandler $handler;
     protected ResponseUtil $responseUtil;
     protected bool $wrapPage = false;
 
@@ -40,46 +39,46 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, bool $wrapPage = false)
     {
-        $this->handler = new DataObjectRequestHandler();
+        $this->handler = new ModuleRequestHandler();
         $this->responseUtil = new ResponseUtil($responseFactory);
         $this->wrapPage = $wrapPage;
     }
 
     /**
-     * Process the server request - request attributes are set here with DataObjectRouter::matchRequest()
+     * Process the server request - request attributes are set here with ModuleRouter::matchRequest()
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $next): ResponseInterface
     {
-        // identify object requests and set request attributes
+        // identify module requests and set request attributes
         $request = $this->matchRequest($request);
 
-        // check only the request attributes relevant for object request
+        // check only the request attributes relevant for module request
         $allowed = array_flip($this->attributes);
         $attribs = array_intersect_key($request->getAttributes(), $allowed);
 
         // pass the request along to the next handler and return its response
-        if (empty($attribs['object'])) {
+        if (empty($attribs['module'])) {
             $response = $next->handle($request);
             return $response;
         }
 
-        // handle the object request here and return our response
+        // handle the module request here and return our response
         $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         // @checkme keep track of the current base uri if filtered in router
         $this->setBaseUri($request);
         $context['baseuri'] = static::$baseUri;
-        // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName() in DD list
-        $this->prepareController('object', static::$baseUri);
-        $context['module'] = 'object';
+        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
+        $this->prepareController($attribs['module'], static::$baseUri);
+        $context['module'] = $attribs['module'];
         // @todo where do we decide to use Twig or not
         //$context['twig'] = true;
         // @todo check if we already have a context? (via request or from elsewhere)
         //$this->setContext($context);
         $this->handler->setContext($context);
 
-        // add remaining query params to request attributes
-        $params = array_merge($attribs, $request->getQueryParams());
+        // filter out request attributes from remaining query params here
+        $params = array_diff_key($request->getQueryParams(), $attribs);
         // add body params to query params (if any) - limited to POST requests here
         if ($request->getMethod() === 'POST') {
             $input = $request->getParsedBody();
@@ -88,13 +87,9 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
             }
         }
 
-        // @checkme pass along buildUri() as link function to DD
-        $params['linktype'] = 'other';
-        $params['linkfunc'] = $this->buildUri(...);
+        $response = $this->run($attribs, $params, $context);
 
-        $response = $this->run($params, $context);
-
-        // clean up routes for object requests in response output
+        // clean up routes for module requests in response output
         //$response = ResponseUtil::cleanResponse($response, $this->getResponseFactory());
 
         return $response;
@@ -102,14 +97,15 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
 
     /**
      * Summary of run
+     * @param array<string, mixed> $attribs
      * @param array<string, mixed> $params
      * @param ?Context<string, mixed> $context
      * @return ResponseInterface
      */
-    public function run($params, $context = null)
+    public function run($attribs, $params, $context = null)
     {
         try {
-            $result = $this->handler->runDataObjectGuiRequest($params);
+            $result = $this->handler->runModuleGuiRequest($attribs, $params);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }
@@ -123,20 +119,21 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
     }
 }
 
-class DataObjectApiMiddleware extends DataObjectMiddleware
+class ModuleApiMiddleware extends ModuleMiddleware
 {
     public string $format = 'json';
 
     /**
      * Summary of run
+     * @param array<string, mixed> $attribs
      * @param array<string, mixed> $params
      * @param ?Context<string, mixed> $context
      * @return ResponseInterface
      */
-    public function run($params, $context = null)
+    public function run($attribs, $params, $context = null)
     {
         try {
-            $result = $this->handler->runDataObjectApiRequest($params);
+            $result = $this->handler->runModuleApiRequest($attribs, $params);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }

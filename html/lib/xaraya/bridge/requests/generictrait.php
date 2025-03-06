@@ -58,6 +58,7 @@ interface GenericBridgeInterface extends CommonRequestInterface
 
 /**
  * Handle Generic requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
+ * @phpstan-import-type RouteDef from BasicBridge
  */
 trait GenericBridgeTrait
 {
@@ -68,11 +69,11 @@ trait GenericBridgeTrait
      * Get Generic handler routes (in generic format)
      * @param string $pathPrefix
      * @param string $namePrefix
-     * @param mixed $handler
+     * @param ?string $handler
      * @param array<mixed> $extra
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
-    public static function getGenericRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    public static function getGenericRoutes(string $pathPrefix = '', string $namePrefix = '', ?string $handler = null, array $extra = []): array
     {
         $handler ??= static::class;
         $routes = [];

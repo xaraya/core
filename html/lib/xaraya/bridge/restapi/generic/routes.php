@@ -16,6 +16,7 @@ namespace Xaraya\Bridge\RestAPI;
 
 /**
  * Class to define Generic REST API routes
+ * @phpstan-import-type RouteDef from RestAPIRoutes
  */
 class GenericAPIRoutes extends RestAPIRoutes
 {
@@ -29,7 +30,7 @@ class GenericAPIRoutes extends RestAPIRoutes
      * @param string $namePrefix
      * @param mixed $restHandler
      * @param array<mixed> $extra
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $restHandler = null, array $extra = []): array
     {

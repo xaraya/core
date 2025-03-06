@@ -22,6 +22,7 @@ use Xaraya\Routing\RouterInterface;
  * /categories/{catid}/{path}
  * /categories/admin/{func} (not used here)
  * ```
+ * @phpstan-import-type RouteDef from ModuleHandler
  */
 class CategoriesHandler extends ModuleHandler
 {
@@ -32,7 +33,7 @@ class CategoriesHandler extends ModuleHandler
 
     /**
      * Get supported handler routes (in generic format)
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array
     {
@@ -43,11 +44,11 @@ class CategoriesHandler extends ModuleHandler
      * Summary of getModuleRoutes
      * @param string $pathPrefix incl. moduleName
      * @param string $namePrefix incl. moduleName
-     * @param mixed $handler
+     * @param ?string $handler
      * @param array<string, mixed> $extra
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
-    public static function getModuleRoutes(string $pathPrefix = '', string $namePrefix = '', mixed $handler = null, array $extra = []): array
+    public static function getModuleRoutes(string $pathPrefix = '', string $namePrefix = '', ?string $handler = null, array $extra = []): array
     {
         $handler ??= static::class;
         $routes = [];

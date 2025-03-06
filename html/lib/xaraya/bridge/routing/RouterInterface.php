@@ -35,6 +35,13 @@ interface RouterInterface
     public function generate($name, $params);
 
     /**
+     * Check last modified cache file against reference file
+     * @param string $filePath
+     * @return void
+     */
+    public function checkCache($filePath);
+
+    /**
      * Get list of loaded routes
      * @return array<mixed>
      */

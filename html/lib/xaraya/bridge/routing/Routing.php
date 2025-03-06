@@ -177,6 +177,25 @@ class Routing implements RouterInterface
     }
 
     /**
+     * Check last modified cache file against reference file
+     * @param string $filePath
+     * @return void
+     */
+    public function checkCache($filePath)
+    {
+        if (empty($filePath) || !file_exists($filePath)) {
+            return;
+        }
+        $cacheFile = $this->cacheDir . '/' . self::MATCHER_CACHE_FILE;
+        if (empty($cacheFile) || !file_exists($cacheFile)) {
+            return;
+        }
+        if (filemtime($cacheFile) < filemtime($filePath)) {
+            $this->resetCache();
+        }
+    }
+
+    /**
      * Get list of loaded routes
      * @return array<mixed>
      */

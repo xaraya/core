@@ -183,6 +183,24 @@ class FastRouter implements RouterInterface
     }
 
     /**
+     * Check last modified cache file against reference file
+     * @param string $filePath
+     * @return void
+     */
+    public function checkCache($filePath)
+    {
+        if (empty($filePath) || !file_exists($filePath)) {
+            return;
+        }
+        if (empty($this->cacheFile) || !file_exists($this->cacheFile)) {
+            return;
+        }
+        if (filemtime($this->cacheFile) < filemtime($filePath)) {
+            unlink($this->cacheFile);
+        }
+    }
+
+    /**
      * Get list of loaded routes
      * @return array<mixed>
      */

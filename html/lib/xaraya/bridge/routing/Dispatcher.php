@@ -11,6 +11,7 @@ use Xaraya\Context\Context;
 use xarClassMap;
 use xarController;
 use xarServer;
+use sys;
 use Exception;
 use FunctionNotFoundException;
 
@@ -30,7 +31,14 @@ class Dispatcher
         $this->baseUri = $baseUri;
     }
 
-    public function dispatch(string $path, string $method = 'GET', array $params = [])
+    /**
+     * Summary of dispatch
+     * @param string $path
+     * @param array<string, mixed> $params
+     * @param string $method
+     * @return array<mixed>
+     */
+    public function dispatch(string $path, array $params = [], string $method = 'GET')
     {
         [$handler, $vars] = $this->getRouter()->match($path, $method);
         if (empty($handler)) {
@@ -61,18 +69,32 @@ class Dispatcher
         return json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 
+    /**
+     * Summary of getRouter
+     * @return RouterInterface
+     */
     public function getRouter()
     {
         if (!isset($this->router)) {
-            $this->router = new Routing($this->getRoutes(...));
+            $cacheFile = sys::varpath() . '/cache/core/' . Routing::MATCHER_CACHE_FILE;
+            $this->router = new Routing($this->getRoutes(...), $cacheFile);
+            // parse classmap if necessary
+            $handlers = xarClassMap::getHandlers();
+            $classMapFile = sys::varpath() . '/cache/' . xarClassMap::PARSED_CACHE_FILE;
+            $this->router->checkCache($classMapFile);
         }
         return $this->router;
     }
 
+    /**
+     * Get routes from all module handlers + default handler
+     * @return array<string, array<mixed>>
+     */
     public function getRoutes()
     {
         $routes = [];
         $handlers = xarClassMap::getHandlers();
+        /** @var HandlerInterface $className */
         foreach ($handlers as $className => $filePath) {
             $routes = array_merge($routes, $className::getRoutes());
         }
@@ -172,6 +194,7 @@ class Dispatcher
             $handlers = xarClassMap::getHandlers();
         }
         $uri = null;
+        /** @var HandlerInterface $className */
         foreach ($handlers as $className => $filePath) {
             $uri = $className::findRoute($router, $extra);
             if (isset($uri)) {

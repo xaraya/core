@@ -177,7 +177,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      * @param string $pathPrefix
      * @param string $namePrefix
      * @param mixed $restHandler
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, array<mixed>> array of name => [method(s), path, handler, options = []]
      */
     public static function getRoutes($pathPrefix = '/v1', $namePrefix = 'restapi-', $restHandler = null)
     {

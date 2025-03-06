@@ -801,6 +801,9 @@ class xarMod extends xarObject implements IxarMod
         $tplData = self::callFunc($modName, $modType, $funcName, $args, '', $context);
         // If we have a string of data, we assume someone else did xarTpl* for us
         if (!is_array($tplData)) {
+            if (!isset($tplData)) {
+                $tplData = '';
+            }
             // Set the output of the module function in cache
             xarCache3::setModule($cacheKey, $tplData);
             return $tplData;

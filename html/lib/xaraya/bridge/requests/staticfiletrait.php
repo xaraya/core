@@ -52,6 +52,7 @@ interface StaticFileBridgeInterface extends CommonRequestInterface
 
 /**
  * Handle static file requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
+ * @phpstan-import-type RouteDef from BasicBridge
  */
 trait StaticFileBridgeTrait
 {
@@ -63,11 +64,11 @@ trait StaticFileBridgeTrait
      * Summary of getRoutes
      * @param string $pathPrefix
      * @param string $namePrefix
-     * @param mixed $handler
+     * @param ?string $handler
      * @param array<mixed> $extra
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
-    public static function getStaticFileRoutes(string $pathPrefix = '', string $namePrefix = 'static-', mixed $handler = null, array $extra = null)
+    public static function getStaticFileRoutes(string $pathPrefix = '', string $namePrefix = 'static-', ?string $handler = null, array $extra = null): array
     {
         $handler ??= static::class;
         $routes = [];

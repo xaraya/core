@@ -59,6 +59,7 @@ use Xaraya\Bridge\GraphQL\GraphQLHandler;
 
 /**
  * Routing bridge to handle Xaraya object, module and block GUI calls + REST API and GraphQL API requests
+ * @phpstan-import-type RouteDef from BasicBridge
  */
 class RoutingBridge extends BasicBridge
 {
@@ -113,9 +114,9 @@ class RoutingBridge extends BasicBridge
      * Summary of getRoutes
      * @param string $pathPrefix
      * @param string $namePrefix
-     * @return array<mixed>
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
-    public static function getRoutes(string $pathPrefix = '', string $namePrefix = '')
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array
     {
         $routes = [];
         $extra = [];
@@ -464,6 +465,7 @@ class RoutingBridge extends BasicBridge
  *
  * Note: if you really want to use APIs for DataObject please have a look at the REST API or GraphQL API instead
  * They can be configured via the admin Back End > Dynamic Data > Utilities > Test APIs
+ * @phpstan-import-type RouteDef from BasicBridge
  */
 class RoutingApiBridge extends RoutingBridge
 {
@@ -473,9 +475,9 @@ class RoutingApiBridge extends RoutingBridge
      * Summary of getRoutes
      * @param string $pathPrefix
      * @param string $namePrefix
-     * @return array<mixed>
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
-    public static function getRoutes(string $pathPrefix = '/api', string $namePrefix = 'api-')
+    public static function getRoutes(string $pathPrefix = '/api', string $namePrefix = 'api-'): array
     {
         $routes = [];
         $extra = [];
@@ -496,6 +498,7 @@ class RoutingApiBridge extends RoutingBridge
  * Same as RoutingBridge but handles static files too
  *
  * Note: static files should really be handled by a web server or reverse proxy in front of the application
+ * @phpstan-import-type RouteDef from BasicBridge
  */
 class RoutingStaticBridge extends RoutingBridge
 {
@@ -504,11 +507,11 @@ class RoutingStaticBridge extends RoutingBridge
     /**
      * Summary of getRoutes
      * @param string $pathPrefix
-     * @param string $staticFiles use this as group e.g. everything under /static
      * @param string $namePrefix
-     * @return array<mixed>
+     * @param string $staticFiles use this as group e.g. everything under /static
+     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
-    public static function getRoutes(string $pathPrefix = '', string $staticFiles = '', string $namePrefix = 'static-')
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = 'static-', string $staticFiles = ''): array
     {
         $routes = [];
         $extra = [];

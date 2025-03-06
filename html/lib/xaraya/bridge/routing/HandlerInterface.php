@@ -19,12 +19,12 @@ interface HandlerInterface extends ContextInterface
 
     /**
      * Get supported handler routes (in generic format)
-     * @return array<mixed> array of name => [method(s), path, handler, options = []]
+     * @return array<string, array<mixed>> array of name => [method(s), path, handler, options = []]
      */
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array;
 
     /**
-     * Find route name based on params
+     * Find route uri based on params
      * @param array<string, mixed> $params
      */
     public static function findRoute(RouterInterface $router, array $params): string|null;

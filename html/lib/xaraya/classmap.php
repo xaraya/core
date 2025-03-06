@@ -24,6 +24,8 @@
  */
 class xarClassMap extends xarObject
 {
+    public const PARSED_CACHE_FILE = 'classmap_parsed.php';
+
     /** @var array<string, array<mixed>> */
     protected static array $classmap = [];
 
@@ -63,7 +65,7 @@ class xarClassMap extends xarObject
             echo 'Please run `composer update` or `composer dump-autoload` first';
             return $classmap;
         }
-        $cacheFile = sys::varpath() . '/cache/classmap_parsed.php';
+        $cacheFile = sys::varpath() . '/cache/' . self::PARSED_CACHE_FILE;
         if (file_exists($cacheFile) && filemtime($cacheFile) > filemtime($file)) {
             // load cacheFile
             $classmap = require $cacheFile;
@@ -83,7 +85,7 @@ class xarClassMap extends xarObject
     public static function clearClassMap()
     {
         static::$classmap = [];
-        $cacheFile = sys::varpath() . '/cache/classmap_parsed.php';
+        $cacheFile = sys::varpath() . '/cache/' . self::PARSED_CACHE_FILE;
         if (file_exists($cacheFile)) {
             unlink($cacheFile);
         }
