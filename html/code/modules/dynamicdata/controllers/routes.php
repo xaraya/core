@@ -1,18 +1,18 @@
 <?php
 
 /**
- * DynamicData handler class for routing & dispatching outside Xaraya
+ * DynamicData routes class for routing & dispatching outside Xaraya
  *
  * @todo experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Modules\DynamicData;
 
-use Xaraya\Routing\ModuleHandler;
+use Xaraya\Routing\ModuleRoutes;
 use Xaraya\Routing\RouterInterface;
 
 /**
- * DynamicData handler class for routing & dispatching outside Xaraya
+ * DynamicData routes class for routing & dispatching outside Xaraya
  *
  * Supported URLs :
  *
@@ -31,9 +31,9 @@ use Xaraya\Routing\RouterInterface;
  * /object/{entity}/{action} (non-numeric)
  * /object/{entity}/{action}/{itemid}
  * ```
- * @phpstan-import-type RouteDef from ModuleHandler
+ * @phpstan-import-type RouteDef from ModuleRoutes
  */
-class DynamicDataHandler extends ModuleHandler
+class DynamicDataRoutes extends ModuleRoutes
 {
     public static string $moduleName = 'dynamicdata';
     public static string $objectName = 'object';

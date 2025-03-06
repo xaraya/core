@@ -453,6 +453,31 @@ class xarClassMap extends xarObject
     }
 
     /**
+     * Summary of getRoutes
+     * @param ?string $modName (optional)
+     * @param ?string $type routes type (optional) - not used
+     * @return array<string, string>
+     */
+    public static function getRoutes(?string $modName = null, ?string $type = null): array
+    {
+        // we can specify modName or type or both here
+        return static::getClassFiles('routes', $modName, $type);
+    }
+
+    /**
+     * Summary of findRoutes
+     * @param string $modName
+     * @param ?string $type routes type (optional) - not used
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
+     */
+    public static function findRoutes(string $modName, ?string $type = null)
+    {
+        // we only have 1 routes class per module for the moment
+        $type ??= '';
+        return static::findClassFile('routes', $modName, $type);
+    }
+
+    /**
      * Summary of getModuleClasses
      * @param ?string $modName (optional)
      * @return array<string, array{classname: string, filepath: string, module: string}>

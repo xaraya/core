@@ -1,32 +1,35 @@
 <?php
 
 /**
- * Categories handler class for routing & dispatching outside Xaraya
+ * Authsystem routes class for routing & dispatching outside Xaraya
  *
  * @todo experiment using module classes and methods as handler
  */
 
-namespace Xaraya\Modules\Categories;
+namespace Xaraya\Modules\Authsystem;
 
-use Xaraya\Routing\ModuleHandler;
+use Xaraya\Routing\ModuleRoutes;
 use Xaraya\Routing\RouterInterface;
 
 /**
- * Categories handler class for routing & dispatching outside Xaraya
+ * Authsystem routes class for routing & dispatching outside Xaraya
  *
  * Supported URLs :
  *
  * ```
- * /categories/
- * /categories/{catid}
- * /categories/{catid}/{path}
- * /categories/admin/{func} (not used here)
+ * /authsystem/
+ * /authsystem/login
+ * /authsystem/auth
+ * /authsystem/logout
+ * /authsystem/password
+ * /authsystem/{func} (not used here)
+ * /authsystem/admin/{func} (not used here)
  * ```
- * @phpstan-import-type RouteDef from ModuleHandler
+ * @phpstan-import-type RouteDef from ModuleRoutes
  */
-class CategoriesHandler extends ModuleHandler
+class AuthsystemRoutes extends ModuleRoutes
 {
-    public static string $moduleName = 'categories';
+    public static string $moduleName = 'authsystem';
     public static string $objectName = '';
     /** @var class-string */
     public static string $handlerClass = UserGui::class;
@@ -58,13 +61,26 @@ class CategoriesHandler extends ModuleHandler
         $name = $namePrefix . 'main';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'main'], $extra];
 
-        $path = $pathPrefix . '/{catid:\d+}';
-        $name = $namePrefix . 'catid';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'main'], $extra];
+        $path = $pathPrefix . '/login';
+        $name = $namePrefix . 'login';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'showloginform'], $extra];
 
-        $path = $pathPrefix . '/{catid:\d+}/{path:.+}';
-        $name = $namePrefix . 'catid-path';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'main'], $extra];
+        $path = $pathPrefix . '/auth';
+        $name = $namePrefix . 'auth';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'login'], $extra];
+
+        $path = $pathPrefix . '/logout';
+        $name = $namePrefix . 'logout';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'logout'], $extra];
+
+        $path = $pathPrefix . '/password';
+        $name = $namePrefix . 'password';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'password'], $extra];
+
+        // default method here - see short.php
+        $path = $pathPrefix . '/{func}';
+        $name = $namePrefix . 'func';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'showloginform'], $extra];
 
         // not supported here
         $path = $pathPrefix . '/admin/{func}';
@@ -101,22 +117,15 @@ class CategoriesHandler extends ModuleHandler
 
             case 'user':
                 // module user func
-                if ($params['func'] != 'main') {
-                    // unsupported: nothing to see here
-                    //$route = $namePrefix . 'user';
-                    return null;
-                }
-                // module user main
-                if (!empty($params['catid'])) {
-                    if (!empty($params['path'])) {
-                        $route = $namePrefix . 'catid-path';
-                    } else {
-                        $route = $namePrefix . 'catid';
-                    }
-                } else {
-                    $route = $namePrefix . 'main';
-                }
-                // clean up default func
+                $route = match ($params['func']) {
+                    'main' => $namePrefix . 'main',
+                    'showloginform' => $namePrefix . 'login',
+                    'login' => $namePrefix . 'auth',
+                    'logout' => $namePrefix . 'logout',
+                    'password' => $namePrefix . 'password',
+                    default => $namePrefix . 'login',  // should be 'func' but maps to login anyway
+                };
+                // clean up current func
                 unset($params['func']);
                 break;
 

@@ -1,35 +1,32 @@
 <?php
 
 /**
- * Authsystem handler class for routing & dispatching outside Xaraya
+ * Categories routes class for routing & dispatching outside Xaraya
  *
  * @todo experiment using module classes and methods as handler
  */
 
-namespace Xaraya\Modules\Authsystem;
+namespace Xaraya\Modules\Categories;
 
-use Xaraya\Routing\ModuleHandler;
+use Xaraya\Routing\ModuleRoutes;
 use Xaraya\Routing\RouterInterface;
 
 /**
- * Authsystem handler class for routing & dispatching outside Xaraya
+ * Categories routes class for routing & dispatching outside Xaraya
  *
  * Supported URLs :
  *
  * ```
- * /authsystem/
- * /authsystem/login
- * /authsystem/auth
- * /authsystem/logout
- * /authsystem/password
- * /authsystem/{func} (not used here)
- * /authsystem/admin/{func} (not used here)
+ * /categories/
+ * /categories/{catid}
+ * /categories/{catid}/{path}
+ * /categories/admin/{func} (not used here)
  * ```
- * @phpstan-import-type RouteDef from ModuleHandler
+ * @phpstan-import-type RouteDef from ModuleRoutes
  */
-class AuthsystemHandler extends ModuleHandler
+class CategoriesRoutes extends ModuleRoutes
 {
-    public static string $moduleName = 'authsystem';
+    public static string $moduleName = 'categories';
     public static string $objectName = '';
     /** @var class-string */
     public static string $handlerClass = UserGui::class;
@@ -61,26 +58,13 @@ class AuthsystemHandler extends ModuleHandler
         $name = $namePrefix . 'main';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'main'], $extra];
 
-        $path = $pathPrefix . '/login';
-        $name = $namePrefix . 'login';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'showloginform'], $extra];
+        $path = $pathPrefix . '/{catid:\d+}';
+        $name = $namePrefix . 'catid';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'main'], $extra];
 
-        $path = $pathPrefix . '/auth';
-        $name = $namePrefix . 'auth';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'login'], $extra];
-
-        $path = $pathPrefix . '/logout';
-        $name = $namePrefix . 'logout';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'logout'], $extra];
-
-        $path = $pathPrefix . '/password';
-        $name = $namePrefix . 'password';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'password'], $extra];
-
-        // default method here - see short.php
-        $path = $pathPrefix . '/{func}';
-        $name = $namePrefix . 'func';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'showloginform'], $extra];
+        $path = $pathPrefix . '/{catid:\d+}/{path:.+}';
+        $name = $namePrefix . 'catid-path';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'main'], $extra];
 
         // not supported here
         $path = $pathPrefix . '/admin/{func}';
@@ -117,15 +101,22 @@ class AuthsystemHandler extends ModuleHandler
 
             case 'user':
                 // module user func
-                $route = match ($params['func']) {
-                    'main' => $namePrefix . 'main',
-                    'showloginform' => $namePrefix . 'login',
-                    'login' => $namePrefix . 'auth',
-                    'logout' => $namePrefix . 'logout',
-                    'password' => $namePrefix . 'password',
-                    default => $namePrefix . 'login',  // should be 'func' but maps to login anyway
-                };
-                // clean up current func
+                if ($params['func'] != 'main') {
+                    // unsupported: nothing to see here
+                    //$route = $namePrefix . 'user';
+                    return null;
+                }
+                // module user main
+                if (!empty($params['catid'])) {
+                    if (!empty($params['path'])) {
+                        $route = $namePrefix . 'catid-path';
+                    } else {
+                        $route = $namePrefix . 'catid';
+                    }
+                } else {
+                    $route = $namePrefix . 'main';
+                }
+                // clean up default func
                 unset($params['func']);
                 break;
 

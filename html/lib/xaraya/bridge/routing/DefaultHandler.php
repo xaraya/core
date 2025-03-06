@@ -32,105 +32,9 @@ class DefaultHandler extends ModuleHandler
     protected string $modType = '';
     protected int $itemType = 0;
 
-    /**
-     * Get supported handler routes (in generic format)
-     * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
-     */
-    public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array
+    public function __construct()
     {
-        $handler = static::class;
-        $extra = [];
-        $routes = [];
-
-        // do not use moduleName in path prefix here
-        $path = $pathPrefix;
-        $name = $namePrefix . static::$moduleName . '-';
-        $routes = array_merge($routes, static::getModuleRoutes($path, $name, $handler, $extra));
-
-        return $routes;
-    }
-
-    /**
-     * Summary of getModuleRoutes
-     * @param string $pathPrefix excl. moduleName here
-     * @param string $namePrefix incl. moduleName
-     * @param ?string $handler
-     * @param array<string, mixed> $extra
-     * @return array<string, array<mixed>> array of name => [method(s), path, handler, options = []]
-     */
-    public static function getModuleRoutes(string $pathPrefix = '', string $namePrefix = '', ?string $handler = null, array $extra = []): array
-    {
-        $handler ??= static::class;
-        $routes = [];
-
-        // home page
-        $path = $pathPrefix . '/';
-        $name = $namePrefix . 'home';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handle'], $extra];
-
-        // with trailing / here?
-        $path = $pathPrefix . '/{module}/';
-        $name = $namePrefix . 'main';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handle'], $extra];
-
-        $path = $pathPrefix . '/{module}/{func}';
-        $name = $namePrefix . 'func';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handle'], $extra];
-
-        $path = $pathPrefix . '/{module}/{type}/{func}';
-        $name = $namePrefix . 'type-func';
-        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handle'], $extra];
-
-        return $routes;
-    }
-
-    /**
-     * Find route uri based on params
-     * @param array<string, mixed> $params
-     */
-    public static function findRoute(RouterInterface $router, array $params): string|null
-    {
-        // we have a route already
-        if (!empty($params[HandlerInterface::ROUTE_PARAM])) {
-            $route = $params[HandlerInterface::ROUTE_PARAM];
-            // clean up current route
-            unset($params[HandlerInterface::ROUTE_PARAM]);
-            return static::makeUri($router, $route, $params);
-        }
-        // for any module that doesn't have its own handler
-        $namePrefix = static::$moduleName . '-';
-        $route = static::findModuleRoute($router, $namePrefix, $params);
-        return $route;
-    }
-
-    /**
-     * Find module route uri based on params
-     * @param string $namePrefix incl. moduleName
-     * @param array<string, mixed> $params
-     */
-    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): string|null
-    {
-        // we have no module
-        if (empty($params['module'])) {
-            $route = $namePrefix . 'home';
-            return static::makeUri($router, $route, $params);
-        }
-        // module user func
-        if (empty($params['type']) || $params['type'] == 'user') {
-            if (empty($params['func']) || $params['func'] == 'main') {
-                $route = $namePrefix . 'main';
-                // clean up default func
-                unset($params['func']);
-            } else {
-                $route = $namePrefix . 'func';
-            }
-            // clean up default type
-            unset($params['type']);
-            return static::makeUri($router, $route, $params);
-        }
-        // module other func
-        $route = $namePrefix . 'type-func';
-        return static::makeUri($router, $route, $params);
+        // ...
     }
 
     /**
@@ -184,5 +88,10 @@ class DefaultHandler extends ModuleHandler
     public function getItemType(): int
     {
         return $this->itemType;
+    }
+
+    public function hasMethod(string $funcName, string $funcType = 'api'): bool
+    {
+        return method_exists($this, $funcName);
     }
 }

@@ -15,20 +15,6 @@ use Xaraya\Context\ContextInterface;
  */
 interface HandlerInterface extends ContextInterface
 {
-    public const ROUTE_PARAM = '_route';
-
-    /**
-     * Get supported handler routes (in generic format)
-     * @return array<string, array<mixed>> array of name => [method(s), path, handler, options = []]
-     */
-    public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array;
-
-    /**
-     * Find route uri based on params
-     * @param array<string, mixed> $params
-     */
-    public static function findRoute(RouterInterface $router, array $params): string|null;
-
     /**
      * Call the right handler after matching the route
      * @param array<string, mixed> $vars

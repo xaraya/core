@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Roles handler class for routing & dispatching outside Xaraya
+ * Roles routes class for routing & dispatching outside Xaraya
  *
  * @todo experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Modules\Roles;
 
-use Xaraya\Routing\ModuleHandler;
+use Xaraya\Routing\ModuleRoutes;
 use Xaraya\Routing\RouterInterface;
 
 /**
- * Roles handler class for routing & dispatching outside Xaraya
+ * Roles routes class for routing & dispatching outside Xaraya
  *
  * Supported URLs :
  *
@@ -27,9 +27,9 @@ use Xaraya\Routing\RouterInterface;
  * /roles/{func} (not used here)
  * /roles/admin/{func} (not used here)
  * ```
- * @phpstan-import-type RouteDef from ModuleHandler
+ * @phpstan-import-type RouteDef from ModuleRoutes
  */
-class RolesHandler extends ModuleHandler
+class RolesRoutes extends ModuleRoutes
 {
     public static string $moduleName = 'roles';
     public static string $objectName = '';

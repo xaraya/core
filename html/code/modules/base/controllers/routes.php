@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Base handler class for routing & dispatching outside Xaraya
+ * Base routes class for routing & dispatching outside Xaraya
  *
  * @todo experiment using module classes and methods as handler
  */
 
 namespace Xaraya\Modules\Base;
 
-use Xaraya\Routing\ModuleHandler;
+use Xaraya\Routing\ModuleRoutes;
 use Xaraya\Routing\RouterInterface;
 
 /**
- * Base handler class for routing & dispatching outside Xaraya
+ * Base routes class for routing & dispatching outside Xaraya
  *
  * Supported URLs :
  *
@@ -21,9 +21,9 @@ use Xaraya\Routing\RouterInterface;
  * /base/{page}
  * /base/admin/{func} (not used here)
  * ```
- * @phpstan-import-type RouteDef from ModuleHandler
+ * @phpstan-import-type RouteDef from ModuleRoutes
  */
-class BaseHandler extends ModuleHandler
+class BaseRoutes extends ModuleRoutes
 {
     public static string $moduleName = 'base';
     public static string $objectName = '';

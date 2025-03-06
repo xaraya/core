@@ -584,6 +584,7 @@ final class ClassMapTest extends TestCase
 
     public function testGetMiddleware(): void
     {
+        $this->markTestSkipped('Middleware classes moved to core');
         $middleware = xarClassMap::getMiddleware();
 
         // we have 2 classes here: DataObjectMiddleware and DataObjectApiMiddleware
@@ -616,6 +617,7 @@ final class ClassMapTest extends TestCase
     #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
     public function testFindMiddleware(): void
     {
+        $this->markTestSkipped('Middleware classes moved to core');
         $modName = 'dynamicdata';
         $type = 'middleware';
         // we have 2 classes here: DataObjectMiddleware and DataObjectApiMiddleware - pick one based on $suffix
@@ -655,6 +657,7 @@ final class ClassMapTest extends TestCase
 
     public function testGetHandlers(): void
     {
+        $this->markTestSkipped('Handler classes replaced by routes');
         $handlers = xarClassMap::getHandlers();
 
         // we only have 1 handler class per module for the moment
@@ -687,6 +690,7 @@ final class ClassMapTest extends TestCase
     #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
     public function testFindHandler(): void
     {
+        $this->markTestSkipped('Handler classes replaced by routes');
         $modName = 'dynamicdata';
         // we only have 1 handler class per module for the moment
         $type = null;
@@ -714,6 +718,66 @@ final class ClassMapTest extends TestCase
         $handler = $instance->getHandler($handler);
         $vars = [];
         [$result, $context] = $instance->callHandler($handler, $vars);
+    }
+
+    public function testGetRoutes(): void
+    {
+        $routes = xarClassMap::getRoutes();
+
+        // we only have 1 routes class per module for the moment
+        $expected = [
+            'Xaraya\\Modules\\DynamicData\\DynamicDataRoutes' => sys::code() . 'modules/dynamicdata/controllers/routes.php',
+        ];
+        $classname = array_key_first($expected);
+        $this->assertArrayHasKey($classname, $routes);
+        $this->assertEquals($expected[$classname], $routes[$classname]);
+        $this->assertGreaterThan(1, count($routes));
+
+        $modName = 'dynamicdata';
+        $routes = xarClassMap::getRoutes($modName, null);
+        $this->assertArrayHasKey($classname, $routes);
+        $this->assertEquals($expected[$classname], $routes[$classname]);
+        $this->assertCount(1, $routes);
+
+        $type = 'routes';
+        $routes = xarClassMap::getRoutes(null, $type);
+        $this->assertArrayHasKey($classname, $routes);
+        $this->assertEquals($expected[$classname], $routes[$classname]);
+        $this->assertGreaterThan(1, count($routes));
+
+        $routes = xarClassMap::getRoutes($modName, $type);
+        $this->assertArrayHasKey($classname, $routes);
+        $this->assertEquals($expected[$classname], $routes[$classname]);
+        $this->assertCount(1, $routes);
+    }
+
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function testFindRoutes(): void
+    {
+        $modName = 'dynamicdata';
+        // we only have 1 routes class per module for the moment
+        $type = null;
+        $result = xarClassMap::findRoutes($modName, $type);
+
+        $expected = [
+            'classname' => 'Xaraya\Modules\DynamicData\DynamicDataRoutes',
+            'filepath' => sys::code() . 'modules/dynamicdata/controllers/routes.php',
+            'classtype' => 'routes',
+            'module' => $modName,
+            'filetype' => $type,
+        ];
+        $this->assertEquals($expected, $result);
+
+        // we can't get an instance without database here - UserGui relies on xarMod::load() in configure()
+        $expected = 'No connection available';
+        $this->expectExceptionMessage($expected);
+
+        $context = new \Xaraya\Context\Context(['source' => __METHOD__]);
+        //$expected = $result['classname'];
+        //$instance = new $result['classname']($modName);
+        $expected = \Xaraya\Modules\DynamicData\UserGui::class;
+        $instance = $result['classname']::getInstance($context);
+        $this->assertInstanceOf($expected, $instance);
     }
 
     public function testGetModuleClasses(): void
@@ -853,5 +917,27 @@ final class ClassMapTest extends TestCase
 
         $instance = new $result['classname']($modName);
         $this->assertInstanceOf($expected, $instance);
+    }
+
+    public function testWalkModuleMethods(): void
+    {
+        $modules = xarClassMap::getModuleClasses();
+        foreach ($modules as $modName => $modInfo) {
+            //echo $modName . ': ' . json_encode($modInfo) . "\n";
+            $classTypes = xarClassMap::getModuleClassTypes($modName);
+            //foreach ($classTypes as $classType => $classInfo) {
+            //    echo "\t" . $classType . ': ' . json_encode($classInfo) . "\n";
+            //}
+            $classType = 'usergui';
+            if (array_key_exists($classType, $classTypes)) {
+                $methods = xarClassMap::getModuleClassMethods($modName, $classType);
+                echo $modName . ' ' . $classType . ";\n";
+                foreach ($methods as $methodName => $methodInfo) {
+                    echo "\t" . $methodName . ': ' . $methodInfo['classname'] . "\n";
+                }
+            }
+            echo "\n";
+        }
+        $this->assertGreaterThan(10, count($modules));
     }
 }

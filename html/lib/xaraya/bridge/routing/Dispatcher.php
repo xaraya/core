@@ -79,7 +79,7 @@ class Dispatcher
             $cacheFile = sys::varpath() . '/cache/core/' . Routing::MATCHER_CACHE_FILE;
             $this->router = new Routing($this->getRoutes(...), $cacheFile);
             // parse classmap if necessary
-            $handlers = xarClassMap::getHandlers();
+            $handlers = xarClassMap::getRoutes();
             $classMapFile = sys::varpath() . '/cache/' . xarClassMap::PARSED_CACHE_FILE;
             $this->router->checkCache($classMapFile);
         }
@@ -93,12 +93,12 @@ class Dispatcher
     public function getRoutes()
     {
         $routes = [];
-        $handlers = xarClassMap::getHandlers();
-        /** @var HandlerInterface $className */
+        $handlers = xarClassMap::getRoutes();
+        /** @var RoutesInterface $className */
         foreach ($handlers as $className => $filePath) {
             $routes = array_merge($routes, $className::getRoutes());
         }
-        $routes = array_merge($routes, DefaultHandler::getRoutes());
+        $routes = array_merge($routes, DefaultRoutes::getRoutes());
         return $routes;
     }
 
@@ -117,10 +117,10 @@ class Dispatcher
             throw new Exception('Invalid handler');
         }
         [$handlerClass, $method] = $handler;
-        if (!is_subclass_of($handlerClass, HandlerInterface::class)) {
-            throw new Exception('Unknown handler class ' . $handlerClass);
+        if (!is_subclass_of($handlerClass, RoutesInterface::class)) {
+            throw new Exception('Unknown routes class ' . $handlerClass);
         }
-        $this->handler = new $handlerClass();
+        $this->handler = $handlerClass::getHandler($context);
         $this->handler->setContext($context);
         try {
             [$result, $context] = $this->handler->callHandler($handler, $vars);
@@ -188,13 +188,13 @@ class Dispatcher
                 $extra['type'] ??= $arg2;
                 $extra['func'] ??= $arg3;
             }
-            $handlers = xarClassMap::getHandlers($arg1);
+            $handlers = xarClassMap::getRoutes($arg1);
         }
         if (empty($handlers)) {
-            $handlers = xarClassMap::getHandlers();
+            $handlers = xarClassMap::getRoutes();
         }
         $uri = null;
-        /** @var HandlerInterface $className */
+        /** @var RoutesInterface $className */
         foreach ($handlers as $className => $filePath) {
             $uri = $className::findRoute($router, $extra);
             if (isset($uri)) {
@@ -202,7 +202,7 @@ class Dispatcher
             }
         }
         if (is_null($uri)) {
-            $uri = DefaultHandler::findRoute($router, $extra);
+            $uri = DefaultRoutes::findRoute($router, $extra);
             if (is_null($uri)) {
                 // @todo find route based on args
                 return "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));

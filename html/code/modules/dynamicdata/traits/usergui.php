@@ -70,7 +70,7 @@ trait UserGuiTrait
      * User handle GUI function
      * @param array<string, mixed> $args
      * @return string
-     * @see \Xaraya\Routing\ModuleHandler::getRoutes()
+     * @see \Xaraya\Routing\ModuleRoutes::getRoutes()
      */
     public function handle(array $args = [])
     {
