@@ -45,7 +45,7 @@ use Xaraya\Context\Context;
 $psr17Factory = new Psr17Factory();
 
 // the Xaraya PSR-15 request handler + middleware here
-$fastrouted = new RoutingHandler($psr17Factory);
+$combined = new RoutingHandler($psr17Factory);
 
 $logger = function (ServerRequestInterface $request, callable $next): ResponseInterface {
     echo date('Y-m-d H:i:s') . ' ' . $request->getMethod() . ' ' . $request->getUri() . PHP_EOL;
@@ -66,7 +66,7 @@ $wrapper = function (ServerRequestInterface $request, callable $next) use ($resp
 };
 
 // See https://github.com/php-pm/php-pm/blob/master/src/ProcessSlave.php to set server environment
-$handler = function (ServerRequestInterface $request) use ($fastrouted, $serverVars) {
+$handler = function (ServerRequestInterface $request) use ($combined, $serverVars) {
     // setting this makes xarServer::getCurrentURL() work again, but we need to set PATH_INFO too for getBaseURI()
     $requestUri = $request->getRequestTarget();
     // @todo try out request context class
@@ -78,7 +78,7 @@ $handler = function (ServerRequestInterface $request) use ($fastrouted, $serverV
     xarServer::getInstance()->setContext($context);
     //xarServer::setVar('REQUEST_URI', $requestUri);
     //xarServer::setVar('PATH_INFO', explode('?', $requestUri)[0]);
-    return $fastrouted->handle($request);
+    return $combined->handle($request);
 };
 
 // @todo adapt for 3.x

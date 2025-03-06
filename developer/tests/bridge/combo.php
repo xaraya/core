@@ -55,12 +55,12 @@ $psr17Factory = new Psr17Factory();
 $request = getRequest($psr17Factory);
 
 // the Xaraya PSR-15 request handler + middleware here
-$fastrouted = new RoutingHandler($psr17Factory);
+$combined = new RoutingHandler($psr17Factory);
 
 // handle the request directly, or use as middleware
-$response = $fastrouted->handle($request);
+$response = $combined->handle($request);
 LocalTimer::setTimer('run');
-$fastrouted->emitResponse($response);
+$combined->emitResponse($response);
 LocalTimer::setTimer('emit');
 
 if (php_sapi_name() === 'cli') {

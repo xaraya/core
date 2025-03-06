@@ -70,11 +70,11 @@ final class BridgeCombinedTest extends TestCase
         }
         $expected = $output;
 
-        $fastrouted = new RoutingHandler(static::$psr17Factory);
+        $combined = new RoutingHandler(static::$psr17Factory);
 
         // handle the request directly, or use as middleware
-        $response = $fastrouted->handle($request);
-        //$fastrouted->emitResponse($response);
+        $response = $combined->handle($request);
+        //$combined->emitResponse($response);
         $result = (string) $response->getBody();
         $result = preg_replace('/<!--.*?-->/s', '', $result);
 

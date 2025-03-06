@@ -13,7 +13,7 @@
  * use Nyholm\Psr7\Factory\Psr17Factory;
  * use Nyholm\Psr7Server\ServerRequestCreator;
  * // use Xaraya PSR-15 compatible request handler + middleware
- * use Xaraya\Bridge\Middleware\FastRouteHandler;
+ * use Xaraya\Bridge\Middleware\RoutingHandler;
  * use Xaraya\Bridge\Middleware\ResponseUtil;
  *
  * // get server request from somewhere
@@ -22,13 +22,13 @@
  * $request = $requestCreator->fromGlobals();
  *
  * // the Xaraya PSR-15 request handler + middleware here
- * $fastrouted = new FastRouteHandler($psr17Factory);
+ * $combined = new RoutingHandler($psr17Factory);
  *
  * // handle the request directly, or use as middleware
- * $response = $fastrouted->handle($request);
+ * $response = $combined->handle($request);
  *
  * //echo $response->getBody();
- * $fastrouted->emitResponse($response);
+ * $combined->emitResponse($response);
  */
 
 namespace Xaraya\Bridge\Middleware;

@@ -2,7 +2,7 @@
 /**
  * Experiment with PSR-7 and PSR-15 compatible DD controller
  *
- * Note: see also combo.php for experiments with FastRouteHandler
+ * Note: see also combo.php for experiments with RoutingHandler
  */
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 chdir(dirname(__DIR__, 3) . '/html');
