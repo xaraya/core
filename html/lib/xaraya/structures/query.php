@@ -1040,10 +1040,13 @@ class Query
             break;
         case "CREATE" :
             $this->setstatement();
-            $st = "CREATE TABLE " . $this->createtablename . " AS " . $this->getstatement();;
+            $st = "CREATE TABLE " . $this->createtablename . " AS " . $this->getstatement();
+            break;
         case "DROP" :
             $st .= "TABLE " . $this->assembledtables();
+            break;
         default :
+            break;
         }
         return $st;
     }

@@ -726,6 +726,7 @@ class Mail_mimeDecode extends PEAR
                 case "cc":
                 case "bcc":
                     $to = ",".$item['value'];
+                    break;
                 default:
                    break;
             }

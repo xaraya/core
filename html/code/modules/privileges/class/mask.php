@@ -239,6 +239,7 @@ class xarMask extends xarObject
         switch(xarModVars::get('privileges', 'realmcomparison')) {
             case "contains":
                 $fails = $p1[1]!=$p2[1];
+                break;
             case "exact":
             default:
                 $fails = $p1[1]!=$p2[1];

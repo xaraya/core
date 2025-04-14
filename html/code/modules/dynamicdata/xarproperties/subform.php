@@ -474,8 +474,8 @@ class SubFormProperty extends DataProperty
         }
 
         foreach ($this->arguments as $item) {
-            if (isset($$item)) {
-                $this->$item = $$item;
+            if (isset(${$item})) {
+                $this->$item = ${$item};
             }
         }
 
@@ -558,8 +558,8 @@ class SubFormProperty extends DataProperty
             $value = $this->value;
         }
         foreach ($this->arguments as $item) {
-            if (isset($$item)) {
-                $this->$item = $$item;
+            if (isset(${$item})) {
+                $this->$item = ${$item};
             }
         }
 

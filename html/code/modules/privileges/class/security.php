@@ -607,6 +607,7 @@ class xarSecurity extends xarObject
         switch(self::$realmcomparison) {
             case "contains":
                 $fails = $p1['realm']!=$p2['realm'];
+                break;
             case "exact":
             default:
                 $fails = $p1['realm']!=$p2['realm'];
