@@ -487,7 +487,7 @@ function &xarDB__datadictInit()
         $dbconn   = xarDB3::getConn();
         // @todo This doesnt work yet in 2.x
         sys::import('xaraya.legacy.legacy');
-        $datadict = xarDBNewDataDict($dbconn, 'ALTERTABLE');
+        $datadict = new xarDBNewDataDict($dbconn, 'ALTERTABLE');
     }
 
     return $datadict;

@@ -224,6 +224,7 @@ class SessionMiddleware implements MiddlewareInterface
         if ($next instanceof RequestHandlerInterface) {
             $response = $next->handle($request);
         } else {
+            /** @var callable $next */
             $response = $next($request);
         }
         if (!empty($requestId)) {

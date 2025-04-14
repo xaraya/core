@@ -150,6 +150,7 @@ class Themes_MetaBlock extends BasicBlock
                 $data['metatags'] = $this->metatags = $metatags;
                 // set the modvar to make tags available to xarMeta class early
                 $this->mod('themes')->setVar('meta.tags', serialize($metatags));
+                // fall through to next upgrade
 
             case '2.2.0':
                 $author = $this->mod('themes')->getVar('SiteName');
@@ -175,6 +176,8 @@ class Themes_MetaBlock extends BasicBlock
                 if (isset($data['glossary'])) unset($data['glossary']);
 
                 $data['linktags'] = $this->linktags = $linktags;
+                // fall through to next upgrade
+
             case '2.2.1':
                 // upgrades from 2.2.1 go here...
                 

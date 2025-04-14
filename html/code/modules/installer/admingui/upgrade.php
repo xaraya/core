@@ -103,7 +103,7 @@ class UpgradeMethod extends MethodClass
 
             // Encrypt if needed using the encryption scheme of the roles module
             if (!empty($pass)) {
-                $data['password'] = $role->properties['password']->setValue($pass);
+                $role->properties['password']->setValue($pass);
                 $userpass = $role->properties['password']->value;
             } else {
                 $userpass = $data['password'];

@@ -70,6 +70,7 @@ class StaticFileMiddleware extends StaticFileRouter implements DefaultRouterInte
             if ($next instanceof RequestHandlerInterface) {
                 $response = $next->handle($request);
             } else {
+                /** @var callable $next */
                 $response = $next($request);
             }
             return $response;

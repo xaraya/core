@@ -56,6 +56,7 @@ class ViewInstancesMethod extends MethodClass
 
         $this->var()->find('tab', $data['tab'], 'pre:trim:lower:str:1:', 'list');
 
+        /** @var \AccessProperty $access_property */
         $access_property = $this->prop()->getProperty(['name' => 'access']);
 
         switch ($data['tab']) {
