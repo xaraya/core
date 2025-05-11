@@ -110,7 +110,7 @@ interface CachingInterface extends ServiceInterface
     /**
      * Get the value of a cached variable
      */
-    public function getVariable(string $cacheKey): string;
+    public function getVariable(string $cacheKey): string|object;
 
     /**
      * Set the value of a cached variable
@@ -279,7 +279,7 @@ trait CachingTrait
     /**
      * Get the value of a cached variable
      */
-    public function getVariable(string $cacheKey): string
+    public function getVariable(string $cacheKey): string|object
     {
         return xarVariableCache::getCached($cacheKey);
     }

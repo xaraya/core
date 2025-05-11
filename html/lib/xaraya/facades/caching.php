@@ -162,7 +162,7 @@ class xarCache3
     /**
      * Get the value of a cached variable
      */
-    public static function getVariable(string $cacheKey): string
+    public static function getVariable(string $cacheKey): string|object
     {
         return self::getInstance()->getVariable($cacheKey);
     }
