@@ -14,11 +14,17 @@
 
 namespace Xaraya\Bridge\RestAPI;
 
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Xaraya\Context\Context;
+use Xaraya\Routing\HandlerInterface;
+use Xaraya\Routing\RoutesInterface;
+use Xaraya\Routing\RouterInterface;
+
 /**
  * Class to define REST API routes
  * @phpstan-type RouteDef array{0: string|array<string>, 1: string, 2: mixed, 3: array<string, mixed>}
  */
-class RestAPIRoutes
+class RestAPIRoutes implements RoutesInterface
 {
     public static string $pathPrefix = '/v1';
     public static string $namePrefix = 'restapi-';
@@ -82,5 +88,91 @@ class RestAPIRoutes
         $routes = array_merge($routes, ModuleAPIRoutes::getRoutes($pathPrefix, $namePrefix, $restHandler, $extra));
 
         return $routes;
+    }
+
+    /**
+     * Find route uri based on params
+     * @param array<string, mixed> $params
+     */
+    public static function findRoute(RouterInterface $router, array $params, string $method = 'GET'): string|null
+    {
+        // we have a route already
+        if (!empty($params[RoutesInterface::ROUTE_PARAM])) {
+            $route = $params[RoutesInterface::ROUTE_PARAM];
+            // clean up current route
+            unset($params[RoutesInterface::ROUTE_PARAM]);
+            return static::makeUri($router, $route, $params);
+        }
+        // @todo make use of method here too!?
+        $route = null;
+        if (empty($params)) {
+            $route = 'openapi';
+            return static::makeUri($router, $route, $params);
+        }
+        // find module route uri or dataobject route uri
+        if (!isset($route) && !empty($params['module'])) {
+            $namePrefix = static::$namePrefix;
+            $route = static::findModuleRoute($router, $namePrefix, $params, $method);
+        }
+        if (!isset($route) && !empty($params['object'])) {
+            $namePrefix = static::$namePrefix;
+            $route = static::findObjectRoute($router, $namePrefix, $params, $method);
+        }
+        return $route;
+    }
+
+    /**
+     * Find module route uri based on params
+     * @param string $namePrefix incl. moduleName
+     * @param array<string, mixed> $params
+     */
+    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = [], string $method = 'GET'): string|null
+    {
+        // @todo make use of method here too!?
+        return ModuleAPIRoutes::findRoute($router, $params, $method, $namePrefix);
+    }
+
+    /**
+     * Find dataobject route uri based on params
+     * @param string $namePrefix incl. objectName
+     * @param array<string, mixed> $params
+     */
+    public static function findObjectRoute(RouterInterface $router, string $namePrefix = '', array $params = [], string $method = 'GET'): string|null
+    {
+        // @todo make use of method here too!?
+        return DataObjectAPIRoutes::findRoute($router, $params, $method, $namePrefix);
+    }
+
+    /**
+     * Summary of makeUri
+     * @param array<string, mixed> $params
+     */
+    public static function makeUri(RouterInterface $router, string $route, array $params = []): string|null
+    {
+        if (empty($route)) {
+            return null;
+        }
+        try {
+            return $router->generate($route, $params);
+            // @todo replace 1234567890 with [itemid] for defer* properties
+        } catch (RouteNotFoundException $e) {
+            // ...
+            var_dump($e);
+            return null;
+        }
+    }
+
+    /**
+     * Get route handler for restapi routes here - @todo align with restapi handling
+     * @param string $route
+     * @param ?Context<string, mixed> $context
+     * @return HandlerInterface
+     */
+    public static function getHandler(string $route, ?Context $context): HandlerInterface
+    {
+        // we could provide different instance or handler based on route here
+        $handler = new RestAPIHandler();
+        $handler->setContext($context);
+        return $handler;
     }
 }

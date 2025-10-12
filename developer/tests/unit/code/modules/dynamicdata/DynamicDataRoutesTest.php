@@ -5,9 +5,8 @@ use Xaraya\Routing\Dispatcher;
 use Xaraya\Routing\RouterInterface;
 use Xaraya\Routing\Routing;
 use Xaraya\Modules\DynamicData\DynamicDataRoutes;
-use Xaraya\Modules\Base\BaseRoutes;
 
-final class BridgeRoutesTest extends TestHelper
+final class DynamicDataRoutesTest extends TestHelper
 {
     private static RouterInterface $router;
 
@@ -113,7 +112,7 @@ final class BridgeRoutesTest extends TestHelper
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getRouteProvider')]
-    public function testRoutesMatch(string $route, array $callable, string $path, array $params): void
+    public function testRouterMatch(string $route, array $callable, string $path, array $params): void
     {
         $router = new Routing(function () {
             return DynamicDataRoutes::getRoutes();
@@ -140,7 +139,7 @@ final class BridgeRoutesTest extends TestHelper
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getRouteProvider')]
-    public function testRoutesFindRoute(string $route, array $callable, string $path, array $params): void
+    public function testFindRoute(string $route, array $callable, string $path, array $params): void
     {
         $uri = DynamicDataRoutes::findRoute(self::$router, $params);
 
@@ -149,7 +148,7 @@ final class BridgeRoutesTest extends TestHelper
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getRouteProvider')]
-    public function testRoutesGenerate(string $route, array $callable, string $path, array $params): void
+    public function testRouterGenerate(string $route, array $callable, string $path, array $params): void
     {
         $router = new Routing(function () {
             return DynamicDataRoutes::getRoutes();
@@ -162,88 +161,11 @@ final class BridgeRoutesTest extends TestHelper
         $this->assertEquals($expected, $uri);
     }
 
-    public function testRoutesBaseRoutes(): void
-    {
-        $params = [
-            'module' => 'base',
-            'type' => 'user',
-            'func' => 'main',
-        ];
-        $uri = BaseRoutes::findRoute(self::$router, $params);
-
-        $expected = '/base/';
-        $this->assertEquals($expected, $uri);
-
-        $params['page'] = 'docs';
-        $uri = BaseRoutes::findRoute(self::$router, $params);
-        unset($params['page']);
-
-        $expected = '/base/docs';
-        $this->assertEquals($expected, $uri);
-
-        // unsupported: overlaps with /base/{page}
-        $params['func'] = 'other';
-        $uri = BaseRoutes::findRoute(self::$router, $params);
-
-        $expected = null;
-        $this->assertEquals($expected, $uri);
-
-        $params['more'] = 'more';
-        $uri = BaseRoutes::findRoute(self::$router, $params);
-
-        $expected = null;
-        $this->assertEquals($expected, $uri);
-
-        $params['type'] = 'admin';
-        $uri = BaseRoutes::findRoute(self::$router, $params);
-
-        $expected = '/base/admin/other?more=more';
-        $this->assertEquals($expected, $uri);
-
-        unset($params['more']);
-        $uri = BaseRoutes::findRoute(self::$router, $params);
-
-        $expected = '/base/admin/other';
-        $this->assertEquals($expected, $uri);
-    }
-
-    public function testRoutesBasePage(): void
-    {
-        xarTpl::init();
-
-        $router = new Routing(function () {
-            return BaseRoutes::getRoutes();
-        });
-        $path = '/base/docs';
-        [$handler, $vars] = $router->match($path);
-
-        $expected = [BaseRoutes::class, 'main'];
-        $this->assertEquals($expected, $handler);
-
-        $route = 'base-page';
-        $expected = [
-            '_route' => $route,
-            'page' => 'docs',
-        ];
-        $this->assertEquals($expected, $vars);
-
-        $context = $this->createContext();
-        [$routesClass, $method] = $handler;
-        $moduleHandler = $routesClass::getHandler($route, $context);
-        [$result, $context] = $moduleHandler->callHandler($handler, $vars);
-
-        $output = $moduleHandler->output($result);
-        $output = preg_replace('/<!--.*?-->/s', '', $output);
-
-        $expected = '<h2>Welcome to Xaraya Documentation</h2>';
-        $this->assertStringContainsString($expected, $output);
-    }
-
-    public function testDispatcherBasePage(): void
+    public function testDispatcher(): void
     {
         $dispatcher = new Dispatcher();
 
-        $path = '/base/docs';
+        $path = '/dynamicdata/';
         $params = [];
         $method = 'GET';
         [$result, $context] = $dispatcher->dispatch($path, $params, $method);
@@ -251,7 +173,7 @@ final class BridgeRoutesTest extends TestHelper
         $output = $dispatcher->output($result);
         $output = preg_replace('/<!--.*?-->/s', '', $output);
 
-        $expected = '<h2>Welcome to Xaraya Documentation</h2>';
+        $expected = 'Sample Object';
         $this->assertStringContainsString($expected, $output);
 
         // make sure we reset the Controller here for later tests

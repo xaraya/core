@@ -14,6 +14,9 @@
 
 namespace Xaraya\Bridge\RestAPI;
 
+use Xaraya\Routing\RoutesInterface;
+use Xaraya\Routing\RouterInterface;
+
 /**
  * Class to define DataObject REST API routes
  * @phpstan-import-type RouteDef from RestAPIRoutes
@@ -51,6 +54,10 @@ class DataObjectAPIRoutes extends RestAPIRoutes
         $name = $namePrefix . 'getObjectItem';
         $routes[$name] = ['GET', $path, [$restHandler, 'getObjectItem'], $extra];
 
+        $path = $pathPrefix . '/{object}/{itemid}/{title}';
+        $name = $namePrefix . 'getObjectItemTitle';
+        $routes[$name] = ['GET', $path, [$restHandler, 'getObjectItem'], $extra];
+
         $path = $pathPrefix . '/{object}';
         $name = $namePrefix . 'createObjectItem';
         $routes[$name] = ['POST', $path, [$restHandler, 'createObjectItem'], $extra];
@@ -68,5 +75,52 @@ class DataObjectAPIRoutes extends RestAPIRoutes
         //$routes[$name] = ['PATCH', $path, [$restHandler, 'patchObjectDefinition'], $extra];
 
         return $routes;
+    }
+
+    /**
+     * Find route uri based on params
+     * @param array<string, mixed> $params
+     */
+    public static function findRoute(RouterInterface $router, array $params, string $method = 'GET', string $namePrefix = ''): string|null
+    {
+        // we have a route already
+        if (!empty($params[RoutesInterface::ROUTE_PARAM])) {
+            $route = $params[RoutesInterface::ROUTE_PARAM];
+            // clean up current route
+            unset($params[RoutesInterface::ROUTE_PARAM]);
+            return static::makeUri($router, $route, $params);
+        }
+        $namePrefix .= static::$namePrefix;
+        // @todo make use of method here too!?
+        $route = null;
+        if (empty($params['itemid'])) {
+            switch ($method) {
+                case 'POST':
+                    $route = $namePrefix . 'createObjectItem';
+                    break;
+                case 'GET':
+                default:
+                    $route = $namePrefix . 'getObjectList';
+                    break;
+            }
+            return static::makeUri($router, $route, $params);
+        }
+        if (empty($params['title'])) {
+            switch ($method) {
+                case 'PUT':
+                    $route = $namePrefix . 'updateObjectItem';
+                    break;
+                case 'DELETE':
+                    $route = $namePrefix . 'deleteObjectItem';
+                    break;
+                case 'GET':
+                default:
+                    $route = $namePrefix . 'getObjectItem';
+                    break;
+            }
+            return static::makeUri($router, $route, $params);
+        }
+        $route = $namePrefix . 'getObjectItemTitle';
+        return static::makeUri($router, $route, $params);
     }
 }
