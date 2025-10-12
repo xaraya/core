@@ -36,9 +36,9 @@ final class BridgeRoutesTest extends TestHelper
         $this->assertEquals($expected, $vars);
 
         $context = $this->createContext();
-        [$handlerClass, $method] = $handler;
-        $instance = $handlerClass::getHandler($route, $context);
-        [$result, $context] = $instance->callHandler($handler, $vars);
+        [$routesClass, $method] = $handler;
+        $moduleHandler = $routesClass::getHandler($route, $context);
+        [$result, $context] = $moduleHandler->callHandler($handler, $vars);
 
         $expected = [
             'startlist' => [
@@ -55,7 +55,7 @@ final class BridgeRoutesTest extends TestHelper
             $this->assertStringContainsString($expected, $result);
         }
 
-        $output = $instance->output($result);
+        $output = $moduleHandler->output($result);
 
         $expected = 'Sample Object';
         $this->assertStringContainsString($expected, $output);
@@ -83,11 +83,11 @@ final class BridgeRoutesTest extends TestHelper
         $this->assertEquals($expected, $vars);
 
         $context = $this->createContext();
-        [$handlerClass, $method] = $handler;
-        $instance = $handlerClass::getHandler($route, $context);
-        [$result, $context] = $instance->callHandler($handler, $vars);
+        [$routesClass, $method] = $handler;
+        $moduleHandler = $routesClass::getHandler($route, $context);
+        [$result, $context] = $moduleHandler->callHandler($handler, $vars);
 
-        $output = $instance->output($result);
+        $output = $moduleHandler->output($result);
         $output = preg_replace('/<!--.*?-->/s', '', $output);
 
         $expected = 'Name</label></div><div class="xar-col">Johnny</div>';
@@ -228,14 +228,33 @@ final class BridgeRoutesTest extends TestHelper
         $this->assertEquals($expected, $vars);
 
         $context = $this->createContext();
-        [$handlerClass, $method] = $handler;
-        $instance = $handlerClass::getHandler($route, $context);
-        [$result, $context] = $instance->callHandler($handler, $vars);
+        [$routesClass, $method] = $handler;
+        $moduleHandler = $routesClass::getHandler($route, $context);
+        [$result, $context] = $moduleHandler->callHandler($handler, $vars);
 
-        $output = $instance->output($result);
+        $output = $moduleHandler->output($result);
         $output = preg_replace('/<!--.*?-->/s', '', $output);
 
         $expected = '<h2>Welcome to Xaraya Documentation</h2>';
         $this->assertStringContainsString($expected, $output);
+    }
+
+    public function testDispatcherBasePage(): void
+    {
+        $dispatcher = new Dispatcher();
+
+        $path = '/base/docs';
+        $params = [];
+        $method = 'GET';
+        [$result, $context] = $dispatcher->dispatch($path, $params, $method);
+
+        $output = $dispatcher->output($result);
+        $output = preg_replace('/<!--.*?-->/s', '', $output);
+
+        $expected = '<h2>Welcome to Xaraya Documentation</h2>';
+        $this->assertStringContainsString($expected, $output);
+
+        // make sure we reset the Controller here for later tests
+        $dispatcher->resetController();
     }
 }

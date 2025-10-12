@@ -116,13 +116,13 @@ class Dispatcher
             // @todo see status in Routing::match()
             throw new Exception('Invalid handler');
         }
-        [$handlerClass, $method] = $handler;
-        if (!is_subclass_of($handlerClass, RoutesInterface::class)) {
-            throw new Exception('Unknown routes class ' . $handlerClass);
+        [$routesClass, $method] = $handler;
+        if (!is_subclass_of($routesClass, RoutesInterface::class)) {
+            throw new Exception('Unknown routes class ' . $routesClass);
         }
-        /** @var class-string<RoutesInterface> $handlerClass */
+        /** @var class-string<RoutesInterface> $routesClass */
         $route = $vars[RoutesInterface::ROUTE_PARAM] ?? '';
-        $this->handler = $handlerClass::getHandler($route, $context);
+        $this->handler = $routesClass::getHandler($route, $context);
         try {
             [$result, $context] = $this->handler->callHandler($handler, $vars);
         } catch (FunctionNotFoundException $e) {
@@ -153,6 +153,20 @@ class Dispatcher
         xarController::setCallback('forbiddenTo', [$this, 'forbidden']);
         xarController::setCallback('notFoundTo', [$this, 'notFound']);
         xarController::setCallback('badRequestTo', [$this, 'badRequest']);
+    }
+
+    /**
+     * Summary of resetController
+     * @return void
+     */
+    public function resetController()
+    {
+        xarServer::$baseurl = null;
+        xarController::setCallback('buildUri', null);
+        xarController::setCallback('redirectTo', null);
+        xarController::setCallback('forbiddenTo', null);
+        xarController::setCallback('notFoundTo', null);
+        xarController::setCallback('badRequestTo', null);
     }
 
     /**
