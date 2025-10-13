@@ -12,6 +12,8 @@ use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use Xaraya\Bridge\RestAPI\RestAPIRoutes;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use Xaraya\Context\Context;
+use Xaraya\Context\ContextInterface;
+use Xaraya\Context\ContextTrait;
 use xarClassMap;
 use xarController;
 use xarServer;
@@ -22,9 +24,12 @@ use FunctionNotFoundException;
 /**
  * Module dispatcher for routing & dispatching outside Xaraya
  */
-class Dispatcher
+class Dispatcher implements ContextInterface
 {
+    use ContextTrait;
+
     public string $baseUri = '';
+    public string $basePath = '';
     public ?RouterInterface $router;
     public HandlerInterface|RestAPIHandler|GraphQLHandler|null $handler;
     /** @var ?Context<string, mixed> */
@@ -34,6 +39,10 @@ class Dispatcher
     {
         $this->baseUri = $baseUri;
         $this->router = $router;
+        if (!empty($this->baseUri)) {
+            $basePath = parse_url($this->baseUri, PHP_URL_PATH);
+            $this->basePath = $basePath ? rtrim($basePath, '/') : '';
+        }
     }
 
     /**
@@ -45,6 +54,10 @@ class Dispatcher
      */
     public function dispatch(string $path, array $params = [], string $method = 'GET')
     {
+        // remove basePath to get PATH_INFO if needed
+        if (!empty($this->basePath) && str_starts_with($path, $this->basePath . '/')) {
+            $path = substr($path, strlen($this->basePath));
+        }
         [$handler, $vars] = $this->getRouter()->match($path, $method);
         if (empty($handler)) {
             return [$vars, null];
@@ -53,7 +66,7 @@ class Dispatcher
         if (!empty($params)) {
             $vars = array_merge($vars, $params);
         }
-        $this->context = new Context(['source' => __METHOD__]);
+        $this->context ??= new Context(['source' => __METHOD__]);
         [$result, $context] = $this->callHandler($handler, $vars, $this->context);
         return [$result, $context];
     }
@@ -190,7 +203,7 @@ class Dispatcher
             $route = $extra['_route'];
             unset($extra['_route']);
             try {
-                return $router->generate($route, $extra);
+                return $this->basePath . $router->generate($route, $extra);
                 // @todo replace 1234567890 with [itemid] for defer* properties
             } catch (RouteNotFoundException $e) {
                 // ...
@@ -229,10 +242,10 @@ class Dispatcher
             $uri = DefaultRoutes::findRoute($router, $extra);
             if (is_null($uri)) {
                 // @todo find route based on args
-                return "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));
+                return $this->basePath . "/$arg1-$arg2-$arg3/" . rawurldecode(json_encode($extra));
             }
         }
-        return $uri;
+        return $this->basePath . $uri;
     }
 
     /**
