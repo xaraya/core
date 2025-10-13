@@ -266,9 +266,21 @@ class xarServer extends xarObject
      */
     public static function setBaseURL($baseurl)
     {
+        // if entry point is specified in baseurl, e.g. http://localhost/xaraya/dispatch.php
+        if (!empty($baseurl) && !str_ends_with($baseurl, '/')) {
+            $parts = explode('/', $baseurl);
+            $entryPoint = array_pop($parts);
+            xarController::$entryPoint = $entryPoint;
+            // @checkme override system config here, since xarController does re-init() for each URL() for some reason...
+            xarSystemVars::set(sys::LAYOUT, 'BaseModURL', $entryPoint);
+            $baseurl = substr($baseurl, 0, -strlen($entryPoint));
+        }
         self::$baseurl = $baseurl;
         if (empty($baseurl)) {
             xarSystemVars::set(sys::LAYOUT, 'BaseURI', null);
+            // reset entry point to default here
+            xarController::$entryPoint = 'index.php';
+            xarSystemVars::set(sys::LAYOUT, 'BaseModURL', null);
             return;
         }
 

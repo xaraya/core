@@ -82,9 +82,25 @@ class Dispatcher implements ContextInterface
             //return '';
         }
         if (is_string($result)) {
+            // @todo transform by using wrapOutputInPage() here
+            if (!empty($transform)) {
+                return $this->wrapOutputInPage($result, $this->context);
+            }
             return $result;
         }
         return json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * Summary of wrapOutputInPage
+     * @param string $body
+     * @param mixed $context
+     * @return string
+     */
+    public function wrapOutputInPage(string $body, $context = null): string
+    {
+        // Render page with the output - see index.php
+        return \xarTpl::renderPage($body, null, $context);
     }
 
     /**

@@ -14,7 +14,16 @@ final class DynamicDataRoutesTest extends TestHelper
     {
         parent::setUpBeforeClass();
         $dispatcher = new Dispatcher();
+        $dispatcher->resetController();
         self::$router = $dispatcher->getRouter();
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        parent::setUpBeforeClass();
+        // make sure we reset the Controller here for later tests
+        $dispatcher = new Dispatcher();
+        $dispatcher->resetController();
     }
 
     public function testRoutesMain(): void
@@ -173,7 +182,29 @@ final class DynamicDataRoutesTest extends TestHelper
         $output = $dispatcher->output($result);
         $output = preg_replace('/<!--.*?-->/s', '', $output);
 
-        $expected = 'Sample Object';
+        $expected = '<a href="/object/sample">Sample Object</a>';
+        $this->assertStringContainsString($expected, $output);
+
+        // make sure we reset the Controller here for later tests
+        $dispatcher->resetController();
+    }
+
+    public function testUserGuiViewSample(): void
+    {
+        $dispatcher = new Dispatcher();
+
+        $path = '/dynamicdata/view/sample';
+        $params = [];
+        $method = 'GET';
+        [$result, $context] = $dispatcher->dispatch($path, $params, $method);
+
+        $output = $dispatcher->output($result);
+        $output = preg_replace('/<!--.*?-->/s', '', $output);
+
+        $expected = '<h2>View Sample Object</h2>';
+        $this->assertStringContainsString($expected, $output);
+
+        $expected = '<a href="/dynamicdata/view/sample/1">Johnny</a>';
         $this->assertStringContainsString($expected, $output);
 
         // make sure we reset the Controller here for later tests
