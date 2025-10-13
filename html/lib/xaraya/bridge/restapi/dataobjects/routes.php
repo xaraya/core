@@ -84,11 +84,8 @@ class DataObjectAPIRoutes extends RestAPIRoutes
     public static function findRoute(RouterInterface $router, array $params, string $method = 'GET', string $namePrefix = ''): string|null
     {
         // we have a route already
-        if (!empty($params[RoutesInterface::ROUTE_PARAM])) {
-            $route = $params[RoutesInterface::ROUTE_PARAM];
-            // clean up current route
-            unset($params[RoutesInterface::ROUTE_PARAM]);
-            return static::makeUri($router, $route, $params);
+        if (!empty($params[$router::ROUTE_PARAM])) {
+            return $router->makeUri(null, $params);
         }
         $namePrefix .= static::$namePrefix;
         // @todo make use of method here too!?
@@ -103,7 +100,7 @@ class DataObjectAPIRoutes extends RestAPIRoutes
                     $route = $namePrefix . 'getObjectList';
                     break;
             }
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
         if (empty($params['title'])) {
             switch ($method) {
@@ -118,9 +115,9 @@ class DataObjectAPIRoutes extends RestAPIRoutes
                     $route = $namePrefix . 'getObjectItem';
                     break;
             }
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
         $route = $namePrefix . 'getObjectItemTitle';
-        return static::makeUri($router, $route, $params);
+        return $router->makeUri($route, $params);
     }
 }

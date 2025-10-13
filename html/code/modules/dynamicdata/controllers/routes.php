@@ -117,7 +117,7 @@ class DynamicDataRoutes extends ModuleRoutes
             if (!empty($params['tplmodule']) && $params['tplmodule'] == static::$moduleName) {
                 unset($params['tplmodule']);
             }
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
 
         // add standard routes

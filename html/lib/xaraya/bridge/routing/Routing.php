@@ -153,7 +153,7 @@ class Routing implements RouterInterface
     }
 
     /**
-     * Generate URL path for route name and params
+     * Generate URL path for route name and params or throw exception
      * @param string $name
      * @param array<string, mixed> $params
      * @return string|null
@@ -174,6 +174,33 @@ class Routing implements RouterInterface
             throw $e;
         }
         return $url;
+    }
+
+    /**
+     * Make URI for route name and params or return null
+     * @param array<string, mixed> $params
+     */
+    public function makeUri(?string $route, array $params = []): ?string
+    {
+        // we have a route in params
+        if (!empty($params[self::ROUTE_PARAM])) {
+            if (empty($route)) {
+                $route = $params[self::ROUTE_PARAM];
+            }
+            // clean up current route
+            unset($params[self::ROUTE_PARAM]);
+        }
+        if (empty($route)) {
+            return null;
+        }
+        try {
+            return $this->generate($route, $params);
+            // @todo replace 1234567890 with [itemid] for defer* properties
+        } catch (RouteNotFoundException $e) {
+            // ...
+            var_dump($e);
+            return null;
+        }
     }
 
     /**

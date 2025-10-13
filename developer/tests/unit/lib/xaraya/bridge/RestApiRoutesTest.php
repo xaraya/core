@@ -3,9 +3,11 @@
 use Xaraya\Modules\TestHelper;
 use Xaraya\Routing\Dispatcher;
 use Xaraya\Routing\RouterInterface;
+use Xaraya\Routing\RoutesInterface;
 use Xaraya\Routing\Routing;
 use Xaraya\Bridge\RestAPI\RestAPIRoutes;
 use Xaraya\Bridge\RestAPI\RestAPIHandler;
+use Xaraya\Bridge\RestAPI\DataObjectAPIHandler;
 
 final class RestApiRoutesTest extends TestHelper
 {
@@ -56,7 +58,7 @@ final class RestApiRoutesTest extends TestHelper
         $this->assertEquals($expected, $uri);
     }
 
-    public function testOpenAPI(): void
+    public function testGetOpenAPI(): void
     {
         xarTpl::init();
 
@@ -77,30 +79,73 @@ final class RestApiRoutesTest extends TestHelper
 
         $context = $this->createContext();
         [$routesClass, $method] = $handler;
-        // @todo $routesClass is already handler class for restapi
-        $moduleHandler = $routesClass::getHandler($route, $context);
+        // @todo $routesClass is already handler class for restapi here
+        if (is_subclass_of($routesClass, RoutesInterface::class)) {
+            $moduleHandler = $routesClass::getHandler($route, $context);
+        } else {
+            $moduleHandler = is_object($routesClass) ? $routesClass : new $routesClass();
+            $moduleHandler->setContext($context);
+        }
         [$result, $context] = $moduleHandler->callHandler($handler, $vars);
 
-        $output = $moduleHandler->output($result);
-        $output = preg_replace('/<!--.*?-->/s', '', $output);
+        // @todo restapi handler = set headers + echo output
+        $output = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-        $expected = '<h2>Congratulations!</h2>';
+        $expected = '"title": "Xaraya REST API"';
+        $this->assertStringContainsString($expected, $output);
+    }
+
+    public function testGetObjectList(): void
+    {
+        xarTpl::init();
+
+        $router = new Routing(function () {
+            return RestAPIRoutes::getRoutes();
+        });
+        $path = '/v1/objects/sample';
+        [$handler, $vars] = $router->match($path);
+
+        $expected = [DataObjectAPIHandler::class, 'getObjectList'];
+        $this->assertEquals($expected, $handler);
+
+        $route = 'restapi-objects-getObjectList';
+        $expected = [
+            '_route' => $route,
+            'object' => 'sample',
+        ];
+        $this->assertEquals($expected, $vars);
+
+        $context = $this->createContext();
+        [$routesClass, $method] = $handler;
+        // @todo $routesClass is already handler class for restapi here
+        if (is_subclass_of($routesClass, RoutesInterface::class)) {
+            $moduleHandler = $routesClass::getHandler($route, $context);
+        } else {
+            $moduleHandler = is_object($routesClass) ? $routesClass : new $routesClass();
+            $moduleHandler->setContext($context);
+        }
+        [$result, $context] = $moduleHandler->callHandler($handler, $vars);
+
+        // @todo restapi handler = set headers + echo output
+        $output = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+        $expected = '"name": "Johnny"';
         $this->assertStringContainsString($expected, $output);
     }
 
     public function testDispatcher(): void
     {
+        // @todo add restapi to Dispatcher routes
         $dispatcher = new Dispatcher();
 
-        $path = '/';
+        $path = '/restapi/v1/objects/sample';
         $params = [];
         $method = 'GET';
         [$result, $context] = $dispatcher->dispatch($path, $params, $method);
 
         $output = $dispatcher->output($result);
-        $output = preg_replace('/<!--.*?-->/s', '', $output);
 
-        $expected = '<h2>Congratulations!</h2>';
+        $expected = '"name": "Johnny"';
         $this->assertStringContainsString($expected, $output);
 
         // make sure we reset the Controller here for later tests

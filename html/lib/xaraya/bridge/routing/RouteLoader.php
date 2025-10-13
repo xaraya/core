@@ -50,7 +50,7 @@ class RouteLoader extends Loader
             /** @var array<string, string|int|bool|float> $options */
             [$methods, $path, $handler, $options] = $route;
             // set route param in request once we find matching route
-            //$params[Route::ROUTE_PARAM] ??= $name;
+            //$params[Routing::ROUTE_PARAM] ??= $name;
             [$path, $requirements] = self::getPathRequirements($path);
             // set handler in 'defaults' here!? - @todo
             $params = [Routing::HANDLER_PARAM => $handler];

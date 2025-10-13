@@ -11,6 +11,8 @@ namespace Xaraya\Routing;
  */
 interface RouterInterface
 {
+    public const ROUTE_PARAM = '_route';
+
     /**
      * Summary of __construct
      * @param callable $callable get array of name => [method(s), path, handler, options = []]
@@ -27,12 +29,18 @@ interface RouterInterface
     public function match($path, $method = null);
 
     /**
-     * Generate URL path for route name and params
+     * Generate URL path for route name and params or throw exception
      * @param string $name
      * @param array<string, mixed> $params
      * @return string|null
      */
     public function generate($name, $params);
+
+    /**
+     * Make URI for route name and params or return null
+     * @param array<string, mixed> $params
+     */
+    public function makeUri(?string $route, array $params = []): ?string;
 
     /**
      * Check last modified cache file against reference file

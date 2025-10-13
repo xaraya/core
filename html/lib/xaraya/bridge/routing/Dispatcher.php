@@ -7,6 +7,10 @@
 namespace Xaraya\Routing;
 
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Xaraya\Bridge\GraphQL\GraphQLRoutes;
+use Xaraya\Bridge\GraphQL\GraphQLHandler;
+use Xaraya\Bridge\RestAPI\RestAPIRoutes;
+use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use Xaraya\Context\Context;
 use xarClassMap;
 use xarController;
@@ -22,13 +26,14 @@ class Dispatcher
 {
     public string $baseUri = '';
     public ?RouterInterface $router;
-    public ?HandlerInterface $handler;
+    public HandlerInterface|RestAPIHandler|GraphQLHandler|null $handler;
     /** @var ?Context<string, mixed> */
     protected $context = null;
 
-    public function __construct(string $baseUri = 'http://localhost/')
+    public function __construct(string $baseUri = 'http://localhost/', ?RouterInterface $router = null)
     {
         $this->baseUri = $baseUri;
+        $this->router = $router;
     }
 
     /**
@@ -98,6 +103,8 @@ class Dispatcher
         foreach ($handlers as $className => $filePath) {
             $routes = array_merge($routes, $className::getRoutes());
         }
+        $routes = array_merge($routes, RestAPIRoutes::getRoutes('/restapi'));
+        $routes = array_merge($routes, GraphQLRoutes::getRoutes());
         $routes = array_merge($routes, DefaultRoutes::getRoutes());
         return $routes;
     }
@@ -117,12 +124,14 @@ class Dispatcher
             throw new Exception('Invalid handler');
         }
         [$routesClass, $method] = $handler;
-        if (!is_subclass_of($routesClass, RoutesInterface::class)) {
-            throw new Exception('Unknown routes class ' . $routesClass);
+        if (is_subclass_of($routesClass, RoutesInterface::class)) {
+            /** @var class-string<RoutesInterface> $routesClass */
+            $route = $vars[RouterInterface::ROUTE_PARAM] ?? '';
+            $this->handler = $routesClass::getHandler($route, $context);
+        } else {
+            $this->handler = is_object($routesClass) ? $routesClass : new $routesClass();
+            $this->handler->setContext($context);
         }
-        /** @var class-string<RoutesInterface> $routesClass */
-        $route = $vars[RoutesInterface::ROUTE_PARAM] ?? '';
-        $this->handler = $routesClass::getHandler($route, $context);
         try {
             [$result, $context] = $this->handler->callHandler($handler, $vars);
         } catch (FunctionNotFoundException $e) {
@@ -133,9 +142,9 @@ class Dispatcher
 
     /**
      * Summary of getHandler
-     * @return HandlerInterface|null
+     * @return HandlerInterface|RestAPIHandler|GraphQLHandler|null
      */
-    public function getHandler(): HandlerInterface|null
+    public function getHandler(): HandlerInterface|RestAPIHandler|GraphQLHandler|null
     {
         return $this->handler;
     }
@@ -161,7 +170,7 @@ class Dispatcher
      */
     public function resetController()
     {
-        xarServer::$baseurl = null;
+        xarServer::setBaseURL(null);
         xarController::setCallback('buildUri', null);
         xarController::setCallback('redirectTo', null);
         xarController::setCallback('forbiddenTo', null);

@@ -97,17 +97,14 @@ class RestAPIRoutes implements RoutesInterface
     public static function findRoute(RouterInterface $router, array $params, string $method = 'GET'): string|null
     {
         // we have a route already
-        if (!empty($params[RoutesInterface::ROUTE_PARAM])) {
-            $route = $params[RoutesInterface::ROUTE_PARAM];
-            // clean up current route
-            unset($params[RoutesInterface::ROUTE_PARAM]);
-            return static::makeUri($router, $route, $params);
+        if (!empty($params[$router::ROUTE_PARAM])) {
+            return $router->makeUri(null, $params);
         }
         // @todo make use of method here too!?
         $route = null;
         if (empty($params)) {
             $route = 'openapi';
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
         // find module route uri or dataobject route uri
         if (!isset($route) && !empty($params['module'])) {
@@ -141,25 +138,6 @@ class RestAPIRoutes implements RoutesInterface
     {
         // @todo make use of method here too!?
         return DataObjectAPIRoutes::findRoute($router, $params, $method, $namePrefix);
-    }
-
-    /**
-     * Summary of makeUri
-     * @param array<string, mixed> $params
-     */
-    public static function makeUri(RouterInterface $router, string $route, array $params = []): string|null
-    {
-        if (empty($route)) {
-            return null;
-        }
-        try {
-            return $router->generate($route, $params);
-            // @todo replace 1234567890 with [itemid] for defer* properties
-        } catch (RouteNotFoundException $e) {
-            // ...
-            var_dump($e);
-            return null;
-        }
     }
 
     /**

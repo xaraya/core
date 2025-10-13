@@ -261,12 +261,16 @@ class xarServer extends xarObject
 
     /**
      * Allow setting baseurl if needed
-     * @param string $baseurl
+     * @param ?string $baseurl
      * @return void
      */
     public static function setBaseURL($baseurl)
     {
         self::$baseurl = $baseurl;
+        if (empty($baseurl)) {
+            xarSystemVars::set(sys::LAYOUT, 'BaseURI', null);
+            return;
+        }
 
         $info = parse_url($baseurl);
         self::setVar('SERVER_NAME', $info['host']);

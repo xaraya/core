@@ -94,18 +94,15 @@ class ModuleAPIRoutes extends RestAPIRoutes
     public static function findRoute(RouterInterface $router, array $params, string $method = 'GET', string $namePrefix = ''): string|null
     {
         // we have a route already
-        if (!empty($params[RoutesInterface::ROUTE_PARAM])) {
-            $route = $params[RoutesInterface::ROUTE_PARAM];
-            // clean up current route
-            unset($params[RoutesInterface::ROUTE_PARAM]);
-            return static::makeUri($router, $route, $params);
+        if (!empty($params[$router::ROUTE_PARAM])) {
+            return $router->makeUri(null, $params);
         }
         $namePrefix .= static::$namePrefix;
         // @todo make use of method here too!?
         $route = null;
         if (empty($params['path'])) {
             $route = $namePrefix . 'getModuleApis';
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
         if (empty($params['more'])) {
             switch ($method) {
@@ -123,7 +120,7 @@ class ModuleAPIRoutes extends RestAPIRoutes
                     $route = $namePrefix . 'getModuleCall';
                     break;
             }
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
         switch ($method) {
             case 'POST':
@@ -140,6 +137,6 @@ class ModuleAPIRoutes extends RestAPIRoutes
                 $route = $namePrefix . 'getModuleCallMore';
                 break;
         }
-        return static::makeUri($router, $route, $params);
+        return $router->makeUri($route, $params);
     }
 }

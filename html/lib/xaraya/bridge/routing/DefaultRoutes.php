@@ -87,11 +87,8 @@ class DefaultRoutes extends ModuleRoutes
     public static function findRoute(RouterInterface $router, array $params): string|null
     {
         // we have a route already
-        if (!empty($params[RoutesInterface::ROUTE_PARAM])) {
-            $route = $params[RoutesInterface::ROUTE_PARAM];
-            // clean up current route
-            unset($params[RoutesInterface::ROUTE_PARAM]);
-            return static::makeUri($router, $route, $params);
+        if (!empty($params[$router::ROUTE_PARAM])) {
+            return $router->makeUri(null, $params);
         }
         // for any module that doesn't have its own handler
         $namePrefix = static::$moduleName . '-';
@@ -109,7 +106,7 @@ class DefaultRoutes extends ModuleRoutes
         // we have no module
         if (empty($params['module'])) {
             $route = $namePrefix . 'home';
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
         // module user func
         if (empty($params['type']) || $params['type'] == 'user') {
@@ -122,11 +119,11 @@ class DefaultRoutes extends ModuleRoutes
             }
             // clean up default type
             unset($params['type']);
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
         // module other func
         $route = $namePrefix . 'type-func';
-        return static::makeUri($router, $route, $params);
+        return $router->makeUri($route, $params);
     }
 
     /**

@@ -15,8 +15,6 @@ use Xaraya\Context\Context;
  */
 interface RoutesInterface
 {
-    public const ROUTE_PARAM = '_route';
-
     /**
      * Get supported handler routes (in generic format)
      * @return array<string, array<mixed>> array of name => [method(s), path, handler, options = []]

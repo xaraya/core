@@ -21,7 +21,6 @@ use Throwable;
  */
 class FastRouter implements RouterInterface
 {
-    public const ROUTE_PARAM = '_route';
     public const FASTROUTE_CACHE_FILE = 'url_fastroute_cache.php';
 
     /** @var callable|null */
@@ -180,6 +179,26 @@ class FastRouter implements RouterInterface
             echo $e;
             return null;
         }
+    }
+
+    /**
+     * Make URI for route name and params or return null
+     * @param array<string, mixed> $params
+     */
+    public function makeUri(?string $route, array $params = []): ?string
+    {
+        // we have a route in params
+        if (!empty($params[self::ROUTE_PARAM])) {
+            if (empty($route)) {
+                $route = $params[self::ROUTE_PARAM];
+            }
+            // clean up current route
+            unset($params[self::ROUTE_PARAM]);
+        }
+        if (empty($route)) {
+            return null;
+        }
+        return $this->generate($route, $params);
     }
 
     /**

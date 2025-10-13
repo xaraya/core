@@ -135,6 +135,6 @@ class AuthsystemRoutes extends ModuleRoutes
         }
         // clean up current type
         unset($params['type']);
-        return static::makeUri($router, $route, $params);
+        return $router->makeUri($route, $params);
     }
 }

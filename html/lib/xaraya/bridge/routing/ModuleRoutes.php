@@ -150,11 +150,8 @@ class ModuleRoutes implements RoutesInterface
     public static function findRoute(RouterInterface $router, array $params): string|null
     {
         // we have a route already
-        if (!empty($params[RoutesInterface::ROUTE_PARAM])) {
-            $route = $params[RoutesInterface::ROUTE_PARAM];
-            // clean up current route
-            unset($params[RoutesInterface::ROUTE_PARAM]);
-            return static::makeUri($router, $route, $params);
+        if (!empty($params[$router::ROUTE_PARAM])) {
+            return $router->makeUri(null, $params);
         }
         // this is not the right module
         if (!empty($params['module']) && $params['module'] != static::$moduleName) {
@@ -213,7 +210,7 @@ class ModuleRoutes implements RoutesInterface
         }
         // clean up current type
         unset($params['type']);
-        return static::makeUri($router, $route, $params);
+        return $router->makeUri($route, $params);
     }
 
     /**
@@ -226,7 +223,7 @@ class ModuleRoutes implements RoutesInterface
         // no dataobject here
         if (empty($params['entity'])) {
             $route = $namePrefix . 'main';
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
         // clean up default type
         if (!empty($params['type']) && $params['type'] == 'user') {
@@ -247,7 +244,7 @@ class ModuleRoutes implements RoutesInterface
                 // clean up default action
                 unset($params['action']);
             }
-            return static::makeUri($router, $route, $params);
+            return $router->makeUri($route, $params);
         }
         // dataobject other
         if (!empty($params['action']) && $params['action'] != 'view') {
@@ -258,25 +255,7 @@ class ModuleRoutes implements RoutesInterface
             // clean up default action
             unset($params['action']);
         }
-        return static::makeUri($router, $route, $params);
-    }
-
-    /**
-     * Summary of makeUri
-     * @param array<string, mixed> $params
-     */
-    public static function makeUri(RouterInterface $router, string $route, array $params = []): string|null
-    {
-        if (empty($route)) {
-            return null;
-        }
-        try {
-            return $router->generate($route, $params);
-            // @todo replace 1234567890 with [itemid] for defer* properties
-        } catch (RouteNotFoundException $e) {
-            // ...
-            return null;
-        }
+        return $router->makeUri($route, $params);
     }
 
     /**

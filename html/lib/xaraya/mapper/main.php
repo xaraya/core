@@ -19,8 +19,6 @@ use Xaraya\Facades\xarConfig3;
 
 class xarController extends xarObject
 {
-    public const ROUTE_PARAM = '_route';
-
     public static bool $allowShortURLs = true;
     /** @var array<string, mixed> */
     public static $shortURLVariables;
