@@ -109,6 +109,7 @@ final class DynamicDataRoutesTest extends TestHelper
         return [
             // uri => [route, callable, path, params]
             '/dynamicdata/' => ['dynamicdata-main', [$class, 'main'], '/dynamicdata/', ['module' => $moduleName]],
+            '/dynamicdata/view/sample' => ['dynamicdata-view-name', [$class, 'view'], '/dynamicdata/view/sample', ['module' => $moduleName, 'type' => 'user', 'func' => 'view', 'name' => 'sample']],
             '/dynamicdata/admin/func' => ['dynamicdata-admin', [$class, 'admingui'], '/dynamicdata/admin/func', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func']],
             '/dynamicdata/admin/func?more=more' => ['dynamicdata-admin', [$class, 'admingui'], '/dynamicdata/admin/func?more=more', ['module' => $moduleName, 'type' => 'admin', 'func' => 'func', 'more' => 'more']],
             '/dynamicdata/search' => ['dynamicdata-user', [$class, 'usergui'], '/dynamicdata/search', ['module' => $moduleName, 'type' => 'user', 'func' => 'search']],
@@ -143,6 +144,10 @@ final class DynamicDataRoutesTest extends TestHelper
         ];
         unset($params['module']);
         unset($params['type']);
+        if (!in_array($callable[1], ['usergui', 'admingui'])) {
+            // function is passed as part of callable for this route
+            unset($params['func']);
+        }
         $expected = array_merge($expected, $params);
         $this->assertEquals($expected, $vars);
     }
@@ -164,6 +169,10 @@ final class DynamicDataRoutesTest extends TestHelper
         });
         unset($params['module']);
         unset($params['type']);
+        if (!in_array($callable[1], ['usergui', 'admingui'])) {
+            // function is passed as part of callable for this route
+            unset($params['func']);
+        }
         $uri = $router->generate($route, $params);
 
         $expected = $path;

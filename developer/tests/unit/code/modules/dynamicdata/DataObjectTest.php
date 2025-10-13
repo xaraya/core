@@ -13,6 +13,10 @@ final class DataObjectTest extends TestCase
     public static function tearDownAfterClass(): void
     {
         xarSystemVars::set(sys::LAYOUT, 'BaseURI', null);
+        // @todo reset deferred property caches after DataObjectTest
+        DeferredItemProperty::$deferred = [];
+        DeferredListProperty::$deferred = [];
+        DeferredManyProperty::$deferred = [];
     }
 
     protected function getFixtureFile($name)
