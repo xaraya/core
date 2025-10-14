@@ -53,7 +53,7 @@ class ModuleHandler implements HandlerInterface
      */
     public function callHandler(mixed $handler, array $vars = []): mixed
     {
-        $this->getContext()?->tracePath(__METHOD__, $handler);
+        $this->getContext()?->tracePath(__METHOD__ . ': ' . $handler[0] . ' ' . $handler[1], $vars);
         $handler = $this->getHandler($handler);
         // @todo allow overriding {module}-main route with $vars['type'] and/or $vars['func'] here?
         if (!empty($vars['_route']) && str_ends_with($vars['_route'], '-main')) {
@@ -86,10 +86,13 @@ class ModuleHandler implements HandlerInterface
             throw new FunctionNotFoundException($handler[1]);
         }
         $this->funcName = $handler[1];
+        // Note: $this->instance might not be initialized for DefaultHandler
+        $this->getContext()?->tracePath(__METHOD__ . ': resolve', [$handler[0]::class, $this->funcName, $vars]);
         $result = $handler($vars);
         // @todo do not apply template here (yet)?
-        if (is_array($result) && is_subclass_of($this->instance, GuiModuleServicesInterface::class)) {
-            $result = $this->instance->mod()->template($this->funcName, $result);
+        if (is_array($result) && is_subclass_of($handler[0], GuiModuleServicesInterface::class)) {
+            $this->getContext()?->tracePath(__METHOD__ . ': template', [$handler[0]::class, $this->funcName]);
+            $result = $handler[0]->mod()->template($this->funcName, $result);
         }
         return [$result, $this->getContext()];
     }

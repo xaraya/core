@@ -267,6 +267,7 @@ trait ModuleServicesTrait
      */
     public function __call(string $funcName, array $arguments = [])
     {
+        $this->context?->tracePath($this::class . '::__call: ' . $funcName, $arguments);
         // call any single-method class that exists in the component namespace
         if (!array_key_exists($funcName, $this->methods)) {
             $className = $this->getClassName($funcName);

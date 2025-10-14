@@ -67,6 +67,7 @@ class Dispatcher implements ContextInterface
             $vars = array_merge($vars, $params);
         }
         $this->context ??= new Context(['source' => __METHOD__]);
+        // $this->context->enableTrace(true);
         [$result, $context] = $this->callHandler($handler, $vars, $this->context);
         return [$result, $context];
     }
@@ -152,6 +153,7 @@ class Dispatcher implements ContextInterface
             // @todo see status in Routing::match()
             throw new Exception('Invalid handler');
         }
+        $context?->tracePath(__METHOD__, $handler);
         [$routesClass, $method] = $handler;
         if (is_subclass_of($routesClass, RoutesInterface::class)) {
             /** @var class-string<RoutesInterface> $routesClass */
