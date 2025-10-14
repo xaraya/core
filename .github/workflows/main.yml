@@ -2,6 +2,7 @@ name: Build
 on:
   push:
     branches:
+      - main
       # disabled - invalid token
       #- com.xaraya.core.bermuda
   pull_request:

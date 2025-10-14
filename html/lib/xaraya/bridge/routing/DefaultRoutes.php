@@ -64,6 +64,11 @@ class DefaultRoutes extends ModuleRoutes
         $name = $namePrefix . 'home';
         $routes[$name] = [['GET', 'POST'], $path, [$handler, 'handle'], $extra];
 
+        // routes page
+        $path = $pathPrefix . '/routes';
+        $name = $namePrefix . 'routes';
+        $routes[$name] = [['GET', 'POST'], $path, [$handler, 'routes'], $extra];
+
         // with trailing / here?
         $path = $pathPrefix . '/{module}/';
         $name = $namePrefix . 'main';

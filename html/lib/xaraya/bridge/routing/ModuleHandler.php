@@ -9,6 +9,7 @@
 namespace Xaraya\Routing;
 
 use Xaraya\Context\ContextTrait;
+use Xaraya\Modules\GuiModuleServicesInterface;
 use Xaraya\Modules\ModuleServicesInterface;
 use FunctionNotFoundException;
 
@@ -87,8 +88,8 @@ class ModuleHandler implements HandlerInterface
         $this->funcName = $handler[1];
         $result = $handler($vars);
         // @todo do not apply template here (yet)?
-        if (is_array($result)) {
-            $result = $handler[0]->mod()->template($handler[1], $result);
+        if (is_array($result) && is_subclass_of($this->instance, GuiModuleServicesInterface::class)) {
+            $result = $this->instance->mod()->template($this->funcName, $result);
         }
         return [$result, $this->getContext()];
     }
@@ -120,7 +121,7 @@ class ModuleHandler implements HandlerInterface
     public function output(mixed $result, mixed $transform = null): string
     {
         // @todo apply template here?
-        //if (is_array($result)) {
+        //if (is_array($result) && is_subclass_of($this->instance, GuiModuleServicesInterface::class)) {
         //    $result = $this->instance->mod()->template($this->funcName, $result);
         //}
         if (is_string($result)) {

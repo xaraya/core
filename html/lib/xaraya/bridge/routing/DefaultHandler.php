@@ -73,6 +73,17 @@ class DefaultHandler extends ModuleHandler
         return $result;
     }
 
+    public function routes(array $args = [])
+    {
+        $dispatcher = new Dispatcher();
+        $result = "<ol>";
+        foreach ($dispatcher->getRoutes() as $name => $route) {
+            $result .= "<li>" . $name . ": " . json_encode($route, JSON_UNESCAPED_SLASHES) . "</li>";
+        }
+        $result .= "</ol>";
+        return $result;
+    }
+
     public function getModName(): string
     {
         return $this->modName;

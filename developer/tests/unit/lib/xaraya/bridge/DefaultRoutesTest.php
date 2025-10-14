@@ -19,7 +19,7 @@ final class DefaultRoutesTest extends TestHelper
 
     public function testGetRoutes(): void
     {
-        $expected = 4;
+        $expected = 5;
         $routes = DefaultRoutes::getRoutes();
         $this->assertCount($expected, $routes);
 
