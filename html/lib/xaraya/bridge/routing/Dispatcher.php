@@ -66,6 +66,8 @@ class Dispatcher implements ContextInterface
         if (!empty($params)) {
             $vars = array_merge($vars, $params);
         }
+        // @todo create context from globals in calling script if needed
+        // $this->context ??= ContextFactory::fromGlobals(__METHOD__);
         $this->context ??= new Context(['source' => __METHOD__]);
         // $this->context->enableTrace(true);
         [$result, $context] = $this->callHandler($handler, $vars, $this->context);
@@ -100,6 +102,15 @@ class Dispatcher implements ContextInterface
      */
     public function wrapOutputInPage(string $body, $context = null): string
     {
+        $context?->tracePath(__METHOD__);
+        // Set page template based on modType if logged in - see index.php
+        if (is_a($this->handler, ModuleHandler::class)) {
+            $modType = $this->handler->getModType();
+            // we need $context['cookie'] and/or $context['server'] for this - see ContextFactory::fromGlobals()
+            if (!empty($context?->getUserId())) {
+                \xarTpl::setPageTemplateName($modType);
+            }
+        }
         // Render page with the output - see index.php
         return \xarTpl::renderPage($body, null, $context);
     }

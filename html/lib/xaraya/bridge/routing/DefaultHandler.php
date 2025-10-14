@@ -84,21 +84,25 @@ class DefaultHandler extends ModuleHandler
         return $result;
     }
 
+    #[\Override]
     public function getModName(): string
     {
         return $this->modName;
     }
 
+    #[\Override]
     public function getModType(): string
     {
         return $this->modType;
     }
 
+    #[\Override]
     public function getItemType(): int
     {
         return $this->itemType;
     }
 
+    #[\Override]
     public function hasMethod(string $funcName, string $funcType = 'api'): bool
     {
         return method_exists($this, $funcName);

@@ -132,4 +132,24 @@ class ModuleHandler implements HandlerInterface
         }
         return json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
+
+    public function getModName(): string
+    {
+        return $this->instance->getModName();
+    }
+
+    public function getModType(): string
+    {
+        return $this->instance->getModType();
+    }
+
+    public function getItemType(): int
+    {
+        return $this->instance->getItemType();
+    }
+
+    public function hasMethod(string $funcName, string $funcType = 'api'): bool
+    {
+        return $this->instance->hasMethod($funcName, $funcType);
+    }
 }
