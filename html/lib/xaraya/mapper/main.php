@@ -340,16 +340,6 @@ class xarController extends xarObject
         // Remove &amp; entities to prevent redirect breakage
         $redirectURL = str_replace('&amp;', '&', $redirectURL);
 
-        if (substr($redirectURL, 0, 4) != 'http') {
-            // Removing leading slashes from redirect url
-            $redirectURL = preg_replace('!^/*!', '', $redirectURL);
-
-            // Get base URL
-            $baseurl = xarServer::getBaseURL();
-
-            $redirectURL = $baseurl.$redirectURL;
-        }
-
         // default response is temp redirect
         if (!preg_match('/^301|302|303|307/', $httpResponse ?? '')) {
             $httpResponse = 302;
@@ -362,6 +352,7 @@ class xarController extends xarObject
                 $context['redirectURL'] = $redirectURL;
                 $context->setResponse(null, $httpResponse);
             }
+            // Note: let whoever set 'redirectTo' deal with 'buildUri' results (e.g. without protocol://server)
             call_user_func($callback, $redirectURL, $httpResponse, $context);
             return false;
         }
@@ -369,6 +360,17 @@ class xarController extends xarObject
         // Bail out if we already sent headers
         if (headers_sent() == true) {
             return false;
+        }
+
+        // Note: this doesn't *quite* match the logic in xarController::URL() - cfr. entryPoint
+        if (substr($redirectURL, 0, 4) != 'http') {
+            // Removing leading slashes from redirect url
+            $redirectURL = preg_replace('!^/*!', '', $redirectURL);
+
+            // Get base URL
+            $baseurl = xarServer::getBaseURL();
+
+            $redirectURL = $baseurl.$redirectURL;
         }
 
         if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE') ?? '') && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE') ?? '')) {

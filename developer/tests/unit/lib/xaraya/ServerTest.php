@@ -5,6 +5,7 @@ use Xaraya\Context\RequestContext;
 use Xaraya\Context\Context;
 use Xaraya\Requests\RequestHandler;
 
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 final class ServerTest extends TestCase
 {
     public static function setUpBeforeClass(): void

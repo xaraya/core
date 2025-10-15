@@ -73,6 +73,7 @@ trait ParentServicesTrait
      * - getModuleURL() - or use mod()->getURL() for current module
      * - getObjectURL() - or use data()->getURL() for current object
      * - getActionURL() - or use $object->getActionURL() with actual object
+     * - getRouteURL() - @todo
      * - getCurrentURL()
      * - getBaseURL()
      * - getBaseURI()

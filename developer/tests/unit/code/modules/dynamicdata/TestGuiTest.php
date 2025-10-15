@@ -5,6 +5,12 @@ use Xaraya\Modules\DynamicData\TestGui;
 
 final class TestGuiTest extends TestHelper
 {
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        xarServer::setBaseURL('http://localhost/');
+    }
+
     public function testTestGui(): void
     {
         $expected = TestGui::class;

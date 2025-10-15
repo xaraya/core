@@ -41,6 +41,7 @@ class Dispatcher implements ContextInterface
         $this->router = $router;
         if (!empty($this->baseUri)) {
             $basePath = parse_url($this->baseUri, PHP_URL_PATH);
+            // for http://localhost/xaraya/dispatch.php this becomes /xaraya/dispatch.php
             $this->basePath = $basePath ? rtrim($basePath, '/') : '';
         }
     }
@@ -75,11 +76,41 @@ class Dispatcher implements ContextInterface
     }
 
     /**
+     * Set headers for result - optional if caller wants this
+     * @see \Xaraya\Bridge\Routing\RoutingBridge::output()
+     */
+    public function setHeaders(mixed $result, ?Context $context): void
+    {
+        if (empty($context)) {
+            return;
+        }
+        if (!empty($context['redirectURL'])) {
+            header('Location: ' . $context['redirectURL']);
+            \xarCore::exit();
+            return;
+        }
+        if (!empty($context['mediatype'])) {
+            $mediaType = $context['mediatype'];
+            if (!str_contains($mediaType, '; charset=')) {
+                $mediaType .= '; charset=utf-8';
+            }
+            header('Content-Type: ' . $mediaType);
+        } elseif (!is_string($result)) {
+            $mediaType = 'application/json; charset=utf-8';
+            header('Content-Type: ' . $mediaType);
+        }
+    }
+
+    /**
      * Create output for result - @todo
      * @see \Xaraya\Bridge\Routing\RoutingBridge::output()
      */
     public function output(mixed $result, mixed $transform = null): string
     {
+        if (!empty($this->context['redirectURL'])) {
+            // let caller deal with setting header("Location: ...") or equivalent
+            return '';
+        }
         if (is_null($result)) {
             $result = $this->context?->getArrayCopy();
             //return '';
@@ -136,7 +167,7 @@ class Dispatcher implements ContextInterface
      * Get routes from all module handlers + default handler
      * @return array<string, array<mixed>>
      */
-    public function getRoutes()
+    public static function getRoutes()
     {
         $routes = [];
         $handlers = xarClassMap::getRoutes();
@@ -286,7 +317,7 @@ class Dispatcher implements ContextInterface
      */
     public function redirect($redirectURL, $httpResponse, $context)
     {
-        echo "Redirect: $redirectURL ($httpResponse)";
+        // echo "Redirect: $redirectURL ($httpResponse)";
         return null;
     }
 

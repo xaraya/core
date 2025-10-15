@@ -49,6 +49,15 @@ interface ControllerInterface extends ServiceInterface
     public function getActionURL(object $object, string $action = '', mixed $itemid = null, array $extra = []): string;
 
     /**
+     * Get URL for a specific route by name - @todo
+     * @param array<string, mixed> $params
+     * @see \Xaraya\Routing\Dispatcher::buildUri()
+     */
+    public function getRouteURL(string $route, array $params = []): string|null;
+
+    public function setRouter(?\Xaraya\Routing\RouterInterface $router): void;
+
+    /**
      * Get current url
      * @param array<string, mixed> $args
      */
@@ -63,6 +72,11 @@ interface ControllerInterface extends ServiceInterface
      * Get base uri
      */
     public function getBaseURI(): string;
+
+    /**
+     * Get entry point = index.php or custom
+     */
+    public function getEntryPoint(): string;
 
     public function getServerVar(string $varName): mixed;
 
@@ -114,6 +128,8 @@ trait ControllerTrait
 {
     use ServiceTrait;
 
+    protected static ?\Xaraya\Routing\RouterInterface $router = null;
+
     /**
      * Get url for a module type function
      * @param array<string, mixed> $args
@@ -147,6 +163,31 @@ trait ControllerTrait
     }
 
     /**
+     * Get URL for a specific route by name - @todo
+     * @param array<string, mixed> $params
+     */
+    public function getRouteURL(string $route, array $params = []): string|null
+    {
+        if (empty(self::$router)) {
+            $cacheFile = sys::varpath() . '/cache/core/' . \Xaraya\Routing\Routing::MATCHER_CACHE_FILE;
+            self::$router = new \Xaraya\Routing\Routing(\Xaraya\Routing\Dispatcher::getRoutes(...), $cacheFile);
+        }
+        // @todo handle $baseURL + $entryPoint somehow!?
+        // ...
+        try {
+            $path = self::$router->generate($route, $params);
+        } catch (\Exception $e) {
+            return null;
+        }
+        return $this->getBaseURL() . ltrim($this->getEntryPoint() . $path, '/');
+    }
+
+    public function setRouter(?\Xaraya\Routing\RouterInterface $router): void
+    {
+        self::$router = $router;
+    }
+
+    /**
      * Get current url
      * @param array<string, mixed> $args
      */
@@ -169,6 +210,14 @@ trait ControllerTrait
     public function getBaseURI(): string
     {
         return xarServer::getBaseURI();
+    }
+
+    /**
+     * Get entry point = index.php or custom
+     */
+    public function getEntryPoint(): string
+    {
+        return xarController::$entryPoint;
     }
 
     /**
@@ -267,6 +316,7 @@ trait ControllerTrait
  * - getModuleURL() - or use mod()->getURL() for current module
  * - getObjectURL() - or use data()->getURL() for current object
  * - getActionURL() - or use $object->getActionURL() with actual object
+ * - getRouteURL() - @todo
  * - getCurrentURL()
  * - getBaseURL()
  * - getBaseURI()

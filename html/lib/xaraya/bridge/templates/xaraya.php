@@ -142,6 +142,11 @@ class XarayaCoreExtension extends XarayaTwigExtension
         return $this->ctl()->getObjectURL($objectName, $methodName, $args, $generateXMLURL);
     }
 
+    public function xar_routeurl($route, $params = [])
+    {
+        return $this->ctl()->getRouteURL($route, $params);
+    }
+
     public function xar_currenturl($args = [], $generateXMLURL = null)
     {
         // avoid double-encoding URLs
