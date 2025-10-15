@@ -12,6 +12,7 @@ use Xaraya\Context\ContextTrait;
 use Xaraya\Modules\GuiModuleServicesInterface;
 use Xaraya\Modules\ModuleServicesInterface;
 use FunctionNotFoundException;
+use xarController;
 
 /**
  * Module handler class for routing & dispatching outside Xaraya
@@ -86,6 +87,8 @@ class ModuleHandler implements HandlerInterface
             throw new FunctionNotFoundException($handler[1]);
         }
         $this->funcName = $handler[1];
+        // @todo set request in xarController here for MenuBlock::setRequestInfo() in admin menu!?
+        xarController::setRequest(['module' => $this->getModName(), 'type' => $this->getModType(), 'func' => $this->funcName]);
         // Note: $this->instance might not be initialized for DefaultHandler
         $this->getContext()?->tracePath(__METHOD__ . ': resolve', [$handler[0]::class, $this->funcName, $vars]);
         $result = $handler($vars);

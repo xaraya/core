@@ -64,6 +64,9 @@ class DefaultHandler extends ModuleHandler
         // parent for modules service here
         $this->modName = $modName;
         $this->modType = $modType;
+        $this->funcName = $funcName;
+        // @todo (re-)set request in xarController here for MenuBlock::setRequestInfo() in admin menu!?
+        \xarController::setRequest(['module' => $this->getModName(), 'type' => $this->getModType(), 'func' => $this->funcName]);
         $xarMod = ServiceFactory::getModulesService($this);
         $result = $xarMod->guiMethod($modName, $modType, $funcName, $args);
         // always apply template here
