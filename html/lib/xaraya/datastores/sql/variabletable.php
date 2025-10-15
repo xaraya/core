@@ -15,7 +15,6 @@ namespace Xaraya\DataObject\DataStores;
 
 use DataProperty;
 use DataPropertyMaster;
-use xarMLS;
 use BadParameterException;
 use Exception;
 use sys;

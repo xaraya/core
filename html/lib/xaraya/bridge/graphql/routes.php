@@ -14,7 +14,6 @@
 
 namespace Xaraya\Bridge\GraphQL;
 
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Xaraya\Context\Context;
 use Xaraya\Routing\HandlerInterface;
 use Xaraya\Routing\RoutesInterface;

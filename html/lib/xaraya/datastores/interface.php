@@ -15,7 +15,6 @@ namespace Xaraya\DataObject\DataStores;
 
 use DataProperty;
 use SimpleXMLElement;
-use BadParameterException;
 
 /*
     Current inheritance (leaving out Data prefix and _Datastore suffix)

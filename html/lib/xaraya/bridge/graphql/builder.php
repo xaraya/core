@@ -14,25 +14,18 @@
 
 namespace Xaraya\Bridge\GraphQL;
 
-use Xaraya\Bridge\GraphQL\Types\BuildType;
 use Xaraya\Bridge\GraphQL\Types\GraphQLObjects;
 use Xaraya\Bridge\GraphQL\Types\GraphQLTypes;
 use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use GraphQL\Type\Schema;
 use GraphQL\Type\SchemaConfig;
-use GraphQL\Error\DebugFlag;
 use GraphQL\Language\Parser;
 use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
 use GraphQL\Type\Definition\Type;
-use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Validator\Rules;
-use GraphQL\Validator\DocumentValidator;
-use xarObject;
 use xarServer;
 use sys;
-use Exception;
 
 /**
  * See xardocs/graphql.txt for class structure

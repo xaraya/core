@@ -2,7 +2,6 @@
 
 namespace Xaraya\Bridge\TemplateEngine;
 
-use Twig\Environment;
 use xarTwigTpl;
 use Exception;
 

@@ -50,7 +50,6 @@
 namespace Xaraya\Modules;
 
 use xarMod;
-use xarTpl;
 use sys;
 
 sys::import('xaraya.modules.servicestrait');

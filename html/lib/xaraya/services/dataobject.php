@@ -21,8 +21,6 @@ use DataObjectFactory;
 use DataObject;
 use DataObjectList;
 use DataObjectLoader;
-use DataPropertyMaster;
-use DataProperty;
 use xarServer;
 use xarTpl;
 use sys;

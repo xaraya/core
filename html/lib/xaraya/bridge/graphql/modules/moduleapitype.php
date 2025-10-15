@@ -20,7 +20,6 @@ use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use xarMod;
 use xarUser;
-use Closure;
 use Exception;
 
 /**

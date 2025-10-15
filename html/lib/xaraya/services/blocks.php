@@ -18,7 +18,6 @@ namespace Xaraya\Services;
 
 use xarBlock;
 use xarMod;
-use xarModVars;
 use xarTpl;
 use sys;
 use Exception;

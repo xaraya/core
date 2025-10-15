@@ -12,7 +12,6 @@
 namespace Xaraya\DataObject\DataStores;
 
 use Xaraya\Database\ExternalDatabase;
-use xarMLS;
 use xarObject;
 use DataObject;
 use SimpleXMLElement;

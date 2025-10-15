@@ -17,7 +17,6 @@ namespace Xaraya\DataObject\DataStores;
 
 use ixarCache_Storage;
 use xarCache;
-use xarMLS;
 use Exception;
 use sys;
 

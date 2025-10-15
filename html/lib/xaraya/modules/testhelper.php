@@ -15,13 +15,11 @@ use xarDatabase;
 use xarEvents;
 use xarLog;
 use xarMod;
-use xarSecurity;
 use xarServer;
 use xarSession;
 use xarUser;
 use sys;
 use LogicException;
-use UnauthorizedOperationException;
 
 /**
  * TestHelper for unit testing module class & method class

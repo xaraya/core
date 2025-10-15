@@ -47,7 +47,6 @@
 
 namespace Xaraya\Database;
 
-use Xaraya\Database\ExternalDatabase;
 use Connection;
 use xarCore;
 use xarCoreCache;

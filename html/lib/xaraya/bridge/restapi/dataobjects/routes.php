@@ -14,7 +14,6 @@
 
 namespace Xaraya\Bridge\RestAPI;
 
-use Xaraya\Routing\RoutesInterface;
 use Xaraya\Routing\RouterInterface;
 
 /**

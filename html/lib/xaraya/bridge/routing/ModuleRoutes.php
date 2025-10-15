@@ -8,7 +8,6 @@
 
 namespace Xaraya\Routing;
 
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Xaraya\Context\Context;
 use Xaraya\Modules\ModuleInterface;
 use Xaraya\Modules\ModuleServicesInterface;

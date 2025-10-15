@@ -12,7 +12,6 @@
 
 namespace Xaraya\Bridge\GraphQL\Types;
 
-use Xaraya\Bridge\GraphQL\GraphQLHandler;
 use GraphQL\Type\Definition\ScalarType;
 
 /**

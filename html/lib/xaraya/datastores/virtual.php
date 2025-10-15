@@ -13,7 +13,6 @@
 
 namespace Xaraya\DataObject\DataStores;
 
-use xarMLS;
 use BadParameterException;
 use sys;
 

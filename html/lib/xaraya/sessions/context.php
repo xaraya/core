@@ -11,8 +11,6 @@
 
 namespace Xaraya\Context;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
 use Xaraya\Sessions\SessionInterface;
 use Xaraya\Sessions\VirtualSession;
 use Xaraya\Sessions\Storage\SessionCacheStorage;

@@ -11,8 +11,6 @@
 
 namespace Xaraya\Context;
 
-use Xaraya\Context\ContextInterface;
-use Xaraya\Context\ContextTrait;
 use Xaraya\Requests\RequestInterface;
 use xarServer;
 use sys;

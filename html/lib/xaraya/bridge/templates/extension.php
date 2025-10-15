@@ -9,9 +9,6 @@ use Twig\Extension\AbstractExtension;
 use Xaraya\Context\Context;
 use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\ServicesTrait;
-use DataObjectList;
-use DataObject;
-use DataProperty;
 
 /**
  * Use Twig template engine to generate output in Xaraya
