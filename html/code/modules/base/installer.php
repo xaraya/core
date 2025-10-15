@@ -15,9 +15,7 @@ namespace Xaraya\Modules\Base;
 
 use Xaraya\Modules\InstallerClass;
 use Exception;
-use xarConfigVars;
 use xarCore;
-use xarDB;
 use xarMod;
 use xarServer;
 use xarVar;

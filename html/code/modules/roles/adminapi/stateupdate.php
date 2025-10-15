@@ -16,8 +16,6 @@ use Xaraya\Modules\Roles\AdminApi;
 use Xaraya\Modules\Roles\UserApi;
 use EmptyParameterException;
 use IDNotFoundException;
-use xarDB;
-use xarMod;
 use sys;
 
 sys::import('xaraya.modules.method');

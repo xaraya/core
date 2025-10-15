@@ -14,14 +14,8 @@
 namespace Xaraya\Modules\Roles;
 
 use Xaraya\Modules\InstallerClass;
-use DataObjectFactory;
 use Exception;
-use xarConfigVars;
-use xarDB;
-use xarMod;
 use xarModHooks;
-use xarModUserVars;
-use xarModVars;
 use xarRoles;
 use xarXMLInstaller;
 use sys;

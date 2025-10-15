@@ -15,8 +15,6 @@ namespace Xaraya\Modules\Privileges;
 
 use Xaraya\Modules\InstallerClass;
 use Exception;
-use xarDB;
-use xarModVars;
 use xarXMLInstaller;
 use sys;
 

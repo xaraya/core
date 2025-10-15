@@ -18,13 +18,6 @@ use Xaraya\Modules\DynamicData\UtilApi;
 use DuplicateException;
 use Exception;
 use FileNotFoundException;
-use xarController;
-use xarDB;
-use xarMod;
-use xarSec;
-use xarSecurity;
-use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.method');

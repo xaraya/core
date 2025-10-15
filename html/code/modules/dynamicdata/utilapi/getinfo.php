@@ -15,7 +15,6 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UtilApi;
 use DataObjectLinks;
 use DataStoreLinks;
-use xarDB;
 use sys;
 
 sys::import('modules.dynamicdata.method');

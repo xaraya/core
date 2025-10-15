@@ -13,7 +13,6 @@ namespace Xaraya\Modules\DynamicData\RestApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\RestApi;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.method');

@@ -13,13 +13,8 @@ namespace Xaraya\Modules\Roles\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
-use DataObjectFactory;
 use Query;
-use xarDB;
-use xarMod;
-use xarModVars;
 use xarRoles;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

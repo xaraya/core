@@ -16,8 +16,6 @@ use Xaraya\Modules\Modules\AdminGui;
 use ConfigurationException;
 use Exception;
 use xarCore;
-use xarMod;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

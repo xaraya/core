@@ -15,12 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminApi;
 use EmptyParameterException;
 use FileNotFoundException;
-use xarMLS;
-use xarMod;
-use xarModVars;
-use xarServer;
-use xarTpl;
-use xarUser;
 use sys;
 use Exception;
 

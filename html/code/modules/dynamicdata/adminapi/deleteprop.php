@@ -15,7 +15,6 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminApi;
 use BadParameterException;
 use SQLException;
-use xarDB;
 use sys;
 
 sys::import('modules.dynamicdata.method');

@@ -15,10 +15,8 @@ namespace Xaraya\Modules\Themes;
 
 use Xaraya\Modules\InstallerClass;
 use Exception;
-use xarDB;
 use xarMasks;
 use xarMod;
-use xarModVars;
 use xarXMLInstaller;
 use sys;
 

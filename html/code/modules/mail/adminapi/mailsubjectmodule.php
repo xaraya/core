@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Mail\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminApi;
-use xarMod;
 use xarTpl;
 use sys;
 

@@ -15,9 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserApi;
 use CategoryWorker;
 use Query;
-use xarDB;
-use xarMod;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

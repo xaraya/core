@@ -16,11 +16,6 @@ use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
 use PropertyRegistration;
 use xarController;
-use xarLog;
-use xarMod;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 use InstallerTool;
 

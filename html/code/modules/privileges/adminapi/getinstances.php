@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Privileges\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminApi;
 use Exception;
-use xarDB;
-use xarException;
-use xarMod;
 use sys;
 
 sys::import('xaraya.modules.method');

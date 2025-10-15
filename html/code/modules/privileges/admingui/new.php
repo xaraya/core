@@ -14,12 +14,7 @@ namespace Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\Privileges\AdminApi;
-use xarMod;
 use xarPrivileges;
-use xarSec;
-use xarSecurity;
-use xarSession;
-use xarVar;
 use sys;
 use SecurityLevel;
 

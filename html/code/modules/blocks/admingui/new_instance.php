@@ -18,16 +18,10 @@ use Xaraya\Modules\Blocks\BlocksApi;
 use Xaraya\Modules\Blocks\InstancesApi;
 use AccessProperty;
 use BadParameterException;
-use DataPropertyMaster;
 use DuplicateException;
 use Exception;
 use IDNotFoundException;
 use xarBlock;
-use xarController;
-use xarMod;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('modules.blocks.method');

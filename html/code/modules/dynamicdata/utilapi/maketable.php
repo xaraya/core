@@ -14,12 +14,7 @@ namespace Xaraya\Modules\DynamicData\UtilApi;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UtilApi;
 use DataObject;
-use DataObjectFactory;
-use DataPropertyMaster;
 use Query;
-use xarDB;
-use xarMod;
-use xarSecurity;
 use xarTableDDL;
 use sys;
 

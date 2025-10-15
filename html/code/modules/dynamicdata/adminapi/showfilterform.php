@@ -14,9 +14,6 @@ namespace Xaraya\Modules\DynamicData\AdminApi;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminApi;
 use DataObjectDescriptor;
-use DataObjectFactory;
-use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.method');

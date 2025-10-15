@@ -18,9 +18,6 @@ use EmptyParameterException;
 use Exception;
 use IDNotFoundException;
 use xarBlock;
-use xarDB;
-use xarHooks;
-use xarMod;
 use sys;
 
 sys::import('modules.blocks.method');

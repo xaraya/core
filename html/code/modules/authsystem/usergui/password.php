@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Authsystem\UserGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\UserGui;
-use xarMod;
 use sys;
 
 sys::import('xaraya.modules.method');

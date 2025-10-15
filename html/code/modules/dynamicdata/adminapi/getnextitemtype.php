@@ -15,7 +15,6 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminApi;
 use Xaraya\Modules\DynamicData\UserApi;
 use DataObject;
-use xarMod;
 use sys;
 
 sys::import('modules.dynamicdata.method');

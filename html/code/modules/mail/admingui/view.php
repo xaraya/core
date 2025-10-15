@@ -14,11 +14,6 @@ namespace Xaraya\Modules\Mail\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminGui;
 use Xaraya\Modules\Mail\AdminApi;
-use xarMod;
-use xarSec;
-use xarSecurity;
-use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

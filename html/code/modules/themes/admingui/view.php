@@ -14,16 +14,7 @@ namespace Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
-use xarController;
-use xarCoreCache;
-use xarMod;
-use xarModUserVars;
-use xarModVars;
-use xarSec;
-use xarSecurity;
-use xarServer;
 use xarTheme;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

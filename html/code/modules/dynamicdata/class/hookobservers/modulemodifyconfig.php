@@ -15,13 +15,6 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
-use xarController;
-use xarMod;
-use xarSecurity;
-use xarTpl;
-use DataObjectDescriptor;
-use DataObjectFactory;
-use DataPropertyMaster;
 use BadParameterException;
 use EmptyParameterException;
 use sys;

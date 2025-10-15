@@ -13,11 +13,6 @@ namespace Xaraya\Modules\Blocks\AdminGui;
 
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\AdminGui;
-use xarController;
-use xarModVars;
-use xarSecurity;
-use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('modules.blocks.method');

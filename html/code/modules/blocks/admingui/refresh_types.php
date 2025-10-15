@@ -15,8 +15,6 @@ use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\AdminGui;
 use Xaraya\Modules\Blocks\TypesApi;
 use xarBlock;
-use xarMod;
-use xarSecurity;
 use sys;
 
 sys::import('modules.blocks.method');

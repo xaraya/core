@@ -14,11 +14,8 @@ namespace Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserGui;
 use LocaleNotFoundException;
-use xarController;
 use xarMLS;
-use xarServer;
 use xarUser;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

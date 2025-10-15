@@ -16,14 +16,7 @@ use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\Roles\AdminApi;
 use DataNotFoundException;
-use xarController;
-use xarMod;
 use xarRoles;
-use xarSec;
-use xarSecurity;
-use xarTpl;
-use xarUser;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -17,11 +17,7 @@ use Xaraya\Modules\Base\UserApi;
 use Exception;
 use ForbiddenOperationException;
 use feedParser;
-use xarController;
 use xarCore;
-use xarMod;
-use xarModVars;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

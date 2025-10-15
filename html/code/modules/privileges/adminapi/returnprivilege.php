@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Privileges\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminApi;
-use xarMod;
 use xarPrivilege;
 use xarPrivileges;
 use sys;

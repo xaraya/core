@@ -17,9 +17,6 @@ namespace Xaraya\Modules\DynamicData;
 use Xaraya\Modules\DynamicData\Traits\UserApiInterface;
 use Xaraya\Modules\DynamicData\Traits\UserApiTrait;
 use xarController;
-use xarDB;
-use xarMLS;
-use xarMod;
 use FunctionNotFoundException;
 use sys;
 

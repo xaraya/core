@@ -14,7 +14,6 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
-use xarVar;
 use BadParameterException;
 use sys;
 

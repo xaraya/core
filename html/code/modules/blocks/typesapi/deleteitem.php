@@ -17,9 +17,6 @@ use Xaraya\Modules\Blocks\InstancesApi;
 use EmptyParameterException;
 use Exception;
 use IDNotFoundException;
-use xarDB;
-use xarHooks;
-use xarMod;
 use sys;
 
 sys::import('modules.blocks.method');

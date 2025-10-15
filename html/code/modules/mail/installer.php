@@ -16,7 +16,6 @@ namespace Xaraya\Modules\Mail;
 use Xaraya\Modules\InstallerClass;
 use xarMasks;
 use xarModHooks;
-use xarModVars;
 use sys;
 
 sys::import('xaraya.modules.installer');

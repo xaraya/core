@@ -16,11 +16,8 @@ namespace Xaraya\Modules\DynamicData\Traits;
 
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
-use DataObjectDescriptor;
 use DataObjectFactory;
 use DataPropertyMaster;
-use xarServer;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.factory');

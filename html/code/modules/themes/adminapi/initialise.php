@@ -16,7 +16,6 @@ use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
 use Exception;
 use ThemeNotFoundException;
-use xarMod;
 use xarTheme;
 use sys;
 

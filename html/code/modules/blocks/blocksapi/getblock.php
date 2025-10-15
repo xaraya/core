@@ -18,7 +18,6 @@ use ClassNotFoundException;
 use FileNotFoundException;
 use FunctionNotFoundException;
 use xarClassMap;
-use xarMLS;
 use sys;
 
 sys::import('modules.blocks.method');

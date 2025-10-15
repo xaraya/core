@@ -15,15 +15,7 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\UserApi;
 use Xaraya\Modules\DynamicData\UtilApi;
-use DataPropertyMaster;
 use Exception;
-use xarController;
-use xarMod;
-use xarModUserVars;
-use xarModVars;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.method');

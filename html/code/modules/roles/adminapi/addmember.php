@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Roles\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminApi;
 use Xaraya\Modules\Roles\UserApi;
-use xarMod;
 use sys;
 
 sys::import('xaraya.modules.method');

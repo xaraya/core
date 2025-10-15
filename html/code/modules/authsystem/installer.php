@@ -14,11 +14,8 @@
 namespace Xaraya\Modules\Authsystem;
 
 use Xaraya\Modules\InstallerClass;
-use xarDB;
 use xarEvents;
 use xarMasks;
-use xarMod;
-use xarModVars;
 use xarPrivileges;
 use sys;
 

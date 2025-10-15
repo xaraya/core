@@ -13,8 +13,6 @@ namespace Xaraya\Modules\DynamicData\UserApi;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UserApi;
-use DataObjectDescriptor;
-use DataObjectFactory;
 use sys;
 
 sys::import('modules.dynamicdata.method');

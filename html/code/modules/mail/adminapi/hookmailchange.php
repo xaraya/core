@@ -16,11 +16,7 @@ use Xaraya\Modules\Mail\AdminApi;
 use BadParameterException;
 use EmptyParameterException;
 use IDNotFoundException;
-use xarMod;
-use xarModVars;
-use xarServer;
 use xarTpl;
-use xarUser;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -17,9 +17,6 @@ namespace Xaraya\DataObject\HookObservers;
 
 use Xaraya\Database\ConnectionInterface;
 use Xaraya\Database\StatementInterface;
-use xarDB;
-use xarMod;
-use xarSecurity;
 use BadParameterException;
 use SQLException;
 use sys;

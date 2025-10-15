@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminApi;
 use DirectoryNotFoundException;
 use FileNotFoundException;
-use xarLog;
 use xarTpl;
 use sys;
 

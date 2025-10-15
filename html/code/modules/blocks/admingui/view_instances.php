@@ -15,14 +15,7 @@ use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\AdminGui;
 use Xaraya\Modules\Blocks\InstancesApi;
 use Xaraya\Modules\Blocks\TypesApi;
-use DataPropertyMaster;
 use xarBlock;
-use xarController;
-use xarMod;
-use xarModVars;
-use xarSecurity;
-use xarServer;
-use xarVar;
 use sys;
 
 sys::import('modules.blocks.method');

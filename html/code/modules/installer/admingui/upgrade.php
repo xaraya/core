@@ -13,14 +13,7 @@ namespace Xaraya\Modules\Installer\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
-use DataObjectFactory;
-use xarConfigVars;
-use xarController;
 use xarCore;
-use xarMod;
-use xarModVars;
-use xarServer;
-use xarVar;
 use xarVersion;
 use sys;
 use Upgrader;

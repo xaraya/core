@@ -14,8 +14,6 @@ namespace Xaraya\Modules\Themes\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\UserApi;
 use Xaraya\Modules\Themes\AdminApi;
-use xarMod;
-use xarModVars;
 use xarTheme;
 use sys;
 

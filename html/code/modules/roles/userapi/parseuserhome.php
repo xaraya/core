@@ -14,11 +14,7 @@ namespace Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use BadParameterException;
-use xarController;
 use xarMod;
-use xarModVars;
-use xarServer;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

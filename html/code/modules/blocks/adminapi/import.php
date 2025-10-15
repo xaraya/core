@@ -21,12 +21,6 @@ use EmptyParameterException;
 use Exception;
 use Query;
 use SimpleXMLElement;
-use xarConfigVars;
-use xarCore;
-use xarDB;
-use xarLog;
-use xarMod;
-use xarVar;
 use sys;
 use ValueValidations;
 

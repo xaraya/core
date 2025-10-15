@@ -17,7 +17,6 @@ use Xaraya\Modules\Blocks\BlocksApi;
 use Exception;
 use FileNotFoundException;
 use xarBlock;
-use xarMod;
 use sys;
 
 sys::import('modules.blocks.method');

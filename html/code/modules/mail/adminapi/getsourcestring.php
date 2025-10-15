@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Mail\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminApi;
 use FileNotFoundException;
-use xarMod;
 use sys;
 
 sys::import('xaraya.modules.method');

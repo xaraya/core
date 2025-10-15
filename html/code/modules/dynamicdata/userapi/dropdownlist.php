@@ -17,8 +17,6 @@ use BadParameterException;
 use DataObjectList;
 use DataProperty;
 use EmptyParameterException;
-use xarMod;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.method');

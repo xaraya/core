@@ -16,15 +16,7 @@ use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\AdminApi;
 use Xaraya\Modules\Roles\UserApi;
 use Exception;
-use xarController;
-use xarDB;
-use xarMod;
-use xarModHooks;
-use xarModVars;
 use xarRoles;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

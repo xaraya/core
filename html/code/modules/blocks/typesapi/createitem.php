@@ -16,8 +16,6 @@ use Xaraya\Modules\Blocks\TypesApi;
 use BadParameterException;
 use DuplicateException;
 use xarBlock;
-use xarDB;
-use xarMod;
 use sys;
 
 sys::import('modules.blocks.method');

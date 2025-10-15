@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use Exception;
 use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Authsystem\RestApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\RestApi;
-use xarMod;
 use sys;
 
 sys::import('xaraya.modules.method');

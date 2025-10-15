@@ -18,11 +18,6 @@ use Xaraya\Modules\Blocks\InstancesApi;
 use EmptyParameterException;
 use IDNotFoundException;
 use xarBlock;
-use xarController;
-use xarMod;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('modules.blocks.method');

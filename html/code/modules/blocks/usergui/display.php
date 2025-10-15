@@ -14,8 +14,6 @@ namespace Xaraya\Modules\Blocks\UserGui;
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\UserGui;
 use Xaraya\Modules\Blocks\UserApi;
-use xarMod;
-use xarVar;
 use sys;
 
 sys::import('modules.blocks.method');

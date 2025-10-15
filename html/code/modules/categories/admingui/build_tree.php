@@ -15,8 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
 use Query;
 use Stack;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

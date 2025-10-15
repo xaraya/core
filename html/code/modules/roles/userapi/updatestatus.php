@@ -14,8 +14,6 @@ namespace Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use EmptyParameterException;
-use xarDB;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

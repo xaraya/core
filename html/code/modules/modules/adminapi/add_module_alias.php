@@ -15,8 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use DuplicateException;
 use EmptyParameterException;
-use xarConfigVars;
-use xarMod;
 use sys;
 
 sys::import('xaraya.modules.method');

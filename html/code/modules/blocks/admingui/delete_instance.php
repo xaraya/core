@@ -16,15 +16,9 @@ use Xaraya\Modules\Blocks\AdminGui;
 use Xaraya\Modules\Blocks\InstancesApi;
 use Xaraya\Modules\Blocks\BlocksApi;
 use AccessProperty;
-use DataPropertyMaster;
 use EmptyParameterException;
 use Exception;
 use IDNotFoundException;
-use xarController;
-use xarMod;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('modules.blocks.method');

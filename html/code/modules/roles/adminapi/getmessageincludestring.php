@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminApi;
 use EmptyParameterException;
 use FileNotFoundException;
-use xarController;
 use sys;
 
 sys::import('xaraya.modules.method');

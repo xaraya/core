@@ -14,15 +14,7 @@ namespace Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\UtilApi;
-use DataObjectFactory;
 use DataPropertyMaster;
-use xarController;
-use xarDB;
-use xarMod;
-use xarModVars;
-use xarSecurity;
-use xarSession;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.method');

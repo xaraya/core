@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Privileges\UserGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\UserGui;
-use xarController;
-use xarUser;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

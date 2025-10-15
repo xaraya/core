@@ -15,9 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use EmptyParameterException;
 use VariableValidationException;
-use xarDB;
 use xarRoles;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

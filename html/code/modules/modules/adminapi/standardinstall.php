@@ -15,8 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use BadParameterException;
 use DataObjectFactory;
-use xarMod;
-use xarModVars;
 use sys;
 
 sys::import('xaraya.modules.method');

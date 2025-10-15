@@ -17,10 +17,6 @@ use BadParameterException;
 use ConfigurationException;
 use xarCore;
 use xarCurl;
-use xarMod;
-use xarModVars;
-use xarServer;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

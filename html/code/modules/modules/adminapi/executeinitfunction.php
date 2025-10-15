@@ -17,7 +17,6 @@ use EmptyParameterException;
 use Exception;
 use ModuleNotFoundException;
 use xarMod;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

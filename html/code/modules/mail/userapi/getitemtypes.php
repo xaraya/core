@@ -13,12 +13,7 @@ namespace Xaraya\Modules\Mail\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\UserApi;
-use DataObjectFactory;
 use Exception;
-use xarController;
-use xarMod;
-use xarModVars;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -15,8 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminApi;
 use Xaraya\Modules\Mail\UserApi;
 use DataObjectFactory;
-use xarMod;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

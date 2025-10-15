@@ -15,12 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Mail\AdminGui;
 use Xaraya\Modules\Mail\AdminApi;
 use Xaraya\Modules\Mail\UserApi;
-use DataObjectFactory;
 use Queue;
-use xarController;
-use xarMod;
-use xarSec;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

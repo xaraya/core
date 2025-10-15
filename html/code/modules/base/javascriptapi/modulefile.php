@@ -13,8 +13,6 @@ namespace Xaraya\Modules\Base\JavascriptApi;
 
 use Xaraya\Modules\Base\MethodClass;
 use Xaraya\Modules\Base\JavascriptApi;
-use xarMod;
-use xarServer;
 use sys;
 
 sys::import('modules.base.method');

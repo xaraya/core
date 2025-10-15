@@ -15,16 +15,8 @@ use Xaraya\Bridge\GraphQL\GraphQLBuilder;
 use Xaraya\Bridge\RestAPI\RestAPIBuilder;
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminGui;
-use DataObjectFactory;
-use xarController;
-use xarMod;
 use xarModVars;
 use xarPageCache;
-use xarSec;
-use xarSecurity;
-use xarServer;
-use xarTpl;
-use xarVar;
 use sys;
 use Exception;
 

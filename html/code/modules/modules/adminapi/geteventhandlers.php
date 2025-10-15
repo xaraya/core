@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Modules\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use PHPException;
-use xarConfigVars;
 use xarMod;
 use sys;
 

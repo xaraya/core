@@ -13,13 +13,6 @@ namespace Xaraya\Modules\Categories\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
-use xarController;
-use xarMod;
-use xarModVars;
-use xarSec;
-use xarSecurity;
-use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -17,9 +17,6 @@ use Xaraya\Modules\Modules\AdminApi;
 use Exception;
 use xarController;
 use xarMod;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 use InstallerTool;
 

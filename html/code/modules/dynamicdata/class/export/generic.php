@@ -20,7 +20,6 @@ use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
 use BadParameterException;
-use xarDB;
 use sys;
 
 sys::import('xaraya.services.hasdatabasetrait');

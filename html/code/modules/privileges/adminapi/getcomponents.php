@@ -14,8 +14,6 @@ namespace Xaraya\Modules\Privileges\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminApi;
 use Exception;
-use xarDB;
-use xarMod;
 use xarSecurity;
 use sys;
 

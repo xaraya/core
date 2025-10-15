@@ -15,11 +15,7 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
 use Exception;
-use xarDB;
 use xarMod;
-use xarSecurity;
-use xarSession;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -16,14 +16,6 @@ use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
 use ForbiddenOperationException;
 use ValidationExceptions;
-use xarController;
-use xarMod;
-use xarModHooks;
-use xarSec;
-use xarSecurity;
-use xarTpl;
-use xarUser;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

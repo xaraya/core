@@ -23,9 +23,6 @@ use DuplicateException;
 use EmptyParameterException;
 use Exception;
 use IValidation;
-use xarConfigVars;
-use xarLog;
-use xarMod;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.factory');

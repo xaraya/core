@@ -13,9 +13,7 @@ namespace Xaraya\Modules\Base\AdminGui;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\AdminGui;
-use xarConfigVars;
 use xarCore;
-use xarSecurity;
 use xarVersion;
 use sys;
 

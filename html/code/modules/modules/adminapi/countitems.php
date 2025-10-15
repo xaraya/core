@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Modules\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use Query;
-use xarDB;
 use xarMod;
 use sys;
 

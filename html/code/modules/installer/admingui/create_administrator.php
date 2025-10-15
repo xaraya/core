@@ -14,12 +14,9 @@ namespace Xaraya\Modules\Installer\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Installer\AdminGui;
 use Exception;
-use xarController;
-use xarModVars;
 use xarPrivileges;
 use xarRoles;
 use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

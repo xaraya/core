@@ -15,10 +15,8 @@ namespace Xaraya\Modules\Blocks;
 
 use Xaraya\Modules\InstallerClass;
 use Exception;
-use xarDB;
 use xarEvents;
 use xarMasks;
-use xarModVars;
 use xarPrivileges;
 use xarXMLInstaller;
 use sys;

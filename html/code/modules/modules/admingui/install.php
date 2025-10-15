@@ -16,15 +16,9 @@ use Xaraya\Modules\Modules\AdminGui;
 use ModuleNotFoundException;
 use xarBlockCache;
 use xarCache;
-use xarController;
 use xarMod;
 use xarOutputCache;
 use xarPageCache;
-use xarSec;
-use xarSecurity;
-use xarSession;
-use xarTpl;
-use xarVar;
 use sys;
 use InstallerTool;
 

@@ -13,11 +13,7 @@ namespace Xaraya\Modules\Base\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\UserApi;
-use xarController;
-use xarModUserVars;
-use xarTpl;
 use xarTplPager;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

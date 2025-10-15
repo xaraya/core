@@ -15,13 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\UserGui;
 use Xaraya\Modules\Categories\UserApi;
 use Exception;
-use xarController;
-use xarDB;
-use xarMod;
-use xarModHooks;
-use xarModVars;
-use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

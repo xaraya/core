@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\TypesApi;
 use BadParameterException;
-use xarDB;
-use xarMod;
-use xarVar;
 use sys;
 
 sys::import('modules.blocks.method');

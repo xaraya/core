@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Base\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\UserApi;
-use xarServer;
 use sys;
 
 sys::import('xaraya.modules.method');

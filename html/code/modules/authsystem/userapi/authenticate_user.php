@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Authsystem\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\UserApi;
-use xarDB;
 use xarUser;
 use sys;
 

@@ -15,11 +15,7 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\AdminGui;
 use Xaraya\Modules\DynamicData\AdminApi;
 use DataObjectDescriptor;
-use DataPropertyMaster;
 use FieldTypeProperty;
-use xarMod;
-use xarSec;
-use xarSecurity;
 use sys;
 
 sys::import('modules.dynamicdata.method');

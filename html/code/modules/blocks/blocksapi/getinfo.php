@@ -17,8 +17,6 @@ use BadParameterException;
 use DataNotFoundException;
 use EmptyParameterException;
 use xarBlock;
-use xarMod;
-use xarVar;
 use sys;
 
 sys::import('modules.blocks.method');

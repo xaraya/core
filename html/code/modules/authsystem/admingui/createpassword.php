@@ -14,13 +14,7 @@ namespace Xaraya\Modules\Authsystem\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\AdminGui;
 use BadParameterException;
-use xarController;
-use xarMod;
-use xarModVars;
 use xarRoles;
-use xarSecurity;
-use xarSession;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

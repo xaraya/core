@@ -14,10 +14,6 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Exception;
-use xarMod;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 use InstallerTool;
 

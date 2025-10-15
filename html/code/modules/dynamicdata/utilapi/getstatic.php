@@ -16,9 +16,6 @@ use Xaraya\Modules\DynamicData\UtilApi;
 use BadParameterException;
 use CreoleTypes;
 use DataPropertyMaster;
-use xarDB;
-use xarMod;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.method');

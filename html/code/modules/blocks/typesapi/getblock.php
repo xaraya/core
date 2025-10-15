@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\BlocksApi;
-use xarMod;
 use sys;
 
 sys::import('modules.blocks.method');

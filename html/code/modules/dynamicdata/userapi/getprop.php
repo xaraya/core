@@ -15,10 +15,6 @@ use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UserApi;
 use Xaraya\Modules\DynamicData\UtilApi;
 use BadParameterException;
-use DataObjectDescriptor;
-use DataObjectFactory;
-use DataPropertyMaster;
-use xarMod;
 use sys;
 
 sys::import('modules.dynamicdata.method');

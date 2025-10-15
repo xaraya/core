@@ -14,8 +14,6 @@ namespace Xaraya\Modules\Roles\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminApi;
 use EmptyParameterException;
-use xarDB;
-use xarModHooks;
 use xarRoles;
 use sys;
 

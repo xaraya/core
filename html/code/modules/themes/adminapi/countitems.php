@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
-use xarDB;
 use xarTheme;
 use sys;
 

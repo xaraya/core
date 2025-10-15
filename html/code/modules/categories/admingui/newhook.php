@@ -15,11 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\Categories\VisualApi;
 use BadParameterException;
-use xarMod;
-use xarModVars;
-use xarSecurity;
-use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

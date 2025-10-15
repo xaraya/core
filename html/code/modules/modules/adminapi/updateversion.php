@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Modules\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use EmptyParameterException;
-use xarDB;
-use xarMod;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

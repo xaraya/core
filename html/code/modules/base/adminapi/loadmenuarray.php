@@ -14,10 +14,6 @@ namespace Xaraya\Modules\Base\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\AdminApi;
 use Exception;
-use xarController;
-use xarMod;
-use xarSecurity;
-use xarServer;
 use sys;
 
 sys::import('xaraya.modules.method');

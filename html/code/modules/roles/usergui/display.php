@@ -14,15 +14,7 @@ namespace Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserGui;
 use Xaraya\Modules\Roles\UserApi;
-use DataObjectFactory;
-use xarController;
-use xarMod;
-use xarModHooks;
 use xarRoles;
-use xarSecurity;
-use xarTpl;
-use xarUser;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

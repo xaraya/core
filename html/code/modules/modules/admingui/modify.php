@@ -14,11 +14,7 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use FunctionNotFoundException;
-use xarController;
 use xarHooks;
-use xarMod;
-use xarSec;
-use xarSecurity;
 use xarVar;
 use sys;
 

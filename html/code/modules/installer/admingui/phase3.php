@@ -17,7 +17,6 @@ use Exception;
 use xarConst;
 use xarInst;
 use xarMLS;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

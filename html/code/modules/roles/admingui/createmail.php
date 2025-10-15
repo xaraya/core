@@ -17,14 +17,7 @@ use Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\Roles\AdminApi;
 use DirectoryNotFoundException;
 use Query;
-use xarDB;
-use xarMod;
-use xarModVars;
 use xarRoles;
-use xarSec;
-use xarSecurity;
-use xarSession;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

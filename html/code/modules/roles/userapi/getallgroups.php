@@ -14,10 +14,7 @@ namespace Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use Query;
-use xarDB;
-use xarMod;
 use xarRoles;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

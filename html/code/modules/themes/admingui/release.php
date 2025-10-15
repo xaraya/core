@@ -17,8 +17,6 @@ use ConfigurationException;
 use Exception;
 use feedParser;
 use xarCore;
-use xarMod;
-use xarSecurity;
 use sys;
 
 sys::import('xaraya.modules.method');

@@ -13,9 +13,6 @@ namespace Xaraya\Modules\Modules\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
-use xarController;
-use xarMod;
-use xarSession;
 use sys;
 
 sys::import('xaraya.modules.method');

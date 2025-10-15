@@ -23,10 +23,7 @@ use DataPropertyMaster;
 use TableObjectDescriptor;
 use BadParameterException;
 use Exception;
-use xarCoreCache;
-use xarDB;
 use xarMod;
-use xarModVars;
 use sys;
 
 sys::import('xaraya.database.databasetrait');

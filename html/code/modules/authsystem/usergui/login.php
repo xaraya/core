@@ -15,17 +15,9 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Authsystem\UserGui;
 use Xaraya\Modules\Authsystem\UserApi;
 use Exception;
-use xarController;
 use xarExceptions;
-use xarMod;
-use xarModUserVars;
-use xarModVars;
 use xarRoles;
-use xarServer;
-use xarSession;
-use xarTpl;
 use xarUser;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

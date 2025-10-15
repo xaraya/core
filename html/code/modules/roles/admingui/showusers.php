@@ -14,17 +14,8 @@ namespace Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\UserApi;
-use DataObjectFactory;
 use Query;
-use xarController;
-use xarDB;
-use xarMod;
-use xarModVars;
 use xarRoles;
-use xarSec;
-use xarSecurity;
-use xarSession;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

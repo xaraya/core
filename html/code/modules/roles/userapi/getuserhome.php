@@ -15,10 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use Exception;
 use VariableValidationException;
-use xarMod;
-use xarModItemVars;
-use xarModUserVars;
-use xarModVars;
 use xarRoles;
 use sys;
 

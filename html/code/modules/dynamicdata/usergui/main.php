@@ -13,13 +13,6 @@ namespace Xaraya\Modules\DynamicData\UserGui;
 
 use Xaraya\Modules\DynamicData\MethodClass;
 use Xaraya\Modules\DynamicData\UserGui;
-use xarController;
-use xarMod;
-use xarModVars;
-use xarSec;
-use xarSecurity;
-use xarServer;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.method');

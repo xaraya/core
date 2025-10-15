@@ -17,11 +17,6 @@ use Xaraya\Modules\Roles\UserApi;
 use DataObject;
 use DataObjectDescriptor;
 use DataObjectList;
-use xarDB;
-use xarHooks;
-use xarMod;
-use xarModVars;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

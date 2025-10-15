@@ -15,14 +15,8 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\AdminApi;
 use DataObject;
-use xarController;
-use xarMod;
 use xarRoles;
-use xarSec;
-use xarSecurity;
-use xarSession;
 use xarTpl;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

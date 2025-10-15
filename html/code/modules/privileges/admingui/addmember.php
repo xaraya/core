@@ -14,12 +14,7 @@ namespace Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use DuplicateException;
-use xarController;
 use xarPrivileges;
-use xarSec;
-use xarSecurity;
-use xarSession;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

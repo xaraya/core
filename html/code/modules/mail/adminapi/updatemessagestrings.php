@@ -16,7 +16,6 @@ use Xaraya\Modules\Mail\AdminApi;
 use DirectoryNotFoundException;
 use EmptyParameterException;
 use FileNotFoundException;
-use xarController;
 use sys;
 
 sys::import('xaraya.modules.method');

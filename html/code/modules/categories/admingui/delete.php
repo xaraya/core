@@ -16,12 +16,6 @@ use Xaraya\Modules\Categories\AdminGui;
 use Xaraya\Modules\Categories\UserApi;
 use BadParameterException;
 use CategoryWorker;
-use xarController;
-use xarMod;
-use xarSec;
-use xarSecurity;
-use xarUser;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

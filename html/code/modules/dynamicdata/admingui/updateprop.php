@@ -18,12 +18,6 @@ use Xaraya\Modules\DynamicData\AdminApi;
 use BadParameterException;
 use DataObjectFactory;
 use DataPropertyMaster;
-use xarController;
-use xarMod;
-use xarModHooks;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.method');

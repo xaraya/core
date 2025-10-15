@@ -15,10 +15,6 @@ use Xaraya\Modules\Blocks\MethodClass;
 use Xaraya\Modules\Blocks\UserApi;
 use Xaraya\Modules\Blocks\TypesApi;
 use Xaraya\Modules\Blocks\InstancesApi;
-use xarController;
-use xarMod;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('modules.blocks.method');

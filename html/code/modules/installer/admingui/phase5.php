@@ -16,17 +16,13 @@ use Xaraya\Modules\Installer\AdminGui;
 use Exception;
 use SQLException;
 use SQLite3;
-use xarConfigVars;
-use xarCore;
 use xarDB;
 use xarDatabase;
 use xarInst;
 use xarInstall;
-use xarModVars;
 use xarSecurity;
 use xarSystemVars;
 use xarTableDDL;
-use xarTpl;
 use xarVar;
 use sys;
 

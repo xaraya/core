@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use EmptyParameterException;
 use xarRoles;
-use xarSession;
 use sys;
 
 sys::import('xaraya.modules.method');

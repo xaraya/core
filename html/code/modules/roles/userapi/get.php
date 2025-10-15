@@ -15,7 +15,6 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use EmptyParameterException;
 use VariableValidationException;
-use xarDB;
 use xarRoles;
 use sys;
 

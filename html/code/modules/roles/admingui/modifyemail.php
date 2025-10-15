@@ -15,15 +15,8 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\AdminGui;
 use Xaraya\Modules\Roles\AdminApi;
 use ConfigurationException;
-use DataObjectFactory;
 use DirectoryNotFoundException;
 use FileNotFoundException;
-use xarController;
-use xarMod;
-use xarModVars;
-use xarSec;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

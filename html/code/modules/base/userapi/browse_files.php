@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Base\UserApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Base\UserApi;
-use xarMod;
 use xarVar;
 use sys;
 

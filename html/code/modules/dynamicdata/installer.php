@@ -16,15 +16,10 @@ namespace Xaraya\Modules\DynamicData;
 use Xaraya\Modules\InstallerClass;
 use DataPropertyMaster;
 use Exception;
-use xarController;
-use xarDB;
 use xarHooks;
 use xarMasks;
-use xarMod;
 use xarModHooks;
-use xarModVars;
 use xarPrivileges;
-use xarSystemVars;
 use xarXMLInstaller;
 use sys;
 

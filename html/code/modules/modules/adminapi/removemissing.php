@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Modules\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminApi;
 use SQLException;
-use xarDB;
-use xarMod;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');

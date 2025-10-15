@@ -15,7 +15,6 @@ namespace Xaraya\DataObject\Export;
 
 use DataObject;
 use DataObjectDescriptor;
-use DataObjectList;
 use DataObjectFactory;
 use VirtualObjectFactory;
 use BadParameterException;

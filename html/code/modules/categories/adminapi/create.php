@@ -13,7 +13,6 @@ namespace Xaraya\Modules\Categories\AdminApi;
 
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Categories\AdminApi;
-use DataObjectFactory;
 use sys;
 
 sys::import('xaraya.modules.method');

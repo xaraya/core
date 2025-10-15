@@ -14,9 +14,6 @@ namespace Xaraya\Modules\Themes\AdminApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
-use xarDB;
-use xarMod;
-use xarSession;
 use xarTheme;
 use sys;
 

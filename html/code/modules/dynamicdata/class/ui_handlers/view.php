@@ -14,9 +14,6 @@
 
 namespace Xaraya\DataObject\Handlers;
 
-use xarCache;
-use xarObjectCache;
-use xarDB;
 use DataObjectList;
 use sys;
 

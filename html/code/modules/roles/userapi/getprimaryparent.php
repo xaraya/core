@@ -14,7 +14,6 @@ namespace Xaraya\Modules\Roles\UserApi;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Roles\UserApi;
 use VariableValidationException;
-use xarModItemVars;
 use xarRoles;
 use sys;
 

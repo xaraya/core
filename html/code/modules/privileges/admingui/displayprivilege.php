@@ -14,10 +14,7 @@ namespace Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Privileges\AdminGui;
 use Xaraya\Modules\Privileges\AdminApi;
-use xarMod;
 use xarPrivileges;
-use xarSecurity;
-use xarVar;
 use sys;
 
 sys::import('xaraya.modules.method');
