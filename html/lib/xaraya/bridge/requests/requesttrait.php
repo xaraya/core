@@ -95,7 +95,7 @@ interface CommonRequestInterface extends Psr7BaseUriInterface
 
 /**
  * Handle generic requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
- * Accepts PSR-7 compatible server requests, xarRequest (partial use) or nothing (using $_SERVER)
+ * Accepts PSR-7 compatible server requests, xarRequest (partial use), context or nothing (using $_SERVER)
  */
 trait CommonRequestTrait
 {
@@ -179,6 +179,10 @@ trait CommonRequestTrait
         if (is_object($request) && method_exists($request, 'getQueryParams')) {
             return $request->getQueryParams();
         }
+        // for server requests with context
+        if (!empty($this->context) && isset($this->context['query'])) {
+            return $this->context['query'];
+        }
         // for everyone else
         $server = $this->getServerParams($request);
         $query = [];
@@ -199,6 +203,10 @@ trait CommonRequestTrait
         if (is_object($request) && method_exists($request, 'getServerParams')) {
             return $request->getServerParams();
         }
+        // for server requests with context
+        if (!empty($this->context) && isset($this->context['server'])) {
+            return $this->context['server'];
+        }
         // for everyone else
         return $_SERVER;
     }
@@ -213,6 +221,10 @@ trait CommonRequestTrait
         // for PSR-7 compatible server requests
         if (is_object($request) && method_exists($request, 'getCookieParams')) {
             return $request->getCookieParams();
+        }
+        // for server requests with context
+        if (!empty($this->context) && isset($this->context['cookie'])) {
+            return $this->context['cookie'];
         }
         // for everyone else
         return $_COOKIE;
@@ -251,6 +263,8 @@ trait CommonRequestTrait
         if (is_object($request) && method_exists($request, 'getUploadedFiles')) {
             return $request->getUploadedFiles();
         }
+        // for server requests with context
+        // @todo
         // for everyone else
         return $_FILES;
     }
@@ -265,6 +279,10 @@ trait CommonRequestTrait
         // for PSR-7 compatible server requests
         if (is_object($request) && method_exists($request, 'getParsedBody')) {
             return $request->getParsedBody();
+        }
+        // for server requests with context
+        if (!empty($this->context) && isset($this->context['body'])) {
+            return $this->context['body'];
         }
         // for everyone else
         return $_POST;
@@ -283,6 +301,9 @@ trait CommonRequestTrait
         } elseif (isset($this->rawInput)) {
             // for testing etc. - see BridgeRoutingTest for graphql
             $rawInput = $this->rawInput;
+        } elseif (!empty($this->context) && isset($this->context['input'])) {
+            // for server requests with context
+            $rawInput = $this->context['input'];
         } else {
             // for everyone else
             $rawInput = file_get_contents('php://input');

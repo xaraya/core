@@ -17,7 +17,7 @@ use Xaraya\Context\ContextTrait;
 
 /**
  * Handle generic requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
- * Accepts PSR-7 compatible server requests, xarRequest (partial use) or nothing (using $_SERVER)
+ * Accepts PSR-7 compatible server requests, xarRequest (partial use), context or nothing (using $_SERVER)
  */
 class BasicRequest implements CommonRequestInterface, ContextInterface
 {
