@@ -76,7 +76,6 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      * Constructor for the session handler
      *
      * @param array<string, mixed> $args not by reference anymore
-     * @uses xarSession::setInstance()
      * @return void
      * @throws SessionException
      **/
@@ -90,9 +89,6 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         $this->db = $this->db()->getConn();
         $tbls     = $this->db()->getTables();
         $this->tbl = $tbls['session_info'];
-
-        // Put a reference to this instance into a static property
-        xarSession::setInstance($this);
 
         // Set up the environment
         $this->setup($args);

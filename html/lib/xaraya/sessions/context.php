@@ -50,13 +50,11 @@ class SessionContext implements ContextInterface, SessionInterface
     /**
      * Constructor for the session handler
      * @param array<string, mixed> $args not by reference anymore
-     * @uses xarSession::setInstance()
      * @return void
      **/
     public function __construct($args = [])
     {
         $this->args = $args;
-        xarSession::setInstance($this);
     }
 
     /**

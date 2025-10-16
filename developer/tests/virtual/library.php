@@ -24,8 +24,8 @@ function get_descriptor($table, $offline)
     return $descriptor;
 }
 
-$offline = true;
-//$offline = false;
+//$offline = true;
+$offline = false;
 
 if (!$offline) {
     xarDatabase::init();
@@ -41,6 +41,8 @@ $table = 'books';
 
 // try out session context class
 $session = new \Xaraya\Context\SessionContext();
+// set instance in xarSession for setCurrentDatabase()
+xarSession::setInstance($session);
 //xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
 //xarSession::init();
 

@@ -76,6 +76,7 @@ class xarSession
 
         // Set up the session object
         $session = new self::$sessionClass($args);
+        self::setInstance($session);
 
         // Initialize the session
         $session->initialize();
