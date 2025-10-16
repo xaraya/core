@@ -37,7 +37,7 @@ class SessionContext implements ContextInterface, SessionInterface
 {
     use ContextTrait;
 
-    /** @var class-string */
+    /** @var class-string<SessionStorageInterface> */
     private static $storageClass = SessionCacheStorage::class;
     /** @var ?SessionStorageInterface */
     private static $storage = null;

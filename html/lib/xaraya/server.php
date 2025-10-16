@@ -34,7 +34,7 @@ class xarServer extends xarObject
     public static $generateXMLURLs = true;
     /** @var ?RequestInterface */
     private static $instance;
-    /** @var class-string */
+    /** @var class-string<RequestInterface> */
     private static $requestClass = RequestHandler::class;
     protected static bool $initialized = false;
 

@@ -42,7 +42,7 @@ class xarSession
     private static $instance;
     /** @var ?int */
     private static $lastSaved;
-    /** @var class-string */
+    /** @var class-string<SessionInterface> */
     private static $sessionClass = SessionHandler::class;
 
     /**

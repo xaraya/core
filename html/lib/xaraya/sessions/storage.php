@@ -21,6 +21,10 @@ sys::import('xaraya.services.hasdatabasetrait');
  */
 interface SessionStorageInterface
 {
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function __construct(array $config);
     public function lookup(string $sessionId, string $ipAddress = ''): ?VirtualSession;
     public function register(VirtualSession $session): void;
     public function update(VirtualSession $session): void;

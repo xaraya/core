@@ -128,8 +128,6 @@ class ModuleAPIHandler extends RestAPIHandler
             if (!$pass) {
                 throw new ForbiddenOperationException();
             }
-            // @checkme for security checks inside API functions when using auth token - see also reactphp single session
-            //$_SESSION[xarSession::PREFIX . 'role_id'] = $userId;
         }
         if (empty($func['caching'])) {
             self::enableCache(false);
@@ -197,8 +195,6 @@ class ModuleAPIHandler extends RestAPIHandler
             if (!$pass) {
                 throw new ForbiddenOperationException();
             }
-            // @checkme for security checks inside API functions when using auth token - see also reactphp single session
-            //$_SESSION[xarSession::PREFIX . 'role_id'] = $userId;
         }
         $context = $this->getContext();
         if (!empty($func['mediatype'])) {

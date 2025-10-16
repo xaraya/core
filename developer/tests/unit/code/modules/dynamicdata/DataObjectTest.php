@@ -89,7 +89,6 @@ final class DataObjectTest extends TestCase
         xarTpl::init();
         // needed for security checks later...
         xarSession::setAnonId(xarConfigVars::get(null, 'Site.User.AnonymousUID', 5));
-        //$_SESSION[xarSession::PREFIX . 'role_id'] = xarSession::getAnonId();
         // needed to check security for the view options
         xarUser::init();
 
