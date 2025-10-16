@@ -118,7 +118,7 @@ class Dispatcher implements ContextInterface
         }
         if (is_string($result)) {
             // @todo transform by using wrapOutputInPage() here
-            if (!empty($transform)) {
+            if (!empty($transform) && empty($this->context['mediatype'])) {
                 return $this->wrapOutputInPage($result);
             }
             return $result;

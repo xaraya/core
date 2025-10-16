@@ -302,7 +302,12 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         //xarUser::init();
         $this->setTimer('handle');
         // define context of the request - see GraphQL
-        $context = ContextFactory::fromRequest($request, __METHOD__);
+        // $request from RoutingBridge overrides any existing context here
+        if (isset($request)) {
+            $context = ContextFactory::fromRequest($request, __METHOD__);
+        } else {
+            $context = $this->getContext() ?? ContextFactory::fromGlobals(__METHOD__);
+        }
         $context['mediatype'] = '';
         // @todo check if we already have a context? (via request or from elsewhere)
         $this->setContext($context);

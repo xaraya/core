@@ -48,6 +48,7 @@ use GraphQL\Validator\DocumentValidator;
 use xarObject;
 use sys;
 use Exception;
+use FunctionNotFoundException;
 
 sys::import('xaraya.bridge.requests.requesttrait');
 
@@ -404,7 +405,12 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
         }
         // load config before setting the context
         $this->loadConfig();
-        $context = ContextFactory::fromRequest($request, __METHOD__);
+        // $request from RoutingBridge overrides any existing context here
+        if (isset($request)) {
+            $context = ContextFactory::fromRequest($request, __METHOD__);
+        } else {
+            $context = $this->getContext() ?? ContextFactory::fromGlobals(__METHOD__);
+        }
         $context['mediatype'] = '';
         $context->enableTrace(self::$tracePath);
         // @todo check if we already have a context? (via request or from elsewhere)
@@ -417,6 +423,24 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
             }
         }
         return [$result, $context];
+    }
+
+    /**
+     * Summary of callHandler - different processing for GraphQL API - see gql.php
+     * @param mixed $handler
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return mixed
+     */
+    public function callHandler($handler, $vars, &$request = null)
+    {
+        if (!is_array($handler)) {
+            throw new FunctionNotFoundException($handler::class, 'Invalid handler #(1)');
+        }
+        if (!is_a($handler[0], $this::class, true)) {
+            throw new FunctionNotFoundException($handler[0], 'Invalid handler #(1)');
+        }
+        return $this->handleRequest($vars, $request);
     }
 
     /**
