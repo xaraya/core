@@ -71,7 +71,7 @@ class Dispatcher implements ContextInterface
         // $this->context ??= ContextFactory::fromGlobals(__METHOD__);
         $this->context ??= new Context(['source' => __METHOD__]);
         // $this->context->enableTrace(true);
-        [$result, $context] = $this->callHandler($handler, $vars, $this->context);
+        [$result, $context] = $this->callHandler($handler, $vars);
         return [$result, $context];
     }
 
@@ -79,8 +79,9 @@ class Dispatcher implements ContextInterface
      * Set headers for result - optional if caller wants this
      * @see \Xaraya\Bridge\Routing\RoutingBridge::output()
      */
-    public function setHeaders(mixed $result, ?Context $context): void
+    public function setHeaders(mixed $result): void
     {
+        $context = $this->getContext();
         if (empty($context)) {
             return;
         }
@@ -118,7 +119,7 @@ class Dispatcher implements ContextInterface
         if (is_string($result)) {
             // @todo transform by using wrapOutputInPage() here
             if (!empty($transform)) {
-                return $this->wrapOutputInPage($result, $this->context);
+                return $this->wrapOutputInPage($result);
             }
             return $result;
         }
@@ -131,19 +132,19 @@ class Dispatcher implements ContextInterface
      * @param mixed $context
      * @return string
      */
-    public function wrapOutputInPage(string $body, $context = null): string
+    public function wrapOutputInPage(string $body): string
     {
-        $context?->tracePath(__METHOD__);
+        $this->context?->tracePath(__METHOD__);
         // Set page template based on modType if logged in - see index.php
         if (is_a($this->handler, ModuleHandler::class)) {
             $modType = $this->handler->getModType();
             // we need $context['cookie'] and/or $context['server'] for this - see ContextFactory::fromGlobals()
-            if (!empty($context?->getUserId())) {
+            if (!empty($this->context?->getUserId())) {
                 \xarTpl::setPageTemplateName($modType);
             }
         }
         // Render page with the output - see index.php
-        return \xarTpl::renderPage($body, null, $context);
+        return \xarTpl::renderPage($body, null, $this->context);
     }
 
     /**
@@ -185,30 +186,29 @@ class Dispatcher implements ContextInterface
      * Instantiate and call the handler returned by match() if it has RoutesInterface
      * @param mixed $handler
      * @param array<string, mixed> $vars
-     * @param ?Context<string, mixed> $context
      * @throws \Exception
      * @return array<mixed>
      */
-    public function callHandler(mixed $handler, array $vars, ?Context $context = null)
+    public function callHandler(mixed $handler, array $vars)
     {
         if (empty($handler)) {
             // @todo see status in Routing::match()
             throw new Exception('Invalid handler');
         }
-        $context?->tracePath(__METHOD__, $handler);
+        $this->context?->tracePath(__METHOD__, $handler);
         [$routesClass, $method] = $handler;
         if (is_subclass_of($routesClass, RoutesInterface::class)) {
             /** @var class-string<RoutesInterface> $routesClass */
             $route = $vars[RouterInterface::ROUTE_PARAM] ?? '';
-            $this->handler = $routesClass::getHandler($route, $context);
+            $this->handler = $routesClass::getHandler($route, $this->context);
         } else {
             $this->handler = is_object($routesClass) ? $routesClass : new $routesClass();
-            $this->handler->setContext($context);
+            $this->handler->setContext($this->context);
         }
         try {
             [$result, $context] = $this->handler->callHandler($handler, $vars);
         } catch (FunctionNotFoundException $e) {
-            $result = $this->notFound($e->getMessage(), $context);
+            $result = $this->notFound($e->getMessage(), $this->context);
         }
         return [$result, $context];
     }

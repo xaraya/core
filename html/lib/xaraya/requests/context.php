@@ -63,7 +63,7 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getRequestId()
     {
-        return $this->getContext()->getRequestId();
+        return $this->context->getRequestId();
     }
 
     /**
@@ -73,10 +73,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getServerVar($name)
     {
-        if (!$this->getContext()->offsetExists('server')) {
+        if (!$this->context->offsetExists('server')) {
             return null;
         }
-        $serverVars = $this->getContext()->offsetGet('server');
+        $serverVars = $this->context->offsetGet('server');
         return $serverVars[$name] ?? null;
     }
 
@@ -88,11 +88,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function setServerVar($name, $value)
     {
-        if (!$this->getContext()->offsetExists('server')) {
+        if (!$this->context->offsetExists('server')) {
             $this->context['server'] = [];
         }
         $this->context['server'][$name] = $value;
-        return;
     }
 
     /**
@@ -102,10 +101,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getQueryVar($name)
     {
-        if (!$this->getContext()->offsetExists('query')) {
+        if (!$this->context->offsetExists('query')) {
             return null;
         }
-        $queryVars = $this->getContext()->offsetGet('query');
+        $queryVars = $this->context->offsetGet('query');
         return $queryVars[$name] ?? null;
     }
 
@@ -116,10 +115,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getBodyVar($name)
     {
-        if (!$this->getContext()->offsetExists('body')) {
+        if (!$this->context->offsetExists('body')) {
             return null;
         }
-        $bodyVars = $this->getContext()->offsetGet('body');
+        $bodyVars = $this->context->offsetGet('body');
         return $bodyVars[$name] ?? null;
     }
 
@@ -129,10 +128,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getJsonBody()
     {
-        if (!$this->getContext()->offsetExists('input')) {
+        if (!$this->context->offsetExists('input')) {
             return null;
         }
-        $rawInput = $this->getContext()->offsetGet('input');
+        $rawInput = $this->context->offsetGet('input');
         $input = null;
         if (!empty($rawInput)) {
             $input = json_decode($rawInput, true, 512, JSON_THROW_ON_ERROR);
@@ -147,10 +146,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getCookieVar($name)
     {
-        if (!$this->getContext()->offsetExists('cookie')) {
+        if (!$this->context->offsetExists('cookie')) {
             return null;
         }
-        $cookieVars = $this->getContext()->offsetGet('cookie');
+        $cookieVars = $this->context->offsetGet('cookie');
         return $cookieVars[$name] ?? null;
     }
 
@@ -160,10 +159,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getServerParams()
     {
-        if (!$this->getContext()->offsetExists('server')) {
+        if (!$this->context->offsetExists('server')) {
             return [];
         }
-        return $this->getContext()->offsetGet('server');
+        return $this->context->offsetGet('server');
     }
 
     /**
@@ -172,10 +171,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getQueryParams()
     {
-        if (!$this->getContext()->offsetExists('query')) {
+        if (!$this->context->offsetExists('query')) {
             return [];
         }
-        return $this->getContext()->offsetGet('query');
+        return $this->context->offsetGet('query');
     }
 
     /**
@@ -185,7 +184,7 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function withQueryParams($args)
     {
-        if (!$this->getContext()->offsetExists('query')) {
+        if (!$this->context->offsetExists('query')) {
             $this->context['query'] = [];
         }
         $this->context['query'] = $this->context['query'] + $args;
@@ -197,10 +196,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getParsedBody()
     {
-        if (!$this->getContext()->offsetExists('body')) {
+        if (!$this->context->offsetExists('body')) {
             return [];
         }
-        return $this->getContext()->offsetGet('body');
+        return $this->context->offsetGet('body');
     }
 
     /**
@@ -209,10 +208,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getRawInput()
     {
-        if (!$this->getContext()->offsetExists('input')) {
+        if (!$this->context->offsetExists('input')) {
             return false;
         }
-        return $this->getContext()->offsetGet('input');
+        return $this->context->offsetGet('input');
     }
 
     /**
@@ -221,10 +220,10 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getCookieParams()
     {
-        if (!$this->getContext()->offsetExists('cookie')) {
+        if (!$this->context->offsetExists('cookie')) {
             return [];
         }
-        return $this->getContext()->offsetGet('cookie');
+        return $this->context->offsetGet('cookie');
     }
 
     /**

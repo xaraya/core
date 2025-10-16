@@ -36,11 +36,12 @@ class DefaultHandler extends ModuleHandler
     }
 
     /**
-     * Summary of getHandler
+     * Summary of resolveHandler
      * @param mixed $handler
+     * @param array<string, mixed> $vars
      * @return array{0: HandlerInterface, 1: string}
      */
-    public function getHandler(mixed $handler): mixed
+    public function resolveHandler(mixed $handler, array $vars): mixed
     {
         // handle default routes here
         $this->funcName = $handler[1];

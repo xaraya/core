@@ -189,8 +189,8 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
         //if (self::$tracePath) {
         //    $extensions['paths'] = self::$paths;
         //}
-        if ($this->getContext()->enableTrace()) {
-            $extensions['paths'] = $this->getContext()->getTrace();
+        if ($this->context->enableTrace()) {
+            $extensions['paths'] = $this->context->getTrace();
         }
         self::setTimer('stop');
         if (self::enableTimer()) {
@@ -208,7 +208,7 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     /**
      * Utility function to send the data to the browser or app
      * @param mixed $data
-     * @param mixed $context
+     * @param mixed $context @deprecated 2.6.3 switch to instance methods
      * @return void
      */
     public function output($data, $context = null)

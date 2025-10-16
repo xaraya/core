@@ -21,8 +21,8 @@ use xarController;
  *
  * ```
  * $pathPrefix/$moduleName/
- * $pathPrefix/$moduleName/admin/{func} (not used here)
- * $pathPrefix/$moduleName[/user]/{func} (not used here)
+ * $pathPrefix/$moduleName/admin/{func}
+ * $pathPrefix/$moduleName[/user]/{func} (add /user if moduleName == objectName)
  * $pathPrefix/$objectName/{entity}
  * $pathPrefix/$objectName/{entity}/{itemid} (numeric)
  * $pathPrefix/$objectName/{entity}/{itemid}/{title}
@@ -54,24 +54,50 @@ class ModuleHandler implements HandlerInterface
      */
     public function callHandler(mixed $handler, array $vars = []): mixed
     {
-        $this->getContext()?->tracePath(__METHOD__ . ': ' . $handler[0] . ' ' . $handler[1], $vars);
-        $handler = $this->getHandler($handler);
+        $this->context?->tracePath(__METHOD__ . ': ' . $handler[0] . ' ' . $handler[1], $vars);
+        $handler = $this->resolveHandler($handler, $vars);
+        if (!$handler[0]->hasMethod($handler[1], 'gui')) {
+            throw new FunctionNotFoundException($handler[1]);
+        }
+        unset($vars['_route']);
+        // @todo set request in xarController here for MenuBlock::setRequestInfo() in admin menu!?
+        xarController::setRequest(['module' => $this->getModName(), 'type' => $this->getModType(), 'func' => $this->funcName]);
+        // Note: $this->instance might not be initialized for DefaultHandler
+        $this->context?->tracePath(__METHOD__ . ': resolve', [$handler[0]::class, $this->funcName, $vars]);
+        $result = $handler($vars);
+        // @todo do not apply template here (yet)?
+        if (is_array($result) && is_subclass_of($handler[0], GuiModuleServicesInterface::class)) {
+            $this->context?->tracePath(__METHOD__ . ': template', [$handler[0]::class, $this->funcName]);
+            $result = $handler[0]->mod()->template($this->funcName, $result);
+        }
+        return [$result, $this->getContext()];
+    }
+
+    /**
+     * Summary of resolveHandler
+     * @param mixed $handler
+     * @param array<string, mixed> $vars
+     * @return array{0: ModuleServicesInterface, 1: string}
+     * @see \Xaraya\Bridge\Routing\RoutingBridge::resolveHandler()
+     */
+    public function resolveHandler(mixed $handler, array $vars): mixed
+    {
         // @todo allow overriding {module}-main route with $vars['type'] and/or $vars['func'] here?
         if (!empty($vars['_route']) && str_ends_with($vars['_route'], '-main')) {
             if (!empty($vars['type']) && $vars['type'] != 'user') {
-                $module = $handler[0]->getModule();
+                $module = $this->instance->getModule();
                 $classType = $module->getClassType($vars['type']);
                 if (!empty($classType) && $module->hasComponent($classType)) {
                     $handler[0] = $module->getComponent($classType);
                     $handler[1] = $vars['func'] ?? 'main';
+                    $this->instance = $handler[0];
                 }
             }
         }
-        unset($vars['_route']);
         // assuming $handler[0] is \Xaraya\Modules\...\UserGui class here
         if ($handler[1] == 'admingui') {
             // ... replace usergui instance with admingui instance
-            $handler[0] = $handler[0]->admingui();
+            $handler[0] = $this->instance->admingui();
             if (empty($handler[0])) {
                 throw new FunctionNotFoundException('AdminGui');
             }
@@ -83,31 +109,6 @@ class ModuleHandler implements HandlerInterface
             // ... replace method with $vars['func']
             $handler[1] = $vars['func'] ?? 'main';
         }
-        if (!$handler[0]->hasMethod($handler[1], 'gui')) {
-            throw new FunctionNotFoundException($handler[1]);
-        }
-        $this->funcName = $handler[1];
-        // @todo set request in xarController here for MenuBlock::setRequestInfo() in admin menu!?
-        xarController::setRequest(['module' => $this->getModName(), 'type' => $this->getModType(), 'func' => $this->funcName]);
-        // Note: $this->instance might not be initialized for DefaultHandler
-        $this->getContext()?->tracePath(__METHOD__ . ': resolve', [$handler[0]::class, $this->funcName, $vars]);
-        $result = $handler($vars);
-        // @todo do not apply template here (yet)?
-        if (is_array($result) && is_subclass_of($handler[0], GuiModuleServicesInterface::class)) {
-            $this->getContext()?->tracePath(__METHOD__ . ': template', [$handler[0]::class, $this->funcName]);
-            $result = $handler[0]->mod()->template($this->funcName, $result);
-        }
-        return [$result, $this->getContext()];
-    }
-
-    /**
-     * Summary of getHandler
-     * @param mixed $handler
-     * @return array{0: ModuleServicesInterface, 1: string}
-     * @see \Xaraya\Bridge\Routing\RoutingBridge::getHandler()
-     */
-    public function getHandler(mixed $handler): mixed
-    {
         $this->funcName = $handler[1];
         return [$this->instance, $this->funcName];
     }

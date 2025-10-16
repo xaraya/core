@@ -228,10 +228,10 @@ class RoutingBridge extends BasicBridge
         [$result, $context] = $this->dispatchRequest($method, $path, $group, $request);
         if ($this->handlerClass == RestAPIHandler::class) {
             // different processing for REST API - see rst.php
-            $this->getRestApiHandler()->output($result, 200, $context);
+            $this->getRestApiHandler()->output($result);
         } elseif ($this->handlerClass == GraphQLHandler::class) {
             // different processing for GraphQL API - see gql.php
-            $this->getGraphQLHandler()->output($result, $context);
+            $this->getGraphQLHandler()->output($result);
         } else {
             $this->output($result, $context);
         }
@@ -240,7 +240,7 @@ class RoutingBridge extends BasicBridge
     /**
      * Summary of output
      * @param mixed $result
-     * @param mixed $context
+     * @param mixed $context for wrapPage and mediaType - may not be set in instance here
      * @param mixed $transform
      * @return void
      */
@@ -290,11 +290,11 @@ class RoutingBridge extends BasicBridge
     }
 
     /**
-     * Summary of getHandler
+     * Summary of resolveHandler
      * @param mixed $handler
      * @return mixed
      */
-    public function getHandler($handler)
+    public function resolveHandler($handler)
     {
         if (!is_array($handler)) {
             // @todo handle first class callable syntax $this->method(...)
@@ -354,7 +354,7 @@ class RoutingBridge extends BasicBridge
         }
         $this->handlerClass = static::class;
         // fix handler if needed
-        $handler = $this->getHandler($handler);
+        $handler = $this->resolveHandler($handler);
         // don't use call_user_func here anymore because $request is passed by reference
         return $handler($vars, $request);
     }

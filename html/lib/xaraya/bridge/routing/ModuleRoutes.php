@@ -43,6 +43,7 @@ class ModuleRoutes implements RoutesInterface
      */
     public static function getRoutes(string $pathPrefix = '', string $namePrefix = ''): array
     {
+        // Use routes class per module here to get the right handler & instance in Dispatcher
         $handler = static::class;
         $extra = [];
         $routes = [];
@@ -258,7 +259,7 @@ class ModuleRoutes implements RoutesInterface
     }
 
     /**
-     * Get route handler for module UserGui class instance
+     * Get route handler for module UserGui class instance like ModuleHandler(\Xaraya\Modules\Base\UserGui())
      * @param string $route
      * @param ?Context<string, mixed> $context
      * @return HandlerInterface
@@ -273,7 +274,7 @@ class ModuleRoutes implements RoutesInterface
     }
 
     /**
-     * Get module UserGui class instance
+     * Get module UserGui class instance like \Xaraya\Modules\Base\UserGui()
      * @param ?Context<string, mixed> $context
      */
     public static function getInstance(?Context $context): ModuleServicesInterface
@@ -286,7 +287,7 @@ class ModuleRoutes implements RoutesInterface
     }
 
     /**
-     * Get module class
+     * Get module class like \Xaraya\Modules\Base\Module()
      */
     public static function getModule(): ModuleInterface
     {

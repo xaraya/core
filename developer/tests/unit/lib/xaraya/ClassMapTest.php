@@ -710,13 +710,12 @@ final class ClassMapTest extends TestCase
         $instance = new \Xaraya\Modules\DynamicData\UserGui('dynamicdata');
 
         $expected = $result['classname'];
-        $handler = new $result['classname']($instance);
-        $this->assertInstanceOf($expected, $handler);
+        $moduleHandler = new $result['classname']($instance);
+        $this->assertInstanceOf($expected, $moduleHandler);
 
         $handler = ['dummy', 'main'];
-        $handler = $instance->getHandler($handler);
         $vars = [];
-        [$result, $context] = $instance->callHandler($handler, $vars);
+        [$result, $context] = $moduleHandler->callHandler($handler, $vars);
     }
 
     public function testGetRoutes(): void

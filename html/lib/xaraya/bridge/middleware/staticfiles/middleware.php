@@ -105,8 +105,8 @@ class StaticFileMiddleware extends StaticFileRouter implements DefaultRouterInte
     /**
      * Summary of run
      * @param array<string, mixed> $attribs
-     * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
+     * @param array<string, mixed> $params not used here
+     * @param ?Context<string, mixed> $context not used here
      * @return ResponseInterface
      */
     public function run($attribs, $params, $context = null)

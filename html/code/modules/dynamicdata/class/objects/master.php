@@ -829,7 +829,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
      * Call $action hooks for this object (= notify observers in observer pattern)
      *
      * @param string $action the hook action ('create', 'display', ...)
-     * @param ?Context<string, mixed> $context optional context for the hook call (default = none)
+     * @param mixed $context @deprecated 2.6.3 use standard method to call hooks + pass context
      * @return void
      */
     public function callHooks($action = '', $context = null)
@@ -844,8 +844,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         } elseif ($this->var()->isCached('DynamicData', 'HookAction')) {
             return;
         }
-        // set context if available in dataobject
-        $context ??= $this->getContext();
 
         if ($this->moduleid === 182) {
             $modname = 'dynamicdata';
@@ -911,7 +909,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         // CHECKME: is this sufficient in most cases, or do we need an explicit xarController::URL() ?
         $this->hookvalues['returnurl'] = $this->ctl()->getCurrentURL();
 
-        // Use the standard method to call hooks
+        // Use the standard method to call hooks + pass context
         if ($this instanceof DataObject) {
             $hooks = $this->mod()->callHooks('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype);
         } else {
@@ -1214,7 +1212,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         }
         // use context to get roleid if needed
         if (empty($roleid) && !empty($this->context)) {
-            $roleid = $this->getContext()->getUserId();
+            $roleid = $this->context->getUserId();
         }
 
         // DD specific access scheme

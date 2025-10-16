@@ -125,16 +125,6 @@ class RoutingHandler implements MiddlewareInterface, RequestHandlerInterface
     }
 
     /**
-     * See RoutingBridge::getHandler()
-     * @param mixed $handler
-     * @return mixed
-     */
-    public function getHandler($handler)
-    {
-        return $this->bridge->getHandler($handler);
-    }
-
-    /**
      * Execute the server request - this will set request attributes based on path variables + handle the request
      */
     public function execute(ServerRequestInterface $request, ?RequestHandlerInterface $next = null): ResponseInterface

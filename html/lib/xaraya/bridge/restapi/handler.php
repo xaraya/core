@@ -307,7 +307,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         // @todo check if we already have a context? (via request or from elsewhere)
         $this->setContext($context);
         // get handler instance with context
-        $handler = $this->getHandler($handler, $context);
+        $handler = $this->resolveHandler($handler, $context);
         try {
             // no longer pass $context to method call here, since we use instance now
             $result = call_user_func($handler, $params);
@@ -338,12 +338,12 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     }
 
     /**
-     * Summary of getHandler
+     * Summary of resolveHandler
      * @param mixed $handler
      * @param mixed $context
      * @return mixed
      */
-    public function getHandler($handler, &$context)
+    public function resolveHandler($handler, &$context)
     {
         if (!is_array($handler)) {
             // @todo handle first class callable syntax $this->method(...)
@@ -370,7 +370,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      * Send Content-Type and JSON result to the browser
      * @param mixed $result
      * @param mixed $status
-     * @param mixed $context
+     * @param mixed $context for mediaType @deprecated 2.6.3 switch to instance methods
      * @return void
      */
     public function output($result, $status = 200, $context = null)
@@ -378,7 +378,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         if (!isset($result) && php_sapi_name() !== 'cli') {
             return;
         }
-        $context ??= $this->getContext();
+        $context = $this->getContext();
         if (is_array($result) && self::enableTimer()) {
             $result['x-times'] = $this->getTimers();
         }

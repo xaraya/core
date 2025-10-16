@@ -103,7 +103,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
     /**
      * Summary of run
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
+     * @param ?Context<string, mixed> $context for wrapPage and mediaType
      * @return ResponseInterface
      */
     public function run($params, $context = null)
@@ -130,7 +130,7 @@ class DataObjectApiMiddleware extends DataObjectMiddleware
     /**
      * Summary of run
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
+     * @param ?Context<string, mixed> $context not used here
      * @return ResponseInterface
      */
     public function run($params, $context = null)

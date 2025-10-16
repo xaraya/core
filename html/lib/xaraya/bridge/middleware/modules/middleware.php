@@ -99,7 +99,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
      * Summary of run
      * @param array<string, mixed> $attribs
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
+     * @param ?Context<string, mixed> $context for wrapPage and mediaType
      * @return ResponseInterface
      */
     public function run($attribs, $params, $context = null)
@@ -127,7 +127,7 @@ class ModuleApiMiddleware extends ModuleMiddleware
      * Summary of run
      * @param array<string, mixed> $attribs
      * @param array<string, mixed> $params
-     * @param ?Context<string, mixed> $context
+     * @param ?Context<string, mixed> $context not used here
      * @return ResponseInterface
      */
     public function run($attribs, $params, $context = null)

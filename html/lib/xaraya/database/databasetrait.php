@@ -132,7 +132,7 @@ interface DatabaseInterface
 
     /**
      * Summary of getCurrentDatabase
-     * @param mixed $context
+     * @param mixed $context for userId
      * @return string|null
      */
     public function getCurrentDatabase($context = null);
@@ -140,7 +140,7 @@ interface DatabaseInterface
     /**
      * Summary of setCurrentDatabase
      * @param string $name
-     * @param mixed $context
+     * @param mixed $context for userId
      * @return void
      */
     public function setCurrentDatabase($name = '', $context = null);
@@ -356,7 +356,7 @@ trait DatabaseTrait
 
     /**
      * Summary of getCurrentDatabase
-     * @param mixed $context
+     * @param mixed $context for userId
      * @return string|null
      */
     public function getCurrentDatabase($context = null)
@@ -392,7 +392,7 @@ trait DatabaseTrait
     /**
      * Summary of setCurrentDatabase
      * @param string $name
-     * @param mixed $context
+     * @param mixed $context for userId
      * @return void
      */
     public function setCurrentDatabase($name = '', $context = null)

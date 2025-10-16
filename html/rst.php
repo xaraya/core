@@ -114,7 +114,7 @@ function handle_request($method, $path, $router, $restHandler)
     // ... call $handler with $vars
     try {
         [$result, $context] = $restHandler->callHandler($handler, $vars);
-        $restHandler->output($result, 200, $context);
+        $restHandler->output($result);
     } catch (UnauthorizedOperationException $e) {
         $restHandler->output('This operation is unauthorized, please authenticate.', 401);
     } catch (ForbiddenOperationException $e) {

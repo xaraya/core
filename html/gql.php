@@ -73,4 +73,4 @@ $data = GraphQLHandler::getData($query, $variables, $operationName);
  */
 $graphQLHandler = new GraphQLHandler();
 [$data, $context] = $graphQLHandler->handleRequest();
-$graphQLHandler->output($data, $context);
+$graphQLHandler->output($data);

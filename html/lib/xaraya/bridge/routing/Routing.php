@@ -83,7 +83,7 @@ class Routing implements RouterInterface
      * @param ?RequestContext $context
      * @return void
      */
-    public function setContext($context = null)
+    public function setRouterContext($context = null)
     {
         $context ??= new RequestContext();
         $this->getRouter()->setContext($context);
@@ -105,23 +105,6 @@ class Routing implements RouterInterface
         }
     }
 
-    /*
-     * Summary of context - @todo
-     * @param mixed $request
-     * @return RequestContext
-    public function context($request)
-    {
-        $handler = $request->getHandler();
-        $endpoint = Route::endpoint($handler);
-        $baseUrl = Route::base() . $endpoint;
-        // @todo get scheme and host - see Symfony\Request::getSchemeAndHttpHost()
-        //$context = new RequestContext('/index.php', 'GET', 'localhost', 'http', 80, 443, '/', '');
-        $context = new RequestContext($baseUrl, $request->method(), 'localhost', 'http', 80, 443, $request->path, $request->query());
-        //$context->fromRequest($request);
-        return $context;
-    }
-     */
-
     /**
      * Match path with optional method
      * @param string $path
@@ -131,7 +114,7 @@ class Routing implements RouterInterface
     public function match($path, $method = null)
     {
         // reset router context to start fresh
-        $this->setContext();
+        $this->setRouterContext();
         if (!empty($method) && $method != 'GET') {
             // set router context with method
             $this->getRouter()->getContext()->setMethod($method);

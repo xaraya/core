@@ -10,6 +10,7 @@ This contains various bridges between Xaraya and other PHP packages or framework
 - [Middleware and Routing Combined](#middleware-and-routing-combined)
 - [Non-blocking HTTP Server (ReactPHP)](#non-blocking-http-server-reactphp)
 - [Twig Template Engine](#twig-template-engine)
+- [Routing to Module Handler Classes](#routing-to-module-handler-classes)
 
 Note: all bridges assume you work with `sys::autoload()` or `require_once dirname(__DIR__).'/vendor/autoload.php'`
 
@@ -422,5 +423,10 @@ $targetPath = sys::root() . '/templates/twig/workflow/includes';
 
 $dependencies = $validator->validateDir($targetPath);
 ```
+
+## Routing to Module Handler Classes
+
+The routing, middleware and combined above use `Requests\ModuleRequestHandler` to call traditional module GUI functions.
+Routing and dispatching to `Routing\ModuleHandler` instead will call the newer [Module Methods](../modules/README.md#module-methods-object-oriented). To be continued...
 
 Enjoy :-)
