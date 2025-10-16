@@ -11,7 +11,6 @@
 namespace Xaraya\Requests;
 
 use Xaraya\Context\ContextFactory;
-use xarServer;
 use sys;
 
 sys::import('xaraya.context.factory');
@@ -34,7 +33,6 @@ class RequestHandler implements RequestInterface
     public function __construct($args = [])
     {
         $this->args = $args;
-        xarServer::setInstance($this);
     }
 
     /**

@@ -12,7 +12,6 @@
 namespace Xaraya\Context;
 
 use Xaraya\Requests\RequestInterface;
-use xarServer;
 use sys;
 
 sys::import('xaraya.server');
@@ -35,13 +34,11 @@ class RequestContext implements ContextInterface, RequestInterface
     /**
      * Constructor for the request handler
      * @param array<string, mixed> $args not by reference anymore
-     * @uses xarServer::setInstance()
      * @return void
      **/
     public function __construct($args = [])
     {
         $this->args = $args;
-        xarServer::setInstance($this);
     }
 
     /**

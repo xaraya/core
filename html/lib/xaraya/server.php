@@ -57,6 +57,7 @@ class xarServer extends xarObject
 
         // Set up the request object
         $request = new self::$requestClass($args);
+        self::setInstance($request);
         // Initialize the request
         $request->initialize();
         // This event is now registered during base module init
@@ -94,6 +95,7 @@ class xarServer extends xarObject
         if (!isset(self::$instance)) {
             // Set up the request object
             $request = new self::$requestClass([]);
+            self::setInstance($request);
             // Initialize the request
             $request->initialize();
         }
