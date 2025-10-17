@@ -109,7 +109,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     // blocks inheriting from this class must define their own public properties
     // the values of which will be stored in $content
 
-    final public function __construct(Array $blockinfo=array())
+    public function __construct(array $blockinfo = [])
     {
         $this->block_index = self::$_count++;
         // normalize blockinfo 

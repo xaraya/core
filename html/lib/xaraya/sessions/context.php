@@ -58,6 +58,16 @@ class SessionContext implements ContextInterface, SessionInterface
     }
 
     /**
+     * Destructor for the session handler
+     * @return void
+     **/
+    public function __destruct()
+    {
+        // Make sure we write dirty data before we lose this object
+        $this->save();
+    }
+
+    /**
      * Initialize the session after setup
      * @return bool
      */
@@ -66,8 +76,19 @@ class SessionContext implements ContextInterface, SessionInterface
         if (!isset($this->context)) {
             $this->context = new Context(['source' => __CLASS__]);
         }
-        self::$storage ??= new self::$storageClass($this->args);
+        // always get storage here when xarSession::init() is called
+        $this->getStorage();
         return true;
+    }
+
+    /**
+     * Get storage on demand (lazy load)
+     * @return SessionStorageInterface
+     */
+    public function getStorage()
+    {
+        self::$storage ??= new self::$storageClass($this->args);
+        return self::$storage;
     }
 
     /**
@@ -259,7 +280,7 @@ class SessionContext implements ContextInterface, SessionInterface
         $session->vars = [];
         // @todo do we want to update or delete here?
         //$this->isUpdated = true;
-        self::$storage->delete($session);
+        self::getStorage()->delete($session);
     }
 
     /**
@@ -285,10 +306,10 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function startSession(Context $context, string $sessionId, int $userId = 0, string $ipAddress = '')
     {
-        $session = self::$storage->lookup($sessionId, $ipAddress);
+        $session = self::getStorage()->lookup($sessionId, $ipAddress);
         if (!isset($session)) {
             $session = new VirtualSession($sessionId, $userId, $ipAddress, time(), []);
-            self::$storage->register($session);
+            self::getStorage()->register($session);
             $session->isNew = true;
         } else {
             $session->setUserId($userId);
@@ -310,8 +331,9 @@ class SessionContext implements ContextInterface, SessionInterface
         if (empty($session)) {
             return false;
         }
-        if ($this->isUpdated) {
-            self::$storage->update($session);
+        // do we want to save session if storage is not initialized here?
+        if ($this->isUpdated && !empty(self::$storage)) {
+            self::getStorage()->update($session);
             $this->isUpdated = false;
         }
         $this->saveTime($session->lastUsed);

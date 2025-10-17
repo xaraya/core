@@ -76,6 +76,13 @@ trait ServiceTrait
         return $this->getParent()->getContext();
     }
 
+    public function setContext($context)
+    {
+        if (!empty($context)) {
+            $this->getParent()->setContext($context);
+        }
+    }
+
     /**
      * Summary of create
      */
@@ -105,10 +112,19 @@ class DummyParent implements ContextInterface
 {
     use ContextTrait;
 
+    protected mixed $parent = null;
+
     public function __construct(mixed $parent = null)
     {
-        //$context = xarServer::getInstance()?->getContext();
-        $context = new Context(['source' => $parent]);
-        $this->setContext($context);
+        $this->parent = $parent;
+    }
+
+    public function getContext()
+    {
+        if (!isset($this->context)) {
+            //$this->context = xarServer::getInstance()?->getContext();
+            $this->context = new Context(['source' => $this->parent]);
+        }
+        return $this->context;
     }
 }

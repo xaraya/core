@@ -20,6 +20,7 @@ sys::import('xaraya.structures.containers.blocks.blocktype');
 sys::import('xaraya.structures.containers.blocks.servicestrait');
 use Xaraya\Blocks\BlockServicesInterface;
 use Xaraya\Blocks\BlockServicesTrait;
+use Xaraya\Context\Context;
 
 interface iBlock extends iBlockType, BlockServicesInterface
 {
@@ -81,6 +82,18 @@ abstract class BasicBlock extends BlockType implements iBlock
 /**
  * Methods called by the blocks subsystem
 **/
+    /**
+     * Summary of __construct
+     * @param array<string, mixed> $blockinfo
+     * @param ?Context<string, mixed> $context
+     */
+    final public function __construct(array $blockinfo = [], $context = null)
+    {
+        // set context before calling parent constructor
+        $this->setContext($context);
+        parent::__construct($blockinfo);
+    }
+
     // this method is called by BlockType::__construct()
     public function init()
     {

@@ -10,11 +10,12 @@
 
 <xsl:template match="xar:place-meta">
   <xsl:processing-instruction name="php">
+    <xsl:text>$context ??= $_bl_context ?? null;&nl;</xsl:text>
     <xsl:text>echo trim(xarMod::apiFunc('themes','user','rendermeta',</xsl:text>
       <xsl:call-template name="atts2args">
         <xsl:with-param name="nodeset" select="@*"/>
       </xsl:call-template>
-    <xsl:text>) ?? '');</xsl:text>
+    <xsl:text>, $context) ?? '');</xsl:text>
   </xsl:processing-instruction>
 </xsl:template>
 </xsl:stylesheet>

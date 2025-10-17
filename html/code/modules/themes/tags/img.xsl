@@ -18,12 +18,16 @@
           <!-- just return the url to the image -->
           <xsl:when test="@render = 'false'">
             <xsl:processing-instruction name="php">
+              <xsl:text>$context ??= $_bl_context ?? null;&nl;</xsl:text>
               <xsl:text>echo </xsl:text>
               <xsl:copy-of select="$image-url"/>
             </xsl:processing-instruction>
           </xsl:when>
           <!-- return an html img tag -->
           <xsl:otherwise>
+            <xsl:processing-instruction name="php">
+              <xsl:text>$context ??= $_bl_context ?? null;&nl;</xsl:text>
+            </xsl:processing-instruction>
             <xsl:element name="img">
               <!-- attach src attribute using image url as value -->
               <xsl:attribute name="src">
@@ -59,7 +63,7 @@
           name="nodeset"
           select="@*[name() != 'alt' and name() != 'title' and name() != 'height' and name() != 'width' and  name() != 'class' and name() != 'id' and name() != 'style' and name() != 'onabort' and name() != 'onclick' and name() != 'ondblclick' and name() != 'onmousedown' and  name() != 'onmousemove' and name() != 'onmouseout' and name() != 'onmouseover' and name() != 'onmouseup' and name() != 'onkeydown' and name() != 'onkeypress' and name() != 'onkeyup']"/>
       </xsl:call-template>
-    <xsl:text>) ?? '');</xsl:text>
+    <xsl:text>, $context) ?? '');</xsl:text>
   </xsl:template>
 
   <!-- attach attributes passed from tag to the element being returned -->

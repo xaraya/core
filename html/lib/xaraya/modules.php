@@ -892,10 +892,10 @@ class xarMod extends xarObject implements IxarMod
         if (!function_exists($modFunc)) {
             // attempt to load the module's api - this will load xaruserapi.php or xaruser.php etc. if they exist
             if ($funcType == 'api') {
-                xarMod::apiLoad($modName, $modType);
+                xarMod::apiLoad($modName, $modType, self::LOAD_ANYSTATE, $context);
             } else {
                 try {
-                    xarMod::load($modName, $modType);
+                    xarMod::load($modName, $modType, self::LOAD_ONLYACTIVE, $context);
                 } catch (Exception $e) {
                     return xarController::notFound('Function not found', $context);
                 }
@@ -910,7 +910,7 @@ class xarMod extends xarObject implements IxarMod
                 if (!file_exists($funcFile)) {
                     // @todo cache this if we ever get here again? Already cached internally for module class methods
                     // Note: pass modType . funcType as modType here for module classes, and use funcType to identify the callType (api or not)
-                    $callable = self::getModuleClassMethod($modName, $modType . $funcType, $funcName, $funcType);
+                    $callable = self::getModuleClassMethod($modName, $modType . $funcType, $funcName, $funcType, $context);
                     if (!empty($callable)) {
                         // this expects an instance in $callable[0]
                         if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
@@ -968,9 +968,9 @@ class xarMod extends xarObject implements IxarMod
      * @param int $flags flags to modify function behaviour (default LOAD_ONLYACTIVE)
      * @return mixed
      */
-    public static function load($modName, $modType = 'user', $flags = self::LOAD_ONLYACTIVE)
+    public static function load($modName, $modType = 'user', $flags = self::LOAD_ONLYACTIVE, $context = null)
     {
-        return self::privateLoad($modName, $modType, $flags);
+        return self::privateLoad($modName, $modType, $flags, $context);
     }
 
     /**
@@ -981,9 +981,9 @@ class xarMod extends xarObject implements IxarMod
      * @param int $flags flags to modify function behaviour (default LOAD_ANYSTATE)
      * @return mixed true on success
      */
-    public static function apiLoad($modName, $modType = 'user', $flags = self::LOAD_ANYSTATE)
+    public static function apiLoad($modName, $modType = 'user', $flags = self::LOAD_ANYSTATE, $context = null)
     {
-        return self::privateLoad($modName, $modType . 'api', $flags);
+        return self::privateLoad($modName, $modType . 'api', $flags, $context);
     }
 
     /**
@@ -998,7 +998,7 @@ class xarMod extends xarObject implements IxarMod
      * @throws ModuleNotFoundException
      * @throws ModuleNotActiveException
      */
-    private static function privateLoad($modName, $modType, $flags = self::LOAD_UNDEFINED)
+    private static function privateLoad($modName, $modType, $flags = self::LOAD_UNDEFINED, $context = null)
     {
         static $loadedModuleCache = [];
         if (empty($modName)) {
@@ -1047,7 +1047,7 @@ class xarMod extends xarObject implements IxarMod
             $loadedModuleCache[$cacheKey] = true;
         } else {
             // Do we have a module class handling this modType
-            $instance = self::getModule($modName);
+            $instance = self::getModule($modName, $context);
             // returns null for DefaultModule() = no suitable class type
             $classType = $instance->getClassType($modType);
             if (isset($classType)) {
@@ -1070,9 +1070,9 @@ class xarMod extends xarObject implements IxarMod
         // Module loaded successfully, trigger the proper event
         //xarEvents::trigger('ModLoad', $modName);
         if (preg_match('/(.*)?api$/', $modType)) {
-            xarEvents::notify('ModApiLoad', $modName);
+            xarEvents::notify('ModApiLoad', $modName, $context);
         } else {
-            xarEvents::notify('ModLoad', $modName);
+            xarEvents::notify('ModLoad', $modName, $context);
         }
         return true;
     }
@@ -1083,7 +1083,7 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modName
      * @return \Xaraya\Modules\ModuleInterface
      */
-    public static function getModule($modName)
+    public static function getModule($modName, $context = null)
     {
         if (!array_key_exists($modName, self::$moduleClasses)) {
             sys::autoload();
@@ -1099,6 +1099,9 @@ class xarMod extends xarObject implements IxarMod
                 }
             } else {
                 self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName);
+            }
+            if (isset($context)) {
+                self::$moduleClasses[$modName]->setContext($context);
             }
         }
         return self::$moduleClasses[$modName];
@@ -1137,13 +1140,13 @@ class xarMod extends xarObject implements IxarMod
      * @param string $callType is this called as an api function or not -> check against module class
      * @return callable|null
      */
-    public static function getModuleClassMethod($modName, $modType, $funcName, $callType = 'api')
+    public static function getModuleClassMethod($modName, $modType, $funcName, $callType = 'api', $context = null)
     {
         static $methods_cache = [];
 
         $key = "$modName:$modType:$funcName:$callType";
         if (!array_key_exists($key, $methods_cache)) {
-            $instance = self::getModule($modName);
+            $instance = self::getModule($modName, $context);
             // returns null for DefaultModule() = no suitable class method
             $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName, $callType);
             if (!isset($methods_cache[$key])) {
@@ -1199,6 +1202,7 @@ class xarMod extends xarObject implements IxarMod
                 // make sure configure() adds 'type' as well as 'typegui' to call types
                 //$type .= 'gui';
             }
+            // Note: component would be configure() with no context here
             $callable = self::getModuleClassMethod($tplmodule, $type, $func, $callType);
             if (!empty($callable)) {
                 $tplmodule_cache[$key] = $tplmodule;

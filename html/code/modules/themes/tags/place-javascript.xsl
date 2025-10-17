@@ -10,12 +10,13 @@
 
 <xsl:template match="xar:place-javascript">
   <xsl:processing-instruction name="php">
+    <xsl:text>$context ??= $_bl_context ?? null;&nl;</xsl:text>
     <xsl:text>echo trim(xarMod::apiFunc('themes','user','renderjs', array(</xsl:text>
     <xsl:text>'position'=&gt;'</xsl:text>
     <xsl:value-of select="@position"/>
     <xsl:text>','type'=&gt;'</xsl:text>
     <xsl:value-of select="@type"/>
-    <xsl:text>')) ?? '');</xsl:text>
+    <xsl:text>'), $context) ?? '');</xsl:text>
   </xsl:processing-instruction>
 </xsl:template>
 </xsl:stylesheet>

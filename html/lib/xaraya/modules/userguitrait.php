@@ -84,7 +84,7 @@ trait UserGuiTrait
     {
         $this->setModType('user');
         // any state here = otherwise during module init(), any GUI hook functions registered will throw ModuleNotActiveException
-        xarMod::load($this->getModName(), $this->getModType(), xarMod::LOAD_ANYSTATE);
+        xarMod::load($this->getModName(), $this->getModType(), xarMod::LOAD_ANYSTATE, $this->getContext());
     }
 
     /**

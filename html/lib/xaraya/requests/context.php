@@ -49,7 +49,6 @@ class RequestContext implements ContextInterface, RequestInterface
     {
         if (!isset($this->context)) {
             $this->context = new Context(['source' => __CLASS__]);
-            //$requestId = bin2hex(random_bytes($this->length));
         }
         return true;
     }
@@ -57,6 +56,7 @@ class RequestContext implements ContextInterface, RequestInterface
     /**
      * Get current requestId from context
      * @return string|null
+     * @see \Xaraya\Context\ContextFactory::makeRequestId()
      */
     public function getRequestId()
     {

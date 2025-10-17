@@ -32,8 +32,24 @@ class Context extends ArrayObject implements ContextObjectInterface
     protected array $tracePaths = [];
 
     /**
+    public function __construct(array|object $array = [], int $flags = 0, string $iteratorClass = \ArrayIterator::class) {
+        parent::__construct($array, $flags, $iteratorClass);
+        if (!empty($array['source'])) {
+            echo "New context from " . $array['source'] . ":<br>\n";
+            debug_print_backtrace();
+            echo "<br>\n";
+        } else {
+            echo "New context from (?): ";
+            debug_print_backtrace();
+            echo "<br>\n";
+        }
+    }
+     */
+
+    /**
      * Get current requestId
      * @return string|null
+     * @see \Xaraya\Context\ContextFactory::makeRequestId()
      */
     public function getRequestId()
     {
@@ -46,6 +62,7 @@ class Context extends ArrayObject implements ContextObjectInterface
     /**
      * Get current session (if any)
      * @return mixed
+     * @see \Xaraya\Context\SessionContext::startSession()
      */
     public function getSession()
     {
@@ -58,6 +75,7 @@ class Context extends ArrayObject implements ContextObjectInterface
     /**
      * Get current userId - entrypoint for session in rest handler and graphql
      * @return int|null
+     * @see \Xaraya\Context\UserContext::getUserId()
      */
     public function getUserId()
     {

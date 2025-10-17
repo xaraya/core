@@ -141,7 +141,7 @@ class ModifyInstanceMethod extends MethodClass
 
             }
             // get the block object and load the interface
-            $block = xarBlock::getObject($blockinfo, $interface);
+            $block = xarBlock::getObject($blockinfo, $interface, null, $this->getContext());
             // set context if available in gui function
             $block->setContext($this->getContext());
 

@@ -218,7 +218,7 @@ function xarMain()
 
         // We're all done, one ServerRequest made
         xarLog::message('Notifying listeners of this request', xarLog::LEVEL_NOTICE);
-        xarEvents::notify('ServerRequest');
+        xarEvents::notify('ServerRequest', [], $context);
         
         // Render page with the output + pass along the current context
         xarLog::message('Creating the page output', xarLog::LEVEL_NOTICE);

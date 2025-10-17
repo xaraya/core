@@ -421,7 +421,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return xarMod::getModuleClassMethod($modName, $modType, $funcName, $callType);
+        return xarMod::getModuleClassMethod($modName, $modType, $funcName, $callType, $this->getContext());
     }
 
     /**
@@ -440,7 +440,7 @@ trait ModulesTrait
         if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
             $modType .= 'api';
         }
-        $callable = xarMod::getModuleClassMethod($modName, $modType, $funcName, 'api');
+        $callable = xarMod::getModuleClassMethod($modName, $modType, $funcName, 'api', $this->getContext());
         if (empty($callable)) {
             throw new FunctionNotFoundException($funcName);
         }
@@ -468,7 +468,7 @@ trait ModulesTrait
         //if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
         //    $modType .= 'gui';
         //}
-        $callable = xarMod::getModuleClassMethod($modName, $modType, $funcName, 'gui');
+        $callable = xarMod::getModuleClassMethod($modName, $modType, $funcName, 'gui', $this->getContext());
         if (empty($callable)) {
             throw new FunctionNotFoundException($funcName);
         }
@@ -618,5 +618,10 @@ class ModulesService implements ModulesInterface
     public function setCurrentModName(string $modName): void
     {
         $this->currentModName = $modName;
+    }
+
+    public function __clone()
+    {
+        $this->currentModName = null;
     }
 }

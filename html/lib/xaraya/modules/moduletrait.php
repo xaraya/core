@@ -159,6 +159,8 @@ trait ModuleTrait
                     if ($this->context !== null) {
                         $this->components[$type]->setContext($this->context);
                     }
+                    // call configure() after setting the context
+                    $this->components[$type]->configure();
                 } else {
                     $this->components[$type] = null;
                 }

@@ -79,6 +79,6 @@ trait UserApiTrait
     {
         $this->setModType('user');
         // any state here = default for api load
-        xarMod::apiLoad($this->getModName(), $this->getModType(), xarMod::LOAD_ANYSTATE);
+        xarMod::apiLoad($this->getModName(), $this->getModType(), xarMod::LOAD_ANYSTATE, $this->getContext());
     }
 }

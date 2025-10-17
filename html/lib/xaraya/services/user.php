@@ -164,4 +164,9 @@ trait UserTrait
 class UserService implements UserInterface
 {
     use UserTrait;
+
+    public function __clone()
+    {
+        $this->currentId = null;
+    }
 }

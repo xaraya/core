@@ -111,7 +111,7 @@ class xarBlock extends xarObject implements ixarBlock
         
         try {
             // get the block instance
-            $block = self::getObject($blockinfo, 'display');
+            $block = self::getObject($blockinfo, 'display', null, $context);
             // set context if available in block render
             $block->setContext($context);
 
@@ -181,7 +181,7 @@ class xarBlock extends xarObject implements ixarBlock
 
     }
 
-    public static function getObject(Array $blockinfo=array(), $interface=null, $method=null)
+    public static function getObject(array $blockinfo = [], $interface = null, $method = null, $context = null)
     {
         $invalid = array();
         if (empty($blockinfo['type']) || !is_string($blockinfo['type']))
@@ -220,7 +220,7 @@ class xarBlock extends xarObject implements ixarBlock
             if (!xarMLS::loadTranslations($filepath))
                 return;
 
-            $object = new $classname($blockinfo);
+            $object = new $classname($blockinfo, $context);
 
             return $object;
         }

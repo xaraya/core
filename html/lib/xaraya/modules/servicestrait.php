@@ -128,12 +128,14 @@ trait ModuleServicesTrait
     {
         $this->setModName($modName);
         $this->setModule($parent);
-        $this->configure();
+        // call configure() after setting the context
+        // $this->configure();
     }
 
     /**
      * Configure this module class - override if needed
      * @return void
+     * @see \Xaraya\Modules\ModuleTrait::getComponent()
      */
     public function configure()
     {
