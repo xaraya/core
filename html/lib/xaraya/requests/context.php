@@ -49,6 +49,7 @@ class RequestContext implements ContextInterface, RequestInterface
     {
         if (!isset($this->context)) {
             $this->context = new Context(['source' => __CLASS__]);
+            //$this->context = ContextFactory::fromGlobals(__CLASS__);
         }
         return true;
     }

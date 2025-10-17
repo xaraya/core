@@ -1092,16 +1092,13 @@ class xarMod extends xarObject implements IxarMod
             if (!empty($result) && class_exists($result['classname'])) {
                 $class = $result['classname'];
                 try {
-                    self::$moduleClasses[$modName] = new $class($modName);
+                    self::$moduleClasses[$modName] = new $class($modName, $context);
                 } catch (Throwable $e) {
-                    self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName);
+                    self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $context);
                     xarLog3::warning("xarMod::getModule: Error loading $class for module $modName");
                 }
             } else {
-                self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName);
-            }
-            if (isset($context)) {
-                self::$moduleClasses[$modName]->setContext($context);
+                self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $context);
             }
         }
         return self::$moduleClasses[$modName];
@@ -1202,7 +1199,7 @@ class xarMod extends xarObject implements IxarMod
                 // make sure configure() adds 'type' as well as 'typegui' to call types
                 //$type .= 'gui';
             }
-            // Note: component would be configure() with no context here
+            // Note: component would use configure() with no context here
             $callable = self::getModuleClassMethod($tplmodule, $type, $func, $callType);
             if (!empty($callable)) {
                 $tplmodule_cache[$key] = $tplmodule;

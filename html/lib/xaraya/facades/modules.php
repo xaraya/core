@@ -197,8 +197,11 @@ class xarMod3
      * @param string $modName
      * @return ModuleInterface
      */
-    public static function getModule(string $modName): ModuleInterface
+    public static function getModule(string $modName, mixed $context = null): ModuleInterface
     {
+        if (!empty($context)) {
+            self::getInstance()->setContext($context);
+        }
         return self::getInstance()->getModule($modName);
     }
 
@@ -210,8 +213,11 @@ class xarMod3
      * @param string $callType is this called as an api function or not -> check against module class
      * @return callable|null
      */
-    public static function getModuleClassMethod(string $modName, string $modType, string $funcName = 'main', string $callType = 'api'): callable|null
+    public static function getModuleClassMethod(string $modName, string $modType, string $funcName = 'main', string $callType = 'api', mixed $context = null): callable|null
     {
+        if (!empty($context)) {
+            self::getInstance()->setContext($context);
+        }
         return self::getInstance()->getModuleClassMethod($modName, $modType, $funcName, $callType);
     }
 

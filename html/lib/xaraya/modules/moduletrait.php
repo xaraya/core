@@ -40,6 +40,7 @@
 
 namespace Xaraya\Modules;
 
+use Xaraya\Context\Context;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use xarMod;
@@ -93,9 +94,13 @@ trait ModuleTrait
     /** @var array<string, ModuleServicesInterface|null> */
     private array $components = [];
 
-    public function __construct(string $modName)
+    /**
+     * @param ?Context<string, mixed> $context
+     */
+    public function __construct(string $modName, ?Context $context = null)
     {
         $this->setModName($modName);
+        $this->setContext($context);
         $this->configure();
     }
 
@@ -127,7 +132,7 @@ trait ModuleTrait
      */
     protected function createComponent(string $className): ModuleServicesInterface
     {
-        return new $className($this->getModName(), $this);
+        return new $className($this->getModName(), $this, $this->context);
     }
 
     /**
@@ -156,11 +161,6 @@ trait ModuleTrait
                 $className = $this->getClassName($type);
                 if (class_exists($className)) {
                     $this->components[$type] = $this->createComponent($className);
-                    if ($this->context !== null) {
-                        $this->components[$type]->setContext($this->context);
-                    }
-                    // call configure() after setting the context
-                    $this->components[$type]->configure();
                 } else {
                     $this->components[$type] = null;
                 }

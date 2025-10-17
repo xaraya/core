@@ -8,6 +8,7 @@
 
 namespace Xaraya\Routing;
 
+use Xaraya\Context\Context;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Modules\GuiModuleServicesInterface;
 use Xaraya\Modules\ModuleServicesInterface;
@@ -41,10 +42,12 @@ class ModuleHandler implements HandlerInterface
     /**
      * Summary of __construct
      * @param ModuleServicesInterface $instance
+     * @param ?Context<string, mixed> $context
      */
-    public function __construct(ModuleServicesInterface $instance)
+    public function __construct(ModuleServicesInterface $instance, ?Context $context = null)
     {
         $this->instance = $instance;
+        $this->setContext($context);
     }
 
     /**

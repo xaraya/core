@@ -658,7 +658,7 @@ class DataObjectFactory extends xarObject
         }
 
         // Do direct queries here, for speed
-        xarMod3::load('dynamicdata');
+        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
         $tables = xarDB3::getTables();
 
         sys::import('xaraya.structures.query');

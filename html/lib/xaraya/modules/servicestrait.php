@@ -16,6 +16,7 @@
 
 namespace Xaraya\Modules;
 
+use Xaraya\Context\Context;
 use Xaraya\Services\ServicesInterface;
 use Xaraya\Services\CoreServicesTrait;
 use xarMod;
@@ -28,7 +29,8 @@ sys::import('xaraya.services.servicestrait');
  */
 interface ModuleServicesInterface extends ServicesInterface
 {
-    public function __construct(string $modName, ?ModuleInterface $parent = null);
+    /** @param ?Context<string, mixed> $context */
+    public function __construct(string $modName, ?ModuleInterface $parent = null, ?Context $context = null);
     /** @return void */
     public function configure();
     public function getModType(): string;
@@ -123,13 +125,15 @@ trait ModuleServicesTrait
     /**
      * Summary of __construct
      * @param TModule $parent
+     * @param ?Context<string, mixed> $context
      */
-    public function __construct(string $modName, ?ModuleInterface $parent = null)
+    public function __construct(string $modName, ?ModuleInterface $parent = null, ?Context $context = null)
     {
         $this->setModName($modName);
         $this->setModule($parent);
+        $this->setContext($context);
         // call configure() after setting the context
-        // $this->configure();
+        $this->configure();
     }
 
     /**

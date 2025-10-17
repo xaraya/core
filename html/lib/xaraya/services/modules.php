@@ -359,7 +359,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return xarMod::apiLoad($modName, $modType);
+        return xarMod::apiLoad($modName, $modType, xarMod::LOAD_ANYSTATE, $this->getContext());
     }
 
     /**
@@ -381,7 +381,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return xarMod::load($modName, $modType);
+        return xarMod::load($modName, $modType, xarMod::LOAD_ONLYACTIVE, $this->getContext());
     }
 
     /**
@@ -406,7 +406,7 @@ trait ModulesTrait
     public function getModule(?string $modName = null): ModuleInterface
     {
         $modName ??= $this->getModName();
-        return xarMod::getModule($modName);
+        return xarMod::getModule($modName, $this->getContext());
     }
 
     /**

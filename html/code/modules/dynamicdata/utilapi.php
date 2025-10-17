@@ -61,12 +61,12 @@ class UtilApi extends UserApi implements DatabaseInterface
      * Summary of __construct
      * @param string $modName
      */
-    public function __construct(string $modName = 'dynamicdata', mixed $parent = null)
+    public function __construct(string $modName = 'dynamicdata', mixed $parent = null, mixed $context = null)
     {
         $this->setDbModName($modName);
         // we extend from UserApi now
-        $parent ??= xarMod::getModule($modName);
-        parent::__construct($modName, $parent);
+        $parent ??= xarMod::getModule($modName, $context);
+        parent::__construct($modName, $parent, $context);
     }
 
     public function configure()

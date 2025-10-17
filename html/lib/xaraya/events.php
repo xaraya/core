@@ -160,11 +160,11 @@ class xarEvents extends xarObject implements ixarEvents
             // get info for specified event
             $info = static::getSubject($event);
             if (empty($info)) return;
-            // file load takes care of validation for us 
-            if (!self::fileLoad($info)) return; 
             if (!isset($context)) {
                 $context = new Context(['source' => __METHOD__]);
             }
+            // file load takes care of validation for us 
+            if (!self::fileLoad($info, $context)) return; 
             $module = $info['module'];
             switch (strtolower($info['area'])) {
                 // support namespaces in modules (and core someday) - we may use $info['classname'] here
@@ -181,7 +181,7 @@ class xarEvents extends xarObject implements ixarEvents
                         foreach ($obsinfo as $obs) {
                             // Attempt to load observer
                             try {
-                                if (!self::fileLoad($obs)) continue;
+                                if (!self::fileLoad($obs, $context)) continue;
                                 $obsmod = $obs['module'];
                                 $obs['module'] = $obsmod;
                                 switch (strtolower($obs['area'])) {
@@ -436,7 +436,7 @@ class xarEvents extends xarObject implements ixarEvents
         return $info;
     }
     
-    public static function fileLoad($info)
+    public static function fileLoad($info, $context = null)
     {
         extract($info);
         
@@ -586,14 +586,14 @@ class xarEvents extends xarObject implements ixarEvents
                     try {
                         sys::import("modules.{$module}.xar{$type}");
                     } catch (Exception $e) {
-                        $instance = xarMod3::getModule($module);
+                        $instance = xarMod3::getModule($module, $context);
                         // let's fall through until we find the function (or not)
                     }
                 }
                 // check function exists
                 if (!function_exists($func)) {
                     // see xarMod::callFunc() - pass modType . funcType as modType here for module classes
-                    $type = $area != 'gui' ? $type : $type . $area;
+                    $type = ($area != 'gui') ? $type : $type . $area;
                     // old-style module_type_func() hook function called via module class
                     $callable = xarMod3::getModuleClassMethod($module, $type, $filename, 'api');
                     if (empty($callable)) {
