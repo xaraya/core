@@ -381,6 +381,7 @@ final class sys extends xarObject
     public static function import($dp, $offset = '')
     {
         // test compatibility with composer autoload by disabling sys::import
+        // works fine except with *_xartables (fixed) or other function files (?)
         //if (self::$autoload) {
         //    return true;
         //}

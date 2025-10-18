@@ -748,7 +748,7 @@ class xarMod extends xarObject implements IxarMod
 
         // Load the database definition if required
         try {
-            sys::import('modules.' . $modDir . '.xartables');
+            include_once sys::code() . 'modules/' . $modDir . '/xartables.php';
         } catch (Exception $e) {
             // set anyway, so we don't try over and over
             $loadedDbInfoCache[$modName] = false;

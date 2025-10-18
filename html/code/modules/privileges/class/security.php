@@ -15,8 +15,10 @@
 
 sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.modules');
 use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMod3;
 
 /**
  * xarSecurity::check: class for the mask repository
@@ -83,7 +85,7 @@ class xarSecurity extends xarObject
         if (!empty(self::$dbconn)  && !empty(self::$privilegestable)) return;
 
         self::$dbconn = xarDB3::getConn();
-        xarMod::loadDbInfo('privileges','privileges');
+        xarMod3::loadDbInfo('privileges', 'privileges');
         $xartable = xarDB3::getTables();
         self::$privilegestable = $xartable['privileges'];
         self::$privmemberstable = $xartable['privmembers'];

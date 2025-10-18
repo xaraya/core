@@ -213,7 +213,7 @@ trait ModuleTrait
     {
         // Load the database definition if required
         try {
-            sys::import('modules.' . $this->getModName() . '.xartables');
+            include_once sys::code() . 'modules/' . $this->getModName() . '/xartables.php';
         } catch (Exception $e) {
             return [];
         }

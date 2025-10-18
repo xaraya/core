@@ -12,7 +12,9 @@
  */
 
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.modules');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarMod3;
 
 /**
  * xarRoles: class for the role repository
@@ -45,7 +47,7 @@ class xarRoles extends xarObject
     public static function initialize()
     {
         self::$dbconn = xarDB3::getConn();
-        xarMod::loadDbInfo('roles','roles');
+        xarMod3::loadDbInfo('roles', 'roles');
         $xartable = xarDB3::getTables();
         self::$rolestable = $xartable['roles'];
         self::$rolememberstable = $xartable['rolemembers'];

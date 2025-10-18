@@ -12,8 +12,10 @@
 sys::import('modules.dynamicdata.class.objects.base');
 sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.logger');
+sys::import('xaraya.facades.modules');
 use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarLog3;
+use Xaraya\Facades\xarMod3;
 
 /**
  * Role: class for the role object
@@ -51,11 +53,8 @@ class Role extends DataObject
     {
         parent::__construct($descriptor);
 
-        // dodgy. remove later on
-        sys::import('modules.privileges.xartables');
-        // pass along the DB prefix to $tablefunc
-        $prefix = xarDB3::getPrefix();
-        xarDB3::importTables(privileges_xartables($prefix));
+        xarMod3::loadDbInfo('roles', 'roles');
+        xarMod3::loadDbInfo('privileges', 'privileges');
 
         $xartable = xarDB3::getTables();
         $this->rolestable = $xartable['roles'];
@@ -79,8 +78,6 @@ class Role extends DataObject
     public function createItem(Array $data = array())
     {
         // Confirm that this group or user does not already exist
-        xarMod::loadDbInfo('roles','roles');
-        $xartable = xarDB3::getTables();
         $dynamicobjects = $this->rolestable;
         $bindvars = array();
         $query = "SELECT name, uname
@@ -360,8 +357,6 @@ class Role extends DataObject
         $email = '';
         $date_reg = '';
 
-        xarMod::loadDbInfo('roles','roles');
-        $xartable = xarDB3::getTables();
         $bindvars = array();
         $query = "UPDATE $this->rolestable
                   SET name = $name,
@@ -831,8 +826,6 @@ class Role extends DataObject
      */
     public function adjustParentUsers($adjust)
     {
-        xarMod::loadDbInfo('roles','roles');
-        $xartable = xarDB3::getTables();
         $memberobject =  $this->rolestable;
         $bindvars = array();
         $query = "SELECT users AS users FROM $memberobject";

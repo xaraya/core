@@ -13,7 +13,9 @@
  */
 
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.modules');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarMod3;
 
 /**
  * Class to model registration information for a property
@@ -26,7 +28,7 @@ class ThemeInitialization extends xarObject
     static public function clearCache()
     {
         $dbconn = xarDB3::getConn();
-        xarMod::loadDbInfo('themes','themes');
+        xarMod3::loadDbInfo('themes', 'themes');
         $tables = xarDB3::getTables();
         $sql = "DELETE FROM $tables[themes_configurations]";
         $res = $dbconn->ExecuteUpdate($sql);

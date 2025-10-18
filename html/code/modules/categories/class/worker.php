@@ -14,7 +14,9 @@
  */
 
 sys::import('xaraya.facades.database');
+sys::import('xaraya.facades.modules');
 use Xaraya\Facades\xarDB3;
+use Xaraya\Facades\xarMod3;
 
 class CategoryWorker extends xarObject
 {
@@ -34,10 +36,7 @@ class CategoryWorker extends xarObject
     public function __construct()
     {
         sys::import('xaraya.structures.query');
-        sys::import('modules.categories.xartables');
-        // pass along the DB prefix to $tablefunc
-        $prefix = xarDB3::getPrefix();
-        xarDB3::importTables(categories_xartables($prefix));
+        xarMod3::loadDbInfo('categories', 'categories');
         $tables = xarDB3::getTables();
         $this->table     = $tables['categories'];
         $this->cattable  = $tables['categories'];

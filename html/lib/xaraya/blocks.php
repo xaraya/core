@@ -15,11 +15,9 @@
 
 sys::import("xaraya.context.context");
 sys::import('xaraya.facades.caching');
-sys::import('xaraya.facades.database');
 sys::import('xaraya.facades.modules');
 use Xaraya\Context\Context;
 use Xaraya\Facades\xarCache3;
-use Xaraya\Facades\xarDB3;
 use Xaraya\Facades\xarMod3;
 
 interface ixarBlock
@@ -75,12 +73,9 @@ class xarBlock extends xarObject implements ixarBlock
             return true;
         }
         // Blocks Support Tables
-        sys::import('modules.blocks.xartables');
-        // pass along the DB prefix to $tablefunc
-        $tables = blocks_xartables(xarDB3::getPrefix());
-        xarDB3::importTables($tables);
+        xarMod3::loadDbInfo('blocks', 'blocks');
         self::$initialized = true;
-        return true;    
+        return true;
     }
 
 /**

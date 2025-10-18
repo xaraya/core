@@ -199,9 +199,7 @@ class DataObjectFactory extends xarObject
             return xarVar3::getCached($cacheKey, $args['name']);
         }
 
-        sys::import('modules.dynamicdata.xartables');
-        // pass along the DB prefix to $tablefunc
-        xarDB3::importTables(dynamicdata_xartables(xarDB3::getPrefix()));
+        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
         $xartable = xarDB3::getTables();
         sys::import('xaraya.structures.query');
         $q = new Query();

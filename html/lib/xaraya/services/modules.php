@@ -318,7 +318,7 @@ trait ModulesTrait
         $modName ??= $this->getModName();
         // Load the database definition if required
         try {
-            sys::import('modules.' . $modName . '.xartables');
+            include_once sys::code() . 'modules/' . $modName . '/xartables.php';
         } catch (Exception $e) {
             return [];
         }
