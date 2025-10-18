@@ -49,14 +49,15 @@ class xarSession
      * Initialise the Session Support
      * This can only be called once for PHP session handler - use setInstance() if needed
      * @param array<string, mixed> $args
+     * @param mixed $context
      * @return boolean true
      */
-    public static function init(array $args = [])
+    public static function init(array $args = [], $context = null)
     {
-        if (!empty(self::$instance)) {
-            return true;
-        }
         if (empty($args)) {
+            if (!empty(self::$instance)) {
+                return true;
+            }
             $args = self::getConfig();
         }
         self::$securityLevel = $args['securityLevel'];
@@ -74,8 +75,8 @@ class xarSession
             define('_XAR_ID_UNREGISTERED', self::$anonId);
         }
 
-        // Set up the session object
-        $session = new self::$sessionClass($args);
+        // Set up the session object with context
+        $session = new self::$sessionClass($args, $context);
         self::setInstance($session);
 
         // Initialize the session

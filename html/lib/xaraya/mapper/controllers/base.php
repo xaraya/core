@@ -31,6 +31,13 @@ class BaseActionController extends xarObject
         $this->modulealias = $this->request->getModuleAlias();
     }
 
+    /**
+     * Summary of run
+     * @param xarRequest|null $request
+     * @param xarResponse|null $response
+     * @return void
+     * @uses \Xaraya\Requests\RequestInterface::getContext()
+     */
     public function run(xarRequest $request = null, xarResponse $response = null): void
     {
         // Get the part of the URL we will tokenize and decode

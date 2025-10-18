@@ -5,6 +5,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
 use Xaraya\Bridge\Middleware\RoutingHandler;
+use Xaraya\Context\Context;
 use Xaraya\Context\SessionContext;
 use Xaraya\Requests\RequestHandler;
 
@@ -23,7 +24,8 @@ final class BridgeCombinedTest extends TestCase
         xarCache::init();
         xarSession::setSessionClass(SessionContext::class);
         xarServer::setRequestClass(RequestHandler::class);
-        xarCore::xarInit(xarCore::SYSTEM_USER);
+        $context = new Context(['source' => __METHOD__]);
+        xarCore::xarInit(xarCore::SYSTEM_USER, $context);
     }
 
 

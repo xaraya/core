@@ -39,13 +39,6 @@ class AuthToken
     {
         // @todo Change the header name for the auth token if needed
         // RequestContext::$authToken = 'HTTP_X_API_KEY';
-        /**
-        try {
-            RequestContext::$authToken = xarSystemVars::get(sys::CONFIG, 'Auth.AuthToken');
-        } catch (Exception) {
-            return;
-        }
-         */
     }
 
     /**
@@ -86,7 +79,7 @@ class AuthToken
      */
     public static function createToken($userInfo)
     {
-        $token = bin2hex(random_bytes(32));
+        $token = bin2hex(random_bytes(16));
         $userInfo['created'] = time();
         $userInfo['updated'] = $userInfo['created'];
         // @checkme clean up cachestorage occasionally based on size

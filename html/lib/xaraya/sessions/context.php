@@ -17,6 +17,7 @@ use Xaraya\Sessions\Storage\SessionCacheStorage;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
 use xarSession;
 use sys;
+use RuntimeException;
 
 sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.virtual');
@@ -48,13 +49,25 @@ class SessionContext implements ContextInterface, SessionInterface
     private ?int $lastSaved = null;
 
     /**
+     * Set the storage class to use (instead of SessionCacheStorage)
+     * @param class-string $className
+     * @return void
+     */
+    public static function setStorageClass($className)
+    {
+        self::$storageClass = $className;
+    }
+
+    /**
      * Constructor for the session handler
      * @param array<string, mixed> $args not by reference anymore
+     * @param ?Context<string, mixed> $context
      * @return void
      **/
-    public function __construct($args = [])
+    public function __construct($args = [], $context = null)
     {
         $this->args = $args;
+        $this->context = $context;
     }
 
     /**
@@ -73,12 +86,47 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function initialize()
     {
-        if (!isset($this->context)) {
-            $this->context = new Context(['source' => __CLASS__]);
-        }
         // always get storage here when xarSession::init() is called
         $this->getStorage();
+        // start session based on cookie here
+        return $this->start();
+    }
+
+    public function start()
+    {
+        // check if we already have a context to work with
+        if (!isset($this->context)) {
+            return false;
+        }
+        return $this->findSession();
+    }
+
+    public function findSession()
+    {
+        // use session cookie here - see UserContext::checkCookie()
+        $sessionId = RequestContext::getSessionCookie($this->context);
+        if (empty($sessionId)) {
+            // @todo create new sessionId here?
+            return false;
+        }
+        $serverVars = $this->context['server'] ?? [];
+        $ipAddress = $serverVars['REMOTE_ADDR'] ?? '-';
+        $session = self::getStorage()->lookup($sessionId, $ipAddress);
+        $this->context['session'] = $session;
+        if (empty($session)) {
+            // @todo create dummy virtual session?
+            return false;
+        }
         return true;
+    }
+
+    public function getContext()
+    {
+        if (!isset($this->context)) {
+            $this->context = new Context(['source' => __CLASS__]);
+            throw new RuntimeException('Session context is not initialized yet');
+        }
+        return $this->context;
     }
 
     /**
@@ -113,7 +161,8 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function getSession()
     {
-        return $this->context?->getSession();
+        // ok if we don't have a context or session here yet for non-standard entrypoint - see xarUser::init()
+        return $this->getContext()?->getSession();
     }
 
     /**
@@ -303,9 +352,11 @@ class SessionContext implements ContextInterface, SessionInterface
      *
      * @param Context<string, mixed> $context
      * @return VirtualSession
+     * @see \Xaraya\Context\UserContext::initSession()
      */
     public function startSession(Context $context, string $sessionId, int $userId = 0, string $ipAddress = '')
     {
+        // @todo do we want to lookup or register RemoteUser: or AuthToken: sessions in storage here?
         $session = self::getStorage()->lookup($sessionId, $ipAddress);
         if (!isset($session)) {
             $session = new VirtualSession($sessionId, $userId, $ipAddress, time(), []);

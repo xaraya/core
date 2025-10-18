@@ -20,16 +20,23 @@ interface RequestInterface
     /**
      * Constructor for the request handler
      * @param array<string, mixed> $args not by reference anymore
-     * @uses xarServer::setInstance()
+     * @param mixed $context
      * @return void
      **/
-    public function __construct($args = []);
+    public function __construct($args = [], $context = null);
 
     /**
      * Initialize the request after setup
      * @return bool
      */
     public function initialize();
+
+    /**
+     * Get context for server request
+     * @return mixed
+     * @see \BaseActionController::run()
+     */
+    public function getContext();
 
     /**
      * Gets a server variable

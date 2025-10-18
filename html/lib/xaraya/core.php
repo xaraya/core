@@ -198,9 +198,10 @@ class xarCore extends xarObject
      * Initializes the core engine
      * 
      * @param integer $whatToLoad What optional systems to load.
+     * @param mixed $context initialize server & session with context
      * @return boolean true
     **/
-    public static function xarInit($whatToLoad = self::SYSTEM_ALL)
+    public static function xarInit($whatToLoad = self::SYSTEM_ALL, $context = null)
     {
         static $first_load = true;
 
@@ -353,7 +354,7 @@ class xarCore extends xarObject
          *
          */
         sys::import('xaraya.server');
-        xarServer::init();
+        xarServer::init([], $context);
         sys::import('xaraya.mapper.main');
         xarController::init();
 
@@ -408,7 +409,7 @@ class xarCore extends xarObject
         if ($whatToLoad & self::SYSTEM_SESSION)
         {
             sys::import('xaraya.sessions');
-            xarSession::init();
+            xarSession::init([], $context);
             $whatToLoad ^= self::BIT_SESSION;
             // We're about done here - everything else requires sessions !?
         } else {

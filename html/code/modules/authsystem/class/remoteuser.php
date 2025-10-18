@@ -39,13 +39,6 @@ class RemoteUser
         // RequestContext::$remoteUser = 'HTTP_X_WEBAUTH_USER';
         // Change the role lookup field if needed
         // static::$lookupField = 'email';
-        /**
-        try {
-            RequestContext::$remoteUser = xarSystemVars::get(sys::CONFIG, 'Auth.RemoteUser');
-        } catch (Exception) {
-            return;
-        }
-         */
     }
 
     /**

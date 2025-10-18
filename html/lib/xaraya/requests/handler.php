@@ -27,12 +27,14 @@ class RequestHandler implements RequestInterface
     /**
      * Constructor for the request handler
      * @param array<string, mixed> $args not by reference anymore
+     * @param mixed $context
      * @uses xarServer::setInstance()
      * @return void
      **/
-    public function __construct($args = [])
+    public function __construct($args = [], $context = null)
     {
         $this->args = $args;
+        $this->context = $context;
     }
 
     /**
@@ -163,6 +165,7 @@ class RequestHandler implements RequestInterface
 
     /**
      * @return mixed
+     * @see \BaseActionController::run()
      */
     public function getContext()
     {

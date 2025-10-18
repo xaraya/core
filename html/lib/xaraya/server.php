@@ -41,12 +41,13 @@ class xarServer extends xarObject
     /**
      * Initialize
      * @param array<string, mixed> $args
+     * @param mixed $context
      * @return void
      */
-    public static function init(array $args = [])
+    public static function init(array $args = [], $context = null)
     {
         if (empty($args)) {
-            if (self::$initialized) {
+            if (empty($context) && !empty(self::$instance)) {
                 return;
             }
             $args = self::getConfig();
@@ -55,8 +56,8 @@ class xarServer extends xarObject
         self::$generateXMLURLs = $args['generateXMLURLs'];
         self::$baseurl = null;
 
-        // Set up the request object
-        $request = new self::$requestClass($args);
+        // Set up the request object with context
+        $request = new self::$requestClass($args, $context);
         self::setInstance($request);
         // Initialize the request
         $request->initialize();
@@ -93,7 +94,7 @@ class xarServer extends xarObject
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            // Set up the request object
+            // Set up the request object - @todo with context?
             $request = new self::$requestClass([]);
             self::setInstance($request);
             // Initialize the request

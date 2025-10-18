@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\sessions
  * @subpackage storage
@@ -13,6 +14,7 @@ namespace Xaraya\Sessions\Storage;
 
 use Xaraya\Sessions\VirtualSession;
 use sys;
+use Exception;
 
 sys::import('xaraya.services.hasdatabasetrait');
 
@@ -117,6 +119,10 @@ class SessionDatabaseStorage implements SessionStorageInterface
 
     public function lookup(string $sessionId, string $ipAddress = ''): ?VirtualSession
     {
+        // @todo do we want to lookup RemoteUser: or AuthToken: sessions in storage here?
+        if (str_contains($sessionId, ':')) {
+            return null;
+        }
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->table WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
         $result = $stmt->executeQuery([$sessionId], $this->db()->getFetchNum());
@@ -134,7 +140,15 @@ class SessionDatabaseStorage implements SessionStorageInterface
         }
         $vars = [];
         if (!empty($varString)) {
-            $vars = unserialize((string) $varString);
+            try {
+                $vars = unserialize((string) $varString);
+            } catch (\Throwable $e) {
+                // might be from internal 'php' session.serialize_handler
+                if (ini_get('session.serialize_handler') == 'php') {
+                    // ...
+                    $vars = self::unserialize_php($varString);
+                }
+            }
         }
         $session = new VirtualSession($sessionId, $userId, $ipAddress, $lastUsed, $vars);
         $session->isNew = false;
@@ -143,6 +157,10 @@ class SessionDatabaseStorage implements SessionStorageInterface
 
     public function register(VirtualSession $session): void
     {
+        // @todo do we want to register RemoteUser: or AuthToken: sessions in storage here?
+        if (str_contains($session->sessionId, ':')) {
+            return;
+        }
         $query = "INSERT INTO $this->table (id, ip_addr, role_id, first_use, last_use, vars)
             VALUES (?,?,?,?,?,?)";
         $bindvars = [$session->sessionId, $session->ipAddress, $session->getUserId(), time(), time(), serialize($session->vars)];
@@ -152,6 +170,10 @@ class SessionDatabaseStorage implements SessionStorageInterface
 
     public function update(VirtualSession $session): void
     {
+        // @todo do we want to update RemoteUser: or AuthToken: sessions in storage here?
+        if (str_contains($session->sessionId, ':')) {
+            return;
+        }
         $query = "UPDATE $this->table
             SET role_id = ?, ip_addr = ?, vars = ?, last_use = ?
             WHERE id = ?";
@@ -162,7 +184,37 @@ class SessionDatabaseStorage implements SessionStorageInterface
 
     public function delete(VirtualSession $session): void
     {
+        // @todo do we want to delete RemoteUser: or AuthToken: sessions in storage here?
+        if (str_contains($session->sessionId, ':')) {
+            return;
+        }
         $query = "DELETE FROM $this->table WHERE id = ?";
         $this->db->execute($query, [$session->sessionId]);
+    }
+
+    /**
+     * Summary of unserialize_php
+     * @param string $session_data
+     * @throws \Exception
+     * @return array<string, mixed>
+     * @see https://www.php.net/manual/en/function.session-decode.php#108037
+     */
+    private static function unserialize_php($session_data)
+    {
+        $return_data = [];
+        $offset = 0;
+        while ($offset < strlen($session_data)) {
+            if (!strstr(substr($session_data, $offset), "|")) {
+                throw new Exception("invalid data, remaining: " . substr($session_data, $offset));
+            }
+            $pos = strpos($session_data, "|", $offset);
+            $num = $pos - $offset;
+            $varname = substr($session_data, $offset, $num);
+            $offset += $num + 1;
+            $data = unserialize(substr($session_data, $offset));
+            $return_data[$varname] = $data;
+            $offset += strlen(serialize($data));
+        }
+        return $return_data;
     }
 }

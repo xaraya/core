@@ -44,11 +44,14 @@ class TestHelper extends TestCase
         xarMod::init();
         // initialize users
         xarUser::init();
+        // create dummy context
+        $context = static::createContext(['source' => __METHOD__]);
         // use RequestContext as request handler
         xarServer::setRequestClass(RequestContext::class);
+        xarServer::init([], $context);
         // use SessionContext as session handler
         xarSession::setSessionClass(SessionContext::class);
-        xarSession::init();
+        xarSession::init([], $context);
 
         // file paths are relative to html directory here
         static::$oldDir = (string) getcwd();
@@ -76,7 +79,7 @@ class TestHelper extends TestCase
      * @param array<mixed> $args
      * @return Context<string, mixed>
      */
-    protected function createContext(array $args = [])
+    protected static function createContext(array $args = [])
     {
         if (empty($args)) {
             $args = ['source' => __METHOD__];

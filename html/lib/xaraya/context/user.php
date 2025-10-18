@@ -124,9 +124,7 @@ class UserContext
             return null;
         }
         // @todo replace with something that doesn't depend on PHP sessions
-        xarSession::init();
-        //xarMLS::init();
-        //xarUser::init();
+        xarSession::init([], $this->context);
         if (!xarUser::isLoggedIn()) {
             return null;
         }
@@ -139,6 +137,7 @@ class UserContext
      * @param string $sessionId
      * @param int $userId
      * @return void
+     * @uses \Xaraya\Context\SessionContext::startSession()
      */
     protected function initSession($sessionId, $userId)
     {
@@ -147,7 +146,7 @@ class UserContext
         }
         sys::import('xaraya.sessions.context');
         xarSession::setSessionClass(SessionContext::class);
-        xarSession::init();
+        xarSession::init([], $this->context);
         $serverVars = $this->context['server'] ?? [];
         $ipAddress = $serverVars['REMOTE_ADDR'] ?? '-';
         xarSession::getInstance()?->startSession($this->context, $sessionId, $userId, $ipAddress);

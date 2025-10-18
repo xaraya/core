@@ -63,6 +63,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
 
     public const  PREFIX = 'XARSV';     // Reserved by us for our session vars
     public const  COOKIE = 'XARAYASID'; // Our cookiename
+    protected mixed $context = null;
     /** @var ConnectionInterface|null */
     private $db;                        // We store sessioninfo in the database
     private string $tbl;                // Container for the session info
@@ -76,11 +77,16 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      * Constructor for the session handler
      *
      * @param array<string, mixed> $args not by reference anymore
+     * @param mixed $context not used in default session handler
      * @return void
      * @throws SessionException
      **/
-    public function __construct($args)
+    public function __construct($args, $context = null)
     {
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            debug_print_backtrace();
+            return;
+        }
         // Register tables this subsystem uses
         $tables = ['session_info' => $this->db()->getPrefix() . '_session_info'];
         $this->db()->importTables($tables);
@@ -91,6 +97,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         $this->tbl = $tbls['session_info'];
 
         // Set up the environment
+        $this->context = $context;
         $this->setup($args);
 
         // Assign the handlers

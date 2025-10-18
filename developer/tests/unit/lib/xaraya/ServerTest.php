@@ -68,9 +68,10 @@ final class ServerTest extends TestCase
     public function testContextGetVar(): void
     {
         xarServer::setRequestClass(RequestContext::class);
+        $context = new Context(['source' => __METHOD__]);
         $expected = $this->getServerVars();
         $_SERVER = array_replace($_SERVER ?? [], $expected);
-        xarServer::init(xarServer::getConfig());
+        xarServer::init(xarServer::getConfig(), $context);
         // @todo we need to reset xarSystemVars::get(sys::LAYOUT, 'BaseURI')
 
         // default empty context for the request

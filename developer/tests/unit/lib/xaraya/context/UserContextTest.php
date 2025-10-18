@@ -85,7 +85,7 @@ final class UserContextTest extends TestCase
         $dbconn = xarDB::getConn();
         $prefix = xarDB::getPrefix();
         $sessionTable = $prefix . '_session_info';
-        $query = "SELECT id, role_id, ip_addr, last_use, vars FROM $sessionTable WHERE role_id = ? ORDER BY last_use DESC";
+        $query = "SELECT id, role_id, ip_addr, last_use, vars FROM $sessionTable WHERE role_id = ? AND id NOT LIKE '%:%' ORDER BY last_use DESC";
         $stmt = $dbconn->prepareStatement($query);
         $stmt->setLimit(1);
         $result = $stmt->executeQuery([$userId], xarDB::FETCHMODE_ASSOC);

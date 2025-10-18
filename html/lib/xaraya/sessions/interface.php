@@ -21,10 +21,10 @@ interface SessionInterface
     /**
      * Constructor for the session handler
      * @param array<string, mixed> $args not by reference anymore
-     * @uses xarSession::setInstance()
+     * @param mixed $context not used in default session handler
      * @return void
      **/
-    public function __construct($args);
+    public function __construct($args, $context = null);
 
     /**
      * Initialize the session after setup

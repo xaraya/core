@@ -13,6 +13,7 @@ namespace Xaraya\Context;
 
 use Xaraya\Requests\RequestInterface;
 use sys;
+use RuntimeException;
 
 sys::import('xaraya.server');
 sys::import('xaraya.context.contexttrait');
@@ -34,11 +35,13 @@ class RequestContext implements ContextInterface, RequestInterface
     /**
      * Constructor for the request handler
      * @param array<string, mixed> $args not by reference anymore
+     * @param ?Context<string, mixed> $context
      * @return void
      **/
-    public function __construct($args = [])
+    public function __construct($args = [], $context = null)
     {
         $this->args = $args;
+        $this->context = $context;
     }
 
     /**
@@ -47,11 +50,19 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function initialize()
     {
-        if (!isset($this->context)) {
-            $this->context = new Context(['source' => __CLASS__]);
-            //$this->context = ContextFactory::fromGlobals(__CLASS__);
-        }
         return true;
+    }
+
+    /**
+     * Summary of getContext
+     * @see \BaseActionController::run()
+     */
+    public function getContext()
+    {
+        if (!isset($this->context)) {
+            throw new RuntimeException('Request context is not initialized yet');
+        }
+        return $this->context;
     }
 
     /**
@@ -71,7 +82,7 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getServerVar($name)
     {
-        if (!$this->context->offsetExists('server')) {
+        if (!$this->getContext()->offsetExists('server')) {
             return null;
         }
         $serverVars = $this->context->offsetGet('server');
@@ -86,7 +97,7 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function setServerVar($name, $value)
     {
-        if (!$this->context->offsetExists('server')) {
+        if (!$this->getContext()->offsetExists('server')) {
             $this->context['server'] = [];
         }
         $this->context['server'][$name] = $value;

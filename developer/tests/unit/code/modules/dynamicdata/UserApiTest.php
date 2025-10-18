@@ -6,6 +6,12 @@ use Xaraya\Services\ModulesInterface;
 
 final class UserApiTest extends TestHelper
 {
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        xarServer::setBaseURL('http://localhost/');
+    }
+
     public function testUserApi(): void
     {
         $expected = UserApi::class;

@@ -31,7 +31,6 @@ namespace Xaraya\Bridge\Routing;
 use Xaraya\Routing\Routing;
 use Xaraya\Routing\RouterInterface;
 // use some Xaraya classes
-use Xaraya\Context\Context;
 use xarServer;
 use sys;
 use JsonException;

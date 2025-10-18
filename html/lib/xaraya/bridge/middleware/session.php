@@ -42,7 +42,7 @@ class SessionMiddleware implements MiddlewareInterface
     private readonly string $cookieName;
     private readonly string $prefix;
     private readonly int $anonId;
-    private int $length = 32;
+    private int $length = 16;
     /** @var array<string, mixed> */
     private array $config;
     /** @var SessionStorageInterface */
