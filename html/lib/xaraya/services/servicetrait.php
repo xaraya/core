@@ -79,10 +79,16 @@ trait ServiceTrait
     public function setContext($context)
     {
         if (!empty($context)) {
-            if (is_null($this->getParent()->getContext())) {
-                $this->getParent()->setContext($this->context);
+            // avoid loops for data() and mod() in request handlers
+            if (!$this->getParent()->hasContext()) {
+                $this->getParent()->setContext($context);
             }
         }
+    }
+
+    public function hasContext()
+    {
+        return $this->getParent()->hasContext();
     }
 
     /**

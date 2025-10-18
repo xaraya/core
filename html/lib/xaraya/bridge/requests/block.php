@@ -35,8 +35,8 @@ class BlockRequestHandler extends BasicBridge implements BlockBridgeInterface
 
     public function setContext($context)
     {
-        $this->block()->setContext($context);
         parent::setContext($context);
+        $this->block()->setContext($context);
     }
 }
 

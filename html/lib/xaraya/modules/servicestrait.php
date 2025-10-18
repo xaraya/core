@@ -210,7 +210,7 @@ trait ModuleServicesTrait
             return $module;
         }
         $this->parent ??= xarMod::getModule($this->getModName());
-        if (is_null($this->parent->getContext())) {
+        if (!$this->parent->hasContext()) {
             $this->parent->setContext($this->context);
         }
         return $this->parent;

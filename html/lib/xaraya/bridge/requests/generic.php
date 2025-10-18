@@ -35,8 +35,8 @@ class GenericRequestHandler extends BasicBridge implements GenericBridgeInterfac
 
     public function setContext($context)
     {
-        //$this->mod()->setContext($context);
         parent::setContext($context);
+        //$this->mod()->setContext($context);
     }
 }
 

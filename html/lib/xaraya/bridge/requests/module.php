@@ -37,8 +37,8 @@ class ModuleRequestHandler extends BasicBridge implements ModuleBridgeInterface
 
     public function setContext($context)
     {
-        $this->mod()->setContext($context);
         parent::setContext($context);
+        $this->mod()->setContext($context);
     }
 }
 

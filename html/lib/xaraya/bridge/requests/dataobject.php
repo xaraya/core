@@ -35,8 +35,8 @@ class DataObjectRequestHandler extends BasicBridge implements DataObjectBridgeIn
 
     public function setContext($context)
     {
-        $this->data()->setContext($context);
         parent::setContext($context);
+        $this->data()->setContext($context);
     }
 }
 

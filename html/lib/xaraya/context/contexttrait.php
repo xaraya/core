@@ -57,6 +57,11 @@ interface ContextInterface
     public function setContext($context);
 
     /**
+     * @return bool
+     */
+    public function hasContext();
+
+    /**
      * Reset context after cloning
      * @return void
      */
@@ -86,6 +91,14 @@ trait ContextTrait
     public function setContext($context)
     {
         $this->context = $context;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasContext()
+    {
+        return isset($this->context);
     }
 
     /**
