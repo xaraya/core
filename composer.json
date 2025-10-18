@@ -7,13 +7,13 @@
         "nikic/fast-route": "2.0.0-beta1",
         "nyholm/psr7": "^1.8",
         "nyholm/psr7-server": "^1.1",
-        "phpdocumentor/reflection": "^6.1",
-        "symfony/config": "^7.2",
-        "symfony/routing": "^7.2",
-        "webonyx/graphql-php": "^15.19",
+        "phpdocumentor/reflection": "^6.3",
+        "symfony/config": "^7.3",
+        "symfony/routing": "^7.3",
+        "webonyx/graphql-php": "^15.25",
         "xaraya/modules": "dev-master",
         "xaraya/properties": "dev-master",
-        "xaraya/twig": "dev-main"
+        "xaraya/twig": "^2.6"
     },
     "suggest": {
         "phpstan/phpstan": "PHP Static Analysis Tool - discover bugs in your code without running it",
