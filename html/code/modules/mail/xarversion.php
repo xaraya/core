@@ -23,10 +23,10 @@
 $modversion = array(
     'name'               => 'Mail',
     'id'                 => '771',
-    'displayname'        => xarML('Mail'),
+    'displayname'        => xarMLS::translate('Mail'),
     'version'            => '2.4.1',
     'description'        => 'Ma4l handling utility module',
-    'displaydescription' => xarML('Mail handling utility module'),
+    'displaydescription' => xarMLS::translate('Mail handling utility module'),
     'credits'            => 'xardocs/credits.txt',
     'help'               => 'xardocs/help.txt',
     'changelog'          => 'xardocs/changelog.txt',

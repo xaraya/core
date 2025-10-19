@@ -22,10 +22,10 @@
  
 $modversion['name']               = 'Base';
 $modversion['id']                 = '68';
-$modversion['displayname']        = xarML('Base');
+$modversion['displayname']        = xarMLS::translate('Base');
 $modversion['version']            = '2.4.1';
 $modversion['description']        = 'Home Page';
-$modversion['displaydescription'] = xarML('Home Page');
+$modversion['displaydescription'] = xarMLS::translate('Home Page');
 $modversion['credits']            = 'xardocs/credits.txt';
 $modversion['help']               = 'xardocs/help.txt';
 $modversion['changelog']          = 'xardocs/changelog.txt';

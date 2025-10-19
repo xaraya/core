@@ -42,6 +42,7 @@ class ClassMapParser
             'handlers' => [],
             'routes' => [],
             'dataobjects' => [],
+            'tables' => [],
             'classes' => [],
             'others' => [],
         ];
@@ -132,7 +133,11 @@ class ClassMapParser
         switch ($dirName) {
             // module files in top directory
             case '.':
-                $this->addModType($className, $filePath, $modName, $fileType);
+                if ($fileType == 'tables') {
+                    $this->addTables($className, $filePath, $modName, $fileType);
+                } else {
+                    $this->addModType($className, $filePath, $modName, $fileType);
+                }
                 return;
             case 'controllers':
                 $this->addController($className, $filePath, $modName, $fileType);
@@ -274,6 +279,15 @@ class ClassMapParser
             }
         }
         $classType = 'modules';
+        $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+    }
+
+    protected function addTables(string $className, string $filePath, string $modName, string $fileType): void
+    {
+        if ($this->checkClass) {
+            // ...
+        }
+        $classType = 'tables';
         $this->addClassType($classType, $className, $filePath, $modName, $fileType);
     }
 

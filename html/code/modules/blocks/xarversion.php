@@ -25,10 +25,10 @@
 $modversion = array(
     'name'               => 'Blocks Administration',
     'id'                 => '13',
-    'displayname'        => xarML('Blocks'),
+    'displayname'        => xarMLS::translate('Blocks'),
     'version'            => '2.4.1',
     'description'        => 'Administration of block instances and groups',
-    'displaydescription' => xarML('Administration of block instances and groups'),
+    'displaydescription' => xarMLS::translate('Administration of block instances and groups'),
     'credits'            => '',
     'help'               => '',
     'changelog'          => '',

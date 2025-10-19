@@ -22,11 +22,11 @@
  
 $modversion = array(
     'name'               => 'authsystem',
-    'displayname'        => xarML('Authsystem'),
+    'displayname'        => xarMLS::translate('Authsystem'),
     'id'                 => '42',
     'version'            => '2.4.1',
     'description'        => 'Xaraya default authentication module',
-    'displaydescription' => xarML('Xaraya default authentication module'),
+    'displaydescription' => xarMLS::translate('Xaraya default authentication module'),
     'credits'            => 'xardocs/credits.txt',
     'help'               => 'xardocs/help.txt',
     'changelog'          => 'xardocs/changelog.txt',

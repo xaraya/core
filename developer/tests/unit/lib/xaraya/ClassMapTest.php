@@ -762,7 +762,7 @@ final class ClassMapTest extends TestCase
             'filepath' => sys::code() . 'modules/dynamicdata/controllers/routes.php',
             'classtype' => 'routes',
             'module' => $modName,
-            'filetype' => $type,
+            'filetype' => '',
         ];
         $this->assertEquals($expected, $result);
 
@@ -785,6 +785,53 @@ final class ClassMapTest extends TestCase
         $expected = \Xaraya\Modules\DynamicData\UserGui::class;
         $handler = $result['classname']::getHandler($route, $context);
         $this->assertInstanceOf($expected, $handler->getInstance());
+    }
+
+    public function testGetTables(): void
+    {
+        $tables = xarClassMap::getTables();
+
+        // we only have 1 tables class per module for the moment
+        $expected = [
+            'Xaraya\\Modules\\DynamicData\\Tables' => sys::code() . 'modules/dynamicdata/tables.php',
+        ];
+        $classname = array_key_first($expected);
+        $this->assertArrayHasKey($classname, $tables);
+        $this->assertEquals($expected[$classname], $tables[$classname]);
+        $this->assertGreaterThan(1, count($tables));
+
+        $modName = 'dynamicdata';
+        $tables = xarClassMap::getTables($modName);
+        $this->assertArrayHasKey($classname, $tables);
+        $this->assertEquals($expected[$classname], $tables[$classname]);
+        $this->assertCount(1, $tables);
+
+        // base module has no tables.php file
+        $modName = 'base';
+        $tables = xarClassMap::getTables($modName);
+        $this->assertCount(0, $tables);
+    }
+
+    public function testFindTables(): void
+    {
+        $modName = 'dynamicdata';
+        $result = xarClassMap::findTables($modName);
+
+        $expected = [
+            'classname' => 'Xaraya\Modules\DynamicData\Tables',
+            'filepath' => sys::code() . 'modules/dynamicdata/tables.php',
+            'classtype' => 'tables',
+            'module' => $modName,
+            'filetype' => '',
+        ];
+        $this->assertEquals($expected, $result);
+
+        // base module has no tables.php file
+        $modName = 'base';
+        $result = xarClassMap::findTables($modName);
+
+        $expected = null;
+        $this->assertEquals($expected, $result);
     }
 
     public function testGetModuleClasses(): void

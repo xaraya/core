@@ -23,9 +23,9 @@
 $modversion['name']               = 'Privileges Adminstration';
 $modversion['id']                 = '1098';
 $modversion['version']            = '2.4.1';
-$modversion['displayname']        = xarML('Privileges');
+$modversion['displayname']        = xarMLS::translate('Privileges');
 $modversion['description']        = 'Modify privileges security';
-$modversion['displaydescription'] = xarML('Modify privileges security');
+$modversion['displaydescription'] = xarMLS::translate('Modify privileges security');
 $modversion['official']           = true;
 $modversion['author']             = 'Marc Lutolf';
 $modversion['contact']            = 'http://www.xaraya.com/';

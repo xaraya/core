@@ -478,6 +478,29 @@ class xarClassMap extends xarObject
     }
 
     /**
+     * Summary of getTables
+     * @param ?string $modName (optional)
+     * @return array<string, string>
+     */
+    public static function getTables(?string $modName = null): array
+    {
+        // we can specify modName here
+        return static::getClassFiles('tables', $modName);
+    }
+
+    /**
+     * Summary of findTables
+     * @param string $modName
+     * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
+     */
+    public static function findTables(string $modName)
+    {
+        // we only have 1 tables class per module for the moment
+        $type = '';
+        return static::findClassFile('tables', $modName, $type);
+    }
+
+    /**
      * Summary of getModuleClasses
      * @param ?string $modName (optional)
      * @return array<string, array{classname: string, filepath: string, module: string}>
