@@ -616,6 +616,15 @@ class xarMod extends xarObject implements IxarMod
         // TODO redo legacy support via type.
         switch ($type) {
             case 'module':
+                sys::import('xaraya.classmap');
+                $result = xarClassMap::findVersion($modOsDir);
+                if (!empty($result)) {
+                    // @todo use class_exists() with autoload
+                    require_once $result['filepath'];
+                    $versionCall = new $result['classname']();
+                    $version = $versionCall();
+                    return self::parseFileInfo($version, $modOsDir . " / " . $type);
+                }
                 // Spliffster, additional mod info from modules/$modDir/xarversion.php
                 $fileName = sys::code() . 'modules/' . $modOsDir . '/xarversion.php';
                 $part = 'xarversion';
@@ -661,6 +670,11 @@ class xarMod extends xarObject implements IxarMod
 
         $version = array_merge($themeinfo, $modversion);
 
+        return self::parseFileInfo($version, $modOsDir . " / " . $type);
+    }
+
+    protected static function parseFileInfo($version, $name)
+    {
         // name and id are required, assert them, otherwise the module is invalid
         assert(isset($version["name"]) && isset($version["id"]));
         $FileInfo['name']           = $version['name'];
@@ -698,7 +712,7 @@ class xarMod extends xarObject implements IxarMod
         $FileInfo['twigtemplates']  = $version['twigtemplates'] ?? false;
         $FileInfo['twigextension']  = $version['twigextension'] ?? '.html.twig';
 
-        xarCoreCache::setCached('Mod.getFileInfos', $modOsDir . " / " . $type, $FileInfo);
+        xarCoreCache::setCached('Mod.getFileInfos', $name, $FileInfo);
         return $FileInfo;
     }
 
@@ -725,6 +739,18 @@ class xarMod extends xarObject implements IxarMod
 
         // Check to ensure we aren't doing this twice
         if (isset($loadedDbInfoCache[$modName])) {
+            return true;
+        }
+
+        sys::import('xaraya.classmap');
+        $result = xarClassMap::findTables($modName);
+        if (!empty($result)) {
+            // @todo use class_exists() with autoload
+            require_once $result['filepath'];
+            $tablesCall = new $result['classname']();
+            // pass along the DB prefix to $tablesCall
+            xarDB3::importTables($tablesCall(xarDB3::getPrefix()));
+            $loadedDbInfoCache[$modName] = true;
             return true;
         }
 
@@ -1100,6 +1126,8 @@ class xarMod extends xarObject implements IxarMod
             } else {
                 self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $context);
             }
+        } elseif (isset($context)) {
+            self::$moduleClasses[$modName]->setContext($context);
         }
         return self::$moduleClasses[$modName];
     }
@@ -1109,9 +1137,9 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modName
      * @return \Xaraya\Modules\UserApiInterface|null
      */
-    public static function userapi($modName)
+    public static function userapi($modName, $context = null)
     {
-        return self::getModule($modName)->userapi();
+        return self::getModule($modName, $context)->userapi();
     }
 
     /**
@@ -1119,9 +1147,9 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modName
      * @return \Xaraya\Modules\UserGuiInterface|null
      */
-    public static function usergui($modName)
+    public static function usergui($modName, $context = null)
     {
-        return self::getModule($modName)->usergui();
+        return self::getModule($modName, $context)->usergui();
     }
 
     /**

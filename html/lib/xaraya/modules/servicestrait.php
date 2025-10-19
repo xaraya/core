@@ -205,11 +205,10 @@ trait ModuleServicesTrait
     public function getModule(?string $modName = null): ModuleInterface|null
     {
         if (!empty($modName)) {
-            $module = xarMod::getModule($modName);
-            $module->setContext($this->context);
+            $module = xarMod::getModule($modName, $this->context);
             return $module;
         }
-        $this->parent ??= xarMod::getModule($this->getModName());
+        $this->parent ??= xarMod::getModule($this->getModName(), $this->context);
         if (!$this->parent->hasContext()) {
             $this->parent->setContext($this->context);
         }

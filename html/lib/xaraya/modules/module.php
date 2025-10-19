@@ -58,8 +58,8 @@ sys::import('xaraya.modules.moduletrait');
  * Module methods:
  * - ... all other module functions implemented here
  * - getName() Get module name
- * - getInfo() Get info from xarversion.php
- * - getTables() Get tables from xartables.php
+ * - getFileInfo() Get file info from version.php
+ * - getTables() Get tables from tables.php
  *
  * Available methods:
  * - configure() Configure module class types - override if needed

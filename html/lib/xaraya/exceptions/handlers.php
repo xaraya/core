@@ -72,6 +72,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
 
             if(method_exists('xarTpl','getThemeDir') && method_exists('xarTpl','file')) {
                 $theme_dir = xarTpl::getThemeDir(); $template="systemerror";
+                sys::import('xaraya.caching.template');
                 if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
                     $msg = xarTpl::file($theme_dir . '/modules/base/message-' . $template . '.xt', self::$data);
                 } else {

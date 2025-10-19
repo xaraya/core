@@ -197,20 +197,29 @@ trait ModuleTrait
     }
 
     /**
-     * Get info from xarversion.php
+     * Get file info from version.php
      * @return array<string, mixed>
      */
     public function getFileInfo(): array
     {
+        // Xaraya\Modules\MyFancyModule\Version
         return xarMod::getFileInfo($this->getModName());
     }
 
     /**
-     * Get tables from xartables.php
+     * Get tables from tables.php
      * @return array<string, mixed>
      */
     public function getTables(): array
     {
+        // Xaraya\Modules\MyFancyModule\Tables
+        $className = $this->getNamespace() . '\\Tables';
+        if (class_exists($className)) {
+            $tablesCall = new $className();
+            // pass along the DB prefix to $tablesCall
+            return $tablesCall(xarDB3::getPrefix());
+        }
+
         // Load the database definition if required
         try {
             include_once sys::code() . 'modules/' . $this->getModName() . '/xartables.php';
@@ -221,7 +230,6 @@ trait ModuleTrait
         if (function_exists($tablefunc)) {
             // pass along the DB prefix to $tablefunc
             $prefix = xarDB3::getPrefix();
-            // xarDB3::importTables($tablefunc($prefix));
             return $tablefunc($prefix);
         }
         return [];
