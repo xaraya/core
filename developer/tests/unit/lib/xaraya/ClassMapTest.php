@@ -822,12 +822,83 @@ final class ClassMapTest extends TestCase
             'filepath' => sys::code() . 'modules/dynamicdata/tables.php',
             'classtype' => 'tables',
             'module' => $modName,
-            'filetype' => '',
+            'filetype' => 'tables',
         ];
         $this->assertEquals($expected, $result);
 
+        $prefix = 'test';
+        $tablesfunc = new $result['classname']();
+        $tables = $tablesfunc($prefix);
+
+        $expected = [
+            'dynamic_objects' => 'test_dynamic_objects',
+            'dynamic_properties' => 'test_dynamic_properties',
+            'dynamic_data' => 'test_dynamic_data',
+            'dynamic_relations' => 'test_dynamic_relations',
+            'dynamic_properties_def' => 'test_dynamic_properties_def',
+            'dynamic_configurations' => 'test_dynamic_configurations',
+        ];
+        $this->assertEquals($expected, $tables);
+
         // base module has no tables.php file
         $modName = 'base';
+        $result = xarClassMap::findTables($modName);
+
+        $expected = null;
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testGetVersions(): void
+    {
+        $versions = xarClassMap::getVersions();
+
+        // we only have 1 version class per module for the moment
+        $expected = [
+            'Xaraya\\Modules\\DynamicData\\Version' => sys::code() . 'modules/dynamicdata/version.php',
+        ];
+        $classname = array_key_first($expected);
+        $this->assertArrayHasKey($classname, $versions);
+        $this->assertEquals($expected[$classname], $versions[$classname]);
+        $this->assertGreaterThan(1, count($versions));
+
+        $modName = 'dynamicdata';
+        $versions = xarClassMap::getVersions($modName);
+        $this->assertArrayHasKey($classname, $versions);
+        $this->assertEquals($expected[$classname], $versions[$classname]);
+        $this->assertCount(1, $versions);
+
+        // invalid module has no version.php file
+        $modName = 'invalid';
+        $tables = xarClassMap::getTables($modName);
+        $this->assertCount(0, $tables);
+    }
+
+    public function testFindVersion(): void
+    {
+        $modName = 'dynamicdata';
+        $result = xarClassMap::findVersion($modName);
+
+        $expected = [
+            'classname' => 'Xaraya\Modules\DynamicData\Version',
+            'filepath' => sys::code() . 'modules/dynamicdata/version.php',
+            'classtype' => 'versions',
+            'module' => $modName,
+            'filetype' => 'version',
+        ];
+        $this->assertEquals($expected, $result);
+
+        $versionfunc = new $result['classname']();
+        $info = $versionfunc();
+
+        $expected = [
+            'name' => 'Dynamic Data',
+        ];
+        $key = array_key_first($expected);
+        $this->assertArrayHasKey($key, $info);
+        $this->assertEquals($expected[$key], $info[$key]);
+
+        // invalid module has no version.php file
+        $modName = 'invalid';
         $result = xarClassMap::findTables($modName);
 
         $expected = null;

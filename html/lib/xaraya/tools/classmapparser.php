@@ -43,6 +43,7 @@ class ClassMapParser
             'routes' => [],
             'dataobjects' => [],
             'tables' => [],
+            'versions' => [],
             'classes' => [],
             'others' => [],
         ];
@@ -135,6 +136,8 @@ class ClassMapParser
             case '.':
                 if ($fileType == 'tables') {
                     $this->addTables($className, $filePath, $modName, $fileType);
+                } elseif ($fileType == 'version') {
+                    $this->addVersion($className, $filePath, $modName, $fileType);
                 } else {
                     $this->addModType($className, $filePath, $modName, $fileType);
                 }
@@ -288,6 +291,15 @@ class ClassMapParser
             // ...
         }
         $classType = 'tables';
+        $this->addClassType($classType, $className, $filePath, $modName, $fileType);
+    }
+
+    protected function addVersion(string $className, string $filePath, string $modName, string $fileType): void
+    {
+        if ($this->checkClass) {
+            // ...
+        }
+        $classType = 'versions';
         $this->addClassType($classType, $className, $filePath, $modName, $fileType);
     }
 
