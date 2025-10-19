@@ -10,6 +10,9 @@
         <xar:set name="dummy">xarVar::fetch('class', 'isset', $class, null, xarVar::NOT_REQUIRED)</xar:set>
         <xar:set name="dummy">xarVar::fetch('mod', 'isset', $mod, null, xarVar::NOT_REQUIRED)</xar:set>
 
+        <xar:if condition="empty($class) and !empty($mod)">
+            <strong>#$mod#:</strong>
+        </xar:if>
         <ul>
         <xar:foreach in="$classmap" key="$classtype" value="$values">
             <li>
@@ -50,6 +53,23 @@
                         </xar:if>
                     </xar:foreach>
                     </ul>
+                <xar:elseif condition="empty($class) and !empty($mod)"/>
+                    <xar:if condition="empty($values[$mod])">
+                        <a href="#$url#">#$classtype#</a> (0):
+                    <xar:else/>
+                        <a href="#$url#">#$classtype#</a> (#count($values[$mod])#):
+                        <ul>
+                        <xar:foreach in="$values[$mod]" key="$type" value="$items">
+                            <li>
+                                <xar:if condition="$classtype eq 'methods'">
+                                    #$type# (#count($items)#)
+                                <xar:else/>
+                                    #$type# =&gt; #implode(', ', array_keys($items))#
+                                </xar:if>
+                            </li>
+                        </xar:foreach>
+                        </ul>
+                    </xar:if>
                 <xar:else/>
                     <a href="#$url#">#$classtype#</a>
                 </xar:if>
