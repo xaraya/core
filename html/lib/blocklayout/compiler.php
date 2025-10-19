@@ -219,23 +219,6 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         $clienttags = $this->configure();
         $this->processor->setParameter('', 'clienttags', implode(',', $clienttags));
 
-        // Pass any legacy tags if legacy support is turned on
-        try {
-            if (class_exists('xarConfigVars') && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
-                $baseDir = sys::lib() . 'xaraya/legacy/tags';
-                $baseDir = realpath($baseDir);
-                if (strpos($baseDir, '\\') != false) {
-                    // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
-                    $baseURI = 'file:///' . str_replace('\\', '/', $baseDir);
-                } else {
-                    $baseURI = 'file://' . $baseDir;
-                }
-                $xslFiles = $this->getTagPaths($baseDir, $baseURI);
-                $this->processor->setParameter('', 'legacytags', implode(',', $xslFiles));
-            }
-        } catch (Exception $e) {
-        }
-
         // Compress excess whitespace
         $this->processor->setParameter('', 'compresswhitespace', $this->compresswhitespace);
 

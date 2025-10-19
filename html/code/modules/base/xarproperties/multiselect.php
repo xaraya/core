@@ -148,10 +148,6 @@ class MultiSelectProperty extends SelectProperty
             if(isset($data['configuration'])) {
                 $this->parseConfiguration($data['configuration']);
                 unset($data['configuration']);
-            // @todo remove Legacy support: if the validation field is an array, we'll assume that this is an array of id => name
-            } elseif (!empty($data['validation']) && is_array($data['validation']) && $this->config()->getVar('Site.Core.LoadLegacy')) {
-                sys::import('xaraya.legacy.validations');
-                $this->options = xar_legacy_validations_dropdown($data['validation']);
             }
 
         // Allow overriding by specific parameters

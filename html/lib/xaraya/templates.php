@@ -1236,10 +1236,6 @@ public static function getFile($fileName, $scope=null, $package=null)
             // module include in module
             $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
             if (file_exists($sourceFileName)) break;
-            if (xarConfig3::getVar('Site.Core.LoadLegacy') == true) {
-                $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xd";
-                if (file_exists($sourceFileName)) break;
-            }
             // @checkme: dd as fall back in all cases? what if dd happens to supply 
             // a same named but unrelated template?
             if (!file_exists($sourceFileName)) {

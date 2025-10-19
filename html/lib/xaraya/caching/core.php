@@ -22,7 +22,6 @@ class xarCoreCache extends xarObject
     /** @var array<string, mixed> */
     private static $cacheCollection = [];
     private static ?ixarCache_Storage $cacheStorage = null;
-    private static int $isBulkStorage = 0;
 
     /**
      * Initialise the caching options
@@ -62,7 +61,7 @@ class xarCoreCache extends xarObject
             return true;
 
         // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
-        } elseif (isset(self::$cacheStorage) && empty(self::$isBulkStorage) && self::$cacheStorage->isCached($scope.':'.$name)) {
+        } elseif (isset(self::$cacheStorage) && self::$cacheStorage->isCached($scope.':'.$name)) {
             // pre-fetch the value from second-level cache here (if we don't load from bulk storage)
             self::$cacheCollection[$scope][$name] = self::$cacheStorage->getCached($scope.':'.$name);
             return true;
@@ -102,7 +101,7 @@ class xarCoreCache extends xarObject
         if (self::hasPreload($scope, $name)) {
             self::saveCached($scope, $name);
         }
-        if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
+        if (isset(self::$cacheStorage)) {
             // save the value to second-level cache here
             self::$cacheStorage->setCached($scope.':'.$name, $value);
         }
@@ -123,7 +122,7 @@ class xarCoreCache extends xarObject
         if (self::hasPreload($scope, $name)) {
             self::delPreload($scope, $name);
         }
-        if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
+        if (isset(self::$cacheStorage)) {
             // delete the value from second-level cache here
             self::$cacheStorage->delCached($scope.':'.$name);
         }
@@ -143,7 +142,7 @@ class xarCoreCache extends xarObject
         if (self::hasPreload($scope)) {
             self::delPreload($scope);
         }
-        if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
+        if (isset(self::$cacheStorage)) {
             // CHECKME: not all cache storage supports this in the same way !
             self::$cacheStorage->flushCached($scope.':');
         }
@@ -274,9 +273,9 @@ return $values;
     /**
      * Set second-level cache storage if you want to keep values for longer than the current HTTP request
      *
-     * @param ixarCache_Storage $cacheStorage  the cache storage instance you want to use (typically in-memory like apc, memcached, xcache, ...)
+     * @param ixarCache_Storage $cacheStorage  the cache storage instance you want to use (typically in-memory like apcu, redis, ...)
      * @param int    $cacheExpire   how long do you want to keep values in second-level cache storage (if the storage supports it)
-     * @param int   $isBulkStorage do we load/save all variables in bulk by scope or not ? - deprecated
+     * @param int   $isBulkStorage do we load/save all variables in bulk by scope or not ? - @deprecated 2.4.1  no longer relevant
      * @return void
     **/
     public static function setCacheStorage($cacheStorage, $cacheExpire = 0, $isBulkStorage = 0)
@@ -292,16 +291,6 @@ return $values;
         // see what's going on in the cache storage ;-)
         //self::$cacheStorage->logfile = sys::varpath() . '/logs/core_cache.txt';
         // FIXME: some in-memory cache storage requires explicit garbage collection !?
-
-        self::$isBulkStorage = $isBulkStorage;
-        /** @deprecated 2.4.1 no longer relevant
-        if ($isBulkStorage) {
-            // load from second-level cache storage here
-            self::loadBulkStorage();
-            // save to second-level cache storage at shutdown
-            //register_shutdown_function(['xarCoreCache','saveBulkStorage']);
-        }
-         */
     }
 
     /**
@@ -312,60 +301,5 @@ return $values;
     public static function getCachedScopes()
     {
         return array_keys(self::$cacheCollection);
-    }
-
-    /**
-     * CHECKME: work with bulk load per scope instead of individual gets per scope:name ?
-     *          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?<br/>
-     *          Get the list of scopes and load each scope from second-level cache. There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
-     * @deprecated 2.4.1 no longer relevant
-     * @return void
-    */
-    public static function loadBulkStorage()
-    {
-        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) {
-            return;
-        }
-        // get the list of scopes
-        if (!self::$cacheStorage->isCached('__scopelist__')) {
-            return;
-        }
-        $scopelist = [];
-        $value = self::$cacheStorage->getCached('__scopelist__');
-        if (!empty($value)) {
-            $scopelist = unserialize($value);
-        }
-        if (empty($scopelist)) {
-            return;
-        }
-        // load each scope from second-level cache
-        foreach ($scopelist as $scope) {
-            $value = self::$cacheStorage->getCached($scope);
-            if (!empty($value)) {
-                self::$cacheCollection[$scope] = unserialize($value);
-            }
-        }
-    }
-    /**
-     * CHECKME: work with bulk save per scope instead of individual gets per scope:name ?<br/>
-     *          But what about concurrent updates in bulk then (+ unserialize & autosave too early) ?<br/>
-     *          It gets the list of scopes and save each scope to second-level cache
-     * @deprecated 2.4.1 no longer relevant
-     * @return void
-     */
-    public static function saveBulkStorage()
-    {
-        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) {
-            return;
-        }
-        // get the list of scopes
-        $scopelist = array_keys(self::$cacheCollection);
-        $value = serialize($scopelist);
-        self::$cacheStorage->setCached('__scopelist__', $value);
-        // save each scope to second-level cache
-        foreach ($scopelist as $scope) {
-            $value = serialize(self::$cacheCollection[$scope]);
-            self::$cacheStorage->setCached($scope, $value);
-        }
     }
 }

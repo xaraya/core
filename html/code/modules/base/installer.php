@@ -101,7 +101,6 @@ class Installer extends InstallerClass
         }
         $this->config()->setVar('Site.Core.SecureServerPort', "443");
 
-        $this->config()->setVar('Site.Core.LoadLegacy', false);
         $this->config()->setVar('Site.Session.SecurityLevel', 'Medium');
         $this->config()->setVar('Site.Session.Duration', 7);
         $this->config()->setVar('Site.Session.InactivityTimeout', 90);

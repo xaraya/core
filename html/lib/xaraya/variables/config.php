@@ -90,8 +90,6 @@ class xarConfigVars extends xarVars implements IxarVars
         {
             case 'Site.DB.TablePrefix':
                 return xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
-//            case 'Site.Core.LoadLegacy':
-//                return xarSystemVars::get(sys::CONFIG, 'Site.LoadLegacy');
             case 'System.Core.Generation':
                 return xarCore::GENERATION;
             case 'System.Core.VersionNumber':

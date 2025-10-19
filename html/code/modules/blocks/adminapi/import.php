@@ -61,15 +61,7 @@ class ImportMethod extends MethodClass
         if (empty($xml) && empty($file)) {
             throw new EmptyParameterException('xml or file');
         } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/', $file))) {
-            // check if we tried to load a file using an old path
-            if ($this->config()->getVar('Site.Core.LoadLegacy') == true && strpos($file, 'modules/') === 0) {
-                $file = sys::code() . $file;
-                if (!file_exists($file)) {
-                    throw new BadParameterException($file, 'Invalid importfile "#(1)"');
-                }
-            } else {
-                throw new BadParameterException($file, 'Invalid importfile "#(1)"');
-            }
+            throw new BadParameterException($file, 'Invalid importfile "#(1)"');
         }
 
         if (!empty($file)) {

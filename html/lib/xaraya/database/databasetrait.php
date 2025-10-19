@@ -207,17 +207,6 @@ trait DatabaseTrait
     }
 
     /**
-     * Summary of setModuleName
-     * @param string $moduleName
-     * @deprecated 2.6.0 use setDbModName() instead
-     * @return void
-     */
-    public function setModuleName($moduleName)
-    {
-        $this->setDbModName($moduleName);
-    }
-
-    /**
      * Summary of getDatabases
      * @param ?string $modName
      * @return array<string, mixed>

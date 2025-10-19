@@ -315,15 +315,6 @@ class xarCore extends xarObject
             self::$runLevel = $new_SYSTEM_level;
             return true;
         }       
-
-        /**
-         * Legacy systems
-         * Before anything fancy is loaded, let's start the legacy systems
-         *
-         */
-        if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
-            sys::import('xaraya.legacy.legacy');
-        }
     
         /**
          * At this point we haven't made any assumptions about architecture
@@ -347,6 +338,14 @@ class xarCore extends xarObject
             // Make the current load level == the new load level
             self::$runLevel = $new_SYSTEM_level;
             return true;
+        }
+
+        /**
+         * Get context from globals if not specified (default)
+         */
+        if (is_null($context)) {
+            sys::import('xaraya.context.factory');
+            $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
         }
 
         /**
@@ -402,9 +401,6 @@ class xarCore extends xarObject
          * We deal with users through the sessions subsystem
          *
          */
-        // @todo Assuming a fixed 5 here needs to be reviewed, core is a too low level system to assume this.
-        //$anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
-        //define('_XAR_ID_UNREGISTERED', $anonid);
 
         if ($whatToLoad & self::SYSTEM_SESSION)
         {

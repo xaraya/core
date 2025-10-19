@@ -100,6 +100,7 @@ class xarUser extends xarObject
         xarDB3::importTables($tables);
     
         self::$authenticationModules = $args['authenticationModules'];
+        // @deprecated 2.4.0 remove someday
         if (!defined('_XAR_ID_UNREGISTERED')) {
             define('_XAR_ID_UNREGISTERED', xarSession::getAnonId());
         }

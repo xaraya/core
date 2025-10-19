@@ -652,7 +652,6 @@ class ModifyconfigMethod extends MethodClass
      */
     public function updateOther(array $data)
     {
-        $this->var()->find('loadlegacy', $loadLegacy, 'checkbox', $this->config()->getVar('Site.Core.LoadLegacy'));
         $this->var()->find('proxyhost', $proxyhost, 'str:1:', $this->mod()->getVar('proxyhost'));
         $this->var()->find('proxyport', $proxyport, 'int:1:', $this->mod()->getVar('proxyport'));
         $this->var()->find('releasenumber', $releasenumber, 'int:1:', $this->mod()->getVar('releasenumber'));
@@ -660,7 +659,6 @@ class ModifyconfigMethod extends MethodClass
         $this->mod()->setVar('proxyhost', $proxyhost);
         $this->mod()->setVar('proxyport', $proxyport);
         $this->mod()->setVar('releasenumber', $releasenumber);
-        $this->config()->setVar('Site.Core.LoadLegacy', $loadLegacy);
 
         // Timezone, offset and DST
         $this->var()->find('hosttimezone', $hosttimezone, 'str:1:', 'UTC');

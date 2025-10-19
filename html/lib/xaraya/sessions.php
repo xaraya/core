@@ -70,10 +70,6 @@ class xarSession
         //self::sessionClass = $args['sessionClass'] ?? SessionHandler::class;
 
         self::$anonId = (int) xarConfig3::getVar('Site.User.AnonymousUID', 5);
-        // @deprecated 2.4.0 remove someday
-        if (!defined('_XAR_ID_UNREGISTERED')) {
-            define('_XAR_ID_UNREGISTERED', self::$anonId);
-        }
 
         // Set up the session object with context
         $session = new self::$sessionClass($args, $context);

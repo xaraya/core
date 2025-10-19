@@ -191,16 +191,6 @@ class BlockLayoutXSLTProcessor extends xarObject
         // Preprocess it.
         $this->preProcess();
 
-        // Legacy transforms for old 1x templates
-        try {
-            if (class_exists('xarConfigVars') && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
-                xarLog3::debug("XSL: Running the legacy transform code");
-                sys::import('xaraya.legacy.templates');
-                $this->prepXml = xar_legacy_templates_fixLegacy($this->prepXml);
-            }
-        } catch (Exception $e) {
-        }
-
         // Set the source document to what we prepped
         $this->setSourceDocument($this->prepXml);
 

@@ -119,6 +119,7 @@ class GetblockMethod extends MethodClass
         }
 
         // @deprecated 2.7.0 remove old code
+        throw new ClassNotFoundException($key);
 
         // $typeclass does not take into account possible namespace + it does not re-use what typesapi getfiles() gave
         if (!empty($args['module'])) {

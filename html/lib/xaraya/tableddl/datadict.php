@@ -483,12 +483,5 @@ function &xarDB__datadictInit()
 // CHECKME: what if we want to change stuff in another database ?
 //          The xarTableDDL API doesn't really provide for this
 
-    if (!isset($datadict)) {
-        $dbconn   = xarDB3::getConn();
-        // @todo This doesnt work yet in 2.x
-        sys::import('xaraya.legacy.legacy');
-        $datadict = new xarDBNewDataDict($dbconn, 'ALTERTABLE');
-    }
-
     return $datadict;
 }
