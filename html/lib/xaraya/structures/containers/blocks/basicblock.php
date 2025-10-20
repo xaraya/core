@@ -23,6 +23,9 @@ use Xaraya\Blocks\BlockServicesInterface;
 use Xaraya\Blocks\BlockServicesTrait;
 use Xaraya\Context\Context;
 
+/**
+ * For documentation purposes only - available via BasicBlock
+ */
 interface iBlock extends iBlockType, BlockServicesInterface
 {
     public function getInfo();
@@ -52,6 +55,41 @@ interface iBlockDelete extends iBlock
     // required
     public function delete();
 }
+
+/**
+ * Basic block class
+ *
+ * Available methods:
+ * - __construct(array $blockinfo = [], $context = null) - called by xarBlock::getObject()
+ * - display() - called by xarBlock::render()
+ * - getInfo()
+ * - ...
+ *
+ * Inherited methods:
+ * - init() - called by BlockType::__construct()
+ * - getContent()
+ * - ...
+ *
+ * Available services:
+ * - $this->ctl() = xarController::* Main Controller (getURL, redirect, ...)
+ * - $this->log() = xarLog::* Logger (message, variable, ...)
+ * - $this->mls() = xarMLS::* Multi-Language System (translate, ...)
+ * - $this->mod() = xarMod*::* Modules (getVar, setVar, ...)
+ * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
+ * - $this->tpl() = xarTpl::* Templating (module, setPageTitle, ...)
+ * - $this->var() = xarVar::* Variables (fetch, check, ...)
+ * - $this->block() = xarBlock*::* Blocks (template, ...)
+ * - $this->data() = DataObjectFactory::* with context (getObject, getObjectList, ...)
+ * - $this->prop() = DataProperty*::* with context (getProperty, template, ...)
+ * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
+ * - $this->config() = xarConfigVars::* Config (getVar, setVar, ...)
+ * - $this->session() = xarSession::* Session (getVar, setVar, ...)
+ * - $this->db() = xarDB::* Database (getConn, getPrefix, ...)
+ * - ...
+ * - $this->service($name, ...$args) = get core service by name
+ * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
+ * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
+ */
 abstract class BasicBlock extends BlockType implements iBlock
 {
     use BlockServicesTrait;

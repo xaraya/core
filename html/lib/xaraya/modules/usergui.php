@@ -77,6 +77,7 @@ sys::import('xaraya.modules.userguitrait');
  * - $this->session() = xarSession::* Session (getVar, setVar, ...)
  * - $this->db() = xarDB::* Database (getConn, getPrefix, ...)
  * - ...
+ * - $this->service($name, ...$args) = get core service by name
  * - $this->ml($rawstring, ...$args) = short-hand version for $this->mls()->translate()
  * - $this->exit($status = 0) = call exit() - override for non-blocking servers, php unit tests or elsewhere
  *

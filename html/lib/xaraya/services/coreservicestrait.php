@@ -42,6 +42,8 @@ interface CoreServicesInterface extends ContextInterface
 {
     /** @param array<string, mixed> $args */
     public function setCoreServices(array $args = []): void;
+    /** @param array<mixed> $args */
+    public function service(string $name, ...$args): ServiceInterface;
     public function ctl(): ControllerInterface;
     public function log(): LoggerInterface;
     public function mls(): MultiLanguageInterface;
@@ -110,7 +112,7 @@ trait CoreServicesTrait
      */
     public function setCoreServices(array $args = []): void
     {
-        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'config', 'session', 'user', 'db', 'exit'];
+        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'config', 'session', 'user', 'db', 'exit', 'sys'];
         foreach ($args as $name => $service) {
             if (!in_array($name, $supported)) {
                 throw new Exception('Unsupported service ' . $name);
@@ -121,6 +123,32 @@ trait CoreServicesTrait
             }
             $this->{$varName} = $service;
         }
+    }
+
+    /**
+     * Get core service by name
+     * @param array<mixed> $args
+     */
+    public function service(string $name, ...$args): ServiceInterface
+    {
+        return match ($name) {
+            'ctl' => $this->ctl(),
+            'log' => $this->log(),
+            'mls' => $this->mls(),
+            'mod' => $this->mod(...$args),
+            'sec' => $this->sec(),
+            'tpl' => $this->tpl(),
+            'var' => $this->var(),
+            'block' => $this->block(),
+            'data' => $this->data(),
+            'prop' => $this->prop(),
+            'cache' => $this->cache(),
+            'config' => $this->config(),
+            'session' => $this->session(),
+            'user' => $this->user(...$args),
+            'db' => $this->db(),
+            default => throw new Exception('Unsupported service ' . $name),
+        };
     }
 
     /**
