@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Session-less page caching for first-time visitors
  *
@@ -26,13 +27,13 @@ class xarSessionLessCache extends xarObject
         // Note: still using $_SERVER here since xarServer is not initialized
         if (
             // we have no session id in a cookie or URL parameter
-            empty($_REQUEST[xarOutputCache::$cacheCookie]) &&
+            empty($_REQUEST[xarOutputCache::$cacheCookie])
         // we're dealing with a GET OR a HEAD request
-            !empty($_SERVER['REQUEST_METHOD']) &&
-            ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD') &&
+            && !empty($_SERVER['REQUEST_METHOD'])
+            && ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD')
         // TODO: make compatible with IIS and https (cfr. xarServer.php)
-            !empty($_SERVER['HTTP_HOST']) &&
-            !empty($_SERVER['REQUEST_URI'])
+            && !empty($_SERVER['HTTP_HOST'])
+            && !empty($_SERVER['REQUEST_URI'])
         ) {
             // the URL is one of the candidates for session-less caching
             return true;
@@ -61,15 +62,15 @@ class xarSessionLessCache extends xarObject
         }
 
         // the URL is already in the list for session-less page caching
-        if (in_array('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], $sessionLessList)) {
+        if (in_array('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], $sessionLessList)) {
             $cacheKey = 'static';
-            $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            $cacheCode = md5($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
             $cache_file = xarOutputCache::getCacheDir() . "/page/$cacheKey-" . $cacheCode . ".php";
             // Note: we stick to filesystem for session-less caching
-            if (file_exists($cache_file) &&
-                filesize($cache_file) > 0 &&
-                (xarPageCache::$cacheTime == 0 ||
-                 filemtime($cache_file) > time() - xarPageCache::$cacheTime)) {
+            if (file_exists($cache_file)
+                && filesize($cache_file) > 0
+                && (xarPageCache::$cacheTime == 0
+                 || filemtime($cache_file) > time() - xarPageCache::$cacheTime)) {
                 // CHECKME: set xarPageCache::$cacheCode for the ETag here or not ???
                 xarPageCache::$cacheCode = $cacheCode;
 
@@ -81,7 +82,7 @@ class xarSessionLessCache extends xarObject
                 self::getCached($cache_file);
 
                 // CHECKME: if we do this after xarPageCache::sendHeaders(), we'll never get the 304's logged for autocache
-                if (file_exists(xarOutputCache::getCacheDir().'/autocache.start')) {
+                if (file_exists(xarOutputCache::getCacheDir() . '/autocache.start')) {
                     sys::import('xaraya.caching.output.autosession');
                     xarAutoSessionCache::logStatus('HIT', $autoCachePeriod);
                 }
@@ -96,7 +97,7 @@ class xarSessionLessCache extends xarObject
             }
         }
         // we haven't found a cache hit for this URL
-        if (file_exists(xarOutputCache::getCacheDir().'/autocache.start')) {
+        if (file_exists(xarOutputCache::getCacheDir() . '/autocache.start')) {
             sys::import('xaraya.caching.output.autosession');
             xarAutoSessionCache::logStatus('MISS', $autoCachePeriod);
         }

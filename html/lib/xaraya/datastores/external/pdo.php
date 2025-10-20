@@ -1,4 +1,5 @@
 <?php
+
 /**
  * External datastore for DD objects using PHP PDO connection from ExternalDatabase
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Exception Handling System
  *
@@ -35,7 +36,7 @@ sys::import('xaraya.exceptions.handlers');
  *
  * @todo do we want this abstracted?
 **/
-set_exception_handler(array('ExceptionHandlers','debughandler'));
+set_exception_handler(['ExceptionHandlers','debughandler']);
 set_error_handler('ExceptionHandlers::phperrors');
 
 /**
@@ -55,11 +56,11 @@ class GeneralException extends xarExceptions
 /**
  * Debug function, artificially throws an exception
  *
- * 
+ *
  * @return void
  * @throws DebugException
 **/
 function debug($anything)
 {
-    throw new DebugException('DEBUGGING',var_export($anything,true));
+    throw new DebugException('DEBUGGING', var_export($anything, true));
 }

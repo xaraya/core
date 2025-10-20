@@ -22,6 +22,23 @@ class BasicBridge extends BasicRequest implements BasicBridgeInterface
 {
     use BasicBridgeTrait;
 
+    /** @var RouterInterface|null */
+    public $router = null;
+
+    public function __construct(?RouterInterface $router = null)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * Summary of getRouter
+     * @return RouterInterface|null
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
     /**
      * Get basic handler routes (in generic format)
      * @param string $pathPrefix

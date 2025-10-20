@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HTTP Protocol URL/Server utilities
  *
@@ -73,7 +74,7 @@ class xarServer extends xarObject
     public static function getConfig()
     {
         $systemArgs = ['enableShortURLsSupport' => xarConfig3::getVar('Site.Core.EnableShortURLsSupport'),
-                            'generateXMLURLs' => true];
+            'generateXMLURLs' => true];
         return $systemArgs;
     }
 
@@ -156,7 +157,7 @@ class xarServer extends xarObject
         try {
             $BaseURI =  xarSystemVars::get(sys::LAYOUT, 'BaseURI');
             return $BaseURI;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // We need to build it
         }
 
@@ -379,7 +380,7 @@ class xarServer extends xarObject
 
             foreach ($args as $k => $v) {
                 if (is_array($v)) {
-                    foreach($v as $l => $w) {
+                    foreach ($v as $l => $w) {
                         // TODO: replace in-line here too ?
                         if (!empty($w)) {
                             $request .= $k . "[$l]=$w&";
@@ -393,13 +394,13 @@ class xarServer extends xarObject
                         if (!empty($v)) {
                             $request = preg_replace("#(&|\?)" . preg_quote($find) . "#", "$1$k=$v", $request);
 
-                        // ... or remove it otherwise
+                            // ... or remove it otherwise
                         } elseif ($matches[1] == '?') {
                             $request = preg_replace("#\?" . preg_quote($find) . "(&|)#", '?', $request);
                         } else {
                             $request = str_replace("&$find", '', $request);
                         }
-                    // <chris/> !empty is too greedy here, $v=0, $v='', et-al are valid
+                        // <chris/> !empty is too greedy here, $v=0, $v='', et-al are valid
                     } elseif (!is_null($v)) {
                         $request .= "$k=$v&";
                     }
@@ -471,7 +472,7 @@ class xarServer extends xarObject
         // 3. remove default method 'view' from URLs
         if ($args['method'] == 'view') {
             unset($args['method']);
-        // and remove default method 'display' from URLs with an itemid
+            // and remove default method 'display' from URLs with an itemid
         } elseif (!empty($args['itemid']) && $args['method'] == 'display') {
             unset($args['method']);
         }

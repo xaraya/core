@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Data Store is the module variables // TODO: integrate module variable handling with DD
  *
@@ -232,7 +233,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
             }
             $modid = xarMod::getID(substr(trim($key), 17));
             $bindmarkers = '?' . str_repeat(',?', count($values) - 1);
-            if($this->getType() == 'sqlite') {
+            if ($this->getType() == 'sqlite') {
                 $query = "SELECT COUNT(*)
                           FROM (SELECT DISTINCT mi.item_id FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
                           WHERE m.name IN ($bindmarkers)) AND m.module_id = $modid";

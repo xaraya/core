@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\hooks
  * @subpackage hooks
@@ -57,22 +58,30 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
      * @param array<string, mixed>|mixed $extrainfo
      * @return array<string, mixed>|bool
      */
-    function validate($extrainfo = array())
+    public function validate($extrainfo = [])
     {
         // Check whether a valid array was passed
         if (!isset($extrainfo) || !is_array($extrainfo)) {
-            $msg = $this->ml('Invalid #(1) in function #(2)() in module #(3)',
-                         'extrainfo', 'updatehook', 'pubsub');
+            $msg = $this->ml(
+                'Invalid #(1) in function #(2)() in module #(3)',
+                'extrainfo',
+                'updatehook',
+                'pubsub'
+            );
             throw new Exception($msg);
         }
 
         // We can use hooks via module/itemtype or object
         if (!isset($extrainfo['module']) && !isset($extrainfo['object'])) {
-            $msg = $this->ml('Missing #(1) in function #(2)() in module #(3)',
-                         'module or object', 'updatehook', 'pubsub');
+            $msg = $this->ml(
+                'Missing #(1) in function #(2)() in module #(3)',
+                'module or object',
+                'updatehook',
+                'pubsub'
+            );
             throw new Exception($msg);
         }
-        
+
         // When called via hooks, the module name may be empty, so we get it from
         // the current module
         if (isset($extrainfo['module']) && is_string($extrainfo['module'])) {
@@ -92,7 +101,7 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
             $item = $this->data()->getObjectID(['name' => $extrainfo['object']]);
             $extrainfo['object_id'] = (int) $item['objectid'];
         }
-        
+
         // Assign the itemtype if we don't have one
         if (!isset($extrainfo['itemtype']) || !is_numeric($extrainfo['itemtype'])) {
             $extrainfo['itemtype'] = 0;
@@ -107,7 +116,7 @@ class HookObserver extends EventObserver implements ixarHookObserver, ServicesIn
         if (isset($extrainfo['cid']) && is_numeric($extrainfo['cid'])) {
             $cid = $extrainfo['cid'];
         } elseif (isset($extrainfo['cids'][0]) && is_numeric($extrainfo['cids'][0])) {
-        // TODO: loop over all categories
+            // TODO: loop over all categories
             $cid = $extrainfo['cids'][0];
         } else {
             $cid = 1;

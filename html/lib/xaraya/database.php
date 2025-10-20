@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Creole Database Abstraction Layer API Helpers
  * @todo review how xarDB is defined here + fix ResultSet mess + stop extending Creole for xarDB_Creole class
@@ -13,54 +14,54 @@
  *
  * @author Marco Canini
 **/
-    
+
 sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarLog3;
 
-switch (xarSystemVars::get(sys::CONFIG, 'DB.Middleware')){
-	case 'Creole':
-		// As per creole.ResultSet.php
-		define('FETCHMODE_ASSOC', 1);
-		define('FETCHMODE_NUM',   2);
-//		define('FETCHMODE_BOTH',  3);
-	break;
-	case 'PDO':
-		define('FETCHMODE_ASSOC', PDO::FETCH_ASSOC);
-		define('FETCHMODE_NUM',   PDO::FETCH_NUM);
-//		define('FETCHMODE_BOTH',  PDO::FETCH_BOTH);
-	break;
-	default:
-	break;
+switch (xarSystemVars::get(sys::CONFIG, 'DB.Middleware')) {
+    case 'Creole':
+        // As per creole.ResultSet.php
+        define('FETCHMODE_ASSOC', 1);
+        define('FETCHMODE_NUM', 2);
+        //		define('FETCHMODE_BOTH',  3);
+        break;
+    case 'PDO':
+        define('FETCHMODE_ASSOC', PDO::FETCH_ASSOC);
+        define('FETCHMODE_NUM', PDO::FETCH_NUM);
+        //		define('FETCHMODE_BOTH',  PDO::FETCH_BOTH);
+        break;
+    default:
+        break;
 }
 
 class xarDB
 {
-	private static $mw;   				// We store the applicable middleware class here
-	
-	// Get fetch modes associaiated with the middleware
-	public const FETCHMODE_ASSOC = FETCHMODE_ASSOC;   // Index result set by field name.
-	public const FETCHMODE_NUM   = FETCHMODE_NUM;     // Index result set numerically.
+    private static $mw;   				// We store the applicable middleware class here
+
+    // Get fetch modes associaiated with the middleware
+    public const FETCHMODE_ASSOC = FETCHMODE_ASSOC;   // Index result set by field name.
+    public const FETCHMODE_NUM   = FETCHMODE_NUM;     // Index result set numerically.
 
     // Instead of the globals, we save our db info here.
     private static $firstDSN      = null;
     private static $firstFlags    = null;
     /** @var array<int, Connection|PDOConnection> */
-    private static $connectionMap = array();
-    private static $dsnMap        = array();
-    private static $flagMap       = array();
-    private static $tables        = array();
+    private static $connectionMap = [];
+    private static $dsnMap        = [];
+    private static $flagMap       = [];
+    private static $tables        = [];
     private static $prefix        = '';
     private static $latest        = null;
 
 
-	public static function getInstance()
-	{
-		$middleware_name = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
-		sys::import('xaraya.database.' . strtolower($middleware_name));
-		$class = 'xarDB_' . $middleware_name;
-		$middleware_class = new $class();
-		self::$mw = $middleware_class;
-	}
+    public static function getInstance()
+    {
+        $middleware_name = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+        sys::import('xaraya.database.' . strtolower($middleware_name));
+        $class = 'xarDB_' . $middleware_name;
+        $middleware_class = new $class();
+        self::$mw = $middleware_class;
+    }
 
     public static function withPDO()
     {
@@ -70,7 +71,7 @@ class xarDB
     // Not all database types have more than one driver
     public static function getDrivers()
     {
-        $map = self::$mw::$DriverMap ?? array();
+        $map = self::$mw::$DriverMap ?? [];
         return $map;
     }
     public static function getPrefix()
@@ -106,85 +107,88 @@ class xarDB
         return self::$tables;
     }
 
-	/**
-	 * Import an array of database tables into the array of loaded tables Xaraya knows about
-	 *
-	 * @return void
-	 */
-    public static function importTables(array $tables = array())
+    /**
+     * Import an array of database tables into the array of loaded tables Xaraya knows about
+     *
+     * @return void
+     */
+    public static function importTables(array $tables = [])
     {
         self::$tables = array_merge(self::$tables, $tables);
     }
 
-	public static function configure($dsn, $flags = array(PDO::CASE_LOWER)) { return self::$mw::configure($dsn, $flags); }
-	
+    public static function configure($dsn, $flags = [PDO::CASE_LOWER])
+    {
+        return self::$mw::configure($dsn, $flags);
+    }
+
     /**
      * Initialise a new db connection
      * Create a new connection based on the supplied parameters
      *
      * This will also set the dbConnIndex to the latest connectionMapKey (crc32)
      *
-	 * @return Connection|PDOConnection object
+     * @return Connection|PDOConnection object
      */
-    public static function newConn(array $args = null)
+    public static function newConn(?array $args = null)
     {
         // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
         switch ($args['databaseType']) {
-        	case 'sqlite3':
-        	case 'pdosqlite':
-				$args['location'] = xarSystemVars::get(sys::CONFIG, 'DB.Location');
-				$args['phptype']       = $args['databaseType'];
-				$args['database']      = $args['location'] . $args['databaseName'] ?? ':memory:';
-				$args['hostspec']    ??= '';
-				$args['port']        ??= '';
-				$args['username']    ??= '';
-				$args['password']    ??= '';
-				$args['encoding']    ??= '';
-				$args['location']    ??= '';
-				$dsn = $args;
-			break;
-			case 'mysqli':
-			case 'pdomysqli':
-				$dsn = array('phptype'   => $args['databaseType'],
-							 'hostspec'  => $args['databaseHost'],
-							 'port'      => $args['databasePort'],
-							 'username'  => $args['userName'],
-							 'password'  => $args['password'],
-							 'database'  => $args['databaseName'],
-							 'encoding'  => $args['databaseCharset']);
-			break;
-			case 'pgsql':
-			case 'pdopgsql':
-				$dsn = array('phptype'   => $args['databaseType'],
-							 'hostspec'  => $args['databaseHost'],
-							 'port'      => $args['databasePort'],
-							 'username'  => $args['userName'],
-							 'password'  => $args['password'],
-							 'database'  => $args['databaseName'],
-							 'encoding'  => $args['databaseCharset']);
-			break;
-			default:
-			throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $args['databaseType']));
+            case 'sqlite3':
+            case 'pdosqlite':
+                $args['location'] = xarSystemVars::get(sys::CONFIG, 'DB.Location');
+                $args['phptype']       = $args['databaseType'];
+                $args['database']      = $args['location'] . $args['databaseName'] ?? ':memory:';
+                $args['hostspec']    ??= '';
+                $args['port']        ??= '';
+                $args['username']    ??= '';
+                $args['password']    ??= '';
+                $args['encoding']    ??= '';
+                $args['location']    ??= '';
+                $dsn = $args;
+                break;
+            case 'mysqli':
+            case 'pdomysqli':
+                $dsn = ['phptype'   => $args['databaseType'],
+                    'hostspec'  => $args['databaseHost'],
+                    'port'      => $args['databasePort'],
+                    'username'  => $args['userName'],
+                    'password'  => $args['password'],
+                    'database'  => $args['databaseName'],
+                    'encoding'  => $args['databaseCharset']];
+                break;
+            case 'pgsql':
+            case 'pdopgsql':
+                $dsn = ['phptype'   => $args['databaseType'],
+                    'hostspec'  => $args['databaseHost'],
+                    'port'      => $args['databasePort'],
+                    'username'  => $args['userName'],
+                    'password'  => $args['password'],
+                    'database'  => $args['databaseName'],
+                    'encoding'  => $args['databaseCharset']];
+                break;
+            default:
+                throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $args['databaseType']));
         }
 
-		// Get the flags
-		// We send the $args to the middleware and get back the flags the way the middleware wants them
-		// Creole wants an integer while PDO wants an array
-		// Not all flags sent will necessarily be supported
-		$flags = self::$mw::getFlags($args);
+        // Get the flags
+        // We send the $args to the middleware and get back the flags the way the middleware wants them
+        // Creole wants an integer while PDO wants an array
+        // Not all flags sent will necessarily be supported
+        $flags = self::$mw::getFlags($args);
 
-        // Now get the connection from the connectionMap or the middleware. 
+        // Now get the connection from the connectionMap or the middleware.
         // If it is new it will be added to the connectionMap
         try {
             $conn = self::getConnection($dsn, $flags); // cached on dsn hash, so no worries
         } catch (Exception $e) {
             throw $e;
         }
-		$count = count(self::$connectionMap);
+        $count = count(self::$connectionMap);
         xarLog3::notice("New connection created, now serving " . $count . " connections");
         return $conn;
     }
-    
+
     /**
      * Get a database connection
      *
@@ -198,30 +202,30 @@ class xarDB
     public static function &getConn($index = 0)
     {
         // Get new connection on demand ($index < 0)
-        // By default we get the first connection created (= typically by Xaraya core), 
+        // By default we get the first connection created (= typically by Xaraya core),
         // that is the one that the current value of self::$firstDSN gives us
         if (($index < 0) && isset(self::$firstDSN) && isset(self::$firstFlags)) {
             $conn =  self::getConnection(self::$firstDSN, self::$firstFlags);
-        	return $conn;
+            return $conn;
         }
 
         // An index value was passed. Go for that connection instead, but don't reset dsn and flags.
         if (($index > 0) && count(self::$connectionMap) > 0 && isset(self::$connectionMap[$index])) {
-        	$conn = self::$connectionMap[$index];
-			//self::$firstDSN = $conn->getDSN();
-			//self::$firstFlags = $conn->getFlags();
-        	return $conn;
+            $conn = self::$connectionMap[$index];
+            //self::$firstDSN = $conn->getDSN();
+            //self::$firstFlags = $conn->getFlags();
+            return $conn;
         }
 
         // No luck so far. Just get the first connection and reset dsn and flags.
         if (!empty(self::$connectionMap)) {
-			$conn = reset(self::$connectionMap);
+            $conn = reset(self::$connectionMap);
 
-			self::$firstDSN = reset(self::$dsnMap);
-			self::$firstFlags = reset(self::$flagMap);
-			return $conn;
-		}
-		
+            self::$firstDSN = reset(self::$dsnMap);
+            self::$firstFlags = reset(self::$flagMap);
+            return $conn;
+        }
+
         // No luck. This happens e.g. early in the installation before we have a database to connect to
         throw new Exception(xarMLS::translate('No connection available'));
     }
@@ -240,8 +244,11 @@ class xarDB
      *
      * Note: external database connection indexes are strings starting with "ext_" - see ExternalDatabase::isIndexExternal()
      */
-	public static function isIndexExternal($index = 0) { return false; }
-	
+    public static function isIndexExternal($index = 0)
+    {
+        return false;
+    }
+
     /**
      * Remove a connection from the connectionMap
      *
@@ -249,7 +256,7 @@ class xarDB
     public static function removeConn($index = null)
     {
         if (null === $index) {
-        	$index = self::getConnIndex();
+            $index = self::getConnIndex();
         }
         if (isset(self::$connectionMap[$index])) {
             unset(self::$connectionMap[$index]);
@@ -291,37 +298,40 @@ class xarDB
         return self::$latest;
     }
 
-	/**
-	 * Get the middleware -> ddl type map
-	 *
-	 * @return array<mixed>
-	 */
-	public static function getTypeMap() { return self::$mw::getTypeMap(); }
+    /**
+     * Get the middleware -> ddl type map
+     *
+     * @return array<mixed>
+     */
+    public static function getTypeMap()
+    {
+        return self::$mw::getTypeMap();
+    }
 
-	/**
-	 * Get a connection from the connectionMap or create a new one from the middleware
-	 *
+    /**
+     * Get a connection from the connectionMap or create a new one from the middleware
+     *
      * This will also set the dbConnIndex to the latest connectionMapKey (crc32)
      *
-	 * @return Connection|PDOConnection object
-	 */
-    public static function getConnection(Array $dsn, $flags)
+     * @return Connection|PDOConnection object
+     */
+    public static function getConnection(array $dsn, $flags)
     {
-    	// I see no reason to assume we'll always have dsn as an array
-/*        if (is_array($dsn)) {
-            $dsninfo = $dsn;
-        } else {
-            $dsninfo = self::parseDSN($dsn);
-        }
-*/
+        // I see no reason to assume we'll always have dsn as an array
+        /*        if (is_array($dsn)) {
+                    $dsninfo = $dsn;
+                } else {
+                    $dsninfo = self::parseDSN($dsn);
+                }
+        */
         // sort $dsn by keys so the serialized result is always the same
         // for identical connection parameters, no matter what their order is
         ksort($dsn);
 
-        $connectionMapKey = crc32(serialize($dsn + array('compat_flags' => ($flags))));
+        $connectionMapKey = crc32(serialize($dsn + ['compat_flags' => ($flags)]));
 
         // see if we already have a connection with these parameters cached
-        if(isset(self::$connectionMap[$connectionMapKey])) {
+        if (isset(self::$connectionMap[$connectionMapKey])) {
             // @todo let the middleware worry about how they store/cache their connections internally,
             // and only focus on what we expect to get back here, i.e. a connection
             $connection = self::$connectionMap[$connectionMapKey];
@@ -355,9 +365,9 @@ class xarDB
             }
         }
 
-		// If we got here then we need a connection that is not in the connectionMap
-		// Let's let the middleware create it 
-		$connection = self::$mw::getConnection($dsn, $flags);
+        // If we got here then we need a connection that is not in the connectionMap
+        // Let's let the middleware create it
+        $connection = self::$mw::getConnection($dsn, $flags);
 
         // Add this new connection to the connection map
         self::$connectionMap[$connectionMapKey] = $connection;
@@ -365,10 +375,10 @@ class xarDB
         self::$dsnMap[] = $dsn;
         self::$flagMap[] = $dsn;
         // Set the values for the first dsn and flags
-//        self::setFirstDSN($dsn);
-//        self::setFirstFlags($flags);
-		self::$firstDSN ??= $dsn;
-		self::$firstFlags ??= $flags;
+        //        self::setFirstDSN($dsn);
+        //        self::setFirstFlags($flags);
+        self::$firstDSN ??= $dsn;
+        self::$firstFlags ??= $flags;
         self::$latest = $connectionMapKey;
 
         return $connection;
@@ -379,28 +389,28 @@ xarDB::getInstance();
 
 function xarDB_init(array &$args)
 {
-	xarDB::setPrefix($args['prefix']);
+    xarDB::setPrefix($args['prefix']);
 
-	// Register postgres driver, since Creole uses a slightly different alias
-	// We do this here so we can remove customisation from creole lib.
-	// @deprecated 2.4.0 postgres hasn't been supported for a long time now
-	// Creole::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
+    // Register postgres driver, since Creole uses a slightly different alias
+    // We do this here so we can remove customisation from creole lib.
+    // @deprecated 2.4.0 postgres hasn't been supported for a long time now
+    // Creole::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
 
-	// If doConnect is null we connect. Not very intuitive
-	$args['doConnect'] = $args['doConnect'] ?? true;
-	if($args['doConnect']) {
-		try {
-			xarDB::newConn($args);
-		} catch (Exception $e) {
-			throw $e;
-		}
-	}
-	return true;
+    // If doConnect is null we connect. Not very intuitive
+    $args['doConnect'] ??= true;
+    if ($args['doConnect']) {
+        try {
+            xarDB::newConn($args);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    return true;
 }
-    
+
 class xarDatabase extends xarObject
 {
-    public static function init(array $args = array())
+    public static function init(array $args = [])
     {
         if (empty($args)) {
             // If no $args were passed then get then from the configuration file.
@@ -411,20 +421,20 @@ class xarDatabase extends xarObject
 
     public static function getConfig()
     {
-//---------------------------------------------------------------------------
-	// Assemble the args from the config file
-        // Host name 
+        //---------------------------------------------------------------------------
+        // Assemble the args from the config file
+        // Host name
         // Hive off the port if there is one added as part of the host
         $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
         $host_parts = explode(':', $host);
         $host = $host_parts[0];
-        $port = isset($host_parts[1]) ? $host_parts[1] : '';
+        $port = $host_parts[1] ?? '';
 
         // Database type, name and Location
-		$databaseType = xarSystemVars::get(sys::CONFIG, 'DB.Type');
-		$databaseName = xarSystemVars::get(sys::CONFIG, 'DB.Name');
-		$location = xarSystemVars::get(sys::CONFIG, 'DB.Location');
-         
+        $databaseType = xarSystemVars::get(sys::CONFIG, 'DB.Type');
+        $databaseName = xarSystemVars::get(sys::CONFIG, 'DB.Name');
+        $location = xarSystemVars::get(sys::CONFIG, 'DB.Location');
+
         // User and Password
         $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
         $password = xarSystemVars::get(sys::CONFIG, 'DB.Password');
@@ -435,73 +445,76 @@ class xarDatabase extends xarObject
                 $userName = base64_decode($userName);
                 $password  = base64_decode($password);
             }
-        } catch(VariableNotFoundException $e) {
+        } catch (VariableNotFoundException $e) {
             // doesnt matter, we assume not encoded
         }
 
         // Prefix and character set
-		$prefix          = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
-		$databaseCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+        $prefix          = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
+        $databaseCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
 
         // Persistence
         $persistent = null;
         try {
             $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
-        } catch(VariableNotFoundException $e) {
+        } catch (VariableNotFoundException $e) {
             $persistent = null;
         }
 
-//---------------------------------------------------------------------------
-	// Create the systemargs from the args
+        //---------------------------------------------------------------------------
+        // Create the systemargs from the args
         switch ($databaseType) {
-	        // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
-        	case 'sqlite3':
-        	case 'pdosqlite':
-				if ($location == ':memory:') {
-					$databaseName = $location;
-					$location = '';
-				}
-			break;
-			
-			case 'mysqli':
-			case 'pdomysqli':
-			break;
-			
-			case 'pgsql':
-			case 'pdopgsql':
-			break;
-			
-			default:
-			throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $databaseType));
+            // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
+            case 'sqlite3':
+            case 'pdosqlite':
+                if ($location == ':memory:') {
+                    $databaseName = $location;
+                    $location = '';
+                }
+                break;
+
+            case 'mysqli':
+            case 'pdomysqli':
+                break;
+
+            case 'pgsql':
+            case 'pdopgsql':
+                break;
+
+            default:
+                throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $databaseType));
         }
-        $systemArgs = array('databaseHost'    => $host,
-                            'databasePort'    => $port,
-                            'databaseType'    => $databaseType,
-                            'databaseName'    => $databaseName,
-        					'userName'        => $userName,
-                            'password'        => $password,
-                            'prefix'          => $prefix,
-                            'databaseCharset' => $databaseCharset,
-                            'persistent'      => $persistent,
-                            'location'        => $location,
-                            );
+        $systemArgs = ['databaseHost'    => $host,
+            'databasePort'    => $port,
+            'databaseType'    => $databaseType,
+            'databaseName'    => $databaseName,
+            'userName'        => $userName,
+            'password'        => $password,
+            'prefix'          => $prefix,
+            'databaseCharset' => $databaseCharset,
+            'persistent'      => $persistent,
+            'location'        => $location,
+        ];
         return $systemArgs;
     }
 
-    protected static function connect(array $systemArgs = array())
+    protected static function connect(array $systemArgs = [])
     {
         $host = $systemArgs['databaseHost'];
         // Connect to the database
         // Cater to different notations in the special case of localhost
-        $localhosts = array('localhost', '127.0.0.1');
+        $localhosts = ['localhost', '127.0.0.1'];
         if (in_array($host, $localhosts)) {
             $connected = false;
             foreach ($localhosts as $local) {
                 $systemArgs['databaseHost'] = $local;
                 try {
                     return xarDB_init($systemArgs);
-                } catch (Exception $e) {}
-                if ($connected) break;
+                } catch (Exception $e) {
+                }
+                if ($connected) {
+                    break;
+                }
             }
             if (!$connected) {
                 throw new Exception("Connection error: a database connection could not be established");

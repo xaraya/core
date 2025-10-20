@@ -1,4 +1,5 @@
 <?php
+
 /*
  * $Id: MySQLDatabaseInfo.php,v 1.13 2006/01/17 19:44:39 hlellelid Exp $
  *

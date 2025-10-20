@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ODBCResultSetCommon.php,v 1.3 2006/01/17 19:44:39 hlellelid Exp $
  *
@@ -164,7 +165,7 @@ abstract class ODBCResultSetCommon extends ResultSetCommon
     protected function checkFetchMode(&$row)
     {
         if ($this->fetchmode == ResultSet::FETCHMODE_ASSOC) {
-            $newrow = array();
+            $newrow = [];
 
             for ($i = 0, $n = count($row); $i < $n; $i++) {
                 $colname = @odbc_field_name($this->result->getHandle(), $i + 1);

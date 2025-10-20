@@ -72,7 +72,7 @@ class xarMod3
     /**
      * Get module system ID for this module
      */
-    public static function getID(string $modName): int|null
+    public static function getID(string $modName): ?int
     {
         return self::getInstance()->getID($modName);
     }
@@ -213,7 +213,7 @@ class xarMod3
      * @param string $callType is this called as an api function or not -> check against module class
      * @return callable|null
      */
-    public static function getModuleClassMethod(string $modName, string $modType, string $funcName = 'main', string $callType = 'api', mixed $context = null): callable|null
+    public static function getModuleClassMethod(string $modName, string $modType, string $funcName = 'main', string $callType = 'api', mixed $context = null): ?callable
     {
         if (!empty($context)) {
             self::getInstance()->setContext($context);

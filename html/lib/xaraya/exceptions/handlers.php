@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Exception handlers class
  *
@@ -11,14 +12,14 @@
  * @link http://www.xaraya.info
  *
  * @author Marcel van der Boom <marcel@hsdev.com>
- * @todo This design promotes method growth instead of inheritance, change it 
+ * @todo This design promotes method growth instead of inheritance, change it
  *         (there should be a chain of classes, not a chain of methods)
 **/
 
 interface IExceptionHandlers
 {
     public static function defaulthandler($e);
-    public static function phperrors($errorType, $errorString, $file, $line, array $errorContext=array());
+    public static function phperrors($errorType, $errorString, $file, $line, array $errorContext = []);
 }
 
 /**
@@ -33,7 +34,7 @@ interface IExceptionHandlers
 **/
 class ExceptionHandlers extends xarObject implements IExceptionHandlers
 {
-    private static $data = array();
+    private static $data = [];
 
     /**
      * Default Exception handler for unhandled exceptions
@@ -59,21 +60,24 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         //          in the bone handler
         try {
             // Try to get the full path location out of the trace
-            self::$data = array_merge( self::$data,
-                                  array(
-                                  'major'     => 'MAJOR TBD (Code was: '. $e->getCode().')',
-                                  'type'      => get_class($e), // consider stripping of 'Exception'
-                                  'title'     => get_class($e) . ' ['.$e->getCode().'] was raised (native)',
-                                  'short'     => htmlspecialchars($e->getMessage()),
-                                  'line'      => $e->getLine(),
-                                  'file'      => $e->getFile(),
-                                ));
+            self::$data = array_merge(
+                self::$data,
+                [
+                    'major'     => 'MAJOR TBD (Code was: ' . $e->getCode() . ')',
+                    'type'      => get_class($e), // consider stripping of 'Exception'
+                    'title'     => get_class($e) . ' [' . $e->getCode() . '] was raised (native)',
+                    'short'     => htmlspecialchars($e->getMessage()),
+                    'line'      => $e->getLine(),
+                    'file'      => $e->getFile(),
+                ]
+            );
             // If we have em, use em
 
-            if(method_exists('xarTpl','getThemeDir') && method_exists('xarTpl','file')) {
-                $theme_dir = xarTpl::getThemeDir(); $template="systemerror";
+            if (method_exists('xarTpl', 'getThemeDir') && method_exists('xarTpl', 'file')) {
+                $theme_dir = xarTpl::getThemeDir();
+                $template = "systemerror";
                 sys::import('xaraya.caching.template');
-                if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
+                if (file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
                     $msg = xarTpl::file($theme_dir . '/modules/base/message-' . $template . '.xt', self::$data);
                 } else {
                     $msg = xarTpl::file(sys::code() . 'modules/base/xartemplates/message-' . $template . '.xt', self::$data);
@@ -87,7 +91,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
                 // Rethrow it, we cant handle it.
                 throw $e;
             }
-        } catch( Exception $e_internal) {
+        } catch (Exception $e_internal) {
             // Oh well, pick up the bones, but pick them up from the original exception
             // otherwise the message can be rather confusing
             // @todo: do we care about what $e_internal is?
@@ -98,15 +102,16 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
     // Handler with more information, for instance for the designated site admin
     public static function debughandler($e)
     {
-        $trace = str_replace(sys::root(),'',$e->getTraceAsString());
-        self::$data = array_merge( self::$data,
-                              array(
-                              'long'      => 'LONG msg TBD',
-                              'hint'      => (method_exists($e,'getHint'))? htmlspecialchars($e->getHint()) : 'No hint available',
-                              'stack'     => htmlspecialchars($trace),
-                              'product'   => 'Product TBD',
-                              'component' => 'Component TBD')
-                            );
+        $trace = str_replace(sys::root(), '', $e->getTraceAsString());
+        self::$data = array_merge(
+            self::$data,
+            [
+                'long'      => 'LONG msg TBD',
+                'hint'      => (method_exists($e, 'getHint')) ? htmlspecialchars($e->getHint()) : 'No hint available',
+                'stack'     => htmlspecialchars($trace),
+                'product'   => 'Product TBD',
+                'component' => 'Component TBD']
+        );
         self::defaulthandler($e);
     }
 
@@ -131,18 +136,18 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
      * @param  integer $line linenumber on which the error occurred
      * @param array<mixed> $errorContext information on the context of the error
      * @author Marco Canini <marco@xaraya.com>
-     * 
+     *
      * @throws PHPException
      * @return void
      */
-    final public static function phperrors($errorRaised, $errorString, $file, $line, array $errorContext = array())
+    final public static function phperrors($errorRaised, $errorString, $file, $line, array $errorContext = [])
     {
         //Checks for a @ presence in the given line, should stop from setting Xaraya errors
         $oldLevel = error_reporting();
         try {
             // We'll try to get the configured threshold
-            $errThreshold = xarSystemVars::get(sys::CONFIG,'Exception.ErrorLevel');
-        } catch(Exception $e) {
+            $errThreshold = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
+        } catch (Exception $e) {
             // Oh well, show everything so construct the maximum bitmask
             // Note that E_ALL is already a summed bitmask value (2047) while E_STRICT is *NOT* (2048)
             // MrB: if there are actually E_STRICT errors, this is known to break *some* installs ( mine ;-) )
@@ -152,14 +157,14 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         // Only continue rendering if:
         // 1. the level was not 0 or equivalent for PHP 8.0+ (either explicitly set or due to an @ on the line causing the error)
         // 2. the raised Errorlevel is included in the threshold bitmask
-        if ( ($oldLevel == 0) or !(error_reporting() & $errorRaised) or ($errorRaised & $errThreshold != $errorRaised )) {
+        if (($oldLevel == 0) or !(error_reporting() & $errorRaised) or ($errorRaised & $errThreshold != $errorRaised)) {
             // Log the message so it is not lost.
             // TODO: make this message available to calling functions that suppress errors through '@'.
             $msg = "PHP error code $errorRaised at line $line of $file: $errorString";
             try {
                 // We'll try to log it.
                 xarLog::message($msg, xarLog::LEVEL_ERROR);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 // Oh well, forget it then
             }
             return; // no need to raise exception
@@ -168,19 +173,19 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         // Make cached files also display their source file if it's a template
         // This is just for convenience when giving support, as people will probably
         // not look in the CACHEKEYS file to mention the template.
-        $key = basename(strval($file),'.php');
+        $key = basename(strval($file), '.php');
         sys::import('xaraya.caching.template');
         $sourceFile = xarTemplateCache::sourceFile($key);
 
         // Construct the msg in a table like way, so it's easily copy/pasteable
-        $spacer= str_repeat(' ',11);
+        $spacer = str_repeat(' ', 11);
         $msg = "File     : $file\n";
-        if(isset($sourceFile)) {
-            $msg.= $spacer."[$sourceFile]\n";
+        if (isset($sourceFile)) {
+            $msg .= $spacer . "[$sourceFile]\n";
         }
-        $msg.= "Line     : $line\n";
-        $msg.= "Code     : $errorRaised\n";
-        $msg.= "Message  : ".str_replace("\n","\n$spacer",wordwrap($errorString,75,"\n"))."\n";
+        $msg .= "Line     : $line\n";
+        $msg .= "Code     : $errorRaised\n";
+        $msg .= "Message  : " . str_replace("\n", "\n$spacer", wordwrap($errorString, 75, "\n")) . "\n";
 
         // Show variables only if this configvar is set in the themes backend
         // Default is no
@@ -188,12 +193,13 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         if (class_exists('xarConfigVars') && xarCore::isLoaded(xarCore::SYSTEM_CONFIGURATION)) {
             try {
                 $show = xarConfigVars::get(null, 'Site.BL.ExceptionDisplay');
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
         if ($show) {
-            $msg.= "Variables: ";
-            foreach($errorContext as $varName => $varValue) {
-                $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ",htmlspecialchars(print_r($varValue,true)))."\n$spacer";
+            $msg .= "Variables: ";
+            foreach ($errorContext as $varName => $varValue) {
+                $msg .= "\$$varName:\n$spacer  " . str_replace("\n", "\n$spacer  ", htmlspecialchars(print_r($varValue, true))) . "\n$spacer";
             }
         }
 
@@ -212,7 +218,8 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             }
 
             // @todo consider removing this, it doesnt add much and causes quite a maintenance task
-            $product = ''; $component = '';
+            $product = '';
+            $component = '';
             if ($module != '') {
                 // load relative to the current file (e.g. for shutdown functions)
                 sys::import('xaraya.exceptions.xarayacomponents');
@@ -235,18 +242,18 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
 
         }
         // Throw an exception to let the default handler handle the rest.
-        throw new PHPException($msg,$errorRaised);
+        throw new PHPException($msg, $errorRaised);
     }
 
     // Private methods
     private static function RenderRaw(Exception $e)
     {
         // @todo how many assumptions can we make about the rendering capabilities of the client here?
-        $out="<pre>";
-        $out.= 'Error: '.$e->getCode().": ".get_class($e)."\n";
-        $out.= $e->getMessage()."\n";
-        $out.= "Backtrace: ".str_replace("\n","\n           ",$e->getTraceAsString());
-        $out.= "</pre>";
+        $out = "<pre>";
+        $out .= 'Error: ' . $e->getCode() . ": " . get_class($e) . "\n";
+        $out .= $e->getMessage() . "\n";
+        $out .= "Backtrace: " . str_replace("\n", "\n           ", $e->getTraceAsString());
+        $out .= "</pre>";
         return $out;
     }
 }

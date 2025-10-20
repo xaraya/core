@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tester for EventObserverBridge and HookObserverBridge
  *

@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ConnectionCommon.php,v 1.5 2005/10/17 19:03:51 dlawson_mi Exp $
  *
@@ -53,7 +54,7 @@ abstract class ConnectionCommon
      * Stack of savepoint names used for nested transaction emulation.
      * @var array
      */
-    protected $nestedTransactionSavepoints = array();
+    protected $nestedTransactionSavepoints = [];
 
     /**
      * DB connection resource id.
@@ -82,7 +83,7 @@ abstract class ConnectionCommon
      *  A reference to the last query performed
      */
     protected $lastQuery;
-    
+
     /**
      * This "magic" method is invoked upon serialize() and works in tandem with the __wakeup()
      * method to ensure that your database connection is serializable.
@@ -112,7 +113,7 @@ abstract class ConnectionCommon
      */
     public function __sleep()
     {
-        return array('dsn', 'flags');
+        return ['dsn', 'flags'];
     }
 
     /**
@@ -179,12 +180,12 @@ abstract class ConnectionCommon
         if ($this->transactionOpcount === 0 || $this->supportsNestedTrans()) {
             $this->beginTrans();
         } elseif ($this->supportsSavepoints()) {
-            $savepointIdentifier = "creole_savepoint_".count($this->nestedTransactionSavepoints);
+            $savepointIdentifier = "creole_savepoint_" . count($this->nestedTransactionSavepoints);
             $this->nestedTransactionSavepoints[] = $savepointIdentifier;
             $this->setSavepoint($savepointIdentifier);
         }
         $this->transactionOpcount++;
-        xarLog3::info("DB: starting transaction [".$this->transactionOpcount."]");
+        xarLog3::info("DB: starting transaction [" . $this->transactionOpcount . "]");
     }
 
     /**
@@ -195,11 +196,11 @@ abstract class ConnectionCommon
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->commitTrans();
-                xarLog3::info("DB: committed transaction [".$this->transactionOpcount."]");
+                xarLog3::info("DB: committed transaction [" . $this->transactionOpcount . "]");
             } elseif ($this->supportsSavepoints()) {
                 $savepointIdentifier = array_pop($this->nestedTransactionSavepoints);
                 $this->releaseSavepoint($savepointIdentifier);
-                xarLog3::warning("DB: releasing savepoint of transaction [".$this->transactionOpcount."]");
+                xarLog3::warning("DB: releasing savepoint of transaction [" . $this->transactionOpcount . "]");
             }
             $this->transactionOpcount--;
         }
@@ -216,7 +217,7 @@ abstract class ConnectionCommon
             } elseif ($this->supportsSavepoints()) {
                 $savepointIdentifier = array_pop($this->nestedTransactionSavepoints);
                 $this->rollbackToSavepoint($savepointIdentifier);
-                xarLog3::warning("DB: Rolled back transaction [".$this->transactionOpcount."]");
+                xarLog3::warning("DB: Rolled back transaction [" . $this->transactionOpcount . "]");
             }
             $this->transactionOpcount--;
         }
@@ -302,40 +303,34 @@ abstract class ConnectionCommon
      * Begin new transaction.
      * Driver classes should override this method if they support transactions.
      */
-    protected function beginTrans()
-    {
-    }
+    protected function beginTrans() {}
 
     /**
      * Commit the current transaction.
      * Driver classes should override this method if they support transactions.
      */
-    protected function commitTrans()
-    {
-    }
+    protected function commitTrans() {}
 
     /**
      * Roll back (undo) the current transaction.
      * Driver classes should override this method if they support transactions.
      */
-    protected function rollbackTrans()
-    {
-    }
+    protected function rollbackTrans() {}
 
     // XARAYA MODIFICATION
     // to prevent changing all execute statements
-    public function &Execute($sql, $bindvars = array(), $fetchmode = null)
+    public function &Execute($sql, $bindvars = [], $fetchmode = null)
     {
         xarLog3::debug("DB: Executing $sql");
         $stmt = $this->prepareStatement($sql);
-        if($stmt) {
-            if($this->isSelect($sql)) {
+        if ($stmt) {
+            if ($this->isSelect($sql)) {
                 try {
                     $res = $stmt->executeQuery($bindvars, $fetchmode);
                 } catch (Exception $e) {
                     throw new SQLException("CREOLE: SELECT query $sql failed to execute");
                 }
-                if($res) {
+                if ($res) {
                     // ADODB used to set the resultset on the first, doh!
                     $res->first();
                 }
@@ -347,18 +342,18 @@ abstract class ConnectionCommon
                 }
                 // Save it, for adodb compat for the the method Affected_Rows
                 $this->affected_rows = $res;
-                if($res == 0) {
+                if ($res == 0) {
                     $res = true;
                 }
             }
-            if(!$res) {
+            if (!$res) {
                 throw new SQLException("CREOLE: query $sql failed to execute");
             }
             return $res;
         }
     }
 
-    public function &SelectLimit($sql, $limit = 0, $offset = 0, $bindvars = array(), $fetchmode = null)
+    public function &SelectLimit($sql, $limit = 0, $offset = 0, $bindvars = [], $fetchmode = null)
     {
         xarLog3::debug("DB: Executing $sql");
         $stmt = $this->prepareStatement($sql);
@@ -393,7 +388,7 @@ abstract class ConnectionCommon
 
     public function __get($propname)
     {
-        switch($propname) {
+        switch ($propname) {
             // return the database type
             case 'databaseType':
                 // This has no realistic equivalent in creole, probably leave it in
@@ -409,12 +404,12 @@ abstract class ConnectionCommon
 
     public function __call($method, $args)
     {
-        switch(strtolower($method)) {
+        switch (strtolower($method)) {
             case 'qstr':
                 // Used in a couple of places where bind variable replacement is less than trivial
                 // (roles and dd only)
                 // DOH! we dont want this
-                return  "'".str_replace("'", "\\'", $args[0])."'";
+                return  "'" . str_replace("'", "\\'", $args[0]) . "'";
             case 'starttrans':
                 return $this->begin();
             case 'completetrans':

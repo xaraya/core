@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Default Route class
  *
@@ -28,13 +29,13 @@ sys::import('xaraya.mapper.routers.routes.base');
 
 class DefaultRoute extends xarRoute
 {
-    public function __construct(array $defaults = array(), ?xarDispatcher $dispatcher = null)
+    public function __construct(array $defaults = [], ?xarDispatcher $dispatcher = null)
     {
-        $this->defaults += array(
-                            'module' => 'base',
-                            'type'   => 'user',
-                            'func'   => 'main',
-                                );
+        $this->defaults += [
+            'module' => 'base',
+            'type'   => 'user',
+            'func'   => 'main',
+        ];
         parent::__construct($defaults, $dispatcher);
     }
 
@@ -46,7 +47,7 @@ class DefaultRoute extends xarRoute
         // Get the request's URL string
         $path = $request->getURL();
 
-        $params = array();
+        $params = [];
 
         // Parse the query part of the URL
         $urlparts = parse_url($path);
@@ -57,7 +58,7 @@ class DefaultRoute extends xarRoute
         // Cater to URLs with &amp;
         $querypart = preg_replace('/&amp;/', '&', $urlparts['query']);
         $pairs = explode(xarController::$separator, $querypart);
-        foreach($pairs as $pair) {
+        foreach ($pairs as $pair) {
             if (trim($pair) == '') {
                 continue;
             }

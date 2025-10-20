@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Request class
  *
@@ -37,12 +38,12 @@ class xarRequest extends xarObject
     /** @var ?string */
     public $func          = null;
     /** @var array<string, mixed> */
-    public $funcargs      = array();
+    public $funcargs      = [];
     public string $object        = 'objects';
     public string $method        = 'view';
 
     /** @var array<mixed> */
-    public $defaultRequestInfo = array();
+    public $defaultRequestInfo = [];
     public bool $isObjectURL     = false;
 
     public string $entryPoint;
@@ -161,7 +162,7 @@ class xarRequest extends xarObject
             // CHECKME: are these next lines needed?
             // Try and get it from the current request path
             // Note: we don't generate an XML compatible URL here
-            $url = xarServer::getCurrentURL(array(), false);
+            $url = xarServer::getCurrentURL([], false);
             $params = $this->requestContext?->getQueryParams();
 
             // We now have a URL. Set it.
@@ -271,11 +272,11 @@ class xarRequest extends xarObject
         }
         // Get variables
         if (empty($url)) {
-            $info = array(
+            $info = [
                 $this->getModule(),
                 $this->getType(),
                 $this->getFunction(),
-            );
+            ];
             // Save the current info in case we call this function again
             $currentRequestInfo = $info;
             return $info;
@@ -287,19 +288,19 @@ class xarRequest extends xarObject
             $regex = ValueValidations::get('regexp');
         }
         if (isset($params['module'])) {
-            $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
+            $isvalid =  $regex->validate($params['module'], ['/^[a-z][a-z_0-9]*$/']);
             $modName = $isvalid ? $params['module'] : null;
         } else {
             $modName = null;
         }
         if (isset($params['type'])) {
-            $isvalid =  $regex->validate($params['type'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
+            $isvalid =  $regex->validate($params['type'], ['/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/']);
             $modType = $isvalid ? $params['type'] : 'user';
         } else {
             $modType = 'user';
         }
         if (isset($params['func'])) {
-            $isvalid =  $regex->validate($params['func'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
+            $isvalid =  $regex->validate($params['func'], ['/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/']);
             $funcName = $isvalid ? $params['func'] : 'main';
         } else {
             $funcName = 'main';
@@ -307,7 +308,7 @@ class xarRequest extends xarObject
 
         if (!empty($modName)) {
             // Cache values into info static var
-            $requestInfo = array($modName, $modType, $funcName);
+            $requestInfo = [$modName, $modType, $funcName];
         } else {
             // Check if we have an object to work with for object URLs
             xarVar::fetch('object', 'regexp:/^[a-zA-Z0-9_-]+$/', $objectName, null, xarVar::NOT_REQUIRED);
@@ -315,16 +316,16 @@ class xarRequest extends xarObject
                 // Check if we have a method to work with for object URLs
                 xarVar::fetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, null, xarVar::NOT_REQUIRED);
                 // Specify 'dynamicdata' as module for xarTpl_* functions etc.
-                $requestInfo = array('object', $objectName, $methodName);
+                $requestInfo = ['object', $objectName, $methodName];
                 //if (empty($url)) {
                 //    $this->isObjectURL = true;
                 //}
             } else {
                 // If $modName is still empty we use the default module/type/func to be loaded in that such case
                 if (empty($this->defaultRequestInfo)) {
-                    $this->defaultRequestInfo = array(xarModVars::get('modules', 'defaultmodule'),
-                                                      xarModVars::get('modules', 'defaultmoduletype'),
-                                                      xarModVars::get('modules', 'defaultmodulefunction'));
+                    $this->defaultRequestInfo = [xarModVars::get('modules', 'defaultmodule'),
+                        xarModVars::get('modules', 'defaultmoduletype'),
+                        xarModVars::get('modules', 'defaultmodulefunction')];
                 }
                 $requestInfo = $this->defaultRequestInfo;
             }
@@ -501,7 +502,7 @@ class xarRequest extends xarObject
      * @param array<string, mixed> $p
      * @return void
      */
-    public function setFunctionArgs($p = array())
+    public function setFunctionArgs($p = [])
     {
         $this->funcargs = $p;
     }
@@ -568,7 +569,7 @@ class xarRequest extends xarObject
     {
         if ($this->isAjax()) {
             if (is_array($msg)) {
-                $data = array('message' => $msg);
+                $data = ['message' => $msg];
                 $output = xarTpl::includeTemplate('theme', '', 'user-message', $data);
                 echo $output;
             } else {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -42,7 +43,7 @@ ifsnow is korean phper. Is sorry to be unskillful to English. *^^*;;
 sys::import('xaraya.validations');
 class MxCheckValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
 
         global $HTTP_HOST;
@@ -52,68 +53,66 @@ class MxCheckValidation extends ValueValidations
         // $Domain : ebeecomm.com
         // list function reference : http://www.php.net/manual/en/function.list.php
         // split function reference : http://www.php.net/manual/en/function.split.php
-        list ( $Username, $Domain ) = explode ("@", $subject);
+        [$Username, $Domain] = explode("@", $subject);
 
         // That MX(mail exchanger) record exists in domain check .
         // checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
-        if ( checkdnsrr ( $Domain, "MX" ) )  {
+        if (checkdnsrr($Domain, "MX")) {
 
             // If MX record exists, save MX record address.
             // getmxrr function reference : http://www.php.net/manual/en/function.getmxrr.php
-            getmxrr ($Domain, $MXHost);
+            getmxrr($Domain, $MXHost);
 
             // Getmxrr function does to store MX record address about $Domain in arrangement form to $MXHost.
             // $ConnectAddress socket connection address.
             $ConnectAddress = $MXHost[0];
-        }
-        else {
+        } else {
             // If there is no MX record simply @ to next time address socket connection do .
             $ConnectAddress = $Domain;
         }
 
         // fsockopen function reference : http://www.php.net/manual/en/function.fsockopen.php
-        $Connect = fsockopen ( $ConnectAddress, 25 );
+        $Connect = fsockopen($ConnectAddress, 25);
 
         // Success in socket connection
-        if ($Connect)
-        {
+        if ($Connect) {
             // Judgment is that service is preparing though begin by 220 getting string after connection .
             // fgets function reference : http://www.php.net/manual/en/function.fgets.php
-            if ( preg_match ( "/^220/", $Out = fgets ( $Connect, 1024 ) ) ) {
+            if (preg_match("/^220/", $Out = fgets($Connect, 1024))) {
 
                 // Inform client's reaching to server who connect.
-                fputs ( $Connect, "HELO $HTTP_HOST\r\n" );
-                $Out = fgets ( $Connect, 1024 ); // Receive server's answering cord.
+                fputs($Connect, "HELO $HTTP_HOST\r\n");
+                $Out = fgets($Connect, 1024); // Receive server's answering cord.
 
                 // Inform sender's address to server.
-                fputs ( $Connect, "MAIL FROM: <{$subject}>\r\n" );
-                $From = fgets ( $Connect, 1024 ); // Receive server's answering cord.
+                fputs($Connect, "MAIL FROM: <{$subject}>\r\n");
+                $From = fgets($Connect, 1024); // Receive server's answering cord.
 
                 // Inform listener's address to server.
-                fputs ( $Connect, "RCPT TO: <{$subject}>\r\n" );
-                $To = fgets ( $Connect, 1024 ); // Receive server's answering cord.
+                fputs($Connect, "RCPT TO: <{$subject}>\r\n");
+                $To = fgets($Connect, 1024); // Receive server's answering cord.
 
                 // Finish connection.
-                fputs ( $Connect, "QUIT\r\n");
+                fputs($Connect, "QUIT\r\n");
 
                 fclose($Connect);
 
-                    // Server's answering cord about MAIL and TO command checks.
-                    // Server about listener's address reacts to 550 codes if there does not exist
-                    // checking that mailbox is in own E-Mail account.
-                    if ( !preg_match ( "/^250/", $From ) || !preg_match ( "/^250/", $To )) {
-                        //We should add some caching for these cases to avoid an excessive
-                        // hardware consumption exploit thru sending many of these e-mails to be checked
+                // Server's answering cord about MAIL and TO command checks.
+                // Server about listener's address reacts to 550 codes if there does not exist
+                // checking that mailbox is in own E-Mail account.
+                if (!preg_match("/^250/", $From) || !preg_match("/^250/", $To)) {
+                    //We should add some caching for these cases to avoid an excessive
+                    // hardware consumption exploit thru sending many of these e-mails to be checked
 
-                        $msg = 'Invalid e-mail #(1), the mail server doesnt recognize it.';
-                        throw new VariableValidationException($subject,$msg);
-                    }
+                    $msg = 'Invalid e-mail #(1), the mail server doesnt recognize it.';
+                    throw new VariableValidationException($subject, $msg);
+                }
             }
         } else { // Failure in socket connection
             // @todo use try catch here
             // @todo CHECK: is this considered to be a validation exception?
             $msg = 'Unable to connect to the mail server #(1) for e-mail #(2).';
-            throw new VariableValidationException(array($ConnectAddress, $subject),$msg);
+            throw new VariableValidationException([$ConnectAddress, $subject], $msg);
         }
 
         return true;

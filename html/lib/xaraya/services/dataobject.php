@@ -49,19 +49,19 @@ interface DataObjectInterface extends ServiceInterface
      * Get data object
      * @param array<string, mixed> $args
      */
-    public function getObject(array $args = []): DataObject|null;
+    public function getObject(array $args = []): ?DataObject;
 
     /**
      * Get data object list
      * @param array<string, mixed> $args
      */
-    public function getObjectList(array $args = []): DataObjectList|null;
+    public function getObjectList(array $args = []): ?DataObjectList;
 
     /**
      * Get data object loader
      * @param array<string> $fieldlist
      */
-    public function getObjectLoader(?string $objectName = null, array $fieldlist = ['id', 'name']): DataObjectLoader|null;
+    public function getObjectLoader(?string $objectName = null, array $fieldlist = ['id', 'name']): ?DataObjectLoader;
 
     /**
      * Get info about a data object by name or objectid
@@ -144,7 +144,7 @@ trait DataObjectTrait
      * Get data object
      * @param array<string, mixed> $args
      */
-    public function getObject(array $args = []): DataObject|null
+    public function getObject(array $args = []): ?DataObject
     {
         return DataObjectFactory::getObject($args, $this->getContext());
     }
@@ -153,7 +153,7 @@ trait DataObjectTrait
      * Get data object list
      * @param array<string, mixed> $args
      */
-    public function getObjectList(array $args = []): DataObjectList|null
+    public function getObjectList(array $args = []): ?DataObjectList
     {
         return DataObjectFactory::getObjectList($args, $this->getContext());
     }
@@ -162,7 +162,7 @@ trait DataObjectTrait
      * Get data object loader
      * @param array<string> $fieldlist
      */
-    public function getObjectLoader(?string $objectName = null, array $fieldlist = ['id', 'name']): DataObjectLoader|null
+    public function getObjectLoader(?string $objectName = null, array $fieldlist = ['id', 'name']): ?DataObjectLoader
     {
         $objectName ??= $this->getObjectName();
         return DataObjectFactory::getObjectLoader($objectName, $fieldlist, $this->getContext());

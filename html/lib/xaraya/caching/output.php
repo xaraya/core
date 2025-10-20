@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Xaraya Output Cache
  *

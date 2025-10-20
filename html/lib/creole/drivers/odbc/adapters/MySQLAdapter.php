@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MySQLAdapter.php,v 1.1 2004/07/27 23:08:30 hlellelid Exp $
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Table Maintenance API for MySQL
  *
@@ -29,7 +30,7 @@ use Xaraya\Facades\xarDB3;
 /**
  * Generate the Oracle specific SQL to create a table
  *
- * 
+ *
  * @param string $tableName the physical table name
  * @param array<mixed> $fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
@@ -37,27 +38,30 @@ use Xaraya\Facades\xarDB3;
  */
 function xarDB__oracleCreateTable($tableName, $fields, $charset = null)
 {
-    $sql_fields = array();
-    $primary_key = array();
+    $sql_fields = [];
+    $primary_key = [];
 
     foreach ($fields as $field_name => $parameters) {
         $parameters['command'] = 'create';
         $this_field = xarDB__oracleColumnDefinition($field_name, $parameters);
 
         $sqlDDL = $field_name;
-        if (isset($this_field['type']))
+        if (isset($this_field['type'])) {
             $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
+        }
 
         // Oracle doesn't handle unsigned
         //if (isset($this_field['unsigned']))
         //    $sqlDDL = $sqlDDL . ' ' . $this_field['unsigned'];
 
         // Order of default and null clause matter
-        if (isset($this_field['default']))
+        if (isset($this_field['default'])) {
             $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
+        }
 
-        if (isset($this_field['null']))
+        if (isset($this_field['null'])) {
             $sqlDDL = $sqlDDL . ' ' . $this_field['null'];
+        }
 
         // Oracle doesn't handle auto_increment - this should be a sequence
         //if (isset($this_field['auto_increment']))
@@ -73,9 +77,9 @@ function xarDB__oracleCreateTable($tableName, $fields, $charset = null)
         }
     }
 
-    $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
+    $sql = 'CREATE TABLE ' . $tableName . ' (' . implode(', ', $sql_fields);
     if (!empty($primary_key)) {
-        $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
+        $sql .= ', PRIMARY KEY (' . implode(',', $primary_key) . ')';
     }
     $sql .= ')';
 
@@ -85,7 +89,7 @@ function xarDB__oracleCreateTable($tableName, $fields, $charset = null)
 /**
  * Oracle specific function to alter a table
  *
- * 
+ *
  * @param string $tableName the table to alter
  * @param array<string, mixed> $args
  * with
@@ -101,25 +105,27 @@ function xarDB__oracleAlterTable($tableName, $args)
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
             }
-            $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
+            $sql = 'ALTER TABLE ' . $tableName . ' ADD ' . $args['field'] . ' ';
             // Get column definitions
             $this_field = xarDB__oracleColumnDefinition($args['field'], $args);
             // Add column values if they exist
             // Note:  Oracle does not support null values in ALTER TABLE
             $sqlDDL = "";
-            if (isset($this_field['type']))
+            if (isset($this_field['type'])) {
                 $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
-            if (isset($this_field['default']))
+            }
+            if (isset($this_field['default'])) {
                 $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
+            }
             $sql .= $sqlDDL;
             break;
         case 'rename':
             if (empty($args['new_name'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (new_name key must be set.)');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (new_name key must be set.)');
             }
-            $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
+            $sql = 'ALTER TABLE ' . $tableName . ' RENAME TO ' . $args['new_name'];
             break;
         case 'modify':
 
@@ -141,19 +147,19 @@ function xarDB__oracleAlterTable($tableName, $args)
 
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
             }
             // check to make sure we have an action to perform on the colunm
             if (!empty($args['type']) || !empty($args['size']) || !empty($args['default']) || !empty($args['unsigned']) || !empty($args['increment']) || !empty($args['primary_key'])) {
-                throw new BadParameterException('args','Modify does not currently support: type, size, default, unsigned, increment, or primary_key)');
+                throw new BadParameterException('args', 'Modify does not currently support: type, size, default, unsigned, increment, or primary_key)');
             }
 
             // check to make sure we have an action to perform on the colunm
-            if (empty($args['null']) && $args['null']!=false) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
+            if (empty($args['null']) && $args['null'] != false) {
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
             // prep the first part of the query
-            $sql = 'ALTER TABLE '.$tableName.' MODIFY ('.$args['field'].' ';
+            $sql = 'ALTER TABLE ' . $tableName . ' MODIFY (' . $args['field'] . ' ';
 
             //since we don't allow type to be passed, check the db for type and derive type from
             // the existing schema. Also b/c the fetch mode may or may not be set to NUM, set it to
@@ -163,28 +169,28 @@ function xarDB__oracleAlterTable($tableName, $args)
             $dbInfo = $dbconn->getDatabaseInfo();
             $tblInfo = $dbInfo->getTable($tableName);
             $tableInfoArray = $tblInfo->getColumns();
-            if (!empty($tableInfoArray[strtoupper($args['field'])]->type)){
-                $sql.=$tableInfoArray[strtoupper($args['field'])]->type;
+            if (!empty($tableInfoArray[strtoupper($args['field'])]->type)) {
+                $sql .= $tableInfoArray[strtoupper($args['field'])]->type;
             }
-            if (!empty($tableInfoArray[strtoupper($args['field'])]->max_length) && $tableInfoArray[strtoupper($args['field'])]->max_length!="-1"){
-                $sql.='('.$tableInfoArray[strtoupper($args['field'])]->max_length.')';
+            if (!empty($tableInfoArray[strtoupper($args['field'])]->max_length) && $tableInfoArray[strtoupper($args['field'])]->max_length != "-1") {
+                $sql .= '(' . $tableInfoArray[strtoupper($args['field'])]->max_length . ')';
             }
 
             // see if the want to add null
-            if ($args['null']==false){
-                $sql.=' NULL ';
+            if ($args['null'] == false) {
+                $sql .= ' NULL ';
             }
-            if ($args['null']==true){
-                $sql.=' NOT NULL ';
+            if ($args['null'] == true) {
+                $sql .= ' NOT NULL ';
             }
 
             // add on closing paren
-            $sql.=")";
+            $sql .= ")";
 
             // break out of the case to return the modify sql
             break;
         default:
-            throw new BadParameterException($args['command'],'Unknown command: "#(1)"');
+            throw new BadParameterException($args['command'], 'Unknown command: "#(1)"');
 
     }
     return $sql;
@@ -193,16 +199,16 @@ function xarDB__oracleAlterTable($tableName, $args)
 /**
  * Oracle specific column type generation
  *
- * 
+ *
  * @param string $field_name
  * @param array<mixed> $parameters
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__oracleColumnDefinition($field_name, $parameters)
 {
-    $this_field = array($field_name);
+    $this_field = [$field_name];
 
-    switch($parameters['type']) {
+    switch ($parameters['type']) {
         case 'integer':
             // TODO Get correct Sizes
             if (isset($parameters['size'])) {
@@ -228,10 +234,10 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field['type'] = 'CHAR('.$parameters['size'].')';
+                $this_field['type'] = 'CHAR(' . $parameters['size'] . ')';
             }
             if (isset($parameters['default'])) {
-                $parameters['default'] = "'".$parameters['default']."'";
+                $parameters['default'] = "'" . $parameters['default'] . "'";
             }
             break;
 
@@ -239,10 +245,10 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field['type'] = 'VARCHAR2('.$parameters['size'].')';
+                $this_field['type'] = 'VARCHAR2(' . $parameters['size'] . ')';
             }
             if (isset($parameters['default'])) {
-                $parameters['default'] = "'".$parameters['default']."'";
+                $parameters['default'] = "'" . $parameters['default'] . "'";
             }
             break;
 
@@ -269,18 +275,18 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'].
-                                         ' '.$datetime_defaults['hour'].
-                                         ':'.$datetime_defaults['minute'].
-                                         ':'.$datetime_defaults['second'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day']
+                                         . ' ' . $datetime_defaults['hour']
+                                         . ':' . $datetime_defaults['minute']
+                                         . ':' . $datetime_defaults['second'];
 
                 } else {
                     // Oracle doesn't allow a default value of
                     // '00-00-00 00:00:00 as this it is not a valid timestamp
-                    if ($parameters['default'] == '0000-00-00 00:00:00' ||
-                        $parameters['default'] == '00-00-00 00:00:00') {
+                    if ($parameters['default'] == '0000-00-00 00:00:00'
+                        || $parameters['default'] == '00-00-00 00:00:00') {
                         // Change to current timestamp
                         $parameters['default'] = 'NOW()';
                         $invalidDate = true;
@@ -308,15 +314,15 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day'];
                 } else {
                     // Oracle doesn't allow a default value of
                     // '00-00-00' as this it is not a valid date
                     // Optionally, a date may have a time value in Oracle
-                    if (stristr('0000-00-00', $parameters['default']) ||
-                        stristr('00-00-00', $parameters['default'])) {
+                    if (stristr('0000-00-00', $parameters['default'])
+                        || stristr('00-00-00', $parameters['default'])) {
                         // Default date to the current time
                         $parameters['default'] = ' NOW()';
                         $invalidDate = true;
@@ -340,12 +346,12 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             }
             switch ($parameters['size']) {
                 case 'double':
-                        $data_type = 'DOUBLE PRECISION';
-                        break;
+                    $data_type = 'DOUBLE PRECISION';
+                    break;
 
                 case 'decimal':
                     if (isset($parameters['width']) && isset($parameters['decimals'])) {
-                        $data_type = 'NUMBER('.$parameters['width'].','.$parameters['width'].')';
+                        $data_type = 'NUMBER(' . $parameters['width'] . ',' . $parameters['width'] . ')';
                     } else {
                         $data_type = 'REAL';
                     }
@@ -357,7 +363,7 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             $this_field['type'] = $data_type;
             break;
 
-        // undefined type
+            // undefined type
         default:
             return false;
     }
@@ -367,7 +373,7 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
         if ($parameters['default'] == 'NULL') {
             $this_field['default'] = 'DEFAULT NULL';
         } else {
-            $this_field['default'] = "DEFAULT ".$parameters['default']."";
+            $this_field['default'] = "DEFAULT " . $parameters['default'] . "";
         }
     }
 
@@ -377,9 +383,9 @@ function xarDB__oracleColumnDefinition($field_name, $parameters)
             // Since Oracle doesn't distinguish between empty strings and NULLs,
             // and Xaraya does make that distinction, we need to remove NOT NULL
             // for Oracle when dealing with char/varchar/text fields !
-            if ($parameters['type'] != 'char' &&
-                $parameters['type'] != 'varchar' &&
-                $parameters['type'] != 'text') {
+            if ($parameters['type'] != 'char'
+                && $parameters['type'] != 'varchar'
+                && $parameters['type'] != 'text') {
 
                 $this_field['null'] = 'NOT NULL';
             }

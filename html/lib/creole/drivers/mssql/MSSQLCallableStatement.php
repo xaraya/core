@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MSSQLCallableStatement.php,v 1.20 2005/09/16 13:09:50 hlellelid Exp $
  *
@@ -42,13 +43,13 @@ include_once 'creole/CreoleTypes.php';
 class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableStatement
 {
     /** Output variables */
-    private $boundOutVars = array();
+    private $boundOutVars = [];
 
     /**
      * Match Creole types to SQL Server types
      * @var array
      */
-    private static $typeMap = array(
+    private static $typeMap = [
         CreoleTypes::BOOLEAN => SQLBIT,
         CreoleTypes::BIGINT => SQLINT4,
         CreoleTypes::SMALLINT => SQLINT2,
@@ -64,8 +65,8 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
         CreoleTypes::TIMESTAMP => SQLVARCHAR,
         CreoleTypes::VARBINARY => SQLVARCHAR,
         CreoleTypes::NUMERIC => SQLINT4,
-        CreoleTypes::DECIMAL => SQLFLT8
-    );
+        CreoleTypes::DECIMAL => SQLFLT8,
+    ];
 
     /**
      * Statement created by mssql_init()
@@ -126,7 +127,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
         }
 
         if ($params) {
-            for($i = 0,$cnt = count($params); $i < $cnt; $i++) {
+            for ($i = 0,$cnt = count($params); $i < $cnt; $i++) {
                 $this->set($i + 1, $params[$i]);
             }
         }
@@ -354,7 +355,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getArray($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;
@@ -368,7 +369,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getBoolean($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;
@@ -382,7 +383,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getBlob($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;
@@ -399,7 +400,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getClob($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;
@@ -416,7 +417,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getDate($paramIndex, $format = '%Y-%m-%d')
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;
@@ -442,7 +443,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getFloat($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;
@@ -456,7 +457,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getInt($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;
@@ -470,7 +471,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getString($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;
@@ -484,7 +485,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getTime($paramIndex, $format = '%X')
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;
@@ -508,7 +509,7 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     public function getTimestamp($paramIndex, $format = 'Y-m-d H:i:s')
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
-            throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
+            throw new SQLException('Requesting variable not bound to output var: ' . $paramIndex);
         }
         if ($this->boundOutVars[$paramIndex] === null) {
             return null;

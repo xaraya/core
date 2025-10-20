@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: OCI8Statement.php,v 1.2 2004/03/05 15:46:12 hlellelid Exp $
  *
@@ -29,6 +30,4 @@ require_once 'creole/common/StatementCommon.php';
  * @version   $Revision: 1.2 $
  * @package   creole.drivers.oracle
  */
-class OCI8Statement extends StatementCommon implements Statement
-{
-}
+class OCI8Statement extends StatementCommon implements Statement {}

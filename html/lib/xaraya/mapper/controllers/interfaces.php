@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Controller Interface class
  *
@@ -15,9 +16,9 @@
 
 interface iController
 {
-    public function __construct(xarRequest $request = null);
+    public function __construct(?xarRequest $request = null);
 
-    public function run(xarRequest $request = null, xarResponse $response = null): void;
+    public function run(?xarRequest $request = null, ?xarResponse $response = null): void;
 
     /**
      * Summary of decode

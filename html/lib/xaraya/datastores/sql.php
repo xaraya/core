@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class for SQL Data Stores
  *
@@ -66,15 +67,15 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     public function addWhere(DataProperty &$property, $clause, $join, $pre = '', $post = '')
     {
         $name = $this->getFieldName($property);
-        if(!isset($name)) {
+        if (!isset($name)) {
             return;
         }
 
         $this->where[] = ['field'  => $name,
-                               'clause' => $clause,
-                               'join'   => $join,
-                               'pre'    => $pre,
-                               'post'   => $post];
+            'clause' => $clause,
+            'join'   => $join,
+            'pre'    => $pre,
+            'post'   => $post];
     }
 
     /**
@@ -94,7 +95,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     public function addGroupBy(DataProperty &$property)
     {
         $name = $this->getFieldName($property);
-        if(!isset($name)) {
+        if (!isset($name)) {
             return;
         }
 
@@ -123,12 +124,12 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      */
     public function addJoin($table, $key, $fields, $where = '', $andor = 'and', $more = '', $sort = [])
     {
-        if(!isset($this->extra)) {
+        if (!isset($this->extra)) {
             $this->extra = [];
         }
 
         $fieldlist = [];
-        foreach(array_keys($fields) as $field) {
+        foreach (array_keys($fields) as $field) {
             $source = $fields[$field]->source;
             // save the source for the query fieldlist
             $fieldlist[] = $source;
@@ -137,12 +138,12 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
         }
 
         $whereclause = '';
-        if(is_array($where) && count($where) > 0) {
-            foreach($where as $part) {
+        if (is_array($where) && count($where) > 0) {
+            foreach ($where as $part) {
                 // TODO: support pre- and post-parts here too ? (cfr. bug 3090)
                 $whereclause .= $part['join'] . ' ' . $part['property']->source . ' ' . $part['clause'] . ' ';
             }
-        } elseif(is_string($where)) {
+        } elseif (is_string($where)) {
             $whereclause = $where;
         }
 

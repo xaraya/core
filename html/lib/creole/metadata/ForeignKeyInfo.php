@@ -30,13 +30,13 @@
 class ForeignKeyInfo
 {
     private $name;
-    private $references = array();
+    private $references = [];
 
     /**
      * Additional and optional vendor specific information.
      * @var array $vendorSpecificInfo
      */
-    protected $vendorSpecificInfo = array();
+    protected $vendorSpecificInfo = [];
 
 
     public const NONE       = "";            // No "ON [ DELETE | UPDATE]" behaviour specified.
@@ -49,7 +49,7 @@ class ForeignKeyInfo
     /**
      * @param string $name The name of the foreign key.
      */
-    public function __construct($name, $vendorInfo = array())
+    public function __construct($name, $vendorInfo = [])
     {
         $this->name = $name;
         $this->vendorSpecificInfo = $vendorInfo;
@@ -71,7 +71,7 @@ class ForeignKeyInfo
      */
     public function addReference(ColumnInfo $local, ColumnInfo $foreign, $onDelete = self::NONE, $onUpdate = self::NONE)
     {
-        $this->references[] = array($local, $foreign, $onDelete, $onUpdate);
+        $this->references[] = [$local, $foreign, $onDelete, $onUpdate];
     }
 
     /**

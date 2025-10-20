@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PgSQLStatement.php,v 1.1 2004/02/19 02:49:42 hlellelid Exp $
  *
@@ -29,6 +30,4 @@ require_once 'creole/common/StatementCommon.php';
  * @version   $Revision: 1.1 $
  * @package   creole.drivers.pgsql
  */
-class PgSQLStatement extends StatementCommon implements Statement
-{
-}
+class PgSQLStatement extends StatementCommon implements Statement {}

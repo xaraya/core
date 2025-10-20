@@ -1,4 +1,5 @@
 <?php
+
 /**
  * External datastore for DD objects using Doctrine DBAL connection from ExternalDatabase
  *

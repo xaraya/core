@@ -1,5 +1,6 @@
 #!/usr/bin/php5
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -52,43 +53,43 @@ $q->clear();
 _tests($q,$l--);
 */
 
-function m($msg,$level=0)
+function m($msg, $level = 0)
 {
-    $prefix = str_repeat('  ',$level);
+    $prefix = str_repeat('  ', $level);
     echo "$prefix - $msg\n";
 }
 
-function _tests($seq,$l=0)
+function _tests($seq, $l = 0)
 {
     $seqName = get_class($seq);
-    m("Operations on empty $seqName",$l++);
-    m("Size of empty $seqName: ".$seq->size,$l);
-    $s=$seq->empty?"yes":"NO?";
-    m("Empty $seqName is empty: $s",$l);
-    m("Popping from empty $seqName",$l);
+    m("Operations on empty $seqName", $l++);
+    m("Size of empty $seqName: " . $seq->size, $l);
+    $s = $seq->empty ? "yes" : "NO?";
+    m("Empty $seqName is empty: $s", $l);
+    m("Popping from empty $seqName", $l);
     $seq->pop();
     $l--;
 
     $seq->clear();
-    m("Pushing and popping 1 item into the $seqName",$l++);
-    m("first",$l);
-    $seq->push("first",$l--);
-    m("Getting items back",$l++);
-    m($seq->pop(),$l);
+    m("Pushing and popping 1 item into the $seqName", $l++);
+    m("first", $l);
+    $seq->push("first", $l--);
+    m("Getting items back", $l++);
+    m($seq->pop(), $l);
     $l--;
 
-    m("Pushing and popping 3 items into the $seqName",$l++);
-    m("first",$l);
+    m("Pushing and popping 3 items into the $seqName", $l++);
+    m("first", $l);
     $seq->push("first");
-    m("second",$l);
+    m("second", $l);
     $seq->push("second");
-    m("third",$l);
+    m("third", $l);
     $seq->push("third");
     $l--;
 
-    m("Getting items back",$l++);
-    m($seq->pop(),$l);
-    m($seq->pop(),$l);
+    m("Getting items back", $l++);
+    m($seq->pop(), $l);
+    m($seq->pop(), $l);
     m($seq->pop(),$l);
     $l--;
 }

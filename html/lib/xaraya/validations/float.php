@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -22,35 +23,35 @@
 sys::import('xaraya.validations');
 class FloatValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
-            $value = (float)$subject;
-            if ("$subject" != "$value") {
-                $msg = 'Not a float type';
-                throw new VariableValidationException(null, $msg);
-            }
+        $value = (float) $subject;
+        if ("$subject" != "$value") {
+            $msg = 'Not a float type';
+            throw new VariableValidationException(null, $msg);
+        }
 
-            if (isset($parameters[0]) && trim($parameters[0]) != '') {
-                if (!is_numeric($parameters[0])) {
-                    // We need a number for the minimum
-                    throw new BadParameterException($parameters[0],'The parameter specifying the minimum value should be numeric. It is: "#(1)"');
-                } elseif ($value < (float) $parameters[0]) {
-                    $msg = 'Float Value "#(1)" is smaller than the specified minimum "#(2)"';
-                    throw new VariableValidationException(array($value,$parameters[0]),$msg);
-                }
+        if (isset($parameters[0]) && trim($parameters[0]) != '') {
+            if (!is_numeric($parameters[0])) {
+                // We need a number for the minimum
+                throw new BadParameterException($parameters[0], 'The parameter specifying the minimum value should be numeric. It is: "#(1)"');
+            } elseif ($value < (float) $parameters[0]) {
+                $msg = 'Float Value "#(1)" is smaller than the specified minimum "#(2)"';
+                throw new VariableValidationException([$value,$parameters[0]], $msg);
             }
+        }
 
-            if (isset($parameters[1]) && trim($parameters[1]) != '') {
-                if (!is_numeric($parameters[1])) {
-                    // We need a number for the maximum
-                    throw new BadParameterException($parameters[1],'The parameter specifying the maximum value should be numeric. It is: "#(1)"');
-                } elseif ($value > (float) $parameters[1]) {
-                    $msg = 'Float Value "#(1)" is larger than the specified maximum "#(2)"';
-                    throw new VariableValidationException(array($value,$parameters[0]),$msg);
-                }
+        if (isset($parameters[1]) && trim($parameters[1]) != '') {
+            if (!is_numeric($parameters[1])) {
+                // We need a number for the maximum
+                throw new BadParameterException($parameters[1], 'The parameter specifying the maximum value should be numeric. It is: "#(1)"');
+            } elseif ($value > (float) $parameters[1]) {
+                $msg = 'Float Value "#(1)" is larger than the specified maximum "#(2)"';
+                throw new VariableValidationException([$value,$parameters[0]], $msg);
             }
+        }
 
-            $subject = $value;
-            return true;
+        $subject = $value;
+        return true;
     }
 }

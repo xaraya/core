@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Hook API Subject
  *
@@ -34,13 +35,13 @@ abstract class ApiHookSubject extends HookSubject
     public function notify()
     {
         foreach ($this->observers as $obs) {
-            try { 
-                // notify observer and capture response 
+            try {
+                // notify observer and capture response
                 $extrainfo = $obs->notify($this);
                 // api type hooks expect an array of extrainfo from each observer
                 if (!empty($extrainfo) && is_array($extrainfo)) {
-                    // update extrainfo for next observer 
-                    $this->setArgs(array('extrainfo' => $extrainfo));
+                    // update extrainfo for next observer
+                    $this->setArgs(['extrainfo' => $extrainfo]);
                 }
             } catch (Exception $e) {
                 // hooks shouldn't fail, ever!

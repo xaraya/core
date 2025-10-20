@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Experiment with htmx - @todo
  */
@@ -38,9 +39,9 @@ class HtmxHandler
         $path = $this->bridge->getPathInfo($request);
         $server = $this->bridge->getServerParams($request);
         [$result, $context] = $this->bridge->dispatchRequest($method, $path, $this->prefix, $request);
-        if (!empty($server['HTTP_HX_REQUEST']) &&
-            empty($server['HTTP_HX_HISTORY_RESTORE_REQUEST']) &&
-            !empty($server['HTTP_HX_TARGET']) && $server['HTTP_HX_TARGET'] == $this->target) {
+        if (!empty($server['HTTP_HX_REQUEST'])
+            && empty($server['HTTP_HX_HISTORY_RESTORE_REQUEST'])
+            && !empty($server['HTTP_HX_TARGET']) && $server['HTTP_HX_TARGET'] == $this->target) {
             $this->bridge->wrapPage = false;
             // @todo use inheritance for other htmx attributes?
             $transform = function ($result) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Xaraya Core Cache
  *
@@ -60,10 +61,10 @@ class xarCoreCache extends xarObject
         } elseif (self::hasPreload($scope, $name) && self::loadCached($scope, $name)) {
             return true;
 
-        // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
-        } elseif (isset(self::$cacheStorage) && self::$cacheStorage->isCached($scope.':'.$name)) {
+            // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
+        } elseif (isset(self::$cacheStorage) && self::$cacheStorage->isCached($scope . ':' . $name)) {
             // pre-fetch the value from second-level cache here (if we don't load from bulk storage)
-            self::$cacheCollection[$scope][$name] = self::$cacheStorage->getCached($scope.':'.$name);
+            self::$cacheCollection[$scope][$name] = self::$cacheStorage->getCached($scope . ':' . $name);
             return true;
         }
         return false;
@@ -103,7 +104,7 @@ class xarCoreCache extends xarObject
         }
         if (isset(self::$cacheStorage)) {
             // save the value to second-level cache here
-            self::$cacheStorage->setCached($scope.':'.$name, $value);
+            self::$cacheStorage->setCached($scope . ':' . $name, $value);
         }
     }
 
@@ -124,7 +125,7 @@ class xarCoreCache extends xarObject
         }
         if (isset(self::$cacheStorage)) {
             // delete the value from second-level cache here
-            self::$cacheStorage->delCached($scope.':'.$name);
+            self::$cacheStorage->delCached($scope . ':' . $name);
         }
     }
 
@@ -144,7 +145,7 @@ class xarCoreCache extends xarObject
         }
         if (isset(self::$cacheStorage)) {
             // CHECKME: not all cache storage supports this in the same way !
-            self::$cacheStorage->flushCached($scope.':');
+            self::$cacheStorage->flushCached($scope . ':');
         }
     }
 
@@ -162,7 +163,7 @@ class xarCoreCache extends xarObject
         }
         if (isset($name)) {
             // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
-            return self::isCached('CoreCache.Preload', $scope.':'.$name);
+            return self::isCached('CoreCache.Preload', $scope . ':' . $name);
         }
         return self::isCached('CoreCache.Preload', $scope);
     }

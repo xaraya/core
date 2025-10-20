@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: LdapResultSet.php,v 1.24 2006/01/17 19:44:39 hlellelid Exp $
  *
@@ -89,7 +90,7 @@ class LdapResultSet extends ResultSetCommon implements ResultSet
     public function close()
     {
         @ldap_free_result($this->result);
-        $this->fields = array();
+        $this->fields = [];
     }
 
     public function getRow()
@@ -97,7 +98,7 @@ class LdapResultSet extends ResultSetCommon implements ResultSet
 
         $conn = $this->conn->getResource();
         $dn = ldap_get_dn($conn, $this->entry);
-        $result = array();
+        $result = [];
 
         $attrs = ldap_get_attributes($conn, $this->entry);
 

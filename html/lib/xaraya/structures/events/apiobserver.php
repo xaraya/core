@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Wrapper for observers calling an api function
  * @package core\events
@@ -19,14 +20,20 @@ class ApiEventObserver extends EventObserver
     public $type;
     /** @var ?string */
     public $func;
-                
+
     public function __construct(array $args = [])
     {
-        if (isset($args['module'])) $this->module = $args['module'];
-        if (isset($args['type'])) $this->type = $args['type'];
-        if (isset($args['func'])) $this->func = $args['func'];
+        if (isset($args['module'])) {
+            $this->module = $args['module'];
+        }
+        if (isset($args['type'])) {
+            $this->type = $args['type'];
+        }
+        if (isset($args['func'])) {
+            $this->func = $args['func'];
+        }
     }
-    
+
     public function notify(ixarEventSubject $subject)
     {
         // function was already imported in events fileLoad, but that doesn't mean the module was loaded

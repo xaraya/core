@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteResultSet.php,v 1.9 2004/11/29 13:41:24 micha Exp $
  *
@@ -73,11 +74,11 @@ class PdoResultSetCommon extends ResultSetCommon
 
     private function closedCursorRecover()
     {
-        if($this->oldCursorPos != -1) {
+        if ($this->oldCursorPos != -1) {
             // re execute the statement
             try {
                 $this->result->execute();
-            } catch(PDOException $e) {
+            } catch (PDOException $e) {
                 throw new SQLException('Could not re-execute PDO statement', $e->getMessage());
             }
             $this->in_cursor_recover = true;
@@ -150,7 +151,7 @@ class PdoResultSetCommon extends ResultSetCommon
             $ok = empty($result) ? false : true;
         }
 
-        if($ok) {
+        if ($ok) {
             $this->cursorPos = $rownum;
             return true;
         } else {
@@ -163,7 +164,7 @@ class PdoResultSetCommon extends ResultSetCommon
         try {
             $result = $this->result->fetch($this->pdo_fetch_style);
 
-            if(empty($result)) {
+            if (empty($result)) {
                 // We've advanced beyond end of recordset.
                 $this->afterLast();
 
@@ -172,7 +173,7 @@ class PdoResultSetCommon extends ResultSetCommon
 
                 return false;
             }
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException('Error fetching result', $e->getMessage());
         }
 
@@ -200,7 +201,7 @@ class PdoResultSetCommon extends ResultSetCommon
     public function getRecordCount()
     {
         // use the cached numRows value if possible
-        if($this->numRows == -1) {
+        if ($this->numRows == -1) {
             // get the sql query string from the PDO statement object associated
             // with this result set.  We could use lastQuery from the connection,
             // but we can not be sure that the connection's last query is the same
@@ -217,7 +218,7 @@ class PdoResultSetCommon extends ResultSetCommon
     {
         $this->closeCursor();
         unset($this->result);
-        $this->fields = array();
+        $this->fields = [];
     }
     /**
      * Simply empties array as there is no result free method for sqlite.
@@ -228,7 +229,7 @@ class PdoResultSetCommon extends ResultSetCommon
         $this->oldCursorPos = $this->cursorPos;
         $this->cursorPos = 0;
         $this->conn->openResultSet(false);
-        if(!empty($this->result) && $this->result instanceof PDOStatement) {
+        if (!empty($this->result) && $this->result instanceof PDOStatement) {
             $this->result->closeCursor();
         }
     }

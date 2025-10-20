@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MySQLConnection.php,v 1.18 2004/09/01 14:00:28 dlawson_mi Exp $
  *
@@ -59,8 +60,8 @@ class MySQLConnection extends ConnectionCommon implements Connection
         $persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;
         $multi_statement = ($flags & Creole::MYSQL_CLIENT_MULTI_STATEMENTS) === Creole::MYSQL_CLIENT_MULTI_STATEMENTS;
         $multi_result = ($flags & Creole::MYSQL_CLIENT_MULTI_RESULTS) === Creole::MYSQL_CLIENT_MULTI_RESULTS;
-        $connect_flags = ($multi_statement ? Creole::MYSQL_CLIENT_MULTI_STATEMENTS : 0) |
-                            ($multi_result ? Creole::MYSQL_CLIENT_MULTI_RESULTS : 0);
+        $connect_flags = ($multi_statement ? Creole::MYSQL_CLIENT_MULTI_STATEMENTS : 0)
+                            | ($multi_result ? Creole::MYSQL_CLIENT_MULTI_RESULTS : 0);
 
         if (isset($dsninfo['protocol']) && $dsninfo['protocol'] == 'unix') {
             $dbhost = ':' . $dsninfo['socket'];
@@ -102,7 +103,7 @@ class MySQLConnection extends ConnectionCommon implements Connection
 
         if ($dsninfo['database']) {
             if (!@mysql_select_db($dsninfo['database'], $conn)) {
-                switch(mysql_errno($conn)) {
+                switch (mysql_errno($conn)) {
                     case 1049:
                         $exc = new SQLException("no such database", mysql_error($conn));
                         break;
@@ -322,7 +323,7 @@ class MySQLConnection extends ConnectionCommon implements Connection
      */
     protected function setSavepoint($identifier)
     {
-        $result = @mysql_query("savepoint ".$identifier, $this->dblink);
+        $result = @mysql_query("savepoint " . $identifier, $this->dblink);
         if (!$result) {
             throw new SQLException('Could not begin transaction', mysql_error($this->dblink));
         }
@@ -336,7 +337,7 @@ class MySQLConnection extends ConnectionCommon implements Connection
      */
     protected function releaseSavepoint($identifier)
     {
-        $result = @mysql_query("release savepoint ".$identifier, $this->dblink);
+        $result = @mysql_query("release savepoint " . $identifier, $this->dblink);
         if (!$result) {
             throw new SQLException('Could not begin transaction', mysql_error($this->dblink));
         }
@@ -350,7 +351,7 @@ class MySQLConnection extends ConnectionCommon implements Connection
      */
     protected function rollbackToSavepoint($identifier)
     {
-        $result = @mysql_query("rollback to savepoint ".$identifier, $this->dblink);
+        $result = @mysql_query("rollback to savepoint " . $identifier, $this->dblink);
         if (!$result) {
             throw new SQLException('Could not begin transaction', mysql_error($this->dblink));
         }

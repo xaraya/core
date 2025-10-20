@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -19,7 +20,7 @@
 sys::import("xaraya.validations");
 class IntValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         $value = intval($subject);
 
@@ -31,20 +32,20 @@ class IntValidation extends ValueValidations
         if (isset($parameters[0]) && trim($parameters[0]) != '') {
             if (!is_numeric($parameters[0])) {
                 // We need a number for the minimum
-                throw new BadParameterException($parameters[0],'The parameter specifying the minimum value should be numeric. It is: "#(1)"');
+                throw new BadParameterException($parameters[0], 'The parameter specifying the minimum value should be numeric. It is: "#(1)"');
             } elseif ($value < (int) $parameters[0]) {
                 $msg = 'Integer Value "#(1)" is smaller than the specified minimum "#(2)"';
-                throw new VariableValidationException(array($value,$parameters[0]),$msg);
+                throw new VariableValidationException([$value,$parameters[0]], $msg);
             }
         }
 
         if (isset($parameters[1]) && trim($parameters[1]) != '') {
             if (!is_numeric($parameters[1])) {
                 // We need a number for the maximum
-                throw new BadParameterException($parameters[1],'The parameter specifying the maximum value should be numeric. It is: "#(1)"');
+                throw new BadParameterException($parameters[1], 'The parameter specifying the maximum value should be numeric. It is: "#(1)"');
             } elseif ($value > (int) $parameters[1]) {
                 $msg = 'Integer Value "#(1)" is larger than the specified minimum "#(2)"';
-                throw new VariableValidationException(array($value,$parameters[1]),$msg);
+                throw new VariableValidationException([$value,$parameters[1]], $msg);
             }
         }
 

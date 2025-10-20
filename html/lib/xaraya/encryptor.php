@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Encryptor utility class
  *
@@ -24,7 +25,7 @@ class xarEncryptor extends xarObject
     {
         // Use include instead of include_once, in case we have loaded this var in another scope
         /*
-        include(sys::lib()."xaraya/encryption.php");            
+        include(sys::lib()."xaraya/encryption.php");
         $this->algorithm = mcrypt_module_open($encryption['cipher'], '', $encryption['mode'], '');
 //            $this->initvector = mcrypt_create_iv(mcrypt_enc_get_iv_size($this->algorithm), MCRYPT_RAND);
         $this->initvector = $encryption['initvector'];
@@ -35,7 +36,9 @@ class xarEncryptor extends xarObject
 
     public static function &instance()
     {
-        if(self::$instance == null) self::$instance = new xarEncryptor();
+        if (self::$instance == null) {
+            self::$instance = new xarEncryptor();
+        }
         return self::$instance;
     }
 
@@ -45,19 +48,21 @@ class xarEncryptor extends xarObject
             mcrypt_generic_init($this->algorithm, $this->key, $this->initvector);
             try {
                 $value = mdecrypt_generic($this->algorithm, base64_decode($value));
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
             mcrypt_generic_deinit($this->algorithm);
         }
         return trim($value);
     }
 
-    public function encrypt($value=null)
+    public function encrypt($value = null)
     {
         if ($value != '') {
             mcrypt_generic_init($this->algorithm, $this->key, $this->initvector);
             try {
                 $value = base64_encode(mcrypt_generic($this->algorithm, $value));
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
             mcrypt_generic_deinit($this->algorithm);
         }
         return trim($value);

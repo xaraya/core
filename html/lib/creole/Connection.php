@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: Connection.php,v 1.29 2005/10/17 19:03:50 dlawson_mi Exp $
  *
@@ -20,6 +21,7 @@
  */
 
 use Xaraya\Database\ConnectionInterface;
+
 include_once 'creole/ResultSet.php'; // we need this for the fetchmode ResultSet flags (constants) that are passed to executeQuery()
 
 /**

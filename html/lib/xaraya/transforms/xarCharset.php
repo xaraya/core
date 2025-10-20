@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class for conversion between charsets
  *
@@ -14,7 +15,7 @@
  * @author Vladimirs Metenchuks <voll@xaraya.com>
 **/
 
-define ("CONVERT_TABLES_DIR", sys::lib() . 'xaraya/transforms/convtables/');
+define("CONVERT_TABLES_DIR", sys::lib() . 'xaraya/transforms/convtables/');
 sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarLog3;
 
@@ -167,35 +168,35 @@ class xarCharset extends xarObject
     /**
      * Converts unicode number to UTF-8 multibyte character
      *
-     * 
+     *
      * @param  int $number Hexadecimal value of a unicode char.
      * @return string      Encoded hexadecimal value as a regular char.
      **/
-    function unicodeNumberToUtf8Char($number)
+    public function unicodeNumberToUtf8Char($number)
     {
         $char = '';
         $number = hexdec($number);
         if ($number < 0x80) {
             $char .= chr($number);
-        } else if ($number < 0x800) {
-            $char .= chr(0xC0 | ($number>>6));
-            $char .= chr(0x80 | ($number&0x3F));
-        } else if ($number < 0x10000) {
-            $char .= chr(0xE0 | ($number>>12));
-            $char .= chr(0x80 | (($number>>6)&0x3F));
-            $char .= chr(0x80 | ($number&0x3F));
-        } else if ($number < 0x200000) {
-            $char .= chr(0xF0 | ($number>>18));
-            $char .= chr(0x80 | (($number>>12)&0x3F));
-            $char .= chr(0x80 | ($number>>6)&0x3F);
-            $char .= chr(0x80 | $number&0x3F);
-        } else if ($number < 0x4000000) {
+        } elseif ($number < 0x800) {
+            $char .= chr(0xC0 | ($number >> 6));
+            $char .= chr(0x80 | ($number & 0x3F));
+        } elseif ($number < 0x10000) {
+            $char .= chr(0xE0 | ($number >> 12));
+            $char .= chr(0x80 | (($number >> 6) & 0x3F));
+            $char .= chr(0x80 | ($number & 0x3F));
+        } elseif ($number < 0x200000) {
+            $char .= chr(0xF0 | ($number >> 18));
+            $char .= chr(0x80 | (($number >> 12) & 0x3F));
+            $char .= chr(0x80 | ($number >> 6) & 0x3F);
+            $char .= chr(0x80 | $number & 0x3F);
+        } elseif ($number < 0x4000000) {
             $char .= chr(0xF8 | ($number >> 24));
             $char .= chr(0x80 | (($number >> 18) & 0x3F));
             $char .= chr(0x80 | (($number >> 12) & 0x3F));
             $char .= chr(0x80 | (($number >> 6) & 0x3F));
             $char .= chr(0x80 | ($number & 0x3F));
-        } else if ($number < 0x80000000) {
+        } elseif ($number < 0x80000000) {
             $char .= chr(0xFC | ($number >> 30));
             $char .= chr(0x80 | (($number >> 24) & 0x3F));
             $char .= chr(0x80 | (($number >> 18) & 0x3F));
@@ -213,25 +214,27 @@ class xarCharset extends xarObject
      * @param   integer  $returnHex If set, then a hex. number is returned.
      * @return  integer  UNICODE integer
      **/
-    function utf8CharToUnicodeNumber($utf8char,$returnHex=0)
+    public function utf8CharToUnicodeNumber($utf8char, $returnHex = 0)
     {
-        $ord = ord(substr($utf8char,0,1)); // First char
+        $ord = ord(substr($utf8char, 0, 1)); // First char
 
         if (($ord & 192) == 192) { // IS it a MB string
             $binBuf = '';
-            for ($b=0;$b<8;$b++) { // for each byte in MB string...
+            for ($b = 0;$b < 8;$b++) { // for each byte in MB string...
                 $ord = $ord << 1;  // Shift it left
                 if ($ord & 128) {  // if 8th bit is set, there are still bytes in sequence.
-                    $binBuf .= substr('00000000'.decbin(ord(substr($utf8char,$b+1,1))),-6);
-                } else break;
+                    $binBuf .= substr('00000000' . decbin(ord(substr($utf8char, $b + 1, 1))), -6);
+                } else {
+                    break;
+                }
             }
-            $binBuf = substr('00000000'.decbin(ord(substr($utf8char,0,1))),-(6-$b)).$binBuf;
+            $binBuf = substr('00000000' . decbin(ord(substr($utf8char, 0, 1))), -(6 - $b)) . $binBuf;
             $int = bindec($binBuf);
         } else {
             $int = $ord;
         }
 
-        return $returnHex ? 'x'.dechex($int) : $int;
+        return $returnHex ? 'x' . dechex($int) : $int;
     }
 
     /**
@@ -240,12 +243,12 @@ class xarCharset extends xarObject
      * @param    string    $inStr Input string
      * @return   string    Output string
      */
-    function utf8ToEntities($inStr)
+    public function utf8ToEntities($inStr)
     {
         $strLen = strlen($inStr);
         $outStr = '';
         $buffer = '';
-        for ($ptr=0; $ptr<$strLen; $ptr++) {
+        for ($ptr = 0; $ptr < $strLen; $ptr++) {
             $char = $inStr[$ptr];
             $asciiChar = ord($char);
             if ($asciiChar > 127) {
@@ -253,15 +256,17 @@ class xarCharset extends xarObject
                 if ($asciiChar & 64) {
                     // The first byte must have the 7th bit set!
                     $buffer = $char; // Add first byte
-                    for ($i=0; $i<8; $i++) { // For each byte in MB string
+                    for ($i = 0; $i < 8; $i++) { // For each byte in MB string
                         $asciiChar = $asciiChar << 1; // Shift char left
                         if ($asciiChar & 128) { // 8th bit
                             // There are still bytes in sequence
                             $ptr++;
                             $buffer .= $inStr[$ptr]; // Add the next char
-                        } else break;
+                        } else {
+                            break;
+                        }
                     }
-                    $outStr .= '&#'.$this->utf8CharToUnicodeNumber($buffer,1).';';
+                    $outStr .= '&#' . $this->utf8CharToUnicodeNumber($buffer, 1) . ';';
                 } else {
                     $outStr .= chr($this->noCharByteVal);
                 }
@@ -285,13 +290,13 @@ class xarCharset extends xarObject
      * @param string $secondEncoding Second encoding name and filename. Optional for building a joined table.
      * @return array<mixed> Table necessary to convert one encoding to another.
      **/
-    function &initConvertTable ($firstEncoding, $secondEncoding = "")
+    public function &initConvertTable($firstEncoding, $secondEncoding = "")
     {
-        if ($this->lastConversion == $firstEncoding.':'.$secondEncoding) {
+        if ($this->lastConversion == $firstEncoding . ':' . $secondEncoding) {
             return $this->conversionTable;
         }
 
-        $convertTable = array();
+        $convertTable = [];
         for ($i = 0; $i < func_num_args(); $i++) {
             $fileName = CONVERT_TABLES_DIR . func_get_arg($i);
             $fp = fopen($fileName, "r");
@@ -301,12 +306,18 @@ class xarCharset extends xarObject
             }
             while (!feof($fp)) {
                 $string = trim(fgets($fp, 1024));
-                if (empty($string)) continue; // Skip empty lines
-                if ($string[0] == "#") continue; // Skip comments
+                if (empty($string)) {
+                    continue;
+                } // Skip empty lines
+                if ($string[0] == "#") {
+                    continue;
+                } // Skip comments
                 // Separators: "space", "tab", ",", "\r", "\n" and "\f"
-                $HexValue = preg_split ("/[\s,]+/", $string, 3);
+                $HexValue = preg_split("/[\s,]+/", $string, 3);
                 // Skip undefined or missing char
-                if ($HexValue[1][0] == "#") continue;
+                if ($HexValue[1][0] == "#") {
+                    continue;
+                }
                 // Got char, load it
                 $ArrayKey = strtoupper(str_replace(strtolower("0x"), "", $HexValue[1]));
                 $ArrayValue = strtoupper(str_replace(strtolower("0x"), "", $HexValue[0]));
@@ -314,7 +325,7 @@ class xarCharset extends xarObject
             }
         }
         $this->lastConversion = $firstEncoding . ':' . $secondEncoding;
-        $this->conversionTable =& $convertTable;
+        $this->conversionTable = & $convertTable;
         return $convertTable;
     }
 
@@ -328,17 +339,17 @@ class xarCharset extends xarObject
      * @param boolean $turnOnEntities Set to true or 1 if you want to use numeric entities insted of regular chars.
      * @return string Converted string
      **/
-    function convertByTable ($inString, $fromCharset = '', $toCharset = '', $turnOnEntities = false)
+    public function convertByTable($inString, $fromCharset = '', $toCharset = '', $turnOnEntities = false)
     {
         /**
          * Check are there all variables
          **/
         if ($inString == '') {
             return '';
-        } else if ($fromCharset == '') {
+        } elseif ($fromCharset == '') {
             xarLog3::warning("xarCharset error, empty variable \$fromCharset in convertByTable() function.");
             return $inString;
-        } else if ($toCharset == '') {
+        } elseif ($toCharset == '') {
             xarLog3::warning("xarCharset error, empty variable \$toCharset in convertByTable() function.");
             return $inString;
         }
@@ -350,13 +361,13 @@ class xarCharset extends xarObject
         $toCharset   = strtolower($toCharset);
 
         if ($fromCharset == $toCharset) {
-            xarLog3::info("xarCharset - you are trying to convert string from ". $fromCharset ." to ". $fromCharset);
+            xarLog3::info("xarCharset - you are trying to convert string from " . $fromCharset . " to " . $fromCharset);
             return $inString;
         }
 
         if ($fromCharset == "utf-8") {
             // Converts from multibyte char string.
-            $CharsetTable =& $this->initConvertTable ($toCharset);
+            $CharsetTable = & $this->initConvertTable($toCharset);
             foreach ($CharsetTable[$toCharset] as $unicodeHexChar => $hexChar) {
                 if ($turnOnEntities == true) {
                     $replace = $this->utf8ToEntities($this->unicodeNumberToUtf8Char($unicodeHexChar));
@@ -370,9 +381,9 @@ class xarCharset extends xarObject
         } else {
             // Converts from 1-byte char string.
             if ($toCharset == "utf-8") {
-                $CharsetTable =& $this->initConvertTable ($fromCharset);
+                $CharsetTable = & $this->initConvertTable($fromCharset);
             } else {
-                $CharsetTable =& $this->initConvertTable ($fromCharset, $toCharset);
+                $CharsetTable = & $this->initConvertTable($fromCharset, $toCharset);
             }
             $strLen = strlen($inString);
             for ($i = 0; $i < $strLen; $i++) {
@@ -380,7 +391,9 @@ class xarCharset extends xarObject
                 $unicodeHexChar = '';
                 $ord = ord($inString[$i]);
                 $hexChar = strtoupper(dechex($ord));
-                if ($ord < 16) $hexChar = "0".$hexChar; // add leading zero
+                if ($ord < 16) {
+                    $hexChar = "0" . $hexChar;
+                } // add leading zero
                 if (($fromCharset == "gsm0338") && ($hexChar == '1B')) {
                     // quick fix of escape to extension table
                     $hexChar .= strtoupper(dechex(ord($inString[++$i])));
@@ -396,7 +409,7 @@ class xarCharset extends xarObject
                             }
                         } else {
                             $outString .= chr($this->noCharByteVal);
-                            xarLog3::warning("xarCharset error, can't find maching char \"". $inString[$i] ."\" in destination encoding table!");
+                            xarLog3::warning("xarCharset error, can't find maching char \"" . $inString[$i] . "\" in destination encoding table!");
                         }
                     } else {
                         $outChar = $this->unicodeNumberToUtf8Char($unicodeHexChar);
@@ -408,7 +421,7 @@ class xarCharset extends xarObject
                     }
                 } else {
                     $outString .= chr($this->noCharByteVal);
-                    xarLog3::warning("xarCharset error, can't find maching char \"". $inString[$i] ."\" in source encoding table!");
+                    xarLog3::warning("xarCharset error, can't find maching char \"" . $inString[$i] . "\" in source encoding table!");
                 }
             }
         }
@@ -424,12 +437,14 @@ class xarCharset extends xarObject
      * @param boolean $turnOnEntities Set to true or 1 if you want to use numeric entities insted of regular chars.
      * @return string Converted string
      **/
-    function convert ($inString, $fromCharset, $toCharset, $turnOnEntities = false)
+    public function convert($inString, $fromCharset, $toCharset, $turnOnEntities = false)
     {
         if (function_exists('iconv')) {
             try {
-                $outString = @iconv($fromCharset, $toCharset.'//TRANSLIT', $inString);
-                if ($outString === false) $outString = '';
+                $outString = @iconv($fromCharset, $toCharset . '//TRANSLIT', $inString);
+                if ($outString === false) {
+                    $outString = '';
+                }
             } catch (Exception $e) {
                 $outString = '';
             }

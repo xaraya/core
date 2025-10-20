@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\logging
  * @subpackage logging
@@ -66,18 +67,18 @@ class xarLogger_sql extends xarLogger
     *
     * @param array<string, mixed> $conf  with
     *               'sqltable  '     => string      The name of the logger table.
-    * 
+    *
     */
-    public function __construct(Array $conf)
+    public function __construct(array $conf)
     {
         parent::__construct($conf);
-        
+
         if (!empty($conf['sqltable'])) {
-	        $this->sqltable = $conf['sqltable'];
+            $this->sqltable = $conf['sqltable'];
         }
 
         // Initialise the buffer
-        $this->buffer = array();
+        $this->buffer = [];
     }
 
     public function close()
@@ -86,18 +87,20 @@ class xarLogger_sql extends xarLogger
 
         // Create the database connection
         $this->dbconn = $this->db()->getConn();
-        
+
         // Write the records to the database and stop logging.
         foreach ($this->buffer as $line) {
-        	$line = explode('|||', $line);
+            $line = explode('|||', $line);
 
-			/* Build the SQL query for this log entry insertion. */
-			$q = sprintf('INSERT INTO %s (uuid, logtime, priority, message)' .
-						 'VALUES(?, ?, ?, ?)',
-						 $this->sqltable);
-			$bindvars = array($this->uuid, $line[0], $line[1], $line[2]);
-			$stmt = $this->dbconn->prepareStatement($q);
-			$stmt->executeUpdate($bindvars);
+            /* Build the SQL query for this log entry insertion. */
+            $q = sprintf(
+                'INSERT INTO %s (uuid, logtime, priority, message)'
+                         . 'VALUES(?, ?, ?, ?)',
+                $this->sqltable
+            );
+            $bindvars = [$this->uuid, $line[0], $line[1], $line[2]];
+            $stmt = $this->dbconn->prepareStatement($q);
+            $stmt->executeUpdate($bindvars);
         }
     }
 
@@ -113,19 +116,21 @@ class xarLogger_sql extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * 
+     *
      */
     public function notify($message, $level)
     {
         // Abort early if the level of priority is above the maximum logging level.
-        if (!$this->doLogLevel($level)) return false;
+        if (!$this->doLogLevel($level)) {
+            return false;
+        }
 
         // Add to the loglines array
         $this->buffer[] = $this->formatMessage($message, $level);
 
         return true;
     }
-    
+
     public function formatMessage($message, $level)
     {
         return $this->getTime() . '|||' . $level . '|||' . $message;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -24,7 +25,7 @@ sys::import('xaraya.structures.sequences.adapters.sequence_adapter');
 class Deque extends SequenceAdapter implements iDeque
 {
     // Push an item into the Deque, head or tail
-    public function push($item, $whichEnd) 
+    public function push($item, $whichEnd)
     {
         // Unfortunate kludge: when there is exactly 1 item in the deque the code cannot tell the difference between head and tail
         // So we temporarily increase the size of the array to make the difference noticeable
@@ -32,28 +33,28 @@ class Deque extends SequenceAdapter implements iDeque
         // because the parent only understands position and knows nothing of head and tail
         $added_dummy = false;
         if ($this->__get('size') == 1) {
-        	parent::insert('void',0);
-        	$added_dummy = true;
-        	$dummy_position = 2;
+            parent::insert('void', 0);
+            $added_dummy = true;
+            $dummy_position = 2;
         }
 
         // Add the "real" item
         $position = $this->__get($whichEnd);
-       	$pushed = parent::insert($item,$position);
-        
+        $pushed = parent::insert($item, $position);
+
         // Remove the item we added
-		if ($added_dummy) {
-			$position = ($whichEnd == 'tail') ? 2 : 1;
-			parent::delete($position);
-		}
-       return $pushed;
+        if ($added_dummy) {
+            $position = ($whichEnd == 'tail') ? 2 : 1;
+            parent::delete($position);
+        }
+        return $pushed;
     }
 
     // Peek at an item at the head or tail of the Deque
     public function &peek($whichEnd)
     {
         $position = $this->__get($whichEnd);
-		$position += ($whichEnd == 'tail') ? 0 : 1;
+        $position += ($whichEnd == 'tail') ? 0 : 1;
         if ($position < 0) {
             $item = null;
         } else {
@@ -66,9 +67,11 @@ class Deque extends SequenceAdapter implements iDeque
     public function &pop($whichEnd)
     {
         $item = $this->peek($whichEnd);
-        if ($item == null) return $item;
+        if ($item == null) {
+            return $item;
+        }
         $position = $this->__get($whichEnd);
-		$position += ($whichEnd == 'tail') ? -1 : 0;
+        $position += ($whichEnd == 'tail') ? -1 : 0;
         parent::delete($position);
         return $item;
     }
@@ -77,7 +80,7 @@ class Deque extends SequenceAdapter implements iDeque
     {
         return parent::clear();
     }
-    
+
     public function load($seq)
     {
         return parent::load($seq);

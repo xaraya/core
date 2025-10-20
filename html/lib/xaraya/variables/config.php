@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration variable handling
  *
@@ -45,7 +46,7 @@ class xarConfigVars extends xarVars implements IxarVars
         // 2. Getting a new id (for some backends)
         // 3. inserting it.
         // Question is wether we want to invent new configvars on the fly or not
-        self::delete(null,$name);
+        self::delete(null, $name);
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -59,7 +60,7 @@ class xarConfigVars extends xarVars implements IxarVars
         $query = "INSERT INTO $config_varsTable
                   (module_id, name, value)
                   VALUES (?,?,?)";
-        $bindvars = array(null, $name, $serialvalue);
+        $bindvars = [null, $name, $serialvalue];
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         xarCoreCache::setCached(self::$KEY, $name, $value);
@@ -77,17 +78,19 @@ class xarConfigVars extends xarVars implements IxarVars
      * @todo the vars which are not in the database should probably be systemvars, not configvars
      * @todo bench the preloading
      */
-    public static function get($scope, $name, $value=null)
+    public static function get($scope, $name, $value = null)
     {
         // Preload the config vars once
-        if(!self::$preloaded) self::preload();
+        if (!self::$preloaded) {
+            self::preload();
+        }
 
-        if(!self::$preloaded)
+        if (!self::$preloaded) {
             throw new VariableNotFoundException($name, "Variable #(1) not found");
-        
+        }
+
         // Configvars which are not in the database (either in config file or in code defines)
-        switch($name)
-        {
+        switch ($name) {
             case 'Site.DB.TablePrefix':
                 return xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
             case 'System.Core.Generation':
@@ -104,24 +107,25 @@ class xarConfigVars extends xarVars implements IxarVars
         }
 
         // From the cache
-        if(xarCoreCache::isCached(self::$KEY, $name))
-        {
+        if (xarCoreCache::isCached(self::$KEY, $name)) {
             $value = xarCoreCache::getCached(self::$KEY, $name);
             return $value;
         }
 
         // Need to retrieve it
         // @todo checkme What should we do here? preload again, or just fetch the one?
-	    $dbconn = xarDB3::getConn();
-	    $tables = xarDB3::getTables();
-	    $varstable = $tables['config_vars'] ?? null;
-	    // No tables, probably installing
-	    if($varstable == null) throw new VariableNotFoundException($name, "Variable #(1) not found (no tables found, in fact)");
+        $dbconn = xarDB3::getConn();
+        $tables = xarDB3::getTables();
+        $varstable = $tables['config_vars'] ?? null;
+        // No tables, probably installing
+        if ($varstable == null) {
+            throw new VariableNotFoundException($name, "Variable #(1) not found (no tables found, in fact)");
+        }
 
         $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($name),xarDB3::getFetchNum());
-        if($result->next()) {
+        $result = $stmt->executeQuery([$name], xarDB3::getFetchNum());
+        if ($result->next()) {
             // Found it, retrieve and cache it
             $value = $result->get(2);
             $value = unserialize((string) $value);
@@ -131,7 +135,9 @@ class xarConfigVars extends xarVars implements IxarVars
         }
 
         // @todo: We found nothing, return the default if we had one
-        if($value !== null) return $value;
+        if ($value !== null) {
+            return $value;
+        }
         throw new VariableNotFoundException($name, "Variable #(1) not found");
     }
 
@@ -150,7 +156,7 @@ class xarConfigVars extends xarVars implements IxarVars
 
         // We want to make the next two statements atomic
         $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate(array($name));
+        $stmt->executeUpdate([$name]);
         xarCoreCache::delCached(self::$KEY, $name);
 
         return true;
@@ -171,18 +177,17 @@ class xarConfigVars extends xarVars implements IxarVars
         }
 
         try {
-          $dbconn = xarDB3::getConn();
-          $tables = xarDB3::getTables();
-          $varstable = xarDB3::getPrefix() . '_module_vars';
+            $dbconn = xarDB3::getConn();
+            $tables = xarDB3::getTables();
+            $varstable = xarDB3::getPrefix() . '_module_vars';
         } catch (Exception $e) {
-          return false;
+            return false;
         }
-        
+
         $query = "SELECT name, value FROM $varstable WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(), xarDB3::getFetchAssoc());
-        while ($result->next())
-        {
+        $result = $stmt->executeQuery([], xarDB3::getFetchAssoc());
+        while ($result->next()) {
             $newval = unserialize($result->getString('value'));
 
             $val = $result->getString('value') ?? 's:0:""';

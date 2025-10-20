@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MySQLTableInfo.php,v 1.20 2006/01/17 19:44:39 hlellelid Exp $
  *
@@ -48,11 +49,11 @@ class MySQLTableInfoBase extends TableInfo
 
         $res = $this->database->sqlQuery("SHOW COLUMNS FROM `" . $this->name . "`");
 
-        $defaults = array();
-        $nativeTypes = array();
-        $precisions = array();
+        $defaults = [];
+        $nativeTypes = [];
+        $precisions = [];
 
-        while($row = $this->database->fetchAssoc($res)) {
+        while ($row = $this->database->fetchAssoc($res)) {
             $name = $row['Field'];
             $is_nullable = ($row['Null'] == 'YES');
             $is_auto_increment = (strpos($row['Extra'], 'auto_increment') !== false);
@@ -117,7 +118,7 @@ class MySQLTableInfoBase extends TableInfo
         // Loop through the returned results, grouping the same key_name together
         // adding each column for that key.
 
-        while($row = $this->database->fetchAssoc($res)) {
+        while ($row = $this->database->fetchAssoc($res)) {
             // Skip any non-primary keys.
             if ($row['Key_name'] !== 'PRIMARY') {
                 continue;
@@ -153,11 +154,11 @@ class MySQLTableInfoBase extends TableInfo
         // Loop through the returned results, grouping the same key_name together
         // adding each column for that key.
 
-        while($row = $this->database->fetchAssoc($res)) {
+        while ($row = $this->database->fetchAssoc($res)) {
             $colName = $row["Column_name"];
             $name = $row["Key_name"];
 
-            if($name == "PRIMARY") {
+            if ($name == "PRIMARY") {
                 continue;
             }
 
@@ -227,10 +228,10 @@ class MySQLTableInfoBase extends TableInfo
                     }
 
                     //typical for mysql is RESTRICT
-                    $fkactions = array(
-                      'ON DELETE'	=> ForeignKeyInfo::RESTRICT,
-                      'ON UPDATE'	=> ForeignKeyInfo::RESTRICT,
-                    );
+                    $fkactions = [
+                        'ON DELETE'	=> ForeignKeyInfo::RESTRICT,
+                        'ON UPDATE'	=> ForeignKeyInfo::RESTRICT,
+                    ];
 
                     if ($fkey) {
                         //split foreign key information -> search for ON DELETE and afterwords for ON UPDATE action

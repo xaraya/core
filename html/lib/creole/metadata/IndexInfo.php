@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: IndexInfo.php,v 1.7 2005/02/25 15:47:02 pachanga Exp $
  *
@@ -32,15 +33,15 @@ class IndexInfo
     private $name;
 
     /** columns in this index */
-    private $columns = array();
+    private $columns = [];
 
     /** uniqueness flag */
     private $isUnique = false;
 
     /** additional vendor specific information */
-    private $vendorSpecificInfo = array();
+    private $vendorSpecificInfo = [];
 
-    public function __construct($name, $isUnique = false, $vendorInfo = array())
+    public function __construct($name, $isUnique = false, $vendorInfo = [])
     {
         $this->name = $name;
         $this->isUnique = $isUnique;

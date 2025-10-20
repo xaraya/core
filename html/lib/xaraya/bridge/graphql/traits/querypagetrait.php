@@ -17,7 +17,7 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use DataObjectFactory;
 use Exception;
- 
+
 /**
  * For documentation purposes only - available via QueryPageTrait
  */

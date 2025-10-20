@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PSR-14 Event Listener Providers for ixarEventSubject and ixarHookSubject events (work in progress)
  *

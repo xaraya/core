@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\requests
  * @category Xaraya Web Applications Framework
@@ -64,7 +65,7 @@ class RequestHandler implements RequestInterface
         if (isset($_SERVER[$name])) {
             return $_SERVER[$name];
         }
-        if($name == 'PATH_INFO') {
+        if ($name == 'PATH_INFO') {
             return null;
         }
         if (isset($_ENV[$name])) {

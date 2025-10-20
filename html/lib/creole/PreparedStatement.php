@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PreparedStatement.php,v 1.21 2005/03/29 16:56:09 gamr Exp $
  *

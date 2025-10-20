@@ -1,4 +1,5 @@
 <?php
+
 /*
  * $Id: MySQLiPreparedStatement.php,v 1.3 2004/09/18 09:15:49 sb Exp $
  *

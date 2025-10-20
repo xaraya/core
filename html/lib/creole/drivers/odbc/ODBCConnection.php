@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ODBCConnection.php,v 1.6 2006/01/17 19:44:39 hlellelid Exp $
  *
@@ -53,7 +54,7 @@ class ODBCConnection extends ConnectionCommon implements Connection
             throw new SQLException('odbc extension not loaded');
         }
 
-        $adapterclass = isset($dsninfo['adapter']) ? $dsninfo['adapter'] : null;
+        $adapterclass = $dsninfo['adapter'] ?? null;
 
         if (!$adapterclass) {
             $adapterclass = 'ODBCAdapter';
@@ -69,8 +70,8 @@ class ODBCConnection extends ConnectionCommon implements Connection
 
         if (!($this->flags & Creole::COMPAT_ASSOC_LOWER) && !$this->adapter->preservesColumnCase()) {
             trigger_error(
-                'Connection created without Creole::COMPAT_ASSOC_LOWER, ' .
-                          'but driver does not support case preservation.',
+                'Connection created without Creole::COMPAT_ASSOC_LOWER, '
+                          . 'but driver does not support case preservation.',
                 E_USER_WARNING
             );
             $this->flags != Creole::COMPAT_ASSOC_LOWER;

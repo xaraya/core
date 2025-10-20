@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteConnection.php,v 1.15 2006/01/17 19:44:41 hlellelid Exp $
  *
@@ -58,8 +59,8 @@ abstract class PdoConnectionCommon extends ConnectionCommon
         $persistent = ($flags & Creole::PERSISTENT === Creole::PERSISTENT);
 
         // use persistent connections?
-        $pdo_conn_flags = array();
-        if($persistent) {
+        $pdo_conn_flags = [];
+        if ($persistent) {
             $pdo_conn_flags[PDO::ATTR_PERSISTENT] = true;
         } else {
             $pdo_conn_flags[PDO::ATTR_PERSISTENT] = false;
@@ -67,7 +68,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon
 
         try {
             $conn = new PDO($pdo_dsn, '', '', $pdo_conn_flags);
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException("Unable to connect to SQLite database", $e->getMessage());
         }
 
@@ -76,7 +77,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // handle the case change
-        if(($flags & Creole::COMPAT_ASSOC_LOWER) === Creole::COMPAT_ASSOC_LOWER) {
+        if (($flags & Creole::COMPAT_ASSOC_LOWER) === Creole::COMPAT_ASSOC_LOWER) {
             $conn->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
         }
 
@@ -99,7 +100,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon
      */
     public function executeQuery($sql, $fetchmode = null, $rs_class = '')
     {
-        if($this->openResultSet()) {
+        if ($this->openResultSet()) {
             $this->handleOpenResultSet();
         }
 
@@ -124,13 +125,13 @@ abstract class PdoConnectionCommon extends ConnectionCommon
     // open record set needs to be tested
     public function openResultSet($val = null)
     {
-        if($val !== null) {
-            if(is_object($val)) {
-                if(is_object($this->open_result_set_ref)) {
+        if ($val !== null) {
+            if (is_object($val)) {
+                if (is_object($this->open_result_set_ref)) {
                     $this->open_result_set_ref->closeCursor();
                 }
                 $this->open_result_set_ref = $val;
-            } elseif($val == false) {
+            } elseif ($val == false) {
                 $this->open_result_set_ref = null;
             }
             $this->open_result_set = $val ? true : false;
@@ -148,7 +149,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon
         try {
             $pdo_stmt = $this->dblink->prepare($this->lastQuery);
             $pdo_stmt->execute();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException('Could not execute query', $e->getMessage(), $this->lastQuery);
         }
         return $pdo_stmt;
@@ -160,7 +161,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon
     public function executeUpdate($sql)
     {
 
-        if($this->openResultSet()) {
+        if ($this->openResultSet()) {
             $this->handleOpenResultSet();
         }
         // reset the count
@@ -169,7 +170,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon
         $pdo_stmt = $this->executePdoQuery($sql);
         try {
             $this->update_count = (int) $pdo_stmt->rowCount();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException('Could not get update count', $e->getMessage(), $this->lastQuery);
         }
         return $this->getUpdateCount();
@@ -203,7 +204,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon
     {
         try {
             $this->dblink->beginTransaction();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException('Could not begin transaction', $e->getMessage());
         }
     }
@@ -217,7 +218,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon
     {
         try {
             $this->dblink->commit();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException('Could not commit transaction', $e->getMessage());
         }
     }
@@ -231,7 +232,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon
     {
         try {
             $this->dblink->rollBack();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException('Could not rollback transaction', $e->getMessage());
         }
     }

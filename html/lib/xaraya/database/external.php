@@ -71,7 +71,7 @@ class ExternalDatabase implements xarDB_Interface
      * @param array<mixed> $args
      * @return object
      */
-    public static function newConn(array $args = null)
+    public static function newConn(?array $args = null)
     {
         $conn = static::getConnection($args);
         return $conn;
@@ -400,7 +400,7 @@ abstract class ExternalConnection implements ConnectionInterface
      * @param array<string, mixed> $dsn
      * @param mixed $flags
      */
-    public function __construct(array $dsn = null, mixed $flags = [])
+    public function __construct(?array $dsn = null, mixed $flags = [])
     {
         $this->dsn = $dsn;
         $this->flags = $flags;

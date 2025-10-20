@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\variables
  * @subpackage variables
@@ -15,7 +16,7 @@
  */
 interface IxarThemeVars
 {
-    static function get   ($scope, $name);
+    public static function get($scope, $name);
 }
 
 
@@ -33,7 +34,7 @@ class xarThemeVars extends xarObject implements IxarThemeVars
     /**
      * get a theme variable
      *
-     * 
+     *
      * @param  string $scope The name of the theme
      * @param  string $name  The name of the variable
      * @return mixed The value of the variable or void if variable doesn't exist

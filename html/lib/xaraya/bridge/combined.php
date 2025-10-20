@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Make use of the RoutingBridge in routing.php for an all-in-one PSR-15 middleware + requesthandler
  *

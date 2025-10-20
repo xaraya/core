@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Representing blocklayout source templates
  *

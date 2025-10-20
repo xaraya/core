@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\context
  * @subpackage context

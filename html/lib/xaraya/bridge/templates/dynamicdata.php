@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Twig extension to use Twig template engine for output in Xaraya
  */
@@ -36,7 +37,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
     public function getFunctions()
     {
         return [
-             // <xar:data-view object="$object" newlink=""/>
+            // <xar:data-view object="$object" newlink=""/>
             new TwigFunction('xar_data_view', $this->xar_data_view(...), ['is_safe' => ['html']]),
             // <xar:data-display object="$object"/>
             new TwigFunction('xar_data_display', $this->xar_data_display(...), ['is_safe' => ['html']]),

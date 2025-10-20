@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Twig extension to use Twig template engine for output in Xaraya
  */

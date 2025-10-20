@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class to handle winsys logggin
  *
@@ -13,7 +14,7 @@
 /**
  * Windows system log
  *
- * 
+ *
 */
 
 /**
@@ -24,7 +25,7 @@ sys::import('xaraya.log.loggers.xarLogger');
 
 /**
  */
-class xarLogger_winsyslog extends xarLogger_syslog 
+class xarLogger_winsyslog extends xarLogger_syslog
 {
     /**
      * Converts a xarLog::LEVEL* constant into a syslog LOG_* constant.
@@ -38,11 +39,11 @@ class xarLogger_winsyslog extends xarLogger_syslog
      *
      * @return int The LOG_* representation of $priority.
      *
-     * 
+     *
      */
     public function toSyslog($level)
     {
-        static $levels = array(
+        static $levels = [
             xarLog::LEVEL_EMERGENCY => 1, //ERROR
             xarLog::LEVEL_ALERT     => 1, //ERROR
             xarLog::LEVEL_CRITICAL  => 1, //ERROR
@@ -50,8 +51,8 @@ class xarLogger_winsyslog extends xarLogger_syslog
             xarLog::LEVEL_WARNING   => 1, //ERROR
             xarLog::LEVEL_NOTICE    => 6, //INFO
             xarLog::LEVEL_INFO      => 6, //INFO
-            xarLog::LEVEL_DEBUG     => 6  //INFO
-        );
+            xarLog::LEVEL_DEBUG     => 6,  //INFO
+        ];
 
         return $levels[$level];
     }

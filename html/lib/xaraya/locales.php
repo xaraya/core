@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Exception raised by the multilanguage subsystem
  *
@@ -47,7 +48,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  */
 function &xarMLSLoadLocaleData($locale = null)
 {
-    static $loaded = array(); // keep track of files we have loaded
+    static $loaded = []; // keep track of files we have loaded
     if (!isset($locale)) {
         $locale = xarMLS::getCurrentLocale();
     }
@@ -62,10 +63,11 @@ function &xarMLSLoadLocaleData($locale = null)
     // check for locale availability
     $siteLocales = xarMLS::listSiteLocales();
 
-    $nullreturn = null; $falsereturn = false;
+    $nullreturn = null;
+    $falsereturn = false;
     if (!in_array($locale, $siteLocales)) {
-        if (strstr($locale,'ISO')) {
-            $locale = str_replace('ISO','iso',$locale);
+        if (strstr($locale, 'ISO')) {
+            $locale = str_replace('ISO', 'iso', $locale);
             if (!in_array($locale, $siteLocales)) {
                 throw new LocaleNotFoundException($locale);
             }
@@ -76,9 +78,11 @@ function &xarMLSLoadLocaleData($locale = null)
 
     // @todo get rid of invalid .php locale files
     $fileName = sys::varpath() . "/locales/$locale/locale.php";
-    if (!$parsedLocale = xarMLS::parseLocaleString($locale)) return false;
+    if (!$parsedLocale = xarMLS::parseLocaleString($locale)) {
+        return false;
+    }
     $siteCharset = $parsedLocale['charset'];
-    $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
+    $utf8locale = $parsedLocale['lang'] . '_' . $parsedLocale['country'] . '.utf-8';
     // @todo get rid of invalid .php locale files
     $utf8FileName = sys::varpath() . "/locales/$utf8locale/locale.php";
     if (file_exists($fileName) && !(isset($loaded[$fileName]))) {
@@ -87,50 +91,54 @@ function &xarMLSLoadLocaleData($locale = null)
         $loaded[$fileName] = true;
         /** @phpstan-ignore-next-line */
         xarLocale::$dataCache[$locale] = $localeData;
-    } else if (file_exists($utf8FileName) && !isset($loaded[$utf8FileName])) {
+    } elseif (file_exists($utf8FileName) && !isset($loaded[$utf8FileName])) {
         include $utf8FileName;
         $loaded[$utf8FileName] = true;
         if ($siteCharset != 'utf-8') {
             /** @phpstan-ignore-next-line */
-            foreach ( $localeData as $tempKey => $tempValue ) {
+            foreach ($localeData as $tempKey => $tempValue) {
                 $tempValue = xarMLS::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
                 $localeData[$tempKey] = $tempValue;
             }
         }
         xarLocale::$dataCache[$locale] = $localeData;
     } else {
-/* TODO: delete after new backend testing
-        if (xarMLS::$backendName == 'xml2php') {
-*/
-            if (!$parsedLocale = xarMLS::parseLocaleString($locale)) return $falsereturn;
-            $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
-            $siteCharset = $parsedLocale['charset'];
-            xarLocale::$dataLoader ??= new xarMLS__LocaleDataLoader();
-            $res = xarLocale::$dataLoader->load($utf8locale);
-            if (isset($res) && $res == false) {
-                throw new LocaleNotFoundException($utf8locale);
-            }
-            if (!isset($res)) return $nullreturn; // Throw back
-            $tempArray = xarLocale::$dataLoader->getLocaleData();
-            if ($siteCharset != 'utf-8') {
-                foreach ( $tempArray as $tempKey => $tempValue ) {
-                    $tempValue = xarMLS::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
-                    $tempArray[$tempKey] = $tempValue;
-                }
-            }
-            xarLocale::$dataCache[$locale] = $tempArray;
-/* TODO: delete after new backend testing
-        } else {
-            $res = xarLocale::$dataLoader->load($locale);
-            if (!isset($res)) return $nullreturn; // Throw back
-            if ($res == false) {
-                // Can we use xarML here? border case, play it safe for now.
-                throw new LocaleNotFoundException($locale);
-
-            }
-            xarLocale::$dataCache[$locale] = xarLocale::$dataLoader->getLocaleData();
+        /* TODO: delete after new backend testing
+                if (xarMLS::$backendName == 'xml2php') {
+        */
+        if (!$parsedLocale = xarMLS::parseLocaleString($locale)) {
+            return $falsereturn;
         }
-*/
+        $utf8locale = $parsedLocale['lang'] . '_' . $parsedLocale['country'] . '.utf-8';
+        $siteCharset = $parsedLocale['charset'];
+        xarLocale::$dataLoader ??= new xarMLS__LocaleDataLoader();
+        $res = xarLocale::$dataLoader->load($utf8locale);
+        if (isset($res) && $res == false) {
+            throw new LocaleNotFoundException($utf8locale);
+        }
+        if (!isset($res)) {
+            return $nullreturn;
+        } // Throw back
+        $tempArray = xarLocale::$dataLoader->getLocaleData();
+        if ($siteCharset != 'utf-8') {
+            foreach ($tempArray as $tempKey => $tempValue) {
+                $tempValue = xarMLS::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
+                $tempArray[$tempKey] = $tempValue;
+            }
+        }
+        xarLocale::$dataCache[$locale] = $tempArray;
+        /* TODO: delete after new backend testing
+                } else {
+                    $res = xarLocale::$dataLoader->load($locale);
+                    if (!isset($res)) return $nullreturn; // Throw back
+                    if ($res == false) {
+                        // Can we use xarML here? border case, play it safe for now.
+                        throw new LocaleNotFoundException($locale);
+
+                    }
+                    xarLocale::$dataCache[$locale] = xarLocale::$dataLoader->getLocaleData();
+                }
+        */
     }
 
     return xarLocale::$dataCache[$locale];
@@ -152,11 +160,11 @@ function &xarMLSLoadLocaleData($locale = null)
 function xarLocaleParseCurrency($currency, $localeData = null)
 {
     if ($localeData == null) {
-        $localeData =& xarMLSLoadLocaleData();
+        $localeData = & xarMLSLoadLocaleData();
     }
 
     $currencySym = $localeData['/monetary/currencySymbol'];
-    $currency = str_replace($currencySym,'',$currency);
+    $currency = str_replace($currencySym, '', $currency);
     $currency = xarLocaleParseNumber($currency, $localeData, true);
     return trim($currency);
 }
@@ -179,13 +187,16 @@ function xarLocaleParseCurrency($currency, $localeData = null)
 function xarLocaleParseNumber($number, $localeData = null, $isCurrency = false)
 {
     if ($localeData == null) {
-        $localeData =& xarMLSLoadLocaleData();
+        $localeData = & xarMLSLoadLocaleData();
     }
-    if ($isCurrency == true) $bp = 'monetary';
-    else $bp = 'numeric';
+    if ($isCurrency == true) {
+        $bp = 'monetary';
+    } else {
+        $bp = 'numeric';
+    }
 
     $groupSep = $localeData["/$bp/groupingSeparator"];
-    $number = str_replace($groupSep,'',$number);
+    $number = str_replace($groupSep, '', $number);
     return trim($number);
 }
 
@@ -207,10 +218,10 @@ function xarLocaleParseNumber($number, $localeData = null, $isCurrency = false)
 function xarLocaleFormatCurrency($currency, $localeData = null)
 {
     if ($localeData == null) {
-        $localeData =& xarMLSLoadLocaleData(); // rraymond : assign by reference for large array (memory issues)
+        $localeData = & xarMLSLoadLocaleData(); // rraymond : assign by reference for large array (memory issues)
     }
     $currencySym = $localeData['/monetary/currencySymbol'];
-    return $currencySym.' '.xarLocaleFormatNumber($currency, $localeData, true);
+    return $currencySym . ' ' . xarLocaleFormatNumber($currency, $localeData, true);
 }
 
 /**
@@ -233,11 +244,14 @@ function xarLocaleFormatNumber($number, $localeData = null, $isCurrency = false)
     }
 
     if ($localeData == null) {
-        $localeData =& xarMLSLoadLocaleData(); // rraymond : assign by reference for large array (memory issues)
+        $localeData = & xarMLSLoadLocaleData(); // rraymond : assign by reference for large array (memory issues)
     }
 
-    if ($isCurrency == true) $bp = 'monetary';
-    else $bp = 'numeric';
+    if ($isCurrency == true) {
+        $bp = 'monetary';
+    } else {
+        $bp = 'numeric';
+    }
 
     $groupSize = $localeData["/$bp/groupingSize"];
     $groupSep = $localeData["/$bp/groupingSeparator"];
@@ -287,11 +301,15 @@ function xarLocaleFormatNumber($number, $localeData = null, $isCurrency = false)
     if (isset($dec_part) || $decSepShown) {
         $str_num .= $decSep;
         if (!isset($dec_part)) {
-            for ($i = 0; $i < $minFractDigits; $i++) $str_num .= '0';
+            for ($i = 0; $i < $minFractDigits; $i++) {
+                $str_num .= '0';
+            }
         } else {
             $dec_part_len = strlen($dec_part);
             if ($dec_part_len < $minFractDigits) {
-                for ($i = 0; $i < $minFractDigits - $dec_part_len; $i++) $dec_part .= '0';
+                for ($i = 0; $i < $minFractDigits - $dec_part_len; $i++) {
+                    $dec_part .= '0';
+                }
             } elseif ($dec_part_len > $maxFractDigits) {
                 // FIXME: <marco> Do we need round here?
                 $dec_part = substr($dec_part, 0, $maxFractDigits - $dec_part_len); // Note negative length
@@ -325,13 +343,13 @@ function xarLocaleFormatNumber($number, $localeData = null, $isCurrency = false)
 **/
 function xarLocaleGetFormattedUTCDate($length = 'short', $timestamp = null, $addoffset = false)
 {
-    if(!isset($timestamp)) {
+    if (!isset($timestamp)) {
         // get UTC timestamp
         $timestamp = time();
     }
 
     // pass this to the regular function, but without using the timezone offset here
-    return xarLocaleGetFormattedDate($length,$timestamp,$addoffset);
+    return xarLocaleGetFormattedDate($length, $timestamp, $addoffset);
 }
 
 /**
@@ -353,30 +371,30 @@ function xarLocaleGetFormattedUTCDate($length = 'short', $timestamp = null, $add
 function xarLocaleGetFormattedDate($length = 'short', $timestamp = null, $addoffset = true)
 {
     $length = strtolower($length);
-    $validLengths = array('short','medium','long');
-    if(!in_array($length,$validLengths)) {
+    $validLengths = ['short','medium','long'];
+    if (!in_array($length, $validLengths)) {
         //TODO: We should throw a USER exception here
         return '';
     }
 
     // the locale data should already be a static var in the main loader script
     // so we no longer need to make it a static in this function
-    $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
+    $localeData = & xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
 
     // @todo get rid of these double transformations
     // grab the right set of locale data
     $locale_format = $localeData["/dateFormats/$length"];
     // replace the locale formatting style with valid strftime() style
-    $locale_format = str_replace('MMMM','%B',$locale_format);
-    $locale_format = str_replace('MMM','%b',$locale_format);
-    $locale_format = str_replace('M','%m',$locale_format);
-    $locale_format = str_replace('dddd','%A',$locale_format);
-    $locale_format = str_replace('ddd','%a',$locale_format);
-    $locale_format = str_replace('d','%d',$locale_format);
-    $locale_format = str_replace('yyyy','%Y',$locale_format);
-    $locale_format = str_replace('yy','%y',$locale_format);
+    $locale_format = str_replace('MMMM', '%B', $locale_format);
+    $locale_format = str_replace('MMM', '%b', $locale_format);
+    $locale_format = str_replace('M', '%m', $locale_format);
+    $locale_format = str_replace('dddd', '%A', $locale_format);
+    $locale_format = str_replace('ddd', '%a', $locale_format);
+    $locale_format = str_replace('d', '%d', $locale_format);
+    $locale_format = str_replace('yyyy', '%Y', $locale_format);
+    $locale_format = str_replace('yy', '%y', $locale_format);
 
-    return xarLocaleFormatDate($locale_format,$timestamp,$addoffset);
+    return xarLocaleFormatDate($locale_format, $timestamp, $addoffset);
 }
 
 /**
@@ -391,15 +409,15 @@ function xarLocaleGetFormattedDate($length = 'short', $timestamp = null, $addoff
  * @link http://www.xaraya.info
  *
 **/
-function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addoffset = false)
+function xarLocaleGetFormattedUTCTime($length = 'short', $timestamp = null, $addoffset = false)
 {
-    if(!isset($timestamp)) {
+    if (!isset($timestamp)) {
         // get UTC timestamp
         $timestamp = time();
     }
 
     // pass this to the regular function, but without using the timezone offset here
-    return xarLocaleGetFormattedTime($length,$timestamp,$addoffset);
+    return xarLocaleGetFormattedTime($length, $timestamp, $addoffset);
 }
 
 /**
@@ -418,11 +436,11 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addo
  * @todo MichelV: why are the formatting rules not the same as PHP rules for strftime?
  *
 **/
-function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffset = true)
+function xarLocaleGetFormattedTime($length = 'short', $timestamp = null, $addoffset = true)
 {
     $length = strtolower($length);
-    $validLengths = array('short','medium','long');
-    if(!in_array($length,$validLengths)) {
+    $validLengths = ['short','medium','long'];
+    if (!in_array($length, $validLengths)) {
         return '';
     }
 
@@ -449,38 +467,42 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
 
     // the locale data should already be a static var in the main loader script
     // so we no longer need to make it a static in this function
-    $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
+    $localeData = & xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
 
     // @todo get rid of these double transformations
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
 
-    $locale_format = str_replace('HH','%H',$locale_format);
-    $locale_format = str_replace('H','%H',$locale_format); // Bug 5806
-    $locale_format = str_replace('%%H','%H',$locale_format); // Now put back the double replaced ones.
-    $locale_format = str_replace('hh','%I',$locale_format);
-    $locale_format = str_replace('mm','%M',$locale_format);
-    $locale_format = str_replace('ss','%S',$locale_format);
-    $locale_format = str_replace('a','%p',$locale_format);
-    $locale_format = str_replace('z','%Z',$locale_format);
+    $locale_format = str_replace('HH', '%H', $locale_format);
+    $locale_format = str_replace('H', '%H', $locale_format); // Bug 5806
+    $locale_format = str_replace('%%H', '%H', $locale_format); // Now put back the double replaced ones.
+    $locale_format = str_replace('hh', '%I', $locale_format);
+    $locale_format = str_replace('mm', '%M', $locale_format);
+    $locale_format = str_replace('ss', '%S', $locale_format);
+    $locale_format = str_replace('a', '%p', $locale_format);
+    $locale_format = str_replace('z', '%Z', $locale_format);
     // format the single digit flags
 
     $datetime = date_create('@' . $timestamp);
     // H = %H = Two digit representation of the hour in 24-hour format
-    if (strpos($locale_format,'H') !== false)
-        $locale_format = str_replace('%H',sprintf('%1d',$datetime->format('H')),$locale_format);
+    if (strpos($locale_format, 'H') !== false) {
+        $locale_format = str_replace('%H', sprintf('%1d', $datetime->format('H')), $locale_format);
+    }
     // h = %I = Two digit representation of the hour in 12-hour format
-    if (strpos($locale_format,'h') !== false)
-        $locale_format = str_replace('h',sprintf('%1d',$datetime->format('h')),$locale_format);
+    if (strpos($locale_format, 'h') !== false) {
+        $locale_format = str_replace('h', sprintf('%1d', $datetime->format('h')), $locale_format);
+    }
     // i = %M = Two digit representation of the minute
-    if (strpos($locale_format,'m') !== false)
-        $locale_format = str_replace('m',sprintf('%1d',$datetime->format('i')),$locale_format);
+    if (strpos($locale_format, 'm') !== false) {
+        $locale_format = str_replace('m', sprintf('%1d', $datetime->format('i')), $locale_format);
+    }
     // s = %S = Two digit representation of the second
-    if (strpos($locale_format,'s') !== false)
-        $locale_format = str_replace('s',sprintf('%1d',$datetime->format('s')),$locale_format);
+    if (strpos($locale_format, 's') !== false) {
+        $locale_format = str_replace('s', sprintf('%1d', $datetime->format('s')), $locale_format);
+    }
 
-    return xarLocaleFormatDate($locale_format,$timestamp,$addoffset);
+    return xarLocaleFormatDate($locale_format, $timestamp, $addoffset);
 }
 
 /**
@@ -497,12 +519,12 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
 **/
 function xarLocaleFormatUTCDate($format = null, $time = null, $addoffset = false)
 {
-    if(!isset($time)) {
+    if (!isset($time)) {
         $time = time();
     }
 
     // pass this to the regular function, but without using the timezone offset here
-    return xarLocaleFormatDate($format,$time,$addoffset);
+    return xarLocaleFormatDate($format, $time, $addoffset);
 }
 
 /**
@@ -544,7 +566,7 @@ function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = tru
         // invalid dates < 0 (e.g. from strtotime) return an empty date string
         return '';
     }
-    return xarMLS_strftime($format,$timestamp);
+    return xarMLS_strftime($format, $timestamp);
 }
 
 /**
@@ -584,10 +606,10 @@ function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = tru
  *  @return string datetime string with locale translations
  *
  */
-function xarMLS_strftime($format=null,$timestamp=null)
+function xarMLS_strftime($format = null, $timestamp = null)
 {
     // if we don't have a timestamp, get the user's current time
-    if(!isset($timestamp)) {
+    if (!isset($timestamp)) {
         $timestamp = xarMLS::userTime();
     } elseif ($timestamp < 0) {
         // invalid dates < 0 (e.g. from strtotime) return an empty date string
@@ -598,7 +620,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
     }
 
     // we need to get the correct timestamp format if we do not have one
-    if(!isset($format)) {
+    if (!isset($format)) {
         // check for user defined format
         /*
         if($user_defined) {
@@ -607,7 +629,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
             $format =& $admin_defined;
         } else {
         */
-            $format = '%c';
+        $format = '%c';
         /*
         }
         */
@@ -649,26 +671,26 @@ class xarMLS__LocaleDataLoader extends xarObject
 
     public $localeData;
 
-    public $attribsStack = array();
+    public $attribsStack = [];
 
     public $tmpVars;
 
-    function load($locale)
+    public function load($locale)
     {
         $fileName = sys::varpath() . "/locales/$locale/locale.xml";
         if (!file_exists($fileName)) {
             return false;
         }
 
-        if(filesize($fileName) == 0 ) {
+        if (filesize($fileName) == 0) {
             return false;
         }
 
-        $this->tmpVars = array();
+        $this->tmpVars = [];
 
         $this->curData = '';
         $this->curPath = '';
-        $this->localeData = array();
+        $this->localeData = [];
 
         // TRICK: <marco> Since this xml parser sucks, we obviously use utf-8 for utf-8 charset
         // and iso-8859-1 for other charsets, even if they're not single byte.
@@ -693,7 +715,7 @@ class xarMLS__LocaleDataLoader extends xarObject
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                throw new XMLParseException(array($fileName,$line,$errstr));
+                throw new XMLParseException([$fileName,$line,$errstr]);
             }
         }
 
@@ -701,41 +723,41 @@ class xarMLS__LocaleDataLoader extends xarObject
         return true;
     }
 
-    function getLocaleData(): array
+    public function getLocaleData(): array
     {
         return $this->localeData;
     }
 
-    function beginElement($parser, $tag, $attribs)
+    public function beginElement($parser, $tag, $attribs)
     {
         if (strpos($tag, ':') !== false) {
-            list($ns, $tag) = explode(':', $tag);
+            [$ns, $tag] = explode(':', $tag);
         }
         $this->attribsStack[] = $attribs;
         if (isset($this->tmpVars['calledOnce'])) {
-            $this->curPath .= '/'.$tag;
+            $this->curPath .= '/' . $tag;
         } else {
             // Avoid to get prefixed the /description to path
             $this->tmpVars['calledOnce'] = true;
         }
     }
 
-    function endElement($parser, $tag)
+    public function endElement($parser, $tag)
     {
         if (strpos($tag, ':') !== false) {
-            list($ns, $tag) = explode(':', $tag);
+            [$ns, $tag] = explode(':', $tag);
         }
         $attribs = array_pop($this->attribsStack);
-        $handler = $tag.'TagHandler';
+        $handler = $tag . 'TagHandler';
         if (method_exists($this, $handler)) {
-            list($new_path, $value) = $this->$handler($this->curPath, $attribs, $this->curData);
+            [$new_path, $value] = $this->$handler($this->curPath, $attribs, $this->curData);
         } else {
             $value = $this->curData;
             $new_path = $this->curPath;
         }
         if (is_array($value)) {
             foreach ($value as $add_path => $real_value) {
-                $this->localeData[$new_path.'/'.$add_path] = $real_value;
+                $this->localeData[$new_path . '/' . $add_path] = $real_value;
             }
         } else {
             $this->localeData[$new_path] = $value;
@@ -745,42 +767,42 @@ class xarMLS__LocaleDataLoader extends xarObject
         $this->curData = '';
     }
 
-    function characterData($parser, $data)
+    public function characterData($parser, $data)
     {
         // FIXME: <marco> consider to replace \n,\r with ''
         $this->curData .= trim($data);
     }
 
-    function maximumTagHandler($path, $attribs, $content)
+    public function maximumTagHandler($path, $attribs, $content)
     {
-        return array($path, (int) $content);
+        return [$path, (int) $content];
     }
 
-    function minimumTagHandler($path, $attribs, $content)
+    public function minimumTagHandler($path, $attribs, $content)
     {
-        return array($path, (int) $content);
+        return [$path, (int) $content];
     }
     /**
-     * @return array<mixed> 
+     * @return array<mixed>
      */
-    function groupingSizeTagHandler($path, $attribs, $content)
+    public function groupingSizeTagHandler($path, $attribs, $content)
     {
-        return array($path, (int) $content);
+        return [$path, (int) $content];
     }
 
-    function isDecimalSeparatorAlwaysShownTagHandler($path, $attribs, $content)
+    public function isDecimalSeparatorAlwaysShownTagHandler($path, $attribs, $content)
     {
         if ($content == 'true') {
             $value = true;
         } else {
             $value = false;
         }
-        return array($path, $value);
+        return [$path, $value];
     }
     /**
-     * @return array<mixed> 
+     * @return array<mixed>
      */
-    function monthTagHandler($path, $attribs, $content)
+    public function monthTagHandler($path, $attribs, $content)
     {
         if (isset($this->tmpVars['monthNum'])) {
             $monthNum = $this->tmpVars['monthNum'];
@@ -789,14 +811,14 @@ class xarMLS__LocaleDataLoader extends xarObject
         }
         $this->tmpVars['monthNum'] = $monthNum + 1;
         $path = substr($path, 0, -6); // Strip the /month at the end
-        $value = array($monthNum.'/full' => $attribs['full'],
-                       $monthNum.'/short' => $attribs['short']);
-        return array($path, $value);
+        $value = [$monthNum . '/full' => $attribs['full'],
+            $monthNum . '/short' => $attribs['short']];
+        return [$path, $value];
     }
     /**
-     * @return array<mixed> 
+     * @return array<mixed>
      */
-    function weekdayTagHandler($path, $attribs, $content)
+    public function weekdayTagHandler($path, $attribs, $content)
     {
         if (isset($this->tmpVars['weekdayNum'])) {
             $weekdayNum = $this->tmpVars['weekdayNum'];
@@ -805,9 +827,9 @@ class xarMLS__LocaleDataLoader extends xarObject
         }
         $this->tmpVars['weekdayNum'] = $weekdayNum + 1;
         $path = substr($path, 0, -8); // Strip the /weekday at the end
-        $value = array($weekdayNum.'/full' => $attribs['full'],
-                       $weekdayNum.'/short' => $attribs['short']);
-        return array($path, $value);
+        $value = [$weekdayNum . '/full' => $attribs['full'],
+            $weekdayNum . '/short' => $attribs['short']];
+        return [$path, $value];
     }
 
 }
@@ -858,13 +880,13 @@ class xarLocale extends xarObject
     {
         return xarLocaleGetFormattedDate($length, $timestamp, $addoffset);
     }
-    public static function getFormattedUTCTime($length = 'short',$timestamp = null, $addoffset = false)
+    public static function getFormattedUTCTime($length = 'short', $timestamp = null, $addoffset = false)
     {
-        return xarLocaleGetFormattedUTCTime($length,$timestamp, $addoffset);
+        return xarLocaleGetFormattedUTCTime($length, $timestamp, $addoffset);
     }
-    public static function getFormattedTime($length = 'short',$timestamp = null, $addoffset = true)
+    public static function getFormattedTime($length = 'short', $timestamp = null, $addoffset = true)
     {
-        return xarLocaleGetFormattedTime($length,$timestamp, $addoffset);
+        return xarLocaleGetFormattedTime($length, $timestamp, $addoffset);
     }
     public static function formatUTCDate($format = null, $time = null, $addoffset = false)
     {

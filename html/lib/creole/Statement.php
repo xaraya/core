@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: Statement.php,v 1.17 2004/03/20 04:16:49 hlellelid Exp $
  *

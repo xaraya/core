@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Data Store is a variable SQL table (= only xar_dynamic_data for now)
  *
@@ -86,10 +87,10 @@ class VariableTableDataStore extends SQLDataStore
                   WHERE property_id IN ($bindmarkers) AND
                         item_id = ?";
         $bindvars = $propids;
-        $bindvars[] = (int)$itemid;
+        $bindvars[] = (int) $itemid;
         $stmt = $this->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
-        if(!$result->getRecordCount()) {
+        if (!$result->getRecordCount()) {
             return;
         }
 
@@ -223,7 +224,7 @@ class VariableTableDataStore extends SQLDataStore
                   WHERE property_id IN ($bindmarkers) AND
                         item_id = ?";
         $bindvars = $propids;
-        $bindvars[] = (int)$itemid;
+        $bindvars[] = (int) $itemid;
 
         $stmt = $this->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
@@ -289,7 +290,7 @@ class VariableTableDataStore extends SQLDataStore
                   WHERE property_id IN ($bindmarkers) AND
                         item_id = ?";
         $bindvars = $propids;
-        $bindvars[] = (int)$itemid;
+        $bindvars[] = (int) $itemid;
         $stmt = $this->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         return $itemid;
@@ -298,7 +299,7 @@ class VariableTableDataStore extends SQLDataStore
     public function getItems(array $args = [])
     {
         // Bail if no properties have yet been defined
-        if(count($this->object->properties) == 0) {
+        if (count($this->object->properties) == 0) {
             return;
         }
 
@@ -423,7 +424,7 @@ class VariableTableDataStore extends SQLDataStore
             }
         } else {
             $query .= " AND item_id = ?";
-            $bindvars[] = (int)$itemids[0];
+            $bindvars[] = (int) $itemids[0];
         }
 
         // CHECKME: there was a cache execute here, it N/A anymore now, as the method is non-existent.
@@ -1031,7 +1032,7 @@ class VariableTableDataStore extends SQLDataStore
     public function countItems(array $args = [])
     {
         // Bail if no properties have yet been defined
-        if(count($this->object->properties) == 0) {
+        if (count($this->object->properties) == 0) {
             return 0;
         }
 
@@ -1073,7 +1074,7 @@ class VariableTableDataStore extends SQLDataStore
         }
 
         $bindmarkers = '?' . str_repeat(',?', count($propids) - 1);
-        if($this->getType() == 'sqlite') {
+        if ($this->getType() == 'sqlite') {
             $query = "SELECT COUNT(*)
                       FROM (SELECT DISTINCT item_id
                             WHERE property_id IN ($bindmarkers) "; // WATCH OUT, STILL UNBALANCED
@@ -1092,11 +1093,11 @@ class VariableTableDataStore extends SQLDataStore
             }
         } else {
             $query .= " AND item_id = ? ";
-            $bindvars[] = (int)$itemids[0];
+            $bindvars[] = (int) $itemids[0];
         }
 
         // Balance parentheses.
-        if($this->getType() == 'sqlite') {
+        if ($this->getType() == 'sqlite') {
             $query .= ")";
         }
 
@@ -1126,7 +1127,7 @@ class VariableTableDataStore extends SQLDataStore
             $propids[] = $prop->id;
         }
 
-        if($this->getType() == 'sqlite') {
+        if ($this->getType() == 'sqlite') {
             $query = "SELECT COUNT(*)
                         FROM ( SELECT DISTINCT item_id FROM $dynamicdata WHERE "; // WATCH OUT, STILL UNBALANCED
         } else {
@@ -1141,7 +1142,7 @@ class VariableTableDataStore extends SQLDataStore
         }
 
         // Balance parentheses.
-        if($this->getType() == 'sqlite') {
+        if ($this->getType() == 'sqlite') {
             $query .= ")";
         }
 
@@ -1170,7 +1171,7 @@ class VariableTableDataStore extends SQLDataStore
         }
 
         $bindmarkers = '?' . str_repeat(',?', count($propids) - 1);
-        if($this->getType() == 'sqlite') {
+        if ($this->getType() == 'sqlite') {
             $query = "SELECT COUNT(*)
                       FROM (SELECT DISTINCT item_id FROM $dynamicdata
                       WHERE property_id IN ($bindmarkers)) ";
@@ -1220,7 +1221,7 @@ class VariableTableDataStore extends SQLDataStore
         $query = "UPDATE $dynamicobjects
                      SET maxid = maxid + 1 ";
         $query .= "WHERE id = ? ";
-        $bindvars[] = (int)$objectid;
+        $bindvars[] = (int) $objectid;
         $stmt = $this->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         // get it back (WARNING : this is *not* guaranteed to be unique on heavy-usage sites !)
@@ -1228,7 +1229,7 @@ class VariableTableDataStore extends SQLDataStore
         $query = "SELECT maxid
                     FROM $dynamicobjects ";
         $query .= "WHERE id = ? ";
-        $bindvars[] = (int)$objectid;
+        $bindvars[] = (int) $objectid;
         $stmt = $this->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if (!$result->first()) {

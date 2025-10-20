@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Module variable handling
  *
@@ -20,8 +21,8 @@ use Xaraya\Facades\xarDB3;
  */
 interface IxarModVars extends IxarVars
 {
-    static function getID     ($scope, $name);
-    static function delete_all($scope);
+    public static function getID($scope, $name);
+    public static function delete_all($scope);
 }
 
 /**
@@ -29,7 +30,7 @@ interface IxarModVars extends IxarVars
  */
 class xarModVars extends xarVars implements IxarModVars
 {
-    private static $preloaded = array(); // Keep track of what module vars (per module) we already had
+    private static $preloaded = []; // Keep track of what module vars (per module) we already had
 
     /**
      * Get a module variable
@@ -40,14 +41,19 @@ class xarModVars extends xarVars implements IxarModVars
      * @return mixed The value of the variable or void if variable doesn't exist
      * @throws EmptyParameterException
      */
-    static function get($scope, $name, $value=null)
+    public static function get($scope, $name, $value = null)
     {
-        if (empty($scope)) throw new EmptyParameterException('modName');
-        if (empty($name)) throw new EmptyParameterException('name');
+        if (empty($scope)) {
+            throw new EmptyParameterException('modName');
+        }
+        if (empty($name)) {
+            throw new EmptyParameterException('name');
+        }
 
         // Preload per module, once
-        if(!isset(self::$preloaded[$scope]))
+        if (!isset(self::$preloaded[$scope])) {
             self::preload($scope);
+        }
 
         // Lets first check to see if any of our type vars are already set in the cache.
         $cacheScope = 'Mod.Variables.' . $scope;
@@ -60,7 +66,9 @@ class xarModVars extends xarVars implements IxarModVars
 
         // Still no luck, let's do the hard work then
         $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (empty($modBaseInfo)) return;
+        if (empty($modBaseInfo)) {
+            return;
+        }
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -68,13 +76,12 @@ class xarModVars extends xarVars implements IxarModVars
         // Retrieve all the variables for this module at once
         $module_varstable = $tables['module_vars'];
         $query = "SELECT name, value FROM $module_varstable WHERE module_id = ? AND name = ?";
-        $bindvars = array((int)$modBaseInfo['systemid'],$name);
+        $bindvars = [(int) $modBaseInfo['systemid'],$name];
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars,xarDB3::getFetchNum());
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchNum());
 
-        if($result->next())
-        {
+        if ($result->next()) {
             // Found
             $value = $result->get(2);
             xarCoreCache::setCached($cacheScope, $result->getString(1), $value);
@@ -91,9 +98,11 @@ class xarModVars extends xarVars implements IxarModVars
      * @throws EmptyParameterException
      * @todo  This has some duplication with config.php
      */
-    static function preload($scope)
+    public static function preload($scope)
     {
-        if (empty($scope)) throw new EmptyParameterException('modName');
+        if (empty($scope)) {
+            throw new EmptyParameterException('modName');
+        }
 
         $cacheScope = 'Mod.Variables.' . $scope;
         if (xarCoreCache::hasPreload($cacheScope) && xarCoreCache::loadCached($cacheScope)) {
@@ -102,7 +111,9 @@ class xarModVars extends xarVars implements IxarModVars
         }
 
         $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (empty($modBaseInfo)) return;
+        if (empty($modBaseInfo)) {
+            return;
+        }
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -111,7 +122,7 @@ class xarModVars extends xarVars implements IxarModVars
 
         $query = "SELECT name, value FROM $module_varstable WHERE module_id = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($modBaseInfo['systemid']),xarDB3::getFetchAssoc());
+        $result = $stmt->executeQuery([$modBaseInfo['systemid']], xarDB3::getFetchAssoc());
 
         while ($result->next()) {
             xarCoreCache::setCached($cacheScope, $result->getString('name'), $result->get('value'));
@@ -149,10 +160,14 @@ class xarModVars extends xarVars implements IxarModVars
      * @throws EmptyParameterException
      * @todo  We could delete the item vars for the module with the new value to save space?
      */
-    static function set($scope, $name, $value)
+    public static function set($scope, $name, $value)
     {
-        if (empty($scope)) throw new EmptyParameterException('modName');
-        if (empty($name)) throw new EmptyParameterException('name');
+        if (empty($scope)) {
+            throw new EmptyParameterException('modName');
+        }
+        if (empty($name)) {
+            throw new EmptyParameterException('name');
+        }
         assert(!is_null($value));
 
         $dbconn = xarDB3::getConn();
@@ -163,18 +178,22 @@ class xarModVars extends xarVars implements IxarModVars
         //unset($modvarid);
         $modvarid = self::getID($scope, $name);
 
-        if($value === false) $value = 0;
-        if($value === true) $value = 1;
-        if(!$modvarid) {
+        if ($value === false) {
+            $value = 0;
+        }
+        if ($value === true) {
+            $value = 1;
+        }
+        if (!$modvarid) {
             // Not there yet
             $query = "INSERT INTO $module_varstable
                          (module_id, name, value)
                       VALUES (?,?,?)";
-            $bindvars = array($modBaseInfo['systemid'],$name,(string)$value);
+            $bindvars = [$modBaseInfo['systemid'],$name,(string) $value];
         } else {
             // Existing one
             $query = "UPDATE $module_varstable SET value = ? WHERE id = ?";
-            $bindvars = array((string)$value,$modvarid);
+            $bindvars = [(string) $value,$modvarid];
         }
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
@@ -193,9 +212,11 @@ class xarModVars extends xarVars implements IxarModVars
      * @throws EmptyParameterException
      * @todo Add caching for item variables?
      */
-    static function delete($scope, $name)
+    public static function delete($scope, $name)
     {
-        if (empty($scope)) throw new EmptyParameterException('modName');
+        if (empty($scope)) {
+            throw new EmptyParameterException('modName');
+        }
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -204,18 +225,18 @@ class xarModVars extends xarVars implements IxarModVars
         // Delete all the itemvars derived from this var first
         $modvarid = self::getID($scope, $name);
         // TODO: we should delegate this to moditemvars class somehow
-        if($modvarid) {
+        if ($modvarid) {
             $module_itemvarstable = $tables['module_itemvars'];
             $query = "DELETE FROM $module_itemvarstable WHERE module_var_id = ?";
             $stmt = $dbconn->prepareStatement($query);
-            $stmt->executeUpdate(array((int)$modvarid));
+            $stmt->executeUpdate([(int) $modvarid]);
         }
 
         // Now delete the modvar itself
         $module_varstable = $tables['module_vars'];
         // Now delete the module var itself
         $query = "DELETE FROM $module_varstable WHERE module_id = ? AND name = ?";
-        $bindvars = array($modBaseInfo['systemid'], $name);
+        $bindvars = [$modBaseInfo['systemid'], $name];
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
 
@@ -232,9 +253,11 @@ class xarModVars extends xarVars implements IxarModVars
      * @throws EmptyParameterException, SQLException
      * @todo Add caching for item variables?
      */
-    static function delete_all($scope)
+    public static function delete_all($scope)
     {
-        if(empty($scope)) throw new EmptyParameterException('modName');
+        if (empty($scope)) {
+            throw new EmptyParameterException('modName');
+        }
 
         $modBaseInfo = xarMod::getBaseInfo($scope);
 
@@ -247,12 +270,12 @@ class xarModVars extends xarVars implements IxarModVars
         // PostGres (allows only one table in DELETE)
         // MySql: multiple table delete only from 4.0 up
         // Select the id's which need to be removed
-        $sql="SELECT $module_varstable.id FROM $module_varstable WHERE $module_varstable.module_id = ?";
+        $sql = "SELECT $module_varstable.id FROM $module_varstable WHERE $module_varstable.module_id = ?";
         $stmt = $dbconn->prepareStatement($sql);
-        $result = $stmt->executeQuery(array($modBaseInfo['systemid']), xarDB3::getFetchNum());
+        $result = $stmt->executeQuery([$modBaseInfo['systemid']], xarDB3::getFetchNum());
 
         // Seems that at least mysql and pgsql support the scalar IN operator
-        $idlist = array();
+        $idlist = [];
         while ($result->next()) {
             $idlist[] = $result->getInt(1);
         }
@@ -262,9 +285,9 @@ class xarModVars extends xarVars implements IxarModVars
         // We delete the module vars and the user vars in a transaction, which either succeeds completely or totally fails
         try {
             $dbconn->begin();
-            if(count($idlist) != 0 ) {
-                $bindmarkers = '?' . str_repeat(',?', count($idlist) -1);
-                $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.module_var_id IN (".$bindmarkers.")";
+            if (count($idlist) != 0) {
+                $bindmarkers = '?' . str_repeat(',?', count($idlist) - 1);
+                $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.module_var_id IN (" . $bindmarkers . ")";
                 $stmt = $dbconn->prepareStatement($sql);
                 $result = $stmt->executeUpdate($idlist);
             }
@@ -272,7 +295,7 @@ class xarModVars extends xarVars implements IxarModVars
             // Now delete the module vars
             $query = "DELETE FROM $module_varstable WHERE module_id = ?";
             $stmt  = $dbconn->prepareStatement($query);
-            $result = $stmt->executeUpdate(array($modBaseInfo['systemid']));
+            $result = $stmt->executeUpdate([$modBaseInfo['systemid']]);
             $dbconn->commit();
         } catch (SQLException $e) {
             // If there was an SQL exception roll back to where we started
@@ -296,14 +319,18 @@ class xarModVars extends xarVars implements IxarModVars
      * @throws EmptyParameterException
      * @see xarModUserVars::set(), xarModUserVars::get(), xarModUserVars::delete()
      */
-    static function getID($scope, $name)
+    public static function getID($scope, $name)
     {
         // Module name and variable name are both necesary
-        if (empty($scope) or empty($name)) throw new EmptyParameterException('modName and/or name');
+        if (empty($scope) or empty($name)) {
+            throw new EmptyParameterException('modName and/or name');
+        }
 
         // Retrieve module info, so we can decide where to look
         $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (empty($modBaseInfo)) return; // throw back
+        if (empty($modBaseInfo)) {
+            return;
+        } // throw back
 
         if (xarCoreCache::isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
             return xarCoreCache::getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
@@ -316,9 +343,11 @@ class xarModVars extends xarVars implements IxarModVars
 
         $query = "SELECT id FROM $module_varstable WHERE module_id = ? AND name = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),xarDB3::getFetchNum());
+        $result = $stmt->executeQuery([(int) $modBaseInfo['systemid'],$name], xarDB3::getFetchNum());
         // If there is no such thing, the callee is responsible, return null
-        if(!$result->next()) return;
+        if (!$result->next()) {
+            return;
+        }
 
         // Return the ID
         $modvarid = $result->getInt(1);

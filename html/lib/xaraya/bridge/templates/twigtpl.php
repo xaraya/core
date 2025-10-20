@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Use Twig template engine for output in Xaraya
  */
@@ -16,6 +17,7 @@ use Xaraya\Context\Context;
 use Xaraya\Facades\xarLog3;
 use Xaraya\Facades\xarMod3;
 use Xaraya\Facades\xarVar3;
+
 //use xarMod;
 //use xarServer;
 //use xarTpl;
@@ -328,10 +330,10 @@ class xarTwigTpl extends xarTpl
         if (empty($caller) || !xarTpl::outputTemplateFilenames()) {
             return $output;
         }
-        return '<!-- start: ' . $templateName . " -->\n" .
+        return '<!-- start: ' . $templateName . " -->\n"
             //'<!-- args: ' . $caller . ' -->' .
-            trim($output) .
-            '<!-- end: ' . $templateName . " -->\n";
+            . trim($output)
+            . '<!-- end: ' . $templateName . " -->\n";
     }
 
     /**
@@ -925,8 +927,8 @@ class xarTwigTpl extends xarTpl
         if ($modName == 'auto') {
             $templates[] = '@theme/' . $themeName . '/properties/' . $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
             $templates[] = '@theme/' . $themeName . '/properties/' . $propertyName . '/' . $tplType . $extension;
-            $templates[] = '@property/' .  $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
-            $templates[] = '@property/' .  $propertyName . '/' . $tplType . $extension;
+            $templates[] = '@property/' . $propertyName . '/' . $tplType . '-' . $propertyName . $extension;
+            $templates[] = '@property/' . $propertyName . '/' . $tplType . $extension;
         } else {
             // changed order - with propertyName first (theme > module), then generic next (theme > module)
             $templates[] = '@theme/' . $themeName . '/modules/' . $modName . '/properties/' . $tplType . '-' . $propertyName . $extension;

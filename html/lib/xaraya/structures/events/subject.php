@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Event Messaging System 
+ * Event Messaging System
  * @package core\events
  * @subpackage events
  * @category Xaraya Web Applications Framework
@@ -14,7 +15,7 @@
 sys::import('xaraya.context.contexttrait');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
- 
+
 interface ixarEventSubject extends ContextInterface
 {
     /**
@@ -44,7 +45,7 @@ interface ixarEventSubject extends ContextInterface
     public function setArgs($args);
 }
 
-/** 
+/**
  * Event Subject
  *
  * This serves as the template from which all other event subjects should inherit
@@ -57,7 +58,7 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
     /** @var mixed */
     protected $args;                // args passed from caller when event is raised
     /** @var EventObserver[] */
-    protected $observers = array(); // xarEvents::notify is responsible for populating this array
+    protected $observers = []; // xarEvents::notify is responsible for populating this array
     /** @var string */
     protected $subject = 'Event';   // name of this event subject
 
@@ -66,15 +67,15 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * overloading is optional
      *
      * @param mixed $args determined by the subject, default null
-     * 
+     *
      * $args are passed to EMS notify() method by caller, eg, as, notify('Event', $args)
      * and from notify method to this object in the constructor
      * @return void
      * @access public
-    **/     
-    public function __construct($args=null)
+    **/
+    public function __construct($args = null)
     {
-        $this->setArgs($args);                           
+        $this->setArgs($args);
     }
     /**
      * notify method
@@ -94,7 +95,7 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
             try {
                 $obs->notify($this);
             } catch (Exception $e) {
-                // events should never fail, ever!                
+                // events should never fail, ever!
                 continue;
             }
         }
@@ -107,7 +108,7 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * @param EventObserver $obs
      * @return void
      * @access public
-    **/    
+    **/
     final public function attach(ixarEventObserver $obs)
     {
         $id = $obs->module;
@@ -121,12 +122,13 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * @param EventObserver $obs
      * @return void
      * @access public
-    **/      
+    **/
     final public function detach(ixarEventObserver $obs)
     {
         $id = $obs->module;
-        if (isset($this->observers[$id]))
-            unset($this->observers[$id]);    
+        if (isset($this->observers[$id])) {
+            unset($this->observers[$id]);
+        }
     }
     /**
      * get subject method
@@ -135,12 +137,12 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      *
      * @return string name of subject
      * @access public
-    **/    
+    **/
     final public function getSubject()
     {
         return $this->subject;
     }
-    
+
     /**
      * @return mixed
      */
@@ -148,7 +150,7 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
     {
         return $this->args;
     }
-    
+
     /**
      * @param mixed $args
      * @return void
@@ -158,8 +160,11 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
         if (empty($this->args) || !is_array($args)) {
             $this->args = $args;
         } elseif (is_array($this->args) && is_array($args)) {
-            foreach ($args as $k => $v) 
-                if (isset($v)) $this->args[$k] = $v;
+            foreach ($args as $k => $v) {
+                if (isset($v)) {
+                    $this->args[$k] = $v;
+                }
+            }
         }
     }
 }

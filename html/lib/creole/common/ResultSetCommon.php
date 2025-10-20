@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ResultSetCommon.php,v 1.9 2006/01/17 19:44:38 hlellelid Exp $
  *
@@ -242,21 +243,21 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::first()
      */
-	// XARAYA MODIFICATION
+    // XARAYA MODIFICATION
     public function first()
     {
         return $this->seek(0);
     }
-	// END XARAYA MODIFICATION
+    // END XARAYA MODIFICATION
 
     /**
      * @see ResultSet::last()
      */
-	// XARAYA MODIFICATION
+    // XARAYA MODIFICATION
     public function last()
-	// END XARAYA MODIFICATION
+    // END XARAYA MODIFICATION
     {
-        if($this->cursorPos !==  ($last = $this->getRecordCount() - 1)) {
+        if ($this->cursorPos !==  ($last = $this->getRecordCount() - 1)) {
             $this->seek($last);
         }
         return $this->next();
@@ -305,9 +306,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getRow()
      */
-	// XARAYA MODIFICATION
-    public function getRow(?int $fetchmode=null)
-	// END XARAYA MODIFICATION
+    // XARAYA MODIFICATION
+    public function getRow(?int $fetchmode = null)
+    // END XARAYA MODIFICATION
     {
         return $this->fields;
     }
@@ -315,9 +316,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::get()
      */
-	// XARAYA MODIFICATION
-    public function get($column=null)
-	// END XARAYA MODIFICATION
+    // XARAYA MODIFICATION
+    public function get($column = null)
+    // END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -329,9 +330,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getArray()
      */
-	// XARAYA MODIFICATION
-    public function getArray($column=null)
-	// END XARAYA MODIFICATION
+    // XARAYA MODIFICATION
+    public function getArray($column = null)
+    // END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -346,9 +347,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getBoolean()
      */
-	// XARAYA MODIFICATION
-    public function getBoolean($column=null)
-	// END XARAYA MODIFICATION
+    // XARAYA MODIFICATION
+    public function getBoolean($column = null)
+    // END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -425,9 +426,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getFloat()
      */
-	// XARAYA MODIFICATION
-    public function getFloat($column=null)
-	// END XARAYA MODIFICATION
+    // XARAYA MODIFICATION
+    public function getFloat($column = null)
+    // END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -442,9 +443,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getInt()
      */
-	// XARAYA MODIFICATION
-    public function getInt($column=null)
-	// END XARAYA MODIFICATION
+    // XARAYA MODIFICATION
+    public function getInt($column = null)
+    // END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -459,9 +460,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getString()
      */
-	// XARAYA MODIFICATION
-    public function getString($column=null)
-	// END XARAYA MODIFICATION
+    // XARAYA MODIFICATION
+    public function getString($column = null)
+    // END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -530,10 +531,10 @@ abstract class ResultSetCommon
 
     public function __get($propname)
     {
-        switch($propname) {
+        switch ($propname) {
             case 'EOF':
                 // Used all over the place, probably needs to stay for a while
-				return ($this->isAfterLast());
+                return ($this->isAfterLast());
             default:
                 // We leave this in so any api migration error show up in a nice way
                 throw new Exception("Unknown property accessed for connection");
@@ -542,7 +543,7 @@ abstract class ResultSetCommon
 
     public function __call($method, $args)
     {
-        switch($method) {
+        switch ($method) {
             case 'MoveNext':
                 // Used all over the place, prolly cant go for a while
                 return $this->next();
@@ -569,9 +570,9 @@ abstract class ResultSetCommon
                 $count = count($this->fields);
                 return $count;
             case 'rewind':
-				if($this->cursorPos !== 0) {
-					$this->seek(0);
-				}
+                if ($this->cursorPos !== 0) {
+                    $this->seek(0);
+                }
                 return true;
             default:
                 // We leave this in so any api migration error show up in a nice way

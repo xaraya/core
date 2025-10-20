@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Event Messaging System 
+ * Event Messaging System
  * @package core\events
  * @subpackage events
  * @category Xaraya Web Applications Framework
@@ -23,7 +24,7 @@ interface ixarEventObserver
     public function notify(ixarEventSubject $subject);
 }
 
-/** 
+/**
  * Event Observer
  *
  * This serves as the template from which all other event observers should inherit

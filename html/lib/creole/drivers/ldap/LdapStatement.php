@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MySQLStatement.php,v 1.1 2004/02/19 02:49:42 hlellelid Exp $
  *
@@ -31,6 +32,4 @@ require_once 'creole/common/StatementCommon.php';
  * @version   $Revision: 69 $
  * @package   creole.drivers.mysql
  */
-class LdapStatement extends StatementCommon implements Statement
-{
-}
+class LdapStatement extends StatementCommon implements Statement {}

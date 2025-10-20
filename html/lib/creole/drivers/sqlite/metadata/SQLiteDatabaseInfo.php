@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteDatabaseInfo.php,v 1.3 2004/03/20 04:16:50 hlellelid Exp $
  *

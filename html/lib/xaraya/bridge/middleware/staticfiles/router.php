@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Experiment with PSR-7 and PSR-15 compatible middleware controller for static files
  * Sets request attributes 'static', 'source', 'folder', 'file' for StaticFileMiddleware->process()

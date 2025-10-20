@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dummy object with context for use in Twig functions
  */

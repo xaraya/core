@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -19,7 +20,7 @@
 sys::import('xaraya.validations');
 class CheckBoxValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         if (empty($subject) || is_null($subject)) {
             $subject = 0;
@@ -27,7 +28,7 @@ class CheckBoxValidation extends ValueValidations
             $subject = 1;
         } else {
             $msg = 'Not a checkbox value';
-            throw new VariableValidationException(null,$msg);
+            throw new VariableValidationException(null, $msg);
         }
         return true;
     }

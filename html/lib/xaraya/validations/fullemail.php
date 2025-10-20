@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -18,9 +19,9 @@
 sys::import('xaraya.validations.email');
 class FullEmailValidation extends EmailValidation
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
-        if (parent::validate($subject,array()) && xarVar::validate('mxcheck', $subject)) {
+        if (parent::validate($subject, []) && xarVar::validate('mxcheck', $subject)) {
             return true;
         }
         return false;

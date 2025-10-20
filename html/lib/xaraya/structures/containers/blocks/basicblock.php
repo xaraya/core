@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\blocks
  * @subpackage blocks
@@ -33,16 +34,16 @@ interface iBlock extends iBlockType, BlockServicesInterface
 interface iBlockGroup extends iBlock
 {
     // protected $type_category = 'group';
-    function attachInstance($block_id);
-    function detachInstance($block_id);
-    function orderInstance($block_id, $direction);
-    function getInstances();
+    public function attachInstance($block_id);
+    public function detachInstance($block_id);
+    public function orderInstance($block_id, $direction);
+    public function getInstances();
 }
 interface iBlockModify extends iBlock
 {
     // required
-    function modify();
-    function update(array $data = []);
+    public function modify();
+    public function update(array $data = []);
     // optional
     // function checkmodify();
 }
@@ -62,26 +63,26 @@ abstract class BasicBlock extends BlockType implements iBlock
     protected $text_type = 'Basic Block';  // Block type display name
     protected $text_type_long = 'Parent class for all block instances'; // Block type description
     protected $xarversion = '0.0.0';    // must be a 3 point version number
-    // Additional info, supplied by developer, optional 
-    protected $type_category = 'block'; // options [(block)|group] 
+    // Additional info, supplied by developer, optional
+    protected $type_category = 'block'; // options [(block)|group]
     protected $author = '';
     protected $contact = '';
     protected $credits = '';
     protected $license = '';
     // We need to get the actual $classname and $filepath from getinfo() - requires UPGRADE due to table change
     protected $filepath = '';
-    
+
     // blocks subsystem flags
     protected $show_preview = true;  // let the subsystem know if it's ok to show a preview
-    // @todo: drop the show_help flag, and go back to checking if help method is declared 
+    // @todo: drop the show_help flag, and go back to checking if help method is declared
     protected $show_help    = false; // let the subsystem know if this block type has a help() method
 
     // blocks inheriting from this class must define their own public properties
     // all public properties not accounted for already by the subsystem are stored in $this->content
 
-/**
- * Methods called by the blocks subsystem
-**/
+    /**
+     * Methods called by the blocks subsystem
+    **/
     /**
      * Summary of __construct
      * @param array<string, mixed> $blockinfo
@@ -95,10 +96,7 @@ abstract class BasicBlock extends BlockType implements iBlock
     }
 
     // this method is called by BlockType::__construct()
-    public function init()
-    {
-    
-    }
+    public function init() {}
 
     // this method is called by xarBlock::render();
     public function display()
@@ -135,12 +133,12 @@ abstract class BasicBlock extends BlockType implements iBlock
         switch ($oldversion) {
             case '0.0.0': // if no version was previously set, the default is 0.0.0
                 // upgrades from 0.0.0 go here
-            // fall through to subsequent upgrades
+                // fall through to subsequent upgrades
             case '0.0.1':
                 // upgrades from 0.0.1 go here
 
-            // etc...
-            break;
+                // etc...
+                break;
         }
         return true;
     }
@@ -149,7 +147,7 @@ abstract class BasicBlock extends BlockType implements iBlock
     {
         return $this->storeContent();
     }
-    
+
     // @todo: this is here to support legacy blocks
     // deprecate once all blocks are using $this->getContent() instead
     public function getInfo()

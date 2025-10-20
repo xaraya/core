@@ -1,4 +1,5 @@
 <?php
+
 /**
  * External datastore for DD objects using MongoDB connection from ExternalDatabase
  *
@@ -349,8 +350,8 @@ class MongoDBDataStore extends ExternalDataStore
                     // for floatbox
                     if ($basetype == 'float') {
                         $values = array_map('floatval', $values);
-                    //} elseif ($basetype == 'checkbox') {
-                    //    $values = array_map('boolval', $values);
+                        //} elseif ($basetype == 'checkbox') {
+                        //    $values = array_map('boolval', $values);
                     } else {
                         $values = array_map('intval', $values);
                     }
@@ -371,8 +372,8 @@ class MongoDBDataStore extends ExternalDataStore
                     // for floatbox
                     if ($basetype == 'decimal') {
                         $value = floatval($value);
-                    //} elseif ($basetype == 'checkbox') {
-                    //    $value = boolval($value);
+                        //} elseif ($basetype == 'checkbox') {
+                        //    $value = boolval($value);
                     } else {
                         $value = intval($value);
                     }
@@ -394,8 +395,8 @@ class MongoDBDataStore extends ExternalDataStore
                     // for floatbox
                     if ($basetype == 'decimal') {
                         $value = floatval($value);
-                    //} elseif ($basetype == 'checkbox') {
-                    //    $value = boolval($value);
+                        //} elseif ($basetype == 'checkbox') {
+                        //    $value = boolval($value);
                     } else {
                         $value = intval($value);
                     }

@@ -1,8 +1,9 @@
 <?php
+
 /*
  * @copyright see the html/credits.html file in this release
 
-    The exception detailed below is granted for the following files in this 
+    The exception detailed below is granted for the following files in this
     directory:
 
     - simple.php
@@ -11,14 +12,14 @@
     - sql.php
     - syslog.php
 
-    As a special exception to the GNU General Public License Xaraya is distributed 
-    under, the Digital Development Corporation gives permission to link the code of 
-    this program with each of the files listed above (or with modified versions of 
-    each file that use the same license as the file), and distribute linked 
-    combinations including the two. You must obey the GNU General Public License 
-    in all respects for all of the code used other than each of the files listed 
-    above. If you modify this file, you may extend this exception to your version 
-    of the file, but you are not obligated to do so. If you do not wish to do so, 
+    As a special exception to the GNU General Public License Xaraya is distributed
+    under, the Digital Development Corporation gives permission to link the code of
+    this program with each of the files listed above (or with modified versions of
+    each file that use the same license as the file), and distribute linked
+    combinations including the two. You must obey the GNU General Public License
+    in all respects for all of the code used other than each of the files listed
+    above. If you modify this file, you may extend this exception to your version
+    of the file, but you are not obligated to do so. If you do not wish to do so,
     delete this exception statement from your version.
 */
 
@@ -40,16 +41,16 @@ class xarLogger extends xarObject
     /**
     * The array of logging levels
     */
-	static public $levels = array(
-		xarLog::LEVEL_EMERGENCY => 'EMERGENCY',
-		xarLog::LEVEL_ALERT     => 'ALERT',
-		xarLog::LEVEL_CRITICAL  => 'CRITICAL',
-		xarLog::LEVEL_ERROR     => 'ERROR',
-		xarLog::LEVEL_WARNING   => 'WARNING',
-		xarLog::LEVEL_NOTICE    => 'NOTICE',
-		xarLog::LEVEL_INFO      => 'INFO',
-		xarLog::LEVEL_DEBUG     => 'DEBUG'
-	 );
+    public static $levels = [
+        xarLog::LEVEL_EMERGENCY => 'EMERGENCY',
+        xarLog::LEVEL_ALERT     => 'ALERT',
+        xarLog::LEVEL_CRITICAL  => 'CRITICAL',
+        xarLog::LEVEL_ERROR     => 'ERROR',
+        xarLog::LEVEL_WARNING   => 'WARNING',
+        xarLog::LEVEL_NOTICE    => 'NOTICE',
+        xarLog::LEVEL_INFO      => 'INFO',
+        xarLog::LEVEL_DEBUG     => 'DEBUG',
+    ];
     /**
     * The name of this logger
     *
@@ -90,27 +91,29 @@ class xarLogger extends xarObject
      *
      * @return boolean
      */
-    public function __construct(Array $conf)
+    public function __construct(array $conf)
     {
         $this->name = $conf['type'];
-        
+
         if ($conf['fallback'] == true) {
-        	// The levels defined in the system configuration file
-			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
+            // The levels defined in the system configuration file
+            $levels = $conf['level'] ?? xarSystemVars::get(sys::CONFIG, 'Log.Level');
         } else {
-        	// The levels defined in the log configuration file
-			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::LOG, 'Log.' . ucwords($this->name) . '.Level');
+            // The levels defined in the log configuration file
+            $levels = $conf['level'] ?? xarSystemVars::get(sys::LOG, 'Log.' . ucwords($this->name) . '.Level');
         }
-		if (!empty($levels)) {
-			$this->logLevel = 0;
-			$levels = explode(',', $levels);
-			foreach ($levels as $level) $this->logLevel |= (int)$level;
-		} else {
-			$this->logLevel = xarLog::LEVEL_ALL;
-		}
+        if (!empty($levels)) {
+            $this->logLevel = 0;
+            $levels = explode(',', $levels);
+            foreach ($levels as $level) {
+                $this->logLevel |= (int) $level;
+            }
+        } else {
+            $this->logLevel = xarLog::LEVEL_ALL;
+        }
 
         $microtime = explode(" ", microtime());
-        $this->elapsed = ((float)$microtime[0] + (float)$microtime[1]);
+        $this->elapsed = ((float) $microtime[0] + (float) $microtime[1]);
 
         // Create a UUID
         $this->uuid = bin2hex(random_bytes(16));
@@ -126,10 +129,8 @@ class xarLogger extends xarObject
       *
       * This method gets overwritten
      **/
-    public function start()
-    {
-    }
-    
+    public function start() {}
+
     /**
     * Destructor. This calls the logger specific close function
     *
@@ -147,7 +148,9 @@ class xarLogger extends xarObject
 
     public function notify($message, $level)
     {
-        if (!$this->doLogLevel($level)) return false;
+        if (!$this->doLogLevel($level)) {
+            return false;
+        }
         // do something appropriate with $message for this logger
         return true;
     }
@@ -158,7 +161,7 @@ class xarLogger extends xarObject
      * @param int $level        A xarLog::$LEVEL_* integer constant mix.
      * @return boolean         Should it be logger or not
      */
-    function doLogLevel($level)
+    public function doLogLevel($level)
     {
         if ($level & $this->logLevel) {
             return true;
@@ -166,16 +169,16 @@ class xarLogger extends xarObject
         return false;
     }
 
-    function getTime()
+    public function getTime()
     {
         $microtime = microtime();
         $microtime = explode(' ', $microtime);
 
-        $secs = ((float)$microtime[0] + (float)$microtime[1]);
+        $secs = ((float) $microtime[0] + (float) $microtime[1]);
         // NOTE: when using E_STRICT, and PHP has no 'own' timezone setting
         // strftime() will issue notices on that. But that's what you get with
-        // E_STRICT ;-) so we will leave this.  
+        // E_STRICT ;-) so we will leave this.
         //return strftime($this->timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3),3);
-        return date($this->dateFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3),3);
+        return date($this->dateFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3), 3);
     }
 }

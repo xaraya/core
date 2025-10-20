@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -28,10 +29,10 @@ class XarDateTime extends DateTime
     public $timestamp;
     public $servertz;
 
-    public function __construct($hour=0,$minute=0,$second=0,$month=0,$day=0,$year=0,$timezone=null)
+    public function __construct($hour = 0, $minute = 0, $second = 0, $month = 0, $day = 0, $year = 0, $timezone = null)
     {
         parent::__construct();
-        $this->timestamp = mktime($hour,$minute,$second,$month,$day,$year);
+        $this->timestamp = mktime($hour, $minute, $second, $month, $day, $year);
         $this->year = $year;
         $this->month = $month;
         $this->day = $day;
@@ -39,13 +40,15 @@ class XarDateTime extends DateTime
         $this->minute = $minute;
         $this->second = $second;
         $this->servertz = empty($timezone) ? xarConfig3::getVar('Site.Core.TimeZone') : $timezone;
-        $this->setISODate($this->year,$this->month,$this->day);
-        $this->setTime($this->hour,$this->minute,$this->second);
+        $this->setISODate($this->year, $this->month, $this->day);
+        $this->setTime($this->hour, $this->minute, $this->second);
     }
 
-    public function getTZOffset($timezone=null, $dst=1)
+    public function getTZOffset($timezone = null, $dst = 1)
     {
-        if (empty($timezone)) return 0;
+        if (empty($timezone)) {
+            return 0;
+        }
         if ($dst) {
             $dt = new DateTime();
 
@@ -73,31 +76,33 @@ class XarDateTime extends DateTime
         return $localoffset - ($baseoffset - $machineoffset);
     }
 
-    public function setnow($timezone=null)
+    public function setnow($timezone = null)
     {
         $this->timestamp = time();
-        if (!empty($timezone)) $this->timestamp += $this->getTZOffset($timezone);
+        if (!empty($timezone)) {
+            $this->timestamp += $this->getTZOffset($timezone);
+        }
         $this->extract();
     }
 
-    public function settoday($timezone=null)
+    public function settoday($timezone = null)
     {
         $this->setnow($timezone);
         $this->hour = 0;
-        $this->minute= 0;
-        $this->second= 0;
+        $this->minute = 0;
+        $this->second = 0;
         $this->regenerate();
     }
 
     public function regenerate()
     {
-        $this->timestamp = mktime($this->hour,$this->minute,$this->second,$this->month,$this->day,$this->year);
+        $this->timestamp = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
         $this->extract();
     }
 
     public function extract()
     {
-    	$timestamp    = $this->timestamp == '' ? 0 : $this->timestamp;
+        $timestamp    = $this->timestamp == '' ? 0 : $this->timestamp;
         $datearray    = getdate($timestamp);
         $this->year   = $datearray['year'];
         $this->month  = $datearray['mon'];
@@ -105,64 +110,90 @@ class XarDateTime extends DateTime
         $this->hour   = $datearray['hours'];
         $this->minute = $datearray['minutes'];
         $this->second = $datearray['seconds'];
-        $this->setISODate($this->year,$this->month,$this->day);
-        $this->setTime($this->hour,$this->minute,$this->second);
+        $this->setISODate($this->year, $this->month, $this->day);
+        $this->setTime($this->hour, $this->minute, $this->second);
     }
 
     public function DBtoTS($dbts)
     {
-        if (preg_match('/^\d{4}/',$dbts)) {
-            $this->year =   substr($dbts,1,4);
-            $this->month =  trim(substr($dbts,6,2),"0");
-            $this->day =    trim(substr($dbts,9,2),"0");
-            $this->hour =   trim(substr($dbts,12,2),"0");
-            $this->minute = trim(substr($dbts,15,2),"0");
-            $this->second = trim(substr($dbts,18,2),"0");
+        if (preg_match('/^\d{4}/', $dbts)) {
+            $this->year =   substr($dbts, 1, 4);
+            $this->month =  trim(substr($dbts, 6, 2), "0");
+            $this->day =    trim(substr($dbts, 9, 2), "0");
+            $this->hour =   trim(substr($dbts, 12, 2), "0");
+            $this->minute = trim(substr($dbts, 15, 2), "0");
+            $this->second = trim(substr($dbts, 18, 2), "0");
             $this->regenerate();
         } else {
             if ($dbts != "") {
                 $guess = strtotime($dbts);
-                if ($guess < 0) $guess = 0;
+                if ($guess < 0) {
+                    $guess = 0;
                 }
-            else {
+            } else {
                 $guess = 0;
             }
             $this->setTimestamp($guess);
         }
     }
 
-    public function display($format='Y-m-d')
+    public function display($format = 'Y-m-d')
     {
-        return date($format,$this->timestamp);
+        return date($format, $this->timestamp);
     }
 
     public function getTimearray()
     {
-        return array(
-                    'year' => $this->year,
-                    'month' => $this->month,
-                    'day' => $this->day,
-                    'hour' => $this->hour,
-                    'minute' => $this->minute,
-                    'second' => $this->second,
-                );
+        return [
+            'year' => $this->year,
+            'month' => $this->month,
+            'day' => $this->day,
+            'hour' => $this->hour,
+            'minute' => $this->minute,
+            'second' => $this->second,
+        ];
     }
 
     #[\ReturnTypeWillChange]
-    public function getTimestamp()  {  return $this->timestamp; }
-    public function getDate($x)     {  return strtotime($x);    }
-    public function getYear()       {  return $this->year;      }
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
+    public function getDate($x)
+    {
+        return strtotime($x);
+    }
+    public function getYear()
+    {
+        return $this->year;
+    }
     public function getYDay()
     {
-        $datearray = getdate($this->timestamp); return $datearray['yday'];
+        $datearray = getdate($this->timestamp);
+        return $datearray['yday'];
     }
 
     // @todo add gets for weekdays etc.
-    public function getMonth()       { return $this->month;    }
-    public function getDay()         { return $this->day;      }
-    public function getHour()        { return $this->hour;     }
-    public function getMinute()      { return $this->minute;   }
-    public function getSecond()      { return $this->second;   }
+    public function getMonth()
+    {
+        return $this->month;
+    }
+    public function getDay()
+    {
+        return $this->day;
+    }
+    public function getHour()
+    {
+        return $this->hour;
+    }
+    public function getMinute()
+    {
+        return $this->minute;
+    }
+    public function getSecond()
+    {
+        return $this->second;
+    }
 
     #[\ReturnTypeWillChange]
     public function setTimestamp($x)
@@ -172,17 +203,65 @@ class XarDateTime extends DateTime
         return $this;
     }
 
-    public function setYear($x)   { $this->year   = $x; $this->regenerate(); }
-    public function setMonth($x)  { $this->month  = $x; $this->regenerate(); }
-    public function setDay($x)    { $this->day    = $x; $this->regenerate(); }
-    public function setHour($x)   { $this->hour   = $x; $this->regenerate(); }
-    public function setMinute($x) { $this->minute = $x; $this->regenerate(); }
-    public function setSecond($x) { $this->second = $x; $this->regenerate(); }
+    public function setYear($x)
+    {
+        $this->year   = $x;
+        $this->regenerate();
+    }
+    public function setMonth($x)
+    {
+        $this->month  = $x;
+        $this->regenerate();
+    }
+    public function setDay($x)
+    {
+        $this->day    = $x;
+        $this->regenerate();
+    }
+    public function setHour($x)
+    {
+        $this->hour   = $x;
+        $this->regenerate();
+    }
+    public function setMinute($x)
+    {
+        $this->minute = $x;
+        $this->regenerate();
+    }
+    public function setSecond($x)
+    {
+        $this->second = $x;
+        $this->regenerate();
+    }
 
-    public function addYears($x)   { $this->year   += $x; $this->regenerate(); }
-    public function addMonths($x)  { $this->month  += $x; $this->regenerate(); }
-    public function addDays($x)    { $this->day    += $x; $this->regenerate(); }
-    public function addHours($x)   { $this->hour   += $x; $this->regenerate(); }
-    public function addMinutes($x) { $this->minute += $x; $this->regenerate(); }
-    public function addSeconds($x) { $this->second += $x; $this->regenerate(); }
+    public function addYears($x)
+    {
+        $this->year   += $x;
+        $this->regenerate();
+    }
+    public function addMonths($x)
+    {
+        $this->month  += $x;
+        $this->regenerate();
+    }
+    public function addDays($x)
+    {
+        $this->day    += $x;
+        $this->regenerate();
+    }
+    public function addHours($x)
+    {
+        $this->hour   += $x;
+        $this->regenerate();
+    }
+    public function addMinutes($x)
+    {
+        $this->minute += $x;
+        $this->regenerate();
+    }
+    public function addSeconds($x)
+    {
+        $this->second += $x;
+        $this->regenerate();
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Template caching abstraction
  *
@@ -156,7 +157,7 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
             return true;
         }
         if ($fd = fopen(self::$dir . '/CACHEKEYS', 'a')) {
-            fwrite($fd, self::getKey($fileName).': '.$fileName."\n");
+            fwrite($fd, self::getKey($fileName) . ': ' . $fileName . "\n");
             fclose($fd);
             return true;
         }
@@ -214,9 +215,9 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
         // 3. modification time of source is smaller than modification time of the compiled template AND
         // 4. DEBUG: when the XSL transformation file has NOT been changed more recently than the compiled template
         // THEN we do NOT need to compile the file.
-        if (file_exists($cacheFile) &&
-             (!file_exists($fileName) ||
-               (
+        if (file_exists($cacheFile)
+             && (!file_exists($fileName)
+               || (
                    filemtime($fileName) < filemtime($cacheFile)
                ))) {
             return false;

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * $Id: MySQLiConnection.php,v 1.7 2004/09/18 09:29:22 sb Exp $
  *
@@ -168,11 +169,11 @@ class MySQLiConnection extends ConnectionCommon implements Connection
     {
         $this->lastQuery = $sql;
 
-        try{
-        	$result = mysqli_query($this->dblink, $sql);
-		} catch (Exception $e) {
+        try {
+            $result = mysqli_query($this->dblink, $sql);
+        } catch (Exception $e) {
             throw new SQLException('Could not execute query', mysqli_error($this->dblink), $sql);
-		}
+        }
 
         return new MySQLiResultSet($this, $result, $fetchmode);
     }
@@ -184,9 +185,9 @@ class MySQLiConnection extends ConnectionCommon implements Connection
     {
         $this->lastQuery = $sql;
 
-        try{
-        	$result = mysqli_query($this->dblink, $sql);
-		} catch (Exception $e) {
+        try {
+            $result = mysqli_query($this->dblink, $sql);
+        } catch (Exception $e) {
             throw new SQLException('Could not execute update', mysqli_error($this->dblink), $sql);
         }
 

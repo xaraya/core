@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PgSQLIdGenerator.php,v 1.5 2004/03/19 14:19:50 hlellelid Exp $
  *
@@ -105,7 +106,7 @@ class PgSQLIdGenerator implements IdGenerator
         // or use the system catalog to determine what sequences are owned by columns
         // in $tableName (which in most cases will be one)
         // ? make optional parameter for fieldname ?
-        return $tableName.'_seq';
+        return $tableName . '_seq';
     }
     // END XARAYA MODIFICATION
 

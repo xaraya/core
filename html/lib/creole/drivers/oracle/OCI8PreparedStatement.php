@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: OCI8PreparedStatement.php,v 1.26 2006/01/30 21:32:05 sethr Exp $
  *
@@ -39,21 +40,21 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
      * on lob descriptors.
      * @var array object from oci_new_descriptor
      */
-    private $lobDescriptors = array();
+    private $lobDescriptors = [];
 
     /**
      * Hold any Blob/Clob data.
      * These can be matched (by key) to descriptors in $lobDescriptors.
      * @var array Lob[]
      */
-    private $lobs = array();
+    private $lobs = [];
 
     /**
      * Array to store the columns in an insert or update statement.
      * This is necessary for the proper handling of lob variables
      * @var arrary columns[]
      */
-    private $columns = array();
+    private $columns = [];
 
     /**
      * If the statement is set, free it.
@@ -97,7 +98,7 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
         }
 
         if ($params) {
-            for($i = 0,$cnt = count($params); $i < $cnt; $i++) {
+            for ($i = 0,$cnt = count($params); $i < $cnt; $i++) {
                 $this->set($i + 1, $params[$i]);
             }
         }
@@ -138,12 +139,12 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
     public function executeUpdate($params = null)
     {
         if ($params) {
-            for($i = 0,$cnt = count($params); $i < $cnt; $i++) {
+            for ($i = 0,$cnt = count($params); $i < $cnt; $i++) {
                 $this->set($i + 1, $params[$i]);
             }
         }
 
-        if($this->resultSet) {
+        if ($this->resultSet) {
             $this->resultSet->close();
         }
         $this->resultSet = null; // reset
@@ -164,7 +165,7 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
         }
 
         // save data in any LOB descriptors, then free them
-        foreach($this->lobDescriptors as $paramIndex => $lobster) {
+        foreach ($this->lobDescriptors as $paramIndex => $lobster) {
             $lob = $this->lobs[$paramIndex]; // corresponding Blob/Clob
             if ($lob->isFromFile()) {
                 $success = $lobster->savefile($lob->getInputFile());
@@ -336,7 +337,7 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
             if (is_object($value)) {
                 $this->boundInVars[$paramIndex] = $value->__toString();
             } else {
-                $this->boundInVars[$paramIndex] = (string)$value;
+                $this->boundInVars[$paramIndex] = (string) $value;
             }
         }
     }
@@ -401,10 +402,10 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
      */
     private function setColumnArray()
     {
-        $this->columns = array();
+        $this->columns = [];
 
         //handle the simple insert case first
-        if(strtoupper(substr($this->sql, 0, 6)) == 'INSERT') {
+        if (strtoupper(substr($this->sql, 0, 6)) == 'INSERT') {
             $firstPos = strpos($this->sql, '(');
             $secPos = strpos($this->sql, ')');
             $collist = substr($this->sql, $firstPos + 1, $secPos - $firstPos - 1);
@@ -421,7 +422,7 @@ class OCI8PreparedStatement extends PreparedStatementCommon implements PreparedS
             $tmp = str_replace(",", " ", $tmp);
             $stage1 = explode("=?", $tmp);
 
-            foreach($stage1 as $chunk) {
+            foreach ($stage1 as $chunk) {
                 $stage2 = explode(' ', $chunk);
                 $this->columns[count($this->columns)] = $stage2[count($stage2) - 1];
             }

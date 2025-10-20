@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\caching
  * @subpackage caching

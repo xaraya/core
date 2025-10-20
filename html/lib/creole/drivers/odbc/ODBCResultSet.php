@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ODBCResultSet.php,v 1.2 2005/04/01 17:10:42 dlawson_mi Exp $
  *
@@ -159,7 +160,7 @@ class ODBCResultSet extends ODBCResultSetCommon implements ResultSet
                 $this->numRows = 0;
                 $this->beforeFirst();
 
-                while($this->next()) {
+                while ($this->next()) {
                     $this->numRows++;
                 }
             }

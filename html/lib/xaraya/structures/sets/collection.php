@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -28,7 +29,7 @@ class BasicCollection extends DataContainer implements Collection
 
     public function __construct()
     {
-        $this->elements = array();
+        $this->elements = [];
     }
     public function add(xarObject $element)
     {
@@ -36,11 +37,11 @@ class BasicCollection extends DataContainer implements Collection
     }
     public function addAll(BasicCollection $collection)
     {
-        $this->elements = array_merge($this->elements,$collection->toArray());
+        $this->elements = array_merge($this->elements, $collection->toArray());
     }
     public function clear()
     {
-        $this->elements = array();
+        $this->elements = [];
     }
     public function isEmpty()
     {
@@ -52,8 +53,11 @@ class BasicCollection extends DataContainer implements Collection
     }
     public function removeAll(BasicCollection $collection)
     {
-        foreach($collection->toArray() as $key => $value)
-            if (in_array($value,$this->elements)) unset($this->elements[$key]);
+        foreach ($collection->toArray() as $key => $value) {
+            if (in_array($value, $this->elements)) {
+                unset($this->elements[$key]);
+            }
+        }
     }
     public function size()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Table Maintenance API for PostgreSQL
  *
@@ -7,7 +8,7 @@
  * USE THE METHODS IN xarDataDict.php. BOTH SUBSYSTEMS ARE NOT 100% FINISHED
  * BUT THIS ONE WILL BE ABANDONED, YOU MIGHT AS WELL WRITE YOUR CODE TO USE
  * THE MAINTAINED SUBSYSTEM.
- 
+
  * @package core
  * @subpackage database
  * @category Xaraya Web Applications Framework
@@ -27,7 +28,7 @@
 /**
  * Generate the PostgreSQL specific SQL to create a table
  *
- * 
+ *
  * @param string $tableName the physical table name
  * @param array<mixed> $fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
@@ -35,9 +36,9 @@
  */
 function xarDB__postgresqlCreateTable($tableName, $fields, $charset = null)
 {
-    $sql_fields = array();
-    $primary_key = array();
-    $epilogue ='';
+    $sql_fields = [];
+    $primary_key = [];
+    $epilogue = '';
 
     foreach ($fields as $field_name => $parameters) {
         $parameters['command'] = 'create';
@@ -47,19 +48,22 @@ function xarDB__postgresqlCreateTable($tableName, $fields, $charset = null)
         // the values from $this_field was causing an infinite loop -
         // now check to see if the key exists before assigning to $sql_fields
         $sqlDDL = $field_name;
-        if (isset($this_field['type']))
+        if (isset($this_field['type'])) {
             $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
+        }
 
-        if (isset($this_field['null']))
+        if (isset($this_field['null'])) {
             $sqlDDL = $sqlDDL . ' ' . $this_field['null'];
+        }
 
-        if (isset($this_field['default']))
+        if (isset($this_field['default'])) {
             $sqlDDL = $sqlDDL . ' ' . $this_field['default'];
-            
+        }
+
         if (isset($parameters['increment']) && $parameters['increment'] == true) {
             // we only support one such field per table, so we simplify the
             // sequence name to apply on the table without the specific column name.
-            $epilogue .= 'ALTER TABLE '.$tableName.'_'.$field_name.'_seq RENAME TO '.$tableName.'_seq;';
+            $epilogue .= 'ALTER TABLE ' . $tableName . '_' . $field_name . '_seq RENAME TO ' . $tableName . '_seq;';
         }
 
         $sql_fields[] = $sqlDDL;
@@ -72,9 +76,9 @@ function xarDB__postgresqlCreateTable($tableName, $fields, $charset = null)
         }
     }
 
-    $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
+    $sql = 'CREATE TABLE ' . $tableName . ' (' . implode(', ', $sql_fields);
     if (!empty($primary_key)) {
-        $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
+        $sql .= ', PRIMARY KEY (' . implode(',', $primary_key) . ')';
     }
     $sql .= ');';
     $sql .= $epilogue;
@@ -85,7 +89,7 @@ function xarDB__postgresqlCreateTable($tableName, $fields, $charset = null)
 /**
  * Postgres specific function to alter a table
  *
- * 
+ *
  * @param string $tableName the table to alter
  * @param array<string, mixed> $args
  * with
@@ -101,23 +105,24 @@ function xarDB__postgresqlAlterTable($tableName, $args)
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
             }
-            $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
+            $sql = 'ALTER TABLE ' . $tableName . ' ADD ' . $args['field'] . ' ';
             // Get column definitions
             $this_field = xarDB__postgresColumnDefinition($args['field'], $args);
             // Add column values if they exist
             // Note:  PostgreSQL does not support default or null values in ALTER TABLE
             $sqlDDL = "";
-            if (isset($this_field['type']))
+            if (isset($this_field['type'])) {
                 $sqlDDL = $sqlDDL . ' ' . $this_field['type'];
+            }
             $sql .= $sqlDDL;
             break;
         case 'rename':
             if (empty($args['new_name'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (new_name key must be set.)');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (new_name key must be set.)');
             }
-            $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
+            $sql = 'ALTER TABLE ' . $tableName . ' RENAME TO ' . $args['new_name'];
             break;
         case 'modify':
 
@@ -139,33 +144,33 @@ function xarDB__postgresqlAlterTable($tableName, $args)
 
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
             }
             // check to make sure we have an action to perform on the colunm
             if (!empty($args['type']) || !empty($args['size']) || !empty($args['default']) || !empty($args['unsigned']) || !empty($args['increment']) || !empty($args['primary_key'])) {
-                throw new BadParameterException('args','Modify does not currently support: type, size, default, unsigned, increment, or primary_key)');
+                throw new BadParameterException('args', 'Modify does not currently support: type, size, default, unsigned, increment, or primary_key)');
             }
 
             // check to make sure we have an action to perform on the colunm
-            if (empty($args['null']) && $args['null']!=false) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
+            if (empty($args['null']) && $args['null'] != false) {
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
 
             // prep the first part of the query
-            $sql = 'ALTER TABLE '.$tableName.' ALTER COLUMN '.$args['field'].' ';
+            $sql = 'ALTER TABLE ' . $tableName . ' ALTER COLUMN ' . $args['field'] . ' ';
 
             // see if the want to add or remove null
-            if ($args['null']==false){
-                $sql.='DROP NOT NULL';
+            if ($args['null'] == false) {
+                $sql .= 'DROP NOT NULL';
             }
-            if ($args['null']==true){
-                $sql.='SET NOT NULL';
+            if ($args['null'] == true) {
+                $sql .= 'SET NOT NULL';
             }
 
             // break out of the case to return the modify sql
             break;
         default:
-            throw new BadParameterException($args['command'],'Unknown command: "#(1)"');
+            throw new BadParameterException($args['command'], 'Unknown command: "#(1)"');
 
     }
     return $sql;
@@ -174,16 +179,16 @@ function xarDB__postgresqlAlterTable($tableName, $args)
 /**
  * Postgres specific column type generation
  *
- * 
+ *
  * @param string $field_name
  * @param array<mixed> $parameters
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__postgresColumnDefinition($field_name, $parameters)
 {
-    $this_field = array();
+    $this_field = [];
 
-    switch($parameters['type']) {
+    switch ($parameters['type']) {
         case 'integer':
             if (isset($parameters['increment']) && $parameters['increment']) {
                 // serial autocreates a sequence tablename_colname_seq
@@ -215,10 +220,10 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field['type'] = 'CHAR('.$parameters['size'].')';
+                $this_field['type'] = 'CHAR(' . $parameters['size'] . ')';
             }
             if (isset($parameters['default'])) {
-                $parameters['default'] = "'".$parameters['default']."'";
+                $parameters['default'] = "'" . $parameters['default'] . "'";
             }
             break;
 
@@ -226,10 +231,10 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field['type'] = 'VARCHAR('.$parameters['size'].')';
+                $this_field['type'] = 'VARCHAR(' . $parameters['size'] . ')';
             }
             if (isset($parameters['default'])) {
-                $parameters['default'] = "'".$parameters['default']."'";
+                $parameters['default'] = "'" . $parameters['default'] . "'";
             }
             break;
 
@@ -261,12 +266,12 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'].
-                                         ' '.$datetime_defaults['hour'].
-                                         ':'.$datetime_defaults['minute'].
-                                         ':'.$datetime_defaults['second'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day']
+                                         . ' ' . $datetime_defaults['hour']
+                                         . ':' . $datetime_defaults['minute']
+                                         . ':' . $datetime_defaults['second'];
 
                     // Check if optional timezone parm and add after type
                     if (isset($datetime_defaults['timezone'])) {
@@ -275,8 +280,8 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
                 } else {
                     // PostgreSQL doesn't allow a default value of
                     // '00-00-00 00:00:00 as this it is not a valid timestamp
-                    if ($parameters['default'] == '0000-00-00 00:00:00' ||
-                        $parameters['default'] == '00-00-00 00:00:00') {
+                    if ($parameters['default'] == '0000-00-00 00:00:00'
+                        || $parameters['default'] == '00-00-00 00:00:00') {
                         // Set to current timestamp
                         $parameters['default'] = 'CURRENT_TIMESTAMP';
                         $invalidDate = true;
@@ -306,14 +311,14 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day'];
                 } else {
                     // PostgreSQL doesn't allow a default value of
                     // '00-00-00 as this it is not a valid date
-                    if ($parameters['default'] == '0000-00-00' ||
-                        $parameters['default'] == '00-00-00') {
+                    if ($parameters['default'] == '0000-00-00'
+                        || $parameters['default'] == '00-00-00') {
                         // Change to current date
                         $parameters['default'] = 'CURRENT_DATE';
                         $invalidDate = true;
@@ -337,13 +342,13 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             }
             switch ($parameters['size']) {
                 case 'double':
-                        $data_type = 'DOUBLE PRECISION';
-                        break;
+                    $data_type = 'DOUBLE PRECISION';
+                    break;
 
                 case 'decimal':
                     $data_type = 'NUMERIC';
                     if (isset($parameters['width']) && isset($parameters['decimals'])) {
-                        $data_type .= '('.$parameters['width'].','.$parameters['width'].')';
+                        $data_type .= '(' . $parameters['width'] . ',' . $parameters['width'] . ')';
                     }
                     break;
 
@@ -353,7 +358,7 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             $this_field['type'] = $data_type;
             break;
 
-        // undefined type
+            // undefined type
         default:
             return false;
     }
@@ -365,7 +370,7 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
             if ($parameters['default'] == 'NULL') {
                 $this_field['default'] = 'DEFAULT NULL';
             } else {
-                $this_field['default'] = "DEFAULT ".$parameters['default']."";
+                $this_field['default'] = "DEFAULT " . $parameters['default'] . "";
             }
         }
     } else {

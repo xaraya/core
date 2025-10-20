@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Table Maintenance API
  *
@@ -52,39 +53,41 @@ use Xaraya\Facades\xarMLS3;
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset='utf-8')
+function xarDBCreateDatabase($databaseName, $databaseType = null, $databaseCharset = 'utf-8')
 {
     // perform validations on input arguments
-    if (empty($databaseName)) throw new EmptyParameterException('databaseName');
+    if (empty($databaseName)) {
+        throw new EmptyParameterException('databaseName');
+    }
     if (empty($databaseType)) {
         $databaseType = xarDB3::getType();
     }
 
-    switch($databaseType) {
+    switch ($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
         case 'oci8':
         case 'oci8po':
-            $sql = 'CREATE DATABASE '. $databaseName . ' DEFAULT CHARACTER SET ' . $databaseCharset;
+            $sql = 'CREATE DATABASE ' . $databaseName . ' DEFAULT CHARACTER SET ' . $databaseCharset;
             break;
         case 'pgsql':
         case 'pdopgsql':
-            $sql = 'CREATE DATABASE "'.$databaseName .'" ENCODING "' . $databaseCharset . '"';
+            $sql = 'CREATE DATABASE "' . $databaseName . '" ENCODING "' . $databaseCharset . '"';
             break;
         case 'sqlite3':
         case 'pdosqlite':
             // No such thing, its created automatically when it doesnt exist
-            $sql ='';
+            $sql = '';
             break;
         case 'mssql':
         case 'datadict':
             //sys::import('xaraya.tableddl.datadict');
             //$sql = xarDB__datadictCreateDatabase($databaseName);
             //break;
-            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
-        // Other DBs go here
+            throw new BadParameterException($databaseType, 'Unsupported database type: "#(1)"');
+            // Other DBs go here
         default:
-            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
+            throw new BadParameterException($databaseType, 'Unknown database type: "#(1)"');
     }
     return $sql;
 
@@ -102,15 +105,21 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
+function xarDBCreateTable($tableName, $fields, $databaseType = "", $charset = "")
 {
     // perform validations on input arguments
-    if (empty($tableName)) throw new EmptyParameterException('tableName');
-    if (!is_array($fields)) throw new BadParameterException('fields','The #(1) parameter is not an array');
+    if (empty($tableName)) {
+        throw new EmptyParameterException('tableName');
+    }
+    if (!is_array($fields)) {
+        throw new BadParameterException('fields', 'The #(1) parameter is not an array');
+    }
     if (empty($databaseType)) {
         $databaseType = xarDB3::getType();
     }
-    if (empty($charset)) $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+    if (empty($charset)) {
+        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+    }
     // set Dbtype to pdosqlite
     $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
     if ($middleware == 'PDO') {
@@ -118,7 +127,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
     }
 
     // Select the correct database type
-    switch($databaseType) {
+    switch ($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
             sys::import('xaraya.tableddl.mysqli');
@@ -144,10 +153,10 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
             //sys::import('xaraya.tableddl.datadict');
             //$sql = xarDB__datadictCreateTable($tableName, $fields, $charset);
             //break;
-            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
-        // Other DBs go here
+            throw new BadParameterException($databaseType, 'Unsupported database type: "#(1)"');
+            // Other DBs go here
         default:
-            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
+            throw new BadParameterException($databaseType, 'Unknown database type: "#(1)"');
     }
     return $sql;
 }
@@ -173,12 +182,14 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
  * @return string generated sql
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDBAlterTable($tableName, $args, $databaseType = NULL)
+function xarDBAlterTable($tableName, $args, $databaseType = null)
 {
     // perform validations on input arguments
-    if (empty($tableName)) throw new EmptyParameterException('tableName');
+    if (empty($tableName)) {
+        throw new EmptyParameterException('tableName');
+    }
     if (!is_array($args) || !isset($args['command'])) {
-        throw new BadParameterException('args','Invalid parameter "args", it must be an array, and the "command" key must be set');
+        throw new BadParameterException('args', 'Invalid parameter "args", it must be an array, and the "command" key must be set');
     }
 
     if (empty($databaseType)) {
@@ -186,12 +197,12 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     }
 
     // Select the correct database type
-    switch($databaseType) {
+    switch ($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
             sys::import('xaraya.tableddl.mysql');
             $sql = xarDB__mysqlAlterTable($tableName, $args);
-        break;
+            break;
         case 'pgsql':
         case 'pdopgsql':
             sys::import('xaraya.tableddl.postgres');
@@ -201,18 +212,18 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
         case 'oci8po':
             sys::import('xaraya.tableddl.oracle');
             $sql = xarDB__oracleAlterTable($tableName, $args);
-        break;
+            break;
         case 'sqlite3':
         case 'pdosqlite':
             sys::import('xaraya.tableddl.sqlite');
             $sql = xarDB__sqliteAlterTable($tableName, $args);
-        break;
+            break;
         case 'mssql':
         case 'datadict':
-            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
-        // Other DBs go here
+            throw new BadParameterException($databaseType, 'Unsupported database type: "#(1)"');
+            // Other DBs go here
         default:
-            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
+            throw new BadParameterException($databaseType, 'Unknown database type: "#(1)"');
     }
     return $sql;
 }
@@ -226,33 +237,35 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDBDropTable($tableName, $databaseType = NULL)
+function xarDBDropTable($tableName, $databaseType = null)
 {
     // perform validations on input arguments
-    if (empty($tableName)) throw new EmptyParameterException('tableName');
+    if (empty($tableName)) {
+        throw new EmptyParameterException('tableName');
+    }
     if (empty($databaseType)) {
         $databaseType = xarDB3::getType();
     }
 
-    switch($databaseType) {
+    switch ($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
         case 'pgsql':
         case 'pdopgsql':
-            $sql = 'DROP TABLE IF EXISTS '.$tableName;
-        break;
+            $sql = 'DROP TABLE IF EXISTS ' . $tableName;
+            break;
         case 'oci8':
         case 'oci8po':
         case 'sqlite3':
         case 'pdosqlite':
-            $sql = 'DROP TABLE '.$tableName;
-        break;
+            $sql = 'DROP TABLE ' . $tableName;
+            break;
         case 'mssql':
         case 'datadict':
-            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
-        // Other DBs go here
+            throw new BadParameterException($databaseType, 'Unsupported database type: "#(1)"');
+            // Other DBs go here
         default:
-            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
+            throw new BadParameterException($databaseType, 'Unknown database type: "#(1)"');
     }
     return $sql;
 }
@@ -266,118 +279,134 @@ function xarDBDropTable($tableName, $databaseType = NULL)
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[], $databaseType = NULL)
+function xarDBCreateColumn(string $columnType, array $args1 = [], array $args2 = [], $databaseType = null)
 {
-	// Special care needs to be taken with this arg, since it could have any numeric or char value
-	$defaultExists = isset($args1['default']);
-	// Make sure all args are present and non-null
-	$params = ['size','unsigned','charset'];
-	foreach ($params as $param) $args1[$param] ??= '';
-	extract($args1);
-	$params = ['id','name','required','auto'];
-	foreach ($params as $param) $args2[$param] ??= '';
-	extract($args2);
-	// Also this one: allow for an override
-	$databaseType ??= xarDB3::getType();
+    // Special care needs to be taken with this arg, since it could have any numeric or char value
+    $defaultExists = isset($args1['default']);
+    // Make sure all args are present and non-null
+    $params = ['size','unsigned','charset'];
+    foreach ($params as $param) {
+        $args1[$param] ??= '';
+    }
+    extract($args1);
+    $params = ['id','name','required','auto'];
+    foreach ($params as $param) {
+        $args2[$param] ??= '';
+    }
+    extract($args2);
+    // Also this one: allow for an override
+    $databaseType ??= xarDB3::getType();
 
-    switch($databaseType) {
+    switch ($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
-			$sql = $name;
-    		switch($columnType) {
-    			case 'text':
-    				if ($size == '') {
-    					$sql .= " TEXT";
-    				} else {
-    					$sql .= " VARCHAR";
-    				}
-    			break;
-    			case 'number':
-    				if ($size != '' && (int)$size > 3) {
-    					$sql .= " INTEGER";
-    				} else {
-    					$sql .= " TINYINT";
-    				}
-    			break;
-    			default:
-					$nativeType = xarXMLInstaller::getNativeType($columnType);
-					if ($nativeType == false) {
-						$message = "Unknown columnType: $columnType";
-						xarCore::exit($message);
+            $sql = $name;
+            switch ($columnType) {
+                case 'text':
+                    if ($size == '') {
+                        $sql .= " TEXT";
+                    } else {
+                        $sql .= " VARCHAR";
+                    }
+                    break;
+                case 'number':
+                    if ($size != '' && (int) $size > 3) {
+                        $sql .= " INTEGER";
+                    } else {
+                        $sql .= " TINYINT";
+                    }
+                    break;
+                default:
+                    $nativeType = xarXMLInstaller::getNativeType($columnType);
+                    if ($nativeType == false) {
+                        $message = "Unknown columnType: $columnType";
+                        xarCore::exit($message);
                         return false;
-					}
-					$sql .= " " . $nativeType;
-    			break;
-    		}
-    		if (!empty($size)) $sql .= '(' . $size . ')';
-    		if ((bool)$unsigned) $sql .= ' UNSIGNED';
-    		if (!empty($charset)) $sql .= ' CHARACTER SET ' . $charset;
-    		if ((bool)$required) $sql .= ' NOT NULL';
-			// Special care needs to be taken with this arg, since it could have any numeric or char value
-    		if ($defaultExists) {
-    			if (strtolower($default) == 'null') {
-		    		$sql .= " DEFAULT NULL";
-    			} else {
-		    		$sql .= " DEFAULT '" . $default . "'";
-    			}
-    		}
-    	break;
+                    }
+                    $sql .= " " . $nativeType;
+                    break;
+            }
+            if (!empty($size)) {
+                $sql .= '(' . $size . ')';
+            }
+            if ((bool) $unsigned) {
+                $sql .= ' UNSIGNED';
+            }
+            if (!empty($charset)) {
+                $sql .= ' CHARACTER SET ' . $charset;
+            }
+            if ((bool) $required) {
+                $sql .= ' NOT NULL';
+            }
+            // Special care needs to be taken with this arg, since it could have any numeric or char value
+            if ($defaultExists) {
+                if (strtolower($default) == 'null') {
+                    $sql .= " DEFAULT NULL";
+                } else {
+                    $sql .= " DEFAULT '" . $default . "'";
+                }
+            }
+            break;
         case 'sqlite3':
         case 'pdosqlite':
-        	// Do nothing here. We're letting XSL handle the column definitions
-    	break;
+            // Do nothing here. We're letting XSL handle the column definitions
+            break;
         case 'pgsql':
         case 'pdopgsql':
-			$sql = $name;
-    		switch($columnType) {
-    			case 'text':
-    			case 'longvarchar':
-    				if ($size == '') {
-    					$sql .= " TEXT";
-    				} else {
-    					$sql .= " VARCHAR";
-    				}
-    			break;
-    			case 'number':
-    				if ($size != '' && (int)$size > 3) {
-    					$sql .= " INTEGER";
-    				} else {
-    					$sql .= " SMALLINT";
-    				}
-    			break;
-    			case 'blob':
-    				$sql .= " BYTEA";
-    			break;
-    			default:
-					$nativeType = xarXMLInstaller::getNativeType($columnType);
-					if ($nativeType == false) {
-						$message = "Unknown columnType: $columnType";
-						xarCore::exit($message);
+            $sql = $name;
+            switch ($columnType) {
+                case 'text':
+                case 'longvarchar':
+                    if ($size == '') {
+                        $sql .= " TEXT";
+                    } else {
+                        $sql .= " VARCHAR";
+                    }
+                    break;
+                case 'number':
+                    if ($size != '' && (int) $size > 3) {
+                        $sql .= " INTEGER";
+                    } else {
+                        $sql .= " SMALLINT";
+                    }
+                    break;
+                case 'blob':
+                    $sql .= " BYTEA";
+                    break;
+                default:
+                    $nativeType = xarXMLInstaller::getNativeType($columnType);
+                    if ($nativeType == false) {
+                        $message = "Unknown columnType: $columnType";
+                        xarCore::exit($message);
                         return false;
-					}
-					$sql .= " " . $nativeType;
-    			break;
-    		}
-    		if (!empty($size) && ($columnType == 'text')) $sql .= '(' . $size . ')';
-    		if ((bool)$required) $sql .= ' NOT NULL';
-			// Special care needs to be taken with this arg, since it could have any numeric or char value
-    		if ($defaultExists) {
-    			if (strtolower($default) == 'null') {
-		    		$sql .= " DEFAULT NULL";
-    			} else {
-		    		$sql .= " DEFAULT '" . $default . "'";
-    			}
-    		}
-    	break;
+                    }
+                    $sql .= " " . $nativeType;
+                    break;
+            }
+            if (!empty($size) && ($columnType == 'text')) {
+                $sql .= '(' . $size . ')';
+            }
+            if ((bool) $required) {
+                $sql .= ' NOT NULL';
+            }
+            // Special care needs to be taken with this arg, since it could have any numeric or char value
+            if ($defaultExists) {
+                if (strtolower($default) == 'null') {
+                    $sql .= " DEFAULT NULL";
+                } else {
+                    $sql .= " DEFAULT '" . $default . "'";
+                }
+            }
+            break;
         case 'oci8':
         case 'oci8po':
-        break;
+            break;
         case 'mssql':
         case 'datadict':
-            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
-        // Other DBs go here
+            throw new BadParameterException($databaseType, 'Unsupported database type: "#(1)"');
+            // Other DBs go here
         default:
-            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
+            throw new BadParameterException($databaseType, 'Unknown database type: "#(1)"');
     }
     return $sql;
 }
@@ -393,12 +422,14 @@ function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[],
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
+function xarDBCreateIndex($tableName, $index, $databaseType = null)
 {
     // perform validations on input arguments
-    if (empty($tableName)) throw new EmptyParameterException('tableName');
+    if (empty($tableName)) {
+        throw new EmptyParameterException('tableName');
+    }
     if (!is_array($index) || !is_array($index['fields']) || empty($index['name'])) {
-        throw new BadParameterException('index','The parameter "#(1)" must be an array, the "fields" key inside it must be an array and the "name" key must be set).');
+        throw new BadParameterException('index', 'The parameter "#(1)" must be an array, the "fields" key inside it must be an array and the "name" key must be set).');
     }
     // default for unique
     if (!isset($index['unique'])) {
@@ -415,16 +446,16 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
     }
 
     // Select the correct database type
-    switch($databaseType) {
+    switch ($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
             if ($index['unique'] == true) {
-                $sql = 'ALTER TABLE '.$tableName.' ADD UNIQUE '.$index['name'];
+                $sql = 'ALTER TABLE ' . $tableName . ' ADD UNIQUE ' . $index['name'];
             } else {
-                $sql = 'ALTER TABLE '.$tableName.' ADD INDEX '.$index['name'];
+                $sql = 'ALTER TABLE ' . $tableName . ' ADD INDEX ' . $index['name'];
             }
-            $sql .= ' ('.join(',', $index['fields']).')';
-        break;
+            $sql .= ' (' . join(',', $index['fields']) . ')';
+            break;
         case 'pgsql':
         case 'pdopgsql':
         case 'oci8':
@@ -432,20 +463,20 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
         case 'sqlite3':
         case 'pdosqlite':
             if ($index['unique'] == true) {
-                $sql = 'CREATE UNIQUE INDEX '.$index['name'].' ON '.$tableName;
+                $sql = 'CREATE UNIQUE INDEX ' . $index['name'] . ' ON ' . $tableName;
             } else {
-                $sql = 'CREATE INDEX '.$index['name'].' ON '.$tableName;
+                $sql = 'CREATE INDEX ' . $index['name'] . ' ON ' . $tableName;
             }
-            $sql .= ' ('.join(',', $index['fields']).')';
-        break;
+            $sql .= ' (' . join(',', $index['fields']) . ')';
+            break;
 
         case 'mssql':
         case 'datadict':
-            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
+            throw new BadParameterException($databaseType, 'Unsupported database type: "#(1)"');
 
-        // Other DBs go here
+            // Other DBs go here
         default:
-            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
+            throw new BadParameterException($databaseType, 'Unknown database type: "#(1)"');
     }
     return $sql;
 }
@@ -460,12 +491,14 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDBDropIndex($tableName, $index, $databaseType = NULL)
+function xarDBDropIndex($tableName, $index, $databaseType = null)
 {
     // perform validations on input arguments
-    if (empty($tableName)) throw new EmptyParameterException('tableName');
+    if (empty($tableName)) {
+        throw new EmptyParameterException('tableName');
+    }
     if (!is_array($index) ||  empty($index['name'])) {
-        throw new BadParameterException('index','The parameter "#(1)" must be an array, the "fields" key inside it must be an array and the "name" key must be set).');
+        throw new BadParameterException('index', 'The parameter "#(1)" must be an array, the "fields" key inside it must be an array and the "name" key must be set).');
     }
     if (empty($databaseType)) {
         $databaseType = xarDB3::getType();
@@ -477,10 +510,10 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         $databaseType = 'pdosqlite';
     }
     // Select the correct database type
-    switch($databaseType) {
+    switch ($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
-            $sql = 'ALTER TABLE '.$tableName.' DROP INDEX '.$index['name'];
+            $sql = 'ALTER TABLE ' . $tableName . ' DROP INDEX ' . $index['name'];
             break;
         case 'pgsql':
         case 'pdopgsql':
@@ -488,14 +521,14 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         case 'oci8po':
         case 'sqlite3':
         case 'pdosqlite':
-            $sql = 'DROP INDEX '.$index['name'];
+            $sql = 'DROP INDEX ' . $index['name'];
             break;
         case 'mssql':
         case 'datadict':
-            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
-        // Other DBs go here
+            throw new BadParameterException($databaseType, 'Unsupported database type: "#(1)"');
+            // Other DBs go here
         default:
-            throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
+            throw new BadParameterException($databaseType, 'Unknown database type: "#(1)"');
     }
     return $sql;
 }
@@ -506,31 +539,31 @@ class xarTableDDL extends xarObject
     {
         return true;
     }
-    public static function createDatabase($databaseName, $databaseType=NULL, $databaseCharset='utf-8')
+    public static function createDatabase($databaseName, $databaseType = null, $databaseCharset = 'utf-8')
     {
         return xarDBCreateDatabase($databaseName, $databaseType, $databaseCharset);
     }
-    public static function createTable($tableName, $fields, $databaseType="",$charset="")
+    public static function createTable($tableName, $fields, $databaseType = "", $charset = "")
     {
-        return xarDBCreateTable($tableName, $fields, $databaseType,$charset);
+        return xarDBCreateTable($tableName, $fields, $databaseType, $charset);
     }
-    public static function alterTable($tableName, $args, $databaseType = NULL)
+    public static function alterTable($tableName, $args, $databaseType = null)
     {
         return xarDBAlterTable($tableName, $args, $databaseType);
     }
-    public static function dropTable($tableName, $databaseType = NULL)
+    public static function dropTable($tableName, $databaseType = null)
     {
         return xarDBDropTable($tableName, $databaseType);
     }
-    static public function xarDBCreateColumn(string $columnType, array $args1=[], array $args2=[], $databaseType = NULL)
+    public static function xarDBCreateColumn(string $columnType, array $args1 = [], array $args2 = [], $databaseType = null)
     {
         return xarDBCreateColumn($columnType, $args1, $args2, $databaseType);
     }
-    public static function createIndex($tableName, $index, $databaseType = NULL)
+    public static function createIndex($tableName, $index, $databaseType = null)
     {
         return xarDBCreateIndex($tableName, $index, $databaseType);
     }
-    public static function dropIndex($tableName, $index, $databaseType = NULL)
+    public static function dropIndex($tableName, $index, $databaseType = null)
     {
         return xarDBDropIndex($tableName, $index, $databaseType);
     }
@@ -539,41 +572,43 @@ class xarTableDDL extends xarObject
 class xarXMLInstaller extends xarObject
 {
     private static $typesObject;
-    
+
     // No constructor yet. maybe later
-    
-    private static function transform($xmlFile, $xslAction='display', $xslFile=null)
+
+    private static function transform($xmlFile, $xslAction = 'display', $xslFile = null)
     {
-        if (!isset($xmlFile))
+        if (!isset($xmlFile)) {
             throw new BadParameterException(xarMLS3::translate('No file to transform!'));
+        }
 
         // Get the database type from the connection
-		$databaseType = xarDB3::getType();
-		switch ($databaseType) {
-			case 'sqlite3':
-			case 'pdosqlite':
-				sys::import('creole.drivers.sqlite.SQLiteTypes');
-				self::$typesObject = new SQLiteTypes;
-				$databaseType = 'sqlite3';
-			break;
-			case 'mysqli':
-			case 'pdomysqli':
-				sys::import('creole.drivers.mysql.MySQLTypes');
-				self::$typesObject = new MySQLTypes;
-				$databaseType = 'mysqli';
-			break;
-			case 'pgsql':
-			case 'pdopgsql':
-				sys::import('creole.drivers.pgsql.PgSQLTypes');
-				self::$typesObject = new PgSQLTypes;
-				$databaseType = 'pgsql';
-			break;
-			default:
-				throw new Exception(xarMLS3::translate("Unknown database type: '#(1)'", $databaseType));
-		}
-        
-        if (!isset($xslFile))
-            $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-'. $databaseType . '.xsl';
+        $databaseType = xarDB3::getType();
+        switch ($databaseType) {
+            case 'sqlite3':
+            case 'pdosqlite':
+                sys::import('creole.drivers.sqlite.SQLiteTypes');
+                self::$typesObject = new SQLiteTypes();
+                $databaseType = 'sqlite3';
+                break;
+            case 'mysqli':
+            case 'pdomysqli':
+                sys::import('creole.drivers.mysql.MySQLTypes');
+                self::$typesObject = new MySQLTypes();
+                $databaseType = 'mysqli';
+                break;
+            case 'pgsql':
+            case 'pdopgsql':
+                sys::import('creole.drivers.pgsql.PgSQLTypes');
+                self::$typesObject = new PgSQLTypes();
+                $databaseType = 'pgsql';
+                break;
+            default:
+                throw new Exception(xarMLS3::translate("Unknown database type: '#(1)'", $databaseType));
+        }
+
+        if (!isset($xslFile)) {
+            $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-' . $databaseType . '.xsl';
+        }
         if (!file_exists($xslFile)) {
             $msg = xarMLS3::translate('The file #(1) was not found', $xslFile);
             throw new BadParameterException(null, $msg);
@@ -584,17 +619,17 @@ class xarXMLInstaller extends xarObject
         $xslProc->setParameter('', 'tableprefix', xarDB3::getPrefix());
         return $xslProc->transform($xmlFile);
     }
-    
-		// For now we'll use Creoles list of types
-        // TODO: Extend or change as more database types are added
-        // TODO: Move the code to tableddl or...?
-        // TODO: Do we still need to support both tabledll andf datadict?
-        //       I don't see an inherent advantage/disadvantage either way, and the decision
-        //       to use tabledll for the xsl stuff was one of convenience at the time.
+
+    // For now we'll use Creoles list of types
+    // TODO: Extend or change as more database types are added
+    // TODO: Move the code to tableddl or...?
+    // TODO: Do we still need to support both tabledll andf datadict?
+    //       I don't see an inherent advantage/disadvantage either way, and the decision
+    //       to use tabledll for the xsl stuff was one of convenience at the time.
     public static function getNativeType($creoleType)
     {
         sys::import('creole.CreoleTypes');
-        $code = (int)CreoleTypes::getCreoleCode(strtoupper($creoleType));
+        $code = (int) CreoleTypes::getCreoleCode(strtoupper($creoleType));
         if (null == $code) {
             xarCore::exit(xarMLS3::translate("Unknown Creole type: '#(1)'", $creoleType));
             return;
@@ -608,11 +643,13 @@ class xarXMLInstaller extends xarObject
 
     public static function createTable($tablefile, $module)
     {
-        if (empty($module))
+        if (empty($module)) {
             throw new BadParameterException('Missing a module name to create for');
-        if (empty($tablefile))
+        }
+        if (empty($tablefile)) {
             throw new BadParameterException('Missing a XML file to create from');
-            
+        }
+
         $xmlfile = sys::code() . 'modules/' . $module . '/xardata/' . $tablefile . '.xml';
         if (!file_exists($xmlfile)) {
             $msg = xarMLS3::translate('Could not find the file #(1) to create tables from', $xmlfile);
@@ -621,10 +658,10 @@ class xarXMLInstaller extends xarObject
 
         // Create a query string for table creation from the XML schema passed
         $sqlCode = self::transform($xmlfile, 'create');
-        // Run the query code to add variable values (there aren't any) and execute any PHP snippets inserted by the transform 
+        // Run the query code to add variable values (there aren't any) and execute any PHP snippets inserted by the transform
         $sqlCode = xarTpl::string($sqlCode, []);
         // Turn the query string into an array of queries
-        $queries = explode(';',$sqlCode);
+        $queries = explode(';', $sqlCode);
         // The last element is empty: remove it
         array_pop($queries);
 

@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PgSQLTableInfo.php,v 1.31 2006/01/17 19:44:40 hlellelid Exp $
  *
@@ -98,7 +99,7 @@ class PgSQLTableInfo extends TableInfo
         if (!$result) {
             throw new SQLException("Could not list fields for table: " . $this->name, pg_last_error($this->conn->getResource()));
         }
-        while($row = pg_fetch_assoc($result)) {
+        while ($row = pg_fetch_assoc($result)) {
 
             $size = null;
             $precision = null;
@@ -158,7 +159,7 @@ class PgSQLTableInfo extends TableInfo
     private function processLengthScale($intTypmod, $strName)
     {
         // Define the return array
-        $arrRetVal = array('length' => null, 'scale' => null);
+        $arrRetVal = ['length' => null, 'scale' => null];
 
         // Some datatypes don't have a Typmod
         if ($intTypmod == -1) {
@@ -214,7 +215,7 @@ class PgSQLTableInfo extends TableInfo
         if (!$row) {
             throw new SQLException("Domain [" . $strDomain . "] not found.");
         } // if (!$row)
-        $arrDomain = array();
+        $arrDomain = [];
         $arrDomain['type'] = $row['basetype'];
         $arrLengthPrecision = $this->processLengthScale($row['typtypmod'], $row['basetype']);
         $arrDomain['length'] = $arrLengthPrecision['length'];
@@ -255,7 +256,7 @@ class PgSQLTableInfo extends TableInfo
             throw new SQLException("Could not list foreign keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
         }
 
-        while($row = pg_fetch_assoc($result)) {
+        while ($row = pg_fetch_assoc($result)) {
             $name = $row['conname'];
             $local_table = $row['fktab'];
             $local_column = $row['fkcol'];
@@ -344,7 +345,7 @@ class PgSQLTableInfo extends TableInfo
             throw new SQLException("Could not list indexes keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
         }
 
-        while($row = pg_fetch_assoc($result)) {
+        while ($row = pg_fetch_assoc($result)) {
             $name = $row["idxname"];
             $unique = ($row["indisunique"] == 't') ? true : false;
             if (!isset($this->indexes[$name])) {
@@ -397,7 +398,7 @@ class PgSQLTableInfo extends TableInfo
         // Loop through the returned results, grouping the same key_name together
         // adding each column for that key.
 
-        while($row = pg_fetch_assoc($result)) {
+        while ($row = pg_fetch_assoc($result)) {
             $arrColumns = explode(' ', $row['indkey']);
             foreach ($arrColumns as $intColNum) {
                 $result2 = pg_query($this->conn->getResource(), sprintf("SELECT a.attname

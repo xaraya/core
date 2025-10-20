@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Experiment with PSR-7 and PSR-15 compatible middleware controller for modules
  * Sets request attributes 'module', 'type', 'func' for ModuleMiddleware->process()

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -16,7 +17,7 @@ use Xaraya\Facades\xarConfig3;
 
 /**
  * Query class for SQL abstraction
- * 
+ *
  */
 class Query
 {
@@ -27,25 +28,25 @@ class Query
     public $id;                                 // A unique identifier for this query
     public $type                = 'SELECT';     // Normalized array of tables used in the statement
     public $dbConnIndex         = 0;            // Connection index of the database if different from Xaraya DB
-    public $tables              = array();      // Normalized array of tables used in the statement
-    public $tablelinks          = array();      // Normalized array of table links used in the statement
-    public $fields              = array();      // Normalized array of fields used in the statement
+    public $tables              = [];      // Normalized array of tables used in the statement
+    public $tablelinks          = [];      // Normalized array of table links used in the statement
+    public $fields              = [];      // Normalized array of fields used in the statement
     public $primary;
-    public $conditions          = array();      // Normalized array of conditions used in the statement
-    public $conjunctions        = array();      // Normalized array of conjunctions used with conditions used in the statement
-    public $sorts               = array();      // Array of fields used in the sort clause of the statement
-    public $groups              = array();      // Normalized array of fields used in the group clause of the statement
-    public $having              = array();      // Normalized array of fields used in the having clause of the statement
-    public $result              = array();      // Holds the result object of a query
-    public $bindvars            = array();      // An array of bindvars in this statement
+    public $conditions          = [];      // Normalized array of conditions used in the statement
+    public $conjunctions        = [];      // Normalized array of conjunctions used with conditions used in the statement
+    public $sorts               = [];      // Array of fields used in the sort clause of the statement
+    public $groups              = [];      // Normalized array of fields used in the group clause of the statement
+    public $having              = [];      // Normalized array of fields used in the having clause of the statement
+    public $result              = [];      // Holds the result object of a query
+    public $bindvars            = [];      // An array of bindvars in this statement
     public $rows                = 0;
     public $rowfields           = 0;
     public $rowstodo            = 0;            // Holds the number of rows to return in a SELECT query
     public $startat             = 1;            // Holds the first record number to return in a SELECT query
     public $createtablename;
-    public $affected            = 0;            
-    public $output              = array();      // Holds multiple rows of results
-    public $row                 = array();      // Holds a single row of results
+    public $affected            = 0;
+    public $output              = [];      // Holds multiple rows of results
+    public $row                 = [];      // Holds a single row of results
     public $dbconn;                             // Holds the connection object to the database
     public $statement;                          // Holds the statement being processed/executed
     public $israwstatement      = 0;            // Flag that indicates whether the statement to be processed was entered as a string
@@ -53,7 +54,7 @@ class Query
     public $limits              = true;         // Flag that indicates whether the (SELECT) query uses limits
     public $optimize            = true;         // Flag that indicates whether the query will be optimized
     public $distinctselect      = false;
-    public $distinctarray       = array();
+    public $distinctarray       = [];
     public $distinctname        = null;
     public $bindings            = null;
     public $pagerows            = null;
@@ -61,19 +62,19 @@ class Query
 
     private $starttime;
     private $key = 0;                           // Unique key for this statement (used in nested conditions)
-    
-// Flags
-// Set to true to use binding variables supported by some dbs
+
+    // Flags
+    // Set to true to use binding variables supported by some dbs
     public $usebinding = true;
-// Two unrelated conditions will be inserted into the query as AND or OR
+    // Two unrelated conditions will be inserted into the query as AND or OR
     public $implicitconjunction = "AND";
-// Use JOIN...ON.. syntax (automatic for left or right joins)
+    // Use JOIN...ON.. syntax (automatic for left or right joins)
     public $on_syntax = false;
-// Before each statement executed, echo the SQL statement
+    // Before each statement executed, echo the SQL statement
     public $debugflag = false;
-// Remove table aliases from queries on a single table
+    // Remove table aliases from queries on a single table
     public $strip_aliases = true;
-// Operator syntax
+    // Operator syntax
     public $eqoperator = '=';
     public $neoperator = '!=';
     public $gtoperator = '>';
@@ -82,33 +83,34 @@ class Query
     public $leoperator = '<=';
     public $andoperator = 'AND';
     public $oroperator = 'OR';
-    private $operatorarray = array();
-//---------------------------------------------------------
-// Constructor
-//---------------------------------------------------------
-    public function __construct($type='SELECT',$tables='',$fields='',$dbConnIndex=0)
+    private $operatorarray = [];
+    //---------------------------------------------------------
+    // Constructor
+    //---------------------------------------------------------
+    public function __construct($type = 'SELECT', $tables = '', $fields = '', $dbConnIndex = 0)
     {
         // Set the debugflag
         if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xarConfig3::getVar('Site.BL.ShowQueries', false) && xarUser::isDebugAdmin()) {
             $this->debugflag = true;
         }
 
-        if (in_array($type,array("SELECT","INSERT","UPDATE","DELETE","DROP"))) $this->type = $type;
-        else {
-            throw new ForbiddenOperationException($type,'This operation is not supported yet. "#(1)"');
+        if (in_array($type, ["SELECT","INSERT","UPDATE","DELETE","DROP"])) {
+            $this->type = $type;
+        } else {
+            throw new ForbiddenOperationException($type, 'This operation is not supported yet. "#(1)"');
         }
         if ($type != "SELECT" && is_array($tables) && count($tables) > 1) {
             $msg = $this->ml('The type #(1) can only take  a single table name', $type);
-            throw new BadParameterException(null,$msg);
+            throw new BadParameterException(null, $msg);
         }
 
         $this->setDbConnIndex($dbConnIndex);
         $this->addtables($tables);
         $this->addfields($fields);
-        
+
         // Create the ID for this query
         $this->id = $this->createID();
-        
+
         // Move this into the declarations once PHP allows it
         $this->operatorarray['eq'] = '=';
         $this->operatorarray['ne'] = '!=';
@@ -131,37 +133,48 @@ class Query
         $this->dbConnIndex = $dbConnIndex;
     }
 
-    public function run($statement='',$display=1)
+    public function run($statement = '', $display = 1)
     {
-        if ($this->debugflag) $querystart = microtime(true);
+        if ($this->debugflag) {
+            $querystart = microtime(true);
+        }
 
-        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
+        if (!isset($this->dbconn)) {
+            $this->dbconn = $this->getDbConn();
+        }
         if ($this->debugflag && $this->db()->withPDO()) {
             $this->dbconn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
-        if (empty($statement) && ($this->optimize == true)) $this->optimize();
+        if (empty($statement) && ($this->optimize == true)) {
+            $this->optimize();
+        }
 
         $this->setstatement($statement);
 
         if ($this->israwstatement) {
             $result = $this->dbconn->Execute($this->statement);
             // If this is not a SELECT exit here
-            if (!is_object($result)) return $result;
+            if (!is_object($result)) {
+                return $result;
+            }
         } else {
             // Special case for multitable inserts
             if ($this->type == 'INSERT' && count($this->tables) > 1) {
-                if (empty($this->primary))
+                if (empty($this->primary)) {
                     throw new Exception($this->ml('Cannot execute a multitable insert without a primary field defined'));
+                }
                 try {
-                    $this->multiinsert(); 
-                } catch (Exception $e) {throw $e;}
+                    $this->multiinsert();
+                } catch (Exception $e) {
+                    throw $e;
+                }
                 return true;
             }
 
             if ($this->type != 'SELECT') {
                 if ($this->usebinding) {
-                    $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-                    $this->bindvars = array();
+                    $result = $this->dbconn->Execute($this->statement, $this->bindvars);
+                    $this->bindvars = [];
                 } else {
                     $result = $this->dbconn->Execute($this->statement);
                 }
@@ -170,35 +183,33 @@ class Query
             }
             // This is a select
             if ($this->db()->withPDO()) {
-                if($this->rowstodo != 0 && $this->limits == 1) {
-                    $begin = $this->startat-1;
+                if ($this->rowstodo != 0 && $this->limits == 1) {
+                    $begin = $this->startat - 1;
                     if ($this->usebinding) {
-                        $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars, PDO::FETCH_ASSOC);
-                    }
-                    else {
-                        $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin, PDO::FETCH_ASSOC);
+                        $result = $this->dbconn->SelectLimit($this->statement, $this->rowstodo, $begin, $this->bindvars, PDO::FETCH_ASSOC);
+                    } else {
+                        $result = $this->dbconn->SelectLimit($this->statement, $this->rowstodo, $begin, PDO::FETCH_ASSOC);
                     }
                 } else {
                     if ($this->usebinding) {
-//                        $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                        //                        $result = $this->dbconn->Execute($this->statement,$this->bindvars);
                         $stmt = $this->dbconn->prepareStatement($this->statement);
                         $result = $stmt->executeQuery($this->bindvars, PDO::FETCH_ASSOC);
                     } else {
                         $result = $this->dbconn->Execute($this->statement);
                     }
-                }                
+                }
             } else {
-                if($this->rowstodo != 0 && $this->limits == 1) {
-                    $begin = $this->startat-1;
+                if ($this->rowstodo != 0 && $this->limits == 1) {
+                    $begin = $this->startat - 1;
                     if ($this->usebinding) {
-                        $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
-                    }
-                    else {
-                        $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+                        $result = $this->dbconn->SelectLimit($this->statement, $this->rowstodo, $begin, $this->bindvars);
+                    } else {
+                        $result = $this->dbconn->SelectLimit($this->statement, $this->rowstodo, $begin);
                     }
                 } else {
                     if ($this->usebinding) {
-                        $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                        $result = $this->dbconn->Execute($this->statement, $this->bindvars);
                         //$stmt = $this->dbconn->prepareStatement($this->statement);
                         //$result = $stmt->executeQuery($this->bindvars);
                     } else {
@@ -208,29 +219,36 @@ class Query
             }
         }
 
-        if ($this->debugflag) $loopstart = microtime(true);
-        if (!$result) return false;
-        $this->result =& $result;
+        if ($this->debugflag) {
+            $loopstart = microtime(true);
+        }
+        if (!$result) {
+            return false;
+        }
+        $this->result = & $result;
 
-        if (!isset($result->fields) || ($result->fields === false))
+        if (!isset($result->fields) || ($result->fields === false)) {
             $numfields = 0;
-        else
-            $numfields = count($result->fields); // Better than the private var, fields should still be protected
-        $this->output = array();
+        } else {
+            $numfields = count($result->fields);
+        } // Better than the private var, fields should still be protected
+        $this->output = [];
         if ($display == 1) {
             if ($this->db()->withPDO()) {
                 $this->output = $result->getall();
             } elseif (!empty($this->dbConnIndex) && get_class($result) === 'PdoSQLiteResultSet') {
                 // PDO ResultSet doesn't handle EOF very well in Creole
                 while ($result->fields !== false) {
-                    $i=0; $line=array();
-                    foreach ($this->fields as $key => $value ) {
-                        if(!empty($value['alias']))
+                    $i = 0;
+                    $line = [];
+                    foreach ($this->fields as $key => $value) {
+                        if (!empty($value['alias'])) {
                             $line[$value['alias']] = $result->fields[$i];
-                        elseif(!empty($value['name']))
+                        } elseif (!empty($value['name'])) {
                             $line[$value['name']] = $result->fields[$i];
-                        else
+                        } else {
                             $line[] = $result->fields[$i];
+                        }
                         $i++;
                     }
                     $this->output[] = $line;
@@ -238,27 +256,29 @@ class Query
                 }
             } else {
                 if (!$this->israwstatement) {
-                    if ($this->fields == array() && $numfields > 0) {
+                    if ($this->fields == [] && $numfields > 0) {
                         $result->setFetchMode($this->db()->getFetchAssoc());
                         $result->first();
-                        for ($i=0;$i< $numfields;$i++) {
-                            $tmp = array_slice($result->fields,$i,1);
+                        for ($i = 0;$i < $numfields;$i++) {
+                            $tmp = array_slice($result->fields, $i, 1);
                             $namefield  = key($tmp);
                             $this->fields[$namefield]['name'] = strtolower($namefield ?? '');
                         }
                     }
-					$result->setFetchMode($this->db()->getFetchNum());
+                    $result->setFetchMode($this->db()->getFetchNum());
                     $result->first();
                     while ($result->next()) {
-                        $i=0; $line=array();
+                        $i = 0;
+                        $line = [];
 
-                        foreach ($this->fields as $key => $value ) {
-                            if(!empty($value['alias']))
+                        foreach ($this->fields as $key => $value) {
+                            if (!empty($value['alias'])) {
                                 $line[$value['alias']] = $result->fields[$i];
-                            elseif(!empty($value['name']))
+                            } elseif (!empty($value['name'])) {
                                 $line[$value['name']] = $result->fields[$i];
-                            else
+                            } else {
                                 $line[] = $result->fields[$i];
+                            }
                             $i++;
                         }
                         $this->output[] = $line;
@@ -274,7 +294,8 @@ class Query
             $assembletime = $querystart - $this->starttime;
             $querytime = $loopstart - $querystart;
             $looptime = microtime(true) - $loopstart;
-            $this->qecho($statement);echo "<br />";
+            $this->qecho($statement);
+            echo "<br />";
             echo "Assemble: " . $assembletime . "    Query: " . $querytime . "   Loops: " . $looptime . "<br />";
         }
         return true;
@@ -300,15 +321,19 @@ class Query
         $this->limits = 0;
     }
 
-    public function row($row=0)
+    public function row($row = 0)
     {
-        if ($this->output == array()) return array();
+        if ($this->output == []) {
+            return [];
+        }
         return $this->output[$row];
     }
 
-    public function flatrow($row=0)
+    public function flatrow($row = 0)
     {
-        if ($this->output == array()) return false;
+        if ($this->output == []) {
+            return false;
+        }
         return array_values($this->output[$row]);
     }
 
@@ -326,16 +351,20 @@ class Query
         }
     }
 
-    public function drop($tables=null)
+    public function drop($tables = null)
     {
         $this->settype("DROP");
-        if (isset($tables)) $this->addtables($tables);
+        if (isset($tables)) {
+            $this->addtables($tables);
+        }
         return true;
     }
 
-    public function createto($newtablename=null)
+    public function createto($newtablename = null)
     {
-        if (!isset($newtablename)) $newtablename = "temp" . xarSession::getUserId() . time();
+        if (!isset($newtablename)) {
+            $newtablename = "temp" . xarSession::getUserId() . time();
+        }
         $this->createtablename = $newtablename;
         $this->settype("CREATE");
         return true;
@@ -347,41 +376,40 @@ class Query
         if ($numargs == 2) {
             $name = func_get_arg(0);
             $alias = func_get_arg(1);
-            $argsarray = array('name' => $name, 'alias' => $alias);
-        }
-        elseif ($numargs == 1) {
+            $argsarray = ['name' => $name, 'alias' => $alias];
+        } elseif ($numargs == 1) {
             $table = func_get_arg(0);
             if (!is_array($table)) {
                 if (!is_string($table)) {
-                    throw new VariableValidationException(array('table',$table,'must be string or array'));
-                }
-                else {
-                    $newtable = explode(' ',$table);
+                    throw new VariableValidationException(['table',$table,'must be string or array']);
+                } else {
+                    $newtable = explode(' ', $table);
                     if (count($newtable) > 1) {
-                        $argsarray = array('name' => trim($newtable[0]), 'alias' => trim($newtable[1]));
-                    }
-                    else {
-                        $argsarray = array('name' => trim($newtable[0]), 'alias' => '');
+                        $argsarray = ['name' => trim($newtable[0]), 'alias' => trim($newtable[1])];
+                    } else {
+                        $argsarray = ['name' => trim($newtable[0]), 'alias' => ''];
                     }
                 }
-            }
-            else {
+            } else {
                 $argsarray = $table;
             }
+        } else {
+            throw new BadParameterException(null, $this->ml('This function can only take 1 or 2 parameters'));
         }
-        else throw new BadParameterException(null, $this->ml('This function can only take 1 or 2 parameters'));
 
         $notdone = true;
         $limit = count($this->tables);
-        for ($i=0;$i<$limit;$i++) {
-            if ($this->tables[$i]['name'] == $argsarray['name'] &&
-                $this->tables[$i]['alias'] == $argsarray['alias']) {
+        for ($i = 0;$i < $limit;$i++) {
+            if ($this->tables[$i]['name'] == $argsarray['name']
+                && $this->tables[$i]['alias'] == $argsarray['alias']) {
                 $this->tables[$i] = $argsarray;
                 $notdone = false;
                 break;
             }
         }
-        if ($notdone) $this->tables[] = $argsarray;
+        if ($notdone) {
+            $this->tables[] = $argsarray;
+        }
 
         // Update the ID for this query
         $this->id = $this->createID();
@@ -397,15 +425,17 @@ class Query
         } elseif ($numargs == 1) {
             $field = func_get_arg(0);
             if (!is_array($field)) {
-                if (!is_string($field))
-                    throw new BadParameterException($field,'The field #(1) you are trying to add needs to be a string or an array.');
-                else {
+                if (!is_string($field)) {
+                    throw new BadParameterException($field, 'The field #(1) you are trying to add needs to be a string or an array.');
+                } else {
                     if ($this->type == 'SELECT') {
                         $field = $this->_deconstructfield($field);
                         $argsarray = $field;
                     } else {
-                        $newfield = explode('=',$field);
-                        if (!isset($newfield[1])) throw new Exception($this->ml("The field #(1) needs to have a value", $newfield[0]));
+                        $newfield = explode('=', $field);
+                        if (!isset($newfield[1])) {
+                            throw new Exception($this->ml("The field #(1) needs to have a value", $newfield[0]));
+                        }
                         $argsarray = $this->_deconstructfield(trim($newfield[0]));
                         $argsarray['value'] = trim($newfield[1]);
                     }
@@ -413,36 +443,44 @@ class Query
             } else {
                 $argsarray = $field;
             }
+        } else {
+            throw new BadParameterException(null, $this->ml('This function can only take 1 or 2 parameters'));
         }
-        else throw new BadParameterException(null, $this->ml('This function can only take 1 or 2 parameters'));
 
         $done = false;
         foreach ($this->fields as $key => $field) {
             // if we already have this field , bail
-            if ($this->fields[$key] == $argsarray) {$done = true; break;}
-            
+            if ($this->fields[$key] == $argsarray) {
+                $done = true;
+                break;
+            }
+
             // If at least the name and table are identical, we might still be able to add alias info
             if ($this->fields[$key]['name'] == $argsarray['name'] && isset($this->fields[$key]['table']) && $this->fields[$key]['table'] == $argsarray['table']) {
                 if (isset($argsarray['alias'])) {
-                    $this->fields[$key]['alias'] = $argsarray['alias'];                
+                    $this->fields[$key]['alias'] = $argsarray['alias'];
                 }
-                if (isset($argsarray['value'])) $this->fields[$key]['value'] = $argsarray['value'];
+                if (isset($argsarray['value'])) {
+                    $this->fields[$key]['value'] = $argsarray['value'];
+                }
                 $done = true;
                 break;
             }
         }
-        if (!$done) $this->fields[] = $argsarray;
+        if (!$done) {
+            $this->fields[] = $argsarray;
+        }
     }
 
     public function addfields($fields)
     {
         if (!is_array($fields)) {
             if (!is_string($fields)) {
-            //error msg
+                //error msg
             } else {
 
                 if ($fields != '') {
-                    $newfields = explode(',',$fields);
+                    $newfields = explode(',', $fields);
                     foreach ($newfields as $field) {
                         $field = $this->_deconstructfield(trim($field));
                         $this->addfield($field);
@@ -456,7 +494,9 @@ class Query
                     $this->addfield($field);
                 }
             } else {
-                foreach ($fields as $field) $this->addfield(trim($field));
+                foreach ($fields as $field) {
+                    $this->addfield(trim($field));
+                }
             }
         }
     }
@@ -465,35 +505,40 @@ class Query
     {
         if (!is_array($tables)) {
             if (!is_string($tables)) {
-            //error msg
+                //error msg
+            } elseif ($tables == '') {
+            }//error msg
+            else {
+                $this->addtable($tables);
             }
-            elseif ($tables=='') {}//error msg
-            else {$this->addtable($tables);}
-        }
-        else {
-            foreach ($tables as $table) $this->addtable($table);
+        } else {
+            foreach ($tables as $table) {
+                $this->addtable($table);
+            }
         }
     }
 
-    public function addtablelink(Array $args=array())
+    public function addtablelink(array $args = [])
     {
         $key = $this->key;
         $this->key++;
         $numargs = func_num_args();
         $link = func_get_arg(0);
-        
-        if (isset($this->operatorarray[$link['field3']])) $link['field3'] = $this->operatorarray[$link['field3']];
+
+        if (isset($this->operatorarray[$link['field3']])) {
+            $link['field3'] = $this->operatorarray[$link['field3']];
+        }
         if ($numargs == 2) {
-            $this->tablelinks[$key]=array('field1' => $link['field1'],
-                                          'field2' => $link['field2'],
-                                          'field3' => $link['field3'],
-                                      'op' => $link['op']);
+            $this->tablelinks[$key] = ['field1' => $link['field1'],
+                'field2' => $link['field2'],
+                'field3' => $link['field3'],
+                'op' => $link['op']];
         } elseif ($numargs == 4) {
             // CHECKME: Remove this? It's not being used
-            $this->tablelinks[$key]=array('field1' => func_get_arg(0) . "." . func_get_arg(1),
-                                          'field2' => func_get_arg(2) . "." . func_get_arg(3),
-                                          'field3' => '=',
-                                      'op' => 'JOIN');
+            $this->tablelinks[$key] = ['field1' => func_get_arg(0) . "." . func_get_arg(1),
+                'field2' => func_get_arg(2) . "." . func_get_arg(3),
+                'field3' => '=',
+                'op' => 'JOIN'];
         }
 
         // Update the ID for this query
@@ -501,7 +546,7 @@ class Query
 
         return $key;
     }
-    public function addhaving(Array $args=array())
+    public function addhaving(array $args = [])
     {
         $key = $this->key;
         $this->key++;
@@ -510,140 +555,181 @@ class Query
         if ($numargs == 1) {
             $this->having[$key] = $having;
         } else {
-        // error msg
+            // error msg
         }
         return true;
     }
-    public function join($field1,$field2,$field3='=',$active=1)
+    public function join($field1, $field2, $field3 = '=', $active = 1)
     {
         $op = $this->on_syntax ? 'INNER JOIN' : 'JOIN';
-        return $this->addtablelink(array('field1' => $field1,
-                                         'field2' => $field2,
-                                         'field3' => $field3,
-                                  'op' => $op),$active);
+        return $this->addtablelink(['field1' => $field1,
+            'field2' => $field2,
+            'field3' => $field3,
+            'op' => $op], $active);
     }
-    public function leftjoin($field1,$field2,$field3='=',$active=1)
+    public function leftjoin($field1, $field2, $field3 = '=', $active = 1)
     {
-        return $this->addtablelink(array('field1' => $field1,
-                                         'field2' => $field2,
-                                         'field3' => $field3,
-                                  'op' => 'LEFT JOIN'),$active);
+        return $this->addtablelink(['field1' => $field1,
+            'field2' => $field2,
+            'field3' => $field3,
+            'op' => 'LEFT JOIN'], $active);
     }
-    public function rightjoin($field1,$field2,$field3='=',$active=1)
+    public function rightjoin($field1, $field2, $field3 = '=', $active = 1)
     {
-        return $this->addtablelink(array('field1' => $field1,
-                                         'field2' => $field2,
-                                         'field3' => $field3,
-                                  'op' => 'RIGHT JOIN'),$active);
+        return $this->addtablelink(['field1' => $field1,
+            'field2' => $field2,
+            'field3' => $field3,
+            'op' => 'RIGHT JOIN'], $active);
     }
-    public function having($expression, $conjunction='')
+    public function having($expression, $conjunction = '')
     {
-        if ($conjunction == '') $conjunction = $this->implicitconjunction;
-        return $this->addhaving(array('expression' => $expression,
-                                  'conjunction' => $conjunction));
+        if ($conjunction == '') {
+            $conjunction = $this->implicitconjunction;
+        }
+        return $this->addhaving(['expression' => $expression,
+            'conjunction' => $conjunction]);
     }
-    public function eq($field1,$field2,$active=1)
+    public function eq($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => $this->eqoperator),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => $this->eqoperator], $active);
     }
-    public function ne($field1,$field2,$active=1)
+    public function ne($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => $this->neoperator),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => $this->neoperator], $active);
     }
-    public function gt($field1,$field2,$active=1)
+    public function gt($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => $this->gtoperator),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => $this->gtoperator], $active);
     }
-    public function ge($field1,$field2,$active=1)
+    public function ge($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => $this->geoperator),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => $this->geoperator], $active);
     }
-    public function le($field1,$field2,$active=1)
+    public function le($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => $this->leoperator),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => $this->leoperator], $active);
     }
-    public function lt($field1,$field2,$active=1)
+    public function lt($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => $this->ltoperator),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => $this->ltoperator], $active);
     }
-    public function like($field1,$field2,$active=1)
+    public function like($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => 'LIKE'),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => 'LIKE'], $active);
     }
-    public function notlike($field1,$field2,$active=1)
+    public function notlike($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => 'NOT LIKE'),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => 'NOT LIKE'], $active);
     }
-    public function in($field1,$field2,$active=1)
+    public function in($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => 'IN'),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => 'IN'], $active);
     }
-    public function notin($field1,$field2,$active=1)
+    public function notin($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => 'NOT IN'),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => 'NOT IN'], $active);
     }
-    public function regex($field1,$field2,$active=1)
+    public function regex($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => 'REGEXP'),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => 'REGEXP'], $active);
     }
-    public function between($field1,$field2,$active=1)
+    public function between($field1, $field2, $active = 1)
     {
-        return $this->addcondition(array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => 'BETWEEN'),$active);
+        return $this->addcondition(['field1' => $field1,
+            'field2' => $field2,
+            'op' => 'BETWEEN'], $active);
     }
 
-    public function peq($field1,$field2)      {return $this->eq($field1,$field2,0);}
-    public function pne($field1,$field2)      {return $this->ne($field1,$field2,0);}
-    public function pgt($field1,$field2)      {return $this->gt($field1,$field2,0);}
-    public function pge($field1,$field2)      {return $this->ge($field1,$field2,0);}
-    public function plt($field1,$field2)      {return $this->lt($field1,$field2,0);}
-    public function ple($field1,$field2)      {return $this->le($field1,$field2,0);}
-    public function plike($field1,$field2)    {return $this->like($field1,$field2,0);}
-    public function pnotlike($field1,$field2) {return $this->notlike($field1,$field2,0);}
-    public function pin($field1,$field2)      {return $this->in($field1,$field2,0);}
-    public function pnotin($field1,$field2)   {return $this->notin($field1,$field2,0);}
-    public function pregex($field1,$field2)   {return $this->regex($field1,$field2,0);}
+    public function peq($field1, $field2)
+    {
+        return $this->eq($field1, $field2, 0);
+    }
+    public function pne($field1, $field2)
+    {
+        return $this->ne($field1, $field2, 0);
+    }
+    public function pgt($field1, $field2)
+    {
+        return $this->gt($field1, $field2, 0);
+    }
+    public function pge($field1, $field2)
+    {
+        return $this->ge($field1, $field2, 0);
+    }
+    public function plt($field1, $field2)
+    {
+        return $this->lt($field1, $field2, 0);
+    }
+    public function ple($field1, $field2)
+    {
+        return $this->le($field1, $field2, 0);
+    }
+    public function plike($field1, $field2)
+    {
+        return $this->like($field1, $field2, 0);
+    }
+    public function pnotlike($field1, $field2)
+    {
+        return $this->notlike($field1, $field2, 0);
+    }
+    public function pin($field1, $field2)
+    {
+        return $this->in($field1, $field2, 0);
+    }
+    public function pnotin($field1, $field2)
+    {
+        return $this->notin($field1, $field2, 0);
+    }
+    public function pregex($field1, $field2)
+    {
+        return $this->regex($field1, $field2, 0);
+    }
 
-   public function qand()
+    public function qand()
     {
         $key = 'lost';
         $numargs = func_num_args();
         if ($numargs == 2) {
         } elseif ($numargs == 1) {
             $field = func_get_arg(0);
-            if ($field == array()) return true;
+            if ($field == []) {
+                return true;
+            }
             $key = $this->_addcondition(1);
-            $this->conjunctions[$key] = array('conditions' => $field,
-                                             'conj' => $this->andoperator,
-                                             'active' => 1);
-            if (!is_array($field)) $field = array($field);
-            
+            $this->conjunctions[$key] = ['conditions' => $field,
+                'conj' => $this->andoperator,
+                'active' => 1];
+            if (!is_array($field)) {
+                $field = [$field];
+            }
+
             // Make the conjunctions below ths one inactive, so as to avoid writng them twice
             foreach ($field as $condition) {
-                if (isset($this->conjunctions[$condition])) $this->conjunctions[$condition]['active'] = 0;
+                if (isset($this->conjunctions[$condition])) {
+                    $this->conjunctions[$condition]['active'] = 0;
+                }
             }
         }
         return $key;
@@ -655,16 +741,22 @@ class Query
         if ($numargs == 2) {
         } elseif ($numargs == 1) {
             $field = func_get_arg(0);
-            if ($field == array()) return true;
+            if ($field == []) {
+                return true;
+            }
             $key = $this->_addcondition(1);
-            $this->conjunctions[$key] = array('conditions' => $field,
-                                             'conj' => $this->oroperator,
-                                             'active' => 1);
-            if (!is_array($field)) $field = array($field);
+            $this->conjunctions[$key] = ['conditions' => $field,
+                'conj' => $this->oroperator,
+                'active' => 1];
+            if (!is_array($field)) {
+                $field = [$field];
+            }
 
             // Make the conjunctions below ths one inactive, so as to avoid writng them twice
             foreach ($field as $condition) {
-                if (isset($this->conjunctions[$condition])) $this->conjunctions[$condition]['active'] = 0;
+                if (isset($this->conjunctions[$condition])) {
+                    $this->conjunctions[$condition]['active'] = 0;
+                }
             }
         }
         return $key;
@@ -676,10 +768,12 @@ class Query
         if ($numargs == 2) {
         } elseif ($numargs == 1) {
             $field = func_get_arg(0);
-            $this->conjunctions[$key] = array('conditions' => $field,
-                                             'conj' => $this->andoperator,
-                                             'active' => 0);
-            if (!is_array($field)) $field = array($field);
+            $this->conjunctions[$key] = ['conditions' => $field,
+                'conj' => $this->andoperator,
+                'active' => 0];
+            if (!is_array($field)) {
+                $field = [$field];
+            }
         }
         return $key;
     }
@@ -690,10 +784,12 @@ class Query
         if ($numargs == 2) {
         } elseif ($numargs == 1) {
             $field = func_get_arg(0);
-            $this->conjunctions[$key] = array('conditions' => $field,
-                                             'conj' => $this->oroperator,
-                                             'active' => 0);
-            if (!is_array($field)) $field = array($field);
+            $this->conjunctions[$key] = ['conditions' => $field,
+                'conj' => $this->oroperator,
+                'active' => 0];
+            if (!is_array($field)) {
+                $field = [$field];
+            }
         }
         return $key;
     }
@@ -701,37 +797,46 @@ class Query
     {
         if (!is_array($sorts)) {
             if (!is_string($sorts)) {
-            //error msg
+                //error msg
+            } elseif ($sorts == '') {
+            }//error msg
+            else {
+                $this->sorts[] = ['name' => $sorts,
+                    'order' => ''];
             }
-            elseif ($sorts=='') {}//error msg
-            else {$this->sorts[]= array('name' => $sorts,
-                                        'order' => '');}
-        }
-        else {
+        } else {
             foreach ($sorts as $sort) {
-                if (is_array($sort)) $this->sorts[] = array('name' => $sort['name'],
-                                                            'order' => $sort['order']);
+                if (is_array($sort)) {
+                    $this->sorts[] = ['name' => $sort['name'],
+                        'order' => $sort['order']];
+                }
             }
         }
     }
     public function getfield($myfield)
     {
-        foreach ($this->fields as $field)
-            if ($field['name'] == $myfield) return $field['value'];
+        foreach ($this->fields as $field) {
+            if ($field['name'] == $myfield) {
+                return $field['value'];
+            }
+        }
         return '';
     }
     public function removefield($myfield)
     {
-        for($i=0;$i<count($this->fields);$i++)
+        for ($i = 0;$i < count($this->fields);$i++) {
             if ($this->fields[$i]['name'] == $myfield) {
                 unset($this->fields[$i]);
                 break;
             }
+        }
     }
-    public function setalias($name='',$alias='')
+    public function setalias($name = '', $alias = '')
     {
-        if($name == '' || $alias == '') return false;
-        for($i=0;$i<count($this->tables);$i++) {
+        if ($name == '' || $alias == '') {
+            return false;
+        }
+        for ($i = 0;$i < count($this->tables);$i++) {
             if ($this->tables[$i]['name'] == $name) {
                 $this->tables[$i]['alias'] = $alias;
                 return true;
@@ -739,67 +844,78 @@ class Query
         }
         return false;
     }
-/*
- * Get the value of a condition on a field 
- */
+    /*
+     * Get the value of a condition on a field
+     */
     public function getcondition(String $mycondition)
     {
-        foreach ($this->conditions as $condition)
-            if ($condition['field1'] == $mycondition) return $condition['field2'];
+        foreach ($this->conditions as $condition) {
+            if ($condition['field1'] == $mycondition) {
+                return $condition['field2'];
+            }
+        }
         return '';
     }
-/*
- * Remove all conditions on a field 
- */
+    /*
+     * Remove all conditions on a field
+     */
     public function removecondition(String $mycondition)
     {
-        foreach($this->conditions as $key => $value)
+        foreach ($this->conditions as $key => $value) {
             if ($value['field1'] == $mycondition) {
                 unset($this->conditions[$key]);
                 unset($this->conjunctions[$key]);
                 break;
             }
+        }
         // Update the ID for this query
         $this->id = $this->createID();
     }
 
-    public function addsecuritycheck(Array $args=array())
+    public function addsecuritycheck(array $args = [])
     {
         $numargs = func_num_args();
         if ($numargs == 2) {
             $fields = func_get_arg(0);
-            if (is_string($fields)) $fields = array($fields);
+            if (is_string($fields)) {
+                $fields = [$fields];
+            }
             $conditions = func_get_arg(1);
             if (isset($conditions['deny'])) {
                 foreach ($conditions['deny'] as $condition) {
                     $limit = count($condition);
                     if (count($fields) != count($condition)) {
                         $msg = $this->ml('Cannot match #(1) fields with #(2) conditions in addsecuritycheck().', count($fields), $limit);
-                        throw new BadParameterException(null,$msg);
+                        throw new BadParameterException(null, $msg);
                     }
-                    for ($i=0;$i<$limit;$i++) $this->ne($fields[$i],$condition[$i]);
+                    for ($i = 0;$i < $limit;$i++) {
+                        $this->ne($fields[$i], $condition[$i]);
+                    }
                 }
             }
         } else {
             $msg = $this->ml('The addsecuritycheck method can only take 2 parameters');
-            throw new BadParameterException(null,$msg);
+            throw new BadParameterException(null, $msg);
         }
     }
 
-    public function addcondition($x,$active=1)
+    public function addcondition($x, $active = 1)
     {
         // if we already have this conditio registered, just return its key
-        foreach($this->conditions as $key => $value)
-            if ($value === $x) return $key;
+        foreach ($this->conditions as $key => $value) {
+            if ($value === $x) {
+                return $key;
+            }
+        }
 
         // This is a new condition: get a new key value
-        $key = $this->_getkey(); 
-        
-        // Create a conjunction to hold the condition       
-        $this->conjunctions[$key]=array('conditions' => $key,
-                                        'conj' => 'IMPLICIT',
-                                        'active' => $active);
-                                        
+        $key = $this->_getkey();
+
+        // Create a conjunction to hold the condition
+        $this->conjunctions[$key] = ['conditions' => $key,
+            'conj' => 'IMPLICIT',
+            'active' => $active];
+
         // Add the condition to the array of conditions
         $this->conditions[$key] = $x;
 
@@ -809,9 +925,9 @@ class Query
         return $key;
     }
 
-/*
-// ------ Private methods --------------------------------------------------------
-*/
+    /*
+    // ------ Private methods --------------------------------------------------------
+    */
     /**
      * Summary of _getbinding
      * @deprecated no longer used?
@@ -820,12 +936,13 @@ class Query
      */
     private function _getbinding($key)
     {
-        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
+        if (!isset($this->dbconn)) {
+            $this->dbconn = $this->getDbConn();
+        }
         $binding = $this->bindings[$key];
         if (!is_numeric($binding['field2']) && !preg_match('/JOIN/i', $binding['op'])) {
             $sqlfield = $this->dbconn->qstr($binding['field2']);
-        }
-        else {
+        } else {
             $sqlfield = $binding['field2'];
             $binding['op'] = preg_match('/JOIN/i', $binding['op']) ? '=' : $binding['op'];
         }
@@ -834,19 +951,25 @@ class Query
 
     private function _getcondition($key)
     {
-        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
+        if (!isset($this->dbconn)) {
+            $this->dbconn = $this->getDbConn();
+        }
         $condition = $this->conditions[$key];
 
         if (!isset($condition['field2']) || $condition['field2'] === 'NULL') {
-            if ($condition['op'] == '=') return $condition['field1'] . " IS NULL";
-            if ($condition['op'] == '!=') return $condition['field1'] . " IS NOT NULL";
+            if ($condition['op'] == '=') {
+                return $condition['field1'] . " IS NULL";
+            }
+            if ($condition['op'] == '!=') {
+                return $condition['field1'] . " IS NOT NULL";
+            }
         }
 
-        $expression_flag = !is_array($condition['field2']) && strtolower(substr($condition['field2'],0,5)) == 'expr:';
-        
-        if (!$expression_flag && in_array(strtolower($condition['op']),array('in','not in'))) {
+        $expression_flag = !is_array($condition['field2']) && strtolower(substr($condition['field2'], 0, 5)) == 'expr:';
+
+        if (!$expression_flag && in_array(strtolower($condition['op']), ['in','not in'])) {
             if (is_array($condition['field2'])) {
-                $elements = array();
+                $elements = [];
                 if ($this->usebinding) {
                     foreach ($condition['field2'] as $element) {
                         $this->bindvars[] = $element;
@@ -858,13 +981,13 @@ class Query
                     }
                 }
 
-                $sqlfield = '(' . implode(',',$elements) . ')';
+                $sqlfield = '(' . implode(',', $elements) . ')';
             } else {
                 $sqlfield = '(' . $condition['field2'] . ')';
             }
-        } elseif (!$expression_flag && in_array(strtolower($condition['op']),array('between'))) {
+        } elseif (!$expression_flag && in_array(strtolower($condition['op']), ['between'])) {
             if (is_array($condition['field2'])) {
-                $elements = array();
+                $elements = [];
                 if ($this->usebinding) {
                     foreach ($condition['field2'] as $element) {
                         $this->bindvars[] = $element;
@@ -874,8 +997,7 @@ class Query
                     foreach ($condition['field2'] as $element) {
                         if (!is_numeric($element)) {
                             $elements[] = $this->dbconn->qstr($element);
-                        }
-                        else {
+                        } else {
                             $elements[] = $element;
                         }
                     }
@@ -887,7 +1009,7 @@ class Query
             }
         } else {
             if ($expression_flag) {
-                $condition['field2'] = trim(substr($condition['field2'],5));
+                $condition['field2'] = trim(substr($condition['field2'], 5));
                 $sqlfield = $condition['field2'];
             } elseif (!is_numeric($condition['field2']) && !preg_match('/JOIN/i', $condition['op'])) {
                 if ($this->usebinding) {
@@ -908,20 +1030,20 @@ class Query
         }
         $field = '';
         switch ($this->type) {
-            case "SELECT" :
+            case "SELECT":
                 $field = $condition['field1'];
                 break;
-            case "INSERT" :
-            case "UPDATE" :
-            case "DELETE" :
+            case "INSERT":
+            case "UPDATE":
+            case "DELETE":
                 $parts = explode('.', $condition['field1']);
-				if ($this->strip_aliases && count($this->tables) == 1) {
-					// Simplify single table queries by removing table aliases
-					$field = isset($parts[1]) ? $parts[1] : $parts[0];
-				} else {
-					$field = isset($parts[1]) ? $parts[1] : $parts[0];
-					$field = $condition['field1'];
-				}
+                if ($this->strip_aliases && count($this->tables) == 1) {
+                    // Simplify single table queries by removing table aliases
+                    $field = $parts[1] ?? $parts[0];
+                } else {
+                    $field = $parts[1] ?? $parts[0];
+                    $field = $condition['field1'];
+                }
                 break;
         }
         return $field . " " . $condition['op'] . " " . $sqlfield;
@@ -929,35 +1051,38 @@ class Query
 
     private function _getconditions()
     {
-       $this->cstring = "";
-       $i = 0;
-       $limit = count($this->conjunctions);
-       foreach ($this->conjunctions as $conjunction) {
+        $this->cstring = "";
+        $i = 0;
+        $limit = count($this->conjunctions);
+        foreach ($this->conjunctions as $conjunction) {
             $i++;
             if ($conjunction['active']) {
-                $this->_resolve($conjunction,1);
-                if ($i != $limit)
+                $this->_resolve($conjunction, 1);
+                if ($i != $limit) {
                     $this->cstring .= $this->implicitconjunction . " ";
+                }
             }
         }
         $this->cstring = trim($this->cstring);
         return $this->cstring;
     }
 
-    private function _resolve($conjunction,$level)
+    private function _resolve($conjunction, $level)
     {
         if (is_array($conjunction['conditions'])) {
             $this->cstring .= "(";
             $count = count($conjunction['conditions']);
-            $i=0;
+            $i = 0;
             foreach ($conjunction['conditions'] as $condition) {
                 $i++;
                 if (isset($this->conjunctions[$condition])) {
-                    $this->_resolve($this->conjunctions[$condition],$level+1);
+                    $this->_resolve($this->conjunctions[$condition], $level + 1);
                 } else {
                     $this->cstring .= $this->_getcondition($condition);
                 }
-                if ($i<$count) $this->cstring .= $conjunction['conj'] . " ";
+                if ($i < $count) {
+                    $this->cstring .= $conjunction['conj'] . " ";
+                }
             }
             $this->cstring = trim($this->cstring) . ")";
         } else {
@@ -966,34 +1091,34 @@ class Query
         $this->cstring .= " ";
     }
 
-    private function _addcondition($active=1)
+    private function _addcondition($active = 1)
     {
         $key = $this->_getkey();
-        $this->conjunctions[$key]=array('conditions' => $key,
-                                        'conj' => 'IMPLICIT',
-                                        'active' => $active);
+        $this->conjunctions[$key] = ['conditions' => $key,
+            'conj' => 'IMPLICIT',
+            'active' => $active];
         // Update the ID for this query
         $this->id = $this->createID();
 
         return $key;
     }
 
-    function __sleep()
+    public function __sleep()
     {
         // Return array of variables to be serialized.
         $vars = array_keys(get_object_vars($this));
 
         // Strip out the variables we don't want serialized, but don't
         // destroy anything yet, as this object may still be needed.
-        foreach(array('dbconn', 'result', 'output') as $var) {
-            if (($key = array_search($var, $vars)) !== FALSE) {
+        foreach (['dbconn', 'result', 'output'] as $var) {
+            if (($key = array_search($var, $vars)) !== false) {
                 unset($vars[$key]);
             }
         }
         return($vars);
     }
 
-    function __wakeup()
+    public function __wakeup()
     {
         $this->openconnection();
     }
@@ -1007,46 +1132,46 @@ class Query
 
     private function _statement()
     {
-        $this->bindvars = array();
+        $this->bindvars = [];
         $st =  $this->type . " ";
         switch ($this->type) {
-        case "SELECT" :
-            $st .= $this->assembledfields("SELECT");
-            $st .= " FROM ";
-            $st .= $this->assembledtables();
-            $st .= $this->assembledconditions();
-            $st .= $this->assembledgroups();
-            $st .= $this->assembledhaving();
-            $st .= $this->assembledsorts();
-            break;
-        case "INSERT" :
-            $st .= "INTO ";
-            $st .= $this->assembledtables();
-            $st .= $this->assembledfields("INSERT");
-            $st .= $this->assembledconditions();
-            break;
-        case "UPDATE" :
-            $st .= $this->assembledtables();
-            $st .= " SET ";
-            $st .= $this->assembledfields("UPDATE");
-            $st .= $this->assembledconditions();
-            break;
-        case "DELETE" :
-            // @todo remove this altogether, or move it after assembledtables if assembledconditions uses aliases?
-            //$st .= $this->assembledaliases();
-            $st .= " FROM ";
-            $st .= $this->assembledtables();
-            $st .= $this->assembledconditions();
-            break;
-        case "CREATE" :
-            $this->setstatement();
-            $st = "CREATE TABLE " . $this->createtablename . " AS " . $this->getstatement();
-            break;
-        case "DROP" :
-            $st .= "TABLE " . $this->assembledtables();
-            break;
-        default :
-            break;
+            case "SELECT":
+                $st .= $this->assembledfields("SELECT");
+                $st .= " FROM ";
+                $st .= $this->assembledtables();
+                $st .= $this->assembledconditions();
+                $st .= $this->assembledgroups();
+                $st .= $this->assembledhaving();
+                $st .= $this->assembledsorts();
+                break;
+            case "INSERT":
+                $st .= "INTO ";
+                $st .= $this->assembledtables();
+                $st .= $this->assembledfields("INSERT");
+                $st .= $this->assembledconditions();
+                break;
+            case "UPDATE":
+                $st .= $this->assembledtables();
+                $st .= " SET ";
+                $st .= $this->assembledfields("UPDATE");
+                $st .= $this->assembledconditions();
+                break;
+            case "DELETE":
+                // @todo remove this altogether, or move it after assembledtables if assembledconditions uses aliases?
+                //$st .= $this->assembledaliases();
+                $st .= " FROM ";
+                $st .= $this->assembledtables();
+                $st .= $this->assembledconditions();
+                break;
+            case "CREATE":
+                $this->setstatement();
+                $st = "CREATE TABLE " . $this->createtablename . " AS " . $this->getstatement();
+                break;
+            case "DROP":
+                $st .= "TABLE " . $this->assembledtables();
+                break;
+            default:
+                break;
         }
         return $st;
     }
@@ -1062,12 +1187,13 @@ class Query
         foreach ($this->tables as $table) {
             if (is_array($table)) {
                 $t .= $table['alias'] . ", ";
-            }
-            else {
+            } else {
                 $t .= $table . ", ";
             }
         }
-        if ($t != "") $t = trim($t," ,");
+        if ($t != "") {
+            $t = trim($t, " ,");
+        }
         return $t;
     }
 
@@ -1079,96 +1205,115 @@ class Query
                 break;
             }
         }
-        $links = array();
+        $links = [];
         if ($this->on_syntax) {
             foreach ($this->tablelinks as $link) {
-                if ($link['op'] == 'JOIN') $link['op'] = 'INNER JOIN';
+                if ($link['op'] == 'JOIN') {
+                    $link['op'] = 'INNER JOIN';
+                }
                 $links[] = $link;
             }
         } else {
             foreach ($this->tablelinks as $link) {
-                if ($link['op'] == 'INNER JOIN') $link['op'] = 'JOIN';
+                if ($link['op'] == 'INNER JOIN') {
+                    $link['op'] = 'JOIN';
+                }
                 $links[] = $link;
             }
         }
         $this->tablelinks = $links;
-        if (count($this->tables) == 0) return "*MISSING*";
+        if (count($this->tables) == 0) {
+            return "*MISSING*";
+        }
         $t = '';
         if ($this->on_syntax && count($this->tables) > 1) {
             $t .= $this->assembledtablelinks();
         } else {
             if ($this->strip_aliases && count($this->tables) == 1) {
-	        	// Simplify single table queries by removing table aliases
-				foreach ($this->tables as $table) {
-					if (is_array($table)) {
-						switch ($this->type) {
-							case "SELECT" :
-								if (empty($table['alias'])) $t .= $table['name'] . ", ";
-								else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
-								break;
-							case "INSERT" :
-								$t .= $table['name'] . " ";
-								break;
-							case "UPDATE" :
-							case "DELETE" :
-								$t .= $table['name'] . ", ";
-								break;
-						}
-					} else {
-						$t .= $table . ", ";
-					}
-				}
+                // Simplify single table queries by removing table aliases
+                foreach ($this->tables as $table) {
+                    if (is_array($table)) {
+                        switch ($this->type) {
+                            case "SELECT":
+                                if (empty($table['alias'])) {
+                                    $t .= $table['name'] . ", ";
+                                } else {
+                                    $t .= $table['name'] . " AS " . $table['alias'] . ", ";
+                                }
+                                break;
+                            case "INSERT":
+                                $t .= $table['name'] . " ";
+                                break;
+                            case "UPDATE":
+                            case "DELETE":
+                                $t .= $table['name'] . ", ";
+                                break;
+                        }
+                    } else {
+                        $t .= $table . ", ";
+                    }
+                }
             } else {
-				foreach ($this->tables as $table) {
-					if (is_array($table)) {
-						switch ($this->type) {
-							case "SELECT" :
-								if (empty($table['alias'])) $t .= $table['name'] . ", ";
-								else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
-								break;
-							case "INSERT" :
-								$t .= $table['name'] . " ";
-								break;
-							case "UPDATE" :
-							case "DELETE" :
-								if (empty($table['alias'])) $t .= $table['name'] . ", ";
-								else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
-								break;
-						}
-					} else {
-						$t .= $table . ", ";
-					}
-				}
+                foreach ($this->tables as $table) {
+                    if (is_array($table)) {
+                        switch ($this->type) {
+                            case "SELECT":
+                                if (empty($table['alias'])) {
+                                    $t .= $table['name'] . ", ";
+                                } else {
+                                    $t .= $table['name'] . " AS " . $table['alias'] . ", ";
+                                }
+                                break;
+                            case "INSERT":
+                                $t .= $table['name'] . " ";
+                                break;
+                            case "UPDATE":
+                            case "DELETE":
+                                if (empty($table['alias'])) {
+                                    $t .= $table['name'] . ", ";
+                                } else {
+                                    $t .= $table['name'] . " AS " . $table['alias'] . ", ";
+                                }
+                                break;
+                        }
+                    } else {
+                        $t .= $table . ", ";
+                    }
+                }
             }
         }
-        if ($t != "") $t = trim($t," ,");
+        if ($t != "") {
+            $t = trim($t, " ,");
+        }
         return $t;
     }
 
     private function assembledtablelinks()
     {
         // We begin with no tables or links yet processed and an empty query string
-        $tablesdone = array();
-        $linksdone = array();
+        $tablesdone = [];
+        $linksdone = [];
         $string = '';
-        
-        // Resort the links. 
+
+        // Resort the links.
         // Each successive link needs to add exactly zero or one new table to the query string
 
         // Create a stack and load it
         sys::import('xaraya.structures.sequences.stack');
         $stack = new Stack();
         $stack->load($this->tablelinks);
-        
+
         // Create a second stack for rejected links
         $stack1 = new Stack();
 
         // Process the stack
-        $sortedlinks = array();
-        while(1) {
+        $sortedlinks = [];
+        while (1) {
             // If the stack is empty then bail
-            if ($stack->size == 0) break;
-            
+            if ($stack->size == 0) {
+                break;
+            }
+
             //Get the next link
             $nextlink = $stack->pop();
 
@@ -1179,18 +1324,18 @@ class Query
             // Get the short names of the tables
             $name1 = $this->_gettablenamefromalias($fullfield1['table']);
             $name2 = $this->_gettablenamefromalias($fullfield2['table']);
-           
+
             if (!empty($tablesdone) && !isset($tablesdone[$name1]) && !isset($tablesdone[$name2])) {
                 // Neither of the tables has been processed; put aside for now
                 $stack1->push($nextlink);
             } else {
-           
+
                 // At least one of the tables has been processed; add this link to the list of sorted links
                 $sortedlinks[] = $nextlink;
-                
+
                 // Move the previously rejected keys back to the stack
                 $size = $stack1->size;
-                for ($i=1;$i<=$size;$i++) {
+                for ($i = 1;$i <= $size;$i++) {
                     $item = $stack1->pop();
                     $stack->push($item);
                 }
@@ -1200,42 +1345,45 @@ class Query
                 $tablesdone[$name2] = $name2;
             }
         }
-        
+
         // Sanity check
         if (count($sortedlinks) != count($this->tablelinks)) {
             throw new Exception($this->ml('Incorrect reordering of query links'));
         }
-            
+
         $this->tablelinks = $sortedlinks;
-                
+
         // Process each of the links in turn
-        $tablesdone = array();
+        $tablesdone = [];
         $count = count($this->tablelinks);
-//        for ($i=1;$i<$count;$i++) $string .= '(';
+        //        for ($i=1;$i<$count;$i++) $string .= '(';
         $i = 1;
         foreach ($this->tablelinks as $link) {
             // Get the names of the fields on either side of the link
             $fullfield1 = $this->_deconstructfield($link['field1']);
             $fullfield2 = $this->_deconstructfield($link['field2']);
-            
+
             // Get the short names of the tables
             $name1 = $this->_gettablenamefromalias($fullfield1['table']);
             $name2 = $this->_gettablenamefromalias($fullfield2['table']);
-            
+
             // If either of the tables has not yet been processed, add them to the query string
             // N.B.: unless we are just starting, maximum one of the two tables will be added
             if (isset($tablesdone[$fullfield1['table']])) {
                 $string .= " ";
             } else {
                 if ($i == 1) {
-					// Do not add the operation if we are just starting out
-					// In that case the second table will add it
+                    // Do not add the operation if we are just starting out
+                    // In that case the second table will add it
                 } else {
-                	// If we get here it means that the second table has already been dealt with before the first
-                	// We therefore need to reverse the direction of an OUTER JOIN
-                	if ($link['op'] == 'LEFT JOIN') $link['op'] = 'RIGHT JOIN';
-                	elseif ($link['op'] == 'RIGHT JOIN') $link['op'] = 'LEFT JOIN';
-					$string .= " " . $link['op'] . " ";
+                    // If we get here it means that the second table has already been dealt with before the first
+                    // We therefore need to reverse the direction of an OUTER JOIN
+                    if ($link['op'] == 'LEFT JOIN') {
+                        $link['op'] = 'RIGHT JOIN';
+                    } elseif ($link['op'] == 'RIGHT JOIN') {
+                        $link['op'] = 'LEFT JOIN';
+                    }
+                    $string .= " " . $link['op'] . " ";
                 }
                 // Add the table to the query string
                 $string .= $name1 . " " . $fullfield1['table'] . " ";
@@ -1256,18 +1404,18 @@ class Query
             // Add the joined fields to the query string
             // Each distinct link only once
             // Different links between the same tables are ANDs
-            if (isset($linksdone[$fullfield1['table'].':'.$fullfield2['table']])) {
+            if (isset($linksdone[$fullfield1['table'] . ':' . $fullfield2['table']])) {
                 $string .= "AND " . $link['field1'] . " " . $link['field3'] . " " . $link['field2'];
             } else {
                 $string .= "ON " . $link['field1'] . " " . $link['field3'] . " " . $link['field2'];
             }
             // Add a closing parenthesis
-//            if ($i < $count) $string .= ")";
+            //            if ($i < $count) $string .= ")";
             $i++;
-            
+
             // Add this link to those done
-            $linksdone[$fullfield1['table'].':'.$fullfield2['table']] = $link['op'];
-            
+            $linksdone[$fullfield1['table'] . ':' . $fullfield2['table']] = $link['op'];
+
         }
         return $string ;
     }
@@ -1275,147 +1423,157 @@ class Query
     private function _gettablenamefromalias($alias)
     {
         foreach ($this->tables as $table) {
-            if ($table['alias'] == $alias) return $table['name'];
+            if ($table['alias'] == $alias) {
+                return $table['name'];
+            }
         }
         return false;
     }
 
     private function assembledfields($type)
     {
-        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
+        if (!isset($this->dbconn)) {
+            $this->dbconn = $this->getDbConn();
+        }
         $f = "";
         $this->bindstring = "";
         switch ($this->type) {
-        case "SELECT" :
-            if (count($this->fields) == 0) {
+            case "SELECT":
+                if (count($this->fields) == 0) {
+                    if (!empty($this->distinctarray)) {
+                        $this->fields = $this->distinctarray;
+                    } else {
+                        return "*";
+                    }
+                }
                 if (!empty($this->distinctarray)) {
-                    $this->fields = $this->distinctarray;
-                } else {
-                    return "*";
-                }
-            } 
-            if (!empty($this->distinctarray)) {
-                $fields = array();
-                $flag = false;
-                $distinct = "";
-                foreach ($this->fields as $field) {
-                    if ((($field['name'] == $this->distinctarray['name']) && ($field['table'] == $this->distinctarray['table'])) || ($field['alias'] == $this->distinctarray['name'])) {
-                        $distinct = $field;
-                    } else {
-                        $fields[] = $field;
-                    }
-                }
-                $this->bindstring .= "DISTINCT ";
-                if (!empty($distinct)) {
-                    $this->bindstring .= $this->_reconstructfield($distinct) . ", ";
-                    $distinct['alias'] = "";
-                    $this->distinctname = $this->_reconstructfield($distinct);               
-                }
-            } else {
-                $fields = $this->fields;
-            }
-            foreach ($fields as $field) {
-                if (is_array($field)) {
-                    $this->bindstring .= $this->_reconstructfield($field);
-                }
-                else {
-                    $this->bindstring .= $field;
-                }
-                $this->bindstring .= ", ";
-            }
-            if ($this->bindstring != "") $this->bindstring = trim($this->bindstring," ,");
-            break;
-        case "INSERT" :
-            $this->bindstring .= " (";
-            $names = '';
-            $values = '';
-            $bindvalues = '';
-            foreach ($this->fields as $field) {
-                if (is_array($field)) {
-                    if(isset($field['name'])) {
-                        $names .= $field['name'] . ", ";
-                        if(isset($field['value'])) {
-                            if ($this->usebinding) {
-                                $bindvalues .= "?, ";
-                                $this->bindvars[] = $field['value'];
-                            } else {
-                                if (!is_numeric($field['value'])) {
-                                    $sqlfield = $this->dbconn->qstr($field['value']);
-                                } else {
-                                    $sqlfield = $field['value'];
-                                }
-                                $values .= $sqlfield . ", ";
-                            }
+                    $fields = [];
+                    $flag = false;
+                    $distinct = "";
+                    foreach ($this->fields as $field) {
+                        if ((($field['name'] == $this->distinctarray['name']) && ($field['table'] == $this->distinctarray['table'])) || ($field['alias'] == $this->distinctarray['name'])) {
+                            $distinct = $field;
                         } else {
-                            if ($this->usebinding) {
-                                $bindvalues .= "?, ";
-                                $this->bindvars[] = NULL;
-                            } else {
-                                $values .= "NULL, ";
-                            }
+                            $fields[] = $field;
                         }
-                    } else {
-                        throw new BadParameterException(null, $this->ml('The current field is missing a name'));
                     }
+                    $this->bindstring .= "DISTINCT ";
+                    if (!empty($distinct)) {
+                        $this->bindstring .= $this->_reconstructfield($distinct) . ", ";
+                        $distinct['alias'] = "";
+                        $this->distinctname = $this->_reconstructfield($distinct);
+                    }
+                } else {
+                    $fields = $this->fields;
                 }
-                else {
-                    throw new BadParameterException(null, $this->ml('The field #(1) is not an array:', $field));
+                foreach ($fields as $field) {
+                    if (is_array($field)) {
+                        $this->bindstring .= $this->_reconstructfield($field);
+                    } else {
+                        $this->bindstring .= $field;
+                    }
+                    $this->bindstring .= ", ";
                 }
-            }
-            $names = substr($names,0,strlen($names)-2);
-            if ($this->usebinding) {
-                $bindvalues = substr($bindvalues,0,strlen($bindvalues)-2);
-                $this->bindstring .= $names . ") VALUES (" . $bindvalues . ")";
-            } else {
-                $values = substr($values,0,strlen($values)-2);
-                $this->bindstring .= $names . ") VALUES (" . $values . ")";
-            }
-            break;
-        case "UPDATE" :
-            if($this->fields == array('*')) {
-                throw new BadParameterException(null, $this->ml('Your query has no fields.'));
-            }
-            foreach ($this->fields as $field) {
-                if (is_array($field)) {
-                    if(isset($field['name'])) {
-                        if(isset($field['value'])) {
-                            if (is_array($field['value'])) throw new BadParameterException(null, $this->ml('The value of field #(1) is an array.', $field['name']));
-                            // Turn off binding if we have an expression for the value (such as another field)
-                            if(substr($field['value'],0,1) == '&') $this->usebinding = false;
-                            if ($this->usebinding) {
-                                $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
-                                $this->bindvars[] = $field['value'];
-                            } else {
-                                if (!is_numeric($field['value']) && (substr($field['value'],0,1) != '&')) {
-                                    $sqlfield = $this->dbconn->qstr($field['value']);
+                if ($this->bindstring != "") {
+                    $this->bindstring = trim($this->bindstring, " ,");
+                }
+                break;
+            case "INSERT":
+                $this->bindstring .= " (";
+                $names = '';
+                $values = '';
+                $bindvalues = '';
+                foreach ($this->fields as $field) {
+                    if (is_array($field)) {
+                        if (isset($field['name'])) {
+                            $names .= $field['name'] . ", ";
+                            if (isset($field['value'])) {
+                                if ($this->usebinding) {
+                                    $bindvalues .= "?, ";
+                                    $this->bindvars[] = $field['value'];
                                 } else {
-                                    if(substr($field['value'],0,1) == '&') {
-                                        $sqlfield = substr($field['value'],1);
+                                    if (!is_numeric($field['value'])) {
+                                        $sqlfield = $this->dbconn->qstr($field['value']);
                                     } else {
                                         $sqlfield = $field['value'];
                                     }
+                                    $values .= $sqlfield . ", ";
                                 }
-                                $this->bindstring .= $this->_reconstructfield($field) . " = " . $sqlfield . ", ";
+                            } else {
+                                if ($this->usebinding) {
+                                    $bindvalues .= "?, ";
+                                    $this->bindvars[] = null;
+                                } else {
+                                    $values .= "NULL, ";
+                                }
                             }
                         } else {
-                            if ($this->usebinding) {
-                                $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
-                                $this->bindvars[] = NULL;
-                            } else {
-                                $this->bindstring .= $this->_reconstructfield($field) . " = NULL, ";
-                            }
+                            throw new BadParameterException(null, $this->ml('The current field is missing a name'));
                         }
                     } else {
-                        throw new BadParameterException(null, $this->ml('The current field is missing a name'));
+                        throw new BadParameterException(null, $this->ml('The field #(1) is not an array:', $field));
                     }
-                } else {
-                    throw new BadParameterException(null, $this->ml('The field #(1) is not an array:', $field));
                 }
-            }
-            if ($this->bindstring != "") $this->bindstring = substr($this->bindstring,0,strlen($this->bindstring)-2);
-            break;
-        case "DELETE" :
-            break;
+                $names = substr($names, 0, strlen($names) - 2);
+                if ($this->usebinding) {
+                    $bindvalues = substr($bindvalues, 0, strlen($bindvalues) - 2);
+                    $this->bindstring .= $names . ") VALUES (" . $bindvalues . ")";
+                } else {
+                    $values = substr($values, 0, strlen($values) - 2);
+                    $this->bindstring .= $names . ") VALUES (" . $values . ")";
+                }
+                break;
+            case "UPDATE":
+                if ($this->fields == ['*']) {
+                    throw new BadParameterException(null, $this->ml('Your query has no fields.'));
+                }
+                foreach ($this->fields as $field) {
+                    if (is_array($field)) {
+                        if (isset($field['name'])) {
+                            if (isset($field['value'])) {
+                                if (is_array($field['value'])) {
+                                    throw new BadParameterException(null, $this->ml('The value of field #(1) is an array.', $field['name']));
+                                }
+                                // Turn off binding if we have an expression for the value (such as another field)
+                                if (substr($field['value'], 0, 1) == '&') {
+                                    $this->usebinding = false;
+                                }
+                                if ($this->usebinding) {
+                                    $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
+                                    $this->bindvars[] = $field['value'];
+                                } else {
+                                    if (!is_numeric($field['value']) && (substr($field['value'], 0, 1) != '&')) {
+                                        $sqlfield = $this->dbconn->qstr($field['value']);
+                                    } else {
+                                        if (substr($field['value'], 0, 1) == '&') {
+                                            $sqlfield = substr($field['value'], 1);
+                                        } else {
+                                            $sqlfield = $field['value'];
+                                        }
+                                    }
+                                    $this->bindstring .= $this->_reconstructfield($field) . " = " . $sqlfield . ", ";
+                                }
+                            } else {
+                                if ($this->usebinding) {
+                                    $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
+                                    $this->bindvars[] = null;
+                                } else {
+                                    $this->bindstring .= $this->_reconstructfield($field) . " = NULL, ";
+                                }
+                            }
+                        } else {
+                            throw new BadParameterException(null, $this->ml('The current field is missing a name'));
+                        }
+                    } else {
+                        throw new BadParameterException(null, $this->ml('The field #(1) is not an array:', $field));
+                    }
+                }
+                if ($this->bindstring != "") {
+                    $this->bindstring = substr($this->bindstring, 0, strlen($this->bindstring) - 2);
+                }
+                break;
+            case "DELETE":
+                break;
         }
         return $this->bindstring;
     }
@@ -1426,15 +1584,18 @@ class Query
         $temp2 = $this->conjunctions;
         $c = "";
         if (!$this->on_syntax) {
-            foreach ($this->tablelinks as $link)
-            $o = $this->addcondition(array('field1' => $link['field1'],
-                                  'field2' => $link['field2'],
-                                  'op' => $link['op']),1);
+            foreach ($this->tablelinks as $link) {
+                $o = $this->addcondition(['field1' => $link['field1'],
+                    'field2' => $link['field2'],
+                    'op' => $link['op']], 1);
+            }
         }
 
-        if (count($this->conditions)>0) {
+        if (count($this->conditions) > 0) {
             $conditions = $this->_getconditions();
-            if (!empty($conditions)) $c = " WHERE " . $conditions;
+            if (!empty($conditions)) {
+                $c = " WHERE " . $conditions;
+            }
         }
         $this->conditions = $temp1;
         $this->conjunctions = $temp2;
@@ -1444,23 +1605,28 @@ class Query
     private function assembledgroups()
     {
         $s = "";
-        if (count($this->groups)>0) $s = " GROUP BY ";
+        if (count($this->groups) > 0) {
+            $s = " GROUP BY ";
+        }
         foreach ($this->groups as $groups) {
             if (is_array($groups)) {
                 $s .= $groups['name'] . ", ";
-            }
-            else {
+            } else {
                 // error msg
             }
         }
-        if ($s != "") $s = substr($s,0,strlen($s)-2);
+        if ($s != "") {
+            $s = substr($s, 0, strlen($s) - 2);
+        }
         return $s;
     }
 
     private function assembledhaving()
     {
         $s = "";
-        if (count($this->having)>0) $s = " HAVING ";
+        if (count($this->having) > 0) {
+            $s = " HAVING ";
+        }
         $first = true;
         foreach ($this->having as $having) {
             if (is_array($having)) {
@@ -1470,8 +1636,7 @@ class Query
                 } else {
                     $s .= $having['conjunction'] . " " . $having['expression'] . " ";
                 }
-            }
-            else {
+            } else {
                 $result = $this->ml('Incorrect HAVING clause');
                 xarCore::exit($result);
                 return;
@@ -1483,45 +1648,52 @@ class Query
     private function assembledsorts()
     {
         $s = "";
-// CHECKME: it should be impossible to not select fields, because an empty array implies *
-//        if (count($this->sorts)>0 && count($this->fields) > 0 && !isset($this->fields['COUNT(*)'])) {
-        if (count($this->sorts)>0 && !isset($this->fields['COUNT(*)'])) {
+        // CHECKME: it should be impossible to not select fields, because an empty array implies *
+        //        if (count($this->sorts)>0 && count($this->fields) > 0 && !isset($this->fields['COUNT(*)'])) {
+        if (count($this->sorts) > 0 && !isset($this->fields['COUNT(*)'])) {
             $s = " ORDER BY ";
-        foreach ($this->sorts as $sort) {
-            if (is_array($sort)) {
-                $s .= $sort['name'] . " " . $sort['order']  . ", ";
+            foreach ($this->sorts as $sort) {
+                if (is_array($sort)) {
+                    $s .= $sort['name'] . " " . $sort['order'] . ", ";
+                } else {
+                    // error msg
+                }
             }
-            else {
-                // error msg
+            if ($s != "") {
+                $s = substr($s, 0, strlen($s) - 2);
             }
-        }
-        if ($s != "") $s = substr($s,0,strlen($s)-2);
         }
         return $s;
     }
 
     private function _deconstructfield($field)
     {
-    	// A well formed field needs to be a string
-    	// Some fields are numbers or arrays, such as after IN conditions
-    	if (!is_string($field)) { throw new Exception('Field is not a string'); }
-    	
+        // A well formed field needs to be a string
+        // Some fields are numbers or arrays, such as after IN conditions
+        if (!is_string($field)) {
+            throw new Exception('Field is not a string');
+        }
+
         if (preg_match("/(.*) as (.*)/i", $field, $match)) {
             $field = trim($match[1]);
             $alias = trim($match[2]);
         }
         $pos = strpos($field, ' ');
         if ($pos !== false) {
-            $fullfield = array('name' => $field, 'table' => '');
+            $fullfield = ['name' => $field, 'table' => ''];
         } else {
-            $fieldparts = explode('.',$field);
-            if (count($fieldparts) > 1) 
-                $fullfield = array('name' => $fieldparts[1], 'table' => $fieldparts[0]);
-            else 
-                $fullfield = array('name' => $field, 'table' => '');
+            $fieldparts = explode('.', $field);
+            if (count($fieldparts) > 1) {
+                $fullfield = ['name' => $fieldparts[1], 'table' => $fieldparts[0]];
+            } else {
+                $fullfield = ['name' => $field, 'table' => ''];
+            }
         }
-        if (isset($alias)) $fullfield['alias'] = $alias;
-        else $fullfield['alias'] = '';
+        if (isset($alias)) {
+            $fullfield['alias'] = $alias;
+        } else {
+            $fullfield['alias'] = '';
+        }
         return $fullfield;
     }
 
@@ -1540,16 +1712,20 @@ class Query
      */
     private function _reconstructfield($field)
     {
-		$bindstring = "";
-		if ($this->strip_aliases && count($this->tables) == 1) {
-			// Simplify single table queries by removing table aliases
-			// Do nothing here
-		} else {
-			// Add the table to the field for a fully qualified field name
-			if(!empty($field['table'])) $bindstring .= $field['table'] . ".";
-		}
-		$bindstring .= $field['name'];
-		if (!empty($field['alias'])) $bindstring .= " AS " . $field['alias'];
+        $bindstring = "";
+        if ($this->strip_aliases && count($this->tables) == 1) {
+            // Simplify single table queries by removing table aliases
+            // Do nothing here
+        } else {
+            // Add the table to the field for a fully qualified field name
+            if (!empty($field['table'])) {
+                $bindstring .= $field['table'] . ".";
+            }
+        }
+        $bindstring .= $field['name'];
+        if (!empty($field['alias'])) {
+            $bindstring .= " AS " . $field['alias'];
+        }
         return $bindstring;
     }
 
@@ -1558,44 +1734,45 @@ class Query
         return $this->_deconstructfield($field);
     }
 
-/*
-// ------ Gets and sets and other public methods --------------------------------------------------------
-*/
+    /*
+    // ------ Gets and sets and other public methods --------------------------------------------------------
+    */
     public function addgroup($x = '')
     {
         if ($x != '') {
-            $this->groups[] = array('name' => $x);
+            $this->groups[] = ['name' => $x];
         }
     }
     public function addgroups($x = '')
     {
         if (!empty($x)) {
-        	$groups = explode(',', $x);
-        	foreach ($groups as $group) {
-	            $this->groups[] = array('name' => trim($group));
-        	}
+            $groups = explode(',', $x);
+            foreach ($groups as $group) {
+                $this->groups[] = ['name' => trim($group)];
+            }
         }
     }
     public function addorder($x = '', $y = 'ASC')
     {
         if ($x != '') {
-            $this->sorts[] = array('name' => $x, 'order' => $y);
+            $this->sorts[] = ['name' => $x, 'order' => $y];
         }
     }
     public function bindstatement()
     {
-        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
-        $pieces = explode('?',$this->statement);
+        if (!isset($this->dbconn)) {
+            $this->dbconn = $this->getDbConn();
+        }
+        $pieces = explode('?', $this->statement);
         $bound = $pieces[0];
         $limit = count($pieces);
-        for ($i=1;$i<$limit;$i++){
-            if (!isset($this->bindvars[$i-1])) {
+        for ($i = 1;$i < $limit;$i++) {
+            if (!isset($this->bindvars[$i - 1])) {
                 $sqlfield = 'NULL';
-            } elseif (!is_numeric($this->bindvars[$i-1])) {
-                $sqlfield = $this->dbconn->qstr($this->bindvars[$i-1]);
-            }
-            else {
-                $sqlfield = $this->bindvars[$i-1];
+            } elseif (!is_numeric($this->bindvars[$i - 1])) {
+                $sqlfield = $this->dbconn->qstr($this->bindvars[$i - 1]);
+            } else {
+                $sqlfield = $this->bindvars[$i - 1];
             }
             $bound .= $sqlfield . $pieces[$i];
         }
@@ -1603,8 +1780,8 @@ class Query
     }
     public function clearconditions()
     {
-        $this->conditions = array();
-        $this->conjunctions = array();
+        $this->conditions = [];
+        $this->conjunctions = [];
 
         // Update the ID for this query
         $this->id = $this->createID();
@@ -1614,41 +1791,40 @@ class Query
         // Get the key of the last condition
         end($this->conditions);
         $last_key = key($this->conditions);
-        
+
         // Remove the condition from the array of conditions
         array_pop($this->conditions);
 
         // Remove the condition entry from the conjunctions array
         foreach ($this->conjunctions as $k => $v) {
-        	if ($v['conditions'] == $last_key) {
-        		unset($this->conjunctions[$k]);
-        		break;
-        	}
+            if ($v['conditions'] == $last_key) {
+                unset($this->conjunctions[$k]);
+                break;
+            }
         }
     }
     public function clearfield($x)
     {
         $count = count($this->fields);
-        for ($i=0;$i<$count;$i++) {
+        for ($i = 0;$i < $count;$i++) {
             if (($this->fields[$i]['name'] == $x)) {
                 unset($this->fields[$i]);
-            }
-            elseif (isset($this->fields[$i]['alias']) && ($this->fields[$i]['alias'] == $x)) {
+            } elseif (isset($this->fields[$i]['alias']) && ($this->fields[$i]['alias'] == $x)) {
                 unset($this->fields[$i]);
             }
         }
     }
     public function clearfields()
     {
-        $this->fields = array();
+        $this->fields = [];
     }
     public function clearsorts()
     {
-        $this->sorts = array();
+        $this->sorts = [];
     }
     public function cleartables()
     {
-        $this->tables = array();
+        $this->tables = [];
     }
     public function result()
     {
@@ -1656,19 +1832,29 @@ class Query
     }
     public function clearresult()
     {
-        $this->result = NULL;
-        $this->output = NULL;
+        $this->result = null;
+        $this->output = null;
     }
     public function getconnection()
     {
-        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
+        if (!isset($this->dbconn)) {
+            $this->dbconn = $this->getDbConn();
+        }
         return $this->dbconn;
     }
-    public function getorder($x='')
+    public function getorder($x = '')
     {
-        if ($this->sorts == array()) return false;
-        if ($x == '') return $this->sorts[0]['name'];
-        foreach ($this->sorts as $order) if ($order[0] == $x) return $order;
+        if ($this->sorts == []) {
+            return false;
+        }
+        if ($x == '') {
+            return $this->sorts[0]['name'];
+        }
+        foreach ($this->sorts as $order) {
+            if ($order[0] == $x) {
+                return $order;
+            }
+        }
         return false;
     }
     public function getpagerows()
@@ -1681,21 +1867,27 @@ class Query
     }
     public function getrows()
     {
-        if (isset($this->output) && $this->rowstodo == 0) return count($this->output);
-        if ($this->optimize == true) $this->optimize();
+        if (isset($this->output) && $this->rowstodo == 0) {
+            return count($this->output);
+        }
+        if ($this->optimize == true) {
+            $this->optimize();
+        }
         if ($this->type == 'SELECT' && $this->rowstodo != 0 && $this->limits == 1) {
-            if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
+            if (!isset($this->dbconn)) {
+                $this->dbconn = $this->getDbConn();
+            }
             if ($this->israwstatement) {
                 $temp1 = $this->rowstodo;
                 $temp2 = $this->startat;
                 $this->rowstodo = 0;
                 $this->startat = 0;
-//                $this->setstatement();
+                //                $this->setstatement();
                 $result = $this->dbconn->Execute($this->statement);
                 $this->rows = $result->getRecordCount();
                 $this->rowstodo = $temp1;
                 $this->startat = $temp2;
-// TODO: there must be a better way to do this
+                // TODO: there must be a better way to do this
             } elseif (count($this->groups) > 0) {
                 $temp1 = $this->rowstodo;
                 $temp2 = $this->usebinding;
@@ -1714,16 +1906,20 @@ class Query
                 $temp3 = $this->usebinding;
                 $this->usebinding = 0;
                 $temp4 = $this->distinctarray;
-                $this->distinctarray = array();
-                if (!empty($this->distinctname)) $this->addfield('COUNT(DISTINCT ' . $this->distinctname. ')');
-                else $this->addfield('COUNT(*)');
+                $this->distinctarray = [];
+                if (!empty($this->distinctname)) {
+                    $this->addfield('COUNT(DISTINCT ' . $this->distinctname . ')');
+                } else {
+                    $this->addfield('COUNT(*)');
+                }
                 $this->setstatement();
                 $result = $this->dbconn->Execute($this->statement);
-                list($this->rows) = array_values($result->fields);
+                [$this->rows] = array_values($result->fields);
                 $this->fields = $temp1;
                 $this->sorts = $temp2;
                 $this->usebinding = $temp3;
-                $this->distinctarray = $temp4;;
+                $this->distinctarray = $temp4;
+                ;
                 $this->setstatement();
             }
         }
@@ -1733,11 +1929,19 @@ class Query
     {
         return $this->rowstodo;
     }
-    public function getsort($x='')
+    public function getsort($x = '')
     {
-        if ($this->sorts == array()) return false;
-        if ($x == '') return $this->sorts[0]['order'];
-        foreach ($this->sorts as $order) if ($order[0] == $x) return $order;
+        if ($this->sorts == []) {
+            return false;
+        }
+        if ($x == '') {
+            return $this->sorts[0]['order'];
+        }
+        foreach ($this->sorts as $order) {
+            if ($order[0] == $x) {
+                return $order;
+            }
+        }
         return false;
     }
     public function getstartat()
@@ -1746,7 +1950,9 @@ class Query
     }
     public function getstatement(): string
     {
-        if ($this->usebinding) $this->bindstatement();
+        if ($this->usebinding) {
+            $this->bindstatement();
+        }
         return $this->statement;
     }
     public function getto()
@@ -1761,37 +1967,49 @@ class Query
     {
         return $this->version;
     }
-    public function lastid($table="", $id="")
+    public function lastid($table = "", $id = "")
     {
-        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
-        $parts = explode('.',$id);
-        $field = isset($parts[1]) ? $parts[1] : $parts[0];
+        if (!isset($this->dbconn)) {
+            $this->dbconn = $this->getDbConn();
+        }
+        $parts = explode('.', $id);
+        $field = $parts[1] ?? $parts[0];
         $table = isset($parts[1]) ? $parts[0] : $table;
         $result = $this->dbconn->Execute("SELECT MAX($field) FROM $table");
         $result->first();
-        list($id) = $result->fields;
-        return (int)$id;
+        [$id] = $result->fields;
+        return (int) $id;
     }
     /** @deprecated 2.2.0 no longer supported - try lastid() after insert if needed */
-    public function nextid($table="", $id="")
+    public function nextid($table = "", $id = "")
     {
-        if (!isset($this->dbconn)) $this->dbconn = $this->getDbConn();
-        return $this->dbconn->PO_Insert_ID($table,$id);
+        if (!isset($this->dbconn)) {
+            $this->dbconn = $this->getDbConn();
+        }
+        return $this->dbconn->PO_Insert_ID($table, $id);
     }
     public function openconnection($x = '')
     {
-        if (empty($x)) $this->dbconn = $this->getDbConn();
-        else $this->dbconn = $x;
+        if (empty($x)) {
+            $this->dbconn = $this->getDbConn();
+        } else {
+            $this->dbconn = $x;
+        }
     }
-    public function qecho($statement='')
+    public function qecho($statement = '')
     {
-        if (empty($statement)) echo $this->tostring();
-        else echo $statement;
+        if (empty($statement)) {
+            echo $this->tostring();
+        } else {
+            echo $statement;
+        }
     }
     public function sessiongetvar($x)
     {
         $q = xarSession::getVar($x);
-        if (empty($q)) return;
+        if (empty($q)) {
+            return;
+        }
         $this->open();
         return $this;
     }
@@ -1804,7 +2022,7 @@ class Query
     public function setdistinct($x = 1)
     {
         if ($x == 1) {
-        	$this->distinctselect = '';
+            $this->distinctselect = '';
         } else {
             $this->distinctselect = $x;
             $this->distinctarray = $this->_deconstructfield($x);
@@ -1813,15 +2031,15 @@ class Query
     public function setgroup($x = '')
     {
         if ($x != '') {
-            $this->groups = array();
+            $this->groups = [];
             $this->addgroup($x);
         }
     }
-    public function setorder($x = '',$y = 'ASC')
+    public function setorder($x = '', $y = 'ASC')
     {
         if ($x != '') {
-            $this->sorts = array();
-            $this->addorder($x,$y);
+            $this->sorts = [];
+            $this->addorder($x, $y);
         }
     }
     public function setrowstodo($x = 0)
@@ -1832,15 +2050,14 @@ class Query
     {
         $this->startat = $x;
     }
-    public function setstatement($statement='')
+    public function setstatement($statement = '')
     {
         if (!empty($statement)) {
             $this->israwstatement = true;
             $this->statement = $statement;
-            $st = explode(" ",$statement);
+            $st = explode(" ", $statement);
             $this->type = strtoupper($st[0]);
-        }
-        else {
+        } else {
             $this->israwstatement = false;
             $this->statement = $this->_statement();
         }
@@ -1878,11 +2095,13 @@ class Query
     }
     public function addconditions($q)
     {
-        if ($q->gettype() != $this->gettype()) return false;
+        if ($q->gettype() != $this->gettype()) {
+            return false;
+        }
 
         // Shift all the keys of the new conditions by $this->key to avoid conflicts
         $newkey = $this->key;
-        
+
         foreach ($q->conditions as $key => $value) {
             $this->conditions[$key + $this->key] = $value;
             $newkey++;
@@ -1891,7 +2110,9 @@ class Query
         foreach ($q->conjunctions as $key => $value) {
             if (is_array($value['conditions'])) {
                 // We have nested conditions
-                foreach ($value['conditions'] as $k => $v) $value['conditions'][$k] = $v + $this->key;
+                foreach ($value['conditions'] as $k => $v) {
+                    $value['conditions'][$k] = $v + $this->key;
+                }
             } else {
                 $value['conditions'] = $value['conditions'] + $this->key;
             }
@@ -1902,19 +2123,33 @@ class Query
     }
     public function addsorts($q)
     {
-        if ($q->gettype() != $this->gettype()) return false;
-        foreach ($q->sorts as $sort) $this->addorder($sort['name'],$sort['order']);
+        if ($q->gettype() != $this->gettype()) {
+            return false;
+        }
+        foreach ($q->sorts as $sort) {
+            $this->addorder($sort['name'], $sort['order']);
+        }
     }
     public function unite($q1, $q2)
     {
-        if ($q1->gettype() != $q2->gettype()) return false;
+        if ($q1->gettype() != $q2->gettype()) {
+            return false;
+        }
         $this->fields = $q1->fields;
         $this->fields = array_merge($this->fields, $q2->fields);
         $conditions = $q1->getconditions();
-        foreach ($q1->conditions as $key => $value) $this->conditions[$key] = $value;
-        foreach ($q2->conditions as $key => $value) $this->conditions[$key] = $value;
-        foreach ($q1->conjunctions as $key => $value) $this->conjunctions[$key] = $value;
-        foreach ($q2->conjunctions as $key => $value) $this->conjunctions[$key] = $value;
+        foreach ($q1->conditions as $key => $value) {
+            $this->conditions[$key] = $value;
+        }
+        foreach ($q2->conditions as $key => $value) {
+            $this->conditions[$key] = $value;
+        }
+        foreach ($q1->conjunctions as $key => $value) {
+            $this->conjunctions[$key] = $value;
+        }
+        foreach ($q2->conjunctions as $key => $value) {
+            $this->conjunctions[$key] = $value;
+        }
         return $this;
     }
     public function getwhereclause()
@@ -1923,7 +2158,8 @@ class Query
         $this->setusebinding(false);
         $clause = $this->assembledconditions();
         $this->setusebinding($bind);
-        return substr($clause, 6);;
+        return substr($clause, 6);
+        ;
     }
     public function setconditions($q)
     {
@@ -1933,49 +2169,69 @@ class Query
         // Update the ID for this query
         $this->id = $this->createID();
     }
-    public function seteqop($x='=')
+    public function seteqop($x = '=')
     {
-        if( in_array($x,array('=','eq'))) $this->eqoperator = $x;
+        if (in_array($x, ['=','eq'])) {
+            $this->eqoperator = $x;
+        }
     }
-    public function setneop($x='!=')
+    public function setneop($x = '!=')
     {
-        if(in_array($x, array('!=','ne'))) $this->neoperator = $x;
+        if (in_array($x, ['!=','ne'])) {
+            $this->neoperator = $x;
+        }
     }
-    public function setgtop($x='>')
+    public function setgtop($x = '>')
     {
-        if(in_array($x, array('>','gt'))) $this->gtoperator = $x;
+        if (in_array($x, ['>','gt'])) {
+            $this->gtoperator = $x;
+        }
     }
-    public function setgeop($x='>=')
+    public function setgeop($x = '>=')
     {
-        if(in_array($x, array('>=','ge'))) $this->geoperator = $x;
+        if (in_array($x, ['>=','ge'])) {
+            $this->geoperator = $x;
+        }
     }
-    public function setltop($x='<')
+    public function setltop($x = '<')
     {
-        if(in_array($x, array('<','lt'))) $this->ltoperator = $x;
+        if (in_array($x, ['<','lt'])) {
+            $this->ltoperator = $x;
+        }
     }
-    public function setleop($x='<=')
+    public function setleop($x = '<=')
     {
-        if(in_array($x, array('<=','le'))) $this->geoperator = $x;
+        if (in_array($x, ['<=','le'])) {
+            $this->geoperator = $x;
+        }
     }
-    public function setbinding($x=true)
+    public function setbinding($x = true)
     {
         $this->usebinding = $x;
     }
-    public function setoptimize($x=true)
+    public function setoptimize($x = true)
     {
         $this->optimize = $x;
     }
-    public function setorop($x='OR')
+    public function setorop($x = 'OR')
     {
         $temp = $this->oroperator;
-        if(in_array($x, array('or','OR'))) $this->oroperator = $x;
-        if($this->implicitconjunction == $temp) $this->implicitconjunction = $x;
+        if (in_array($x, ['or','OR'])) {
+            $this->oroperator = $x;
+        }
+        if ($this->implicitconjunction == $temp) {
+            $this->implicitconjunction = $x;
+        }
     }
-    public function setandop($x='AND')
+    public function setandop($x = 'AND')
     {
         $temp = $this->andoperator;
-        if(in_array($x, array('and','AND'))) $this->andoperator = $x;
-        if($this->implicitconjunction == $temp) $this->implicitconjunction = $x;
+        if (in_array($x, ['and','AND'])) {
+            $this->andoperator = $x;
+        }
+        if ($this->implicitconjunction == $temp) {
+            $this->implicitconjunction = $x;
+        }
     }
     public function setalphaoperators()
     {
@@ -1992,7 +2248,7 @@ class Query
         $this->setandop('and');
         $this->setorop('or');
     }
-    
+
     public function present()
     {
         $string = '';
@@ -2004,10 +2260,10 @@ class Query
         foreach ($this->tablelinks as $link) {
             $string .= "field1 = " . $link['field1'] . ", field2 = " . $link['field2'] . "<br/>";
         }
-//        $string .= "Bindings: <br />";
-//        foreach ($this->bindings as $binding) {
-//            $string .= "field1 = " . $binding['field1'] . ", field2 = " . $binding['field2'] . "<br/>";
-//        }
+        //        $string .= "Bindings: <br />";
+        //        foreach ($this->bindings as $binding) {
+        //            $string .= "field1 = " . $binding['field1'] . ", field2 = " . $binding['field2'] . "<br/>";
+        //        }
         $string .= "Fields: <br />";
         foreach ($this->fields as $field) {
             $string .= "name = " . $field['name'] . ", alias = " . $field['alias'] . ", table = " . $field['table'] . ", value = " . $field['value'] . "<br/>";
@@ -2015,7 +2271,7 @@ class Query
         echo $string;
     }
 
-    public function setdebug($debugflag=1)
+    public function setdebug($debugflag = 1)
     {
         if ($debugflag && xarUser::isDebugAdmin()) {
             $this->debugflag = true;
@@ -2025,94 +2281,126 @@ class Query
         }
     }
 
-/*
- * This method removes tables from the query that we don't need
- * Approach: identify all the relevant tables, then what is left is those we don't need
- * Relevant tables:
- * - those with fields that are being queried
- * - those with fields that are in the conditions
- * - those with more than 1 link
-*/
+    /*
+     * This method removes tables from the query that we don't need
+     * Approach: identify all the relevant tables, then what is left is those we don't need
+     * Relevant tables:
+     * - those with fields that are being queried
+     * - those with fields that are in the conditions
+     * - those with more than 1 link
+    */
     public function optimize()
     {
         // If we don't have multiple tables, no need to optimize
-        if (count($this->tables) < 2) return true;
-        
+        if (count($this->tables) < 2) {
+            return true;
+        }
+
         // If we want ALL fields (i.e. *), no need to optimize
-        if (empty($this->fields)) return true;
-        
+        if (empty($this->fields)) {
+            return true;
+        }
+
         // Bail if we have a function here
         // CHECKME: do a match function here
         foreach ($this->fields as $field) {
-            if (strpos(strtolower($field['name']),'count(') !== false) return true;
+            if (strpos(strtolower($field['name']), 'count(') !== false) {
+                return true;
+            }
         }
-        if (empty($this->fields)) return true;
-        
-        // Put the table names in an array for processing. 
+        if (empty($this->fields)) {
+            return true;
+        }
+
+        // Put the table names in an array for processing.
         // We'll remove all the relevant tables from this array
-        $tables = array();
-        foreach ($this->tables as $table) $tables[$table['alias']] = $table['name'];
-        
+        $tables = [];
+        foreach ($this->tables as $table) {
+            $tables[$table['alias']] = $table['name'];
+        }
+
         // Check which tables the fields reference; remove those that do from the array
         foreach ($this->fields as $field) {
             if (isset($tables[$field['table']])) {
                 unset($tables[$field['table']]);
-//            } elseif (in_array($field['table'],array_values($tables)))  {
-//                $selbat = array_flip($tables);
-//                unset($tables[$selbat[$field['table']]]);
+                //            } elseif (in_array($field['table'],array_values($tables)))  {
+                //                $selbat = array_flip($tables);
+                //                unset($tables[$selbat[$field['table']]]);
             }
         }
 
-        // Check which tables the conditions reference; 
-        // We want to keep these, so remove them from the array      
+        // Check which tables the conditions reference;
+        // We want to keep these, so remove them from the array
         foreach ($this->conditions as $condition) {
             try {
                 $fullfield = $this->_deconstructfield($condition['field1']);
-                if (isset($tables[$fullfield['table']])) unset($tables[$fullfield['table']]);
-            } catch (Exception $e) {}
+                if (isset($tables[$fullfield['table']])) {
+                    unset($tables[$fullfield['table']]);
+                }
+            } catch (Exception $e) {
+            }
             try {
                 $fullfield = $this->_deconstructfield($condition['field2']);
-                if (isset($tables[$fullfield['table']])) unset($tables[$fullfield['table']]);
-            } catch (Exception $e) {}
+                if (isset($tables[$fullfield['table']])) {
+                    unset($tables[$fullfield['table']]);
+                }
+            } catch (Exception $e) {
+            }
         }
 
         // Remove any tables that have more than 1 link
-        $tablehits = array();
-        foreach ($tables as $key => $table) $tablehits[$key] = 0;
+        $tablehits = [];
+        foreach ($tables as $key => $table) {
+            $tablehits[$key] = 0;
+        }
         foreach ($this->tablelinks as $link) {
             $fullfield = $this->_deconstructfield($link['field1']);
-            if (isset($tables[$fullfield['table']])) $tablehits[$fullfield['table']] += 1;
+            if (isset($tables[$fullfield['table']])) {
+                $tablehits[$fullfield['table']] += 1;
+            }
             $fullfield = $this->_deconstructfield($link['field2']);
-            if (isset($tables[$fullfield['table']])) $tablehits[$fullfield['table']] += 1;
+            if (isset($tables[$fullfield['table']])) {
+                $tablehits[$fullfield['table']] += 1;
+            }
         }
-        foreach ($tablehits as $key => $hits) if ($hits > 1) unset($tables[$key]);
-                    
+        foreach ($tablehits as $key => $hits) {
+            if ($hits > 1) {
+                unset($tables[$key]);
+            }
+        }
+
         // What is left are the table with no fields; remove them
-        $newtables = array();
+        $newtables = [];
         foreach ($this->tables as $table) {
-            if (!isset($tables[$table['alias']])) $newtables[$table['alias']] = $table;
+            if (!isset($tables[$table['alias']])) {
+                $newtables[$table['alias']] = $table;
+            }
         }
         $this->tables = $newtables;
-        
+
         // Remove the links that contain them
-        $newlinks = array();
+        $newlinks = [];
         foreach ($this->tablelinks as $link) {
             $fullfield1 = $this->_deconstructfield($link['field1']);
             $fullfield2 = $this->_deconstructfield($link['field2']);
-            if (isset($tables[$fullfield1['table']]) || isset($tables[$fullfield2['table']])) continue;
+            if (isset($tables[$fullfield1['table']]) || isset($tables[$fullfield2['table']])) {
+                continue;
+            }
             $newlinks[] = $link;
         }
         $this->tablelinks = $newlinks;
-        
+
         // Remove the sort orders that contain them
-        $newsorts = array();
+        $newsorts = [];
         foreach ($this->sorts as $sort) {
             $fullfield = $this->_deconstructfield($sort['name']);
-            if (isset($tables[$fullfield['table']])) continue;
+            if (isset($tables[$fullfield['table']])) {
+                continue;
+            }
             $newsorts[] = $sort;
         }
         $this->sorts = $newsorts;
-        
+
         // Update the ID for this query
         $this->id = $this->createID();
 
@@ -2121,76 +2409,82 @@ class Query
 
     private function multiinsert()
     {
-# --------------------------------------------------------
-# Determine which is the primary table and field, get its value
-#
-        $parts = explode('.',$this->primary);
-        if (!isset($parts[1])) 
-            throw new Exception($this->ml('Incorrect format for primary field: missing table alias'));            
+        # --------------------------------------------------------
+        # Determine which is the primary table and field, get its value
+        #
+        $parts = explode('.', $this->primary);
+        if (!isset($parts[1])) {
+            throw new Exception($this->ml('Incorrect format for primary field: missing table alias'));
+        }
         $primarytable = $parts[0];
         $primaryfield = $parts[1];
-        
+
         $tablesource = '';
-        foreach($this->tables as $table) {
+        foreach ($this->tables as $table) {
             if ($table['alias'] == $parts[0]) {
                 $tablesource = $table['name'];
                 break;
             }
         }
         $primaryvalue = $this->lastid($tablesource, $parts[1]) + 1;
-        
-# --------------------------------------------------------
-# Get convenient arrays to track the tables, links and fields
-# Get the links we will work with; we only consider inner joins
-#
-        $tablelinks = array();
+
+        # --------------------------------------------------------
+        # Get convenient arrays to track the tables, links and fields
+        # Get the links we will work with; we only consider inner joins
+        #
+        $tablelinks = [];
         foreach ($this->tablelinks as $link) {
             // Only support INNER JOINs
             if (
-                ($this->on_syntax && $link['op'] == 'INNER JOIN') ||
-                (!$this->on_syntax && $link['op'] == 'JOIN')
-            ) $tablelinks[] = $link;
+                ($this->on_syntax && $link['op'] == 'INNER JOIN')
+                || (!$this->on_syntax && $link['op'] == 'JOIN')
+            ) {
+                $tablelinks[] = $link;
+            }
         }
-        
-# --------------------------------------------------------
-# Get the tables joined by the links and re-present them
-#
+
+        # --------------------------------------------------------
+        # Get the tables joined by the links and re-present them
+        #
         $tablestodo = $this->findInternalTables($primarytable, $tablelinks);
 
-# --------------------------------------------------------
-# Now weed out any of the links above that don't deal with these tables
-#
-        $linkstodo = array();
+        # --------------------------------------------------------
+        # Now weed out any of the links above that don't deal with these tables
+        #
+        $linkstodo = [];
         $tablekeys = array_keys($tablestodo);
         foreach ($tablelinks as $link) {
             $field1 = $this->_deconstructfield($link['field1']);
             $field2 = $this->_deconstructfield($link['field2']);
-            if (in_array($field1['table'],$tablekeys) || in_array($field2['table'],$tablekeys))
+            if (in_array($field1['table'], $tablekeys) || in_array($field2['table'], $tablekeys)) {
                 $linkstodo[] = $link;
+            }
         }
 
-# --------------------------------------------------------
-# Finally get all the fields we'll be working with
-#
-        $fieldstodo = array();
-        foreach ($this->fields as $field) $fieldstodo[$field['table'] . '.' . $field['name']] = $field;
+        # --------------------------------------------------------
+        # Finally get all the fields we'll be working with
+        #
+        $fieldstodo = [];
+        foreach ($this->fields as $field) {
+            $fieldstodo[$field['table'] . '.' . $field['name']] = $field;
+        }
 
-# --------------------------------------------------------
-# Assign values to all the link fields where we can
-# At the end of this process we will have linkfields with either values at both ends of the link
-# or no values. In the latter case the code will just insert the next possible value, as such cases
-# must involve at least one primary key.
-#
+        # --------------------------------------------------------
+        # Assign values to all the link fields where we can
+        # At the end of this process we will have linkfields with either values at both ends of the link
+        # or no values. In the latter case the code will just insert the next possible value, as such cases
+        # must involve at least one primary key.
+        #
         $linkstoprocess = $linkstodo;
-        $temp = array();
-        
+        $temp = [];
+
         $fieldstodonames = array_keys($fieldstodo);
         while (count($linkstoprocess)) {
             $linkpair = reset($linkstoprocess);
-            if (in_array($linkpair['field1'],$fieldstodonames)) {
+            if (in_array($linkpair['field1'], $fieldstodonames)) {
                 $temp[$linkpair['field1']] = $fieldstodo[$linkpair['field1']]['value'];
                 $temp[$linkpair['field2']] = $temp[$linkpair['field1']];
-            } elseif (in_array($linkpair['field2'],$fieldstodonames)) {
+            } elseif (in_array($linkpair['field2'], $fieldstodonames)) {
                 $temp[$linkpair['field2']] = $fieldstodo[$linkpair['field2']]['value'];
                 $temp[$linkpair['field1']] = $temp[$linkpair['field2']];
             } elseif (($linkpair['field1'] == $this->primary)) {
@@ -2198,24 +2492,26 @@ class Query
             } elseif (($linkpair['field2'] == $this->primary)) {
                 $temp[$linkpair['field1']] = $primaryvalue;
             }
-            array_shift($linkstoprocess);            
+            array_shift($linkstoprocess);
         }
 
-        $linkfields = array();
+        $linkfields = [];
         foreach ($temp as $key => $value) {
             $parts = $this->_deconstructfield($key);
-            $linkfields[$parts['table']][$parts['table'] . "." . $parts['name']] = array('name' => $parts['name'], 'table' => $parts['table'], 'value' => $value);
+            $linkfields[$parts['table']][$parts['table'] . "." . $parts['name']] = ['name' => $parts['name'], 'table' => $parts['table'], 'value' => $value];
         }
 
-# --------------------------------------------------------
-# Set up an array which holds the number of links per table
-#
-        $tablequeue = array();
-        foreach ($tablestodo as $table) $tablequeue[$table['alias']] = 0;
+        # --------------------------------------------------------
+        # Set up an array which holds the number of links per table
+        #
+        $tablequeue = [];
+        foreach ($tablestodo as $table) {
+            $tablequeue[$table['alias']] = 0;
+        }
 
-# --------------------------------------------------------
-# Go through the tables, running an insert for each and its fields
-#
+        # --------------------------------------------------------
+        # Go through the tables, running an insert for each and its fields
+        #
         while (count($tablestodo)) {
             foreach ($linkstodo as $link) {
                 // This link is not present in the insert fields
@@ -2226,48 +2522,56 @@ class Query
                 if (!isset($fieldstodo[$link['field2']])) {
                     $fulllink = $this->_deconstructfield($link['field2']);
                     $tablequeue[$fulllink['table']] += 1;
-                }            
+                }
             }
 
-# --------------------------------------------------------
-# Now pick up the table to run an insert on
-# Look for a table with 1 link, saving the primary table for last
-#
+            # --------------------------------------------------------
+            # Now pick up the table to run an insert on
+            # Look for a table with 1 link, saving the primary table for last
+            #
             foreach ($tablequeue as $alias => $hits) {
                 if (($hits == 1) && ($alias != $primarytable)) {
                     $thistable = $tablestodo[$alias];
                     break;
                 }
             }
-# --------------------------------------------------------
-# Sanity check: do we still have our primary table?
-#
-            if (!isset($tablestodo[$primarytable])) throw new Exception($this->ml('Primary table #(1) no longer available!', $primarytable ));
-            
-# --------------------------------------------------------
-# If we found nothing we must be almost finished: run an insert on the primary table
-#
-            if (empty($thistable)) $thistable = $tablestodo[$primarytable];
+            # --------------------------------------------------------
+            # Sanity check: do we still have our primary table?
+            #
+            if (!isset($tablestodo[$primarytable])) {
+                throw new Exception($this->ml('Primary table #(1) no longer available!', $primarytable));
+            }
 
-# --------------------------------------------------------
-# Run an insert
-#
-            $theselinks = isset($linkfields[$thistable['alias']]) ? $linkfields[$thistable['alias']] : array();
+            # --------------------------------------------------------
+            # If we found nothing we must be almost finished: run an insert on the primary table
+            #
+            if (empty($thistable)) {
+                $thistable = $tablestodo[$primarytable];
+            }
+
+            # --------------------------------------------------------
+            # Run an insert
+            #
+            $theselinks = $linkfields[$thistable['alias']] ?? [];
             try {
-                $fieldsdone = $this->partialinsert($thistable,$fieldstodo,$theselinks);
-            } catch (Exception $e) {throw $e;}
-            
-# --------------------------------------------------------
-# We've run the insert for this table, remove it from the list of todos
-#
-            unset($tablestodo[$thistable['alias']]);
-            $tablequeue = array();
-            foreach ($tablestodo as $table) $tablequeue[$table['alias']] = 0;
+                $fieldsdone = $this->partialinsert($thistable, $fieldstodo, $theselinks);
+            } catch (Exception $e) {
+                throw $e;
+            }
 
-# --------------------------------------------------------
-# Now check the field links for links to other tables
-#
-            $newlinks = array();
+            # --------------------------------------------------------
+            # We've run the insert for this table, remove it from the list of todos
+            #
+            unset($tablestodo[$thistable['alias']]);
+            $tablequeue = [];
+            foreach ($tablestodo as $table) {
+                $tablequeue[$table['alias']] = 0;
+            }
+
+            # --------------------------------------------------------
+            # Now check the field links for links to other tables
+            #
+            $newlinks = [];
             foreach ($linkstodo as $link) {
                 $fulllink = $this->_deconstructfield($link['field1']);
                 if (isset($fieldsdone[$fulllink['name']]) && $fulllink['table'] == $thistable['alias']) {
@@ -2283,93 +2587,102 @@ class Query
                     $fieldstodo[$link['field1']] = $fulllink1;
                     break;
                 }
-                
+
                 // This link was not involved in the last insert; pass it on
                 $newlinks[] = $link;
             }
             $linkstodo = $newlinks;
             $thistable = '';
-            
+
         }
         return true;
     }
-    
-    private function partialinsert($table=array(), $fieldstodo=array(),$linkfields=array())
+
+    private function partialinsert($table = [], $fieldstodo = [], $linkfields = [])
     {
-# --------------------------------------------------------
-# Create an insert query based on this table
-#
+        # --------------------------------------------------------
+        # Create an insert query based on this table
+        #
         $q = new Query('INSERT');
         $q->tables[] = $table;
-        
-# --------------------------------------------------------
-# Pick out the fields that are in this table
-#
-        $fieldsdone = array();
+
+        # --------------------------------------------------------
+        # Pick out the fields that are in this table
+        #
+        $fieldsdone = [];
         foreach ($fieldstodo as $key => $field) {
-# --------------------------------------------------------
-# Ignore the fields of other tables
-#
-            if ($field['table'] != $table['alias']) continue;
-            
-# --------------------------------------------------------
-# If we used the %next% keyword, get the next itemid
-#
+            # --------------------------------------------------------
+            # Ignore the fields of other tables
+            #
+            if ($field['table'] != $table['alias']) {
+                continue;
+            }
+
+            # --------------------------------------------------------
+            # If we used the %next% keyword, get the next itemid
+            #
             if ($fieldstodo[$key]['value'] === '%next%') {
                 $fieldstodo[$key]['value'] = $q->lastid($table['name'], $field['name']) + 1;
             }
-# --------------------------------------------------------
-# Add it to this query
-#
-            $q->fields[] =& $fieldstodo[$key];
-            $fieldsdone[$key] =& $fieldstodo[$key];
+            # --------------------------------------------------------
+            # Add it to this query
+            #
+            $q->fields[] = & $fieldstodo[$key];
+            $fieldsdone[$key] = & $fieldstodo[$key];
         }
 
-# --------------------------------------------------------
-# Now add the link fields from this table, only if it hasn't already been added
-#
+        # --------------------------------------------------------
+        # Now add the link fields from this table, only if it hasn't already been added
+        #
         foreach ($linkfields as $key => $field) {
             // If we used the %next% keyword, get the next itemid
             if ($linkfields[$key]['value'] === '%next%') {
                 $linkfields[$key]['value'] = $q->lastid($table['name'], $field['name']) + 1;
             }
-            if (!isset($fieldsdone[$key])) $q->fields[] = $linkfields[$key];
+            if (!isset($fieldsdone[$key])) {
+                $q->fields[] = $linkfields[$key];
+            }
         }
 
-# --------------------------------------------------------
-# Run the insert on this table
-#
+        # --------------------------------------------------------
+        # Run the insert on this table
+        #
         try {
             $q->run();
         } catch (Exception $e) {
             $msg = 'Failed to execute: ' . $q->tostring();
             throw new Exception($msg);
         }
-                
-# --------------------------------------------------------
-# Try to retrieve the record we just inserted
-#
+
+        # --------------------------------------------------------
+        # Try to retrieve the record we just inserted
+        #
         $dbInfo = $this->dbconn->getDatabaseInfo();
         $tableobject = $dbInfo->getTable($table['name']);
         $primarykey = $tableobject->getPrimaryKey()->getName();
-        if (empty($primarykey))
+        if (empty($primarykey)) {
             throw new Exception($this->ml('Unable to retrieve primary key'));
+        }
 
         $itemid = $q->lastid($table['name'], $primarykey);
-        $q = new Query('SELECT',$table['name']);
+        $q = new Query('SELECT', $table['name']);
         $q->eq($primarykey, $itemid);
-        if (!$q->run()) return false;
-        
-# --------------------------------------------------------
-# Return the array of the fields we used for this insert and their values
-#
+        if (!$q->run()) {
+            return false;
+        }
+
+        # --------------------------------------------------------
+        # Return the array of the fields we used for this insert and their values
+        #
         return $q->row();
     }
-    
-    private function findInternalTables($primarytable, $linkstodo) 
+
+    private function findInternalTables($primarytable, $linkstodo)
     {
         $temp = [];
-        foreach ($this->tables as $table) $temp[$table['alias']] = $table;
+        foreach ($this->tables as $table) {
+            $temp[$table['alias']] = $table;
+        }
         $tables[$primarytable] = $temp[$primarytable];
         $links = $linkstodo;
 
@@ -2378,21 +2691,21 @@ class Query
             $field1 = $this->_deconstructfield($linkpair['field1']);
             $field2 = $this->_deconstructfield($linkpair['field2']);
 
-            if (in_array($field1['table'],array_keys($tables))) {
+            if (in_array($field1['table'], array_keys($tables))) {
                 $tables[$field2['table']] = $temp[$field2['table']];
-            } elseif (in_array($field2['table'],array_keys($tables))) {
+            } elseif (in_array($field2['table'], array_keys($tables))) {
                 $tables[$field1['table']] = $temp[$field1['table']];
             }
-            array_shift($links);            
+            array_shift($links);
         }
         return $tables;
     }
-    
-    public function suppressTable($thistable) 
+
+    public function suppressTable($thistable)
     {
         // Support both table names and aliases
-        $tablenames = array();
-        
+        $tablenames = [];
+
         // Remove this table from the list of tables
         foreach ($this->tables as $key => $table) {
             if ($table['name'] == $thistable) {
@@ -2408,7 +2721,7 @@ class Query
                 break;
             }
         }
-        
+
         $field1 = [];
         // Remove links with this table
         foreach ($this->tablelinks as $key => $link) {
@@ -2419,37 +2732,45 @@ class Query
                 unset($this->tablelinks[$key]);
             }
         }
-        
+
         // Remove fields that reference this table
         foreach ($this->fields as $key => $field) {
-            if (in_array($field1['table'], $tablenames)) unset($this->fields[$key]);
+            if (in_array($field1['table'], $tablenames)) {
+                unset($this->fields[$key]);
+            }
         }
 
         // Remove conditions that reference this table
         foreach ($this->conditions as $key => $condition) {
             try {
                 $field = $this->_deconstructfield($condition['field1']);
-                if (in_array($field1['table'], $tablenames)) unset($this->conditions[$key]);
+                if (in_array($field1['table'], $tablenames)) {
+                    unset($this->conditions[$key]);
+                }
                 break;
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
             try {
                 $field = $this->_deconstructfield($condition['field2']);
-                if (in_array($field1['table'], $tablenames)) unset($this->conditions[$key]);
+                if (in_array($field1['table'], $tablenames)) {
+                    unset($this->conditions[$key]);
+                }
                 break;
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
 
         return true;
     }
 
-/*
- * Creates a unique ID for this query. 
- * The ID includes the characteristics assumed "innate" of the query
- * It does not include display-dependant stuff such as fields or sorts
- */
+    /*
+     * Creates a unique ID for this query.
+     * The ID includes the characteristics assumed "innate" of the query
+     * It does not include display-dependant stuff such as fields or sorts
+     */
     public function createID()
     {
-        $idarray = array($this->tables, $this->tablelinks, $this->conjunctions, $this->conditions);
+        $idarray = [$this->tables, $this->tablelinks, $this->conjunctions, $this->conditions];
         $idstring = serialize($idarray);
         $id = md5($idstring);
         return $id;

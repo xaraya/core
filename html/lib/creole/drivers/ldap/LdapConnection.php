@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: LdapConnection.php,v 1.18 2004/09/01 14:00:28 dlawson_mi Exp $
  *
@@ -179,12 +180,12 @@ class LdapConnection extends ConnectionCommon implements Connection
         }
 
         /* return an array in the same order as specified in rfc 2255 */
-        return array(	'dn' => $query[0] ? $query[0] : $this->basedn,
-                                        'attributes' => $query[1] ? explode(',', $query[1]) : array('*'),
-                                        'scope' => $query[2] ? $query[2] : 'base',   /* base, one, sub */
-                                        'filter' => $query[3] ? $query[3] : '(objectClass=*)',
-                                        'extensions' => $query[4]
-                                    );
+        return [	'dn' => $query[0] ? $query[0] : $this->basedn,
+            'attributes' => $query[1] ? explode(',', $query[1]) : ['*'],
+            'scope' => $query[2] ? $query[2] : 'base',   /* base, one, sub */
+            'filter' => $query[3] ? $query[3] : '(objectClass=*)',
+            'extensions' => $query[4],
+        ];
     }
 
     /**

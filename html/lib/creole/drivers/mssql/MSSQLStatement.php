@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MSSQLStatement.php,v 1.4 2004/06/13 02:31:07 hlellelid Exp $
  *

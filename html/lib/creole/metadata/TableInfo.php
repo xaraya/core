@@ -30,9 +30,9 @@
 abstract class TableInfo
 {
     protected $name;
-    protected $columns = array();
-    protected $foreignKeys = array();
-    protected $indexes = array();
+    protected $columns = [];
+    protected $foreignKeys = [];
+    protected $indexes = [];
     protected $primaryKey;
 
     protected $pkLoaded = false;
@@ -45,7 +45,7 @@ abstract class TableInfo
      * Additional and optional vendor specific information.
      * @var array $vendorSpecificInfo
      */
-    protected $vendorSpecificInfo = array();
+    protected $vendorSpecificInfo = [];
 
     /**
      * Database Connection.
@@ -86,7 +86,7 @@ abstract class TableInfo
      */
     public function __sleep()
     {
-        return array('name', 'columns', 'foreignKeys', 'indexes', 'primaryKey');
+        return ['name', 'columns', 'foreignKeys', 'indexes', 'primaryKey'];
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class TableInfo
     public function __wakeup()
     {
         // restore chaining
-        foreach($this->columns as $col) {
+        foreach ($this->columns as $col) {
             $col->table = $this;
         }
     }
@@ -132,9 +132,7 @@ abstract class TableInfo
     //it must be asbtract and be implemented in every vendor specific driver,
     //however since it's an experimental stuff it has an empty body in order
     //not to break BC
-    /*abstract*/ protected function initVendorSpecificInfo()
-    {
-    }
+    /*abstract*/ protected function initVendorSpecificInfo() {}
 
     /**
      * Get parimary key in this table.
@@ -143,7 +141,7 @@ abstract class TableInfo
      */
     public function getPrimaryKey()
     {
-        if(!$this->pkLoaded) {
+        if (!$this->pkLoaded) {
             $this->initPrimaryKey();
         }
         return $this->primaryKey;
@@ -157,11 +155,11 @@ abstract class TableInfo
      */
     public function getColumn($name)
     {
-        if(!$this->colsLoaded) {
+        if (!$this->colsLoaded) {
             $this->initColumns();
         }
         if (!isset($this->columns[$name])) {
-            throw new SQLException("Table `".$this->name."` has no column `".$name."`");
+            throw new SQLException("Table `" . $this->name . "` has no column `" . $name . "`");
         }
         return $this->columns[$name];
     }
@@ -173,7 +171,7 @@ abstract class TableInfo
      */
     public function hasColumn($name)
     {
-        if(!$this->colsLoaded) {
+        if (!$this->colsLoaded) {
             $this->initColumns();
         }
         return isset($this->columns[$name]);
@@ -185,7 +183,7 @@ abstract class TableInfo
      */
     public function getColumns()
     {
-        if(!$this->colsLoaded) {
+        if (!$this->colsLoaded) {
             $this->initColumns();
         }
         return array_values($this->columns); // re-key numerically
@@ -199,11 +197,11 @@ abstract class TableInfo
      */
     public function getForeignKey($name)
     {
-        if(!$this->fksLoaded) {
+        if (!$this->fksLoaded) {
             $this->initForeignKeys();
         }
         if (!isset($this->foreignKeys[$name])) {
-            throw new SQLException("Table `".$this->name."` has no foreign key `".$name."`");
+            throw new SQLException("Table `" . $this->name . "` has no foreign key `" . $name . "`");
         }
         return $this->foreignKeys[$name];
     }
@@ -214,7 +212,7 @@ abstract class TableInfo
      */
     public function getForeignKeys()
     {
-        if(!$this->fksLoaded) {
+        if (!$this->fksLoaded) {
             $this->initForeignKeys();
         }
         return array_values($this->foreignKeys);
@@ -228,11 +226,11 @@ abstract class TableInfo
      */
     public function getIndex($name)
     {
-        if(!$this->indexesLoaded) {
+        if (!$this->indexesLoaded) {
             $this->initIndexes();
         }
         if (!isset($this->indexes[$name])) {
-            throw new SQLException("Table `".$this->name."` has no index `".$name."`");
+            throw new SQLException("Table `" . $this->name . "` has no index `" . $name . "`");
         }
         return $this->indexes[$name];
     }
@@ -243,7 +241,7 @@ abstract class TableInfo
      */
     public function getIndexes()
     {
-        if(!$this->indexesLoaded) {
+        if (!$this->indexesLoaded) {
             $this->initIndexes();
         }
         return array_values($this->indexes);
@@ -305,7 +303,7 @@ abstract class TableInfo
      */
     public function getVendorSpecificInfo()
     {
-        if(!$this->vendorLoaded) {
+        if (!$this->vendorLoaded) {
             $this->initVendorSpecificInfo();
         }
         return $this->vendorSpecificInfo;

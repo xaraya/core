@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\caching
  * @subpackage caching
@@ -10,7 +11,7 @@
  */
 
 sys::import('xaraya.services.hasdatabasetrait');
- 
+
 /**
  * Cache data in the database using the xar_cache_data table
  */
@@ -94,10 +95,10 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
 
         $this->lastid = $id;
         $this->lastinfo = ['key'   => $key,
-                           'code'  => $this->code,
-                           'time'  => $time,
-                           'size'  => $size,
-                           'check' => $check];
+            'code'  => $this->code,
+            'time'  => $time,
+            'size'  => $size,
+            'check' => $check];
         if (!empty($expire) && $time < time() - $expire) {
             $this->value = null;
             if ($log) {
@@ -245,10 +246,10 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
             return $this->lastinfo;
         }
         return ['key'   => $key,
-                'code'  => $this->code,
-                'time'  => time(),
-                'size'  => 0,
-                'check' => ''];
+            'code'  => $this->code,
+            'time'  => time(),
+            'size'  => 0,
+            'check' => ''];
     }
 
     public function flushCached($key = '')
@@ -262,7 +263,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
             $query = "DELETE FROM $table WHERE type = ?";
             $bindvars = [$this->type];
         } else {
-            $key = '%'.$key.'%';
+            $key = '%' . $key . '%';
             $query = "DELETE FROM $table  WHERE type = ? AND cache_key LIKE ?";
             $bindvars = [$this->type,$key];
         }
@@ -317,10 +318,10 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         $result->close();
 
         return ['size'    => $this->size,
-                'items'   => $this->items,
-                'hits'    => $this->hits,
-                'misses'  => $this->misses,
-                'modtime' => $this->modtime];
+            'items'   => $this->items,
+            'hits'    => $this->hits,
+            'misses'  => $this->misses,
+            'modtime' => $this->modtime];
     }
 
     public function saveFile($key = '', $filename = '')
@@ -372,10 +373,10 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         while ($result->next()) {
             [$id, $time, $key, $code, $size, $check] = $result->fields;
             $list[$id] = ['key'   => $key,
-                          'code'  => $code,
-                          'time'  => $time,
-                          'size'  => $size,
-                          'check' => $check];
+                'code'  => $code,
+                'time'  => $time,
+                'size'  => $size,
+                'check' => $check];
         }
         $result->close();
         return $list;

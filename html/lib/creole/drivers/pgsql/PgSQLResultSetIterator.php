@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PgSQLResultSetIterator.php,v 1.1 2004/12/04 05:58:53 gamr Exp $
  *

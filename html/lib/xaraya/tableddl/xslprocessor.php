@@ -17,8 +17,8 @@ class XarayaXSLProcessor extends xarObject
         $this->xslProc->registerPHPFunctions();
 
         // Set up the stylesheet
-		sys::import('xaraya.exceptions.handlers');
-    	xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
+        sys::import('xaraya.exceptions.handlers');
+        xarDebug::setExceptionHandler(['ExceptionHandlers','bone']);
         $this->setStyleSheet($xslFile);
 
         // Set up the document to transform
@@ -34,11 +34,11 @@ class XarayaXSLProcessor extends xarObject
     {
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
-		if (!$this->xslProc->importStyleSheet($this->xslDoc)) {
-			$halt = xarMLS::translate('Could not load a stylesheet');
-			echo $halt;
+        if (!$this->xslProc->importStyleSheet($this->xslDoc)) {
+            $halt = xarMLS::translate('Could not load a stylesheet');
+            echo $halt;
             xarCore::exit();
-		}
+        }
     }
 
     private function setSourceFile(&$xml)
@@ -56,8 +56,8 @@ class XarayaXSLProcessor extends xarObject
         // Set the source document to what we prepped
         $this->setSourceFile($xml);
 
-		sys::import('xaraya.exceptions.handlers');
-    	xarDebug::setExceptionHandler(array('ExceptionHandlers','defaulthandler'));
+        sys::import('xaraya.exceptions.handlers');
+        xarDebug::setExceptionHandler(['ExceptionHandlers','defaulthandler']);
 
         // What should we initialize $result to?
         // Transform it
@@ -65,7 +65,7 @@ class XarayaXSLProcessor extends xarObject
         return $this->postXML;
     }
 
-    static function phpexpression($expr)
+    public static function phpexpression($expr)
     {
         $res = ExpressionTransformer::transformPHPExpression($expr);
         xarLog3::info("BL: '$expr' resolved to '$res'");

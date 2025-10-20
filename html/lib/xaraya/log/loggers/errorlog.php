@@ -1,4 +1,5 @@
 <?php
+
 // $Id: syslog.php,v 1.12 2003/04/08 05:55:05 jon Exp $
 // $Horde: horde/lib/Log/syslog.php,v 1.6 2000/06/28 21:36:13 jon Exp $
 
@@ -60,10 +61,10 @@ class xarLogger_errorlog extends xarLogger
      *
      * @param array<string, mixed> $conf               Configuration options for the specific driver.
      *
-     * 
+     *
      * @return boolean
      */
-    public function __construct(Array $conf)
+    public function __construct(array $conf)
     {
         parent::__construct($conf);
 
@@ -72,7 +73,7 @@ class xarLogger_errorlog extends xarLogger
         if (!empty($conf['destination'])) {
             $this->destination = $conf['destination'];
         }
-		*/
+        */
         /* If it is given a logging type to be used, then use it. */
         //This should be useful only when 0.
         //The rest of the options will have better coverage from other loggers.
@@ -80,7 +81,7 @@ class xarLogger_errorlog extends xarLogger
         if (!empty($conf['type'])) {
             $this->type = $conf['type'];
         }
-		*/
+        */
         /* If it is given a logging type to be used, then use it. */
         /*
         if (!empty($conf['extra_headers'])) {
@@ -101,15 +102,22 @@ class xarLogger_errorlog extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * 
+     *
      */
-    function notify($message, $level)
+    public function notify($message, $level)
     {
         // Abort early if the level of priority is above the maximum logging level.
-        if (!$this->doLogLevel($level)) return false;
+        if (!$this->doLogLevel($level)) {
+            return false;
+        }
 
-        $entry = sprintf("%s %s [%s] %s\n", $this->getTime(),
-            $this->uuid, self::$levels[$level], $message);
+        $entry = sprintf(
+            "%s %s [%s] %s\n",
+            $this->getTime(),
+            $this->uuid,
+            self::$levels[$level],
+            $message
+        );
 
         // if (!error_log($entry, $this->logtype, $this->destination, $this->extra_headers)) {
         if (!error_log($entry, $this->logtype)) {

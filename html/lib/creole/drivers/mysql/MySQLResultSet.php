@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MySQLResultSet.php,v 1.24 2006/01/17 19:44:39 hlellelid Exp $
  *
@@ -93,10 +94,10 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet
      */
     public function close()
     {
-        if(is_resource($this->result)) {
+        if (is_resource($this->result)) {
             @mysql_free_result($this->result);
         }
-        $this->fields = array();
+        $this->fields = [];
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\caching
  * @subpackage caching
@@ -64,12 +65,12 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
         $cache_file = $this->dir . '/' . $cache_key . '.php';
 
         if (// the file is present AND
-            file_exists($cache_file) &&
+            file_exists($cache_file)
             // the file has something in it AND
-            filesize($cache_file) > 0 &&
+            && filesize($cache_file) > 0
             // (cached files don't expire OR this file hasn't expired yet) AND
-            ($expire == 0 ||
-             filemtime($cache_file) > time() - $expire)) {
+            && ($expire == 0
+             || filemtime($cache_file) > time() - $expire)) {
             $this->modtime = filemtime($cache_file);
             if ($log) {
                 $this->logStatus('HIT', $key);
@@ -172,8 +173,8 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
         if ($handle = @opendir($this->dir)) {
             while (($file = readdir($handle)) !== false) {
                 $cache_file = $this->dir . '/' . $file;
-                if ((filemtime($cache_file) < $time) &&
-                    (strpos($file, '.php') !== false)) {
+                if ((filemtime($cache_file) < $time)
+                    && (strpos($file, '.php') !== false)) {
                     @unlink($cache_file);
                 }
             }
@@ -201,10 +202,10 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
         $this->size = $this->_getCacheDirSize($this->dir, true);
 
         return ['size'    => $this->size,
-                'items'   => $this->items,
-                'hits'    => $this->hits,
-                'misses'  => $this->misses,
-                'modtime' => $this->modtime];
+            'items'   => $this->items,
+            'hits'    => $this->hits,
+            'misses'  => $this->misses,
+            'modtime' => $this->modtime];
     }
 
     public function saveFile($key = '', $filename = '')
@@ -244,8 +245,8 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
                     if (is_dir($dir . $item)) {
                         $this->_flushDirCached($key, $dir . $item);
                     } else {
-                        if ((preg_match("#$key#", $item)) &&
-                            (strpos($item, '.php') !== false)) {
+                        if ((preg_match("#$key#", $item))
+                            && (strpos($item, '.php') !== false)) {
                             @unlink($dir . $item);
                         }
                     }
@@ -345,10 +346,10 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
                     $key = str_replace($this->prefix, '', $key);
                 }
                 $list[] = ['key'   => $key,
-                           'code'  => $code,
-                           'time'  => $time,
-                           'size'  => $size,
-                           'check' => $check];
+                    'code'  => $code,
+                    'time'  => $time,
+                    'size'  => $size,
+                    'check' => $check];
             }
             closedir($handle);
         }

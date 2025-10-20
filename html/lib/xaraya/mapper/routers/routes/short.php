@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short Route class
  *
@@ -33,7 +34,7 @@ class ShortRoute extends xarRoute
 {
     protected bool $validModule  = false;
 
-    public function __construct(array $defaults = array(), ?xarDispatcher $dispatcher = null)
+    public function __construct(array $defaults = [], ?xarDispatcher $dispatcher = null)
     {
         if (isset($dispatcher)) {
             $this->dispatcher = $dispatcher;
@@ -49,8 +50,8 @@ class ShortRoute extends xarRoute
         // Get the request's URL string
         $path = $request->getURL();
 
-        $params = array();
-        $parts = array();
+        $params = [];
+        $parts = [];
 
         // Get everything between the entry point and the beginning of the query part of the URL
         if ($pos = strpos($path, '?')) {
@@ -99,7 +100,7 @@ class ShortRoute extends xarRoute
             for ($i = 0; $i < $numSegs; $i = $i + 2) {
                 $key = urldecode($path[$i]);
                 $val = isset($path[$i + 1]) ? urldecode($path[$i + 1]) : null;
-                $params[$key] = (isset($params[$key]) ? (array_merge((array) $params[$key], array($val))) : $val);
+                $params[$key] = (isset($params[$key]) ? (array_merge((array) $params[$key], [$val])) : $val);
             }
         }
 

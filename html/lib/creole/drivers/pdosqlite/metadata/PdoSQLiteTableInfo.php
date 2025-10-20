@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteTableInfo.php,v 1.8 2005/10/18 02:27:50 hlellelid Exp $
  *
@@ -37,12 +38,12 @@ class PdoSQLiteTableInfo extends SQLiteTableInfo
 
     protected function prepTable()
     {
-        $sql = 'PRAGMA table_info('.$this->name.')';
+        $sql = 'PRAGMA table_info(' . $this->name . ')';
 
         try {
             $this->statement = $this->dblink->prepare($sql);
             $this->statement->execute();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException('Could not get table info', $e->getMessage(), $sql);
         }
     }
@@ -54,12 +55,12 @@ class PdoSQLiteTableInfo extends SQLiteTableInfo
 
     protected function prepIndex1()
     {
-        $sql = "PRAGMA index_list('".$this->name."')";
+        $sql = "PRAGMA index_list('" . $this->name . "')";
 
         try {
             $this->statement = $this->dblink->prepare($sql);
             $this->statement->execute();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException('Could not get index info', $e->getMessage(), $sql);
         }
     }
@@ -71,7 +72,7 @@ class PdoSQLiteTableInfo extends SQLiteTableInfo
         try {
             $this->i2statement = $this->dblink->prepare($sql);
             $this->i2statement->execute();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException("Could not get index info for: $name", $e->getMessage(), $sql);
         }
     }

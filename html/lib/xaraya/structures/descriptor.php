@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -17,7 +18,7 @@ class ObjectDescriptor extends DataContainer
 {
     protected $args;
 
-    function __construct(array $args=array())
+    public function __construct(array $args = [])
     {
         $this->setArgs($args);
     }
@@ -30,38 +31,61 @@ class ObjectDescriptor extends DataContainer
     public function refresh(xarObject $object)
     {
         $publicproperties = $object->getPublicProperties();
-        foreach ($this->args as $key => $value) if (array_key_exists($key,$publicproperties)) $object->$key = $value;
+        foreach ($this->args as $key => $value) {
+            if (array_key_exists($key, $publicproperties)) {
+                $object->$key = $value;
+            }
+        }
     }
 
     public function store(xarObject $object)
     {
         $publicproperties = $object->getPublicProperties();
-        foreach ($publicproperties as $key => $value) $this->args[$key] = $value;
+        foreach ($publicproperties as $key => $value) {
+            $this->args[$key] = $value;
+        }
     }
 
-    public function setArgs(array $args=array())
+    public function setArgs(array $args = [])
     {
-        if (empty($this->args)) $this->args = $args;
-        else foreach($args as $key => $value) if (isset($value)) $this->args[$key] = $value;
+        if (empty($this->args)) {
+            $this->args = $args;
+        } else {
+            foreach ($args as $key => $value) {
+                if (isset($value)) {
+                    $this->args[$key] = $value;
+                }
+            }
+        }
     }
 
-    public function exists($arg=null)
+    public function exists($arg = null)
     {
-        if (empty($arg)) return false;
+        if (empty($arg)) {
+            return false;
+        }
         return isset($this->args[$arg]);
     }
-    
-    public function get($arg=null)
+
+    public function get($arg = null)
     {
-        if (empty($arg)) return null;
-        if ($this->exists($arg)) return $this->args[$arg];
+        if (empty($arg)) {
+            return null;
+        }
+        if ($this->exists($arg)) {
+            return $this->args[$arg];
+        }
         return null;
     }
 
-    public function set($arg=null, $value=null)
+    public function set($arg = null, $value = null)
     {
-        if (empty($arg)) return true;
-        if ($this->exists($arg)) $this->args[$arg] = $value;
+        if (empty($arg)) {
+            return true;
+        }
+        if ($this->exists($arg)) {
+            $this->args[$arg] = $value;
+        }
         return true;
     }
 }

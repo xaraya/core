@@ -1,4 +1,5 @@
 <?php
+
 /**
  * IsSet Validation Function
  *
@@ -23,7 +24,7 @@
 sys::import('xaraya.validations');
 class IssetValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters )
+    public function validate(&$subject, array $parameters)
     {
         if (!isset($subject)) {
             $msg = 'The variable was not set while the validation requires it to be.';

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * GuiHook Subject
  *
@@ -25,16 +26,16 @@ abstract class GuiHookSubject extends HookSubject
 {
     protected $subject = 'GuiHook';  // change this to the name of your event subject
     /** @var array<string, mixed> */
-    protected $hookoutput = array(); // property to store array of hooked module responses 
+    protected $hookoutput = []; // property to store array of hooked module responses
     /**
      * Notify hooked observers
      *
      * @return array<mixed> of cumulative responses from observers
-    **/    
+    **/
     public function notify()
     {
         foreach ($this->observers as $obs) {
-            try { 
+            try {
                 // notify observer and store response in hookoutput property keyed by hook module name
                 $this->hookoutput[$obs->module] = $obs->notify($this);
             } catch (Exception $e) {
@@ -42,7 +43,7 @@ abstract class GuiHookSubject extends HookSubject
                 continue;
             }
         }
-        // return array of hookoutput 
+        // return array of hookoutput
         return $this->hookoutput;
     }
 }

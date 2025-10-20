@@ -1,4 +1,5 @@
 <?php
+
 /**
  * External SQL-like datastore for DD objects unrelated to Xaraya database(s) or DB methods
  *

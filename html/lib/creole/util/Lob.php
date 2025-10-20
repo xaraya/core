@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: Lob.php,v 1.10 2004/03/20 04:16:50 hlellelid Exp $
  *
@@ -183,7 +184,7 @@ abstract class Lob
         }
         $data = @file_get_contents($this->inFile);
         if ($data === false) {
-            throw new Exception('Unable to read from file: '.$this->inFile);
+            throw new Exception('Unable to read from file: ' . $this->inFile);
         }
         $this->setContents($data);
     }
@@ -208,7 +209,7 @@ abstract class Lob
             throw new Exception('No data to write to file');
         }
         if (false === @file_put_contents($this->outFile, $this->data)) {
-            throw new Exception('Unable to write to file: '.$this->outFile);
+            throw new Exception('Unable to write to file: ' . $this->outFile);
         }
     }
 

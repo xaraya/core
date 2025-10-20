@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PgSQLPreparedStatement.php,v 1.14 2005/04/16 18:55:28 hlellelid Exp $
  *
@@ -48,8 +49,8 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
      */
     private function arrayToStr($arr)
     {
-        $parts = array();
-        foreach((array)$arr as $el) {
+        $parts = [];
+        foreach ((array) $arr as $el) {
             if (is_array($el)) {
                 $parts[] = $this->arrayToStr($el);
             } else {
@@ -74,8 +75,8 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
      */
     public function setArray($paramIndex, $value)
     {
-        if($paramIndex > $this->positionsCount || $paramIndex < 1) {
-            throw new SQLException('Cannot bind to invalid param index: '.$paramIndex);
+        if ($paramIndex > $this->positionsCount || $paramIndex < 1) {
+            throw new SQLException('Cannot bind to invalid param index: ' . $paramIndex);
         }
         if ($value === null) {
             $this->setNull($paramIndex);
@@ -92,8 +93,8 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
      */
     public function setBoolean($paramIndex, $value)
     {
-        if($paramIndex > $this->positionsCount || $paramIndex < 1) {
-            throw new SQLException('Cannot bind to invalid param index: '.$paramIndex);
+        if ($paramIndex > $this->positionsCount || $paramIndex < 1) {
+            throw new SQLException('Cannot bind to invalid param index: ' . $paramIndex);
         }
         if ($value === null) {
             $this->setNull($paramIndex);
@@ -156,7 +157,7 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
             } elseif (is_object($value)) {
                 $value = date("Y-m-d H:i:s O", $value->getTime());
             }
-            $this->boundInVars[$paramIndex] = "'".$this->escape($value)."'";
+            $this->boundInVars[$paramIndex] = "'" . $this->escape($value) . "'";
         }
     }
 }

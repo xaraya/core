@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Twig extension to use Twig template engine for output in Xaraya
  */
@@ -157,7 +158,7 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
 
     public function xar_meta($args = [])
     {
-        $this->mod()->apiFunc('themes','user','registermeta', $args);
+        $this->mod()->apiFunc('themes', 'user', 'registermeta', $args);
         return '';
     }
 

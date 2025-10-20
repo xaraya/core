@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -42,7 +43,7 @@
 sys::import('xaraya.validations');
 class KeyListValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         if (!is_array($subject)) {
             $msg = 'Not an array';
@@ -60,9 +61,9 @@ class KeyListValidation extends ValueValidations
             $validation = implode(':', $parameters);
 
             // The key validation is everything up to the first ';'.
-            list($validation_key, $validation_value) = explode(';', $validation, 2);
+            [$validation_key, $validation_value] = explode(';', $validation, 2);
 
-            foreach  ($subject as $key => $value) {
+            foreach ($subject as $key => $value) {
                 // Note: key is a copy, so it will not get updated by the validation routine.
                 // That is the behaviour we want: not to start updating key values.
                 $return = xarVar::validate($validation_key, $key);

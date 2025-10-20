@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: Creole.php,v 1.14 2006/01/17 20:06:31 hlellelid Exp $
  *
@@ -95,24 +96,24 @@ class Creole
      * @see registerDriver()
      * @var array Hash mapping phptype => driver class (in dot-path notation, e.g. 'mysql' => 'creole.drivers.mysql.MySQLConnection').
      */
-    private static $driverMap = array(  'mysql'      => 'creole.drivers.mysql.MySQLConnection',
-                                        'mysqli'     => 'creole.drivers.mysqli.MySQLiConnection',
-                                        'pgsql'      => 'creole.drivers.pgsql.PgSQLConnection',
-                                        'sqlite'     => 'creole.drivers.sqlite.SQLiteConnection',
-                                        'oracle'     => 'creole.drivers.oracle.OCI8Connection',
-                                        'mssql'      => 'creole.drivers.mssql.MSSQLConnection',
-                                        'odbc'       => 'creole.drivers.odbc.ODBCConnection',
-                                        'pdosqlite'  => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
-                                        'pdosqlite2' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
-                                        'sqlite3'    => 'creole.drivers.sqlite.SQLiteConnection',
-                                       );
+    private static $driverMap = [  'mysql'      => 'creole.drivers.mysql.MySQLConnection',
+        'mysqli'     => 'creole.drivers.mysqli.MySQLiConnection',
+        'pgsql'      => 'creole.drivers.pgsql.PgSQLConnection',
+        'sqlite'     => 'creole.drivers.sqlite.SQLiteConnection',
+        'oracle'     => 'creole.drivers.oracle.OCI8Connection',
+        'mssql'      => 'creole.drivers.mssql.MSSQLConnection',
+        'odbc'       => 'creole.drivers.odbc.ODBCConnection',
+        'pdosqlite'  => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+        'pdosqlite2' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+        'sqlite3'    => 'creole.drivers.sqlite.SQLiteConnection',
+    ];
 
     /**
      * Map of already established connections
      * @see getConnection()
      * @var array Hash mapping connection DSN => Connection instance
      */
-    private static $connectionMap = array();
+    private static $connectionMap = [];
 
     /**
      * Register your own RDBMS driver class.
@@ -215,10 +216,10 @@ class Creole
         // sort $dsninfo by keys so the serialized result is always the same
         // for identical connection parameters, no matter what their order is
         ksort($dsninfo);
-        $connectionMapKey = crc32(serialize($dsninfo + array('compat_flags' => ($flags & Creole::COMPAT_ALL))));
+        $connectionMapKey = crc32(serialize($dsninfo + ['compat_flags' => ($flags & Creole::COMPAT_ALL)]));
 
         // see if we already have a connection with these parameters cached
-        if(isset(self::$connectionMap[$connectionMapKey])) {
+        if (isset(self::$connectionMap[$connectionMapKey])) {
             // persistent connections will be used if a non-persistent one was requested and is available
             // but a persistent connection will be created if a non-persistent one is present
 
@@ -226,7 +227,7 @@ class Creole
             // non persistent with the persistent object so as we dont have
             // both links open for no reason
 
-            if(isset(self::$connectionMap[$connectionMapKey][1])) { // is persistent
+            if (isset(self::$connectionMap[$connectionMapKey][1])) { // is persistent
                 // a persistent connection with these parameters is already there,
                 // so we return it, no matter what was specified as persistent flag
                 $con = self::$connectionMap[$connectionMapKey][1];
@@ -266,12 +267,12 @@ class Creole
 
         try {
             $obj->connect($dsninfo, $flags);
-        } catch(SQLException $sqle) {
+        } catch (SQLException $sqle) {
             $sqle->setUserInfo($dsninfo);
             throw $sqle;
         }
         $persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;
-        return self::$connectionMap[$connectionMapKey][(int)$persistent] = $obj;
+        return self::$connectionMap[$connectionMapKey][(int) $persistent] = $obj;
     }
 
     /**
@@ -311,7 +312,7 @@ class Creole
             return $dsn;
         }
 
-        $parsed = array(
+        $parsed = [
             'phptype'  => null,
             'username' => null,
             'password' => null,
@@ -319,12 +320,12 @@ class Creole
             'hostspec' => null,
             'port'     => null,
             'socket'   => null,
-            'database' => null
-        );
+            'database' => null,
+        ];
 
         $preg_query = "!^(([a-z0-9]+)(\(([^()]+)\))?)(://((((([^@/:]+)(:([^@/]+))?)@)?((([a-z]+)\((([^?():]+)(:([^()?]+))?)\))|((([^/?:]+)(:([^/?]+))?))))/?)?([^?]+)?(\?(.+))?)?$!i";
 
-        $info = array();
+        $info = [];
 
         if (preg_match($preg_query, $dsn, $info)) { // only if it is matching
 
@@ -368,7 +369,7 @@ class Creole
                 if ((isset($info[27])) && (strlen($info[27]) > 0)) { // There is a query
                     $opts = explode('&', $info[27]);
                     foreach ($opts as $opt) {
-                        list($key, $value) = explode('=', $opt);
+                        [$key, $value] = explode('=', $opt);
                         if (!isset($parsed[$key])) { // don't allow params overwrite
                             $parsed[$key] = urldecode($value);
                         }

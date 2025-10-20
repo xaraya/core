@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: Blob.php,v 1.5 2004/03/20 04:16:50 hlellelid Exp $
  *
@@ -43,7 +44,7 @@ class Blob extends Lob
             if ($this->inFile) {
                 $fp = @fopen($this->inFile, "rb");
                 if (!$fp) {
-                    throw new Exception('Unable to open file: '.$this->inFile);
+                    throw new Exception('Unable to open file: ' . $this->inFile);
                 }
                 fpassthru($fp);
                 @fclose($fp);

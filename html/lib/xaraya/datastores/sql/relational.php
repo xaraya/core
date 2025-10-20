@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Data Store is a series of flat SQL tables (= typical module tables)
  *
@@ -101,7 +102,7 @@ class RelationalDataStore extends SQLDataStore
 
         $q = $this->object->dataquery;
         $primary = $this->object->properties[$this->object->primary]->source;
-        $q->eq($primary, (int)$itemid);
+        $q->eq($primary, (int) $itemid);
 
         // Run it
         if (!$q->run()) {
@@ -149,7 +150,7 @@ class RelationalDataStore extends SQLDataStore
             }
         }
         $primary = $this->object->properties[$this->object->primary]->source;
-        $q->eq($primary, (int)$itemid);
+        $q->eq($primary, (int) $itemid);
 
         // Run it
         if (!$q->run()) {
@@ -421,8 +422,8 @@ class RelationalDataStore extends SQLDataStore
             }
 
             // Make sure this table is not tagged "foreign" before adding it
-            if ((!is_array($this->object->datasources[$table['alias']]) ||
-                 $this->object->datasources[$table['alias']][1] != 'foreign')) {
+            if ((!is_array($this->object->datasources[$table['alias']])
+                 || $this->object->datasources[$table['alias']][1] != 'foreign')) {
                 $updatabletables[$table['alias']] = $table;
             }
         }
@@ -435,8 +436,8 @@ class RelationalDataStore extends SQLDataStore
             $link2 = $q->deconstructfield($link['field2']);
             if (isset($this->object->datasources[$link1['table']]) && isset($this->object->datasources[$link2['table']])) {
                 if (
-                    (is_array($this->object->datasources[$link1['table']]) && $this->object->datasources[$link1['table']][1] == 'foreign') &&
-                    (is_array($this->object->datasources[$link2['table']]) && $this->object->datasources[$link2['table']][1] == 'foreign')
+                    (is_array($this->object->datasources[$link1['table']]) && $this->object->datasources[$link1['table']][1] == 'foreign')
+                    && (is_array($this->object->datasources[$link2['table']]) && $this->object->datasources[$link2['table']][1] == 'foreign')
                 ) {
                     continue;
                 }
@@ -456,12 +457,12 @@ class RelationalDataStore extends SQLDataStore
     public function getItems(array $args = [])
     {
         if (!empty($args['numitems'])) {
-            $numitems = (int)$args['numitems'];
+            $numitems = (int) $args['numitems'];
         } else {
             $numitems = 0;
         }
         if (!empty($args['startnum'])) {
-            $startnum = (int)$args['startnum'];
+            $startnum = (int) $args['startnum'];
         } else {
             $startnum = 1;
         }
@@ -633,7 +634,7 @@ class RelationalDataStore extends SQLDataStore
             // This is not a subitems property: assign the value in the usual way
             try {
                 $this->object->properties[$field]->value = $value[$this->object->properties[$field]->name];
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 throw new Exception($this->ml('Could not assign a value to field #(1). Its source may overlap with another field.', $field));
             }
         }
@@ -770,7 +771,7 @@ class RelationalDataStore extends SQLDataStore
             return null;
         }
 
-        return (int)current($result);
+        return (int) current($result);
     }
 
     /**
@@ -828,7 +829,7 @@ class RelationalDataStore extends SQLDataStore
                 }
             } elseif (count($itemids) == 1) {
                 $query .= " WHERE $itemidfield = ? ";
-                $bindvars[] = (int)$itemids[0];
+                $bindvars[] = (int) $itemids[0];
             } elseif (count($this->where) > 0) {
                 $query .= " WHERE ";
                 foreach ($this->where as $whereitem) {

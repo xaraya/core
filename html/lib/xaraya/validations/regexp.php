@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -20,7 +21,7 @@
 sys::import("xaraya.validations");
 class RegExpValidation extends ValueValidations
 {
-    function validate (&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         if (!isset($parameters[0]) || trim($parameters[0]) == '') {
             $msg = 'There is no parameter to check agains the regular expression validation.';
@@ -31,6 +32,6 @@ class RegExpValidation extends ValueValidations
         }
 
         $msg = '"#(1)" Does not match pattern "#(2)"';
-        throw new VariableValidationException(array($subject, $parameters[0]),$msg);
+        throw new VariableValidationException([$subject, $parameters[0]], $msg);
     }
 }

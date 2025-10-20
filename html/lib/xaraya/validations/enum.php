@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -19,7 +20,7 @@
 sys::import('xaraya.validations');
 class EnumValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         $found = false;
 
@@ -35,8 +36,11 @@ class EnumValidation extends ValueValidations
             $msg = 'Input given is not in list of valid options';
             $first = true;
             foreach ($parameters as $param) {
-                if ($first) $first = false;
-                else $msg .= ' or '; // TODO: evaluate MLS consequences later on
+                if ($first) {
+                    $first = false;
+                } else {
+                    $msg .= ' or ';
+                } // TODO: evaluate MLS consequences later on
 
                 $msg .= $param;
             }

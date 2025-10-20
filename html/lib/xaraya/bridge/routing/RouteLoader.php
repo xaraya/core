@@ -23,13 +23,13 @@ class RouteLoader extends Loader
      * @param string|null $type not used here
      * @return RouteCollection
      */
-    public function load(mixed $resource, string|null $type = null): mixed
+    public function load(mixed $resource, ?string $type = null): mixed
     {
         $routes = new RouteCollection();
         return self::addRouteCollection($resource, $routes);
     }
 
-    public function supports(mixed $resource, string|null $type = null): bool
+    public function supports(mixed $resource, ?string $type = null): bool
     {
         return true;
     }

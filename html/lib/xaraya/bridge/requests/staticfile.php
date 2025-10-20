@@ -28,7 +28,7 @@ class StaticFileHandler extends BasicBridge implements StaticFileBridgeInterface
      * @param array<mixed> $extra
      * @return array<string, RouteDef> array of name => [method(s), path, handler, options = []]
      */
-    public static function getRoutes(string $pathPrefix = '', string $namePrefix = 'static-', ?string $handler = null, array $extra = null): array
+    public static function getRoutes(string $pathPrefix = '', string $namePrefix = 'static-', ?string $handler = null, ?array $extra = null): array
     {
         return static::getStaticFileRoutes($pathPrefix, $namePrefix, $handler, $extra);
     }

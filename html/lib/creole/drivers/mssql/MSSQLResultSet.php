@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MSSQLResultSet.php,v 1.21 2006/01/17 19:44:38 hlellelid Exp $
  *
@@ -138,7 +139,7 @@ class MSSQLResultSet extends ResultSetCommon implements ResultSet
     {
         $ret = @mssql_free_result($this->result);
         $this->result = false;
-        $this->fields = array();
+        $this->fields = [];
         $this->limit = 0;
         $this->offset = 0;
     }

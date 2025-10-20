@@ -339,16 +339,16 @@ class BlocklayoutToTwigConverter extends TwigConverter
         // Blocks user templates are not in modulespace and do not extend base.extension
         // @todo do we want to extend all admin templates too?
         if (!str_contains($fileName, '/') && $namespace !== 'blocks') {
-            $this->content = '{# ' . $name . ' #}' . "\n\n" .
-                '{% extends \'' . $base . '\' %}' . "\n\n" .
-                '{% block modulespace %}' . "\n" .
-                $this->content .
-                '{% endblock %}';
+            $this->content = '{# ' . $name . ' #}' . "\n\n"
+                . '{% extends \'' . $base . '\' %}' . "\n\n"
+                . '{% block modulespace %}' . "\n"
+                . $this->content
+                . '{% endblock %}';
         } else {
-            $this->content = '{# ' . $name . ' #}' . "\n\n" .
-                '{% block ' . $block . ' %}' . "\n" .
-                $this->content .
-                '{% endblock %}';
+            $this->content = '{# ' . $name . ' #}' . "\n\n"
+                . '{% block ' . $block . ' %}' . "\n"
+                . $this->content
+                . '{% endblock %}';
         }
     }
 
@@ -1106,9 +1106,9 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $properties = $this->replaceVariable($attrib['properties']);
             $values = $this->replaceVariable($attrib['values']);
             // @todo not sure this will help unless we change template too
-            return '{% set tmp_dd_getitems = xar_data_getitems(' . $this->buildTwigArray($attrib) . ') %}' .
-                '{% set ' . $properties . ' = tmp_dd_getitems.0 %}' .
-                '{% set ' . $values . ' = tmp_dd_getitems.1 %}';
+            return '{% set tmp_dd_getitems = xar_data_getitems(' . $this->buildTwigArray($attrib) . ') %}'
+                . '{% set ' . $properties . ' = tmp_dd_getitems.0 %}'
+                . '{% set ' . $values . ' = tmp_dd_getitems.1 %}';
         }, $this->content);
 
         $pattern = '~<xar:data-getitem ([^>]+)\s*/>~i';

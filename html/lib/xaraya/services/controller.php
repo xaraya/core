@@ -53,7 +53,7 @@ interface ControllerInterface extends ServiceInterface
      * @param array<string, mixed> $params
      * @see \Xaraya\Routing\Dispatcher::buildUri()
      */
-    public function getRouteURL(string $route, array $params = []): string|null;
+    public function getRouteURL(string $route, array $params = []): ?string;
 
     public function setRouter(?\Xaraya\Routing\RouterInterface $router): void;
 
@@ -106,19 +106,19 @@ interface ControllerInterface extends ServiceInterface
      * Return a 403 Forbidden header and fill in the 'message-forbidden.xt' template
      * @return string|null output display string
      */
-    public function forbidden(string $msg = '', ?string $template = null): string|null;
+    public function forbidden(string $msg = '', ?string $template = null): ?string;
 
     /**
      * Return a 404 Not Found header and fill in the 'message-notfound.xt' template
      * @return string|null output display string
      */
-    public function notFound(string $msg = '', ?string $template = null): string|null;
+    public function notFound(string $msg = '', ?string $template = null): ?string;
 
     /**
      * Return a 400 Bad Request header and fill in the 'user-errors.xt' template with optional layout
      * @return string|null output display string
      */
-    public function badRequest(?string $layout = null): string|null;
+    public function badRequest(?string $layout = null): ?string;
 }
 
 /**
@@ -166,7 +166,7 @@ trait ControllerTrait
      * Get URL for a specific route by name - @todo
      * @param array<string, mixed> $params
      */
-    public function getRouteURL(string $route, array $params = []): string|null
+    public function getRouteURL(string $route, array $params = []): ?string
     {
         if (empty(self::$router)) {
             $cacheFile = sys::varpath() . '/cache/core/' . \Xaraya\Routing\Routing::MATCHER_CACHE_FILE;
@@ -285,7 +285,7 @@ trait ControllerTrait
      * Return a 403 Forbidden header and fill in the 'message-forbidden.xt' template
      * @return string|null output display string
      */
-    public function forbidden(string $msg = '', ?string $template = null): string|null
+    public function forbidden(string $msg = '', ?string $template = null): ?string
     {
         return xarController::forbidden($msg, $this->getContext(), $template);
     }
@@ -294,7 +294,7 @@ trait ControllerTrait
      * Return a 404 Not Found header and fill in the 'message-notfound.xt' template
      * @return string|null output display string
      */
-    public function notFound(string $msg = '', ?string $template = null): string|null
+    public function notFound(string $msg = '', ?string $template = null): ?string
     {
         return xarController::notFound($msg, $this->getContext(), $template);
     }
@@ -303,7 +303,7 @@ trait ControllerTrait
      * Return a 400 Bad Request header and fill in the 'user-errors.xt' template with optional layout
      * @return string|null output display string
      */
-    public function badRequest(?string $layout = null): string|null
+    public function badRequest(?string $layout = null): ?string
     {
         return xarController::badRequest($layout, $this->getContext());
     }

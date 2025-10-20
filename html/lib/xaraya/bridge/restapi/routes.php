@@ -93,7 +93,7 @@ class RestAPIRoutes implements RoutesInterface
      * Find route uri based on params
      * @param array<string, mixed> $params
      */
-    public static function findRoute(RouterInterface $router, array $params, string $method = 'GET'): string|null
+    public static function findRoute(RouterInterface $router, array $params, string $method = 'GET'): ?string
     {
         // we have a route already
         if (!empty($params[$router::ROUTE_PARAM])) {
@@ -122,7 +122,7 @@ class RestAPIRoutes implements RoutesInterface
      * @param string $namePrefix incl. moduleName
      * @param array<string, mixed> $params
      */
-    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = [], string $method = 'GET'): string|null
+    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = [], string $method = 'GET'): ?string
     {
         // @todo make use of method here too!?
         return ModuleAPIRoutes::findRoute($router, $params, $method, $namePrefix);
@@ -133,7 +133,7 @@ class RestAPIRoutes implements RoutesInterface
      * @param string $namePrefix incl. objectName
      * @param array<string, mixed> $params
      */
-    public static function findObjectRoute(RouterInterface $router, string $namePrefix = '', array $params = [], string $method = 'GET'): string|null
+    public static function findObjectRoute(RouterInterface $router, string $namePrefix = '', array $params = [], string $method = 'GET'): ?string
     {
         // @todo make use of method here too!?
         return DataObjectAPIRoutes::findRoute($router, $params, $method, $namePrefix);

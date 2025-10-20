@@ -77,10 +77,10 @@ class MSSQLConnection extends ConnectionCommon implements Connection
             $portDelimiter = ":";
         }
 
-        if(!empty($dsninfo['port'])) {
-            $dbhost .= $portDelimiter.$dsninfo['port'];
+        if (!empty($dsninfo['port'])) {
+            $dbhost .= $portDelimiter . $dsninfo['port'];
         } else {
-            $dbhost .= $portDelimiter.'1433';
+            $dbhost .= $portDelimiter . '1433';
         }
 
         $connect_function = $persistent ? 'mssql_pconnect' : 'mssql_connect';
@@ -173,7 +173,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection
 
         // obtain the original select statement
         preg_match('/\A(.*)select(.*)from/si', $sql, $select_segment);
-        if(count($select_segment > 0)) {
+        if (count($select_segment > 0)) {
             $original_select = $select_segment[0];
         } else {
             // not a select query, nothing further to do
@@ -186,24 +186,24 @@ class MSSQLConnection extends ConnectionCommon implements Connection
 
         // obtain the original order by clause, or create one if there isn't one
         preg_match('/order by(.*)\Z/si', $sql, $order_segment);
-        if(count($order_segment) > 0) {
+        if (count($order_segment) > 0) {
             $order_by = $order_segment[0];
         } else {
             // no order by clause, if there are columns we can attempt to sort by the columns in the select statement
             $select_items = explode(',', trim(substr($modified_select, 0, strlen($modified_select) - 4)));
-            if(count($select_items) > 0) {
+            if (count($select_items) > 0) {
                 $item_number = 0;
                 $order_by = null;
-                while($order_by === null && $item_number < count($select_items)) {
-                    if(!strstr($select_items[$item_number], '*')) {
+                while ($order_by === null && $item_number < count($select_items)) {
+                    if (!strstr($select_items[$item_number], '*')) {
                         if (strstr($select_items[$item_number], '(')) {
                             // aggregate function used in field, if the field is named with AS, use it
                             //  if a name is not given, assign one for use as ORDER BY field
-                            $aggregateFieldName = array();
+                            $aggregateFieldName = [];
                             //preg_match('/ as (.*)\Z/si',$select_items[$item_number],$aggregateFieldName);
                             if (count($aggregateFieldName) == 0) {
                                 $select_items[$item_number] .= ' AS _creole_order_field';
-                                $aggregateFieldName = array('_creole_order_field');
+                                $aggregateFieldName = ['_creole_order_field'];
                             }
                             $order_by = 'ORDER BY ' . $aggregateFieldName[0] . ' ASC';
                         } else {
@@ -214,10 +214,10 @@ class MSSQLConnection extends ConnectionCommon implements Connection
                 }
             }
             // since the select has possibly had a name added to a field, regenerate the select
-            $modified_select = ' '.join(', ', $select_items).' FROM';
-            if($order_by === null) {
+            $modified_select = ' ' . join(', ', $select_items) . ' FROM';
+            if ($order_by === null) {
                 // no valid columns were found in the select statement (SELECT *), get a list of fields from the db
-                $fieldSql = 'SELECT TOP 1 '.$modified_select.$sql;
+                $fieldSql = 'SELECT TOP 1 ' . $modified_select . $sql;
                 $fieldStmt = $this->prepareStatement($fieldSql);
                 $fieldRs = $fieldStmt->executeQuery();
                 $fieldRs->next();
@@ -225,7 +225,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection
                 // in this case, there is always at least one field
                 $order_by = 'ORDER BY ' . $fields[0] . ' ASC';
             }
-            $sql .= ' '.$order_by;
+            $sql .= ' ' . $order_by;
         }
 
         // modify the sort order for paging
@@ -233,27 +233,27 @@ class MSSQLConnection extends ConnectionCommon implements Connection
         $order_columns = explode(',', str_ireplace('order by ', '', $order_by));
         $original_order_by = $order_by;
         $order_by = '';
-        foreach($order_columns as $column) {
+        foreach ($order_columns as $column) {
             // strip "table." from order by columns
             $column = array_reverse(explode("\.", $column));
             $column = $column[0];
 
             // commas if we have multiple sort columns
-            if(strlen($inverted_order) > 0) {
+            if (strlen($inverted_order) > 0) {
                 $order_by .= ', ';
                 $inverted_order .= ', ';
             }
 
             // put together order for paging wrapper
-            if(stristr($column, ' desc')) {
+            if (stristr($column, ' desc')) {
                 $order_by .= $column;
                 $inverted_order .= str_ireplace(' desc', ' ASC', $column);
-            } elseif(stristr($column, ' asc')) {
+            } elseif (stristr($column, ' asc')) {
                 $order_by .= $column;
                 $inverted_order .= str_ireplace(' asc', ' DESC', $column);
             } else {
                 $order_by .= $column;
-                $inverted_order .= $column .' DESC';
+                $inverted_order .= $column . ' DESC';
             }
         }
         $order_by = 'ORDER BY ' . $order_by;
@@ -263,9 +263,9 @@ class MSSQLConnection extends ConnectionCommon implements Connection
         $modified_sql = "";
         if ($limit > 0) {
             $modified_sql = 'SELECT * FROM (';
-            $modified_sql .= 'SELECT TOP '.$limit.' * FROM (';
-            $modified_sql .= 'SELECT TOP '.($limit + $offset).' '.$modified_select.$sql;
-            $modified_sql .= ') OffsetSet '.$inverted_order.') LimitSet '.$order_by;
+            $modified_sql .= 'SELECT TOP ' . $limit . ' * FROM (';
+            $modified_sql .= 'SELECT TOP ' . ($limit + $offset) . ' ' . $modified_select . $sql;
+            $modified_sql .= ') OffsetSet ' . $inverted_order . ') LimitSet ' . $order_by;
         } else {
             // For the case when the limit is 0, the idea is to return the entire recordset minus the offset
             $countSql = count($order_segment) > 0 ? str_replace($order_segment[0], null, $sql) : $sql;
@@ -274,9 +274,9 @@ class MSSQLConnection extends ConnectionCommon implements Connection
             $countRs->next();
             $rowCount = $countRs->getInt(1);
             $modified_sql = 'SELECT * FROM (';
-            $modified_sql .= 'SELECT TOP '.($rowCount - $offset).' * FROM (';
-            $modified_sql .= 'SELECT TOP 100 PERCENT '.$modified_select.$sql;
-            $modified_sql .= ') OffsetSet '.$inverted_order.') LimitSet '.$order_by;
+            $modified_sql .= 'SELECT TOP ' . ($rowCount - $offset) . ' * FROM (';
+            $modified_sql .= 'SELECT TOP 100 PERCENT ' . $modified_select . $sql;
+            $modified_sql .= ') OffsetSet ' . $inverted_order . ') LimitSet ' . $order_by;
         }
         $sql = $modified_sql;
     }
@@ -320,7 +320,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection
         // XARAYA modification
         // We got to determine the table here and set identity insert to on for it
         // FIXME: this sucks
-        $errMsgs = array();
+        $errMsgs = [];
         $tmpSql = str_replace('(', ' (', $sql);
         $queryParts = preg_split("/[ ]+/", $tmpSql, 4, PREG_SPLIT_NO_EMPTY);
         $stmtType = trim(strtolower($queryParts[0]));
@@ -335,9 +335,9 @@ class MSSQLConnection extends ConnectionCommon implements Connection
                 $tablename = '';
         }
         // make sure we can insert into an identity column
-        if($tablename != '') {
+        if ($tablename != '') {
             $res = @mssql_query("SET IDENTITY_INSERT $tablename ON", $this->dblink);
-            if(!$res) {
+            if (!$res) {
                 // Dont except just yet, the table could have no identity column,
                 $tablename = '';
                 $errMsgs[] = mssql_get_last_message();
@@ -349,7 +349,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection
             throw new SQLException('Could not execute update', mssql_get_last_message(), $sql);
         }
 
-        if($tablename != '') {
+        if ($tablename != '') {
             $res = mssql_query("SET IDENTITY_INSERT $tablename OFF", $this->dblink);
             if (!$res) {
                 throw new SQLException('Could not unlock table for identity insert', mssql_get_last_message(), $sql);

@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteConnection.php,v 1.15 2006/01/17 19:44:41 hlellelid Exp $
  *
@@ -74,11 +75,11 @@ class SQLiteConnection extends ConnectionCommon implements Connection
             throw new SQLException("No SQLite database specified.");
         }
 
-        $mode = (isset($dsninfo['mode']) && is_numeric($dsninfo['mode'])) ? $dsninfo['mode'] : 0644;
+        $mode = (isset($dsninfo['mode']) && is_numeric($dsninfo['mode'])) ? $dsninfo['mode'] : 0o644;
 
         if ($file != ':memory:') {
             if (!file_exists($file)) {
-                if(!@touch($file)) {
+                if (!@touch($file)) {
                     throw new SQLException("Unable to create SQLite database.  Check parent folder permissions.");
                 }
 
@@ -99,10 +100,10 @@ class SQLiteConnection extends ConnectionCommon implements Connection
         // XARAYA MODIFICATION
         // Use the SQLite3 class
         try {
-        	// TODO: add flags here
-        	$conn = new SQLite3($file);
-        	// Have SQLite throw exceptions, rather than errors
-        	$conn->enableExceptions(true);
+            // TODO: add flags here
+            $conn = new SQLite3($file);
+            // Have SQLite throw exceptions, rather than errors
+            $conn->enableExceptions(true);
         } catch (Exception $e) {
             throw new SQLException("Unable to connect to SQLite database");
         }
@@ -184,9 +185,9 @@ class SQLiteConnection extends ConnectionCommon implements Connection
     {
         ini_set('sqlite.assoc_case', $this->sqliteAssocCase);
         $this->lastQuery = $sql;
-        
-	    $result = $this->dblink->query($this->lastQuery);
-		if (!$result) {
+
+        $result = $this->dblink->query($this->lastQuery);
+        if (!$result) {
             $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not execute query', $nativeError, $this->lastQuery);
         }
@@ -203,7 +204,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection
         $this->lastQuery = $sql;
         // XARAYA MODIFICATION
         try {
-	        $result = $this->dblink->query($this->lastQuery);
+            $result = $this->dblink->query($this->lastQuery);
         } catch (Exception $e) {
             $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not execute update', $nativeError, $this->lastQuery);

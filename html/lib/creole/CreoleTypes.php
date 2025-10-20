@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: CreoleTypes.php,v 1.18 2005/11/07 22:38:52 hlellelid Exp $
  *
@@ -59,68 +60,68 @@ abstract class CreoleTypes
     public const OTHER         = -1;
 
     /** Map of Creole type integers to the setter/getter affix. */
-    protected static $affixMap = array(
-            self::BOOLEAN       => 'Boolean',
-            self::BIGINT        => 'String',
-            self::CHAR          => 'String',
-            self::DATE          => 'Date',
-            self::DOUBLE        => 'String',
-            self::FLOAT         => 'String',
-            self::INTEGER       => 'Int',
-            self::SMALLINT      => 'Int',
-            self::TINYINT       => 'Int',
-            self::TIME          => 'Time',
-            self::TIMESTAMP     => 'Timestamp',
-            self::VARCHAR       => 'String',
-            self::VARBINARY     => 'Blob',
-            self::NUMERIC       => 'String',
-            self::BLOB          => 'Blob',
-            self::CLOB          => 'Clob',
-            self::LONGVARCHAR   => 'String',
-            self::DECIMAL       => 'String',
-            self::REAL          => 'String',
-            self::BINARY        => 'Blob',
-            self::LONGVARBINARY => 'Blob',
-            self::YEAR          => 'Int',
-            self::ARR           => 'Array',
-            self::OTHER => '', // get() and set() for unknown
-            );
+    protected static $affixMap = [
+        self::BOOLEAN       => 'Boolean',
+        self::BIGINT        => 'String',
+        self::CHAR          => 'String',
+        self::DATE          => 'Date',
+        self::DOUBLE        => 'String',
+        self::FLOAT         => 'String',
+        self::INTEGER       => 'Int',
+        self::SMALLINT      => 'Int',
+        self::TINYINT       => 'Int',
+        self::TIME          => 'Time',
+        self::TIMESTAMP     => 'Timestamp',
+        self::VARCHAR       => 'String',
+        self::VARBINARY     => 'Blob',
+        self::NUMERIC       => 'String',
+        self::BLOB          => 'Blob',
+        self::CLOB          => 'Clob',
+        self::LONGVARCHAR   => 'String',
+        self::DECIMAL       => 'String',
+        self::REAL          => 'String',
+        self::BINARY        => 'Blob',
+        self::LONGVARBINARY => 'Blob',
+        self::YEAR          => 'Int',
+        self::ARR           => 'Array',
+        self::OTHER => '', // get() and set() for unknown
+    ];
 
     /** Map of Creole type integers to their textual name. */
-    public static $creoleTypeMap = array(
-            self::BOOLEAN       => 'BOOLEAN',
+    public static $creoleTypeMap = [
+        self::BOOLEAN       => 'BOOLEAN',
 
-            self::TINYINT       => 'TINYINT',
-            self::SMALLINT      => 'SMALLINT',
-            self::INTEGER       => 'INTEGER',
-            self::BIGINT        => 'BIGINT',
+        self::TINYINT       => 'TINYINT',
+        self::SMALLINT      => 'SMALLINT',
+        self::INTEGER       => 'INTEGER',
+        self::BIGINT        => 'BIGINT',
 
-            self::NUMERIC       => 'NUMERIC',
-            self::DECIMAL       => 'DECIMAL',
-            self::REAL          => 'REAL',
-            self::FLOAT         => 'FLOAT',
-            self::DOUBLE        => 'DOUBLE',
+        self::NUMERIC       => 'NUMERIC',
+        self::DECIMAL       => 'DECIMAL',
+        self::REAL          => 'REAL',
+        self::FLOAT         => 'FLOAT',
+        self::DOUBLE        => 'DOUBLE',
 
-            self::CHAR          => 'CHAR',
-            self::VARCHAR       => 'VARCHAR',
-            self::TEXT          => 'TEXT',
-            self::CLOB          => 'CLOB',
-            self::LONGVARCHAR   => 'LONGVARCHAR',
+        self::CHAR          => 'CHAR',
+        self::VARCHAR       => 'VARCHAR',
+        self::TEXT          => 'TEXT',
+        self::CLOB          => 'CLOB',
+        self::LONGVARCHAR   => 'LONGVARCHAR',
 
-            self::BINARY        => 'BINARY',
-            self::VARBINARY     => 'VARBINARY',
-            self::BLOB          => 'BLOB',
-            self::LONGVARBINARY => 'LONGVARBINARY',
+        self::BINARY        => 'BINARY',
+        self::VARBINARY     => 'VARBINARY',
+        self::BLOB          => 'BLOB',
+        self::LONGVARBINARY => 'LONGVARBINARY',
 
-            self::TIME          => 'TIME',
-            self::TIMESTAMP     => 'TIMESTAMP',
-            self::DATE          => 'DATE',
-            self::YEAR          => 'YEAR',
+        self::TIME          => 'TIME',
+        self::TIMESTAMP     => 'TIMESTAMP',
+        self::DATE          => 'DATE',
+        self::YEAR          => 'YEAR',
 
-            self::ARR           => 'ARR',
-            
-            self::OTHER         => 'OTHER', // string is "raw" return
-            );
+        self::ARR           => 'ARR',
+
+        self::OTHER         => 'OTHER', // string is "raw" return
+    ];
 
     /**
      * This method returns the generic Creole (JDBC-like) type

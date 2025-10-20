@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User System
  *
@@ -51,12 +52,12 @@ class NotLoggedInException extends xarExceptions
  * Authentication modules capabilities
  * (to be revised e.g. to differentiate read & update capability for core & dynamic)
  */
-define('XARUSER_AUTH_AUTHENTICATION'           ,   1);
-define('XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER',   2);
-define('XARUSER_AUTH_PERMISSIONS_OVERRIDER'    ,  16);
-define('XARUSER_AUTH_USER_CREATEABLE'          ,  32);
-define('XARUSER_AUTH_USER_DELETEABLE'          ,  64);
-define('XARUSER_AUTH_USER_ENUMERABLE'          , 128);
+define('XARUSER_AUTH_AUTHENTICATION', 1);
+define('XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER', 2);
+define('XARUSER_AUTH_PERMISSIONS_OVERRIDER', 16);
+define('XARUSER_AUTH_USER_CREATEABLE', 32);
+define('XARUSER_AUTH_USER_DELETEABLE', 64);
+define('XARUSER_AUTH_USER_ENUMERABLE', 128);
 
 /**
  * User System
@@ -64,22 +65,22 @@ define('XARUSER_AUTH_USER_ENUMERABLE'          , 128);
  */
 class xarUser extends xarObject
 {
-    const AUTH_FAILED = -1;
-    const AUTH_DENIED = -2;
-    const LAST_RESORT = -3;
+    public const AUTH_FAILED = -1;
+    public const AUTH_DENIED = -2;
+    public const LAST_RESORT = -3;
 
     private static $objectRef;
     public static $authenticationModules;
     protected static bool $initialized = false;
-    
+
     /**
      * Initialise the User System
      *
-     * 
+     *
      * @param array<string, mixed> $args[authenticationModules] array
      * @return boolean true on success
      */
-    static public function init(array $args = array())
+    public static function init(array $args = [])
     {
         if (empty($args)) {
             if (self::$initialized) {
@@ -89,41 +90,41 @@ class xarUser extends xarObject
         }
         // User System and Security Service Tables
         $prefix = xarDB3::getPrefix();
-    
+
         // CHECKME: is this needed?
-        $tables = array(
+        $tables = [
             'roles'       => $prefix . '_roles',
             'realms'      => $prefix . '_security_realms',
-            'rolemembers' => $prefix . '_rolemembers'
-        );
-    
+            'rolemembers' => $prefix . '_rolemembers',
+        ];
+
         xarDB3::importTables($tables);
-    
+
         self::$authenticationModules = $args['authenticationModules'];
         // @deprecated 2.4.0 remove someday
         if (!defined('_XAR_ID_UNREGISTERED')) {
             define('_XAR_ID_UNREGISTERED', xarSession::getAnonId());
         }
-    
+
         xarMLS::setCurrentLocale(self::getNavigationLocale());
         xarTpl::setThemeName(self::getNavigationThemeName());
-    
+
         // These events are now registered during authsystem module init
         // Register the UserLogin event
         //xarEvents::register('UserLogin');
         // Register the UserLogout event
         //xarEvents::register('UserLogout');
-    
+
         // Populate the GLOBAL for legacy calls
         //$GLOBALS['xarUser_authenticationModules'] =  self::$authenticationModules;
-        
+
         self::$initialized = true;
         return true;
     }
 
-    static function getConfig()
+    public static function getConfig()
     {
-        $systemArgs = array('authenticationModules' => xarConfig3::getVar('Site.User.AuthenticationModules'));
+        $systemArgs = ['authenticationModules' => xarConfig3::getVar('Site.User.AuthenticationModules')];
         return $systemArgs;
     }
 
@@ -133,7 +134,7 @@ class xarUser extends xarObject
     /**
      * Log the user in
      *
-     * 
+     *
      * @param  string  $userName the name of the user logging in
      * @param  string  $password the password of the user logging in
      * @param  integer $rememberMe whether or not to remember this login
@@ -141,33 +142,40 @@ class xarUser extends xarObject
      * @throws EmptyParameterException, SQLException
      * @todo <marco> #1 here we could also set a last_logon timestamp
      */
-    static public function logIn($userName, $password, $rememberMe = 0, $context = null)
+    public static function logIn($userName, $password, $rememberMe = 0, $context = null)
     {
-        if (self::isLoggedIn()) return true;
-    
-        if (empty($userName)) throw new EmptyParameterException('userName');
-        if (empty($password)) throw new EmptyParameterException('password');
-    
+        if (self::isLoggedIn()) {
+            return true;
+        }
+
+        if (empty($userName)) {
+            throw new EmptyParameterException('userName');
+        }
+        if (empty($password)) {
+            throw new EmptyParameterException('password');
+        }
+
         $userId = self::AUTH_FAILED;
-        $args = array('uname' => $userName, 'pass' => $password);
-    
+        $args = ['uname' => $userName, 'pass' => $password];
+
         $authModName = 'authsystem';
         $modId = 42;
-        foreach(self::$authenticationModules as $authModName)
-        {
+        foreach (self::$authenticationModules as $authModName) {
             // Bug #918 - If the module has been deactivated, then continue
             // checking with the next available authentication module
-            if (!xarMod3::isAvailable($authModName))
+            if (!xarMod3::isAvailable($authModName)) {
                 continue;
-    
+            }
+
             // Every authentication module must at least implement the
             // authentication interface so there's at least the authenticate_user
             // user api function
-            if (!xarMod3::apiLoad($authModName, 'user'))
+            if (!xarMod3::apiLoad($authModName, 'user')) {
                 continue;
-    
+            }
+
             $modId = xarMod3::getID($authModName);
-    
+
             // CHECKME: Does this raise an exception??? If so:
             // TODO: test with multiple auth modules and wrap in try/catch clause
             $userId = xarMod3::apiFunc($authModName, 'user', 'authenticate_user', $args, $context);
@@ -178,59 +186,58 @@ class xarUser extends xarObject
                 break;
             }
         }
-        if ($userId == self::AUTH_FAILED || $userId == self::AUTH_DENIED)
-        {
-            if (xarMod3::getVar('lastresort', 'privileges'))
-            {
+        if ($userId == self::AUTH_FAILED || $userId == self::AUTH_DENIED) {
+            if (xarMod3::getVar('lastresort', 'privileges')) {
                 $secret = unserialize((string) xarMod3::getVar('lastresort', 'privileges'));
-                if ($secret['name'] == md5($userName) && $secret['password'] == md5($password))
-                {
+                if ($secret['name'] == md5($userName) && $secret['password'] == md5($password)) {
                     $userId = self::LAST_RESORT;
                     $rememberMe = 0;
                 }
-             }
+            }
             if ($userId != self::LAST_RESORT) {
                 return false;
             }
         }
-    
+
         // Catch common variations (0, false, '', ...)
-        if (empty($rememberMe))
+        if (empty($rememberMe)) {
             $rememberMe = false;
-        else
+        } else {
             $rememberMe = true;
-    
+        }
+
         // Set user session information
         // TODO: make this a class static in xarSession.php
-        if (!xarSession::setUserInfo($userId, $rememberMe))
-            return; // throw back
-    
+        if (!xarSession::setUserInfo($userId, $rememberMe)) {
+            return;
+        } // throw back
+
         // Set user auth module information
         $dbconn   = xarDB3::getConn();
         $xartable = xarDB3::getTables();
-    
+
         $rolestable = $xartable['roles'];
-    
+
         // TODO: this should be inside roles module
         try {
             $dbconn->begin();
             $query = "UPDATE $rolestable SET auth_module_id = ? WHERE id = ?";
             $stmt = $dbconn->prepareStatement($query);
-            $stmt->executeUpdate(array($modId,$userId));
+            $stmt->executeUpdate([$modId,$userId]);
             $dbconn->commit();
         } catch (SQLException $e) {
             $dbconn->rollback();
             throw $e;
         }
-    
+
         // Set session variables
-    
+
         // Keep a reference to auth module that authenticates successfully
         xarSession::setVar('authenticationModule', $authModName);
-    
+
         // FIXME: <marco> here we could also set a last_logon timestamp
         //<jojodee> currently set in individual authsystem when success on login returned to it
-    
+
         if (!empty($context)) {
             $context->setUserId($userId);
         }
@@ -244,32 +251,32 @@ class xarUser extends xarObject
     /**
      * Log the user out
      *
-     * 
+     *
      * @return boolean|void true if the user successfully logged out
      */
-    static public function logOut($context = null)
+    public static function logOut($context = null)
     {
         if (!self::isLoggedIn()) {
             return true;
         }
         // get the current userid before logging out
         $userId = xarSession::getUserId();
-    
+
         // Reset user session information
         $res = xarSession::setUserInfo(xarSession::getAnonId(), false);
         if (!isset($res)) {
             return; // throw back
         }
-    
+
         xarSession::delVar('authenticationModule');
-    
+
         if (!empty($context)) {
             $context->setUserId(xarSession::getAnonId());
         }
         // User logged out successfully, trigger the proper event with the old userid
         //xarEvents::trigger('UserLogout',$userId);
         xarEvents::notify('UserLogout', $userId, $context);
-        
+
         xarSession::delVar('privilegeset');
         return true;
     }
@@ -281,7 +288,7 @@ class xarUser extends xarObject
      * @param mixed $context
      * @return boolean true if the user is logged in, false if they are not
      */
-    static public function isLoggedIn($context = null)
+    public static function isLoggedIn($context = null)
     {
         $userId = xarSession::getUserId() ?? 0;
         return (!empty($userId) && $userId != xarSession::getAnonId());
@@ -312,30 +319,32 @@ class xarUser extends xarObject
     /**
      * Gets the user navigation theme name
      *
-     * 
+     *
      * @return string name of the users navigation theme
      */
-    static public function getNavigationThemeName()
+    public static function getNavigationThemeName()
     {
         $themeName = xarTpl::getThemeName();
-    
-        if (self::isLoggedIn() && (bool) xarMod3::getVar('enable_user_menu', 'themes')){
+
+        if (self::isLoggedIn() && (bool) xarMod3::getVar('enable_user_menu', 'themes')) {
             $id = self::getVar('id');
             $userThemeName = xarModUserVars::get('themes', 'default_theme', $id);
-            if ($userThemeName) $themeName=$userThemeName;
+            if ($userThemeName) {
+                $themeName = $userThemeName;
+            }
         }
-    
+
         return $themeName;
     }
 
     /**
      * Set the user navigation theme name
      *
-     * 
+     *
      * @param  string $themeName name of the theme to set as navigation theme
      * @return void
      */
-    static public function setNavigationThemeName($themeName)
+    public static function setNavigationThemeName($themeName)
     {
         assert($themeName != "");
         // uservar system takes care of dealing with anynomous
@@ -345,18 +354,19 @@ class xarUser extends xarObject
     /**
      * Get the user navigation locale
      *
-     * 
+     *
      * @return string|bool $locale users navigation locale name
      */
-    static public function getNavigationLocale()
+    public static function getNavigationLocale()
     {
-        if (self::isLoggedIn())
-        {
+        if (self::isLoggedIn()) {
             $id = self::getVar('id');
             //last resort user is falling over on this uservar by setting multiple times
             //return true for last resort user - use default locale
-            if ($id == self::LAST_RESORT) return true;
-    
+            if ($id == self::LAST_RESORT) {
+                return true;
+            }
+
             $locale = xarModUserVars::get('roles', 'locale');
             if (empty($locale)) {
                 $locale = xarSession::getVar('navigationLocale');
@@ -374,13 +384,13 @@ class xarUser extends xarObject
     /**
      * Set the user navigation locale
      *
-     * 
+     *
      * @param  string $locale
      * @return boolean true if the navigation locale is set, false if not
      */
-    static public function setNavigationLocale($locale)
+    public static function setNavigationLocale($locale)
     {
-        xarLog3::info("Changing the navigation locale from ". self::getNavigationLocale() . " to " . $locale);
+        xarLog3::info("Changing the navigation locale from " . self::getNavigationLocale() . " to " . $locale);
         if (xarMLS::getMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
             xarSession::setVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
@@ -394,11 +404,11 @@ class xarUser extends xarObject
     /*
      * User variables API functions
      */
-    
+
     /**
      * Get a user variable
      *
-     * 
+     *
      * @param  string  $name the name of the variable
      * @param  integer $userId integer the user to get the variable for
      * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
@@ -409,15 +419,21 @@ class xarUser extends xarObject
      * @todo add some security for getting to user variables (at least from another id)
      * @todo define clearly what the difference or similarity is with dd here
      */
-    static public function getVar($name, $userId = null)
+    public static function getVar($name, $userId = null)
     {
-        if (empty($name)) throw new EmptyParameterException('name');
-    
+        if (empty($name)) {
+            throw new EmptyParameterException('name');
+        }
+
         // @todo see UserContext::getUserId() for userId without session
-        if (empty($userId)) $userId = xarSession::getUserId();
+        if (empty($userId)) {
+            $userId = xarSession::getUserId();
+        }
         //LEGACY
-        if ($name == 'id' || $name == 'uid') return $userId;
-    
+        if ($name == 'id' || $name == 'uid') {
+            return $userId;
+        }
+
         if (empty($userId) || $userId == xarSession::getAnonId()) {
             // Anonymous user => only id, name and uname allowed, for other variable names
             // an exception of type NOT_LOGGED_IN is raised
@@ -427,17 +443,19 @@ class xarUser extends xarObject
             }
             throw new NotLoggedInException();
         }
-    
+
         // Don't allow any module to retrieve passwords in this way
-        if ($name == 'pass') throw new BadParameterException('name');
-    
-        if (!xarVar3::isCached('User.Variables.'.$userId, $name)) {
-    
+        if ($name == 'pass') {
+            throw new BadParameterException('name');
+        }
+
+        if (!xarVar3::isCached('User.Variables.' . $userId, $name)) {
+
             if ($name == 'name' || $name == 'uname' || $name == 'email') {
                 if ($userId == self::LAST_RESORT) {
                     return xarMLS3::translate('No Information'); // better return null here
                 }
-                
+
                 // Retrieve the item
                 // Rather than use roles_userapi_get, we hard code this unique case
                 // FIXME: Look at this again when we move to PDO
@@ -449,91 +467,93 @@ class xarUser extends xarObject
 
                 // We want the result as an associative array
                 // First get the field names
-                $fields = array();
+                $fields = [];
                 $result->setFetchMode(xarDB3::getFetchAssoc());
-//                $result->next(); $result->previous();
+                //                $result->next(); $result->previous();
                 $result->first();
                 if (!isset($result->fields)) {
                     $result->fields = [];
                 }
                 $numfields = count($result->fields);
-                for ($i=0;$i< $numfields;$i++) {
-                    $tmp = array_slice($result->fields,$i,1);
+                for ($i = 0;$i < $numfields;$i++) {
+                    $tmp = array_slice($result->fields, $i, 1);
                     $namefield  = key($tmp);
                     $fields[$namefield]['name'] = strtolower($namefield);
                 }
                 $result->setFetchMode(xarDB3::getFetchNum());
                 $result->first();
-//                $result->next(); $result->previous();
-                
+                //                $result->next(); $result->previous();
+
                 // Now get the values
-                $i=0; $line=array();
-                foreach ($fields as $key => $value ) {
-                    if(!empty($value['alias']))
+                $i = 0;
+                $line = [];
+                foreach ($fields as $key => $value) {
+                    if (!empty($value['alias'])) {
                         $line[$value['alias']] = $result->fields[$i];
-                    elseif(!empty($value['name']))
+                    } elseif (!empty($value['name'])) {
                         $line[$value['name']] = $result->fields[$i];
-                    else
+                    } else {
                         $line[] = $result->fields[$i];
+                    }
                     $i++;
                 }
                 $userRole = $line;
-   
+
                 if (empty($userRole) || $userRole['id'] != $userId) {
-                    throw new IDNotFoundException($userId,'User identified by id #(1) does not exist.');
+                    throw new IDNotFoundException($userId, 'User identified by id #(1) does not exist.');
                 }
-    
-                xarVar3::setCached('User.Variables.'.$userId, 'uname', $userRole['uname']);
-                xarVar3::setCached('User.Variables.'.$userId, 'name', $userRole['name']);
-                xarVar3::setCached('User.Variables.'.$userId, 'email', $userRole['email']);
-    
+
+                xarVar3::setCached('User.Variables.' . $userId, 'uname', $userRole['uname']);
+                xarVar3::setCached('User.Variables.' . $userId, 'name', $userRole['name']);
+                xarVar3::setCached('User.Variables.' . $userId, 'email', $userRole['email']);
+
             } elseif (!self::isVarDefined($name)) {
-                if (xarMod3::getVar($name, 'roles') || xarMod3::getVar('set'.$name, 'roles')) { //acount for optionals that need to be activated)
-                    $value = xarModUserVars::get('roles',$name,$userId);
+                if (xarMod3::getVar($name, 'roles') || xarMod3::getVar('set' . $name, 'roles')) { //acount for optionals that need to be activated)
+                    $value = xarModUserVars::get('roles', $name, $userId);
                     if ($value == null) {
-                        xarVar3::setCached('User.Variables.'.$userId, $name, false);
+                        xarVar3::setCached('User.Variables.' . $userId, $name, false);
                         // Here we can't raise an exception because they're all optional
-                        $optionalvars=array('locale','timezone','usertimezone','userlastlogin',
-                                            'userhome','primaryparent','passwordupdate');
+                        $optionalvars = ['locale','timezone','usertimezone','userlastlogin',
+                            'userhome','primaryparent','passwordupdate'];
                         //if ($name != 'locale' && $name != 'timezone') {
                         if (!in_array($name, $optionalvars)) {
-                        // log unknown user variables to inform the site admin
+                            // log unknown user variables to inform the site admin
                             $msg = xarMLS3::translate('User variable #(1) was not correctly registered', $name);
                             xarLog3::error($msg);
                         }
                         return;
                     } else {
-                        xarVar3::setCached('User.Variables.'.$userId, $name, $value);
+                        xarVar3::setCached('User.Variables.' . $userId, $name, $value);
                     }
                 }
-    
+
             } else {
                 // retrieve the user item
-                $itemid = self::$objectRef->getItem(array('itemid' => $userId));
+                $itemid = self::$objectRef->getItem(['itemid' => $userId]);
                 if (empty($itemid) || $itemid != $userId) {
-                    throw new IDNotFoundException($userId,'User identified by id #(1) does not exist.');
+                    throw new IDNotFoundException($userId, 'User identified by id #(1) does not exist.');
                 }
-    
+
                 // save the properties
-                $properties =& self::$objectRef->getProperties();
+                $properties = & self::$objectRef->getProperties();
                 foreach (array_keys($properties) as $key) {
                     if (isset($properties[$key]->value)) {
-                        xarVar3::setCached('User.Variables.'.$userId, $key, $properties[$key]->value);
+                        xarVar3::setCached('User.Variables.' . $userId, $key, $properties[$key]->value);
                     }
                 }
             }
         }
-    
-        if (!xarVar3::isCached('User.Variables.'.$userId, $name)) {
+
+        if (!xarVar3::isCached('User.Variables.' . $userId, $name)) {
             return false; //failure
         }
-    
-        $cachedValue = xarVar3::getCached('User.Variables.'.$userId, $name);
+
+        $cachedValue = xarVar3::getCached('User.Variables.' . $userId, $name);
         if ($cachedValue === false) {
             // Variable already searched but doesn't exist and has no default
             return;
         }
-    
+
         return $cachedValue;
     }
 
@@ -542,7 +562,7 @@ class xarUser extends xarObject
      *
      * @author Marco Canini
      * @since 1.23 - 2002/02/01
-     * 
+     *
      * @param  string  $name  the name of the variable
      * @param  mixed   $value the value of the variable
      * @param  integer $userId integer user's ID
@@ -551,14 +571,16 @@ class xarUser extends xarObject
      * @todo redesign the delegation to auth* modules for handling user variables
      * @todo some securitycheck for retrieving at least other users variables ?
      */
-    static public function setVar($name, $value, $userId = null)
+    public static function setVar($name, $value, $userId = null)
     {
         // check that $name is valid
-        if (empty($name)) throw new EmptyParameterException('name');
+        if (empty($name)) {
+            throw new EmptyParameterException('name');
+        }
         if ($name == 'id' || $name == 'authenticationModule' || $name == 'pass') {
             throw new BadParameterException('name');
         }
-    
+
         if (empty($userId)) {
             $userId = xarSession::getUserId();
         }
@@ -566,27 +588,27 @@ class xarUser extends xarObject
             // Anonymous user
             throw new NotLoggedInException();
         }
-    
+
         if ($name == 'name' || $name == 'uname' || $name == 'email') {
             // TODO: replace with some roles API
             // TODO: not -^ but get rid of this entirely here.
             //self::setUsersTableUserVar($name, $value, $userId);
             throw new BadParameterException('name');
-    
+
         } elseif (!self::isVarDefined($name)) {
             if (xarMod3::getVar($name, 'roles')) {
-                xarVar3::setCached('User.Variables.'.$userId, $name, false);
-                throw new IDNotFoundException($name,'User variable #(1) was not correctly registered');
+                xarVar3::setCached('User.Variables.' . $userId, $name, false);
+                throw new IDNotFoundException($name, 'User variable #(1) was not correctly registered');
             } else {
-                xarModUserVars::set('roles',$name,$value,$userId);
+                xarModUserVars::set('roles', $name, $value, $userId);
             }
         } else {
             // retrieve the user item
-            $itemid = self::$objectRef->getItem(array('itemid' => $userId));
+            $itemid = self::$objectRef->getItem(['itemid' => $userId]);
             if (empty($itemid) || $itemid != $userId) {
-                throw new IDNotFoundException($userId,'User identified by id "#(1)" does not exist.');
+                throw new IDNotFoundException($userId, 'User identified by id "#(1)" does not exist.');
             }
-    
+
             // check if we need to update the item
             if ($value != self::$objectRef->properties[$name]->value) {
                 // validate the new value
@@ -594,22 +616,24 @@ class xarUser extends xarObject
                     return false;
                 }
                 // update the item
-                $itemid = self::$objectRef->updateItem(array($name => $value));
-                if (!isset($itemid)) return; // throw back
+                $itemid = self::$objectRef->updateItem([$name => $value]);
+                if (!isset($itemid)) {
+                    return;
+                } // throw back
             }
-    
+
         }
-    
+
         // Keep in sync the UserVariables cache
-        xarVar3::setCached('User.Variables.'.$userId, $name, $value);
-    
+        xarVar3::setCached('User.Variables.' . $userId, $name, $value);
+
         return true;
     }
 
     /**
      * Compare Passwords
      *
-     * 
+     *
      * @param  string $givenPassword  the password given for comparison
      * @param  string $realPassword   the reference password to compare to
      * @param  string $userName       name of the corresponding user?
@@ -618,30 +642,31 @@ class xarUser extends xarObject
      * @todo   weird duckling here
      * @todo   consider something strong than md5 here (not trivial wrt upgrading though)
      */
-    static public function comparePasswords($givenPassword, $realPassword, $userName, $cryptSalt = '')
+    public static function comparePasswords($givenPassword, $realPassword, $userName, $cryptSalt = '')
     {
         // TODO: consider moving to something stronger like sha1
         $md5pass = md5($givenPassword);
-        if (strcmp($md5pass, $realPassword ?? '') == 0)
+        if (strcmp($md5pass, $realPassword ?? '') == 0) {
             // Huh? shouldn't this be true instead of the md5 ?
             return true;
-    
+        }
+
         return false;
     }
 
     // PRIVATE FUNCTIONS
-    
+
     /**
      * Get user's authentication module
      *
-     * 
+     *
      * @param  int $userId string
      * @todo   what happens for anonymous users ???
      * @todo   check coherence 1 vs. 0 for Anonymous users !!!
      * @todo   this should be somewhere else probably (base class of auth* or roles mebbe)
      * @todo   is $userId a string? looks like an ID
      */
-    static private function getAuthModule($userId)
+    private static function getAuthModule($userId)
     {
         if ($userId == xarSession::getUserId()) {
             $authModName = xarSession::getVar('authenticationModule');
@@ -649,21 +674,21 @@ class xarUser extends xarObject
                 return $authModName;
             }
         }
-    
+
         $dbconn   = xarDB3::getConn();
         $xartable = xarDB3::getTables();
-    
+
         // Get user auth_module name
         $rolestable = $xartable['roles'];
         $modstable = $xartable['modules'];
-    
+
         $query = "SELECT mods.name
                   FROM $modstable mods, $rolestable roles
                   WHERE mods.id = roles.auth_module_id AND
                         roles.id = ?";
-        $stmt =& $dbconn->prepareStatement($query);
-        $result =& $stmt->executeQuery(array($userId),xarDB3::getFetchNum());
-    
+        $stmt = & $dbconn->prepareStatement($query);
+        $result = & $stmt->executeQuery([$userId], xarDB3::getFetchNum());
+
         if (!$result->next()) {
             // That user has never logon, strange, don't you think?
             // However fallback to authsystem
@@ -677,31 +702,33 @@ class xarUser extends xarObject
             }
         }
         $result->Close();
-    
-        if (!xarMod3::apiLoad($authModName, 'user')) return;
-    
+
+        if (!xarMod3::apiLoad($authModName, 'user')) {
+            return;
+        }
+
         return $authModName;
     }
-    
+
     /**
      * See if a Variable has been defined
      *
-     * 
+     *
      * @param  string $name name of the variable to check
      * @return boolean true if the variable is defined
      * @todo   rething this.
      */
-    static private function isVarDefined($name)
+    private static function isVarDefined($name)
     {
         // Retrieve the dynamic user object if necessary
-        if (!isset(self::$objectRef) && xarMod3::isHooked('dynamicdata','roles')) {
+        if (!isset(self::$objectRef) && xarMod3::isHooked('dynamicdata', 'roles')) {
             sys::import('modules.dynamicdata.class.objects.factory');
             self::$objectRef = DataObjectFactory::getObject(['module' => 'roles']);
             if (empty(self::$objectRef) || empty(self::$objectRef->objectid)) {
                 self::$objectRef = false;
             }
         }
-    
+
         // Check if this property is defined for the dynamic user object
         if (empty(self::$objectRef) || empty(self::$objectRef->properties[$name])) {
             return false;

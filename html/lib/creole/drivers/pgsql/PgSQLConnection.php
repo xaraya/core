@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PgSQLConnection.php,v 1.21 2005/08/03 17:56:22 hlellelid Exp $
  *
@@ -112,7 +113,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection
         $this->dblink = $conn;
 
         // set the schema search order
-        if(!empty($dsninfo['schema'])) {
+        if (!empty($dsninfo['schema'])) {
             $this->setSchemaSearchPath($dsninfo['schema']);
         }
     }
@@ -123,10 +124,10 @@ class PgSQLConnection extends ConnectionCommon implements Connection
     public function applyLimit(&$sql, $offset, $limit)
     {
         if ($limit > 0) {
-            $sql .= " LIMIT ".$limit;
+            $sql .= " LIMIT " . $limit;
         }
         if ($offset > 0) {
-            $sql .= " OFFSET ".$offset;
+            $sql .= " OFFSET " . $offset;
         }
     }
 
@@ -284,7 +285,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection
      */
     protected function setSavepoint($identifier)
     {
-        $result = @pg_query($this->dblink, "savepoint ".$identifier);
+        $result = @pg_query($this->dblink, "savepoint " . $identifier);
         if (!$result) {
             throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
         }
@@ -298,7 +299,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection
      */
     protected function releaseSavepoint($identifier)
     {
-        $result = @pg_query($this->dblink, "release savepoint ".$identifier);
+        $result = @pg_query($this->dblink, "release savepoint " . $identifier);
         if (!$result) {
             throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
         }
@@ -312,7 +313,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection
      */
     protected function rollbackToSavepoint($identifier)
     {
-        $result = @pg_query($this->dblink, "rollback to savepoint ".$identifier);
+        $result = @pg_query($this->dblink, "rollback to savepoint " . $identifier);
         if (!$result) {
             throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
         }

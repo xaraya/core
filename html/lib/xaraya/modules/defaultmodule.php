@@ -30,7 +30,7 @@ class DefaultModule implements ModuleInterface
     /**
      * @see \xarMod::privateLoad()
      */
-    public function getClassType(string $modType): string|null
+    public function getClassType(string $modType): ?string
     {
         // no class types available here
         return null;
@@ -39,7 +39,7 @@ class DefaultModule implements ModuleInterface
     /**
      * @see \xarMod::getModuleClassMethod()
      */
-    public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): callable|null
+    public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): ?callable
     {
         // no callable methods available here
         return null;

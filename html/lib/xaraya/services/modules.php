@@ -58,7 +58,7 @@ interface ModulesInterface extends ServiceInterface
      */
     public function prepare(array $tplData = []): array;
     public function getName(?int $regID = null): string;
-    public function getID(?string $modName = null): int|null;
+    public function getID(?string $modName = null): ?int;
     public function getRegID(?string $modName = null): int;
     public function getDisplayName(?string $modName = null): string;
     /** @return array<string, mixed> */
@@ -78,7 +78,7 @@ interface ModulesInterface extends ServiceInterface
     public function load(?string $modName = null, ?string $modType = null): mixed;
     public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed;
     public function getModule(?string $modName = null): ModuleInterface;
-    public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): callable|null;
+    public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): ?callable;
     /** @param array<string, mixed> $args */
     public function apiMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     /** @param array<string, mixed> $args */
@@ -178,7 +178,7 @@ trait ModulesTrait
      */
     public function disableOverview(): bool
     {
-        return xarModVars::get('modules', 'disableoverview') ? true :  false;
+        return xarModVars::get('modules', 'disableoverview') ? true : false;
     }
 
     /**
@@ -252,7 +252,7 @@ trait ModulesTrait
     /**
      * Get module system ID for this module (internal)
      */
-    public function getID(?string $modName = null): int|null
+    public function getID(?string $modName = null): ?int
     {
         $modName ??= $this->getModName();
         return xarMod::getID($modName);
@@ -417,7 +417,7 @@ trait ModulesTrait
      * @param string $callType is this called as an api function or not -> check against module class
      * @return callable|null
      */
-    public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): callable|null
+    public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): ?callable
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();

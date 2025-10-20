@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -14,7 +15,9 @@ class RelativeDirectoryIterator extends DirectoryIterator
     public function __construct($file)
     {
         $realpath = realpath($file);
-        if (!$realpath) throw new DirectoryNotFoundException($file);
+        if (!$realpath) {
+            throw new DirectoryNotFoundException($file);
+        }
         parent::__construct($realpath);
     }
 
@@ -23,9 +26,10 @@ class RelativeDirectoryIterator extends DirectoryIterator
     {
         $filename = $this->GetFilename();
         $extension = strrpos($filename, ".", 1) + 1;
-        if ($extension != false)
+        if ($extension != false) {
             return strtolower(substr($filename, $extension, strlen($filename) - $extension));
-        else
+        } else {
             return "";
+        }
     }
 }

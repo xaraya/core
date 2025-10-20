@@ -64,7 +64,7 @@ class GenericAPIRoutes extends RestAPIRoutes
      * Find route uri based on params
      * @param array<string, mixed> $params
      */
-    public static function findRoute(RouterInterface $router, array $params, string $method = 'GET', string $namePrefix = ''): string|null
+    public static function findRoute(RouterInterface $router, array $params, string $method = 'GET', string $namePrefix = ''): ?string
     {
         // we have a route already
         if (!empty($params[$router::ROUTE_PARAM])) {

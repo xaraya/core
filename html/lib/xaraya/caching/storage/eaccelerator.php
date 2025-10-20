@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\caching
  * @subpackage caching
@@ -106,10 +107,10 @@ class xarCache_eAccelerator_Storage extends xarCache_Storage implements ixarCach
         // TODO: extract other values
 
         return ['size'    => $this->size,
-                'items'   => $this->items,
-                'hits'    => $this->hits,
-                'misses'  => $this->misses,
-                'modtime' => $this->modtime];
+            'items'   => $this->items,
+            'hits'    => $this->hits,
+            'misses'  => $this->misses,
+            'modtime' => $this->modtime];
     }
 
     public function getCachedList()

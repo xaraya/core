@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Event Observer Bridges for Xaraya to forward events to a dispatcher compatible with Symfony EventDispatcher (not PSR-14)
  *

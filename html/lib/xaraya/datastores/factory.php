@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\datastores
  * @subpackage datastores
@@ -84,7 +85,7 @@ class DDObject extends xarObject implements IDDObject
      * @param SimpleXMLElement|null $schemaobject
      * @return array<mixed>|bool
      */
-    public function toArray(SimpleXMLElement $schemaobject = null)
+    public function toArray(?SimpleXMLElement $schemaobject = null)
     {
         $schemaobject ??= $this->schemaobject;
         if (empty($schemaobject)) {
@@ -95,18 +96,18 @@ class DDObject extends xarObject implements IDDObject
 
         foreach ($children as $element => $value) {
             if ($value instanceof SimpleXMLElement) {
-                $values = (array)$value->children();
+                $values = (array) $value->children();
 
                 if (count($values) > 0) {
                     $return[$element] = $this->toArray($value);
                 } else {
                     if (!isset($return[$element])) {
-                        $return[$element] = (string)$value;
+                        $return[$element] = (string) $value;
                     } else {
                         if (!is_array($return[$element])) {
-                            $return[$element] = [$return[$element], (string)$value];
+                            $return[$element] = [$return[$element], (string) $value];
                         } else {
-                            $return[$element][] = (string)$value;
+                            $return[$element][] = (string) $value;
                         }
                     }
                 }
@@ -125,7 +126,7 @@ class DDObject extends xarObject implements IDDObject
      * @param SimpleXMLElement|null $schemaobject
      * @return bool|string
      */
-    public function toXML(SimpleXMLElement $schemaobject = null)
+    public function toXML(?SimpleXMLElement $schemaobject = null)
     {
         $schemaobject ??= $this->schemaobject;
         if (empty($schemaobject)) {
@@ -234,9 +235,7 @@ class DataStoreFactory extends xarObject
      * Summary of getDataStores
      * @return void
      */
-    public function getDataStores()
-    {
-    }
+    public function getDataStores() {}
 
     /**
      * Get possible data sources

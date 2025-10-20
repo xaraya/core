@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Try out the combined request handler with ReactPHP (work in progress)
  *

@@ -63,11 +63,11 @@ interface MethodServicesInterface extends ParentServicesInterface
     public function getParent(): ModuleServicesInterface;
     /** @param TComponent $parent */
     public function setParent(ModuleServicesInterface $parent): void;
-    public function getModule(?string $modName = null): ModuleInterface|null;
-    public function userapi(): UserApiInterface|null;
-    public function usergui(): UserGuiInterface|null;
-    public function adminapi(): AdminApiInterface|null;
-    public function admingui(): AdminGuiInterface|null;
+    public function getModule(?string $modName = null): ?ModuleInterface;
+    public function userapi(): ?UserApiInterface;
+    public function usergui(): ?UserGuiInterface;
+    public function adminapi(): ?AdminApiInterface;
+    public function admingui(): ?AdminGuiInterface;
     public function getModName(): string;
     public function setModName(string $modName): void;
     public function getItemType(): int;
@@ -140,15 +140,15 @@ trait MethodServicesTrait
     /**
      * Get parent module to access other module classes
      */
-    public function getModule(?string $modName = null): ModuleInterface|null
+    public function getModule(?string $modName = null): ?ModuleInterface
     {
-        return $this->getParent()->getModule($modName);   
+        return $this->getParent()->getModule($modName);
     }
 
     /**
      * Get module user API class for this module
      */
-    public function userapi(): UserApiInterface|null
+    public function userapi(): ?UserApiInterface
     {
         return $this->getParent()->userapi();
     }
@@ -156,7 +156,7 @@ trait MethodServicesTrait
     /**
      * Get module user GUI class for this module
      */
-    public function usergui(): UserGuiInterface|null
+    public function usergui(): ?UserGuiInterface
     {
         return $this->getParent()->usergui();
     }
@@ -164,7 +164,7 @@ trait MethodServicesTrait
     /**
      * Get module admin API class for this module
      */
-    public function adminapi(): AdminApiInterface|null
+    public function adminapi(): ?AdminApiInterface
     {
         return $this->getParent()->adminapi();
     }
@@ -172,7 +172,7 @@ trait MethodServicesTrait
     /**
      * Get module admin GUI class for this module
      */
-    public function admingui(): AdminGuiInterface|null
+    public function admingui(): ?AdminGuiInterface
     {
         return $this->getParent()->admingui();
     }

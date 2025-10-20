@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Main Controller class
  *
@@ -60,7 +61,7 @@ class xarController extends xarObject
      *
      * @param array<string, mixed> $args
      */
-    public static function init(array $args = array()): void
+    public static function init(array $args = []): void
     {
         if (empty($args)) {
             $args = self::getConfig();
@@ -75,7 +76,7 @@ class xarController extends xarObject
         // setting BaseModURL = '' in config.system.php
         try {
             self::$entryPoint = xarSystemVars::get(sys::LAYOUT, 'BaseModURL');
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             self::$entryPoint = 'index.php';
         }
         // xarController::init() comes after xarServer::init()
@@ -89,8 +90,8 @@ class xarController extends xarObject
     public static function getConfig()
     {
         // xarController::init() comes after xarVar::init()
-        $systemArgs = array('enableShortURLsSupport' => xarConfig3::getVar('Site.Core.EnableShortURLsSupport'),
-                            'generateXMLURLs' => true);
+        $systemArgs = ['enableShortURLsSupport' => xarConfig3::getVar('Site.Core.EnableShortURLsSupport'),
+            'generateXMLURLs' => true];
         return $systemArgs;
     }
 
@@ -204,7 +205,7 @@ class xarController extends xarObject
      */
     public static function __stripslashes($value)
     {
-        $value = is_array($value) ? array_map(array('self','__stripslashes'), $value) : stripslashes($value);
+        $value = is_array($value) ? array_map(['self','__stripslashes'], $value) : stripslashes($value);
         return $value;
     }
 
@@ -370,7 +371,7 @@ class xarController extends xarObject
             // Get base URL
             $baseurl = xarServer::getBaseURL();
 
-            $redirectURL = $baseurl.$redirectURL;
+            $redirectURL = $baseurl . $redirectURL;
         }
 
         if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE') ?? '') && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE') ?? '')) {
@@ -533,7 +534,7 @@ class xarController extends xarObject
      * @return string absolute URL for call, or false on failure
      * @todo allow for an alternative entry point (e.g. stream.php) without affecting the other parameters
      */
-    public static function URL($modName = null, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = null, $fragment = null, $entrypoint = array(), $route = null)
+    public static function URL($modName = null, $modType = 'user', $funcName = 'main', $args = [], $generateXMLURL = null, $fragment = null, $entrypoint = [], $route = null)
     {
         // Allow overriding building URL if needed
         $callback = self::getCallback('buildUri');
@@ -629,7 +630,7 @@ class xarController extends xarObject
      */
     public static function parseQuery($url = '')
     {
-        $params = array();
+        $params = [];
         if (empty($url)) {
             return $params;
         }
@@ -637,14 +638,14 @@ class xarController extends xarObject
         if (isset($decomposed['query'])) {
             $pairs = explode('&', $decomposed['query']);
             try {
-                foreach($pairs as $pair) {
+                foreach ($pairs as $pair) {
                     if (trim($pair) == '') {
                         continue;
                     }
-                    list($key, $value) = explode('=', $pair);
+                    [$key, $value] = explode('=', $pair);
                     $params[$key] = urldecode($value);
                 }
-            } catch(Exception $e) {
+            } catch (Exception $e) {
             }
         }
         return $params;

@@ -68,7 +68,7 @@ class ColumnInfo
      * Additional and optional vendor specific information.
      * @var array $vendorSpecificInfo
      */
-    protected $vendorSpecificInfo = array();
+    protected $vendorSpecificInfo = [];
 
     /**
      * Construct a new ColumnInfo object.
@@ -95,7 +95,7 @@ class ColumnInfo
         $is_nullable = null,
         $default = null,
         $is_auto_increment = null,
-        $vendorInfo = array()
+        $vendorInfo = []
     ) {
         $this->table = $table;
         $this->name = $name;
@@ -118,7 +118,7 @@ class ColumnInfo
      */
     public function __sleep()
     {
-        return array('name', 'type', 'nativeType', 'size', 'precision', 'isNullable', 'defaultValue');
+        return ['name', 'type', 'nativeType', 'size', 'precision', 'isNullable', 'defaultValue'];
     }
 
     /**
@@ -234,7 +234,7 @@ class ColumnInfo
     // emulate some stuff
     public function __get($propname)
     {
-        switch($propname) {
+        switch ($propname) {
             case 'max_length':
                 return $this->size;
             default:
@@ -244,7 +244,7 @@ class ColumnInfo
 
     public function __call($method, $args)
     {
-        switch($method) {
+        switch ($method) {
             default:
                 throw new Exception("Unknown method calls for columninfo");
         }

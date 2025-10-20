@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Xaraya Variable Cache
  *
@@ -54,17 +55,17 @@ class xarVariableCache extends xarObject
         ];
         self::$cacheSettings = $config['Variable.CacheSettings'] ?? self::$cacheScopes;
 
-        $storage = !empty($config['Variable.CacheStorage']) ?
-            $config['Variable.CacheStorage'] : 'apcu';
-        $provider = !empty($config['Variable.CacheProvider']) ?
-            $config['Variable.CacheProvider'] : null;
+        $storage = !empty($config['Variable.CacheStorage'])
+            ? $config['Variable.CacheStorage'] : 'apcu';
+        $provider = !empty($config['Variable.CacheProvider'])
+            ? $config['Variable.CacheProvider'] : null;
         self::$cacheDir = $config['Variable.CacheDir'] ?? xarCache::$cacheDir . '/variables';
         // CHECKME: we won't actually support filesystem as storage here for security !?
         if ($storage == 'filesystem') {
             return false;
         }
-        $logfile = !empty($config['Variable.LogFile']) ?
-            $config['Variable.LogFile'] : null;
+        $logfile = !empty($config['Variable.LogFile'])
+            ? $config['Variable.LogFile'] : null;
         // Note: make sure this isn't used before core loading if we use database storage
         self::$cacheStorage = xarCache::getStorage([
             'storage'   => $storage,
@@ -113,7 +114,7 @@ class xarVariableCache extends xarObject
         // Answer: this must be handled by the cacheStorage if necessary
         // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
         // Note: the cacheStorage may add its own namespace internally to take into account the host, site, ...
-        return $scope.':'.$name;
+        return $scope . ':' . $name;
     }
 
     /**
@@ -275,6 +276,6 @@ class xarVariableCache extends xarObject
             return;
         }
         // CHECKME: not all cache storage supports this in the same way !
-        self::$cacheStorage->flushCached($scope.':');
+        self::$cacheStorage->flushCached($scope . ':');
     }
 }

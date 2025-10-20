@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\logging
  * @subpackage logging
@@ -16,7 +17,7 @@
  */
 function xarLog__stringToLevel($string)
 {
-    static $strings = array (
+    static $strings =  [
         'EMERGENCY' => xarLog::LEVEL_EMERGENCY,
         'ALERT'     => xarLog::LEVEL_ALERT,
         'CRITICAL'  => xarLog::LEVEL_CRITICAL,
@@ -24,8 +25,8 @@ function xarLog__stringToLevel($string)
         'WARNING'   => xarLog::LEVEL_WARNING,
         'NOTICE'    => xarLog::LEVEL_NOTICE,
         'INFO'      => xarLog::LEVEL_INFO,
-        'DEBUG'     => xarLog::LEVEL_DEBUG
-    );
+        'DEBUG'     => xarLog::LEVEL_DEBUG,
+    ];
 
     return $strings[$string];
 }

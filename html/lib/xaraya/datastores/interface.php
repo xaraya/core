@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\datastores
  * @subpackage datastores
@@ -73,14 +74,14 @@ interface IDDObject
      * @param SimpleXMLElement|null $schemaobject
      * @return array<mixed>|bool
      */
-    public function toArray(SimpleXMLElement $schemaobject = null);
+    public function toArray(?SimpleXMLElement $schemaobject = null);
 
     /**
      * Summary of toXML
      * @param SimpleXMLElement|null $schemaobject
      * @return bool|string
      */
-    public function toXML(SimpleXMLElement $schemaobject = null);
+    public function toXML(?SimpleXMLElement $schemaobject = null);
 }
 
 interface IBasicDataStore

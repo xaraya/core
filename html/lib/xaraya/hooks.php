@@ -1,4 +1,5 @@
 <?php
+
 /**
  * (Module) Hooks handling subsystem - moved from modules to hooks for (future) clarity
  * @todo Hooks are currently linked with modules & itemtypes, not objects
@@ -27,21 +28,21 @@ use Xaraya\Facades\xarVar3;
 
 class xarHooks extends xarEvents
 {
-    // unique event system itemtype ids for storage/retrieval/actioning in the event system 
-    const HOOK_SUBJECT_TYPE  = 3;    
-    const HOOK_OBSERVER_TYPE = 4;
-    
-    protected static $hookobservers = array();
+    // unique event system itemtype ids for storage/retrieval/actioning in the event system
+    public const HOOK_SUBJECT_TYPE  = 3;
+    public const HOOK_OBSERVER_TYPE = 4;
+
+    protected static $hookobservers = [];
     // allow others to define callback functions without registering observers e.g. for event bridge
     protected static $callbackFunctions = [];
 
-/**    
- * required functions, provide event system with late static bindings for these values
-**/
+    /**
+     * required functions, provide event system with late static bindings for these values
+    **/
     public static function getSubjectType()
     {
         return xarHooks::HOOK_SUBJECT_TYPE;
-    }    
+    }
     public static function getObserverType()
     {
         return xarHooks::HOOK_OBSERVER_TYPE;
@@ -92,14 +93,16 @@ class xarHooks extends xarEvents
         $event = $subject->getSubject();
         $args = $subject->getExtrainfo();
         $info = static::getSubject($event);
-        if (empty($info)) return;
+        if (empty($info)) {
+            return;
+        }
         $subject_id = $args['module_id'];
         $subject_module = $args['module'];
         $subject_itemtype = empty($args['itemtype']) ? 0 : $args['itemtype'];
-        
+
         $cacheScope = 'Hooks.Observers';
         $cacheName = $subject_module . '.' . $subject_itemtype;
-        $observers = array();
+        $observers = [];
         if (xarVar3::isCached($cacheScope, $cacheName)) {
             $observers = xarVar3::getCached($cacheScope, $cacheName);
             if (isset($observers[$event])) {
@@ -107,7 +110,7 @@ class xarHooks extends xarEvents
             }
         }
         // init cache
-        $observers[$event] = array();
+        $observers[$event] = [];
 
         // Get database info
         $dbconn   = xarDB3::getConn();
@@ -115,15 +118,15 @@ class xarHooks extends xarEvents
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
-        $bindvars = array();
-        $where = array();
+        $bindvars = [];
+        $where = [];
         // support namespaces in modules (and core someday) - we may get back $classname here
         $query = "SELECT eo.id, eo.event, eo.module_id, eo.area, eo.type, eo.func, eo.itemtype, eo.class,
                          mo.name
                   FROM $htable h, $etable eo, $mtable mo, $etable es";
         // only get observers for the hooks observer itemtype
         $where[] =  "eo.itemtype = ?";
-        $bindvars[] = xarHooks::HOOK_OBSERVER_TYPE;        
+        $bindvars[] = xarHooks::HOOK_OBSERVER_TYPE;
         // only get observers of this event - we take all events at once now
         //$where[] = "eo.event = ?";
         //$bindvars[] = $event;
@@ -141,12 +144,12 @@ class xarHooks extends xarEvents
         // The common case is hooking DD to some itemtype that is already a dataobject:
         // We pass the itemid of the object through the hooks call, causing DD to display an object of the same itemid, which is of course the original object
         if (!empty($args['exclude_module'])) {
-            //$query .= " AND mo.regid NOT IN ('" . join("','", xarMod3::getRegID($extraInfo['exclude_module'])) . "')"; 
+            //$query .= " AND mo.regid NOT IN ('" . join("','", xarMod3::getRegID($extraInfo['exclude_module'])) . "')";
             foreach ($args['exclude_module'] as $excluded_module) {
                 $where[] = "mo.regid != " . xarMod3::getRegID($excluded_module);
             }
         }
-        
+
         if (!empty($subject_itemtype)) {
             $where[] = "(h.itemtype = ? OR h.itemtype = ?)";
             $bindvars[] = $subject_itemtype;
@@ -162,14 +165,16 @@ class xarHooks extends xarEvents
         $query .= " WHERE " . join(" AND ", $where);
         // order by module, event
         // @TODO: allow ordering ?
-        $query .= " ORDER BY mo.name ASC, eo.event ASC";  
+        $query .= " ORDER BY mo.name ASC, eo.event ASC";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
-        if (!$result) return;
-        while($result->next()) {
-            list($id, $evt, $module_id, $area, $type, $func, $itemtype, $classname, $module) = $result->fields;
-            $observers[$evt] ??= array();
-            $observers[$evt][$module] = array(
+        if (!$result) {
+            return;
+        }
+        while ($result->next()) {
+            [$id, $evt, $module_id, $area, $type, $func, $itemtype, $classname, $module] = $result->fields;
+            $observers[$evt] ??= [];
+            $observers[$evt][$module] = [
                 'id' => $id,
                 'event' => $evt,
                 'module_id' => $module_id,
@@ -179,53 +184,73 @@ class xarHooks extends xarEvents
                 'func' => $func,
                 'itemtype' => $itemtype,
                 'classname' => $classname,
-            );
+            ];
         };
         $result->close();
         xarVar3::setCached($cacheScope, $cacheName, $observers);
         return $observers[$event];
     }
-    
-    
-/**
- * Hook system functions
-**/
+
+
+    /**
+     * Hook system functions
+    **/
     /**
      * Attach (hook) a hook module (observer) to a module (subject) (+ itemtype)
-    **/ 
-    public static function attach($observer, $subject, $itemtype=null, $scope="0")
+    **/
+    public static function attach($observer, $subject, $itemtype = null, $scope = "0")
     {
         // Argument check
-        if (empty($observer)) 
+        if (empty($observer)) {
             throw new EmptyParameterException('observer');
-        if (!empty($scope) && !is_numeric($scope) && !is_string($scope))
+        }
+        if (!empty($scope) && !is_numeric($scope) && !is_string($scope)) {
             throw new EmptyParameterException('scope');
-        if (empty($subject))   
+        }
+        if (empty($subject)) {
             throw new EmptyParameterException('subject');
-        if (!empty($itemtype) && !is_numeric($itemtype)) 
+        }
+        if (!empty($itemtype) && !is_numeric($itemtype)) {
             throw new BadParameterException('itemtype');
-        
+        }
+
         $observer_id = xarMod3::getRegID($observer);
-        if (empty($observer_id)) return;
+        if (empty($observer_id)) {
+            return;
+        }
         $subject_id = xarMod3::getRegID($subject);
-        if (empty($subject_id)) return;
-        
-        if (empty($itemtype)) $itemtype = 0;
-        if (empty($scope)) $scope = '0';
-        
-        if (xarHooks::isAttached($observer, $subject, $itemtype, $scope)) return true;
-        
+        if (empty($subject_id)) {
+            return;
+        }
+
+        if (empty($itemtype)) {
+            $itemtype = 0;
+        }
+        if (empty($scope)) {
+            $scope = '0';
+        }
+
+        if (xarHooks::isAttached($observer, $subject, $itemtype, $scope)) {
+            return true;
+        }
+
         // when hooking to itemtype 0 (all items) we need to remove hooks to distinct itemtypes
         if ($itemtype === 0 && $scope === 0) {
             // remove all hooks, all itemtypes, all scopes
-            if (!xarHooks::detach($observer, $subject, -1, -1)) return;
+            if (!xarHooks::detach($observer, $subject, -1, -1)) {
+                return;
+            }
         } elseif ($itemtype === 0) {
             // remove all hooks, all itemtypes, specified scope
-            if (!xarHooks::detach($observer, $subject, -1, $scope)) return;
-        } elseif ($scope === 0) {            
-            // remove all hooks, specified itemtype, all scopes 
-            if (!xarHooks::detach($observer, $subject, $itemtype, -1)) return;
-        }        
+            if (!xarHooks::detach($observer, $subject, -1, $scope)) {
+                return;
+            }
+        } elseif ($scope === 0) {
+            // remove all hooks, specified itemtype, all scopes
+            if (!xarHooks::detach($observer, $subject, $itemtype, -1)) {
+                return;
+            }
+        }
         // Get database info
         $dbconn   = xarDB3::getConn();
         $xartable = xarDB3::getTables();
@@ -241,7 +266,7 @@ class xarHooks extends xarEvents
                       scope
                      )
                      VALUES (?,?,?,?)";
-            $bindvars = array($observer_id, $subject_id, $itemtype, $scope);
+            $bindvars = [$observer_id, $subject_id, $itemtype, $scope];
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeUpdate($bindvars);
             $dbconn->commit();
@@ -249,30 +274,40 @@ class xarHooks extends xarEvents
             $dbconn->rollback();
             throw $e;
         }
-        return true;       
+        return true;
     }
     /**
      * Detach (unhook) a hook module (observer) from a module (subject) (+ itemtype)
     **/
-    public static function detach($observer, $subject, $itemtype=null, $scope=null)
+    public static function detach($observer, $subject, $itemtype = null, $scope = null)
     {
         // Argument check
-        if (empty($observer)) 
+        if (empty($observer)) {
             throw new EmptyParameterException('observer');
-        if (empty($subject))   
+        }
+        if (empty($subject)) {
             throw new EmptyParameterException('subject');
-        if (!empty($itemtype) && !is_numeric($itemtype)) 
+        }
+        if (!empty($itemtype) && !is_numeric($itemtype)) {
             throw new BadParameterException('itemtype');
-        if (!empty($scope) && !is_numeric($scope) && !is_string($scope))
+        }
+        if (!empty($scope) && !is_numeric($scope) && !is_string($scope)) {
             throw new EmptyParameterException('scope');
-        
+        }
+
         $observer_id = xarMod3::getRegID($observer);
-        if (empty($observer_id)) return;
+        if (empty($observer_id)) {
+            return;
+        }
         $subject_id = xarMod3::getRegID($subject);
-        if (empty($subject_id)) return;
-        
-        if (empty($itemtype)) $itemtype = 0;
-                
+        if (empty($subject_id)) {
+            return;
+        }
+
+        if (empty($itemtype)) {
+            $itemtype = 0;
+        }
+
         // Get database info
         $dbconn   = xarDB3::getConn();
         $xartable = xarDB3::getTables();
@@ -283,13 +318,13 @@ class xarHooks extends xarEvents
             if ($observer == 'all') {
                 $query = "DELETE FROM $htable
                           WHERE subject = ?";
-                $bindvars = array($subject_id);
+                $bindvars = [$subject_id];
             } else {
                 $query = "DELETE FROM $htable
                           WHERE observer = ? AND subject = ?";
-                $bindvars = array($observer_id, $subject_id);
+                $bindvars = [$observer_id, $subject_id];
             }
-            // itemtype -1 = detach from all subject itemtypes 
+            // itemtype -1 = detach from all subject itemtypes
             if ($itemtype !== -1) {
                 $query .= " AND itemtype = ?";
                 $bindvars[] = $itemtype;
@@ -299,7 +334,7 @@ class xarHooks extends xarEvents
                 $bindvars[] = $scope;
             }
             $dbconn->Execute($query, $bindvars);
-            $dbconn->commit();                
+            $dbconn->commit();
         } catch (SQLException $e) {
             $dbconn->rollback();
             throw $e;
@@ -311,26 +346,38 @@ class xarHooks extends xarEvents
      * See if a hook module (observer) is attached (hooked) to specific module (subject) (+ itemtype)
      * @return bool true if the observer is attached, false otherwise (for any reason)
     **/
-    public static function isAttached($observer, $subject, $itemtype=null, $scope="0")
+    public static function isAttached($observer, $subject, $itemtype = null, $scope = "0")
     {
         // Argument check
-        if (empty($observer)) 
+        if (empty($observer)) {
             throw new EmptyParameterException('observer');
-        if (empty($subject))   
+        }
+        if (empty($subject)) {
             throw new EmptyParameterException('subject');
-        if (!empty($itemtype) && !is_numeric($itemtype)) 
+        }
+        if (!empty($itemtype) && !is_numeric($itemtype)) {
             throw new BadParameterException('itemtype');
-        if (!empty($scope) && !is_numeric($scope) && !is_string($scope))
+        }
+        if (!empty($scope) && !is_numeric($scope) && !is_string($scope)) {
             throw new EmptyParameterException('scope');
-                    
+        }
+
         $observer_id = xarMod3::getRegID($observer);
-        if (empty($observer_id)) return false;
+        if (empty($observer_id)) {
+            return false;
+        }
         $subject_id = xarMod3::getRegID($subject);
-        if (empty($subject_id)) return false;
-        
-        if (empty($itemtype)) $itemtype = 0;
-        if (empty($scope)) $scope = 0;
-        
+        if (empty($subject_id)) {
+            return false;
+        }
+
+        if (empty($itemtype)) {
+            $itemtype = 0;
+        }
+        if (empty($scope)) {
+            $scope = 0;
+        }
+
         // Get database info
         $dbconn   = xarDB3::getConn();
         $xartable = xarDB3::getTables();
@@ -338,7 +385,7 @@ class xarHooks extends xarEvents
         $query = "SELECT observer, subject, itemtype, scope
                   FROM $htable
                   WHERE observer = ? AND subject = ?";
-        $bindvars = array($observer_id, $subject_id, $itemtype, $scope);
+        $bindvars = [$observer_id, $subject_id, $itemtype, $scope];
         // check if a module is hooked to all (itemtype 0) when an itemtype is specified
         if (!empty($itemtype)) {
             $query .= " AND ( itemtype = ? OR itemtype = ? )";
@@ -354,53 +401,65 @@ class xarHooks extends xarEvents
         }
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
-        if (!$result) return false;
-        if (!$result->next()) return false;
-        return true;        
+        if (!$result) {
+            return false;
+        }
+        if (!$result->next()) {
+            return false;
+        }
+        return true;
     }
-    
+
     /**
      * Get the list of hook modules (observers) and their available subject observers (hooks)
-     * @param string $observer, name of module supplying hooks 
+     * @param string $observer, name of module supplying hooks
     **/
-    public static function getObserverModules($observer=null)
+    public static function getObserverModules($observer = null)
     {
         // Get list of hook modules from event system
         $hookmods = parent::getObserverModules();
 
         // format the list for output
-        $hooklist = array();    
+        $hooklist = [];
         foreach ($hookmods as $modname => $hooks) {
-            if (!empty($observer) && $modname != $observer) continue;
+            if (!empty($observer) && $modname != $observer) {
+                continue;
+            }
             $hooklist[$modname] = xarMod3::getInfo(xarMod3::getRegID($modname));
             $hooklist[$modname]['hooks'] = $hooks;
-            $hooklist[$modname]['scopes'] = array();            
+            $hooklist[$modname]['scopes'] = [];
             foreach ($hooks as $event => $info) {
                 $scope = $info['scope'];
-                if (!isset($hooklist[$modname]['scopes'][$scope][$event]))
+                if (!isset($hooklist[$modname]['scopes'][$scope][$event])) {
                     $hooklist[$modname]['scopes'][$scope][$event] = $info;
+                }
             }
         }
         return $hooklist;
     }
-    
+
     /**
-     * Get the list of modules (subjects) (+itemtypes) a hook module (observer) is hooked to   
+     * Get the list of modules (subjects) (+itemtypes) a hook module (observer) is hooked to
     **/
-    public static function getObserverSubjects($observer, $subject=null, $scope=null)
+    public static function getObserverSubjects($observer, $subject = null, $scope = null)
     {
         // Argument check
-        if (empty($observer)) 
-            throw new EmptyParameterException('observer');        
-        
+        if (empty($observer)) {
+            throw new EmptyParameterException('observer');
+        }
+
         $observer_id = xarMod3::getRegID($observer);
-        if (empty($observer_id)) return;
+        if (empty($observer_id)) {
+            return;
+        }
 
         if (!empty($subject)) {
             $subject_id = xarMod3::getRegID($subject);
-            if (empty($subject_id)) return;
+            if (empty($subject_id)) {
+                return;
+            }
         }
-        
+
         // Get database info
         $dbconn   = xarDB3::getConn();
         $xartable = xarDB3::getTables();
@@ -412,7 +471,7 @@ class xarHooks extends xarEvents
                   WHERE h.observer = ? 
                   AND mo.regid = h.observer
                   AND ms.regid = h.subject";
-        $bindvars = array($observer_id);
+        $bindvars = [$observer_id];
         if (!empty($subject_id)) {
             $query .= " AND h.subject = ?";
             $bindvars[] = $subject_id;
@@ -425,31 +484,38 @@ class xarHooks extends xarEvents
 
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
-        if (!$result) return;
-        $subjects = array();
-        while($result->next()) {
-            list($module, $itemtype, $scope) = $result->fields;
+        if (!$result) {
+            return;
+        }
+        $subjects = [];
+        while ($result->next()) {
+            [$module, $itemtype, $scope] = $result->fields;
             $subjects[$module][$itemtype][$scope] = 1;
         }
-        return $subjects;              
+        return $subjects;
     }
 
     /**
-     * Get a list of hook modules (observers) attached (hooked) 
+     * Get a list of hook modules (observers) attached (hooked)
      * to a specific module (subject) (+itemtype) event
     **/
-    public static function getSubjectObservers($subject, $event, $itemtype=null)
+    public static function getSubjectObservers($subject, $event, $itemtype = null)
     {
-        if (empty($subject) || !is_string($subject))
+        if (empty($subject) || !is_string($subject)) {
             throw new BadParameterException('subject', 'Invalid #(1) for xarHooks::getSubjectObservers()');
-        if (empty($event) || !is_string($event))
+        }
+        if (empty($event) || !is_string($event)) {
             throw new BadParameterException('event', 'Invalid #(1) for xarHooks::getSubjectObservers()');
-        if (isset($itemtype) && !is_numeric($itemtype))
+        }
+        if (isset($itemtype) && !is_numeric($itemtype)) {
             throw new BadParameterException('itemtype', 'Invalid #(1) for xarHooks::getSubjectObservers()');
-        
+        }
+
         $subject_id = xarMod3::getRegID($subject);
-        if (empty($subject_id)) return;
-        
+        if (empty($subject_id)) {
+            return;
+        }
+
         // Get database info
         $dbconn   = xarDB3::getConn();
         $xartable = xarDB3::getTables();
@@ -462,26 +528,28 @@ class xarHooks extends xarEvents
                   AND mo.regid = h.observer
                   AND eo.module_id = h.observer
                   AND eo.event = ?";
-        $bindvars = array($subject_id, $event);            
+        $bindvars = [$subject_id, $event];
         if (!empty($itemtype)) {
             $query .= " AND ( h.itemtype = ? OR h.itemtype = ? )";
             $bindvars[] = $itemtype;
             $bindvars[] = 0;
-        } 
+        }
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
-        if (!$result) return;
-        
-        $observers = array();
-        while($result->next()) {
-            list($module, $event, $scope) = $result->fields;
-            $observers[] = array(
+        if (!$result) {
+            return;
+        }
+
+        $observers = [];
+        while ($result->next()) {
+            [$module, $event, $scope] = $result->fields;
+            $observers[] = [
                 'module' => $module,
                 'event' => $event,
                 'scope' => $scope,
-            );
+            ];
         }
-        return $observers;                
+        return $observers;
     }
 
 }
@@ -513,18 +581,22 @@ class xarModHooks extends xarObject
     {
         // scope and action are concatenated to form the name of the hook event
         $event = ucfirst($hookScope) . ucfirst($hookAction);
-        if (empty($extraInfo))
-            $extraInfo = array();
-        if (!isset($extraInfo['itemid']))
+        if (empty($extraInfo)) {
+            $extraInfo = [];
+        }
+        if (!isset($extraInfo['itemid'])) {
             $extraInfo['itemid'] = $hookId;
-        if (isset($callerModName) && !isset($extraInfo['module']))
+        }
+        if (isset($callerModName) && !isset($extraInfo['module'])) {
             $extraInfo['module'] = $callerModName;
-        if (isset($callerItemType) && !isset($extraInfo['itemtype']))
+        }
+        if (isset($callerItemType) && !isset($extraInfo['itemtype'])) {
             $extraInfo['itemtype'] = $callerItemType;
-        $args = array(
+        }
+        $args = [
             'objectid' => $hookId,
             'extrainfo' => $extraInfo,
-        );
+        ];
         // Notify the hook subject (event) observers
         return xarHooks::notify($event, $args, $context);
     }
@@ -591,7 +663,7 @@ class xarModHooks extends xarObject
      * @return bool true if the unregister call suceeded, false if it failed
      * @throws BadParameterException
      */
-    public static function unregister($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc)
+    public static function unregister($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
     {
         $event = ucfirst($hookScope) . ucfirst($hookAction);
         return xarHooks::unregisterObserver($event, $hookModName);

@@ -45,7 +45,7 @@ class xarCache3
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Module, or null if not applicable
      */
-    public static function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): string|null
+    public static function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): ?string
     {
         return self::getInstance()->getModuleKey($modName, $modType, $funcName, $args);
     }
@@ -79,7 +79,7 @@ class xarCache3
      * @param array<string, mixed> $blockInfo block information
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Block, or null if not applicable
      */
-    public static function getBlockKey(array $blockInfo = []): string|null
+    public static function getBlockKey(array $blockInfo = []): ?string
     {
         return self::getInstance()->getBlockKey($blockInfo);
     }
@@ -113,7 +113,7 @@ class xarCache3
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Object, or null if not applicable
      */
-    public static function getObjectKey(string $objectName, string $methodName = 'view', array $args = []): string|null
+    public static function getObjectKey(string $objectName, string $methodName = 'view', array $args = []): ?string
     {
         return self::getInstance()->getObjectKey($objectName, $methodName, $args);
     }
@@ -146,7 +146,7 @@ class xarCache3
      * Get a cache key for variable value caching
      * @return string|null cacheKey to be used with xarVariableCache::(is|get|set)Cached, or null if not applicable
      */
-    public static function getVariableKey(string $scope, string $name): string|null
+    public static function getVariableKey(string $scope, string $name): ?string
     {
         return self::getInstance()->getVariableKey($scope, $name);
     }

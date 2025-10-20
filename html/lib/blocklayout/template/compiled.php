@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Representing blocklayout compiled templates
  *
@@ -61,9 +62,9 @@ class CompiledTemplate extends xarObject
         // Make the bindvars known in the scope.
         extract($bindvars, EXTR_OVERWRITE);
 
-        if($this->type == 'page') {
+        if ($this->type == 'page') {
             sys::import('xaraya.exceptions.handlers');
-            xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
+            xarDebug::setExceptionHandler(['ExceptionHandlers','bone']);
         }
 
         // Executing means generating output, start a buffer for it
@@ -108,7 +109,7 @@ class CompiledTemplate extends xarObject
             throw $e;
         }
 
-        if(isset($this->source)) {
+        if (isset($this->source)) {
             $prelimOut = ob_get_contents();
             ob_end_clean();
             ob_start();

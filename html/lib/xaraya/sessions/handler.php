@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\sessions
  * @category Xaraya Web Applications Framework
@@ -61,8 +62,8 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     use \Xaraya\Services\HasDatabaseTrait;
     use \Xaraya\Services\HasMultiLanguageTrait;
 
-    public const  PREFIX = 'XARSV';     // Reserved by us for our session vars
-    public const  COOKIE = 'XARAYASID'; // Our cookiename
+    public const PREFIX = 'XARSV';     // Reserved by us for our session vars
+    public const COOKIE = 'XARAYASID'; // Our cookiename
     protected mixed $context = null;
     /** @var ConnectionInterface|null */
     private $db;                        // We store sessioninfo in the database
@@ -114,7 +115,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         if (ini_get('register_globals')) {
             // First thing we do is ensure that there is no attempted pollution
             // of the session namespace (yes, we still need this in this case)
-            foreach($GLOBALS as $k => $v) {
+            foreach ($GLOBALS as $k => $v) {
                 if (substr($k, 0, 5) == self::PREFIX) {
                     throw new SessionException('xarSession init: Session Support initialisation failed.');
                 }
@@ -257,7 +258,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
 
         // If it's new, register it, otherwise use the existing.
         if ($this->isNew()) {
-            if($this->register($ipAddress)) {
+            if ($this->register($ipAddress)) {
                 // Congratulations. We have created a new session
                 //xarEvents::trigger('SessionCreate');
                 xarEvents::notify('SessionCreate');
@@ -300,7 +301,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      */
     public function getId($id = null): string|bool
     {
-        if(isset($id)) {
+        if (isset($id)) {
             return session_id($id);
         } else {
             return session_id();
@@ -390,8 +391,8 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             $this->isNew = false;
             [$XARSVid, $this->ipAddress, $lastused, $vars] = $result->getRow();
             // in case garbage collection didn't have the opportunity to do its job
-            if (!empty(xarSession::getSecurityLevel()) &&
-                xarSession::getSecurityLevel() == 'High') {
+            if (!empty(xarSession::getSecurityLevel())
+                && xarSession::getSecurityLevel() == 'High') {
                 $timeoutSetting = xarSession::getTimeoutSetting();
                 if ($lastused < $timeoutSetting) {
                     // force a reset of the userid (but use the same sessionid)
@@ -430,10 +431,10 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             // Additional notes:
             // * apache 2 on debian linux segfaults
             // UPDATE: Could this be because the vars column is a BLOB (i.e. binary) ?
-            $query = "UPDATE $this->tbl SET vars = " .
-                $this->db->qstr($vars) . ", last_use = " .
-                $this->db->qstr($now) . "WHERE id = " .
-                $this->db->qstr($sessionId);
+            $query = "UPDATE $this->tbl SET vars = "
+                . $this->db->qstr($vars) . ", last_use = "
+                . $this->db->qstr($now) . "WHERE id = "
+                . $this->db->qstr($sessionId);
             $this->db->executeUpdate($query);
             $this->db->commit();
             $this->saveTime($now);

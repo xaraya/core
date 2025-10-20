@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Encryption configuration file
  *
@@ -11,10 +12,10 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  */
-$encryption = array(
+$encryption = [
     'cipher'        => 'blowfish',
     'mode'          => 'ecb',
     'key'           => '698967f805dea9ea073d188d73ab7390',
     'hint'          => 'favorite song',
     'initvector'    => 'xaraya2x',
-);
+];

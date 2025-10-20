@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -18,13 +19,13 @@
  *
  * If you are in need of these objects, this file should theoretically
  * contain any information you need to be able to use them.
- * 
+ *
  * Legend for interface description:
  * Properties:
- * [rw] (type) name : description of property 'name' with (r)ead and/or (w)rite access        
+ * [rw] (type) name : description of property 'name' with (r)ead and/or (w)rite access
  * Methods:
  * (type) access function &name(param,...,param)
- * 
+ *
  * Methods and properties in an interface declaration are by
  * definition public (in PHP that is)
  */
@@ -34,7 +35,7 @@
  *
  * A sequence is the generic datastructure for a linear list where
  * items can be deleted and inserted at any place in the list.
- * 
+ *
  */
 interface iSequence
 {
@@ -47,18 +48,19 @@ interface iSequence
     /* (bool)  ok   */public function load($seq);
 }
 
-/** 
+/**
  * Adapter helper
  *
  * To use (in this case a sequence) an object and implement its
  * interface in terms of another, we use an adapter interface
- * 
+ *
  * An adapter reimplements the interface of the object being adapted
  * but protects those methods, to be used only by its descendents
  * This interface is the base Adapter.
  */
-interface iAdapter {
-    /* (mixed) object */public function __construct($type = 'array', array $args = array());
+interface iAdapter
+{
+    /* (mixed) object */public function __construct($type = 'array', array $args = []);
 }
 
 /**
@@ -86,7 +88,7 @@ interface iSequenceAdapter
 interface iQueue
 {
     // r (int)   size : number of elements in the queue
-    // r (bool)  empty: is the queue empty 
+    // r (bool)  empty: is the queue empty
     /*   (bool)  ok   */public function push($item);
     /*   (mixed) item */public function &pop();
     /*   (bool)  ok   */public function clear();
@@ -100,8 +102,7 @@ interface iQueue
  * accessible. It has the same interface as a queue (which one
  * inherits from which is arbitrary)
  */
-interface iStack extends iQueue
-{}
+interface iStack extends iQueue {}
 
 /**
  * Deque datastructure

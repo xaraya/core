@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: OCI8TableInfo.php,v 1.13 2006/01/06 00:02:38 sethr Exp $
  *

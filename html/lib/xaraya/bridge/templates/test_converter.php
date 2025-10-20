@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test Script for Blocklayout Converter tests
  */
@@ -111,7 +112,7 @@ class TestConverter
             }
             // start from depth 1 here to avoid renaming
             $converter->convertDir($sourcePath, $targetPath, '.xt', '', 1);
-    
+
         }
     }
 }

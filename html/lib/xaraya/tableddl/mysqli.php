@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Table Maintenance API for MySQL
  *
@@ -29,7 +30,7 @@ use Xaraya\Facades\xarDB3;
 /**
  * Generate the MySQL specific SQL to create a table
  *
- * 
+ *
  * @param string $tableName the physical table name
  * @param array<mixed> $fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
@@ -37,20 +38,20 @@ use Xaraya\Facades\xarDB3;
  */
 function xarDB__mysqlCreateTable($tableName, $fields, $charset = null)
 {
-    $sql_fields = array();
-    $primary_key = array();
+    $sql_fields = [];
+    $primary_key = [];
     $increment_start = false;
 
     foreach ($fields as $field_name => $parameters) {
         $parameters['command'] = 'create';
         $this_field = xarDB__mysqlColumnDefinition($field_name, $parameters);
 
-        $sql_fields[] = $field_name .' '
-                      . $this_field['type'] .' '
-                      . $this_field['charset'] .' '
-                      . $this_field['unsigned'] .' '
-                      . $this_field['null'] .' '
-                      . $this_field['default'] .' '
+        $sql_fields[] = $field_name . ' '
+                      . $this_field['type'] . ' '
+                      . $this_field['charset'] . ' '
+                      . $this_field['unsigned'] . ' '
+                      . $this_field['null'] . ' '
+                      . $this_field['default'] . ' '
                       . $this_field['auto_increment'];
         if ($this_field['primary_key'] == true) {
             $primary_key[] = $field_name;
@@ -70,11 +71,11 @@ function xarDB__mysqlCreateTable($tableName, $fields, $charset = null)
     $dbconn = xarDB3::getConn();
     $query  = 'DROP TABLE IF EXISTS ' . $tableName;
     // CHECKME: Do we want to use bind vars here?
-    $result =& $dbconn->Execute($query);
+    $result = & $dbconn->Execute($query);
 
-    $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
+    $sql = 'CREATE TABLE ' . $tableName . ' (' . implode(', ', $sql_fields);
     if (!empty($primary_key)) {
-        $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
+        $sql .= ', PRIMARY KEY (' . implode(',', $primary_key) . ')';
     }
 
     $sql .= ')';
@@ -89,7 +90,7 @@ function xarDB__mysqlCreateTable($tableName, $fields, $charset = null)
 /**
  * Mysql specific function to alter a table
  *
- * 
+ *
  * @param string $tableName the table to alter
  * @param array<string, mixed> $args
  * with
@@ -106,40 +107,40 @@ function xarDB__mysqlAlterTable($tableName, $args)
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
             }
             // TODO: adapt mysqlColumnDefinition to return field name too
-            $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
-            $coldef = xarDB__mysqlColumnDefinition($args['field'],$args);
+            $sql = 'ALTER TABLE ' . $tableName . ' ADD ' . $args['field'] . ' ';
+            $coldef = xarDB__mysqlColumnDefinition($args['field'], $args);
             $sql .= $coldef['type'] . ' '
                 . $coldef['unsigned'] . ' '
                 . $coldef['null'] . ' '
                 . $coldef['default'] . ' '
                 . $coldef['auto_increment'] . ' ';
 
-            if($coldef['primary_key']) {
-                $sql.= 'PRIMARY KEY ';
+            if ($coldef['primary_key']) {
+                $sql .= 'PRIMARY KEY ';
             }
             //$sql .= join(' ', xarDB__mysqlColumnDefinition($args['field'], $args));
             if (!empty($args['first']) && $args['first'] == true) {
                 $sql .= ' FIRST';
             } elseif (!empty($args['after_field'])) {
-                $sql .= ' AFTER '.$args['after_field'];
+                $sql .= ' AFTER ' . $args['after_field'];
             }
 
             // Add table options, if any
             // FIXME: when the callee was more sensible, we could simplify this
-            if(isset($coldef['increment_start'])) {
-                if($coldef['increment_start'] > 0) {
-                    $sql.= 'AUTO_INCREMENT=' .$coldef['increment_start'] . ' ';
+            if (isset($coldef['increment_start'])) {
+                if ($coldef['increment_start'] > 0) {
+                    $sql .= 'AUTO_INCREMENT=' . $coldef['increment_start'] . ' ';
                 }
             }
             break;
         case 'rename':
             if (empty($args['new_name'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (new_name key must be set.)');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (new_name key must be set.)');
             }
-            $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
+            $sql = 'ALTER TABLE ' . $tableName . ' RENAME TO ' . $args['new_name'];
             break;
         case 'modify':
 
@@ -161,19 +162,19 @@ function xarDB__mysqlAlterTable($tableName, $args)
 
             // make sure we have the colunm we're altering
             if (empty($args['field'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
             }
             // check to make sure we have an action to perform on the colunm
             if (!empty($args['type']) || !empty($args['size']) || !empty($args['default']) || !empty($args['unsigned']) || !empty($args['increment']) || !empty($args['primary_key'])) {
-                throw new BadParameterException('args','Modify does not currently support: type, size, default, unsigned, increment, or primary_key)');
+                throw new BadParameterException('args', 'Modify does not currently support: type, size, default, unsigned, increment, or primary_key)');
             }
 
             // check to make sure we have an action to perform on the colunm
-            if (empty($args['null']) && $args['null']!=false) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
+            if (empty($args['null']) && $args['null'] != false) {
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
             // prep the first part of the query
-            $sql = 'ALTER TABLE `'.$tableName.'` MODIFY `'.$args['field'].'` ';
+            $sql = 'ALTER TABLE `' . $tableName . '` MODIFY `' . $args['field'] . '` ';
 
             //since we don't allow type to be passed, check the db for type and derive type from
             // the existing schema. Also b/c the fetch mode may or may not be set to NUM, set it to
@@ -184,22 +185,22 @@ function xarDB__mysqlAlterTable($tableName, $args)
             $tblInfo = $dbInfo->getTable($tableName);
             $tableInfoArray = $tblInfo->getColumns();
 
-            if (!empty($tableInfoArray[strtoupper($args['field'])]->type)){
-                $sql.=$tableInfoArray[strtoupper($args['field'])]->type;
+            if (!empty($tableInfoArray[strtoupper($args['field'])]->type)) {
+                $sql .= $tableInfoArray[strtoupper($args['field'])]->type;
             }
-            if (!empty($tableInfoArray[strtoupper($args['field'])]->max_length) && $tableInfoArray[strtoupper($args['field'])]->max_length!="-1"){
-                $sql.='('.$tableInfoArray[strtoupper($args['field'])]->max_length.')';
+            if (!empty($tableInfoArray[strtoupper($args['field'])]->max_length) && $tableInfoArray[strtoupper($args['field'])]->max_length != "-1") {
+                $sql .= '(' . $tableInfoArray[strtoupper($args['field'])]->max_length . ')';
             }
 
             // see if the want to add null
-            if ($args['null']==true){
-                $sql.=' NOT NULL ';
+            if ($args['null'] == true) {
+                $sql .= ' NOT NULL ';
             }
 
             // break out of the case to return the modify sql
             break;
         default:
-            throw new BadParameterException($args['command'],'Unknown command: "#(1)"');
+            throw new BadParameterException($args['command'], 'Unknown command: "#(1)"');
 
     }
 
@@ -209,16 +210,16 @@ function xarDB__mysqlAlterTable($tableName, $args)
 /**
  * Mysql specific column type generation
  *
- * 
+ *
  * @param string $field_name
  * @param array<mixed> $parameters
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__mysqlColumnDefinition($field_name, $parameters)
 {
-    $this_field = array();
+    $this_field = [];
 
-    switch($parameters['type']) {
+    switch ($parameters['type']) {
 
         case 'integer':
             if (empty($parameters['size'])) {
@@ -246,7 +247,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field['type'] = 'CHAR('.$parameters['size'].')';
+                $this_field['type'] = 'CHAR(' . $parameters['size'] . ')';
             }
             break;
 
@@ -254,7 +255,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field['type'] = 'VARCHAR('.$parameters['size'].')';
+                $this_field['type'] = 'VARCHAR(' . $parameters['size'] . ')';
             }
             break;
 
@@ -297,7 +298,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             break;
 
         case 'boolean':
-            // mrb: Mysql has no native boolean, BOOL evaluates to TinyInt(1), which 
+            // mrb: Mysql has no native boolean, BOOL evaluates to TinyInt(1), which
             //      i dont really understand, they could have used BIT(1)
             // this returns as a binary string for MySQL 5.0.3+, which messes up true/false comparisons in PHP !
             //$this_field['type'] = "BIT(1)";
@@ -315,12 +316,12 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'].
-                                         ' '.$datetime_defaults['hour'].
-                                         ':'.$datetime_defaults['minute'].
-                                         ':'.$datetime_defaults['second'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day']
+                                         . ' ' . $datetime_defaults['hour']
+                                         . ':' . $datetime_defaults['minute']
+                                         . ':' . $datetime_defaults['second'];
                 }
             }
             break;
@@ -332,9 +333,9 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day'];
                 }
             }
             break;
@@ -354,11 +355,11 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
                     $data_type = 'FLOAT';
             }
             if (isset($parameters['width']) && isset($parameters['decimals'])) {
-               $data_type .= '('.$parameters['width'].','.$parameters['decimals'].')';
+                $data_type .= '(' . $parameters['width'] . ',' . $parameters['decimals'] . ')';
             }
             $this_field['type'] = $data_type;
             break;
-        // Added Time field via marsel@phatcom.net (David Taylor)
+            // Added Time field via marsel@phatcom.net (David Taylor)
         case 'time':
             $this_field['type'] = "TIME";
             break;
@@ -393,7 +394,7 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
             }
             break;
 
-        // undefined type
+            // undefined type
         default:
             return false;
     }
@@ -409,16 +410,17 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
                         : '';
 
     // Test for DEFAULTS
-    $this_field['default'] ='';
-    if(isset($parameters['default'])) 
-        if($parameters['default']=='NULL') 
+    $this_field['default'] = '';
+    if (isset($parameters['default'])) {
+        if ($parameters['default'] == 'NULL') {
             $this_field['default'] = "DEFAULT NULL";
-        else
-            if(is_string($parameters['default']))   
-                $this_field['default'] = "DEFAULT '".$parameters['default']."'";
-            else
-                $this_field['default'] = "DEFAULT ".$parameters['default'];
-    
+        } elseif (is_string($parameters['default'])) {
+            $this_field['default'] = "DEFAULT '" . $parameters['default'] . "'";
+        } else {
+            $this_field['default'] = "DEFAULT " . $parameters['default'];
+        }
+    }
+
     // Test for AUTO_INCREMENT
     $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true)
                                   ? 'AUTO_INCREMENT'
@@ -426,9 +428,9 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
 
     // Bug #744 - Check "increment_start" field so that MySQL increment field will start at the appropriate startid
     if (!empty($this_field['auto_increment'])) {
-        if (isset($parameters['increment_start']))
+        if (isset($parameters['increment_start'])) {
             $this_field['increment_start'] = $parameters['increment_start'];
-        else {
+        } else {
             // FIXME: <mrb> IMO the default auto_increment start = 1, why not use
             //        that and  simplify code a bit?
             $this_field['increment_start'] = 0;
@@ -441,9 +443,12 @@ function xarDB__mysqlColumnDefinition($field_name, $parameters)
     }
 
     // Set character set
-    if(isset($parameters['charset'])) $this_field['charset'] = "CHARACTER SET " . $parameters['charset'];
-    else $this_field['charset'] = "";
-    
+    if (isset($parameters['charset'])) {
+        $this_field['charset'] = "CHARACTER SET " . $parameters['charset'];
+    } else {
+        $this_field['charset'] = "";
+    }
+
     // Test for PRIMARY KEY
     $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
                                ? true

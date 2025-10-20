@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteConnection.php,v 1.15 2006/01/17 19:44:41 hlellelid Exp $
  *
@@ -48,12 +49,12 @@ class PdoSQLiteConnection extends PdoConnectionCommon implements Connection
             throw new SQLException("No SQLite database specified.");
         }
 
-        $mode = (isset($dsninfo['mode']) && is_numeric($dsninfo['mode'])) ? $dsninfo['mode'] : 0644;
+        $mode = (isset($dsninfo['mode']) && is_numeric($dsninfo['mode'])) ? $dsninfo['mode'] : 0o644;
 
         if ($file != ':memory:') {
 
             if (!file_exists($file)) {
-                if(!@touch($file)) {
+                if (!@touch($file)) {
                     throw new SQLException("Unable to create SQLite database.  Check parent folder permissions.");
                 }
 
@@ -75,7 +76,7 @@ class PdoSQLiteConnection extends PdoConnectionCommon implements Connection
         $pdo_dsn = $dsninfo['phptype'] == 'pdosqlite2' ? 'sqlite2' : 'sqlite';
 
         // add the file name to the PDO DSN
-        $pdo_dsn .= ':'.$dsninfo['database'];
+        $pdo_dsn .= ':' . $dsninfo['database'];
 
         parent::connect($dsninfo, $flags, $pdo_dsn);
 

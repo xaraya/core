@@ -29,9 +29,9 @@
  */
 abstract class DatabaseInfo
 {
-    protected $tables = array();
+    protected $tables = [];
 
-    protected $sequences = array();
+    protected $sequences = [];
 
     /** have tables been loaded */
     protected $tablesLoaded = false;
@@ -40,7 +40,7 @@ abstract class DatabaseInfo
     protected $seqsLoaded = false;
 
     /** additional vendor specific information */
-    private $vendorSpecificInfo = array();
+    private $vendorSpecificInfo = [];
 
     /**
      * The database Connection.
@@ -60,7 +60,7 @@ abstract class DatabaseInfo
     /**
      * @param Connection $dbh
      */
-    public function __construct(Connection $conn, $vendorInfo = array())
+    public function __construct(Connection $conn, $vendorInfo = [])
     {
         $this->conn = $conn;
         $this->dblink = $conn->getResource();
@@ -86,7 +86,7 @@ abstract class DatabaseInfo
      */
     public function __sleep()
     {
-        return array('tables','sequences','conn');
+        return ['tables','sequences','conn'];
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class DatabaseInfo
         $this->dblink = $this->conn->connection;
 
         // restore chaining
-        foreach($this->tables as $tbl) {
+        foreach ($this->tables as $tbl) {
             $tbl->database = $this;
             $tbl->dbname = $this->dbname;
             $tbl->dblink = $this->dblink;
@@ -127,11 +127,11 @@ abstract class DatabaseInfo
      */
     public function getTable($name)
     {
-        if(!$this->tablesLoaded) {
+        if (!$this->tablesLoaded) {
             $this->initTables();
         }
         if (!isset($this->tables[strtoupper($name)])) {
-            throw new SQLException("Database `".$this->dbname."` has no table `".$name."`");
+            throw new SQLException("Database `" . $this->dbname . "` has no table `" . $name . "`");
         }
         return $this->tables[ strtoupper($name) ];
     }
@@ -143,7 +143,7 @@ abstract class DatabaseInfo
      */
     public function hasTable($name)
     {
-        if(!$this->tablesLoaded) {
+        if (!$this->tablesLoaded) {
             $this->initTables();
         }
         return isset($this->tables[strtoupper($name)]);
@@ -155,7 +155,7 @@ abstract class DatabaseInfo
      */
     public function getTables()
     {
-        if(!$this->tablesLoaded) {
+        if (!$this->tablesLoaded) {
             $this->initTables();
         }
         return array_values($this->tables); //re-key [numerically]
@@ -189,7 +189,7 @@ abstract class DatabaseInfo
      */
     public function isSequence($key)
     {
-        if(!$this->seqsLoaded) {
+        if (!$this->seqsLoaded) {
             $this->initSequences();
         }
         return isset($this->sequences[ strtoupper($key) ]);
@@ -201,7 +201,7 @@ abstract class DatabaseInfo
      */
     public function getSequences()
     {
-        if(!$this->seqsLoaded) {
+        if (!$this->seqsLoaded) {
             $this->initSequences();
         }
         return array_values($this->sequences); //re-key [numerically]

@@ -58,7 +58,7 @@ class ODBCTypes extends CreoleTypes
             throw new SQLException('No connection specified when loading ODBC type map.');
         }
 
-        self::$typeMap = array();
+        self::$typeMap = [];
 
         $result = @odbc_gettypeinfo($conn->getResource());
 

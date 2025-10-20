@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Core
  *
@@ -48,13 +49,13 @@
  *                 |- SESSION      (00010000)
  *                    |
  *                    |- USER      (00100000)
- *                       |                 
+ *                       |
  *                       |- BLOCKS (01000000)
  *                       |
  *                       |- HOOKS  (10000000)
- *                        
+ *
  * |- ALL                          (11111111)
- */    
+ */
 /**
  * System dependencies for (optional) systems
  * FIXME: This diagram isn't correct (or at least not detailed enough)
@@ -77,7 +78,7 @@
  * | USER           | SESSION                     |   32   |
  * | BLOCKS         | USER                        |   64   |
  * | HOOKS          | USER                        |  128   |
- * --------------------------------------------------------- 
+ * ---------------------------------------------------------
  **/
 
 /**
@@ -99,48 +100,50 @@ class xarConst
      * better control on config settings
      *
     **/
-    const VERSION_ID        = 'Bermuda';
-    const VERSION_NUM       = '2.8.1';
-    const VERSION_SUB       = 'olympic';  // continuing the Olympic motto
+    public const VERSION_ID        = 'Bermuda';
+    public const VERSION_NUM       = '2.8.1';
+    public const VERSION_SUB       = 'olympic';  // continuing the Olympic motto
 
-    const BIT_DATABASE      = 1;
-    const BIT_CONFIGURATION = 2;
-    const BIT_MODULES       = 4;
-    const BIT_TEMPLATES     = 8;
-    const BIT_SESSION       = 16;
-    const BIT_USER          = 32;
-    const BIT_BLOCKS        = 64;
-    const BIT_HOOKS         = 128;
-    const BIT_ALL           = 255;
+    public const BIT_DATABASE      = 1;
+    public const BIT_CONFIGURATION = 2;
+    public const BIT_MODULES       = 4;
+    public const BIT_TEMPLATES     = 8;
+    public const BIT_SESSION       = 16;
+    public const BIT_USER          = 32;
+    public const BIT_BLOCKS        = 64;
+    public const BIT_HOOKS         = 128;
+    public const BIT_ALL           = 255;
 
-    const SYSTEM_NONE           = 0;
-    const SYSTEM_DATABASE       = self::BIT_DATABASE;
-    const SYSTEM_CONFIGURATION  = self::BIT_CONFIGURATION | self::SYSTEM_DATABASE ;
-    const SYSTEM_MODULES        = self::BIT_MODULES | self::SYSTEM_CONFIGURATION ;
-    const SYSTEM_TEMPLATES      = self::BIT_TEMPLATES | self::SYSTEM_MODULES ;
-    const SYSTEM_SESSION        = self::BIT_SESSION | self::SYSTEM_TEMPLATES ;
-    const SYSTEM_USER           = self::BIT_USER | self::SYSTEM_SESSION ;
-    const SYSTEM_BLOCKS         = self::BIT_BLOCKS | self::SYSTEM_USER ;
-    const SYSTEM_HOOKS          = self::BIT_HOOKS | self::SYSTEM_USER ;
-    const SYSTEM_ALL            = self::BIT_ALL ; 
+    public const SYSTEM_NONE           = 0;
+    public const SYSTEM_DATABASE       = self::BIT_DATABASE;
+    public const SYSTEM_CONFIGURATION  = self::BIT_CONFIGURATION | self::SYSTEM_DATABASE ;
+    public const SYSTEM_MODULES        = self::BIT_MODULES | self::SYSTEM_CONFIGURATION ;
+    public const SYSTEM_TEMPLATES      = self::BIT_TEMPLATES | self::SYSTEM_MODULES ;
+    public const SYSTEM_SESSION        = self::BIT_SESSION | self::SYSTEM_TEMPLATES ;
+    public const SYSTEM_USER           = self::BIT_USER | self::SYSTEM_SESSION ;
+    public const SYSTEM_BLOCKS         = self::BIT_BLOCKS | self::SYSTEM_USER ;
+    public const SYSTEM_HOOKS          = self::BIT_HOOKS | self::SYSTEM_USER ;
+    public const SYSTEM_ALL            = self::BIT_ALL ;
 
-    const DBG_ACTIVE            = 1; 
-    const DBG_SQL               = 2; 
-    const DBG_EXCEPTIONS        = 4; 
-    const DBG_SHOW_PARAMS_IN_BT = 8; 
-    const DBG_INACTIVE          = 16; 
+    public const DBG_ACTIVE            = 1;
+    public const DBG_SQL               = 2;
+    public const DBG_EXCEPTIONS        = 4;
+    public const DBG_SHOW_PARAMS_IN_BT = 8;
+    public const DBG_INACTIVE          = 16;
 
-    const CACHEDIR         = '/cache';
-    const DB_CACHEDIR      = '/cache/database';
-    const RSS_CACHEDIR     = '/cache/rss';
-    const TPL_CACHEDIR     = '/cache/templates';
+    public const CACHEDIR         = '/cache';
+    public const DB_CACHEDIR      = '/cache/database';
+    public const RSS_CACHEDIR     = '/cache/rss';
+    public const TPL_CACHEDIR     = '/cache/templates';
 }
 
 /**
  * Sanity check that we are coming in through a normal entry point
  *
  */
-if(!class_exists('sys')) throw new Exception("The Xaraya precore was not loaded");
+if (!class_exists('sys')) {
+    throw new Exception("The Xaraya precore was not loaded");
+}
 
 /**
  * Now begin loading
@@ -162,41 +165,41 @@ sys::import('xaraya.caching.core');
 **/
 class xarCore extends xarObject
 {
-    const GENERATION           = 2;
-    
+    public const GENERATION           = 2;
+
     // The actual version information
-    const VERSION_ID           = xarConst::VERSION_ID;
-    const VERSION_NUM          = xarConst::VERSION_NUM;
-    const VERSION_SUB          = xarConst::VERSION_SUB;
-    const VERSION_REV          = 'unknown';
-    
-    const BIT_DATABASE         = xarConst::BIT_DATABASE;
-    const BIT_CONFIGURATION    = xarConst::BIT_CONFIGURATION;
-    const BIT_MODULES          = xarConst::BIT_MODULES;
-    const BIT_TEMPLATES        = xarConst::BIT_TEMPLATES;
-    const BIT_SESSION          = xarConst::BIT_SESSION;
-    const BIT_USER             = xarConst::BIT_USER;
-    const BIT_BLOCKS           = xarConst::BIT_BLOCKS;
-    const BIT_HOOKS            = xarConst::BIT_HOOKS;
-    const BIT_ALL              = xarConst::BIT_ALL;
-    
-    const SYSTEM_NONE          = xarConst::SYSTEM_NONE;
-    const SYSTEM_DATABASE      = xarConst::SYSTEM_DATABASE;
-    const SYSTEM_CONFIGURATION = xarConst::SYSTEM_CONFIGURATION;
-    const SYSTEM_MODULES       = xarConst::SYSTEM_MODULES;
-    const SYSTEM_TEMPLATES     = xarConst::SYSTEM_TEMPLATES;
-    const SYSTEM_SESSION       = xarConst::SYSTEM_SESSION;
-    const SYSTEM_USER          = xarConst::SYSTEM_USER;
-    const SYSTEM_BLOCKS        = xarConst::SYSTEM_BLOCKS;
-    const SYSTEM_HOOKS         = xarConst::SYSTEM_HOOKS;
-    const SYSTEM_ALL           = xarConst::SYSTEM_ALL;
-    
+    public const VERSION_ID           = xarConst::VERSION_ID;
+    public const VERSION_NUM          = xarConst::VERSION_NUM;
+    public const VERSION_SUB          = xarConst::VERSION_SUB;
+    public const VERSION_REV          = 'unknown';
+
+    public const BIT_DATABASE         = xarConst::BIT_DATABASE;
+    public const BIT_CONFIGURATION    = xarConst::BIT_CONFIGURATION;
+    public const BIT_MODULES          = xarConst::BIT_MODULES;
+    public const BIT_TEMPLATES        = xarConst::BIT_TEMPLATES;
+    public const BIT_SESSION          = xarConst::BIT_SESSION;
+    public const BIT_USER             = xarConst::BIT_USER;
+    public const BIT_BLOCKS           = xarConst::BIT_BLOCKS;
+    public const BIT_HOOKS            = xarConst::BIT_HOOKS;
+    public const BIT_ALL              = xarConst::BIT_ALL;
+
+    public const SYSTEM_NONE          = xarConst::SYSTEM_NONE;
+    public const SYSTEM_DATABASE      = xarConst::SYSTEM_DATABASE;
+    public const SYSTEM_CONFIGURATION = xarConst::SYSTEM_CONFIGURATION;
+    public const SYSTEM_MODULES       = xarConst::SYSTEM_MODULES;
+    public const SYSTEM_TEMPLATES     = xarConst::SYSTEM_TEMPLATES;
+    public const SYSTEM_SESSION       = xarConst::SYSTEM_SESSION;
+    public const SYSTEM_USER          = xarConst::SYSTEM_USER;
+    public const SYSTEM_BLOCKS        = xarConst::SYSTEM_BLOCKS;
+    public const SYSTEM_HOOKS         = xarConst::SYSTEM_HOOKS;
+    public const SYSTEM_ALL           = xarConst::SYSTEM_ALL;
+
     public static $build       = self::VERSION_REV;
     public static $runLevel    = self::SYSTEM_NONE;
 
     /**
      * Initializes the core engine
-     * 
+     *
      * @param integer $whatToLoad What optional systems to load.
      * @param mixed $context initialize server & session with context
      * @return boolean true
@@ -206,10 +209,12 @@ class xarCore extends xarObject
         static $first_load = true;
 
         $new_SYSTEM_level = $whatToLoad;
-    
+
         // Make sure it only loads the current load level (or less than the current load level) once.
         if ($whatToLoad <= self::$runLevel) {
-            if (!$first_load) return true; // Does this ever happen? If so, we might consider an assert
+            if (!$first_load) {
+                return true;
+            } // Does this ever happen? If so, we might consider an assert
             $first_load = false;
         } else {
             // if we are loading a load level higher than the
@@ -233,19 +238,19 @@ class xarCore extends xarObject
         /**
          * Start exceptions subsystem
         **/
-        self::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT );       
-    
+        self::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
+
         /**
          * Load system variables
         **/
         sys::import('xaraya.variables.system');
-    
+
         /*
          * Start the logging subsystem
          */
         sys::import('xaraya.log');
         xarLog::init();
-    
+
         /**
          * Make sure we can get time for logging
         **/
@@ -275,7 +280,7 @@ class xarCore extends xarObject
          * Note: we only need this for variable caching for now, but if we generalize autoloading
          *       of Xaraya classes someday, we could initialize this earlier, e.g. in bootstrap ?
          */
-    /* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
+        /* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
         sys::import('xaraya.caching');
         xarCache::init();
 
@@ -314,8 +319,8 @@ class xarCore extends xarObject
             // Make the current load level == the new load level
             self::$runLevel = $new_SYSTEM_level;
             return true;
-        }       
-    
+        }
+
         /**
          * At this point we haven't made any assumptions about architecture
          * except that we use a database as storage container.
@@ -365,12 +370,12 @@ class xarCore extends xarObject
         // FIXME: Site.MLS.MLSMode is NULL during install
         xarMLS::init();
 
-    /*
-    // Testing of autoload + second-level cache storage - please do not use on live sites
-        sys::import('xaraya.caching.storage');
-        $cache = xarCache_Storage::getCacheStorage(array('storage' => 'apcu', 'type' => 'core'));
-        xarCoreCache::setCacheStorage($cache);
-    */
+        /*
+        // Testing of autoload + second-level cache storage - please do not use on live sites
+            sys::import('xaraya.caching.storage');
+            $cache = xarCache_Storage::getCacheStorage(array('storage' => 'apcu', 'type' => 'core'));
+            xarCoreCache::setCacheStorage($cache);
+        */
 
         /**
          * Assemble the autoload functions
@@ -386,7 +391,7 @@ class xarCore extends xarObject
          * Start BlockLayout Template Engine
          *
          */
-        if ($whatToLoad & self::SYSTEM_TEMPLATES) { 
+        if ($whatToLoad & self::SYSTEM_TEMPLATES) {
             sys::import('xaraya.templates');
             xarTpl::init();
             $whatToLoad ^= self::BIT_TEMPLATES;
@@ -402,8 +407,7 @@ class xarCore extends xarObject
          *
          */
 
-        if ($whatToLoad & self::SYSTEM_SESSION)
-        {
+        if ($whatToLoad & self::SYSTEM_SESSION) {
             sys::import('xaraya.sessions');
             xarSession::init([], $context);
             $whatToLoad ^= self::BIT_SESSION;
@@ -412,14 +416,13 @@ class xarCore extends xarObject
             // Make the current load level == the new load level
             self::$runLevel = $new_SYSTEM_level;
             return true;
-        }  
+        }
 
         /**
          * At last, we can give people access to the system.
          * Initialise users, session, templates for GUI functions
         **/
-        if ($whatToLoad & self::SYSTEM_USER)
-        {
+        if ($whatToLoad & self::SYSTEM_USER) {
             sys::import('xaraya.users');
             sys::import('xaraya.security');
             // Start User System
@@ -431,7 +434,7 @@ class xarCore extends xarObject
             self::$runLevel = $new_SYSTEM_level;
             return true;
         }
-    
+
         /**
          * Block subsystem
          *
@@ -439,8 +442,7 @@ class xarCore extends xarObject
         // FIXME: This is wrong, should be part of templating
         //        it's a legacy thought, we don't need it anymore
 
-        if ($whatToLoad & self::SYSTEM_BLOCKS)
-        {
+        if ($whatToLoad & self::SYSTEM_BLOCKS) {
             sys::import('xaraya.blocks');
             // Start Blocks Support System
             xarBlock::init();
@@ -451,7 +453,7 @@ class xarCore extends xarObject
             self::$runLevel = $new_SYSTEM_level;
             return true;
         }
-          
+
         /**
          * Start Hooks Subsystem
         **/
@@ -464,7 +466,7 @@ class xarCore extends xarObject
             // Make the current load level == the new load level
             self::$runLevel = $new_SYSTEM_level;
             return true;
-        }   */            
+        }   */
 
         /**
          * Get the current git revision
@@ -472,7 +474,7 @@ class xarCore extends xarObject
          * Handy if we're running from a working copy, prolly comment out on distributing
          */
         $path = '../.git/refs/heads/com.xaraya.core.bermuda';
-        if(@file_exists($path)) {
+        if (@file_exists($path)) {
             $text = file($path);
             $rev = $text[0];
             self::$build = $rev;
@@ -515,15 +517,15 @@ class xarCore extends xarObject
             try {
                 sys::import('xaraya.variables.system');
                 $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $errLevel = E_ALL;
             }
 
             error_reporting($errLevel);
             // Activate assertions
-            assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
-            assert_options(ASSERT_WARNING,   1);    // Issue a php warning
-            assert_options(ASSERT_BAIL,      0);    // Stop processing?
+            assert_options(ASSERT_ACTIVE, 1);    // Activate when debugging
+            assert_options(ASSERT_WARNING, 1);    // Issue a php warning
+            assert_options(ASSERT_BAIL, 0);    // Stop processing?
             //assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition? Removed for PHP 8.x
             xarDebug::$sqlCalls = 0;
             xarDebug::$startTime = microtime(true);
@@ -561,19 +563,17 @@ class xarCore extends xarObject
     {
         static $disabled;
 
-        if (!isset($disabled))
-        {
+        if (!isset($disabled)) {
             // Fetch the disabled functions as an array.
             // White space is trimmed here too.
             $functions = preg_split('/[\s,]+/', trim(ini_get('disable_functions')));
 
-            if ($functions[0] != '')
-            {
+            if ($functions[0] != '') {
                 // Make the function names the keys.
                 // Values will be 0, 1, 2 etc.
                 $disabled = array_flip($functions);
             } else {
-                $disabled = array();
+                $disabled = [];
             }
         }
 
@@ -602,14 +602,18 @@ class xarDebug extends xarObject
     public static $flags     = 0; // default off?
     public static $sqlCalls  = 0; // Should be in flags imo
     public static $startTime = 0; // Should not be here at all
-    
-    public static function setExceptionHandler($exception='')
+
+    public static function setExceptionHandler($exception = '')
     {
-    	if (empty($exception)) return null;
-    	
-	    if (is_array($exception)) $exception = $exception[0] . '::' . $exception[1];
+        if (empty($exception)) {
+            return null;
+        }
+
+        if (is_array($exception)) {
+            $exception = $exception[0] . '::' . $exception[1];
+        }
         xarLog::message("xarDebug: Setting exception handler to $exception", xarLog::LEVEL_DEBUG);
-        
-	    return set_exception_handler($exception);
+
+        return set_exception_handler($exception);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Object gui method caching
  *
@@ -50,12 +51,12 @@ class xarObjectCache extends xarObject
         self::$cacheSizeLimit = $args['Object.SizeLimit'] ?? 2097152;
         self::$cacheMethods = $args['Object.CacheMethods'] ?? ['view' => 1, 'display' => 1];
 
-        $storage = !empty($args['Object.CacheStorage']) ?
-            $args['Object.CacheStorage'] : 'filesystem';
-        $provider = !empty($args['Object.CacheProvider']) ?
-            $args['Object.CacheProvider'] : null;
-        $logfile = !empty($args['Object.LogFile']) ?
-            $args['Object.LogFile'] : null;
+        $storage = !empty($args['Object.CacheStorage'])
+            ? $args['Object.CacheStorage'] : 'filesystem';
+        $provider = !empty($args['Object.CacheProvider'])
+            ? $args['Object.CacheProvider'] : null;
+        $logfile = !empty($args['Object.LogFile'])
+            ? $args['Object.LogFile'] : null;
         self::$cacheStorage = xarCache::getStorage([
             'storage'   => $storage,
             'type'      => 'object',
@@ -114,8 +115,8 @@ class xarObjectCache extends xarObject
         // set the cacheCode for the current cacheKey
 
         // the output depends on the current host, theme and locale
-        $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
-                   xarUser::getNavigationLocale();
+        $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir()
+                   . xarUser::getNavigationLocale();
 
         // add group or user identifier if needed
         if (self::$userShared == 2) {
@@ -291,12 +292,12 @@ class xarObjectCache extends xarObject
         }
 
         if (// the http request is a GET AND
-            xarServer::getVar('REQUEST_METHOD') == 'GET' &&
+            xarServer::getVar('REQUEST_METHOD') == 'GET'
         // CHECKME: do we really want to check this again, or do we ignore it ?
             // the cache entry doesn't exist or has expired (no log here) AND
-            !(self::$cacheStorage->isCached($cacheKey, self::$expireTime, 0)) &&
+            && !(self::$cacheStorage->isCached($cacheKey, self::$expireTime, 0))
             // the cache collection directory hasn't reached its size limit...
-            !(self::$cacheStorage->sizeLimitReached())) {
+            && !(self::$cacheStorage->sizeLimitReached())) {
             // CHECKME: add cacheKey cacheCode in comments if template filenames are already added
             if (xarTpl::outputTemplateFilenames()) {
                 // separate with space here - we must avoid issues with double -- !?
@@ -306,10 +307,10 @@ class xarObjectCache extends xarObject
             }
 
             $content = ['output' => $value,
-                        'link'   => xarServer::getCurrentURL(),
-                        'title'  => self::$pageTitle,
-                        'styles' => self::$styleList,
-                        'script' => self::$scriptList];
+                'link'   => xarServer::getCurrentURL(),
+                'title'  => self::$pageTitle,
+                'styles' => self::$styleList,
+                'script' => self::$scriptList];
             $value = serialize($content);
 
             // Note: we pass along the expiration time here, because it may be different for each object

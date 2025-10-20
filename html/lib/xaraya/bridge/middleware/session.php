@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Sessions for PSR-7 and PSR-15 compatible middleware controllers (not functional)
  *

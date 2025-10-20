@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Multi Language System
  *
@@ -25,64 +26,66 @@ use Xaraya\Facades\xarLog3;
 
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
-    public static $PHPBackend_entries = array();
-    public static $PHPBackend_keyEntries = array();
+    public static $PHPBackend_entries = [];
+    public static $PHPBackend_keyEntries = [];
     public $gen;
     public $basePHPDir;
     public $baseXMLDir;
 
-    function __construct($locales)
+    public function __construct($locales)
     {
         parent::__construct($locales);
         $this->backendtype = "php";
 
         $this->gen = new PHPBackendGenerator(xarMLS::getCurrentLocale());
-        if (!isset($this->gen)) return;
+        if (!isset($this->gen)) {
+            return;
+        }
     }
 
-    function translate($string, $type = 0)
+    public function translate($string, $type = 0)
     {
-        if (isset(self::$PHPBackend_entries[$string]))
+        if (isset(self::$PHPBackend_entries[$string])) {
             return self::$PHPBackend_entries[$string];
-        else {
+        } else {
             if ($type == 1) {
                 return $string;
-            }
-            else {
+            } else {
                 return "";
             }
         }
     }
 
-    function translateByKey($key, $type = 0)
+    public function translateByKey($key, $type = 0)
     {
-        if (isset(self::$PHPBackend_keyEntries[$key]))
+        if (isset(self::$PHPBackend_keyEntries[$key])) {
             return self::$PHPBackend_keyEntries[$key];
-        else {
+        } else {
             if ($type == 1) {
                 return $key;
-            }
-            else {
+            } else {
                 return "";
             }
         }
     }
 
-    function clear()
+    public function clear()
     {
-        self::$PHPBackend_entries = array();
-        self::$PHPBackend_keyEntries = array();
+        self::$PHPBackend_entries = [];
+        self::$PHPBackend_keyEntries = [];
     }
 
-    function bindDomain($domainType=xarMLS::DNTYPE_CORE, $domainName='xaraya')
+    public function bindDomain($domainType = xarMLS::DNTYPE_CORE, $domainName = 'xaraya')
     {
         $bindResult = parent::bindDomain($domainType, $domainName);
 
-        $php_locale_dir = sys::varpath()."/locales/{$this->locale}";
+        $php_locale_dir = sys::varpath() . "/locales/{$this->locale}";
 
-        if (!$parsedLocale = xarMLS::parseLocaleString("{$this->locale}")) return false;
-        $xml_locale_dir = sys::varpath().'/locales/';
-        $xml_locale_dir .= $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
+        if (!$parsedLocale = xarMLS::parseLocaleString("{$this->locale}")) {
+            return false;
+        }
+        $xml_locale_dir = sys::varpath() . '/locales/';
+        $xml_locale_dir .= $parsedLocale['lang'] . '_' . $parsedLocale['country'] . '.utf-8';
 
         $php_dir = "$php_locale_dir/php";
         $xml_dir = "$xml_locale_dir/xml";
@@ -99,23 +102,29 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
             case xarMLS::DNTYPE_MODULE:
             case xarMLS::DNTYPE_PROPERTY:
             case xarMLS::DNTYPE_BLOCK:
-            $this->basePHPDir .= $domainName . "/";
-            $this->baseXMLDir = $domainName . "/";
-            break;
+                $this->basePHPDir .= $domainName . "/";
+                $this->baseXMLDir = $domainName . "/";
+                break;
         }
         $this->baseXMLDir = xarMLSContext::getDomainPath($domainType, $this->locale, 'xml', $domainName) . "/";
         $this->basePHPDir = xarMLSContext::getDomainPath($domainType, $this->locale, 'php', $domainName) . "/";
 
         if ($bindResult) {
-            if (!isset($this->gen)) return false;
+            if (!isset($this->gen)) {
+                return false;
+            }
             //            if (!isset($this->gen)) {
             //                $this->gen = new PHPBackendGenerator(xarMLS::getCurrentLocale());
             //                if (!isset($this->gen)) return false;
             //            }
 
-            if (!$this->gen->bindDomain($domainType, $domainName)) return false;
+            if (!$this->gen->bindDomain($domainType, $domainName)) {
+                return false;
+            }
             // We already did this above
-            if (parent::bindDomain($domainType, $domainName)) return true;
+            if (parent::bindDomain($domainType, $domainName)) {
+                return true;
+            }
             return true;
         }
 
@@ -127,30 +136,34 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         //     $this->loadKEYS($dnName);
         // }
 
-        if (!$this->gen->bindDomain($domainType, $domainName)) return false;
-        if (parent::bindDomain($domainType, $domainName)) return true;
+        if (!$this->gen->bindDomain($domainType, $domainName)) {
+            return false;
+        }
+        if (parent::bindDomain($domainType, $domainName)) {
+            return true;
+        }
 
         return false;
     }
-/*
-    function loadKEYS($dnName)
-    {
-        $modBaseInfo = xarMod::getBaseInfo($dnName);
-        $fileName = "modules/$modBaseInfo[directory]/KEYS";
-        if (file_exists($fileName)) {
+    /*
+        function loadKEYS($dnName)
+        {
+            $modBaseInfo = xarMod::getBaseInfo($dnName);
+            $fileName = "modules/$modBaseInfo[directory]/KEYS";
+            if (file_exists($fileName)) {
 
-            $lines = file($fileName);
-            foreach ($lines as $line) {
-                if ($line[0] == '#') continue;
-                list($key, $value) = explode('=', $line);
-                $key = trim($key);
-                $value = trim($value);
-                self::$PHPBackend_keyEntries[$key] = $value;
+                $lines = file($fileName);
+                foreach ($lines as $line) {
+                    if ($line[0] == '#') continue;
+                    list($key, $value) = explode('=', $line);
+                    $key = trim($key);
+                    $value = trim($value);
+                    self::$PHPBackend_keyEntries[$key] = $value;
+                }
             }
         }
-    }
-*/
-    function findContext($contextType, $contextName)
+    */
+    public function findContext($contextType, $contextName)
     {
         // Check if the file already exists
         // Returns filename or false if absent
@@ -158,7 +171,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 
         $phpFileName = $this->basePHPDir;
         $xmlFileName = $this->baseXMLDir;
-            
+
         if (!preg_match("/^[a-z]+:$/", $contextType)) {
             $contextParts = xarMLSContext::getContextTypeComponents($contextType);
             if (!empty($contextParts[1])) {
@@ -192,16 +205,22 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
             //if (!$gen->bindDomain($dnType, $dnName)) return false;
             //if (parent::bindDomain($dnType, $dnName)) return true;
 
-            if (!isset($this->gen)) return false;
-            if (!$this->gen->create($contextType, $contextName)) return false;
+            if (!isset($this->gen)) {
+                return false;
+            }
+            if (!$this->gen->create($contextType, $contextName)) {
+                return false;
+            }
 
             $fileName = parent::findContext($contextType, $contextName);
-            if ($fileName === false) return false;
+            if ($fileName === false) {
+                return false;
+            }
         }
         return $fileName;
     }
 
-    function loadContext($contextType, $contextName)
+    public function loadContext($contextType, $contextName)
     {
         if (!$fileName = $this->findContext($contextType, $contextName)) {
             return true;
@@ -220,19 +239,24 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         return true;
     }
 
-    function getContextNames($ctxType)
+    public function getContextNames($ctxType)
     {
         // FIXME need more global check
-        if (($ctxType == 'core:') || ($ctxType == 'modules:') || ($ctxType == 'properties:') || ($ctxType == 'blocks:') || ($ctxType == 'themes:')) $directory = '';
-        else list($prefix,$directory) = explode(':',$ctxType);
+        if (($ctxType == 'core:') || ($ctxType == 'modules:') || ($ctxType == 'properties:') || ($ctxType == 'blocks:') || ($ctxType == 'themes:')) {
+            $directory = '';
+        } else {
+            [$prefix, $directory] = explode(':', $ctxType);
+        }
         $this->contextlocation = $this->domainlocation . "/" . $directory;
-        $ctxNames = array();
+        $ctxNames = [];
         if (!file_exists($this->contextlocation)) {
             return $ctxNames;
         }
         $dd = opendir($this->contextlocation);
         while ($fileName = readdir($dd)) {
-            if (!preg_match('/^(.+)\.php$/', $fileName, $matches)) continue;
+            if (!preg_match('/^(.+)\.php$/', $fileName, $matches)) {
+                continue;
+            }
             $ctxNames[] = $matches[1];
         }
         closedir($dd);
@@ -262,7 +286,7 @@ class PHPBackendGenerator extends xarObject
     public $fileName;
     public $xmlFileName;
 
-    function __construct($locale)
+    public function __construct($locale)
     {
         $this->locale = $locale;
         $l = xarMLS::localeGetInfo($locale);
@@ -291,20 +315,22 @@ class PHPBackendGenerator extends xarObject
         xarMLS::mkdirr($core_dir);
     }
 
-    function bindDomain($domainType=xarMLS::DNTYPE_CORE, $domainName='xaraya')
+    public function bindDomain($domainType = xarMLS::DNTYPE_CORE, $domainName = 'xaraya')
     {
         $varDir = sys::varpath();
         $locales_dir = "$varDir/locales";
 
         $php_locale_dir = "$locales_dir/{$this->locale}";
 
-        if (!$parsedLocale = xarMLS::parseLocaleString("{$this->locale}")) return false;
+        if (!$parsedLocale = xarMLS::parseLocaleString("{$this->locale}")) {
+            return false;
+        }
         $xml_locale_dir = "$locales_dir/";
-        $xml_locale_dir .= $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
+        $xml_locale_dir .= $parsedLocale['lang'] . '_' . $parsedLocale['country'] . '.utf-8';
 
         $this->baseDir = "$php_locale_dir/php";
         $this->baseXMLDir = "$xml_locale_dir/xml";
-        
+
         // Determine the contextType: bein by getting its prefix
         $contextType = xarMLSContext::getContextTypePrefix($domainType);
 
@@ -317,16 +343,18 @@ class PHPBackendGenerator extends xarObject
             case xarMLS::DNTYPE_MODULE:
             case xarMLS::DNTYPE_PROPERTY:
             case xarMLS::DNTYPE_BLOCK:
-            $this->baseDir .= $domainName . "/";
-            $this->baseXMLDir = $domainName . "/";
-            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
-            break;
+                $this->baseDir .= $domainName . "/";
+                $this->baseXMLDir = $domainName . "/";
+                if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) {
+                    xarMLS::mkdirr($this->baseDir);
+                }
+                break;
         }
 
         return true;
     }
 
-    function create($ctxType, $ctxName)
+    public function create($ctxType, $ctxName)
     {
         assert(!empty($this->baseDir));
         assert(!empty($this->baseXMLDir));
@@ -334,7 +362,7 @@ class PHPBackendGenerator extends xarObject
         $this->xmlFileName = $this->baseXMLDir;
 
         if (!preg_match("/^[a-z]+:$/", $ctxType)) {
-            list($prefix,$directory) = explode(':',$ctxType);
+            [$prefix, $directory] = explode(':', $ctxType);
             if ($directory != "") {
                 $this->fileName .= $directory . "/";
                 $this->xmlFileName .= $directory . "/";
@@ -348,7 +376,7 @@ class PHPBackendGenerator extends xarObject
         $xmlFileExists = false;
         if (file_exists($this->xmlFileName)) {
             if (!($fp1 = fopen($this->xmlFileName, "r"))) {
-                xarLog3::error("Could not open XML input: ".$this->xmlFileName);
+                xarLog3::error("Could not open XML input: " . $this->xmlFileName);
             }
             $data = fread($fp1, filesize($this->xmlFileName));
             fclose($fp1);
@@ -357,49 +385,61 @@ class PHPBackendGenerator extends xarObject
             xml_parser_free($xml_parser);
             $xmlFileExists = true;
         } else {
-            xarLog3::error("Context Type: ".$ctxType." Context Name: ".$ctxName);
-            xarLog3::error("MLS Could not find XML input: ".$this->xmlFileName);
+            xarLog3::error("Context Type: " . $ctxType . " Context Name: " . $ctxName);
+            xarLog3::error("MLS Could not find XML input: " . $this->xmlFileName);
         }
 
-        if (!$xmlFileExists) return true;
+        if (!$xmlFileExists) {
+            return true;
+        }
 
-        if (!file_exists($dirForMkDir)) xarMLS::mkdirr($dirForMkDir);
-        $fp2 = @fopen ($this->fileName, "w" );
+        if (!file_exists($dirForMkDir)) {
+            xarMLS::mkdirr($dirForMkDir);
+        }
+        $fp2 = @fopen($this->fileName, "w");
         if ($fp2 !== false) {
-            fputs($fp2, '<?php'."\n");
-            fputs($fp2, 'global $xarML_PHPBackend_entries;'."\n");
-            fputs($fp2, 'global $xarML_PHPBackend_keyEntries;'."\n");
+            fputs($fp2, '<?php' . "\n");
+            fputs($fp2, 'global $xarML_PHPBackend_entries;' . "\n");
+            fputs($fp2, 'global $xarML_PHPBackend_keyEntries;' . "\n");
             $start = '';
             foreach ($vals as $node) {
-                if (!isset($node['tag'])) continue;
-                if (!isset($node['value'])) $node['value'] = '';
+                if (!isset($node['tag'])) {
+                    continue;
+                }
+                if (!isset($node['value'])) {
+                    $node['value'] = '';
+                }
                 if ($node['tag'] == 'STRING') {
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                    $start = '$xarML_PHPBackend_entries[\''.$node['value']."']";
+                    $start = '$xarML_PHPBackend_entries[\'' . $node['value'] . "']";
                 } elseif ($node['tag'] == 'KEY') {
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
-                    $start = '$xarML_PHPBackend_keyEntries[\''.$node['value']."']";
+                    $start = '$xarML_PHPBackend_keyEntries[\'' . $node['value'] . "']";
                 } elseif ($node['tag'] == 'TRANSLATION') {
                     if ($this->outCharset != 'utf-8') {
                         $node['value'] = xarMLS::$newEncoding->convert($node['value'], 'utf-8', $this->outCharset, 0);
                     }
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     if (!empty($node['value'])) {
-                        fputs($fp2, $start . " = '".$node['value']."';\n");
+                        fputs($fp2, $start . " = '" . $node['value'] . "';\n");
                     }
                 }
             }
             fputs($fp2, "?>");
             fclose($fp2);
         } else {
-            xarLog3::error("Could not create file: ".$this->fileName);
+            xarLog3::error("Could not create file: " . $this->fileName);
             global $xarML_PHPBackend_entries;
             global $xarML_PHPBackend_keyEntries;
             $entryIndex = '';
             $entryType = '';
             foreach ($vals as $node) {
-                if (!isset($node['tag'])) continue;
-                if (!isset($node['value'])) $node['value'] = '';
+                if (!isset($node['tag'])) {
+                    continue;
+                }
+                if (!isset($node['value'])) {
+                    $node['value'] = '';
+                }
                 if ($node['tag'] == 'STRING') {
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     $entryIndex = $node['value'];

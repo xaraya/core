@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base Route class
  *
@@ -25,9 +26,9 @@ class xarRoute extends xarObject implements iRoute
     /** @var ?string */
     protected $route = null;
     /** @var array<string, mixed> */
-    protected $parts = array();
+    protected $parts = [];
     /** @var array<string, mixed> */
-    protected $defaults = array();
+    protected $defaults = [];
     protected bool $keysSet     = false;
     /** @var ?string */
     protected $matchedPath = null;
@@ -36,7 +37,7 @@ class xarRoute extends xarObject implements iRoute
     protected string $typeKey   = 'type';
     protected string $funcKey   = 'func';
 
-    public function __construct(array $defaults = array(), ?xarDispatcher $dispatcher = null)
+    public function __construct(array $defaults = [], ?xarDispatcher $dispatcher = null)
     {
         $this->defaults += $defaults;
         //if (isset($request)) $this->request = $request;
@@ -65,11 +66,11 @@ class xarRoute extends xarObject implements iRoute
             }
         }
 
-        $this->defaults += array(
+        $this->defaults += [
             $this->moduleKey   => xarController::$module,
             $this->typeKey     => xarController::$type,
             $this->funcKey     => xarController::$func,
-        );
+        ];
 
         $this->keysSet = true;
     }

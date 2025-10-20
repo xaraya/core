@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PSR-3 LoggerInterface compatible bridge to xarLog::message() for Symfony & other packages
  *

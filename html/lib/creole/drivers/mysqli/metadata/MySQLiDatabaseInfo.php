@@ -1,4 +1,5 @@
 <?php
+
 /*
  * $Id: MySQLiDatabaseInfo.php,v 1.3 2006/01/17 19:44:39 hlellelid Exp $
  *
@@ -51,7 +52,7 @@ class MySQLiDatabaseInfo extends MySQLDatabaseInfoBase
 
     public function selectDb($dbName)
     {
-        $this->tables = array();
+        $this->tables = [];
         $this->tablesLoaded = false;
         $this->dbname = $dbName;
         return @mysqli_select_db($this->conn->getResource(), $dbName);

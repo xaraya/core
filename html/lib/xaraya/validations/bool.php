@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -19,11 +20,11 @@
 sys::import('xaraya.validations');
 class BoolValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         if ($subject === true || $subject === 'true') {
             $subject = true;
-        //Added '' because that is what false gets translated for...
+            //Added '' because that is what false gets translated for...
         } elseif ($subject === false || $subject === 'false') {
             $subject = false;
         } else {

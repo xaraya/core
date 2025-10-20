@@ -147,7 +147,7 @@ class ModuleRoutes implements RoutesInterface
      * Find route uri based on params
      * @param array<string, mixed> $params
      */
-    public static function findRoute(RouterInterface $router, array $params): string|null
+    public static function findRoute(RouterInterface $router, array $params): ?string
     {
         // we have a route already
         if (!empty($params[$router::ROUTE_PARAM])) {
@@ -177,7 +177,7 @@ class ModuleRoutes implements RoutesInterface
      * @param string $namePrefix incl. moduleName
      * @param array<string, mixed> $params
      */
-    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): string|null
+    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): ?string
     {
         $params['type'] ??= 'user';
         $params['func'] ??= 'main';
@@ -218,7 +218,7 @@ class ModuleRoutes implements RoutesInterface
      * @param string $namePrefix incl. objectName
      * @param array<string, mixed> $params
      */
-    public static function findObjectRoute(RouterInterface $router, string $namePrefix = '', array $params = []): string|null
+    public static function findObjectRoute(RouterInterface $router, string $namePrefix = '', array $params = []): ?string
     {
         // no dataobject here
         if (empty($params['entity'])) {

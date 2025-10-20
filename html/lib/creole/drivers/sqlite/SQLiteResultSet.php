@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteResultSet.php,v 1.9 2004/11/29 13:41:24 micha Exp $
  *
@@ -39,15 +40,15 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
      * Holds the number of records in our resultset
      */
     private $recordcount = null;
-    
-	// Add a constructor to deal with quirks
-	// XARAYA MODIFICATION
+
+    // Add a constructor to deal with quirks
+    // XARAYA MODIFICATION
     public function _construct()
     {
-    	$this->recordcount = $this->getRecordCount();
-    	return true;
+        $this->recordcount = $this->getRecordCount();
+        return true;
     }
-	// END XARAYA MODIFICATION
+    // END XARAYA MODIFICATION
 
     /**
      * Gets optimized SQLiteResultSetIterator.
@@ -73,26 +74,26 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
         // XARAYA MODIFICATION
         // We *can* reset to the beginning
         if ($rownum === 0) {
-        	$this->result->reset();
-	        // Get the fields and reposition
-	        $result = $this->result->fetcharray($this->fetchmode);
-        	$this->result->reset();
-        	if ($result === false) {
-        		// No result, return false
-        		return $result;
-        	} elseif (is_array($result)) {
-        		// Good result put the fetched fields where they need to be, adjust the cursor posiition and return true.
-		        $this->fields = $result;
-		        $this->cursorPos = $rownum;
-        		return true;
-        	} else {
-        		// Not supposed to happen
-				echo 'seek() returned an unknown result';
+            $this->result->reset();
+            // Get the fields and reposition
+            $result = $this->result->fetcharray($this->fetchmode);
+            $this->result->reset();
+            if ($result === false) {
+                // No result, return false
+                return $result;
+            } elseif (is_array($result)) {
+                // Good result put the fetched fields where they need to be, adjust the cursor posiition and return true.
+                $this->fields = $result;
+                $this->cursorPos = $rownum;
+                return true;
+            } else {
+                // Not supposed to happen
+                echo 'seek() returned an unknown result';
                 xarCore::exit();
                 return;
-        	}
+            }
         } else {
-			throw new SQLException("SQLite3 does not support a seek method");
+            throw new SQLException("SQLite3 does not support a seek method");
         }
         // END XARAYA MODIFICATION
     }
@@ -106,30 +107,30 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
         $this->fields = $this->result->fetchArray($this->fetchmode); // (ResultSet::FETCHMODE_NUM = SQLITE_NUM, etc.)
         // END XARAYA MODIFICATION
         if (!$this->fields) {
-        	// XARAYA MODIFICATION
+            // XARAYA MODIFICATION
             $errno = $this->conn->getResource()->lastErrorCode();
-        	// END XARAYA MODIFICATION
-        	
-        	// XARAYA MODIFICATION
-        	// Check for both SQLITE_OK and SQLITE_DONE
+            // END XARAYA MODIFICATION
+
+            // XARAYA MODIFICATION
+            // Check for both SQLITE_OK and SQLITE_DONE
             if (($errno == 0) || ($errno == 101)) {
-        	// END XARAYA MODIFICATION
+                // END XARAYA MODIFICATION
 
                 // We've advanced beyond end of recordset.
                 $this->afterLast();
                 return false;
             } else {
-        		// XARAYA MODIFICATION
+                // XARAYA MODIFICATION
                 throw new SQLException("Error fetching result", $this->conn->getResource()->lastErrorMsg());
-        		// END XARAYA MODIFICATION
+                // END XARAYA MODIFICATION
             }
         }
 
         // strip out the table part of the field names so we get
         // just the column part
         $keys = array_keys($this->fields);
-        foreach($keys as $key) {
-            if(($pos = strpos($key, '.')) !== false) {
+        foreach ($keys as $key) {
+            if (($pos = strpos($key, '.')) !== false) {
                 $newkey = substr($key, $pos + 1);
                 $this->fields[$newkey] = $this->fields[$key];
                 unset($this->fields[$key]);
@@ -147,16 +148,16 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
     public function getRecordCount()
     {
         // XARAYA MODIFICATION
-		if (null === $this->recordcount) {
-			$this->result->reset();
-			$records = 0;
-			while ($this->result->fetchArray()) {
-    			$records++;
-			}
-			$this->recordcount = $records;
-			$this->result->reset();
-		} 
-		return $this->recordcount;
+        if (null === $this->recordcount) {
+            $this->result->reset();
+            $records = 0;
+            while ($this->result->fetchArray()) {
+                $records++;
+            }
+            $this->recordcount = $records;
+            $this->result->reset();
+        }
+        return $this->recordcount;
         // END XARAYA MODIFICATION
     }
 
@@ -185,8 +186,8 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
      */
     public function close()
     {
-    	// TODO: this is unsatisfactory, but working with the finalize() method seems to give strange results
-        $this->fields = array();
+        // TODO: this is unsatisfactory, but working with the finalize() method seems to give strange results
+        $this->fields = [];
         $this->result = null;
     }
 }

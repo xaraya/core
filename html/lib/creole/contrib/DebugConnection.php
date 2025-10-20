@@ -80,7 +80,7 @@ class DebugConnection implements Connection
         }
         $connectionClass = Creole::import($driver);
         $this->childConnection = new $connectionClass();
-        $this->log("connect(): DSN: ". var_export($dsninfo, true) . ", FLAGS: " . var_export($flags, true));
+        $this->log("connect(): DSN: " . var_export($dsninfo, true) . ", FLAGS: " . var_export($flags, true));
         return $this->childConnection->connect($dsninfo, $flags);
     }
 
@@ -265,7 +265,7 @@ class DebugConnection implements Connection
         }
     }
 
-    public function Execute($sql, $bindvars = array(), $fetchmode = null)
+    public function Execute($sql, $bindvars = [], $fetchmode = null)
     {
         throw new SQLException("Execute() is not supported in DebugConnection");
     }

@@ -33,23 +33,23 @@ require_once 'creole/CreoleTypes.php';
 class OCI8Types extends CreoleTypes
 {
     /** Map Oracle native types to Creole (JDBC) types. */
-    private static $typeMap = array(
-                                'char' => CreoleTypes::CHAR,
-                                'varchar2' => CreoleTypes::VARCHAR,
-                                'long' => CreoleTypes::LONGVARCHAR,
-                                'number' => CreoleTypes::NUMERIC,
-                                'float' => CreoleTypes::FLOAT,
-                                'integer' => CreoleTypes::INTEGER,
-                                'smallint' => CreoleTypes::SMALLINT,
-                                'double' => CreoleTypes::DOUBLE,
-                                'raw' => CreoleTypes::VARBINARY,
-                                'longraw' => CreoleTypes::LONGVARBINARY,
-                                'date' => CreoleTypes::DATE,
-                                'timestamp' => CreoleTypes::TIMESTAMP,
-                                'blob' => CreoleTypes::BLOB,
-                                'clob' => CreoleTypes::CLOB,
-                                'varray' => CreoleTypes::ARR,
-                                );
+    private static $typeMap = [
+        'char' => CreoleTypes::CHAR,
+        'varchar2' => CreoleTypes::VARCHAR,
+        'long' => CreoleTypes::LONGVARCHAR,
+        'number' => CreoleTypes::NUMERIC,
+        'float' => CreoleTypes::FLOAT,
+        'integer' => CreoleTypes::INTEGER,
+        'smallint' => CreoleTypes::SMALLINT,
+        'double' => CreoleTypes::DOUBLE,
+        'raw' => CreoleTypes::VARBINARY,
+        'longraw' => CreoleTypes::LONGVARBINARY,
+        'date' => CreoleTypes::DATE,
+        'timestamp' => CreoleTypes::TIMESTAMP,
+        'blob' => CreoleTypes::BLOB,
+        'clob' => CreoleTypes::CLOB,
+        'varray' => CreoleTypes::ARR,
+    ];
 
     /** Reverse mapping, created on demand. */
     private static $reverseMap = null;

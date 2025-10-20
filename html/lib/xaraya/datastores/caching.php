@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Data Store is supported by cacheStorage (dummy = 1 request only or apcu = somewhat persistent by default)
  *

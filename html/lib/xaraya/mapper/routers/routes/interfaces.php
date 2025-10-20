@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Route Interface class
  *
@@ -16,7 +17,7 @@
 interface iRoute
 {
     /** @param array<string, mixed> $defaults */
-    public function __construct(array $defaults = array(), ?xarDispatcher $dispatcher = null);
+    public function __construct(array $defaults = [], ?xarDispatcher $dispatcher = null);
 
     /** @return array<string, mixed>|bool */
     public function match(xarRequest $request, bool $partial = false);

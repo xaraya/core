@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteStatement.php,v 1.1 2004/02/19 02:49:43 hlellelid Exp $
  *
@@ -29,6 +30,4 @@ require_once 'creole/common/StatementCommon.php';
  * @version   $Revision: 1.1 $
  * @package   creole.drivers.sqlite
  */
-class PdoStatementCommon extends StatementCommon implements Statement
-{
-}
+class PdoStatementCommon extends StatementCommon implements Statement {}

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\logging
  * @subpackage logging
@@ -12,7 +13,7 @@
  * The HTML logger
  *
  * @copyright see the html/credits.html file in this release
- * 
+ *
 */
 
 /**
@@ -37,13 +38,13 @@ class xarLogger_html extends xarLogger_simple
       *               'maxLevel'     => int         Maximum level at which to log.
       *               'mode'         => string      File mode of te log file (optional)
       *               'timeFormat'   => string      Time format to be used in the file (optional)
-      * 
+      *
      **/
-    public function __construct(Array $conf)
+    public function __construct(array $conf)
     {
         parent::__construct($conf);
-		
-		$this->header = '<?xml version="1.0" encoding="utf-8"?>
+
+        $this->header = '<?xml version="1.0" encoding="utf-8"?>
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -56,25 +57,25 @@ class xarLogger_html extends xarLogger_simple
                         <th>Message</th>
                     </tr>';
     }
-    
+
     /**
       * Start the logger
       *
       * Begin filling the buffer and ready the log file for writing
-      * 
+      *
      **/
     public function start()
     {
         // Note: still using $_SERVER here since xarServer is not initialized
-		$this->buffer = $this->header;
-         
+        $this->buffer = $this->header;
+
         // Write the request details.
         if (isset($_SERVER['REQUEST_URI'])) {
-            $this->buffer .= '<tr style="background-color:#e3e3e3;"><td colspan="3">REQUEST_URI: '.$_SERVER["REQUEST_URI"].'</td></tr>';
+            $this->buffer .= '<tr style="background-color:#e3e3e3;"><td colspan="3">REQUEST_URI: ' . $_SERVER["REQUEST_URI"] . '</td></tr>';
         }
 
         if (isset($_SERVER['HTTP_REFERER'])) {
-            $this->buffer .= '<tr style="background-color:#e3e3e3;"><td colspan="3">HTTP_REFERER: '.$_SERVER["HTTP_REFERER"].'</td></tr>';
+            $this->buffer .= '<tr style="background-color:#e3e3e3;"><td colspan="3">HTTP_REFERER: ' . $_SERVER["HTTP_REFERER"] . '</td></tr>';
         }
 
         // Set the log file up for writing.
@@ -85,8 +86,8 @@ class xarLogger_html extends xarLogger_simple
     {
         xarLogger::close();
 
-		$this->buffer .= '</tr>' . $this->EOL;
-		$this->buffer .= '<tr>
+        $this->buffer .= '</tr>' . $this->EOL;
+        $this->buffer .= '<tr>
 							<td colspan="3">HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . '</td>
 							</tr>
 							</table>
@@ -101,13 +102,15 @@ class xarLogger_html extends xarLogger_simple
      *
      * @param  string  $message   The line to write
      * @param  integer $level     The level of priority of this line/msg
-     * 
+     *
     **/
     public function formatMessage($message, $level)
     {
-        return sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",
-                                     $this->getTime(),
-                                     self::$levels[$level],
-                                     nl2br(htmlspecialchars($message)));
+        return sprintf(
+            "<tr><td>%s</td><td>%s</td><td>%s</td></tr>",
+            $this->getTime(),
+            self::$levels[$level],
+            nl2br(htmlspecialchars($message))
+        );
     }
 }

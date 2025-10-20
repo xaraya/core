@@ -98,7 +98,7 @@ class ODBCIdGenerator implements IdGenerator
     {
         // Lets assume we went to the create already
         // FIXME: the seq prefix is ad-hoc
-        $seqName = 'seq_'.$tableName;
+        $seqName = 'seq_' . $tableName;
         $rs = $this->conn->executeQuery("SELECT id FROM $seqName");
         $rs->next();
         return $rs->getInt(1);
@@ -107,7 +107,7 @@ class ODBCIdGenerator implements IdGenerator
     public function getNextId($tableName)
     {
         // FIXME: the seq prefix is ad-hoc
-        $seqName = 'seq_'.$tableName;
+        $seqName = 'seq_' . $tableName;
         return $this->getId($seqName);
     }
     // END XARAYA MODIFICATION

@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteDatabaseInfo.php,v 1.3 2004/03/20 04:16:50 hlellelid Exp $
  *
@@ -43,7 +44,7 @@ class PdoSQLiteDatabaseInfo extends DatabaseInfo
         try {
             $statement = $this->dblink->prepare($sql);
             $statement->execute();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException('Could not list tables', $e->getMessage(), $sql);
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PgSQLDatabaseInfo.php,v 1.11 2006/01/17 19:44:40 hlellelid Exp $
  *
@@ -83,7 +84,7 @@ class PgSQLDatabaseInfo extends DatabaseInfo
     protected function initSequences()
     {
 
-        $this->sequences = array();
+        $this->sequences = [];
 
         $result = pg_query($this->conn->getResource(), "SELECT c.oid, 
 														case when n.nspname='public' then c.relname else n.nspname||'.'||c.relname end as relname 

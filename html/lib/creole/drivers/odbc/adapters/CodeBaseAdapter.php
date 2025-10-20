@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: CodeBaseAdapter.php,v 1.3 2005/10/17 19:03:51 dlawson_mi Exp $
  *

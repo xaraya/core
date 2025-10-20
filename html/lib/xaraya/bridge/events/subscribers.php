@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Event Subscribers compatible with Symfony EventDispatcher (not PSR-14) to notify xarEvents or xarHooks
  *

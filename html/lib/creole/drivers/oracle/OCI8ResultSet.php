@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: OCI8ResultSet.php,v 1.13 2006/01/17 19:44:40 hlellelid Exp $
  *
@@ -111,7 +112,7 @@ class OCI8ResultSet extends ResultSetCommon implements ResultSet
             );
         }
 
-        return ( int ) $rows;
+        return (int) $rows;
     }
 
     /**
@@ -119,7 +120,7 @@ class OCI8ResultSet extends ResultSetCommon implements ResultSet
      */
     public function close()
     {
-        $this->fields			= array();
+        $this->fields			= [];
         @oci_free_statement($this->result);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\caching
  * @subpackage caching
@@ -120,10 +121,10 @@ class xarCache_Dummy_Storage extends xarCache_Storage implements ixarCache_Stora
         }
         $this->items = count($keylist);
         return ['size'    => $this->size,
-                'items'   => $this->items,
-                'hits'    => $this->hits,
-                'misses'  => $this->misses,
-                'modtime' => $this->modtime];
+            'items'   => $this->items,
+            'hits'    => $this->hits,
+            'misses'  => $this->misses,
+            'modtime' => $this->modtime];
     }
 
     public function getCachedList()
@@ -148,10 +149,10 @@ class xarCache_Dummy_Storage extends xarCache_Storage implements ixarCache_Stora
             }
             $check = '';
             $list[] = ['key'   => $key,
-                       'code'  => $code,
-                       'time'  => $time,
-                       'size'  => $size,
-                       'check' => $check];
+                'code'  => $code,
+                'time'  => $time,
+                'size'  => $size,
+                'check' => $check];
         }
         return $list;
     }

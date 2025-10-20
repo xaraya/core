@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Table Maintenance API for other databases (using xarDataDict)
  *
@@ -29,7 +30,7 @@ use Xaraya\Facades\xarDB3;
 /**
  * Generate the DataDict specific SQL to create a table
  *
- * 
+ *
  * @param string $tableName the physical table name
  * @param array<string, mixed> $fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
@@ -38,27 +39,29 @@ use Xaraya\Facades\xarDB3;
  */
 function xarDB__datadictCreateTable($tableName, $fields)
 {
-    $sql_fields = array();
+    $sql_fields = [];
 
     foreach ($fields as $field_name => $parameters) {
         $this_field = xarDB__datadictColumnDefinition($field_name, $parameters);
-        if (empty($this_field)) continue;
+        if (empty($this_field)) {
+            continue;
+        }
 
-        $sql_fields[] = $field_name .' '
-                      . $this_field['type'] .' '
-                      . $this_field['unsigned'] .' '
-                      . $this_field['null'] .' '
-                      . $this_field['default'] .' '
-                      . $this_field['auto_increment'] .' '
+        $sql_fields[] = $field_name . ' '
+                      . $this_field['type'] . ' '
+                      . $this_field['unsigned'] . ' '
+                      . $this_field['null'] . ' '
+                      . $this_field['default'] . ' '
+                      . $this_field['auto_increment'] . ' '
                       . $this_field['primary_key'];
     }
 
-    $datadict =& xarDB__datadictInit();
-    $sql = $datadict->dict->CreateTableSQL($tableName, join(', ',$sql_fields));
+    $datadict = & xarDB__datadictInit();
+    $sql = $datadict->dict->CreateTableSQL($tableName, join(', ', $sql_fields));
 
     if (isset($sql) && is_array($sql)) {
-    // CHECKME: will this work for multiple statements ?
-        return join('; ',$sql);
+        // CHECKME: will this work for multiple statements ?
+        return join('; ', $sql);
     } else {
         return $sql;
     }
@@ -67,7 +70,7 @@ function xarDB__datadictCreateTable($tableName, $fields)
 /**
  * DataDict specific function to alter a table
  *
- * 
+ *
  * @param string $tableName the table to alter
  * @param array<string, mixed> $args
  * with
@@ -85,13 +88,13 @@ function xarDB__datadictAlterTable($tableName, $args)
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)", the "fields" key must be set');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)", the "fields" key must be set');
             }
-            $coldef = xarDB__datadictColumnDefinition($args['field'],$args);
+            $coldef = xarDB__datadictColumnDefinition($args['field'], $args);
             if (empty($coldef)) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
-            $fields = $args['field'] .' '
+            $fields = $args['field'] . ' '
                 . $coldef['type'] . ' '
                 . $coldef['unsigned'] . ' '
                 . $coldef['null'] . ' '
@@ -100,31 +103,31 @@ function xarDB__datadictAlterTable($tableName, $args)
                 . $coldef['primary_key'];
 
             // Generate SQL to add a column to the table
-            $datadict =& xarDB__datadictInit();
+            $datadict = & xarDB__datadictInit();
             $sql = $datadict->dict->AddColumnSQL($tableName, $fields);
 
             break;
 
         case 'rename':
             if (empty($args['new_name'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (new_name key must be set.)');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (new_name key must be set.)');
             }
 
             // Generate SQL to rename the table
-            $datadict =& xarDB__datadictInit();
-            $sql = $datadict->dict->RenameTableSQL($tableName,$args['new_name']);
+            $datadict = & xarDB__datadictInit();
+            $sql = $datadict->dict->RenameTableSQL($tableName, $args['new_name']);
 
             break;
 
         case 'modify':
             if (empty($args['field'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
             }
-            $coldef = xarDB__datadictColumnDefinition($args['field'],$args);
+            $coldef = xarDB__datadictColumnDefinition($args['field'], $args);
             if (empty($coldef)) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (type,size,default,null, unsigned, increment, or primary_key must be set)');
             }
-            $fields = $args['field'] .' '
+            $fields = $args['field'] . ' '
                 . $coldef['type'] . ' '
                 . $coldef['unsigned'] . ' '
                 . $coldef['null'] . ' '
@@ -133,18 +136,18 @@ function xarDB__datadictAlterTable($tableName, $args)
                 . $coldef['primary_key'];
 
             // Generate SQL to modify a column in the table
-            $datadict =& xarDB__datadictInit();
+            $datadict = & xarDB__datadictInit();
             $sql = $datadict->dict->AlterColumnSQL($tableName, $fields);
 
             break;
 
         default:
-            throw new BadParameterException($args['command'],'Unknown command: "#(1)"');
+            throw new BadParameterException($args['command'], 'Unknown command: "#(1)"');
     }
 
     if (isset($sql) && is_array($sql)) {
-    // CHECKME: will this work for multiple statements ?
-        return join('; ',$sql);
+        // CHECKME: will this work for multiple statements ?
+        return join('; ', $sql);
     } else {
         return $sql;
     }
@@ -153,7 +156,7 @@ function xarDB__datadictAlterTable($tableName, $args)
 /**
  * DataDict specific column type generation - adapted from a d o d b-mysql.inc.php mapping
  *
- * 
+ *
  * @param string $field_name
  * @param array<string, mixed> $parameters
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -161,9 +164,9 @@ function xarDB__datadictAlterTable($tableName, $args)
  */
 function xarDB__datadictColumnDefinition($field_name, $parameters)
 {
-    $this_field = array();
+    $this_field = [];
 
-    switch($parameters['type']) {
+    switch ($parameters['type']) {
 
         case 'integer':
             if (empty($parameters['size'])) {
@@ -191,7 +194,7 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field['type'] = 'C('.$parameters['size'].')';
+                $this_field['type'] = 'C(' . $parameters['size'] . ')';
             }
             break;
 
@@ -199,7 +202,7 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
             if (empty($parameters['size'])) {
                 return false;
             } else {
-                $this_field['type'] = 'C('.$parameters['size'].')';
+                $this_field['type'] = 'C(' . $parameters['size'] . ')';
             }
             break;
 
@@ -252,12 +255,12 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'].
-                                         ' '.$datetime_defaults['hour'].
-                                         ':'.$datetime_defaults['minute'].
-                                         ':'.$datetime_defaults['second'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day']
+                                         . ' ' . $datetime_defaults['hour']
+                                         . ':' . $datetime_defaults['minute']
+                                         . ':' . $datetime_defaults['second'];
                 }
             }
             break;
@@ -269,9 +272,9 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day'];
                 }
             }
             break;
@@ -291,11 +294,11 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
                     $data_type = 'F';
             }
             if (isset($parameters['width']) && isset($parameters['decimals'])) {
-               $data_type = 'N('.$parameters['width'].'.'.$parameters['decimals'].')';
+                $data_type = 'N(' . $parameters['width'] . '.' . $parameters['decimals'] . ')';
             }
             $this_field['type'] = $data_type;
             break;
-        // Added Time field via marsel@phatcom.net (David Taylor)
+            // Added Time field via marsel@phatcom.net (David Taylor)
         case 'time':
             $this_field['type'] = "T";
             break;
@@ -330,7 +333,7 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
             }
             break;
 
-        // undefined type
+            // undefined type
         default:
             return false;
     }
@@ -349,7 +352,7 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
     $this_field['default'] = (isset($parameters['default']))
                            ? (($parameters['default'] == 'NULL')
                                     ? 'DEFAULT NULL'
-                                    : "DEFAULT '".$parameters['default']."'")
+                                    : "DEFAULT '" . $parameters['default'] . "'")
                            : '';
 
     // Test for AUTO_INCREMENT
@@ -359,9 +362,9 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
 
     // Bug #744 - Check "increment_start" field so that Other increment field will start at the appropriate startid
     if (!empty($this_field['auto_increment'])) {
-        if (isset($parameters['increment_start']))
+        if (isset($parameters['increment_start'])) {
             $this_field['increment_start'] = $parameters['increment_start'];
-        else {
+        } else {
             // FIXME: <mrb> IMO the default auto_increment start = 1, why not use
             //        that and  simplify code a bit?
             $this_field['increment_start'] = 0;
@@ -386,7 +389,7 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
 /**
  * Generate the SQL to create a database
  *
- * 
+ *
  * @param string $databaseName
  * @return string sql statement for database creation
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -394,12 +397,12 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
  */
 function xarDB__datadictCreateDatabase($databaseName)
 {
-    $datadict =& xarDB__datadictInit();
+    $datadict = & xarDB__datadictInit();
     $sql = $datadict->dict->CreateDatabase($databaseName);
 
     if (isset($sql) && is_array($sql)) {
-    // CHECKME: will this work for multiple statements ?
-        return join('; ',$sql);
+        // CHECKME: will this work for multiple statements ?
+        return join('; ', $sql);
     } else {
         return $sql;
     }
@@ -408,7 +411,7 @@ function xarDB__datadictCreateDatabase($databaseName)
 /**
  * Generate the DataDict specific SQL to drop a table
  *
- * 
+ *
  * @param string $tableName the physical table name
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -416,12 +419,12 @@ function xarDB__datadictCreateDatabase($databaseName)
  */
 function xarDB__datadictDropTable($tableName)
 {
-    $datadict =& xarDB__datadictInit();
+    $datadict = & xarDB__datadictInit();
     $sql = $datadict->dict->DropTableSQL($tableName);
 
     if (isset($sql) && is_array($sql)) {
-    // CHECKME: will this work for multiple statements ?
-        return join('; ',$sql);
+        // CHECKME: will this work for multiple statements ?
+        return join('; ', $sql);
     } else {
         return $sql;
     }
@@ -438,12 +441,12 @@ function xarDB__datadictDropTable($tableName)
  */
 function xarDB__datadictCreateIndex($tableName, $index)
 {
-    $datadict =& xarDB__datadictInit();
+    $datadict = & xarDB__datadictInit();
     $sql = $datadict->dict->CreateIndexSQL($index['name'], $tableName, $index['fields']);
 
     if (isset($sql) && is_array($sql)) {
-    // CHECKME: will this work for multiple statements ?
-        return join('; ',$sql);
+        // CHECKME: will this work for multiple statements ?
+        return join('; ', $sql);
     } else {
         return $sql;
     }
@@ -452,7 +455,7 @@ function xarDB__datadictCreateIndex($tableName, $index)
 /**
  * Generate the SQL to drop an index
  *
- * 
+ *
  * @param string $tableName
  * @param array<string, mixed> $index name a db index name
  * @return string|false generated sql to drop an index
@@ -461,12 +464,12 @@ function xarDB__datadictCreateIndex($tableName, $index)
  */
 function xarDB__datadictDropIndex($tableName, $index)
 {
-    $datadict =& xarDB__datadictInit();
+    $datadict = & xarDB__datadictInit();
     $sql = $datadict->dict->DropIndexSQL($index['name'], $tableName);
 
     if (isset($sql) && is_array($sql)) {
-    // CHECKME: will this work for multiple statements ?
-        return join('; ',$sql);
+        // CHECKME: will this work for multiple statements ?
+        return join('; ', $sql);
     } else {
         return $sql;
     }
@@ -480,8 +483,8 @@ function &xarDB__datadictInit()
 {
     static $datadict = null;
 
-// CHECKME: what if we want to change stuff in another database ?
-//          The xarTableDDL API doesn't really provide for this
+    // CHECKME: what if we want to change stuff in another database ?
+    //          The xarTableDDL API doesn't really provide for this
 
     return $datadict;
 }

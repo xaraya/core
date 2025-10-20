@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Event names to be dispatched via the EventDispatcher are structured as:
  * - xarEvents.{scope}.{event} e.g. xarEvents.user.UserLogin

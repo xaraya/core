@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\variables
  * @subpackage variables
@@ -20,9 +21,9 @@ use Xaraya\Facades\xarDB3;
 
 interface IxarModItemVars
 {
-    static function get   ($scope, $name, $itemid = null);
-    static function set   ($scope, $name, $value, $itemid = null);
-    static function delete($scope, $name, $itemid = null);
+    public static function get($scope, $name, $itemid = null);
+    public static function set($scope, $name, $value, $itemid = null);
+    public static function delete($scope, $name, $itemid = null);
 }
 
 /**
@@ -36,10 +37,11 @@ interface IxarModItemVars
  */
 class xarModItemVars extends xarVars implements IxarModItemVars
 {
-    static function get($scope, $name, $itemid = null)
+    public static function get($scope, $name, $itemid = null)
     {
-        if(empty($name))
+        if (empty($name)) {
             throw new EmptyParameterException('name');
+        }
 
         // Initialize
         $value = null;
@@ -60,31 +62,34 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $module_itemvarstable = $tables['module_itemvars'];
         //unset($modvarid);
         $modvarid = xarModVars::getID($scope, $name);
-        if(!$modvarid)
+        if (!$modvarid) {
             return;
+        }
 
         $query = "SELECT value FROM $module_itemvarstable WHERE module_var_id = ? AND item_id = ?";
-        $bindvars = array((int)$modvarid, (int)$itemid);
+        $bindvars = [(int) $modvarid, (int) $itemid];
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars,xarDB3::getFetchNum());
+        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchNum());
 
-        if(!$result->next()) {
+        if (!$result->next()) {
             // No value, return the modvar default
             $value = xarModVars::get($scope, $name);
         } else {
             // We finally found it, update the appropriate cache
-            list($value) = $result->getRow();
+            [$value] = $result->getRow();
             xarCoreCache::setCached($cacheCollection, $cacheName, $value);
         }
         $result->close();
         return $value;
     }
 
-    static function set($scope, $name, $value, $itemid = null)
+    public static function set($scope, $name, $value, $itemid = null)
     {
         assert(!is_null($value)); /* Not allowed to set a variable to NULL value */
-        if (empty($name)) throw new EmptyParameterException('name');
+        if (empty($name)) {
+            throw new EmptyParameterException('name');
+        }
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -97,22 +102,27 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         // We need the variable id
         //unset($modvarid);
         $modvarid = xarModVars::getID($scope, $name);
-        if(!$modvarid) throw new VariableNotFoundException($name);
+        if (!$modvarid) {
+            throw new VariableNotFoundException($name);
+        }
 
         // First delete it.
         // FIXME: do we really want this ?
-        self::delete($scope,$name,$itemid);
+        self::delete($scope, $name, $itemid);
 
-        if($value === false) $value = 0;
-        if($value === true) $value = 1;
-        
+        if ($value === false) {
+            $value = 0;
+        }
+        if ($value === true) {
+            $value = 1;
+        }
+
         // Only store setting if different from global setting
-        if ($value != $modsetting)
-        {
+        if ($value != $modsetting) {
             $query = "INSERT INTO $module_itemvarstable
                         (module_var_id, item_id, value)
                       VALUES (?,?,?)";
-            $bindvars = array($modvarid, $itemid, (string)$value);
+            $bindvars = [$modvarid, $itemid, (string) $value];
             $stmt = $dbconn->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
         }
@@ -123,9 +133,11 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         return true;
     }
 
-    static function delete($scope, $name, $itemid = null)
+    public static function delete($scope, $name, $itemid = null)
     {
-        if (empty($name)) throw new EmptyParameterException('name');
+        if (empty($name)) {
+            throw new EmptyParameterException('name');
+        }
 
         $dbconn = xarDB3::getConn();
         $tables = xarDB3::getTables();
@@ -133,9 +145,11 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $module_itemvarstable = $tables['module_itemvars'];
         // We need the variable id
         $modvarid = xarModVars::getID($scope, $name);
-        if(!$modvarid) return;
+        if (!$modvarid) {
+            return;
+        }
         $query = "DELETE FROM $module_itemvarstable WHERE module_var_id = ? AND item_id = ?";
-        $bindvars = array((int)$modvarid, (int)$itemid);
+        $bindvars = [(int) $modvarid, (int) $itemid];
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         $cachename = $itemid . $name;

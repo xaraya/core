@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PreparedStatementCommon.php,v 1.16 2005/11/13 01:30:00 gamr Exp $
  *
@@ -90,7 +91,7 @@ abstract class PreparedStatementCommon
      * Map of index => value for bound params.
      * @var array string[]
      */
-    protected $boundInVars = array();
+    protected $boundInVars = [];
 
     /**
      * Temporarily hold a ResultSet object after an execute() query.
@@ -129,7 +130,7 @@ abstract class PreparedStatementCommon
     protected function parseQuery($sql)
     {
 
-        $positions = array();
+        $positions = [];
         // match anything ? ' " or \ in $sql with an early out if we find nothing
         if (preg_match_all('([\?]|[\']|[\"]|[\\\])', $sql, $matches, PREG_OFFSET_CAPTURE) !== 0) {
             $matches = $matches['0'];
@@ -252,9 +253,7 @@ abstract class PreparedStatementCommon
     /**
      * Nothing to close for emulated prepared statements.
      */
-    public function close()
-    {
-    }
+    public function close() {}
 
     /**
      * Replaces placeholders with the specified parameter values in the SQL.
@@ -285,7 +284,7 @@ abstract class PreparedStatementCommon
             // indicate that is required
             $param_value = $this->boundInVars[$position + 1];
             $str_param_value = '';
-            if(is_float($param_value)) {
+            if (is_float($param_value)) {
                 $str_param_value .= $param_value;
                 $str_param_value = str_replace(',', '.', $str_param_value);
             } else {
@@ -365,7 +364,7 @@ abstract class PreparedStatementCommon
         }
         unset($params);
 
-        if($this->resultSet) {
+        if ($this->resultSet) {
             $this->resultSet->close();
         }
         $this->resultSet = null; // reset
@@ -617,7 +616,7 @@ abstract class PreparedStatementCommon
             if (is_object($value)) {
                 $this->boundInVars[$paramIndex] = "'" . $this->escape($value->__toString()) . "'";
             } else {
-                $this->boundInVars[$paramIndex] = "'" . $this->escape((string)$value) . "'";
+                $this->boundInVars[$paramIndex] = "'" . $this->escape((string) $value) . "'";
             }
         }
     }

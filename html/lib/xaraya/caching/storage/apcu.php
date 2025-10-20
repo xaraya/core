@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\caching
  * @subpackage caching
@@ -119,11 +120,11 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
         }
         $info = apcu_key_info($cache_key);
         return ['key'   => $key,
-                'code'  => $code,
-                'time'  => $info['mtime'],
-                'size'  => 0,
-                'hits'  => $info['hits'],
-                'check' => $info['ttl']];
+            'code'  => $code,
+            'time'  => $info['mtime'],
+            'size'  => 0,
+            'hits'  => $info['hits'],
+            'check' => $info['ttl']];
     }
 
     public function doGarbageCollection($expire = 0)
@@ -151,10 +152,10 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
         $this->misses = $cacheinfo['num_misses'];
 
         return ['size'    => $this->size,
-                'items'   => $this->items,
-                'hits'    => $this->hits,
-                'misses'  => $this->misses,
-                'modtime' => $this->modtime];
+            'items'   => $this->items,
+            'hits'    => $this->hits,
+            'misses'  => $this->misses,
+            'modtime' => $this->modtime];
     }
 
     public function getCachedList()
@@ -183,10 +184,10 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
                 $key = str_replace($this->prefix, '', $key);
             }
             $list[] = ['key'   => $key,
-                       'code'  => $code,
-                       'time'  => $time,
-                       'size'  => $size,
-                       'check' => $check];
+                'code'  => $code,
+                'time'  => $time,
+                'size'  => $size,
+                'check' => $check];
         }
         return $list;
     }

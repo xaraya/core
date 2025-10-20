@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MSSQLTableInfo.php,v 1.14 2006/01/17 19:44:39 hlellelid Exp $
  *
@@ -44,7 +45,7 @@ class MSSQLTableInfo extends TableInfo
             throw new SQLException('No database selected');
         }
 
-        $res = mssql_query("sp_columns '".$this->name."'", $this->conn->getResource());
+        $res = mssql_query("sp_columns '" . $this->name . "'", $this->conn->getResource());
         if (!$res) {
             throw new SQLException('Could not get column names', mssql_get_last_message());
         }
@@ -83,7 +84,7 @@ class MSSQLTableInfo extends TableInfo
             throw new SQLException('No database selected');
         }
 
-        $res = mssql_query("sp_indexes_rowset ".$this->name, $this->conn->getResource());
+        $res = mssql_query("sp_indexes_rowset " . $this->name, $this->conn->getResource());
 
         while ($row = mssql_fetch_array($res)) {
             $name = $row['INDEX_NAME'];
@@ -119,9 +120,9 @@ class MSSQLTableInfo extends TableInfo
                                       CONSTRAINT_TYPE = 'Foreign Key' INNER JOIN
                                       INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc1 ON rc1.CONSTRAINT_NAME = tc1.CONSTRAINT_NAME INNER JOIN
                                       INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ccu2 ON ccu2.CONSTRAINT_NAME = rc1.UNIQUE_CONSTRAINT_NAME
-                            WHERE     (ccu1.table_name = '".$this->name."')", $this->conn->getResource());
+                            WHERE     (ccu1.table_name = '" . $this->name . "')", $this->conn->getResource());
 
-        while($row = mssql_fetch_array($res)) {
+        while ($row = mssql_fetch_array($res)) {
             $name = $row['COLUMN_NAME'];
             $ftbl = $row['FK_TABLE_NAME'];
             $fcol = $row['FK_COLUMN_NAME'];
@@ -171,11 +172,11 @@ class MSSQLTableInfo extends TableInfo
                                 INNER JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ON 
                       INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_NAME = INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE.constraint_name
                         WHERE     (INFORMATION_SCHEMA.TABLE_CONSTRAINTS.CONSTRAINT_TYPE = 'PRIMARY KEY') AND 
-                      (INFORMATION_SCHEMA.TABLE_CONSTRAINTS.TABLE_NAME = '".$this->name."')", $this->conn->getResource());
+                      (INFORMATION_SCHEMA.TABLE_CONSTRAINTS.TABLE_NAME = '" . $this->name . "')", $this->conn->getResource());
 
         // Loop through the returned results, grouping the same key_name together.
         // name of the primary key will be the first column name in the key.
-        while($row = mssql_fetch_row($res)) {
+        while ($row = mssql_fetch_row($res)) {
             $name = $row[0];
             if (!isset($this->primaryKey)) {
                 $this->primaryKey = new PrimaryKeyInfo($name);

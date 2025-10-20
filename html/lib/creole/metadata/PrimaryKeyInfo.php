@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PrimaryKeyInfo.php,v 1.6 2005/02/25 15:47:02 pachanga Exp $
  *
@@ -32,15 +33,15 @@ class PrimaryKeyInfo
     private $name;
 
     /** columns in the primary key */
-    private $columns = array();
+    private $columns = [];
 
     /** additional vendor specific information */
-    private $vendorSpecificInfo = array();
+    private $vendorSpecificInfo = [];
 
     /**
      * @param string $name The name of the foreign key.
      */
-    public function __construct($name, $vendorInfo = array())
+    public function __construct($name, $vendorInfo = [])
     {
         $this->name = $name;
         $this->vendorSpecificInfo = $vendorInfo;

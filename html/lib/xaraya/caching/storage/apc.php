@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\caching
  * @subpackage caching
@@ -110,10 +111,10 @@ class xarCache_APC_Storage extends xarCache_Storage implements ixarCache_Storage
         $this->misses = $cacheinfo['num_misses'];
 
         return ['size'    => $this->size,
-                'items'   => $this->items,
-                'hits'    => $this->hits,
-                'misses'  => $this->misses,
-                'modtime' => $this->modtime];
+            'items'   => $this->items,
+            'hits'    => $this->hits,
+            'misses'  => $this->misses,
+            'modtime' => $this->modtime];
     }
 
     public function getCachedList()
@@ -142,10 +143,10 @@ class xarCache_APC_Storage extends xarCache_Storage implements ixarCache_Storage
                 $key = str_replace($this->prefix, '', $key);
             }
             $list[] = ['key'   => $key,
-                       'code'  => $code,
-                       'time'  => $time,
-                       'size'  => $size,
-                       'check' => $check];
+                'code'  => $code,
+                'time'  => $time,
+                'size'  => $size,
+                'check' => $check];
         }
         return $list;
     }

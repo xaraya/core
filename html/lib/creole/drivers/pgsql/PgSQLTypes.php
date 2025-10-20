@@ -20,8 +20,8 @@
  * <http://creole.phpdb.org>.
  */
 
-/** 
-	This is an intermin solution; see below.
+/**
+    This is an intermin solution; see below.
  */
 require_once 'lib/creole/CreoleTypes.php';
 
@@ -35,91 +35,91 @@ require_once 'lib/creole/CreoleTypes.php';
 class PgSQLTypes extends CreoleTypes
 {
     /** Map PostgreSQL native types to Creole (JDBC) types. */
-/*
-    private static $typeMap = array(
-                "int2"        => CreoleTypes::SMALLINT,
-                "int4"        => CreoleTypes::INTEGER,
-                "oid"         => CreoleTypes::INTEGER,
-                "int8"        => CreoleTypes::BIGINT,
-                "cash"        => CreoleTypes::DOUBLE,
-                "money"       => CreoleTypes::DOUBLE,
-                "numeric"     => CreoleTypes::NUMERIC,
-                "float4"      => CreoleTypes::REAL,
-                "float8"      => CreoleTypes::DOUBLE,
-                "bpchar"      => CreoleTypes::CHAR,
-                "char"        => CreoleTypes::CHAR,
-                "char2"       => CreoleTypes::CHAR,
-                "char4"       => CreoleTypes::CHAR,
-                "char8"       => CreoleTypes::CHAR,
-                "char16"      => CreoleTypes::CHAR,
-                "varchar"     => CreoleTypes::VARCHAR,
-                "text"        => CreoleTypes::VARCHAR,
-                "name"        => CreoleTypes::VARCHAR,
-                "filename"    => CreoleTypes::VARCHAR,
-                "bytea"       => CreoleTypes::BINARY,
-                "bool"        => CreoleTypes::BOOLEAN,
-                "date"        => CreoleTypes::DATE,
-                "time"        => CreoleTypes::TIME,
-                "abstime"     => CreoleTypes::TIMESTAMP,
-                "timestamp"   => CreoleTypes::TIMESTAMP,
-                "timestamptz" => CreoleTypes::TIMESTAMP,
-                "_bool"       => CreoleTypes::ARR,
-                "_char"       => CreoleTypes::ARR,
-                "_int2"       => CreoleTypes::ARR,
-                "_int4"       => CreoleTypes::ARR,
-                "_text"       => CreoleTypes::ARR,
-                "_oid"        => CreoleTypes::ARR,
-                "_varchar"    => CreoleTypes::ARR,
-                "_int8"       => CreoleTypes::ARR,
-                "_float4"     => CreoleTypes::ARR,
-                "_float8"     => CreoleTypes::ARR,
-                "_abstime"    => CreoleTypes::ARR,
-                "_date"       => CreoleTypes::ARR,
-                "_time"       => CreoleTypes::ARR,
-                "_timestamp"  => CreoleTypes::ARR,
-                "_numeric"    => CreoleTypes::ARR,
-                "_bytea"      => CreoleTypes::ARR,
-            );
-*/
-    /** 
+    /*
+        private static $typeMap = array(
+                    "int2"        => CreoleTypes::SMALLINT,
+                    "int4"        => CreoleTypes::INTEGER,
+                    "oid"         => CreoleTypes::INTEGER,
+                    "int8"        => CreoleTypes::BIGINT,
+                    "cash"        => CreoleTypes::DOUBLE,
+                    "money"       => CreoleTypes::DOUBLE,
+                    "numeric"     => CreoleTypes::NUMERIC,
+                    "float4"      => CreoleTypes::REAL,
+                    "float8"      => CreoleTypes::DOUBLE,
+                    "bpchar"      => CreoleTypes::CHAR,
+                    "char"        => CreoleTypes::CHAR,
+                    "char2"       => CreoleTypes::CHAR,
+                    "char4"       => CreoleTypes::CHAR,
+                    "char8"       => CreoleTypes::CHAR,
+                    "char16"      => CreoleTypes::CHAR,
+                    "varchar"     => CreoleTypes::VARCHAR,
+                    "text"        => CreoleTypes::VARCHAR,
+                    "name"        => CreoleTypes::VARCHAR,
+                    "filename"    => CreoleTypes::VARCHAR,
+                    "bytea"       => CreoleTypes::BINARY,
+                    "bool"        => CreoleTypes::BOOLEAN,
+                    "date"        => CreoleTypes::DATE,
+                    "time"        => CreoleTypes::TIME,
+                    "abstime"     => CreoleTypes::TIMESTAMP,
+                    "timestamp"   => CreoleTypes::TIMESTAMP,
+                    "timestamptz" => CreoleTypes::TIMESTAMP,
+                    "_bool"       => CreoleTypes::ARR,
+                    "_char"       => CreoleTypes::ARR,
+                    "_int2"       => CreoleTypes::ARR,
+                    "_int4"       => CreoleTypes::ARR,
+                    "_text"       => CreoleTypes::ARR,
+                    "_oid"        => CreoleTypes::ARR,
+                    "_varchar"    => CreoleTypes::ARR,
+                    "_int8"       => CreoleTypes::ARR,
+                    "_float4"     => CreoleTypes::ARR,
+                    "_float8"     => CreoleTypes::ARR,
+                    "_abstime"    => CreoleTypes::ARR,
+                    "_date"       => CreoleTypes::ARR,
+                    "_time"       => CreoleTypes::ARR,
+                    "_timestamp"  => CreoleTypes::ARR,
+                    "_numeric"    => CreoleTypes::ARR,
+                    "_bytea"      => CreoleTypes::ARR,
+                );
+    */
+    /**
     	This is an interim solution that maps each Creole (JDBC) type to exactly one native type.
     	This works well for the core and core modules tables, which need only a subset of all types.
     	1. Over time this map can be extended to include more that one native type per Creole type,
     	   but then a different approach will be needed.
     	2. This map should be moved out of Creole to lib/xaraya.
      */
-    public static $typeMap = array(
-                                'boolean'     => CreoleTypes::BOOLEAN,			    
+    public static $typeMap = [
+        'boolean'     => CreoleTypes::BOOLEAN,
 
-                                'tinyint'     => CreoleTypes::TINYINT,		    // Undefined in this db
-                                'smallint'    => CreoleTypes::SMALLINT,			
-                                'integer'     => CreoleTypes::INTEGER,
-                                'bigint'      => CreoleTypes::BIGINT,		    
+        'tinyint'     => CreoleTypes::TINYINT,		    // Undefined in this db
+        'smallint'    => CreoleTypes::SMALLINT,
+        'integer'     => CreoleTypes::INTEGER,
+        'bigint'      => CreoleTypes::BIGINT,
 
-                                'numeric'     => CreoleTypes::NUMERIC,			// Not currently used
-                                'decimal'     => CreoleTypes::DECIMAL,
-                                'real'        => CreoleTypes::REAL,				// Not currently used
-                                'float'       => CreoleTypes::FLOAT,
-                                'double'      => CreoleTypes::DOUBLE,			// Not currently used
+        'numeric'     => CreoleTypes::NUMERIC,			// Not currently used
+        'decimal'     => CreoleTypes::DECIMAL,
+        'real'        => CreoleTypes::REAL,				// Not currently used
+        'float'       => CreoleTypes::FLOAT,
+        'double'      => CreoleTypes::DOUBLE,			// Not currently used
 
-                                'char'        => CreoleTypes::CHAR,				// Not currently used
-                                'varchar'     => CreoleTypes::VARCHAR,			
-                                'text'        => CreoleTypes::TEXT,
-                                'longtext'    => CreoleTypes::LONGVARCHAR,		// Undefined in this db
-                                'clob'        => CreoleTypes::CLOB,				// Undefined in this db
+        'char'        => CreoleTypes::CHAR,				// Not currently used
+        'varchar'     => CreoleTypes::VARCHAR,
+        'text'        => CreoleTypes::TEXT,
+        'longtext'    => CreoleTypes::LONGVARCHAR,		// Undefined in this db
+        'clob'        => CreoleTypes::CLOB,				// Undefined in this db
 
-                                'tinyblob'    => CreoleTypes::BINARY,			// Undefined in this db
-                                'varbinary'   => CreoleTypes::VARBINARY,		// Undefined in this db
-                                'blob'        => CreoleTypes::BLOB,				// Undefined in this db
-                                'bytea'       => CreoleTypes::LONGVARBINARY,
+        'tinyblob'    => CreoleTypes::BINARY,			// Undefined in this db
+        'varbinary'   => CreoleTypes::VARBINARY,		// Undefined in this db
+        'blob'        => CreoleTypes::BLOB,				// Undefined in this db
+        'bytea'       => CreoleTypes::LONGVARBINARY,
 
-                                'time'        => CreoleTypes::TIME,				// Not currently used
-                                'timestamp'   => CreoleTypes::TIMESTAMP,		// Undefined in this db
-                                'date'        => CreoleTypes::DATE,				// Not currently used
-                                'year'        => CreoleTypes::YEAR,				// Not currently used
+        'time'        => CreoleTypes::TIME,				// Not currently used
+        'timestamp'   => CreoleTypes::TIMESTAMP,		// Undefined in this db
+        'date'        => CreoleTypes::DATE,				// Not currently used
+        'year'        => CreoleTypes::YEAR,				// Not currently used
 
-                                'array'       => CreoleTypes::ARR,				// Undefined in this db
-                                );
+        'array'       => CreoleTypes::ARR,				// Undefined in this db
+    ];
 
     /** Reverse lookup map, created on demand. */
     private static $reverseMap = null;

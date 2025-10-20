@@ -138,7 +138,7 @@ class DummyType extends ObjectType
                     }
                     return $context->getArrayCopy();
                 },
-            ]
+            ],
         ];
     }
 

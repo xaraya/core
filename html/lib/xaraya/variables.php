@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Variable utilities
  *
@@ -62,9 +63,9 @@ class ConfigurationException extends ConfigurationExceptions
  */
 interface IxarVars
 {
-    static function get       ($scope, $name);
-    static function set       ($scope, $name, $value);
-    static function delete    ($scope, $name);
+    public static function get($scope, $name);
+    public static function set($scope, $name, $value);
+    public static function delete($scope, $name);
 }
 
 /**
@@ -85,10 +86,7 @@ sys::import('xaraya.facades.database');
 use Xaraya\Facades\xarConfig3;
 use Xaraya\Facades\xarDB3;
 
-class xarVars extends xarObject
-{
-
-}
+class xarVars extends xarObject {}
 
 /**
  * Move public static functions to class
@@ -96,24 +94,24 @@ class xarVars extends xarObject
  */
 class xarVar extends xarObject
 {
-    const ALLOW_NO_ATTRIBS = 1;
-    const ALLOW            = 2;
+    public const ALLOW_NO_ATTRIBS = 1;
+    public const ALLOW            = 2;
 
-    const GET_OR_POST      = 0;
-    const GET_ONLY         = 2;
-    const POST_ONLY        = 4;
+    public const GET_OR_POST      = 0;
+    public const GET_ONLY         = 2;
+    public const POST_ONLY        = 4;
 
-    const NOT_REQUIRED     = 64;
-    const DONT_SET         = 128;
-    const DONT_REUSE       = 256;
+    public const NOT_REQUIRED     = 64;
+    public const DONT_SET         = 128;
+    public const DONT_REUSE       = 256;
 
-    const PREP_FOR_NOTHING = 0;
-    const PREP_FOR_DISPLAY = 1;
-    const PREP_FOR_HTML    = 2;
-    const PREP_FOR_STORE   = 4;
-    const PREP_TRIM        = 8;
+    public const PREP_FOR_NOTHING = 0;
+    public const PREP_FOR_DISPLAY = 1;
+    public const PREP_FOR_HTML    = 2;
+    public const PREP_FOR_STORE   = 4;
+    public const PREP_TRIM        = 8;
 
-    public static $allowableHTML = array();
+    public static $allowableHTML = [];
     public static $fixHTMLEntities = true;
     protected static bool $initialized = false;
 
@@ -122,7 +120,7 @@ class xarVar extends xarObject
      *
      * Sets up allowable html and htmlentities options
      *
-     * 
+     *
      * @global array xarVar_allowableHTML
      * @global bool xarVar_fixHTMLEntities
      * @param array<mixed> $args
@@ -130,19 +128,19 @@ class xarVar extends xarObject
      * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
      * @todo revisit naming of config_vars table
     **/
-    public static function init(array $args = array())
+    public static function init(array $args = [])
     {
         if (empty($args) && self::$initialized) {
             return true;
         }
         // Configuration init needs to be done first
-        $tables = array('config_vars' => xarDB3::getPrefix() . '_module_vars');
+        $tables = ['config_vars' => xarDB3::getPrefix() . '_module_vars'];
 
         xarDB3::importTables($tables);
 
         // Initialise the variable cache
         sys::import('xaraya.variables.config');
-        self::$allowableHTML = xarConfig3::getVar('Site.Core.AllowableHTML', array());
+        self::$allowableHTML = xarConfig3::getVar('Site.Core.AllowableHTML', []);
         self::$fixHTMLEntities = xarConfig3::getVar('Site.Core.FixHTMLEntities', true);
 
         self::$initialized = true;
@@ -181,13 +179,13 @@ class xarVar extends xarObject
 
         $batch = func_get_args();
 
-        $result_array = array();
+        $result_array = [];
         $no_errors    = true;
 
         foreach ($batch as $line) {
-            $result_array[$line[2]] = array();
+            $result_array[$line[2]] = [];
             try {
-                $result = self::fetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3]) ? $line[3] : null, isset($line[4]) ? $line[4]  : self::GET_OR_POST);
+                $result = self::fetch($line[0], $line[1], $result_array[$line[2]]['value'], $line[3] ?? null, $line[4] ?? self::GET_OR_POST);
                 $result_array[$line[2]]['error'] = '';
             } catch (ValidationExceptions $e) { // Only catch validation exceptions, the rest should be thrown
                 //Records the error presented in the given input variable
@@ -243,7 +241,7 @@ class xarVar extends xarObject
      *   xarVar::PREP_FOR_STORE:      dbconn->qstr($value)
      *   xarVar::PREP_TRIM:           trim($value)
      *
-     * 
+     *
      * @param string $name the variable name
      * @param string $validation the validation to be performed
      * @param mixed $value contains the converted value of fetched variable
@@ -263,14 +261,20 @@ class xarVar extends xarObject
         assert(empty($name) || preg_match("/^[a-zA-Z0-9_\[\]\"\x7f-\xff][a-zA-Z0-9_\[\]\"\x7f-\xff]*$/", $name));
 
         $allowOnlyMethod = null;
-        if ($flags & self::GET_ONLY) $allowOnlyMethod = 'GET';
-        if ($flags & self::POST_ONLY) $allowOnlyMethod = 'POST';
+        if ($flags & self::GET_ONLY) {
+            $allowOnlyMethod = 'GET';
+        }
+        if ($flags & self::POST_ONLY) {
+            $allowOnlyMethod = 'POST';
+        }
 
         // xarVar::DONT_SET does not set $value, if there already is one
         // This allows us to have a extract($args) before the xarVar::fetch and still run
         // the variables thru the tests here.
         $oldValue = null;
-        if (isset($value) && $flags & self::DONT_SET) $oldValue = $value;
+        if (isset($value) && $flags & self::DONT_SET) {
+            $oldValue = $value;
+        }
 
         // xarVar::DONT_REUSE fetches the variable, regardless
         // FIXME: this flag doesn't seem to work !?
@@ -300,8 +304,12 @@ class xarVar extends xarObject
             }
         } else {
             // Value is ok, handle preparation of that value
-            if ($prep & self::PREP_FOR_DISPLAY) $value = xarVarPrepForDisplay($value);
-            if ($prep & self::PREP_FOR_HTML)    $value = xarVarPrepHTMLDisplay($value);
+            if ($prep & self::PREP_FOR_DISPLAY) {
+                $value = xarVarPrepForDisplay($value);
+            }
+            if ($prep & self::PREP_FOR_HTML) {
+                $value = xarVarPrepHTMLDisplay($value);
+            }
 
             // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
             if ($prep & self::PREP_FOR_STORE) {
@@ -309,7 +317,9 @@ class xarVar extends xarObject
                 $value = $dbconn->qstr($value);
             }
 
-            if ($prep & self::PREP_TRIM) $value = trim($value);
+            if ($prep & self::PREP_TRIM) {
+                $value = trim($value);
+            }
         }
         return true;
     }
@@ -355,7 +365,7 @@ class xarVar extends xarObject
      *
      * The $validation parameter can be any of the implemented functions in html/modules/variable/validations/
      *
-     * 
+     *
      * @param mixed $validation the validation to be performed
      * @param string $subject the subject on which the validation must be performed, will be where the validated value will be returned
      * @throws EmptyParameterException
@@ -367,7 +377,9 @@ class xarVar extends xarObject
         $valParams = explode(':', $validation);
         $type = strtolower(array_shift($valParams));
 
-        if (empty($type)) throw new EmptyParameterException('type');
+        if (empty($type)) {
+            throw new EmptyParameterException('type');
+        }
 
         sys::import("xaraya.validations");
         $v = ValueValidations::get($type);
@@ -378,12 +390,14 @@ class xarVar extends xarObject
             return $result;
         } catch (ValidationExceptions $e) {
             // If a validation exception occurred, we can optionally suppress it
-            if(!$supress) {
+            if (!$supress) {
                 // Rethrow with more verbose message
-                if($name == '') $name = '<unknown>'; // @todo MLS!
-                throw new VariableValidationException(array($name,$subject,$e->getMessage()));
+                if ($name == '') {
+                    $name = '<unknown>';
+                } // @todo MLS!
+                throw new VariableValidationException([$name,$subject,$e->getMessage()]);
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // But not the others (note that this part is redundant)
             throw $e;
         }
@@ -393,7 +407,7 @@ class xarVar extends xarObject
     /**@+
      * Wrapper functions for var caching as in Xaraya 1 API
      * See the documentation of protected xarCoreCache::*Cached for details
-     * 
+     *
      * @see xarCore
      */
     public static function isCached($scope, $name)
@@ -476,13 +490,13 @@ class xarVar extends xarObject
  * Gets a variable, cleaning it up such that the text is
  * shown exactly as expected. Can have as many parameters as desired.
  *
- * 
+ *
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
 function xarVarPrepForDisplay()
 {
-    $resarray = array();
+    $resarray = [];
     $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
     // stopgap for now. we need to agree on a naming convention for the charsets that won't confuse the hell out of everyone
     $charset = $charset == 'utf8' ? 'utf-8' : $charset;
@@ -518,24 +532,24 @@ function xarVarPrepForDisplay()
  * shown exactly as expected, except for allowed HTML tags which
  * are allowed through. Can have as many parameters as desired.
  *
- * 
+ *
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
 function xarVarPrepHTMLDisplay()
 {
-// <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
+    // <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
     static $allowedtags = null;
 
     if (!isset($allowedtags)) {
-        $allowedHTML = array();
-        foreach(xarVar::$allowableHTML as $k=>$v) {
+        $allowedHTML = [];
+        foreach (xarVar::$allowableHTML as $k => $v) {
             if ($k == '!--') {
                 if ($v <> 0) {
                     $allowedHTML[] = "$k.*?--";
                 }
             } else {
-                switch($v) {
+                switch ($v) {
                     case 0:
                         break;
                     case 1:
@@ -548,34 +562,37 @@ function xarVarPrepHTMLDisplay()
             }
         }
         if (count($allowedHTML) > 0) {
-            $allowedtags = '~<(' . join('|',$allowedHTML) . ')>~is';
+            $allowedtags = '~<(' . join('|', $allowedHTML) . ')>~is';
         } else {
             $allowedtags = '';
         }
     }
 
-    $resarray = array();
+    $resarray = [];
     foreach (func_get_args() as $var) {
         // Preparse var to mark the HTML that we want
-        if (!empty($allowedtags))
+        if (!empty($allowedtags)) {
             $var = preg_replace($allowedtags, "\022\\1\024", $var);
+        }
 
         // Prepare var
         $var = htmlspecialchars($var);
 
         // Fix the HTML that we want
-/*
-        $var = preg_replace('/\022([^\024]*)\024/e',
-                               "'<' . strtr('\\1',
-                                            array('&gt;' => '>',
-                                                  '&lt;' => '<',
-                                                  '&quot;' => '\"',
-                                                  '&amp;' => '&'))
-                               . '>';", $var);
-*/
-        $var = preg_replace_callback('/\022([^\024]*)\024/',
-                                     'xarVarPrepHTMLDisplay__callback',
-                                     $var);
+        /*
+                $var = preg_replace('/\022([^\024]*)\024/e',
+                                       "'<' . strtr('\\1',
+                                                    array('&gt;' => '>',
+                                                          '&lt;' => '<',
+                                                          '&quot;' => '\"',
+                                                          '&amp;' => '&'))
+                                       . '>';", $var);
+        */
+        $var = preg_replace_callback(
+            '/\022([^\024]*)\024/',
+            'xarVarPrepHTMLDisplay__callback',
+            $var
+        );
 
         // Fix entities if required
         if (xarVar::$fixHTMLEntities) {
@@ -596,11 +613,13 @@ function xarVarPrepHTMLDisplay()
 
 function xarVarPrepHTMLDisplay__callback($matches)
 {
-    return '<' . strtr($matches[1],
-                       array('&gt;' => '>',
-                             '&lt;' => '<',
-                             '&quot;' => '"',
-                             '&amp;' => '&'))
+    return '<' . strtr(
+        $matches[1],
+        ['&gt;' => '>',
+            '&lt;' => '<',
+            '&quot;' => '"',
+            '&amp;' => '&']
+    )
            . '>';
 }
 
@@ -610,34 +629,34 @@ function xarVarPrepHTMLDisplay__callback($matches)
  * Gets a variable, cleaning it up such that e-mail addresses are
  * slightly obfuscated against e-mail harvesters.
  *
- * 
+ *
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  * @todo this looks like something for the mail module or an EmailAddress class somewhere
  */
 function xarVarPrepEmailDisplay()
 {
-/*
-    // This search and replace finds the text 'x@y' and replaces
-    // it with HTML entities, this provides protection against
-    // email harvesters
-    //
-    // Note that the use of \024 and \022 are needed to ensure that
-    // this does not break HTML tags that might be around either
-    // the username or the domain name
-    static $search = array('/([^\024])@([^\022])/se');
+    /*
+        // This search and replace finds the text 'x@y' and replaces
+        // it with HTML entities, this provides protection against
+        // email harvesters
+        //
+        // Note that the use of \024 and \022 are needed to ensure that
+        // this does not break HTML tags that might be around either
+        // the username or the domain name
+        static $search = array('/([^\024])@([^\022])/se');
 
-    static $replace = array('"&#" .
-                            sprintf("%03d", ord("\\1")) .
-                            ";&#064;&#" .
-                            sprintf("%03d", ord("\\2")) . ";";');
+        static $replace = array('"&#" .
+                                sprintf("%03d", ord("\\1")) .
+                                ";&#064;&#" .
+                                sprintf("%03d", ord("\\2")) . ";";');
 
-*/
-    $resarray = array();
+    */
+    $resarray = [];
     foreach (func_get_args() as $var) {
         // Prepare var
-//        $var = preg_replace($search, $replace, $var);
-        $var = strtr($var,array('@' => '&#064;'));
+        //        $var = preg_replace($search, $replace, $var);
+        $var = strtr($var, ['@' => '&#064;']);
         // Add to array
         array_push($resarray, $var);
     }
@@ -657,7 +676,7 @@ function xarVarPrepEmailDisplay()
  * to access files outside of the scope of the Xaraya
  * system is not allowed. Can have as many parameters as desired.
  *
- * 
+ *
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  *
@@ -667,12 +686,12 @@ function xarVarPrepEmailDisplay()
  */
 function xarVarPrepForOS()
 {
-    static $special_characters = array(':'  => ' ',  // c:\foo\bar
-                                       '/'  => ' ',  // /etc/passwd
-                                       '\\' => ' ',  // \\financialserver\fire.these.people
-                                       '..' => ' ',  // ../../../etc/passwd
-                                       '?'  => ' ',  // wildcard
-                                       '*'  => ' '); // wildcard
+    static $special_characters = [':'  => ' ',  // c:\foo\bar
+        '/'  => ' ',  // /etc/passwd
+        '\\' => ' ',  // \\financialserver\fire.these.people
+        '..' => ' ',  // ../../../etc/passwd
+        '?'  => ' ',  // wildcard
+        '*'  => ' ']; // wildcard
 
     $args = func_get_args();
 

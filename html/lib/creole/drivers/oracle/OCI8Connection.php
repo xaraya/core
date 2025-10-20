@@ -62,8 +62,8 @@ class OCI8Connection extends ConnectionCommon implements Connection
         $this->dsn				= $dsninfo;
         $this->flags			= $flags;
 
-        $persistent				=
-            ($flags & Creole::PERSISTENT === Creole::PERSISTENT);
+        $persistent
+            = ($flags & Creole::PERSISTENT === Creole::PERSISTENT);
 
         $user					= $dsninfo[ 'username' ];
         $pw						= $dsninfo[ 'password' ];
@@ -287,12 +287,12 @@ class OCI8Connection extends ConnectionCommon implements Connection
      */
     public function applyLimit(&$sql, $offset, $limit)
     {
-        $sql					=
-            'SELECT B.* FROM (  '
-            .  'SELECT A.*, rownum AS CREOLE$ROWNUM FROM (  '
+        $sql
+            = 'SELECT B.* FROM (  '
+            . 'SELECT A.*, rownum AS CREOLE$ROWNUM FROM (  '
             . $sql
             . '  ) A '
-            .  ' ) B WHERE ';
+            . ' ) B WHERE ';
 
         if ($offset > 0) {
             $sql				.= ' B.CREOLE$ROWNUM > ' . $offset;

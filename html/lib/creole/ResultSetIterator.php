@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ResultSetIterator.php,v 1.3 2004/03/15 17:47:45 hlellelid Exp $
  *
@@ -106,8 +107,6 @@ class ResultSetIterator implements Iterator
      * the cursor pos in valid().
      * @see valid()
      */
-    public function next(): void
-    {
-    }
+    public function next(): void {}
 
 }

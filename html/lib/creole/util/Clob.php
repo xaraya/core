@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: Clob.php,v 1.6 2004/07/27 23:15:13 hlellelid Exp $
  *
@@ -52,7 +53,7 @@ class Clob extends Lob
         }
         fclose($file);
         if ($data === false) {
-            throw new Exception('Unable to read from file: '.$this->inFile);
+            throw new Exception('Unable to read from file: ' . $this->inFile);
         }
         $this->setContents($data);
     }
@@ -77,7 +78,7 @@ class Clob extends Lob
         }
         $fp = fopen($this->outFile, "wt");
         if (fputs($fp, $this->data) === false) {
-            throw new Exception('Unable to write to file: '.$this->outFile);
+            throw new Exception('Unable to write to file: ' . $this->outFile);
         }
         fclose($fp);
     }
@@ -96,7 +97,7 @@ class Clob extends Lob
             if ($this->inFile) {
                 $fp = @fopen($this->inFile, "r");
                 if (!$fp) {
-                    throw new Exception('Unable to open file: '.$this->inFile);
+                    throw new Exception('Unable to open file: ' . $this->inFile);
                 }
                 fpassthru($fp);
                 @fclose($fp);

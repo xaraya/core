@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base Action Controller class
  *
@@ -23,7 +24,7 @@ class BaseActionController extends xarObject
     public string $module;
     public string $modulealias;
 
-    public function __construct(xarRequest $request = null)
+    public function __construct(?xarRequest $request = null)
     {
         $this->request = $request;
         $this->actionstring = $request->getActionString();
@@ -38,7 +39,7 @@ class BaseActionController extends xarObject
      * @return void
      * @uses \Xaraya\Requests\RequestInterface::getContext()
      */
-    public function run(xarRequest $request = null, xarResponse $response = null): void
+    public function run(?xarRequest $request = null, ?xarResponse $response = null): void
     {
         // Get the part of the URL we will tokenize and decode
         $this->actionstring = $request->getActionString();

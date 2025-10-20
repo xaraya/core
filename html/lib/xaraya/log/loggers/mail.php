@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\logging
  * @subpackage logging
@@ -16,18 +17,18 @@
  * which sends log messages to a mailbox.
  * The mail is actually sent when you close() the logger, or when the destructor
  * is called (when the script is terminated).
- * 
+ *
  * PLEASE NOTE that you must create a Log_mail object using =&, like this :
  *  $logger =& Log::factory("mail", "recipient@example.com", ...)
- * 
+ *
  * This is a PEAR requirement for destructors to work properly.
  * See http://pear.php.net/manual/en/class.pear.php
- * 
+ *
  * @author  Ronnie Garcia <ronnie@mk2.net>
  * @author  Jon Parise <jon@php.net>
  * @version $Revision: 1.8 $
  */
- 
+
 /**
  * Make sure the base class is available
  *
@@ -38,21 +39,21 @@ sys::import('xaraya.log.loggers.xarLogger');
  * Mail logger
  *
  */
-class xarLogger_mail extends xarLogger 
+class xarLogger_mail extends xarLogger
 {
-    /** 
+    /**
      * String holding the recipient's email address.
      * @var string
      */
     private $recipient = '';
 
-    /** 
+    /**
      * String holding the sender's email address.
      * @var string
      */
     private $sender = '';
 
-    /** 
+    /**
      * String holding the email's subject.
      * @var string
      */
@@ -72,7 +73,7 @@ class xarLogger_mail extends xarLogger
 
     /**
      * Constructs a new Log_mail object.
-     * 
+     *
      * @param array<string, mixed> $conf      The configuration array.
      * Obligatory configurations:
      *   $conf['to']        : The e-mail that will be receiving the log files.
@@ -81,9 +82,9 @@ class xarLogger_mail extends xarLogger
      *   $conf['$maxLevel'] : Maximum level at which to log.
      *   $conf['from']      : the mail's "From" header line,
      *   $conf['subject']   : the mail's "Subject" line.
-     * 
+     *
      */
-    public function __construct(Array $conf)
+    public function __construct(array $conf)
     {
         parent::__construct($conf);
 
@@ -94,7 +95,7 @@ class xarLogger_mail extends xarLogger
         } else {
             $this->sender = ini_get('sendmail_from');
         }
-        
+
         if (!empty($conf['subject'])) {
             $this->subject = $conf['subject'];
         }
@@ -103,7 +104,7 @@ class xarLogger_mail extends xarLogger
     /**
      * Starts a new mail message.
      * This is implicitly called by log(), if necessary.
-     * 
+     *
      */
     public function open()
     {
@@ -116,7 +117,7 @@ class xarLogger_mail extends xarLogger
     /**
      * Closes the message, if it is open, and sends the mail.
      * This is implicitly called by the destructor, if necessary.
-     * 
+     *
      */
     public function close()
     {
@@ -127,9 +128,14 @@ class xarLogger_mail extends xarLogger
                 $headers = "From: $this->sender\r\n";
                 $headers .= "User-Agent: Log_mail\r\n";
 
-                if (mail($this->recipient, $this->subject, $this->message,
-                        $headers, "-f".$this->sender) == false) {
-                    //FIXME: Use xarLog::message, with an extra variable to rule this 
+                if (mail(
+                    $this->recipient,
+                    $this->subject,
+                    $this->message,
+                    $headers,
+                    "-f" . $this->sender
+                ) == false) {
+                    //FIXME: Use xarLog::message, with an extra variable to rule this
                     // logger out and make it log on the others avaiable
                     error_log("Log_mail: Failure executing mail()", 0);
                     return false;
@@ -144,23 +150,30 @@ class xarLogger_mail extends xarLogger
     /**
      * Writes $message to the currently open mail message.
      * Calls open(), if necessary.
-     * 
+     *
      * @return boolean  True on success or false on failure.
-     * 
+     *
      */
     public function notify($message, $level)
     {
-        if (!$this->doLogLevel($level)) return false;
+        if (!$this->doLogLevel($level)) {
+            return false;
+        }
 
         if (!$this->opened) {
             $this->open();
         }
 
-        $entry = sprintf("%s %s [%s] %s\n", $this->getTime(),
-            $this->uuid, self::$levels[$level], $message);
+        $entry = sprintf(
+            "%s %s [%s] %s\n",
+            $this->getTime(),
+            $this->uuid,
+            self::$levels[$level],
+            $message
+        );
 
         $this->message .= $entry;
-        
+
         return true;
     }
 }

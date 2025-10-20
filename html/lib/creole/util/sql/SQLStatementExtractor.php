@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLStatementExtractor.php,v 1.5 2004/07/27 23:13:46 hlellelid Exp $
  *
@@ -73,16 +74,16 @@ class SQLStatementExtractor
     protected static function extractStatements($lines)
     {
 
-        $statements = array();
+        $statements = [];
         $sql = "";
 
-        foreach($lines as $line) {
+        foreach ($lines as $line) {
 
             $line = trim($line);
 
-            if (self::startsWith("//", $line) ||
-                self::startsWith("--", $line) ||
-                self::startsWith("#", $line)) {
+            if (self::startsWith("//", $line)
+                || self::startsWith("--", $line)
+                || self::startsWith("#", $line)) {
                 continue;
             }
 
@@ -101,11 +102,11 @@ class SQLStatementExtractor
             $bc_last = strrpos($line, '*/');
 
             // looking for the number of BEGIN/END blocks
-            if(preg_match('/BEGIN$/', strtoupper($line))) {
+            if (preg_match('/BEGIN$/', strtoupper($line))) {
                 self::$iBegEndNest++;
             }
 
-            if(preg_match('/^END;/', strtoupper($line))) {
+            if (preg_match('/^END;/', strtoupper($line))) {
                 self::$iBegEndNest--;
             }
 
@@ -116,7 +117,7 @@ class SQLStatementExtractor
             $comment_position = strpos($line, "--");
 
             // make sure the above comment isn't in block comment
-            if(self::$bc_nest > 0 || ($bc_first < $comment_position && $bc_last > $comment_position)) {
+            if (self::$bc_nest > 0 || ($bc_first < $comment_position && $bc_last > $comment_position)) {
                 // it is in a block comment, so we will pretend it doesn't exist
                 $comment_position = false;
             }
@@ -154,7 +155,7 @@ class SQLStatementExtractor
 
             if (self::$iBegEndNest == 0 && self::endsWith(self::$delimiter, $sql)) {
                 $statements[] = self::substring($sql, 0, strlen($sql) - 1 - strlen(self::$delimiter));
-                if($comment != '') {
+                if ($comment != '') {
                     $statements[] = $comment;
                 }
                 $sql = "";
@@ -209,7 +210,7 @@ class SQLStatementExtractor
             trigger_error("substring(), Startindex out of bounds must be 0<n<$len", E_USER_ERROR);
         }
         if ($endpos > $len - 1 || $endpos < $startpos) {
-            trigger_error("substring(), Endindex out of bounds must be $startpos<n<".($len - 1), E_USER_ERROR);
+            trigger_error("substring(), Endindex out of bounds must be $startpos<n<" . ($len - 1), E_USER_ERROR);
         }
         if ($startpos === $endpos) {
             return (string) $string[$startpos];

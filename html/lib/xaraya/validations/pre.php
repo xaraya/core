@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\validation
  * @subpackage validation
@@ -60,7 +61,7 @@ use Xaraya\Facades\xarDB3;
 **/
 class PreValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         // Start by forcing the subject into a string.
         //@todo extend it from string validation then??
@@ -90,53 +91,61 @@ class PreValidation extends ValueValidations
             // The first switch is for rules that require a value to be set.
             if (isset($subject)) {
                 switch ($param) {
-                    case 'trim'   : $subject = trim($subject); break;
-                    case 'upper'  : $subject = strtoupper($subject); break;
-                    case 'lower'  : $subject = strtolower($subject); break;
-                    case 'html'   : $subject = xarVar::prepHTMLDisplay($subject); break;
-                    case 'display': $subject = xarVar::prepForDisplay($subject); break;
-                    case 'store'  :
-                    case 'sql'    :
+                    case 'trim': $subject = trim($subject);
+                        break;
+                    case 'upper': $subject = strtoupper($subject);
+                        break;
+                    case 'lower': $subject = strtolower($subject);
+                        break;
+                    case 'html': $subject = xarVar::prepHTMLDisplay($subject);
+                        break;
+                    case 'display': $subject = xarVar::prepForDisplay($subject);
+                        break;
+                    case 'store':
+                    case 'sql':
                         // @todo this doesnt belong here, creates database dependency too
                         // Preparing for use as a quoted SQL string.
                         $dbconn = xarDB3::getConn();
                         // @todo when using bindvars this can be just (string) $subject
                         $subject = $dbconn->qstr($subject);
                         break;
-                    case 'alpha'  : $subject = preg_replace('/[^a-z]+/i', '', $subject); break;
-                    case 'alnum'  : $subject = preg_replace('/[^a-z0-9]+/i', '', $subject); break;
-                    case 'num'    : $subject = preg_replace('/[^0-9]+/i', '', $subject); break;
-                    case 'vtoken' :
+                    case 'alpha': $subject = preg_replace('/[^a-z]+/i', '', $subject);
+                        break;
+                    case 'alnum': $subject = preg_replace('/[^a-z0-9]+/i', '', $subject);
+                        break;
+                    case 'num': $subject = preg_replace('/[^0-9]+/i', '', $subject);
+                        break;
+                    case 'vtoken':
                         // Variable-name compatible token. Same as function names.
                         $subject = preg_replace(
-                            array('/[ _-]+/', '/[^a-zA-Z0-9_\x7f-\xff]+/'),
-                            array('_', ''),
+                            ['/[ _-]+/', '/[^a-zA-Z0-9_\x7f-\xff]+/'],
+                            ['_', ''],
                             trim($subject)
                         );
                         // The token must start with a letter or underscore.
                         // Raise an error if not.
                         if (!empty($subject) && !preg_match('/^[a-zA-Z_]/', $subject)) {
                             $msg = 'Value "#(1)" is not a valid variable name';
-                            throw new VariableValidationException($subject,$msg);
+                            throw new VariableValidationException($subject, $msg);
                         }
                         break;
-                    case 'ftoken' :
+                    case 'ftoken':
                         // Filename-compatible token. Use in conjunction with
                         // 'lower' if case forcing is required too.
                         // Note: this is not a file name, so periods/full stops/dots
                         // are not included in the accepted characters.
                         $subject = preg_replace(
-                            array('/[ _]+/', '/[^-a-z0-9_]+/i'),
-                            array('_', ''),
+                            ['/[ _]+/', '/[^-a-z0-9_]+/i'],
+                            ['_', ''],
                             trim($subject)
                         );
                         break;
-                    case 'field' :
+                    case 'field':
                         if (!empty($parameters)) {
                             $fieldname = array_shift($parameters);
                         }
                         break;
-                    case 'left' :
+                    case 'left':
                         // Truncate the string to 'n' bytes, or chars (depending on mb settings).
                         if (!empty($parameters)) {
                             $trimvalue = array_shift($parameters);
@@ -151,15 +160,17 @@ class PreValidation extends ValueValidations
                 // the parameters, without referencing the subject. We want to
                 // consume the 'pre' parameters, in case there are further validation
                 // rules to apply.
-                switch($param) {
+                switch ($param) {
                     case 'field':
                     case 'left':
-                        if (!empty($parameters)) {array_shift($parameters);}
+                        if (!empty($parameters)) {
+                            array_shift($parameters);
+                        }
                         break;
                 }
             }
 
-                // The second switch is for rules that don't require a value to be set.
+            // The second switch is for rules that don't require a value to be set.
             switch ($param) {
                 case 'trim' :
                 case 'upper' :
@@ -201,9 +212,9 @@ class PreValidation extends ValueValidations
 
                     // The passthru validation consumes all further parameters, so clear
                     // them here to exit the outer loop.
-                    $parameters = array();
+                    $parameters = [];
                     break;
-                }
+            }
         }
 
         // CHECKME: since we either handle it directly and/or the stack is never filled. Is this still needed?
@@ -212,7 +223,7 @@ class PreValidation extends ValueValidations
             // Combine it with the 'short' details of the last message logged,
             // with the assumption that it will contain some useful details.
             $msg = 'Field "#(1)" is invalid. [#(2)]';
-            throw new VariableValidationException(array($fieldname,'UNKNOWN'),$msg);
+            throw new VariableValidationException([$fieldname,'UNKNOWN'], $msg);
         }
 
         // Single point of exit.

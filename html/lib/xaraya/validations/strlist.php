@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\validation
  * @subpackage validation
@@ -32,7 +33,7 @@
 sys::import('xaraya.validations');
 class StrListValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         $return = true;
 
@@ -64,7 +65,7 @@ class StrListValidation extends ValueValidations
             // Loop through each element if there are any elements, and if
             // there is further validation to apply.
             if ($count > 0 && !empty($validation)) {
-                for($i = 0; $i < $count; $i++) {
+                for ($i = 0; $i < $count; $i++) {
                     // Validate each element in turn.
                     $return = $return & xarVar::validate($validation, $elements[$i]);
                     if (!$return) {

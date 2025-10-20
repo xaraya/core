@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\variables
  * @subpackage variables
@@ -31,7 +32,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * a specific item for a certain module. Typical usage
      * is storing user preferences.
      *
-     * 
+     *
      * @param  string  $scope   The name of the module
      * @param  string  $name    The name of the variable to get
      * @param  integer $itemid  User id for which value is to be retrieved
@@ -39,13 +40,17 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * @see  xarModVars::get()
      * @todo Mrb : Add caching?
      */
-    static function get($scope, $name, $itemid = null)
+    public static function get($scope, $name, $itemid = null)
     {
         // If id not specified take the current user
-        if ($itemid == null) $itemid = xarUser::getVar('id');
+        if ($itemid == null) {
+            $itemid = xarUser::getVar('id');
+        }
 
         // Anonymous user always uses the module default setting
-        if ($itemid == xarSession::getAnonId()) return xarModVars::get($scope, $name);
+        if ($itemid == xarSession::getAnonId()) {
+            return xarModVars::get($scope, $name);
+        }
         return parent::get($scope, $name, $itemid);
     }
 
@@ -58,7 +63,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * is storing user preferences.
      * Only deviations from the module vars are stored.
      *
-     * 
+     *
      * @param  string  $scope   The name of the module to set a user variable for
      * @param  string  $name    The name of the variable to set
      * @param  mixed   $value   Value to set the variable to.
@@ -68,14 +73,18 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * @see xarModVars::set()
      * @todo Add caching?
      */
-    static function set($scope, $name, $value, $itemid = null)
+    public static function set($scope, $name, $value, $itemid = null)
     {
         // If no id specified assume current user
-        if ($itemid == null) $itemid = xarUser::getVar('id');
+        if ($itemid == null) {
+            $itemid = xarUser::getVar('id');
+        }
 
         // For anonymous users no preference can be set
         // MrB: should we raise an exception here?
-        if ($itemid == xarSession::getAnonId()) return false;
+        if ($itemid == xarSession::getAnonId()) {
+            return false;
+        }
 
         return parent::set($scope, $name, $value, $itemid);
     }
@@ -87,7 +96,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * for deleting a specific user variable, effectively
      * setting the value for that user to the default setting
      *
-     * 
+     *
      * @param  string  $scope The name of the module to set a variable for
      * @param  string  $name  The name of the variable to set
      * @param  integer $itemid User id of the user to delete the variable for.
@@ -95,16 +104,20 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * @see xarModVars::delete()
      * @todo Add caching?
      */
-    static function delete($scope, $name, $itemid = null)
+    public static function delete($scope, $name, $itemid = null)
     {
         // If id is not set assume current user
-        if ($itemid == null) $itemid = xarUser::getVar('id');
+        if ($itemid == null) {
+            $itemid = xarUser::getVar('id');
+        }
 
         // Deleting for anonymous user is useless return true
         // MrB: should we continue, can't harm either and we have
         //      a failsafe that records are deleted, bit dirty, but
         //      it would work.
-        if ($itemid == xarSession::getAnonId()) return true;
+        if ($itemid == xarSession::getAnonId()) {
+            return true;
+        }
 
         return parent::delete($scope, $name, $itemid);
     }

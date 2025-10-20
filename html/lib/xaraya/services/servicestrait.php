@@ -57,7 +57,7 @@ interface ServicesInterface extends CoreServicesInterface
     /**
      * @todo Get data property from here - override if needed
      */
-    public function getProperty(): DataProperty|null;
+    public function getProperty(): ?DataProperty;
 }
 
 /**
@@ -133,7 +133,7 @@ trait ServicesTrait
     /**
      * @todo Get data property from here - override if needed
      */
-    public function getProperty(): DataProperty|null
+    public function getProperty(): ?DataProperty
     {
         return $this->property;
     }

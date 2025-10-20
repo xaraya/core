@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Multi Language System - XML Translations Backend
  *
@@ -28,27 +29,26 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     public $parser;
 
-    public $trans = array();            // where translations are kept
-    public $transEntries = array();     // mapping for string-based translations
-    public $transKeyEntries = array();  // mapping for key-based translations
+    public $trans = [];            // where translations are kept
+    public $transEntries = [];     // mapping for string-based translations
+    public $transKeyEntries = [];  // mapping for key-based translations
 
     public $transInd = 0;
     public $transKeyInd = 0;
 
 
-    function __construct($locales)
+    public function __construct($locales)
     {
         parent::__construct($locales);
         $this->backendtype = "xml";
     }
 
-    function translate($string, $type = 0)
+    public function translate($string, $type = 0)
     {
         if (!isset($this->transEntries[$string])) {
             if ($type == 1) {
                 return $string;
-            }
-            else {
+            } else {
                 return "";
             }
         }
@@ -56,13 +56,12 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return $this->trans[$ind]['translation'];
     }
 
-    function translateByKey($key, $type = 0)
+    public function translateByKey($key, $type = 0)
     {
         if (!isset($this->transKeyEntries[$key])) {
             if ($type == 1) {
                 return $key;
-            }
-            else {
+            } else {
                 return "";
             }
         }
@@ -70,37 +69,40 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return $this->trans[$ind]['translation'];
     }
 
-    function clear()
+    public function clear()
     {
-        $this->trans = array();
-        $this->transEntries = array();
-        $this->transKeyEntries = array();
+        $this->trans = [];
+        $this->transEntries = [];
+        $this->transKeyEntries = [];
         $this->transInd = 0;
         $this->transKeyInd = 0;
     }
 
-    function bindDomain($dnType=xarMLS::DNTYPE_CORE, $dnName='xaraya')
+    public function bindDomain($dnType = xarMLS::DNTYPE_CORE, $dnName = 'xaraya')
     {
-        if (parent::bindDomain($dnType, $dnName)) return true;
-        else return false;
+        if (parent::bindDomain($dnType, $dnName)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    function loadContext($contextType, $contextName)
+    public function loadContext($contextType, $contextName)
     {
         static $xmlExtensionLoaded = null;
 
-        if  ($xmlExtensionLoaded === null) {
+        if ($xmlExtensionLoaded === null) {
             if (function_exists('xml_parser_create')) {
                 $xmlExtensionLoaded = true;
             } else {
                 $xmlExtensionLoaded = false;
             }
         }
-        
+
         if ($xmlExtensionLoaded === false) {
             throw new Exception('Using the "xml" backend for translations, but the php-xml extension is not loaded. Please modify your php.ini to load the extension or choose the "php" backend.');
         }
-        
+
         $this->curData = '';
 
         if (!isset($this->locale)) {
@@ -117,8 +119,8 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
             $this->parser = xml_parser_create('iso-8859-1');
         }
         xml_set_object($this->parser, $this);
-        xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING,0);
-        xml_set_element_handler($this->parser, "beginElement","endElement");
+        xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 0);
+        xml_set_element_handler($this->parser, "beginElement", "endElement");
         xml_set_character_data_handler($this->parser, "characterData");
 
         if (!$fileName = $this->findContext($contextType, $contextName)) {
@@ -131,15 +133,15 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         $fp = fopen($fileName, 'r');
 
         while ($data = fread($fp, 4096)) {
-                if ($charset != 'utf-8' && $currentcharset == 'utf-8' && function_exists('mb_convert_encoding')) {
-                    // @todo not sure we can rely on $charset to identify the source encoding here
-                    $data = mb_convert_encoding($data, $currentcharset, $charset);
-                }
+            if ($charset != 'utf-8' && $currentcharset == 'utf-8' && function_exists('mb_convert_encoding')) {
+                // @todo not sure we can rely on $charset to identify the source encoding here
+                $data = mb_convert_encoding($data, $currentcharset, $charset);
+            }
             if (!xml_parse($this->parser, $data, feof($fp))) {
                 // NOTE: <marco> Of course don't use xarML here!
                 $errstr = xml_error_string(xml_get_error_code($this->parser));
                 $line = xml_get_current_line_number($this->parser);
-                throw new XMLParseException(array($fileName,$line,$errstr));
+                throw new XMLParseException([$fileName,$line,$errstr]);
             }
         }
 
@@ -147,27 +149,31 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return true;
     }
 
-    function getContextNames($ctxType)
+    public function getContextNames($ctxType)
     {
         $contextParts = xarMLSContext::getContextTypeComponents($ctxType);
-        
+
         // Complete the directory path if the context directory is not empty
-        if (!empty($contextParts[1])) $this->contextlocation = $this->domainlocation . "/" . $contextParts[1];
-        
-        $contextNames = array();
+        if (!empty($contextParts[1])) {
+            $this->contextlocation = $this->domainlocation . "/" . $contextParts[1];
+        }
+
+        $contextNames = [];
         if (!file_exists($this->contextlocation)) {
             return $contextNames;
         }
         $dd = opendir($this->contextlocation);
         while ($fileName = readdir($dd)) {
-            if (!preg_match('/^(.+)\.xml$/', $fileName, $matches)) continue;
+            if (!preg_match('/^(.+)\.xml$/', $fileName, $matches)) {
+                continue;
+            }
             $contextNames[] = $matches[1];
         }
         closedir($dd);
         return $contextNames;
     }
 
-    function getEntry($string)
+    public function getEntry($string)
     {
         if (!isset($this->transEntries[$string])) {
             return;
@@ -176,7 +182,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return $this->trans[$ind];
     }
 
-    function getEntryByKey($key)
+    public function getEntryByKey($key)
     {
         if (!isset($this->transKeyEntries[$key])) {
             return;
@@ -185,7 +191,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return $this->trans[$ind];
     }
 
-    function markEntry($string)
+    public function markEntry($string)
     {
         if (!isset($this->transEntries[$string])) {
             return false;
@@ -195,7 +201,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return true;
     }
 
-    function markEntryByKey($key)
+    public function markEntryByKey($key)
     {
         if (!isset($this->transKeyEntries[$key])) {
             return false;
@@ -205,29 +211,37 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return true;
     }
 
-    function getFuzzyEntries()
+    public function getFuzzyEntries()
     {
-        $fuzzyEntries = array();
+        $fuzzyEntries = [];
         foreach ($this->trans as $ind => $entry) {
-            if (!isset($entry['string'])) continue;
-            if ($entry['marked'] == 1) continue;
+            if (!isset($entry['string'])) {
+                continue;
+            }
+            if ($entry['marked'] == 1) {
+                continue;
+            }
             $fuzzyEntries[] = $entry;
         }
         return $fuzzyEntries;
     }
 
-    function getFuzzyEntriesByKey()
+    public function getFuzzyEntriesByKey()
     {
-        $fuzzyKeys = array();
+        $fuzzyKeys = [];
         foreach ($this->trans as $ind => $entry) {
-            if (!isset($entry['key'])) continue;
-            if ($entry['marked'] == 1) continue;
+            if (!isset($entry['key'])) {
+                continue;
+            }
+            if ($entry['marked'] == 1) {
+                continue;
+            }
             $fuzzyKeys[] = $entry;
         }
         return $fuzzyKeys;
     }
 
-    function getTransientId($string)
+    public function getTransientId($string)
     {
         if (!isset($this->transEntries[$string])) {
             return;
@@ -235,7 +249,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return $this->transEntries[$string];
     }
 
-    function lookupTransientId($transientId)
+    public function lookupTransientId($transientId)
     {
         if (!isset($this->trans[(int) $transientId])) {
             return;
@@ -243,7 +257,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return $this->trans[(int) $transientId];
     }
 
-    function enumTranslations($reset = false)
+    public function enumTranslations($reset = false)
     {
         if ($reset == true) {
             $this->transInd = 0;
@@ -254,7 +268,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         }
         while ($this->transInd < $count) {
             if (isset($this->trans[$this->transInd]['string'])) {
-                $res = array($this->trans[$this->transInd]['string'], $this->trans[$this->transInd]['translation']);
+                $res = [$this->trans[$this->transInd]['string'], $this->trans[$this->transInd]['translation']];
                 $this->transInd++;
                 return $res;
             }
@@ -263,7 +277,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return false;
     }
 
-    function enumKeyTranslations($reset = false)
+    public function enumKeyTranslations($reset = false)
     {
         if ($reset == true) {
             $this->transKeyInd = 0;
@@ -274,7 +288,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         }
         while ($this->transKeyInd < $count) {
             if (isset($this->trans[$this->transKeyInd]['key'])) {
-                $res = array($this->trans[$this->transKeyInd]['key'], $this->trans[$this->transKeyInd]['translation']);
+                $res = [$this->trans[$this->transKeyInd]['key'], $this->trans[$this->transKeyInd]['translation']];
                 $this->transKeyInd++;
                 return $res;
             }
@@ -283,15 +297,15 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         return false;
     }
 
-    function beginElement($parser, $tag, $attribs)
+    public function beginElement($parser, $tag, $attribs)
     {
         if (strpos($tag, ':') !== false) {
-            list($ns, $tag) = explode(':', $tag);
+            [$ns, $tag] = explode(':', $tag);
         }
         if ($tag == 'entry' || $tag == 'keyEntry') {
-            $this->curEntry = array();
+            $this->curEntry = [];
             $this->curEntry['marked'] = 0;
-            $this->curEntry['references'] = array();
+            $this->curEntry['references'] = [];
         } elseif ($tag == 'reference') {
             $reference['file'] = $attribs['file'];
             $reference['line'] = $attribs['line'];
@@ -304,10 +318,10 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         }*/
     }
 
-    function endElement($parser, $tag)
+    public function endElement($parser, $tag)
     {
         if (strpos($tag, ':') !== false) {
-            list($ns, $tag) = explode(':', $tag);
+            [$ns, $tag] = explode(':', $tag);
         }
         if ($tag == 'entry') {
             $string = $this->curEntry['string'];
@@ -320,8 +334,8 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         } elseif ($tag == 'string') {
             // Delete extra whitespaces and spaces around newline
             $string = trim($this->curData);
-            $string = preg_replace('/[\t ]+/',' ',$string);
-            $string = preg_replace('/\s*\n\s*/',"\n",$string);
+            $string = preg_replace('/[\t ]+/', ' ', $string);
+            $string = preg_replace('/\s*\n\s*/', "\n", $string);
             $this->curEntry['string'] = $string;
             //$this->curEntry['string'] = utf8_decode(trim($this->curData));
         } elseif ($tag == 'key') {
@@ -334,7 +348,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         $this->curData = '';
     }
 
-    function characterData($parser, $data)
+    public function characterData($parser, $data)
     {
         // FIXME <marco> consider to replace \n,\r with ''
         $this->curData .= $data;

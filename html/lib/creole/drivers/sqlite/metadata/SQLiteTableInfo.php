@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteTableInfo.php,v 1.8 2005/10/18 02:27:50 hlellelid Exp $
  *
@@ -36,7 +37,7 @@ class SQLiteTableInfo extends TableInfo
 
     protected function prepTable()
     {
-        $sql = "PRAGMA table_info('".$this->name."')";
+        $sql = "PRAGMA table_info('" . $this->name . "')";
 
         $this->resource = $this->conn->getResource()->query($sql);
     }
@@ -48,7 +49,7 @@ class SQLiteTableInfo extends TableInfo
 
     protected function prepIndex1()
     {
-        $sql = "PRAGMA index_list('".$this->name."')";
+        $sql = "PRAGMA index_list('" . $this->name . "')";
 
         $this->resource = $this->conn->getResource()->query($sql);
     }
@@ -77,7 +78,7 @@ class SQLiteTableInfo extends TableInfo
 
         $this->prepTable();
 
-        while($row = $this->getRow()) {
+        while ($row = $this->getRow()) {
 
             $name = $row['name'];
 
@@ -105,7 +106,7 @@ class SQLiteTableInfo extends TableInfo
             $default_val = $row['dflt_value'];
 
             $this->columns[$name] = new ColumnInfo($this, $name, SQLiteTypes::getType($type), $type, $size, $precision, $scale, $is_nullable, $default_val, $is_auto_increment);
-            if($this->name == 'products' && $name == 'ProductID') {
+            if ($this->name == 'products' && $name == 'ProductID') {
                 //sa( $row );
                 //sa( $type)
             }
@@ -146,13 +147,13 @@ class SQLiteTableInfo extends TableInfo
 
         $this->prepIndex1();
 
-        while($row = $this->getRow()) {
+        while ($row = $this->getRow()) {
             $name = $row['name'];
             $this->indexes[$name] = new IndexInfo($name);
 
             // get columns for that index
             $this->prepIndex2($name);
-            while($row2 = $this->getI2Row()) {
+            while ($row2 = $this->getI2Row()) {
                 $colname = $row2['name'];
                 $this->indexes[$name]->addColumn($this->columns[ $colname ]);
             }

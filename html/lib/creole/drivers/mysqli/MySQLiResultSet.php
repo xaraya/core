@@ -1,4 +1,5 @@
 <?php
+
 /*
  * $Id: MySQLiResultSet.php,v 1.5 2006/01/17 19:44:39 hlellelid Exp $
  *
@@ -40,10 +41,10 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
      */
     public function seek($rownum)
     {
-		// XARAYA MODIFICATION
-		if (($rownum < 0) || ($rownum > $this->getRecordCount())) {
-			return false;
-		}
+        // XARAYA MODIFICATION
+        if (($rownum < 0) || ($rownum > $this->getRecordCount())) {
+            return false;
+        }
         // MySQL rows start w/ 0, but this works, because we are
         // looking to move the position _before_ the next desired position
         if (!@mysqli_data_seek($this->result, $rownum)) {
@@ -51,35 +52,35 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
         }
 
         $this->cursorPos = $rownum;
-		// END XARAYA MODIFICATION
+        // END XARAYA MODIFICATION
 
         return true;
     }
-    
+
     public function first()
     {
-		// XARAYA MODIFICATION
+        // XARAYA MODIFICATION
         $this->seek(0);
-    	$result = mysqli_fetch_array($this->result, $this->fetchmode);
+        $result = mysqli_fetch_array($this->result, $this->fetchmode);
         $this->seek(0);
-		if ($result === false) {
-			// No result, return false
-			return $result;
-		} elseif (is_array($result)) {
-			// Good result put the fetched fields where they need to be, adjust the cursor posiition and return true.
-			$this->fields = $result;
-			$this->cursorPos = 0;
-			return true;
-		} elseif (null === $result) {
-			// Indicates a successful call, but no rows fetched; return false for now
-			return false;
-		} else {
-			// Not supposed to happen
-			echo 'seek() returned an unknown result';
+        if ($result === false) {
+            // No result, return false
+            return $result;
+        } elseif (is_array($result)) {
+            // Good result put the fetched fields where they need to be, adjust the cursor posiition and return true.
+            $this->fields = $result;
+            $this->cursorPos = 0;
+            return true;
+        } elseif (null === $result) {
+            // Indicates a successful call, but no rows fetched; return false for now
+            return false;
+        } else {
+            // Not supposed to happen
+            echo 'seek() returned an unknown result';
             xarCore::exit();
             return;
-		}
-		// END XARAYA MODIFICATION
+        }
+        // END XARAYA MODIFICATION
     }
 
     /**
@@ -87,12 +88,12 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
      */
     public function next()
     {
-    	$this->fields = mysqli_fetch_array($this->result, $this->fetchmode);
+        $this->fields = mysqli_fetch_array($this->result, $this->fetchmode);
 
         if (!$this->fields) {
-			// XARAYA MODIFICATION
-	        $resource = $this->conn->getResource();
-			// END XARAYA MODIFICATION
+            // XARAYA MODIFICATION
+            $resource = $this->conn->getResource();
+            // END XARAYA MODIFICATION
             $errno = mysqli_errno($resource);
 
             if (!$errno) {
@@ -140,7 +141,7 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
             // Remove it anyway
             unset($this->result);
         }
-        $this->fields = array();
+        $this->fields = [];
     }
 
     /**
@@ -148,9 +149,9 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
      * No rtrim() necessary for MySQL, as this happens natively.
      * @see ResultSet::getString()
      */
-	// XARAYA MODIFICATION
-    public function getString($column=null)
-	// END XARAYA MODIFICATION
+    // XARAYA MODIFICATION
+    public function getString($column = null)
+    // END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
 

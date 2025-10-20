@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteResultSet.php,v 1.9 2004/11/29 13:41:24 micha Exp $
  *

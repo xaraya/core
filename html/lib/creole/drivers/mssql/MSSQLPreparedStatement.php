@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: MSSQLPreparedStatement.php,v 1.13 2005/11/13 01:29:01 gamr Exp $
  *
@@ -53,7 +54,7 @@ class MSSQLPreparedStatement extends PreparedStatementCommon implements Prepared
                 $blob = $blob->__toString();
             }
             $data = unpack("H*hex", $blob);
-            $this->boundInVars[$paramIndex] = '0x'.$data['hex']; // no surrounding quotes!
+            $this->boundInVars[$paramIndex] = '0x' . $data['hex']; // no surrounding quotes!
         }
     }
 
@@ -91,7 +92,7 @@ class MSSQLPreparedStatement extends PreparedStatementCommon implements Prepared
         }
 
         if ($params) {
-            for($i = 0,$cnt = count($params); $i < $cnt; $i++) {
+            for ($i = 0,$cnt = count($params); $i < $cnt; $i++) {
                 $this->set($i + 1, $params[$i]);
             }
         }

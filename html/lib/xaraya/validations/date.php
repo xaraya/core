@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Validate a date value.
  *
@@ -39,7 +40,7 @@ use function Xaraya\Tools\strftime;
 sys::import('xaraya.validations');
 class DateValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         if (!is_string($subject)) {
             $msg = 'Not a string';
@@ -64,8 +65,8 @@ class DateValidation extends ValueValidations
             $store_format = $display_format;
         }
 
-        $input_formats = array();
-        foreach($parameters as $parameter) {
+        $input_formats = [];
+        foreach ($parameters as $parameter) {
             if (trim($parameter) != '') {
                 $input_formats[] = trim($parameter);
             }

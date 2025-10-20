@@ -53,9 +53,9 @@ interface TemplatingInterface extends ServiceInterface
 
     public function getCodeUrl(): string;
 
-    public function getImage(string $fileName, ?string $scope = null, ?string $package = null): string|null;
+    public function getImage(string $fileName, ?string $scope = null, ?string $package = null): ?string;
 
-    public function getFile(string $fileName, ?string $scope = null, ?string $package = null): string|null;
+    public function getFile(string $fileName, ?string $scope = null, ?string $package = null): ?string;
 
     /** @param int|array<mixed> $blockOptions */
     public function getPager(int $startNum, int $total, string $urltemplate, int $itemsPerPage = 10, int|array $blockOptions = [], string $template = 'default', string $tplmodule = 'base'): string;
@@ -248,7 +248,7 @@ trait TemplatingTrait
      * @param ?string $package
      * @return string|null
      */
-    public function getImage(string $fileName, ?string $scope = null, ?string $package = null): string|null
+    public function getImage(string $fileName, ?string $scope = null, ?string $package = null): ?string
     {
         return xarTpl::getImage($fileName, $scope, $package);
     }
@@ -260,7 +260,7 @@ trait TemplatingTrait
      * @param ?string $package
      * @return string|null
      */
-    public function getFile(string $fileName, ?string $scope = null, ?string $package = null): string|null
+    public function getFile(string $fileName, ?string $scope = null, ?string $package = null): ?string
     {
         return xarTpl::getFile($fileName, $scope, $package);
     }

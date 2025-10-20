@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Representing blocklayout source templates in Xaraya
  *
@@ -27,7 +28,7 @@ class XarayaSourceTemplate extends SourceTemplate
      *
      * @return string the compiled template code.
     **/
-    public function &compile() 
+    public function &compile()
     {
         assert(isset($this->fileName));
         sys::import('xaraya.templating.compiler');
@@ -35,7 +36,7 @@ class XarayaSourceTemplate extends SourceTemplate
         $templateCode = $compiler->compileFile($this->fileName);
 
         $out = '';
-        if(xarTpl::outputPHPCommentBlockInTemplates()) {
+        if (xarTpl::outputPHPCommentBlockInTemplates()) {
             // FIXME: this is weird stuff:
             // theme is irrelevant, date is seen in the filesystem, sourcefile in CACHEKEYS, why? it complicates the system a lot.
             $commentBlock = "<?php\n/*"
@@ -48,9 +49,12 @@ class XarayaSourceTemplate extends SourceTemplate
         // Replace useless php context switches.
         // This sometimes seems to improve rendering end speed, dunno, bytecacher dependent?
         // Typical improvement i bench is around 4-5%
-        $templateCode = preg_replace(array('/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/','/\?>[\s]+<\?php/','/<\?php[\s]+\?>/'),
-                                     array("\n","\n",' ',' '),$templateCode);
-        
+        $templateCode = preg_replace(
+            ['/\?>[\s\n]+<\?php/','/<\?php[\s\n]+\?>/','/\?>[\s]+<\?php/','/<\?php[\s]+\?>/'],
+            ["\n","\n",' ',' '],
+            $templateCode
+        );
+
         $out .= $templateCode;
         return $out;
     }

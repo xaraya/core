@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -25,13 +26,17 @@ class Stack extends SequenceAdapter implements iStack
     public function &pop()
     {
         $item = null;
-        if($this->empty) return $item;
+        if ($this->empty) {
+            return $item;
+        }
         $item = parent::get($this->head);
-        if($item == null) return $item;
+        if ($item == null) {
+            return $item;
+        }
         parent::delete($this->head);
         return $item;
     }
-    
+
     public function clear()
     {
         return parent::clear();
@@ -40,7 +45,9 @@ class Stack extends SequenceAdapter implements iStack
     public function peek()
     {
         $item = null;
-        if($this->empty) return $item;
+        if ($this->empty) {
+            return $item;
+        }
         $item = $this->pop();
         $this->push($item);
         return $item;

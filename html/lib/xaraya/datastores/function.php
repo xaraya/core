@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Data Store is offered by a user function
  *
@@ -86,10 +87,10 @@ class Dynamic_Function_DataStore extends BasicDataStore
                     $ftype,
                     $ffunc,
                     ['modname' => $modname,
-                                             'modid' => $modid,
-                                             'itemtype' => $itemtype,
-                                             'itemid' => $itemid,
-                                             'objectid' => $itemid]
+                        'modid' => $modid,
+                        'itemtype' => $itemtype,
+                        'itemid' => $itemid,
+                        'objectid' => $itemid]
                 );
                 // see if we got something interesting in return
                 if (isset($value)) {
@@ -108,10 +109,10 @@ class Dynamic_Function_DataStore extends BasicDataStore
                     $ftype,
                     $ffunc,
                     ['modname' => $modname,
-                                          'modid' => $modid,
-                                          'itemtype' => $itemtype,
-                                          'itemid' => $itemid,
-                                          'objectid' => $itemid]
+                        'modid' => $modid,
+                        'itemtype' => $itemtype,
+                        'itemid' => $itemid,
+                        'objectid' => $itemid]
                 );
                 // see if we got something interesting in return
                 if (isset($value)) {

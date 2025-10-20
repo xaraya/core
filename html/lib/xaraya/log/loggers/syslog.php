@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\logging
  * @subpackage logging
@@ -28,12 +29,12 @@ sys::import('xaraya.log.loggers.xarLogger');
  * The Log_syslog class is a concrete implementation of the Log::
  * abstract class which sends messages to syslog on UNIX-like machines
  * (PHP emulates this with the Event Log on Windows machines).
- * 
+ *
  * @author  Chuck Hagenbuch <chuck@horde.org>
  * @version $Revision: 1.12 $
  * @since   Horde 1.3
  */
-class xarLogger_syslog extends xarLogger 
+class xarLogger_syslog extends xarLogger
 {
     //Take a look at http://br.php.net/manual/en/function.openlog.php for the options/facilities
 
@@ -61,45 +62,45 @@ class xarLogger_syslog extends xarLogger
      * @param array<string, mixed> $conf               Configuration options for the specific driver.
      *
      */
-    public function __construct(Array $conf)
+    public function __construct(array $conf)
     {
         parent::__construct($conf);
-        
+
         /* If a logging facility is passed, then use it. */
         if (isset($conf['facility'])) {
-        	try {
-				// Convert the string to a constant expression
-				$const = $conf['facility'];
-				eval("\$facility = $const;");
+            try {
+                // Convert the string to a constant expression
+                $const = $conf['facility'];
+                eval("\$facility = $const;");
                 /** @var mixed $facility */
                 $facility ??= LOG_USER;
-				$this->facility = $facility;
-        	} catch (Exception $e) {
-        		xarCore::exit("The value " . $conf['facility'] . " does not correspond to a recognized constant and will be ignored.");
+                $this->facility = $facility;
+            } catch (Exception $e) {
+                xarCore::exit("The value " . $conf['facility'] . " does not correspond to a recognized constant and will be ignored.");
                 return;
-        	}
+            }
         }
 
         /* If logging facility options are given, then use them. */
         if (isset($conf['options'])) {
-        	try {
-				// Convert the string to a constant expression
-				$const = $conf['options'];
-				eval("\$options = $const;");
+            try {
+                // Convert the string to a constant expression
+                $const = $conf['options'];
+                eval("\$options = $const;");
                 /** @var mixed $options */
                 $options ??= LOG_PID;
-				$this->options = $options;
-        	} catch (Exception $e) {
-        		xarCore::exit("The value " . $conf['options'] . " does not correspond to an expression of recognized constants and will be ignored.");
+                $this->options = $options;
+            } catch (Exception $e) {
+                xarCore::exit("The value " . $conf['options'] . " does not correspond to an expression of recognized constants and will be ignored.");
                 return;
-        	}
+            }
         }
     }
 
     /**
      * Opens a connection to the system logger, if it has not already
      * been opened.  This is implicitly called by log(), if necessary.
-     * 
+     *
      */
     public function open()
     {
@@ -111,7 +112,7 @@ class xarLogger_syslog extends xarLogger
 
     /**
      * Closes the connection to the system logger, if it is open.
-     *      
+     *
      */
     public function close()
     {
@@ -127,7 +128,7 @@ class xarLogger_syslog extends xarLogger
      * Sends $message to the currently open syslog connection.  Calls
      * open() if necessary. Also passes the message along to any Log_observer
      * instances that are observing this Log.
-     * 
+     *
      * @param string $message  The textual message to be logged.
      * @param int $level (optional) The priority of the message.  Valid
      *                  values are: PEAR_LOG_EMERG, PEAR_LOG_ALERT,
@@ -135,11 +136,13 @@ class xarLogger_syslog extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     *      
+     *
      */
     public function notify($message, $level)
     {
-        if (!$this->doLogLevel($level)) return false;
+        if (!$this->doLogLevel($level)) {
+            return false;
+        }
 
         if (!$this->opened) {
             $this->open();
@@ -164,11 +167,11 @@ class xarLogger_syslog extends xarLogger
      *
      * @return int The LOG_* representation of $priority.
      *
-     * 
+     *
      */
     protected function toSyslog($level)
     {
-        static $levels = array(
+        static $levels = [
             xarLog::LEVEL_EMERGENCY => LOG_EMERG,
             xarLog::LEVEL_ALERT     => LOG_ALERT,
             xarLog::LEVEL_CRITICAL  => LOG_CRIT,
@@ -176,8 +179,8 @@ class xarLogger_syslog extends xarLogger
             xarLog::LEVEL_WARNING   => LOG_WARNING,
             xarLog::LEVEL_NOTICE    => LOG_NOTICE,
             xarLog::LEVEL_INFO      => LOG_INFO,
-            xarLog::LEVEL_DEBUG     => LOG_DEBUG
-        );
+            xarLog::LEVEL_DEBUG     => LOG_DEBUG,
+        ];
 
         return $levels[$level];
     }

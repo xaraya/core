@@ -29,7 +29,7 @@ interface UserInterface extends ServiceInterface
 {
     public function getVar(string $varName): mixed;
     public function setVar(string $varName, mixed $value): bool;
-    public function getId(): int|null;
+    public function getId(): ?int;
     public function getName(): string;
     public function getUser(): string;
     public function getEmail(): string;
@@ -40,7 +40,7 @@ interface UserInterface extends ServiceInterface
     public function setLocale(string $locale): bool;
     public function getThemeName(): mixed;
     public function setThemeName(string $themeName): void;
-    public function getCurrentId(): int|null;
+    public function getCurrentId(): ?int;
     public function setCurrentId(int $userId): void;
 }
 
@@ -72,7 +72,7 @@ trait UserTrait
     /**
      * Get current userId from session (if any) or anonymous userId or null
      */
-    public function getId(): int|null
+    public function getId(): ?int
     {
         // @todo see UserContext::getUserId() for userId without session
         return xarSession::getUserId();
@@ -132,7 +132,7 @@ trait UserTrait
     /**
      * Get current userId if overridden
      */
-    public function getCurrentId(): int|null
+    public function getCurrentId(): ?int
     {
         return $this->currentId ?? $this->getId();
     }

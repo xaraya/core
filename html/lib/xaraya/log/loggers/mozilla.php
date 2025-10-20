@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\logging
  * @subpackage logging
@@ -31,7 +32,7 @@ class xarLogger_mozilla extends xarLogger_javascript
     public function getCommonCode()
     {
         // Common javascript to get a variable which has the logmessage method
-        $code="
+        $code = "
 public function mozConsole(msg, level)
 {
     // Only relevant for moz engine
@@ -52,21 +53,23 @@ public function mozConsole(msg, level)
      }
    }
 }";
-  return $code;
+        return $code;
     }
 
-   /**
-    * Updates the Observer
-    *
-    * @param string $message Log message
-    * @param int $level Level of priority of the message
-    * @return boolean  True on success or false on failure.
-    * 
-    */
+    /**
+     * Updates the Observer
+     *
+     * @param string $message Log message
+     * @param int $level Level of priority of the message
+     * @return boolean  True on success or false on failure.
+     *
+     */
     public function notify($message, $level)
     {
         // Abort early if the level of priority is above the maximum logging level.
-        if (!$this->doLogLevel($level)) return false;
+        if (!$this->doLogLevel($level)) {
+            return false;
+        }
 
         // FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
         // In mozilla//ff:
@@ -79,13 +82,13 @@ public function mozConsole(msg, level)
         // it should be done with a signed script eventually, but this is rather complex
         // TODO: check on windows and browsers other than mozilla, to fall back gracefully
 
-        $logentry = $this->getTime(). " - (" . self::$levels[$level] .") ".$message;
+        $logentry = $this->getTime() . " - (" . self::$levels[$level] . ") " . $message;
 
         // Add \ for problematic chars and for each newline format unix, mac and windows
         $logentry = addslashes($logentry);
-        $trans = array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
-        $logentry = strtr($logentry,$trans);
+        $trans = ["\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n"];
+        $logentry = strtr($logentry, $trans);
         $this->buffer .= "mozConsole('$logentry', $level);\n";
         return true;
     }
- }
+}

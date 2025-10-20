@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Data Store is managed by a hook/utility module
  *
@@ -65,10 +66,10 @@ class HookDataStore extends BasicDataStore
                     'user',
                     'get',
                     ['modname' => $modname,
-                                             'modid' => $modid,
-                                             'itemtype' => $itemtype,
-                                             'itemid' => $itemid,
-                                             'objectid' => $itemid]
+                        'modid' => $modid,
+                        'itemtype' => $itemtype,
+                        'itemid' => $itemid,
+                        'objectid' => $itemid]
                 );
                 // see if we got something interesting in return
                 if (isset($value)) {

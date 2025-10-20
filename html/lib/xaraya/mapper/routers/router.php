@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base Router class
  *
@@ -19,7 +20,7 @@ use Xaraya\Facades\xarLog3;
 class xarRouter extends xarObject
 {
     /** @var array<string, xarRoute> */
-    protected $routes       = array();
+    protected $routes       = [];
     protected string $currentRoute = 'default';
     //protected $globalParams = array();
 
@@ -39,11 +40,11 @@ class xarRouter extends xarObject
             $dispatcher = xarController::getDispatcher();
 
             sys::import('xaraya.mapper.routers.routes.default');
-            $route = new DefaultRoute(array(), $dispatcher);
+            $route = new DefaultRoute([], $dispatcher);
             $this->routes['default'] = $route;
 
             sys::import('xaraya.mapper.routers.routes.short');
-            $route = new ShortRoute(array(), $dispatcher);
+            $route = new ShortRoute([], $dispatcher);
             $this->routes['short'] = $route;
 
             /* Add more routes here

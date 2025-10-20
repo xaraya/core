@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLException.php,v 1.10 2004/03/20 04:16:49 hlellelid Exp $
  *
@@ -87,7 +88,7 @@ class SQLException extends Exception
     public function setNativeError($msg)
     {
         $this->nativeError = $msg;
-        $this->message .= " [Native Error: " .$this->nativeError . "]";
+        $this->message .= " [Native Error: " . $this->nativeError . "]";
     }
 
     /**

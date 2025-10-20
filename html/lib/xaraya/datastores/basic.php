@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class for Dynamic Data Stores
  *
@@ -168,7 +169,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     public function addField(DataProperty &$property)
     {
         parent::addField($property);
-        if(!isset($this->primary) && DataPropertyMaster::isPrimaryType($property->type)) {
+        if (!isset($this->primary) && DataPropertyMaster::isPrimaryType($property->type)) {
             // Item ID
             $this->setPrimary($property);
         }
@@ -195,7 +196,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     {
         $name = $this->getFieldName($property);
         $this->sort[] = ['field'     => $name,
-                        'sortorder' => $sortorder];
+            'sortorder' => $sortorder];
     }
 
     /**

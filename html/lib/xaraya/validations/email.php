@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -20,7 +21,7 @@
 sys::import('xaraya.validations');
 class EmailValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         if (filter_var($subject, FILTER_VALIDATE_EMAIL) === false) {
             $msg = 'Not a valid email format';

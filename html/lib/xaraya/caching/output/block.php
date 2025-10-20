@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Block caching
  *
@@ -41,12 +42,12 @@ class xarBlockCache extends xarObject
         self::$cacheTime = $args['Block.TimeExpiration'] ?? 7200;
         self::$cacheSizeLimit = $args['Block.SizeLimit'] ?? 2097152;
 
-        $storage = !empty($args['Block.CacheStorage']) ?
-            $args['Block.CacheStorage'] : 'filesystem';
-        $provider = !empty($args['Block.CacheProvider']) ?
-            $args['Block.CacheProvider'] : null;
-        $logfile = !empty($args['Block.LogFile']) ?
-            $args['Block.LogFile'] : null;
+        $storage = !empty($args['Block.CacheStorage'])
+            ? $args['Block.CacheStorage'] : 'filesystem';
+        $provider = !empty($args['Block.CacheProvider'])
+            ? $args['Block.CacheProvider'] : null;
+        $logfile = !empty($args['Block.LogFile'])
+            ? $args['Block.LogFile'] : null;
         self::$cacheStorage = xarCache::getStorage([
             'storage'   => $storage,
             'type'      => 'block',
@@ -93,8 +94,8 @@ class xarBlockCache extends xarObject
         // set the cacheCode for the current cacheKey
 
         // the output depends on the current host, theme and locale
-        $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
-                   xarUser::getNavigationLocale();
+        $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir()
+                   . xarUser::getNavigationLocale();
 
         // add page identifier if needed
         if (self::$pageShared == 0) {
@@ -276,12 +277,12 @@ class xarBlockCache extends xarObject
         }
 
         if (// the http request is a GET AND
-            xarServer::getVar('REQUEST_METHOD') == 'GET' &&
+            xarServer::getVar('REQUEST_METHOD') == 'GET'
         // CHECKME: do we really want to check this again, or do we ignore it ?
             // the cache entry doesn't exist or has expired (no log here) AND
-            !(self::$cacheStorage->isCached($cacheKey, self::$expireTime, 0)) &&
+            && !(self::$cacheStorage->isCached($cacheKey, self::$expireTime, 0))
             // the cache collection directory hasn't reached its size limit...
-            !(self::$cacheStorage->sizeLimitReached())) {
+            && !(self::$cacheStorage->sizeLimitReached())) {
             // Note: we pass along the expiration time here, because it may be different for each block
             self::$cacheStorage->setCached($cacheKey, $value, self::$expireTime);
         }

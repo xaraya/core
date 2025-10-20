@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class and factory for the cache storage types
  *
@@ -329,10 +330,10 @@ class xarCache_Storage extends xarObject
             $key = str_replace($this->prefix, '', $key);
         }
         return ['key'   => $key,
-                'code'  => $code,
-                'time'  => time(),
-                'size'  => 0,
-                'check' => ''];
+            'code'  => $code,
+            'time'  => time(),
+            'size'  => 0,
+            'check' => ''];
     }
 
     /**
@@ -428,10 +429,10 @@ class xarCache_Storage extends xarObject
     public function getCacheInfo()
     {
         return ['size'    => $this->size,
-                'items'   => $this->items,
-                'hits'    => $this->hits,
-                'misses'  => $this->misses,
-                'modtime' => $this->modtime];
+            'items'   => $this->items,
+            'hits'    => $this->hits,
+            'misses'  => $this->misses,
+            'modtime' => $this->modtime];
     }
 
     /**
@@ -495,14 +496,14 @@ class xarCache_Storage extends xarObject
      */
     public function logStatus($status = 'MISS', $key = '')
     {
-        if (empty($this->logfile) || empty(xarServer::getVar('HTTP_HOST')) ||
-            empty(xarServer::getVar('REQUEST_URI')) || empty(xarServer::getVar('REMOTE_ADDR'))) {
+        if (empty($this->logfile) || empty(xarServer::getVar('HTTP_HOST'))
+            || empty(xarServer::getVar('REQUEST_URI')) || empty(xarServer::getVar('REMOTE_ADDR'))) {
             return;
         }
 
         $time = time();
         $addr = !empty(xarServer::getVar('REMOTE_ADDR')) ? xarServer::getVar('REMOTE_ADDR') : '-';
-        $url = 'http://'.xarServer::getVar('HTTP_HOST').xarServer::getVar('REQUEST_URI');
+        $url = 'http://' . xarServer::getVar('HTTP_HOST') . xarServer::getVar('REQUEST_URI');
         //$ref = !empty(xarServer::getVar('HTTP_REFERER')) ? xarServer::getVar('HTTP_REFERER') : '-';
         $type = $this->type;
         $code = $this->code;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\caching
  * @subpackage caching
@@ -97,7 +98,7 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
         }
         if (!empty($classname)) {
             $value = ['_xcache_class_' => $classname,
-                           '_xcache_value_' => serialize($value)];
+                '_xcache_value_' => serialize($value)];
         }
         if (!empty($expire)) {
             xcache_set($cache_key, $value, $expire);
@@ -168,7 +169,7 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
 
         // this is the info for the whole cache
         $vcnt = xcache_count(XC_TYPE_VAR);
-        for ($i = 0; $i < $vcnt; $i ++) {
+        for ($i = 0; $i < $vcnt; $i++) {
             $info = xcache_info(XC_TYPE_VAR, $i);
             $this->size += ($info['size'] - $info['avail']);
             $this->items += $info['cached'];
@@ -177,17 +178,17 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
         }
 
         return ['size'    => $this->size,
-                'items'   => $this->items,
-                'hits'    => $this->hits,
-                'misses'  => $this->misses,
-                'modtime' => $this->modtime];
+            'items'   => $this->items,
+            'hits'    => $this->hits,
+            'misses'  => $this->misses,
+            'modtime' => $this->modtime];
     }
 
     public function getCachedList()
     {
         $vcnt = xcache_count(XC_TYPE_VAR);
         $list = [];
-        for ($i = 0; $i < $vcnt; $i ++) {
+        for ($i = 0; $i < $vcnt; $i++) {
             $info = xcache_list(XC_TYPE_VAR, $i);
             foreach ($info['cache_list'] as $entry) {
                 // filter out the keys that don't start with the right type/namespace prefix
@@ -210,10 +211,10 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
                     $key = str_replace($this->prefix, '', $key);
                 }
                 $list[] = ['key'   => $key,
-                           'code'  => $code,
-                           'time'  => $time,
-                           'size'  => $size,
-                           'check' => $check];
+                    'code'  => $code,
+                    'time'  => $time,
+                    'size'  => $size,
+                    'check' => $check];
             }
         }
         return $list;

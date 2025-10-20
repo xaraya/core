@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ODBCPreparedStatement.php,v 1.4 2005/11/13 01:29:01 gamr Exp $
  *
@@ -103,14 +104,14 @@ class ODBCPreparedStatement extends PreparedStatementCommon implements PreparedS
     {
         switch (func_num_args()) {
             case 2:
-                list($params, $fetchmode) = func_get_args();
+                [$params, $fetchmode] = func_get_args();
                 if (!is_array($params)) {
                     unset($params);
                 }
                 break;
             case 1:
                 $params = null;
-                list($fetchmode) = func_get_args();
+                [$fetchmode] = func_get_args();
                 break;
             case 0:
                 $params = null;
@@ -120,7 +121,7 @@ class ODBCPreparedStatement extends PreparedStatementCommon implements PreparedS
 
         // Set any params passed directly
         if (isset($params)) {
-            for($i = 0,$cnt = count($params); $i < $cnt; $i++) {
+            for ($i = 0,$cnt = count($params); $i < $cnt; $i++) {
                 $this->set($i + 1, $params[$i]);
             }
         } else {
@@ -152,7 +153,7 @@ class ODBCPreparedStatement extends PreparedStatementCommon implements PreparedS
     {
         // Set any params passed directly
         if ($params) {
-            for($i = 0,$cnt = count($params); $i < $cnt; $i++) {
+            for ($i = 0,$cnt = count($params); $i < $cnt; $i++) {
                 $this->set($i + 1, $params[$i]);
             }
         }

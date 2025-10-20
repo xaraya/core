@@ -1,4 +1,5 @@
 <?php
+
 sys::import('xaraya.variables');
 /**
  * Class to handle system variables
@@ -31,15 +32,18 @@ class xarSystemVars extends xarVars implements IxarVars
      */
     public static function get($scope, $name)
     {
-        if(!isset($scope))
+        if (!isset($scope)) {
             $scope = sys::CONFIG;
+        }
 
-        if (!isset(self::$systemVars[$scope]))
+        if (!isset(self::$systemVars[$scope])) {
             self::preload($scope);
+        }
 
         // We need the system variable; complain if it's not there
-        if (!isset(self::$systemVars[$scope][$name]))
+        if (!isset(self::$systemVars[$scope][$name])) {
             throw new Exception("xarSystemVars: Unknown system variable: '$name'.");
+        }
 
         return self::$systemVars[$scope][$name];
     }
@@ -69,12 +73,15 @@ class xarSystemVars extends xarVars implements IxarVars
     private static function preload($scope)
     {
         $fileName = sys::varpath() . '/';
-        if ($scope == sys::LOG)  $fileName .= 'logs/';
+        if ($scope == sys::LOG) {
+            $fileName .= 'logs/';
+        }
         $fileName .= $scope;
 
         // We need the file; complain if it's not there
-		if (!file_exists($fileName))
+        if (!file_exists($fileName)) {
             throw new Exception("The system config file '$fileName' could not be found.");
+        }
 
         // Make stuff from config.system.php available
         // NOTE: we can not use sys::import since the variable scope would be wrong.

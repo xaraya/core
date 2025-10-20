@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Experiment with PSR-7 and PSR-15 compatible middleware controller for DataObject
  * Uses request attributes 'object', 'method', 'itemid' from DataObjectRouter::matchRequest()

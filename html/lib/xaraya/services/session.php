@@ -32,8 +32,8 @@ interface SessionInterface extends ServiceInterface
     public function getVar(string $varName): mixed;
     public function setVar(string $varName, mixed $value): bool;
     public function delVar(string $varName): mixed;
-    public function getUserId(): int|null;
-    public function getAnonId(): int|null;
+    public function getUserId(): ?int;
+    public function getAnonId(): ?int;
 }
 
 /**
@@ -70,7 +70,7 @@ trait SessionTrait
     /**
      * Get current userId from session (if any) or anonymous userId or null
      */
-    public function getUserId(): int|null
+    public function getUserId(): ?int
     {
         // @todo see UserContext::getUserId() for userId without session
         return xarSession::getUserId();
@@ -79,7 +79,7 @@ trait SessionTrait
     /**
      * Get the anonymous userId or null if no session has been initialized
      */
-    public function getAnonId(): int|null
+    public function getAnonId(): ?int
     {
         return xarSession::getAnonId();
     }

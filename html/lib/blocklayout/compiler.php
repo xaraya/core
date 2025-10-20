@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BlockLayout Template Engine Compiler
  *
@@ -69,9 +70,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
     /**
      * Private constructor, since this is a Singleton
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Implementation of the interface
@@ -79,7 +78,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
      */
     public static function &instance()
     {
-        if(self::$instance == null) {
+        if (self::$instance == null) {
             self::$instance = new xarBLCompiler();
         }
         return self::$instance;
@@ -132,13 +131,13 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
      */
     public function getTagPaths($filepath, $prefix)
     {
-        $files = array();
+        $files = [];
         foreach (new DirectoryIterator($filepath) as $fileInfo) {
-            if($fileInfo->isDot()) {
+            if ($fileInfo->isDot()) {
                 continue;
             }
             $pathinfo = pathinfo($fileInfo->getPathName());
-            if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') {
+            if (isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') {
                 continue;
             }
             $files[] = $prefix . "/" . $fileInfo->getFileName();
@@ -230,7 +229,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
             // Get all its child nodes
             $children = $sheetnode->childNodes;
             // Run through them and append to the end of our stylesheet
-            foreach($children as $node) {
+            foreach ($children as $node) {
                 $tempnode = $doc->importNode($node, true);
                 $doc->documentElement->appendChild($tempnode);
             }
@@ -297,8 +296,8 @@ class ExpressionTransformer extends xarObject
 
         // 'resolve' the dot and colon notation
         $subparts = preg_split('/[\[|\]]/', $blExpression);
-        if(count($subparts) > 1) {
-            foreach($subparts as $subpart) {
+        if (count($subparts) > 1) {
+            foreach ($subparts as $subpart) {
                 // Resolve the subpart
                 $blExpression = str_replace($subpart, self::transformBLExpression($subpart), $blExpression);
             }
@@ -312,14 +311,14 @@ class ExpressionTransformer extends xarObject
 
         $expression = $identifiers[0];
         for ($i = 1; $i < $numIdentifiers; $i++) {
-            if($operators[$i - 1] == '.') {
-                if((substr($identifiers[$i], 0, 1) == self::XAR_TOKEN_VAR_START) || is_numeric($identifiers[$i])) {
-                    $expression .= "[".$identifiers[$i]."]";
+            if ($operators[$i - 1] == '.') {
+                if ((substr($identifiers[$i], 0, 1) == self::XAR_TOKEN_VAR_START) || is_numeric($identifiers[$i])) {
+                    $expression .= "[" . $identifiers[$i] . "]";
                 } else {
-                    $expression .= "['".$identifiers[$i]."']";
+                    $expression .= "['" . $identifiers[$i] . "']";
                 }
-            } elseif($operators[$i - 1] == ':') {
-                $expression .= '->'.$identifiers[$i];
+            } elseif ($operators[$i - 1] == ':') {
+                $expression .= '->' . $identifiers[$i];
             }
         }
         return $expression;
@@ -364,7 +363,7 @@ class ExpressionTransformer extends xarObject
             // Resolve BL expressions inside the php Expressions
 
             // To prevent overlap as much as we can we sort descending by length
-            usort($matches[0], array('ExpressionTransformer','rlensort'));
+            usort($matches[0], ['ExpressionTransformer','rlensort']);
             $numMatches = count($matches[0]);
             for ($i = 0; $i < $numMatches; $i++) {
                 // CHECKME: & removed here for php 4.4
@@ -378,8 +377,8 @@ class ExpressionTransformer extends xarObject
             }
         }
 
-        $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
-        $replaceLogic   = array(' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= ');
+        $findLogic      = [' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge '];
+        $replaceLogic   = [' == ', ' != ',  ' < ',  ' > ', ' === ', ' !== ', ' <= ', ' >= '];
 
         $phpExpression = str_replace($findLogic, $replaceLogic, $phpExpression);
 
@@ -394,7 +393,7 @@ class ExpressionTransformer extends xarObject
      */
     public static function rlensort($a, $b)
     {
-        if(strlen($a) == strlen($b)) {
+        if (strlen($a) == strlen($b)) {
             return 0;
         }
         return (strlen($a) < strlen($b)) ? 1 : -1;
@@ -408,11 +407,11 @@ class ExpressionTransformer extends xarObject
     public static function normalize($expr)
     {
         /* If the expression is enclosed in # s, ignore them */
-        if(empty($expr)) {
+        if (empty($expr)) {
             return $expr;
         }
-        if($expr[0] == self::XAR_TOKEN_CI_DELIM &&
-            $expr[strlen($expr) - 1] == self::XAR_TOKEN_CI_DELIM) {
+        if ($expr[0] == self::XAR_TOKEN_CI_DELIM
+            && $expr[strlen($expr) - 1] == self::XAR_TOKEN_CI_DELIM) {
             $expr = substr($expr, 1, -1);
         }
         return $expr;

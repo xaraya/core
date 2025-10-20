@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: PgSQLResultSet.php,v 1.31 2006/01/17 19:44:40 hlellelid Exp $
  *
@@ -111,7 +112,7 @@ class PgSQLResultSet extends ResultSetCommon implements ResultSet
      */
     public function close()
     {
-        $this->fields = array();
+        $this->fields = [];
         @pg_free_result($this->result);
     }
 
@@ -123,13 +124,13 @@ class PgSQLResultSet extends ResultSetCommon implements ResultSet
     private function strToArray($str)
     {
         $str = substr($str, 1, -1); // remove { }
-        $res = array();
+        $res = [];
 
-        $subarr = array();
+        $subarr = [];
         $in_subarr = 0;
 
         $toks = explode(',', $str);
-        foreach($toks as $tok) {
+        foreach ($toks as $tok) {
             if ($in_subarr > 0) { // already in sub-array?
                 $subarr[$in_subarr][] = $tok;
                 if ('}' === substr($tok, -1, 1)) { // check to see if we just added last component
@@ -140,7 +141,7 @@ class PgSQLResultSet extends ResultSetCommon implements ResultSet
                 if ('}' !== substr($tok, -1, 1)) {
                     $in_subarr++;
                     // if sub-array has more than one element
-                    $subarr[$in_subarr] = array();
+                    $subarr[$in_subarr] = [];
                     $subarr[$in_subarr][] = $tok;
                 } else {
                     $res[] = $this->strToArray($tok);

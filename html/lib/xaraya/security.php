@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @package core\security
@@ -95,40 +96,47 @@ class xarSec extends xarObject
     public static function confirmAuthKey($modName = null, $authIdVarName = 'authid', $catch = false)
     {
         // We don't need this check for AJAX calls
-        if (xarController::getRequest()->isAjax()) return true;
+        if (xarController::getRequest()->isAjax()) {
+            return true;
+        }
 
-        if(!isset($modName)) $modName = xarController::getRequest()->getModule();
+        if (!isset($modName)) {
+            $modName = xarController::getRequest()->getModule();
+        }
         $authid = xarController::getVar($authIdVarName);
 
         // Regenerate static part of key
         $partkey = xarSession::getVar('rand') . strtolower($modName);
 
-    // Not using time-sensitive keys for the moment
-    //    // Key life is 5 minutes, so search backwards and forwards 5
-    //    // minutes to see if there is a match anywhere
-    //    for ($i=-5; $i<=5; $i++) {
-    //        $testdate  = mktime(date('G'), date('i')+$i, 0, date('m') , date('d'), date('Y'));
-    //
-    //        $testauthid = md5($partkey . date('YmdGi', $testdate));
-    //        if ($testauthid == $authid) {
-    //            // Match
-    //
-    //            // We've used up the current random
-    //            // number, make up a new one
-    //            srand((double) microtime(true) * 1000000.0);
-    //            xarSession::setVar('rand', rand());
-    //
-    //            return true;
-    //        }
-    //    }
+        // Not using time-sensitive keys for the moment
+        //    // Key life is 5 minutes, so search backwards and forwards 5
+        //    // minutes to see if there is a match anywhere
+        //    for ($i=-5; $i<=5; $i++) {
+        //        $testdate  = mktime(date('G'), date('i')+$i, 0, date('m') , date('d'), date('Y'));
+        //
+        //        $testauthid = md5($partkey . date('YmdGi', $testdate));
+        //        if ($testauthid == $authid) {
+        //            // Match
+        //
+        //            // We've used up the current random
+        //            // number, make up a new one
+        //            srand((double) microtime(true) * 1000000.0);
+        //            xarSession::setVar('rand', rand());
+        //
+        //            return true;
+        //        }
+        //    }
         if ((md5($partkey)) == $authid) {
             // Match - generate new random number for next key and leave happy
-            srand((double) microtime(true) * 1000000.0);
+            srand((float) microtime(true) * 1000000.0);
             xarSession::setVar('rand', rand());
             return true;
         }
         // Not found, assume invalid
-        if ($catch) throw new ForbiddenOperationException();
-        else return false;
+        if ($catch) {
+            throw new ForbiddenOperationException();
+        } else {
+            return false;
+        }
     }
 }

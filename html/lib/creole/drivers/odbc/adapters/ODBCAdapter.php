@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ODBCAdapter.php,v 1.3 2005/10/17 19:03:51 dlawson_mi Exp $
  *
@@ -65,9 +66,7 @@ class ODBCAdapter
     /**
      * @see Connection::applyLimit()
      */
-    public function applyLimit(&$sql, $offset, $limit)
-    {
-    }
+    public function applyLimit(&$sql, $offset, $limit) {}
 
     /**
      * @see PreparedStatementCommon::escape()

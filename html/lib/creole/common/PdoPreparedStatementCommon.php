@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLitePreparedStatement.php,v 1.7 2004/03/20 04:16:50 hlellelid Exp $
  *
@@ -36,7 +37,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
     private $pdo_stmt = null;
 
 
-    private $bind_values = array();
+    private $bind_values = [];
     /**
      * Create new prepared statement instance.
      *
@@ -63,7 +64,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      */
     public function saveBindValue($index, $value, $type = null)
     {
-        $this->bind_values[] = array( $index, $value, $type );
+        $this->bind_values[] = [ $index, $value, $type ];
     }
 
     /**
@@ -88,15 +89,15 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
 
         try {
             $this->pdo_stmt = $this->conn->getResource()->prepare($sql);
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException("Unable to prepare statement", $e->getMessage(), $sql);
         }
 
-        foreach($this->bind_values as &$parameter) {
+        foreach ($this->bind_values as &$parameter) {
             // not sure if we need this check, PDO might accept the NULL value
             // without any adverse affects.  However, I didn't want to chance it
             // or take the time to test it :)
-            if($parameter[2] != null) {
+            if ($parameter[2] != null) {
                 $this->pdo_stmt->bindValue($parameter[0], $parameter[1], $parameter[2]);
             } else {
                 $this->pdo_stmt->bindValue($parameter[0], $parameter[1]);
@@ -118,7 +119,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
     {
         // $rs_class can not be null, but inheritance requires our class definition
         // to be compatible with PreparedStatementCommon::executeQuery()
-        if(empty($rs_class)) {
+        if (empty($rs_class)) {
             throw new SQLException('PdoPreparedStatementCommon::executeQuery: $rs_class can not be empty');
         }
 
@@ -150,7 +151,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
         unset($this->resultSet);
 
         // make sure the connection does not have any open result sets
-        if($this->conn->openResultSet()) {
+        if ($this->conn->openResultSet()) {
             $this->conn->handleOpenResultSet();
         }
 
@@ -169,7 +170,7 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      */
     public function executeUpdate($params = null)
     {
-        if($this->resultSet) {
+        if ($this->resultSet) {
             $this->resultSet->close();
         }
         $this->resultSet = null; // reset
@@ -178,19 +179,19 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
         $this->replaceParams();
 
         // make sure the connection does not have any open result sets
-        if($this->conn->openResultSet()) {
+        if ($this->conn->openResultSet()) {
             $this->conn->handleOpenResultSet();
         }
 
         try {
-            if(empty($params)) {
+            if (empty($params)) {
                 $this->pdo_stmt->execute();
             } else {
                 $this->pdo_stmt->execute($params);
             }
 
             $this->updateCount = $this->pdo_stmt->rowCount();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw new SQLException("Unable to execute prepared statement", $e->getMessage());
         }
         return $this->updateCount;

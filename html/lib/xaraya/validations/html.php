@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -22,19 +23,19 @@ use Xaraya\Facades\xarConfig3;
 **/
 class HtmlValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
-        assert(($parameters[0] == "restricted" ||
-                 $parameters[0] == "basic" ||
-                 $parameters[0] == "enhanced" ||
-                 $parameters[0] == "admin"));
+        assert(($parameters[0] == "restricted"
+                 || $parameters[0] == "basic"
+                 || $parameters[0] == "enhanced"
+                 || $parameters[0] == "admin"));
 
         if ($parameters[0] == 'admin') {
             return true;
         }
 
-        $allowedTags = array();
-        foreach (xarConfig3::getVar('Site.Core.AllowableHTML') as $k=>$v) {
+        $allowedTags = [];
+        foreach (xarConfig3::getVar('Site.Core.AllowableHTML') as $k => $v) {
             if ($v) {
                 $allowedTags[] = $k;
             }
@@ -50,7 +51,7 @@ class HtmlValidation extends ValueValidations
                 // We should check for on* attributes
                 // Attributes should be restricted too, shouldnt they?
                 $msg = 'Attributes are not allowed for tag "#(1)"';
-                throw new VariableValidationException(array($tag),$msg);
+                throw new VariableValidationException([$tag], $msg);
             }
         }
         return true;

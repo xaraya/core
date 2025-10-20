@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Table Maintenance API for SQLite
  *
@@ -7,7 +8,7 @@
  * USE THE METHODS IN xarDataDict.php. BOTH SUBSYSTEMS ARE NOT 100% FINISHED
  * BUT THIS ONE WILL BE ABANDONED, YOU MIGHT AS WELL WRITE YOUR CODE TO USE
  * THE MAINTAINED SUBSYSTEM.
- 
+
  * @package core
  * @subpackage database
  * @category Xaraya Web Applications Framework
@@ -27,28 +28,28 @@
 /**
  * Generate the SQLite specific SQL to create a table
  *
- * 
+ *
  * @param string $tableName the physical table name
  * @param array<mixed> $fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
  */
 function xarDB__sqliteCreateTable($tableName, $fields, $charset = null)
 {
-    $sql_fields = array();
-    $primary_key = array();
+    $sql_fields = [];
+    $primary_key = [];
     $increment_start = false;
-    
+
     foreach ($fields as $field_name => $parameters) {
         $parameters['command'] = 'create';
         $this_field = xarDB__sqliteColumnDefinition($field_name, $parameters);
-        
-        $sql_fields[] = $field_name .' '
-            . $this_field['type'] .' '
-            . $this_field['unsigned'] .' '
-            . $this_field['null'] .' '
-            . $this_field['default'] .' '
+
+        $sql_fields[] = $field_name . ' '
+            . $this_field['type'] . ' '
+            . $this_field['unsigned'] . ' '
+            . $this_field['null'] . ' '
+            . $this_field['default'] . ' '
         . $this_field['auto_increment'];
-        
+
         if ($this_field['primary_key'] == true) {
             $primary_key[] = $field_name;
         }
@@ -59,11 +60,11 @@ function xarDB__sqliteCreateTable($tableName, $fields, $charset = null)
             $increment_start = $this_field['increment_start'];
         }
     }
-    
-    $sql = 'CREATE TABLE '.$tableName.' ('.implode(', ',$sql_fields);
-                                         
+
+    $sql = 'CREATE TABLE ' . $tableName . ' (' . implode(', ', $sql_fields);
+
     if (!empty($primary_key)) {
-        $sql .= ', PRIMARY KEY ('.implode(',',$primary_key).')';
+        $sql .= ', PRIMARY KEY (' . implode(',', $primary_key) . ')';
     }
     $sql .= ')';
 
@@ -73,7 +74,7 @@ function xarDB__sqliteCreateTable($tableName, $fields, $charset = null)
 /**
  * SQLite specific function to alter a table
  *
- * 
+ *
  * @param string $tableName the table to alter
  * @param array<string, mixed> $args
  * with
@@ -85,59 +86,61 @@ function xarDB__sqliteCreateTable($tableName, $fields, $charset = null)
  * @throws BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDB__sqliteAlterTable($tableName, $args) 
+function xarDB__sqliteAlterTable($tableName, $args)
 {
     switch ($args['command']) {
         case 'add':
             if (empty($args['field'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (field key must be set).');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
             }
-           
-            $sql = 'ALTER TABLE '.$tableName.' ADD '.$args['field'].' ';
-            $coldef = xarDB__sqliteColumnDefinition($args['field'],$args);
-            $sql.= $coldef['type'] . ' '
+
+            $sql = 'ALTER TABLE ' . $tableName . ' ADD ' . $args['field'] . ' ';
+            $coldef = xarDB__sqliteColumnDefinition($args['field'], $args);
+            $sql .= $coldef['type'] . ' '
                 . $coldef['unsigned'] . ' '
                 . $coldef['null'] . ' '
                 . $coldef['default'] . ' '
                 . $coldef['auto_increment'] . ' ';
 
-            if($coldef['primary_key']) {
-                $sql.= 'PRIMARY KEY ';
-            }   
+            if ($coldef['primary_key']) {
+                $sql .= 'PRIMARY KEY ';
+            }
 
             break;
         case 'rename':
             if (empty($args['new_name'])) {
-                throw new BadParameterException('args','Invalid parameter "#(1)" (new_name key must be set.)');
+                throw new BadParameterException('args', 'Invalid parameter "#(1)" (new_name key must be set.)');
             }
-            $sql = 'ALTER TABLE '.$tableName.' RENAME TO '.$args['new_name'];
+            $sql = 'ALTER TABLE ' . $tableName . ' RENAME TO ' . $args['new_name'];
             break;
         default:
-            throw new BadParameterException($args['command'],'Unknown command: "#(1)"');
-        }
+            throw new BadParameterException($args['command'], 'Unknown command: "#(1)"');
+    }
 
-        return $sql;
+    return $sql;
 }
 
 /**
  * SQLite specific column type generation
  *
- * Note that SQLite only cares about INTEGER PRIMARY KEY 
+ * Note that SQLite only cares about INTEGER PRIMARY KEY
  * all other specs are not needed. We left them in here, so the SQL generated
- * is at least more clear. 
+ * is at least more clear.
  *
- * 
+ *
  * @param string $field_name
  * @param array<mixed> $parameters
  *
  */
-function xarDB__sqliteColumnDefinition($field_name, $parameters) 
+function xarDB__sqliteColumnDefinition($field_name, $parameters)
 {
-    $this_field = array();
+    $this_field = [];
 
-    switch($parameters['type']) {
+    switch ($parameters['type']) {
         case 'integer':
-            if (empty($parameters['size']))  $parameters['size'] = 'int';
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'int';
+            }
             // Let's always use integer instead of int, so when it gets set as primary key, we get the autoinc behaviour for free
             switch ($parameters['size']) {
                 case 'tiny':
@@ -153,23 +156,31 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
                     $this_field['type'] = 'BIGINT';
                     break;
                 default:
-            $this_field['type'] = 'INTEGER';
+                    $this_field['type'] = 'INTEGER';
             } // switch ($parameters['size'])
             break;
         case 'char':
-            if (empty($parameters['size'])) return false;
-            $this_field['type'] = 'CHAR('.$parameters['size'].')';
+            if (empty($parameters['size'])) {
+                return false;
+            }
+            $this_field['type'] = 'CHAR(' . $parameters['size'] . ')';
             break;
         case 'varchar':
-            if (empty($parameters['size'])) return false;
-            $this_field['type'] = 'VARCHAR('.$parameters['size'].')';
+            if (empty($parameters['size'])) {
+                return false;
+            }
+            $this_field['type'] = 'VARCHAR(' . $parameters['size'] . ')';
             break;
         case 'text':
-            if (empty($parameters['size'])) $parameters['size'] = 'text';
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'text';
+            }
             $this_field['type'] = 'TEXT';
             break;
         case 'blob':
-            if (empty($parameters['size'])) $parameters['size'] = 'blob';
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'blob';
+            }
             $this_field['type'] = 'BLOB';
             break;
         case 'boolean':
@@ -186,12 +197,12 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'].
-                                         ' '.$datetime_defaults['hour'].
-                                         ':'.$datetime_defaults['minute'].
-                                         ':'.$datetime_defaults['second'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day']
+                                         . ' ' . $datetime_defaults['hour']
+                                         . ':' . $datetime_defaults['minute']
+                                         . ':' . $datetime_defaults['second'];
                 }
             }
             break;
@@ -202,14 +213,16 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
                 // array('year'=>2002,'month'=>04,'day'=>17)
                 if (is_array($parameters['default'])) {
                     $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year'].
-                                         '-'.$datetime_defaults['month'].
-                                         '-'.$datetime_defaults['day'];
+                    $parameters['default'] = $datetime_defaults['year']
+                                         . '-' . $datetime_defaults['month']
+                                         . '-' . $datetime_defaults['day'];
                 }
             }
             break;
         case 'float':
-            if (empty($parameters['size'])) $parameters['size'] = 'float';
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'float';
+            }
             switch ($parameters['size']) {
                 case 'double':
                     $data_type = 'DOUBLE';
@@ -221,15 +234,17 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
                     $data_type = 'FLOAT';
             }
             if (isset($parameters['width']) && isset($parameters['decimals'])) {
-               $data_type .= '('.$parameters['width'].','.$parameters['decimals'].')';
+                $data_type .= '(' . $parameters['width'] . ',' . $parameters['decimals'] . ')';
             }
             $this_field['type'] = $data_type;
             break;
-       case 'time':
+        case 'time':
             $this_field['type'] = "TIME";
             break;
         case 'timestamp':
-            if (empty($parameters['size'])) $parameters['size'] = 'timestamp';
+            if (empty($parameters['size'])) {
+                $parameters['size'] = 'timestamp';
+            }
             switch ($parameters['size']) {
                 case 'YY':
                     $this_field['type'] = 'TIMESTAMP(2)';
@@ -272,14 +287,15 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
 
     // Test for DEFAULTS
     $this_field['default'] = '';
-    if (isset($parameters['default']))
-        if ($parameters['default'] == 'NULL')
+    if (isset($parameters['default'])) {
+        if ($parameters['default'] == 'NULL') {
             $this_field['default'] = "DEFAULT NULL";
-        else
-        if (is_string($parameters['default']))
+        } elseif (is_string($parameters['default'])) {
             $this_field['default'] = "DEFAULT '" . $parameters['default'] . "'";
-        else
+        } else {
             $this_field['default'] = "DEFAULT " . $parameters['default'];
+        }
+    }
 
     // Test for AUTO_INCREMENT
     $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true) ? 'AUTO_INCREMENT' : '';

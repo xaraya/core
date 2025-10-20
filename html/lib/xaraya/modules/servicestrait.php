@@ -36,11 +36,11 @@ interface ModuleServicesInterface extends ServicesInterface
     public function getModType(): string;
     public function setModType(string $modType): void;
     public function hasMethod(string $funcName, string $callType = 'api'): bool;
-    public function getModule(?string $modName = null): ModuleInterface|null;
-    public function userapi(): UserApiInterface|null;
-    public function usergui(): UserGuiInterface|null;
-    public function adminapi(): AdminApiInterface|null;
-    public function admingui(): AdminGuiInterface|null;
+    public function getModule(?string $modName = null): ?ModuleInterface;
+    public function userapi(): ?UserApiInterface;
+    public function usergui(): ?UserGuiInterface;
+    public function adminapi(): ?AdminApiInterface;
+    public function admingui(): ?AdminGuiInterface;
 }
 
 /**
@@ -202,7 +202,7 @@ trait ModuleServicesTrait
      * Get parent module to access other module classes
      * @return TModule
      */
-    public function getModule(?string $modName = null): ModuleInterface|null
+    public function getModule(?string $modName = null): ?ModuleInterface
     {
         if (!empty($modName)) {
             $module = xarMod::getModule($modName, $this->context);
@@ -227,7 +227,7 @@ trait ModuleServicesTrait
     /**
      * Get module user API class for this module
      */
-    public function userapi(): UserApiInterface|null
+    public function userapi(): ?UserApiInterface
     {
         $component = $this->getModule()?->userapi();
         assert($component instanceof UserApiInterface);
@@ -237,7 +237,7 @@ trait ModuleServicesTrait
     /**
      * Get module user GUI class for this module
      */
-    public function usergui(): UserGuiInterface|null
+    public function usergui(): ?UserGuiInterface
     {
         $component = $this->getModule()?->usergui();
         assert($component instanceof UserGuiInterface);
@@ -247,7 +247,7 @@ trait ModuleServicesTrait
     /**
      * Get module admin API class for this module
      */
-    public function adminapi(): AdminApiInterface|null
+    public function adminapi(): ?AdminApiInterface
     {
         $component = $this->getModule()?->adminapi();
         assert($component instanceof AdminApiInterface);
@@ -257,7 +257,7 @@ trait ModuleServicesTrait
     /**
      * Get module admin GUI class for this module
      */
-    public function admingui(): AdminGuiInterface|null
+    public function admingui(): ?AdminGuiInterface
     {
         $component = $this->getModule()?->admingui();
         assert($component instanceof AdminGuiInterface);

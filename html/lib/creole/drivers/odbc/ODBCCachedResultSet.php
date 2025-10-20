@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ODBCCachedResultSet.php,v 1.2 2005/04/01 17:04:00 dlawson_mi Exp $
  *
@@ -54,7 +55,7 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
      * Record cache
      * @var array
      */
-    protected $recs = array();
+    protected $recs = [];
 
     /**
      * Tracks the last cursor position of the recordset.
@@ -125,7 +126,7 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
             }
 
             // Load row array.
-            $row = array();
+            $row = [];
             for ($i = 0, $n = @odbc_num_fields($rid); $i < $n; $i++) {
                 $fldNum = $i + 1;
                 $row[$i] = odbc_result($rid, $fldNum);
@@ -137,11 +138,11 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
                     $nativeType = @odbc_field_type($rid, $fldNum);
                     $creoleType = ODBCTypes::getType($nativeType);
 
-                    $isBlob = ($creoleType == CreoleTypes::BLOB ||
-                               $creoleType == CreoleTypes::LONGVARBINARY);
+                    $isBlob = ($creoleType == CreoleTypes::BLOB
+                               || $creoleType == CreoleTypes::LONGVARBINARY);
 
-                    $isClob = ($creoleType == CreoleTypes::CLOB ||
-                               $creoleType == CreoleTypes::LONGVARCHAR);
+                    $isClob = ($creoleType == CreoleTypes::CLOB
+                               || $creoleType == CreoleTypes::LONGVARCHAR);
 
                     if (($isBlob || $isClob) && $row[$i] !== null) {
                         $binmode = ($isBlob ? ODBC_BINMODE_RETURN : ODBC_BINMODE_CONVERT);

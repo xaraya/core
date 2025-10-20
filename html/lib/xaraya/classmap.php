@@ -152,7 +152,7 @@ class xarClassMap extends xarObject
      * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
      * @see xarEvents::fileLoad() not used except for hook observers
      */
-    public static function findClassFile(string $classType, string $modName, string $fileType, ?string $suffix = null): array|null
+    public static function findClassFile(string $classType, string $modName, string $fileType, ?string $suffix = null): ?array
     {
         $found = static::getClassFiles($classType, $modName, $fileType);
         if (!empty($suffix) && count($found) > 1) {
@@ -194,7 +194,7 @@ class xarClassMap extends xarObject
      * @throws \DuplicateException
      * @return array{classname: string, filepath: string, module: string, type: string, interface: string}|null
      */
-    public static function findBlock(string $modName, string $type, ?string $interface = null): array|null
+    public static function findBlock(string $modName, string $type, ?string $interface = null): ?array
     {
         $interface ??= '';
         $found = static::getBlocks($modName, $type);
@@ -243,7 +243,7 @@ class xarClassMap extends xarObject
      * @return array{filepath: string, found: array<string, string>}
      * @see xarBlock::getObject()
      */
-    public static function findBlockByPath(array $paths): array|null
+    public static function findBlockByPath(array $paths): ?array
     {
         // remove sys::code() from paths but keep last /
         $syscode = rtrim(sys::code(), '/');
@@ -321,7 +321,7 @@ class xarClassMap extends xarObject
      * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
      * @see xarEvents::fileLoad()
      */
-    public static function findHookObserver(string $modName, string $event): array|null
+    public static function findHookObserver(string $modName, string $event): ?array
     {
         return static::findClassFile('hookobservers', $modName, $event);
     }
@@ -371,7 +371,7 @@ class xarClassMap extends xarObject
      * @throws \DuplicateException
      * @return array{classname: string, filepath: string, classtype: string, module: string, filetype: string}|null
      */
-    public static function findProperty(string $modName, string $type): array|null
+    public static function findProperty(string $modName, string $type): ?array
     {
         // Ignore installer classes of properties (they are extensions)
         $suffix = 'Property';
@@ -547,7 +547,7 @@ class xarClassMap extends xarObject
      * @return array{classname: string, filepath: string, module: string}|null
      * @see \xarMod::getModule()
      */
-    public static function findModuleClass(string $modName): array|null
+    public static function findModuleClass(string $modName): ?array
     {
         $modules = static::getModuleClasses($modName);
         return $modules[$modName] ?? null;
@@ -583,7 +583,7 @@ class xarClassMap extends xarObject
      * @return array{classname: string, filepath: string, module: string, classtype: string}|null
      * @see \Xaraya\Modules\ModuleTrait::getClassName()
      */
-    public static function findModuleClassType(string $modName, string $modType): array|null
+    public static function findModuleClassType(string $modName, string $modType): ?array
     {
         $modType = strtolower($modType);
         $classTypes = static::getModuleClassTypes($modName, $modType);
@@ -636,7 +636,7 @@ class xarClassMap extends xarObject
      * @return array{classname: string, filepath: string, method: string}|null
      * @see \Xaraya\Modules\ModuleServicesTrait::getClassName()
      */
-    public static function findModuleClassMethod(string $modName, string $modType, string $funcName): array|null
+    public static function findModuleClassMethod(string $modName, string $modType, string $funcName): ?array
     {
         $modType = strtolower($modType);
         // @todo support converted method name here too?

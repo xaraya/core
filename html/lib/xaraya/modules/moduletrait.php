@@ -64,18 +64,18 @@ interface ModuleInterface extends ContextInterface
     public function getFileInfo(): array;
     /** @return array<string, mixed> */
     public function getTables(): array;
-    public function getComponent(string $type): ModuleServicesInterface|null;
+    public function getComponent(string $type): ?ModuleServicesInterface;
     public function hasComponent(string $type): bool;
-    public function userapi(): UserApiInterface|null;
-    public function usergui(): UserGuiInterface|null;
-    public function adminapi(): AdminApiInterface|null;
-    public function admingui(): AdminGuiInterface|null;
-    public function installer(): InstallerInterface|null;
-    public function restapi(): UserApiInterface|null;
-    public function schedulerapi(): UserApiInterface|null;
+    public function userapi(): ?UserApiInterface;
+    public function usergui(): ?UserGuiInterface;
+    public function adminapi(): ?AdminApiInterface;
+    public function admingui(): ?AdminGuiInterface;
+    public function installer(): ?InstallerInterface;
+    public function restapi(): ?UserApiInterface;
+    public function schedulerapi(): ?UserApiInterface;
     public function setClassTypes(): void;
-    public function getClassType(string $modType): string|null;
-    public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): callable|null;
+    public function getClassType(string $modType): ?string;
+    public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): ?callable;
 }
 
 /**
@@ -153,7 +153,7 @@ trait ModuleTrait
         return substr($this::class, 0, strrpos($this::class, '\\'));
     }
 
-    public function getComponent(string $type): ModuleServicesInterface|null
+    public function getComponent(string $type): ?ModuleServicesInterface
     {
         if (!array_key_exists($type, $this->components)) {
             try {
@@ -235,49 +235,49 @@ trait ModuleTrait
         return [];
     }
 
-    public function userapi(): UserApiInterface|null
+    public function userapi(): ?UserApiInterface
     {
         $component = $this->getComponent('UserApi');
         assert($component instanceof UserApiInterface);
         return $component;
     }
 
-    public function usergui(): UserGuiInterface|null
+    public function usergui(): ?UserGuiInterface
     {
         $component = $this->getComponent('UserGui');
         assert($component instanceof UserGuiInterface);
         return $component;
     }
 
-    public function adminapi(): AdminApiInterface|null
+    public function adminapi(): ?AdminApiInterface
     {
         $component = $this->getComponent('AdminApi');
         assert($component instanceof AdminApiInterface);
         return $component;
     }
 
-    public function admingui(): AdminGuiInterface|null
+    public function admingui(): ?AdminGuiInterface
     {
         $component = $this->getComponent('AdminGui');
         assert($component instanceof AdminGuiInterface);
         return $component;
     }
 
-    public function installer(): InstallerInterface|null
+    public function installer(): ?InstallerInterface
     {
         $component = $this->getComponent('Installer');
         assert($component instanceof InstallerInterface);
         return $component;
     }
 
-    public function restapi(): UserApiInterface|null
+    public function restapi(): ?UserApiInterface
     {
         $component = $this->getComponent('RestApi');
         //assert($component instanceof UserApiInterface);
         return $component;
     }
 
-    public function schedulerapi(): UserApiInterface|null
+    public function schedulerapi(): ?UserApiInterface
     {
         $component = $this->getComponent('SchedulerApi');
         //assert($component instanceof UserApiInterface);
@@ -310,7 +310,7 @@ trait ModuleTrait
     /**
      * @see \xarMod::privateLoad()
      */
-    public function getClassType(string $modType): string|null
+    public function getClassType(string $modType): ?string
     {
         if (isset($this->classtypes[$modType])) {
             return $this->classtypes[$modType];
@@ -328,7 +328,7 @@ trait ModuleTrait
     /**
      * @see \xarMod::getModuleClassMethod()
      */
-    public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): callable|null
+    public function getCallableMethod(string $modType, string $funcName, string $callType = 'api'): ?callable
     {
         // $modType already includes $funcType here, e.g. userapi or installer
         $classType = $this->getClassType($modType);

@@ -35,7 +35,7 @@ interface CachingInterface extends ServiceInterface
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Module, or null if not applicable
      */
-    public function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): string|null;
+    public function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): ?string;
 
     /**
      * Check if the output of a module function is cached
@@ -57,7 +57,7 @@ interface CachingInterface extends ServiceInterface
      * @param array<string, mixed> $blockInfo block information
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Block, or null if not applicable
      */
-    public function getBlockKey(array $blockInfo = []): string|null;
+    public function getBlockKey(array $blockInfo = []): ?string;
 
     /**
      * Check if the output of a block display is cached
@@ -79,7 +79,7 @@ interface CachingInterface extends ServiceInterface
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Object, or null if not applicable
      */
-    public function getObjectKey(string $objectName, string $methodName = 'view', array $args = []): string|null;
+    public function getObjectKey(string $objectName, string $methodName = 'view', array $args = []): ?string;
 
     /**
      * Check if the output of an object method is cached
@@ -100,7 +100,7 @@ interface CachingInterface extends ServiceInterface
      * Get a cache key for variable instance caching
      * @return string|null cacheKey to be used with xarVariableCache::(is|get|set)Cached, or null if not applicable
      */
-    public function getVariableKey(string $scope, string $name): string|null;
+    public function getVariableKey(string $scope, string $name): ?string;
 
     /**
      * Check if a variable value is cached
@@ -135,7 +135,7 @@ trait CachingTrait
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Module, or null if not applicable
      */
-    public function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): string|null
+    public function getModuleKey(string $modName, string $modType = 'user', string $funcName = 'main', array $args = []): ?string
     {
         if (empty($modName)) {
             return null;
@@ -178,7 +178,7 @@ trait CachingTrait
      * @param array<string, mixed> $blockInfo block information
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Block, or null if not applicable
      */
-    public function getBlockKey(array $blockInfo = []): string|null
+    public function getBlockKey(array $blockInfo = []): ?string
     {
         return xarCache::getBlockKey($blockInfo);
     }
@@ -218,7 +218,7 @@ trait CachingTrait
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Object, or null if not applicable
      */
-    public function getObjectKey(string $objectName, string $methodName = 'view', array $args = []): string|null
+    public function getObjectKey(string $objectName, string $methodName = 'view', array $args = []): ?string
     {
         if (empty($objectName)) {
             return null;
@@ -260,7 +260,7 @@ trait CachingTrait
      * Get a cache key for variable value caching
      * @return string|null cacheKey to be used with xarVariableCache::(is|get|set)Cached, or null if not applicable
      */
-    public function getVariableKey(string $scope, string $name): string|null
+    public function getVariableKey(string $scope, string $name): ?string
     {
         return xarCache::getVariableKey($scope, $name);
     }

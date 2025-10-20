@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XSLT version of the BL compiler
  *
@@ -45,7 +46,7 @@ class BlockLayoutXSLTProcessor extends xarObject
 
         // Set the exceptions handler
         sys::import('xaraya.exceptions.handlers');
-        xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
+        xarDebug::setExceptionHandler(['ExceptionHandlers','bone']);
 
         // Set up the stylesheet
         if (isset($xslFile)) {
@@ -84,13 +85,13 @@ class BlockLayoutXSLTProcessor extends xarObject
         $this->xmlDoc->resolveExternals = false;
         // We're still a long way from validating
         // $this->xmlDoc->validateOnParse = true;
-        $file = isset($this->xmlFile) ? $this->xmlFile : 'unknown';
+        $file = $this->xmlFile ?? 'unknown';
         xarLog3::debug("XSL: Loading the template code");
         $this->xmlDoc->loadXML($xml);
 
         // Set up additional parameters related to the input
         // @todo wrong here.
-        if(isset($this->xmlFile)) {
+        if (isset($this->xmlFile)) {
             xarLog3::debug("XSL: Adding parameters to the processor");
             // Set up the parameters
             $this->xslProc->setParameter('', 'bl_filename', basename($this->xmlFile));
@@ -109,7 +110,7 @@ class BlockLayoutXSLTProcessor extends xarObject
         // &xar-entity; -> #[whatever expression it needs]#
         $this->prepXml = $this->origXml;
         $entityPattern = '/(&xar-[a-z\-_]+?;)/';
-        $callBack      = array('XsltCallbacks','entities');
+        $callBack      = ['XsltCallbacks','entities'];
         $this->prepXml = preg_replace_callback($entityPattern, $callBack, $this->prepXml);
 
         // Make sure ML placeholders look like expressions
@@ -196,7 +197,7 @@ class BlockLayoutXSLTProcessor extends xarObject
 
         // Transform it
         xarLog3::debug("XSL: Running the XML transform");
-        xarDebug::setExceptionHandler(array('ExceptionHandlers','defaulthandler'));
+        xarDebug::setExceptionHandler(['ExceptionHandlers','defaulthandler']);
         // What should we initialize $result to?
         try {
             $this->postXml = $this->transformToXML($this->xmlDoc) ?? '';
@@ -226,7 +227,7 @@ class BlockLayoutXSLTProcessor extends xarObject
         	- TDOD: move this back to xar2php.xsl when we can (when PHP adopts XSLT 2.x?)
         */
         $exprPattern = '/%#%(.*?)%#%/';
-        $callBack    = array('XsltCallbacks','phpexpressions');
+        $callBack    = ['XsltCallbacks','phpexpressions'];
         $this->postXml = preg_replace_callback($exprPattern, $callBack, $this->postXml ?? '');
 
         /*
@@ -250,7 +251,7 @@ class BlockLayoutXSLTProcessor extends xarObject
 
         */
         $exprPattern = '/(#[^"><]*?#)/';
-        $callBack    = array('XsltCallbacks','attributes');
+        $callBack    = ['XsltCallbacks','attributes'];
         $this->postXml = preg_replace_callback($exprPattern, $callBack, $this->postXml);
 
         // Special handling for xar:attribute, where the tag is created at runtime
@@ -305,7 +306,7 @@ class XsltCallbacks extends xarObject
      */
     public static function mlsplaceholders($matches)
     {
-        $res = $matches[1].'#'.$matches[2];
+        $res = $matches[1] . '#' . $matches[2];
         //xarLog3::debug('MLS: ' . $matches[0] . ' => '.$res);
         return $res;
     }
@@ -318,16 +319,16 @@ class XsltCallbacks extends xarObject
     public static function attributes($matches)
     {
         // Resolve the parts between the #-es, but leave MLS stuff alone.
-        if(preg_match('/#\([0-9]+(\))#?/', $matches[0])) {
+        if (preg_match('/#\([0-9]+(\))#?/', $matches[0])) {
             return $matches[0];
         }
-        if($matches[0] == '##') {
+        if ($matches[0] == '##') {
             return '#';
         }
         $raw = ExpressionTransformer::transformPHPExpression($matches[1]);
         $raw = self::reverseXMLEntities($raw);
         // Return the first match too, to ensure not changing the input
-        $res = '<?php echo ' . $raw .';?>';
+        $res = '<?php echo ' . $raw . ';?>';
         //        xarLog3::debug('XsltCallbacks::attributes: '. $matches[0] . ' => ' . $res);
         return $res;
     }
@@ -346,8 +347,8 @@ class XsltCallbacks extends xarObject
             in attributes in general.
         */
         return str_replace(
-            array('&amp;', '&gt;', '&lt;', '&quot;','&apos;'),
-            array('&', '>', '<', '"',"'"),
+            ['&amp;', '&gt;', '&lt;', '&quot;','&apos;'],
+            ['&', '>', '<', '"',"'"],
             $content
         );
     }
@@ -364,12 +365,12 @@ class XsltCallbacks extends xarObject
         $entityParts = explode('-', $entityName);
 
         // The first part will always be xar, if not, return the whole entity back
-        if($entityParts[0] != 'xar' or !isset($entityParts[1])) {
+        if ($entityParts[0] != 'xar' or !isset($entityParts[1])) {
             return $matches[0];
         }
 
         // The second part signals what we need to do
-        switch($entityParts[1]) {
+        switch ($entityParts[1]) {
             // &xar-baseurl;
             case 'baseurl':
                 return '#xarServer::getBaseURL()#';
@@ -377,9 +378,9 @@ class XsltCallbacks extends xarObject
             case 'modurl':
                 //   1       2     3    4
                 // modurl-modname-type-func
-                if(isset($entityParts[2]) and
-                    isset($entityParts[3]) and
-                    isset($entityParts[4])
+                if (isset($entityParts[2])
+                    and isset($entityParts[3])
+                    and isset($entityParts[4])
                 ) {
                     return "#xarController::URL('$entityParts[2]','$entityParts[3]','$entityParts[4]')#";
                 }
@@ -396,7 +397,7 @@ class XsltCallbacks extends xarObject
                 // &xar-session-varname;
                 // &xar-url-modname-type-func-args;
         }
-        xarLog3::debug('XsltCallbacks::entities: found in xml source:'.$entityName);
+        xarLog3::debug('XsltCallbacks::entities: found in xml source:' . $entityName);
         return $matches[0];
     }
 }

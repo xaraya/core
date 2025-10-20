@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\sessions
  * @category Xaraya Web Applications Framework

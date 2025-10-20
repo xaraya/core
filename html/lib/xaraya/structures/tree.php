@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package core\structures
  * @subpackage structures
@@ -13,8 +14,8 @@ sys::import('xaraya.structures.sets.collection');
 interface ITreeNode
 {
     public function adddata(array $arr);
-    public function breadthfirstenumeration($arg=null);
-    public function depthfirstenumeration($arg=null);
+    public function breadthfirstenumeration($arg = null);
+    public function depthfirstenumeration($arg = null);
     public function getChildCount();
     public function getDepth();
     public function getLevel();
@@ -35,23 +36,29 @@ class TreeNode extends xarObject implements ITreeNode
     public $allowschildren;
     public $nodelevel;
 
-    function __construct($id=0)
+    public function __construct($id = 0)
     {
         $this->id = $id;
     }
-    function adddata(Array $arr)
+    public function adddata(array $arr)
     {
-        foreach($arr as $key => $value) $this->{$key} = $value;
+        foreach ($arr as $key => $value) {
+            $this->{$key} = $value;
+        }
     }
-    function breadthfirstenumeration($depth=null)
+    public function breadthfirstenumeration($depth = null)
     {
         $data = $this->tree->treedata;
-        if (empty($data)) return new BasicSet();
-        uasort($data, array($this,"comparelevels"));
+        if (empty($data)) {
+            return new BasicSet();
+        }
+        uasort($data, [$this,"comparelevels"]);
 
         $nodeset = new BasicSet();
         foreach ($data as $value) {
-            if (isset($depth) && ($value['nodelevel'] > $depth)) break;
+            if (isset($depth) && ($value['nodelevel'] > $depth)) {
+                break;
+            }
             $node = new TreeNode();
             $node->adddata($value);
             $nodeset->add($node);
@@ -59,55 +66,57 @@ class TreeNode extends xarObject implements ITreeNode
         $it = $nodeset->getIterator();
         return $nodeset;
     }
-    function depthfirstenumeration($depth=null)
+    public function depthfirstenumeration($depth = null)
     {
         $data = $this->tree->treedata;
-        if (empty($data)) return new BasicSet();
-        uasort($data, array($this,"rcomparelevels"));
+        if (empty($data)) {
+            return new BasicSet();
+        }
+        uasort($data, [$this,"rcomparelevels"]);
 
-        $data1 = array();
+        $data1 = [];
         $toplevel = null;
         foreach ($data as $key => $value) {
-            if (isset($depth) && ($value['nodelevel'] > $depth)) continue;
-            $children = array();
-            foreach ($value['children'] as $child) {
-                if (isset($data1[$child])) $children[] = array($data1[$child]);
+            if (isset($depth) && ($value['nodelevel'] > $depth)) {
+                continue;
             }
-            $data1[$key] = array('id' => $key, 'children' => $children);
+            $children = [];
+            foreach ($value['children'] as $child) {
+                if (isset($data1[$child])) {
+                    $children[] = [$data1[$child]];
+                }
+            }
+            $data1[$key] = ['id' => $key, 'children' => $children];
             $toplevel = $data1[$key];
         }
         $nodeset = new BasicSet();
         $arrayIterator = new RecursiveArrayIterator($toplevel);
         $iterator = new RecursiveIteratorIterator($arrayIterator);
-        foreach($iterator as $value) {
+        foreach ($iterator as $value) {
             $node = new TreeNode();
             $node->adddata($data[$value]);
             $nodeset->add($node);
         }
         return $nodeset;
     }
-    function getChildCount()
-    {
-    }
-    function getDepth()
-    {
-    }
-    function getLevel()
+    public function getChildCount() {}
+    public function getDepth() {}
+    public function getLevel()
     {
         return $this->nodelevel;
     }
-    function hash()
+    public function hash()
     {
         return $this->hashCode();
     }
 
     private function comparelevels($a, $b)
     {
-       return ($a['nodelevel'] <=> $b['nodelevel']);
+        return ($a['nodelevel'] <=> $b['nodelevel']);
     }
     private function rcomparelevels($a, $b)
     {
-       return ($b['nodelevel'] <=> $a['nodelevel']);
+        return ($b['nodelevel'] <=> $a['nodelevel']);
     }
 }
 
@@ -116,17 +125,17 @@ class Tree extends xarObject implements ITree
     public $root;
     public $asksallowschildren;
 
-    public $treedata = array();
+    public $treedata = [];
 
-    function __construct(TreeNode $root=null)
+    public function __construct(?TreeNode $root = null)
     {
-        if(isset($root)) {
+        if (isset($root)) {
             $this->root = $root;
         }
         $root->tree = $this;
         $this->createNodes($root);
     }
-    function getRoot()
+    public function getRoot()
     {
         return $this->root;
     }
@@ -134,18 +143,20 @@ class Tree extends xarObject implements ITree
     {
         $inputdata = $this->treedata;
         $tempdata = $this->treedata;
-        $this->treedata = array();
-        $lastidsdone = array();
-        if (!is_object($inputdata)) $inputdata = new ArrayObject($inputdata);
+        $this->treedata = [];
+        $lastidsdone = [];
+        if (!is_object($inputdata)) {
+            $inputdata = new ArrayObject($inputdata);
+        }
 
         // Identify the top level node.; it is always a single node
-        for($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {
+        for ($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {
             $thiskey = $iterator->key();
             $thisvalue = $iterator->current();
-            
-            if ((int)$thisvalue['id'] == $node->id) {
+
+            if ((int) $thisvalue['id'] == $node->id) {
                 $thisvalue['nodelevel'] = 0;
-                $thisvalue['children'] = array();
+                $thisvalue['children'] = [];
                 $this->treedata[$node->id] = $thisvalue;
                 $lastidsdone[] = $thisvalue['id'];
                 unset($tempdata[$thiskey]);
@@ -157,16 +168,16 @@ class Tree extends xarObject implements ITree
         $lastcount = count($tempdata);
         $nodelevel = 0;
         while (true) {
-            $thisidsdone = array();
+            $thisidsdone = [];
             $nodelevel += 1;
             $inputdata = new ArrayObject($tempdata);
-            for($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {
+            for ($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {
                 $thiskey = $iterator->key();
                 $thisvalue = $iterator->current();
 
-                if (in_array($thisvalue['parent'],$lastidsdone)) {
+                if (in_array($thisvalue['parent'], $lastidsdone)) {
                     $thisvalue['nodelevel'] = $nodelevel;
-                    $thisvalue['children'] = array();
+                    $thisvalue['children'] = [];
                     $this->treedata[$thisvalue['id']] = $thisvalue;
                     $this->treedata[$thisvalue['parent']]['children'][] = $thisvalue['id'];
                     $thisidsdone[] = $thisvalue['id'];

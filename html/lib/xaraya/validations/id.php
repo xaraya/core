@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -19,8 +20,8 @@
 sys::import("xaraya.validations.int");
 class IdValidation extends IntValidation
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
-        return parent::validate($subject,array(1));
+        return parent::validate($subject, [1]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Short description of purpose of file
  *
@@ -21,7 +22,7 @@
 sys::import('xaraya.validations');
 class NotEmptyValidation extends ValueValidations
 {
-    function validate(&$subject, Array $parameters)
+    public function validate(&$subject, array $parameters)
     {
         if (empty($subject)) {
             $msg = 'Variable is empty';

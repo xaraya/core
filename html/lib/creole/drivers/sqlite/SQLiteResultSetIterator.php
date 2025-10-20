@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteResultSetIterator.php,v 1.6 2004/12/03 16:57:54 gamr Exp $
  *
