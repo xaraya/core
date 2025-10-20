@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Entrypoint for handling GraphQL queries
  *
@@ -16,7 +17,7 @@
  * https://github.com/webonyx/graphql-php/tree/master/examples/01-blog
  * @uses \sys::autoload()
  */
-require_once dirname(__DIR__).'/vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use Xaraya\Bridge\GraphQL\GraphQLHandler;
 

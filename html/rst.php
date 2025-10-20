@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Entrypoint for handling REST API calls
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Loads the files required for a validation request
  *
@@ -12,43 +13,31 @@
 */
 function xarValidationLoader()
 {
-    global $systemConfiguration;
-/**
- * Load the layout file so we know where to find the Xaraya directories
- */
-    if (!isset($systemConfiguration)) {
-		$systemConfiguration = array();
-		include_once 'var/layout.system.php';
-    }
-    if (!isset($systemConfiguration['rootDir'])) { $systemConfiguration['rootDir'] = '../'; }
-    if (!isset($systemConfiguration['libDir']))  { $systemConfiguration['libDir'] = 'lib/'; }
-    if (!isset($systemConfiguration['webDir']))  { $systemConfiguration['webDir'] = 'html/'; }
-    if (!isset($systemConfiguration['codeDir'])) { $systemConfiguration['codeDir'] = 'code/'; }
-    $GLOBALS['systemConfiguration'] = $systemConfiguration;
-    if (!empty($systemConfiguration['rootDir'])) {
-        set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
-    }
+    /**
+     * Load the Xaraya bootstrap so we can get started
+     */
+    require_once __DIR__ . '/bootstrap.php';
 
-/**
- * Load the Xaraya bootstrap so we can get started
- */
+    // initialize bootstrap
+    sys::init();
+    // start autoload
+    sys::autoload();
+
+    // add parent directory to include path - @deprecated 2.7.3 left-over from before?
     set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
-    if (!class_exists('xarObject')) {
-	    include_once 'bootstrap.php';
-    }
 
-/**
- * Set up caching
- */
+    /**
+     * Set up caching
+     */
     sys::import('xaraya.caching');
     xarCache::init();
-    
-/**
- * Load the Xaraya core
- */
+
+    /**
+     * Load the Xaraya core
+     */
     sys::import('xaraya.core');
     xarCore::xarInit(xarCore::SYSTEM_ALL);
-}        
+}
 
 /**
  * Entry point for validating users
@@ -65,25 +54,29 @@ function xarValidationLoader()
  */
 function xarValidationMain()
 {
-/**
- * Get the user ID and the validation code
- */
+    /**
+     * Get the user ID and the validation code
+     */
     xarVar::fetch('v', 'str:1', $v);
     xarVar::fetch('u', 'str:1', $u);
 
-/**
- * Get the user information
- */
-    $user = xarMod::apiFunc('roles','user','get', array('id' => $u));
+    /**
+     * Get the user information
+     */
+    $user = xarMod::apiFunc('roles', 'user', 'get', ['id' => $u]);
 
-/**
- * Redirect to the validation page
- */
-    xarController::redirect(xarController::URL('roles', 'user','getvalidation',
-                                  array('stage'   => 'getvalidate',
-                                        'valcode' => $v,
-                                        'uname'   => $user['uname'],
-                                        'phase'   => 'getvalidate')));
+    /**
+     * Redirect to the validation page
+     */
+    xarController::redirect(xarController::URL(
+        'roles',
+        'user',
+        'getvalidation',
+        ['stage'   => 'getvalidate',
+            'valcode' => $v,
+            'uname'   => $user['uname'],
+            'phase'   => 'getvalidate']
+    ));
     return true;
 }
 

@@ -78,6 +78,7 @@ class xarObject extends stdClass
      * an object versus the 'flatness' of a string.
      *
      * @return Class_ the class of the object
+     * @deprecated 2.4.0 not used
     **/
     final public function getClass()
     {
@@ -92,7 +93,9 @@ class xarObject extends stdClass
     final public function getClassName()
     {
         $className = get_class($this);
-        if (($pos = strrpos($className, '\\')) !== false) return substr($className, $pos + 1);
+        if (($pos = strrpos($className, '\\')) !== false) {
+            return substr($className, $pos + 1);
+        }
         return $className;
     }
 
@@ -164,6 +167,7 @@ abstract class Reflectable extends xarObject
  * @package core
  * @todo can we come up with a better name without the underscore?
  * @todo look at visibility of the methods
+ * @deprecated 2.4.0 not used
 **/
 final class Class_ extends Reflectable
 {
@@ -184,8 +188,8 @@ final class Class_ extends Reflectable
     **/
     public function getProperties()
     {
-        $ret = array();
-        foreach($this->reflect->getProperties() as $p) {
+        $ret = [];
+        foreach ($this->reflect->getProperties() as $p) {
             $ret[] = new Property($this, $p->getName());
         }
         return $ret;
@@ -213,6 +217,7 @@ final class Class_ extends Reflectable
  * method in the Class_ class.
  *
  * @package core
+ * @deprecated 2.4.0 not used
 **/
 final class Property extends Reflectable
 {
@@ -255,27 +260,26 @@ final class sys extends xarObject
     public const LAYOUT = 'layout.system.php';     // Default layout configuration file
     public const LOG    = 'config.log.php';        // Default log configuration file
 
-    private static $has  = array();         // Keep a list of what we already have
+    private static $has  = [];         // Keep a list of what we already have
     private static $var  = null;            // Save the var location
     private static $root = null;            // Save our root location
     private static $lib  = null;            // Save our lib location
     private static $code = null;            // Save our code location
     private static $web  = null;            // Save our web root location
     private static $autoload = false;
+    private static $config = [];
 
-    private function __construct()
-    {
-    } // no objects can be made out of this.
+    private function __construct() {} // no objects can be made out of this.
 
     /**
      * Load the layout file so we know where to find the Xaraya directories (composer autoload)
      */
     public static function init()
     {
-        if (!empty($GLOBALS['systemConfiguration'])) {
+        if (!empty(self::$config)) {
             return;
         }
-        $systemConfiguration = array();
+        $systemConfiguration = [];
         include 'var/layout.system.php';
         if (!isset($systemConfiguration['rootDir'])) {
             $systemConfiguration['rootDir'] = '../';
@@ -292,7 +296,7 @@ final class sys extends xarObject
         if (empty($systemConfiguration['rootDir'])) {
             $systemConfiguration['rootDir'] = __DIR__ . '/';
         }
-        $GLOBALS['systemConfiguration'] = $systemConfiguration;
+        self::$config = $systemConfiguration;
         if (!empty($systemConfiguration['rootDir'])) {
             set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
         }
@@ -307,7 +311,7 @@ final class sys extends xarObject
         try {
             // Look for a composer autoload file. If it exists it will be in the vendor folder at the top level, depending on how Xaraya is configured in layout.system.php.
             if (empty(self::$root)) {
-                require_once dirname(__DIR__).'/vendor/autoload.php';
+                require_once dirname(__DIR__) . '/vendor/autoload.php';
             } elseif (self::$root == self::$web && is_dir(self::$root . '../vendor')) {
                 require_once self::$root . '../vendor/autoload.php';
             } else {
@@ -356,12 +360,12 @@ final class sys extends xarObject
     private static function once($dp, $offset = '')
     {
         // If we already have it, get out of here asap
-        if(!isset(self::$has[$dp])) {
+        if (!isset(self::$has[$dp])) {
             // set this *before* the include below
             self::$has[$dp] = true;
             // tiny bit faster would be to use include, but this is quite a bit safer
             // and it will be executed only once anyway. (i.e. if everything uses this class)
-            return include_once($offset . $dp .'.php');
+            return include_once($offset . $dp . '.php');
         }
         return true;
     }
@@ -386,9 +390,9 @@ final class sys extends xarObject
         //    return true;
         //}
         $dp = str_replace('.', '/', $dp);
-        if((0 === strpos($dp, 'modules/')) || (0 === strpos($dp, 'properties/')) || (0 === strpos($dp, 'blocks/'))) {
+        if ((0 === strpos($dp, 'modules/')) || (0 === strpos($dp, 'properties/')) || (0 === strpos($dp, 'blocks/'))) {
             return self::once(self::code() . $dp, $offset);
-        } elseif(0 === strpos($dp, 'composer/')) {
+        } elseif (0 === strpos($dp, 'composer/')) {
             return self::once($dp, $offset);
         }
         return self::once(self::lib() . $dp, $offset);
@@ -403,8 +407,8 @@ final class sys extends xarObject
     public static function root($offset = '')
     {
         // We are in bootstrap.php and we want <root>
-        if(!isset(self::$root)) {
-            self::$root = $offset . $GLOBALS['systemConfiguration']['rootDir'];
+        if (!isset(self::$root)) {
+            self::$root = $offset . self::$config['rootDir'];
         }
         return self::$root;
     }
@@ -418,8 +422,8 @@ final class sys extends xarObject
     public static function lib($offset = '')
     {
         // We are in bootstrap.php and we want <lib>
-        if(!isset(self::$lib)) {
-            self::$lib = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['libDir'];
+        if (!isset(self::$lib)) {
+            self::$lib = $offset . self::$config['rootDir'] . self::$config['libDir'];
         }
         return self::$lib;
     }
@@ -433,8 +437,8 @@ final class sys extends xarObject
     public static function web($offset = '')
     {
         // We are in bootstrap.php and we want <web>
-        if(!isset(self::$web)) {
-            self::$web = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['webDir'];
+        if (!isset(self::$web)) {
+            self::$web = $offset . self::$config['rootDir'] . self::$config['webDir'];
         }
         return self::$web;
     }
@@ -447,8 +451,8 @@ final class sys extends xarObject
     public static function code($offset = '')
     {
         // We are in bootstrap.php and we want <code>
-        if(!isset(self::$code)) {
-            self::$code = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['codeDir'];
+        if (!isset(self::$code)) {
+            self::$code = $offset . self::$config['rootDir'] . self::$config['codeDir'];
         }
         return self::$code;
     }
@@ -471,10 +475,10 @@ final class sys extends xarObject
         if (isset(self::$var)) {
             return self::$var;
         }
-        if (isset($GLOBALS['systemConfiguration']['varDir'])) {
-            self::$var = $offset . $GLOBALS['systemConfiguration']['varDir'];
+        if (isset(self::$config['varDir'])) {
+            self::$var = $offset . self::$config['varDir'];
         } else {
-            $basepath = $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['webDir'];
+            $basepath = self::$config['rootDir'] . self::$config['webDir'];
             self::$var = $offset . $basepath . 'var';
         }
         return self::$var;
