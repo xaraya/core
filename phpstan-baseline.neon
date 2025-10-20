@@ -1,18 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to deprecated function xar_legacy_validations_dropdown\(\)\.$#'
-			identifier: function.deprecated
-			count: 1
-			path: html/code/modules/base/xarproperties/dropdown.php
-
-		-
-			message: '#^Call to deprecated function xar_legacy_validations_dropdown\(\)\.$#'
-			identifier: function.deprecated
-			count: 1
-			path: html/code/modules/base/xarproperties/multiselect.php
-
-		-
 			message: '#^Use of constant FILTER_SANITIZE_STRING is deprecated\.$#'
 			identifier: constant.deprecated
 			count: 1
@@ -49,43 +37,7 @@ parameters:
 			path: html/code/modules/installer/admingui/phase5.php
 
 		-
-			message: '#^Path in include_once\(\) "code/modules/blocks/xartables\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: html/code/modules/installer/admingui/phase5.php
-
-		-
-			message: '#^Path in include_once\(\) "code/modules/categories/xartables\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: html/code/modules/installer/admingui/phase5.php
-
-		-
-			message: '#^Path in include_once\(\) "code/modules/dynamicdata/xartables\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: html/code/modules/installer/admingui/phase5.php
-
-		-
 			message: '#^Path in include_once\(\) "code/modules/mail/xartables\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: html/code/modules/installer/admingui/phase5.php
-
-		-
-			message: '#^Path in include_once\(\) "code/modules/privileges/xartables\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: html/code/modules/installer/admingui/phase5.php
-
-		-
-			message: '#^Path in include_once\(\) "code/modules/roles/xartables\.php" is not a file or it does not exist\.$#'
-			identifier: includeOnce.fileNotFound
-			count: 1
-			path: html/code/modules/installer/admingui/phase5.php
-
-		-
-			message: '#^Path in include_once\(\) "code/modules/themes/xartables\.php" is not a file or it does not exist\.$#'
 			identifier: includeOnce.fileNotFound
 			count: 1
 			path: html/code/modules/installer/admingui/phase5.php
@@ -157,16 +109,16 @@ parameters:
 			path: html/code/modules/privileges/admingui/modifyprivilege.php
 
 		-
+			message: '#^Undefined variable\: \$value$#'
+			identifier: variable.undefined
+			count: 1
+			path: html/code/properties/date/main.php
+
+		-
 			message: '#^Path in include\(\) "var\://_compiler_output" is not a file or it does not exist\.$#'
 			identifier: include.fileNotFound
 			count: 1
 			path: html/lib/blocklayout/template/compiled.php
-
-		-
-			message: '#^Call to deprecated function xar_legacy_templates_fixLegacy\(\)\.$#'
-			identifier: function.deprecated
-			count: 1
-			path: html/lib/blocklayout/xsltransformer.php
 
 		-
 			message: '#^Call to an undefined method Xaraya\\Bridge\\Requests\\BlockRequestHandler\:\:runBlockRequest\(\)\.$#'
@@ -209,6 +161,54 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: html/lib/xaraya/bridge/requests/module.php
+
+		-
+			message: '#^Call to method __construct\(\) of deprecated class xarCache_MMCache_Storage\.$#'
+			identifier: method.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/caching/storage.php
+
+		-
+			message: '#^Call to method __construct\(\) of deprecated class xarCache_MemCached_Storage\.$#'
+			identifier: method.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/caching/storage.php
+
+		-
+			message: '#^Call to method __construct\(\) of deprecated class xarCache_XCache_Storage\.$#'
+			identifier: method.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/caching/storage.php
+
+		-
+			message: '#^Call to method __construct\(\) of deprecated class xarCache_eAccelerator_Storage\.$#'
+			identifier: method.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/caching/storage.php
+
+		-
+			message: '#^Instantiation of deprecated class xarCache_MMCache_Storage\.$#'
+			identifier: new.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/caching/storage.php
+
+		-
+			message: '#^Instantiation of deprecated class xarCache_MemCached_Storage\.$#'
+			identifier: new.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/caching/storage.php
+
+		-
+			message: '#^Instantiation of deprecated class xarCache_XCache_Storage\.$#'
+			identifier: new.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/caching/storage.php
+
+		-
+			message: '#^Instantiation of deprecated class xarCache_eAccelerator_Storage\.$#'
+			identifier: new.deprecatedClass
+			count: 1
+			path: html/lib/xaraya/caching/storage.php
 
 		-
 			message: '#^Function eaccelerator not found\.$#'
@@ -269,6 +269,24 @@ parameters:
 			identifier: function.notFound
 			count: 1
 			path: html/lib/xaraya/caching/storage/mmcache.php
+
+		-
+			message: '''
+				#^Call to deprecated method getColumns\(\) of class Doctrine\\DBAL\\Schema\\Index\:
+				Use \{@see getIndexedColumns\(\)\} instead\.$#
+			'''
+			identifier: method.deprecated
+			count: 2
+			path: html/lib/xaraya/database/drivers/dbal.php
+
+		-
+			message: '''
+				#^Call to deprecated method isPrimary\(\) of class Doctrine\\DBAL\\Schema\\Index\:
+				Use \{@see PrimaryKeyConstraint\} instead\.$#
+			'''
+			identifier: method.deprecated
+			count: 1
+			path: html/lib/xaraya/database/drivers/dbal.php
 
 		-
 			message: '#^Function mcrypt_generic not found\.$#'
