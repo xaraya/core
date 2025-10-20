@@ -2,6 +2,12 @@
     "name": "xaraya/core",
     "description": "Xaraya Core web development framework",
     "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "ext-mbstring": "*",
+        "ext-xml": "*",
+        "ext-xsl": "*"
+    },
     "require-dev": {
         "middlewares/utils": "^4.0",
         "nikic/fast-route": "2.0.0-beta1",
@@ -13,7 +19,7 @@
         "webonyx/graphql-php": "^15.25",
         "xaraya/modules": "dev-master",
         "xaraya/properties": "dev-master",
-        "xaraya/twig": "^2.6"
+        "xaraya/twig": "^2.8"
     },
     "suggest": {
         "phpstan/phpstan": "PHP Static Analysis Tool - discover bugs in your code without running it",
