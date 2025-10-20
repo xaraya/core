@@ -25,7 +25,7 @@
  * @package core\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.5.7
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -80,7 +80,9 @@ class InstallerClass implements InstallerInterface
             case '2.4.1':
                 // fall through to next upgrade
             case '2.4.2':
-                break;
+                // fall through to next upgrade
+            case '2.8.1':
+                // fall through to next upgrade
             default:
                 break;
         }

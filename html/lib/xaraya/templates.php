@@ -939,6 +939,7 @@ class xarTpl extends xarObject
             $filePath = $path;
             break;
         }
+        if (empty($filePath)) return null;
 
         // Turn relative path into an absolute URL
         $webDir = sys::web();

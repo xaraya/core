@@ -6,7 +6,7 @@
  * @package modules\mail
  * @subpackage mail
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/771.html
@@ -36,7 +36,7 @@ class Version
             'name' => 'Mail',
             'id' => '771',
             'displayname' => 'Mail',
-            'version' => '2.4.1',
+            'version' => '2.8.1',
             'description' => 'Ma4l handling utility module',
             'displaydescription' => 'Mail handling utility module',
             'credits' => 'xardocs/credits.txt',

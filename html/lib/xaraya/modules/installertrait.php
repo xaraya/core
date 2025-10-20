@@ -109,7 +109,9 @@ trait InstallerTrait
             case '2.4.1':
                 // fall through to next upgrade
             case '2.4.2':
-                break;
+                // fall through to next upgrade
+            case '2.8.1':
+                // fall through to next upgrade
             default:
                 break;
         }

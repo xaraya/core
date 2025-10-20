@@ -5,7 +5,7 @@
  *
  * @package modules\dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.6.1
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -297,7 +297,8 @@ class Installer extends InstallerClass
                     xarHooks::registerObserver('ItemDisplay', 'dynamicdata', $namespace . '\ItemDisplay');
                 */
                 // fall through to next upgrade
-                // no break
+            case '2.8.1':
+                // fall through to next upgrade
             default:
                 break;
         }

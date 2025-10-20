@@ -77,6 +77,7 @@ class UpgradeMethod extends MethodClass
             '2.3.1',
             '2.4.0',
             '2.4.1',
+            '2.8.1',
         ];
 
 

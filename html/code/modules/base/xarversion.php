@@ -4,7 +4,7 @@
  *
  * @package modules\base
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
@@ -23,7 +23,7 @@
 $modversion['name']               = 'Base';
 $modversion['id']                 = '68';
 $modversion['displayname']        = xarMLS::translate('Base');
-$modversion['version']            = '2.4.1';
+$modversion['version']            = '2.8.1';
 $modversion['description']        = 'Home Page';
 $modversion['displaydescription'] = xarMLS::translate('Home Page');
 $modversion['credits']            = 'xardocs/credits.txt';

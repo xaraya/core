@@ -6,7 +6,7 @@
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
@@ -36,7 +36,7 @@ class Version
             'name' => 'Dynamic Data',
             'id' => '182',
             'displayname' => 'Dynamic Data',
-            'version' => '2.4.1',
+            'version' => '2.8.1',
             'description' => 'Dynamic Data Module',
             'displaydescription' => 'Dynamic Data Module',
             'credits' => 'xardocs/credits.txt',

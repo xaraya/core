@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div>
+        <ul>
+            <li>
+                The code base has been cleaned up to support PHP 8.2+ since the last official release.
+            </li>
+            <li>
+                Autoload is now enabled by default, so you need to run <strong>composer install -o</strong> before install or upgrade.
+            </li>
+        </ul>
+    </div>
+</xar:template>
