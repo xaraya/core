@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Convert Aruba themes and modules to Jamaica 2.1.x
  *
@@ -89,16 +90,16 @@ function getFiles($path)
     $exts = ['php','xt','xd','xml'];
     // create new DirectoryIterator object and loop items
     foreach (new DirectoryIterator($path) as $item) {
-        if ($item->isDir() &&
-            !$item->isDot() &&
-            $item->current() != '_MTN'
+        if ($item->isDir()
+            && !$item->isDot()
+            && $item->current() != '_MTN'
             && $item->isWritable()) {
             // is dir, is writable, not . or .. or _MTN, get files
             getFiles($item->getPathName());
-        } elseif ($item->isFile() &&
-            !str_starts_with($item->current(), '.') &&
-            $item->isWritable() &&
-            in_array(pathinfo($item, PATHINFO_EXTENSION), $exts)) {
+        } elseif ($item->isFile()
+            && !str_starts_with($item->current(), '.')
+            && $item->isWritable()
+            && in_array(pathinfo($item, PATHINFO_EXTENSION), $exts)) {
             // is file, valid extension, not beginning with . (hidden) and is writable, add file
             $_files[] = $item->getPathName();
         }

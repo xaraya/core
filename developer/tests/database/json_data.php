@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Entrypoint for experimenting with JSON data type in Doctrine DBAL or MongoDB
  *

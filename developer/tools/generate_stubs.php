@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Generate stubs of Xaraya core files for phpstan etc.
  */

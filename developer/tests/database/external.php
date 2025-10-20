@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Entrypoint for experimenting with ExternalDatabase and DbalDataStore
  *

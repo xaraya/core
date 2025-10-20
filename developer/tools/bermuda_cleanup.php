@@ -1284,7 +1284,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
     public function find_method_dependencies($lname)
     {
         $class = $this->classes[$lname];
-        $methods = []; 
+        $methods = [];
         $count = 0;
         foreach (array_keys($class['methods']) as $mname) {
             $method = $class['methods'][$mname];
@@ -1374,7 +1374,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             } else {
                 $modClass = 'xaraya\\modules\\' . $modName;
             }
-            if (str_contains($call['class'], $modClass . '\\' . $modType  . 'api\\')) {
+            if (str_contains($call['class'], $modClass . '\\' . $modType . 'api\\')) {
                 $call['internal'] = true;
                 $internal += 1;
             } elseif (str_contains($call['class'], $modClass . '\\')) {
@@ -1405,7 +1405,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             } else {
                 $modClass = 'xaraya\\modules\\' . $modName;
             }
-            if (str_contains($call['class'], $modClass . '\\' . $modType  . 'gui\\')) {
+            if (str_contains($call['class'], $modClass . '\\' . $modType . 'gui\\')) {
                 $call['internal'] = true;
                 $internal += 1;
             } elseif (str_contains($call['class'], $modClass . '\\')) {
@@ -1433,7 +1433,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
         ksort($called);
         foreach ($called as $class => $methods) {
             $fromto = [];
-            $lines[] ='### ' . $class;
+            $lines[] = '### ' . $class;
             $lines[] = '';
             $lines[] = '```mermaid';
             $lines[] = 'flowchart LR';

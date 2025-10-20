@@ -13,9 +13,7 @@ final class BridgeClientTest extends TestCase
         self::$client = new TestClient(self::$endpoint);
     }
 
-    public static function tearDownAfterClass(): void
-    {
-    }
+    public static function tearDownAfterClass(): void {}
 
     public static function getRequestProvider(): array
     {

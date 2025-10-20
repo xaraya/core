@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Database Configuration for other test scripts
  */
@@ -17,7 +18,7 @@ function get_xaraya_config()
     $persistent = null;
     try {
         $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
-    } catch(VariableNotFoundException $e) {
+    } catch (VariableNotFoundException $e) {
         $persistent = null;
     }
     try {
@@ -25,7 +26,7 @@ function get_xaraya_config()
             $userName = base64_decode($userName);
             $password  = base64_decode($password);
         }
-    } catch(VariableNotFoundException) {
+    } catch (VariableNotFoundException) {
         // doesnt matter, we assume not encoded
     }
 

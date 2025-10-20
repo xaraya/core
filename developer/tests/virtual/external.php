@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Entrypoint for experimenting with virtual objects
  */
@@ -24,7 +25,7 @@ function get_xaraya_config()
     $persistent = null;
     try {
         $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
-    } catch(VariableNotFoundException $e) {
+    } catch (VariableNotFoundException $e) {
         $persistent = null;
     }
     try {
@@ -32,7 +33,7 @@ function get_xaraya_config()
             $userName = base64_decode($userName);
             $password  = base64_decode($password);
         }
-    } catch(VariableNotFoundException) {
+    } catch (VariableNotFoundException) {
         // doesnt matter, we assume not encoded
     }
 
@@ -44,14 +45,14 @@ function get_xaraya_config()
 
     // Optionals dealt with, do the rest inline
     $systemArgs = ['userName'        => $userName,
-                        'password'        => $password,
-                        'databaseHost'    => $host,
-                        'databasePort'    => $port,
-                        'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
-                        'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
-                        'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
-                        'persistent'      => $persistent,
-                        'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix')];
+        'password'        => $password,
+        'databaseHost'    => $host,
+        'databasePort'    => $port,
+        'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
+        'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
+        'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
+        'persistent'      => $persistent,
+        'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix')];
     return $systemArgs;
 }
 

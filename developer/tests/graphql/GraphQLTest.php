@@ -1,4 +1,5 @@
 <?php
+
 /**
  * GraphQLTest
  */
@@ -103,13 +104,13 @@ class GraphQLTest extends TestCase
                 // @todo
                 $fields = implode("\n    ", ['id']);
                 $query = <<<GRAPHQL
-query $operation {
-  $name {
-    __typename
-    $fields
-  }
-}
-GRAPHQL;
+                    query $operation {
+                      $name {
+                        __typename
+                        $fields
+                      }
+                    }
+                    GRAPHQL;
                 //if (!file_exists($fileName)) {
                 //    file_put_contents($fileName, $query);
                 //}

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OpenApiTest
  * PHP version 7.3
@@ -125,13 +126,13 @@ class OpenApiTest extends TestCase
         $items[] = new \OpenAPI\Client\Model\ViewSampleItems(['name' => 'Nancy', 'age' => 29]);
         $items[] = new \OpenAPI\Client\Model\ViewSampleItems(['name' => 'Baby', 'age' => 1]);
         $data = [
-             'limit' => 100,
-             'offset' => 0,
-             'order' => '',
-             'filter' => [],
-             'count' => count($items),
-             'items' => $items,
-    ];
+            'limit' => 100,
+            'offset' => 0,
+            'order' => '',
+            'filter' => [],
+            'count' => count($items),
+            'items' => $items,
+        ];
         $expected = new \OpenAPI\Client\Model\ViewSample($data);
         $result = true;
         $apiInstance = new \OpenAPI\Client\Api\SampleApi(
