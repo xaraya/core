@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -23,7 +24,7 @@ function sql_220_17()
     $data['reply'] = xarML("
         Success!
     ");
-    
+
     // Run the task
     $dbconn  = xarDB::getConn();
     try {
@@ -69,6 +70,6 @@ INSERT INTO `xar_dynamic_configurations` VALUES(150, 'display_maximum_rows', 'Th
         Failed!
         ");
     }
-    return $data;   
-    
+    return $data;
+
 }

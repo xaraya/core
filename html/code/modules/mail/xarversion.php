@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration information for the Mail module
  *
@@ -19,8 +20,8 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
- 
-$modversion = array(
+
+$modversion = [
     'name'               => 'Mail',
     'id'                 => '771',
     'displayname'        => xarMLS::translate('Mail'),
@@ -39,4 +40,4 @@ $modversion = array(
     'class'              => 'Core Complete',
     'category'           => 'System',
     'twigtemplates'      => true,
-);
+];

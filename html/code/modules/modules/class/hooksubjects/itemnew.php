@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ItemNew hook Subject
  *
@@ -19,8 +20,8 @@
  * $item = array('module' => $module, $itemid => $itemid [, 'itemtype' => $itemtype, ...]);
  * New way of calling hooks
  * $data['hooks'] = xarHooks::notify('ItemNew', $item);
- * Legacy way, supported for now, deprecated in future 
- * $data['hooks'] = xarModHooks::call('item', 'new', $itemid, $item); 
+ * Legacy way, supported for now, deprecated in future
+ * $data['hooks'] = xarModHooks::call('item', 'new', $itemid, $item);
  * Output in new template as
  * <xar:foreach in="$hooks" key="$hookmod" value="$hookoutput">
  *     #$hookoutput#
@@ -31,18 +32,19 @@ class ModulesItemNewSubject extends GuiHookSubject
 {
     public $subject = 'ItemNew';
 
-    public function __construct($args=array())
+    public function __construct($args = [])
     {
-        // pass args to parent constructor, it validates module and extrainfo values 
+        // pass args to parent constructor, it validates module and extrainfo values
         parent::__construct($args);
         // get args populated by constuctor array('objectid', 'extrainfo')
         $args = $this->getArgs();
         // Item observers expect an objectid, if it isn't valid it's pointless notifying them, bail
-        if (!isset($args['objectid']) || !is_numeric($args['objectid']))
+        if (!isset($args['objectid']) || !is_numeric($args['objectid'])) {
             throw new BadParameterException('objectid');
+        }
         // From this point on, any observers notified can safely assume arguments are valid
         // API and GUI observers will be passed $this->getArgs()
         // Class observers can obtain the same args from $subject->getArgs() or
-        // just retrieve extrainfo from $subject->getExtrainfo() 
-    } 
+        // just retrieve extrainfo from $subject->getExtrainfo()
+    }
 }

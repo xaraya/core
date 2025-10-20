@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Skin Block configuration interface
  *
@@ -22,14 +23,14 @@
 sys::import('modules.themes.xarblocks.skin');
 class Themes_SkinBlockConfig extends Themes_SkinBlock implements iBlock
 {
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
-    
-	/**
+    /**
+     * Modify Function to the Blocks Admin
+     * @param $data array containing title,content
+     */
+
+    /**
      * Modify the configuration of the skin block
-     * 
+     *
      * @return array<mixed> $data array of values to be displayed in the block's configuration page
      */
     public function configmodify()
@@ -38,10 +39,10 @@ class Themes_SkinBlockConfig extends Themes_SkinBlock implements iBlock
         $data['enable_user_menu'] = $this->mod('themes')->getVar('enable_user_menu');
         return $data;
     }
-	
-	/**
+
+    /**
      * Update the configuration of the skin block
-     * 
+     *
      * @return boolean Returns true
      */
     public function configupdate()

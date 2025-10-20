@@ -86,8 +86,8 @@ class LeftjoinMethod extends MethodClass
                 $cleanids[] = $id;
             }
             $allids = join(', ', $cleanids);
-            $leftjoin['where'] = $rolestable . '.id IN (' .
-                                 $allids . ')';
+            $leftjoin['where'] = $rolestable . '.id IN ('
+                                 . $allids . ')';
         } else {
             $leftjoin['where'] = '';
         }

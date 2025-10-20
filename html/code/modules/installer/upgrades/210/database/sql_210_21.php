@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upgrade SQL file
  *
@@ -31,15 +32,15 @@ function sql_210_21()
     $dbconn = xarDB::getConn();
     try {
         $dbconn->begin();
-        
-        $types = array('text','html','php','finclude');
+
+        $types = ['text','html','php','finclude'];
         foreach ($types as $type) {
             $data['sql'] = "
             SELECT i.id, i.content FROM $table[block_instances] i, $table[block_types] t WHERE i.type_id = t.id AND t.name = '" . $type . "';
             ";
             $result = $dbconn->Execute($data['sql']);
             while ($result->next()) {
-                list($id, $content) = $result->fields;
+                [$id, $content] = $result->fields;
                 $temp = unserialize($content);
                 $temp['content_type'] = $type;
                 $content = serialize($temp);

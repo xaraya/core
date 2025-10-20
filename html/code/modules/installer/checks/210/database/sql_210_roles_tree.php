@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Check SQL file
  *
@@ -39,7 +40,7 @@ function sql_210_roles_tree()
         ";
         $result = $dbconn->Execute($data['sql']);
         if (!$result->EOF) {
-            list($id, $uname) = $result->fields;
+            [$id, $uname] = $result->fields;
             $data['success'] = false;
             $data['reply'] = xarML("
             No parent: $uname (ID $id)

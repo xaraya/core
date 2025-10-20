@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -32,7 +33,7 @@ class ExtendedDateProperty extends CalendarProperty
     public $name       = 'extendeddate';
     public $desc       = 'Extended Date';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
@@ -53,7 +54,9 @@ class ExtendedDateProperty extends CalendarProperty
         }
         */
 
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (empty($value)) {
             return true;
@@ -61,14 +64,14 @@ class ExtendedDateProperty extends CalendarProperty
         } elseif (is_array($value)) {
 
             if (!empty($value['year']) && !empty($value['mon']) && !empty($value['day'])) {
-                if (is_numeric($value['year']) && is_numeric($value['mon']) && is_numeric($value['day']) &&
-                    $value['mon'] > 0 && $value['mon'] < 13 && $value['day'] > 0 && $value['day'] < 32) {
-                    $this->value = sprintf('%04d-%02d-%02d',$value['year'],$value['mon'],$value['day']);
+                if (is_numeric($value['year']) && is_numeric($value['mon']) && is_numeric($value['day'])
+                    && $value['mon'] > 0 && $value['mon'] < 13 && $value['day'] > 0 && $value['day'] < 32) {
+                    $this->value = sprintf('%04d-%02d-%02d', $value['year'], $value['mon'], $value['day']);
                     if ($this->configuration == 'datetime') {
-                        if (isset($value['hour']) && isset($value['min']) && isset($value['sec']) &&
-                            is_numeric($value['hour']) && is_numeric($value['min']) && is_numeric($value['sec']) &&
-                            $value['hour'] > -1 && $value['hour'] < 24 && $value['min'] > -1 && $value['min'] < 61 && $value['sec'] > -1 && $value['sec'] < 61) {
-                            $this->value .= ' ' . sprintf('%02d:%02d:%02d',$value['hour'],$value['min'],$value['sec']);
+                        if (isset($value['hour']) && isset($value['min']) && isset($value['sec'])
+                            && is_numeric($value['hour']) && is_numeric($value['min']) && is_numeric($value['sec'])
+                            && $value['hour'] > -1 && $value['hour'] < 24 && $value['min'] > -1 && $value['min'] < 61 && $value['sec'] > -1 && $value['sec'] < 61) {
+                            $this->value .= ' ' . sprintf('%02d:%02d:%02d', $value['hour'], $value['min'], $value['sec']);
                         } else {
                             $this->invalid = $this->ml('date: #(1)', $this->name);
                             $this->log()->error($this->invalid);
@@ -87,16 +90,16 @@ class ExtendedDateProperty extends CalendarProperty
             }
             return true;
 
-        /* sample value: 2004-06-18 18:47:33 */
-        } elseif (is_string($value) &&
+            /* sample value: 2004-06-18 18:47:33 */
+        } elseif (is_string($value)
 
             /* check it matches the correct regexp */
-            ($this->configuration == 'date' &&
-            preg_match('/\d{4}-\d{1,2}-\d{1,2}/', $value)) ||
+            && ($this->configuration == 'date'
+            && preg_match('/\d{4}-\d{1,2}-\d{1,2}/', $value))
 
-            ($this->configuration == 'datetime' &&
-            preg_match('/\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}/', $value))
-            ) {
+            || ($this->configuration == 'datetime'
+            && preg_match('/\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}/', $value))
+        ) {
 
             /* TODO: use middleware to format the date? */
             $this->value = $value;
@@ -110,12 +113,12 @@ class ExtendedDateProperty extends CalendarProperty
         }
     } /* validateValue */
 
-   /**
-     * Show the input according to the requested dateformat.
-     * 
-     * @param string[] $data Array containing the value of the property                           
-     * @return string Input data
-     */
+    /**
+      * Show the input according to the requested dateformat.
+      *
+      * @param string[] $data Array containing the value of the property
+      * @return string Input data
+      */
     public function showInput(array $data = [])
     {
         if (!isset($data['value'])) {
@@ -133,14 +136,14 @@ class ExtendedDateProperty extends CalendarProperty
         if (empty($data['value'])) {
             $data['value'] = '';
 
-        } elseif ($this->configuration == 'date' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
+        } elseif ($this->configuration == 'date'
+            && preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
 
-        } elseif ($this->configuration == 'datetime' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
+        } elseif ($this->configuration == 'datetime'
+            && preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
@@ -163,8 +166,8 @@ class ExtendedDateProperty extends CalendarProperty
 
     /**
      * Show the output according to the requested dateformat.
-     * 
-     * @param string[] $data Array containing the value of the property                           
+     *
+     * @param string[] $data Array containing the value of the property
      * @return string Output data
      */
     public function showOutput(array $data = [])
@@ -184,14 +187,14 @@ class ExtendedDateProperty extends CalendarProperty
         if (empty($data['value'])) {
             $data['value'] = '';
 
-        } elseif ($this->configuration == 'date' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
+        } elseif ($this->configuration == 'date'
+            && preg_match('/(\d{4})-(\d{1,2})-(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];
 
-        } elseif ($this->configuration == 'datetime' &&
-            preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
+        } elseif ($this->configuration == 'datetime'
+            && preg_match('/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/', $data['value'], $matches)) {
             $data['year'] = $matches[1];
             $data['mon']  = $matches[2];
             $data['day']  = $matches[3];

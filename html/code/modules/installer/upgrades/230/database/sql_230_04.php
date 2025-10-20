@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -22,16 +23,18 @@ function sql_230_04()
     ");
     $data['reply'] = xarML("
         Success!
-    ");    
-    
+    ");
+
     // import the object
     $dbconn  = xarDB::getConn();
     try {
-        $objects = array(
-                       'themes_configurations',
-                         );
-    
-        if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => $module, 'objects' => $objects))) return;
+        $objects = [
+            'themes_configurations',
+        ];
+
+        if (!xarMod::apiFunc('modules', 'admin', 'standardinstall', ['module' => $module, 'objects' => $objects])) {
+            return;
+        }
     } catch (Exception $e) {
         // Damn
         $dbconn->rollback();

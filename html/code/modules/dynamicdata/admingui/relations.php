@@ -419,7 +419,7 @@ class RelationsMethod extends MethodClass
             $data['module'] = $this->mod()->getName($module_id);
             // (try to) get the relationships between this module and others
             $data['relations'] = $utilapi->getrelations(['module_id' => $module_id,
-                    'itemtype' => $itemtype]);
+                'itemtype' => $itemtype]);
         } else {
             $this->tpl()->setPageTitle($this->ml('Links'));
         }

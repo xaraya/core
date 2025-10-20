@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -34,28 +35,36 @@ class NumberBoxProperty extends TextBoxProperty
     public $display_maxlength              = 30;
     public $display_numberformat           = 0;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        if (!is_numeric($this->value) && !empty($this->value)) throw new Exception($this->ml('The default value of a #(1) must be numeric',$this->name));
+        if (!is_numeric($this->value) && !empty($this->value)) {
+            throw new Exception($this->ml('The default value of a #(1) must be numeric', $this->name));
+        }
     }
 
-	/**
+    /**
  * Validate the value of a input box
- *  
+ *
  * @return bool Returns true if the value passes all validation checks; otherwise returns false.
  */
-	
+
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         // Remove any whitespace
         $value = trim($value);
 
         // We might have picked up empty string values in the configuration
-        if ($this->validation_min_value == "") $this->validation_min_value = null;
-        if ($this->validation_max_value == "") $this->validation_max_value = null;
+        if ($this->validation_min_value == "") {
+            $this->validation_min_value = null;
+        }
+        if ($this->validation_max_value == "") {
+            $this->validation_max_value = null;
+        }
 
         if (!isset($value) || $value === '') {
             if (isset($this->validation_min_value)) {
@@ -69,7 +78,7 @@ class NumberBoxProperty extends TextBoxProperty
         } elseif (is_numeric($value)) {
             $value = $this->castType($value);
             if (isset($this->validation_min_value) && isset($this->validation_max_value) && ($this->validation_min_value > $value || $this->validation_max_value < $value)) {
-                $this->invalid = $this->ml('number: allowed range is between #(1) and #(2)',$this->validation_min_value,$this->validation_max_value);
+                $this->invalid = $this->ml('number: allowed range is between #(1) and #(2)', $this->validation_min_value, $this->validation_max_value);
                 $this->log()->error($this->invalid);
                 $this->setValue();
                 return false;
@@ -77,7 +86,7 @@ class NumberBoxProperty extends TextBoxProperty
                 if (!empty($this->validation_min_value_invalid)) {
                     $this->invalid = $this->ml($this->validation_min_value_invalid);
                 } else {
-                    $this->invalid = $this->ml('number: must be #(1) or more',$this->validation_min_value);
+                    $this->invalid = $this->ml('number: must be #(1) or more', $this->validation_min_value);
                 }
                 $this->log()->error($this->invalid);
                 $this->setValue();
@@ -87,7 +96,7 @@ class NumberBoxProperty extends TextBoxProperty
                 if (!empty($this->validation_max_value_invalid)) {
                     $this->invalid = $this->ml($this->validation_max_value_invalid);
                 } else {
-                    $this->invalid = $this->ml('number: must be #(1) or less',$this->validation_max_value);
+                    $this->invalid = $this->ml('number: must be #(1) or less', $this->validation_max_value);
                 }
                 $this->log()->error($this->invalid);
                 $this->setValue();
@@ -102,15 +111,17 @@ class NumberBoxProperty extends TextBoxProperty
         $this->value = $value;
         return true;
     }
-/**
- * Convert an integer or string value to true/false
- * 
- * @param  mixed value The value to be converted
- * @return bool  Returns true if the integer or string value is 1, "1" or "true"; otherwise returns false.
- */
-    public function castType($value=null)
+    /**
+     * Convert an integer or string value to true/false
+     *
+     * @param  mixed value The value to be converted
+     * @return bool  Returns true if the integer or string value is 1, "1" or "true"; otherwise returns false.
+     */
+    public function castType($value = null)
     {
-        if (!is_null($value)) return (int)$value;
+        if (!is_null($value)) {
+            return (int) $value;
+        }
         return 0;
     }
 }

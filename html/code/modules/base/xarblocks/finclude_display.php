@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Finclude Block display interface
  *
@@ -17,13 +18,12 @@
 sys::import('modules.base.xarblocks.finclude');
 class Base_FincludeBlockDisplay extends Base_FincludeBlock implements iBlock
 {
-
     /**
      * Disaply function
-     * 
+     *
      * @return array<mixed> Retursn display data array
      */
-    function display()
+    public function display()
     {
         $data = $this->getContent();
         if (empty($this->url)) {

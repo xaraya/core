@@ -203,8 +203,8 @@ class LoadmenuarrayMethod extends MethodClass
                     }
                 }
                 // Active link?
-                if (!empty($v['active']) && is_array($v['active']) && in_array($args['funcname'], $v['active']) ||
-                    $v['url'] == $currenturl) {
+                if (!empty($v['active']) && is_array($v['active']) && in_array($args['funcname'], $v['active'])
+                    || $v['url'] == $currenturl) {
                     $menulinks[$k]['isactive'] = 1;
                 } else {
                     $menulinks[$k]['isactive'] = 0;

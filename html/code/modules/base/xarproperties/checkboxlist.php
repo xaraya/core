@@ -1,4 +1,5 @@
 <?php
+
 /* include the base class */
 sys::import('modules.base.xarproperties.dropdown');
 /**
@@ -23,20 +24,20 @@ class CheckboxListProperty extends SelectProperty
 
     public $display_columns = 3;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'checkboxlist';
     }
-/**
- * Get the value of a checkbox from a web page<br/>
- * The value is true if checked, otherwise it is false
- * 
- * @param  string name The name of the checkbox to be checked
- * @param  string value The value of the checkbox to be checked
- * @return bool   This method passes the value gotten to the validateValue method and returns its output.
- */
+    /**
+     * Get the value of a checkbox from a web page<br/>
+     * The value is true if checked, otherwise it is false
+     *
+     * @param  string name The name of the checkbox to be checked
+     * @param  string value The value of the checkbox to be checked
+     * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+     */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -47,77 +48,85 @@ class CheckboxListProperty extends SelectProperty
         }
         return $this->validateValue($value);
     }
-/**
- * Validate the value of a checkbox (checked or not checked)
- *
- * @return bool Returns true if the value passes all validation checks; otherwise returns false.
- */
+    /**
+     * Validate the value of a checkbox (checked or not checked)
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
         $this->log()->info("DataProperty::validateValue: Validating property " . $this->name);
 
-        if (!isset($value)) $value = '';
+        if (!isset($value)) {
+            $value = '';
+        }
         $this->setValue($value);
         return true;
     }
-/**
- * Display a checkbox for input
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for input on a web page
- */
-	
+    /**
+     * Display a checkbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
+
     public function showInput(array $data = [])
     {
         if (isset($data['value'])) {
             if (is_array($data['value'])) {
-                $this->value = implode(',',$data['value']);
+                $this->value = implode(',', $data['value']);
             } else {
                 $this->value = $data['value'];
             }
         }
         $data['value'] = $this->getValue();
-        if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_columns;
+        if (!isset($data['rows_cols'])) {
+            $data['rows_cols'] = $this->display_columns;
+        }
         return parent::showInput($data);
     }
-/**
- * Display a checkbox for output
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for output on a web page
- */
+    /**
+     * Display a checkbox for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if (isset($data['value'])) $this->value = $data['value'];
+        if (isset($data['value'])) {
+            $this->value = $data['value'];
+        }
         $data['value'] = $this->getValue();
-        if (isset($data['options']))  $this->options = $data['options'];
+        if (isset($data['options'])) {
+            $this->options = $data['options'];
+        }
         $data['options'] = $this->getOptions();
         return parent::showOutput($data);
     }
-/**
- * Used to show the hidden data
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for hidden input on a web page
- */	  
+    /**
+     * Used to show the hidden data
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for hidden input on a web page
+     */
     public function showHidden(array $data = [])
     {
         if (isset($data['value'])) {
             if (is_array($data['value'])) {
-                $data['value'] = implode(',',$data['value']);
+                $data['value'] = implode(',', $data['value']);
             }
         } else {
             $data['value'] = '';
         }
         return parent::showHidden($data);
     }
-/**
- * Get the value of input
- *  Check the value of input whether it is in an array or not.
- * If value of input is not an array it converts string into array first.
- * 
- * @return array<mixed>    return always array value
- */	 
+    /**
+     * Get the value of input
+     *  Check the value of input whether it is in an array or not.
+     * If value of input is not an array it converts string into array first.
+     *
+     * @return array<mixed>    return always array value
+     */
     public function getValue()
     {
         if (!is_array($this->value)) {
@@ -131,14 +140,17 @@ class CheckboxListProperty extends SelectProperty
         }
         return $value;
     }
-/**
- * Set the value of input
- * 
- * @param  mixed value The value of the input
- */	   
-    public function setValue($value=null)
+    /**
+     * Set the value of input
+     *
+     * @param  mixed value The value of the input
+     */
+    public function setValue($value = null)
     {
-        if ( is_array($value) ) $this->value = implode ( ',', $value);
-        else $this->value = $value;
+        if (is_array($value)) {
+            $this->value = implode(',', $value);
+        } else {
+            $this->value = $value;
+        }
     }
 }

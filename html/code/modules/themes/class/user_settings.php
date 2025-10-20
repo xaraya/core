@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Themes User Settings
  *
@@ -15,7 +16,7 @@ sys::import('modules.dynamicdata.class.objects.base');
 
 class ThemesUserSettings extends DataObject
 {
-    function updateItem(Array $data = array())
+    public function updateItem(array $data = [])
     {
         foreach ($this->properties as $name => $setting) {
             $this->mod('themes')->setUserVar($name, $setting->value);

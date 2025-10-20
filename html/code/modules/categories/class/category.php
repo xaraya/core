@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories Module
  *
@@ -17,21 +18,21 @@ sys::import('modules.dynamicdata.class.objects.base');
 
 class Category extends DataObject
 {
-    public $parentindices = array();
+    public $parentindices = [];
 
-    function createItem(Array $args = array())
+    public function createItem(array $args = [])
     {
         if (isset($args['entry'])) {
             // This is a create via an import
             extract($args);
 
             // there may not be an entry point passed
-            $entry = isset($entry) ? $entry : array();
+            $entry ??= [];
 
             if (isset($args['parent_id'])) {
                 // If this is an import: replace parentid imported with the local ones
                 $parentindex = $args['parent_id'];
-                if (in_array($parentindex,array_keys($this->parentindices))) {
+                if (in_array($parentindex, array_keys($this->parentindices))) {
                     $args['parent_id'] = $this->parentindices[$parentindex];
                 } else {
                     // there could be more than 1 entry point, therefore the array
@@ -50,10 +51,12 @@ class Category extends DataObject
             $id = parent::createItem($args);
 
             // add this category to the list of known parents
-            if (isset($args['parent_id'])) $this->parentindices[$args['id']] = $id;
+            if (isset($args['parent_id'])) {
+                $this->parentindices[$args['id']] = $id;
+            }
 
             // do the Celko dance and update all the left/right values
-            return xarMod::apiFunc('categories','admin','updatecelkolinks',array('cid' => $id, 'type' => 'create'));
+            return xarMod::apiFunc('categories', 'admin', 'updatecelkolinks', ['cid' => $id, 'type' => 'create']);
         } else {
             // This is a "normal" programatic create
             // The dataobject may already contain all the information it needs
@@ -66,7 +69,7 @@ class Category extends DataObject
             // It is up to the caller passing the values to ensure they are compatible
             if (isset($args['relative_position'])) {
                 // Apply the position passed
-                switch ((int)$args['relative_position']) {
+                switch ((int) $args['relative_position']) {
                     case 1: // before - same level
                         $celkoposition->rightorleft = 'left';
                         $celkoposition->inorout = 'out';
@@ -90,13 +93,13 @@ class Category extends DataObject
                 }
             }
             if (isset($args['parent_id'])) {
-                $celkoposition->reference_id = (int)$args['parent_id'];
+                $celkoposition->reference_id = (int) $args['parent_id'];
             }
-            
+
             // Now check if we have a position in the object
-            if (!empty($celkoposition->rightorleft) && 
-                !empty($celkoposition->inorout) &&
-                isset($celkoposition->reference_id)) {
+            if (!empty($celkoposition->rightorleft)
+                && !empty($celkoposition->inorout)
+                && isset($celkoposition->reference_id)) {
                 // No position was passed, but checkInput or the code above or something else already loaded one into the object
                 // No need to do anything
             } else {
@@ -104,7 +107,7 @@ class Category extends DataObject
                 // As default we will make this new category a child of the top level
                 $celkoposition->rightorleft = 'right';
                 $celkoposition->inorout = 'in';
-                
+
                 // Get top level nodes (there should only be one)
                 sys::import('modules.categories.class.worker');
                 $worker = new CategoryWorker();
@@ -113,13 +116,13 @@ class Category extends DataObject
                 // Take the first one
                 $toplevel = reset($toplevels);
                 if (isset($toplevel) && isset($toplevel['id'])) {
-                    $celkoposition->reference_id = (int)$toplevel['id'];
+                    $celkoposition->reference_id = (int) $toplevel['id'];
                 }
             }
             $this->properties['position'] = $celkoposition;
 
             // Now that we have all the information, run the create
-			// The heavy lifting (i.e. changing all the right and left indices) is done by the position property
+            // The heavy lifting (i.e. changing all the right and left indices) is done by the position property
             $id = parent::createItem($args);
             return $id;
         }

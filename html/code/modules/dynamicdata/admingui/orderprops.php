@@ -88,7 +88,8 @@ class OrderpropsMethod extends MethodClass
             throw new BadParameterException($vars, $msg);
         }
 
-        $fields = $userapi->getprop(['objectid' => $objectid,
+        $fields = $userapi->getprop(
+            ['objectid' => $objectid,
                 'module_id' => $module_id,
                 'itemtype' => $itemtype,
                 'allprops' => true]
@@ -123,7 +124,8 @@ class OrderpropsMethod extends MethodClass
         }
 
         if (isset($swappos)) {
-            if (!$adminapi->updateprop(['id' => $itemid,
+            if (!$adminapi->updateprop(
+                ['id' => $itemid,
                     'label' => $fields[$move_prop]['label'],
                     'type' => $fields[$move_prop]['type'],
                     'seq' => $fields[$swapwith]['seq']]
@@ -131,7 +133,8 @@ class OrderpropsMethod extends MethodClass
                 return;
             }
 
-            if (!$adminapi->updateprop(['id' => $fields[$swapwith]['id'],
+            if (!$adminapi->updateprop(
+                ['id' => $fields[$swapwith]['id'],
                     'label' => $fields[$swapwith]['label'],
                     'type' => $fields[$swapwith]['type'],
                     'seq' => $fields[$move_prop]['seq']]

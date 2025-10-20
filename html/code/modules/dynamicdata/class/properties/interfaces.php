@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Interfaces for Dynamic Properties
  *

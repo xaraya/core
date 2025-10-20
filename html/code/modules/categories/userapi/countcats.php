@@ -55,8 +55,8 @@ class CountcatsMethod extends MethodClass
         $bindvars = [];
 
         // Get number of categories
-        if (!empty($left_id) && is_numeric($left_id) &&
-            !empty($right_id) && is_numeric($right_id)) {
+        if (!empty($left_id) && is_numeric($left_id)
+            && !empty($right_id) && is_numeric($right_id)) {
             $sql = "SELECT COUNT(id) AS childnum
                       FROM $categoriestable
                      WHERE left_id

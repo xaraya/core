@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\blocks
  * @subpackage blocks
@@ -12,10 +13,10 @@
 
 /**
  * Return table name definitions to Xaraya.
- * 
+ *
  * This function is called internally by the core whenever the module is
  * loaded. It adds the table names to a globally accessible array
- * 
+ *
  * @return array<mixed> Registered table names to a globally accessibl array
  */
 function blocks_xartables(?string $prefix = null)
@@ -26,6 +27,6 @@ function blocks_xartables(?string $prefix = null)
     //$tables['block_group_instances']  = $prefix . '_block_group_instances';
     $tables['block_types']            = $prefix . '_block_types';
     //$tables['cache_blocks']           = $prefix . '_cache_blocks';
-    
+
     return $tables;
 }

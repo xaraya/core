@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -137,7 +138,7 @@ class XmlImporter extends DataObjectImporter
 
         $object = DataObjectFactory::getObject(['name' => 'objects']);
         $objectproperties = array_keys($object->properties);
-        foreach($objectproperties as $property) {
+        foreach ($objectproperties as $property) {
             if (isset($xmlobject->{$property}[0])) {
                 $value = (string) $xmlobject->{$property}[0];
                 try {
@@ -212,11 +213,11 @@ class XmlImporter extends DataObjectImporter
 
         $propertyproperties = array_keys($dataproperty->properties);
         $propertieshead = $xmlobject->properties;
-        foreach($propertieshead->children() as $property) {
+        foreach ($propertieshead->children() as $property) {
             $propertyargs = [];
             $propertyname = (string) ($property->attributes()->name);
             $propertyargs['name'] = $propertyname;
-            foreach($propertyproperties as $prop) {
+            foreach ($propertyproperties as $prop) {
                 if (isset($property->{$prop}[0])) {
                     $value = (string) $property->{$prop}[0];
                     try {
@@ -325,7 +326,7 @@ class XmlImporter extends DataObjectImporter
 
         $object = null;
         $objectproperties = [];
-        foreach($xmlobject->children() as $child) {
+        foreach ($xmlobject->children() as $child) {
 
             // pass on some generic values so that the class(es) will know where we are
             if ($index == 1) {
@@ -372,7 +373,7 @@ class XmlImporter extends DataObjectImporter
             }
 
             $oldindex = 0;
-            foreach($objectproperties as $propertyname => $property) {
+            foreach ($objectproperties as $propertyname => $property) {
                 if (isset($child->$propertyname)) {
                     // Run the import value through the property's validation routine
                     //$check = $property->validateValue((string)$child->$propertyname);

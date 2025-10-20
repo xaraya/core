@@ -81,8 +81,8 @@ class SenduseremailMethod extends MethodClass
                 $ip = '';
             }
 
-            $validationlink = isset($user['valcode']) ?
-                $this->ctl()->getModuleURL(
+            $validationlink = isset($user['valcode'])
+                ? $this->ctl()->getModuleURL(
                     'roles',
                     'user',
                     'getvalidation',

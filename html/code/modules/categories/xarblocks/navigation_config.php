@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories Module
  *
@@ -18,16 +19,16 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
 {
     /**
      * Modify Function to the Blocks Admin
-     * 
+     *
      * @return array<mixed> Returns data array
      */
     public function configmodify()
     {
         $data = $this->getContent();
 
-        $data['modules'] = array();
-        $data['modules'][] = array('id' => '',
-                                   'name' => $this->ml('Adapt dynamically to current page'));
+        $data['modules'] = [];
+        $data['modules'][] = ['id' => '',
+            'name' => $this->ml('Adapt dynamically to current page')];
 
         // List contains:
         // 0. option group for the module
@@ -40,25 +41,25 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
 
         sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
-        $allcatbases = $worker->getcatbases(array('order'=>'module', 'format'=>'tree'));
+        $allcatbases = $worker->getcatbases(['order' => 'module', 'format' => 'tree']);
 
-        foreach($allcatbases as $modulecatbases) {
+        foreach ($allcatbases as $modulecatbases) {
             // Module label for the option group in the list.
             $modlabel = $this->ml('#(1)', ucwords($modulecatbases['module']));
-            $data['modules'][] = array('label' => $modlabel);
-    
+            $data['modules'][] = ['label' => $modlabel];
+
             $indent = '&#160;&#160;&#160;';
-    
-            foreach($modulecatbases['itemtypes'] as $thisitemtype => $itemtypecatbase) {
+
+            foreach ($modulecatbases['itemtypes'] as $thisitemtype => $itemtypecatbase) {
                 if (!empty($itemtypecatbase['catbases'])) {
                     $catlist = '[';
                     $join = '';
-                    foreach($itemtypecatbase['catbases'] as $itemtypecatbases) {
+                    foreach ($itemtypecatbase['catbases'] as $itemtypecatbases) {
                         $catlist .= $join . $itemtypecatbases['category']['name'];
                         $join = ' | ';
                     }
                     $catlist .= ']';
-    
+
                     //if (empty($itemtypecatbase['itemtype']['label'])) {
                     if ($thisitemtype == 0) {
                         // Default module cats at top level.
@@ -69,25 +70,27 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
                         $indent_level = 1;
                         $itemtypelabel = ' -&gt; ' . $this->ml('#(1)', $itemtypecatbase['itemtype']['label']);
                     }
-    
+
                     // Module-Itemtype [all cats]
-                    $data['modules'][] = array(
+                    $data['modules'][] = [
                         'id' => $modulecatbases['module'] . '.' . $thisitemtype . '.0',
-                        'name' => str_repeat($indent, $indent_level) . $modlabel . $itemtypelabel . ' ' . $catlist
-                    );
-    
+                        'name' => str_repeat($indent, $indent_level) . $modlabel . $itemtypelabel . ' ' . $catlist,
+                    ];
+
                     // Individual categories a level deeper.
                     $indent_level += 1;
-    
+
                     // Individual base categories where there are more than one.
                     if (count($itemtypecatbase['catbases']) > 1) {
-                        foreach($itemtypecatbase['catbases'] as $itemtypecatbases) {
+                        foreach ($itemtypecatbase['catbases'] as $itemtypecatbases) {
                             $catlist = '[' . $itemtypecatbases['category']['name'] . ']';
-                            if ($thisitemtype == 0) {$itemtypelabel = $modlabel;}
-                            $data['modules'][] = array(
+                            if ($thisitemtype == 0) {
+                                $itemtypelabel = $modlabel;
+                            }
+                            $data['modules'][] = [
                                 'id' => $modulecatbases['module'] . '.' . $thisitemtype . '.' . $itemtypecatbases['category']['cid'],
-                                'name' => str_repeat($indent, $indent_level) . $itemtypelabel . ' ' . $catlist
-                            );
+                                'name' => str_repeat($indent, $indent_level) . $itemtypelabel . ' ' . $catlist,
+                            ];
                         }
                     }
                 }
@@ -98,11 +101,11 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
 
     /**
      * Updates the Block config from the Blocks Admin
-     * 
+     *
      * @param array<string, mixed> $data Parameter data array
-     * @return boolean|null Returns true on success and null on failure 
+     * @return boolean|null Returns true on success and null on failure
      */
-    public function configupdate(Array $vars=array())
+    public function configupdate(array $vars = [])
     {
         $this->var()->check('layout', $vars['layout'], 'isset', $this->layout);
         $this->var()->find('showcatcount', $vars['showcatcount'], 'isset', false);
@@ -110,7 +113,7 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
         $this->var()->find('showempty', $vars['showempty'], 'checkbox', false);
         $this->var()->check('startmodule', $vars['startmodule'], 'isset', $this->startmodule);
         $this->var()->find('dynamictitle', $vars['dynamictitle'], 'checkbox', false);
-        
+
         $this->setContent($vars);
         return true;
     }

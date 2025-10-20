@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer Class - Xaraya Modification
  *
@@ -12,11 +13,11 @@
  * @authorBrent R. Matzelle
  */
 /**
- * PHPMailer language file.  
+ * PHPMailer language file.
  * English Version
  */
 
-$PHPMAILER_LANG = array(
+$PHPMAILER_LANG = [
     "provide_address"       => xarML('You must provide at least one recipient email address.'),
     "mailer_not_supported"  => xarML(' mailer is not supported.'),
     "execute"               => xarML('Could not execute: '),
@@ -29,4 +30,4 @@ $PHPMAILER_LANG = array(
     "file_access"           => xarML('Could not access file: '),
     "file_open"             => xarML('File Error: Could not open file: '),
     "encoding"              => xarML('Unknown encoding: '),
-);
+];

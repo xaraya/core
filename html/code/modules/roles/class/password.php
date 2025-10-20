@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Password creation
  *
@@ -38,33 +39,35 @@ use xarObject;
 
 class Password extends xarObject
 {
-	private const SYLLABLES       = "*abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz0123456789";
-	private const PASSWORD_LENGTH = 8;
-	private const PASSWORD_BOX    = 5000;
+    private const SYLLABLES       = "*abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz0123456789";
+    private const PASSWORD_LENGTH = 8;
+    private const PASSWORD_BOX    = 5000;
 
-	public static function make_pass()
-	{
-    	$length = strlen(self::SYLLABLES) - 1;
-    	
-	    // Create the box
-    	$box = '';
-		for($i = 0; $i < self::PASSWORD_BOX; $i++) {
-			$ch = self::SYLLABLES[mt_rand(0, $length)];
-			// Set 20% of the characters to upper case letters
-			if (mt_rand(0, $length) % 5 == 1) {
-				// Make sure we have a number here
-				if (is_numeric($ch)) $ch = strtoupper($ch);
-			}
-			// filling up the box with random chars
-			$box .= $ch;
-		}
-	
-		// Now collect password from the box
-		$result = '';
-		for($i = 0; $i < self::PASSWORD_LENGTH; $i++) {
-			$result .= $box[mt_rand(0, (self::PASSWORD_BOX - 1))];
-		}
-	
-		return $result;
-	}
+    public static function make_pass()
+    {
+        $length = strlen(self::SYLLABLES) - 1;
+
+        // Create the box
+        $box = '';
+        for ($i = 0; $i < self::PASSWORD_BOX; $i++) {
+            $ch = self::SYLLABLES[mt_rand(0, $length)];
+            // Set 20% of the characters to upper case letters
+            if (mt_rand(0, $length) % 5 == 1) {
+                // Make sure we have a number here
+                if (is_numeric($ch)) {
+                    $ch = strtoupper($ch);
+                }
+            }
+            // filling up the box with random chars
+            $box .= $ch;
+        }
+
+        // Now collect password from the box
+        $result = '';
+        for ($i = 0; $i < self::PASSWORD_LENGTH; $i++) {
+            $result .= $box[mt_rand(0, (self::PASSWORD_BOX - 1))];
+        }
+
+        return $result;
+    }
 }

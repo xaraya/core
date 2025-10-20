@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Menu Block configuration interface
  *
@@ -32,11 +33,11 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
     /**
      * Modify the configuration of the menu block
-     * 
+     *
      * @param array<string, mixed> $data Data array
      * @return array<mixed> $data array of values to be displayed in the block's configuration page
      */
-    public function configmodify(Array $data=array())
+    public function configmodify(array $data = [])
     {
         $data = $this->getContent();
 
@@ -48,24 +49,26 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
     /**
      * Update the configuration of the menu block
-     * 
+     *
      * @param array<string, mixed> $data Data array
      * @return boolean|void Returns true on success, false on failure
      */
-    public function configupdate(Array $data=array())
+    public function configupdate(array $data = [])
     {
         $data = parent::update($data);
-        $vars = !empty($data['content']) ? $data['content'] : array();
+        $vars = !empty($data['content']) ? $data['content'] : [];
 
         // Handle any methods specific to this block
         // CHECKME: is this the right place for handling this
         $this->var()->find('menumethod', $menumethod, 'str:1:255', '');
         switch ($menumethod) {
-            case  'linkorder':
+            case 'linkorder':
                 $links = array_merge($vars, $this->linkorderupdate());
                 $this->blockinfo['content']['userlinks'] = $links['userlinks'];
                 $this->setContent($links);
-                if (!$this->mod()->apiFunc('blocks', 'instances', 'updateitem', $this->blockinfo)) return;
+                if (!$this->mod()->apiFunc('blocks', 'instances', 'updateitem', $this->blockinfo)) {
+                    return;
+                }
                 $this->ctl()->redirect($links['return_url']);
                 return true;
             default:
@@ -87,7 +90,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         $this->var()->find('backlabel', $backlabel, 'str:1:255', '');
         $this->var()->find('backtitle', $backtitle, 'str:1:255', '');
         // userlinks
-        $this->var()->find('userlinks', $userlinks, 'array', array());
+        $this->var()->find('userlinks', $userlinks, 'array', []);
         $this->var()->find('links_select', $links_select, 'pre:trim:lower:enum:show:hide:delete', 'none');
 
         // add new link
@@ -99,12 +102,12 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         $this->var()->find('links_new_relation', $new_relation, 'int:0:', 0);
 
         // modulelist
-        $this->var()->find('modulelist', $modulelist, 'array', array());
+        $this->var()->find('modulelist', $modulelist, 'array', []);
 
         // handle user links
         // Build new link if we have any values for it
         if (!empty($new_url) || !empty($new_label) || !empty($new_title) || !empty($new_blank)) {
-            $modlinks = array();
+            $modlinks = [];
             $new_link = self::_decodeURL($new_url, true);
             $new_link['visible'] = 1;
             if (!empty($new_blank)) {
@@ -112,7 +115,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 $new_link['name'] = '_blank_';
             } elseif ($new_link['ismodlink'] && $new_position > 1) {
                 $new_link['ismodlink'] = 0;
-                 if (empty($new_label)) {
+                if (empty($new_label)) {
                     $new_label = $this->mod()->getDisplayName($new_link['modname']);
                     $new_link['name'] = $new_link['modname'] . '_' . $new_link['modtype'] . '_main';
                 }
@@ -129,17 +132,18 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
             }
             $new_link['label'] = $new_label;
             $new_link['title'] = $new_title;
-            $new_link['menulinks'] = array();
+            $new_link['menulinks'] = [];
         }
 
         // Now re-index our array of links, performing any selected actions along the way
-        $new_links = array();
+        $new_links = [];
         $i = $j = 0;
         if (!empty($userlinks)) {
             foreach ($userlinks as $order => $link) {
                 // add missing link settings from exisiting entry
-                if (isset($this->userlinks[$order]))
+                if (isset($this->userlinks[$order])) {
                     $link += $this->userlinks[$order];
+                }
                 // Insert new link before an item
                 if ((!empty($new_link) && $new_position == 0) && ($new_relation == $order)) {
                     // insert new link before selected link
@@ -160,7 +164,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                     $link['name'] = '_blank_';
                 } elseif (!empty($link['label']) && !$link['ismodlink']) {
                     // normal link, set name as label
-                   $link['name'] = $link['label'];
+                    $link['name'] = $link['label'];
                 } elseif ($link['ismodlink']) {
                     // module link, set name as module_type
                     $link['name'] = $link['modname'] . '_' . $link['modtype'];
@@ -182,24 +186,26 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 // perform links_select action on selected items
                 if (!empty($link['select']) && $links_select != 'none') {
                     // remove link
-                    if ($links_select == 'delete') continue;
+                    if ($links_select == 'delete') {
+                        continue;
+                    }
                     switch ($links_select) {
                         case 'show':
                             // make link visible
                             $link['visible'] = 1;
-                        break;
+                            break;
                         case 'hide':
                             // make link invisible
                             $link['visible'] = 0;
-                        break;
+                            break;
                         default:
                             // do nothing
-                        break;
+                            break;
                     }
                 }
-                unset ($link['select']);
+                unset($link['select']);
                 // re-index sublinks
-                $menu_links = array();
+                $menu_links = [];
                 // only if the parent isn't a module link
                 if (empty($link['ismodlink'])) {
                     // insert link as first child of item
@@ -212,8 +218,9 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                     if (!empty($link['menulinks'])) {
                         foreach ($link['menulinks'] as $suborder => $sublink) {
                             // add missing link settings from existing entry
-                            if (isset($this->userlinks[$order]['menulinks'][$suborder]))
+                            if (isset($this->userlinks[$order]['menulinks'][$suborder])) {
                                 $sublink += $this->userlinks[$order]['menulinks'][$suborder];
+                            }
                             // decode the link url
                             $subcheck = self::_decodeURL($sublink['url'], true);
                             foreach ($subcheck as $k => $v) {
@@ -225,7 +232,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                                 $sublink['name'] = '_blank_';
                             } elseif (!empty($sublink['label']) && !$sublink['ismodlink']) {
                                 // normal link, set name as label
-                               $sublink['name'] = $sublink['label'];
+                                $sublink['name'] = $sublink['label'];
                             } elseif ($sublink['ismodlink']) {
                                 // module link, set name as module_type_main
                                 $sublink['name'] = $subcheck['modname'] . '_' . $subcheck['modtype'] . '_main';
@@ -236,22 +243,24 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                             // perform links_select action on selected items
                             if (!empty($sublink['select']) && $links_select != 'none') {
                                 // remove sublink
-                                if ($links_select == 'delete') continue;
+                                if ($links_select == 'delete') {
+                                    continue;
+                                }
                                 switch ($links_select) {
                                     case 'show':
                                         // make sublink visible
                                         $sublink['visible'] = 1;
-                                    break;
+                                        break;
                                     case 'hide':
                                         // make sublink invisible
                                         $sublink['visible'] = 0;
-                                    break;
+                                        break;
                                     default:
                                         // do nothing
-                                    break;
+                                        break;
                                 }
                             }
-                            unset ($sublink['select']);
+                            unset($sublink['select']);
                             $sublink['id'] = $j;
                             $sublink['ismodlink'] = 0;
                             //$sublink['name'] = $sublink['label'];
@@ -285,17 +294,18 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
         // handle modulelist input
         sys::import('modules.dynamicdata.class.properties.master');
-        $accessproperty = $this->prop()->getProperty(array('name' => 'access'));
+        $accessproperty = $this->prop()->getProperty(['name' => 'access']);
         foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];
-            if (empty($modulelist[$modname]['visible']))
+            if (empty($modulelist[$modname]['visible'])) {
                 $modulelist[$modname]['visible'] = 0;
-            if (empty($modulelist[$modname]['alias_name']) ||
-                empty($this->modulelist[$modname]['aliases']) ||
-                !isset($this->modulelist[$modname]['aliases'][$modulelist[$modname]['alias_name']])) {
+            }
+            if (empty($modulelist[$modname]['alias_name'])
+                || empty($this->modulelist[$modname]['aliases'])
+                || !isset($this->modulelist[$modname]['aliases'][$modulelist[$modname]['alias_name']])) {
                 $modulelist[$modname]['alias_name'] = $modname;
             }
-            $isvalid = $accessproperty->checkInput('modulelist_'.$modname.'_view_access');
+            $isvalid = $accessproperty->checkInput('modulelist_' . $modname . '_view_access');
             $modulelist[$modname]['view_access'] = $accessproperty->getValue();
         }
 
@@ -322,18 +332,20 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
     /**
      * Admin get userlinks method
-     * 
+     *
      * @return string[] Returns user links as array
      */
     public function getUserLinks()
     {
-        $userlinks = array();
+        $userlinks = [];
         $authid = $this->sec()->genAuthKey();
         if (!empty($this->userlinks)) {
             $numlinks = count($this->userlinks);
             $i = 1;
             foreach ($this->userlinks as $linkid => $link) {
-                if (empty($linkid)) $linkid = $i-1;
+                if (empty($linkid)) {
+                    $linkid = $i - 1;
+                }
                 if (!isset($link['encodedurl'])) {
                     $check = self::_decodeURL($link['url'], true);
                     foreach ($check as $k => $v) {
@@ -344,21 +356,21 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 $link['url'] = $link['encodedurl'];
                 // Add order links to parent menu items
                 if ($i < $numlinks) {
-                    $link['downurl'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' =>  $linkid, 'direction' => 'down', 'authid' => $authid, 'this' => '0'));
+                    $link['downurl'] = $this->ctl()->getCurrentURL(['interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' =>  $linkid, 'direction' => 'down', 'authid' => $authid, 'this' => '0']);
                     /*
                     $link['downurl'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                     */
                 }
                 if ($i > 1) {
-                    $link['upurl'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
+                    $link['upurl'] = $this->ctl()->getCurrentURL(['interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid]);
                     /*
                     $link['upurl'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
                     */
                 }
                 if (!empty($link['menulinks'])) {
-                    $sublinks = array();
+                    $sublinks = [];
                     $numsublinks = count($link['menulinks']);
                     $j = 1;
                     foreach ($link['menulinks'] as $sublinkid => $sublink) {
@@ -373,14 +385,14 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
                         // Add order links to child menu items
                         if ($j < $numsublinks) {
-                            $link['downurl'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
+                            $link['downurl'] = $this->ctl()->getCurrentURL(['interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid]);
                             /*
                             $sublink['downurl'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                             */
                         }
                         if ($j > 1) {
-                            $sublink['upurl'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
+                            $sublink['upurl'] = $this->ctl()->getCurrentURL(['interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid]);
                             /*
                             $sublink['upurl'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
@@ -400,44 +412,48 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
     /**
      * Custom update method to handle link ordering
-     * 
+     *
      * @param array<string, mixed> $data Data array
      * @return array<mixed>|null Returns data array containing link ordering. If linkid, sublinkid or direction have not been found null is returned.
      * @throws EmptyParameterException Thrown if linkid and direction are not given.
      */
-    public function linkorderupdate(Array $data=array())
+    public function linkorderupdate(array $data = [])
     {
         $data = $this->getInfo();
         $this->var()->check('linkid', $linkid, 'int:0:', null);
         $this->var()->check('sublinkid', $sublinkid, 'int:0:', null);
         $this->var()->check('direction', $direction, 'pre:trim:lower:enum:up:down', null);
 
-        if (!isset($linkid)) throw new EmptyParameterException('linkid');
-        if (!isset($direction)) throw new EmptyParameterException('direction');
+        if (!isset($linkid)) {
+            throw new EmptyParameterException('linkid');
+        }
+        if (!isset($direction)) {
+            throw new EmptyParameterException('direction');
+        }
 
         foreach ($this->userlinks as $order => $link) {
             if ($order == $linkid) {
                 if (!isset($sublinkid)) {
-                    if ($direction == 'up' && isset($this->userlinks[$order-1])) {
-                        $temp = $this->userlinks[$order-1];
-                        $this->userlinks[$order-1] = $link;
+                    if ($direction == 'up' && isset($this->userlinks[$order - 1])) {
+                        $temp = $this->userlinks[$order - 1];
+                        $this->userlinks[$order - 1] = $link;
                         $this->userlinks[$order] = $temp;
-                    } elseif ($direction == 'down' && isset($this->userlinks[$order+1])) {
-                        $temp = $this->userlinks[$order+1];
-                        $this->userlinks[$order+1] = $link;
+                    } elseif ($direction == 'down' && isset($this->userlinks[$order + 1])) {
+                        $temp = $this->userlinks[$order + 1];
+                        $this->userlinks[$order + 1] = $link;
                         $this->userlinks[$order] = $temp;
                     }
                 } else {
                     if (!empty($link['menulinks'])) {
                         foreach ($link['menulinks'] as $suborder => $sublink) {
                             if ($suborder == $sublinkid) {
-                                if ($direction == 'up' && isset($this->userlinks[$order]['menulinks'][$suborder-1])) {
-                                    $temp = $this->userlinks[$order]['menulinks'][$suborder-1];
-                                    $this->userlinks[$order]['menulinks'][$suborder-1] = $sublink;
+                                if ($direction == 'up' && isset($this->userlinks[$order]['menulinks'][$suborder - 1])) {
+                                    $temp = $this->userlinks[$order]['menulinks'][$suborder - 1];
+                                    $this->userlinks[$order]['menulinks'][$suborder - 1] = $sublink;
                                     $this->userlinks[$order]['menulinks'][$suborder] = $temp;
-                                } elseif ($direction == 'down' && isset($this->userlinks[$order]['menulinks'][$suborder+1])) {
-                                    $temp = $this->userlinks[$order]['menulinks'][$suborder+1];
-                                    $this->userlinks[$order]['menulinks'][$suborder+1] = $sublink;
+                                } elseif ($direction == 'down' && isset($this->userlinks[$order]['menulinks'][$suborder + 1])) {
+                                    $temp = $this->userlinks[$order]['menulinks'][$suborder + 1];
+                                    $this->userlinks[$order]['menulinks'][$suborder + 1] = $sublink;
                                     $this->userlinks[$order]['menulinks'][$suborder] = $temp;
                                 }
                                 break;
@@ -449,8 +465,8 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
             }
         }
         $data['userlinks'] = $this->userlinks;
-        $data['return_url'] = $this->ctl()->getCurrentURL(array('interface' => 'config', 'menumethod' => null, 'authid' => null, 'direction' => null, 'sublinkid' => null, 'linkid' => null, 'phase' => null), null) . '#menulinks_'.$this->block_id;
-        /* 
+        $data['return_url'] = $this->ctl()->getCurrentURL(['interface' => 'config', 'menumethod' => null, 'authid' => null, 'direction' => null, 'sublinkid' => null, 'linkid' => null, 'phase' => null], null) . '#menulinks_' . $this->block_id;
+        /*
         $data['return_url'] = $this->ctl()->getModuleURL('blocks', 'admin', 'modify_instance',
             array('block_id' => $this->block_id, 'interface' => 'config'), null) . '#menulinks_'.$this->block_id);
         */

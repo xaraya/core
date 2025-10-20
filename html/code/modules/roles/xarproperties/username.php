@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.base.xarproperties.textbox');
 
@@ -19,7 +20,7 @@ class UsernameProperty extends TextBoxProperty
     public $id         = 7;
     public $name       = 'username';
     public $desc       = 'Username';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
     public $display_linkurl                 = 0;
     public $validation_existrule            = 0;    // 0: no rule; 1: must not already exist; 2: must already exist
@@ -27,7 +28,7 @@ class UsernameProperty extends TextBoxProperty
     public $initialization_store_type       = 'name';
     public $initialization_display_name     = 'uname';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
@@ -35,59 +36,67 @@ class UsernameProperty extends TextBoxProperty
         $this->filepath   = 'modules/roles/xarproperties';
 
         // Cater to a common case
-        if ($this->value == 'myself') $this->value = $this->user()->getId();        
+        if ($this->value == 'myself') {
+            $this->value = $this->user()->getId();
+        }
     }
 
-	/**
-	 * Validate the value of a textbox
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a textbox
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
         $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
         // Save the current value of this property for comparison below
         $previousvalue = $this->value;
-        
+
         // Validate as a text box
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         // We set an empty value to the id of the current user
-        if (empty($value) || ($value == 'myself')) $value = $this->user()->getUser();
+        if (empty($value) || ($value == 'myself')) {
+            $value = $this->user()->getUser();
+        }
 
         // We allow the special value [All]
-        
+
         if ($value != '[All]') {
             $role = xarRoles::ufindRole($value, xarRoles::ROLES_USERTYPE, xarRoles::ROLES_STATE_ALL);
-            switch ((int)$this->validation_existrule) {
+            switch ((int) $this->validation_existrule) {
                 case 1:
-                if (!empty($role)) {
-                    
-                    // If we're just keeping the name we already have, it's OK
-                    if ($previousvalue == $value) break;
+                    if (!empty($role)) {
 
-                    if (!empty($this->validation_existrule_invalid)) {
-                        $this->invalid = $this->ml($this->validation_existrule_invalid);
-                    } else {
-                        $this->invalid = $this->ml('user #(1) already exists', $value);
+                        // If we're just keeping the name we already have, it's OK
+                        if ($previousvalue == $value) {
+                            break;
+                        }
+
+                        if (!empty($this->validation_existrule_invalid)) {
+                            $this->invalid = $this->ml($this->validation_existrule_invalid);
+                        } else {
+                            $this->invalid = $this->ml('user #(1) already exists', $value);
+                        }
+                        $this->log()->error($this->invalid);
+                        return false;
                     }
-                    $this->log()->error($this->invalid);
-                    return false;
-                }
-                break;
+                    break;
 
                 case 2:
-                if (empty($role)) {
-                    if (!empty($this->validation_existrule_invalid)) {
-                        $this->invalid = $this->ml($this->validation_existrule_invalid);
-                    } else {
-                        $this->invalid = $this->ml('user #(1) does not exist', $value);
+                    if (empty($role)) {
+                        if (!empty($this->validation_existrule_invalid)) {
+                            $this->invalid = $this->ml($this->validation_existrule_invalid);
+                        } else {
+                            $this->invalid = $this->ml('user #(1) does not exist', $value);
+                        }
+                        $this->log()->error($this->invalid);
+                        return false;
                     }
-                    $this->log()->error($this->invalid);
-                    return false;
-                }
-                break;
+                    break;
 
                 case 0:
                 default:
@@ -97,12 +106,12 @@ class UsernameProperty extends TextBoxProperty
         return true;
     }
 
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
         // The user param is a name
@@ -116,31 +125,38 @@ class UsernameProperty extends TextBoxProperty
                 $data['value'] = $data['user'];
             }
         } else {
-            if (isset($data['value'])) $this->value = $data['value'];
+            if (isset($data['value'])) {
+                $this->value = $data['value'];
+            }
             $data['value'] = $this->getValue();
         }
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a textbox for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */	
+    /**
+     * Display a textbox for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if (!empty($data['display_type'])) $this->initialization_display_name = $data['display_type'];
-        if (!empty($data['link_url'])) $this->display_linkurl = $data['link_url'];
-        
+        if (!empty($data['display_type'])) {
+            $this->initialization_display_name = $data['display_type'];
+        }
+        if (!empty($data['link_url'])) {
+            $this->display_linkurl = $data['link_url'];
+        }
+
         // The user param is a name
         if (isset($data['user'])) {
             // Cater to a common case
             if ($data['user'] == 'myself') {
-                if ($this->initialization_display_name == 'name')
+                if ($this->initialization_display_name == 'name') {
                     $data['value'] = $this->user()->getName();
-                else
+                } else {
                     $data['value'] = $this->user()->getUser();
+                }
             } else {
                 $data['value'] = $data['user'];
             }
@@ -166,18 +182,18 @@ class UsernameProperty extends TextBoxProperty
             } else {
                 $textvalue = $this->value;
             }
-            $data['link_url'] = $this->mod()->getURL('user','display',array('id' => $this->value));
+            $data['link_url'] = $this->mod()->getURL('user', 'display', ['id' => $this->value]);
         } else {
             $data['link_url'] = "";
         }
         return parent::showOutput($data);
     }
-    
-	/**
-	 * Used to show the hidden data
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters 
-	 */	
+
+    /**
+     * Used to show the hidden data
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     */
     public function showHidden(array $data = [])
     {
         if (empty($data['value'])) {
@@ -185,31 +201,37 @@ class UsernameProperty extends TextBoxProperty
         }
         return parent::showHidden($data);
     }
-    
-	/**
-	 * Get the value of input
-	 *  Check the value of input whether it is numeric or not.
-	 * 
-	 * @return string    return value
-	 */	
+
+    /**
+     * Get the value of input
+     *  Check the value of input whether it is numeric or not.
+     *
+     * @return string    return value
+     */
     public function getValue()
     {
         if ($this->initialization_store_type == 'id') {
-            if(!is_numeric($this->value)) return $this->value;
-            if ($this->value == 0) return '[All]';
+            if (!is_numeric($this->value)) {
+                return $this->value;
+            }
+            if ($this->value == 0) {
+                return '[All]';
+            }
             return $this->user($this->value)->getUser();
         } else {
-            if (empty($this->value)) return '';
+            if (empty($this->value)) {
+                return '';
+            }
             return $this->value;
         }
     }
 
-	/**
-	 * Set the value of input
-	 * 
-	 * @param  mixed value The value of the input
-	 */	
-    public function setValue($value=null)
+    /**
+     * Set the value of input
+     *
+     * @param  mixed value The value of the input
+     */
+    public function setValue($value = null)
     {
         if ($this->initialization_store_type == 'id') {
             if (empty($value)) {
@@ -219,8 +241,11 @@ class UsernameProperty extends TextBoxProperty
                     $this->value = 0;
                 } else {
                     $role = xarRoles::ufindRole($value);
-                    if (empty($role)) $this->value = null;
-                    else $this->value = $role->getID();
+                    if (empty($role)) {
+                        $this->value = null;
+                    } else {
+                        $this->value = $role->getID();
+                    }
                 }
             }
         } else {

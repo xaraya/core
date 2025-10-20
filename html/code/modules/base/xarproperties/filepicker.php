@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -20,7 +21,7 @@ sys::import('xaraya.structures.relativedirectoryiterator');
 
 /**
  * This property displays a dropdown of file names
- * 
+ *
  * Parameters:
  * basedir          base directory whose contents are displayed
  * matches          string to filter the directory contents with
@@ -37,11 +38,11 @@ class FilePickerProperty extends SelectProperty
     public $validation_file_extensions   = '';          // holds a string of comma delimited extensions
     public $validation_matches           = '';
     public $display_fullname             = false;
-    
+
     public $file_extension_list         = [];      // holds an array of filename extensions
     public $file_extension_regex        = '';           // holds a string of type 'jpg|gif|png'
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath = 'modules/base/xarproperties';
@@ -50,10 +51,10 @@ class FilePickerProperty extends SelectProperty
             $this->initialization_basedirectory = 'var';
         } else {
             // Cater to common Xaraya calls
-            if ((strpos($this->initialization_basedirectory,'sys') === 0) || (strpos($this->initialization_basedirectory,'xar') === 0)) {
+            if ((strpos($this->initialization_basedirectory, 'sys') === 0) || (strpos($this->initialization_basedirectory, 'xar') === 0)) {
                 /** @var string $temp */
                 $temp = '';
-                eval('$temp='.$this->initialization_basedirectory.";");
+                eval('$temp=' . $this->initialization_basedirectory . ";");
                 $this->initialization_basedirectory = $temp;
             }
         }
@@ -65,58 +66,72 @@ class FilePickerProperty extends SelectProperty
 
     /**
      * Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory - move to templates/themes?
-     * 
+     *
      * @param  string basedir Base directory to be replaced
      * @return string         Corresponding theme directory
      */
     public function getThemeDir($basedir = null)
     {
-        if (!$basedir) $basedir = $this->initialization_basedirectory;
+        if (!$basedir) {
+            $basedir = $this->initialization_basedirectory;
+        }
         if (strpos($basedir, '{user_theme}') !== false) {
-            $basedir = str_replace('{user_theme}',"themes/".$this->mod('themes')->getVar('default_theme'),$basedir);
+            $basedir = str_replace('{user_theme}', "themes/" . $this->mod('themes')->getVar('default_theme'), $basedir);
         }
         if (strpos($basedir, '{admin_theme}') !== false) {
-            $basedir = str_replace('{admin_theme}',"themes/".$this->mod('themes')->getVar('admin_theme'),$basedir);
+            $basedir = str_replace('{admin_theme}', "themes/" . $this->mod('themes')->getVar('admin_theme'), $basedir);
         }
         if (strpos($basedir, '{theme}') !== false) {
-            $basedir = str_replace('{theme}',xarTpl::getThemeDir(),$basedir);
+            $basedir = str_replace('{theme}', xarTpl::getThemeDir(), $basedir);
         }
         return $basedir;
     }
 
-/**
- * Display a Dropdown for input
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for input on a web page
- */
+    /**
+     * Display a Dropdown for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (isset($data['basedir'])) $this->initialization_basedirectory = $this->getThemeDir($data['basedir']);
+        if (isset($data['basedir'])) {
+            $this->initialization_basedirectory = $this->getThemeDir($data['basedir']);
+        }
 
-        if (isset($data['matches'])) $this->validation_matches = $data['matches'];
-        if (isset($data['extensions'])) $this->setExtensions($data['extensions']);
-        if (isset($data['display_fullname'])) $this->display_fullname = $data['display_fullname'];
-        if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
+        if (isset($data['matches'])) {
+            $this->validation_matches = $data['matches'];
+        }
+        if (isset($data['extensions'])) {
+            $this->setExtensions($data['extensions']);
+        }
+        if (isset($data['display_fullname'])) {
+            $this->display_fullname = $data['display_fullname'];
+        }
+        if (isset($data['firstline'])) {
+            $this->initialization_firstline = $data['firstline'];
+        }
         return parent::showInput($data);
     }
-/**
- * Validate the file
- *
- * @return bool Returns true if the value passes all validation checks; otherwise returns false.
- */
+    /**
+     * Validate the file
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         // use the real path here for file checking
-        $filepath = realpath($this->initialization_basedirectory.'/'.$value);
-        if (!empty($value) &&
+        $filepath = realpath($this->initialization_basedirectory . '/' . $value);
+        if (!empty($value)
             //slight change to allow spaces
-            preg_match('/^[a-zA-Z0-9_\/.\-\040]+$/',$value) &&
-            $this->validateExtension($value) &&
-            file_exists($filepath) &&
-            is_file($filepath)) {
+            && preg_match('/^[a-zA-Z0-9_\/.\-\040]+$/', $value)
+            && $this->validateExtension($value)
+            && file_exists($filepath)
+            && is_file($filepath)) {
             return true;
         } elseif (empty($value)) {
             return true;
@@ -129,14 +144,16 @@ class FilePickerProperty extends SelectProperty
     /**
      * Retrieve the list of options on demand
      */
-    function getOptions()
+    public function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
         }
-        
+
         $options = [];
-        if (empty($this->initialization_basedirectory)) return [];
+        if (empty($this->initialization_basedirectory)) {
+            return [];
+        }
 
         // This works with relative directories - but they must be accessible first :-)
         if (!is_dir($this->initialization_basedirectory)) {
@@ -150,16 +167,26 @@ class FilePickerProperty extends SelectProperty
         } catch (DirectoryNotFoundException $e) {
             return [];
         }
-        
-        for($dir->rewind();$dir->valid();$dir->next()) {
-            if($dir->isDir()) continue; // no dirs
-            if(!$this->validateExtension($dir->getExtension())) continue;
-            if($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
+
+        for ($dir->rewind();$dir->valid();$dir->next()) {
+            if ($dir->isDir()) {
+                continue;
+            } // no dirs
+            if (!$this->validateExtension($dir->getExtension())) {
+                continue;
+            }
+            if ($dir->isDot()) {
+                continue;
+            } // temp for emacs insanity and skip hidden files while we're at it
             $name = $dir->getFileName();
             $id = $name;
-            if (!$this->display_fullname) $name = substr($name, 0, strlen($name) - strlen($dir->getExtension()) - 1);
-            if(!empty($this->validation_matches) && (strpos($this->validation_matches,$name) === false)) continue;
-            $options[$name] = array('id' => $id, 'name' => $name);
+            if (!$this->display_fullname) {
+                $name = substr($name, 0, strlen($name) - strlen($dir->getExtension()) - 1);
+            }
+            if (!empty($this->validation_matches) && (strpos($this->validation_matches, $name) === false)) {
+                continue;
+            }
+            $options[$name] = ['id' => $id, 'name' => $name];
         }
         ksort($options);
 
@@ -172,7 +199,7 @@ class FilePickerProperty extends SelectProperty
 
     /**
      * Set the list/regex of allowed file extensions, depending on the syntax used (cfr. image, webpage, ...)
-     * 
+     *
      * @param string|string[] $file_extensions String or array of file extensions.
      *                                      If a string is used, multiple file extensions shall be
      *                                      separated by "," or valid regular expression
@@ -189,11 +216,11 @@ class FilePickerProperty extends SelectProperty
             if (is_array($this->validation_file_extensions)) {
                 $this->file_extension_list = $this->validation_file_extensions;
 
-            // example: gif,jpg,jpeg,png,bmp,txt,htm,html
+                // example: gif,jpg,jpeg,png,bmp,txt,htm,html
             } elseif (strpos($this->validation_file_extensions, ',') !== false) {
                 $this->file_extension_list = explode(',', $this->validation_file_extensions);
 
-            // example: gif|jpe?g|png|bmp|txt|html?
+                // example: gif|jpe?g|png|bmp|txt|html?
             } else {
                 $this->file_extension_regex = $this->validation_file_extensions;
             }
@@ -203,7 +230,7 @@ class FilePickerProperty extends SelectProperty
     /**
      * Validate the given filename against the list/regex of allowed file extensions
      * This method can take an extension or a full file name
-     * 
+     *
      * @param string $filename Extension or full file name
      * @return boolean
      */
@@ -217,12 +244,12 @@ class FilePickerProperty extends SelectProperty
             $extension = $filename;
         }
 
-        if (!empty($this->file_extension_list) &&
-            !in_array($extension, $this->file_extension_list)) {
+        if (!empty($this->file_extension_list)
+            && !in_array($extension, $this->file_extension_list)) {
             return false;
         }
-        if (!empty($this->file_extension_regex) &&
-            !preg_match('/^' . $this->file_extension_regex . '$/', $extension)) {
+        if (!empty($this->file_extension_regex)
+            && !preg_match('/^' . $this->file_extension_regex . '$/', $extension)) {
             return false;
         }
         return true;

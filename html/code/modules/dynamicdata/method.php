@@ -29,7 +29,7 @@ class MethodClass extends CoreMethodClass
     /**
      * Get module util API class for this module
      */
-    public function utilapi(): UserApiInterface|null
+    public function utilapi(): ?UserApiInterface
     {
         return $this->getParent()->utilapi();
     }
@@ -37,7 +37,7 @@ class MethodClass extends CoreMethodClass
     /**
      * Get module data API class for this module
      */
-    public function dataapi(): UserApiInterface|null
+    public function dataapi(): ?UserApiInterface
     {
         return $this->getParent()->dataapi();
     }

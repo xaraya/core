@@ -36,12 +36,12 @@ class GetstatesMethod extends MethodClass
     public function __invoke(array $args = [])
     {
         return [
-            xarBlock::BLOCK_STATE_INACTIVE =>
-                ['id' => xarBlock::BLOCK_STATE_INACTIVE, 'name' => $this->ml('Inactive')],
-            xarBlock::BLOCK_STATE_HIDDEN =>
-                ['id' => xarBlock::BLOCK_STATE_HIDDEN, 'name' => $this->ml('Hidden')],
-            xarBlock::BLOCK_STATE_VISIBLE =>
-                ['id' => xarBlock::BLOCK_STATE_VISIBLE, 'name' => $this->ml('Visible')],
+            xarBlock::BLOCK_STATE_INACTIVE
+                => ['id' => xarBlock::BLOCK_STATE_INACTIVE, 'name' => $this->ml('Inactive')],
+            xarBlock::BLOCK_STATE_HIDDEN
+                => ['id' => xarBlock::BLOCK_STATE_HIDDEN, 'name' => $this->ml('Hidden')],
+            xarBlock::BLOCK_STATE_VISIBLE
+                => ['id' => xarBlock::BLOCK_STATE_VISIBLE, 'name' => $this->ml('Visible')],
         ];
     }
 }

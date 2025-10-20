@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Online Block
  *
@@ -27,7 +28,7 @@ class Roles_OnlineBlock extends BasicBlock
     protected $text_type           = 'Online';
     protected $text_type_long      = 'Display who is online';
     protected $show_preview        = true;
-        
+
     public $showusers = true;
     public $showusertotal = false;
     public $showanontotal = false;

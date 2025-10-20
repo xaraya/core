@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ModDeactivate System Event Subject
  * Notifies observers when a module is deactivated (via xarMod::apiFunc('modules','admin','deactivate')
@@ -21,6 +22,6 @@ class ModulesModDeactivateSubject extends EventSubject implements ixarEventSubje
     **/
     public function __construct($modName)
     {
-        parent::__construct($modName);                             
+        parent::__construct($modName);
     }
 }

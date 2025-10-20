@@ -442,8 +442,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
                 }
                 // Filter out properties with the state chosen above, and also the disabled properties
                 foreach ($this->properties as $property) {
-                    if ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED &&
-                       $property->getDisplayStatus() != $not_allowed_state) {
+                    if ($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED
+                       && $property->getDisplayStatus() != $not_allowed_state) {
                         $fields[$property->id] = $property->name;
                     }
                 }
@@ -1126,8 +1126,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
 
         foreach ($object->properties as $name => $property) {
             // Recursive call for subitems properties
-            if ($object->properties[$name]->type == 30069 &&
-                $object->properties[$name]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED
+            if ($object->properties[$name]->type == 30069
+                && $object->properties[$name]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED
             ) {
                 $this->assembleQuery($object->properties[$name]->subitemsobject, true);
             }

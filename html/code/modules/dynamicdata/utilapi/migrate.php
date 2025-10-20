@@ -145,8 +145,8 @@ class MigrateMethod extends MethodClass
 
             case 'dynamicdata':
                 $items = $userapi->getitems(['module_id' => $from['module'],
-                        'itemtype' => $from['itemtype'],
-                        'itemids' => $itemids]);
+                    'itemtype' => $from['itemtype'],
+                    'itemids' => $itemids]);
                 if (!isset($items)) {
                     return;
                 }
@@ -535,8 +535,8 @@ class MigrateMethod extends MethodClass
             if (empty($itemid) || empty($newid)) {
                 continue;
             }
-            if ($from['module'] == $to['module'] && $newid == $itemid &&
-                ($moduleto == 'articles' || $moduleto == 'xarbb' || $moduleto == 'xarpages')) {
+            if ($from['module'] == $to['module'] && $newid == $itemid
+                && ($moduleto == 'articles' || $moduleto == 'xarbb' || $moduleto == 'xarpages')) {
                 // don't delete articles or topics when moving itemtypes
                 continue;
             } elseif ($from['module'] == $to['module'] && $from['itemtype'] == $to['itemtype'] && $newid == $itemid) {
@@ -568,7 +568,8 @@ class MigrateMethod extends MethodClass
 
                 case 'dynamicdata':
                     if (empty($debug)) {
-                        if (!$adminapi->delete(['module_id'    => $from['module'],
+                        if (!$adminapi->delete(
+                            ['module_id'    => $from['module'],
                                 'itemtype' => $from['itemtype'],
                                 'itemid'   => $itemid]
                         )) {

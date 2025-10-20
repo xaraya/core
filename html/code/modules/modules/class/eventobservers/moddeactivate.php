@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ModDeactivate Subject Observer
  *
@@ -25,7 +26,7 @@ class ModulesModDeactivateObserver extends EventObserver implements ixarEventObs
                 xarPageCache::flushCached('base');
             }
         }
-        // let any hooks know the module was deactivated    
-        xarHooks::notify('ModuleDeactivate', array('objectid' => $modName, 'module' => $modName));
+        // let any hooks know the module was deactivated
+        xarHooks::notify('ModuleDeactivate', ['objectid' => $modName, 'module' => $modName]);
     }
 }

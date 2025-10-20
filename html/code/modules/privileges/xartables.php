@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\privileges
  * @subpackage privileges

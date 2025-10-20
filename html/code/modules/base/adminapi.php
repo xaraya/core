@@ -41,7 +41,7 @@ class AdminApi extends AdminApiClass
      * with $args['database_middleware'] Name of the chosen middleware
      * @return array Returns a dropdown array of the databases supported by the middleware
      */
-    public static function getSupportedDbs($args) 
+    public static function getSupportedDbs($args)
     {
         if (is_array($args)) {
             extract($args);

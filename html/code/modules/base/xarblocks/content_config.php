@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Content Block configuration interface
  *
@@ -20,10 +21,9 @@
 sys::import('modules.base.xarblocks.content');
 class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
 {
-
     /**
      * Modify Function to the Blocks Admin
-     * 
+     *
      * @author Jason Judge
      * @return string Returns display data
      */
@@ -31,12 +31,12 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
     {
         $data = $this->getContent();
         // Drop-down list defining content type.
-        $content_types = array();
-        $content_types[] = array('value' => 'text', 'label' => $this->ml('Text'));
-        $content_types[] = array('value' => 'html', 'label' => $this->ml('HTML'));
-        $content_types[] = array('value' => 'bl', 'label'   => $this->ml('Blocklayout'));
-        $content_types[] = array('value' => 'php', 'label'  => $this->ml('PHP (echo capture)'));
-        $content_types[] = array('value' => 'data', 'label' => $this->ml('PHP (template data)'));
+        $content_types = [];
+        $content_types[] = ['value' => 'text', 'label' => $this->ml('Text')];
+        $content_types[] = ['value' => 'html', 'label' => $this->ml('HTML')];
+        $content_types[] = ['value' => 'bl', 'label'   => $this->ml('Blocklayout')];
+        $content_types[] = ['value' => 'php', 'label'  => $this->ml('PHP (echo capture)')];
+        $content_types[] = ['value' => 'data', 'label' => $this->ml('PHP (template data)')];
         $data['content_types'] = $content_types;
         return $data;
     }
@@ -46,7 +46,7 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
      * @param array<string, mixed> $data Data array for configuration update
      * @return boolean Returns true on success, false on failure
      */
-    public function configupdate(Array $data=array())
+    public function configupdate(array $data = [])
     {
         if ($this->var()->find('content_type', $content_type, 'pre:lower:passthru:enum:text:html:bl:php:custom:data', 'text')) {
             $args['content_type'] = $content_type;

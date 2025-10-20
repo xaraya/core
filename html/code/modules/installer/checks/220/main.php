@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -24,35 +25,35 @@
 function main_check_220()
 {
     $data['check']['message'] = xarML('The database checks to version 2.2.0 were successfully completed');
-    $data['check']['tasks'] = array();
-    $data['upgrade'] = array();
-    
-    $checks = array(
-                        'sql_220_dynamic_objects',
-                        'sql_220_events',
-                        'sql_220_hooks',
-                    );
+    $data['check']['tasks'] = [];
+    $data['upgrade'] = [];
+
+    $checks = [
+        'sql_220_dynamic_objects',
+        'sql_220_events',
+        'sql_220_hooks',
+    ];
     foreach ($checks as $check) {
         if (!Upgrader::loadFile('checks/220/database/' . $check . '.php')) {
-            $data['check']['tasks'][] = array(
+            $data['check']['tasks'][] = [
                 'reply' => xarML('Failed!'),
                 'description' => Upgrader::$errormessage,
                 'reference' => $check,
                 'success' => false,
-            );
+            ];
             $data['check']['errormessage'] = xarML('Some checks failed. Check the reference(s) above to determine the cause.');
             continue;
         }
         $result = $check();
-        $data['check']['tasks'][] = array(
-                            'reply' => $result['reply'],
-                            'description' => $result['task'],
-                            'reference' => $check,
-                            'success' => $result['success'],
-                            );
+        $data['check']['tasks'][] = [
+            'reply' => $result['reply'],
+            'description' => $result['task'],
+            'reference' => $check,
+            'success' => $result['success'],
+        ];
         if (!$result['success']) {
             $data['check']['errormessage'] = xarML('Some checks failed. Check the reference(s) above to determine the cause.');
-//            break;
+            //            break;
         }
     }
     return $data;

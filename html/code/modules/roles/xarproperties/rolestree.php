@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.dynamicdata.class.properties.base');
 
@@ -19,9 +20,9 @@ class RolesTreeProperty extends DataProperty
     public $id         = 30044;
     public $name       = 'rolestree';
     public $desc       = 'Roles Tree';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
 
@@ -29,15 +30,17 @@ class RolesTreeProperty extends DataProperty
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
-	/**
-	 * Display the property for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display the property for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (!isset($data['topid'])) $data['topid'] = (int)$this->mod()->getVar('everybody');
+        if (!isset($data['topid'])) {
+            $data['topid'] = (int) $this->mod()->getVar('everybody');
+        }
         $node = new TreeNode($data['topid']);
         $tree = new RolesTree($node);
         $data['nodes'] = $node->depthfirstenumeration();
@@ -62,22 +65,22 @@ sys::import('xaraya.structures.tree');
  */
 class RolesTree extends Tree
 {
-	/**
-	*  Create nodes for a tree format
-	* 
-	* @param  TreeNode data An array of input parameters
-	*/
-    function createnodes(TreeNode $node)
+    /**
+    *  Create nodes for a tree format
+    *
+    * @param  TreeNode data An array of input parameters
+    */
+    public function createnodes(TreeNode $node)
     {
         sys::import('modules.roles.class.roles');
         $data = xarRoles::getgroups();
-         foreach ($data as $row) {
-            $nodedata = array(
+        foreach ($data as $row) {
+            $nodedata = [
                 'id' => $row['id'],
                 'parent' => $row['parentid'],
                 'name' => $row['name'],
                 'users' => $row['users'],
-            );
+            ];
             $this->treedata[] = $nodedata;
         }
         parent::createnodes($node);

@@ -111,7 +111,8 @@ class ExportMethod extends MethodClass
         } elseif (is_numeric($itemid)) {
             $data['label'] = $this->ml('Export Data for #(1) # #(2)', $myobject->label, $itemid);
 
-            $xml = $utilapi->exportItem(['objectid' => $myobject->objectid,
+            $xml = $utilapi->exportItem(
+                ['objectid' => $myobject->objectid,
                     'itemid' => $itemid,
                     'format' => $format]
             );
@@ -121,7 +122,8 @@ class ExportMethod extends MethodClass
         } elseif ($itemid == 'all') {
             $data['label'] = $this->ml('Export Data for all #(1) Items', $myobject->label);
 
-            $xml = $utilapi->exportItems(['objectid' => $myobject->objectid,
+            $xml = $utilapi->exportItems(
+                ['objectid' => $myobject->objectid,
                     'format' => $format]
             );
             $ext = '-dat';

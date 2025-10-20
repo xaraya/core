@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User Info via block
  *
@@ -26,15 +27,17 @@ class Roles_UserBlock extends BasicBlock
     protected $text_type_long      = 'User\'s Custom Box';
     protected $show_preview        = true;
 
-	/**
+    /**
      * Display the user info via block
-     * 
+     *
      * @param array<string, mixed> $data Data array
      * @return array<mixed>|void Display data array or null if nothing is to display.
      */
-    function display(Array $data=array())
+    public function display(array $data = [])
     {
-        if (!$this->user()->isLoggedIn()) return;
+        if (!$this->user()->isLoggedIn()) {
+            return;
+        }
         $data['name'] = $this->user()->getName();
         return $data;
     }

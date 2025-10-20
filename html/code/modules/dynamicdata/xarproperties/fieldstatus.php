@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -61,7 +62,7 @@ class FieldStatusProperty extends SelectProperty
 
         $data['value'] = $valuearray;
 
-        if(!isset($data['onchange'])) {
+        if (!isset($data['onchange'])) {
             $data['onchange'] = null;
         } // let tpl decide what to do
         $data['extraparams'] ??= "";
@@ -114,8 +115,8 @@ class FieldStatusProperty extends SelectProperty
         }
 
         // Just really check whether we're in bounds. Don't think more is required
-        if (($value >= DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) &&
-            ($value <= DataPropertyMaster::DD_INPUTSTATE_MODIFY)) {
+        if (($value >= DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            && ($value <= DataPropertyMaster::DD_INPUTSTATE_MODIFY)) {
             return true;
         }
         return false;
@@ -128,19 +129,19 @@ class FieldStatusProperty extends SelectProperty
     public function getOptions()
     {
         $options['display'] = [
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => $this->ml('All Views')],
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY, 'name' => $this->ml('List only')],
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => $this->ml('Display only')],
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => $this->ml('Hidden')],
-                             ['id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => $this->ml('Disabled')],
-                         ];
+            ['id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => $this->ml('All Views')],
+            ['id' => DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY, 'name' => $this->ml('List only')],
+            ['id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => $this->ml('Display only')],
+            ['id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => $this->ml('Hidden')],
+            ['id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => $this->ml('Disabled')],
+        ];
         $options['input'] = [
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_IGNORED, 'name' => $this->ml('Ignored for input')],
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => $this->ml('No manual input')],
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_ADD, 'name' => $this->ml('Can be added')],
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_MODIFY, 'name' => $this->ml('Can be changed')],
-                             ['id' => DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY, 'name' => $this->ml('Can be added/changed')],
-                         ];
+            ['id' => DataPropertyMaster::DD_INPUTSTATE_IGNORED, 'name' => $this->ml('Ignored for input')],
+            ['id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => $this->ml('No manual input')],
+            ['id' => DataPropertyMaster::DD_INPUTSTATE_ADD, 'name' => $this->ml('Can be added')],
+            ['id' => DataPropertyMaster::DD_INPUTSTATE_MODIFY, 'name' => $this->ml('Can be changed')],
+            ['id' => DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY, 'name' => $this->ml('Can be added/changed')],
+        ];
         return $options;
     }
 

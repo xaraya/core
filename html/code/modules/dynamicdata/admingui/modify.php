@@ -177,8 +177,8 @@ class ModifyMethod extends MethodClass
         $data['authid'] = $this->sec()->genAuthKey();
         $data['context'] = $object->getContext();
 
-        if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
-            file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
+        if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt')
+            || file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
             return $this->tpl()->module($args['tplmodule'], 'admin', 'modify', $data, $args['template']);
         } else {
             return $this->tpl()->module('dynamicdata', 'admin', 'modify', $data, $args['template']);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -13,32 +14,32 @@
 function main_upgrade_240()
 {
     $data['upgrade']['message'] = xarML('The upgrade to version 2.4.0 was successfully completed');
-    $data['upgrade']['tasks'] = array();
-    
-    $upgrades = array(
-                        'sql_240_01', // Upgrading the core module version numbers
-                    );
+    $data['upgrade']['tasks'] = [];
+
+    $upgrades = [
+        'sql_240_01', // Upgrading the core module version numbers
+    ];
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/240/database/' . $upgrade . '.php')) {
-            $data['upgrade']['tasks'][] = array(
+            $data['upgrade']['tasks'][] = [
                 'reply' => xarML('Failed!'),
                 'description' => Upgrader::$errormessage,
                 'reference' => $upgrade,
                 'success' => false,
-            );
+            ];
             $data['upgrade']['errormessage'] = xarML('Some checks failed. Check the reference(s) above to determine the cause.');
             continue;
         }
         $result = $upgrade();
-        $data['upgrade']['tasks'][] = array(
-                            'reply' => $result['reply'],
-                            'description' => $result['task'],
-                            'reference' => $upgrade,
-                            'success' => $result['success'],
-                            );        
+        $data['upgrade']['tasks'][] = [
+            'reply' => $result['reply'],
+            'description' => $result['task'],
+            'reference' => $upgrade,
+            'success' => $result['success'],
+        ];
         if (!$result['success']) {
             $data['upgrade']['errormessage'] = xarML('Some parts of the upgrade failed. Check the reference(s) above to determine the cause.');
-//            break;
+            //            break;
         }
     }
     return $data;

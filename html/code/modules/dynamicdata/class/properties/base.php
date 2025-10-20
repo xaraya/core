@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -141,16 +142,16 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             $this->parseConfiguration($this->configuration);
         }
 
-        if(!isset($args['value'])) {
+        if (!isset($args['value'])) {
             // if the default field looks like <something>(...), we'll assume that this
             // a function call that returns some dynamic default value
             // Expression stolen from http://php.net/functions
-            if(!empty($this->defaultvalue) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/', $this->defaultvalue)) {
+            if (!empty($this->defaultvalue) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/', $this->defaultvalue)) {
                 try {
                     /** @var mixed|null $value */
                     $value = null;
                     eval('$value = ' . $this->defaultvalue . ';');
-                    if(isset($value)) {
+                    if (isset($value)) {
                         $this->defaultvalue = $value;
                     } else {
                         $this->defaultvalue = null;
@@ -272,7 +273,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         $found = false;
         $value = null;
         $this->var()->check($name, $namevalue);
-        if(isset($namevalue)) {
+        if (isset($namevalue)) {
             $found = true;
             $value = $namevalue;
         }
@@ -293,7 +294,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         // Store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         $this->invalid = '';
-        if(!isset($value)) {
+        if (!isset($value)) {
             [$found, $value] = $this->fetchValue($name);
             if (!$found) {
                 $this->objectref->missingfields[] = $this->name;
@@ -324,7 +325,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
     {
         $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
-        if(!isset($value)) {
+        if (!isset($value)) {
             $value = $this->getValue();
         } else {
             $this->setValue($value);
@@ -462,11 +463,11 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             }
         }
 
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
+        if ($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
             return $this->showHidden($data);
         }
 
-        if($this->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_NOINPUT) {
+        if ($this->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_NOINPUT) {
             return $this->showOutput($data) . $this->showHidden($data);
         }
 
@@ -481,42 +482,42 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         // Add the object's field prefix if there is one
         $prefix = '';
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0) {
+        if (!empty($this->_fieldprefix) || $this->_fieldprefix === 0) {
             $prefix = $this->_fieldprefix . '_';
         }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix'])) {
+        if (isset($data['fieldprefix'])) {
             $prefix = $data['fieldprefix'] . '_';
         }
-        if(!empty($prefix)) {
+        if (!empty($prefix)) {
             $name = $prefix . $name;
         }
-        if(!empty($prefix)) {
+        if (!empty($prefix)) {
             $id = $prefix . $id;
         }
 
         // Allow for overrides form the template
-        if(!isset($data['id'])) {
+        if (!isset($data['id'])) {
             $data['id']   = $id;
         }
-        if(!isset($data['name'])) {
+        if (!isset($data['name'])) {
             $data['name']   = $name;
         }
 
-        if(!isset($data['tplmodule'])) {
+        if (!isset($data['tplmodule'])) {
             $data['tplmodule']   = $this->tplmodule;
         }
-        if(!isset($data['template'])) {
+        if (!isset($data['template'])) {
             $data['template'] = $this->template;
         }
-        if(!isset($data['layout'])) {
+        if (!isset($data['layout'])) {
             $data['layout']   = $this->display_layout;
         }
 
-        if(!isset($data['tabindex'])) {
+        if (!isset($data['tabindex'])) {
             $data['tabindex'] = 0;
         }
-        if(!isset($data['value'])) {
+        if (!isset($data['value'])) {
             $data['value']    = $this->value;
         }
         if (!empty($this->invalid)) {
@@ -526,7 +527,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         }
 
         // Add the configuration options defined via UI
-        if(isset($data['configuration'])) {
+        if (isset($data['configuration'])) {
             $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
@@ -562,7 +563,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             }
         }
 
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
+        if ($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
             return $this->showHidden($data);
         }
 
@@ -572,7 +573,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             $data['_itemid'] = 0;
         }
 
-        if(!isset($data['value'])) {
+        if (!isset($data['value'])) {
             $data['value']    = $this->value;
         }
 
@@ -588,18 +589,18 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         }
 
         // TODO: does this hurt when it is an array?
-        if(!isset($data['tplmodule'])) {
+        if (!isset($data['tplmodule'])) {
             $data['tplmodule']   = $this->tplmodule;
         }
-        if(!isset($data['template'])) {
+        if (!isset($data['template'])) {
             $data['template'] = $this->template;
         }
-        if(!isset($data['layout'])) {
+        if (!isset($data['layout'])) {
             $data['layout']   = $this->display_layout;
         }
 
         // Add the configuration options defined via UI
-        if(isset($data['configuration'])) {
+        if (isset($data['configuration'])) {
             $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
@@ -626,50 +627,50 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     public function showLabel(array $data = [])
     {
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
+        if ($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
             return "";
         }
 
-        if(empty($data)) {
+        if (empty($data)) {
             // old syntax was showLabel($label = null)
-        } elseif(is_string($data)) {
+        } elseif (is_string($data)) {
             $label = $data;
-        } elseif(is_array($data)) {
+        } elseif (is_array($data)) {
             extract($data);
         }
 
         $data['name']  = $this->name;
         $data['name']     = !empty($data['name']) ? $data['name'] : $this->propertyprefix . $this->id;
         $data['id']       = !empty($data['id']) ? $data['id'] : $this->propertyprefix . $this->id;
-        if(!isset($data['id'])) {
+        if (!isset($data['id'])) {
             $data['id']   = $data['name'];
         }
 
         $data['label'] = isset($data['label']) ? $this->var()->prep($data['label']) : $this->var()->prep($this->label);
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
+        if (!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
             $data['fieldprefix'] = $this->_fieldprefix;
         }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix'])) {
+        if (isset($data['fieldprefix'])) {
             $prefix = $data['fieldprefix'] . '_';
         }
-        if(!empty($prefix)) {
+        if (!empty($prefix)) {
             $data['name'] = $prefix . $data['name'];
         }
-        if(!empty($prefix)) {
+        if (!empty($prefix)) {
             $data['id'] = $prefix . $data['id'];
         }
-        if(!isset($data['tplmodule'])) {
+        if (!isset($data['tplmodule'])) {
             $data['tplmodule']   = $this->tplmodule;
         }
-        if(!isset($data['template'])) {
+        if (!isset($data['template'])) {
             $data['template'] = $this->template;
         }
-        if(!isset($data['layout'])) {
+        if (!isset($data['layout'])) {
             $data['layout']   = $this->layout;
         }
-        if(!isset($data['title'])) {
+        if (!isset($data['title'])) {
             $data['title']   = $this->display_tooltip;
         }
         return $this->tpl()->property($data['tplmodule'], $data['template'], 'label', $data);
@@ -688,10 +689,10 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
     {
         // FIXME: Move the valid options as properties to each dataproperty
         // A filter cannot be hidden or disables
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
+        if ($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
             return "";
         }
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
+        if ($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
             return "";
         }
 
@@ -703,19 +704,19 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
 
         // This is the array of all possible filter options
         $filteroptions = [
-                            ''        => ['id' => '', 'name' => $this->ml('not used')],
-                            '='       => ['id' => 'eq', 'name' => $this->ml('equals')],
-                            '!='      => ['id' => 'ne', 'name' => $this->ml('not equals')],
-                            '>'       => ['id' => 'gt', 'name' => $this->ml('greater than')],
-                            '>='      => ['id' => 'ge', 'name' => $this->ml('greater than or equal')],
-                            '<'       => ['id' => 'lt', 'name' => $this->ml('less than')],
-                            '<='      => ['id' => 'le', 'name' => $this->ml('less than or equal')],
-                            'like'    => ['id' => 'like', 'name' => $this->ml('like')],
-                            'notlike' => ['id' => 'notlike', 'name' => $this->ml('not like')],
-                            'null'    => ['id' => 'null', 'name' => $this->ml('is null')],
-                            'notnull' => ['id' => 'notnull', 'name' => $this->ml('is not null')],
-                            'regex'   => ['id' => 'regex', 'name' => $this->ml('regular expression')],
-                        ];
+            ''        => ['id' => '', 'name' => $this->ml('not used')],
+            '='       => ['id' => 'eq', 'name' => $this->ml('equals')],
+            '!='      => ['id' => 'ne', 'name' => $this->ml('not equals')],
+            '>'       => ['id' => 'gt', 'name' => $this->ml('greater than')],
+            '>='      => ['id' => 'ge', 'name' => $this->ml('greater than or equal')],
+            '<'       => ['id' => 'lt', 'name' => $this->ml('less than')],
+            '<='      => ['id' => 'le', 'name' => $this->ml('less than or equal')],
+            'like'    => ['id' => 'like', 'name' => $this->ml('like')],
+            'notlike' => ['id' => 'notlike', 'name' => $this->ml('not like')],
+            'null'    => ['id' => 'null', 'name' => $this->ml('is null')],
+            'notnull' => ['id' => 'notnull', 'name' => $this->ml('is not null')],
+            'regex'   => ['id' => 'regex', 'name' => $this->ml('regular expression')],
+        ];
 
         $data['filters'] ??= [];
 
@@ -748,26 +749,26 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         }
 
         $data['value'] = $data['filter'] ?? $this->filter;
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
+        if (!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
             $prefix = $this->_fieldprefix . '_';
         }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix'])) {
+        if (isset($data['fieldprefix'])) {
             $prefix = $data['fieldprefix'] . '_';
         }
-        if(!empty($prefix)) {
+        if (!empty($prefix)) {
             $data['name'] = $prefix . $data['name'];
         }
-        if(!empty($prefix)) {
+        if (!empty($prefix)) {
             $data['id'] = $prefix . $data['id'];
         }
-        if(!isset($data['tplmodule'])) {
+        if (!isset($data['tplmodule'])) {
             $data['tplmodule']   = $this->tplmodule;
         }
-        if(!isset($data['template'])) {
+        if (!isset($data['template'])) {
             $data['template'] = $this->template;
         }
-        if(!isset($data['layout'])) {
+        if (!isset($data['layout'])) {
             $data['layout']   = $this->layout;
         }
         return $this->tpl()->property($data['tplmodule'], $data['template'], 'filter', $data);
@@ -791,17 +792,17 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         // Add the object's field prefix if there is one
         $prefix = '';
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
+        if (!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
             $prefix = $this->_fieldprefix . '_';
         }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix'])) {
+        if (isset($data['fieldprefix'])) {
             $prefix = $data['fieldprefix'] . '_';
         }
-        if(!empty($prefix)) {
+        if (!empty($prefix)) {
             $data['name'] = $prefix . $data['name'];
         }
-        if(!empty($prefix)) {
+        if (!empty($prefix)) {
             $data['id'] = $prefix . $data['id'];
         }
 
@@ -819,13 +820,13 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         }
 
         $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->invalid;
-        if(!isset($data['tplmodule'])) {
+        if (!isset($data['tplmodule'])) {
             $data['tplmodule']   = $this->tplmodule;
         }
-        if(!isset($data['template'])) {
+        if (!isset($data['template'])) {
             $data['template'] = $this->template;
         }
-        if(!isset($data['layout'])) {
+        if (!isset($data['layout'])) {
             $data['layout']   = $this->layout;
         }
 
@@ -850,16 +851,16 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     final public function _showPreset(array $data = [])
     {
-        if(empty($data['name'])) {
+        if (empty($data['name'])) {
             $isvalid = $this->checkInput();
         } else {
             $isvalid = $this->checkInput($data['name']);
         }
-        if(!$isvalid) {
+        if (!$isvalid) {
             $isvalid = $this->checkInput($this->name);
         }
 
-        if(!empty($data['hidden'])) {
+        if (!empty($data['hidden'])) {
             return $this->showHidden($data);
         } else {
             return $this->showInput($data);
@@ -882,8 +883,8 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
             // fall back to the old N:M validation for text boxes et al. (cfr. utilapi_getstatic/getmeta)
         } elseif (preg_match('/^(\d+):(\d+)$/', $configuration, $matches)) {
             $fields = ['validation_min_length' => $matches[1],
-                            'validation_max_length' => $matches[2],
-                            'display_maxlength'     => $matches[2]];
+                'validation_max_length' => $matches[2],
+                'display_maxlength'     => $matches[2]];
 
             // try normal serialized configuration
         } else {
@@ -963,13 +964,13 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         } else {
             $data['required'] = false;
         }
-        if(!isset($data['module'])) {
+        if (!isset($data['module'])) {
             $data['module']   = $this->tplmodule;
         }
-        if(!isset($data['template'])) {
+        if (!isset($data['template'])) {
             $data['template'] = $this->template;
         }
-        if(!isset($data['layout'])) {
+        if (!isset($data['layout'])) {
             $data['layout']   = $this->display_layout;
         }
 
@@ -1146,7 +1147,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     protected function getCanonicalName($data = null)
     {
-        if(!isset($data['name'])) {
+        if (!isset($data['name'])) {
             if ($this->anonymous == true) {
                 $data['name'] = $this->name;
             } else {
@@ -1164,7 +1165,7 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
      */
     protected function getCanonicalID($data = null)
     {
-        if(!isset($data['id'])) {
+        if (!isset($data['id'])) {
             $data['id']   = $this->getCanonicalName($data);
         }
         $data['id'] = $this->getPrefix($data) . $data['id'];
@@ -1181,11 +1182,11 @@ class DataProperty extends xarObject implements iDataProperty, DataPropertyServi
         // Add the object's field prefix if there is one
         $prefix = '';
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0) {
+        if (!empty($this->_fieldprefix) || $this->_fieldprefix === 0) {
             $prefix = $this->_fieldprefix . '_';
         }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix'])) {
+        if (isset($data['fieldprefix'])) {
             $prefix = $data['fieldprefix'] . '_';
         }
         return $prefix;

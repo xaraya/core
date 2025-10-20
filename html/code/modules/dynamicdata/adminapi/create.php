@@ -53,8 +53,8 @@ class CreateMethod extends MethodClass
         if (!isset($itemid) || !is_numeric($itemid)) {
             $invalid[] = 'item id';
         }
-        if ((isset($fields) && is_array($fields)) ||
-            (isset($values) && is_array($values))) {
+        if ((isset($fields) && is_array($fields))
+            || (isset($values) && is_array($values))) {
         } else {
             $invalid[] = $this->ml('fields or values');
         }

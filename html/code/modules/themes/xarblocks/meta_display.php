@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Meta Block display interface
  *
@@ -23,22 +24,22 @@ sys::import('modules.themes.xarblocks.meta');
 sys::import('modules.themes.class.xarmeta');
 class Themes_MetaBlockDisplay extends Themes_MetaBlock
 {
-	/**
+    /**
      * Initialize the block display
      *
      * This method is called by the BasicBlock class constructor
      */
-    public function init() 
+    public function init()
     {
         parent::init();
     }
 
-	/**
-	 * Display func.
-	 * @param $data array containing title,content
-	 * @todo: add the same functionality for links we now use for metatags
-	 */
-    function display()
+    /**
+     * Display func.
+     * @param $data array containing title,content
+     * @todo: add the same functionality for links we now use for metatags
+     */
+    public function display()
     {
         $meta = $this->getContent();
         /** support for dynamic description and dynamic keywords is now
@@ -58,50 +59,51 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
 
         // By the time we get here, the stored metatags will already be queued
         // So we just need to add any tags with dynamic values, in this case
-        // the equiv meta tag now sets text/html as content, but this is 
-        // determined by the page template, in our current setup compiled too 
-        // late to pull it in here, this is addressed in the tpl_order 
-        // scenario, no choice but to leave or delete, leaving it for now 
+        // the equiv meta tag now sets text/html as content, but this is
+        // determined by the page template, in our current setup compiled too
+        // late to pull it in here, this is addressed in the tpl_order
+        // scenario, no choice but to leave or delete, leaving it for now
         sys::import('modules.themes.class.xarmeta');
         $xarmeta = xarMeta::getInstance();
-        $xarmeta->register(array(
+        $xarmeta->register([
             'type' => 'http-equiv',
             'value' => 'Content-Type',
             'content' => 'text/html; charset=' . $this->mls()->getCharsetFromLocale($this->mls()->getCurrentLocale()),
             'lang' => '',
             'dir' => '',
             'scheme' => '',
-        ));
+        ]);
         // while we're here, handle modules setting meta refresh via the cache
         // NOTE: this functionality is deprecated, instead use the xar:meta tag, eg...
         // <xar:meta type="http-equiv" value="refresh" content="3; URL=http://www.example.com"/>
-        if ($this->var()->isCached('Meta.refresh','url') && $this->var()->isCached('Meta.refresh','time')) {
-            $xarmeta->register(array(
+        if ($this->var()->isCached('Meta.refresh', 'url') && $this->var()->isCached('Meta.refresh', 'time')) {
+            $xarmeta->register([
                 'type' => 'http-equiv',
                 'value' => 'Refresh',
-                'content' => $this->var()->getCached('Meta.refresh','time').'; URL='.$this->var()->getCached('Meta.refresh','url'),
+                'content' => $this->var()->getCached('Meta.refresh', 'time') . '; URL=' . $this->var()->getCached('Meta.refresh', 'url'),
                 'lang' => '',
                 'dir' => '',
                 'scheme' => '',
-            ));
+            ]);
         }
 
-        if (!empty($this->linktags))
+        if (!empty($this->linktags)) {
             $meta['linktags'] = $this->parseLinkTags();
+        }
 
-         //Pager Buttons
-        $meta['first']          = $this->var()->getCached('Pager.first','leftarrow');
-        $meta['last']           = $this->var()->getCached('Pager.last','rightarrow');
+        //Pager Buttons
+        $meta['first']          = $this->var()->getCached('Pager.first', 'leftarrow');
+        $meta['last']           = $this->var()->getCached('Pager.last', 'rightarrow');
 
         return $meta;
 
     }
 
-	/**
+    /**
      * Method to get help content
-     * 
+     *
      * @return array<mixed> Display data array
-     */ 
+     */
     public function help()
     {
         return $this->getInfo();

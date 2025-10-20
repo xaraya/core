@@ -155,8 +155,8 @@ class DeleteMethod extends MethodClass
 
             $this->tpl()->setPageTitle($this->ml('Delete Item #(1) in #(2)', $data['itemid'], $myobject->label));
 
-            if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete.xt') ||
-                file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete-' . $data['template'] . '.xt')) {
+            if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete.xt')
+                || file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete-' . $data['template'] . '.xt')) {
                 return $this->tpl()->module($data['tplmodule'], 'admin', 'delete', $data, $data['template']);
             } else {
                 return $this->tpl()->module('dynamicdata', 'admin', 'delete', $data, $data['template']);

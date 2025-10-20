@@ -80,7 +80,7 @@ class GetrelationsMethod extends MethodClass
 
         // get the list of static properties for this module
         $static = $utilapi->getstatic(['module_id' => $module_id,
-                'itemtype' => $itemtype]);
+            'itemtype' => $itemtype]);
 
         // get the list of hook modules that are enabled for this module
         // TODO: get all hooks types, not only item display hooks

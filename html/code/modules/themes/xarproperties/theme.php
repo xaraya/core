@@ -1,4 +1,5 @@
 <?php
+
 sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
@@ -23,13 +24,13 @@ class ThemeProperty extends ObjectRefProperty
     public $id         = 38;
     public $name       = 'theme';
     public $desc       = 'Theme';
-    public $reqmodules = array('themes');
+    public $reqmodules = ['themes'];
 
     public $filter = [];
 
     public $initialization_refobject    = 'themes';            // The object we want to reference
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath = 'modules/themes/xarproperties';
@@ -38,35 +39,38 @@ class ThemeProperty extends ObjectRefProperty
         $this->initialization_display_prop = 'name';
     }
 
-	/**
-	 * Display a dropdown for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
-    function showInput(array $data = [])
+    /**
+     * Display a dropdown for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
+    public function showInput(array $data = [])
     {
-        if (!empty($data['filter'])) $this->filter = $data['filter'];
+        if (!empty($data['filter'])) {
+            $this->filter = $data['filter'];
+        }
         return parent::showInput($data);
     }
 
-	/**
+    /**
      * Retrieve the list of options on demand
-     * 
-	 * @return array<mixed> Returns list of options
+     *
+     * @return array<mixed> Returns list of options
      */
-    function getOptions()
+    public function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
         }
-        
+
         $options = [];
-        $items = $this->mod()->apiFunc('themes', 'admin', 'getlist',array('filter' => $this->filter));
-        foreach($items as $item) {
+        $items = $this->mod()->apiFunc('themes', 'admin', 'getlist', ['filter' => $this->filter]);
+        foreach ($items as $item) {
             try {
-                $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
-            } catch(Exception $e) {}
+                $options[] = ['id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]];
+            } catch (Exception $e) {
+            }
         }
         return $options;
     }

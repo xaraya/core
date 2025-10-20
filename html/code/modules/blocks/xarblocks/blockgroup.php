@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Blockgroup Block
  *
@@ -24,54 +25,61 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
  */
 class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
 {
-    
     protected $type                = 'blockgroup';
     protected $module              = 'blocks';
     protected $text_type           = 'Blockgroup';
     protected $text_type_long      = 'Blockgroup';
-    
+
     // let the blocks subsystem know we implement the iBlockGroup interface
     protected $type_category       = 'group';
 
     protected $allow_multiple      = true;
     protected $show_preview        = true;
-    
-    public $group_instances     = array();
 
-	/**
-	 * Implement required methods of the iBlockGroup interface
-	 **/
+    public $group_instances     = [];
+
+    /**
+     * Implement required methods of the iBlockGroup interface
+     **/
     public function attachInstance($block_id)
     {
-        if (in_array($block_id, $this->group_instances)) return true;
+        if (in_array($block_id, $this->group_instances)) {
+            return true;
+        }
         $this->group_instances[] = $block_id;
-        return true;      
+        return true;
     }
 
-	/**
+    /**
      * Detach the given block instance
-     * 
+     *
      * @param string $block_id block id to be detached
-     * @return boolean Returns true if $block_id not in group instances array 
+     * @return boolean Returns true if $block_id not in group instances array
      */
     public function detachInstance($block_id)
     {
-        if (!in_array($block_id, $this->group_instances)) return true;
-        $instances = array();
+        if (!in_array($block_id, $this->group_instances)) {
+            return true;
+        }
+        $instances = [];
         foreach ($this->group_instances as $id) {
-            if ($id == $block_id) continue; 
+            if ($id == $block_id) {
+                continue;
+            }
             $instances[] = $id;
         }
         $this->group_instances = $instances;
         return true;
     }
 
-	
+
     public function orderInstance($block_id, $direction)
     {
         foreach ($this->group_instances as $i => $id) {
-            if ($id != $block_id) continue;
-            $position = $direction == 'up' ? $i-1 : $i+1;
+            if ($id != $block_id) {
+                continue;
+            }
+            $position = $direction == 'up' ? $i - 1 : $i + 1;
             if (isset($this->group_instances[$position])) {
                 $temp = $this->group_instances[$position];
                 $this->group_instances[$position] = $block_id;
@@ -82,14 +90,15 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
         return true;
     }
 
-	/**
-	 * Get the group instances in array
-	 */
+    /**
+     * Get the group instances in array
+     */
     public function getInstances()
     {
-        $instances = array();
-        foreach ($this->group_instances as $id) 
+        $instances = [];
+        foreach ($this->group_instances as $id) {
             $instances[] = $id;
+        }
         return $this->group_instances = $instances;
     }
 

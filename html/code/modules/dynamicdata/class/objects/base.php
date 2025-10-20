@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -48,10 +49,10 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         $this->log()->info("DataObject::getItem: Retrieving an item of object " . $this->name);
 
-        if(!empty($args['itemid'])) {
-            if($args['itemid'] != $this->itemid) {
+        if (!empty($args['itemid'])) {
+            if ($args['itemid'] != $this->itemid) {
                 // initialise the properties again and refresh the contents of the object configuration
-                foreach($this->properties as $property) {
+                foreach ($this->properties as $property) {
                     $property->value = $property->defaultvalue;
                     $this->configuration['property_' . $property->name] = ['type' => &$property->type, 'value' => &$property->value];
                 }
@@ -72,27 +73,27 @@ class DataObject extends DataObjectMaster implements iDataObject
          */
         $itemid = $this->datastore->getItem($args);
 
-        if(!empty($args['fieldlist'])) {
+        if (!empty($args['fieldlist'])) {
             $this->setFieldList($args['fieldlist']);
         }
 
         // Turn the values retrieved into proper PHP values
-        foreach($this->properties as $property) {
+        foreach ($this->properties as $property) {
             try {
                 $property->value = $property->castType($property->value);
-            } catch(Exception) {
+            } catch (Exception) {
             }
         }
 
         foreach ($this->getFieldList() as $fieldname) {
-            if (empty($this->properties[$fieldname]->source) &&
-                method_exists($this->properties[$fieldname], 'mountValue')) {
+            if (empty($this->properties[$fieldname]->source)
+                && method_exists($this->properties[$fieldname], 'mountValue')) {
                 $this->properties[$fieldname]->mountValue($this->itemid);
             }
         }
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview'])) {
+        if (!empty($args['preview'])) {
             $this->checkInput();
         }
         return $itemid;
@@ -109,7 +110,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
 
         $invalids = [];
-        foreach($fields as $name) {
+        foreach ($fields as $name) {
             if (!empty($this->properties[$name]->invalid)) {
                 $invalids[$name] = $this->properties[$name]->invalid;
             }
@@ -134,7 +135,7 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         $this->log()->info("xarLog in clearInvalids function");
 
-        foreach(array_keys($this->properties) as $name) {
+        foreach (array_keys($this->properties) as $name) {
             $this->properties[$name]->invalid = '';
         }
         return true;
@@ -147,12 +148,12 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         $this->log()->info("DataObject::checkInput: Checking an item of object " . $this->name);
 
-        if(!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
+        if (!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
             $this->itemid = $args['itemid'];
             $this->getItem($args);
         }
 
-        if(!empty($args['fieldprefix'])) {
+        if (!empty($args['fieldprefix'])) {
             $this->fieldprefix = $args['fieldprefix'];
             // Allow 0 as a fieldprefix
         } elseif (isset($args['fieldprefix']) && $args['fieldprefix'] === '0') {
@@ -172,9 +173,9 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $this->missingfields = [];
         $badnames = [];
-        foreach($fields as $name) {
+        foreach ($fields as $name) {
             // Ignore disabled or ignored properties
-            if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            if (($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
             || ($this->properties[$name]->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED)) {
                 continue;
             }
@@ -197,14 +198,14 @@ class DataObject extends DataObjectMaster implements iDataObject
                 $name1 = $name2;
                 $name2 = $temp;
             }
-            if(isset($args[$name])) {
+            if (isset($args[$name])) {
                 // Name based check
                 $passed = $this->properties[$name]->checkInput($name1, $args[$name]);
                 if ($passed === null) {
                     array_pop($this->missingfields);
                     $passed = $this->properties[$name]->checkInput($name2, $args[$name]);
                 }
-            } elseif(isset($args[$ddname])) {
+            } elseif (isset($args[$ddname])) {
                 // No name, check based on field
                 $passed = $this->properties[$name]->checkInput($name1, $args[$ddname]);
                 if ($passed === null) {
@@ -262,7 +263,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $this->setFieldPrefix($args['fieldprefix']);
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview'])) {
+        if (!empty($args['preview'])) {
             $this->checkInput();
         }
 
@@ -280,19 +281,19 @@ class DataObject extends DataObjectMaster implements iDataObject
         if (empty($args['fieldlist'])) {
             $args['fieldlist'] = [];
         }
-        if(count($args['fieldlist']) > 0) {
+        if (count($args['fieldlist']) > 0) {
             $fields = $args['fieldlist'];
         } else {
             $fields = array_keys($this->properties);
         }
 
         $args['properties'] = [];
-        foreach($fields as $name) {
-            if(!isset($this->properties[$name])) {
+        foreach ($fields as $name) {
+            if (!isset($this->properties[$name])) {
                 continue;
             }
 
-            if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            if (($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) {
                 continue;
             }
@@ -317,7 +318,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $args = $this->toArray($args);
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
-        if(!empty($args['preview'])) {
+        if (!empty($args['preview'])) {
             $this->checkInput();
         }
 
@@ -342,12 +343,12 @@ class DataObject extends DataObjectMaster implements iDataObject
         $this->callHooks('transform');
 
         $args['properties'] = [];
-        foreach($this->fieldlist as $name) {
-            if(!isset($this->properties[$name])) {
+        foreach ($this->fieldlist as $name) {
+            if (!isset($this->properties[$name])) {
                 continue;
             }
 
-            if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            if (($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) {
                 continue;
@@ -419,23 +420,23 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Reset the itemid
         $this->itemid = null;
 
-        if(count($args) > 0) {
-            foreach($args as $name => $value) {
-                if(isset($this->properties[$name])) {
+        if (count($args) > 0) {
+            foreach ($args as $name => $value) {
+                if (isset($this->properties[$name])) {
                     $this->properties[$name]->value = $value;
                 }
             }
         }
-        if(isset($args['itemid'])) {
+        if (isset($args['itemid'])) {
             $this->itemid = $args['itemid'];
         } elseif (!empty($this->properties[$this->primary]->value)) {
             $this->itemid = $this->properties[$this->primary]->value;
         }
 
         // Special case when we try to create a new object handled by dynamicdata
-        if(
-            $this->objectid == 1 &&
-            $this->properties['module_id']->value == $this->mod()->getRegID('dynamicdata')
+        if (
+            $this->objectid == 1
+            && $this->properties['module_id']->value == $this->mod()->getRegID('dynamicdata')
             //&& $this->properties['itemtype']->value < 2
         ) {
             $this->properties['itemtype']->setValue($this->getNextItemtype($args));
@@ -450,16 +451,16 @@ class DataObject extends DataObjectMaster implements iDataObject
          */
 
         foreach ($this->getFieldList() as $fieldname) {
-            if (!empty($this->properties[$fieldname]->source) &&
-                method_exists($this->properties[$fieldname], 'createvalue')) {
+            if (!empty($this->properties[$fieldname]->source)
+                && method_exists($this->properties[$fieldname], 'createvalue')) {
                 $this->properties[$fieldname]->createValue($this->itemid);
             }
         }
         $this->itemid = $this->datastore->createItem();
 
         foreach ($this->getFieldList() as $fieldname) {
-            if (empty($this->properties[$fieldname]->source) &&
-                method_exists($this->properties[$fieldname], 'createvalue')) {
+            if (empty($this->properties[$fieldname]->source)
+                && method_exists($this->properties[$fieldname], 'createvalue')) {
                 $this->properties[$fieldname]->createValue($this->itemid);
             }
         }
@@ -479,18 +480,18 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         $this->log()->info("DataObject::updateItem: Updating an item of object " . $this->name);
 
-        if(count($args) > 0) {
-            if(!empty($args['itemid'])) {
+        if (count($args) > 0) {
+            if (!empty($args['itemid'])) {
                 $this->itemid = $args['itemid'];
             }
 
-            foreach($args as $name => $value) {
-                if(isset($this->properties[$name])) {
+            foreach ($args as $name => $value) {
+                if (isset($this->properties[$name])) {
                     $this->properties[$name]->setValue($value);
                 }
             }
         }
-        if(empty($this->itemid) && !empty($this->primary)) {
+        if (empty($this->itemid) && !empty($this->primary)) {
             $this->itemid = $this->properties[$this->primary]->getValue();
         }
 
@@ -508,16 +509,16 @@ class DataObject extends DataObjectMaster implements iDataObject
          */
 
         foreach ($this->getFieldList() as $fieldname) {
-            if (!empty($this->properties[$fieldname]->source) &&
-                method_exists($this->properties[$fieldname], 'updatevalue')) {
+            if (!empty($this->properties[$fieldname]->source)
+                && method_exists($this->properties[$fieldname], 'updatevalue')) {
                 $this->properties[$fieldname]->updateValue($this->itemid);
             }
         }
         $this->itemid = $this->datastore->updateItem();
 
         foreach ($this->getFieldList() as $fieldname) {
-            if (empty($this->properties[$fieldname]->source) &&
-                method_exists($this->properties[$fieldname], 'updatevalue')) {
+            if (empty($this->properties[$fieldname]->source)
+                && method_exists($this->properties[$fieldname], 'updatevalue')) {
                 $this->properties[$fieldname]->updateValue($this->itemid);
             }
         }
@@ -539,18 +540,18 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         $this->log()->info("DataObject::deleteItem: Deleting an item of object " . $this->name);
 
-        if(!empty($args['itemid'])) {
+        if (!empty($args['itemid'])) {
             $this->itemid = $args['itemid'];
         }
 
-        if(empty($this->itemid)) {
+        if (empty($this->itemid)) {
             $msg = 'Invalid item id in method #(1)() for dynamic object [#(2)] #(3)';
             $vars = ['deleteItem',$this->objectid,$this->name];
             throw new BadParameterException($vars, $msg);
         }
 
         // Last stand against wild hooks and other excesses
-        if(($this->objectid < 3) && ($this->itemid < 3)) {
+        if (($this->objectid < 3) && ($this->itemid < 3)) {
             $msg = 'You cannot delete the DataObject or DataProperties class';
             throw new BadParameterException(null, $msg);
         }
@@ -576,19 +577,19 @@ class DataObject extends DataObjectMaster implements iDataObject
          */
 
         foreach ($this->getFieldList() as $fieldname) {
-            if (!empty($this->properties[$fieldname]->source) &&
-                method_exists($this->properties[$fieldname], 'deletevalue')) {
+            if (!empty($this->properties[$fieldname]->source)
+                && method_exists($this->properties[$fieldname], 'deletevalue')) {
                 $this->properties[$fieldname]->deleteValue($this->itemid);
             }
         }
         $this->itemid = $this->datastore->deleteItem();
-        if(empty($this->itemid)) {
+        if (empty($this->itemid)) {
             return;
         }                    // CHECKME: Is this needed?
 
         foreach ($this->getFieldList() as $fieldname) {
-            if (empty($this->properties[$fieldname]->source) &&
-                method_exists($this->properties[$fieldname], 'deletevalue')) {
+            if (empty($this->properties[$fieldname]->source)
+                && method_exists($this->properties[$fieldname], 'deletevalue')) {
                 $this->properties[$fieldname]->deleteValue($this->itemid);
             }
         }
@@ -618,7 +619,7 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function getNextItemtype(array $args = [])
     {
-        if(empty($args['moduleid'])) {
+        if (empty($args['moduleid'])) {
             $args['moduleid'] = $this->moduleid;
         }
 
@@ -631,7 +632,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $query = "SELECT MAX(itemtype) FROM $dynamicobjects  WHERE module_id = ?";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery([(int) $args['moduleid']]);
-        if(!$result->first()) {
+        if (!$result->first()) {
             return;
         } // shouldnt we raise?
         $nexttype = $result->getInt(1);

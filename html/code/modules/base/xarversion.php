@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration information for the Base module
  *
@@ -19,7 +20,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
- 
+
 $modversion['name']               = 'Base';
 $modversion['id']                 = '68';
 $modversion['displayname']        = xarMLS::translate('Base');

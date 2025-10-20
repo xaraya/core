@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\themes
  * @subpackage themes
@@ -25,7 +26,7 @@ use Xaraya\Facades\xarMod3;
  */
 class ThemeInitialization extends xarObject
 {
-    static public function clearCache()
+    public static function clearCache()
     {
         $dbconn = xarDB3::getConn();
         xarMod3::loadDbInfo('themes', 'themes');
@@ -42,16 +43,16 @@ class ThemeInitialization extends xarObject
      * @param array dirs
      * @return boolean true if the table is loaded, else false
      */
-    static public function importConfigurations($flush = true, $dirs = array())
+    public static function importConfigurations($flush = true, $dirs = [])
     {
         sys::import('xaraya.structures.relativedirectoryiterator');
 
         $dbconn = xarDB3::getConn(); // Need this for the transaction
-        $themeDirs = array();
+        $themeDirs = [];
 
         // We do the whole thing, or not at all (given proper db support)
         try {
-             $dbconn->begin();
+            $dbconn->begin();
 
             if (!empty($dirs) && is_array($dirs)) {
                 // We got an array of directories passed in for which to import properties
@@ -62,22 +63,22 @@ class ThemeInitialization extends xarObject
                 // Clear the cache
                 self::ClearCache();
 
-                $activeThemes = xarMod::apiFunc('themes','admin','getlist', array('filter' => array('State' => xarTheme::STATE_ACTIVE)));
+                $activeThemes = xarMod::apiFunc('themes', 'admin', 'getlist', ['filter' => ['State' => xarTheme::STATE_ACTIVE]]);
                 assert(!empty($activeThemes)); // this should never happen
 
-                foreach($activeThemes as $themeInfo) {
+                foreach ($activeThemes as $themeInfo) {
                     // FIXME: the themeInfo directory does NOT end with a /
                     $themeDirs[] = $themeInfo['directory'];
                 }
             }
 
             // Loop through theme directories
-            foreach($themeDirs as $dir) {
+            foreach ($themeDirs as $dir) {
                 // Run the initialization routine
                 self::inittheme($dir);
             }
             $dbconn->commit();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // TODO: catch more specific exceptions than all?
             $dbconn->rollback();
             throw $e;
@@ -85,12 +86,12 @@ class ThemeInitialization extends xarObject
 
 
         // Clear the property types from cached memory
-//        xarCoreCache::delCached('DynamicData','PropertyTypes');
+        //        xarCoreCache::delCached('DynamicData','PropertyTypes');
 
         return true;
     }
 
-    static public function inittheme($dir)
+    public static function inittheme($dir)
     {
         sys::import('modules.dynamicdata.class.objects.descriptor');
         $class = UCFirst($dir) . 'Init';
@@ -104,6 +105,6 @@ class ThemeInitialization extends xarObject
         }
         $descriptor = new DataObjectDescriptor();
         $installer = new $class($descriptor);
-        $installer->init(array('name' => $dir));
+        $installer->init(['name' => $dir]);
     }
 }

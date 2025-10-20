@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -168,7 +169,7 @@ class SubItemsProperty extends DataProperty
      */
     public function deleteValue($itemid = 0)
     {
-        foreach($this->todelete as $id) {
+        foreach ($this->todelete as $id) {
             $this->subitemsobject->deleteItem(['itemid' => (int) $id]);
         }
         return $itemid;
@@ -454,7 +455,7 @@ class SubItemsProperty extends DataProperty
         $needed_slots = count($args);
         $replaceable_slots = min($available_slots, $needed_slots);
         // Note that subitems are numbered beginning at 1
-        for($i = 1;$i <= $replaceable_slots;$i++) {
+        for ($i = 1;$i <= $replaceable_slots;$i++) {
             $args[$i]['id'] = (int) array_shift($old_ids);
             $args[$i]['transaction_id'] = $parent_id;
         }

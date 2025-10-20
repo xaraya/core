@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Include the base class
  */
- sys::import('modules.base.xarproperties.textbox');
+sys::import('modules.base.xarproperties.textbox');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -34,7 +35,7 @@ class ImageProperty extends TextBoxProperty
     // this is used by DataPropertyMaster::addProperty() to set the $object->upload flag
     public $upload = false;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->template  = 'image';
@@ -43,54 +44,65 @@ class ImageProperty extends TextBoxProperty
         $this->initialization_basedirectory = $this->getThemeDir();
         // FIXME: baseurl is no longer initialized - could be different from basedir !
 
-    	$this->initialization_basedirectory = sys::varpath() . '/uploads';
-        if ($this->initialization_image_source == 'upload') $this->upload = true;
+        $this->initialization_basedirectory = sys::varpath() . '/uploads';
+        if ($this->initialization_image_source == 'upload') {
+            $this->upload = true;
+        }
     }
 
     /**
      * Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory - move to templates/themes?
-     * 
+     *
      * @param  string basedir Base directory to be replaced
      * @return string         Corresponding theme directory
      */
     public function getThemeDir($basedir = '')
     {
-        if (empty($basedir)) $basedir = $this->initialization_basedirectory;
+        if (empty($basedir)) {
+            $basedir = $this->initialization_basedirectory;
+        }
         if (strpos($basedir ?? '', '{user_theme}') !== false) {
-            $basedir = str_replace('{user_theme}',"themes/".$this->mod('themes')->getVar('default_theme'),$basedir);
+            $basedir = str_replace('{user_theme}', "themes/" . $this->mod('themes')->getVar('default_theme'), $basedir);
         }
         if (strpos($basedir ?? '', '{admin_theme}') !== false) {
-            $basedir = str_replace('{admin_theme}',"themes/".$this->mod('themes')->getVar('admin_theme'),$basedir);
+            $basedir = str_replace('{admin_theme}', "themes/" . $this->mod('themes')->getVar('admin_theme'), $basedir);
         }
         if (strpos($basedir ?? '', '{theme}') !== false) {
-            $basedir = str_replace('{theme}',xarTpl::getThemeDir(),$basedir);
+            $basedir = str_replace('{theme}', xarTpl::getThemeDir(), $basedir);
         }
         return $basedir;
     }
 
-	/**
-	 * Validate the value of a field
-	 *
-	 * @return bool|void Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a field
+     *
+     * @return bool|void Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         // make sure we check the right image_source when dealing with several image properties
-        if (isset($this->fieldname)) $name = $this->fieldname;
-        else $name = 'dd_'.$this->id;
+        if (isset($this->fieldname)) {
+            $name = $this->fieldname;
+        } else {
+            $name = 'dd_' . $this->id;
+        }
         $sourcename = $name . '_source';
         $this->var()->find($sourcename, $image_source, 'str:1:100');
-        if (!empty($image_source)) $this->initialization_image_source = $image_source;
+        if (!empty($image_source)) {
+            $this->initialization_image_source = $image_source;
+        }
 
         if ($this->initialization_image_source == 'url') {
-            $prop = $this->prop()->getProperty(array('type' => 'url'));
+            $prop = $this->prop()->getProperty(['type' => 'url']);
             $prop->validateValue($value);
             $this->value = $prop->value;
         } elseif ($this->initialization_image_source == 'upload') {
             /** @var FileUploadProperty $prop */
-            $prop = $this->prop()->getProperty(array('type' => 'fileupload'));
+            $prop = $this->prop()->getProperty(['type' => 'fileupload']);
             $prop->initialization_basedirectory = $this->initialization_basedirectory;
             $prop->setExtensions($this->validation_file_extensions);
             $prop->fieldname = $this->fieldname;
@@ -100,43 +112,55 @@ class ImageProperty extends TextBoxProperty
         return true;
     }
 
-	/**
-	 * Display the property for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display the property for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
         // CHECKME: why not use image_source as attribute instead of inputtype ?
-        $data['image_source'] = isset($data['inputtype']) ? $data['inputtype'] : $this->initialization_image_source;
-        if ($data['image_source'] == 'upload') $this->upload = true;
-        $data['basedirectory'] = isset($data['basedir']) ? $data['basedir'] : $this->initialization_basedirectory;
-        $data['extensions'] = isset($data['extensions']) ? $data['extensions'] : $this->validation_file_extensions;
+        $data['image_source'] = $data['inputtype'] ?? $this->initialization_image_source;
+        if ($data['image_source'] == 'upload') {
+            $this->upload = true;
+        }
+        $data['basedirectory'] = $data['basedir'] ?? $this->initialization_basedirectory;
+        $data['extensions'] ??= $this->validation_file_extensions;
         $data['value']    = isset($data['value']) ? $this->var()->prep($data['value']) : $this->var()->prep($this->value);
 
         return parent::showInput($data);
     }
 
-	/**
-	 * Display the property for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */	
+    /**
+     * Display the property for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if(!empty($data['inputtype'])) $this->initialization_image_source = $data['inputtype'];
-        if(!empty($data['basedir'])) $this->initialization_basedirectory = $this->getThemeDir($data['basedir']);
-        if (empty($data['value'])) $data['value'] = $this->value;
+        if (!empty($data['inputtype'])) {
+            $this->initialization_image_source = $data['inputtype'];
+        }
+        if (!empty($data['basedir'])) {
+            $this->initialization_basedirectory = $this->getThemeDir($data['basedir']);
+        }
+        if (empty($data['value'])) {
+            $data['value'] = $this->value;
+        }
         if (!empty($data['value'])) {
             // FIXME: baseurl is no longer initialized - could be different from basedir !
             if (($this->initialization_image_source == 'local') || ($this->initialization_image_source == 'upload')) {
                 $data['value'] = $this->initialization_basedirectory . "/" . $data['value'];
             }
         }
-        if (empty($data['imagetext'])) $data['imagetext'] = $this->imagetext;
-        if (empty($data['imagealt'])) $data['imagealt'] = $this->imagealt;
+        if (empty($data['imagetext'])) {
+            $data['imagetext'] = $this->imagetext;
+        }
+        if (empty($data['imagealt'])) {
+            $data['imagealt'] = $this->imagealt;
+        }
 
         return parent::showOutput($data);
     }

@@ -124,8 +124,8 @@ class AssignprivilegesMethod extends MethodClass
                 if ((count($ids) == 2) && !(empty($ids[0]) || empty($ids[1]))) {
                     $dbconn = $this->db()->getConn();
                     $xartable = $this->db()->getTables();
-                    $query = "DELETE FROM " . $xartable['security_acl'] .
-                              " WHERE role_id = ? AND privilege_id = ?";
+                    $query = "DELETE FROM " . $xartable['security_acl']
+                              . " WHERE role_id = ? AND privilege_id = ?";
                     $bindvars = $ids;
                     $dbconn->Execute($query, $bindvars);
                 }

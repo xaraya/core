@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.base.xarproperties.textbox');
 
@@ -20,32 +21,34 @@ class YahooProperty extends TextBoxProperty
     public $id         = 31;
     public $name       = 'yahoo';
     public $desc       = 'Yahoo Messenger';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
     public $initialization_icon_url;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'yahoo';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = $this->tpl()->getImage('contact/yahoo.png','module','roles');
+            $this->initialization_icon_url = $this->tpl()->getImage('contact/yahoo.png', 'module', 'roles');
         }
     }
 
-	/**
-	 * Validate the value of a textbox
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a textbox
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (!empty($value)) {
-            if (preg_match('/^[a-z0-9_-]+$/i',$value)) { // TODO: refine this !?
+            if (preg_match('/^[a-z0-9_-]+$/i', $value)) { // TODO: refine this !?
                 $this->value = $value;
             } else {
                 $this->invalid = $this->ml('Yahoo Messenger: #(1)', $this->name);
@@ -59,38 +62,42 @@ class YahooProperty extends TextBoxProperty
         return true;
     }
 
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if(!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target='.$this->var()->prep($data['value']).'&.src=pg';
+            $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target=' . $this->var()->prep($data['value']) . '&.src=pg';
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a textbox for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
+    /**
+     * Display a textbox for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
         $data['value'] = $this->var()->prep($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target='.$data['value'].'&.src=pg';
+            $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target=' . $data['value'] . '&.src=pg';
         }
         if (empty($data['image'])) {
             $data['image'] = $this->initialization_icon_url;

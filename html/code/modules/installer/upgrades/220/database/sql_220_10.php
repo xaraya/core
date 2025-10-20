@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -22,8 +23,8 @@ function sql_220_10()
     ");
 
     try {
-        xarConfigVars::set(null, 'Site.User.DebugAdmins', array('admin'));
-        xarModVars::delete('dynamicdata','debugusers');
+        xarConfigVars::set(null, 'Site.User.DebugAdmins', ['admin']);
+        xarModVars::delete('dynamicdata', 'debugusers');
     } catch (Exception $e) {
         // Damn
         $dbconn = xarDB::getConn();

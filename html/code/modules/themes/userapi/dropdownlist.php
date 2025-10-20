@@ -85,8 +85,8 @@ class DropdownlistMethod extends MethodClass
             $user_themes = !empty($user_themes) ? explode(',', $user_themes) : [];
             if (!empty($themelist) && !empty($user_themes)) {
                 foreach ($themelist as $theme) {
-                    if ((!empty($user_themes) && !in_array($theme['name'], $user_themes)) ||
-                        $theme['class'] != 2) {
+                    if ((!empty($user_themes) && !in_array($theme['name'], $user_themes))
+                        || $theme['class'] != 2) {
                         continue;
                     }
                     $options[] = ['id' =>  $theme['name'], 'name' => $theme['displayname']];

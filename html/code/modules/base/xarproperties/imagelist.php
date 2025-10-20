@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Include the base class
  */
- sys::import('modules.base.xarproperties.filepicker');
+sys::import('modules.base.xarproperties.filepicker');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -27,12 +28,14 @@ class ImageListProperty extends FilePickerProperty
     public $imagealt   = 'Image';
     public $baseurl;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->template = 'imagelist';
 
-        if (empty($this->validation_file_extensions)) $this->setExtensions('gif,jpg,jpeg,png,bmp');
+        if (empty($this->validation_file_extensions)) {
+            $this->setExtensions('gif,jpg,jpeg,png,bmp');
+        }
 
         // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory - already done in parent
         //$this->initialization_basedirectory = $this->getThemeDir();
@@ -41,28 +44,32 @@ class ImageListProperty extends FilePickerProperty
         if (isset($this->baseurl)) {
             $this->baseurl = $this->getThemeDir($this->baseurl);
         }
-        
+
         // Default selection
-        if (!isset($this->initialization_firstline)) $this->initialization_firstline = ',' . $this->ml('Select Image');
+        if (!isset($this->initialization_firstline)) {
+            $this->initialization_firstline = ',' . $this->ml('Select Image');
+        }
     }
-/**
- * Display the output 
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for output on a web page
- */	
+    /**
+     * Display the output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
         extract($data);
 
-        if (!isset($value)) $value = $this->value;
+        if (!isset($value)) {
+            $value = $this->value;
+        }
 
         $basedir = $this->initialization_basedirectory;
 
         // FIXME: baseurl is no longer initialized - could be different from basedir !
 
         if (!empty($value)) {
-            $srcpath = $basedir.'/'.$value;
+            $srcpath = $basedir . '/' . $value;
         } else {
             $srcpath = '';
         }
@@ -71,8 +78,12 @@ class ImageListProperty extends FilePickerProperty
         $data['basedir']  = $basedir;
         $data['srcpath']  = $srcpath;
 
-        if (empty($data['imagetext'])) $data['imagetext'] = $this->imagetext;
-        if (empty($data['imagealt'])) $data['imagealt'] = $this->imagealt;
+        if (empty($data['imagetext'])) {
+            $data['imagetext'] = $this->imagetext;
+        }
+        if (empty($data['imagealt'])) {
+            $data['imagealt'] = $this->imagealt;
+        }
 
         return parent::showOutput($data);
     }

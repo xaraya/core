@@ -21,7 +21,7 @@ trait OtherApiTrait
     /**
      * Get module javascript API class for this module
      */
-    public function javascriptapi(): UserApiInterface|null
+    public function javascriptapi(): ?UserApiInterface
     {
         $component = $this->getModule()->getComponent('JavascriptApi');
         assert($component instanceof UserApiInterface);
@@ -31,7 +31,7 @@ trait OtherApiTrait
     /**
      * Get module ws API class for this module
      */
-    public function wsapi(): UserApiInterface|null
+    public function wsapi(): ?UserApiInterface
     {
         $component = $this->getModule()->getComponent('WsApi');
         assert($component instanceof UserApiInterface);

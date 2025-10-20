@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -23,12 +24,12 @@ class TextAreaProperty extends DataProperty
     public $id         = 3;
     public $name       = 'textarea';
     public $desc       = 'Small Text Area';
-    public $reqmodules = array('base');
+    public $reqmodules = ['base'];
 
     public $display_rows    = 0;
     public $display_columns = 0;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
@@ -40,42 +41,46 @@ class TextAreaProperty extends DataProperty
             $this->display_rows = $this->args['rows'];
         }
     }
-/**
- 
- * @return array<mixed>   array of provided elements
- */
-    function aliases()
+    /**
+
+     * @return array<mixed>   array of provided elements
+     */
+    public function aliases()
     {
         if (get_class($this) !== 'TextAreaProperty') {
             return [];
-	}
+        }
 
         $a1['id']   = 4;
         $a1['name'] = 'textarea_medium';
         $a1['desc'] = 'Medium Text Area';
-        $a1['args'] = array('rows' => 8);
-        $a1['reqmodules'] = array('base');
+        $a1['args'] = ['rows' => 8];
+        $a1['reqmodules'] = ['base'];
 
         $a2['id']   = 5;
         $a2['name'] = 'textarea_large';
         $a2['desc'] = 'Large Text Area';
-        $a2['args'] = array('rows' => 20);
-        $a2['reqmodules'] = array('base');
+        $a2['args'] = ['rows' => 20];
+        $a2['reqmodules'] = ['base'];
 
-        return array($a1, $a2);
+        return [$a1, $a2];
     }
-/**
- * Display a textarea for input
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for input on a web page
- */
+    /**
+     * Display a textarea for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
         // TODO: the way the template is organized now, this only works when an id is set.
         $data['value'] = isset($data['value']) ? $this->var()->prep($data['value']) : $this->var()->prep($this->value);
-        if(empty($data['rows'])) $data['rows'] = $this->display_rows;
-        if(empty($data['cols'])) $data['cols'] = $this->display_columns;
+        if (empty($data['rows'])) {
+            $data['rows'] = $this->display_rows;
+        }
+        if (empty($data['cols'])) {
+            $data['cols'] = $this->display_columns;
+        }
 
         return parent::showInput($data);
     }

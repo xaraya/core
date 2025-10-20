@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -30,22 +31,28 @@ class FloatBoxProperty extends NumberBoxProperty
 
     public $basetype   = 'decimal';
     public $defaultvalue   = 0;
-    
-    function __construct(ObjectDescriptor $descriptor)
+
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        if ($this->value == '') $this->value = $this->defaultvalue;
-        if (!is_numeric($this->value) && !empty($this->value)) throw new Exception($this->ml('The default value of a #(1) must be numeric',$this->name));
+        if ($this->value == '') {
+            $this->value = $this->defaultvalue;
+        }
+        if (!is_numeric($this->value) && !empty($this->value)) {
+            throw new Exception($this->ml('The default value of a #(1) must be numeric', $this->name));
+        }
     }
-/**
- * Convert an integer or string value to true/false
- * 
- * @param  mixed value The value to be converted
- * @return bool  Returns true if the integer or string value is 1, "1" or "true"; otherwise returns false.
- */
-    public function castType($value=null)
+    /**
+     * Convert an integer or string value to true/false
+     *
+     * @param  mixed value The value to be converted
+     * @return bool  Returns true if the integer or string value is 1, "1" or "true"; otherwise returns false.
+     */
+    public function castType($value = null)
     {
-        if (!is_null($value)) return (float)$value;
+        if (!is_null($value)) {
+            return (float) $value;
+        }
         return 0;
     }
 }

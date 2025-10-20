@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration information for the Privileges module
  *
@@ -19,7 +20,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
- 
+
 $modversion['name']               = 'Privileges Adminstration';
 $modversion['id']                 = '1098';
 $modversion['version']            = '2.8.1';
@@ -33,5 +34,5 @@ $modversion['admin']              = true;
 $modversion['user']               = false;
 $modversion['class']              = 'Core Complete';
 $modversion['category']           = 'Users & Groups';
-$modversion['securityschema']     = array('Privileges::' => 'name:id');
+$modversion['securityschema']     = ['Privileges::' => 'name:id'];
 $modversion['twigtemplates']      = true;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Content Block display interface
  *
@@ -25,7 +26,7 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
      * Display method
      * @return array<mixed>|void Returns display data array or null if not available.
      */
-    function display()
+    public function display()
     {
         $data = $this->getContent();
 
@@ -58,18 +59,20 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
             // We are ready. Run the template and its data through the compiler
             try {
                 // No passing arguments (yet)
-                $args = array();
+                $args = [];
                 $tplInputString = $blCompiler->compilestring($tplInputString);
                 $data['content_text'] = xarTpl::string($tplInputString, $args);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 // Show an error message if I am an admin. Otherwise just throw an exception
                 if (xarRoles::isParent("Administrators", $this->user()->getUser())) {
-                    echo "<pre>";var_dump($e->getMessage());echo "</pre>";
+                    echo "<pre>";
+                    var_dump($e->getMessage());
+                    echo "</pre>";
                 } else {
-                 throw $e;
+                    throw $e;
                 }
             }
-            
+
         } elseif ($data['content_type'] == 'php' || $data['content_type'] == 'data') {
             // Execute the PHP code.
             ob_start();
@@ -116,7 +119,7 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
 
         // Split the text into lines, to help rendering.
         $data['content_lines'] = explode("\n", $data['content_text']);
-            
+
         return $data;
     }
 

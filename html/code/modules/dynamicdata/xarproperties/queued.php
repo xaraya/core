@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Queued property extends the Callable property by keeping track of which values
  * have been set/get by which property, or in which common queue if they're shared,

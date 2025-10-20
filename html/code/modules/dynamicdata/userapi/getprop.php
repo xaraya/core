@@ -135,7 +135,7 @@ class GetpropMethod extends MethodClass
         if (!empty($static)) {
             // get the list of static properties for this module
             $staticlist = $utilapi->getstatic(['module_id' => $module_id,
-                    'itemtype' => $itemtype]);
+                'itemtype' => $itemtype]);
             // TODO: watch out for conflicting property ids ?
             $fields = array_merge($staticlist, $fields);
         }

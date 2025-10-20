@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dynamic Object User Interface Handler
  * @package modules\dynamicdata
@@ -265,8 +266,8 @@ class StatsHandler extends DefaultHandler
         }
 
         $info = ['fieldlist' => $fieldlist,
-                 'groupby'   => $groupby,
-                 'sort'      => $sort];
+            'groupby'   => $groupby,
+            'sort'      => $sort];
 
         // check if we need to save this report
         $save = null;
@@ -282,7 +283,8 @@ class StatsHandler extends DefaultHandler
             $this->ctl()->redirect($this->ctl()->getObjectUrl(
                 $this->object->name,
                 'report',
-                ['report' => $stats['report']]));
+                ['report' => $stats['report']]
+            ));
             return true;
 
             // get the result
@@ -293,13 +295,13 @@ class StatsHandler extends DefaultHandler
         }
 
         $stats['options'] = ['hide'     => '',
-                             //'show'     => 'Show', // can't be mixed with group by etc.
-                             'count'    => 'Count',
-                             'distinct' => 'Distinct', // CHECKME in datastores
-                             'min'      => 'Minimum',
-                             'max'      => 'Maximum',
-                             'sum'      => 'Sum',
-                             'avg'      => 'Average'];
+            //'show'     => 'Show', // can't be mixed with group by etc.
+            'count'    => 'Count',
+            'distinct' => 'Distinct', // CHECKME in datastores
+            'min'      => 'Minimum',
+            'max'      => 'Maximum',
+            'sum'      => 'Sum',
+            'avg'      => 'Average'];
 
         // add data to original method args
         $data = array_replace($args, [

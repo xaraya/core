@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Language Selection via block
  *
@@ -28,33 +29,37 @@ class Roles_LanguageBlock extends BasicBlock
     protected $text_type           = 'Language';
     protected $text_type_long      = 'Language selection';
 
-	/**
-	 * Display the language block
-	 * @return array<mixed>|void Display data array
-	 */
-    function display()
+    /**
+     * Display the language block
+     * @return array<mixed>|void Display data array
+     */
+    public function display()
     {
         // if (xarMLS::getMode() != xarMLS::BOXED_MULTI_LANGUAGE_MODE) {
-        if (xarMLS::getMode() == xarMLS::SINGLE_LANGUAGE_MODE) return;
+        if (xarMLS::getMode() == xarMLS::SINGLE_LANGUAGE_MODE) {
+            return;
+        }
 
         $current_locale = xarUser::getNavigationLocale();
 
         $site_locales = xarMLS::listSiteLocales();
 
         asort($site_locales);
-        if (count($site_locales) <= 1) return;
+        if (count($site_locales) <= 1) {
+            return;
+        }
 
         foreach ($site_locales as $locale) {
             $locale_data = $this->mls()->loadLocale($locale);
 
             $selected = ($current_locale == $locale);
 
-            $locales[] = array(
+            $locales[] = [
                 'locale'   => $locale,
                 'country'  => $locale_data['/country/display'],
                 'name'     => $locale_data['/language/display'],
-                'selected' => $selected
-            );
+                'selected' => $selected,
+            ];
         }
 
         $data['form_action'] = $this->ctl()->getModuleURL('roles', 'user', 'changelanguage');

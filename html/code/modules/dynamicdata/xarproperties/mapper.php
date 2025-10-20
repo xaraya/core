@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Mapper property extends the Queued property by mapping queued values
  * to an itemid of some configurable DataObject and returning some of its

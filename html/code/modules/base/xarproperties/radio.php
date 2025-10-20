@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -23,29 +24,31 @@ class RadioButtonsProperty extends SelectProperty
     public $name       = 'radio';
     public $desc       = 'Radio Buttons';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'radio';
     }
-/**
- * Display a radio button for input
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for input on a web page
- */
+    /**
+     * Display a radio button for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (!empty($data['checked'])) $data['value'] = $data['checked'];
+        if (!empty($data['checked'])) {
+            $data['value'] = $data['checked'];
+        }
         return parent::showInput($data);
     }
-/**
- * Display a radio button for output on dropdown template
- * 
- * @param array<string, mixed> $data An array of input parameters 
- * @return string     HTML markup to display the property for output on a web page
- */
+    /**
+     * Display a radio button for output on dropdown template
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
         $this->template  = 'dropdown';

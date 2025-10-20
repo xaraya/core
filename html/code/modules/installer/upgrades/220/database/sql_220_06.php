@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -15,7 +16,7 @@ function sql_220_06()
 
     $hooks_table = xarDB::getPrefix() . '_hooks';
     $modules_table = xarDB::getPrefix() . '_modules';
-    
+
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
@@ -23,24 +24,24 @@ function sql_220_06()
     ");
     $data['reply'] = xarML("
         Success!
-    ");    
+    ");
     $dbconn  = xarDB::getConn();
     try {
-        // get the list of available hooks 
-        $bindvars = array();
+        // get the list of available hooks
+        $bindvars = [];
         $query = "SELECT DISTINCT h.object, h.action, h.t_area, h.t_type,
                                   h.t_func, h.t_file, h.t_module_id,
                                   t.name, t.regid
                   FROM $hooks_table h, $modules_table t
                   WHERE h.t_module_id = t.id ";
-                  
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars);    
 
-        while($result->next()) {
-            list($object, $action, $area, $type, $func, $file, $sysid, $modname, $regid) = $result->fields;
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+
+        while ($result->next()) {
+            [$object, $action, $area, $type, $func, $file, $sysid, $modname, $regid] = $result->fields;
             $event = ucfirst($object) . ucfirst($action);
-            xarHooks::registerObserver($event,$modname,$area,$type,$func);
+            xarHooks::registerObserver($event, $modname, $area, $type, $func);
         }
 
         $result->close();
@@ -51,6 +52,6 @@ function sql_220_06()
         Failed!
         ");
     }
-    return $data;   
-    
+    return $data;
+
 }

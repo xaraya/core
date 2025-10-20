@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Skin Block display interface
  *
@@ -22,22 +23,26 @@
 sys::import('modules.themes.xarblocks.skin');
 class Themes_SkinBlockDisplay extends Themes_SkinBlock implements iBlock
 {
-/**
- * Display func.
- * @param $data array containing title,content
- */
-    function display(Array $data=array())
+    /**
+     * Display func.
+     * @param $data array containing title,content
+     */
+    public function display(array $data = [])
     {
-        
-        if (!$this->user()->isLoggedIn() ||
-            (bool) $this->mod('themes')->getVar('enable_user_menu') == false) return;
-        
+
+        if (!$this->user()->isLoggedIn()
+            || (bool) $this->mod('themes')->getVar('enable_user_menu') == false) {
+            return;
+        }
+
         $data = $this->getContent();
         $data['user_themes'] = $this->mod()->apiFunc('themes', 'user', 'dropdownlist');
-        if ($data['user_themes'] <= 1) return;
+        if ($data['user_themes'] <= 1) {
+            return;
+        }
         $data['default_theme'] = $this->mod('themes')->getUserVar('default_theme');
-        $data['return_url'] = ($this->ctl()->getRequestMethod() == 'GET') ?
-            $this->ctl()->getCurrentURL() : $this->ctl()->getBaseURL();
+        $data['return_url'] = ($this->ctl()->getRequestMethod() == 'GET')
+            ? $this->ctl()->getCurrentURL() : $this->ctl()->getBaseURL();
 
         return $data;
 

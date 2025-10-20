@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Adminmenu Block
  *
@@ -27,29 +28,29 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
     protected $xarversion          = '2.4.0';
     protected $show_preview        = true;
     protected $show_help           = true;
-    
+
     protected $menumodtype         = 'admin';
-    protected $menumodtypes        = array('admin', 'util');
+    protected $menumodtypes        = ['admin', 'util'];
 
     public $showlogout          = 1;
     public $menustyle           = 'bycat';
     public $showfront           = 1;
     public $marker              = '';
 
-/**
- * This method is called by the BasicBlock class constructor
- * 
-**/    
+    /**
+     * This method is called by the BasicBlock class constructor
+     *
+    **/
     public function init()
     {
         parent::init();
         if (empty($this->modulelist)) {
             // if the modulelist is empty, admin deselected all modules, put back the modules module
             // @CHECKME: put back the blocks module too so we can edit this?
-            $this->modulelist = array('modules' => array('visible' => 1));
+            $this->modulelist = ['modules' => ['visible' => 1]];
         }
         // make sure we keep the content array in sync
         $this->content['modulelist'] = $this->modulelist;
     }
-    
+
 }

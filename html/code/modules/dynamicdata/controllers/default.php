@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DynamicData Default Action Controller class
  *
@@ -68,7 +69,7 @@ class DynamicdataDefaultController extends DefaultActionController
         parent::chargeRequest($request, $params);
     }
 
-    public function run(xarRequest $request = null, xarResponse $response = null): void
+    public function run(?xarRequest $request = null, ?xarResponse $response = null): void
     {
         // Now get the output - @todo we'll never get here atm when xarDispatcher::findController() is looking for the 'object' module :-)
         //if ($request->getModule() == 'object') {

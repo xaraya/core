@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -18,20 +19,20 @@ class HiddenProperty extends DataProperty
     public $id         = 18;
     public $name       = 'hidden';
     public $desc       = 'Hidden';
-    public $reqmodules = array('base');
+    public $reqmodules = ['base'];
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template = 'hidden';
         $this->filepath   = 'modules/base/xarproperties';
     }
-/**
- * Validate the value of a hidden field
- *
- * @return bool Returns true if the value passes all validation checks; otherwise returns false.
- */
+    /**
+     * Validate the value of a hidden field
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
         $this->log()->info("DataProperty::validateValue: Validating property " . $this->name);

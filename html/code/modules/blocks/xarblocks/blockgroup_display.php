@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Blockgroup Block display interface
  *
@@ -16,34 +17,44 @@
  * Display block
  *
  * @author  Chris Powis <crisp@xaraya.com>
-*/ 
+*/
 sys::import('modules.blocks.xarblocks.blockgroup');
 
 class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iBlockGroup
 {
-	/**
+    /**
      * Display the blockgroup block
-     * 
+     *
      * @param array<string, mixed> $data Data array
      * @return array<mixed>|void Display data array or null if nothing is to display.
-     */ 
-    function display(Array $data=array())
+     */
+    public function display(array $data = [])
     {
         $data = $this->getContent();
 
-        if (empty($this->group_instances)) return;
-        $instances = $this->mod()->apiFunc('blocks', 'instances', 'getitems', 
-            array(
-                'block_id' => $this->group_instances, 
+        if (empty($this->group_instances)) {
+            return;
+        }
+        $instances = $this->mod()->apiFunc(
+            'blocks',
+            'instances',
+            'getitems',
+            [
+                'block_id' => $this->group_instances,
                 'type_state' => xarBlock::TYPE_STATE_ACTIVE,
-                'state' => array(xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN),
-            ));
-        
-        if (empty($instances)) return;
-        
+                'state' => [xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN],
+            ]
+        );
+
+        if (empty($instances)) {
+            return;
+        }
+
         $output = '';
         foreach ($this->group_instances as $id) {
-            if (!isset($instances[$id])) continue;
+            if (!isset($instances[$id])) {
+                continue;
+            }
             $block_info = $instances[$id];
             $block_info['group_id'] = $this->block_id;
             $block_info['group'] = $this->name;
@@ -54,22 +65,27 @@ class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iB
             }
             // fall back to instance defaults
             // checkme: should we honour template settings in pairs ?
-            if (empty($box_template))
-                $box_template = $block_info['content']['box_template'];            
-            if (empty($block_template))
+            if (empty($box_template)) {
+                $box_template = $block_info['content']['box_template'];
+            }
+            if (empty($block_template)) {
                 $block_template = $block_info['content']['block_template'];
-            
+            }
+
             // fall back to blockgroup
-            if (empty($box_template))
-                $box_template = $this->box_template;            
-            $block_info['content']['box_template'] = $box_template;            
+            if (empty($box_template)) {
+                $box_template = $this->box_template;
+            }
+            $block_info['content']['box_template'] = $box_template;
             $block_info['content']['block_template'] = $block_template;
 
             $output .= xarBlock::render($block_info, $this->getContext());
         }
-        if (empty($output)) return;
+        if (empty($output)) {
+            return;
+        }
         $data['blocks'] = $output;
-        
+
         return $data;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories System
  *
@@ -12,7 +13,7 @@
  *
  * @author Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
 */
-$modversion = array(
+$modversion = [
     'name'           => 'categories',
     'id'             => '147',
     'version'        => '2.8.1',
@@ -29,7 +30,7 @@ $modversion = array(
     'user'           => false,
     'class'          => 'Core Complete',
     'category'       => 'Content',
-    'securityschema' => array('categories::category' => 'Category name::Category ID',
-                                      'categories::item' => 'Category ID:Module ID:Item ID'),
+    'securityschema' => ['categories::category' => 'Category name::Category ID',
+        'categories::item' => 'Category ID:Module ID:Item ID'],
     'twigtemplates'  => true,
-);
+];

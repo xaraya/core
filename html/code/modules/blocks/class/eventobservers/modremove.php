@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @package modules\blocks
@@ -24,21 +25,25 @@ class BlocksModRemoveObserver extends EventObserver implements ixarEventObserver
     public function notify(ixarEventSubject $subject)
     {
         $modName = $subject->getArgs();
-        xarVar::setCached('Blocks.event','modremove', $modName);
+        xarVar::setCached('Blocks.event', 'modremove', $modName);
         //
         // Delete block details for this module.
         //
         // Get block types.
-        $blocktypes = xarMod::apiFunc('blocks', 'types', 'getitems',
-                                    array('module' => $modName));
+        $blocktypes = xarMod::apiFunc(
+            'blocks',
+            'types',
+            'getitems',
+            ['module' => $modName]
+        );
 
         // Delete block types.
         if (is_array($blocktypes) && !empty($blocktypes)) {
-            foreach($blocktypes as $blocktype) {
+            foreach ($blocktypes as $blocktype) {
                 xarMod::apiFunc('blocks', 'types', 'deleteitem', $blocktype);
             }
         }
-        xarVar::delCached('Blocks.event','modremove');
+        xarVar::delCached('Blocks.event', 'modremove');
 
     }
 }

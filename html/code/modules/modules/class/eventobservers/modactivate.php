@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ModActivate Subject Observer
  *
@@ -24,7 +25,7 @@ class ModulesModActivateObserver extends EventObserver implements ixarEventObser
         if (empty($modInfo)) {
             return;
         }
-        PropertyRegistration::importPropertyTypes(true, array('modules/' . $modInfo['directory'] . '/xarproperties'));
+        PropertyRegistration::importPropertyTypes(true, ['modules/' . $modInfo['directory'] . '/xarproperties']);
         if (xarCache::isOutputCacheEnabled() && function_exists('xarMod::getName') && xarMod::getName() != 'installer') {
             if (xarOutputCache::isPageCacheEnabled()) {
                 xarPageCache::flushCached('modules');
@@ -32,7 +33,7 @@ class ModulesModActivateObserver extends EventObserver implements ixarEventObser
                 xarPageCache::flushCached('base');
             }
         }
-        // let any hooks know the module was activated    
-        xarHooks::notify('ModuleActivate', array('objectid' => $modName, 'module' => $modName));
+        // let any hooks know the module was activated
+        xarHooks::notify('ModuleActivate', ['objectid' => $modName, 'module' => $modName]);
     }
 }

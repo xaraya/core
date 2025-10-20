@@ -74,8 +74,8 @@ class DeleteTypeMethod extends MethodClass
 
         $data = [];
 
-        if ($type['type_state'] == xarBlock::TYPE_STATE_MISSING ||
-            $type['type_state'] == xarBlock::TYPE_STATE_MOD_UNAVAILABLE) {
+        if ($type['type_state'] == xarBlock::TYPE_STATE_MISSING
+            || $type['type_state'] == xarBlock::TYPE_STATE_MOD_UNAVAILABLE) {
 
             $this->var()->find(
                 'confirm',

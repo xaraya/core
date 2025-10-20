@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories Module
  *
@@ -23,10 +24,10 @@ class CategoryTreeProperty extends DataProperty
     public $id         = 30046;
     public $name       = 'categorytree';
     public $desc       = 'CategoryTree';
-    public $reqmodules = array('categories');
+    public $reqmodules = ['categories'];
     public $options;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
 
@@ -34,35 +35,39 @@ class CategoryTreeProperty extends DataProperty
         $this->filepath   = 'modules/categories/xarproperties';
     }
 
-	/**
-	 * Display the property for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display the property for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (empty($data['startnum'])) $data['startnum'] = 1;
-        if (empty($data['items_per_page'])) $data['items_per_page'] = $this->mod()->getVar('items_per_page');
+        if (empty($data['startnum'])) {
+            $data['startnum'] = 1;
+        }
+        if (empty($data['items_per_page'])) {
+            $data['items_per_page'] = $this->mod()->getVar('items_per_page');
+        }
 
         if (isset($data['options'])) {
             $this->options = $data['options'];
         } else {
-            $this->options = $this->mod()->apiFunc('categories','user','getchildren',array('cid' => 0));
+            $this->options = $this->mod()->apiFunc('categories', 'user', 'getchildren', ['cid' => 0]);
         }
         $trees = [];
         $totalcount = 0;
         foreach ($this->options as $entry) {
             $node = new CategoryTreeNode($entry['id']);
-// Can't do the pager stuff here. needs to happen in the template
-//            $node->start = $data['startnum'];
-//            $node->itemstoshow = $data['items_per_page'];
+            // Can't do the pager stuff here. needs to happen in the template
+            //            $node->start = $data['startnum'];
+            //            $node->itemstoshow = $data['items_per_page'];
             $tree = new CategoryTree($node);
             $nodes = $node->depthfirstenumeration();
             $trees[] = $nodes;
 
             // Perhaps this should be in the classes?
-            $count = $this->mod()->apiFunc('categories','user','countcats', $entry);
+            $count = $this->mod()->apiFunc('categories', 'user', 'countcats', $entry);
             $totalcount += $count;
         }
         $data['trees'] = $trees;

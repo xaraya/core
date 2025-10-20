@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -141,16 +142,16 @@ class ObjectRefProperty extends SelectProperty
                     $filepath, $urlparam, $maxid, $config, $isalias] = $result->fields;
 
                 $items[] = ['objectid' => $objectid,
-                                 'name'    => $name,
-                                 'label'   => $label,
-                                 'moduleid' => $module_id,
-                                 'itemtype' => $itemtype,
-                                 'class'   => $class,
-                                 'filepath'   => $filepath,
-                                 'urlparam'   => $urlparam,
-                                 'maxid'   => $maxid,
-                                 'config'   => $config,
-                                 'isalias'   => $isalias];
+                    'name'    => $name,
+                    'label'   => $label,
+                    'moduleid' => $module_id,
+                    'itemtype' => $itemtype,
+                    'class'   => $class,
+                    'filepath'   => $filepath,
+                    'urlparam'   => $urlparam,
+                    'maxid'   => $maxid,
+                    'config'   => $config,
+                    'isalias'   => $isalias];
             }
             $object = $this->data()->getObject(['name' => 'objects']);
         } else {
@@ -158,9 +159,9 @@ class ObjectRefProperty extends SelectProperty
 
             $items =  $object->getItems(
                 [
-                                        'sort'     => $this->initialization_display_prop,
-                                        'fieldlist' => [$this->initialization_display_prop,$this->initialization_store_prop],
-                                        'fordisplay' => 1]
+                    'sort'     => $this->initialization_display_prop,
+                    'fieldlist' => [$this->initialization_display_prop,$this->initialization_store_prop],
+                    'fordisplay' => 1]
             );
             $object = $this->data()->getObject(['name' => $this->initialization_refobject]);
         }
@@ -181,7 +182,7 @@ class ObjectRefProperty extends SelectProperty
             $this->store_prop_is_itemid = false;
         }
 
-        foreach($items as $item) {
+        foreach ($items as $item) {
             $options[] = ['id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]];
         }
 
@@ -279,7 +280,7 @@ class ObjectRefProperty extends SelectProperty
         $storeprop   = $tableprefix . $object->properties[$this->initialization_store_prop]->source;
         $displayprop = $tableprefix . $object->properties[$this->initialization_display_prop]->source;
         $i = 0;
-        foreach($sources as $key => $value) {
+        foreach ($sources as $key => $value) {
             $q->addTable($value[0], $tableprefix . $key);
             if ($i == 0) {
                 $q->leftjoin($this->source, $storeprop);

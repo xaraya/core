@@ -231,7 +231,8 @@ class MigrateMethod extends MethodClass
 
                     // add DD properties to field list
                     if (!empty($data['fromhooklist']['dynamicdata'])) {
-                        $props = $userapi->getprop(['module_id'    => $data['from']['module'],
+                        $props = $userapi->getprop(
+                            ['module_id'    => $data['from']['module'],
                                 'itemtype' => $data['from']['itemtype']]
                         );
                         $proptypes = $this->prop()->getPropertyTypes();
@@ -328,7 +329,8 @@ class MigrateMethod extends MethodClass
 
                     // add DD properties to field list
                     if (!empty($data['tohooklist']['dynamicdata'])) {
-                        $props = $userapi->getprop(['module_id'    => $data['to']['module'],
+                        $props = $userapi->getprop(
+                            ['module_id'    => $data['to']['module'],
                                 'itemtype' => $data['to']['itemtype']]
                         );
                         $proptypes = $this->prop()->getPropertyTypes();
@@ -391,8 +393,8 @@ class MigrateMethod extends MethodClass
         $data['step'] = $step;
 
         // see if we have everything we need to finish if necessary
-        if (!empty($from['module']) && !empty($from['itemtype']) && !empty($from['itemid']) &&
-            !empty($to['module']) && !empty($to['itemtype'])) {
+        if (!empty($from['module']) && !empty($from['itemtype']) && !empty($from['itemid'])
+            && !empty($to['module']) && !empty($to['itemtype'])) {
             $data['check'] = 1;
         } else {
             $data['check'] = 0;

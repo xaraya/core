@@ -58,9 +58,9 @@ class RemoveprivilegeMethod extends MethodClass
         // Call the Privileges class and get the privilege
         $priv = xarPrivileges::getPrivilege($privid);
         // some assignments can't be removed, for your own good
-        if ((($roleid == 1) && ($privid == 1)) ||
-            (($roleid == 2) && ($privid == 6)) ||
-            (($roleid == 4) && ($privid == 2))) {
+        if ((($roleid == 1) && ($privid == 1))
+            || (($roleid == 2) && ($privid == 6))
+            || (($roleid == 4) && ($privid == 2))) {
             return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_privilege']);
         }
 

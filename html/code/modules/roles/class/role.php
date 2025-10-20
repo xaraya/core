@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\roles
  * @subpackage roles
@@ -75,19 +76,23 @@ class Role extends DataObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return boolean|void
      */
-    public function createItem(Array $data = array())
+    public function createItem(array $data = [])
     {
         // Confirm that this group or user does not already exist
         $dynamicobjects = $this->rolestable;
-        $bindvars = array();
+        $bindvars = [];
         $query = "SELECT name, uname
                   FROM $dynamicobjects ";
         if ($this->itemtype == xarRoles::ROLES_GROUPTYPE) {
-            if (empty($data['name'])) $data['name'] = $this->getName();
+            if (empty($data['name'])) {
+                $data['name'] = $this->getName();
+            }
             $query .= " WHERE name = ? ";
             $bindvars[] = $data['name'];
         } else {
-            if (empty($data['uname'])) $data['uname'] = $this->getUser();
+            if (empty($data['uname'])) {
+                $data['uname'] = $this->getUser();
+            }
             $query .= " WHERE uname = ? ";
             $bindvars[] = $data['uname'];
         }
@@ -96,7 +101,7 @@ class Role extends DataObject
         $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         if ($result->first() > 0) {
             $result = $result->getRow();
-            throw new DuplicateException(array('role',($this->itemtype == xarRoles::ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
+            throw new DuplicateException(['role',($this->itemtype == xarRoles::ROLES_GROUPTYPE) ? $result['name'] : $result['uname'] ]);
         }
 
         $result->close();
@@ -107,18 +112,23 @@ class Role extends DataObject
         $this->mod()->setUserVar('allowemail', false, $id);
 
         // Get a value for the parent id
-        if (empty($data['parentid'])) xarVar::fetch('parentid',  'int', $data['parentid'],  NULL, xarVar::DONT_SET);
-        if (empty($data['parentid'])) $data['parentid'] = (int)xarModVars::get('roles', 'defaultgroup');
+        if (empty($data['parentid'])) {
+            xarVar::fetch('parentid', 'int', $data['parentid'], null, xarVar::DONT_SET);
+        }
+        if (empty($data['parentid'])) {
+            $data['parentid'] = (int) xarModVars::get('roles', 'defaultgroup');
+        }
         if (!empty($data['parentid'])) {
             sys::import('modules.roles.class.roles');
             $parent = xarRoles::get($data['parentid']);
-            if (!$parent->addMember($this))
+            if (!$parent->addMember($this)) {
                 throw new Exception('Unable to create a roles relation');
+            }
         }
 
         // add the duvs
-        xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED);
-        foreach($duvs as $key => $value) {
+        xarVar::fetch('duvs', 'array', $duvs, [], xarVar::NOT_REQUIRED);
+        foreach ($duvs as $key => $value) {
             $this->mod()->setUserVar($key, $value, $id);
         }
 
@@ -126,22 +136,22 @@ class Role extends DataObject
         $item['module'] = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
-        $item['exclude_module'] = array('dynamicdata');
+        $item['exclude_module'] = ['dynamicdata'];
         xarModHooks::call('item', 'create', $id, $item);
         return $id;
     }
 
-    public function updateItem(Array $data = array())
+    public function updateItem(array $data = [])
     {
         $id = parent::updateItem($data);
-        xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED);
-        foreach($duvs as $key => $value) {
+        xarVar::fetch('duvs', 'array', $duvs, [], xarVar::NOT_REQUIRED);
+        foreach ($duvs as $key => $value) {
             $this->mod()->setUserVar($key, $value, $id);
         }
         $item['module'] = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
-        $item['exclude_module'] = array('dynamicdata');
+        $item['exclude_module'] = ['dynamicdata'];
         xarModHooks::call('item', 'update', $id, $item);
         return $id;
     }
@@ -159,11 +169,13 @@ class Role extends DataObject
     public function addMember($member)
     {
         // bail if the purported parent is not a group
-        if ($this->isUser()) return false;
+        if ($this->isUser()) {
+            return false;
+        }
 
         $query = "SELECT * FROM $this->rolememberstable
                  WHERE role_id = ? AND parent_id = ?";
-        $bindvars = array();
+        $bindvars = [];
 
         $bindvars[] = $member->getID();
         $bindvars[] = $this->getID();
@@ -171,14 +183,18 @@ class Role extends DataObject
         $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
-        
+
         // If the relation already exists we are done
-        while($result->next()) $row = $result->fields;
-        if (!empty($row)) return true;
+        while ($result->next()) {
+            $row = $result->fields;
+        }
+        if (!empty($row)) {
+            return true;
+        }
 
         $query = "INSERT INTO $this->rolememberstable (role_id, parent_id)
-                    values (".$member->getID().", ". $this->getID().")";
-        $bindvars = array();
+                    values (" . $member->getID() . ", " . $this->getID() . ")";
+        $bindvars = [];
 
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
@@ -187,19 +203,23 @@ class Role extends DataObject
         // add 1 to the users field of the parent group. This is for display purposes.
         if ($member->isUser()) {
             // get the current count
-            $bindvars = array();
+            $bindvars = [];
             $query = "SELECT  users
                         FROM $this->rolestable";
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
-            if (!$result) return;
-            while($result->next()) $row = $result->fields;
+            if (!$result) {
+                return;
+            }
+            while ($result->next()) {
+                $row = $result->fields;
+            }
 
             // add 1 and update.
-            $bindvars = array();
-            $value = $row['users']+1;
+            $bindvars = [];
+            $value = $row['users'] + 1;
             $query = "UPDATE  " . $this->rolestable . " SET users = " . $value . " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $stmt = $dbconn->prepareStatement($query);
@@ -237,11 +257,11 @@ class Role extends DataObject
         $q->eq('parent_id', $this->getID());
         $q->run();
 
-        // For children that are users subtract 1 from the users field of the parent group. 
+        // For children that are users subtract 1 from the users field of the parent group.
         // This is for display purposes.
         if ($member->isUser() && ($q->affected != 0)) {
             // get the current count.
-            $bindvars = array();
+            $bindvars = [];
             $query = "SELECT  users
                         FROM $this->rolestable";
             $query .= " WHERE id = ?";
@@ -249,13 +269,17 @@ class Role extends DataObject
             $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
-            if (!$result) return;
-            while($result->next()) $row = $result->fields;
+            if (!$result) {
+                return;
+            }
+            while ($result->next()) {
+                $row = $result->fields;
+            }
 
             // subtract 1 and update.
             $dynamicobjects = $this->rolestable;
-            $value = $row['users']-1;
-            $bindvars = array();
+            $value = $row['users'] - 1;
+            $bindvars = [];
             $query = "UPDATE  " . $dynamicobjects . " SET users = " . $value . " WHERE id = ?";
             $bindvars[] =  $this->getID();
 
@@ -279,12 +303,15 @@ class Role extends DataObject
      * @return boolean|string|void
      * @todo flag illegal deletes
      */
-    public function deleteItem(Array $data = array())
+    public function deleteItem(array $data = [])
     {
-        if (!empty($data['itemid'])) $this->setID($data['itemid']);
+        if (!empty($data['itemid'])) {
+            $this->setID($data['itemid']);
+        }
 
-        if($this->getID() == (int)xarModVars::get('roles','defaultgroup'))
-            return xarTpl::module('roles','user','errors',array('layout' => 'remove_defaultusergroup', 'group' => $this->getID()));
+        if ($this->getID() == (int) xarModVars::get('roles', 'defaultgroup')) {
+            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'remove_defaultusergroup', 'group' => $this->getID()]);
+        }
 
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
@@ -292,17 +319,18 @@ class Role extends DataObject
         // Execute the query, bail if an exception was thrown
         $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($this->getID()));
+        $result = $stmt->executeQuery([$this->getID()]);
 
-        if(count($result->fields) == 1)
-            return xarTpl::module('roles','user','errors',array('layout' => 'remove_sole_parent'));
+        if (count($result->fields) == 1) {
+            return xarTpl::module('roles', 'user', 'errors', ['layout' => 'remove_sole_parent']);
+        }
 
         sys::import('modules.roles.class.roles');
         // go through the list, retrieving the roles and detaching each one
         // we need to do it this way because the method removeMember is more than just
         // a simple SQL DELETE
         while ($result->next()) {
-            list($parentid) = $result->fields;
+            [$parentid] = $result->fields;
             $parent = xarRoles::get($parentid);
             // Check that a parent was returned
             if ($parent) {
@@ -312,13 +340,15 @@ class Role extends DataObject
 
         //Let's not remove the role yet. Instead, we want to deactivate it
         $deleted = xarML('deleted');
-        $args = array(
+        $args = [
             'itemid' => $this->getID(),
             'user' => "[" . $deleted . "]" . time(),
             'email' => "[" . $deleted . "]" . time(),
             'state' => xarRoles::ROLES_STATE_DELETED,
-        );
-        if (isset($data['authmodule'])) $args['authmodule'] = $data['authmodule'];
+        ];
+        if (isset($data['authmodule'])) {
+            $args['authmodule'] = $data['authmodule'];
+        }
         $this->updateItem($args);
 
         // get all the privileges that were assigned to this role
@@ -332,7 +362,7 @@ class Role extends DataObject
         $item['module'] = 'roles';
         $item['itemid'] = $this->getID();
         $item['method'] = 'delete';
-        $item['exclude_module'] = array('dynamicdata');
+        $item['exclude_module'] = ['dynamicdata'];
         xarModHooks::call('item', 'delete', $this->getID(), $item);
 
         // CHECKME: re-assign all privileges to the child roles ? (probably not)
@@ -351,19 +381,19 @@ class Role extends DataObject
         // no checks here. just do it
         $this->deleteItem();
         $state = xarRoles::ROLES_STATE_DELETED;
-        $uname = xarML('deleted') . microtime(TRUE) .'.'. $this->properties['id']->value;
+        $uname = xarML('deleted') . microtime(true) . '.' . $this->properties['id']->value;
         $name = '';
         $pass = '';
         $email = '';
         $date_reg = '';
 
-        $bindvars = array();
+        $bindvars = [];
         $query = "UPDATE $this->rolestable
                   SET name = $name,
                       uname = $uname,
                       pass = $pass,
                       email = $email,
-                      date_reg = ".time().",
+                      date_reg = " . time() . ",
                       state = $state";
 
         $query .= " WHERE id = ? ";
@@ -391,8 +421,8 @@ class Role extends DataObject
         static $stmt = null;  // For each id, the query is the same, prepare it once.
 
         $cacheKey = "Privileges.ById";
-        if(xarVar::isCached($cacheKey,$this->properties['id']->value)) {
-            return xarVar::getCached($cacheKey,$this->properties['id']->value);
+        if (xarVar::isCached($cacheKey, $this->properties['id']->value)) {
+            return xarVar::getCached($cacheKey, $this->properties['id']->value);
         }
         // We'll have to get it.
         xarLog3::info("ROLE: getting privileges for id: " . $this->properties['id']->value);
@@ -406,30 +436,30 @@ class Role extends DataObject
                           LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   WHERE   p.id = acl.privilege_id AND
                           acl.role_id = ?";
-        if(!isset($stmt)) {
+        if (!isset($stmt)) {
             $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
-        $result = $stmt->executeQuery(array($this->properties['id']->value));
+        $result = $stmt->executeQuery([$this->properties['id']->value]);
 
         sys::import('modules.privileges.class.privilege');
-        $privileges = array();
+        $privileges = [];
         while ($result->next()) {
-            list($id, $name, $realm, $module_id, $module, $component, $instance, $level,
-                $description) = $result->fields;
-            $perm = new xarPrivilege(array('id' => $id,
-                    'name' => $name,
-                    'realm' => is_null($realm) ? 'All' : $realm,
-                    'module' => $module,
-                    'module_id' => $module_id,
-                    'component' => $component,
-                    'instance' => $instance,
-                    'level' => $level,
-                    'description' => $description,
-                    'parentid' => 0));
+            [$id, $name, $realm, $module_id, $module, $component, $instance, $level,
+                $description] = $result->fields;
+            $perm = new xarPrivilege(['id' => $id,
+                'name' => $name,
+                'realm' => is_null($realm) ? 'All' : $realm,
+                'module' => $module,
+                'module_id' => $module_id,
+                'component' => $component,
+                'instance' => $instance,
+                'level' => $level,
+                'description' => $description,
+                'parentid' => 0]);
             array_push($privileges, $perm);
         }
-        xarVar::setCached($cacheKey,$this->properties['id']->value,$privileges);
+        xarVar::setCached($cacheKey, $this->properties['id']->value, $privileges);
         return $privileges;
     }
 
@@ -444,7 +474,7 @@ class Role extends DataObject
     {
         // mrb: is this only dependent on $this->properties['id']->value? if so, we can cache it too.
         $ancestors = $this->getRoleAncestors();
-        $inherited = array();
+        $inherited = [];
         foreach ($ancestors as $ancestor) {
             $perms = $ancestor->getAssignedPrivileges();
             foreach ($perms as $key => $perm) {
@@ -463,11 +493,17 @@ class Role extends DataObject
     public function hasPrivilege($privname)
     {
         $privs = $this->getAssignedPrivileges();
-        foreach ($privs as $privilege)
-            if ($privilege->getName() == $privname) return true;
+        foreach ($privs as $privilege) {
+            if ($privilege->getName() == $privname) {
+                return true;
+            }
+        }
         $privs = $this->getInheritedPrivileges();
-        foreach ($privs as $privilege)
-            if ($privilege->getName() == $privname) return true;
+        foreach ($privs as $privilege) {
+            if ($privilege->getName() == $privname) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -482,9 +518,9 @@ class Role extends DataObject
     {
         // create an entry in the privmembers table
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
-        $bindvars = array($this->getID(),$privilege->getID());
+        $bindvars = [$this->getID(),$privilege->getID()];
         $dbconn = xarDB3::getConn();
-        $dbconn->Execute($query,$bindvars);
+        $dbconn->Execute($query, $bindvars);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -503,9 +539,9 @@ class Role extends DataObject
         // remove an entry from the privmembers table
         $query = "DELETE FROM $this->acltable
                   WHERE role_id= ? AND privilege_id= ?";
-        $bindvars = array($this->properties['id']->value, $privilege->getID());
+        $bindvars = [$this->properties['id']->value, $privilege->getID()];
         $dbconn = xarDB3::getConn();
-        $dbconn->Execute($query,$bindvars);
+        $dbconn->Execute($query, $bindvars);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -521,9 +557,9 @@ class Role extends DataObject
      * @param integer numitems get a defined number of users
      * @param string order order the result (name, uname, itemtype, email, date_reg, state...)
      * @param string selection get users within this selection criteria
-     * @return array<mixed> 
+     * @return array<mixed>
      */
-    public function getUsers($state = xarRoles::ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
+    public function getUsers($state = xarRoles::ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = null)
     {
         $query = "SELECT r.id, r.name, r.itemtype, r.uname,
                          r.email, r.pass, r.date_reg,
@@ -535,21 +571,23 @@ class Role extends DataObject
                         r.itemtype = ? AND
                         r.state != ? AND
                         rm.parent_id = ?";
-             $bindvars = array(xarRoles::ROLES_USERTYPE,xarRoles::ROLES_STATE_DELETED,$this->getID());
+            $bindvars = [xarRoles::ROLES_USERTYPE,xarRoles::ROLES_STATE_DELETED,$this->getID()];
         } elseif ($state == xarRoles::ROLES_STATE_ALL) {
             $where = "WHERE r.id = rm.role_id AND
                         r.itemtype = ? AND
                         rm.parent_id = ?";
-             $bindvars = array(xarRoles::ROLES_USERTYPE,$this->getID());
+            $bindvars = [xarRoles::ROLES_USERTYPE,$this->getID()];
         } else {
-             $bindvars = array(xarRoles::ROLES_USERTYPE, $state, $this->properties['id']->value);
+            $bindvars = [xarRoles::ROLES_USERTYPE, $state, $this->properties['id']->value];
             $where = "WHERE r.id = rm.role_id AND
                         r.itemtype = ? AND
                         r.state = ? AND
                         rm.parent_id = ?";
         }
         $query .= $where;
-        if (isset($selection)) $query .= $selection;
+        if (isset($selection)) {
+            $query .= $selection;
+        }
         $query .= " ORDER BY " . $order;
         // Prepare the query
         $dbconn = xarDB3::getConn();
@@ -564,12 +602,12 @@ class Role extends DataObject
         // CHECKME: I suppose this is what you meant here ?
         $parentid = $this->getID();
         // arrange the data in an array of role objects
-        $users = array();
+        $users = [];
         while ($result->next()) {
-            list($id) = $result->fields;
+            [$id] = $result->fields;
 
-            $role = DataObjectFactory::getObject(array('name' => 'roles_users'));
-            $role->getItem(array('itemid' => $id));
+            $role = DataObjectFactory::getObject(['name' => 'roles_users']);
+            $role->getItem(['itemid' => $id]);
             $users[] = $role;
         }
         // done
@@ -585,12 +623,12 @@ class Role extends DataObject
      * @param integer itemtype group or user
      * @return integer|void
      */
-    public function countChildren($state = xarRoles::ROLES_STATE_CURRENT, $selection = NULL, $itemtype = NULL)
+    public function countChildren($state = xarRoles::ROLES_STATE_CURRENT, $selection = null, $itemtype = null)
     {
         $xartable = xarDB3::getTables();
         $rolesmemobjects = $this->rolememberstable;
         $rolesobjects = $this->rolestable;
-        $bindvars = array();
+        $bindvars = [];
         $query = "SELECT COUNT(r.id) AS children FROM $rolesobjects AS r
                 JOIN $rolesmemobjects AS rm ON(r.id = rm.role_id)";
 
@@ -616,8 +654,12 @@ class Role extends DataObject
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
         }
-        if($result) return;
-        while ($result->next()) $row = $result->fields;
+        if ($result) {
+            return;
+        }
+        while ($result->next()) {
+            $row = $result->fields;
+        }
 
         return $row['children'];
     }
@@ -630,7 +672,7 @@ class Role extends DataObject
      * @param string $selection count user within this selection criteria
      * @return integer
      */
-    public function countUsers($state = xarRoles::ROLES_STATE_CURRENT, $selection = NULL)
+    public function countUsers($state = xarRoles::ROLES_STATE_CURRENT, $selection = null)
     {
         return $this->countChildren(0, $state, $selection);
     }
@@ -647,35 +689,37 @@ class Role extends DataObject
 
         $cacheKey = 'RoleParents.ById';
         // create an array to hold the objects to be returned
-        $parents = array();
+        $parents = [];
         // if this is the root return an empty array
-        if ($this->getID() == 1) return $parents;
+        if ($this->getID() == 1) {
+            return $parents;
+        }
 
         // if it's cached, we can return it
-        if(xarVar::isCached($cacheKey,$this->properties['id']->value)) {
-            return xarVar::getCached($cacheKey,$this->properties['id']->value);
+        if (xarVar::isCached($cacheKey, $this->properties['id']->value)) {
+            return xarVar::getCached($cacheKey, $this->properties['id']->value);
         }
 
         // if this is a user just perform a SELECT on the rolemembers table
         $query = "SELECT r.*
                   FROM $this->rolestable r, $this->rolememberstable rm
                   WHERE r.id = rm.parent_id AND rm.role_id = ?";
-        if(!isset($stmt)) {
+        if (!isset($stmt)) {
             $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
-        $result = $stmt->executeQuery(array($this->properties['id']->value));
+        $result = $stmt->executeQuery([$this->properties['id']->value]);
 
         // collect the table values and use them to create new role objects
         while ($result->next()) {
-            list($id) = $result->fields;
+            [$id] = $result->fields;
 
-            $role = DataObjectFactory::getObject(array('name' => 'roles_groups'));
-            $role->getItem(array('itemid' => $id));
+            $role = DataObjectFactory::getObject(['name' => 'roles_groups']);
+            $role->getItem(['itemid' => $id]);
             $parents[] = $role;
         }
         // done
-        xarVar::setCached($cacheKey,$this->properties['id']->value,$parents);
+        xarVar::setCached($cacheKey, $this->properties['id']->value, $parents);
         return $parents;
     }
 
@@ -688,10 +732,12 @@ class Role extends DataObject
     public function getRoleAncestors()
     {
         // if this is the root return an empty array
-        if ($this->getID() == 1) return array();
+        if ($this->getID() == 1) {
+            return [];
+        }
         // start by getting an array of the parents
         $parents = $this->getParents();
-        $parents1 = array();
+        $parents1 = [];
         foreach ($parents as $key => $parent) {
             $parents[$key]->setLevel(1);
         }
@@ -707,7 +753,7 @@ class Role extends DataObject
             }
         }
 
-        $ancestors = array();
+        $ancestors = [];
         // If this is a new ancestor add to the end of the array
         foreach ($parents as $parent) {
             $iscontained = false;
@@ -717,7 +763,9 @@ class Role extends DataObject
                     break;
                 }
             }
-            if (!$iscontained) $ancestors[] = $parent;
+            if (!$iscontained) {
+                $ancestors[] = $parent;
+            }
         }
         // done
         return $ancestors;
@@ -731,25 +779,25 @@ class Role extends DataObject
      * @return array<mixed> list of users
      * @todo evaluate performance of this (3 loops, of which 2 nested)
      */
-    public function getDescendants($state = xarRoles::ROLES_STATE_CURRENT, $grpflag=0)
+    public function getDescendants($state = xarRoles::ROLES_STATE_CURRENT, $grpflag = 0)
     {
         $users = $this->getUsers($state);
 
         sys::import('modules.roles.class.roles');
         $groups = xarRoles::getSubGroups($this->getID());
-        $ua = array();
-        foreach($users as $user){
+        $ua = [];
+        foreach ($users as $user) {
             //using the ID as the key so that if a person is in more than one sub group they only get one email (mrb: email?)
             $ua[$user->getID()] = $user;
         }
         //Get the sub groups and go for another round
-        foreach($groups as $group){
+        foreach ($groups as $group) {
             $role = xarRoles::get($group['id']);
             if ($grpflag) {
                 $ua[$group['id']] = $role;
             }
             $users = $role->getDescendants($state);
-            foreach($users as $user){
+            foreach ($users as $user) {
                 $ua[$user->getID()] = $user;
             }
         }
@@ -796,7 +844,9 @@ class Role extends DataObject
     {
         $parents = $this->getParents();
         foreach ($parents as $parent) {
-            if ($role->isEqual($parent)) return true;
+            if ($role->isEqual($parent)) {
+                return true;
+            }
         }
         return false;
     }
@@ -812,7 +862,9 @@ class Role extends DataObject
     {
         $ancestors = $this->getRoleAncestors();
         foreach ($ancestors as $ancestor) {
-            if ($role->isEqual($ancestor)) return true;
+            if ($role->isEqual($ancestor)) {
+                return true;
+            }
         }
         return false;
     }
@@ -827,7 +879,7 @@ class Role extends DataObject
     public function adjustParentUsers($adjust)
     {
         $memberobject =  $this->rolestable;
-        $bindvars = array();
+        $bindvars = [];
         $query = "SELECT users AS users FROM $memberobject";
         $query1 = "UPDATE $memberobject ";
 
@@ -841,10 +893,11 @@ class Role extends DataObject
 
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
-            if (!$result) return;
+            if (!$result) {
+                return;
+            }
             // get the current count.
-            while ($result->next())
-            {
+            while ($result->next()) {
                 $row = $result->fields;
             }
 
@@ -853,7 +906,9 @@ class Role extends DataObject
             $bindvars[] = $value;
             $stmt = $dbconn->prepareStatement($query1);
             $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
-            if (!$result) return;
+            if (!$result) {
+                return;
+            }
         }
         return true;
     }
@@ -866,35 +921,104 @@ class Role extends DataObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @todo since there are so many a generalized getter (magic __get() ) might be more pleasurable
      */
-    function getID(): int { return $this->properties['id']->value; }
-    function getName() { return $this->properties['name']->getValue(); }
-    function getUname() { return $this->properties['uname']->value; }
-    function getType(): int { return $this->properties['role_type']->value; }
-    function getUser() { return $this->properties['uname']->value; }
-    function getEmail() { return $this->properties['email']->value; }
-    function getPass() { return $this->properties['password']->value; }
-    function getState() { return $this->properties['state']->value; }
-    function getDateReg() { return $this->properties['regdate']->value; }
-    function getValCode() { return $this->properties['valcode']->value; }
-    function getAuthModule() { return $this->properties['authmodule']->value; }
-    function getLevel()
+    public function getID(): int
+    {
+        return $this->properties['id']->value;
+    }
+    public function getName()
+    {
+        return $this->properties['name']->getValue();
+    }
+    public function getUname()
+    {
+        return $this->properties['uname']->value;
+    }
+    public function getType(): int
+    {
+        return $this->properties['role_type']->value;
+    }
+    public function getUser()
+    {
+        return $this->properties['uname']->value;
+    }
+    public function getEmail()
+    {
+        return $this->properties['email']->value;
+    }
+    public function getPass()
+    {
+        return $this->properties['password']->value;
+    }
+    public function getState()
+    {
+        return $this->properties['state']->value;
+    }
+    public function getDateReg()
+    {
+        return $this->properties['regdate']->value;
+    }
+    public function getValCode()
+    {
+        return $this->properties['valcode']->value;
+    }
+    public function getAuthModule()
+    {
+        return $this->properties['authmodule']->value;
+    }
+    public function getLevel()
     {
         return $this->parentlevel;
     }
 
-    function setID($var) { $this->properties['id']->setValue($var); }
-    function setName($var) { $this->properties['name']->setValue($var); }
-    function setUname($var) { $this->properties['uname']->setValue($var); }
-    function setType($var) { $this->properties['role_type']->setValue($var); }
-    function setParent($var) { $this->properties['parentid']->setValue($var); }
-    function setUser($var) { $this->properties['uname']->setValue($var); }
-    function setEmail($var) { $this->properties['email']->setValue($var); }
-    function setPass($var) { $this->properties['password']->setValue($var); }
-    function setState($var) { $this->properties['state']->setValue($var); }
-    function setDateReg($var) { $this->properties['regdate']->setValue($var); }
-    function setValCode($var) { $this->properties['valcode']->setValue($var); }
-    function setAuthModule($var) { $this->properties['authmodule']->setValue($var); }
-    function setLevel($var)
+    public function setID($var)
+    {
+        $this->properties['id']->setValue($var);
+    }
+    public function setName($var)
+    {
+        $this->properties['name']->setValue($var);
+    }
+    public function setUname($var)
+    {
+        $this->properties['uname']->setValue($var);
+    }
+    public function setType($var)
+    {
+        $this->properties['role_type']->setValue($var);
+    }
+    public function setParent($var)
+    {
+        $this->properties['parentid']->setValue($var);
+    }
+    public function setUser($var)
+    {
+        $this->properties['uname']->setValue($var);
+    }
+    public function setEmail($var)
+    {
+        $this->properties['email']->setValue($var);
+    }
+    public function setPass($var)
+    {
+        $this->properties['password']->setValue($var);
+    }
+    public function setState($var)
+    {
+        $this->properties['state']->setValue($var);
+    }
+    public function setDateReg($var)
+    {
+        $this->properties['regdate']->setValue($var);
+    }
+    public function setValCode($var)
+    {
+        $this->properties['valcode']->setValue($var);
+    }
+    public function setAuthModule($var)
+    {
+        $this->properties['authmodule']->setValue($var);
+    }
+    public function setLevel($var)
     {
         $this->parentlevel = $var;
     }

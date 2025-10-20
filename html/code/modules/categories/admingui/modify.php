@@ -81,8 +81,8 @@ class ModifyMethod extends MethodClass
         foreach ($categories as $key => $category) {
             $categories[$key]['slash_separated'] = '';
 
-            while ((count($category_Stack) > 0) &&
-                   ($category_Stack[count($category_Stack) - 1]['indentation'] >= $category['indentation'])
+            while ((count($category_Stack) > 0)
+                   && ($category_Stack[count($category_Stack) - 1]['indentation'] >= $category['indentation'])
             ) {
                 array_pop($category_Stack);
             }

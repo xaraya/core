@@ -84,25 +84,25 @@ class SetstateMethod extends MethodClass
                 }
                 break;
             case xarTheme::STATE_INACTIVE:
-                if (($oldState != xarTheme::STATE_UNINITIALISED) &&
-                    ($oldState != xarTheme::STATE_ACTIVE) &&
-                    ($oldState != xarTheme::STATE_MISSING_FROM_INACTIVE) &&
-                    ($oldState != xarTheme::STATE_UPGRADED)) {
+                if (($oldState != xarTheme::STATE_UNINITIALISED)
+                    && ($oldState != xarTheme::STATE_ACTIVE)
+                    && ($oldState != xarTheme::STATE_MISSING_FROM_INACTIVE)
+                    && ($oldState != xarTheme::STATE_UPGRADED)) {
                     $this->session()->setVar('errormsg', $this->ml('Invalid theme state transition'));
                     return false;
                 }
                 break;
             case xarTheme::STATE_ACTIVE:
-                if (($oldState != xarTheme::STATE_INACTIVE) &&
-                    ($oldState != xarTheme::STATE_MISSING_FROM_ACTIVE)) {
+                if (($oldState != xarTheme::STATE_INACTIVE)
+                    && ($oldState != xarTheme::STATE_MISSING_FROM_ACTIVE)) {
                     $this->session()->setVar('errormsg', $this->ml('Invalid theme state transition'));
                     return false;
                 }
                 break;
             case xarTheme::STATE_UPGRADED:
-                if (($oldState != xarTheme::STATE_INACTIVE) &&
-                    ($oldState != xarTheme::STATE_ACTIVE) &&
-                    $oldState != xarTheme::STATE_MISSING_FROM_UPGRADED) {
+                if (($oldState != xarTheme::STATE_INACTIVE)
+                    && ($oldState != xarTheme::STATE_ACTIVE)
+                    && $oldState != xarTheme::STATE_MISSING_FROM_UPGRADED) {
                     $this->session()->setVar('errormsg', $this->ml('Invalid theme state transition'));
                     return false;
                 }

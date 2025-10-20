@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -23,10 +24,10 @@ function sql_220_03()
     ");
     $data['reply'] = xarML("
         Success!
-    ");    
-    
+    ");
+
     //Load Table Maintainance API
-    sys::import('xaraya.tableddl');    
+    sys::import('xaraya.tableddl');
     // create eventsystem table
     $dbconn  = xarDB::getConn();
     try {
@@ -45,25 +46,25 @@ function sql_220_03()
          *   PRIMARY KEY (id)
          * )
          */
-        $fields = array(
-            'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true,     'primary_key' => true),
-            'event' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
-            'module_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),    
-            'itemtype' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),
-            'area' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-            'type' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-            'func' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-            'scope' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset)
-        );
+        $fields = [
+            'id' => ['type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true,     'primary_key' => true],
+            'event' => ['type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset],
+            'module_id' => ['type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'],
+            'itemtype' => ['type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'],
+            'area' => ['type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset],
+            'type' => ['type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset],
+            'func' => ['type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset],
+            'scope' => ['type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset],
+        ];
 
         // Create the eventsystem table
         $query = xarTableDDL::createTable($events_table, $fields);
         $dbconn->Execute($query);
 
         // each entry should be unique
-        $index = array('name'   => 'i_'.$prefix.'_eventsystem',
-            'fields' => array('event', 'module_id', 'itemtype'),
-            'unique' => true);
+        $index = ['name'   => 'i_' . $prefix . '_eventsystem',
+            'fields' => ['event', 'module_id', 'itemtype'],
+            'unique' => true];
 
         $query = xarTableDDL::createIndex($events_table, $index);
         $dbconn->Execute($query);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * xarRoles class
  *
@@ -26,23 +27,23 @@ use Xaraya\Facades\xarMod3;
  */
 class xarRoles extends xarObject
 {
-    const ROLES_STATE_DELETED = 0;
-    const ROLES_STATE_INACTIVE = 1;
-    const ROLES_STATE_NOTVALIDATED = 2;
-    const ROLES_STATE_ACTIVE = 3;
-    const ROLES_STATE_PENDING = 4;
-    const ROLES_STATE_CURRENT = 98;
-    const ROLES_STATE_ALL = 99;
+    public const ROLES_STATE_DELETED = 0;
+    public const ROLES_STATE_INACTIVE = 1;
+    public const ROLES_STATE_NOTVALIDATED = 2;
+    public const ROLES_STATE_ACTIVE = 3;
+    public const ROLES_STATE_PENDING = 4;
+    public const ROLES_STATE_CURRENT = 98;
+    public const ROLES_STATE_ALL = 99;
 
-    const ROLES_USERTYPE = 1;
-    const ROLES_GROUPTYPE = 2;
+    public const ROLES_USERTYPE = 1;
+    public const ROLES_GROUPTYPE = 2;
 
     protected static $dbconn;
     protected static $rolestable;
     protected static $rolememberstable;
 
-    public $allgroups = array();
-    public $users = array();
+    public $allgroups = [];
+    public $users = [];
 
     public static function initialize()
     {
@@ -67,7 +68,7 @@ class xarRoles extends xarObject
     public static function getgroups()
     {
         self::initialize();
-        static $allgroups = array();
+        static $allgroups = [];
         if (empty($allgroups)) {
             $query = "SELECT r.id AS id, r.name AS name, r.users AS users, rm.parent_id AS parentid 
                       FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
@@ -77,8 +78,12 @@ class xarRoles extends xarObject
             $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
-            if(!$result) return;            
-            while($result->next()) $allgroups[] = $result->fields;
+            if (!$result) {
+                return;
+            }
+            while ($result->next()) {
+                $allgroups[] = $result->fields;
+            }
         }
         return $allgroups;
     }
@@ -105,9 +110,15 @@ class xarRoles extends xarObject
         $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
-        if(!$result) return;            
-        while($result->next()) $group[] = $result->fields;
-        if (!empty($group)) return $group;
+        if (!$result) {
+            return;
+        }
+        while ($result->next()) {
+            $group[] = $result->fields;
+        }
+        if (!empty($group)) {
+            return $group;
+        }
         return;
     }
 
@@ -123,9 +134,9 @@ class xarRoles extends xarObject
      */
     public static function getsubgroups($id)
     {
-        $subgroups = array();
+        $subgroups = [];
         $groups = self::getgroups();
-        foreach($groups as $subgroup) {
+        foreach ($groups as $subgroup) {
             if ($subgroup['parentid'] == $id) {
                 $subgroups[] = $subgroup;
             }
@@ -145,20 +156,23 @@ class xarRoles extends xarObject
     public static function get($id)
     {
         $cacheKey = 'Roles.ById';
-        if(xarVar::isCached($cacheKey,$id)) {
-            return xarVar::getCached($cacheKey,$id);
+        if (xarVar::isCached($cacheKey, $id)) {
+            return xarVar::getCached($cacheKey, $id);
         }
         // Need to get it from DB.
         // TODO: move caching to _lookuprole?
-        $r = self::_lookuprole('id',(int) $id);
-        xarVar::setCached($cacheKey,$id,$r);
+        $r = self::_lookuprole('id', (int) $id);
+        xarVar::setCached($cacheKey, $id, $r);
         return $r;
     }
 
     /**
      * Wrapper functions to support Xaraya 1 API for roles
      */
-    public static function getRole($id) {return self::get($id);}
+    public static function getRole($id)
+    {
+        return self::get($id);
+    }
 
     /**
      * findRole: finds a single role based on its name
@@ -171,9 +185,9 @@ class xarRoles extends xarObject
      * @return object role
      * @todo cache this too?
      */
-    public static function findRole($name,$itemtype=self::ROLES_USERTYPE,$state=self::ROLES_STATE_ACTIVE)
+    public static function findRole($name, $itemtype = self::ROLES_USERTYPE, $state = self::ROLES_STATE_ACTIVE)
     {
-        return self::_lookuprole('name',$name,$itemtype,$state);
+        return self::_lookuprole('name', $name, $itemtype, $state);
     }
 
     /**
@@ -183,9 +197,9 @@ class xarRoles extends xarObject
      * @return object role
      * @todo cache this too?
      */
-    public static function ufindRole($uname,$itemtype=self::ROLES_USERTYPE,$state=self::ROLES_STATE_ACTIVE)
+    public static function ufindRole($uname, $itemtype = self::ROLES_USERTYPE, $state = self::ROLES_STATE_ACTIVE)
     {
-        return self::_lookuprole('uname',$uname,$itemtype,$state);
+        return self::_lookuprole('uname', $uname, $itemtype, $state);
     }
 
     /**
@@ -210,39 +224,43 @@ class xarRoles extends xarObject
         $stmt = self::$dbconn->prepareStatement($query);
 
         // Execute the query, bail if an exception was thrown
-        $result = $stmt->executeQuery(array($parentname));
+        $result = $stmt->executeQuery([$parentname]);
         $result->first();
 
         // create the parent object
-        list($id, $name, $itemtype, $parentid, $uname, $email, $pass,
-            $date_reg, $val_code, $state, $auth_module) = $result->fields;
+        [$id, $name, $itemtype, $parentid, $uname, $email, $pass,
+            $date_reg, $val_code, $state, $auth_module] = $result->fields;
         sys::import('modules.dynamicdata.class.objects.factory');
         switch ($itemtype) {
-            case 1: $name = "roles_users"; break;
-            case 2: $name = "roles_groups"; break;
+            case 1: $name = "roles_users";
+                break;
+            case 2: $name = "roles_groups";
+                break;
         }
         /** @var Role $parent */
-        $parent = DataObjectFactory::getObject(array('name' => $name));
-        $parent->getItem(array('itemid' => $id));
+        $parent = DataObjectFactory::getObject(['name' => $name]);
+        $parent->getItem(['itemid' => $id]);
 
         // retrieve the child's data from the repository
         // Execute the query, bail if an exception was thrown
-        $result = $stmt->executeQuery(array($childname));
+        $result = $stmt->executeQuery([$childname]);
         $result->first();
 
         // create the child object
-        list($id, $name, $itemtype, $parentid, $uname, $email, $pass,
-            $date_reg, $val_code, $state, $auth_module) = $result->fields;
+        [$id, $name, $itemtype, $parentid, $uname, $email, $pass,
+            $date_reg, $val_code, $state, $auth_module] = $result->fields;
         sys::import('modules.roles.class.role');
         switch ($itemtype) {
-            case 1: $name = "roles_users"; break;
-            case 2: $name = "roles_groups"; break;
+            case 1: $name = "roles_users";
+                break;
+            case 2: $name = "roles_groups";
+                break;
         }
         /** @var Role $child */
-        $child = DataObjectFactory::getObject(array('name' => $name));
-        $child->getItem(array('itemid' => $id));
+        $child = DataObjectFactory::getObject(['name' => $name]);
+        $child->getItem(['itemid' => $id]);
 
-       // done
+        // done
         return $parent->addMember($child);
     }
 
@@ -330,7 +348,7 @@ class xarRoles extends xarObject
      * @param int    $state
      * @return object|void a role
      */
-    private static function _lookuprole($field,$value,$itemtype=self::ROLES_USERTYPE,$state=self::ROLES_STATE_ALL)
+    private static function _lookuprole($field, $value, $itemtype = self::ROLES_USERTYPE, $state = self::ROLES_STATE_ALL)
     {
         // get rid of 30 repeating queries for base homepage due to security checks
         $cacheScope = 'Roles.ByLookup';
@@ -353,24 +371,34 @@ class xarRoles extends xarObject
             }
             $stmt = self::$dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($params, xarDB3::getFetchAssoc());
-            if(!$result) return;
-            if($result->next()) $row = $result->fields;
-            if (empty($row)) return;
+            if (!$result) {
+                return;
+            }
+            if ($result->next()) {
+                $row = $result->fields;
+            }
+            if (empty($row)) {
+                return;
+            }
             xarCoreCache::setCached($cacheScope, $cacheName, $row);
         }
 
         // create and return the role object
-        if ($row['itemtype'] == self::ROLES_USERTYPE) $name = 'roles_users';
-        elseif ($row['itemtype'] == self::ROLES_GROUPTYPE) $name = 'roles_groups';
-        else throw new Exception(xarML('Unknown role type'));
+        if ($row['itemtype'] == self::ROLES_USERTYPE) {
+            $name = 'roles_users';
+        } elseif ($row['itemtype'] == self::ROLES_GROUPTYPE) {
+            $name = 'roles_groups';
+        } else {
+            throw new Exception(xarML('Unknown role type'));
+        }
         $cacheKey = 'Roles.ById';
-        if(xarVar::isCached($cacheKey,$row['id'])) {
-            return xarVar::getCached($cacheKey,$row['id']);
+        if (xarVar::isCached($cacheKey, $row['id'])) {
+            return xarVar::getCached($cacheKey, $row['id']);
         }
         sys::import('modules.dynamicdata.class.objects.factory');
-        $role = DataObjectFactory::getObject(array('name' => $name));
-        $role->getItem(array('itemid' => $row['id']));
-        xarVar::setCached($cacheKey,$row['id'],$role);
+        $role = DataObjectFactory::getObject(['name' => $name]);
+        $role->getItem(['itemid' => $row['id']]);
+        xarVar::setCached($cacheKey, $row['id'], $role);
         return $role;
     }
 }

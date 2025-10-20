@@ -103,7 +103,7 @@ class Phase5Method extends MethodClass
                     $db = new SQLite3($dbpath);
                 } catch (Exception $e) {
                     echo $e->getMessage();
-                     $this->exit();
+                    $this->exit();
                     return;
                 }
             }

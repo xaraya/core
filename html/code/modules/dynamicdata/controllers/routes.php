@@ -95,7 +95,7 @@ class DynamicDataRoutes extends ModuleRoutes
      * Find route uri based on params
      * @param array<string, mixed> $params
      */
-    public static function findRoute(RouterInterface $router, array $params): string|null
+    public static function findRoute(RouterInterface $router, array $params): ?string
     {
         return parent::findRoute($router, $params);
     }
@@ -105,7 +105,7 @@ class DynamicDataRoutes extends ModuleRoutes
      * @param string $namePrefix incl. moduleName
      * @param array<string, mixed> $params
      */
-    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): string|null
+    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): ?string
     {
         // custom routes first
         $name = static::findCustomRouteName($params);
@@ -128,7 +128,7 @@ class DynamicDataRoutes extends ModuleRoutes
      * Find custom route name for this module
      * @param array<string, mixed> $params
      */
-    public static function findCustomRouteName(array $params): string|null
+    public static function findCustomRouteName(array $params): ?string
     {
         $params['type'] ??= 'user';
         if ($params['type'] != 'user') {

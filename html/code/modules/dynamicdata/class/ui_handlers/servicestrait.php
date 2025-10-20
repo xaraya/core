@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Core services for ui handler classes
  * @package modules\dynamicdata

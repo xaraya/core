@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.base.xarproperties.textbox');
 
@@ -19,8 +20,8 @@ class PassBoxProperty extends TextBoxProperty
     public $id         = 46;
     public $name       = 'passwordbox';
     public $desc       = 'Password';
-    public $reqmodules = array('roles');
-    public $aliases    = array('id' => 461);
+    public $reqmodules = ['roles'];
+    public $aliases    = ['id' => 461];
 
     public $password = null;
 
@@ -31,50 +32,52 @@ class PassBoxProperty extends TextBoxProperty
     public $validation_password_confirm_invalid;
     public $initialization_hash_type        = 'md5';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
-        $this->template ='password';
+        $this->template = 'password';
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
-	/**
-	 * @return array<mixed>   array of provided elements
-	 */
-    function aliases()
+    /**
+     * @return array<mixed>   array of provided elements
+     */
+    public function aliases()
     {
         if (get_class($this) !== 'PassBoxProperty') {
             return [];
-	}
+        }
 
         $a1['id']   = 461;
         $a1['name'] = 'password';
         $a1['desc'] = 'Password Text Box';
-        $a1['reqmodules'] = array('roles');
-        return array($a1);
+        $a1['reqmodules'] = ['roles'];
+        return [$a1];
     }
 
-	/**
-	 * Set the value of input
-	 * 
-	 * @param  mixed value The value of the input
-	 */	
-    function setValue($value=null)
+    /**
+     * Set the value of input
+     *
+     * @param  mixed value The value of the input
+     */
+    public function setValue($value = null)
     {
         $this->value = $this->encrypt($value);
     }
 
-	/**
-	 * Validate the value of a textbox
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a textbox
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
         $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
-        if (!isset($value)) $value = "";
+        if (!isset($value)) {
+            $value = "";
+        }
 
         if ($this->validation_password_confirm) {
             if (is_array($value) && $value[0] == $value[1]) {
@@ -92,7 +95,9 @@ class PassBoxProperty extends TextBoxProperty
         }
 
         if (!(empty($value) && !empty($this->value))) {
-            if (!parent::validateValue($value)) return false;
+            if (!parent::validateValue($value)) {
+                return false;
+            }
 
             $this->password = $value;
             $this->setValue($value);
@@ -101,51 +106,61 @@ class PassBoxProperty extends TextBoxProperty
         return true;
     }
 
-	/**
-	 * Encrypt the provided value
-	 *
-	 * @param string value  The value to be encrypted
-	 * @return string  Returns the hashed value 
-	 * @throws Exception Thrown if hash type not defined
-	 */
+    /**
+     * Encrypt the provided value
+     *
+     * @param string value  The value to be encrypted
+     * @return string  Returns the hashed value
+     * @throws Exception Thrown if hash type not defined
+     */
     public function encrypt($value = null)
     {
-        if (empty($value)) return null;
-        
+        if (empty($value)) {
+            return null;
+        }
+
         // If we removed the default, revert to md5
-        if (empty($this->initialization_hash_type)) return md5($value);
+        if (empty($this->initialization_hash_type)) {
+            return md5($value);
+        }
         // Do not encrypt only if explicitly stated
-        if ($this->initialization_hash_type == 'none') return $value;
+        if ($this->initialization_hash_type == 'none') {
+            return $value;
+        }
         try {
             return hash($this->initialization_hash_type, $value);
         } catch (Exception $e) {
-        // Bad hash type? Go back to md5
+            // Bad hash type? Go back to md5
             return md5($value);
         }
     }
 
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (isset($data['confirm'])) $this->validation_password_confirm = $data['confirm'];
+        if (isset($data['confirm'])) {
+            $this->validation_password_confirm = $data['confirm'];
+        }
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a textbox for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
+    /**
+     * Display a textbox for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
         // We don't want to show the password, but leave open the possibility of displaying some value here
-        if (!isset($data['value'])) $data['value'] = ' ';
+        if (!isset($data['value'])) {
+            $data['value'] = ' ';
+        }
         return parent::showOutput($data);
     }
 

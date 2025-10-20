@@ -50,8 +50,8 @@ class UnlinkMethod extends MethodClass
             }
         } else {
             // Argument check
-            if ((empty($modid)) || !is_numeric($modid) ||
-                (empty($iid)) || !is_numeric($iid)) {
+            if ((empty($modid)) || !is_numeric($modid)
+                || (empty($iid)) || !is_numeric($iid)) {
                 $msg = $this->ml('Invalid Parameter Count', '', 'admin', 'unlink', 'categories');
                 throw new BadParameterException(null, $msg);
             }

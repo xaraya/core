@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -19,12 +20,12 @@ function sql_220_04()
     ");
     $data['reply'] = xarML("
         Success!
-    ");    
+    ");
 
     try {
         // initialise event system
-        $systemArgs = array();
-        xarEvents::init($systemArgs);        
+        $systemArgs = [];
+        xarEvents::init($systemArgs);
         // Register base module event subjects
         xarEvents::registerSubject('Event', 'event', 'base');
         xarEvents::registerSubject('ServerRequest', 'server', 'base');
@@ -44,6 +45,6 @@ function sql_220_04()
         Failed!
         ");
     }
-    return $data;   
-    
+    return $data;
+
 }

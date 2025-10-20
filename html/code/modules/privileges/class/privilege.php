@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\privileges
  * @subpackage privileges
@@ -33,7 +34,7 @@ class xarPrivilege extends xarMask
      * @param   array of values
      * @return  xarPrivilege object
     */
-    function __construct($pargs)
+    public function __construct($pargs)
     {
         parent::__construct($pargs);
         $this->parentid     = isset($pargs['parentid']) ? (int) $pargs['parentid'] : 0;
@@ -48,11 +49,11 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return  boolean
     */
-   function add()
-   {
-        if(empty($this->name)) {
-            $msg = xarML('You must enter a name.','privileges');
-            throw new DuplicateException(null,$msg);
+    public function add()
+    {
+        if (empty($this->name)) {
+            $msg = xarML('You must enter a name.', 'privileges');
+            throw new DuplicateException(null, $msg);
             //xarSession::setVar('errormsg', _MODARGSERROR);
             //return false;
         }
@@ -60,24 +61,26 @@ class xarPrivilege extends xarMask
         $dbconn = xarDB3::getConn();
         // create the insert query
         $realmid = null;
-        if($this->realm != 'All') {
-            $stmt = $dbconn->prepareStatement('SELECT id FROM '. $this->realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($this->realm),xarDB3::getFetchAssoc());
-            if($result->next()) $realmid = $result->getInt('id');
+        if ($this->realm != 'All') {
+            $stmt = $dbconn->prepareStatement('SELECT id FROM ' . $this->realmstable . ' WHERE name=?');
+            $result = $stmt->executeQuery([$this->realm], xarDB3::getFetchAssoc());
+            if ($result->next()) {
+                $realmid = $result->getInt('id');
+            }
         }
         $query = "INSERT INTO $this->privilegestable
                     (name, realm_id, module_id, component, instance, level, itemtype, description)
                   VALUES (?,?,?,?,?,?,?,?)";
-        $bindvars = array($this->name, $realmid, $this->module_id,
-                          $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE, $this->description);
+        $bindvars = [$this->name, $realmid, $this->module_id,
+            $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE, $this->description];
         //Execute the query, bail if an exception was thrown
-        $dbconn->Execute($query,$bindvars);
+        $dbconn->Execute($query, $bindvars);
         // the insert created a new index value
         // retrieve the value
         $this->id = $dbconn->getLastId($this->privilegestable);
 
         // make this privilege a child of its parent
-        if(!empty($this->parentid)) {
+        if (!empty($this->parentid)) {
             sys::import('modules.privileges.class.privileges');
             $parentperm = xarPrivileges::getprivilege($this->parentid);
             $parentperm->addMember($this);
@@ -97,13 +100,13 @@ class xarPrivilege extends xarMask
      * @return  boolean
      * @todo    check to make sure the child is not a parent of the parent
     */
-    function addMember($member)
+    public function addMember($member)
     {
         $query = "INSERT INTO $this->privmemberstable VALUES (?,?)";
-        $bindvars = array($member->getID(), $this->getID());
+        $bindvars = [$member->getID(), $this->getID()];
         //Execute the query, bail if an exception was thrown
         $dbconn = xarDB3::getConn();
-        $dbconn->Execute($query,$bindvars);
+        $dbconn->Execute($query, $bindvars);
         // Refresh the privileges cached for the current sessions
         sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
@@ -119,22 +122,24 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return  boolean
     */
-    function removeMember($member)
+    public function removeMember($member)
     {
         $xartable = xarDB3::getTables();
         $rolesobjects = $this->privmemberstable;
-        $bindvars = array();
+        $bindvars = [];
         $query = "DELETE FROM $rolesobjects ";
-    
+
         $query .= " WHERE privilege_id = ?";
         $bindvars[] = $member->getID();
         $query .= " AND  parent_id = ?";
         $bindvars[] = $this->getID();
-        
+
         $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
-        if (!$result) return false;
+        if (!$result) {
+            return false;
+        }
         // Refresh the privileges cached for the current sessions
         sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
@@ -150,26 +155,28 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return  boolean
     */
-    function update()
+    public function update()
     {
         $dbconn = xarDB3::getConn();
         $realmid = null;
-        if($this->realm != 'All') {
-            $stmt = $dbconn->prepareStatement('SELECT id FROM '. $this->realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($this->realm),xarDB3::getFetchAssoc());
-            if($result->next()) $realmid = $result->getInt('id');
+        if ($this->realm != 'All') {
+            $stmt = $dbconn->prepareStatement('SELECT id FROM ' . $this->realmstable . ' WHERE name=?');
+            $result = $stmt->executeQuery([$this->realm], xarDB3::getFetchAssoc());
+            if ($result->next()) {
+                $realmid = $result->getInt('id');
+            }
         }
 
-        $query =    "UPDATE " . $this->privilegestable .
-                    ' SET name = ?,     realm_id = ?,
+        $query =    "UPDATE " . $this->privilegestable
+                    . ' SET name = ?,     realm_id = ?,
                           module_id = ?,   component = ?,
                           instance = ?, level = ?, itemtype = ?
                       WHERE id = ?';
-        $bindvars = array($this->name, $realmid, $this->module_id,
-                          $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE,
-                          $this->getID());
+        $bindvars = [$this->name, $realmid, $this->module_id,
+            $this->component, $this->instance, $this->level, self::PRIVILEGES_PRIVILEGETYPE,
+            $this->getID()];
         //Execute the query, bail if an exception was thrown
-        $dbconn->Execute($query,$bindvars);
+        $dbconn->Execute($query, $bindvars);
 
         // Refresh the privileges cached for the current sessions
         sys::import('modules.privileges.class.security');
@@ -188,24 +195,24 @@ class xarPrivilege extends xarMask
      * @todo    reverse the order of deletion, i.e. first delete the related parts then the master (foreign key compat)
      * @todo    even better, do it in a transaction.
     */
-    function remove()
+    public function remove()
     {
         // set up the DELETE query
         $query = "DELETE FROM $this->privilegestable WHERE id=?";
         $dbconn = xarDB3::getConn();
         //Execute the query, bail if an exception was thrown
-        $dbconn->Execute($query,array($this->id));
+        $dbconn->Execute($query, [$this->id]);
 
         // set up a query to get all the parents of this child
         $query = "SELECT parent_id FROM $this->privmemberstable
               WHERE privilege_id=?";
         //Execute the query, bail if an exception was thrown
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($this->getID()));
+        $result = $stmt->executeQuery([$this->getID()]);
 
         // remove this child from all the parents
-        while($result->next()) {
-            list($parentid) = $result->fields;
+        while ($result->next()) {
+            [$parentid] = $result->fields;
             if ($parentid != 0) {
                 $parentperm = xarPrivileges::getPrivilege($parentid);
                 $parentperm->removeMember($this);
@@ -242,14 +249,14 @@ class xarPrivilege extends xarMask
      * @param   role object
      * @return  boolean
     */
-    function isassigned($role)
+    public function isassigned($role)
     {
         static $stmt = null;
 
         $query = "SELECT role_id FROM $this->acltable WHERE
                 role_id = ? AND privilege_id = ?";
-        $bindvars = array($role->getID(), $this->getID());
-        if(!isset($stmt)) {
+        $bindvars = [$role->getID(), $this->getID()];
+        if (!isset($stmt)) {
             $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
@@ -267,7 +274,7 @@ class xarPrivilege extends xarMask
      * @return array<mixed>
      * @todo    seems to me this belong in roles module instead?
     */
-    function getRoles()
+    public function getRoles()
     {
         // set up a query to select the roles this privilege
         // is linked to in the acl table
@@ -279,24 +286,24 @@ class xarPrivilege extends xarMask
                         acl.privilege_id = ?";
         $dbconn = xarDB3::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($this->id));
+        $result = $stmt->executeQuery([$this->id]);
 
         // make objects from the db entries retrieved
         sys::import('modules.roles.class.roles');
-        $roles = array();
+        $roles = [];
 
         sys::import('modules.dynamicdata.class.objects.factory');
-        while($result->next()) {
-            list($id,$name,$itemtype,$uname,$email,$pass,$auth_modid) = $result->fields;
+        while ($result->next()) {
+            [$id, $name, $itemtype, $uname, $email, $pass, $auth_modid] = $result->fields;
             switch ($itemtype) {
                 case 1:
-                $role = DataObjectFactory::getObject(array('name' => 'roles_users'));
-                break;
+                    $role = DataObjectFactory::getObject(['name' => 'roles_users']);
+                    break;
                 case 2:
-                $role = DataObjectFactory::getObject(array('name' => 'roles_groups'));
-                break;
+                    $role = DataObjectFactory::getObject(['name' => 'roles_groups']);
+                    break;
             }
-            $role->getItem(array('itemid' => $id));
+            $role->getItem(['itemid' => $id]);
             /*
             $role = new xarRole(array('id' => $id,
                                       'name' => $name,
@@ -326,7 +333,7 @@ class xarPrivilege extends xarMask
      * @param   role object
      * @return  boolean
     */
-    function removeRole($role)
+    public function removeRole($role)
     {
         // use the equivalent method from the roles object
         return $role->removePrivilege($this);
@@ -339,36 +346,36 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return array<mixed> of privilege objects
     */
-    function getParents()
+    public function getParents()
     {
         static $stmt = null;
 
         // create an array to hold the objects to be returned
-        $parents = array();
+        $parents = [];
 
         // perform a SELECT on the privmembers table
         $query = "SELECT DISTINCT p.*, m.name
                   FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.parent_id
                   LEFT JOIN $this->modulestable m ON p.module_id = m.id
                   WHERE pm.privilege_id = ?";
-        if(!isset($stmt)) {
+        if (!isset($stmt)) {
             $dbconn = xarDB3::getConn();
             $stmt = $dbconn->prepareStatement($query);
         }
-        $result = $stmt->executeQuery(array($this->getID()));
+        $result = $stmt->executeQuery([$this->getID()]);
         // collect the table values and use them to create new role objects
-        while($result->next()) {
-            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$module) = $result->fields;
-            $pargs = array('id'=>$id,
-                            'name'=>$name,
-                            'realm'=>$realm,
-                            'module'=>$module,
-                            'module_id'=>$module_id,
-                            'component'=>$component,
-                            'instance'=>$instance,
-                            'level'=>$level,
-                            'description'=>$description,
-                            'parentid' => $id);
+        while ($result->next()) {
+            [$id, $name, $realm, $module_id, $component, $instance, $level, $description, $module] = $result->fields;
+            $pargs = ['id' => $id,
+                'name' => $name,
+                'realm' => $realm,
+                'module' => $module,
+                'module_id' => $module_id,
+                'component' => $component,
+                'instance' => $instance,
+                'level' => $level,
+                'description' => $description,
+                'parentid' => $id];
             $parents[] = new xarPrivilege($pargs);
         }
         // done
@@ -382,10 +389,12 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return array<mixed> of privilege objects
     */
-    function getAncestors()
+    public function getAncestors()
     {
         // if this is the root return an empty array
-        if ($this->getID() == 1) return array();
+        if ($this->getID() == 1) {
+            return [];
+        }
 
         // start by getting an array of the parents
         $parents = $this->getParents();
@@ -399,8 +408,8 @@ class xarPrivilege extends xarMask
         }
 
         //done
-        $ancestors = array();
-        $parents = array_merge($ancestors,$parents);
+        $ancestors = [];
+        $parents = array_merge($ancestors, $parents);
         return $ancestors;
     }
 
@@ -412,7 +421,7 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return array<mixed> of privilege objects
     */
-    function getChildren()
+    public function getChildren()
     {
         $cacheId = $this->getID();
 
@@ -421,12 +430,12 @@ class xarPrivilege extends xarMask
             if (xarVar::isCached('Privileges.getChildren', $cacheId)) {
                 return xarVar::getCached('Privileges.getChildren', $cacheId);
             } else {
-                return array();
+                return [];
             }
         }
 
         // create an array to hold the objects to be returned
-        $children = array();
+        $children = [];
 
         $query = "SELECT p.id, p.name, p.realm_id, p.module_id, p.component, p.instance, p.level, p.description, pm.parent_id, m.name AS module
                     FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.privilege_id
@@ -438,19 +447,21 @@ class xarPrivilege extends xarMask
         $dbconn = xarDB3::getConn();
         $result = $dbconn->executeQuery($query);
 
-        while($result->next()) {
-            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$parentid,$module) = $result->fields;
-            if (!isset($children[$parentid])) $children[$parentid] = array();
-            $pargs = array('id'          => $id,
-                            'name'       => $name,
-                            'realm'      => $realm,
-                            'module_id'  => $module_id,
-                            'module'     => $module,
-                            'component'  => $component,
-                            'instance'   => $instance,
-                            'level'      => $level,
-                            'description'=> $description,
-                            'parentid'   => $parentid);
+        while ($result->next()) {
+            [$id, $name, $realm, $module_id, $component, $instance, $level, $description, $parentid, $module] = $result->fields;
+            if (!isset($children[$parentid])) {
+                $children[$parentid] = [];
+            }
+            $pargs = ['id'          => $id,
+                'name'       => $name,
+                'realm'      => $realm,
+                'module_id'  => $module_id,
+                'module'     => $module,
+                'component'  => $component,
+                'instance'   => $instance,
+                'level'      => $level,
+                'description' => $description,
+                'parentid'   => $parentid];
             $children[$parentid][] = new xarPrivilege($pargs);
         }
         // done
@@ -461,7 +472,7 @@ class xarPrivilege extends xarMask
         if (isset($children[$cacheId])) {
             return $children[$cacheId];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -472,7 +483,7 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return array<mixed> of privilege objects
     */
-    function getDescendants()
+    public function getDescendants()
     {
         // start by getting an array of the parents
         $children = $this->getChildren();
@@ -481,13 +492,13 @@ class xarPrivilege extends xarMask
         foreach ($children as $key => $child) {
             $descendants = $child->getChildren();
             foreach ($descendants as $descendant) {
-                $children[] =$descendant;
+                $children[] = $descendant;
             }
         }
 
         //done
-        $descendants = array();
-        $descendants = array_merge($descendants,$children);
+        $descendants = [];
+        $descendants = array_merge($descendants, $children);
         return $descendants;
     }
 
@@ -501,7 +512,7 @@ class xarPrivilege extends xarMask
      * @param   xarPrivilege object
      * @return  boolean
     */
-    function isEqual($privilege)
+    public function isEqual($privilege)
     {
         return $this->getID() == $privilege->getID();
     }
@@ -515,7 +526,7 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return  boolean
     */
-    function getID()
+    public function getID()
     {
         return $this->id;
     }
@@ -529,7 +540,7 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return  boolean
     */
-    function isEmpty()
+    public function isEmpty()
     {
         return $this->module_id == null;
     }
@@ -544,11 +555,13 @@ class xarPrivilege extends xarMask
      * @param   xarPrivilege object
      * @return  boolean
     */
-    function isParentPrivilege($privilege)
+    public function isParentPrivilege($privilege)
     {
         $privs = $this->getParents();
         foreach ($privs as $priv) {
-            if ($privilege->isEqual($priv)) return true;
+            if ($privilege->isEqual($priv)) {
+                return true;
+            }
         }
         return false;
     }
@@ -562,19 +575,19 @@ class xarPrivilege extends xarMask
      * @access  public
      * @return  boolean
     */
-    function isRootPrivilege()
+    public function isRootPrivilege()
     {
         $xartable = xarDB3::getTables();
         $previlegeobjects = $this->privilegestable;
         $privilegmemobjects = $this->privmemberstable;
-        $bindvars = array();
+        $bindvars = [];
         $query = "SELECT * FROM $previlegeobjects AS p 
                  JOIN $privilegmemobjects AS pm ON (p.id = pm.privilege_id)
                  WHERE pm.privilege_id = ?";
         $bindvars[] =  $this->getID();
         $dbconn = xarDB3::getConn();
-        $stmt = $dbconn->prepareStatement($query); 
+        $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
-        return ($result != array());
+        return ($result != []);
     }
 }

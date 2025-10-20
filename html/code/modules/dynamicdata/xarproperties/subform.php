@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -131,7 +132,7 @@ class SubFormProperty extends DataProperty
         if ($this->style == 'serialized') {
 
             $object = $this->data()->getObject(['objectid'  => $this->objectid,
-                                                                'fieldlist' => $this->fieldlist]);
+                'fieldlist' => $this->fieldlist]);
             $i = 0;
             $values = [];
             $prefix = empty($this->fieldprefix) ? $name : $this->fieldprefix;
@@ -163,8 +164,8 @@ class SubFormProperty extends DataProperty
                     $this->invalid = '';
                     foreach ($keylist as $key) {
                         // we ignore errors in any other properties here
-                        if ((empty($this->fieldlist) || in_array($key, $this->fieldlist)) &&
-                            !empty($object->properties[$key]->invalid)) {
+                        if ((empty($this->fieldlist) || in_array($key, $this->fieldlist))
+                            && !empty($object->properties[$key]->invalid)) {
                             // pass along the invalid message for this property
                             $this->invalid .= ' [' . $object->properties[$key]->label . '] ' . $object->properties[$key]->invalid;
                         }
@@ -179,8 +180,8 @@ class SubFormProperty extends DataProperty
                 // save the values we're interested in
                 $value = [];
                 foreach ($keylist as $key) {
-                    if ((empty($this->fieldlist) || in_array($key, $this->fieldlist)) &&
-                        isset($object->properties[$key]->value)) {
+                    if ((empty($this->fieldlist) || in_array($key, $this->fieldlist))
+                        && isset($object->properties[$key]->value)) {
                         $value[$key] = $object->properties[$key]->value;
                     }
                 }
@@ -280,7 +281,7 @@ class SubFormProperty extends DataProperty
             }
             // check user input for the object item
             $myobject = $this->data()->getObject(['objectid'  => $this->objectid,
-                                                                'fieldlist' => $this->fieldlist]);
+                'fieldlist' => $this->fieldlist]);
             $keylist = array_keys($myobject->properties);
             // report all invalid values here, even the ones we don't see because of the fieldlist
             $this->invalid = '';
@@ -376,7 +377,7 @@ class SubFormProperty extends DataProperty
             }
             // check user input for the object item
             $myobject = $this->data()->getObject(['objectid'  => $this->objectid,
-                                                                'fieldlist' => $this->fieldlist]);
+                'fieldlist' => $this->fieldlist]);
             $keylist = array_keys($myobject->properties);
             // report all invalid values here, even the ones we don't see because of the fieldlist
             $this->invalid = '';
@@ -480,8 +481,8 @@ class SubFormProperty extends DataProperty
         }
 
         // default to the current itemid if necessary
-        if (!empty($this->objectid) && $this->style == 'parentid' &&
-            empty($value) && !empty($this->title) && !empty($this->_itemid)) {
+        if (!empty($this->objectid) && $this->style == 'parentid'
+            && empty($value) && !empty($this->title) && !empty($this->_itemid)) {
             $value = $this->_itemid;
         }
 
@@ -503,17 +504,17 @@ class SubFormProperty extends DataProperty
         if (!empty($this->objectid)) {
             $data['object'] = & $this->getObject($value);
             $data['emptyobject'] = $myobject = $this->data()->getObject(['objectid'  => $this->objectid,
-                                                                            'fieldlist' => $this->fieldlist]);
+                'fieldlist' => $this->fieldlist]);
 
             // get the list of available items if requested
             if ($this->style == 'itemid' && !empty($this->title)) {
                 $mylist = $this->data()->getObjectList(['objectid'  => $this->objectid,
-                                                                      'fieldlist' => [$this->title],
-                                                                      'where'     => $this->where]);
+                    'fieldlist' => [$this->title],
+                    'where'     => $this->where]);
                 $data['dropdown'] = $mylist->getItems();
 
-            } elseif (($this->style == 'childlist' || $this->style == 'parentid') &&
-                       !empty($this->link)) {
+            } elseif (($this->style == 'childlist' || $this->style == 'parentid')
+                       && !empty($this->link)) {
                 if (empty($this->title)) {
                     // pick some field to count with
                     if (!empty($data['object']->primary)) {
@@ -534,8 +535,8 @@ class SubFormProperty extends DataProperty
                 }
                 // get the number of items per link field value
                 $mylist = $this->data()->getObjectList(['objectid'  => $this->objectid,
-                                                                      'fieldlist' => [$this->link],
-                                                                      'groupby'   => [$this->link]]);
+                    'fieldlist' => [$this->link],
+                    'groupby'   => [$this->link]]);
                 $data['dropdown'] = $mylist->getItems();
             } else {
                 $data['dropdown'] = [];
@@ -614,8 +615,8 @@ class SubFormProperty extends DataProperty
                         $status = null;
                     }
                     $myobject = $this->data()->getObject(['objectid'  => $this->objectid,
-                                                                            'fieldlist' => $this->fieldlist,
-                                                                            'status'    => $status]);
+                        'fieldlist' => $this->fieldlist,
+                        'status'    => $status]);
                 } else {
                     // reset the list of item ids
                     $myobject->itemids = [];
@@ -647,8 +648,8 @@ class SubFormProperty extends DataProperty
                         $status = null;
                     }
                     $myobject = $this->data()->getObjectList(['objectid'  => $this->objectid,
-                                                                            'fieldlist' => $this->fieldlist,
-                                                                            'status'    => $status]);
+                        'fieldlist' => $this->fieldlist,
+                        'status'    => $status]);
                 } else {
                     // reset the list of item ids
                     $myobject->itemids = [];
@@ -658,17 +659,17 @@ class SubFormProperty extends DataProperty
                         $where = $this->link . ' eq ' . $value;
                     } else {
                         $unserializedvalue = unserialize($value);
-                        if($unserializedvalue === false) {
+                        if ($unserializedvalue === false) {
                             $where = $this->link . " eq '" . $value . "'";
                         } elseif (count($unserializedvalue) > 0) {
-                            if(is_numeric($unserializedvalue[0])) {
+                            if (is_numeric($unserializedvalue[0])) {
                                 $where = $this->link . ' IN (' . implode(",", $unserializedvalue) . ')';
                             } else {
                                 $where = $this->link . " IN ('" . implode('\',\'', $unserializedvalue) . "')";
                             }
                         }
                     }
-                    if(isset($where)) {
+                    if (isset($where)) {
                         $myobject->getItems(['where' => $where]);
                     } else {
                         // re-initialize the items array
@@ -683,7 +684,7 @@ class SubFormProperty extends DataProperty
             case 'itemid':
                 if (!isset($myobject)) {
                     $myobject = $this->data()->getObject(['objectid'  => $this->objectid,
-                                                                        'fieldlist' => $this->fieldlist]);
+                        'fieldlist' => $this->fieldlist]);
                 }
                 if (!empty($value)) {
                     $myobject->getItem(['itemid' => $value]);
@@ -709,7 +710,7 @@ class SubFormProperty extends DataProperty
                 if (empty($value)) {
                     if (!isset($myobject)) {
                         $myobject = $this->data()->getObject(['objectid'  => $this->objectid,
-                                                                            'fieldlist' => $this->fieldlist]);
+                            'fieldlist' => $this->fieldlist]);
                     } else {
                         // initialise the properties again
                         foreach (array_keys($myobject->properties) as $propname) {
@@ -724,7 +725,7 @@ class SubFormProperty extends DataProperty
                     // Preserve the index in case it has meaning
                     foreach ($value as $idx => $vals) {
                         $myobject = $this->data()->getObject(['objectid'  => $this->objectid,
-                                                                        'fieldlist' => $this->fieldlist]);
+                            'fieldlist' => $this->fieldlist]);
                         foreach ($vals as $key => $val) {
                             if (isset($myobject->properties[$key])) {
                                 $myobject->properties[$key]->setValue($val);
@@ -815,9 +816,9 @@ class SubFormProperty extends DataProperty
         $data['other']     = '';
 
         $data['styles']    = ['serialized' => $this->ml('Local value'),
-                                   'itemid'     => $this->ml('Link to item'),
-                                   'childlist'  => $this->ml('List of children (child ids)'),
-                                   'parentid'   => $this->ml('List of children (parent id)')];
+            'itemid'     => $this->ml('Link to item'),
+            'childlist'  => $this->ml('List of children (child ids)'),
+            'parentid'   => $this->ml('List of children (parent id)')];
 
         // allow template override by child classes
         $module    = empty($module) ? $this->getModule() : $module;

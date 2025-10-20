@@ -57,9 +57,9 @@ class LinkcatMethod extends MethodClass
         $check = $args['check'] ?? true;
 
         if (
-            (!isset($args['cids'])) ||
-            (!isset($args['iids'])) ||
-            (!isset($args['modid']))
+            (!isset($args['cids']))
+            || (!isset($args['iids']))
+            || (!isset($args['modid']))
         ) {
             $msg = $this->ml('Invalid Parameter Count');
             throw new BadParameterException(null, $msg);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Waitingcontent Block
  *
@@ -19,10 +20,10 @@ class Base_WaitingContentBlock extends BasicBlock implements iBlock
 
     /**
      * Display method
-     * 
+     *
      * @return array<mixed> Display data array
      */
-    function display()
+    public function display()
     {
         return $data['output'] = $this->mod()->apiFunc('base', 'admin', 'waitingcontent');
     }

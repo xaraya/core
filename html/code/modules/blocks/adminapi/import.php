@@ -122,7 +122,7 @@ class ImportMethod extends MethodClass
                         $args[$field] = $value;
                     }
                 } else {
-                     $this->exit($this->ml('Missing #(1) field', $field));
+                    $this->exit($this->ml('Missing #(1) field', $field));
                     return false;
                 }
             }

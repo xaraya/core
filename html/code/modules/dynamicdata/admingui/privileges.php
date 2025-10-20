@@ -156,7 +156,8 @@ class PrivilegesMethod extends MethodClass
             if (!empty($itemid)) {
                 $numitems = $this->ml('probably');
             } elseif (!empty($objectid) || !empty($moduleid)) {
-                $numitems = $userapi->countitems(['objectid' => $objectid,
+                $numitems = $userapi->countitems(
+                    ['objectid' => $objectid,
                         'moduleid' => $moduleid,
                         'itemtype' => $itemtype]
                 );

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ItemtypeDelete Hook Subject
  *

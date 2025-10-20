@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Make security levels available
  *
@@ -16,33 +17,33 @@
  **/
 final class SecurityLevel extends xarObject
 {
-    const INVALID =   -1;
-    const NONE    =    0;
-    const OVERVIEW = 100;
-    const READ     = 200;
-    const COMMENT  = 300;
-    const MODERATE = 400;
-    const EDIT     = 500;
-    const ADD      = 600;
-    const DELETE   = 700;
-    const ADMIN    = 800;
+    public const INVALID =   -1;
+    public const NONE    =    0;
+    public const OVERVIEW = 100;
+    public const READ     = 200;
+    public const COMMENT  = 300;
+    public const MODERATE = 400;
+    public const EDIT     = 500;
+    public const ADD      = 600;
+    public const DELETE   = 700;
+    public const ADMIN    = 800;
 
     // This kinda sucks, but alas.
-    private static $nameMap  = array(
-        'ACCESS_INVALID'  => self::INVALID  ,
-        'ACCESS_NONE'     => self::NONE     ,
-        'ACCESS_OVERVIEW' => self::OVERVIEW ,
-        'ACCESS_READ'     => self::READ     ,
-        'ACCESS_COMMENT'  => self::COMMENT  ,
-        'ACCESS_MODERATE' => self::MODERATE ,
-        'ACCESS_EDIT'     => self::EDIT     ,
-        'ACCESS_ADD'      => self::ADD      ,
-        'ACCESS_DELETE'   => self::DELETE   ,
-        'ACCESS_ADMIN'    => self::ADMIN);
+    private static $nameMap  = [
+        'ACCESS_INVALID'  => self::INVALID,
+        'ACCESS_NONE'     => self::NONE,
+        'ACCESS_OVERVIEW' => self::OVERVIEW,
+        'ACCESS_READ'     => self::READ,
+        'ACCESS_COMMENT'  => self::COMMENT,
+        'ACCESS_MODERATE' => self::MODERATE,
+        'ACCESS_EDIT'     => self::EDIT,
+        'ACCESS_ADD'      => self::ADD,
+        'ACCESS_DELETE'   => self::DELETE,
+        'ACCESS_ADMIN'    => self::ADMIN];
 
     // @todo should we xarML these?, its perhaps better to move this to templates completely.
     // @todo this shouldn't be public if it is to stay here
-    public static $displayMap = array(
+    public static $displayMap = [
         self::INVALID  => 'Invalid (-1)',
         self::NONE     => 'No Access (0)',
         self::OVERVIEW => 'Overview (100)',
@@ -52,13 +53,13 @@ final class SecurityLevel extends xarObject
         self::EDIT     => 'Edit (500)',
         self::ADD      => 'Add (600)',
         self::DELETE   => 'Delete (700)',
-        self::ADMIN    => 'Administer (800)'
-        );
+        self::ADMIN    => 'Administer (800)',
+    ];
 
     // @todo get rid of securitylevel class - see xarSecurity::getLevel()
     public static function get($name)
     {
-        if(isset(self::$nameMap[$name])) {
+        if (isset(self::$nameMap[$name])) {
             return self::$nameMap[$name];
         } else {
             return self::INVALID;

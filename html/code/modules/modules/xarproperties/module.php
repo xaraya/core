@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\modules
  * @subpackage modules
@@ -14,14 +15,14 @@ sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
  * This property displays a dropdown of Xaraya modules (subject to filters)
- * 
+ *
  */
 class ModuleProperty extends ObjectRefProperty
 {
     public $id         = 19;
     public $name       = 'module';
     public $desc       = 'Module';
-    public $reqmodules = array('modules');
+    public $reqmodules = ['modules'];
 
     public $filter = [];
 
@@ -30,43 +31,46 @@ class ModuleProperty extends ObjectRefProperty
     public $initialization_store_prop   = 'regid';
     public $initialization_display_prop = 'name';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath = 'modules/modules/xarproperties';
     }
 
-	/**
-	 * Display a dropdown for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
-    function showInput(array $data = [])
+    /**
+     * Display a dropdown for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
+    public function showInput(array $data = [])
     {
-        if (!empty($data['filter'])) $this->filter = $data['filter'];
+        if (!empty($data['filter'])) {
+            $this->filter = $data['filter'];
+        }
         return parent::showInput($data);
     }
 
-	/**
+    /**
      * Retrieve the list of options on demand
-     * 
-     * N.B. the code below is repetitive, but lets leave it clearly separated for 
+     *
+     * N.B. the code below is repetitive, but lets leave it clearly separated for
      * each type of input for the moment
-     * 
+     *
      */
-    function getOptions()
+    public function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
         }
-        
+
         $options = [];
-        $items = $this->mod()->apiFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
-        foreach($items as $item) {
+        $items = $this->mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => $this->filter]);
+        foreach ($items as $item) {
             try {
-                $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
-            } catch(Exception $e) {}
+                $options[] = ['id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]];
+            } catch (Exception $e) {
+            }
         }
         return $options;
     }

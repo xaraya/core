@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Adminmenu Block display interface
  *
@@ -20,46 +21,49 @@ sys::import('modules.base.xarblocks.adminmenu');
 
 class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockModify
 {
-
-/**
- * This method is called by the BasicBlock class constructor
-**/    
+    /**
+     * This method is called by the BasicBlock class constructor
+    **/
     public function init()
     {
         parent::init();
     }
 
-/**
- * Display func.
- * @return array<mixed> Returns display data array
- */
+    /**
+     * Display func.
+     * @return array<mixed> Returns display data array
+     */
     public function display()
     {
         $data = $this->getContent();
 
         foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];
-            if (!isset($this->modulelist[$modname])) continue;
+            if (!isset($this->modulelist[$modname])) {
+                continue;
+            }
             $link = $this->modulelist[$modname];
             $link['modname'] = $modname;
             $link = self::getModuleLink($link);
-            if (!$link) continue;
+            if (!$link) {
+                continue;
+            }
             $link['title'] = $this->ml('Show administration options for module #(1)', $link['label']);
             switch ($data['menustyle']) {
                 case 'bycat':
                 default:
                     // determine category
-                    if(!isset($mod['category']) or $mod['category'] == '0') {
+                    if (!isset($mod['category']) or $mod['category'] == '0') {
                         $mod['category'] = $this->ml('Unknown');
                     }
                     $cat = $this->var()->prep($mod['category']);
                     // add module link to category
                     $categories[$cat][$modname] = $link;
-                break;
+                    break;
                 case 'byname':
                     // add module link to adminmods
                     $adminmods[$modname] = $link;
-                break;
+                    break;
             }
         }
 
@@ -67,12 +71,12 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
             case 'byname':
                 $data['adminmods'] = $adminmods;
                 $template = 'verticallistbyname';
-            break;
+                break;
             case 'bycat':
                 ksort($categories);
                 $data['catmods'] = $categories;
                 $template = 'verticallistbycats';
-            break;
+                break;
         }
 
         //making a few assumptions here for now about modname and directory
@@ -100,7 +104,7 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
 
     /**
      * Function to display help
-     * 
+     *
      * @return string Returns content
      */
     public function help()

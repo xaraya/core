@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Login Block
  *
@@ -31,5 +32,5 @@ class Authsystem_LoginBlock extends BasicBlock implements iBlock
 
     public $showlogout          = 0;
     public $logouttitle         = '';
-    
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Menu Block display interface
  *
@@ -33,24 +34,24 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
 
     /**
      * Display the menu block
-     * 
+     *
      * @param array<string, mixed> $data Data array
      * @return array<mixed>|void Display data array or null if nothing is to display.
      */
-    function display(Array $data=array())
+    public function display(array $data = [])
     {
         $data = $this->getContent();
 
         if ($this->user()->isLoggedIn()) {
             if (!empty($data['showlogout'])) {
-                $authmoduledata = $this->mod()->apiFunc('roles','user','getdefaultauthdata');
+                $authmoduledata = $this->mod()->apiFunc('roles', 'user', 'getdefaultauthdata');
                 $authmodlogout = $authmoduledata['defaultloginmodname'];
                 if ($this->sec()->checkAccess('AdminBase', 0)) {
                     // Administrators get a confirmation page
                     $data['logouturl'] = $this->ctl()->getModuleURL('base', 'admin', 'confirmlogout');
                 } else {
                     // Everyone else just gets logged out
-                    $data['logouturl'] = $this->ctl()->getModuleURL($authmodlogout,'user', 'logout', array());
+                    $data['logouturl'] = $this->ctl()->getModuleURL($authmodlogout, 'user', 'logout', []);
                     $data['showback'] = 0;
                 }
             }
@@ -65,51 +66,63 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
         $data['userlinks'] = self::getUserLinks();
 
         // Handle modulelist
-        $modlinks = array();
+        $modlinks = [];
         foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];
-            if (!isset($this->modulelist[$modname])) continue;
+            if (!isset($this->modulelist[$modname])) {
+                continue;
+            }
             $link = $this->modulelist[$modname];
             $link['modname'] = $modname;
             $link = self::getModuleLink($link);
-            if (!$link) continue;
+            if (!$link) {
+                continue;
+            }
             $modlinks[$modname] = $link;
         }
         $data['modlinks'] = $modlinks;
 
         // no links, nothing to display
         if (
-            empty($data['modlinks']) &&
-            empty($data['userlinks']) &&
-            empty($data['showlogout']) &&
-            empty($data['showback']) &&
-            empty($data['displayprint']) &&
-            empty($data['displayrss'])
-        ) return;
+            empty($data['modlinks'])
+            && empty($data['userlinks'])
+            && empty($data['showlogout'])
+            && empty($data['showback'])
+            && empty($data['displayprint'])
+            && empty($data['displayrss'])
+        ) {
+            return;
+        }
 
         // pass through the current request info
         $data['thismodname'] = self::$thismodname;
         $data['thismodtype'] = self::$thismodtype;
         $data['thisfuncname'] = self::$thisfuncname;
 
-        if (!empty($data['displayrss']) && !$this->mod()->isAvailable('rss')) $data['displayrss'] = 0;
-        if (!empty($data['displayprint']) && !$this->mod()->isAvailable('print')) $data['displayprint'] = 0;
+        if (!empty($data['displayrss']) && !$this->mod()->isAvailable('rss')) {
+            $data['displayrss'] = 0;
+        }
+        if (!empty($data['displayprint']) && !$this->mod()->isAvailable('print')) {
+            $data['displayprint'] = 0;
+        }
 
         return $data;
     }
 
     /**
      * Method to get user links
-     * 
+     *
      * @return string[] Array containing user links.
      */
     public function getUserLinks()
     {
-        $userlinks = array();
+        $userlinks = [];
 
         if (!empty($this->userlinks)) {
             foreach ($this->userlinks as $id => $link) {
-                if (empty($link['visible'])) continue;
+                if (empty($link['visible'])) {
+                    continue;
+                }
                 // handle links not yet using encode/decode settings
                 if (!isset($link['encodedurl'])) {
                     $check = self::_decodeURL($link['url'], true);
@@ -119,7 +132,9 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
                 }
                 if (!empty($link['ismodlink'])) {
                     $link = self::getModuleLink($link);
-                    if (!$link) continue;
+                    if (!$link) {
+                        continue;
+                    }
                 } elseif (self::$currenturl == $link['url']) {
                     $link['url'] = '';
                     $link['isactive'] = 1;
@@ -129,8 +144,8 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
 
                 if (!empty($link['menulinks'])) {
                     foreach ($link['menulinks'] as $subid => $sublink) {
-                        if (empty($sublink['visible']) &&
-                            (empty($link['ismodlink']) || empty($link['isactive'])) ) {
+                        if (empty($sublink['visible'])
+                            && (empty($link['ismodlink']) || empty($link['isactive']))) {
                             unset($link['menulinks'][$subid]);
                             continue;
                         }
@@ -162,7 +177,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
 
     /**
      * Method to get help content
-     * 
+     *
      * @return array<mixed> Display data array
      */
     public function help()

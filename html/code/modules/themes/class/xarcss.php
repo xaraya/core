@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Xaraya CSS class library
  *
@@ -20,48 +21,48 @@ use Xaraya\Facades\xarLog3;
 **/
 class xarCSS extends xarObject
 {
-/**
- * Defines for this library
- *
- * @author Andy Varganov <andyv@xaraya.com>
- * @author Chris Powis   <crisp@xaraya.com>
- * @todo evaluate if these are really necessary
-**/
+    /**
+     * Defines for this library
+     *
+     * @author Andy Varganov <andyv@xaraya.com>
+     * @author Chris Powis   <crisp@xaraya.com>
+     * @todo evaluate if these are really necessary
+    **/
     // the name of the module and the modvar to use for storing this object
-    const STORAGE_MODULE           = 'themes';
-    const STORAGE_VARIABLE         = 'css.libs';
+    public const STORAGE_MODULE           = 'themes';
+    public const STORAGE_VARIABLE         = 'css.libs';
     // base folder to look in for libs
-    const LIB_BASE                 = 'style';
-    const LIB_BASE_ALT             = 'xarstyles';
+    public const LIB_BASE                 = 'style';
+    public const LIB_BASE_ALT             = 'xarstyles';
 
-    const CSSRELSTYLESHEET         = "stylesheet";
-    const CSSRELALTSTYLESHEET      = "alternate";
-    const CSSTYPETEXT              = "text/css";
-    const CSSMEDIA                 = "media";
-    const CSSMEDIATV               = "tv";
-    const CSSMEDIATTY              = "tty";
-    const CSSMEDIAALL              = "all";
-    const CSSMEDIAPRINT            = "print";
-    const CSSMEDIAAURAL            = "aural";
-    const CSSMEDIASCREEN           = "screen";
-    const CSSMEDIABRAILLE          = "braille";
-    const CSSMEDIAHANDHELD         = "handheld";
-    const CSSMEDIAPROJECTION       = "projection";
-    const CSSCOMMONBASE            = "style";
-    const CSSCOMMONFILE            = "style";
-    const CSSCOMMONFILEEXT         = "css";
+    public const CSSRELSTYLESHEET         = "stylesheet";
+    public const CSSRELALTSTYLESHEET      = "alternate";
+    public const CSSTYPETEXT              = "text/css";
+    public const CSSMEDIA                 = "media";
+    public const CSSMEDIATV               = "tv";
+    public const CSSMEDIATTY              = "tty";
+    public const CSSMEDIAALL              = "all";
+    public const CSSMEDIAPRINT            = "print";
+    public const CSSMEDIAAURAL            = "aural";
+    public const CSSMEDIASCREEN           = "screen";
+    public const CSSMEDIABRAILLE          = "braille";
+    public const CSSMEDIAHANDHELD         = "handheld";
+    public const CSSMEDIAPROJECTION       = "projection";
+    public const CSSCOMMONBASE            = "style";
+    public const CSSCOMMONFILE            = "style";
+    public const CSSCOMMONFILEEXT         = "css";
     //const CSSCOMMONCORE            = "xarcore-xhtml1-strict";
-    const CSSCOMMONCORE            = "core";
+    public const CSSCOMMONCORE            = "core";
 
     private static $instance;
     private static $css;
 
     // array of sheet objects
-    public $local_libs      = array();
+    public $local_libs      = [];
     // array of sheet objects
-    public $remote_libs     = array();
+    public $remote_libs     = [];
     // default sheets to load...
-    public $default_libs    = array();
+    public $default_libs    = [];
 
     // experimental combine/compress options
     private $cacheDir   = 'cache/css';
@@ -72,20 +73,20 @@ class xarCSS extends xarObject
     public $last_run = 0;
 
     // avoid refreshing on each unserialize
-    public  $refreshed  = false;
+    public $refreshed  = false;
     private $expires    = 86400; // One day
 
-/**
- * object constructor
- *
- * Unless the modvar is deleted outside this object
- * this function will only ever been run once (first run)
- * so we use it to populate the initial defaults
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access private prevents direct creation of this singleton, use getInstance()
- * @return void
-**/
+    /**
+     * object constructor
+     *
+     * Unless the modvar is deleted outside this object
+     * this function will only ever been run once (first run)
+     * so we use it to populate the initial defaults
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access private prevents direct creation of this singleton, use getInstance()
+     * @return void
+    **/
 
     private function __construct()
     {
@@ -94,21 +95,21 @@ class xarCSS extends xarObject
         $this->compressed = xarModVars::get('themes', 'css.compressed');
     }
 
-/**
- * Object wakeup
- *
- * This is called immediately after the object is unserialized
- * this function is only ever run once per page request
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access public
- * @return void
-**/
+    /**
+     * Object wakeup
+     *
+     * This is called immediately after the object is unserialized
+     * this function is only ever run once per page request
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access public
+     * @return void
+    **/
     public function __wakeup()
     {
         // Check what libraries are present in the filesystem
         if (time() - $this->last_run > $this->expires) {
-            xarLog3::debug('xarCSS::__wakeup: unserialize & refresh ' . (string)$this->last_run);
+            xarLog3::debug('xarCSS::__wakeup: unserialize & refresh ' . (string) $this->last_run);
             $this->refresh();
             $this->refreshed = true;
         } else {
@@ -116,21 +117,21 @@ class xarCSS extends xarObject
             $this->refreshed = false;
         }
         // Load the default libraries
-        foreach($this->default_libs as $lib) {
-//            $this->register($lib);
+        foreach ($this->default_libs as $lib) {
+            //            $this->register($lib);
         }
     }
-/**
- * Object sleep method
- *
- * This is called whenever the object is serialized
- * this function is only ever run once per page request
- * Use it to perform operations immediately before the object goes out of scope
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access public
- * @return array<mixed> public object properties to store values for
-**/
+    /**
+     * Object sleep method
+     *
+     * This is called whenever the object is serialized
+     * this function is only ever run once per page request
+     * Use it to perform operations immediately before the object goes out of scope
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access public
+     * @return array<mixed> public object properties to store values for
+    **/
     public function __sleep()
     {
         xarLog3::debug('xarCSS::__sleep: serialize');
@@ -140,16 +141,16 @@ class xarCSS extends xarObject
         return array_keys($this->getPublicProperties());
     }
 
-/**
- * Object destructor
- *
- * This method is called when the object goes out of scope,
- * typically this will be when xaraya exits
- * but can be forced at any time by unsetting this object
- *
- * At this point we want to store the current object, serialized
- * To the modvar specified by the module and modvar constants
-**/
+    /**
+     * Object destructor
+     *
+     * This method is called when the object goes out of scope,
+     * typically this will be when xaraya exits
+     * but can be forced at any time by unsetting this object
+     *
+     * At this point we want to store the current object, serialized
+     * To the modvar specified by the module and modvar constants
+    **/
     public function __destruct()
     {
         if (!$this->refreshed && time() - $this->last_run < $this->expires) {
@@ -166,24 +167,24 @@ class xarCSS extends xarObject
         } catch (Exception $e) {
             xarModVars::delete(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE);
             xarModVars::set(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE, serialize($this));
-       }
+        }
     }
 
-/**
- * Get instance function
- *
- * This is the only way to obtain this object instance
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access public
- * @return object current instance
- *
-**/
+    /**
+     * Get instance function
+     *
+     * This is the only way to obtain this object instance
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access public
+     * @return object current instance
+     *
+    **/
     public static function getInstance_old()
     {
         if (!isset(self::$instance)) {
             $c = __CLASS__;
-            self::$instance = new $c;
+            self::$instance = new $c();
         }
         return self::$instance;
     }
@@ -193,12 +194,12 @@ class xarCSS extends xarObject
         if (!isset(self::$instance)) {
             xarLog3::info('xarCSS::getInstance: loading modvars');
             // try unserializing the stored modvar
-	    self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE) ?? '');
+            self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
             if (empty(self::$instance)) {
                 $c = __CLASS__;
                 // this is the one and only time the __construct() method will be run
-                self::$instance = new $c;
+                self::$instance = new $c();
             }
         } else {
             xarLog3::info('xarCSS::getInstance: modvars already loaded');
@@ -208,28 +209,32 @@ class xarCSS extends xarObject
         return self::$instance;
     }
 
-/**
- * Refresh function
- *
- * 1. Identify all local javascript libraries
- * 2. For each library create the corresponding object
- * 3. Find all the associated files and add them to the object
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @author Marc Lutolf <mfl@netspan.ch>
- * @access public
- * @return void
- *
-**/
+    /**
+     * Refresh function
+     *
+     * 1. Identify all local javascript libraries
+     * 2. For each library create the corresponding object
+     * 3. Find all the associated files and add them to the object
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @author Marc Lutolf <mfl@netspan.ch>
+     * @access public
+     * @return void
+     *
+    **/
     public function refresh()
     {
         // now find all libs in the filesystem
         // we want to look in all active themes
-        $filter = array('Class' => 2, 'State' => xarTheme::STATE_ACTIVE);
+        $filter = ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE];
         $themes = xarMod::apiFunc('themes', 'admin', 'getlist', $filter);
         // we want to look in all active modules
-        $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
-            array('filter' => array('State' => xarMod::STATE_ACTIVE)));
+        $modules = xarMod::apiFunc(
+            'modules',
+            'admin',
+            'getlist',
+            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
+        );
         // we want to look in all active themes
         // we want to look in all active modules
         // set default paths and filenames
@@ -241,9 +246,9 @@ class xarCSS extends xarObject
         $libBase     = xarCSS::LIB_BASE;
         $libBaseAlt  = xarCSS::LIB_BASE_ALT;
 
-        $paths = array();
+        $paths = [];
         // search common too
-        $themes[] = array('osdirectory' => 'common');
+        $themes[] = ['osdirectory' => 'common'];
         // first we want to look in each active theme...
         foreach ($themes as $theme) {
             $themeOSDir = $theme['osdirectory'];
@@ -269,29 +274,38 @@ class xarCSS extends xarObject
         // Below the lib directory we expect to find a directory with a library's name
         // Below that the next level must be one or more directories with different versions of the library
         sys::import('xaraya.version');
-        $libs = array();
+        $libs = [];
         foreach ($paths as $path) {
-            if (!is_dir($path)) continue;
+            if (!is_dir($path)) {
+                continue;
+            }
             //xarLog3::debug('xarCSS::refresh: looking in ' . $path);
             $folders = $this->getFolders($path, 1);
-            if (empty($folders)) continue;
+            if (empty($folders)) {
+                continue;
+            }
             foreach (array_keys($folders) as $lib) {
                 $subpath = $path . "/" . $lib;
                 $versions = $this->getFolders($subpath, 1);
-                if (empty($versions)) continue;                
-                
+                if (empty($versions)) {
+                    continue;
+                }
+
                 // Remove any versions which are not valid
                 foreach ($versions as $key => $value) {
                     $valid = xarVersion::parse($key);
-                    if(!$valid) unset($versions[$key]);
+                    if (!$valid) {
+                        unset($versions[$key]);
+                    }
                 }
-                
+
                 // keep track of found libs
                 $libs[$lib] = 1;
                 // init lib if necessary
-                if (!isset($this->local_libs[$lib]))
+                if (!isset($this->local_libs[$lib])) {
                     $this->local_libs[$lib] = new xarCSSLib($lib);
-                    
+                }
+
                 // refresh lib
                 $this->local_libs[$lib]->versions = $versions;
                 $this->local_libs[$lib]->findFiles();
@@ -301,120 +315,129 @@ class xarCSS extends xarObject
         }
         // remove any missing libs
         foreach ($this->local_libs as $compare => $curlib) {
-            if (!isset($libs[$compare]))
+            if (!isset($libs[$compare])) {
                 unset($this->local_libs[$compare]);
+            }
         }
 
     }
 
-    public static function getFolders($path, $levels=0)
+    public static function getFolders($path, $levels = 0)
     {
-        $folders = array();
+        $folders = [];
         try {
             foreach (new DirectoryIterator($path) as $item) {
-                if ($item->isDir() && !$item->isDot() &&
-                    (string) $item->current() != '_MTN') {
+                if ($item->isDir() && !$item->isDot()
+                    && (string) $item->current() != '_MTN') {
                     $folders[(string) $item->current()] = (string) $item->current();
                     if ($levels <> 1) {
                         $folders = array_merge($folders, self::getFolders($item->getPathName(), $levels--));
                     }
                 }
             }
-        } catch (Exception $e) { }
+        } catch (Exception $e) {
+        }
         return $folders;
-   }
+    }
 
-   public static function getFiles($path, $levels=0, $rel=false)
-   {
-       // @todo $rel was meant to support recursive search - remove?
-       $rel=false;
-       $files = array();
-       if ($rel === true) {
-           $base = $path;
-           $parent = '';
-       } elseif ($rel=== false) {
-           $base = $path;
-           $parent = false;
-       } else {
-           $base = !empty($rel) ? $rel . '/' : '' . basename($path);
-           $parent = $base;
-       }
-       $exts = array('js', 'css', 'xml', 'xt');
-       try {
+    public static function getFiles($path, $levels = 0, $rel = false)
+    {
+        // @todo $rel was meant to support recursive search - remove?
+        $rel = false;
+        $files = [];
+        if ($rel === true) {
+            $base = $path;
+            $parent = '';
+        } elseif ($rel === false) {
+            $base = $path;
+            $parent = false;
+        } else {
+            $base = !empty($rel) ? $rel . '/' : '' . basename($path);
+            $parent = $base;
+        }
+        $exts = ['js', 'css', 'xml', 'xt'];
+        try {
             foreach (new DirectoryIterator($path) as $item) {
-                if ($item->isFile() && !$item->isDot() &&
-                    in_array(pathinfo($item, PATHINFO_EXTENSION), $exts)) {
+                if ($item->isFile() && !$item->isDot()
+                    && in_array(pathinfo($item, PATHINFO_EXTENSION), $exts)) {
                     $fileName = (string) $item->current();
                     $files[$base][$fileName] = $item->getPathName();
-                } elseif ($levels <> 1 &&
-                    $item->isDir() && !$item->isDot()) {
+                } elseif ($levels <> 1
+                    && $item->isDir() && !$item->isDot()) {
                     $files = array_merge_recursive($files, self::getFiles($item->getPathName(), $levels--, $parent));
                 }
             }
-        } catch (Exception $e) { }
+        } catch (Exception $e) {
+        }
         return $files;
     }
 
-/**
- * Register function
- *
- * Register css in queue for later rendering
- *
- * @author Andy Varganov <andyv@xaraya.com>
- * @author Chris Powis <crisp@xaraya.com>
- * @access public
- * @param array<string, mixed> $args array of optional parameters<br/>
- *         string $args[scope] scope of style, one of common!theme(default)|module|block|property<br/>
- *         string $args[method] style method, one of link(default)|import|embed<br/>
- *         string $args[alternatedir] alternative base folder to look in, falling back to...<br/>
- *         string $args[base] base folder to look in, optional, default "style"<br/>
- *         string $args[file] name of file required for link or embed methods, optional, default "style"<br/>
- *         string $args[filext] extension to use for file(s), optional, default "css"<br/>
- *         string $args[source] source code, required for embed method, default ""<br/>
- *         string $args[alternate] switch to set rel="alternate stylesheet", optional true|false(default)<br/>
- *         string $args[rel] rel attribute, optional, default "stylesheet"<br/>
- *         string $args[type] link/style type attribute, optional, default "text/css"<br/>
- *         string $args[media] media attribute, optional, default "screen"<br/>
- *         string $args[title] title attribute, optional, default ""<br/>
- *         string $args[condition] conditionals for ie browser, optional, default ""<br/>
- *         string $args[theme] theme name, optional first theme to look for in theme scope
- *         string $args[module] module for module|block scope, optional, default current module<br/>
- *         string $args[property] standalone property name, required for property scope
- *         string $args[block] standalone block name, required for block scope
- * @todo: support other W3C standard attributes of link and style tags?
- * @return boolean|void true on success
- *
-**/
+    /**
+     * Register function
+     *
+     * Register css in queue for later rendering
+     *
+     * @author Andy Varganov <andyv@xaraya.com>
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access public
+     * @param array<string, mixed> $args array of optional parameters<br/>
+     *         string $args[scope] scope of style, one of common!theme(default)|module|block|property<br/>
+     *         string $args[method] style method, one of link(default)|import|embed<br/>
+     *         string $args[alternatedir] alternative base folder to look in, falling back to...<br/>
+     *         string $args[base] base folder to look in, optional, default "style"<br/>
+     *         string $args[file] name of file required for link or embed methods, optional, default "style"<br/>
+     *         string $args[filext] extension to use for file(s), optional, default "css"<br/>
+     *         string $args[source] source code, required for embed method, default ""<br/>
+     *         string $args[alternate] switch to set rel="alternate stylesheet", optional true|false(default)<br/>
+     *         string $args[rel] rel attribute, optional, default "stylesheet"<br/>
+     *         string $args[type] link/style type attribute, optional, default "text/css"<br/>
+     *         string $args[media] media attribute, optional, default "screen"<br/>
+     *         string $args[title] title attribute, optional, default ""<br/>
+     *         string $args[condition] conditionals for ie browser, optional, default ""<br/>
+     *         string $args[theme] theme name, optional first theme to look for in theme scope
+     *         string $args[module] module for module|block scope, optional, default current module<br/>
+     *         string $args[property] standalone property name, required for property scope
+     *         string $args[block] standalone block name, required for block scope
+     * @todo: support other W3C standard attributes of link and style tags?
+     * @return boolean|void true on success
+     *
+    **/
     public function register($args)
     {
         extract($args);
 
         // set some defaults
-        if (!isset($method)) // link|import|embed
+        if (!isset($method)) { // link|import|embed
             $method = 'link';
+        }
 
         // if method is embed we need a source
-        if ($method == 'embed' && empty($source)) return;
+        if ($method == 'embed' && empty($source)) {
+            return;
+        }
 
-        if (!isset($scope)) // common|theme|module|block|property
+        if (!isset($scope)) { // common|theme|module|block|property
             $scope = 'module';
+        }
 
         // if scope is property we need a property name
-        if ($scope == 'property' && empty($property)) return;
+        if ($scope == 'property' && empty($property)) {
+            return;
+        }
 
         // init tag from args / defaults
-        $tag = array(
+        $tag = [
             'method'     => $method,
             'scope'      => $scope,
-            'base'       => !empty($base)      ? xarVar::prepForOS($base) : xarCSS::CSSCOMMONBASE,
-            'file'       => !empty($file)      ? $file      : xarCSS::CSSCOMMONFILE,
-            'fileext'    => !empty($fileext)   ? $fileext   : xarCSS::CSSCOMMONFILEEXT,
-            'type'       => !empty($type)      ? $type      : xarCSS::CSSTYPETEXT,
-            'media'      => !empty($media)     ? $media     : xarCSS::CSSMEDIASCREEN,
-            'rel'        => !empty($rel)       ? $rel       : xarCSS::CSSRELSTYLESHEET,
-            'source'     => !empty($source)    ? $source    : '',
-            'src'        => !empty($src)       ? $src       : '',
-            'title'      => !empty($title)     ? $title     : '',
+            'base'       => !empty($base) ? xarVar::prepForOS($base) : xarCSS::CSSCOMMONBASE,
+            'file'       => !empty($file) ? $file : xarCSS::CSSCOMMONFILE,
+            'fileext'    => !empty($fileext) ? $fileext : xarCSS::CSSCOMMONFILEEXT,
+            'type'       => !empty($type) ? $type : xarCSS::CSSTYPETEXT,
+            'media'      => !empty($media) ? $media : xarCSS::CSSMEDIASCREEN,
+            'rel'        => !empty($rel) ? $rel : xarCSS::CSSRELSTYLESHEET,
+            'source'     => !empty($source) ? $source : '',
+            'src'        => !empty($src) ? $src : '',
+            'title'      => !empty($title) ? $title : '',
             'condition'  => !empty($condition) ? $condition : '',
             'theme'      => '',
             'module'     => '',
@@ -422,16 +445,20 @@ class xarCSS extends xarObject
             'block'      => '',
             'url'        => '',
             'alternatedir' => !empty($alternatedir) ? xarVar::prepForOS($alternatedir) : '',
-        );
+        ];
 
         // Local or remote absolute url, just include it and return
         // We support both 'source' and 'src' for compatibility with xarjs
         if (($method == "link") && (!empty($source) || !empty($src))) {
-            if (!empty($source)) $tag['url'] = $source;
-            if (!empty($src)) $tag['url'] = $src;
+            if (!empty($source)) {
+                $tag['url'] = $source;
+            }
+            if (!empty($src)) {
+                $tag['url'] = $src;
+            }
             return $this->queue($method, $scope, $tag['url'], $tag);
         }
-        
+
         // set additional params based on method
         switch ($method) {
             case 'embed':
@@ -442,14 +469,16 @@ class xarCSS extends xarObject
                 break;
             case 'link':
                 if (isset($alternate) && $alternate == 'true') {
-                    if (empty($rel)) // 'alternate stylesheet'
+                    if (empty($rel)) { // 'alternate stylesheet'
                         $tag['rel'] = xarCSS::CSSRELALTSTYLESHEET;
+                    }
                 }
                 break;
         }
 
-        if ($scope == 'common' && empty($file))
+        if ($scope == 'common' && empty($file)) {
             $tag['file'] = xarCSS::CSSCOMMONCORE;
+        }
 
         // set common paths to look in
         $fileName = $tag['file'] . '.' . $tag['fileext'];
@@ -457,7 +486,7 @@ class xarCSS extends xarObject
         $commonDir = xarTpl::getThemeDir('common');
         $codeDir = sys::code();
 
-        $paths = array();
+        $paths = [];
         // if an alternatedir was supplied, look there first
         if (!empty($alternatedir)) {
             // themes/theme/alternate
@@ -490,16 +519,21 @@ class xarCSS extends xarObject
                     $paths[] = $codeDir . 'blocks/' . $block . '/xartemplates/' . $tag['base'] . '/' . $fileName;
                     break;
                 }
-                if (empty($module))
+                if (empty($module)) {
                     $module = xarVar::getCached('Security.Variables', 'currentmodule');
+                }
+                // no break
             case 'module':
-                if (empty($module))
+                if (empty($module)) {
                     $module = xarMod::getName();
+                }
                 $modInfo = xarMod::getBaseInfo($module);
-                if (empty($modInfo)) return;
+                if (empty($modInfo)) {
+                    return;
+                }
                 $tag['module'] = $module;
                 $modOsDir = $modInfo['osdirectory'];
-                
+
                 // Handle legacy calls to styles in base module now located in common/style
                 if ($module == 'base') {
                     // themes/theme/style
@@ -507,7 +541,7 @@ class xarCSS extends xarObject
                     // themes/common/style
                     $paths[] = $commonDir . '/' . $tag['base'] . '/' . $fileName;
                 }
-                
+
                 // themes/theme/modules/module/style
                 $paths[] = $themeDir . '/modules/' . $modOsDir . '/' . $tag['base'] . '/' . $fileName;
                 // themes/theme/modules/module/styles (legacy)
@@ -523,7 +557,7 @@ class xarCSS extends xarObject
                 $tag['property'] = $property;
                 $property = xarVar::prepForOS($property);
                 // themes/theme/properties/property/style
-                
+
                 $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
                 // themes/common/properties/property/style
                 $paths[] = $commonDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
@@ -533,26 +567,32 @@ class xarCSS extends xarObject
                 $paths[] = $codeDir . 'properties/' . $property . '/xartemplates/' . $tag['base'] . '/' . $fileName;
                 break;
         }
-        if (empty($paths)) return;
+        if (empty($paths)) {
+            return;
+        }
 
-         // Debug display
-         if (xarModVars::get('themes','debugmode') && xarUser::isDebugAdmin()) {
+        // Debug display
+        if (xarModVars::get('themes', 'debugmode') && xarUser::isDebugAdmin()) {
             foreach ($paths as $path) {
-                echo xarML('Possible location: ') . $path . "<br/>";                
+                echo xarML('Possible location: ') . $path . "<br/>";
             }
-         }
+        }
 
         foreach ($paths as $path) {
-            if (!file_exists($path)) continue;
+            if (!file_exists($path)) {
+                continue;
+            }
             $filePath = $path;
             // Debug display
-             if (xarModVars::get('themes','debugmode') && xarUser::isDebugAdmin()) {
+            if (xarModVars::get('themes', 'debugmode') && xarUser::isDebugAdmin()) {
                 echo "<b>" . xarML('Chosen: ') . $path . "</b><br/>";
-             }
+            }
             break;
         }
-        if (empty($filePath)) return;
-        
+        if (empty($filePath)) {
+            return;
+        }
+
         // Turn relative path into an absolute URL
         $webDir = sys::web();
         if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
@@ -565,23 +605,25 @@ class xarCSS extends xarObject
 
     }
 
-/**
- * Queue function
- *
- * Add css to queue
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access public
- * @param string  $scope the scope of the file (common, theme, module, block, property)
- * @param string  $method the method to use (link, import, embed)
- * @param string  $url source, either code to embed or url of file to link or import
- * @param array<string, mixed> $data tag data to cache
- * @return boolean|void true on success
- * @todo make private once xarTpl functions are deprecated
-**/
+    /**
+     * Queue function
+     *
+     * Add css to queue
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access public
+     * @param string  $scope the scope of the file (common, theme, module, block, property)
+     * @param string  $method the method to use (link, import, embed)
+     * @param string  $url source, either code to embed or url of file to link or import
+     * @param array<string, mixed> $data tag data to cache
+     * @return boolean|void true on success
+     * @todo make private once xarTpl functions are deprecated
+    **/
     public function queue($method, $scope, $url, $data)
     {
-        if (empty($scope) || empty($method) || empty($url) || empty($data)) return;
+        if (empty($scope) || empty($method) || empty($url) || empty($data)) {
+            return;
+        }
 
         // keep track of style when we're caching
         xarCache::addStyle($data);
@@ -589,27 +631,29 @@ class xarCSS extends xarObject
         // init the queue
         if (!isset(self::$css)) {
             // scope rendering order...
-            $scopes = array(
-                'common'   => array(),
-                'theme'    => array(),
-                'module'   => array(),
-                'block'    => array(),
-                'property' => array(),
-            );
+            $scopes = [
+                'common'   => [],
+                'theme'    => [],
+                'module'   => [],
+                'block'    => [],
+                'property' => [],
+            ];
             // method rendering order...
-            self::$css = array(
+            self::$css = [
                 'import' => $scopes,
                 'link'   => $scopes,
                 'embed'  => $scopes,
-            );
+            ];
             unset($scopes);
         }
         // skip unknown scopes/methods (for now)
-        if (!isset(self::$css[$method][$scope])) return;
+        if (!isset(self::$css[$method][$scope])) {
+            return;
+        }
 
         // hash the url to prevent the same source code
         // or file name being included more than once
-        $index=md5($url);
+        $index = md5($url);
 
         // queue the style
         self::$css[$method][$scope][$index] = $data;
@@ -617,58 +661,72 @@ class xarCSS extends xarObject
         return true;
     }
 
-/**
- * Render function
- *
- * Render queued css
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access public
- * @param array<string, mixed> $args array of optional parameters<br/>
- *         boolean $args[comments] show comments, optional, default false
- * @todo option to turn on/off style comments in UI, cfr template comments
- * @return string templated output of css to render
-**/
+    /**
+     * Render function
+     *
+     * Render queued css
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access public
+     * @param array<string, mixed> $args array of optional parameters<br/>
+     *         boolean $args[comments] show comments, optional, default false
+     * @todo option to turn on/off style comments in UI, cfr template comments
+     * @return string templated output of css to render
+    **/
     public function render($args)
     {
-        if (empty(self::$css)) return '';
+        if (empty(self::$css)) {
+            return '';
+        }
         extract($args);
         if ($this->combined) {
             $this->combine();
         }
-        $args['styles'] =& self::$css;
+        $args['styles'] = & self::$css;
         $args['comments'] = !empty($comments);
 
         return xarTpl::module('themes', 'css', 'render', $args);
     }
 
-/**
- * Combine CSS
- *
- * Takes the content of queued css files and embedded source code,
- * or @imported styles contained within other stylesheets and combines
- * them into a single stylesheet
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access private
- * @return bool|void true on success
- * @todo implement proper caching using xarCache
-**/
+    /**
+     * Combine CSS
+     *
+     * Takes the content of queued css files and embedded source code,
+     * or @imported styles contained within other stylesheets and combines
+     * them into a single stylesheet
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access private
+     * @return bool|void true on success
+     * @todo implement proper caching using xarCache
+    **/
     private function combine()
     {
-        if (empty(self::$css) || !$this->combined) return;
+        if (empty(self::$css) || !$this->combined) {
+            return;
+        }
         $content = '';
         foreach (self::$css as $method => $scopes) {
-            if (empty($scopes)) continue;
+            if (empty($scopes)) {
+                continue;
+            }
             foreach ($scopes as $scope => $styles) {
-                if (empty($styles)) continue;
+                if (empty($styles)) {
+                    continue;
+                }
                 foreach ($styles as $index => $style) {
-                    if (empty($style)) continue;
-                    if (($style['media'] != 'all' && $style['media'] != 'screen') ||
-                        !empty($style['condition'])) continue;
+                    if (empty($style)) {
+                        continue;
+                    }
+                    if (($style['media'] != 'all' && $style['media'] != 'screen')
+                        || !empty($style['condition'])) {
+                        continue;
+                    }
                     if ($style['method'] != 'embed') {
                         $string = @file_get_contents($style['url']);
-                        if (empty($string)) continue;
+                        if (empty($string)) {
+                            continue;
+                        }
                         if ($this->compressed) {
                             $string = $this->compress($string, $style['url']);
                         } else {
@@ -695,15 +753,21 @@ class xarCSS extends xarObject
                 }
             }
         }
-        if (empty($content)) return;
+        if (empty($content)) {
+            return;
+        }
         // @todo: implement proper caching
         $cacheKey = md5($content);
         $filePath = sys::varpath() . '/' . $this->cacheDir . '/' . $cacheKey . '.css';
         if (!file_exists($filePath)) {
-            $fp = @fopen($filePath,'wb');
-            if (!$fp) return;
+            $fp = @fopen($filePath, 'wb');
+            if (!$fp) {
+                return;
+            }
             $size = fwrite($fp, $content);
-            if (!$size || $size < strlen($content)) return;
+            if (!$size || $size < strlen($content)) {
+                return;
+            }
             fclose($fp);
         }
 
@@ -716,7 +780,7 @@ class xarCSS extends xarObject
 
         // Queue the combined stylesheet
         $index = md5($cacheKey . '.css');
-        self::$css['link']['theme'][$index] = array(
+        self::$css['link']['theme'][$index] = [
             'method' => 'link',
             'scope' => 'theme',
             'rel' => 'stylesheet',
@@ -725,27 +789,29 @@ class xarCSS extends xarObject
             'type' => 'text/css',
             'media' => 'all',
             'condition' => '',
-        );
+        ];
         return true;
     }
 
-/**
- * Compress CSS
- *
- * Compress CSS (when combining and caching)
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access private
- * @param  string css to compress
- * return  string compressed css
-**/
-    private function compress($string='', $fileName='')
+    /**
+     * Compress CSS
+     *
+     * Compress CSS (when combining and caching)
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access private
+     * @param  string css to compress
+     * return  string compressed css
+    **/
+    private function compress($string = '', $fileName = '')
     {
-        if (empty($string)) return '';
+        if (empty($string)) {
+            return '';
+        }
         // remove comments
         $string = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $string);
         // remove tabs, spaces, newlines, etc.
-        $string = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $string);
+        $string = str_replace(["\r\n", "\r", "\n", "\t", '  ', '    ', '    '], '', $string);
         if (!empty($fileName)) {
             // replace relative paths like url(../images/somefile.png)
             $string = $this->fixurlpaths($string, $fileName);
@@ -755,19 +821,19 @@ class xarCSS extends xarObject
         return $string;
     }
 
-/**
- * Fix url paths
- *
- * transform paths relative to current file into paths relative to web root
- * eg, url(../images/myfile.png) in file /themes/common/style/style.css
- * will be transformed into url(/themes/common/images/myfile.png);
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access private
- * @param  string $string the string to look in for replacements
- * @param  string $fileName the name of the file the string belongs to
- * return  string the string with urls replaced
-**/
+    /**
+     * Fix url paths
+     *
+     * transform paths relative to current file into paths relative to web root
+     * eg, url(../images/myfile.png) in file /themes/common/style/style.css
+     * will be transformed into url(/themes/common/images/myfile.png);
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access private
+     * @param  string $string the string to look in for replacements
+     * @param  string $fileName the name of the file the string belongs to
+     * return  string the string with urls replaced
+    **/
     private function fixurlpaths($string, $fileName)
     {
         // remove the domain name from path (if any)
@@ -777,7 +843,7 @@ class xarCSS extends xarObject
         }
         // add leading slash if required so url is relative to web root
         if (strpos($fileName, '/') !== 0) {
-            $fileName = '/'.$fileName;
+            $fileName = '/' . $fileName;
         }
         // get the directory the file declaring the url lives in
         $filePath = dirname($fileName);
@@ -786,10 +852,12 @@ class xarCSS extends xarObject
         if (!empty($matches)) {
             foreach ($matches[1] as $i => $match) {
                 // skip replacements on paths already relative to web root
-                if (strpos($match, '/') === 0) continue;
+                if (strpos($match, '/') === 0) {
+                    continue;
+                }
                 $curPath = $filePath;
                 // see if the declaration is relative to current file directory
-                $count = substr_count($match,'../');
+                $count = substr_count($match, '../');
                 if (!empty($count)) {
                     while ($count > 0) {
                         // move up the path once for each occurence of ../
@@ -806,17 +874,17 @@ class xarCSS extends xarObject
         return $string;
     }
 
-/**
- * Combine imports
- *
- * embeds css from @import url() into combined stylesheet
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access private
- * @param  string $string the string to look in for replacements
- * @param  string $fileName the name of the file the string belongs to
- * return  string the string with @imports replaced with content
-**/
+    /**
+     * Combine imports
+     *
+     * embeds css from @import url() into combined stylesheet
+     *
+     * @author Chris Powis <crisp@xaraya.com>
+     * @access private
+     * @param  string $string the string to look in for replacements
+     * @param  string $fileName the name of the file the string belongs to
+     * return  string the string with @imports replaced with content
+    **/
     private function combineimports($string, $fileName)
     {
         if (preg_match_all('!@import\s*url\([\'|"]?([^\'|"|\)]*)[\'|"]?\);!', $string, $matches)) {
@@ -825,7 +893,9 @@ class xarCSS extends xarObject
                     $match = substr($match, 1, strlen($match));
                 }
                 $ifile = @file_get_contents($match);
-                if (empty($ifile)) continue;
+                if (empty($ifile)) {
+                    continue;
+                }
                 if ($this->compressed) {
                     $ifile = $this->compress($ifile, $match);
                 } else {
@@ -862,24 +932,25 @@ class xarCSSLib extends xarObject
     public $osdirectory;
 
     // All the optional meta data for this library
-    public $script        = array(); // default script
-    public $style         = array(); // default style
+    public $script        = []; // default script
+    public $style         = []; // default style
     public $scriptfolder  = '';      // where to look for lib scripts
     public $pluginfolder  = 'plugins';      // where to look for plugins, relative to base folder
     public $stylefolder   = '';      // where to look for styles, relative to script folder
-    public $versions      = array(); // array of known versions
-    public $dependencies  = array(); // array of lib dependencies
-    public $events        = array(); // array of events supplied by lib
+    public $versions      = []; // array of known versions
+    public $dependencies  = []; // array of lib dependencies
+    public $events        = []; // array of events supplied by lib
 
     // Library files
-    public $styles        = array(); // all styles
+    public $styles        = []; // all styles
     public $templates;
     public $scripts;
 
     public function __construct($name)
     {
-        if (empty($name))
+        if (empty($name)) {
             throw new BadParameterException($name, 'Invalid name "#(1)" for xarCSSLib');
+        }
         // first run, populate the library meta data
         $this->name = $name;
         $this->displayname = ucfirst($this->name);
@@ -887,19 +958,27 @@ class xarCSSLib extends xarObject
         $this->osdirectory = xarVar::prepForOS($this->name);
     }
 
-/**
- * Find library files
- * The intent here is to scan the entire filesystem looking for files
- * and folders belonging to this library
-**/
+    /**
+     * Find library files
+     * The intent here is to scan the entire filesystem looking for files
+     * and folders belonging to this library
+    **/
     public function findFiles()
     {
         // we want to look in all active themes
-        $themes = xarMod::apiFunc('themes', 'admin', 'getlist',
-            array('filter' => array('Class' => 2, 'State' => xarTheme::STATE_ACTIVE)));
+        $themes = xarMod::apiFunc(
+            'themes',
+            'admin',
+            'getlist',
+            ['filter' => ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE]]
+        );
         // we want to look in all active modules
-        $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
-            array('filter' => array('State' => xarMod::STATE_ACTIVE)));
+        $modules = xarMod::apiFunc(
+            'modules',
+            'admin',
+            'getlist',
+            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
+        );
         // set default paths and filenames
         $libName     = $this->name;
         $baseDir     = xarTpl::getBaseDir();
@@ -910,8 +989,8 @@ class xarCSSLib extends xarObject
         $libBase     = xarCSS::LIB_BASE;
         $libBaseAlt  = xarCSS::LIB_BASE_ALT;
 
-        $paths = array();
-        $themes[] = array('osdirectory' => 'common');
+        $paths = [];
+        $themes[] = ['osdirectory' => 'common'];
         // first we want to look in each active theme...
         foreach ($themes as $theme) {
             $themeOSDir = $theme['osdirectory'];
@@ -930,50 +1009,58 @@ class xarCSSLib extends xarObject
             // look in code/modules/<module>/xartemplates/lib/libname/*
             $paths['module'][$modOSDir] = "{$codeDir}modules/{$modOSDir}/{$libBaseAlt}/{$libName}";
         }
-        
+
         // Load the version class to check versions
         sys::import('xaraya.version');
-        
+
         // find files in all lib folders, all themes, all modules, all properties
-        $this->scripts = array();
-        $this->styles = array();
+        $this->scripts = [];
+        $this->styles = [];
         foreach ($paths as $scope => $packages) {
             foreach ($packages as $package => $path) {
-                if (!is_dir($path)) continue;
+                if (!is_dir($path)) {
+                    continue;
+                }
                 $versions = xarCSS::getFolders($path, 1);
-                if (empty($versions)) continue;
+                if (empty($versions)) {
+                    continue;
+                }
                 foreach (array_keys($versions) as $version) {
                     // Check if this is a valid version folder
                     $valid = xarVersion::parse($version);
-                    if(!$valid) continue;
-                    
+                    if (!$valid) {
+                        continue;
+                    }
+
                     $subpath = $path . "/" . $version;
                     $files = xarCSS::getFiles($subpath);
-                    if (empty($files)) continue;
+                    if (empty($files)) {
+                        continue;
+                    }
                     foreach ($files as $folder => $items) {
                         foreach ($items as $file => $filepath) {
                             // store script as scope - package - libbase/libname - file
                             // eg, scripts[theme][common][lib/jquery][jquery-1.4.4.min.js] =
                             // /themes/common/lib/jquery/jquery-1.4.4.min.js
                             // init the actual tag info used to init this lib
-                            $tag = array(
+                            $tag = [
                                 'lib'    => $libName,
                                 'scope'  => $scope,
                                 'type'   => 'lib',
                                 'origin' => 'local',
-                            );
+                            ];
                             switch ($scope) {
                                 case 'theme':
                                 case 'common':
                                     $tag['theme'] = $package;
-                                break;
+                                    break;
                                 case 'module':
                                 case 'block':
                                     $tag['module'] = $package;
-                                break;
+                                    break;
                                 case 'property':
                                     $tag['property'] = $package;
-                                break;
+                                    break;
                             }
                             $ext = pathinfo($file, PATHINFO_EXTENSION);
                             switch ($ext) {
@@ -985,14 +1072,15 @@ class xarCSSLib extends xarObject
                                     // remove the filename from the path
                                     $basepath = str_replace("/$file", '', $filepath);
                                     // remove anything before the base
-                                    $basepath = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    $basepath = preg_replace("!^.*" . $base . "+(.*)$!", $base . "$1", $basepath);
                                     // if this isn't base, keep everything after base
-                                    if ($basepath != $base)
-                                        $base = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    if ($basepath != $base) {
+                                        $base = preg_replace("!^.*" . $base . "+(.*)$!", $base . "$1", $basepath);
+                                    }
                                     $tag['base'] = $base;
                                     $this->scripts[$version][$scope][$package][$base][$file] = $tag;
-//                                    var_dump($this->scripts);
-                                break;
+                                    //                                    var_dump($this->scripts);
+                                    break;
                                 case 'css':
                                     $tag['file'] = $file;
                                     $tag['version'] = $version;
@@ -1001,20 +1089,21 @@ class xarCSSLib extends xarObject
                                     // remove the filename from the path
                                     $basepath = str_replace("/$file", '', $filepath);
                                     // remove anything before the base
-                                    $basepath = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    $basepath = preg_replace("!^.*" . $base . "+(.*)$!", $base . "$1", $basepath);
                                     // if this isn't base, keep everything after base
-                                    if ($basepath != $base)
-                                        $base = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    if ($basepath != $base) {
+                                        $base = preg_replace("!^.*" . $base . "+(.*)$!", $base . "$1", $basepath);
+                                    }
                                     $tag['base'] = $base;
                                     $this->styles[$version][$scope][$package][$base][$file] = $tag;
-//                                    var_dump($this->styles);
-                                break;
+                                    //                                    var_dump($this->styles);
+                                    break;
                                 case 'xt':
                                     $tag['template'] = str_replace('.xt', '', $file);
                                     $this->templates[$version][$scope][$package][$base][$file] = $tag;
-                                break;
+                                    break;
                                 case 'xml':
-                                break;
+                                    break;
                             }
                         }
                     }

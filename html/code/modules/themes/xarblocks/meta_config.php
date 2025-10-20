@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Meta Block configuration interface
  *
@@ -23,20 +24,20 @@ sys::import('modules.themes.xarblocks.meta');
 sys::import('modules.themes.class.xarmeta');
 class Themes_MetaBlockConfig extends Themes_MetaBlock
 {
-	/**
+    /**
      * Initialize the configuration
      *
      * This method is called by the BasicBlock class constructor
      */
-    public function init() 
+    public function init()
     {
         parent::init();
     }
-	
-	/**
-	 * Modify Function to the Blocks Admin
-	 * @param $data array containing title,content
-	 */
+
+    /**
+     * Modify Function to the Blocks Admin
+     * @param $data array containing title,content
+     */
     public function configmodify()
     {
         $data = $this->getContent();
@@ -48,27 +49,29 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
         return $data;
     }
 
-	/**
-	 * Updates the Block config from the Blocks Admin
-	 * @param $data array containing title,content
-	 */
+    /**
+     * Updates the Block config from the Blocks Admin
+     * @param $data array containing title,content
+     */
     public function configupdate()
     {
         // FIXME: use better validation on these parameters.
-        $vars = array();
+        $vars = [];
 
         // fetch the array of meta tags from input
-        $this->var()->find('metatags', $metatags, 'array', array());
-        $newtags = array();     
+        $this->var()->find('metatags', $metatags, 'array', []);
+        $newtags = [];
         foreach ($metatags as $metatag) {
             // empty value = delete
-            if (empty($metatag['value'])) continue;
+            if (empty($metatag['value'])) {
+                continue;
+            }
             // @todo: validation on other params
             $newtags[] = $metatag;
         }
         // fetch the value of the new tag (if any)
         $this->var()->find('metatypeval', $metatypeval, 'pre:trim:lower:str:1:', '');
-        // only fetch the other params if we have a value        
+        // only fetch the other params if we have a value
         if (!empty($metatypeval)) {
             $this->var()->find('metatype', $metatype, 'pre:trim:lower:enum:name:http-equiv', '');
             $this->var()->find('metalang', $metalang, 'pre:trim:lower:str:1:', '');
@@ -76,26 +79,28 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
             $this->var()->find('metascheme', $metascheme, 'pre:trim:str:1:', '');
             $this->var()->find('metacontent', $metacontent, 'pre:trim:str:1:', '');
             if (!empty($metatype)) {
-                $newtags[] = array(
+                $newtags[] = [
                     'type' => $metatype,
                     'value' => $metatypeval,
                     'content' => $metacontent,
                     'lang' => $metalang,
                     'dir' => $metadir,
                     'scheme' => $metascheme,
-                );
+                ];
             }
-        } 
+        }
         $vars['metatags'] = $newtags;
-        // store the tags for use by the xarMeta class 
+        // store the tags for use by the xarMeta class
         $this->mod('themes')->setVar('meta.tags', serialize($newtags));
-        
+
         // fetch the array of link tags from input
-        $this->var()->find('linktags', $linktags, 'array', array());
-        $newlinks = array();
+        $this->var()->find('linktags', $linktags, 'array', []);
+        $newlinks = [];
         foreach ($linktags as $linktag) {
             // delete if flag is set not empty
-            if (isset($linktag['delete']) && !empty($linktag['delete'])) continue;
+            if (isset($linktag['delete']) && !empty($linktag['delete'])) {
+                continue;
+            }
             $newlinks[] = $linktag;
         }
         // fetch the value of the new link rel
@@ -105,15 +110,15 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
             $this->var()->find('linkhref', $linkhref, 'pre:trim:str:1:', '');
             $this->var()->find('linktitle', $linktitle, 'pre:trim:str:1:', '');
             $this->var()->find('linktype', $linktype, 'pre:trim:str:1:', '');
-            $newlinks[] = array(
+            $newlinks[] = [
                 'rel' => $linkrel,
                 'href' => $linkhref,
                 'title' => $linktitle,
                 'type' => $linktype,
-            );
+            ];
         }
         $vars['linktags'] = $newlinks;
-        
+
         $this->setContent($vars);
         return true;
     }

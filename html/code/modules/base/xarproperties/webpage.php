@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Include the base class
  */
- sys::import('modules.base.xarproperties.dropdown');
+sys::import('modules.base.xarproperties.dropdown');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -26,7 +27,7 @@ class HTMLPageProperty extends SelectProperty
     public $basedir  = '';
     public $filetype = '((xml)|(html))?';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
@@ -36,8 +37,8 @@ class HTMLPageProperty extends SelectProperty
             // Hack for passing this thing into transform hooks
             // validation may start with 'transform:' and we
             // obviously dont want that in basedir
-            if(substr($this->configuration,0,10) == 'transform:') {
-                $basedir = substr($this->configuration,10,strlen($this->configuration)-10);
+            if (substr($this->configuration, 0, 10) == 'transform:') {
+                $basedir = substr($this->configuration, 10, strlen($this->configuration) - 10);
             } else {
                 $basedir = $this->configuration;
             }
@@ -45,22 +46,24 @@ class HTMLPageProperty extends SelectProperty
         }
     }
 
-	/**
-	 * Validate the value of a selected dropdown option
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a selected dropdown option
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         $basedir = $this->basedir;
         $filetype = $this->filetype;
-        if (!empty($value) &&
-            preg_match('/^[a-zA-Z0-9_\/.-]+$/',$value) &&
-            preg_match("/$filetype$/",$value) &&
-            file_exists($basedir.'/'.$value) &&
-            is_file($basedir.'/'.$value)) {
+        if (!empty($value)
+            && preg_match('/^[a-zA-Z0-9_\/.-]+$/', $value)
+            && preg_match("/$filetype$/", $value)
+            && file_exists($basedir . '/' . $value)
+            && is_file($basedir . '/' . $value)) {
             return true;
         } elseif (empty($value)) {
             return true;
@@ -71,61 +74,63 @@ class HTMLPageProperty extends SelectProperty
         return false;
     }
 
-	/**
-	 * Display a Dropdown for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a Dropdown for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
         }
-/*        if (!isset($data['options']) || count($data['options']) == 0) {
-            $data['options'] = $this->getOptions();
-        }
-        if (count($data['options']) == 0 && !empty($this->basedir)) {
-            $files = $this->mod()->apiFunc('dynamicdata','admin','browse',
-                                   array('basedir' => $this->basedir,
-                                         'filetype' => $this->filetype));
-            if (!isset($files)) {
-                $files = [];
-            }
-            natsort($files);
-            array_unshift($files,'');
-            foreach ($files as $file) {
-                $options[] = array('id' => $file,
-                                   'name' => $file);
-            }
-            unset($files);
-        }
-*/
+        /*        if (!isset($data['options']) || count($data['options']) == 0) {
+                    $data['options'] = $this->getOptions();
+                }
+                if (count($data['options']) == 0 && !empty($this->basedir)) {
+                    $files = $this->mod()->apiFunc('dynamicdata','admin','browse',
+                                           array('basedir' => $this->basedir,
+                                                 'filetype' => $this->filetype));
+                    if (!isset($files)) {
+                        $files = [];
+                    }
+                    natsort($files);
+                    array_unshift($files,'');
+                    foreach ($files as $file) {
+                        $options[] = array('id' => $file,
+                                           'name' => $file);
+                    }
+                    unset($files);
+                }
+        */
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a dropdown for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */	
+    /**
+     * Display a dropdown for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
         extract($data);
 
-        if (!isset($value)) $value = $this->value;
+        if (!isset($value)) {
+            $value = $this->value;
+        }
 
         $basedir = $this->basedir;
         $filetype = $this->filetype;
-        if (!empty($value) &&
-            preg_match('/^[a-zA-Z0-9_\/.-]+$/',$value) &&
-            preg_match("/$filetype$/",$value) &&
-            file_exists($basedir.'/'.$value) &&
-            is_file($basedir.'/'.$value)) {
-            $srcpath = join('', @file($basedir.'/'.$value));
+        if (!empty($value)
+            && preg_match('/^[a-zA-Z0-9_\/.-]+$/', $value)
+            && preg_match("/$filetype$/", $value)
+            && file_exists($basedir . '/' . $value)
+            && is_file($basedir . '/' . $value)) {
+            $srcpath = join('', @file($basedir . '/' . $value));
         } else {
-            $srcpath='';
+            $srcpath = '';
         }
         $data['value']    = $value;
         $data['basedir']  = $basedir;
@@ -133,26 +138,30 @@ class HTMLPageProperty extends SelectProperty
         $data['srcpath']  = $srcpath;
         return parent::showOutput($data);
     }
-	
-	/**
+
+    /**
      * Retrieve the list of options on demand
-     * 
+     *
      */
     public function getOptions()
     {
         $options = parent::getOptions();
         if (count($options) == 0 && !empty($this->basedir)) {
-            $files = $this->mod()->apiFunc('dynamicdata','admin','browse',
-                                   array('basedir' => $this->basedir,
-                                         'filetype' => $this->filetype));
+            $files = $this->mod()->apiFunc(
+                'dynamicdata',
+                'admin',
+                'browse',
+                ['basedir' => $this->basedir,
+                    'filetype' => $this->filetype]
+            );
             if (!isset($files)) {
                 $files = [];
             }
             natsort($files);
-            array_unshift($files,'');
+            array_unshift($files, '');
             foreach ($files as $file) {
-                $options[] = array('id' => $file,
-                                   'name' => $file);
+                $options[] = ['id' => $file,
+                    'name' => $file];
             }
             unset($files);
         }

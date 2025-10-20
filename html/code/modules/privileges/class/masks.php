@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Privileges administration API
  *
@@ -45,36 +46,36 @@ class xarMasks extends xarSecurity
      * @throws  list of exception identifiers which can be thrown
      * @todo    list of things which must be done to comply to relevant RFC
     */
-    public static function getmasks($modid=self::PRIVILEGES_ALL,$component='All')
+    public static function getmasks($modid = self::PRIVILEGES_ALL, $component = 'All')
     {
         self::initialize();
         // TODO: try to do all this a bit more compact and without xarMod::getBaseInfo
         // TODO: sort on the name of the mod again
         // TODO: evaluate ambiguous signature of this method: does 'All' mean get *only* the masks which apply to all modules
         //       or get *all* masks.
-        $bindvars = array();
+        $bindvars = [];
         // base query, only the where clauses differ
         $query = "SELECT masks.id, masks.name, realms.name,
                   modules.name, masks.component, masks.instance,
                   masks.level, masks.description
                   FROM " . self::$privilegestable . " AS masks
-                  LEFT JOIN " . self::$realmstable. " AS realms ON masks.realm_id = realms.id
-                  LEFT JOIN " . self::$modulestable. " AS modules ON masks.module_id = modules.id ";
+                  LEFT JOIN " . self::$realmstable . " AS realms ON masks.realm_id = realms.id
+                  LEFT JOIN " . self::$modulestable . " AS modules ON masks.module_id = modules.id ";
         if ($modid == self::PRIVILEGES_ALL) {
             if ($component == '' || $component == 'All') {
                 // nothing differs
             } else {
                 $query .= "WHERE (component IN (?,?,?) ";
-                $bindvars = array($component,'All','None');
+                $bindvars = [$component,'All','None'];
             }
         } else {
             if ($component == '' || $component == 'All') {
                 $query .= "WHERE module_id = ? ";
-                $bindvars = array($modid);
+                $bindvars = [$modid];
             } else {
                 $query .= "WHERE  module_id = ? AND
                                  component IN (?,?,?) ";
-                $bindvars = array($modid,$component,'All','None');
+                $bindvars = [$modid,$component,'All','None'];
             }
         }
         $query .= " AND itemtype = ? ";
@@ -84,18 +85,18 @@ class xarMasks extends xarSecurity
         $stmt = self::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
 
-        $masks = array();
-        while($result->next()) {
-            list($id, $name, $realm, $module_id, $component, $instance, $level,
-                    $description) = $result->fields;
-            $pargs = array('id' => $id,
-                           'name' => $name,
-                           'realm' => is_null($realm) ? 'All' : $realm,
-                           'module' => $module_id,
-                           'component' => $component,
-                           'instance' => $instance,
-                           'level' => $level,
-                           'description' => $description);
+        $masks = [];
+        while ($result->next()) {
+            [$id, $name, $realm, $module_id, $component, $instance, $level,
+                $description] = $result->fields;
+            $pargs = ['id' => $id,
+                'name' => $name,
+                'realm' => is_null($realm) ? 'All' : $realm,
+                'module' => $module_id,
+                'component' => $component,
+                'instance' => $instance,
+                'level' => $level,
+                'description' => $description];
             array_push($masks, new xarMask($pargs));
         }
         return $masks;
@@ -113,15 +114,15 @@ class xarMasks extends xarSecurity
      * @return  boolean
      * @todo    almost the same as privileges register method
     */
-    public static function register($name,$realm,$module,$component,$instance,$level,$description='')
+    public static function register($name, $realm, $module, $component, $instance, $level, $description = '')
     {
         self::initialize();
         // Check if the mask has already been registered, and update it if necessary.
         // FIXME: make mask names unique across modules (+ across realms) ?
         // FIXME: is module/name enough? Perhaps revisit this with realms in mind.
-        if($module == 'All') {
+        if ($module == 'All') {
             $module_id = self::PRIVILEGES_ALL;
-        } elseif($module == null) {
+        } elseif ($module == null) {
             $module_id = null;
         } else {
             $module_id = xarMod::getID($module);
@@ -131,34 +132,36 @@ class xarMasks extends xarSecurity
         }
 
         $realmid = null;
-        if($realm != 'All') {
-            $stmt = self::$dbconn->prepareStatement('SELECT id FROM '.self::$realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($realm),xarDB3::getFetchAssoc());
-            if($result->next()) $realmid = $result->getInt('id');
+        if ($realm != 'All') {
+            $stmt = self::$dbconn->prepareStatement('SELECT id FROM ' . self::$realmstable . ' WHERE name=?');
+            $result = $stmt->executeQuery([$realm], xarDB3::getFetchAssoc());
+            if ($result->next()) {
+                $realmid = $result->getInt('id');
+            }
         }
 
-        $query = "SELECT id FROM " . self::$privilegestable  . " WHERE itemtype = ? AND module_id = ? AND name = ?";
+        $query = "SELECT id FROM " . self::$privilegestable . " WHERE itemtype = ? AND module_id = ? AND name = ?";
         $stmt = self::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(self::PRIVILEGES_MASKTYPE, $module_id, $name));
+        $result = $stmt->executeQuery([self::PRIVILEGES_MASKTYPE, $module_id, $name]);
 
         try {
             self::$dbconn->begin();
             if ($result->first()) {
-                list($id) = $result->fields;
-                $query = "UPDATE " . self::$privilegestable .
-                          " SET realm_id = ?, component = ?,
+                [$id] = $result->fields;
+                $query = "UPDATE " . self::$privilegestable
+                          . " SET realm_id = ?, component = ?,
                               instance = ?, level = ?,
                               description = ?, itemtype= ?
                           WHERE id = ?";
-                $bindvars = array($realmid, $component, $instance, $level,
-                                  $description, self::PRIVILEGES_MASKTYPE, $id);
+                $bindvars = [$realmid, $component, $instance, $level,
+                    $description, self::PRIVILEGES_MASKTYPE, $id];
             } else {
-                $query = "INSERT INTO " . self::$privilegestable .
-                          " (name, realm_id, module_id, component, instance, level, description, itemtype)
+                $query = "INSERT INTO " . self::$privilegestable
+                          . " (name, realm_id, module_id, component, instance, level, description, itemtype)
                           VALUES (?,?,?,?,?,?,?,?)";
-                $bindvars = array(
-                                  $name, $realmid, $module_id, $component, $instance, $level,
-                                  $description, self::PRIVILEGES_MASKTYPE);
+                $bindvars = [
+                    $name, $realmid, $module_id, $component, $instance, $level,
+                    $description, self::PRIVILEGES_MASKTYPE];
             }
             $stmt = self::$dbconn->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
@@ -185,7 +188,7 @@ class xarMasks extends xarSecurity
     {
         self::initialize();
         $query = "DELETE FROM " . self::$privilegestable . " WHERE itemtype = ? AND name = ?";
-        self::$dbconn->Execute($query,array(self::PRIVILEGES_MASKTYPE, $name));
+        self::$dbconn->Execute($query, [self::PRIVILEGES_MASKTYPE, $name]);
         return true;
     }
 
@@ -211,7 +214,7 @@ class xarMasks extends xarSecurity
         }
         $query = "DELETE FROM " . self::$privilegestable . " WHERE itemtype = ? AND module_id = ?";
         //Execute the query, bail if an exception was thrown
-        self::$dbconn->Execute($query,array(self::PRIVILEGES_MASKTYPE, $modid));
+        self::$dbconn->Execute($query, [self::PRIVILEGES_MASKTYPE, $modid]);
         return true;
     }
 
@@ -268,19 +271,23 @@ class xarMasks extends xarSecurity
             return xarVar::getCached('Security.getprivset', $role);
         }
         $query = "SELECT set FROM " . self::$privsetstable . " WHERE id =?";
-        if(!isset($selStmt)) $selStmt = self::$dbconn->prepareStatement($query);
+        if (!isset($selStmt)) {
+            $selStmt = self::$dbconn->prepareStatement($query);
+        }
 
-        $result = $selStmt->executeQuery(array($role->getID()));
+        $result = $selStmt->executeQuery([$role->getID()]);
 
         if (!$result->first()) {
-            $privileges = self::irreducibleset(array('roles' => array($role)));
+            $privileges = self::irreducibleset(['roles' => [$role]]);
             $query = "INSERT INTO " . self::$privsetstable . " VALUES (?,?)";
-            $bindvars = array($role->getID(), serialize($privileges));
-            if(!isset($insStmt)) $insStmt = self::$dbconn->prepareStatement($query);
+            $bindvars = [$role->getID(), serialize($privileges)];
+            if (!isset($insStmt)) {
+                $insStmt = self::$dbconn->prepareStatement($query);
+            }
             $insStmt->executeUpdate($bindvars);
             return $privileges;
         } else {
-            list($serprivs) = $result->fields;
+            [$serprivs] = $result->fields;
         }
         // MrB: Why the unserialize here?
         xarVar::setCached('Security.getprivset', $role, unserialize($serprivs));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories Module
  *
@@ -21,7 +22,7 @@ class Categories extends xarObject
 {
     /**
      * Fetches CategoryTreeNode object from database
-     * 
+     *
      * @param int $id Id of the CategoryTreeNode
      * @return \CategoryTreeNode|void
      */
@@ -39,12 +40,14 @@ class Categories extends xarObject
                             left_id,
                             right_id
                        FROM  " . $xartable['categories'] . " WHERE id = ?";
-        $bindvars = array($id);
-        $result = $dbconn->Execute($SQLquery,$bindvars);
-        if (!$result) return;
+        $bindvars = [$id];
+        $result = $dbconn->Execute($SQLquery, $bindvars);
+        if (!$result) {
+            return;
+        }
 
         $c = new CategoryTreeNode();
-        list($c->id, $c->name, $c->description, $c->image, $c->parent, $c->left, $c->right) = $result->fields;
+        [$c->id, $c->name, $c->description, $c->image, $c->parent, $c->left, $c->right] = $result->fields;
         return $c;
     }
 }
@@ -86,10 +89,10 @@ class CategoryTreeNode extends TreeNode
 
     /**
      * Fetches a collection of the node's children
-     * 
+     *
      * @return object|void Collection of \CategoryTreeNode
      */
-    function getChildren()
+    public function getChildren()
     {
         $dbconn = xarDB3::getConn();
         $xartable = xarDB3::getTables();
@@ -104,15 +107,17 @@ class CategoryTreeNode extends TreeNode
                             left_id,
                             right_id
                        FROM  " . $xartable['categories'] . " WHERE parent_id = ? ORDER BY left_id";
-        $bindvars = array($this->id);
-        $result = $dbconn->Execute($SQLquery,$bindvars);
-        if (!$result) return;
+        $bindvars = [$this->id];
+        $result = $dbconn->Execute($SQLquery, $bindvars);
+        if (!$result) {
+            return;
+        }
 
         sys::import('xaraya.structures.sets.collection');
         $collection = new BasicSet();
         while ($result->next()) {
             $c = new CategoryTreeNode();
-            list($c->id, $c->name, $c->description, $c->image, $c->template, $c->child_object, $c->parent, $c->left, $c->right) = $result->fields;
+            [$c->id, $c->name, $c->description, $c->image, $c->template, $c->child_object, $c->parent, $c->left, $c->right] = $result->fields;
             $collection->add($c);
         }
         return $collection;
@@ -120,10 +125,10 @@ class CategoryTreeNode extends TreeNode
 
     /**
      * Returns the parent of the CategoryTreeNode
-     * 
+     *
      * @return \CategoryTreeNode
      */
-    function getParent()
+    public function getParent()
     {
         return Categories::get($this->parent);
     }
@@ -131,20 +136,19 @@ class CategoryTreeNode extends TreeNode
     /**
      * Not implemented
      */
-    function getChildAt()
-    {
+    public function getChildAt() {}
 
-    }
-
-    function getChildCount()
+    public function getChildCount()
     {
         $dbconn = xarDB3::getConn();
         $xartable = xarDB3::getTables();
 
         $SQLquery = "SELECT COUNT(*) FROM " . $xartable['categories'] . " WHERE parent_id = ? ORDER BY left_id";
-        $bindvars = array($this->id);
-        $result = $dbconn->Execute($SQLquery,$bindvars);
-        if (!$result) return;
+        $bindvars = [$this->id];
+        $result = $dbconn->Execute($SQLquery, $bindvars);
+        if (!$result) {
+            return;
+        }
 
         $fields = $result->fields;
         return array_pop($fields);
@@ -153,11 +157,11 @@ class CategoryTreeNode extends TreeNode
 
     /**
      * Check if a CategoryTreeNode is a descendant
-     * 
+     *
      * @param CategoryTreeNode $n Node to look up
      * @return boolean|void True if the given CategoryTreeNode is a decendant
      */
-    function isDescendant(CategoryTreeNode $n)
+    public function isDescendant(CategoryTreeNode $n)
     {
         $dbconn = xarDB3::getConn();
         $xartable = xarDB3::getTables();
@@ -173,7 +177,9 @@ class CategoryTreeNode extends TreeNode
             AND     P1.id !=' . $n->id;
 
         $result = $dbconn->SelectLimit($query, 1);
-        if (!$result) {return;}
+        if (!$result) {
+            return;
+        }
 
         if ($result->first()) {
             return true;
@@ -186,28 +192,32 @@ class CategoryTreeNode extends TreeNode
      * Load values from array
      * @param array<string, mixed> $args Data array for CategoryTreeNode
      */
-    function load(Array $args)
+    public function load(array $args)
     {
-        foreach($args as $key => $value) $this->$key = $value;
+        foreach ($args as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
     /**
      * Set filter
      * @param array<string, mixed> $args Filter Data array
      */
-    function setfilter($args=array())
+    public function setfilter($args = [])
     {
-        foreach ($args as $key => $value) $this->$key = $value;
+        foreach ($args as $key => $value) {
+            $this->$key = $value;
+        }
     }
-    
+
     /**
      * Return this object as an array
-     * 
+     *
      * @return array<mixed> CategoryTreeNode information as array
      */
-    function toArray()
+    public function toArray()
     {
-        return array('id' => $this->id, 'name' => $this->name);
+        return ['id' => $this->id, 'name' => $this->name];
     }
 }
 
@@ -229,23 +239,27 @@ class CategoryTree extends Tree
     /**
      * @param CategoryTreeNode $node
      */
-    function createnodes(TreeNode $node)
+    public function createnodes(TreeNode $node)
     {
-        if ($node->id != null) $node->cid = $node->id;
-        $data = xarMod::apiFunc('categories',
-                                'user',
-                                'getcat',
-                              array('eid'           => $node->eid,
-                                    'cid'           => $node->cid,
-                                    'return_itself' => $node->returnitself,
-                                    'getchildren'   => $node->getchildren,
-                                    'maximum_depth' => $node->maxdepth,
-                                    'minimum_depth' => $node->mindepth,
-                                    'startnum'      => $node->start,
-                                    'items_per_page'  => $node->itemstoshow,
-                                    ));
-         foreach ($data as $row) {
-            $nodedata = array(
+        if ($node->id != null) {
+            $node->cid = $node->id;
+        }
+        $data = xarMod::apiFunc(
+            'categories',
+            'user',
+            'getcat',
+            ['eid'           => $node->eid,
+                'cid'           => $node->cid,
+                'return_itself' => $node->returnitself,
+                'getchildren'   => $node->getchildren,
+                'maximum_depth' => $node->maxdepth,
+                'minimum_depth' => $node->mindepth,
+                'startnum'      => $node->start,
+                'items_per_page'  => $node->itemstoshow,
+            ]
+        );
+        foreach ($data as $row) {
+            $nodedata = [
                 'id' => $row['cid'],
                 'parent' => $row['parent'],
                 'name' => $row['name'],
@@ -256,27 +270,29 @@ class CategoryTree extends Tree
                 'child_object' => $row['child_object'],
                 'left' => $row['left'],
                 'right' => $row['right'],
-            );
+            ];
             if (!empty($node->cidlist) && isset($node->cidlist[$node->id])) {
                 $cidlist = $node->cidlist[$node->id];
-                if (in_array($row['cid'],$cidlist)) $this->treedata[] = $nodedata;
+                if (in_array($row['cid'], $cidlist)) {
+                    $this->treedata[] = $nodedata;
+                }
             } else {
                 $this->treedata[$row['id']] = $nodedata;
             }
         }
         if ($node->id == 0) {
-            $vr = array(
-                  'id'           => 0,
-                  'parent'       => 0,
-                  'name'         => 'Root',
-                  'description'  => 'A virtual root node',
-                  'indentation'  => 0,
-                  'image'        => '',
-                  'template'     => '',
-                  'child_object' => '',
-                  'left'         => 1,
-                  'right'        => 2,
-            );
+            $vr = [
+                'id'           => 0,
+                'parent'       => 0,
+                'name'         => 'Root',
+                'description'  => 'A virtual root node',
+                'indentation'  => 0,
+                'image'        => '',
+                'template'     => '',
+                'child_object' => '',
+                'left'         => 1,
+                'right'        => 2,
+            ];
             $this->treedata[0] = $vr;
         }
         parent::createnodes($node);

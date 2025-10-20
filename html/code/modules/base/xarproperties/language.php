@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -22,17 +23,17 @@ class LanguageListProperty extends SelectProperty
     public $id         = 36;
     public $name       = 'language';
     public $desc       = 'Language List';
-/**
-     * Retrieve the list of options on demand
-     * 
-     * @return array<mixed> Array of options
-     */
-    function getOptions()
+    /**
+         * Retrieve the list of options on demand
+         *
+         * @return array<mixed> Array of options
+         */
+    public function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
         }
-        
+
         $options = [];
         $list = xarMLS::listSiteLocales();
         asort($list);
@@ -40,9 +41,9 @@ class LanguageListProperty extends SelectProperty
         foreach ($list as $locale) {
             $locale_data = $this->mls()->loadLocale($locale);
             $name = $locale_data['/language/display'] . " (" . $locale_data['/country/display'] . ")";
-            $options[] = array('id'   => $locale,
-                                     'name' => $name,
-                                    );
+            $options[] = ['id'   => $locale,
+                'name' => $name,
+            ];
         }
         return $options;
     }

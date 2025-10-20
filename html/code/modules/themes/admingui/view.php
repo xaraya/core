@@ -271,24 +271,24 @@ class ViewMethod extends MethodClass
         $data['authid'] = $authid;
 
         $data['states'] = [
-            xarTheme::STATE_ANY =>
-                ['id' => xarTheme::STATE_ANY, 'name' => $this->ml('All')],
-            xarTheme::STATE_INSTALLED =>
-                ['id' => xarTheme::STATE_INSTALLED, 'name' => $this->ml('Installed')],
-            xarTheme::STATE_ACTIVE =>
-                ['id' => xarTheme::STATE_ACTIVE, 'name' => $this->ml('Active')],
-            xarTheme::STATE_INACTIVE =>
-                ['id' => xarTheme::STATE_INACTIVE, 'name' => $this->ml('Inactive')],
-            xarTheme::STATE_UNINITIALISED =>
-                ['id' => xarTheme::STATE_UNINITIALISED, 'name' => $this->ml('Uninitialized')],
-            xarTheme::STATE_MISSING_FROM_UNINITIALISED =>
-                ['id' => xarTheme::STATE_MISSING_FROM_UNINITIALISED, 'name' => $this->ml('Missing (Not Inited)')],
-            xarTheme::STATE_MISSING_FROM_INACTIVE =>
-                ['id' => xarTheme::STATE_MISSING_FROM_INACTIVE, 'name' => $this->ml('Missing (Inactive)')],
-            xarTheme::STATE_MISSING_FROM_ACTIVE =>
-                ['id' => xarTheme::STATE_MISSING_FROM_ACTIVE, 'name' => $this->ml('Missing (Active)')],
-            xarTheme::STATE_MISSING_FROM_UPGRADED =>
-                ['id' => xarTheme::STATE_MISSING_FROM_UPGRADED, 'name' => $this->ml('Missing (Upgraded)')],
+            xarTheme::STATE_ANY
+                => ['id' => xarTheme::STATE_ANY, 'name' => $this->ml('All')],
+            xarTheme::STATE_INSTALLED
+                => ['id' => xarTheme::STATE_INSTALLED, 'name' => $this->ml('Installed')],
+            xarTheme::STATE_ACTIVE
+                => ['id' => xarTheme::STATE_ACTIVE, 'name' => $this->ml('Active')],
+            xarTheme::STATE_INACTIVE
+                => ['id' => xarTheme::STATE_INACTIVE, 'name' => $this->ml('Inactive')],
+            xarTheme::STATE_UNINITIALISED
+                => ['id' => xarTheme::STATE_UNINITIALISED, 'name' => $this->ml('Uninitialized')],
+            xarTheme::STATE_MISSING_FROM_UNINITIALISED
+                => ['id' => xarTheme::STATE_MISSING_FROM_UNINITIALISED, 'name' => $this->ml('Missing (Not Inited)')],
+            xarTheme::STATE_MISSING_FROM_INACTIVE
+                => ['id' => xarTheme::STATE_MISSING_FROM_INACTIVE, 'name' => $this->ml('Missing (Inactive)')],
+            xarTheme::STATE_MISSING_FROM_ACTIVE
+                => ['id' => xarTheme::STATE_MISSING_FROM_ACTIVE, 'name' => $this->ml('Missing (Active)')],
+            xarTheme::STATE_MISSING_FROM_UPGRADED
+                => ['id' => xarTheme::STATE_MISSING_FROM_UPGRADED, 'name' => $this->ml('Missing (Upgraded)')],
         ];
 
         $data['classes'] = [

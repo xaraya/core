@@ -77,7 +77,7 @@ class BaseRoutes extends ModuleRoutes
      * Find route uri based on params
      * @param array<string, mixed> $params
      */
-    public static function findRoute(RouterInterface $router, array $params): string|null
+    public static function findRoute(RouterInterface $router, array $params): ?string
     {
         return parent::findRoute($router, $params);
     }
@@ -87,7 +87,7 @@ class BaseRoutes extends ModuleRoutes
      * @param string $namePrefix incl. moduleName
      * @param array<string, mixed> $params
      */
-    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): string|null
+    public static function findModuleRoute(RouterInterface $router, string $namePrefix = '', array $params = []): ?string
     {
         $params['type'] ??= 'user';
         $params['func'] ??= 'main';

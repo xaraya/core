@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -55,7 +56,7 @@ class PropertyRegistration extends DataContainer
     {
         $args = $descriptor->getArgs();
         if (!empty($args)) {
-            foreach($args as $key => $value) {
+            foreach ($args as $key => $value) {
                 $this->$key = $value;
             }
         }
@@ -92,8 +93,8 @@ class PropertyRegistration extends DataContainer
         static $types = [];
 
         // Sanity checks (silent)
-        foreach($this->reqfiles as $required) {
-            if(!file_exists($required)) {
+        foreach ($this->reqfiles as $required) {
+            if (!file_exists($required)) {
                 return false;
             }
         }
@@ -112,14 +113,14 @@ class PropertyRegistration extends DataContainer
         assert(count($this->reqmodules) <= 1);
         $module_id = empty($this->reqmodules) ? 0 : xarMod3::getID($this->reqmodules[0]);
 
-        if($this->format == 0) {
+        if ($this->format == 0) {
             $this->format = $this->id;
         }
 
         if (empty($types)) {
             $sql = "SELECT id FROM $tables[dynamic_properties_def]";
             $res = $dbconn->executeQuery($sql);
-            while($res->next()) {
+            while ($res->next()) {
                 [$id] = $res->fields;
                 $types[] = $id;
             }
@@ -150,8 +151,8 @@ class PropertyRegistration extends DataContainer
             $res = true;
         }
 
-        if(!empty($this->aliases)) {
-            foreach($this->aliases as $aliasInfo) {
+        if (!empty($this->aliases)) {
+            foreach ($this->aliases as $aliasInfo) {
                 if (!isset($aliasInfo['filepath'])) {
                     $aliasInfo['filepath'] = $this->filepath;
                 }
@@ -173,7 +174,7 @@ class PropertyRegistration extends DataContainer
 
     public static function Retrieve()
     {
-        if(xarVar3::isCached('DynamicData', 'PropertyTypes')) {
+        if (xarVar3::isCached('DynamicData', 'PropertyTypes')) {
             return xarVar3::getCached('DynamicData', 'PropertyTypes');
         }
         $dbconn = xarDB3::getConn();
@@ -195,10 +196,10 @@ class PropertyRegistration extends DataContainer
 
         $result = $dbconn->executeQuery($query);
         $proptypes = [];
-        if($result->RecordCount() === 0) {
+        if ($result->RecordCount() === 0) {
             $proptypes = self::importPropertyTypes(false);
         } else {
-            while($result->next()) {
+            while ($result->next()) {
                 [
                     $id, $name, $label, $filepath, $class, $format,
                     $configuration, $source, $reqfiles, $modname, $args, $aliases
@@ -218,7 +219,7 @@ class PropertyRegistration extends DataContainer
                 // TODO: this returns a serialized array of objects, does that hurt?
                 try {
                     $property['aliases']        = unserialize($aliases);
-                } catch(Exception) {
+                } catch (Exception) {
                     $property['aliases']        = [];
                 }
                 $proptypes[$id] = $property;
@@ -277,10 +278,10 @@ class PropertyRegistration extends DataContainer
                 assert(!empty($activeMods)); // this should never happen
                 xarLog3::debug('DynamicData: There are ' . count($activeMods) . ' active modules');
 
-                foreach($activeMods as $modInfo) {
+                foreach ($activeMods as $modInfo) {
                     // FIXME: the modinfo directory does NOT end with a /
                     $dir = 'modules/' . $modInfo['osdirectory'] . '/xarproperties';
-                    if(file_exists(sys::code() . $dir)) {
+                    if (file_exists(sys::code() . $dir)) {
                         $propDirs[] = $dir;
                     }
 
@@ -292,7 +293,7 @@ class PropertyRegistration extends DataContainer
                     // If there is a configurations-dat.xml file in this module, then load it now
                     // CHECKME: For more flexibility this could be done through a PropertyInstall class
                     $dir = 'modules/' . $modInfo['osdirectory'] . '/xardata/configurations-dat.xml';
-                    if(file_exists(sys::code() . $dir)) {
+                    if (file_exists(sys::code() . $dir)) {
                         $dat_file = sys::code() . $dir;
                         $data = ['file' => $dat_file];
                         try {
@@ -315,7 +316,7 @@ class PropertyRegistration extends DataContainer
             static $loaded = [];
             $proptypes = [];
             $numLoaded = 0;
-            foreach($propDirs as $PropertiesDir) {
+            foreach ($propDirs as $PropertiesDir) {
                 $propertiesdir = sys::code() . $PropertiesDir;
                 if (!file_exists($propertiesdir)) {
                     continue;
@@ -415,7 +416,7 @@ class PropertyRegistration extends DataContainer
                 // Good class: add it to the array
                 $classesToSort[$thisclass] = $thisclass;
 
-                if(property_exists($thisclass, 'deferto')) {
+                if (property_exists($thisclass, 'deferto')) {
                     $vars = get_class_vars($thisclass);
                     $deferto = $vars['deferto'];
                     if (isset($deferto) && is_array($deferto)) {
@@ -440,7 +441,7 @@ class PropertyRegistration extends DataContainer
 
             // Process the sorted classes
             $i = 0;
-            foreach($sortedClasses as $index => $propertyClass) {
+            foreach ($sortedClasses as $index => $propertyClass) {
                 $processedClasses[] = $propertyClass;
 
                 // Main part
@@ -485,7 +486,7 @@ class PropertyRegistration extends DataContainer
                 $aliases = $property->aliases();
                 if (!empty($aliases)) {
                     // Each alias is also a propertyRegistration object
-                    foreach($aliases as $alias) {
+                    foreach ($aliases as $alias) {
                         $descriptor = new ObjectDescriptor($alias);
                         $aliasInfo = new PropertyRegistration($descriptor);
                         $aliasInfo->class = $propertyClass;
@@ -508,17 +509,17 @@ class PropertyRegistration extends DataContainer
                 unset($currentproptypes);
 
                 // Configuring each property type
-    			if (xarVar3::getCached('installer','installing') === true) {
-    				// We don't need this when installing Xaraya
-    				// This saves a lot of db calls
-    				continue;
-    			} else {
-	                // Run the install function if it exists
-					self::installproperty($baseInfo->name);
-    			}
+                if (xarVar3::getCached('installer', 'installing') === true) {
+                    // We don't need this when installing Xaraya
+                    // This saves a lot of db calls
+                    continue;
+                } else {
+                    // Run the install function if it exists
+                    self::installproperty($baseInfo->name);
+                }
             } // next property class in the same file
             $dbconn->commit();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // TODO: catch more specific exceptions than all?
             $dbconn->rollback();
             throw $e;
@@ -539,21 +540,21 @@ class PropertyRegistration extends DataContainer
         $class = ucfirst($propertyname) . 'PropertyInstall';
         if ($frommodule) {
             // Assume this is a property in a module
-			if (class_exists($class)) {
-				$descriptor = new DataObjectDescriptor();
-				$installer = new $class($descriptor);
-				$installer->install();
-			}
+            if (class_exists($class)) {
+                $descriptor = new DataObjectDescriptor();
+                $installer = new $class($descriptor);
+                $installer->install();
+            }
         } else {
             // Assume this is a standalone property in the properties directory
-			if (!class_exists($class)) {
-				sys::import('properties.' . $propertyname . '.install');
-				$descriptor = new DataObjectDescriptor();
-				$installer = new $class($descriptor);
-			} else {
-				$descriptor = new DataObjectDescriptor();
-				$installer = new $class($descriptor);
-			}
+            if (!class_exists($class)) {
+                sys::import('properties.' . $propertyname . '.install');
+                $descriptor = new DataObjectDescriptor();
+                $installer = new $class($descriptor);
+            } else {
+                $descriptor = new DataObjectDescriptor();
+                $installer = new $class($descriptor);
+            }
             $installer->install();
         }
     }
@@ -562,9 +563,9 @@ class PropertyRegistration extends DataContainer
     private static function topological_sort($nodeids, $edges)
     {
         $L = $S = $nodes = [];
-        foreach($nodeids as $id) {
+        foreach ($nodeids as $id) {
             $nodes[$id] = ['in' => [], 'out' => []];
-            foreach($edges as $e) {
+            foreach ($edges as $e) {
                 if ($id == $e[0]) {
                     $nodes[$id]['out'][] = $e[1];
                 }
@@ -580,7 +581,7 @@ class PropertyRegistration extends DataContainer
         }
         while (!empty($S)) {
             $L[] = $id = array_shift($S);
-            foreach($nodes[$id]['out'] as $m) {
+            foreach ($nodes[$id]['out'] as $m) {
                 $nodes[$m]['in'] = array_diff($nodes[$m]['in'], [$id]);
                 if (empty($nodes[$m]['in'])) {
                     $S[] = $m;
@@ -588,7 +589,7 @@ class PropertyRegistration extends DataContainer
             }
             $nodes[$id]['out'] = [];
         }
-        foreach($nodes as $n) {
+        foreach ($nodes as $n) {
             if (!empty($n['in']) or !empty($n['out'])) {
                 return null; // not sortable as graph is cyclic
             }

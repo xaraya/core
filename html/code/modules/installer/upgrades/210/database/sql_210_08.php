@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upgrade SQL file
  *
@@ -48,7 +49,7 @@ function sql_210_08()
         SELECT id FROM $roles WHERE name = 'sitemanagers'
         ";
         $result = $dbconn->Execute($data['sql']);
-        list($idgroup) = $result->fields;
+        [$idgroup] = $result->fields;
         $data['sql'] = "
         INSERT INTO $rolemembers (role_id, parent_id) VALUES ($idgroup,1)
         ";
@@ -57,7 +58,7 @@ function sql_210_08()
         SELECT id FROM $roles WHERE uname = 'manager'
         ";
         $result = $dbconn->Execute($data['sql']);
-        list($iduser) = $result->fields;
+        [$iduser] = $result->fields;
         $data['sql'] = "
         INSERT INTO $rolemembers (role_id, parent_id) VALUES ($iduser,$idgroup)
         ";

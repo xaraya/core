@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Check SQL file
  *
@@ -57,7 +58,7 @@ function sql_210_roles_roles()
             Missing Administrators group
             ");
         }
-        
+
         $data['sql'] = "
         SELECT 
         `id`,
@@ -104,7 +105,7 @@ function sql_210_roles_roles()
         SELECT 
         `id`,
         `uname`
-        FROM $table WHERE id = " . xarModVars::get('roles','admin') . "
+        FROM $table WHERE id = " . xarModVars::get('roles', 'admin') . "
         ";
         $result = $dbconn->Execute($data['sql']);
         if ($result->EOF) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dynamic Object User Interface Handler
  * @package modules\dynamicdata

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -17,7 +18,7 @@ sys::import("modules.base.xarproperties.multiselect");
 
 /**
  * This property displays a multiselect box with the contents ordered alphabetically
- * 
+ *
  */
 class OrderSelectProperty extends MultiSelectProperty
 {
@@ -28,36 +29,42 @@ class OrderSelectProperty extends MultiSelectProperty
     public $initialization_order        = null;
 
     public $order = null;
-    
-    function __construct(ObjectDescriptor $descriptor)
+
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->template  = 'orderselect';
     }
-/**
- * Get the value of a checkbox from a web page<br/>
- * 
- * @param  string value The value of the input
- * @return bool   This method passes the value gotten to the validateOrder method and returns its output.Returns true if the function has been successfully completed. Returns false if the function completion has failed.
- */
+    /**
+     * Get the value of a checkbox from a web page<br/>
+     *
+     * @param  string value The value of the input
+     * @return bool   This method passes the value gotten to the validateOrder method and returns its output.Returns true if the function has been successfully completed. Returns false if the function completion has failed.
+     */
     public function checkInput($name = '', $value = null)
     {
-        if (parent::checkInput($name, $value)) return false;
-        list($found, $order) = $this->fetchValue($name . '_order');
-        if (!$found) return false;
+        if (parent::checkInput($name, $value)) {
+            return false;
+        }
+        [$found, $order] = $this->fetchValue($name . '_order');
+        if (!$found) {
+            return false;
+        }
         return $this->validateOrder($order);
 
     }
-    
+
     /**
      * Validates the order of values
-     * 
+     *
      * @param string $order Order of the values
      * @return boolean Returns true on success, false on failure
      */
-    function validateOrder($order = null)
+    public function validateOrder($order = null)
     {
-        if (!isset($order)) $order = $this->order;
+        if (!isset($order)) {
+            $order = $this->order;
+        }
         $options = array_keys($this->getOptions());
 
         $tmp = [];
@@ -69,7 +76,7 @@ class OrderSelectProperty extends MultiSelectProperty
             $tmp = explode(';', $order);
         }
 
-        if(count(array_diff($options, $tmp)) != 0) {
+        if (count(array_diff($options, $tmp)) != 0) {
             $this->invalid = $this->ml('incorrect order value: #(1) for #(2)', implode(';', $tmp), $this->name);
             $this->order = null;
             return false;
@@ -77,28 +84,33 @@ class OrderSelectProperty extends MultiSelectProperty
         $this->order = implode(';', $tmp);
         return true;
     }
-/**
- * Display a options for input
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for input on a web page
- */
+    /**
+     * Display a options for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (empty($data['options'])) $data['options'] = $this->getOptions();
+        if (empty($data['options'])) {
+            $data['options'] = $this->getOptions();
+        }
 
         if (empty($data['order']) || strstr($data['order'], ';') === false) {
             $data['order'] = '';
             foreach ($data['options'] as $option) {
-                if (is_array($option) && isset($option['id'])) $data['order'] .= $option['id'] . ';';
-                else $data['order'] .= $option . ';';
+                if (is_array($option) && isset($option['id'])) {
+                    $data['order'] .= $option['id'] . ';';
+                } else {
+                    $data['order'] .= $option . ';';
+                }
             }
         } else {
             $tmpval = explode(';', $data['order']);
             $tmpopts = [];
-            foreach($tmpval as $v) {
-                foreach($data['options'] as $k) {
-                    if($k['id'] == $v) {
+            foreach ($tmpval as $v) {
+                foreach ($data['options'] as $k) {
+                    if ($k['id'] == $v) {
                         $tmpopts[] = $k;
                         continue;
                     }
@@ -108,29 +120,36 @@ class OrderSelectProperty extends MultiSelectProperty
         }
         return parent::showInput($data);
     }
-/**
- * Display options for output
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for output on a web page
- */	
+    /**
+     * Display options for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
-        if (!isset($data['options'])) $data['options'] = $this->options;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
+        if (!isset($data['options'])) {
+            $data['options'] = $this->options;
+        }
 
         if (empty($data['order']) || strstr($data['order'], ';') === false) {
             $data['order'] = '';
             foreach ($data['options'] as $option) {
-                if (is_array($option) && isset($option['id'])) $data['order'] .= $option['id'] . ';';
-                else $data['order'] .= $option . ';';
+                if (is_array($option) && isset($option['id'])) {
+                    $data['order'] .= $option['id'] . ';';
+                } else {
+                    $data['order'] .= $option . ';';
+                }
             }
         } else {
             $tmpval = explode(';', $data['order']);
             $tmpopts = [];
-            foreach($tmpval as $v) {
-                foreach($data['options'] as $k) {
-                    if($k['id'] == $v) {
+            foreach ($tmpval as $v) {
+                foreach ($data['options'] as $k) {
+                    if ($k['id'] == $v) {
                         $tmpopts[] = $k;
                         continue;
                     }

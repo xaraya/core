@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -45,7 +46,7 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         $this->invalid = '';
-        if(!isset($value)) {
+        if (!isset($value)) {
             [$found, $value] = $this->fetchValue($name);
             if (!$found) {
                 $value = null;

@@ -1,4 +1,5 @@
 <?php
+
 /* Include the parent class */
 sys::import('modules.base.xarproperties.dropdown');
 
@@ -19,7 +20,7 @@ class UserListProperty extends SelectProperty
     public $id         = 37;
     public $name       = 'userlist';
     public $desc       = 'User List';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
     public $grouplist = [];
     public $userstate = -1;
@@ -49,7 +50,7 @@ class UserListProperty extends SelectProperty
     *   field - name|uname|email|id
     */
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
@@ -58,25 +59,27 @@ class UserListProperty extends SelectProperty
 
         if (count($this->options) == 0) {
             $select_options = [];
-            if (!empty($this->initialization_orderlist)) $select_options['order'] = explode(',', $this->initialization_orderlist);
-//            $users = $this->mod()->apiFunc('roles', 'user', 'getall', $select_options);
+            if (!empty($this->initialization_orderlist)) {
+                $select_options['order'] = explode(',', $this->initialization_orderlist);
+            }
+            //            $users = $this->mod()->apiFunc('roles', 'user', 'getall', $select_options);
             // FIXME: this function needs to be reviewed
             $users = [];
             // Loop for each user retrieved and populate the options array.
             if (empty($this->display_showfields)) {
                 // Simple case (default) -
                 foreach ($users as $user) {
-                    $this->options[] = array('id' => $user['id'], 'name' => $user['name']);
+                    $this->options[] = ['id' => $user['id'], 'name' => $user['name']];
                 }
             } else {
-                $showfields = explode(',',$this->display_showfields);
+                $showfields = explode(',', $this->display_showfields);
                 // Complex case: allow specific fields to be selected.
                 foreach ($users as $user) {
                     $namevalue = [];
                     foreach ($showfields as $showfield) {
                         $namevalue[] = $user[$showfield];
                     }
-                    $this->options[] = array('id' => $user['id'], 'name' => implode($this->showglue, $namevalue));
+                    $this->options[] = ['id' => $user['id'], 'name' => implode($this->showglue, $namevalue)];
                 }
             }
         }
@@ -85,7 +88,9 @@ class UserListProperty extends SelectProperty
     // TODO: validate the selected user against the specified group(s).
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (!empty($value)) {
             // check if this is a valid user id
@@ -106,19 +111,25 @@ class UserListProperty extends SelectProperty
         return false;
     }
 
-	/**
-	 * Display a dropdown for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a dropdown for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
         // CHECKME: Remove this?
-        if (isset($data['group_list'])) $this->validation_userlist_group_list = $data['group_list'];
-        
-        if (isset($data['group']))      $this->validation_userlist_group_list = $data['group'];
-        if (isset($data['state']))      $this->initialization_userlist_user_state = $data['state'];
+        if (isset($data['group_list'])) {
+            $this->validation_userlist_group_list = $data['group_list'];
+        }
+
+        if (isset($data['group'])) {
+            $this->validation_userlist_group_list = $data['group'];
+        }
+        if (isset($data['state'])) {
+            $this->initialization_userlist_user_state = $data['state'];
+        }
 
         return parent::showInput($data);
     }
@@ -129,7 +140,9 @@ class UserListProperty extends SelectProperty
     public function showOutput(array $data = [])
     {
         extract($data);
-        if (!isset($value)) $value = $this->value;
+        if (!isset($value)) {
+            $value = $this->value;
+        }
 
         if (empty($value)) {
             $user = '';
@@ -146,24 +159,26 @@ class UserListProperty extends SelectProperty
         $data['value'] = $value;
         $data['user'] = $user;
 
-        if (isset($data['state']))      $this->initialization_userlist_user_state = $data['state'];
-        
+        if (isset($data['state'])) {
+            $this->initialization_userlist_user_state = $data['state'];
+        }
+
         return parent::showOutput($data);
     }
 
-	/**
+    /**
      * Retrieve the list of options on demand
-     * 
+     *
      */
     public function getOptions()
     {
         $select_options = [];
         $select_options['state'] = $this->initialization_userlist_user_state;
-        
+
         if (!empty($this->initialization_userlist_group_list)) {
             $select_options['grouplist'] = $this->initialization_userlist_group_list;
         }
-        
+
         // TODO: the names here (group, grouplist, group_list) need to be simplified
         // This comes from a property call on (usually in the template) and overrides the initialization
         if (!empty($this->validation_userlist_group_list)) {
@@ -172,19 +187,23 @@ class UserListProperty extends SelectProperty
 
         // Get the candidates
         $options = $this->mod()->apiFunc('roles', 'user', 'getall', $select_options);
-        
+
         // Adjust for the fields to show
-        if (!empty($options) && !empty($this->display_showfields)) {        
+        if (!empty($options) && !empty($this->display_showfields)) {
             $testrow = $options[0];
-            $fields = explode(',',$this->display_showfields);
+            $fields = explode(',', $this->display_showfields);
             foreach ($fields as $k => $v) {
-                if (!isset($testrow[trim($v)])) unset($fields[$k]);
+                if (!isset($testrow[trim($v)])) {
+                    unset($fields[$k]);
+                }
             }
-            foreach($options as $key => $value) {
+            foreach ($options as $key => $value) {
                 $namestring = '';
                 foreach ($fields as $v) {
                     $v = $value[trim($v)];
-                    if (empty($v)) continue;
+                    if (empty($v)) {
+                        continue;
+                    }
                     $namestring .= $v . $this->display_showglue;
                 }
                 $namestring = substr($namestring, 0, -strlen($this->display_showglue));
@@ -215,13 +234,13 @@ class UserListPropertyInstall extends UserListProperty implements iDataPropertyI
     public function install(array $data = [])
     {
         $dat_file = sys::code() . 'modules/roles/xardata/userlist_configurations-dat.xml';
-        $data = array('file' => $dat_file);
+        $data = ['file' => $dat_file];
         try {
-            $objectid = $this->mod()->apiFunc('dynamicdata','util','import', $data);
+            $objectid = $this->mod()->apiFunc('dynamicdata', 'util', 'import', $data);
         } catch (Exception $e) {
             //
         }
         return true;
     }
-    
+
 }

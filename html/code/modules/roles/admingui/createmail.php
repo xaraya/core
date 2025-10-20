@@ -69,8 +69,8 @@ class CreatemailMethod extends MethodClass
         $xartable = $this->db()->getTables();
         if ($type == 'single') {
             $id = $role->getID();
-            $data['users'][$role->getID()] =
-                ['id'       => $id,
+            $data['users'][$role->getID()]
+                = ['id'       => $id,
                     'name'     => $role->getName(),
                     'uname'    => $role->getUser(),
                     'email'    => $role->getEmail(),
@@ -151,8 +151,8 @@ class CreatemailMethod extends MethodClass
             $q->run();
 
             foreach ($q->output() as $role) {
-                $data['users'][$role['id']] =
-                    ['id'      => $role['id'],
+                $data['users'][$role['id']]
+                    = ['id'      => $role['id'],
                         'name'     => $role['name'],
                         'uname'    => $role['uname'],
                         'email'    => $role['email'],
@@ -171,8 +171,8 @@ class CreatemailMethod extends MethodClass
                 foreach ($descendants as $key => $user) {
                     if ($this->sec()->check('EditRoles', 0, 'Roles', $user->getName())) {
                         if (in_array($state, [$user->getState(),xarRoles::ROLES_STATE_ALL])) {
-                            $data['users'][$user->getID()] =
-                                ['id'      => $user->getID(),
+                            $data['users'][$user->getID()]
+                                = ['id'      => $user->getID(),
                                     'name'     => $user->getName(),
                                     'uname'    => $user->getUser(),
                                     'email'    => $user->getEmail(),

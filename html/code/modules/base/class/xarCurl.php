@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -39,8 +40,8 @@ class xarCurl extends xarObject
     public $url;
 
     // The GET and POST data.
-    public $post = array();
-    public $get = array();
+    public $post = [];
+    public $get = [];
 
     // Default method of sending data.
     public $sendmethod = 'POST';
@@ -69,8 +70,8 @@ class xarCurl extends xarObject
     public $info = null;
 
     // Header information from the return message.
-    public $header100 = array();
-    public $header = array();
+    public $header100 = [];
+    public $header = [];
 
     // Curl info types: the information flags that getinfo() can accept.
     // The basic constants.
@@ -82,7 +83,7 @@ class xarCurl extends xarObject
     // TODO: Some of these codes have related header records, such as
     // redirection URLs. We should collect those headers automatically
     // to make handling the exceptions easier.
-    public $http_codes = array(
+    public $http_codes = [
         // Success 2xx
         200 => 'OK',
         201 => 'CREATED',
@@ -107,15 +108,15 @@ class xarCurl extends xarObject
         500 => 'Internal Error',
         501 => 'Not implemented',
         502 => 'Service temporarily overloaded',
-        503 => 'Gateway timeout'
-    );
+        503 => 'Gateway timeout',
+    ];
 
     /**
      * Constructor: create the PHP curl object.
      * A url can be passed in at this point, or added later.
      * A session will be opened immediately the object is created.
      */
-    public function __construct(Array $args=array())
+    public function __construct(array $args = [])
     {
         extract($args);
 
@@ -138,22 +139,22 @@ class xarCurl extends xarObject
         if (constant('CURLINFO_CONTENT_TYPE') != null) {
             $this->info_types = array_merge(
                 $this->info_types,
-                array(
+                [
                     CURLINFO_CONTENT_TYPE => 'content_type',
                     CURLINFO_STARTTRANSFER_TIME => 'starttransfer_time',
                     CURLINFO_REDIRECT_TIME => 'redirect_time',
-                    CURLINFO_REDIRECT_COUNT => 'redirect_count'
-                )
+                    CURLINFO_REDIRECT_COUNT => 'redirect_count',
+                ]
             );
         }
     }
 
     /**
      * Initialize a new session.
-     * 
+     *
      * This only needs to be called to reopen a new session after the initial
      * session is closed. Alternatively, discard the object and create a new one.
-     * 
+     *
      */
     public function init()
     {
@@ -174,18 +175,18 @@ class xarCurl extends xarObject
 
         // Reset other properties of this object.
         $this->url = null;
-        $this->post = array();
-        $this->get = array();
+        $this->post = [];
+        $this->get = [];
         $this->errno = 0;
         $this->error = '';
         $this->info = null;
-        $this->header100 = array();
-        $this->header = array();
+        $this->header100 = [];
+        $this->header = [];
     }
 
     /**
      * Set an option. Session must be open.
-     * 
+     *
      * @param mixed $option Option to set
      * @param mixed $value Value to set to the option
      * @return boolean Returns true on success false on failure
@@ -201,7 +202,7 @@ class xarCurl extends xarObject
 
     /**
      * Add GET or POST parameters (name/value pair or an array)
-     * 
+     *
      * @param string|array $name
      * @param string $value
      * @param string $type
@@ -219,7 +220,7 @@ class xarCurl extends xarObject
 
         if (is_string($name)) {
             // TODO: multiple name/value pairs?
-            $params = array($name => $value);
+            $params = [$name => $value];
         }
 
         if (empty($type)) {
@@ -227,12 +228,12 @@ class xarCurl extends xarObject
         }
 
         if ($type == 'POST') {
-            $dest =& $this->post;
+            $dest = & $this->post;
         } else {
-            $dest =& $this->get;
+            $dest = & $this->get;
         }
 
-        foreach($params as $key => $val) {
+        foreach ($params as $key => $val) {
             if (isset($val)) {
                 $dest[] = urlencode($key) . '=' . urlencode($val);
             }
@@ -243,7 +244,7 @@ class xarCurl extends xarObject
 
     /**
      * Set URL for curl
-     * 
+     *
      * @param string $url Url
      */
     public function seturl($url)
@@ -257,7 +258,7 @@ class xarCurl extends xarObject
      * Add POST parameters (name/value pair or an array)
      * Can be called as many times as necessary to load up
      * all the POST parameters.
-     * 
+     *
      * @param string $name Post variable name
      * @param mixed $value Post variable value
      * @return boolean
@@ -270,7 +271,7 @@ class xarCurl extends xarObject
     /**
      * Add GET parameters (name/value pair or an array)
      * Same rules apply as for the post() method.
-     * 
+     *
      * @param string $name Get variable name
      * @param mixed $value Get variable value
      * @return boolean
@@ -282,7 +283,7 @@ class xarCurl extends xarObject
 
     /**
      * Upload file
-     * 
+     *
      * @param string $filename Path to file to upload
      */
     public function uploadfile($filename)
@@ -298,7 +299,7 @@ class xarCurl extends xarObject
 
     /**
      * Execute curl fetch
-     * 
+     *
      * @return boolean Returns true on on success, false on failure
      */
     public function exec()
@@ -396,13 +397,13 @@ class xarCurl extends xarObject
         }
         */
         // Decode content-encoding.
-        if (isset($this->header['Content-Encoding']) && $this->header['Content-Encoding'] != ''){
+        if (isset($this->header['Content-Encoding']) && $this->header['Content-Encoding'] != '') {
             if ($this->header['Content-Encoding'] == 'deflate' || $this->header['Content-Encoding'] == 'gzip') {
                 // If decoding works, use it, otherwise assume data wasn't gzencoded.
                 if (function_exists('gzinflate')) {
                     if ($this->header['Content-Encoding'] == 'deflate' && $degzdata = @gzinflate($result)) {
                         $result = $degzdata;
-                    } elseif ($this->header['Content-Encoding'] == 'gzip' && $degzdata = gzinflate(substr($result, 10))){
+                    } elseif ($this->header['Content-Encoding'] == 'gzip' && $degzdata = gzinflate(substr($result, 10))) {
                         $result = $degzdata;
                     } else {
                         $this->errno = -1;
@@ -421,14 +422,14 @@ class xarCurl extends xarObject
     }
 
     /**
-     * 
+     *
      */
-    
+
     /**
      * Get info fields from the curl object.
      * These info fields will remain available even after the curl session
      * has been closed.
-     * 
+     *
      * @param mixed $option
      * @return mixed
      */
@@ -473,7 +474,7 @@ class xarCurl extends xarObject
 
     /**
      * Close curl call
-     * 
+     *
      * @return boolean Return true on success false on failure
      */
     public function close()
@@ -522,7 +523,7 @@ class xarCurl extends xarObject
             $chunkend = strpos($buffer, $crnl, $chunkstart + $chunk_size);
 
             // Just in case we got a broken connection
-            if ($chunkend == FALSE) {
+            if ($chunkend == false) {
                 $chunk = substr($buffer, $chunkstart);
                 // append chunk-data to entity-body
                 $new .= $chunk;
@@ -539,7 +540,7 @@ class xarCurl extends xarObject
             $chunkstart = $chunkend + 2;
 
             $chunkend = strpos($buffer, $crnl, $chunkstart) + 2;
-            if ($chunkend == FALSE) {
+            if ($chunkend == false) {
                 break; //Just in case we got a broken connection
             }
             $temp = substr($buffer, $chunkstart, $chunkend - $chunkstart);

@@ -82,8 +82,8 @@ class GetfilethemesMethod extends MethodClass
                         if (!isset($regId) || $this->var()->prepPath($directory) != $themeOsDir) {
                             $this->session()->setVar(
                                 'errormsg',
-                                "Theme '$name' exists in $basedir/$themeOsDir " .
-                              "but should be in $basedir/$directory according to $basedir/$themeOsDir/xartheme.php... Skipping this theme until resolved."
+                                "Theme '$name' exists in $basedir/$themeOsDir "
+                              . "but should be in $basedir/$directory according to $basedir/$themeOsDir/xartheme.php... Skipping this theme until resolved."
                             );
                             continue 2;
                         }

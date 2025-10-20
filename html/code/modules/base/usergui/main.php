@@ -52,8 +52,8 @@ class MainMethod extends MethodClass
             $this->var()->setCached('Base.pages', 'page', $page);
         } else {
             $pageTemplate = $this->mod()->getVar('AlternatePageTemplateName');
-            if ($this->mod()->getVar('UseAlternatePageTemplate') != '' &&
-                $pageTemplate != '') {
+            if ($this->mod()->getVar('UseAlternatePageTemplate') != ''
+                && $pageTemplate != '') {
                 $this->tpl()->setPageTemplateName($pageTemplate);
             }
             $this->tpl()->setPageTitle($this->ml('Welcome'));

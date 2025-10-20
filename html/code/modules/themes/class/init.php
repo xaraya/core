@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\themes
  * @subpackage themes
@@ -16,12 +17,12 @@ sys::import('modules.themes.class.interfaces');
 
 class ThemeInit implements iThemeInit
 {
-    public function init(Array $data=array())
+    public function init(array $data = [])
     {
         $dat_file = 'themes/' . $data['name'] . '/configuration.xml';
-        $data = array('file' => $dat_file);
+        $data = ['file' => $dat_file];
         try {
-            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+            $objectid = xarMod::apiFunc('dynamicdata', 'util', 'import', $data);
         } catch (Exception $e) {
             //
         }

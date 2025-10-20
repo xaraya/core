@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ModAcativate System Event Subject
  * Notifies observers when a module is activated (via xarMod::apiFunc('modules','admin','activate')
@@ -21,6 +22,6 @@ class ModulesModActivateSubject extends EventSubject implements ixarEventSubject
     **/
     public function __construct($modName)
     {
-        parent::__construct($modName);                             
+        parent::__construct($modName);
     }
 }

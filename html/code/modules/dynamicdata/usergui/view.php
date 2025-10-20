@@ -132,8 +132,8 @@ class ViewMethod extends MethodClass
 
         $this->tpl()->setPageTitle($this->ml('View #(1)', $object->label));
 
-        if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view.xt') ||
-            file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
+        if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view.xt')
+            || file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
             return $this->tpl()->module($data['tplmodule'], 'user', 'view', $data, $data['template']);
         } else {
             return $this->tpl()->module('dynamicdata', 'user', 'view', $data, $args['template']);

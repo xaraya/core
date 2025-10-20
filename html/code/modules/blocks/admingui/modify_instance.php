@@ -653,8 +653,8 @@ class ModifyInstanceMethod extends MethodClass
                                 $now = time();
                                 $soon = $blockinfo['content']['expire'] - $now ;
                                 $blockinfo['expirein'] = $soon;
-                                if ($now > $blockinfo['content']['expire'] &&
-                                    $blockinfo['content']['expire'] != 0) {
+                                if ($now > $blockinfo['content']['expire']
+                                    && $blockinfo['content']['expire'] != 0) {
                                     $blockinfo['expire'] = 0;
                                 } else {
                                     $blockinfo['expire'] = $blockinfo['content']['expire'];

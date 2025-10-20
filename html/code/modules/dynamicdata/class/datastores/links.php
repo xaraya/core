@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -160,12 +161,12 @@ class DataStoreLinks extends xarObject
         }
 
         $link = ['source'    => $from_table,
-                      'from_prop' => $from_field,
-                      'target'    => $to_table,
-                      'to_prop'   => $to_field,
-                      'link_type' => $link_type,
-                      'direction' => $direction,
-                      'extra'     => $extra];
+            'from_prop' => $from_field,
+            'target'    => $to_table,
+            'to_prop'   => $to_field,
+            'link_type' => $link_type,
+            'direction' => $direction,
+            'extra'     => $extra];
         $link_id = $linkobject->createItem($link);
         if (empty($link_id)) {
             return;
@@ -192,13 +193,13 @@ class DataStoreLinks extends xarObject
         }
 
         $link = ['source'    => $to_table,
-                      'from_prop' => $to_field,
-                      'target'    => $from_table,
-                      'to_prop'   => $from_field,
-                      'link_type' => $reversetype,
-                      'direction' => $reversedir,
-                      // CHECKME: probably not the right syntax in reverse !
-                      'extra'     => $extra];
+            'from_prop' => $to_field,
+            'target'    => $from_table,
+            'to_prop'   => $from_field,
+            'link_type' => $reversetype,
+            'direction' => $reversedir,
+            // CHECKME: probably not the right syntax in reverse !
+            'extra'     => $extra];
 
         $link_id = $linkobject->createItem($link);
         return $link_id;
@@ -238,10 +239,10 @@ class DataStoreLinks extends xarObject
 
         foreach ($links[$linkfields['target']] as $link) {
             // find the corresponding link from target to source
-            if ($link['target'] == $linkfields['source'] &&
-                $link['to_prop'] == $linkfields['from_prop'] &&
-                $link['from_prop'] == $linkfields['to_prop'] &&
-                $link['link_type'] == $reversetype) {
+            if ($link['target'] == $linkfields['source']
+                && $link['to_prop'] == $linkfields['from_prop']
+                && $link['from_prop'] == $linkfields['to_prop']
+                && $link['link_type'] == $reversetype) {
 
                 $link_id = $linkobject->getItem(['itemid' => $link['id']]);
                 if (empty($link_id) || $link_id != $link['id']) {
@@ -278,7 +279,7 @@ class DataStoreLinks extends xarObject
             'userapi',
             'getobjectlist',
             ['name' => 'properties',
-                                            'fieldlist' => ['name','objectid','source']]
+                'fieldlist' => ['name','objectid','source']]
         );
         $properties->getItems();
         foreach ($properties->items as $item) {
@@ -318,7 +319,7 @@ class DataStoreLinks extends xarObject
             'userapi',
             'getobjectlist',
             ['name' => 'properties',
-                                            'fieldlist' => ['name','objectid','source']]
+                'fieldlist' => ['name','objectid','source']]
         );
         $properties->getItems();
         foreach ($properties->items as $item) {
@@ -370,11 +371,11 @@ class DataStoreLinks extends xarObject
                     $tofield = $foreign->getName();
 
                     $keylist[] = ['source'   => $source,
-                                       'from'     => $fromfield,
-                                       'target'   => $target,
-                                       'to'       => $tofield,
-                                       'onupdate' => $onupdate,
-                                       'ondelete' => $ondelete];
+                        'from'     => $fromfield,
+                        'target'   => $target,
+                        'to'       => $tofield,
+                        'onupdate' => $onupdate,
+                        'ondelete' => $ondelete];
                 }
             }
         }

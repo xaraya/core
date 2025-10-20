@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Roles Action Controller class
  *
@@ -106,7 +107,7 @@ class RolesShortController extends ShortActionController
 
         $params = $request->getFunctionArgs();
         $path = [];
-        switch($request->getFunction()) {
+        switch ($request->getFunction()) {
             case 'main':
                 // Note : if your main function calls some other function by default,
                 // you should set the path to directly to that other function

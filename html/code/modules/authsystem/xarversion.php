@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration information for the Authsystem module
  *
@@ -19,8 +20,8 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
- 
-$modversion = array(
+
+$modversion = [
     'name'               => 'authsystem',
     'displayname'        => xarMLS::translate('Authsystem'),
     'id'                 => '42',
@@ -39,4 +40,4 @@ $modversion = array(
     'class'              => 'Authentication',
     'category'           => 'Users & Groups',
     'twigtemplates'      => true,
-);
+];

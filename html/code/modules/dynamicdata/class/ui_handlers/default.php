@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dynamic Object User Interface Handler
  * @package modules\dynamicdata
@@ -252,7 +253,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
                 $this->args['fieldlist'] = array_filter(explode(',', $this->args['fieldlist']));
             }
             $cleanfields = [];
-            foreach($this->args['fieldlist'] as $field) {
+            foreach ($this->args['fieldlist'] as $field) {
                 if (str_contains($field, '.')) {
                     [$field, $subset] = explode('.', $field, 2);
                     $fieldsubset[$field] ??= [];

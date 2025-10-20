@@ -21,6 +21,4 @@ sys::import('xaraya.bridge.graphql.handler');
  * Class to handle GraphQL queries
  * @uses \sys::autoload()
  */
-class xarGraphQL extends GraphQLHandler
-{
-}
+class xarGraphQL extends GraphQLHandler {}

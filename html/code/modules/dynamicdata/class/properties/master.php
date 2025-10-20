@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -69,7 +70,7 @@ class DataPropertyMaster extends xarObject
                          id, defaultvalue, source,
                          status, translatable, seq, configuration,
                          object_id FROM $dynamicprop ";
-        if(empty($args['objectid'])) {
+        if (empty($args['objectid'])) {
             if (empty($args['moduleid'])) {
                 throw new EmptyParameterException('moduleid');
             }
@@ -85,7 +86,7 @@ class DataPropertyMaster extends xarObject
         $bindvars[] = (int) $args['objectid'];
 
         $anonymous = empty($args['anonymous']) ? 0 : 1;
-        if(empty($args['allprops'])) {
+        if (empty($args['allprops'])) {
             $query .= " AND status > 0 ";
         }
 
@@ -115,7 +116,7 @@ class DataPropertyMaster extends xarObject
                 'anonymous'     => $anonymous,
                 'class'         => '',
             ];
-            if(isset($args['objectref'])) {
+            if (isset($args['objectref'])) {
                 self::addProperty($property, $args['objectref']);
             } else {
                 $properties[$name] = $property;
@@ -141,7 +142,7 @@ class DataPropertyMaster extends xarObject
      */
     public static function addProperty(array $args, &$objectref)
     {
-        if(!isset($objectref) || empty($args['name']) || empty($args['type'])) {
+        if (!isset($objectref) || empty($args['name']) || empty($args['type'])) {
             return;
         }
         // If this is a disabled property, then ignore
@@ -153,7 +154,7 @@ class DataPropertyMaster extends xarObject
 
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.
-        if(!isset($args['label']) && !empty($args['name'])) {
+        if (!isset($args['label']) && !empty($args['name'])) {
             $args['label'] = strtr($args['name'], '_', ' ');
             $args['label'] = ucwords($args['label']);
         }
@@ -164,10 +165,10 @@ class DataPropertyMaster extends xarObject
         // Get a new property
         $property = &self::getProperty($args);
 
-        if(method_exists($objectref, 'getItems')) {
+        if (method_exists($objectref, 'getItems')) {
             // for dynamic object lists, put a reference to the $items array in the property
             $property->_items = &$objectref->items;
-        } elseif(method_exists($objectref, 'getItem')) {
+        } elseif (method_exists($objectref, 'getItem')) {
             // for dynamic objects, put a reference to the $itemid value in the property
             $property->_itemid = &$objectref->itemid;
         }
@@ -179,7 +180,7 @@ class DataPropertyMaster extends xarObject
         $objectref->properties[$property->name]->objectconfiguration = &$objectref->configuration;
 
         // if the property involves upload, tell its object
-        if(isset($property->upload)) {
+        if (isset($property->upload)) {
             $objectref->upload = true;
         }
 
@@ -207,24 +208,24 @@ class DataPropertyMaster extends xarObject
      */
     public static function &getProperty(array $args = [])
     {
-        if(!isset($args['name']) && !isset($args['type'])) {
+        if (!isset($args['name']) && !isset($args['type'])) {
             throw new BadParameterException(null, xarMLS3::translate('The getProperty method needs either a name or type parameter.'));
         }
 
-        if(isset($args['name']) || !is_numeric($args['type'])) {
+        if (isset($args['name']) || !is_numeric($args['type'])) {
             // TODO: type takes precedence if it exists. should this be changed?
             if (!isset($args['type'])) {
-                if(isset($args['name'])) {
+                if (isset($args['name'])) {
                     $args['type'] = $args['name'];
                 }
             }
             $proptypes = self::getPropertyTypes();
-            if(!isset($proptypes)) {
+            if (!isset($proptypes)) {
                 $proptypes = [];
             }
 
             foreach ($proptypes as $typeid => $proptype) {
-                if($proptype['name'] == $args['type']) {
+                if ($proptype['name'] == $args['type']) {
                     $args['type'] = $typeid;
                     break;
                 }
@@ -236,7 +237,7 @@ class DataPropertyMaster extends xarObject
             sys::import('modules.dynamicdata.class.properties.base');
         }
         $clazz = 'DataProperty';
-        if(isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']])) {
+        if (isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']])) {
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['class'];
 
@@ -247,7 +248,7 @@ class DataPropertyMaster extends xarObject
 
                 // Make sure we have a property PHP file
                 $propertyfile = sys::code() . $propertyInfo['filepath'];
-                if(!file_exists($propertyfile)) {
+                if (!file_exists($propertyfile)) {
                     throw new FileNotFoundException($propertyfile);
                 }
 
@@ -279,9 +280,9 @@ class DataPropertyMaster extends xarObject
     {
         $object = DataObjectFactory::getObject(
             [
-                                            'name' => 'properties',
-                                            'itemid'   => $args['itemid'],
-                                        ]
+                'name' => 'properties',
+                'itemid'   => $args['itemid'],
+            ]
         );
         $objectid = $object->createItem($args);
         unset($object);
@@ -295,7 +296,7 @@ class DataPropertyMaster extends xarObject
 
     public static function deleteProperty(array $args = [])
     {
-        if(empty($args['itemid'])) {
+        if (empty($args['itemid'])) {
             return;
         }
 
@@ -304,7 +305,7 @@ class DataPropertyMaster extends xarObject
             [
                 'name'   => 'properties', // the Dynamic Properties = 2
                 'itemid' => $args['itemid'],
-                                        ]
+            ]
         );
         if (!class_exists('DataObject')) {
             sys::import('modules.dynamicdata.class.objects.base');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -23,32 +24,34 @@ class TimeZoneProperty extends SelectProperty
     public $name       = 'timezone';
     public $desc       = 'Time Zone';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'timezone';
     }
-/**
- * Display a timezone of region
- * 
- * @param array<string, mixed> $data An array of input parameters 
- * @return string     HTML markup to display the property for output on a web page
- */
+    /**
+     * Display a timezone of region
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
         $zone = new DateTimeZone($data['value']);
-        $datetime = new DateTime('now',$zone);
-        $data['offset'] = $zone->getOffset($datetime)/3600;
+        $datetime = new DateTime('now', $zone);
+        $data['offset'] = $zone->getOffset($datetime) / 3600;
         return parent::showOutput($data);
     }
- /**
-     * Get Options
-     *
-     * Get a array of timezones
-     */
-    function getOptions()
+    /**
+        * Get Options
+        *
+        * Get a array of timezones
+        */
+    public function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
@@ -57,8 +60,8 @@ class TimeZoneProperty extends SelectProperty
         $options = [];
         foreach ($zones as $name) {
             $zone = new DateTimeZone($name);
-            $datetime = new DateTime('now',$zone);
-            $options[] = array('id' => $name, 'name' => $name, 'offset' => $zone->getOffset($datetime));
+            $datetime = new DateTime('now', $zone);
+            $options[] = ['id' => $name, 'name' => $name, 'offset' => $zone->getOffset($datetime)];
         }
         return $options;
     }

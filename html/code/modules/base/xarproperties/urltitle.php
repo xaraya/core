@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Include the base class
  */
- sys::import('modules.base.xarproperties.textbox');
+sys::import('modules.base.xarproperties.textbox');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -23,21 +24,23 @@ class URLTitleProperty extends TextBoxProperty
     public $name       = 'urltitle';
     public $desc       = 'URL + Title';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'urltitle';
     }
 
-	/**
-	 * Validate the value of a url title textbox
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a url title textbox
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (!empty($value)) {
             if (is_array($value)) {
@@ -62,7 +65,7 @@ class URLTitleProperty extends TextBoxProperty
 
                 // Make sure $value['link'] is set, has a length > 0 and does not equal simply 'http://'
                 if (strlen(trim($link)) && trim($link) != 'http://') {
-                        $link = $value['link'];
+                    $link = $value['link'];
                 } else {
                     // If we have a scheme but nothing following it,
                     // then consider the link empty :-)
@@ -74,19 +77,19 @@ class URLTitleProperty extends TextBoxProperty
                         // has at least a scheme (http/ftp/etc) and a host (domain.tld)
                         $uri = parse_url($value['link']);
 
-                        if ( (!isset($uri['scheme']) || empty($uri['scheme'])) ||
-                            (!isset($uri['host']) || empty($uri['host']))) {
-                                $this->invalid = $this->ml('URL');
-                                $this->log()->error($this->invalid);
-                                $this->value = null;
-                                return false;
+                        if ((!isset($uri['scheme']) || empty($uri['scheme']))
+                            || (!isset($uri['host']) || empty($uri['host']))) {
+                            $this->invalid = $this->ml('URL');
+                            $this->log()->error($this->invalid);
+                            $this->value = null;
+                            return false;
                         }
                     }
                 }
-                $value = array('link' => $link, 'title' => $title);
+                $value = ['link' => $link, 'title' => $title];
                 $this->value = serialize($value);
             } else {
-            // TODO: do we need to check the serialized content here ?
+                // TODO: do we need to check the serialized content here ?
                 $this->value = $value;
             }
         } else {
@@ -94,13 +97,13 @@ class URLTitleProperty extends TextBoxProperty
         }
         return true;
     }
-	
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
         if (!isset($data['value'])) {
@@ -118,7 +121,7 @@ class URLTitleProperty extends TextBoxProperty
             if (isset($value['title'])) {
                 $title = $value['title'];
             }
-        } elseif (is_string($value) && substr($value,0,2) == 'a:') {
+        } elseif (is_string($value) && substr($value, 0, 2) == 'a:') {
             $newval = unserialize($value);
             if (isset($newval['link'])) {
                 $link = $newval['link'];
@@ -141,18 +144,22 @@ class URLTitleProperty extends TextBoxProperty
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a textbox for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */	
+    /**
+     * Display a textbox for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
         extract($data);
-        if (!isset($value)) $value = $this->value;
+        if (!isset($value)) {
+            $value = $this->value;
+        }
 
-        if (empty($value)) $returndata= '';
+        if (empty($value)) {
+            $returndata = '';
+        }
 
         if (is_array($value)) {
             if (isset($value['link'])) {
@@ -161,7 +168,7 @@ class URLTitleProperty extends TextBoxProperty
             if (isset($value['title'])) {
                 $title = $value['title'];
             }
-        } elseif (is_string($value) && substr($value,0,2) == 'a:') {
+        } elseif (is_string($value) && substr($value, 0, 2) == 'a:') {
             $newval = unserialize($value);
             if (isset($newval['link'])) {
                 $link = $newval['link'];
@@ -171,12 +178,14 @@ class URLTitleProperty extends TextBoxProperty
             }
         }
 
-        if (!empty($title)) $title = $this->var()->prep($title);
+        if (!empty($title)) {
+            $title = $this->var()->prep($title);
+        }
 
         $url_parts = parse_url($link);
         if (!isset($url_parts['host'])) {
             $truecurrenturl = $this->ctl()->getCurrentURL([], false);
-            $urldata = $this->mod()->apiFunc('roles','user','parseuserhome',array('url'=>$link,'truecurrenturl'=>$truecurrenturl));
+            $urldata = $this->mod()->apiFunc('roles', 'user', 'parseuserhome', ['url' => $link,'truecurrenturl' => $truecurrenturl]);
             $link = $urldata['redirecturl'];
         }
 

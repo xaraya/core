@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories Module
  *
@@ -37,8 +38,8 @@ class CategoriesProperty extends DataProperty
     public $id         = 100;
     public $name       = 'categories';
     public $desc       = 'Categories';
-    public $reqmodules = array('categories');
-    public static $deferto    = array('CategoryPickerProperty');
+    public $reqmodules = ['categories'];
+    public static $deferto    = ['CategoryPickerProperty'];
 
     public $include_reference   = 1;
 
@@ -49,7 +50,7 @@ class CategoriesProperty extends DataProperty
     public $initialization_include_no_cat   = 0;
     public $initialization_include_all_cats = 0;
     // Four columns (0 - 3) on 1 line
-    public $initialization_basecategories   = array(array('New Tree',array(array(1)),true,1));
+    public $initialization_basecategories   = [['New Tree',[[1]],true,1]];
 
     public $module_id      = 0;
     public $itemtype       = 0;
@@ -57,8 +58,8 @@ class CategoriesProperty extends DataProperty
     public $itemid;
     public $categories     = [];
     public $basecategories = [];
-        
-    function __construct(ObjectDescriptor $descriptor)
+
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->template       = 'categories';
@@ -67,18 +68,18 @@ class CategoriesProperty extends DataProperty
 
         // In a bound property, get module and itemtype from the parent object
         if (!empty($this->objectref)) {
-            $this->module_id = (int)$this->objectref->moduleid;
-            $this->itemtype  = (int)$this->objectref->itemtype;
+            $this->module_id = (int) $this->objectref->moduleid;
+            $this->itemtype  = (int) $this->objectref->itemtype;
         }
     }
 
-	/**
-	 * Get the value of the property from a web page
-	 * 
-	 * @param  string name The name of the property
-	 * @param  string value The value of the property
-	 * @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
-	 */
+    /**
+     * Get the value of the property from a web page
+     *
+     * @param  string name The name of the property
+     * @param  string value The value of the property
+     * @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
+     */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -90,7 +91,7 @@ class CategoriesProperty extends DataProperty
         $this->var()->find($name . '[module_id]', $module_id, 'int', 182);
         $this->module_id = $module_id;
         $this->itemtype = $itemtype;
-       
+
         // Get the base categories from the form
         $this->var()->find($name . '[base_category]', $basecats, 'array', []);
         $this->basecategories = $basecats;
@@ -108,17 +109,19 @@ class CategoriesProperty extends DataProperty
         return $this->validateValue($categories);
     }
 
-	/**
-	 * Validate the value of the property
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of the property
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         // Make sure they are valid unless we can override
-//        if (!$this->validation_override) {
+        //        if (!$this->validation_override) {
         /**
         if (0) {
             if (count($value) > 0) {
@@ -138,7 +141,7 @@ class CategoriesProperty extends DataProperty
             }
         }
          */
-        
+
         // Check the number of base categories against the number categories we have
         // Remark: some of the selected categories might be empty here!
         // Consequence: if we are using e.g. checkboxes then we can have fewer categories found than base categories
@@ -150,7 +153,7 @@ class CategoriesProperty extends DataProperty
             return false;
         }
         */
-        
+
         // We passed the checks, set the categories, making sure we have integers
         // There can be several basecategories, and each can have several categories
         // The form of the resulting array is
@@ -158,27 +161,27 @@ class CategoriesProperty extends DataProperty
         //                      [<category_id>_<basecategory_id>] => <category_id>,
         //                      ...
         //                     )
-        
+
         $this->categories = [];
         foreach ($value as $baseid => $categories) {
             foreach ($categories as $category) {
-                $category_id = (int)$category;
-                $this->categories[$category_id . "_" . (int)$this->basecategories[$baseid]] = $category_id;
+                $category_id = (int) $category;
+                $this->categories[$category_id . "_" . (int) $this->basecategories[$baseid]] = $category_id;
             }
         }
 
         // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
-        $this->value =& $this->categories;
+        $this->value = & $this->categories;
         return true;
     }
 
     /**
      * Create Value
-     * 
+     *
      * @param int $itemid
      * @return boolean Returns true
      */
-    public function createValue($itemid=0)
+    public function createValue($itemid = 0)
     {
         if (isset($this->objectref)) {
             // This property is bound
@@ -187,31 +190,39 @@ class CategoriesProperty extends DataProperty
         sys::import('xaraya.structures.query');
         $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
-    
+
         // This property is standalone
         // For both create and update we remove any existing links and create the new ones
         if (!empty($itemid)) {
-            $q = new Query('DELETE', $xartable['categories_linkage']); 
-            $q->eq('item_id', (int)$itemid);
+            $q = new Query('DELETE', $xartable['categories_linkage']);
+            $q->eq('item_id', (int) $itemid);
             // CHRCKME: shouldn't we force a value for module_id and itemtype?
-            if ($this->module_id) $q->eq('module_id', $this->module_id);
-            if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+            if ($this->module_id) {
+                $q->eq('module_id', $this->module_id);
+            }
+            if ($this->itemtype) {
+                $q->eq('itemtype', $this->itemtype);
+            }
             $q->run();
         }
 
         // Make sure the categories are in the form of an array
-        if (!is_array($this->categories)) $this->categories = unserialize((string) $this->categories);
+        if (!is_array($this->categories)) {
+            $this->categories = unserialize((string) $this->categories);
+        }
 
         foreach ($this->basecategories as $key => $basecategory) {
             foreach ($this->categories[$key] as $category) {
                 // Ignore if no category was chosen (value = 0)
-                if (empty($category)) continue;
-            
-                $q = new Query('INSERT', $xartable['categories_linkage']); 
-                $q->addfield('item_id', (int)$itemid);
+                if (empty($category)) {
+                    continue;
+                }
+
+                $q = new Query('INSERT', $xartable['categories_linkage']);
+                $q->addfield('item_id', (int) $itemid);
                 $q->addfield('module_id', $this->module_id);
                 $q->addfield('itemtype', $this->itemtype);
-//                    $q->addfield('basecategory', $key);
+                //                    $q->addfield('basecategory', $key);
                 $q->addfield('category_id', $category);
                 $q->addfield('property_id', $this->id);
                 $q->run();
@@ -227,7 +238,7 @@ class CategoriesProperty extends DataProperty
      *
      * This method also maintains integrity by updating module_id, itemtype etc. if these have changed
      */
-    public function updateValue($itemid=0)
+    public function updateValue($itemid = 0)
     {
         if (isset($this->objectref)) {
             return $this->updateLinks($itemid);
@@ -238,20 +249,20 @@ class CategoriesProperty extends DataProperty
 
     /**
      * Deletes a value by item ID. Not implemented
-     * 
+     *
      * @param int $itemid Item ID to be deleted
      * @return int Returns Item ID
      */
-    public function deleteValue($itemid=0)
+    public function deleteValue($itemid = 0)
     {
         sys::import('xaraya.structures.query');
         $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
-        
+
         if (isset($this->objectref)) {
             // This property is bound
-            $q = new Query('DELETE', $xartable['categories_linkage']); 
-            $q->eq('item_id', (int)$itemid);
+            $q = new Query('DELETE', $xartable['categories_linkage']);
+            $q->eq('item_id', (int) $itemid);
             $q->eq('property_id', $this->id);
             $q->run();
         } else {
@@ -263,7 +274,7 @@ class CategoriesProperty extends DataProperty
 
     /**
      * Displays the property for input
-     * 
+     *
      * The value is an associative array that has the form
      * key:
      * value: ID value of the category displayed
@@ -271,30 +282,54 @@ class CategoriesProperty extends DataProperty
      */
     public function showInput(array $data = [])
     {
-        if (isset($data['include_no_line'])) $this->initialization_include_no_cat = $data['include_no_line'];
-        if (isset($data['include_all_line'])) $this->initialization_include_all_cats = $data['include_all_line'];
-        if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
-        if (isset($data['configuration'])) $this->configuration = $data['configuration'];
+        if (isset($data['include_no_line'])) {
+            $this->initialization_include_no_cat = $data['include_no_line'];
+        }
+        if (isset($data['include_all_line'])) {
+            $this->initialization_include_all_cats = $data['include_all_line'];
+        }
+        if (isset($data['allowempty'])) {
+            $this->validation_allowempty = $data['allowempty'];
+        }
+        if (isset($data['configuration'])) {
+            $this->configuration = $data['configuration'];
+        }
 
         // Set the module_id: case of a bound property
-        if (isset($this->objectref)) $this->module_id = (int)$this->objectref->moduleid;
+        if (isset($this->objectref)) {
+            $this->module_id = (int) $this->objectref->moduleid;
+        }
         // Override for a standalone property
-        if (isset($data['module'])) $this->module_id = $this->mod()->getID($data['module']);
+        if (isset($data['module'])) {
+            $this->module_id = $this->mod()->getID($data['module']);
+        }
         // No hint at all, take the current module
-        if (!isset($this->module_id)) $this->module_id = $this->mod()->getID($this->mod()->getName());
+        if (!isset($this->module_id)) {
+            $this->module_id = $this->mod()->getID($this->mod()->getName());
+        }
 
         // Do the same for itemtypes
-        if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
-        if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
+        if (isset($this->objectref)) {
+            $this->itemtype = (int) $this->objectref->itemtype;
+        }
+        if (isset($data['itemtype'])) {
+            $this->itemtype = (int) $data['itemtype'];
+        }
         // No hint at all, assume all itemtypes
-        if (!isset($this->itemtype)) $this->itemtype = 0;
+        if (!isset($this->itemtype)) {
+            $this->itemtype = 0;
+        }
 
         // Do the same for the property
-        if (isset($this->objectref)) $this->property = (int)$this->id;
+        if (isset($this->objectref)) {
+            $this->property = (int) $this->id;
+        }
 
         // Get the itemid
         $itemid = $this->_itemid;
-        if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
+        if (isset($data['itemid'])) {
+            $itemid = (int) $data['itemid'];
+        }
 
         // Retrieve the configuration settings for this property
         // The default value (parent property) is a:0{}
@@ -302,7 +337,7 @@ class CategoriesProperty extends DataProperty
         if (!is_array($this->configuration)) {
             try {
                 $configuration = unserialize($this->configuration);
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $configuration = [];
             }
         } else {
@@ -312,8 +347,9 @@ class CategoriesProperty extends DataProperty
         if (!empty($configuration)) {
             try {
                 // CHECKME: can we remove this excess level?
-                if (isset($configuration['initialization_basecategories'])) 
+                if (isset($configuration['initialization_basecategories'])) {
                     $configuration = $configuration['initialization_basecategories'];
+                }
                 $data['tree_name']    = [];
                 $base_categories      = [];
                 $data['include_self'] = [];
@@ -324,33 +360,33 @@ class CategoriesProperty extends DataProperty
                     $data['include_self'][]  = $row[2];
                     $data['select_type'][]   = $row[3];
                 }
-            } catch(Exception $e) {
-                $data['tree_name']    = array(0 => 'New Tree');
-                $base_categories      = array(0 => 1);
-                $data['include_self'] = array(0 => true);
-                $data['select_type']  = array(0 => 1);
+            } catch (Exception $e) {
+                $data['tree_name']    = [0 => 'New Tree'];
+                $base_categories      = [0 => 1];
+                $data['include_self'] = [0 => true];
+                $data['select_type']  = [0 => 1];
             }
-       } else {
-            $data['tree_name']    = array(0 => 'New Tree');
-            $base_categories      = array(0 => 1);
-            $data['include_self'] = array(0 => true);
-            $data['select_type']  = array(0 => 1);
+        } else {
+            $data['tree_name']    = [0 => 'New Tree'];
+            $base_categories      = [0 => 1];
+            $data['include_self'] = [0 => true];
+            $data['select_type']  = [0 => 1];
         }
         // Get an array of category trees, each having a base category as its head
         // CHECKME: what is this again?
-        $filter = array(
+        $filter = [
             'getchildren' => true,
-            'maxdepth' => isset($data['maxdepth'])?$data['maxdepth']:null,
-            'mindepth' => isset($data['mindepth'])?$data['mindepth']:null,
-        );
-        // The somewhat convoluted way of getting to the actual base category ids is a consequence of 
+            'maxdepth' => $data['maxdepth'] ?? null,
+            'mindepth' => $data['mindepth'] ?? null,
+        ];
+        // The somewhat convoluted way of getting to the actual base category ids is a consequence of
         // using the array property (categorypicker) to define them
         $data['base_category'] = [];
         foreach ($base_categories as $key => $trees) {
             // The base category is a single category (no multiselect), so get the category ID
             $tree = is_array($trees) ? reset($trees) : $trees;
             $id = is_array($tree) ? reset($tree) : $tree;
-            $data['base_category'][$key] = (int)$id;
+            $data['base_category'][$key] = (int) $id;
             $nodes = new BasicSet();
             $node = new CategoryTreeNode($id);
             $node->setfilter($filter);
@@ -360,18 +396,21 @@ class CategoriesProperty extends DataProperty
                 $elements = $nodes->toArray();
                 $nodes->clear();
                 array_shift($elements);
-                foreach($elements as $element)
+                foreach ($elements as $element) {
                     $nodes->add($element);
+                }
             }
             $data['trees'][$key] = $nodes;
         }
 
         // Now lets turn to the value
         if (!empty($this->source)) {
-            // This property has a source other than "None". 
+            // This property has a source other than "None".
             // In this scenario we are storing a value in the source
             // CHECKME: what is the use case here?
-            if (!isset($data['value'])) $data['value'] = array(1=>array(1 => $this->value));
+            if (!isset($data['value'])) {
+                $data['value'] = [1 => [1 => $this->value]];
+            }
         } else {
             // If we have a value passed, then jump over this next part
             if (!isset($data['value'])) {
@@ -381,18 +420,27 @@ class CategoriesProperty extends DataProperty
                 $xartable = $this->db()->getTables();
                 sys::import('xaraya.structures.query');
                 foreach ($data['base_category'] as $key => $value) {
-                    $q = new Query('SELECT', $xartable['categories_linkage']); 
-                    $q->eq('basecategory', (int)$value);
-                    $q->eq('item_id', (int)$itemid);
-                    if ($this->module_id) $q->eq('module_id', $this->module_id);
-                    if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
-                    if ($this->property) $q->eq('property_id', $this->property);
+                    $q = new Query('SELECT', $xartable['categories_linkage']);
+                    $q->eq('basecategory', (int) $value);
+                    $q->eq('item_id', (int) $itemid);
+                    if ($this->module_id) {
+                        $q->eq('module_id', $this->module_id);
+                    }
+                    if ($this->itemtype) {
+                        $q->eq('itemtype', $this->itemtype);
+                    }
+                    if ($this->property) {
+                        $q->eq('property_id', $this->property);
+                    }
                     $q->addfield('category_id');
                     $q->run();
                     $result = $q->output();
                     $categories = [];
-                    foreach ($result as $row) 
-                        if (!empty($row['category_id'])) $categories[] = (int)$row['category_id'];
+                    foreach ($result as $row) {
+                        if (!empty($row['category_id'])) {
+                            $categories[] = (int) $row['category_id'];
+                        }
+                    }
                     $data['value'][$key] = $categories;
                 }
             }
@@ -405,9 +453,9 @@ class CategoriesProperty extends DataProperty
         return parent::showInput($data);
     }
 
-	/**
+    /**
      * Displays the property for output
-     * 
+     *
      * The value is an associative array that has the form
      * key:
      * value: ID value of the category displayed
@@ -422,7 +470,7 @@ class CategoriesProperty extends DataProperty
             // Set the module_id: case of a bound property
             $itemid = 0;
             if (isset($this->objectref)) {
-                $this->module_id = (int)$this->objectref->moduleid;
+                $this->module_id = (int) $this->objectref->moduleid;
                 // Ignore itemid if this is an object list; need to get the ID from the corresponding attribute
                 if (isset($this->objectref->itemid)) {
                     if (isset($this->objectref->properties['objectid'])) {
@@ -433,21 +481,35 @@ class CategoriesProperty extends DataProperty
                 }
             }
             // Override or a standalone property
-            if (isset($data['module'])) $this->module_id = $this->mod()->getID($data['module']);
+            if (isset($data['module'])) {
+                $this->module_id = $this->mod()->getID($data['module']);
+            }
             // No hint at all, take the current module
-            if (!isset($this->module_id)) $this->module_id = $this->mod()->getID($this->mod()->getName());
-    
+            if (!isset($this->module_id)) {
+                $this->module_id = $this->mod()->getID($this->mod()->getName());
+            }
+
             // Do the same for itemtypes
-            if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
-            if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
+            if (isset($this->objectref)) {
+                $this->itemtype = (int) $this->objectref->itemtype;
+            }
+            if (isset($data['itemtype'])) {
+                $this->itemtype = (int) $data['itemtype'];
+            }
             // No hint at all, assume all itemtypes
-            if (!isset($this->itemtype)) $this->itemtype = 0;
-    
+            if (!isset($this->itemtype)) {
+                $this->itemtype = 0;
+            }
+
             // Do the same for the property
-            if (isset($this->objectref)) $this->property = (int)$this->id;
+            if (isset($this->objectref)) {
+                $this->property = (int) $this->id;
+            }
 
             // Pick up an itemid if one was passed
-            if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
+            if (isset($data['itemid'])) {
+                $itemid = (int) $data['itemid'];
+            }
 
             $this->mountValue($itemid);
             $this->value = unserialize($this->value);
@@ -456,75 +518,87 @@ class CategoriesProperty extends DataProperty
         return parent::showOutput($data);
     }
 
-	/**
-	 * Get the value of input
-	 * Unserialize the value
-	 * 
-	 * @return array<mixed>    return the unserialized value
-	 */	 
+    /**
+     * Get the value of input
+     * Unserialize the value
+     *
+     * @return array<mixed>    return the unserialized value
+     */
     public function getValue()
-    {    
+    {
         $unpacked = unserialize((string) $this->value);
         return $unpacked;
     }
 
-	/**
-	 * Set the value of input
-	 * 
-	 * @param  string value The value of the input
-	 */	
-    public function setValue($value=null)
+    /**
+     * Set the value of input
+     *
+     * @param  string value The value of the input
+     */
+    public function setValue($value = null)
     {
         $this->value = serialize($value);
     }
 
-	/*
-	 * Move the item from the base category to the other categories in property
-	 *
-	 * @param int $itemid Item ID to be moved
+    /*
+     * Move the item from the base category to the other categories in property
+     *
+     * @param int $itemid Item ID to be moved
      * @return boolean Returns true
      */
-    public function mountValue($itemid=0)
-    {    
+    public function mountValue($itemid = 0)
+    {
         sys::import('xaraya.structures.query');
         $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
-        $q = new Query('SELECT'); 
-        $q->addtable( $xartable['categories'],'c');
-        $q->addtable( $xartable['categories_linkage'],'cl');
-        $q->join('c.id','cl.category_id');
+        $q = new Query('SELECT');
+        $q->addtable($xartable['categories'], 'c');
+        $q->addtable($xartable['categories_linkage'], 'cl');
+        $q->join('c.id', 'cl.category_id');
         $q->eq('item_id', $itemid);
-        if ($this->module_id) $q->eq('module_id', $this->module_id);
-        if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
-        if ($this->property) $q->eq('property_id', $this->property);
+        if ($this->module_id) {
+            $q->eq('module_id', $this->module_id);
+        }
+        if ($this->itemtype) {
+            $q->eq('itemtype', $this->itemtype);
+        }
+        if ($this->property) {
+            $q->eq('property_id', $this->property);
+        }
         $q->run();
         $result = $q->output();
         $this->value = serialize($result);
-    
+
         return true;
     }
 
     /**
      * Fetches items from the database
-     * 
+     *
      * @param int $category Category ID of the items
      * @param object $object Object the property belongs to
      * @return array<mixed> Array of fetched items
      * @throws Exception Thrown if no object was given.
      */
-    public function getItems($category=0, $object=null)
+    public function getItems($category = 0, $object = null)
     {
-        if (empty($object)) $object = $this->objectref;
-        if (empty($object)) throw new Exception($this->ml('No object found for the getItems method'));
-        if (empty($this->itemid)) $this->itemid = $object->properties[$object->primary]->value;
+        if (empty($object)) {
+            $object = $this->objectref;
+        }
+        if (empty($object)) {
+            throw new Exception($this->ml('No object found for the getItems method'));
+        }
+        if (empty($this->itemid)) {
+            $this->itemid = $object->properties[$object->primary]->value;
+        }
         $prinaryfield = $object->properties[$object->primary]->source;
         $this->mod()->load('categories');
         $q = $object->dataquery;
         $tables = $this->db()->getTables();
-        $q->addtable($tables['categories'],'c');
-        $q->addtable($tables['categories_linkage'],'l');
-        $q->leftjoin('l.category_id','c.id');
-        $q->leftjoin($prinaryfield,'l.item_id');
+        $q->addtable($tables['categories'], 'c');
+        $q->addtable($tables['categories_linkage'], 'l');
+        $q->leftjoin('l.category_id', 'c.id');
+        $q->leftjoin($prinaryfield, 'l.item_id');
         if (!empty($category)) {
             if (is_array($category)) {
                 $q->in('c.id', $category);
@@ -533,12 +607,12 @@ class CategoriesProperty extends DataProperty
             }
         }
         $q->run();
-//        $q->qecho();
+        //        $q->qecho();
         $items = $q->output();
         return $items;
     }
 
-	/**
+    /**
      * Update the current configuration rule in a specific way for this property type
      *
      * @param array<string, mixed> $data An array of input parameters
@@ -547,7 +621,7 @@ class CategoriesProperty extends DataProperty
     {
         // Array properties and their extensions have arrays as values
         // Use the property's checkInput method to get the value
-        $arrayprop = $this->prop()->getProperty(array('name' => 'categorypicker'));
+        $arrayprop = $this->prop()->getProperty(['name' => 'categorypicker']);
         $arrayprop->checkInput($this->propertyprefix . $this->id . '["initialization_basecategories"]');
 
         // Assign the value to this configuration property for update
@@ -556,20 +630,22 @@ class CategoriesProperty extends DataProperty
         // The other configuration properties need no special treatment
         return parent::updateConfiguration($data);
     }
-    
-	
+
+
     public function preList()
     {
         // Bail if there is no parent object
-        if (empty($this->objectref)) return true;
+        if (empty($this->objectref)) {
+            return true;
+        }
 
         // Get the parent object's query;
         $q = $this->objectref->dataquery;
-        
+
         // Get the primary propety of the parent object, and its source
         $primary = $this->objectref->primary;
         $primary_source = $this->objectref->properties[$primary]->source;
-        
+
         // The tables of this property will be added with a special prefix
         // to make sure all tables are unique
         $tableprefix = $this->id . "_";
@@ -581,7 +657,7 @@ class CategoriesProperty extends DataProperty
         $q->leftjoin($primary_source, $tableprefix . 'linkage.item_id');
         $q->addTable($tables['categories'], $tableprefix . 'categories');
         $q->leftjoin($tableprefix . 'linkage.category_id', $tableprefix . 'categories.id');
-        
+
         // A zero means "all"
         // Itemtype & module ID = 0 means the objects listing
         // We want each of the following three conditions to hold, or not exist
@@ -601,13 +677,13 @@ class CategoriesProperty extends DataProperty
             $a[] = $q->peq($tableprefix . 'linkage.property_id', 'NULL');
             $q->qor($a);
         }
-        
+
         // Set the source of this property
         $this->source = $tableprefix . 'categories.name';
-       
+
         // Align the display status of this property with that of the name property in he categories object
         // In other words, we can make this field be displayed or not depending on the display status we give it in the DD UI
-        $categories_object = $this->data()->getObject(array('name' => 'categories'));
+        $categories_object = $this->data()->getObject(['name' => 'categories']);
         $display_status = $categories_object->properties['name']->getDisplayStatus();
         $this->setDisplayStatus($display_status);
         $this->objectref->setFieldList();
@@ -618,13 +694,13 @@ class CategoriesProperty extends DataProperty
             echo "Property: " . $this->name . "<br/>";
             echo "Query: " . $q->qecho() . "<br/>";
         }
-        
+
         return true;
     }
 
     /**
      * Get the category links for this property
-     * 
+     *
      * @param int $itemid
      * @return array<mixed> category links
      *
@@ -632,83 +708,86 @@ class CategoriesProperty extends DataProperty
      * key: categoryID_basecategoryID
      * value: associtive array of the database entry with key = field name and value = field value
      */
-    private function getLinks($itemid=0)
+    private function getLinks($itemid = 0)
     {
         sys::import('xaraya.structures.query');
         $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
-        
-        $q = new Query('SELECT', $xartable['categories_linkage']); 
-        $q->eq('item_id', (int)$itemid);
+
+        $q = new Query('SELECT', $xartable['categories_linkage']);
+        $q->eq('item_id', (int) $itemid);
         $q->eq('property_id', $this->id);
         $q->run();
         $links = [];
-        foreach ($q->output() as $row) 
-            $links[(int)$row['category_id'] . "_" . (int)$row['basecategory']] = $row;
+        foreach ($q->output() as $row) {
+            $links[(int) $row['category_id'] . "_" . (int) $row['basecategory']] = $row;
+        }
         return $links;
     }
-    
+
     /**
      * Updates category links for a given item id.
      * @param int $itemid ID of the item to be updated
      * @return boolean Returns true on success, false on failure
      *
      * A property can have 0 to many category links
-     * The method compares categories to be added and removed, 
+     * The method compares categories to be added and removed,
      * and then tries to reuse existing linkage entries that can be overwritten
-     * This method also maintains integrity in the linkage table by 
+     * This method also maintains integrity in the linkage table by
      * updating module_id, itemtype etc. if these have changed
      */
-    private function updateLinks($itemid=0)
+    private function updateLinks($itemid = 0)
     {
         sys::import('xaraya.structures.query');
         $this->mod()->apiLoad('categories');
         $xartable = $this->db()->getTables();
-        
+
         // This property is bound
         // Get the category links of this property and item
         $links = $this->getLinks($itemid);
-        
+
         // Calculate what rows require what actions
         $previous_cats = array_keys($links);
-        
+
         // Make sure the categories are in the form of an array
-        if (!is_array($this->categories)) $this->categories = unserialize((string) $this->categories);
+        if (!is_array($this->categories)) {
+            $this->categories = unserialize((string) $this->categories);
+        }
 
         $current_cats  = array_keys($this->categories);
-        $todelete = array_diff($previous_cats,$current_cats);
-        $tocreate = array_diff($current_cats,$previous_cats);
-        $toupdate = array_intersect($current_cats,$previous_cats);
+        $todelete = array_diff($previous_cats, $current_cats);
+        $tocreate = array_diff($current_cats, $previous_cats);
+        $toupdate = array_intersect($current_cats, $previous_cats);
 
         // Set up for updating rows we want to delete
         if (!empty($tocreate)) {
-            $q = new Query('UPDATE', $xartable['categories_linkage']); 
+            $q = new Query('UPDATE', $xartable['categories_linkage']);
         }
 
         // We need to delete and create a certain number of categories
         // Instead we update the deletes to the values of the categories we need to create
         $reusable = min(count($todelete), count($tocreate));
         if (!empty($reusable)) {
-            for ($i=0;$i<$reusable;$i++) {
+            for ($i = 0;$i < $reusable;$i++) {
                 // Get the of the row to delete we will overwrite
                 $this_key = array_shift($todelete);
                 // Explode the item into its categoryID and basecategoryID components
-                $key = explode('_',$this_key);
+                $key = explode('_', $this_key);
 
-                $this_category = (int)$key[0];
-                $this_basecategory = (int)$key[1];
-                
+                $this_category = (int) $key[0];
+                $this_basecategory = (int) $key[1];
+
                 $this_link = $links[$this_key];
                 $id = $this_link['id'];
-                
+
                 // This will be a row we overwrite
                 $q->eq('id', $id);
-                
-                // Get the category we will insert into this row
-                $key = explode('_',array_shift($tocreate));
 
-                $new_category = (int)$key[0];
-                $new_basecategory = (int)$key[1];
+                // Get the category we will insert into this row
+                $key = explode('_', array_shift($tocreate));
+
+                $new_category = (int) $key[0];
+                $new_basecategory = (int) $key[1];
 
                 // Check if any other items need updating
                 if ($this_link['category_id'] != $new_category) {
@@ -727,15 +806,15 @@ class CategoriesProperty extends DataProperty
             }
         }
         unset($q);
-        
+
         // Do the deletes
         if (!empty($todelete)) {
-            foreach($todelete as $this_todelete) {
+            foreach ($todelete as $this_todelete) {
                 // Explode the item into its categoryID and basecategoryID components
-                $key = explode('_',$this_todelete);
+                $key = explode('_', $this_todelete);
                 // Assemble the DELETE query
-                $q = new Query('DELETE', $xartable['categories_linkage']); 
-                $q->eq('item_id', (int)$itemid);
+                $q = new Query('DELETE', $xartable['categories_linkage']);
+                $q->eq('item_id', (int) $itemid);
                 $q->eq('property_id', $this->id);
                 $q->eq('category_id', $key[0]);
                 $q->eq('basecategory', $key[1]);
@@ -745,15 +824,15 @@ class CategoriesProperty extends DataProperty
             }
         }
         unset($q);
-    
+
         // Do the creates
         if (!empty($tocreate)) {
-            foreach($tocreate as $this_tocreate) {
+            foreach ($tocreate as $this_tocreate) {
                 // Explode the item into its categoryID and basecategoryID components
-                $key = explode('_',$this_tocreate);
+                $key = explode('_', $this_tocreate);
                 // Assemble the INSERT query
-                $q = new Query('INSERT', $xartable['categories_linkage']); 
-                $q->addfield('item_id', (int)$itemid);
+                $q = new Query('INSERT', $xartable['categories_linkage']);
+                $q->addfield('item_id', (int) $itemid);
                 $q->addfield('module_id', $this->module_id);
                 $q->addfield('itemtype', $this->itemtype);
                 $q->addfield('basecategory', $key[1]);
@@ -772,7 +851,7 @@ class CategoriesPropertyInstall extends CategoriesProperty implements iDataPrope
 {
     /**
      * Install method
-     * 
+     *
      * @param array<string, mixed> $data Parameter data array
      * @return boolean Returns true.
      */
@@ -781,9 +860,10 @@ class CategoriesPropertyInstall extends CategoriesProperty implements iDataPrope
         $files[] = sys::code() . 'modules/categories/xardata/categories_configurations-dat.xml';
         foreach ($files as $file) {
             try {
-                $objectid = $this->mod()->apiFunc('dynamicdata','util','import', array('file' => $file));
-            } catch (Exception $e) {}
+                $objectid = $this->mod()->apiFunc('dynamicdata', 'util', 'import', ['file' => $file]);
+            } catch (Exception $e) {
+            }
         }
         return true;
-    }    
+    }
 }

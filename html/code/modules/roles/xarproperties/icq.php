@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.base.xarproperties.textbox');
 
@@ -20,29 +21,31 @@ class ICQProperty extends TextBoxProperty
     public $id         = 28;
     public $name       = 'icq';
     public $desc       = 'ICQ Number';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
     public $initialization_icon_url;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'icq';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = $this->tpl()->getImage('contact/icq.png','module','roles');
+            $this->initialization_icon_url = $this->tpl()->getImage('contact/icq.png', 'module', 'roles');
         }
     }
 
-	/**
-	 * Validate the value of a textbox
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a textbox
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (!empty($value)) {
             if (is_numeric($value)) {
@@ -58,34 +61,38 @@ class ICQProperty extends TextBoxProperty
         return true;
     }
 
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if(!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
 
-        $data['link'] ='';
-        if(!empty($data['value'])) {
-            $data['link'] = 'http://wwp.icq.com/scripts/search.dll?to='.$this->var()->prep($data['value']);
+        $data['link'] = '';
+        if (!empty($data['value'])) {
+            $data['link'] = 'http://wwp.icq.com/scripts/search.dll?to=' . $this->var()->prep($data['value']);
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a textbox for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */	
+    /**
+     * Display a textbox for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
         extract($data);
-        if (!isset($value)) $value = $this->value;
+        if (!isset($value)) {
+            $value = $this->value;
+        }
 
         if (empty($data['image'])) {
             $data['image'] = $this->initialization_icon_url;
@@ -100,10 +107,10 @@ class ICQProperty extends TextBoxProperty
             //The data is there for anyone that wants to use the vars themselves in the template.
             $link = '<script type="text/javascript"><!--
 if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
-    document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.$this->var()->prep($value).'"><img src="'.$this->var()->prep($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
+    document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to=' . $this->var()->prep($value) . '"><img src="' . $this->var()->prep($data['image']) . '" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
 else
-    document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to='.$this->var()->prep($value).'"><img src="'.$this->var()->prep($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/'.$this->var()->prep($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.$this->var()->prep($value).'&amp;img=5" width="18" height="18" alt=""/></a>\');
-//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.$this->var()->prep($value).'"><img src="'.$this->var()->prep($data['image']).'" alt="ICQ Number" title="ICQ Number" border="0"/></a></noscript>';
+    document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to=' . $this->var()->prep($value) . '"><img src="' . $this->var()->prep($data['image']) . '" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/' . $this->var()->prep($value) . '#pager"><img src="http://web.icq.com/whitepages/online?icq=' . $this->var()->prep($value) . '&amp;img=5" width="18" height="18" alt=""/></a>\');
+//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to=' . $this->var()->prep($value) . '"><img src="' . $this->var()->prep($data['image']) . '" alt="ICQ Number" title="ICQ Number" border="0"/></a></noscript>';
 
         }
 

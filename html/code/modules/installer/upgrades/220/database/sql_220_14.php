@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -14,7 +15,7 @@ function sql_220_14()
 {
     // Define parameters
     $table = xarDB::getPrefix() . '_dynamic_objects';
-    
+
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
@@ -23,15 +24,15 @@ function sql_220_14()
     $data['reply'] = xarML("
         Success!
     ");
-    
+
     // Run the query
     $dbconn  = xarDB::getConn();
     try {
         $dbconn->begin();
-        $query = "ALTER TABLE $table ADD COLUMN access TEXT";              
-        $dbconn->Execute($query);        
+        $query = "ALTER TABLE $table ADD COLUMN access TEXT";
+        $dbconn->Execute($query);
         $dbconn->commit();
-        
+
     } catch (Exception $e) {
         // Damn
         $dbconn->rollback();
@@ -40,6 +41,6 @@ function sql_220_14()
         Failed!
         ");
     }
-    return $data;   
-    
+    return $data;
+
 }

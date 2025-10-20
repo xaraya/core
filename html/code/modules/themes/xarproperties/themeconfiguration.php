@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -26,7 +27,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
     public $id         = 30107;
     public $name       = 'themeconfiguration';
     public $desc       = 'Theme Configuration';
-    public $reqmodules = array('themes');
+    public $reqmodules = ['themes'];
 
     /** @var int */
     public $theme_id;   // The regid of the theme this property belongs to

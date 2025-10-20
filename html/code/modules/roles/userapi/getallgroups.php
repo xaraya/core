@@ -155,15 +155,18 @@ class GetallgroupsMethod extends MethodClass
 
     protected function recursive_getDescendants($ancestor, &$allgroups)
     {
-        $descendants = array();
-        foreach($allgroups as $group){
-            if($group['parent_id'] == $ancestor)
+        $descendants = [];
+        foreach ($allgroups as $group) {
+            if ($group['parent_id'] == $ancestor) {
                 $descendants[$group['id']] = $group;
+            }
         }
-        $subgroups = array();
-        foreach($descendants as $descendant){
-            $subgroups = $this->recursive_getDescendants((int)$descendant['id'], $allgroups);
-            foreach($subgroups as $subgroup) $subgroups[$subgroup['id']] = $subgroup;
+        $subgroups = [];
+        foreach ($descendants as $descendant) {
+            $subgroups = $this->recursive_getDescendants((int) $descendant['id'], $allgroups);
+            foreach ($subgroups as $subgroup) {
+                $subgroups[$subgroup['id']] = $subgroup;
+            }
             $descendants = array_merge($descendants, $subgroups);
         }
         return $descendants;

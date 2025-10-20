@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -11,7 +12,7 @@
  */
 
 function sql_220_05()
-{    
+{
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
@@ -19,12 +20,12 @@ function sql_220_05()
     ");
     $data['reply'] = xarML("
         Success!
-    ");    
-    
+    ");
+
     try {
         sys::import('xaraya.hooks');
         /* Hook Events */
-        // Register modules module hook subjects 
+        // Register modules module hook subjects
         xarHooks::registerSubject('ModuleModifyconfig', 'module', 'modules');
         xarHooks::registerSubject('ModuleUpdateconfig', 'module', 'modules');
         xarHooks::registerSubject('ModuleRemove', 'module', 'modules');
@@ -35,26 +36,26 @@ function sql_220_05()
         xarHooks::registerSubject('ItemtypeCreate', 'itemtype', 'modules');
         xarHooks::registerSubject('ItemtypeDelete', 'itemtype', 'modules');
         xarHooks::registerSubject('ItemtypeView', 'itemtype', 'modules');
-        // Module item hook subjects (@TODO: these should no longer apply to roles) 
+        // Module item hook subjects (@TODO: these should no longer apply to roles)
         xarHooks::registerSubject('ItemNew', 'item', 'modules');
         xarHooks::registerSubject('ItemCreate', 'item', 'modules');
-        xarHooks::registerSubject('ItemModify', 'item', 'modules'); 
+        xarHooks::registerSubject('ItemModify', 'item', 'modules');
         xarHooks::registerSubject('ItemUpdate', 'item', 'modules');
         xarHooks::registerSubject('ItemDisplay', 'item', 'modules');
         xarHooks::registerSubject('ItemDelete', 'item', 'modules');
-        xarHooks::registerSubject('ItemSubmit', 'item', 'modules');        
+        xarHooks::registerSubject('ItemSubmit', 'item', 'modules');
         // Transform hooks
         // @TODO: these really need to go away...
         xarHooks::registerSubject('ItemTransform', 'item', 'modules');
-        xarHooks::registerSubject('ItemTransforminput', 'item', 'modules');           
+        xarHooks::registerSubject('ItemTransforminput', 'item', 'modules');
         // @TODO: these need evaluating
         xarHooks::registerSubject('ItemFormheader', 'item', 'modules');
         xarHooks::registerSubject('ItemFormaction', 'item', 'modules');
         xarHooks::registerSubject('ItemFormdisplay', 'item', 'modules');
         xarHooks::registerSubject('ItemFormarea', 'item', 'modules');
-        // Register base module hook subjects 
-        xarHooks::registerSubject('ItemWaitingcontent', 'item', 'base'); 
-        // NOTE: ItemSearch is registered by search module 
+        // Register base module hook subjects
+        xarHooks::registerSubject('ItemWaitingcontent', 'item', 'base');
+        // NOTE: ItemSearch is registered by search module
     } catch (Exception $e) {
         // Damn
         $data['success'] = false;
@@ -62,6 +63,6 @@ function sql_220_05()
         Failed!
         ");
     }
-    return $data;   
-    
+    return $data;
+
 }

@@ -168,13 +168,13 @@ class SearchMethod extends MethodClass
                 // get the object
                 // set context if available in function
                 $object = $userapi->getobjectlist([
-                        'name' => $name,
-                        //'where' => $where,
-                        'startnum' => $startnum,
-                        'numitems' => $numitems,
-                        //'pagerurl' => $pagerurl,
-                        'layout' => 'list',
-                        'status' => $status]);
+                    'name' => $name,
+                    //'where' => $where,
+                    'startnum' => $startnum,
+                    'numitems' => $numitems,
+                    //'pagerurl' => $pagerurl,
+                    'layout' => 'list',
+                    'status' => $status]);
                 if (!$object->checkAccess('view')) {
                     continue;
                 }

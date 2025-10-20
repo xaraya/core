@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Deferred List property delays loading extra information using the database values until they need to be shown.
  *

@@ -70,9 +70,9 @@ class GetfilesMethod extends MethodClass
                 continue;
             }
             foreach (new DirectoryIterator($path) as $item) {
-                if ($item->isDir() &&
-                    !$item->isDot() &&
-                    $item->isReadable()) {
+                if ($item->isDir()
+                    && !$item->isDot()
+                    && $item->isReadable()) {
                     // subfolders containing file(s) for individual blocks - the new way
 
                     // the block type is the name of the subfolder,
@@ -86,11 +86,11 @@ class GetfilesMethod extends MethodClass
                         continue;
                     }
 
-                } elseif ($item->isFile() &&
-                    !$item->isDot() &&
-                    $item->isReadable() &&
-                    pathinfo($item->getPathname(), PATHINFO_EXTENSION) == 'php' &&
-                    strpos($item->getFilename(), '_') === false) {
+                } elseif ($item->isFile()
+                    && !$item->isDot()
+                    && $item->isReadable()
+                    && pathinfo($item->getPathname(), PATHINFO_EXTENSION) == 'php'
+                    && strpos($item->getFilename(), '_') === false) {
 
                     // folder containing block file(s) for multiple blocks - the legacy way
                     // matches code/modules/modulename/xarblocks/example.php

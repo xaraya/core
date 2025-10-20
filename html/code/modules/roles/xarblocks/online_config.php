@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Online Block
  *
@@ -22,20 +23,20 @@
 sys::import('modules.roles.xarblocks.online');
 class Roles_OnlineBlockConfig extends Roles_OnlineBlock
 {
-	/**
+    /**
      * Modify the configuration of the online block
-     * 
+     *
      * @param array<string, mixed> $data Data array
      * @return array<mixed>  array of values to be displayed in the block's configuration page
      */
-    function configmodify(Array $data=array())
+    public function configmodify(array $data = [])
     {
         return $this->getContent();
     }
 
-	/**
+    /**
      * Update the configuration of the online block
-     * 
+     *
      * @return boolean|void Returns true on success, false on failure
      */
     public function configupdate(array $args = [])

@@ -54,9 +54,9 @@ class ExecuteinitfunctionMethod extends MethodClass
         // Get module information
         $modInfo = $this->mod()->getInfo($args['regid']);
 
-        if (!isset($modInfo['osdirectory']) ||
-            empty($modInfo['osdirectory']) ||
-            !is_dir(sys::code() . 'modules/' . $modInfo['osdirectory'])) {
+        if (!isset($modInfo['osdirectory'])
+            || empty($modInfo['osdirectory'])
+            || !is_dir(sys::code() . 'modules/' . $modInfo['osdirectory'])) {
 
             $msg = 'Module (regid: #(1) - directory: #(2) does not exist.';
             $vars = [$args['regid'], $modInfo['osdirectory']];

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Form Block configuration interface
  *

@@ -163,10 +163,10 @@ class RegenerateMethod extends MethodClass
                         // Automatically update the module version for uninstalled modules or
                         // where the version number is equivalent (but could be a different format)
                         // or if the module is a core module.
-                        if ($dbModules[$name]['state'] == xarMod::STATE_UNINITIALISED ||
-                            $dbModules[$name]['state'] == xarMod::STATE_MISSING_FROM_UNINITIALISED ||
-                            $dbModules[$name]['state'] == xarMod::STATE_ERROR_UNINITIALISED ||
-                            $vercompare == 0 || $is_core) {
+                        if ($dbModules[$name]['state'] == xarMod::STATE_UNINITIALISED
+                            || $dbModules[$name]['state'] == xarMod::STATE_MISSING_FROM_UNINITIALISED
+                            || $dbModules[$name]['state'] == xarMod::STATE_ERROR_UNINITIALISED
+                            || $vercompare == 0 || $is_core) {
 
                             // First we check if this module belongs to class Core or not
                             if (substr($modinfo['class'], 0, 4)  == 'Core') {
@@ -212,10 +212,10 @@ class RegenerateMethod extends MethodClass
                         // than the db version.
 
                         // Check if error state is already set
-                        if (($dbModules[$name]['state'] == xarMod::STATE_ERROR_UNINITIALISED) ||
-                            ($dbModules[$name]['state'] == xarMod::STATE_ERROR_INACTIVE) ||
-                            ($dbModules[$name]['state'] == xarMod::STATE_ERROR_ACTIVE) ||
-                            ($dbModules[$name]['state'] == xarMod::STATE_ERROR_UPGRADED)) {
+                        if (($dbModules[$name]['state'] == xarMod::STATE_ERROR_UNINITIALISED)
+                            || ($dbModules[$name]['state'] == xarMod::STATE_ERROR_INACTIVE)
+                            || ($dbModules[$name]['state'] == xarMod::STATE_ERROR_ACTIVE)
+                            || ($dbModules[$name]['state'] == xarMod::STATE_ERROR_UPGRADED)) {
                             // Continue to next module
                             continue;
                         }

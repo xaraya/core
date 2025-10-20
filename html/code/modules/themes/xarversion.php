@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration information for the Themes module
  *
@@ -20,8 +21,8 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
- 
-$modversion = array(
+
+$modversion = [
     'name'               => 'Themes Administration',
     'id'                 => '70',
     'version'            => '2.8.1',
@@ -40,4 +41,4 @@ $modversion = array(
     'class'              => 'Core Admin',
     'category'           => 'System',
     'twigtemplates'      => true,
-);
+];

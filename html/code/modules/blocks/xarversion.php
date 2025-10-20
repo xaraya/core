@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration information for the Blocks module
  *
@@ -21,8 +22,8 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
- 
-$modversion = array(
+
+$modversion = [
     'name'               => 'Blocks Administration',
     'id'                 => '13',
     'displayname'        => xarMLS::translate('Blocks'),
@@ -41,4 +42,4 @@ $modversion = array(
     'class'              => 'Core Admin',
     'category'           => 'System',
     'twigtemplates'      => true,
-);
+];

@@ -69,7 +69,7 @@ class InitialiseMethod extends MethodClass
         if (!$installer->verifydependency($regid)) {
             //TODO: Add description of the dependencies
             $msg = $this->ml('The dependencies to initialise the module "#(1)" were not met.', $modInfo['displayname']);
-             $this->exit($msg);
+            $this->exit($msg);
             return;
         }
 

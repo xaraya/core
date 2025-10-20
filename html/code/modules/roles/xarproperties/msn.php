@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.base.xarproperties.textbox');
 
@@ -20,34 +21,36 @@ class MSNProperty extends TextBoxProperty
     public $id         = 30;
     public $name       = 'msn';
     public $desc       = 'MSN Messenger';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
     public $initialization_icon_url;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'msn';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = $this->tpl()->getImage('contact/msnm.png','module','roles');
+            $this->initialization_icon_url = $this->tpl()->getImage('contact/msnm.png', 'module', 'roles');
         }
     }
 
-	/**
-	 * Validate the value of a textbox
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a textbox
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (!empty($value)) {
             // cfr. pnVarValidate in pnLegacy.php
             $regexp = '/^(?:[^\s\000-\037\177\(\)<>@,;:\\"\[\]]\.?)+@(?:[^\s\000-\037\177\(\)<>@,;:\\\"\[\]]\.?)+\.[a-z]{2,6}$/Ui'; // TODO: verify this !
-            if (!preg_match($regexp,$value)) {
+            if (!preg_match($regexp, $value)) {
                 $this->invalid = $this->ml('MSN Messenger: #(1)', $this->name);
                 $this->log()->error($this->invalid);
                 $this->value = null;
@@ -59,38 +62,42 @@ class MSNProperty extends TextBoxProperty
         return true;
     }
 
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if(!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
 
-        $data['link'] ='';
-        if(!empty($data['value'])) {
-            $data['link'] = 'msnim:chat?contact='.$this->var()->prep($data['value']);
+        $data['link'] = '';
+        if (!empty($data['value'])) {
+            $data['link'] = 'msnim:chat?contact=' . $this->var()->prep($data['value']);
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a textbox for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
+    /**
+     * Display a textbox for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
         $data['value'] = $this->var()->prep($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'msnim:chat?contact='.$data['value'];
+            $data['link'] = 'msnim:chat?contact=' . $data['value'];
         }
         if (empty($data['image'])) {
             $data['image'] = $this->initialization_icon_url;

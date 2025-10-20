@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Core module list
  *
@@ -15,16 +16,16 @@
  * This needs to be updated whnever the core modules change
  * @author Marc Lutolf
  */
-$coremodules = array(
-    array('name' => "authsystem",   'regid' => 42),
-    array('name' => "base",         'regid' => 68),
-    array('name' => "blocks",       'regid' => 13),
-    array('name' => "categories",   'regid' => 147),
-    array('name' => "dynamicdata",  'regid' => 182),
-    array('name' => "installer",    'regid' => 200),
-    array('name' => "mail",         'regid' => 771),
-    array('name' => "modules",      'regid' => 1),
-    array('name' => "privileges",   'regid' => 1098),
-    array('name' => "roles",        'regid' => 27),
-    array('name' => "themes",       'regid' => 70)
-);
+$coremodules = [
+    ['name' => "authsystem",   'regid' => 42],
+    ['name' => "base",         'regid' => 68],
+    ['name' => "blocks",       'regid' => 13],
+    ['name' => "categories",   'regid' => 147],
+    ['name' => "dynamicdata",  'regid' => 182],
+    ['name' => "installer",    'regid' => 200],
+    ['name' => "mail",         'regid' => 771],
+    ['name' => "modules",      'regid' => 1],
+    ['name' => "privileges",   'regid' => 1098],
+    ['name' => "roles",        'regid' => 27],
+    ['name' => "themes",       'regid' => 70],
+];

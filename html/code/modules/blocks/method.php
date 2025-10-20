@@ -25,7 +25,7 @@ class MethodClass extends CoreMethodClass
     /**
      * Get module blocks API class for this module
      */
-    public function blocksapi(): UserApiInterface|null
+    public function blocksapi(): ?UserApiInterface
     {
         return $this->getParent()->blocksapi();
     }
@@ -33,7 +33,7 @@ class MethodClass extends CoreMethodClass
     /**
      * Get module instances API class for this module
      */
-    public function instancesapi(): UserApiInterface|null
+    public function instancesapi(): ?UserApiInterface
     {
         return $this->getParent()->instancesapi();
     }
@@ -41,7 +41,7 @@ class MethodClass extends CoreMethodClass
     /**
      * Get module types API class for this module
      */
-    public function typesapi(): UserApiInterface|null
+    public function typesapi(): ?UserApiInterface
     {
         return $this->getParent()->typesapi();
     }

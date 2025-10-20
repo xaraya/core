@@ -78,7 +78,8 @@ class CreatepropertyMethod extends MethodClass
         // TODO: security check on object level
 
         // get the properties of the 'properties' object
-        $fields = $userapi->getprop(['objectid' => 2]
+        $fields = $userapi->getprop(
+            ['objectid' => 2]
         ); // the properties
 
         $values = [];

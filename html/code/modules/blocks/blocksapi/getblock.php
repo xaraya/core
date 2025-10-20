@@ -92,29 +92,29 @@ class GetblockMethod extends MethodClass
             if (empty($classname)) {
                 throw new FileNotFoundException($typepath);
             }
-    
+
             if (!class_exists($classname) || !is_subclass_of($classname, 'BasicBlock')) {
                 throw new ClassNotFoundException($classname);
             }
-    
+
             if (!empty($args['block_method']) && !method_exists($classname, $args['block_method'])) {
                 throw new FunctionNotFoundException($args['block_method']);
             }
-    
+
             // Load the block language files
             if (!$this->mls()->loadTranslations($typepath)) {
                 // What to do here? return doesnt seem right
                 return;
             }
-    
+
             if (isset($args['block_method'])) {
                 unset($args['block_method']);
             }
-    
+
             $object = new $classname($args);
-    
+
             $loaded[$key] = $classname;
-    
+
             return $object;
         }
 

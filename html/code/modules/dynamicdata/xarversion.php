@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration information for the Dynamicdata module
  *

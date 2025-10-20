@@ -43,9 +43,9 @@ class LoginMethod extends MethodClass
 
         // FIXME: this should be removed as far as possible
         if (isset($passwd) && !isset($pass)) {
-             $this->exit("authsystem_userapi_login: authsystem_userapi_login prototype has changed, " .
-                "you should use pass instead of passwd to " .
-                "avoid this message being displayed");
+            $this->exit("authsystem_userapi_login: authsystem_userapi_login prototype has changed, "
+               . "you should use pass instead of passwd to "
+               . "avoid this message being displayed");
             return false;
         }
 
@@ -53,8 +53,8 @@ class LoginMethod extends MethodClass
             $rememberme = 0;
         }
 
-        if ((!isset($uname)) ||
-            (!isset($pass))) {
+        if ((!isset($uname))
+            || (!isset($pass))) {
             throw new BadParameterException(null, $this->ml('Wrong arguments to authsystem_userapi_login.'));
         }
 

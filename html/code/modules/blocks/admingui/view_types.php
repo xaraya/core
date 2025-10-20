@@ -80,8 +80,8 @@ class ViewTypesMethod extends MethodClass
             $item['modify_link'] = [
                 'label' => $this->ml('Config'),
                 'title' => $this->ml('View or modify default configuration for this block type'),
-                'url' => !$this->sec()->checkAccess('AdminBlocks', 0) ? '' :
-                    $this->ctl()->getModuleURL(
+                'url' => !$this->sec()->checkAccess('AdminBlocks', 0) ? ''
+                    : $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'modify_type',
@@ -91,8 +91,8 @@ class ViewTypesMethod extends MethodClass
             $item['preview_link'] = [
                 'label' => $this->ml('Preview'),
                 'title' => $this->ml('View a preview of this block type'),
-                'url' => empty($item['type_info']['show_preview']) ? '' :
-                    $this->ctl()->getModuleURL(
+                'url' => empty($item['type_info']['show_preview']) ? ''
+                    : $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'modify_type',
@@ -102,8 +102,8 @@ class ViewTypesMethod extends MethodClass
             $item['help_link'] = [
                 'label' => $this->ml('Help'),
                 'title' => $this->ml('View help information about this block type'),
-                'url' => empty($item['type_info']['show_help']) ? '' :
-                    $this->ctl()->getModuleURL(
+                'url' => empty($item['type_info']['show_help']) ? ''
+                    : $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'modify_type',
@@ -121,8 +121,8 @@ class ViewTypesMethod extends MethodClass
             $item['add_link'] = [
                 'label' => $this->ml('Add'),
                 'title' => $this->ml('Create a new instance of this block type'),
-                'url' => (!$access_property->check($access) || $item['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ? '' :
-                    $this->ctl()->getModuleURL(
+                'url' => (!$access_property->check($access) || $item['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ? ''
+                    : $this->ctl()->getModuleURL(
                         'blocks',
                         'admin',
                         'new_instance',

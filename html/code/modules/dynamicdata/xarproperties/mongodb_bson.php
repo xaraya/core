@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The MongoDB BSON property tries to deal with various MongoDB BSON data formats
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -17,25 +18,25 @@ class StaticTextProperty extends DataProperty
     public $id         = 1;
     public $name       = 'static';
     public $desc       = 'Static Text';
-    public $reqmodules = array('base');
+    public $reqmodules = ['base'];
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template = 'static';
         $this->filepath = 'modules/base/xarproperties';
     }
-	/**
+    /**
  * Validate the value of a input
- *  
+ *
  * @return bool Returns true if the value passes all validation checks; otherwise returns false.
  */
 
     public function validateValue($value = null)
     {
         $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
-        
+
         if (isset($value) && $value != $this->value) {
             $this->invalid = $this->ml('static text: #(1)', $this->name);
             $this->log()->error($this->invalid);

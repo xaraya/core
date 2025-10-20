@@ -102,9 +102,9 @@ class UpdatepropMethod extends MethodClass
         }
 
         $fields = $userapi->getprop(['objectid' => $objectid,
-                'moduleid' => $module_id,
-                'itemtype' => $itemtype,
-                'allprops' => true]);
+            'moduleid' => $module_id,
+            'itemtype' => $itemtype,
+            'allprops' => true]);
 
         $isprimary = 0;
         $i = 0;
@@ -143,15 +143,15 @@ class UpdatepropMethod extends MethodClass
                     $dd_translatable[$id] = 0;
                 }
                 if (!$adminapi->updateprop(['id'            => $id,
-                        'name'          => $dd_name[$id],
-                        'label'         => $dd_label[$id],
-                        'type'          => $dd_type[$id],
-                        'defaultvalue'  => $dd_defaultvalue[$id],
-                        'seq'           => $dd_seq[$id],
-                        'translatable'  => $dd_translatable[$id],
-                        'source'        => $dd_source[$id],
-                        'status'        => $dd_status[$id],
-                        'configuration' => $dd_configuration[$id]])) {
+                    'name'          => $dd_name[$id],
+                    'label'         => $dd_label[$id],
+                    'type'          => $dd_type[$id],
+                    'defaultvalue'  => $dd_defaultvalue[$id],
+                    'seq'           => $dd_seq[$id],
+                    'translatable'  => $dd_translatable[$id],
+                    'source'        => $dd_source[$id],
+                    'status'        => $dd_status[$id],
+                    'configuration' => $dd_configuration[$id]])) {
                     return;
                 }
                 if (DataPropertyMaster::isPrimaryType($dd_type[$id])) { // item id
@@ -182,15 +182,15 @@ class UpdatepropMethod extends MethodClass
             }
             $dd_status[0] = $display_dd_status[0] + $input_dd_status[0];
             $id = $adminapi->createproperty(['name' => $name,
-                    'label' => $dd_label[0],
-                    'objectid' => $objectid,
-                    // 'moduleid' => $module_id,
-                    // 'itemtype' => $itemtype,
-                    'type' => $dd_type[0],
-                    'defaultvalue' => $dd_defaultvalue[0],
-                    'source' => $dd_source[0],
-                    'status' => $dd_status[0],
-                    'seq' => $i]);
+                'label' => $dd_label[0],
+                'objectid' => $objectid,
+                // 'moduleid' => $module_id,
+                // 'itemtype' => $itemtype,
+                'type' => $dd_type[0],
+                'defaultvalue' => $dd_defaultvalue[0],
+                'source' => $dd_source[0],
+                'status' => $dd_status[0],
+                'seq' => $i]);
             if (empty($id)) {
                 return;
             }

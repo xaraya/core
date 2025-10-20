@@ -59,7 +59,8 @@ class ImportpropsMethod extends MethodClass
             return $this->ctl()->badRequest('bad_author');
         }
 
-        if (!$utilapi->importproperties(['module_id' => $module_id,
+        if (!$utilapi->importproperties(
+            ['module_id' => $module_id,
                 'itemtype' => $itemtype,
                 'table' => $table,
                 'objectid' => $objectid]

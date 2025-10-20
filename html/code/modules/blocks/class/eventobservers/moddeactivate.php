@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @package modules\blocks
@@ -31,7 +32,11 @@ class BlocksModDeactivateObserver extends EventObserver implements ixarEventObse
             }
         }
         // refresh block types
-        xarMod::apiFunc('blocks', 'types', 'refresh', 
-            array('module' => $modName, 'refresh' => true));
+        xarMod::apiFunc(
+            'blocks',
+            'types',
+            'refresh',
+            ['module' => $modName, 'refresh' => true]
+        );
     }
 }

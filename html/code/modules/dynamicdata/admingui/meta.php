@@ -103,8 +103,8 @@ class MetaMethod extends MethodClass
             }
         }
         $data['tables'] = $utilapi->getmeta(['db' => $db,
-                'table' => $table,
-                'dbConnIndex' => $data['dbConnIndex']]);
+            'table' => $table,
+            'dbConnIndex' => $data['dbConnIndex']]);
 
         $data['result'] = '';
         if (!empty($create) && !empty($data['dbConnIndex'])) {

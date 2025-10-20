@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ModuleActivate Hook Subject
  *

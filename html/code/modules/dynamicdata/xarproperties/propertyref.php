@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -116,7 +117,7 @@ class PropertyRefProperty extends SelectProperty
 
         $object = $this->data()->getObjectList(['name' => 'properties']);
         $items = $object->getItems(['where'     => "objectid eq $objectid", // filter on the selected object
-                                         'fieldlist' => ['name','label']]);
+            'fieldlist' => ['name','label']]);
         foreach ($items as $item) {
             $options[] = ['id' => $item['name'], 'name' => $item['label']];
         }

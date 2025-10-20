@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Deferred Item property delays loading extra information using the database values until they need to be shown.
  * It was inspired by how GraphQL-PHP tackles the N+1 problem, but without proxy, callable or promises (sync or async).

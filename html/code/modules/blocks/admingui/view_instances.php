@@ -95,8 +95,8 @@ class ViewInstancesMethod extends MethodClass
                         'group' => $item['content']['modify_access']['group'],
                         'level' => $item['content']['modify_access']['level'],
                     ];
-                    $modify_link = (!$access_property->check($args)) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $modify_link = (!$access_property->check($args)) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
@@ -108,8 +108,8 @@ class ViewInstancesMethod extends MethodClass
                         'url' => $modify_link,
                     ];
                     // check if this block type supports previews
-                    $preview_link = (empty($item['type_info']['show_preview'])) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $preview_link = (empty($item['type_info']['show_preview'])) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
@@ -121,8 +121,8 @@ class ViewInstancesMethod extends MethodClass
                         'url' => $preview_link,
                     ];
                     // check if this block type supplies help
-                    $help_link = (empty($item['type_info']['show_help'])) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $help_link = (empty($item['type_info']['show_help'])) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
@@ -141,8 +141,8 @@ class ViewInstancesMethod extends MethodClass
                         'group' => $item['content']['delete_access']['group'],
                         'level' => $item['content']['delete_access']['level'],
                     ];
-                    $delete_link = (!$access_property->check($args)) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $delete_link = (!$access_property->check($args)) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'delete_instance',
@@ -190,8 +190,8 @@ class ViewInstancesMethod extends MethodClass
                         'group' => $group['content']['modify_access']['group'],
                         'level' => $group['content']['modify_access']['level'],
                     ];
-                    $modify_link = (!$access_property->check($args)) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $modify_link = (!$access_property->check($args)) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
@@ -203,8 +203,8 @@ class ViewInstancesMethod extends MethodClass
                         'url' => $modify_link,
                     ];
                     // check if this block type supports previews
-                    $preview_link = (empty($group['type_info']['show_preview'])) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $preview_link = (empty($group['type_info']['show_preview'])) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
@@ -216,8 +216,8 @@ class ViewInstancesMethod extends MethodClass
                         'url' => $preview_link,
                     ];
                     // check if this block type supplies help
-                    $help_link = (empty($group['type_info']['show_help'])) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $help_link = (empty($group['type_info']['show_help'])) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
@@ -236,8 +236,8 @@ class ViewInstancesMethod extends MethodClass
                         'group' => $group['content']['delete_access']['group'],
                         'level' => $group['content']['delete_access']['level'],
                     ];
-                    $delete_link = (!$access_property->check($args)) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $delete_link = (!$access_property->check($args)) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'delete_instance',
@@ -275,8 +275,8 @@ class ViewInstancesMethod extends MethodClass
                                 'group' => $block['content']['modify_access']['group'],
                                 'level' => $block['content']['modify_access']['level'],
                             ];
-                            $modify_link = (!$access_property->check($args)) ? '' :
-                                $this->ctl()->getModuleURL(
+                            $modify_link = (!$access_property->check($args)) ? ''
+                                : $this->ctl()->getModuleURL(
                                     'blocks',
                                     'admin',
                                     'modify_instance',
@@ -288,8 +288,8 @@ class ViewInstancesMethod extends MethodClass
                                 'url' => $modify_link,
                             ];
                             // check if this block type supports previews
-                            $preview_link = (empty($block['type_info']['show_preview'])) ? '' :
-                                $this->ctl()->getModuleURL(
+                            $preview_link = (empty($block['type_info']['show_preview'])) ? ''
+                                : $this->ctl()->getModuleURL(
                                     'blocks',
                                     'admin',
                                     'modify_instance',
@@ -301,8 +301,8 @@ class ViewInstancesMethod extends MethodClass
                                 'url' => $preview_link,
                             ];
                             // check if this block type supplies help
-                            $help_link = (empty($block['type_info']['show_help'])) ? '' :
-                                $this->ctl()->getModuleURL(
+                            $help_link = (empty($block['type_info']['show_help'])) ? ''
+                                : $this->ctl()->getModuleURL(
                                     'blocks',
                                     'admin',
                                     'modify_instance',
@@ -321,8 +321,8 @@ class ViewInstancesMethod extends MethodClass
                                 'group' => $block['content']['delete_access']['group'],
                                 'level' => $block['content']['delete_access']['level'],
                             ];
-                            $delete_link = (!$access_property->check($args)) ? '' :
-                                $this->ctl()->getModuleURL(
+                            $delete_link = (!$access_property->check($args)) ? ''
+                                : $this->ctl()->getModuleURL(
                                     'blocks',
                                     'admin',
                                     'delete_instance',
@@ -357,8 +357,8 @@ class ViewInstancesMethod extends MethodClass
                     $item['modify_link'] = [
                         'label' => $this->ml('Config'),
                         'title' => $this->ml('View or modify default configuration for this block type'),
-                        'url' => !$this->sec()->checkAccess('AdminBlocks', 0) ? '' :
-                            $this->ctl()->getModuleURL(
+                        'url' => !$this->sec()->checkAccess('AdminBlocks', 0) ? ''
+                            : $this->ctl()->getModuleURL(
                                 'blocks',
                                 'admin',
                                 'modify_type',
@@ -368,8 +368,8 @@ class ViewInstancesMethod extends MethodClass
                     $item['preview_link'] = [
                         'label' => $this->ml('Preview'),
                         'title' => $this->ml('View a preview of this block type'),
-                        'url' => empty($item['type_info']['show_preview']) ? '' :
-                            $this->ctl()->getModuleURL(
+                        'url' => empty($item['type_info']['show_preview']) ? ''
+                            : $this->ctl()->getModuleURL(
                                 'blocks',
                                 'admin',
                                 'modify_type',
@@ -379,8 +379,8 @@ class ViewInstancesMethod extends MethodClass
                     $item['help_link'] = [
                         'label' => $this->ml('Help'),
                         'title' => $this->ml('View help information about this block type'),
-                        'url' => empty($item['type_info']['show_help']) ? '' :
-                            $this->ctl()->getModuleURL(
+                        'url' => empty($item['type_info']['show_help']) ? ''
+                            : $this->ctl()->getModuleURL(
                                 'blocks',
                                 'admin',
                                 'modify_type',
@@ -398,8 +398,8 @@ class ViewInstancesMethod extends MethodClass
                     $item['add_link'] = [
                         'label' => $this->ml('Add'),
                         'title' => $this->ml('Create a new instance of this block type'),
-                        'url' => (!$access_property->check($access) || $item['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ? '' :
-                            $this->ctl()->getModuleURL(
+                        'url' => (!$access_property->check($access) || $item['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ? ''
+                            : $this->ctl()->getModuleURL(
                                 'blocks',
                                 'admin',
                                 'new_instance',
@@ -439,8 +439,8 @@ class ViewInstancesMethod extends MethodClass
                         'group' => $item['content']['modify_access']['group'],
                         'level' => $item['content']['modify_access']['level'],
                     ];
-                    $modify_link = (!$access_property->check($args)) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $modify_link = (!$access_property->check($args)) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
@@ -452,8 +452,8 @@ class ViewInstancesMethod extends MethodClass
                         'url' => $modify_link,
                     ];
                     // check if this block type supports previews
-                    $preview_link = (empty($item['type_info']['show_preview'])) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $preview_link = (empty($item['type_info']['show_preview'])) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
@@ -465,8 +465,8 @@ class ViewInstancesMethod extends MethodClass
                         'url' => $preview_link,
                     ];
                     // check if this block type supplies help
-                    $help_link = (empty($item['type_info']['show_help'])) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $help_link = (empty($item['type_info']['show_help'])) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'modify_instance',
@@ -485,8 +485,8 @@ class ViewInstancesMethod extends MethodClass
                         'group' => $item['content']['delete_access']['group'],
                         'level' => $item['content']['delete_access']['level'],
                     ];
-                    $delete_link = (!$access_property->check($args)) ? '' :
-                        $this->ctl()->getModuleURL(
+                    $delete_link = (!$access_property->check($args)) ? ''
+                        : $this->ctl()->getModuleURL(
                             'blocks',
                             'admin',
                             'delete_instance',

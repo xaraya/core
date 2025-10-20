@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -56,7 +57,7 @@ class DataObjectFactory extends xarObject
                          config,
                          isalias
                   FROM $dynamicobjects ";
-        if(isset($moduleid)) {
+        if (isset($moduleid)) {
             $query .= "WHERE module_id = ?";
             $bindvars[] = $moduleid;
         }
@@ -111,7 +112,7 @@ class DataObjectFactory extends xarObject
             }
             $infoid = $args['moduleid'] . ':' . $args['itemtype'];
         }
-        if(xarVar3::isCached($cacheKey, $infoid)) {
+        if (xarVar3::isCached($cacheKey, $infoid)) {
             return xarVar3::getCached($cacheKey, $infoid);
         }
 
@@ -155,7 +156,7 @@ class DataObjectFactory extends xarObject
 
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
-        if(!$result->first()) {
+        if (!$result->first()) {
             return null;
         }
         $info = [];
@@ -192,10 +193,10 @@ class DataObjectFactory extends xarObject
         }
 
         $cacheKey = 'DynamicData._ObjectInfo';
-        if(isset($args['objectid']) && xarVar3::isCached($cacheKey, $args['objectid'])) {
+        if (isset($args['objectid']) && xarVar3::isCached($cacheKey, $args['objectid'])) {
             return xarVar3::getCached($cacheKey, $args['objectid']);
         }
-        if(isset($args['name']) && xarVar3::isCached($cacheKey, $args['name'])) {
+        if (isset($args['name']) && xarVar3::isCached($cacheKey, $args['name'])) {
             return xarVar3::getCached($cacheKey, $args['name']);
         }
 
@@ -384,7 +385,7 @@ class DataObjectFactory extends xarObject
         }
         $data = array_merge($args, $data);
         // Make sure the class for this object is loaded
-        if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) {
+        if (!empty($data['filepath']) && ($data['filepath'] != 'auto')) {
             include_once(sys::code() . $data['filepath']);
         } else {
             sys::import('modules.dynamicdata.class.objects.base');
@@ -476,7 +477,7 @@ class DataObjectFactory extends xarObject
         // Make sure the class for this object is loaded
         sys::import('modules.dynamicdata.class.objects.list');
         $class = 'DataObjectList';
-        if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) {
+        if (!empty($data['filepath']) && ($data['filepath'] != 'auto')) {
             include_once(sys::code() . $data['filepath']);
         }
 
@@ -498,11 +499,11 @@ class DataObjectFactory extends xarObject
         $data['propertyargs'] = & $info;
 
         // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
-        if(!empty($data['class'])) {
-            if(class_exists($data['class'] . 'List')) {
+        if (!empty($data['class'])) {
+            if (class_exists($data['class'] . 'List')) {
                 // this is a generic classname for the object, list and interface
                 $class = $data['class'] . 'List';
-            } elseif(class_exists($data['class']) && method_exists($data['class'], 'getItems')) {
+            } elseif (class_exists($data['class']) && method_exists($data['class'], 'getItems')) {
                 // this is a specific classname for the list
                 $class = $data['class'];
             }
@@ -559,14 +560,14 @@ class DataObjectFactory extends xarObject
 
         $class = 'DataObjectUserInterface';
         // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
-        if(!empty($args['class'])) {
-            if(class_exists($args['class'] . 'UserInterface')) {
+        if (!empty($args['class'])) {
+            if (class_exists($args['class'] . 'UserInterface')) {
                 // this is a generic classname for the object, list and interface
                 $class = $args['class'] . 'UserInterface';
-            } elseif(class_exists($args['class'] . 'Interface')) { // deprecated
+            } elseif (class_exists($args['class'] . 'Interface')) { // deprecated
                 // this is a generic classname for the object, list and interface
                 $class = $args['class'] . 'Interface';
-            } elseif(class_exists($args['class'])) {
+            } elseif (class_exists($args['class'])) {
                 // this is a specific classname for the interface
                 $class = $args['class'];
             }
@@ -629,7 +630,7 @@ class DataObjectFactory extends xarObject
 
         // Update specific part
         $itemid = $object->getItem(['itemid' => $args['objectid']]);
-        if(empty($itemid)) {
+        if (empty($itemid)) {
             return null;
         }
         xarLog3::info("Updating an object " . $object->name . ". Objectid: " . $itemid);
@@ -650,7 +651,7 @@ class DataObjectFactory extends xarObject
         $args = $descriptor->getArgs();
 
         // Last stand against wild hooks and other excesses
-        if($args['objectid'] < 5) {
+        if ($args['objectid'] < 5) {
             $msg = 'You cannot delete the DynamicData classes';
             throw new BadParameterException(null, $msg);
         }

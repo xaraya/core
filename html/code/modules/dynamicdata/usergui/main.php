@@ -62,8 +62,8 @@ class MainMethod extends MethodClass
 
         // define the list of main objects
         $this->var()->check('update', $update);
-        if ((empty($startlist) || !empty($update)) &&
-            $this->sec()->checkAccess('AdminDynamicData', 0)) {
+        if ((empty($startlist) || !empty($update))
+            && $this->sec()->checkAccess('AdminDynamicData', 0)) {
             $this->var()->check('starter', $starter, 'array', []);
             if (is_array($starter) && $this->sec()->confirmAuthKey()) {
                 $startlist = array_keys($starter);

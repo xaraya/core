@@ -136,8 +136,8 @@ class ViewMethod extends MethodClass
 
         $this->tpl()->setPageTitle($this->ml('Manage - View #(1)', $data['label']));
 
-        if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view.xt') ||
-            file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view-' . $data['template'] . '.xt')) {
+        if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view.xt')
+            || file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view-' . $data['template'] . '.xt')) {
             return $this->tpl()->module($data['tplmodule'], 'admin', 'view', $data, $data['template']);
         } else {
             return $this->tpl()->module('dynamicdata', 'admin', 'view', $data);

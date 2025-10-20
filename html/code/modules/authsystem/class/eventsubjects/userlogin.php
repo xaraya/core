@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Authsystem Module
  *
@@ -17,14 +18,14 @@ sys::import('xaraya.structures.events.subject');
 class AuthsystemUserLoginSubject extends EventSubject implements ixarEventSubject
 {
     protected $subject = 'UserLogin';
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param int $userId
      */
     public function __construct($userId)
     {
-        parent::__construct($userId);                             
+        parent::__construct($userId);
     }
 }

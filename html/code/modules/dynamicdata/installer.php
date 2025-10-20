@@ -297,6 +297,7 @@ class Installer extends InstallerClass
                     xarHooks::registerObserver('ItemDisplay', 'dynamicdata', $namespace . '\ItemDisplay');
                 */
                 // fall through to next upgrade
+                // no break
             case '2.8.1':
                 // fall through to next upgrade
             default:

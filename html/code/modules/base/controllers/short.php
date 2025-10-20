@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base Action Controller class
  *
@@ -50,7 +51,7 @@ class BaseShortController extends ShortActionController
 
         $params = $request->getFunctionArgs();
         $path = [];
-        switch($request->getFunction()) {
+        switch ($request->getFunction()) {
             case 'main':
                 if (!empty($params['page'])) {
                     $path[] = $params['page'];

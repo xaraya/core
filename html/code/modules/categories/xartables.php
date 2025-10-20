@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories Module
  *
@@ -23,7 +24,7 @@
 function categories_xartables(?string $prefix = null)
 {
     // Initialise table array
-    $xartable = array();
+    $xartable = [];
     $prefix ??= xarDB::getPrefix();
 
     // Set the table name

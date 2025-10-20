@@ -193,7 +193,8 @@ class QueryMethod extends MethodClass
                 if (!empty($join) || empty($data['object']->primary)) {
                     // (try to) show the "static" properties, corresponding to fields in dedicated
                     // tables for this module
-                    $static = $utilapi->getstatic(['module_id' => $data['object']->moduleid,
+                    $static = $utilapi->getstatic(
+                        ['module_id' => $data['object']->moduleid,
                             'itemtype' => $data['object']->itemtype]
                     );
                     $data['jointables'] = [];
@@ -391,9 +392,9 @@ class QueryMethod extends MethodClass
         //    }
 
         // TODO: clean up generation of dummy object
-        if (!empty($fieldlist) && count($fieldlist) > 0 &&
-             ((!empty($itemid) && $itemid == $olditemid) ||
-             (!empty($table) && $table == $oldtable))) {
+        if (!empty($fieldlist) && count($fieldlist) > 0
+             && ((!empty($itemid) && $itemid == $olditemid)
+             || (!empty($table) && $table == $oldtable))) {
             $data['object']->getItems([
                 'fieldlist' => $fieldlist,
                 'where' => $whereclause,

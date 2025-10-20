@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ModInitialise System Event Subject
  * Notifies observers when a module is initialised (via xarMod::apiFunc('modules','admin','initialise')
@@ -21,6 +22,6 @@ class ModulesModInitialiseSubject extends EventSubject implements ixarEventSubje
     **/
     public function __construct($modName)
     {
-        parent::__construct($modName);                             
+        parent::__construct($modName);
     }
 }

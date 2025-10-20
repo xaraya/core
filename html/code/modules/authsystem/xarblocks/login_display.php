@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Login Block display interface
  *
@@ -19,39 +20,43 @@ sys::import('modules.authsystem.xarblocks.login');
 
 /**
  * Authsystem Login Block Display
- * 
+ *
  * @author Jim McDonald
  */
 class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlock
 {
-
     /**
      * Method to display the login
-     * 
+     *
      * @return array<mixed>|void Returns display data array.
      */
-    function display()
+    public function display()
     {
         $data = $this->getContent();
-        if ($this->user()->isLoggedIn()) {    
+        if ($this->user()->isLoggedIn()) {
             if (!empty($this->showlogout)) {
                 $data['name'] = $this->user()->getName();
                 $this->setTemplateBase('logout');
-                if (!empty($this->logouttitle))
+                if (!empty($this->logouttitle)) {
                     $this->setTitle($this->logouttitle);
+                }
             } else {
                 return;
             }
         } elseif ($this->ctl()->getRequestMethod() == 'GET') {
-            $this->var()->find('redirecturl',
-               $data['return_url'],
-               'pre:trim:str:1:',
-               $this->ctl()->getCurrentURL([], false));
+            $this->var()->find(
+                'redirecturl',
+                $data['return_url'],
+                'pre:trim:str:1:',
+                $this->ctl()->getCurrentURL([], false)
+            );
         } else {
-            $this->var()->find('redirecturl', 
+            $this->var()->find(
+                'redirecturl',
                 $data['return_url'],
                 'pre:trim:str:1',
-                $this->ctl()->getBaseURL());
+                $this->ctl()->getBaseURL()
+            );
         }
         return $data;
     }

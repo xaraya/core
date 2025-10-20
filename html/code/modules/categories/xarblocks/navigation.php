@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories Module
  *
@@ -24,8 +25,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
     protected $module              = 'categories';
     protected $text_type           = 'Show navigation';
     protected $text_type_long      = 'Show navigation';
-    // Additional info, supplied by developer, optional 
-    protected $type_category       = 'block'; // options [(block)|group] 
+    // Additional info, supplied by developer, optional
+    protected $type_category       = 'block'; // options [(block)|group]
     protected $author              = 'Jim McDonald';
 
     // blocks subsystem flags
@@ -40,37 +41,39 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
     /**
      * Display block
-     * 
+     *
      */
-    function display()
+    public function display()
     {
         $vars = $this->getContent();
 
         extract($vars);
 
         // Get requested layout
-        if (empty($layout)) $layout = $this->layout; // default tree here
+        if (empty($layout)) {
+            $layout = $this->layout;
+        } // default tree here
 
         if (!empty($startmodule)) {
             // static behaviour
-            list($module,$itemtype,$rootcid) = explode('.',$startmodule);
+            [$module, $itemtype, $rootcid] = explode('.', $startmodule);
             if (empty($rootcid)) {
                 $rootcids = null;
-            } elseif (strpos($rootcid,' ')) {
-                $rootcids = explode(' ',$rootcid);
-            } elseif (strpos($rootcid,'+')) {
-                $rootcids = explode('+',$rootcid);
+            } elseif (strpos($rootcid, ' ')) {
+                $rootcids = explode(' ', $rootcid);
+            } elseif (strpos($rootcid, '+')) {
+                $rootcids = explode('+', $rootcid);
             } else {
-                $rootcids = explode('-',$rootcid);
+                $rootcids = explode('-', $rootcid);
             }
         }
 
-    // TODO: for multi-module pages, we'll need some other reference point(s)
-    //       (e.g. cross-module categories defined in categories admin ?)
+        // TODO: for multi-module pages, we'll need some other reference point(s)
+        //       (e.g. cross-module categories defined in categories admin ?)
         // Get current module
         if (empty($module)) {
-            if ($this->var()->isCached('Blocks.categories','module')) {
-               $modname = $this->var()->getCached('Blocks.categories','module');
+            if ($this->var()->isCached('Blocks.categories', 'module')) {
+                $modname = $this->var()->getCached('Blocks.categories', 'module');
             }
             if (empty($modname)) {
                 $modname = $this->mod()->getName();
@@ -85,8 +88,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
         // Get current item type (if any)
         if (!isset($itemtype)) {
-            if ($this->var()->isCached('Blocks.categories','itemtype')) {
-                $itemtype = $this->var()->getCached('Blocks.categories','itemtype');
+            if ($this->var()->isCached('Blocks.categories', 'itemtype')) {
+                $itemtype = $this->var()->getCached('Blocks.categories', 'itemtype');
             } else {
                 // try to get itemtype from input
                 $this->var()->check('itemtype', $itemtype, 'id', null);
@@ -98,8 +101,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
         // Get current item id (if any)
         if (!isset($itemid)) {
-            if ($this->var()->isCached('Blocks.categories','itemid')) {
-                $itemid = $this->var()->getCached('Blocks.categories','itemid');
+            if ($this->var()->isCached('Blocks.categories', 'itemid')) {
+                $itemid = $this->var()->getCached('Blocks.categories', 'itemid');
             } else {
                 // try to get itemid from input
                 $this->var()->check('itemid', $itemid, 'id', null);
@@ -129,8 +132,10 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 // no categories to show here -> return empty output
                 return;
             }
-            $mastercids = array();
-            foreach ($toplevelcats as $tlc) $mastercids[$tlc['id']] = (int)$tlc['id'];
+            $mastercids = [];
+            foreach ($toplevelcats as $tlc) {
+                $mastercids[$tlc['id']] = (int) $tlc['id'];
+            }
 
             if (!empty($startmodule)) {
                 $rootcids = $mastercids;
@@ -149,7 +154,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
         // Get current category counts (optional array of cid => count)
         if (empty($showcatcount)) {
-            $catcount = array();
+            $catcount = [];
         }
         if (empty($showempty) || !empty($showcatcount)) {
             // A 'deep count' sums the totals at each node with the totals of all descendants.
@@ -157,10 +162,12 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 $deepcount = $this->var()->getCached('Blocks.categories', 'deepcount');
             } else {
                 $deepcount = $this->mod()->apiFunc(
-                    'categories', 'user', 'deepcount',
-                    array('modid' => $modid, 'itemtype' => $itemtype)
+                    'categories',
+                    'user',
+                    'deepcount',
+                    ['modid' => $modid, 'itemtype' => $itemtype]
                 );
-                $this->var()->setCached('Blocks.categories','deepcount', $deepcount);
+                $this->var()->setCached('Blocks.categories', 'deepcount', $deepcount);
             }
         }
         if (!empty($showcatcount)) {
@@ -173,12 +180,14 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 if ($showcatcount == 1) {
                     // We want to display only children category counts.
                     $catcount = $this->mod()->apiFunc(
-                        'categories','user', 'groupcount',
-                        array('modid' => $modid, 'itemtype' => $itemtype)
+                        'categories',
+                        'user',
+                        'groupcount',
+                        ['modid' => $modid, 'itemtype' => $itemtype]
                     );
                 } else {
                     // We want to display the deep counts.
-                    $catcount =& $deepcount;
+                    $catcount = & $deepcount;
                 }
 
                 $this->var()->setCached('Blocks.categories', 'catcount', $catcount);
@@ -187,16 +196,16 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
         // Specify type=... & func = ... arguments for $this->ctl()->getModuleURL()
         if (empty($type)) {
-            if ($this->var()->isCached('Blocks.categories','type')) {
-                $type = $this->var()->getCached('Blocks.categories','type');
+            if ($this->var()->isCached('Blocks.categories', 'type')) {
+                $type = $this->var()->getCached('Blocks.categories', 'type');
             }
             if (empty($type)) {
                 $type = 'user';
             }
         }
         if (empty($func)) {
-            if ($this->var()->isCached('Blocks.categories','func')) {
-                $func = $this->var()->getCached('Blocks.categories','func');
+            if ($this->var()->isCached('Blocks.categories', 'func')) {
+                $func = $this->var()->getCached('Blocks.categories', 'func');
             }
             if (empty($func)) {
                 $func = 'view';
@@ -204,8 +213,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
         }
 
         // Get current categories
-        if ($this->var()->isCached('Blocks.categories','catid')) {
-           $catid = $this->var()->getCached('Blocks.categories','catid');
+        if ($this->var()->isCached('Blocks.categories', 'catid')) {
+            $catid = $this->var()->getCached('Blocks.categories', 'catid');
         }
         if (empty($catid)) {
             // try to get catid from input
@@ -215,26 +224,26 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
         $istree = 0;
         if (!empty($catid)) {
             // if we're viewing all items below a certain category, i.e. catid = _NN
-            if (strstr($catid,'_')) {
-                 $catid = preg_replace('/_/','',$catid);
-                 $istree = 1;
+            if (strstr($catid, '_')) {
+                $catid = preg_replace('/_/', '', $catid);
+                $istree = 1;
             }
-            if (strpos($catid,' ')) {
-                $cids = explode(' ',$catid);
+            if (strpos($catid, ' ')) {
+                $cids = explode(' ', $catid);
                 $andcids = true;
-            } elseif (strpos($catid,'+')) {
-                $cids = explode('+',$catid);
+            } elseif (strpos($catid, '+')) {
+                $cids = explode('+', $catid);
                 $andcids = true;
             } else {
-                $cids = explode('-',$catid);
+                $cids = explode('-', $catid);
                 $andcids = false;
             }
         } elseif (empty($cids)) {
-            if ($this->var()->isCached('Blocks.categories','cids')) {
-                $cids = $this->var()->getCached('Blocks.categories','cids');
+            if ($this->var()->isCached('Blocks.categories', 'cids')) {
+                $cids = $this->var()->getCached('Blocks.categories', 'cids');
             }
-            if ($this->var()->isCached('Blocks.categories','andcids')) {
-                $andcids = $this->var()->getCached('Blocks.categories','andcids');
+            if ($this->var()->isCached('Blocks.categories', 'andcids')) {
+                $andcids = $this->var()->getCached('Blocks.categories', 'andcids');
             }
             if (empty($cids)) {
                 // try to get cids from input
@@ -242,12 +251,16 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 $this->var()->find('andcids', $andcids, 'isset', false);
 
                 if (empty($cids)) {
-                    $cids = array();
+                    $cids = [];
                     if ((empty($module) || $module == $modname) && !empty($itemid)) {
-                        $links = $this->mod()->apiFunc('categories','user','getlinks',
-                                              array('modid' => $modid,
-                                                    'itemtype' => $itemtype,
-                                                    'iids' => array($itemid)));
+                        $links = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getlinks',
+                            ['modid' => $modid,
+                                'itemtype' => $itemtype,
+                                'iids' => [$itemid]]
+                        );
                         if (!empty($links) && count($links) > 0) {
                             $cids = array_keys($links);
                         }
@@ -256,7 +269,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
             }
         }
         if (count($cids) > 0) {
-            $seencid = array();
+            $seencid = [];
             foreach ($cids as $cid) {
                 if (empty($cid) || ! is_numeric($cid)) {
                     continue;
@@ -266,7 +279,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
             $cids = array_keys($seencid);
         }
 
-        $data = array();
+        $data = [];
         $data['cids'] = $cids;
         // pass information about current module, item type and item id (if any) to template
         $data['module'] = $modname;
@@ -287,52 +300,68 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 } else {
                     // See if we need to show anything
                     if (empty($showprevnext)) {
-                        if ($this->var()->isCached('Blocks.categories','showprevnext')) {
-                            $showprevnext = $this->var()->getCached('Blocks.categories','showprevnext');
+                        if ($this->var()->isCached('Blocks.categories', 'showprevnext')) {
+                            $showprevnext = $this->var()->getCached('Blocks.categories', 'showprevnext');
                             if (empty($showprevnext)) {
                                 return;
                             }
                         }
                     }
-                    $cat = $this->mod()->apiFunc('categories','user','getcatinfo',
-                                    array('cid' => $cids[0]));
+                    $cat = $this->mod()->apiFunc(
+                        'categories',
+                        'user',
+                        'getcatinfo',
+                        ['cid' => $cids[0]]
+                    );
                     if (empty($cat)) {
                         return;
                     }
-                    $neighbours = $this->mod()->apiFunc('categories','user','getneighbours',
-                                               $cat);
+                    $neighbours = $this->mod()->apiFunc(
+                        'categories',
+                        'user',
+                        'getneighbours',
+                        $cat
+                    );
                     if (empty($neighbours) || count($neighbours) == 0) {
                         return;
                     }
                     foreach ($neighbours as $neighbour) {
-    //                    if ($neighbour['link'] == 'parent') {
-    //                        $data['uplabel'] = $neighbour['name'];
-    //                        $data['upcid'] = $neighbour['cid'];
-    //                        $data['uplink'] = $this->ctl()->getModuleURL($modname,$type,$func,
-    //                                                   array('itemtype' => $itemtype,
-    //                                                         'catid' => $neighbour['cid']));
-    //                    } elseif ($neighbour['link'] == 'previous') {
+                        //                    if ($neighbour['link'] == 'parent') {
+                        //                        $data['uplabel'] = $neighbour['name'];
+                        //                        $data['upcid'] = $neighbour['cid'];
+                        //                        $data['uplink'] = $this->ctl()->getModuleURL($modname,$type,$func,
+                        //                                                   array('itemtype' => $itemtype,
+                        //                                                         'catid' => $neighbour['cid']));
+                        //                    } elseif ($neighbour['link'] == 'previous') {
                         if ($neighbour['link'] == 'previous') {
                             $data['prevlabel'] = $neighbour['name'];
                             $data['prevcid'] = $neighbour['cid'];
-                            $data['prevlink'] = $this->ctl()->getModuleURL($modname,$type,$func,
-                                                         array('itemtype' => $itemtype,
-                                                               'catid' => $neighbour['cid']));
+                            $data['prevlink'] = $this->ctl()->getModuleURL(
+                                $modname,
+                                $type,
+                                $func,
+                                ['itemtype' => $itemtype,
+                                    'catid' => $neighbour['cid']]
+                            );
                         } elseif ($neighbour['link'] == 'next') {
                             $data['nextlabel'] = $neighbour['name'];
                             $data['nextcid'] = $neighbour['cid'];
-                            $data['nextlink'] = $this->ctl()->getModuleURL($modname,$type,$func,
-                                                         array('itemtype' => $itemtype,
-                                                               'catid' => $neighbour['cid']));
+                            $data['nextlink'] = $this->ctl()->getModuleURL(
+                                $modname,
+                                $type,
+                                $func,
+                                ['itemtype' => $itemtype,
+                                    'catid' => $neighbour['cid']]
+                            );
                         }
                     }
-                    if (!isset($data['nextlabel']) &&
-                        !isset($data['prevlabel'])) {
+                    if (!isset($data['nextlabel'])
+                        && !isset($data['prevlabel'])) {
                         return;
                     }
-    //                if (!isset($data['uplabel'])) {
-    //                    $data['uplabel'] = '&#160;';
-    //                }
+                    //                if (!isset($data['uplabel'])) {
+                    //                    $data['uplabel'] = '&#160;';
+                    //                }
                 }
                 break;
 
@@ -341,25 +370,33 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 if (empty($cids) || count($cids) == 0) {
                     $template = 'rootcats';
                     $data['cattitle'] = $this->ml('Browse in');
-                    $data['catitems'] = array();
+                    $data['catitems'] = [];
 
                     // Get root categories
-                    $catlist = $this->mod()->apiFunc('categories','user','getcatinfo',
-                                            array('cids' => $mastercids));
+                    $catlist = $this->mod()->apiFunc(
+                        'categories',
+                        'user',
+                        'getcatinfo',
+                        ['cids' => $mastercids]
+                    );
                     $join = '';
                     if (empty($catlist) || !is_array($catlist)) {
                         return;
                     }
                     foreach ($catlist as $cat) {
-                    // TODO: now this is a tricky part...
-                        $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                         array('itemtype' => $itemtype,
-                                               'catid' => $cat['id']));
+                        // TODO: now this is a tricky part...
+                        $link = $this->ctl()->getModuleURL(
+                            $modname,
+                            $type,
+                            $func,
+                            ['itemtype' => $itemtype,
+                                'catid' => $cat['id']]
+                        );
                         $label = $this->var()->prep($cat['name']);
-                        $data['catitems'][] = array('catlabel' => $label,
-                                                    'catid' => $cat['id'],
-                                                    'catlink' => $link,
-                                                    'catjoin' => $join);
+                        $data['catitems'][] = ['catlabel' => $label,
+                            'catid' => $cat['id'],
+                            'catlink' => $link,
+                            'catjoin' => $join];
                         $join = ' | ';
                     }
                 } else {
@@ -369,38 +406,50 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                     } else {
                         $data['cattitle'] = $this->ml('Browse in');
                     }
-                    $data['cattrails'] = array();
+                    $data['cattrails'] = [];
 
-                    $descriptions = array();
-        // TODO: stop at root categories
+                    $descriptions = [];
+                    // TODO: stop at root categories
                     foreach ($cids as $cid) {
                         // Get category information
-                        $parents = $this->mod()->apiFunc('categories','user','getparents',
-                                                array('cid' => $cid));
+                        $parents = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getparents',
+                            ['cid' => $cid]
+                        );
                         if (empty($parents)) {
                             continue;
                         }
-                        $catitems = array();
+                        $catitems = [];
                         $curcount = 0;
-                    // TODO: now this is a tricky part...
+                        // TODO: now this is a tricky part...
                         $label = $this->ml('All');
-                        $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                         array('itemtype' => $itemtype));
+                        $link = $this->ctl()->getModuleURL(
+                            $modname,
+                            $type,
+                            $func,
+                            ['itemtype' => $itemtype]
+                        );
                         $join = '';
-                        $catitems[] = array('catlabel' => $label,
-                                            'catid' => $cid,
-                                            'catlink' => $link,
-                                            'catjoin' => $join);
+                        $catitems[] = ['catlabel' => $label,
+                            'catid' => $cid,
+                            'catlink' => $link,
+                            'catjoin' => $join];
                         $join = ' &gt; ';
                         foreach ($parents as $cat) {
                             $label = $this->var()->prep($cat['name']);
                             if ($cat['id'] == $cid && empty($itemid) && empty($andcids)) {
                                 $link = '';
                             } else {
-                            // TODO: now this is a tricky part...
-                                $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                                 array('itemtype' => $itemtype,
-                                                       'catid' => $cat['id']));
+                                // TODO: now this is a tricky part...
+                                $link = $this->ctl()->getModuleURL(
+                                    $modname,
+                                    $type,
+                                    $func,
+                                    ['itemtype' => $itemtype,
+                                        'catid' => $cat['id']]
+                                );
                             }
                             if ($cat['id'] == $cid) {
                                 // show optional count
@@ -417,50 +466,58 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                     $curcat = $cat;
                                 }
                             }
-                            $catitems[] = array('catlabel' => $label,
-                                                'catid' => $cat['id'],
-                                                'catlink' => $link,
-                                                'catjoin' => $join);
+                            $catitems[] = ['catlabel' => $label,
+                                'catid' => $cat['id'],
+                                'catlink' => $link,
+                                'catjoin' => $join];
                         }
-                        $data['cattrails'][] = array('catitems' => $catitems,
-                                                     'catcount' => $curcount);
+                        $data['cattrails'][] = ['catitems' => $catitems,
+                            'catcount' => $curcount];
                     }
 
                     // Add filters to select on all categories or any categories
                     if (count($cids) > 1) {
-                        $catitems = array();
+                        $catitems = [];
                         if (!empty($itemid) || !empty($andcids)) {
                             $label = $this->ml('Any of these categories');
-                            $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                              array('itemtype' => $itemtype,
-                                                    'catid' => join('-',$cids)));
+                            $link = $this->ctl()->getModuleURL(
+                                $modname,
+                                $type,
+                                $func,
+                                ['itemtype' => $itemtype,
+                                    'catid' => join('-', $cids)]
+                            );
                             $join = '';
-                            $catitems[] = array('catlabel' => $label,
-                                                'catid' => join('-',$cids),
-                                                'catlink' => $link,
-                                                'catjoin' => $join);
+                            $catitems[] = ['catlabel' => $label,
+                                'catid' => join('-', $cids),
+                                'catlink' => $link,
+                                'catjoin' => $join];
                         }
                         if (empty($andcids)) {
                             $label = $this->ml('All of these categories');
-                            $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                              array('itemtype' => $itemtype,
-                                                    'catid' => join('+',$cids)));
+                            $link = $this->ctl()->getModuleURL(
+                                $modname,
+                                $type,
+                                $func,
+                                ['itemtype' => $itemtype,
+                                    'catid' => join('+', $cids)]
+                            );
                             if (!empty($itemid)) {
                                 $join = '-';
                             } else {
                                 $join = '';
                             }
-                            $catitems[] = array('catlabel' => $label,
-                                                'catid' => join('+',$cids),
-                                                'catlink' => $link,
-                                                'catjoin' => $join);
+                            $catitems[] = ['catlabel' => $label,
+                                'catid' => join('+', $cids),
+                                'catlink' => $link,
+                                'catjoin' => $join];
                         }
                         $curcount = 0;
-                        $data['cattrails'][] = array('catitems' => $catitems,
-                                                     'catcount' => $curcount);
+                        $data['cattrails'][] = ['catitems' => $catitems,
+                            'catcount' => $curcount];
                     }
 
-                // TODO: move off to nav-trails template ?
+                    // TODO: move off to nav-trails template ?
                     // Build category description
                     if (!empty($itemid)) {
                         $data['catdescr'] = join(' + ', $descriptions);
@@ -475,44 +532,48 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                     }
 
                     if (!empty($curcat)) {
-    /*
-                        $curcat['module'] = 'categories';
-                        $curcat['itemtype'] = 0;
-                        $curcat['itemid'] = $cids[0];
-                        $curcat['returnurl'] = $this->ctl()->getModuleURL($modname,$type,$func,
-                                                         array('itemtype' => $itemtype,
-                                                               'catid' => $cids[0]));
-                        // calling item display hooks *for the categories module* here !
-                        $data['cathooks'] = $this->mod()->callHooks('item','display',$cid,$curcat,'categories');
-    */
+                        /*
+                                            $curcat['module'] = 'categories';
+                                            $curcat['itemtype'] = 0;
+                                            $curcat['itemid'] = $cids[0];
+                                            $curcat['returnurl'] = $this->ctl()->getModuleURL($modname,$type,$func,
+                                                                             array('itemtype' => $itemtype,
+                                                                                   'catid' => $cids[0]));
+                                            // calling item display hooks *for the categories module* here !
+                                            $data['cathooks'] = $this->mod()->callHooks('item','display',$cid,$curcat,'categories');
+                        */
                         // saving the current cat id for use e.g. with DD tags (<xar:data-display module="categories" itemid="$catid"/>)
                         $data['catid'] = $curcat['cid'];
                     }
-    /*
-                    // set the page title to the current module + category if no item is displayed
-                    if (empty($itemid)) {
-                        // Get current title
-                        if (empty($title)) {
-                            if ($this->var()->isCached('Blocks.categories','title')) {
-                                $title = $this->var()->getCached('Blocks.categories','title');
-                            }
-                        }
-                        if (!empty($curcat['name'])) {
-                            $title = $this->var()->prep($curcat['name']);
-                        }
-                        $this->tpl()->setPageTitle($title);
-                    }
-    */
-                // TODO: don't show icons when displaying items ?
+                    /*
+                                    // set the page title to the current module + category if no item is displayed
+                                    if (empty($itemid)) {
+                                        // Get current title
+                                        if (empty($title)) {
+                                            if ($this->var()->isCached('Blocks.categories','title')) {
+                                                $title = $this->var()->getCached('Blocks.categories','title');
+                                            }
+                                        }
+                                        if (!empty($curcat['name'])) {
+                                            $title = $this->var()->prep($curcat['name']);
+                                        }
+                                        $this->tpl()->setPageTitle($title);
+                                    }
+                    */
+                    // TODO: don't show icons when displaying items ?
                     if (!empty($curcat['image'])) {
                         // find the image in categories (we need to specify the module here)
-                        $data['catimage'] = $this->tpl()->getImage($curcat['image'],'categories');
+                        $data['catimage'] = $this->tpl()->getImage($curcat['image'], 'categories');
                         $data['catname'] = $this->var()->prep($curcat['name']);
                     }
                     if ($showchildren == 2) {
                         // Get child categories (all sub-levels)
-                        $childlist = $this->mod()->apiFunc('categories','visual','listarray',
-                                                  array('cid' => $cids[0]));
+                        $childlist = $this->mod()->apiFunc(
+                            'categories',
+                            'visual',
+                            'listarray',
+                            ['cid' => $cids[0]]
+                        );
                         if (empty($childlist) || count($childlist) == 0) {
                             break;
                         }
@@ -521,50 +582,62 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 continue;
                             }
                             $label = $this->var()->prep($info['name']);
-                        // TODO: now this is a tricky part...
-                            $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                             array('itemtype' => $itemtype,
-                                                   'catid' => $info['id']));
+                            // TODO: now this is a tricky part...
+                            $link = $this->ctl()->getModuleURL(
+                                $modname,
+                                $type,
+                                $func,
+                                ['itemtype' => $itemtype,
+                                    'catid' => $info['id']]
+                            );
                             if (!empty($catcount[$info['id']])) {
                                 $count = $catcount[$info['id']];
                             } else {
                                 $count = 0;
                             }
-        /* don't show descriptions in (potentially) multi-level trees
-                            if (!empty($info['description'])) {
-                                $descr = $this->var()->prepHTML($info['description']);
-                            } else {
-                                $descr = '';
-                            }
-        */
-                            $data['catlines'][] = array('catlabel' => $label,
-                                                        'catid' => $info['id'],
-                                                        'catlink' => $link,
-                                                      //  'catdescr' => $descr,
-                                                        'catdescr' => '',
-                                                        'catcount' => $count,
-                                                        'beforetags' => $info['beforetags'],
-                                                        'aftertags' => $info['aftertags']);
+                            /* don't show descriptions in (potentially) multi-level trees
+                                                if (!empty($info['description'])) {
+                                                    $descr = $this->var()->prepHTML($info['description']);
+                                                } else {
+                                                    $descr = '';
+                                                }
+                            */
+                            $data['catlines'][] = ['catlabel' => $label,
+                                'catid' => $info['id'],
+                                'catlink' => $link,
+                                //  'catdescr' => $descr,
+                                'catdescr' => '',
+                                'catcount' => $count,
+                                'beforetags' => $info['beforetags'],
+                                'aftertags' => $info['aftertags']];
 
                         }
                         unset($childlist);
                     } elseif ($showchildren == 1) {
                         // Get child categories (1 level only)
-                        $children = $this->mod()->apiFunc('categories','user','getchildren',
-                                                 array('cid' => $cids[0]));
+                        $children = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getchildren',
+                            ['cid' => $cids[0]]
+                        );
                         if (empty($children) || count($children) == 0) {
                             break;
                         }
-                        $data['catlines'] = array();
-                    // TODO: don't show icons when displaying items ?
-                        $data['caticons'] = array();
+                        $data['catlines'] = [];
+                        // TODO: don't show icons when displaying items ?
+                        $data['caticons'] = [];
                         $numicons = 0;
                         foreach ($children as $cat) {
-                        // TODO: now this is a tricky part...
+                            // TODO: now this is a tricky part...
                             $label = $this->var()->prep($cat['name']);
-                            $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                             array('itemtype' => $itemtype,
-                                                   'catid' => $cat['id']));
+                            $link = $this->ctl()->getModuleURL(
+                                $modname,
+                                $type,
+                                $func,
+                                ['itemtype' => $itemtype,
+                                    'catid' => $cat['id']]
+                            );
                             if (!empty($catcount[$cat['id']])) {
                                 $count = $catcount[$cat['id']];
                             } else {
@@ -572,14 +645,14 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             }
                             if (!empty($cat['image'])) {
                                 // find the image in categories (we need to specify the module here)
-                                $image = $this->tpl()->getImage($cat['image'],'categories');
+                                $image = $this->tpl()->getImage($cat['image'], 'categories');
                                 $numicons++;
-                                $data['caticons'][] = array('catlabel' => $label,
-                                                            'catid' => $cat['id'],
-                                                            'catlink' => $link,
-                                                            'catimage' => $image,
-                                                            'catcount' => $count,
-                                                            'catnum' => $numicons);
+                                $data['caticons'][] = ['catlabel' => $label,
+                                    'catid' => $cat['id'],
+                                    'catlink' => $link,
+                                    'catimage' => $image,
+                                    'catcount' => $count,
+                                    'catnum' => $numicons];
                             } else {
                                 if (!empty($cat['description']) && $cat['description'] != $cat['name']) {
                                     $descr = $this->var()->prepHTML($cat['description']);
@@ -588,28 +661,28 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                                 $beforetags = '<li>';
                                 $aftertags = '</li>';
-                                $data['catlines'][] = array('catlabel' => $label,
-                                                            'catid' => $cat['id'],
-                                                            'catlink' => $link,
-                                                            'catdescr' => $descr,
-                                                            'catcount' => $count,
-                                                            'beforetags' => $beforetags,
-                                                            'aftertags' => $aftertags);
+                                $data['catlines'][] = ['catlabel' => $label,
+                                    'catid' => $cat['id'],
+                                    'catlink' => $link,
+                                    'catdescr' => $descr,
+                                    'catcount' => $count,
+                                    'beforetags' => $beforetags,
+                                    'aftertags' => $aftertags];
                             }
                         }
                         unset($children);
                         if (count($data['catlines']) > 0) {
                             $numitems = count($data['catlines']);
                             // add leading <ul> tag
-                            $data['catlines'][0]['beforetags'] = '<ul>' .
-                                                       $data['catlines'][0]['beforetags'];
+                            $data['catlines'][0]['beforetags'] = '<ul>'
+                                                       . $data['catlines'][0]['beforetags'];
                             // add trailing </ul> tag
                             $data['catlines'][$numitems - 1]['aftertags'] .= '</ul>';
                             // add new column
                             if ($numitems > 7) {
                                 $miditem = round(($numitems + 0.5) / 2) - 1;
-                                $data['catlines'][$miditem]['aftertags'] .=
-                                                       '</ul></td><td valign="top"><ul>';
+                                $data['catlines'][$miditem]['aftertags']
+                                                       .= '</ul></td><td valign="top"><ul>';
                             }
                         }
                     }
@@ -623,14 +696,14 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 // Get current title (if dynamic)
                 if (!empty($dynamictitle)) {
                     if (empty($title) && empty($module)) {
-                        if ($this->var()->isCached('Blocks.categories','title')) {
-                            $title = $this->var()->getCached('Blocks.categories','title');
+                        if ($this->var()->isCached('Blocks.categories', 'title')) {
+                            $title = $this->var()->getCached('Blocks.categories', 'title');
                         }
                     }
                     if (empty($title) && !empty($itemtype)) {
                         // Get the list of all item types for this module (if any)
                         try {
-                            $mytypes = $this->mod()->apiFunc($modname,'user','getitemtypes');
+                            $mytypes = $this->mod()->apiFunc($modname, 'user', 'getitemtypes');
                         } catch (Exception $e) {
                             $mytypes = [];
                         }
@@ -645,16 +718,20 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                     $blockinfo['title'] = $this->ml('Browse in #(1)', $title);
                 }
 
-                $data['cattrees'] = array();
+                $data['cattrees'] = [];
 
                 if (empty($cids) || count($cids) == 0) {
                     foreach ($mastercids as $cid) {
-                        $catparents = array();
-                        $catitems = array();
+                        $catparents = [];
+                        $catitems = [];
                         // Get child categories
-                        $children = $this->mod()->apiFunc('categories','user','getchildren',
-                                                 array('cid' => $cid,
-                                                       'return_itself' => true));
+                        $children = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getchildren',
+                            ['cid' => $cid,
+                                'return_itself' => true]
+                        );
                         foreach ($children as $cat) {
                             // TODO: now this is a tricky part...
                             if (!empty($catcount[$cat['id']])) {
@@ -671,35 +748,45 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                             }
 
-                            $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                             array('itemtype' => $itemtype,
-                                                   'catid' => $cat['id']));
+                            $link = $this->ctl()->getModuleURL(
+                                $modname,
+                                $type,
+                                $func,
+                                ['itemtype' => $itemtype,
+                                    'catid' => $cat['id']]
+                            );
 
                             $label = $this->var()->prep($cat['name']);
                             if ($cat['id'] == $cid) {
-                                $catparents[] = array('catlabel' => $label,
-                                                      'catid' => $cat['id'],
-                                                      'catlink' => $link,
-                                                      'catcount' => $count);
+                                $catparents[] = ['catlabel' => $label,
+                                    'catid' => $cat['id'],
+                                    'catlink' => $link,
+                                    'catcount' => $count];
                             } else {
-                                $catitems[] = array('catlabel' => $label,
-                                                    'catid' => $cat['id'],
-                                                    'catlink' => $link,
-                                                    'catcount' => $count);
+                                $catitems[] = ['catlabel' => $label,
+                                    'catid' => $cat['id'],
+                                    'catlink' => $link,
+                                    'catcount' => $count];
                             }
                         }
-                        if (empty($catitems) && empty ($catparents)) continue;
-                        $data['cattrees'][] = array('catitems' => $catitems,
-                                                    'catparents' => $catparents);
+                        if (empty($catitems) && empty($catparents)) {
+                            continue;
+                        }
+                        $data['cattrees'][] = ['catitems' => $catitems,
+                            'catparents' => $catparents];
                     }
                 } elseif (isset($rootcids) && count($rootcids) > 0) {
                     foreach ($rootcids as $cid) {
-                        $catparents = array();
-                        $catitems = array();
+                        $catparents = [];
+                        $catitems = [];
                         // Get child categories
-                        $children = $this->mod()->apiFunc('categories','user','getchildren',
-                                                 array('cid' => $cid,
-                                                       'return_itself' => true));
+                        $children = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getchildren',
+                            ['cid' => $cid,
+                                'return_itself' => true]
+                        );
                         foreach ($children as $cat) {
                             if (!empty($catcount[$cat['id']])) {
                                 $count = $catcount[$cat['id']];
@@ -720,37 +807,45 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             }
 
                             $label = $this->var()->prep($cat['name']);
-                        // TODO: now this is a tricky part...
-                            $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                             array('itemtype' => $itemtype,
-                                                   'catid' => $cat['id']));
+                            // TODO: now this is a tricky part...
+                            $link = $this->ctl()->getModuleURL(
+                                $modname,
+                                $type,
+                                $func,
+                                ['itemtype' => $itemtype,
+                                    'catid' => $cat['id']]
+                            );
 
                             if ($cat['id'] == $cid) {
-                                $catparents[] = array('catlabel' => $label,
-                                                      'catid' => $cat['id'],
-                                                      'catlink' => $link,
-                                                      'catcount' => $count);
+                                $catparents[] = ['catlabel' => $label,
+                                    'catid' => $cat['id'],
+                                    'catlink' => $link,
+                                    'catcount' => $count];
                             } elseif ($showchildren > 0) {
-                                $catitems[] = array('catlabel' => $label,
-                                                    'catid' => $cat['id'],
-                                                    'catlink' => $link,
-                                                    'catcount' => $count);
+                                $catitems[] = ['catlabel' => $label,
+                                    'catid' => $cat['id'],
+                                    'catlink' => $link,
+                                    'catcount' => $count];
                             }
                         }
-                        $data['cattrees'][] = array('catitems' => $catitems,
-                                                    'catparents' => $catparents);
+                        $data['cattrees'][] = ['catitems' => $catitems,
+                            'catparents' => $catparents];
                     }
                 } else {
                     foreach ($cids as $cid) {
-                        $catparents = array();
-                        $catitems = array();
+                        $catparents = [];
+                        $catitems = [];
                         // Get category information
-                        $parents = $this->mod()->apiFunc('categories','user','getparents',
-                                                array('cid' => $cid));
+                        $parents = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getparents',
+                            ['cid' => $cid]
+                        );
                         if (empty($parents)) {
                             continue;
                         }
-                    // TODO: do something with parents
+                        // TODO: do something with parents
                         $root = '';
                         $parentid = 0;
                         foreach ($parents as $id => $info) {
@@ -764,32 +859,44 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         // yes, this excludes the top-level categories too :-)
                         if (empty($parentid) || empty($root)) {
                             $parentid = $cid;
-                    //        return;
+                            //        return;
                         }
                         if (!empty($parents[$parentid])) {
                             $cat = $parents[$parentid];
                             $label = $this->var()->prep($cat['name']);
-                            $link = $this->ctl()->getModuleURL($modname,$type,$func,
-                                             array('itemtype' => $itemtype,
-                                                   'catid' => $cat['id']));
+                            $link = $this->ctl()->getModuleURL(
+                                $modname,
+                                $type,
+                                $func,
+                                ['itemtype' => $itemtype,
+                                    'catid' => $cat['id']]
+                            );
                             if (!empty($catcount[$cat['id']])) {
                                 $count = $catcount[$cat['id']];
                             } else {
                                 $count = 0;
                             }
-                            $catparents[] = array('catlabel' => $label,
-                                                  'catid' => $cat['id'],
-                                                  'catlink' => $link,
-                                                  'catcount' => $count);
+                            $catparents[] = ['catlabel' => $label,
+                                'catid' => $cat['id'],
+                                'catlink' => $link,
+                                'catcount' => $count];
                         }
 
                         // Get sibling categories
-                        $siblings = $this->mod()->apiFunc('categories','user','getchildren',
-                                                 array('cid' => $parentid));
+                        $siblings = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getchildren',
+                            ['cid' => $parentid]
+                        );
                         if ($showchildren && $parentid != $cid) {
                             // Get child categories
-                            $children = $this->mod()->apiFunc('categories','user','getchildren',
-                                                     array('cid' => $cid));
+                            $children = $this->mod()->apiFunc(
+                                'categories',
+                                'user',
+                                'getchildren',
+                                ['cid' => $cid]
+                            );
                         }
 
                         // Generate list of sibling categories
@@ -814,16 +921,18 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
                             $label = $this->var()->prep($cat['name']);
                             $link = $this->ctl()->getModuleURL(
-                                $modname, $type, $func,
-                                array(
+                                $modname,
+                                $type,
+                                $func,
+                                [
                                     'itemtype' => $itemtype,
-                                    'catid' => $cat['id']
-                                )
+                                    'catid' => $cat['id'],
+                                ]
                             );
 
 
                             $savecid = $cat['id'];
-                            $catchildren = array();
+                            $catchildren = [];
                             if ($cat['id'] == $cid) {
                                 if (empty($itemid) && empty($andcids)) {
                                     $link = '';
@@ -831,30 +940,34 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 if ($showchildren && !empty($children) && count($children) > 0) {
                                     foreach ($children as $cat) {
                                         $clabel = $this->var()->prep($cat['name']);
-                                    // TODO: now this is a tricky part...
-                                        $clink = $this->ctl()->getModuleURL($modname,$type,$func,
-                                                          array('itemtype' => $itemtype,
-                                                                'catid' => $cat['id']));
+                                        // TODO: now this is a tricky part...
+                                        $clink = $this->ctl()->getModuleURL(
+                                            $modname,
+                                            $type,
+                                            $func,
+                                            ['itemtype' => $itemtype,
+                                                'catid' => $cat['id']]
+                                        );
                                         if (!empty($catcount[$cat['id']])) {
                                             $ccount = $catcount[$cat['id']];
                                         } else {
                                             $ccount = 0;
                                         }
-                                        $catchildren[] = array('clabel' => $clabel,
-                                                               'cid' => $cat['id'],
-                                                               'clink' => $clink,
-                                                               'ccount' => $ccount);
+                                        $catchildren[] = ['clabel' => $clabel,
+                                            'cid' => $cat['id'],
+                                            'clink' => $clink,
+                                            'ccount' => $ccount];
                                     }
                                 }
                             }
-                            $catitems[] = array('catlabel' => $label,
-                                                'catid' => $savecid,
-                                                'catlink' => $link,
-                                                'catcount' => $count,
-                                                'catchildren' => $catchildren);
+                            $catitems[] = ['catlabel' => $label,
+                                'catid' => $savecid,
+                                'catlink' => $link,
+                                'catcount' => $count,
+                                'catchildren' => $catchildren];
                         }
-                        $data['cattrees'][] = array('catitems' => $catitems,
-                                                    'catparents' => $catparents);
+                        $data['cattrees'][] = ['catitems' => $catitems,
+                            'catparents' => $catparents];
                     }
                 }
                 break;
@@ -867,6 +980,6 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
         $this->setTemplateBase('nav-' . $template);
 
         return $data;
-        
+
     }
 }

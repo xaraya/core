@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -26,19 +27,19 @@ function sql_220_09()
     } catch (Exception $e) {
         xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
     }
-    
+
     try {
         $tmp = xarConfigVars::get(null, 'Site.BL.CompressWhitespace');
     } catch (Exception $e) {
         xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
     }
-    
+
     // Add default values for logging if logging is not turned on
     try {
         $logfile = xarSystemVars::get(sys::CONFIG, 'Log.Filename');
     } catch (Exception $e) {
-        $variables = array('Log.Enabled' => 0, 'Log.Filename' => 'xarayalog.txt');
-        xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+        $variables = ['Log.Enabled' => 0, 'Log.Filename' => 'xarayalog.txt'];
+        xarMod::apiFunc('installer', 'admin', 'modifysystemvars', ['variables' => $variables]);
     }
     return $data;
 }

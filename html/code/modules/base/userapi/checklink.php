@@ -142,8 +142,8 @@ class ChecklinkMethod extends MethodClass
         fclose($fp);
         if (!preg_match('/^\s*HTTP\/[\d\.]+\s+(\d+)/s', $content, $matches)) {
             // some hosts (e.g. newsforge.com) don't even send HTTP headers or <html tags ?!
-            if (!preg_match('/<html(\s+|>)/is', $content) &&
-                !preg_match('/<body(\s+|>)/is', $content)) {
+            if (!preg_match('/<html(\s+|>)/is', $content)
+                && !preg_match('/<body(\s+|>)/is', $content)) {
                 $header = preg_replace('/\r\n\r\n.*$/s', '', $content);
                 return $this->ml('Invalid response headers for URL #(1) : #(2)', $url, $header);
             }

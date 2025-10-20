@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Composer script event handler
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\mail
  * @subpackage mail
@@ -14,20 +15,20 @@
  * if it's there it will work, if it's not it will work too
  *
  */
-if(!class_exists('PEAR')) {
+if (!class_exists('PEAR')) {
     class PEAR extends xarObject
     {
         /**
          * Re-implement raiseError method which normally would be in PEAR
          */
-        function raiseError($msg='Unknown error')
+        public function raiseError($msg = 'Unknown error')
         {
-            echo $msg."\n"; // TODO: raise exception here?
+            echo $msg . "\n"; // TODO: raise exception here?
             return false;
         }
-        
+
         // Signature from PEAR
-        function isError($data, $code = null) 
+        public function isError($data, $code = null)
         {
             return ($data === false);
         }
@@ -48,7 +49,4 @@ sys::import('modules.mail.class.mimeDecode');
  * @author Marcel van der Bom <marcel@xaraya.com>
  * @todo use implements and interface definition
  */
-class xarMailParser extends Mail_mimeDecode
-{
-
-}
+class xarMailParser extends Mail_mimeDecode {}

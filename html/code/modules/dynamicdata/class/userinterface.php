@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dynamic Object User Interface
  * @package modules\dynamicdata
@@ -129,48 +130,48 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
         // define the method mapper
         $this->mapper = [
             'create'  => ['classname'  => 'CreateHandler',
-                          'classfunc'  => 'run',
-                          'importname' => 'modules.dynamicdata.class.ui_handlers.create',
-                          'nextmethod' => 'view'], // or e.g. 'display' (= with itemid)
+                'classfunc'  => 'run',
+                'importname' => 'modules.dynamicdata.class.ui_handlers.create',
+                'nextmethod' => 'view'], // or e.g. 'display' (= with itemid)
 
             'update'  => ['classname'  => 'UpdateHandler',
-                          'classfunc'  => 'run',
-                          'importname' => 'modules.dynamicdata.class.ui_handlers.update',
-                          'nextmethod' => 'view'],
+                'classfunc'  => 'run',
+                'importname' => 'modules.dynamicdata.class.ui_handlers.update',
+                'nextmethod' => 'view'],
 
             'delete'  => ['classname'  => 'DeleteHandler',
-                          'classfunc'  => 'run',
-                          'importname' => 'modules.dynamicdata.class.ui_handlers.delete',
-                          'nextmethod' => 'view'],
+                'classfunc'  => 'run',
+                'importname' => 'modules.dynamicdata.class.ui_handlers.delete',
+                'nextmethod' => 'view'],
 
             'display' => ['classname'  => 'DisplayHandler',
-                          'classfunc'  => 'run',
-                          'importname' => 'modules.dynamicdata.class.ui_handlers.display'],
+                'classfunc'  => 'run',
+                'importname' => 'modules.dynamicdata.class.ui_handlers.display'],
 
             'view'    => ['classname'  => 'ViewHandler',
-                          'classfunc'  => 'run',
-                          'importname' => 'modules.dynamicdata.class.ui_handlers.view'],
+                'classfunc'  => 'run',
+                'importname' => 'modules.dynamicdata.class.ui_handlers.view'],
 
             'search'  => ['classname'  => 'SearchHandler',
-                          'classfunc'  => 'run',
-                          'importname' => 'modules.dynamicdata.class.ui_handlers.search'],
+                'classfunc'  => 'run',
+                'importname' => 'modules.dynamicdata.class.ui_handlers.search'],
 
             'config'  => ['classname'  => 'ConfigHandler',
-                          'classfunc'  => 'run',
-                          'importname' => 'modules.dynamicdata.class.ui_handlers.config'],
+                'classfunc'  => 'run',
+                'importname' => 'modules.dynamicdata.class.ui_handlers.config'],
 
             'stats'   => ['classname'  => 'StatsHandler',
-                          'classfunc'  => 'run',
-                          'importname' => 'modules.dynamicdata.class.ui_handlers.stats'],
-/*
+                'classfunc'  => 'run',
+                'importname' => 'modules.dynamicdata.class.ui_handlers.stats'],
+            /*
             'access'  => ['classname'  => 'AccessHandler',
                           'classfunc'  => 'run',
                           'importname' => 'modules.dynamicdata.class.ui_handlers.access'],
 */
             'default' => ['classname'  => 'DefaultHandler',
-                          'classfunc'  => 'run',
-                          'importname' => 'modules.dynamicdata.class.ui_handlers.default'],
-/*
+                'classfunc'  => 'run',
+                'importname' => 'modules.dynamicdata.class.ui_handlers.default'],
+            /*
             'myname'  => ['classname'  => 'MyMethodHandler',
                           'classfunc'  => 'run',
                           'importname' => 'modules.mymodule.class.myhandler',
@@ -196,7 +197,7 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
             'settings' => 'config',
             'report'   => 'stats',
             'other'    => 'default',
-/*
+            /*
             'mystuff'  => 'myname',
 */
         ];

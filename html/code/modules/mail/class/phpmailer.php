@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer Class - Xaraya Modification
  *
@@ -221,16 +222,16 @@ class PHPMailer extends xarObject
     /**#@+
      * @access private
      */
-    public $smtp            = NULL;
-    public $to              = array();
-    public $cc              = array();
-    public $bcc             = array();
-    public $ReplyTo         = array();
-    public $attachment      = array();
-    public $CustomHeader    = array();
+    public $smtp            = null;
+    public $to              = [];
+    public $cc              = [];
+    public $bcc             = [];
+    public $ReplyTo         = [];
+    public $attachment      = [];
+    public $CustomHeader    = [];
     public $message_type    = "";
-    public $boundary        = array();
-    public $language        = array();
+    public $boundary        = [];
+    public $language        = [];
     public $error_count     = 0;
     public $LE              = "\n";
     /**#@-*/
@@ -244,19 +245,20 @@ class PHPMailer extends xarObject
      * @param bool $bool
      * @return void
      */
-    function IsHTML($bool)
+    public function IsHTML($bool)
     {
-        if($bool == true)
+        if ($bool == true) {
             $this->ContentType = "text/html";
-        else
+        } else {
             $this->ContentType = "text/plain";
+        }
     }
 
     /**
      * Sets Mailer to send message using SMTP.
      * @return void
      */
-    function IsSMTP()
+    public function IsSMTP()
     {
         $this->Mailer = "smtp";
     }
@@ -265,7 +267,7 @@ class PHPMailer extends xarObject
      * Sets Mailer to send message using PHP mail() function.
      * @return void
      */
-    function IsMail()
+    public function IsMail()
     {
         $this->Mailer = "mail";
     }
@@ -274,7 +276,7 @@ class PHPMailer extends xarObject
      * Sets Mailer to send message using the $Sendmail program.
      * @return void
      */
-    function IsSendmail()
+    public function IsSendmail()
     {
         $this->Mailer = "sendmail";
     }
@@ -283,7 +285,7 @@ class PHPMailer extends xarObject
      * Sets Mailer to send message using the qmail MTA.
      * @return void
      */
-    function IsQmail()
+    public function IsQmail()
     {
         $this->Sendmail = "/var/qmail/bin/sendmail";
         $this->Mailer = "sendmail";
@@ -300,7 +302,7 @@ class PHPMailer extends xarObject
      * @param string $name
      * @return void
      */
-    function AddAddress($address, $name = "")
+    public function AddAddress($address, $name = "")
     {
         $cur = count($this->to);
         $this->to[$cur][0] = trim($address);
@@ -315,7 +317,7 @@ class PHPMailer extends xarObject
      * @param string $name
      * @return void
     */
-    function AddCC($address, $name = "")
+    public function AddCC($address, $name = "")
     {
         $cur = count($this->cc);
         $this->cc[$cur][0] = trim($address);
@@ -330,7 +332,7 @@ class PHPMailer extends xarObject
      * @param string $name
      * @return void
      */
-    function AddBCC($address, $name = "")
+    public function AddBCC($address, $name = "")
     {
         $cur = count($this->bcc);
         $this->bcc[$cur][0] = trim($address);
@@ -343,7 +345,7 @@ class PHPMailer extends xarObject
      * @param string $name
      * @return void
      */
-    function AddReplyTo($address, $name = "")
+    public function AddReplyTo($address, $name = "")
     {
         $cur = count($this->ReplyTo);
         $this->ReplyTo[$cur][0] = trim($address);
@@ -361,32 +363,33 @@ class PHPMailer extends xarObject
      * variable to view description of the error.
      * @return boolean
      */
-    function Send()
+    public function Send()
     {
         $header = "";
         $body = "";
         $result = true;
 
-        if((count($this->to) + count($this->cc) + count($this->bcc)) < 1)
-        {
+        if ((count($this->to) + count($this->cc) + count($this->bcc)) < 1) {
             $this->SetError($this->Lang("provide_address"));
             return false;
         }
 
         // Set whether the message is multipart/alternative
-        if(!empty($this->AltBody))
+        if (!empty($this->AltBody)) {
             $this->ContentType = "multipart/alternative";
+        }
 
         $this->error_count = 0; // reset errors
         $this->SetMessageType();
         $header .= $this->CreateHeader();
         $body = $this->CreateBody();
 
-        if($body == "") { return false; }
+        if ($body == "") {
+            return false;
+        }
 
         // Choose the mailer
-        switch($this->Mailer)
-        {
+        switch ($this->Mailer) {
             case "sendmail":
                 $result = $this->SendmailSend($header, $body);
                 break;
@@ -397,7 +400,7 @@ class PHPMailer extends xarObject
                 $result = $this->SmtpSend($header, $body);
                 break;
             default:
-            $this->SetError($this->Mailer . $this->Lang("mailer_not_supported"));
+                $this->SetError($this->Mailer . $this->Lang("mailer_not_supported"));
                 $result = false;
                 break;
         }
@@ -410,15 +413,15 @@ class PHPMailer extends xarObject
      * @access private
      * @return boolean
      */
-    function SendmailSend($header, $body)
+    public function SendmailSend($header, $body)
     {
-        if ($this->Sender != "")
+        if ($this->Sender != "") {
             $sendmail = sprintf("%s -oi -f %s -t", $this->Sendmail, $this->Sender);
-        else
+        } else {
             $sendmail = sprintf("%s -oi -t", $this->Sendmail);
+        }
 
-        if(!@$mail = popen($sendmail, "w"))
-        {
+        if (!@$mail = popen($sendmail, "w")) {
             $this->SetError($this->Lang("execute") . $this->Sendmail);
             return false;
         }
@@ -427,8 +430,7 @@ class PHPMailer extends xarObject
         fputs($mail, $body);
 
         $result = pclose($mail) >> 8 & 0xFF;
-        if($result != 0)
-        {
+        if ($result != 0) {
             $this->SetError($this->Lang("execute") . $this->Sendmail);
             return false;
         }
@@ -441,37 +443,46 @@ class PHPMailer extends xarObject
      * @access private
      * @return boolean
      */
-    function MailSend($header, $body)
+    public function MailSend($header, $body)
     {
         $to = "";
-        for($i = 0; $i < count($this->to); $i++)
-        {
-            if($i != 0) { $to .= ", "; }
+        for ($i = 0; $i < count($this->to); $i++) {
+            if ($i != 0) {
+                $to .= ", ";
+            }
             $to .= $this->to[$i][0];
         }
 
-        if ($this->Sender != "" && strlen(ini_get("safe_mode"))< 1)
-        {
+        if ($this->Sender != "" && strlen(ini_get("safe_mode")) < 1) {
             $old_from = ini_get("sendmail_from");
             //XARAYA MODIFICATION -- Start
-            if (!xarCore::funcIsDisabled('ini_set')) ini_set("sendmail_from", $this->Sender);
+            if (!xarCore::funcIsDisabled('ini_set')) {
+                ini_set("sendmail_from", $this->Sender);
+            }
             //XARAYA MODIFICATION -- End
             //SF issue 1312256
             //$params = sprintf("-oi -f %s", $this->Sender);
             $params = sprintf("-oi -f%s", $this->Sender);
-              $rt = @mail($to, $this->EncodeHeader($this->Subject), $body,
-                        $header, $params);
-        }
-        else
+            $rt = @mail(
+                $to,
+                $this->EncodeHeader($this->Subject),
+                $body,
+                $header,
+                $params
+            );
+        } else {
             $rt = @mail($to, $this->EncodeHeader($this->Subject), $body, $header);
+        }
 
-        if (isset($old_from))
+        if (isset($old_from)) {
             //XARAYA MODIFICATION -- Start
-            if (!xarCore::funcIsDisabled('ini_set')) ini_set("sendmail_from", $old_from);
-            //XARAYA MODIFICATION -- End
+            if (!xarCore::funcIsDisabled('ini_set')) {
+                ini_set("sendmail_from", $old_from);
+            }
+        }
+        //XARAYA MODIFICATION -- End
 
-        if(!$rt)
-        {
+        if (!$rt) {
             $this->SetError($this->Lang("instantiate"));
             return false;
         }
@@ -486,19 +497,19 @@ class PHPMailer extends xarObject
      * @access private
      * @return boolean
      */
-    function SmtpSend($header, $body)
+    public function SmtpSend($header, $body)
     {
         // @todo do we want sys::import here too? since this is third party and all.
         include_once($this->PluginDir . "class.smtp.php");
         $error = "";
-        $bad_rcpt = array();
+        $bad_rcpt = [];
 
-        if(!$this->SmtpConnect())
+        if (!$this->SmtpConnect()) {
             return false;
+        }
 
         $smtp_from = ($this->Sender == "") ? $this->From : $this->Sender;
-        if(!$this->smtp->Mail($smtp_from))
-        {
+        if (!$this->smtp->Mail($smtp_from)) {
             $error = $this->Lang("from_failed") . ": " . $smtp_from;
             $this->SetError($error);
             $this->smtp->Reset();
@@ -506,27 +517,27 @@ class PHPMailer extends xarObject
         }
 
         // Attempt to send attach all recipients
-        for($i = 0; $i < count($this->to); $i++)
-        {
-            if(!$this->smtp->Recipient($this->to[$i][0]))
+        for ($i = 0; $i < count($this->to); $i++) {
+            if (!$this->smtp->Recipient($this->to[$i][0])) {
                 $bad_rcpt[] = $this->to[$i][0];
+            }
         }
-        for($i = 0; $i < count($this->cc); $i++)
-        {
-            if(!$this->smtp->Recipient($this->cc[$i][0]))
+        for ($i = 0; $i < count($this->cc); $i++) {
+            if (!$this->smtp->Recipient($this->cc[$i][0])) {
                 $bad_rcpt[] = $this->cc[$i][0];
+            }
         }
-        for($i = 0; $i < count($this->bcc); $i++)
-        {
-            if(!$this->smtp->Recipient($this->bcc[$i][0]))
+        for ($i = 0; $i < count($this->bcc); $i++) {
+            if (!$this->smtp->Recipient($this->bcc[$i][0])) {
                 $bad_rcpt[] = $this->bcc[$i][0];
+            }
         }
 
-        if(count($bad_rcpt) > 0) // Create error message
-        {
-            for($i = 0; $i < count($bad_rcpt); $i++)
-            {
-                if($i != 0) { $error .= ", "; }
+        if (count($bad_rcpt) > 0) { // Create error message
+            for ($i = 0; $i < count($bad_rcpt); $i++) {
+                if ($i != 0) {
+                    $error .= ", ";
+                }
                 $error .= $bad_rcpt[$i];
             }
             $error = $this->Lang("recipients_failed") . $error;
@@ -535,16 +546,16 @@ class PHPMailer extends xarObject
             return false;
         }
 
-        if(!$this->smtp->Data($header . $body))
-        {
+        if (!$this->smtp->Data($header . $body)) {
             $this->SetError($this->Lang("data_not_accepted"));
             $this->smtp->Reset();
             return false;
         }
-        if($this->SMTPKeepAlive == true)
+        if ($this->SMTPKeepAlive == true) {
             $this->smtp->Reset();
-        else
+        } else {
             $this->SmtpClose();
+        }
 
         return true;
     }
@@ -555,9 +566,11 @@ class PHPMailer extends xarObject
      * @access private
      * @return boolean
      */
-    function SmtpConnect()
+    public function SmtpConnect()
     {
-        if($this->smtp == NULL) { $this->smtp = new SMTP(); }
+        if ($this->smtp == null) {
+            $this->smtp = new SMTP();
+        }
 
         $this->smtp->do_debug = $this->SMTPDebug;
         $hosts = explode(";", $this->Host);
@@ -565,28 +578,26 @@ class PHPMailer extends xarObject
         $connection = ($this->smtp->Connected());
 
         // Retry while there is no connection
-        while($index < count($hosts) && $connection == false)
-        {
-            if(strstr($hosts[$index], ":"))
-                list($host, $port) = explode(":", $hosts[$index]);
-            else
-            {
+        while ($index < count($hosts) && $connection == false) {
+            if (strstr($hosts[$index], ":")) {
+                [$host, $port] = explode(":", $hosts[$index]);
+            } else {
                 $host = $hosts[$index];
                 $port = $this->Port;
             }
 
-            if($this->smtp->Connect($host, $port, $this->Timeout))
-            {
-                if ($this->Helo != '')
+            if ($this->smtp->Connect($host, $port, $this->Timeout)) {
+                if ($this->Helo != '') {
                     $this->smtp->Hello($this->Helo);
-                else
+                } else {
                     $this->smtp->Hello($this->ServerHostname());
+                }
 
-                if($this->SMTPAuth)
-                {
-                    if(!$this->smtp->Authenticate($this->Username,
-                                                  $this->Password))
-                    {
+                if ($this->SMTPAuth) {
+                    if (!$this->smtp->Authenticate(
+                        $this->Username,
+                        $this->Password
+                    )) {
                         $this->SetError($this->Lang("authenticate"));
                         $this->smtp->Reset();
                         $connection = false;
@@ -596,8 +607,9 @@ class PHPMailer extends xarObject
             }
             $index++;
         }
-        if(!$connection)
+        if (!$connection) {
             $this->SetError($this->Lang("connect_host"));
+        }
 
         return $connection;
     }
@@ -606,12 +618,10 @@ class PHPMailer extends xarObject
      * Closes the active SMTP session if one exists.
      * @return void
      */
-    function SmtpClose()
+    public function SmtpClose()
     {
-        if($this->smtp != NULL)
-        {
-            if($this->smtp->Connected())
-            {
+        if ($this->smtp != null) {
+            if ($this->smtp->Connected()) {
                 $this->smtp->Quit();
                 $this->smtp->Close();
             }
@@ -627,18 +637,17 @@ class PHPMailer extends xarObject
      * @access public
      * @return boolean
      */
-    function SetLanguage($lang_type, $lang_path = "./")
+    public function SetLanguage($lang_type, $lang_path = "./")
     {
         // XARAYA-MODIFICATION
         // we can translate ourselves thank you
         $lang_type = 'xar';
         // END XARAYA MODIFICATION
-        if(file_exists($lang_path.'phpmailer.lang-'.$lang_type.'.php'))
-            include($lang_path.'phpmailer.lang-'.$lang_type.'.php');
-        else if(file_exists($lang_path.'phpmailer.lang-en.php'))
-            include($lang_path.'phpmailer.lang-en.php');
-        else
-        {
+        if (file_exists($lang_path . 'phpmailer.lang-' . $lang_type . '.php')) {
+            include($lang_path . 'phpmailer.lang-' . $lang_type . '.php');
+        } elseif (file_exists($lang_path . 'phpmailer.lang-en.php')) {
+            include($lang_path . 'phpmailer.lang-en.php');
+        } else {
             $this->SetError("Could not load language file");
             return false;
         }
@@ -656,14 +665,14 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function AddrAppend($type, $addr)
+    public function AddrAppend($type, $addr)
     {
         $addr_str = $type . ": ";
         $addr_str .= $this->AddrFormat($addr[0]);
-        if(count($addr) > 1)
-        {
-            for($i = 1; $i < count($addr); $i++)
+        if (count($addr) > 1) {
+            for ($i = 1; $i < count($addr); $i++) {
                 $addr_str .= ", " . $this->AddrFormat($addr[$i]);
+            }
         }
         $addr_str .= $this->LE;
 
@@ -675,14 +684,13 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function AddrFormat($addr)
+    public function AddrFormat($addr)
     {
-        if(empty($addr[1]))
+        if (empty($addr[1])) {
             $formatted = $addr[0];
-        else
-        {
-            $formatted = $this->EncodeHeader($addr[1], 'phrase') . " <" .
-                         $addr[0] . ">";
+        } else {
+            $formatted = $this->EncodeHeader($addr[1], 'phrase') . " <"
+                         . $addr[0] . ">";
         }
 
         return $formatted;
@@ -695,75 +703,68 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function WrapText($message, $length, $qp_mode = false)
+    public function WrapText($message, $length, $qp_mode = false)
     {
         $soft_break = ($qp_mode) ? sprintf(" =%s", $this->LE) : $this->LE;
 
         $message = $this->FixEOL($message);
-        if (substr($message, -1) == $this->LE)
+        if (substr($message, -1) == $this->LE) {
             $message = substr($message, 0, -1);
+        }
 
         $line = explode($this->LE, $message);
         $message = "";
-        for ($i=0 ;$i < count($line); $i++)
-        {
-          $line_part = explode(" ", $line[$i]);
-          $buf = "";
-          for ($e = 0; $e<count($line_part); $e++)
-          {
-              $word = $line_part[$e];
-              if ($qp_mode and (strlen($word) > $length))
-              {
-                $space_left = $length - strlen($buf) - 1;
-                if ($e != 0)
-                {
-                    if ($space_left > 20)
-                    {
-                        $len = $space_left;
-                        if (substr($word, $len - 1, 1) == "=")
-                          $len--;
-                        elseif (substr($word, $len - 2, 1) == "=")
-                          $len -= 2;
+        for ($i = 0 ;$i < count($line); $i++) {
+            $line_part = explode(" ", $line[$i]);
+            $buf = "";
+            for ($e = 0; $e < count($line_part); $e++) {
+                $word = $line_part[$e];
+                if ($qp_mode and (strlen($word) > $length)) {
+                    $space_left = $length - strlen($buf) - 1;
+                    if ($e != 0) {
+                        if ($space_left > 20) {
+                            $len = $space_left;
+                            if (substr($word, $len - 1, 1) == "=") {
+                                $len--;
+                            } elseif (substr($word, $len - 2, 1) == "=") {
+                                $len -= 2;
+                            }
+                            $part = substr($word, 0, $len);
+                            $word = substr($word, $len);
+                            $buf .= " " . $part;
+                            $message .= $buf . sprintf("=%s", $this->LE);
+                        } else {
+                            $message .= $buf . $soft_break;
+                        }
+                        $buf = "";
+                    }
+                    while (strlen($word) > 0) {
+                        $len = $length;
+                        if (substr($word, $len - 1, 1) == "=") {
+                            $len--;
+                        } elseif (substr($word, $len - 2, 1) == "=") {
+                            $len -= 2;
+                        }
                         $part = substr($word, 0, $len);
                         $word = substr($word, $len);
-                        $buf .= " " . $part;
-                        $message .= $buf . sprintf("=%s", $this->LE);
-                    }
-                    else
-                    {
-                        $message .= $buf . $soft_break;
-                    }
-                    $buf = "";
-                }
-                while (strlen($word) > 0)
-                {
-                    $len = $length;
-                    if (substr($word, $len - 1, 1) == "=")
-                        $len--;
-                    elseif (substr($word, $len - 2, 1) == "=")
-                        $len -= 2;
-                    $part = substr($word, 0, $len);
-                    $word = substr($word, $len);
 
-                    if (strlen($word) > 0)
-                        $message .= $part . sprintf("=%s", $this->LE);
-                    else
-                        $buf = $part;
-                }
-              }
-              else
-              {
-                $buf_o = $buf;
-                $buf .= ($e == 0) ? $word : (" " . $word);
+                        if (strlen($word) > 0) {
+                            $message .= $part . sprintf("=%s", $this->LE);
+                        } else {
+                            $buf = $part;
+                        }
+                    }
+                } else {
+                    $buf_o = $buf;
+                    $buf .= ($e == 0) ? $word : (" " . $word);
 
-                if (strlen($buf) > $length and $buf_o != "")
-                {
-                    $message .= $buf_o . $soft_break;
-                    $buf = $word;
+                    if (strlen($buf) > $length and $buf_o != "") {
+                        $message .= $buf_o . $soft_break;
+                        $buf = $word;
+                    }
                 }
-              }
-          }
-          $message .= $buf . $this->LE;
+            }
+            $message .= $buf . $this->LE;
         }
 
         return $message;
@@ -774,21 +775,21 @@ class PHPMailer extends xarObject
      * @access private
      * @return void
      */
-    function SetWordWrap()
+    public function SetWordWrap()
     {
-        if($this->WordWrap < 1)
+        if ($this->WordWrap < 1) {
             return;
+        }
 
-        switch($this->message_type)
-        {
-           case "alt":
-              // fall through
-           case "alt_attachment":
-              $this->AltBody = $this->WrapText($this->AltBody, $this->WordWrap);
-              break;
-           default:
-              $this->Body = $this->WrapText($this->Body, $this->WordWrap);
-              break;
+        switch ($this->message_type) {
+            case "alt":
+                // fall through
+            case "alt_attachment":
+                $this->AltBody = $this->WrapText($this->AltBody, $this->WordWrap);
+                break;
+            default:
+                $this->Body = $this->WrapText($this->Body, $this->WordWrap);
+                break;
         }
     }
 
@@ -797,7 +798,7 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function CreateHeader()
+    public function CreateHeader()
     {
         $result = "";
 
@@ -807,37 +808,42 @@ class PHPMailer extends xarObject
         $this->boundary[2] = "b2_" . $uniq_id;
 
         $result .= $this->HeaderLine("Date", $this->RFCDate());
-        if($this->Sender == "")
+        if ($this->Sender == "") {
             $result .= $this->HeaderLine("Return-Path", trim($this->From));
-        else
+        } else {
             $result .= $this->HeaderLine("Return-Path", trim($this->Sender));
+        }
 
         // To be created automatically by mail()
-        if($this->Mailer != "mail")
-        {
-            if(count($this->to) > 0)
+        if ($this->Mailer != "mail") {
+            if (count($this->to) > 0) {
                 $result .= $this->AddrAppend("To", $this->to);
-            else if (count($this->cc) == 0)
+            } elseif (count($this->cc) == 0) {
                 $result .= $this->HeaderLine("To", "undisclosed-recipients:;");
+            }
         }
-        if(count($this->cc) > 0)
+        if (count($this->cc) > 0) {
             $result .= $this->AddrAppend("Cc", $this->cc);
+        }
 
-        $from = array();
+        $from = [];
         $from[0][0] = trim($this->From);
         $from[0][1] = $this->FromName;
         $result .= $this->AddrAppend("From", $from);
 
         // sendmail and mail() extract Bcc from the header before sending
-        if((($this->Mailer == "sendmail") || ($this->Mailer == "mail")) && (count($this->bcc) > 0))
+        if ((($this->Mailer == "sendmail") || ($this->Mailer == "mail")) && (count($this->bcc) > 0)) {
             $result .= $this->AddrAppend("Bcc", $this->bcc);
+        }
 
-        if(count($this->ReplyTo) > 0)
+        if (count($this->ReplyTo) > 0) {
             $result .= $this->AddrAppend("Reply-to", $this->ReplyTo);
+        }
 
         // mail() sets the subject itself
-        if($this->Mailer != "mail")
+        if ($this->Mailer != "mail") {
             $result .= $this->HeaderLine("Subject", $this->EncodeHeader(trim($this->Subject)));
+        }
 
         // Get  client IP addr
         //
@@ -853,38 +859,44 @@ class PHPMailer extends xarObject
         $result .= $this->HeaderLine("X-Priority", $this->Priority);
         $result .= $this->HeaderLine("X-Mailer", "PHPMailer [version " . $this->Version . "]");
 
-        if($this->ConfirmReadingTo != "")
-        {
-            $result .= $this->HeaderLine("Disposition-Notification-To",
-                       "<" . trim($this->ConfirmReadingTo) . ">");
+        if ($this->ConfirmReadingTo != "") {
+            $result .= $this->HeaderLine(
+                "Disposition-Notification-To",
+                "<" . trim($this->ConfirmReadingTo) . ">"
+            );
         }
 
         // Add custom headers
-        for($index = 0; $index < count($this->CustomHeader); $index++)
-        {
-            $result .= $this->HeaderLine(trim($this->CustomHeader[$index][0]),
-                       $this->EncodeHeader(trim($this->CustomHeader[$index][1])));
+        for ($index = 0; $index < count($this->CustomHeader); $index++) {
+            $result .= $this->HeaderLine(
+                trim($this->CustomHeader[$index][0]),
+                $this->EncodeHeader(trim($this->CustomHeader[$index][1]))
+            );
         }
         $result .= $this->HeaderLine("MIME-Version", "1.0");
 
-        switch($this->message_type)
-        {
+        switch ($this->message_type) {
             case "plain":
                 $result .= $this->HeaderLine("Content-Transfer-Encoding", $this->Encoding);
-                $result .= sprintf("Content-Type: %s; charset=\"%s\"",
-                                    $this->ContentType, $this->CharSet);
+                $result .= sprintf(
+                    "Content-Type: %s; charset=\"%s\"",
+                    $this->ContentType,
+                    $this->CharSet
+                );
                 break;
             case "attachments":
                 // fall through
             case "alt_attachments":
-                if($this->InlineImageExists())
-                {
-                    $result .= sprintf("Content-Type: %s;%s\ttype=\"text/html\";%s\tboundary=\"%s\"%s",
-                                    "multipart/related", $this->LE, $this->LE,
-                                    $this->boundary[1], $this->LE);
-                }
-                else
-                {
+                if ($this->InlineImageExists()) {
+                    $result .= sprintf(
+                        "Content-Type: %s;%s\ttype=\"text/html\";%s\tboundary=\"%s\"%s",
+                        "multipart/related",
+                        $this->LE,
+                        $this->LE,
+                        $this->boundary[1],
+                        $this->LE
+                    );
+                } else {
                     $result .= $this->HeaderLine("Content-Type", "multipart/mixed;");
                     $result .= $this->TextLine("\tboundary=\"" . $this->boundary[1] . '"');
                 }
@@ -895,8 +907,9 @@ class PHPMailer extends xarObject
                 break;
         }
 
-        if($this->Mailer != "mail")
-            $result .= $this->LE.$this->LE;
+        if ($this->Mailer != "mail") {
+            $result .= $this->LE . $this->LE;
+        }
 
         return $result;
     }
@@ -906,24 +919,31 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function CreateBody()
+    public function CreateBody()
     {
         $result = "";
 
         $this->SetWordWrap();
 
-        switch($this->message_type)
-        {
+        switch ($this->message_type) {
             case "alt":
-                $result .= $this->GetBoundary($this->boundary[1], "",
-                                              "text/plain", "");
+                $result .= $this->GetBoundary(
+                    $this->boundary[1],
+                    "",
+                    "text/plain",
+                    ""
+                );
                 $result .= $this->EncodeString($this->AltBody, $this->Encoding);
-                $result .= $this->LE.$this->LE;
-                $result .= $this->GetBoundary($this->boundary[1], "",
-                                              "text/html", "");
+                $result .= $this->LE . $this->LE;
+                $result .= $this->GetBoundary(
+                    $this->boundary[1],
+                    "",
+                    "text/html",
+                    ""
+                );
 
                 $result .= $this->EncodeString($this->Body, $this->Encoding);
-                $result .= $this->LE.$this->LE;
+                $result .= $this->LE . $this->LE;
 
                 $result .= $this->EndBoundary($this->boundary[1]);
                 break;
@@ -939,32 +959,45 @@ class PHPMailer extends xarObject
                 break;
             case "alt_attachments":
                 $result .= sprintf("--%s%s", $this->boundary[1], $this->LE);
-                $result .= sprintf("Content-Type: %s;%s" .
-                                   "\tboundary=\"%s\"%s",
-                                   "multipart/alternative", $this->LE,
-                                   $this->boundary[2], $this->LE.$this->LE);
+                $result .= sprintf(
+                    "Content-Type: %s;%s"
+                                   . "\tboundary=\"%s\"%s",
+                    "multipart/alternative",
+                    $this->LE,
+                    $this->boundary[2],
+                    $this->LE . $this->LE
+                );
 
                 // Create text body
-                $result .= $this->GetBoundary($this->boundary[2], "",
-                                              "text/plain", "") . $this->LE;
+                $result .= $this->GetBoundary(
+                    $this->boundary[2],
+                    "",
+                    "text/plain",
+                    ""
+                ) . $this->LE;
 
                 $result .= $this->EncodeString($this->AltBody, $this->Encoding);
-                $result .= $this->LE.$this->LE;
+                $result .= $this->LE . $this->LE;
 
                 // Create the HTML body
-                $result .= $this->GetBoundary($this->boundary[2], "",
-                                              "text/html", "") . $this->LE;
+                $result .= $this->GetBoundary(
+                    $this->boundary[2],
+                    "",
+                    "text/html",
+                    ""
+                ) . $this->LE;
 
                 $result .= $this->EncodeString($this->Body, $this->Encoding);
-                $result .= $this->LE.$this->LE;
+                $result .= $this->LE . $this->LE;
 
                 $result .= $this->EndBoundary($this->boundary[2]);
 
                 $result .= $this->AttachAll();
                 break;
         }
-        if($this->IsError())
+        if ($this->IsError()) {
             $result = "";
+        }
 
         return $result;
     }
@@ -973,17 +1006,26 @@ class PHPMailer extends xarObject
      * Returns the start of a message boundary.
      * @access private
      */
-    function GetBoundary($boundary, $charSet, $contentType, $encoding)
+    public function GetBoundary($boundary, $charSet, $contentType, $encoding)
     {
         $result = "";
-        if($charSet == "") { $charSet = $this->CharSet; }
-        if($contentType == "") { $contentType = $this->ContentType; }
-        if($encoding == "") { $encoding = $this->Encoding; }
+        if ($charSet == "") {
+            $charSet = $this->CharSet;
+        }
+        if ($contentType == "") {
+            $contentType = $this->ContentType;
+        }
+        if ($encoding == "") {
+            $encoding = $this->Encoding;
+        }
 
         $result .= $this->TextLine("--" . $boundary);
         //SF Issue 1292500
-        $result .= sprintf("Content-Type: %s; charset=\"%s\"",
-                            $contentType, $charSet);
+        $result .= sprintf(
+            "Content-Type: %s; charset=\"%s\"",
+            $contentType,
+            $charSet
+        );
         $result .= $this->LE;
         $result .= $this->HeaderLine("Content-Transfer-Encoding", $encoding);
         $result .= $this->LE;
@@ -995,7 +1037,7 @@ class PHPMailer extends xarObject
      * Returns the end of a message boundary.
      * @access private
      */
-    function EndBoundary($boundary)
+    public function EndBoundary($boundary)
     {
         return $this->LE . "--" . $boundary . "--" . $this->LE;
     }
@@ -1005,18 +1047,20 @@ class PHPMailer extends xarObject
      * @access private
      * @return void
      */
-    function SetMessageType()
+    public function SetMessageType()
     {
-        if(count($this->attachment) < 1 && strlen($this->AltBody) < 1)
+        if (count($this->attachment) < 1 && strlen($this->AltBody) < 1) {
             $this->message_type = "plain";
-        else
-        {
-            if(count($this->attachment) > 0)
+        } else {
+            if (count($this->attachment) > 0) {
                 $this->message_type = "attachments";
-            if(strlen($this->AltBody) > 0 && count($this->attachment) < 1)
+            }
+            if (strlen($this->AltBody) > 0 && count($this->attachment) < 1) {
                 $this->message_type = "alt";
-            if(strlen($this->AltBody) > 0 && count($this->attachment) > 0)
+            }
+            if (strlen($this->AltBody) > 0 && count($this->attachment) > 0) {
                 $this->message_type = "alt_attachments";
+            }
         }
     }
 
@@ -1025,7 +1069,7 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function HeaderLine($name, $value)
+    public function HeaderLine($name, $value)
     {
         return $name . ": " . $value . $this->LE;
     }
@@ -1035,7 +1079,7 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function TextLine($value)
+    public function TextLine($value)
     {
         return $value . $this->LE;
     }
@@ -1054,17 +1098,17 @@ class PHPMailer extends xarObject
      * @param string $type File extension (MIME) type.
      * @return boolean
      */
-    function AddAttachment($path, $name = "", $encoding = "base64", $type = "application/octet-stream")
+    public function AddAttachment($path, $name = "", $encoding = "base64", $type = "application/octet-stream")
     {
-        if(!@is_file($path))
-        {
+        if (!@is_file($path)) {
             $this->SetError($this->Lang("file_access") . $path);
             return false;
         }
 
         $filename = basename($path);
-        if($name == "")
+        if ($name == "") {
             $name = $filename;
+        }
 
         $cur = count($this->attachment);
         $this->attachment[$cur][0] = $path;
@@ -1085,20 +1129,20 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function AttachAll()
+    public function AttachAll()
     {
         // Return text of body
-        $mime = array();
+        $mime = [];
 
         // Add all attachments
-        for($i = 0; $i < count($this->attachment); $i++)
-        {
+        for ($i = 0; $i < count($this->attachment); $i++) {
             // Check for string attachment
             $bString = $this->attachment[$i][5];
-            if ($bString)
+            if ($bString) {
                 $string = $this->attachment[$i][0];
-            else
+            } else {
                 $path = $this->attachment[$i][0];
+            }
 
             $filename    = $this->attachment[$i][1];
             $name        = $this->attachment[$i][2];
@@ -1111,24 +1155,30 @@ class PHPMailer extends xarObject
             $mime[] = sprintf("Content-Type: %s; name=\"%s\"%s", $type, $name, $this->LE);
             $mime[] = sprintf("Content-Transfer-Encoding: %s%s", $encoding, $this->LE);
 
-            if($disposition == "inline")
+            if ($disposition == "inline") {
                 $mime[] = sprintf("Content-ID: <%s>%s", $cid, $this->LE);
+            }
 
-            $mime[] = sprintf("Content-Disposition: %s; filename=\"%s\"%s",
-                              $disposition, $name, $this->LE.$this->LE);
+            $mime[] = sprintf(
+                "Content-Disposition: %s; filename=\"%s\"%s",
+                $disposition,
+                $name,
+                $this->LE . $this->LE
+            );
 
             // Encode as string attachment
-            if($bString)
-            {
+            if ($bString) {
                 $mime[] = $this->EncodeString($string, $encoding);
-                if($this->IsError()) { return ""; }
-                $mime[] = $this->LE.$this->LE;
-            }
-            else
-            {
+                if ($this->IsError()) {
+                    return "";
+                }
+                $mime[] = $this->LE . $this->LE;
+            } else {
                 $mime[] = $this->EncodeFile($path, $encoding);
-                if($this->IsError()) { return ""; }
-                $mime[] = $this->LE.$this->LE;
+                if ($this->IsError()) {
+                    return "";
+                }
+                $mime[] = $this->LE . $this->LE;
             }
         }
 
@@ -1143,10 +1193,9 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function EncodeFile ($path, $encoding = "base64")
+    public function EncodeFile($path, $encoding = "base64")
     {
-        if(!@$fd = fopen($path, "rb"))
-        {
+        if (!@$fd = fopen($path, "rb")) {
             $this->SetError($this->Lang("file_open") . $path);
             return "";
         }
@@ -1167,29 +1216,30 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function EncodeString ($str, $encoding = "base64")
+    public function EncodeString($str, $encoding = "base64")
     {
         $encoded = "";
-        switch(strtolower($encoding)) {
-          case "base64":
-              // chunk_split is found in PHP >= 3.0.6
-              $encoded = chunk_split(base64_encode($str), 76, $this->LE);
-              break;
-          case "7bit":
-          case "8bit":
-              $encoded = $this->FixEOL($str);
-              if (substr($encoded, -(strlen($this->LE))) != $this->LE)
-                $encoded .= $this->LE;
-              break;
-          case "binary":
-              $encoded = $str;
-              break;
-          case "quoted-printable":
-              $encoded = $this->EncodeQP($str);
-              break;
-          default:
-              $this->SetError($this->Lang("encoding") . $encoding);
-              break;
+        switch (strtolower($encoding)) {
+            case "base64":
+                // chunk_split is found in PHP >= 3.0.6
+                $encoded = chunk_split(base64_encode($str), 76, $this->LE);
+                break;
+            case "7bit":
+            case "8bit":
+                $encoded = $this->FixEOL($str);
+                if (substr($encoded, -(strlen($this->LE))) != $this->LE) {
+                    $encoded .= $this->LE;
+                }
+                break;
+            case "binary":
+                $encoded = $str;
+                break;
+            case "quoted-printable":
+                $encoded = $this->EncodeQP($str);
+                break;
+            default:
+                $this->SetError($this->Lang("encoding") . $encoding);
+                break;
         }
         return $encoded;
     }
@@ -1199,53 +1249,56 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function EncodeHeader ($str, $position = 'text')
+    public function EncodeHeader($str, $position = 'text')
     {
-      $x = 0;
+        $x = 0;
 
-      switch (strtolower($position)) {
-        case 'phrase':
-          if (!preg_match('/[\200-\377]/', $str)) {
-            // Can't use addslashes as we don't know what value has magic_quotes_sybase.
-            $encoded = addcslashes($str, "\0..\37\177\\\"");
+        switch (strtolower($position)) {
+            case 'phrase':
+                if (!preg_match('/[\200-\377]/', $str)) {
+                    // Can't use addslashes as we don't know what value has magic_quotes_sybase.
+                    $encoded = addcslashes($str, "\0..\37\177\\\"");
 
-            if (($str == $encoded) && !preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ -]/', $str))
-              return ($encoded);
-            else
-              return ("\"$encoded\"");
-          }
-          $x = preg_match_all('/[^\040\041\043-\133\135-\176]/', $str, $matches);
-          break;
-        case 'comment':
-          $x = preg_match_all('/[()"]/', $str, $matches);
-          // Fall-through
-        case 'text':
-        default:
-          $x += preg_match_all('/[\000-\010\013\014\016-\037\177-\377]/', $str, $matches);
-          break;
-      }
+                    if (($str == $encoded) && !preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ -]/', $str)) {
+                        return ($encoded);
+                    } else {
+                        return ("\"$encoded\"");
+                    }
+                }
+                $x = preg_match_all('/[^\040\041\043-\133\135-\176]/', $str, $matches);
+                break;
+            case 'comment':
+                $x = preg_match_all('/[()"]/', $str, $matches);
+                // Fall-through
+                // no break
+            case 'text':
+            default:
+                $x += preg_match_all('/[\000-\010\013\014\016-\037\177-\377]/', $str, $matches);
+                break;
+        }
 
-      if ($x == 0)
-        return ($str);
+        if ($x == 0) {
+            return ($str);
+        }
 
-      $maxlen = 75 - 7 - strlen($this->CharSet);
-      // Try to select the encoding which should produce the shortest output
-      if (strlen($str)/3 < $x) {
-        $encoding = 'B';
-        $encoded = base64_encode($str);
-        $maxlen -= $maxlen % 4;
-        $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
-      } else {
-        $encoding = 'Q';
-        $encoded = $this->EncodeQ($str, $position);
-        $encoded = $this->WrapText($encoded, $maxlen, true);
-        $encoded = str_replace("=".$this->LE, "\n", trim($encoded));
-      }
+        $maxlen = 75 - 7 - strlen($this->CharSet);
+        // Try to select the encoding which should produce the shortest output
+        if (strlen($str) / 3 < $x) {
+            $encoding = 'B';
+            $encoded = base64_encode($str);
+            $maxlen -= $maxlen % 4;
+            $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
+        } else {
+            $encoding = 'Q';
+            $encoded = $this->EncodeQ($str, $position);
+            $encoded = $this->WrapText($encoded, $maxlen, true);
+            $encoded = str_replace("=" . $this->LE, "\n", trim($encoded));
+        }
 
-      $encoded = preg_replace('/^(.*)$/m', " =?".$this->CharSet."?$encoding?\\1?=", $encoded);
-      $encoded = trim(str_replace("\n", $this->LE, $encoded));
+        $encoded = preg_replace('/^(.*)$/m', " =?" . $this->CharSet . "?$encoding?\\1?=", $encoded);
+        $encoded = trim(str_replace("\n", $this->LE, $encoded));
 
-      return $encoded;
+        return $encoded;
     }
 
     /**
@@ -1253,30 +1306,37 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function EncodeQP ($str)
+    public function EncodeQP($str)
     {
         $encoded = $this->FixEOL($str);
-        if (substr($encoded, -(strlen($this->LE))) != $this->LE)
+        if (substr($encoded, -(strlen($this->LE))) != $this->LE) {
             $encoded .= $this->LE;
+        }
 
         // Replace every high ascii, control and = characters
         //$encoded = preg_replace('/([\000-\010\013\014\016-\037\075\177-\377])/e',
         //          "'='.sprintf('%02X', ord('\\1'))", $encoded);
-        $encoded = preg_replace_callback('/([\000-\010\013\014\016-\037\075\177-\377])/',
-            function($matches){
-                foreach($matches as $match){
-                    return '='.sprintf('%02X', ord($match));
+        $encoded = preg_replace_callback(
+            '/([\000-\010\013\014\016-\037\075\177-\377])/',
+            function ($matches) {
+                foreach ($matches as $match) {
+                    return '=' . sprintf('%02X', ord($match));
                 }
-            }, $encoded);
+            },
+            $encoded
+        );
         // Replace every spaces and tabs when it's the last character on a line
         //$encoded = preg_replace("/([\011\040])".$this->LE."/e",
         //          "'='.sprintf('%02X', ord('\\1')).'".$this->LE."'", $encoded);
-        $encoded = preg_replace_callback("/([\011\040])".$this->LE."/",
-            function($matches){
-                foreach($matches as $match){
-                    return '='.sprintf('%02X', ord($match));
+        $encoded = preg_replace_callback(
+            "/([\011\040])" . $this->LE . "/",
+            function ($matches) {
+                foreach ($matches as $match) {
+                    return '=' . sprintf('%02X', ord($match));
                 }
-            }, $encoded);
+            },
+            $encoded
+        );
 
         // Maximum line length of 76 characters before CRLF (74 + space + '=')
         $encoded = $this->WrapText($encoded, 74, true);
@@ -1289,43 +1349,50 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function EncodeQ ($str, $position = "text")
+    public function EncodeQ($str, $position = "text")
     {
         // There should not be any EOL in the string
         $encoded = preg_replace("[\r\n]", "", $str);
 
         switch (strtolower($position)) {
-          case "phrase":
-//            $encoded = preg_replace("/([^A-Za-z0-9!*+\/ -])/e", "'='.sprintf('%02X', ord('\\1'))", $encoded);
-            $encoded = preg_replace_callback("/([^A-Za-z0-9!*+\/ -])/",
-				function($matches){
-					foreach($matches as $match){
-						return '='.sprintf('%02X', ord($match));
-					}
-				}, 
-				$encoded);
-            break;
-          case "comment":
-//            $encoded = preg_replace("/([\(\)\"])/e", "'='.sprintf('%02X', ord('\\1'))", $encoded);
-            $encoded = preg_replace_callback("/([\(\)\"])/",
-				function($matches){
-					foreach($matches as $match){
-						return '='.sprintf('%02X', ord($match));
-					}
-				}, 
-				$encoded);
-          case "text":
-          default:
-            // Replace every high ascii, control =, ? and _ characters
-//            $encoded = preg_replace('/([\000-\011\013\014\016-\037\075\077\137\177-\377])/e',
-            $encoded = preg_replace_callback('/([\000-\011\013\014\016-\037\075\077\137\177-\377])/',
-				function($matches){
-					foreach($matches as $match){
-						return '='.sprintf('%02X', ord($match));
-					}
-				}, 
-				$encoded);
-            break;
+            case "phrase":
+                //            $encoded = preg_replace("/([^A-Za-z0-9!*+\/ -])/e", "'='.sprintf('%02X', ord('\\1'))", $encoded);
+                $encoded = preg_replace_callback(
+                    "/([^A-Za-z0-9!*+\/ -])/",
+                    function ($matches) {
+                        foreach ($matches as $match) {
+                            return '=' . sprintf('%02X', ord($match));
+                        }
+                    },
+                    $encoded
+                );
+                break;
+            case "comment":
+                //            $encoded = preg_replace("/([\(\)\"])/e", "'='.sprintf('%02X', ord('\\1'))", $encoded);
+                $encoded = preg_replace_callback(
+                    "/([\(\)\"])/",
+                    function ($matches) {
+                        foreach ($matches as $match) {
+                            return '=' . sprintf('%02X', ord($match));
+                        }
+                    },
+                    $encoded
+                );
+                // no break
+            case "text":
+            default:
+                // Replace every high ascii, control =, ? and _ characters
+                //            $encoded = preg_replace('/([\000-\011\013\014\016-\037\075\077\137\177-\377])/e',
+                $encoded = preg_replace_callback(
+                    '/([\000-\011\013\014\016-\037\075\077\137\177-\377])/',
+                    function ($matches) {
+                        foreach ($matches as $match) {
+                            return '=' . sprintf('%02X', ord($match));
+                        }
+                    },
+                    $encoded
+                );
+                break;
         }
 
         // Replace every spaces to _ (more readable than =20)
@@ -1344,7 +1411,7 @@ class PHPMailer extends xarObject
      * @param string $type File extension (MIME) type.
      * @return void
      */
-    function AddStringAttachment($string, $filename="attachment.txt", $encoding = "base64", $type = "application/octet-stream")
+    public function AddStringAttachment($string, $filename = "attachment.txt", $encoding = "base64", $type = "application/octet-stream")
     {
         // Append to $attachment array
         $cur = count($this->attachment);
@@ -1371,18 +1438,18 @@ class PHPMailer extends xarObject
      * @param string $type File extension (MIME) type.
      * @return boolean
      */
-    function AddEmbeddedImage($path, $cid, $name = "", $encoding = "base64", $type = "application/octet-stream")
+    public function AddEmbeddedImage($path, $cid, $name = "", $encoding = "base64", $type = "application/octet-stream")
     {
 
-        if(!@is_file($path))
-        {
+        if (!@is_file($path)) {
             $this->SetError($this->Lang("file_access") . $path);
             return false;
         }
 
         $filename = basename($path);
-        if($name == "")
+        if ($name == "") {
             $name = $filename;
+        }
 
         // Append to $attachment array
         $cur = count($this->attachment);
@@ -1403,13 +1470,11 @@ class PHPMailer extends xarObject
      * @access private
      * @return boolean
      */
-    function InlineImageExists()
+    public function InlineImageExists()
     {
         $result = false;
-        for($i = 0; $i < count($this->attachment); $i++)
-        {
-            if($this->attachment[$i][6] == "inline")
-            {
+        for ($i = 0; $i < count($this->attachment); $i++) {
+            if ($this->attachment[$i][6] == "inline") {
                 $result = true;
                 break;
             }
@@ -1426,36 +1491,36 @@ class PHPMailer extends xarObject
      * Clears all recipients assigned in the TO array.  Returns void.
      * @return void
      */
-    function ClearAddresses()
+    public function ClearAddresses()
     {
-        $this->to = array();
+        $this->to = [];
     }
 
     /**
      * Clears all recipients assigned in the CC array.  Returns void.
      * @return void
      */
-    function ClearCCs()
+    public function ClearCCs()
     {
-        $this->cc = array();
+        $this->cc = [];
     }
 
     /**
      * Clears all recipients assigned in the BCC array.  Returns void.
      * @return void
      */
-    function ClearBCCs()
+    public function ClearBCCs()
     {
-        $this->bcc = array();
+        $this->bcc = [];
     }
 
     /**
      * Clears all recipients assigned in the ReplyTo array.  Returns void.
      * @return void
      */
-    function ClearReplyTos()
+    public function ClearReplyTos()
     {
-        $this->ReplyTo = array();
+        $this->ReplyTo = [];
     }
 
     /**
@@ -1463,11 +1528,11 @@ class PHPMailer extends xarObject
      * array.  Returns void.
      * @return void
      */
-    function ClearAllRecipients()
+    public function ClearAllRecipients()
     {
-        $this->to = array();
-        $this->cc = array();
-        $this->bcc = array();
+        $this->to = [];
+        $this->cc = [];
+        $this->bcc = [];
     }
 
     /**
@@ -1475,18 +1540,18 @@ class PHPMailer extends xarObject
      * attachments.  Returns void.
      * @return void
      */
-    function ClearAttachments()
+    public function ClearAttachments()
     {
-        $this->attachment = array();
+        $this->attachment = [];
     }
 
     /**
      * Clears all custom headers.  Returns void.
      * @return void
      */
-    function ClearCustomHeaders()
+    public function ClearCustomHeaders()
     {
-        $this->CustomHeader = array();
+        $this->CustomHeader = [];
     }
 
 
@@ -1500,7 +1565,7 @@ class PHPMailer extends xarObject
      * @access private
      * @return void
      */
-    function SetError($msg)
+    public function SetError($msg)
     {
         $this->error_count++;
         $this->ErrorInfo = $msg;
@@ -1511,12 +1576,12 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function RFCDate()
+    public function RFCDate()
     {
         $tz = date("Z");
         $tzs = ($tz < 0) ? "-" : "+";
         $tz = abs($tz);
-        $tz = ($tz/3600)*100 + ($tz%3600)/60;
+        $tz = ($tz / 3600) * 100 + ($tz % 3600) / 60;
         $result = sprintf("%s %s%04d", date("D, j M Y H:i:s"), $tzs, $tz);
 
         return $result;
@@ -1529,23 +1594,24 @@ class PHPMailer extends xarObject
      * @access private
      * @return mixed
      */
-    function ServerVar($varName)
+    public function ServerVar($varName)
     {
         // @todo clean this up
         global $HTTP_SERVER_VARS;
         global $HTTP_ENV_VARS;
 
-        if(!isset($_SERVER))
-        {
+        if (!isset($_SERVER)) {
             $_SERVER = $HTTP_SERVER_VARS;
-            if(!isset($_SERVER["REMOTE_ADDR"]))
-                $_SERVER = $HTTP_ENV_VARS; // must be Apache
+            if (!isset($_SERVER["REMOTE_ADDR"])) {
+                $_SERVER = $HTTP_ENV_VARS;
+            } // must be Apache
         }
 
-        if(isset($_SERVER[$varName]))
+        if (isset($_SERVER[$varName])) {
             return $_SERVER[$varName];
-        else
+        } else {
             return "";
+        }
     }
 
     /**
@@ -1553,14 +1619,15 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function ServerHostname()
+    public function ServerHostname()
     {
-        if ($this->Hostname != "")
+        if ($this->Hostname != "") {
             $result = $this->Hostname;
-        elseif ($this->ServerVar('SERVER_NAME') != "")
+        } elseif ($this->ServerVar('SERVER_NAME') != "") {
             $result = $this->ServerVar('SERVER_NAME');
-        else
+        } else {
             $result = "localhost.localdomain";
+        }
 
         return $result;
     }
@@ -1570,22 +1637,24 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function Lang($key)
+    public function Lang($key)
     {
-        if(count($this->language) < 1)
-            $this->SetLanguage("en"); // set the default language
+        if (count($this->language) < 1) {
+            $this->SetLanguage("en");
+        } // set the default language
 
-        if(isset($this->language[$key]))
+        if (isset($this->language[$key])) {
             return $this->language[$key];
-        else
+        } else {
             return "Language string failed to load: " . $key;
+        }
     }
 
     /**
      * Returns true if an error occurred.
      * @return boolean
      */
-    function IsError()
+    public function IsError()
     {
         return ($this->error_count > 0);
     }
@@ -1595,7 +1664,7 @@ class PHPMailer extends xarObject
      * @access private
      * @return string
      */
-    function FixEOL($str)
+    public function FixEOL($str)
     {
         $str = str_replace("\r\n", "\n", $str);
         $str = str_replace("\r", "\n", $str);
@@ -1607,7 +1676,7 @@ class PHPMailer extends xarObject
      * Adds a custom header.
      * @return void
      */
-    function AddCustomHeader($custom_header)
+    public function AddCustomHeader($custom_header)
     {
         $this->CustomHeader[] = explode(":", $custom_header, 2);
     }

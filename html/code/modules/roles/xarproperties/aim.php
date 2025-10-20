@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.base.xarproperties.textbox');
 
@@ -20,29 +21,31 @@ class AIMProperty extends TextBoxProperty
     public $id         = 29;
     public $name       = 'aim';
     public $desc       = 'AIM Screen Name';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
     public $initialization_icon_url;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'aim';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = $this->tpl()->getImage('contact/aim.png','module','roles');
+            $this->initialization_icon_url = $this->tpl()->getImage('contact/aim.png', 'module', 'roles');
         }
     }
 
-	/**
-	 * Validate the value of a textbox
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a textbox
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (!empty($value)) {
             if (!is_string($value)) {
@@ -57,38 +60,42 @@ class AIMProperty extends TextBoxProperty
         return true;
     }
 
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if(!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
 
-        $data['link'] ='';
-        if(!empty($data['value'])) {
-            $data['link'] = 'aim:goim?screenname='.$this->var()->prep($data['value']).'&message='.$this->ml('Hello+Are+you+there?');
+        $data['link'] = '';
+        if (!empty($data['value'])) {
+            $data['link'] = 'aim:goim?screenname=' . $this->var()->prep($data['value']) . '&message=' . $this->ml('Hello+Are+you+there?');
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
     }
 
-	/**
+    /**
      * Display a textbox for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
         $data['value'] = $this->var()->prep($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'aim:goim?screenname='.$data['value'].'&message='.$this->ml('Hello+Are+you+there?');
+            $data['link'] = 'aim:goim?screenname=' . $data['value'] . '&message=' . $this->ml('Hello+Are+you+there?');
         }
         if (empty($data['image'])) {
             $data['image'] = $this->initialization_icon_url;

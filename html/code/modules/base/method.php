@@ -25,7 +25,7 @@ class MethodClass extends CoreMethodClass
     /**
      * Get module javascript API class for this module
      */
-    public function javascriptapi(): UserApiInterface|null
+    public function javascriptapi(): ?UserApiInterface
     {
         return $this->getParent()->javascriptapi();
     }
@@ -33,7 +33,7 @@ class MethodClass extends CoreMethodClass
     /**
      * Get module ws API class for this module
      */
-    public function wsapi(): UserApiInterface|null
+    public function wsapi(): ?UserApiInterface
     {
         return $this->getParent()->wsapi();
     }

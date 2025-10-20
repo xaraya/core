@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ModApiLoad System Event Subject
  * Notifies observers when a module api is loaded (via xarMod::apiLoad)
@@ -21,6 +22,6 @@ class ModulesModApiLoadSubject extends EventSubject implements ixarEventSubject
     **/
     public function __construct($modName)
     {
-        parent::__construct($modName);                               
+        parent::__construct($modName);
     }
 }

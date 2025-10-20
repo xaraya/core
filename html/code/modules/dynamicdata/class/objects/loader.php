@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The DataObject Loader delays loading values from the database until they are requested.
  * It was inspired by how GraphQL-PHP tackles the N+1 problem, but without proxy, callable or promises (sync or async).
@@ -227,8 +228,8 @@ class DataObjectLoader implements ContextInterface
     {
         if (empty($value)) {
             return false;
-        } elseif (!in_array($value, $this->todo) &&
-            !array_key_exists($this->getCacheKey($value), $this->cache)) {
+        } elseif (!in_array($value, $this->todo)
+            && !array_key_exists($this->getCacheKey($value), $this->cache)) {
             return false;
         }
         return true;

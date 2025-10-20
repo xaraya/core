@@ -1,10 +1,11 @@
 <?php
+
 /* Include parent class */
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * The Textbox property models an HTML input of type text
- * 
+ *
  * @package modules\base
  * subpackage base
  * @category Xaraya Web Applications Framework
@@ -15,16 +16,16 @@ sys::import('modules.dynamicdata.class.properties.base');
  *
  * @author mikespub <mikespub@xaraya.com>
  */
- 
- /**
-  * This property displays a textbox
-  */
+
+/**
+ * This property displays a textbox
+ */
 class TextBoxProperty extends DataProperty
 {
     public $id         = 2;
     public $name       = 'textbox';
     public $desc       = 'Text Box';
-    public $reqmodules = array('base');
+    public $reqmodules = ['base'];
 
     public $display_size                    = 50;
     public $display_maxlength               = 254;
@@ -36,7 +37,7 @@ class TextBoxProperty extends DataProperty
     public $validation_regex_invalid;
     public $initialization_sanitize         = false;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
 
@@ -46,27 +47,30 @@ class TextBoxProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
     }
 
-/**
- * Validate the value of a textbox according to the rules inherited and set out in its configuration
- * 
- */
+    /**
+     * Validate the value of a textbox according to the rules inherited and set out in its configuration
+     *
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (is_array($value)) {
             $value = serialize($value);
         }
 
         // Remove any unwanted characters
-        if ($this->initialization_sanitize)
+        if ($this->initialization_sanitize) {
             $value = filter_var($value, FILTER_SANITIZE_STRING);
-        
+        }
+
         if (isset($this->validation_max_length)  && strlen($value) > $this->display_maxlength) {
             if (!empty($this->validation_max_length_invalid)) {
                 $this->invalid = $this->ml($this->validation_max_length_invalid);
             } else {
-                $this->invalid = $this->ml('#(1) field #(3): must be less than #(2) characters long', $this->name,$this->validation_max_length + 1, $this->desc);
+                $this->invalid = $this->ml('#(1) field #(3): must be less than #(2) characters long', $this->name, $this->validation_max_length + 1, $this->desc);
             }
             $this->log()->error($this->invalid);
             $this->value = null;
@@ -75,7 +79,7 @@ class TextBoxProperty extends DataProperty
             if (!empty($this->validation_min_length_invalid)) {
                 $this->invalid = $this->ml($this->validation_min_length_invalid);
             } else {
-                $this->invalid = $this->ml('#(1) field #(3): must be at least #(2) characters long', $this->name,$this->validation_min_length, $this->desc);
+                $this->invalid = $this->ml('#(1) field #(3): must be at least #(2) characters long', $this->name, $this->validation_min_length, $this->desc);
             }
             $this->log()->error($this->invalid);
             $this->value = null;
@@ -90,28 +94,34 @@ class TextBoxProperty extends DataProperty
             $this->value = null;
             return false;
         } else {
-    // TODO: allowable HTML ?
+            // TODO: allowable HTML ?
             $this->setValue($value);
             return true;
         }
     }
 
-/**
- * Display a textbox for input
- * 
- */
+    /**
+     * Display a textbox for input
+     *
+     */
     public function showInput(array $data = [])
     {
         // Should we be doing this? (random)
-        if(isset($data['maxlength'])) $this->display_maxlength = $data['maxlength'];
-        if(isset($data['size']))      $this->display_size = $data['size'];
+        if (isset($data['maxlength'])) {
+            $this->display_maxlength = $data['maxlength'];
+        }
+        if (isset($data['size'])) {
+            $this->display_size = $data['size'];
+        }
         if ($this->display_size > $this->display_maxlength) {
             $this->display_size = $this->display_maxlength;
         }
 
         // Prepare for templating
         $data['value']    = isset($data['value']) ? $this->var()->prep($data['value']) : $this->var()->prep($this->getValue());
-        if(!isset($data['onfocus']))   $data['onfocus']   = null;
+        if (!isset($data['onfocus'])) {
+            $data['onfocus']   = null;
+        }
 
         return parent::showInput($data);
     }

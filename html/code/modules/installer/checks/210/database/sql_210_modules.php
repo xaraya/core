@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Check SQL file
  *

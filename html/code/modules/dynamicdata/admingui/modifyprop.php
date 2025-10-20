@@ -126,7 +126,8 @@ class ModifypropMethod extends MethodClass
         $data['itemid'] = $data['objectid'];
         $this->tpl()->setPageTitle($this->ml('Modify DataProperties #(1)', $data['label']));
 
-        $data['fields'] = $userapi->getprop(['objectid' => $objectid,
+        $data['fields'] = $userapi->getprop(
+            ['objectid' => $objectid,
                 'moduleid' => $module_id,
                 'itemtype' => $itemtype,
                 'allprops' => true]
@@ -202,7 +203,8 @@ class ModifypropMethod extends MethodClass
         // TODO: allow modules to specify their own properties
         // (try to) show the "static" properties, corresponding to fields in dedicated
         // tables for this module
-        $data['static'] = $utilapi->getstatic(['module_id' => $module_id,
+        $data['static'] = $utilapi->getstatic(
+            ['module_id' => $module_id,
                 'itemtype' => $itemtype]
         );
         if (!isset($data['static']) || $data['static'] == false) {
@@ -222,7 +224,8 @@ class ModifypropMethod extends MethodClass
 
         // TODO: allow other kinds of relationships than hooks
         // (try to) get the relationships between this module and others
-        $data['relations'] = $utilapi->getrelations(['module_id' => $module_id,
+        $data['relations'] = $utilapi->getrelations(
+            ['module_id' => $module_id,
                 'itemtype' => $itemtype]
         );
         if (!isset($data['relations']) || $data['relations'] == false) {

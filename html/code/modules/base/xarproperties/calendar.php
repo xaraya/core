@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -9,7 +10,7 @@
  */
 
 /**
- * This property displays a textbox for date/time input	
+ * This property displays a textbox for date/time input
  * @todo Review this
  */
 class CalendarProperty extends DataProperty
@@ -17,44 +18,54 @@ class CalendarProperty extends DataProperty
     public $id         = 8;
     public $name       = 'calendar';
     public $desc       = 'Calendar';
-    public $reqmodules = array('base');
+    public $reqmodules = ['base'];
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->filepath  = 'modules/base/xarproperties';
     }
-	
-	/**
-	 * Validate the date and Time
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+
+    /**
+     * Validate the date and Time
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         // default time is unspecified
         if (empty($value)) {
-              $this->value = -1;
+            $this->value = -1;
         } elseif (is_numeric($value)) {
         } elseif (is_array($value) && !empty($value['year'])) {
             if (!isset($value['sec'])) {
                 $value['sec'] = 0;
             }
-            $this->value = mktime($value['hour'],$value['min'],$value['sec'],
-                                  $value['mon'],$value['mday'],$value['year']);
+            $this->value = mktime(
+                $value['hour'],
+                $value['min'],
+                $value['sec'],
+                $value['mon'],
+                $value['mday'],
+                $value['year']
+            );
         } elseif (is_string($value)) {
             // assume dates are stored in UTC format
             // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
-            if (!preg_match('/[a-zA-Z]+/',$value)) {
+            if (!preg_match('/[a-zA-Z]+/', $value)) {
                 $value .= ' GMT';
             }
             // this returns -1 when we have an invalid date (e.g. on purpose)
             $this->value = strtotime($value);
             // starting with PHP 5.1.0, strtotime returns false instead of -1
-            if ($this->value === false) $this->value = -1;
+            if ($this->value === false) {
+                $this->value = -1;
+            }
             if ($this->value >= 0) {
                 // adjust for the user's timezone offset
                 $this->value -= xarMLS::userOffset($this->value) * 3600;
@@ -69,24 +80,28 @@ class CalendarProperty extends DataProperty
         // store values in a datetime field
         if ($this->configuration == 'datetime') {
             $this->value = gmdate('Y-m-d H:i:s', $this->value);
-        // store values in a date field
+            // store values in a date field
         } elseif ($this->configuration == 'date') {
             $this->value = gmdate('Y-m-d', $this->value);
         }
         return true;
     }
-	
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
         extract($data);
-        if (!isset($value)) $value = $this->value;
-        if (!isset($id)) $id = 'dd_'.$this->id;
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!isset($id)) {
+            $id = 'dd_' . $this->id;
+        }
 
         // default time is unspecified
         if (empty($value)) {
@@ -94,13 +109,15 @@ class CalendarProperty extends DataProperty
         } elseif (!is_numeric($value) && is_string($value)) {
             // assume dates are stored in UTC format
             // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
-            if (!preg_match('/[a-zA-Z]+/',$value)) {
+            if (!preg_match('/[a-zA-Z]+/', $value)) {
                 $value .= ' GMT';
             }
             // this returns -1 when we have an invalid date (e.g. on purpose)
             $value = strtotime($value);
             // starting with PHP 5.1.0, strtotime returns false instead of -1
-            if ($value === false) $value = -1;
+            if ($value === false) {
+                $value = -1;
+            }
         }
         if (!isset($dateformat)) {
             $dateformat = '%Y-%m-%d %H:%M:%S';
@@ -114,24 +131,26 @@ class CalendarProperty extends DataProperty
         // $timeval = $this->mls()->formatDate($dateformat, $value);
         $data['baseuri']    = $this->ctl()->getBaseURI();
         $data['dateformat'] = $dateformat;
-        $data['jsID']       = str_replace(array('[', ']'), '_', $id);
+        $data['jsID']       = str_replace(['[', ']'], '_', $id);
         // $data['timeval']    = $timeval;
         $data['id'] = $id;
         $data['value']      = $value;
         return parent::showInput($data);
     }
-	
-	/**
-	 * Display a textbox for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
+
+    /**
+     * Display a textbox for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
         extract($data);
 
-        if (!isset($value)) $value = $this->value;
+        if (!isset($value)) {
+            $value = $this->value;
+        }
 
         // default time is unspecified
         if (empty($value)) {
@@ -139,13 +158,15 @@ class CalendarProperty extends DataProperty
         } elseif (!is_numeric($value) && is_string($value)) {
             // assume dates are stored in UTC format
             // TODO: check if we still need to add "00" for PostgreSQL timestamps or not
-            if (!preg_match('/[a-zA-Z]+/',$value)) {
+            if (!preg_match('/[a-zA-Z]+/', $value)) {
                 $value .= ' GMT';
             }
             // this returns -1 when we have an invalid date (e.g. on purpose)
             $value = strtotime($value);
             // starting with PHP 5.1.0, strtotime returns false instead of -1
-            if ($value === false) $value = -1;
+            if ($value === false) {
+                $value = -1;
+            }
         }
         if (!isset($dateformat)) {
             $dateformat = '%a, %d %B %Y %H:%M:%S %Z';
@@ -156,22 +177,22 @@ class CalendarProperty extends DataProperty
         // $data['returnvalue']= $this->mls()->formatDate($dateformat, $value);
         return parent::showOutput($data);
     }
-	
-	/**
-	 * Display the Configuration (uses calendar template as default, allow template override by child classes)
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters 
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
+
+    /**
+     * Display the Configuration (uses calendar template as default, allow template override by child classes)
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showConfiguration(array $args = [])
     {
         extract($args);
 
         $data = [];
-        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['name']       = !empty($name) ? $name : 'dd_' . $this->id;
+        $data['id']         = !empty($id) ? $id : 'dd_' . $this->id;
         $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
-        $data['invalid']    = !empty($this->invalid) ? $this->ml('Invalid #(1)', $this->invalid) :'';
+        $data['invalid']    = !empty($this->invalid) ? $this->ml('Invalid #(1)', $this->invalid) : '';
 
         if (isset($validation)) {
             $this->configuration = $validation;
@@ -194,18 +215,18 @@ class CalendarProperty extends DataProperty
         $data['context'] ??= $this->objectref?->getContext();
         return $this->tpl()->property('base', $template, 'configuration', $data);
     }
-	
-	/**
-	 * Update the Configuration 
-	 * 
-	 * Validate the data and  save it in $this->configuration
-	 */
+
+    /**
+     * Update the Configuration
+     *
+     * Validate the data and  save it in $this->configuration
+     */
     public function updateConfiguration(array $args = [])
     {
         extract($args);
 
         // in case we need to process additional input fields based on the name
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $name = empty($name) ? 'dd_' . $this->id : $name;
         // do something with the validation and save it in $this->configuration
         if (isset($validation)) {
             if (is_array($validation)) {

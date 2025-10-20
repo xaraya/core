@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.base.xarproperties.textbox');
 
@@ -19,13 +20,13 @@ class EmailProperty extends TextBoxProperty
     public $id         = 26;
     public $name       = 'email';
     public $desc       = 'E-Mail';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
     public $validation_email_invalid;
     public $validation_email_confirm     = 0;
     public $validation_email_confirm_invalid;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
@@ -33,16 +34,18 @@ class EmailProperty extends TextBoxProperty
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
-	/**
-	 * Validate the value of a textbox
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a textbox
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
         $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
 
-        if (!isset($value)) $value = "";
+        if (!isset($value)) {
+            $value = "";
+        }
 
         if ($this->validation_email_confirm) {
             if (is_array($value) && trim($value[0]) == trim($value[1])) {
@@ -59,7 +62,9 @@ class EmailProperty extends TextBoxProperty
         }
 
         $value = trim($value);
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
         if (!empty($value)) {
             sys::import('xaraya.validations');
             $boolean = ValueValidations::get('email');
@@ -81,15 +86,17 @@ class EmailProperty extends TextBoxProperty
         return true;
     }
 
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (isset($data['confirm'])) $this->validation_email_confirm = $data['confirm'];
+        if (isset($data['confirm'])) {
+            $this->validation_email_confirm = $data['confirm'];
+        }
         return parent::showInput($data);
     }
 

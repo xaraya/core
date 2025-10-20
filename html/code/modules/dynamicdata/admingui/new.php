@@ -92,8 +92,8 @@ class NewMethod extends MethodClass
 
         $this->tpl()->setPageTitle($this->ml('Manage - Create New Item in #(1)', $myobject->label));
 
-        if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xt') ||
-            file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xt')) {
+        if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xt')
+            || file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xt')) {
             return $this->tpl()->module($args['tplmodule'], 'admin', 'new', $data, $args['template']);
         } else {
             return $this->tpl()->module('dynamicdata', 'admin', 'new', $data, $args['template']);

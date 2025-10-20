@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -26,97 +27,97 @@ class StateListProperty extends SelectProperty
     public $name       = 'statelisting';
     public $desc       = 'State Dropdown';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->template  = 'statelisting';
-    }   
+    }
 
-	
-	 /**
-     * Get Options
-     *
-     * Get a list of States
-     */
-   function getOptions()
-   {
+
+    /**
+    * Get Options
+    *
+    * Get a list of States
+    */
+    public function getOptions()
+    {
         if (count($this->options) > 0) {
             return $this->options;
         }
-        
-        $options[] = array('id' =>'Alabama', 'name' =>'Alabama');
-        $options[] = array('id' =>'Alaska', 'name' =>'Alaska');
-        $options[] = array('id' =>'Arizona', 'name' =>'Arizona');
-        $options[] = array('id' =>'Arkansas', 'name' =>'Arkansas');
-        $options[] = array('id' =>'California', 'name' =>'California');
-        $options[] = array('id' =>'Colorado', 'name' =>'Colorado');
-        $options[] = array('id' =>'Connecticut', 'name' =>'Connecticut');
-        $options[] = array('id' =>'Delaware', 'name' =>'Delaware');
-        $options[] = array('id' =>'District of Columbia', 'name' =>'District of Columbia');
-        $options[] = array('id' =>'Florida', 'name' =>'Florida');
-        $options[] = array('id' =>'Georgia', 'name' =>'Georgia');
-        $options[] = array('id' =>'Hawaii', 'name' =>'Hawaii');
-        $options[] = array('id' =>'Idaho', 'name' =>'Idaho');
-        $options[] = array('id' =>'Illinois', 'name' =>'Illinois');
-        $options[] = array('id' =>'Indiana', 'name' =>'Indiana');
-        $options[] = array('id' =>'Iowa', 'name' =>'Iowa');
-        $options[] = array('id' =>'Kansas', 'name' =>'Kansas');
-        $options[] = array('id' =>'Kentucky', 'name' =>'Kentucky');
-        $options[] = array('id' =>'Louisiana', 'name' =>'Louisiana');
-        $options[] = array('id' =>'Maine', 'name' =>'Maine');
-        $options[] = array('id' =>'Maryland', 'name' =>'Maryland');
-        $options[] = array('id' =>'Massachusetts', 'name' =>'Massachusetts');
-        $options[] = array('id' =>'Michigan', 'name' =>'Michigan');
-        $options[] = array('id' =>'Minnesota', 'name' =>'Minnesota');
-        $options[] = array('id' =>'Mississippi', 'name' =>'Mississippi');
-        $options[] = array('id' =>'Missouri', 'name' =>'Missouri');
-        $options[] = array('id' =>'Montana', 'name' =>'Montana');
-        $options[] = array('id' =>'Nebraska', 'name' =>'Nebraska');
-        $options[] = array('id' =>'Nevada', 'name' =>'Nevada');
-        $options[] = array('id' =>'New Hampshire', 'name' =>'New Hampshire');
-        $options[] = array('id' =>'New Jersey', 'name' =>'New Jersey');
-        $options[] = array('id' =>'New Mexico', 'name' =>'New Mexico');
-        $options[] = array('id' =>'New York', 'name' =>'New York');
-        $options[] = array('id' =>'North Carolina', 'name' =>'North Carolina');
-        $options[] = array('id' =>'North Dakota', 'name' =>'North Dakota');
-        $options[] = array('id' =>'Ohio', 'name' =>'Ohio');
-        $options[] = array('id' =>'Oklahoma', 'name' =>'Oklahoma');
-        $options[] = array('id' =>'Oregon', 'name' =>'Oregon');
-        $options[] = array('id' =>'Pennsylvania', 'name' =>'Pennsylvania');
-        $options[] = array('id' =>'Rhode Island', 'name' =>'Rhode Island');
-        $options[] = array('id' =>'South Carolina', 'name' =>'South Carolina');
-        $options[] = array('id' =>'South Dakota', 'name' =>'South Dakota');
-        $options[] = array('id' =>'Tennessee', 'name' =>'Tennessee');
-        $options[] = array('id' =>'Texas', 'name' =>'Texas');
-        $options[] = array('id' =>'Utah', 'name' =>'Utah');
-        $options[] = array('id' =>'Vermont', 'name' =>'Vermont');
-        $options[] = array('id' =>'Virginia', 'name' =>'Virginia');
-        $options[] = array('id' =>'Washington', 'name' =>'Washington');
-        $options[] = array('id' =>'West Virginia', 'name' =>'West Virginia');
-        $options[] = array('id' =>'Wisconsin', 'name' =>'Wisconsin');
-        $options[] = array('id' =>'Wyoming', 'name' =>'Wyoming');
-        $options[] = array('id' =>'Alberta', 'name' =>'Alberta');
-        $options[] = array('id' =>'British Columbia', 'name' =>'British Columbia');
-        $options[] = array('id' =>'Manitoba', 'name' =>'Manitoba');
-        $options[] = array('id' =>'New Brunswick', 'name' =>'New Brunswick');
-        $options[] = array('id' =>'Newfoundland and Labrador', 'name' =>'Newfoundland and Labrador');
-        $options[] = array('id' =>'Northwest Territories', 'name' =>'Northwest Territories');
-        $options[] = array('id' =>'Nova Scotia', 'name' =>'Nova Scotia');
-        $options[] = array('id' =>'Nunavut', 'name' =>'Nunavut');
-        $options[] = array('id' =>'Ontario', 'name' =>'Ontario');
-        $options[] = array('id' =>'Prince Edward Island', 'name' =>'Prince Edward Island');
-        $options[] = array('id' =>'Quebec', 'name' =>'Quebec');
-        $options[] = array('id' =>'Saskatchewan', 'name' =>'Saskatchewan');
-        $options[] = array('id' =>'Yukon Territory', 'name' =>'Yukon Territory');
-        $options[] = array('id' =>'Australian Capital Territory', 'name' =>'Australian Capital Territory');
-        $options[] = array('id' =>'New South Wales', 'name' =>'New South Wales');
-        $options[] = array('id' =>'Northern Territory', 'name' =>'Northern Territory');
-        $options[] = array('id' =>'Queensland', 'name' =>'Queensland');
-        $options[] = array('id' =>'South Australia', 'name' =>'South Australia');
-        $options[] = array('id' =>'Tasmania', 'name' =>'Tasmania');
-        $options[] = array('id' =>'Victoria', 'name' =>'Victoria');
-        $options[] = array('id' =>'Western Australia', 'name' =>'Western Australia');
-        $options[] = array('id' =>'Other', 'name' =>'Other');
+
+        $options[] = ['id' => 'Alabama', 'name' => 'Alabama'];
+        $options[] = ['id' => 'Alaska', 'name' => 'Alaska'];
+        $options[] = ['id' => 'Arizona', 'name' => 'Arizona'];
+        $options[] = ['id' => 'Arkansas', 'name' => 'Arkansas'];
+        $options[] = ['id' => 'California', 'name' => 'California'];
+        $options[] = ['id' => 'Colorado', 'name' => 'Colorado'];
+        $options[] = ['id' => 'Connecticut', 'name' => 'Connecticut'];
+        $options[] = ['id' => 'Delaware', 'name' => 'Delaware'];
+        $options[] = ['id' => 'District of Columbia', 'name' => 'District of Columbia'];
+        $options[] = ['id' => 'Florida', 'name' => 'Florida'];
+        $options[] = ['id' => 'Georgia', 'name' => 'Georgia'];
+        $options[] = ['id' => 'Hawaii', 'name' => 'Hawaii'];
+        $options[] = ['id' => 'Idaho', 'name' => 'Idaho'];
+        $options[] = ['id' => 'Illinois', 'name' => 'Illinois'];
+        $options[] = ['id' => 'Indiana', 'name' => 'Indiana'];
+        $options[] = ['id' => 'Iowa', 'name' => 'Iowa'];
+        $options[] = ['id' => 'Kansas', 'name' => 'Kansas'];
+        $options[] = ['id' => 'Kentucky', 'name' => 'Kentucky'];
+        $options[] = ['id' => 'Louisiana', 'name' => 'Louisiana'];
+        $options[] = ['id' => 'Maine', 'name' => 'Maine'];
+        $options[] = ['id' => 'Maryland', 'name' => 'Maryland'];
+        $options[] = ['id' => 'Massachusetts', 'name' => 'Massachusetts'];
+        $options[] = ['id' => 'Michigan', 'name' => 'Michigan'];
+        $options[] = ['id' => 'Minnesota', 'name' => 'Minnesota'];
+        $options[] = ['id' => 'Mississippi', 'name' => 'Mississippi'];
+        $options[] = ['id' => 'Missouri', 'name' => 'Missouri'];
+        $options[] = ['id' => 'Montana', 'name' => 'Montana'];
+        $options[] = ['id' => 'Nebraska', 'name' => 'Nebraska'];
+        $options[] = ['id' => 'Nevada', 'name' => 'Nevada'];
+        $options[] = ['id' => 'New Hampshire', 'name' => 'New Hampshire'];
+        $options[] = ['id' => 'New Jersey', 'name' => 'New Jersey'];
+        $options[] = ['id' => 'New Mexico', 'name' => 'New Mexico'];
+        $options[] = ['id' => 'New York', 'name' => 'New York'];
+        $options[] = ['id' => 'North Carolina', 'name' => 'North Carolina'];
+        $options[] = ['id' => 'North Dakota', 'name' => 'North Dakota'];
+        $options[] = ['id' => 'Ohio', 'name' => 'Ohio'];
+        $options[] = ['id' => 'Oklahoma', 'name' => 'Oklahoma'];
+        $options[] = ['id' => 'Oregon', 'name' => 'Oregon'];
+        $options[] = ['id' => 'Pennsylvania', 'name' => 'Pennsylvania'];
+        $options[] = ['id' => 'Rhode Island', 'name' => 'Rhode Island'];
+        $options[] = ['id' => 'South Carolina', 'name' => 'South Carolina'];
+        $options[] = ['id' => 'South Dakota', 'name' => 'South Dakota'];
+        $options[] = ['id' => 'Tennessee', 'name' => 'Tennessee'];
+        $options[] = ['id' => 'Texas', 'name' => 'Texas'];
+        $options[] = ['id' => 'Utah', 'name' => 'Utah'];
+        $options[] = ['id' => 'Vermont', 'name' => 'Vermont'];
+        $options[] = ['id' => 'Virginia', 'name' => 'Virginia'];
+        $options[] = ['id' => 'Washington', 'name' => 'Washington'];
+        $options[] = ['id' => 'West Virginia', 'name' => 'West Virginia'];
+        $options[] = ['id' => 'Wisconsin', 'name' => 'Wisconsin'];
+        $options[] = ['id' => 'Wyoming', 'name' => 'Wyoming'];
+        $options[] = ['id' => 'Alberta', 'name' => 'Alberta'];
+        $options[] = ['id' => 'British Columbia', 'name' => 'British Columbia'];
+        $options[] = ['id' => 'Manitoba', 'name' => 'Manitoba'];
+        $options[] = ['id' => 'New Brunswick', 'name' => 'New Brunswick'];
+        $options[] = ['id' => 'Newfoundland and Labrador', 'name' => 'Newfoundland and Labrador'];
+        $options[] = ['id' => 'Northwest Territories', 'name' => 'Northwest Territories'];
+        $options[] = ['id' => 'Nova Scotia', 'name' => 'Nova Scotia'];
+        $options[] = ['id' => 'Nunavut', 'name' => 'Nunavut'];
+        $options[] = ['id' => 'Ontario', 'name' => 'Ontario'];
+        $options[] = ['id' => 'Prince Edward Island', 'name' => 'Prince Edward Island'];
+        $options[] = ['id' => 'Quebec', 'name' => 'Quebec'];
+        $options[] = ['id' => 'Saskatchewan', 'name' => 'Saskatchewan'];
+        $options[] = ['id' => 'Yukon Territory', 'name' => 'Yukon Territory'];
+        $options[] = ['id' => 'Australian Capital Territory', 'name' => 'Australian Capital Territory'];
+        $options[] = ['id' => 'New South Wales', 'name' => 'New South Wales'];
+        $options[] = ['id' => 'Northern Territory', 'name' => 'Northern Territory'];
+        $options[] = ['id' => 'Queensland', 'name' => 'Queensland'];
+        $options[] = ['id' => 'South Australia', 'name' => 'South Australia'];
+        $options[] = ['id' => 'Tasmania', 'name' => 'Tasmania'];
+        $options[] = ['id' => 'Victoria', 'name' => 'Victoria'];
+        $options[] = ['id' => 'Western Australia', 'name' => 'Western Australia'];
+        $options[] = ['id' => 'Other', 'name' => 'Other'];
         return $options;
     }
 }

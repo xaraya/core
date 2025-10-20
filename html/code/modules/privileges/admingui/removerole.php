@@ -59,9 +59,9 @@ class RemoveroleMethod extends MethodClass
 
 
         // some assignments can't be changed, for your own good
-        if ((($roleid == 1) && ($id == 1)) ||
-            (($roleid == 2) && ($id == 6)) ||
-            (($roleid == 4) && ($id == 2))) {
+        if ((($roleid == 1) && ($id == 1))
+            || (($roleid == 2) && ($id == 6))
+            || (($roleid == 4) && ($id == 2))) {
             throw new ForbiddenOperationException(null, 'This privilege cannot be removed');
         }
 

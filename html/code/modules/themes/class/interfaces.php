@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Interfaces for Themes
  *
@@ -14,5 +15,5 @@
 
 interface iThemeInit
 {
-    public function init(Array $data=array());
+    public function init(array $data = []);
 }

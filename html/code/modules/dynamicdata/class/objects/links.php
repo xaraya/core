@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -156,12 +157,12 @@ class DataObjectLinks extends xarObject
         }
 
         $link = ['source'    => $from_object,
-                      'from_prop' => $from_propname,
-                      'target'    => $to_object,
-                      'to_prop'   => $to_propname,
-                      'link_type' => $link_type,
-                      'direction' => $direction,
-                      'extra'     => $extra];
+            'from_prop' => $from_propname,
+            'target'    => $to_object,
+            'to_prop'   => $to_propname,
+            'link_type' => $link_type,
+            'direction' => $direction,
+            'extra'     => $extra];
 
         // get the list of all existing links
         $linklist = self::initLinks();
@@ -176,11 +177,11 @@ class DataObjectLinks extends xarObject
         // make sure the link doesn't exist yet
         $link_id = 0;
         foreach ($checklinks as $checklink) {
-            if ($link['source'] == $checklink['source'] &&
-                $link['from_prop'] == $checklink['from_prop'] &&
-                $link['target'] == $checklink['target'] &&
-                $link['to_prop'] == $checklink['to_prop'] &&
-                $link['link_type'] == $checklink['link_type']) {
+            if ($link['source'] == $checklink['source']
+                && $link['from_prop'] == $checklink['from_prop']
+                && $link['target'] == $checklink['target']
+                && $link['to_prop'] == $checklink['to_prop']
+                && $link['link_type'] == $checklink['link_type']) {
                 $link_id = $checklink['id'];
                 break;
             }
@@ -218,22 +219,22 @@ class DataObjectLinks extends xarObject
         }
 
         $link = ['source'    => $to_object,
-                      'from_prop' => $to_propname,
-                      'target'    => $from_object,
-                      'to_prop'   => $from_propname,
-                      'link_type' => $reversetype,
-                      'direction' => $reversedir,
-                      // CHECKME: probably not the right syntax in reverse !
-                      'extra'     => $extra];
+            'from_prop' => $to_propname,
+            'target'    => $from_object,
+            'to_prop'   => $from_propname,
+            'link_type' => $reversetype,
+            'direction' => $reversedir,
+            // CHECKME: probably not the right syntax in reverse !
+            'extra'     => $extra];
 
         // make sure the reverse link doesn't exist yet
         $link_id = 0;
         foreach ($checklinks as $checklink) {
-            if ($link['source'] == $checklink['source'] &&
-                $link['from_prop'] == $checklink['from_prop'] &&
-                $link['target'] == $checklink['target'] &&
-                $link['to_prop'] == $checklink['to_prop'] &&
-                $link['link_type'] == $checklink['link_type']) {
+            if ($link['source'] == $checklink['source']
+                && $link['from_prop'] == $checklink['from_prop']
+                && $link['target'] == $checklink['target']
+                && $link['to_prop'] == $checklink['to_prop']
+                && $link['link_type'] == $checklink['link_type']) {
                 $link_id = $checklink['id'];
                 break;
             }
@@ -290,10 +291,10 @@ class DataObjectLinks extends xarObject
 
         foreach ($links[$linkfields['target']] as $link) {
             // find the corresponding link from target to source
-            if ($link['target'] == $linkfields['source'] &&
-                $link['to_prop'] == $linkfields['from_prop'] &&
-                $link['from_prop'] == $linkfields['to_prop'] &&
-                $link['link_type'] == $reversetype) {
+            if ($link['target'] == $linkfields['source']
+                && $link['to_prop'] == $linkfields['from_prop']
+                && $link['from_prop'] == $linkfields['to_prop']
+                && $link['link_type'] == $reversetype) {
 
                 $link_id = $linkobject->getItem(['itemid' => $link['id']]);
                 if (empty($link_id) || $link_id != $link['id']) {
@@ -528,8 +529,8 @@ class DataObjectLinks extends xarObject
                 if (!empty($linkedlist->primary)) {
                     // group by $link['to_prop']
                     $itemcounts = $linkedlist->getItems(['fieldlist' => ['COUNT(' . $linkedlist->primary . ')', $link['to_prop']],
-                                                              'groupby' => $link['to_prop'],
-                                                              'where' => implode(' and ', $where)]);
+                        'groupby' => $link['to_prop'],
+                        'where' => implode(' and ', $where)]);
                     foreach ($itemcounts as $item) {
                         if (isset($item[$link['to_prop']])) {
                             $value = $item[$link['to_prop']];
@@ -577,7 +578,7 @@ class DataObjectLinks extends xarObject
             'userapi',
             'getobjectlist',
             ['name' => 'properties',
-                                            'fieldlist' => ['name','objectid','source']]
+                'fieldlist' => ['name','objectid','source']]
         );
         $properties->getItems();
         foreach ($properties->items as $item) {

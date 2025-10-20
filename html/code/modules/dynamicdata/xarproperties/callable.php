@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Callable property sets a callable as value in setItemValue() with the itemid and value
  * as inherited variables for use in the anonymous function, method or whatever the callable is.

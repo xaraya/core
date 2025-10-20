@@ -63,10 +63,10 @@ class RemoveMethod extends MethodClass
         // Make the whole thing atomic
 
         // If the files have been removed, the module will now also be removed from the db
-        if ($modinfo['state'] == xarMod::STATE_MISSING_FROM_UNINITIALISED ||
-            $modinfo['state'] == xarMod::STATE_MISSING_FROM_INACTIVE ||
-            $modinfo['state'] == xarMod::STATE_MISSING_FROM_ACTIVE ||
-            $modinfo['state'] == xarMod::STATE_MISSING_FROM_UPGRADED) {
+        if ($modinfo['state'] == xarMod::STATE_MISSING_FROM_UNINITIALISED
+            || $modinfo['state'] == xarMod::STATE_MISSING_FROM_INACTIVE
+            || $modinfo['state'] == xarMod::STATE_MISSING_FROM_ACTIVE
+            || $modinfo['state'] == xarMod::STATE_MISSING_FROM_UPGRADED) {
 
             // All cleanup needs to happen before a module entry is removed
             xarEvents::notify('ModRemove', $modinfo['name']);

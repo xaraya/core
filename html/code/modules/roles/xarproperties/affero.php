@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.base.xarproperties.textbox');
 
@@ -20,29 +21,31 @@ class AfferoProperty extends TextBoxProperty
     public $id         = 40;
     public $name       = 'affero';
     public $desc       = 'Affero Username';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
     public $initialization_icon_url;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
         $this->template = 'affero';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = $this->tpl()->getImage('contact/affero.png','module','roles');
+            $this->initialization_icon_url = $this->tpl()->getImage('contact/affero.png', 'module', 'roles');
         }
     }
 
-	/**
-	 * Validate the value of a textbox
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a textbox
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (!empty($value)) {
             if (!is_string($value)) {
@@ -57,38 +60,42 @@ class AfferoProperty extends TextBoxProperty
         return true;
     }
 
-	/**
-	 * Display a textbox for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a textbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if(!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.$this->var()->prep($data['value']);
+            $data['link'] = 'http://svcs.affero.net/user-history.php?ll=lq_members&u=' . $this->var()->prep($data['value']);
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
     }
 
-	/**
+    /**
      * Display a textbox for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */	
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
         $data['value'] = $this->var()->prep($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'http://svcs.affero.net/user-history.php?ll=lq_members&u='.$data['value'];
+            $data['link'] = 'http://svcs.affero.net/user-history.php?ll=lq_members&u=' . $data['value'];
         }
         if (empty($data['image'])) {
             $data['image'] = $this->initialization_icon_url;

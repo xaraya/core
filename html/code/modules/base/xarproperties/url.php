@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -24,31 +25,33 @@ class URLProperty extends TextBoxProperty
     public $name       = 'url';
     public $desc       = 'URL';
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->template = 'url';
     }
-/**
- * Validate the value of a url and also passes for all types of url schemes
- * 
- */
-    function validateValue($value = null)
+    /**
+     * Validate the value of a url and also passes for all types of url schemes
+     *
+     */
+    public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         // Make sure $value['link'] is set, has a length > 0 and does not equal simply 'http://'
         $value = trim($value);
-        if (!empty($value) && $value != 'http://')  {
-           //let's process futher then
-           //check it is not invalid eg html tag
-            if (preg_match('/[<>"]/',$value)) {
+        if (!empty($value) && $value != 'http://') {
+            //let's process futher then
+            //check it is not invalid eg html tag
+            if (preg_match('/[<>"]/', $value)) {
                 $this->invalid = $this->ml('Invalid URL: #(1)', $value);
                 $this->log()->error($this->invalid);
                 $this->value = null;
                 return false;
             } else {
-              // If we have a scheme but nothing following it,
+                // If we have a scheme but nothing following it,
                 // then consider the link empty :-)
                 if (preg_match('/^[a-z]+\:\/\/$/i', $value)) {
                     $this->value = '';
@@ -56,13 +59,15 @@ class URLProperty extends TextBoxProperty
                     // Do some URL validation below. Separate for better understanding
                     // Still not perfect. Add as seen fit.
                     $uri = parse_url($value);
-                    if (empty($uri['scheme'])) $value = 'http://' . $value;
+                    if (empty($uri['scheme'])) {
+                        $value = 'http://' . $value;
+                    }
                     if (!filter_var($value, FILTER_VALIDATE_URL)) {
                         $this->invalid = $this->ml('Invalid URL: #(1)', $value);
                         $this->log()->error($this->invalid);
                         $this->value = null;
                         return false;
-                    } 
+                    }
                     $this->value = $value;
                 }
 

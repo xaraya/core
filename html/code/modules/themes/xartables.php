@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\themes
  * @subpackage themes
@@ -10,11 +11,11 @@
  * @link http://xaraya.info/index.php/release/70.html
  */
 
-/** 
+/**
  * Return table name definitions to Xaraya.
  * This function is called internally by the core whenever the module is
  * loaded. It adds the table names to a globally accessible array
- * 
+ *
  * @author Marty Vance
  * @return array<mixed> the registered tables of this module
  */

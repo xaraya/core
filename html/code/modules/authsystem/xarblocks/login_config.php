@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Login Block configuration interface
  *
@@ -19,15 +20,14 @@ sys::import('modules.authsystem.xarblocks.login');
 
 /**
  * Authsystem Login Block Configuration
- * 
+ *
  * @author Jim McDonald
  */
 class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBlock
 {
-
     /**
      * Method to retrieve block content
-     * 
+     *
      * @return array<mixed> Array of block content data
      */
     public function configmodify()
@@ -38,15 +38,15 @@ class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBloc
 
     /**
      * Updates the Block config from the Blocks Admin
-     * 
+     *
      * @return boolean|void Returns true if configuation was updated successfully
      */
     public function configupdate()
     {
         $this->var()->find('showlogout', $showlogout, 'checkbox', false);
         $this->var()->find('logouttitle', $logouttitle, 'pre:trim:str:1:254', '');
-        
-        $this->showlogout = $showlogout;        
+
+        $this->showlogout = $showlogout;
         $this->logouttitle = $logouttitle;
         return true;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories Module
  *
@@ -23,20 +24,24 @@ class CategoryMenuProperty extends CategoryTreeProperty
     public $id         = 30047;
     public $name       = 'categorymenu';
     public $desc       = 'CategoryMenu';
-    public $reqmodules = array('categories');
+    public $reqmodules = ['categories'];
 
-	/**
-	 * Display the property for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string|void     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display the property for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string|void     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
         $this->var()->find('activetab', $data['activetab'], 'isset', 0);
 
-        if (!isset($data['parent'])) $data['parent'] = 0;
-        if (!isset($data['levels'])) $data['levels'] = 1;
+        if (!isset($data['parent'])) {
+            $data['parent'] = 0;
+        }
+        if (!isset($data['levels'])) {
+            $data['levels'] = 1;
+        }
         // Could also do this using getchildren, although then we get more data we don't really need
 
         if ($data['parent']) {
@@ -50,12 +55,14 @@ class CategoryMenuProperty extends CategoryTreeProperty
             $this->mod()->loadDbInfo('categories');
             $xartable = $this->db()->getTables();
             sys::import('xaraya.structures.query');
-            $q = new Query('SELECT',$xartable['categories']);
+            $q = new Query('SELECT', $xartable['categories']);
             $q->addfield('id');
             $q->addfield('name');
             $q->addfield('parent_id');
-            $q->eq('parent_id',$data['parent']);
-            if (!$q->run()) return;
+            $q->eq('parent_id', $data['parent']);
+            if (!$q->run()) {
+                return;
+            }
             $trees = $q->output();
             $data['layout'] = 'toplevel';
         }

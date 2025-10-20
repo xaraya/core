@@ -9,7 +9,7 @@
 namespace Xaraya\Modules\DynamicData;
 
 use Xaraya\Routing\ModuleHandler;
- 
+
 /**
  * DynamicData handler class for routing & dispatching outside Xaraya
  *

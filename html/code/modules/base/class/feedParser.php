@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -23,16 +24,15 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/**  
+/**
  * Written by Reverend Jim (jim@revjim.net)
  *
  * http://revjim.net/code/feedParser/
  */
 class feedParser extends xarObject
 {
-
     public $version = "0.5";
-    public $entities = array(
+    public $entities = [
         'nbsp' =>   "&#160;",
         'iexcl' =>  "&#161;",
         'cent' =>   "&#162;",
@@ -128,16 +128,16 @@ class feedParser extends xarObject
         'uuml' =>   "&#252;",
         'yacute' => "&#253;",
         'thorn' =>  "&#254;",
-        'yuml' =>   "&#255;"
-    );
+        'yuml' =>   "&#255;",
+    ];
 
-    public $namespaces = array(
+    public $namespaces = [
         'DC' => 'http://purl.org/dc/elements/1.1/',
         'RDF' => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         'RSS' => 'http://purl.org/rss/1.0/',
-        'RSS2'=> 'http://backend.userland.com/rss2',
-        'RDF2' => 'http://my.netscape.com/rdf/simple/0.9/'
-    );
+        'RSS2' => 'http://backend.userland.com/rss2',
+        'RDF2' => 'http://my.netscape.com/rdf/simple/0.9/',
+    ];
 
     public $data = [];
     public $xmldata;
@@ -145,13 +145,13 @@ class feedParser extends xarObject
     public $uri2ns = [];
     public $unkcnt = 0;
 
-    function buildStruct($xmldata) 
+    public function buildStruct($xmldata)
     {
         // Define our known namespaces
         foreach ($this->namespaces as $space => $uri) {
-            $this->definens($space,$uri);
+            $this->definens($space, $uri);
         }
-    
+
         // Define base namespace
         $this->definens("UNDEF");
 
@@ -159,37 +159,43 @@ class feedParser extends xarObject
 
         // Tell the parser to get the file.
         $this->setXmlData($xmldata);
-    
+
         // Tell the parser to build the tree.
         $this->buildXmlTree();
-    
+
         // Spit the tree out so we can see it
         return $this->getXmlTree();
-    
+
     }
 
-    function getXmlTree() { return $this->data;}
-    function setXmlData($data) { $this->xmldata = $data; }
-    
-    function parseEntities(&$data) 
+    public function getXmlTree()
+    {
+        return $this->data;
+    }
+    public function setXmlData($data)
+    {
+        $this->xmldata = $data;
+    }
+
+    public function parseEntities(&$data)
     {
 
-        foreach($this->entities as $entity => $replace) {
-            $data = preg_replace('/&' . $entity . ';/',$replace,$data);
+        foreach ($this->entities as $entity => $replace) {
+            $data = preg_replace('/&' . $entity . ';/', $replace, $data);
         }
 
-        $data = preg_replace('/&[ ]*;/','',$data);
+        $data = preg_replace('/&[ ]*;/', '', $data);
 
     }
 
 
-    function parseFeed($xmldata) 
+    public function parseFeed($xmldata)
     {
         $data = $this->buildStruct($xmldata);
-        if(is_array($data) && count($data) > 0) {
-            foreach($data as $child) {
-                if(is_array($child)) {
-                    switch($child['tag']) {
+        if (is_array($data) && count($data) > 0) {
+            foreach ($data as $child) {
+                if (is_array($child)) {
+                    switch ($child['tag']) {
                         case "RSS:RSS":
                         case "UNDEF:RSS":
                         case "RSS2:RSS":
@@ -213,17 +219,17 @@ class feedParser extends xarObject
         } else {
             $info["warning"] = xarML('Invalid XML data');
         }
-        
+
         return $info;
-    
+
     }
 
-    function parseRDF(&$data) 
+    public function parseRDF(&$data)
     {
-        if(is_array($data['children'])) {
-            foreach($data['children'] as $child) {
-                if(is_array($child)) {
-                    switch($child['tag']) {
+        if (is_array($data['children'])) {
+            foreach ($data['children'] as $child) {
+                if (is_array($child)) {
+                    switch ($child['tag']) {
                         case "RSS:CHANNEL":
                         case "RDF2:CHANNEL":
                             $channel = $this->getRDFChannel($child);
@@ -243,24 +249,24 @@ class feedParser extends xarObject
                     }
                 }
             }
-        
+
         }
         if (!isset($channel)) {
-            return array('warning' => TRUE);
+            return ['warning' => true];
         }
         if (!isset($item)) {
-            $item = array();
+            $item = [];
         }
-        return array('channel' => $channel, 'item' => $item);
-            
+        return ['channel' => $channel, 'item' => $item];
+
     }
 
-    function parseRSS(&$data) 
+    public function parseRSS(&$data)
     {
-        if(is_array($data['children'])) {
-            foreach($data['children'] as $child) {
-                if(is_array($child)) {
-                    switch($child['tag']) {
+        if (is_array($data['children'])) {
+            foreach ($data['children'] as $child) {
+                if (is_array($child)) {
+                    switch ($child['tag']) {
                         case "RSS:CHANNEL":
                         case "RSS2:CHANNEL":
                         case "UNDEF:CHANNEL":
@@ -271,70 +277,70 @@ class feedParser extends xarObject
                     }
                 }
             }
-        
+
         }
         if (!isset($info)) {
-            $info = array('warning' => TRUE);
+            $info = ['warning' => true];
         }
         return $info;
-            
+
     }
 
-    function getRDFChannel($data) 
+    public function getRDFChannel($data)
     {
-        if(is_array($data['children'])) {
-            foreach($data['children'] as $child) {
-                if(is_array($child)) {
-                    switch($child['tag']) {
+        if (is_array($data['children'])) {
+            foreach ($data['children'] as $child) {
+                if (is_array($child)) {
+                    switch ($child['tag']) {
                         case "RSS:TITLE":
                         case "RDF2:TITLE":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['title'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['title'] = '';
                             }
                             break;
                         case "UNDEF:TITLE":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['title'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['title'] = '';
                             }
                             break;
                         case "RSS:LINK":
                         case "RDF2:LINK":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['link'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['link'] = '';
                             }
                             break;
                         case "UNDEF:LINK":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['link'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['link'] = '';
                             }
                             break;
                         case "RSS:DESCRIPTION":
                         case "RDF2:DESCRIPTION":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['description'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['description'] = '';
                             }
                             break;
                         case "UNDEF:DESCRIPTION":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['description'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['description'] = '';
                             }
                             break;
                         case "RSS:WEBMASTER":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['creator'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['creator'] = '';
                             }
                             break;
@@ -348,36 +354,36 @@ class feedParser extends xarObject
         return $channel;
     }
 
-    function getRSSChannel($data) 
+    public function getRSSChannel($data)
     {
-        if(is_array($data['children'])) {
-            foreach($data['children'] as $child) {
-                if(is_array($child)) {
-                    switch($child['tag']) {
+        if (is_array($data['children'])) {
+            foreach ($data['children'] as $child) {
+                if (is_array($child)) {
+                    switch ($child['tag']) {
                         case "UNDEF:TITLE":
                         case "RSS:TITLE":
                         case "RSS2:TITLE":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['title'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['title'] = '';
                             }
                             break;
                         case "UNDEF:LINK":
                         case "RSS:LINK":
                         case "RSS2:LINK":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['link'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['link'] = '';
                             }
                             break;
                         case "UNDEF:DESCRIPTION":
                         case "RSS:DESCRIPTION":
                         case "RSS2:DESCRIPTION":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['description'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $channel['description'] = '';
                             }
                             break;
@@ -389,9 +395,9 @@ class feedParser extends xarObject
                         case "UNDEF:LASTBUILDDATE":
                         case "RSS:LASTBUILDDATE":
                         case "RSS2:LASTBUILDDATE":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $channel['lastbuilddate'] = strtotime($child['children'][0]);
-                            }else{
+                            } else {
                                 $channel['lastbuilddate'] = strtotime('01/01/1900)');
                             }
                             break;
@@ -404,65 +410,65 @@ class feedParser extends xarObject
         // prevent a broken feed from breaking a site
         // FIXME: raise exception?
         if (!isset($item)) {
-            $item = array('info' => array('warning' => TRUE));
+            $item = ['info' => ['warning' => true]];
         }
-        return array('channel' => $channel, 'item' => $item);
+        return ['channel' => $channel, 'item' => $item];
     }
 
-    function getRDFItem($data) 
+    public function getRDFItem($data)
     {
-        if(is_array($data['children'])) {
-            foreach($data['children'] as $child) {
-                if(is_array($child)) {
-                    switch($child['tag']) {
+        if (is_array($data['children'])) {
+            foreach ($data['children'] as $child) {
+                if (is_array($child)) {
+                    switch ($child['tag']) {
                         case "RSS:TITLE":
                         case "RDF2:TITLE":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $item['title'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $item['title'] = '';
                             }
                             break;
                         case "UNDEF:TITLE":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $item['title'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $item['title'] = '';
                             }
                             break;
                         case "RSS:LINK":
                         case "RDF2:LINK":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $item['link'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $item['link'] = '';
                             }
                             break;
                         case "UNDEF:LINK":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $item['link'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $item['link'] = '';
                             }
                             break;
                         case "RSS:DESCRIPTION":
                         case "RDF2:DESCRIPTION":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $item['description'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $item['description'] = '';
                             }
                             break;
                         case "UNDEF:DESCRIPTION":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $item['description'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $item['description'] = '';
                             }
                             break;
                         case "DC:DATE":
-                            $item['date'] = $this->dcDateToUnixTime($child['children'][0],0);
-                            $item['locdate'] = $this->dcDateToUnixTime($child['children'][0],1);
+                            $item['date'] = $this->dcDateToUnixTime($child['children'][0], 0);
+                            $item['locdate'] = $this->dcDateToUnixTime($child['children'][0], 1);
                             break;
                         default:
                             break;
@@ -470,46 +476,46 @@ class feedParser extends xarObject
                 }
             }
         }
-    
+
         return $item;
     }
-    
-    function getRSSItem($data) 
+
+    public function getRSSItem($data)
     {
-        if(is_array($data['children'])) {
-            foreach($data['children'] as $child) {
-                if(is_array($child)) {
-                    switch($child['tag']) {
+        if (is_array($data['children'])) {
+            foreach ($data['children'] as $child) {
+                if (is_array($child)) {
+                    switch ($child['tag']) {
                         case "UNDEF:TITLE":
                         case "RSS:TITLE":
                         case "RSS2:TITLE":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $item['title'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $item['title'] = '';
                             }
                             break;
                         case "UNDEF:LINK":
                         case "RSS:LINK":
                         case "RSS2:LINK":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $item['link'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $item['link'] = '';
                             }
                             break;
                         case "UNDEF:DESCRIPTION":
                         case "RSS:DESCRIPTION":
                         case "RSS2:DESCRIPTION":
-                            if (array_key_exists('children', $child)){
+                            if (array_key_exists('children', $child)) {
                                 $item['description'] = $child['children'][0];
-                            }else{
+                            } else {
                                 $item['description'] = '';
                             }
                             break;
                         case "DC:DATE":
-                            $item["date"] = $this->dcDateToUnixTime($child['children'][0],0);
-                            $item["locdate"] = $this->dcDateToUnixTime($child['children'][0],1);
+                            $item["date"] = $this->dcDateToUnixTime($child['children'][0], 0);
+                            $item["locdate"] = $this->dcDateToUnixTime($child['children'][0], 1);
                             break;
                         case "UNDEF:PUBDATE":
                         case "RSS:PUBDATE":
@@ -523,13 +529,13 @@ class feedParser extends xarObject
                 }
             }
         }
-    
+
         return $item;
     }
 
-    function dcDateToUnixTime($dcdate,$cvttz = 1) 
+    public function dcDateToUnixTime($dcdate, $cvttz = 1)
     {
-        list($date,$time) = explode("T",$dcdate);
+        [$date, $time] = explode("T", $dcdate);
         preg_match(
             "/([0-9]{2}:[0-9]{2}:[0-9]{2})(\-?\+?)([0-9]{2}):([0-9]{2})/",
             $time,
@@ -544,7 +550,7 @@ class feedParser extends xarObject
 
     }
 
-    function defineNs($ident, $uri = "") 
+    public function defineNs($ident, $uri = "")
     {
         if ($uri == "") {
             $uri = "::UNDEFINED::";
@@ -553,34 +559,36 @@ class feedParser extends xarObject
         $this->uri2ns[$uri] = strtoupper($ident);
     }
 
-    function buildXmlTree() 
+    public function buildXmlTree()
     {
         $p = xml_parser_create();
         xml_parser_set_option($p, XML_OPTION_SKIP_WHITE, 1);
         xml_parse_into_struct($p, $this->xmldata, $vals, $index);
         xml_parser_free($p);
 
-        $this->data = array();
+        $this->data = [];
         $i = 0;
-        if (!isset($vals[$i])) return;
+        if (!isset($vals[$i])) {
+            return;
+        }
         $ns = $this->getnamespaces(isset($vals[$i]['attributes']));
-        array_push($this->data, array(
-            'tag' => $this->_convertTagNs($vals[$i]['tag'],$ns), 
+        array_push($this->data, [
+            'tag' => $this->_convertTagNs($vals[$i]['tag'], $ns),
             'attributes' => isset($vals[$i]['attributes']),
-            'children' => $this->_getXmlChildren($vals, $ns, $i)
-        ));
-    }     
+            'children' => $this->_getXmlChildren($vals, $ns, $i),
+        ]);
+    }
 
-    function getnamespaces($attribs,$ns = array()) 
+    public function getnamespaces($attribs, $ns = [])
     {
         if (is_array($attribs)) {
-            foreach($attribs as $key => $value) {
+            foreach ($attribs as $key => $value) {
                 $key = strtoupper($key);
-                if (substr($key,0,5) == 'XMLNS') {
-                    if($pos = strpos($key,':')) {
-                        $ns[substr($key,$pos+1)] = $value;
+                if (substr($key, 0, 5) == 'XMLNS') {
+                    if ($pos = strpos($key, ':')) {
+                        $ns[substr($key, $pos + 1)] = $value;
                     } else {
-                        $ns['::ROOT']= $value;
+                        $ns['::ROOT'] = $value;
                     }
                 }
             }
@@ -589,12 +597,12 @@ class feedParser extends xarObject
 
         return $ns;
     }
-                    
-    function _convertTagNs($tag,$ns) 
+
+    public function _convertTagNs($tag, $ns)
     {
-        if($pos = strpos($tag,':')) {
-            $docns = substr($tag,0,$pos);
-            $doctag = substr($tag,$pos+1);
+        if ($pos = strpos($tag, ':')) {
+            $docns = substr($tag, 0, $pos);
+            $doctag = substr($tag, $pos + 1);
         } else {
             $docns = "::ROOT";
             $doctag = "$tag";
@@ -606,7 +614,7 @@ class feedParser extends xarObject
             $uri = "::UNDEFINED::";
         }
 
-        if(isset($this->uri2ns[$uri])) {
+        if (isset($this->uri2ns[$uri])) {
             $parns = $this->uri2ns[$uri];
         } else {
             $this->definens("::UNK" . $this->unkcnt, $uri);
@@ -615,51 +623,51 @@ class feedParser extends xarObject
         }
 
         return $parns . ":" . $doctag;
-        
+
     }
 
-    function _getXmlChildren(&$vals, $ns, &$i) 
+    public function _getXmlChildren(&$vals, $ns, &$i)
     {
-        $children = array();
+        $children = [];
 
         if (isset($vals[$i]['value'])) {
             array_push($children, $vals[$i]['value']);
         }
-    
+
         while (++$i < count($vals)) {
             switch ($vals[$i]['type']) {
                 case 'cdata':
                     array_push($children, $vals[$i]['value']);
                     break;
-    
+
                 case 'complete':
-                    $tmpns = $this->getnamespaces(isset($vals[$i]['attributes']),$ns);
-                    $tag = $this->_convertTagNs($vals[$i]['tag'],$tmpns);
-                    if(isset($vals[$i]['value'])) {
-                        array_push($children, array(
-                            'tag' => $tag, 
-                            'attributes' => isset($vals[$i]['attributes']), 
-                            'children' => array($vals[$i]['value'])
-                        ));
+                    $tmpns = $this->getnamespaces(isset($vals[$i]['attributes']), $ns);
+                    $tag = $this->_convertTagNs($vals[$i]['tag'], $tmpns);
+                    if (isset($vals[$i]['value'])) {
+                        array_push($children, [
+                            'tag' => $tag,
+                            'attributes' => isset($vals[$i]['attributes']),
+                            'children' => [$vals[$i]['value']],
+                        ]);
                     } else {
-                        array_push($children, array(
-                            'tag' => $tag, 
-                            'attributes' => isset($vals[$i]['attributes']) 
-                        ));
+                        array_push($children, [
+                            'tag' => $tag,
+                            'attributes' => isset($vals[$i]['attributes']),
+                        ]);
                     }
 
                     break;
-    
+
                 case 'open':
-                    $tmpns = $this->getnamespaces(isset($vals[$i]['attributes']),$ns);
-                    $tag = $this->_convertTagNs($vals[$i]['tag'],$tmpns);
-                    array_push($children, array(
-                        'tag' => $tag, 
-                        'attributes' => isset($vals[$i]['attributes']), 
-                        'children' => $this->_getXmlChildren($vals,$tmpns,$i)
-                    ));
+                    $tmpns = $this->getnamespaces(isset($vals[$i]['attributes']), $ns);
+                    $tag = $this->_convertTagNs($vals[$i]['tag'], $tmpns);
+                    array_push($children, [
+                        'tag' => $tag,
+                        'attributes' => isset($vals[$i]['attributes']),
+                        'children' => $this->_getXmlChildren($vals, $tmpns, $i),
+                    ]);
                     break;
-    
+
                 case 'close':
                     if (isset($vals[$i]['value'])) {
                         array_push($children, $vals[$i]['value']);

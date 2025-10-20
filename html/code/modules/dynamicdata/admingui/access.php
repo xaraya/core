@@ -273,8 +273,8 @@ class AccessMethod extends MethodClass
 
         $data['authid'] = $this->sec()->genAuthKey();
 
-        if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access.xt') ||
-            file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access-' . $data['template'] . '.xt')) {
+        if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access.xt')
+            || file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access-' . $data['template'] . '.xt')) {
             return $this->tpl()->module($data['tplmodule'], 'admin', 'access', $data, $data['template']);
         } else {
             return $this->tpl()->module('dynamicdata', 'admin', 'access', $data, $data['template']);

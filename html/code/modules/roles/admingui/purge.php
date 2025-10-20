@@ -46,7 +46,7 @@ class PurgeMethod extends MethodClass
         /** @var UserApi $userapi */
         $userapi = $this->userapi();
         // Security
-        if(!$this->sec()->checkAccess('ManageRoles')) {
+        if (!$this->sec()->checkAccess('ManageRoles')) {
             return;
         }
 
@@ -79,7 +79,7 @@ class PurgeMethod extends MethodClass
 
             if ($confirmation == $this->ml("Recall")) {
                 // --- recall users and groups
-                if(!$this->sec()->checkAccess('ManageRoles')) {
+                if (!$this->sec()->checkAccess('ManageRoles')) {
                     return;
                 }
                 if ($data['groupid'] != 0) {
@@ -147,7 +147,7 @@ class PurgeMethod extends MethodClass
                     } else {
                         $uname1 = explode($deleted, $role['uname']);
                         // checking empty unames for code robustness :-)
-                        if($uname1[0] == '') {
+                        if ($uname1[0] == '') {
                             $existinguser = 0;
                             $skip = 1;
                         } elseif (is_array($existinguser)) {
@@ -194,13 +194,13 @@ class PurgeMethod extends MethodClass
             // Check for confirmation.
             if ($confirmation == $this->ml("Purge")) {
                 // --- purge users
-                if(!$this->sec()->checkAccess('AdminRoles')) {
+                if (!$this->sec()->checkAccess('AdminRoles')) {
                     return;
                 }
                 foreach ($purgeids as $id => $val) {
                     // --- skip if we are trying to remove the designated site admin.
                     // TODO: insert error feedabck here somehow
-                    if($id == $this->mod()->getVar('admin')) {
+                    if ($id == $this->mod()->getVar('admin')) {
                         continue;
                     }
                     // --- do this in 2 stages. First, delete the role: this will update the user
@@ -274,9 +274,9 @@ class PurgeMethod extends MethodClass
                         email,
                         state,
                         date_reg
-                        FROM ' . $rolestable .
-                        $selection .
-                        ' ORDER BY name';
+                        FROM ' . $rolestable
+                        . $selection
+                        . ' ORDER BY name';
 
             $stmt = $dbconn->prepareStatement($query);
 
@@ -296,7 +296,7 @@ class PurgeMethod extends MethodClass
             }
 
             $purgeusers = [];
-            while($result->next()) {
+            while ($result->next()) {
                 [$id, $uname, $name, $email, $state, $date_reg] = $result->fields;
                 // check each role's name and user name
                 if (empty($name) || empty($uname)) {

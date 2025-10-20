@@ -58,8 +58,8 @@ class UpdateMethod extends MethodClass
         if (!isset($module_id) || !is_numeric($module_id)) {
             $invalid[] = 'module id';
         }
-        if ((isset($fields) && is_array($fields)) ||
-            (isset($values) && is_array($values))) {
+        if ((isset($fields) && is_array($fields))
+            || (isset($values) && is_array($values))) {
         } else {
             $invalid[] = $this->ml('fields or values');
         }

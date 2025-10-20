@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upgrade SQL file
  *
@@ -24,18 +25,18 @@ function sql_211_01()
     $data['reply'] = xarML("
         Success!
     ");
-    $core_modules = array(
-                            'authsystem',
-                            'base',
-                            'blocks',
-                            'dynamicdata',
-                            'installer',
-                            'mail',
-                            'modules',
-                            'privileges',
-                            'roles',
-                            'themes',
-    );
+    $core_modules = [
+        'authsystem',
+        'base',
+        'blocks',
+        'dynamicdata',
+        'installer',
+        'mail',
+        'modules',
+        'privileges',
+        'roles',
+        'themes',
+    ];
     // Run the query
     $dbconn = xarDB::getConn();
     try {

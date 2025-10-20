@@ -21,7 +21,7 @@ trait OtherApiTrait
     /**
      * Get module blocks API class for this module
      */
-    public function blocksapi(): UserApiInterface|null
+    public function blocksapi(): ?UserApiInterface
     {
         $component = $this->getModule()->getComponent('BlocksApi');
         assert($component instanceof UserApiInterface);
@@ -31,7 +31,7 @@ trait OtherApiTrait
     /**
      * Get module instances API class for this module
      */
-    public function instancesapi(): UserApiInterface|null
+    public function instancesapi(): ?UserApiInterface
     {
         $component = $this->getModule()->getComponent('InstancesApi');
         assert($component instanceof UserApiInterface);
@@ -41,7 +41,7 @@ trait OtherApiTrait
     /**
      * Get module types API class for this module
      */
-    public function typesapi(): UserApiInterface|null
+    public function typesapi(): ?UserApiInterface
     {
         $component = $this->getModule()->getComponent('TypesApi');
         assert($component instanceof UserApiInterface);

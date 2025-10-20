@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dynamic Object User Interface Handler
  * @package modules\dynamicdata
@@ -212,13 +213,13 @@ class SearchHandler extends DefaultHandler
             $search['q'] = $this->var()->prep($search['q']);
         }
         $search['options'] = ['like'  => '',
-                              'start' => 'starts with',
-                              'end'   => 'ends with',
-                              'eq'    => 'exact match',
-                              'in'    => 'in list a,b,c',
-                              'gt'    => 'greater than',
-                              'lt'    => 'less than',
-                              'ne'    => 'not equal to'];
+            'start' => 'starts with',
+            'end'   => 'ends with',
+            'eq'    => 'exact match',
+            'in'    => 'in list a,b,c',
+            'gt'    => 'greater than',
+            'lt'    => 'less than',
+            'ne'    => 'not equal to'];
 
         // add data to original method args
         $data = array_replace($args, [
@@ -386,13 +387,13 @@ class SearchHandler extends DefaultHandler
             }
         }
         $query['options'] = ['like'  => '',
-                             'start' => 'starts with',
-                             'end'   => 'ends with',
-                             'eq'    => 'exact match',
-                             'in'    => 'in list a,b,c',
-                             'gt'    => 'greater than',
-                             'lt'    => 'less than',
-                             'ne'    => 'not equal to'];
+            'start' => 'starts with',
+            'end'   => 'ends with',
+            'eq'    => 'exact match',
+            'in'    => 'in list a,b,c',
+            'gt'    => 'greater than',
+            'lt'    => 'less than',
+            'ne'    => 'not equal to'];
         // get the property types in case we want to do more than check the parent class
         $query['proptypes'] = $this->prop()->getPropertyTypes();
 

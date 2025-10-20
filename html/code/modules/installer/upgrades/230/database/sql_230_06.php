@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -14,7 +15,7 @@ function sql_230_06()
 {
     // Define parameters
     $table = xarDB::getPrefix() . '_themes';
-    
+
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
@@ -23,37 +24,39 @@ function sql_230_06()
     $data['reply'] = xarML("
         Success!
     ");
-    
+
     // Run the query
     $dbconn  = xarDB::getConn();
     try {
         // add the class column
         $dbconn->begin();
-        $query = "ALTER TABLE $table ADD COLUMN class TINYINT";              
+        $query = "ALTER TABLE $table ADD COLUMN class TINYINT";
         $dbconn->Execute($query);
-        $dbconn->commit();     
+        $dbconn->commit();
 
-        // get themes from db 
+        // get themes from db
         $dbconn->begin();
         $query = "SELECT themes.regid,
                          themes.directory
                   FROM $table AS themes";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array());
-        // update theme classes        
-        while($result->next()) {
-            list($regid,$directory) = $result->fields;
+        $result = $stmt->executeQuery([]);
+        // update theme classes
+        while ($result->next()) {
+            [$regid, $directory] = $result->fields;
             $info = xarTheme::getFileInfo($directory);
-            if (empty($info)) continue; // skip themes missing a xartheme.php 
+            if (empty($info)) {
+                continue;
+            } // skip themes missing a xartheme.php
             $query = "UPDATE $table
                       SET class = ? WHERE regid = ?";
-            $bindvars = array($info['class'], $regid);
+            $bindvars = [$info['class'], $regid];
             $stmt = $dbconn->prepareStatement($query);
             $stmt->executeQuery($bindvars);
         }
         $result->close();
-        $dbconn->commit();     
-        
+        $dbconn->commit();
+
     } catch (Exception $e) {
         // Damn
         $dbconn->rollback();
@@ -62,6 +65,6 @@ function sql_230_06()
         Failed!
         ");
     }
-    return $data;   
-    
+    return $data;
+
 }

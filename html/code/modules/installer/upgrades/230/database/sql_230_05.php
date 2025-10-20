@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -22,10 +23,10 @@ function sql_230_05()
     ");
     $data['reply'] = xarML("
         Success!
-    ");    
-    
+    ");
+
     try {
-        $systemArgs = array();
+        $systemArgs = [];
         xarEvents::init($systemArgs);
         // register modules module event subjects
         xarEvents::registerSubject('ModInitialise', 'module', 'modules');
@@ -38,8 +39,8 @@ function sql_230_05()
         xarEvents::registerObserver('ModActivate', 'modules');
         xarEvents::registerObserver('ModDeactivate', 'modules');
         xarEvents::registerObserver('ModRemove', 'modules');
-        
-        // Register blocks module event observers 
+
+        // Register blocks module event observers
         xarEvents::registerObserver('ModRemove', 'blocks');
     } catch (Exception $e) {
         // Damn

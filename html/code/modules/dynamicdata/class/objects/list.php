@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DataObject List
  * Note : for performance reasons, we won't use an array of objects here,
@@ -163,7 +164,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $formitem = [];
             foreach ($this->properties as $name => $property) {
                 // Only active or list properties will be checked
-                if(!in_array($property->getDisplayStatus(), [DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY])) {
+                if (!in_array($property->getDisplayStatus(), [DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY])) {
                     continue;
                 }
                 $isvalid = $this->properties[$name]->checkInput($name . "[" . $id . "]");
@@ -237,9 +238,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         // Make sure we have an array for itemids, groupings and fieldlist
         if (!is_array($this->itemids)) {
-            if(is_numeric($this->itemids)) {
+            if (is_numeric($this->itemids)) {
                 $this->itemids = [$this->itemids];
-            } elseif(is_string($this->itemids)) {
+            } elseif (is_string($this->itemids)) {
                 $this->itemids = explode(',', $this->itemids);
             }
         }
@@ -313,19 +314,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $this->sort = [];  // FIXME: this should not be necessary
 
         // Make sure we have an array
-        if(is_array($sort)) {
+        if (is_array($sort)) {
             $this->sort = $sort;
         } elseif (!empty($sort)) {
             $this->sort = explode(',', $sort);
         }
 
-        foreach($this->sort as $criteria) {
+        foreach ($this->sort as $criteria) {
             if (empty($criteria)) {
                 return true;
             }
 
             // split off trailing ASC or DESC
-            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/i', $criteria, $matches)) {
+            if (preg_match('/^(.+)\s+(ASC|DESC)\s*$/i', $criteria, $matches)) {
                 $criteria = trim($matches[1]);
                 $sortorder = strtoupper($matches[2]);
             } elseif (str_starts_with($criteria, '-')) {
@@ -466,7 +467,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function setGroupBy($groupby)
     {
-        foreach($this->groupby as $name) {
+        foreach ($this->groupby as $name) {
             // If it fails, just ignore it
             try {
                 $this->dataquery->addgroup($this->properties[$name]->source);
@@ -537,19 +538,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php
 
-        if(isset($args['count']) && (($args['count'] == 'count') || ($args['count'] == 1))) {
+        if (isset($args['count']) && (($args['count'] == 'count') || ($args['count'] == 1))) {
             $itemcount = $this->countitems($args);
         }
-        if(empty($args['numitems'])) {
+        if (empty($args['numitems'])) {
             $args['numitems'] = $this->numitems;
         }
-        if(empty($args['startnum'])) {
+        if (empty($args['startnum'])) {
             $args['startnum'] = $this->startnum;
         }
 
         // Replace the fieldlist with the fields passed
         $fields = [];
-        if(!empty($args['fieldlist'])) {
+        if (!empty($args['fieldlist'])) {
             $fields = $this->getFieldList();
             $this->setFieldList($args['fieldlist']);
         }
@@ -577,7 +578,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         // Reinstate the original fieldlist
-        if(!empty($args['fieldlist'])) {
+        if (!empty($args['fieldlist'])) {
             $this->setFieldList($fields);
         }
 
@@ -610,7 +611,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // Note: we do NOT retrieve the items again here
         //$this->getItems($args);
 
-        if(!empty($this->status)) {
+        if (!empty($this->status)) {
             $state = $this->status;
         } else {
             $state = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
@@ -622,11 +623,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 throw new Exception('Badly formed fieldlist attribute');
             }
         }
-        if(count($args['fieldlist']) > 0) {
-            foreach($args['fieldlist'] as $field) {
+        if (count($args['fieldlist']) > 0) {
+            foreach ($args['fieldlist'] as $field) {
                 $name = trim($field);
-                if(isset($this->properties[$name])) {
-                    if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
+                if (isset($this->properties[$name])) {
+                    if (($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED)
@@ -636,8 +637,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 }
             }
         } else {
-            foreach($this->properties as $name => $property) {
-                if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
+            foreach ($this->properties as $name => $property) {
+                if (($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED)
@@ -666,19 +667,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         // add link to display the item
-        if(empty($args['linktype'])) {
+        if (empty($args['linktype'])) {
             $args['linktype'] = $this->linktype;
         }
-        if(empty($args['linkfunc'])) {
+        if (empty($args['linkfunc'])) {
             $args['linkfunc'] = $this->linkfunc;
         }
-        if(empty($args['linklabel'])) {
+        if (empty($args['linklabel'])) {
             $args['linklabel'] = $this->ml('Display');
         }
-        if(empty($args['param'])) {
+        if (empty($args['param'])) {
             $args['param'] = $this->urlparam;
         }
-        if(empty($args['linkfield'])) {
+        if (empty($args['linkfield'])) {
             $args['linkfield'] = '';
         }
 
@@ -689,13 +690,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $itemtype = $this->itemtype;
 
         // override for viewing dynamic objects
-        if($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) {
+        if ($modname == 'dynamicdata' && $this->itemtype == 0 && empty($this->table)) {
             $args['linktype'] = 'user';
             $args['linkfunc'] = 'display';
             // Don't show link to view items that don't belong to the DD module
         }
 
-        if(empty($itemtype)) {
+        if (empty($itemtype)) {
             $itemtype = 0;
         } // don't add to URL
         $args['table'] = !empty($this->table) ? $this->table : null;
@@ -709,8 +710,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (empty($args['template']) && !empty($args['objectname'])) {
             $args['template'] = $args['objectname'];
         }
-        if(empty($args['tplmodule'])) {
-            if(!empty($this->tplmodule)) {
+        if (empty($args['tplmodule'])) {
+            if (!empty($this->tplmodule)) {
                 $args['tplmodule'] = $this->tplmodule;
             } else {
                 $args['tplmodule'] = $modname;
@@ -725,10 +726,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         sys::import('xaraya.objects');
 
         // get view options for each item
-        if(empty($this->groupby)) {
+        if (empty($this->groupby)) {
             // reset cached urls
             $this->cached_urls = [];
-            foreach(array_keys($this->items) as $itemid) {
+            foreach (array_keys($this->items) as $itemid) {
                 $args['links'][$itemid] = $this->getViewOptions($itemid, $this->items[$itemid]);
             }
         }
@@ -745,14 +746,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->items[$itemid] = $summary;
                 // add view options for the dummy item - last label wins :-)
                 $args['links'][$itemid] = ['display' => ['otitle' => $this->fieldsummarylabel,
-                                                                   'olink'  => '',
-                                                                   'ojoin'  => '']];
+                    'olink'  => '',
+                    'ojoin'  => '']];
             }
         }
 
-        if(!empty($this->groupby)) {
-            foreach(array_keys($args['properties']) as $name) {
-                if(!empty($this->properties[$name]->operation)) {
+        if (!empty($this->groupby)) {
+            foreach (array_keys($args['properties']) as $name) {
+                if (!empty($this->properties[$name]->operation)) {
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
                 }
             }
@@ -774,7 +775,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $this->itemcount = $args['itemcount'];
         }
 
-        if(empty($args['pagerurl'])) {
+        if (empty($args['pagerurl'])) {
             $args['pagerurl'] = '';
         }
         $this->pagerurl = $args['pagerurl'];
@@ -863,32 +864,32 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if ($allow_read) {
                 // @todo override getDisplayLink() to do something with $item, e.g. include title in links
                 $options['display'] = ['otitle' => $this->ml('Display'),
-                                            'oicon'  => 'display.png',
-                                            'olink'  => $this->getDisplayLink($itemid, $item),
-                                            'ojoin'  => ''];
+                    'oicon'  => 'display.png',
+                    'olink'  => $this->getDisplayLink($itemid, $item),
+                    'ojoin'  => ''];
             }
             if ($allow_edit) {
                 $options['modify'] = ['otitle' => $this->ml('Edit'),
-                                           'oicon'  => 'modify.png',
-                                           'olink'  => $this->getActionURL('modify', $itemid),
-                                           'ojoin'  => '|'];
+                    'oicon'  => 'modify.png',
+                    'olink'  => $this->getActionURL('modify', $itemid),
+                    'ojoin'  => '|'];
             }
             // extra options when showing the dynamic objects themselves
             if ($allow_edit && $this->objectid == 1) {
                 // CHECKME: access should be based on the objects themselves here (but probably too heavy) ?
                 $options['modifyprops'] = ['otitle' => $this->ml('Properties'),
-                                                'oicon'  => 'modify-config.png',
-                                                'olink'  => $this->getActionURL('modifyprop', $itemid),
-                                                'ojoin'  => '|'];
+                    'oicon'  => 'modify-config.png',
+                    'olink'  => $this->getActionURL('modifyprop', $itemid),
+                    'ojoin'  => '|'];
                 $options['access'] = ['otitle' => $this->ml('Access'),
-                                                'oicon'  => 'privileges.png',
-                                                'olink'  => $this->getActionURL('access', $itemid),
-                                                'ojoin'  => '|'];
+                    'oicon'  => 'privileges.png',
+                    'olink'  => $this->getActionURL('access', $itemid),
+                    'ojoin'  => '|'];
                 $options['viewitems'] = ['otitle' => $this->ml('Items'),
-                                              'oicon'  => 'item-list.png',
-                                              'olink'  => $this->getActionURL('viewitems', $itemid),
-                                              'ojoin'  => '|',
-                                             ];
+                    'oicon'  => 'item-list.png',
+                    'olink'  => $this->getActionURL('viewitems', $itemid),
+                    'ojoin'  => '|',
+                ];
             }
             //if ($allow_add)  {
             // CHECKME: and/or skip cloning in object interface ?
@@ -897,15 +898,15 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if ($allow_add && $this->objectid == 1) {
                 // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
                 $options['clone'] = ['otitle' => $this->ml('Clone'),
-                                           'oicon'  => 'add.png',
-                                           'olink'  => $this->getActionURL('modify', $itemid, ['tab' => 'clone']),
-                                           'ojoin'  => '|'];
+                    'oicon'  => 'add.png',
+                    'olink'  => $this->getActionURL('modify', $itemid, ['tab' => 'clone']),
+                    'ojoin'  => '|'];
             }
             if ($allow_delete) {
                 $options['delete'] = ['otitle' => $this->ml('Delete'),
-                                           'oicon'  => 'delete.png',
-                                           'olink'  => $this->getActionURL('delete', $itemid),
-                                           'ojoin'  => '|'];
+                    'oicon'  => 'delete.png',
+                    'olink'  => $this->getActionURL('delete', $itemid),
+                    'ojoin'  => '|'];
             }
         }
         return $options;
@@ -918,7 +919,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function &getViewValues(array $args = [])
     {
-        if(empty($args['fieldlist'])) {
+        if (empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
         if (!is_array($args['fieldlist'])) {
@@ -928,16 +929,16 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
 
-        if(count($args['fieldlist']) == 0 && empty($this->status)) {
+        if (count($args['fieldlist']) == 0 && empty($this->status)) {
             $args['fieldlist'] = $this->getFieldList();
         }
         $viewvalues = [];
-        foreach($this->itemids as $itemid) {
+        foreach ($this->itemids as $itemid) {
             $viewvalues[$itemid] = [];
-            foreach($args['fieldlist'] as $name) {
-                if(isset($this->properties[$name])) {
+            foreach ($args['fieldlist'] as $name) {
+                if (isset($this->properties[$name])) {
                     $label = $this->var()->prep($this->properties[$name]->label);
-                    if(isset($this->items[$itemid][$name])) {
+                    if (isset($this->items[$itemid][$name])) {
                         $value = $this->properties[$name]->showOutput(['value' => $this->items[$itemid][$name]]);
                     } else {
                         $value = '';
@@ -971,7 +972,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // calculate the field summary
         $fieldvalues = [];
         $fieldcount  = [];
-        foreach(array_keys($this->items) as $itemid) {
+        foreach (array_keys($this->items) as $itemid) {
             foreach ($this->fieldsummary as $field => $operation) {
                 if (!isset($this->items[$itemid][$field])) {
                     continue;
@@ -1049,8 +1050,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // Only properties that are configured to display in lists
             $display_status = $this->properties[$fieldname]->getDisplayStatus();
             if (!in_array($display_status, [DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
-                                                 DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
-                                                 DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN])) {
+                DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
+                DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN])) {
                 continue;
             }
             $this->properties[$fieldname]->preList();

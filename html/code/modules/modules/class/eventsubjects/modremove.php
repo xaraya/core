@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ModRemove System Event Subject
  * Notifies observers when a module is removed (via xarMod::apiFunc('modules','admin','remove')
@@ -21,6 +22,6 @@ class ModulesModRemoveSubject extends EventSubject implements ixarEventSubject
     **/
     public function __construct($modName)
     {
-        parent::__construct($modName);                             
+        parent::__construct($modName);
     }
 }

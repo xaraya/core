@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration information for the Roles module
  *
@@ -21,8 +22,8 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
- 
-$modversion = array(
+
+$modversion = [
     'name'               => 'Roles',
     'id'                 => '27',
     'version'            => '2.8.1',
@@ -41,4 +42,4 @@ $modversion = array(
     'class'              => 'Core Complete',
     'category'           => 'Users & Groups',
     'twigtemplates'      => true,
-);
+];

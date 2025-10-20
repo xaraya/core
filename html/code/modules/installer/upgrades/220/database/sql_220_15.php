@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -15,7 +16,7 @@ function sql_220_15()
     // Define parameters
     $propertytable = xarDB::getPrefix() . '_dynamic_properties';
     $objecttable = xarDB::getPrefix() . '_dynamic_objects';
-    
+
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
@@ -24,16 +25,16 @@ function sql_220_15()
     $data['reply'] = xarML("
         Success!
     ");
-    
+
     // Run the query
     $dbconn  = xarDB::getConn();
     try {
         $dbconn->begin();
         $query = "INSERT INTO $propertytable (name, label, object_id, type, defaultvalue, source, status, seq,configuration)
-    VALUES ('access', 'Access', 1, 2, '', '" . $objecttable . ".access', 67, 10, 'a:0:{}')";              
-        $dbconn->Execute($query);        
+    VALUES ('access', 'Access', 1, 2, '', '" . $objecttable . ".access', 67, 10, 'a:0:{}')";
+        $dbconn->Execute($query);
         $dbconn->commit();
-        
+
     } catch (Exception $e) {
         // Damn
         $dbconn->rollback();
@@ -42,6 +43,6 @@ function sql_220_15()
         Failed!
         ");
     }
-    return $data;   
-    
+    return $data;
+
 }

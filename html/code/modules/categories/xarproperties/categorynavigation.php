@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Categories Module
  *
@@ -47,20 +48,20 @@ class CategoryNavigationProperty extends SelectProperty
      * Pending
      * TODO: clean up all those ways to get parameters + better templating
      */
-    
+
     public $id         = 30073;
     public $name       = 'categorynavigation';
     public $desc       = 'Category Navigation';
-    public $reqmodules = array('categories');
+    public $reqmodules = ['categories'];
 
     public $display_layout = 'tree';
 
-/*  public $baselist   = 'all';
-    public $cidlist    = [];
-    public $itemid     = 0;
-    public $showbase   = true;
-*/
-    function __construct(ObjectDescriptor $descriptor)
+    /*  public $baselist   = 'all';
+        public $cidlist    = [];
+        public $itemid     = 0;
+        public $showbase   = true;
+    */
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->template  = 'categorynavigation';
@@ -68,35 +69,35 @@ class CategoryNavigationProperty extends SelectProperty
         $this->filepath   = 'modules/categories/xarproperties';
     }
 
-	/**
-	 * Display the property for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display the property for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
         return parent::showInput($data);
     }
 
-	/**
-	 * Display the property for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */	
+    /**
+     * Display the property for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
         // fix missing $data['...'] conversions below
         extract($data);
-						
-    // TODO: for multi-module pages, we'll need some other reference point(s)
-    //       (e.g. cross-module categories defined in categories admin ?)
+
+        // TODO: for multi-module pages, we'll need some other reference point(s)
+        //       (e.g. cross-module categories defined in categories admin ?)
 
         // Get current module
         if (empty($data['module'])) {
-            if ($this->var()->isCached('Blocks.categories','module')) {
-               $modname = $this->var()->getCached('Blocks.categories','module');
+            if ($this->var()->isCached('Blocks.categories', 'module')) {
+                $modname = $this->var()->getCached('Blocks.categories', 'module');
             }
             if (empty($modname)) {
                 $modname = $this->mod()->getName();
@@ -111,50 +112,63 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get current item type (if any)
         if (!isset($data['itemtype'])) {
-            if ($this->var()->isCached('Blocks.categories','itemtype')) {
-                $data['itemtype'] = $this->var()->getCached('Blocks.categories','itemtype');
+            if ($this->var()->isCached('Blocks.categories', 'itemtype')) {
+                $data['itemtype'] = $this->var()->getCached('Blocks.categories', 'itemtype');
             } else {
                 // try to get itemtype from input
                 $this->var()->check('itemtype', $data['itemtype'], 'id');
             }
         }
-        if (empty($data['itemtype'])) $data['itemtype'] = null;
+        if (empty($data['itemtype'])) {
+            $data['itemtype'] = null;
+        }
         $itemtype = $data['itemtype'];
 
         // Get current item id (if any)
         if (!isset($data['itemid'])) {
-            if ($this->var()->isCached('Blocks.categories','itemid')) {
-                $data['itemid'] = $this->var()->getCached('Blocks.categories','itemid');
+            if ($this->var()->isCached('Blocks.categories', 'itemid')) {
+                $data['itemid'] = $this->var()->getCached('Blocks.categories', 'itemid');
             } else {
                 // try to get itemid from input
                 $this->var()->check('itemid', $data['itemid'], 'id');
             }
         }
-        if (empty($data['itemid'])) $data['itemid'] = null;
+        if (empty($data['itemid'])) {
+            $data['itemid'] = null;
+        }
         $itemid = $data['itemid'];
 
         // Get base cids for this module + item type
-// CHECKME: getcatbases has changed result format !
+        // CHECKME: getcatbases has changed result format !
         sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $basecats = $worker->getcatbases(
-                                  array('module'    => $modname,
-                                        'itemtype' => $data['itemtype']));
+            ['module'    => $modname,
+                'itemtype' => $data['itemtype']]
+        );
 
-        if (empty($basecats)) return ''; // no categories to show here -> return empty output
+        if (empty($basecats)) {
+            return '';
+        } // no categories to show here -> return empty output
         $basecids = [];
         foreach ($basecats as $tempcat) {
             $basecids[] = $tempcat['category_id'];
         }
 
         // See if we need to show a count per category
-        if (!isset($data['showcatcount'])) $data['showcatcount'] = 0;
+        if (!isset($data['showcatcount'])) {
+            $data['showcatcount'] = 0;
+        }
 
         // See if we need to show the children of current categories
-        if (!isset($data['showchildren'])) $data['showchildren'] = 1;
+        if (!isset($data['showchildren'])) {
+            $data['showchildren'] = 1;
+        }
 
         // See if we need to show empty categories
-        if (!isset($data['showempty']) && empty($data['showcatcount'])) $data['showempty'] = 1; // default yes here (otherwise you never see anything by default - duh)
+        if (!isset($data['showempty']) && empty($data['showcatcount'])) {
+            $data['showempty'] = 1;
+        } // default yes here (otherwise you never see anything by default - duh)
 
         // Get current category counts (optional array of cid => count)
         if (empty($data['showcatcount'])) {
@@ -166,10 +180,12 @@ class CategoryNavigationProperty extends SelectProperty
                     $deepcount = $this->var()->getCached('Blocks.categories', 'deepcount');
                 } else {
                     $deepcount = $this->mod()->apiFunc(
-                        'categories', 'user', 'deepcount',
-                        array('modid' => $modid, 'itemtype' => $data['itemtype'])
+                        'categories',
+                        'user',
+                        'deepcount',
+                        ['modid' => $modid, 'itemtype' => $data['itemtype']]
                     );
-                    $this->var()->setCached('Blocks.categories','deepcount', $deepcount);
+                    $this->var()->setCached('Blocks.categories', 'deepcount', $deepcount);
                 }
             }
 
@@ -182,12 +198,14 @@ class CategoryNavigationProperty extends SelectProperty
                 if ($data['showcatcount'] == 1) {
                     // We want to display only children category counts.
                     $catcount = $this->mod()->apiFunc(
-                        'categories','user', 'groupcount',
-                        array('modid' => $modid, 'itemtype' => $data['itemtype'])
+                        'categories',
+                        'user',
+                        'groupcount',
+                        ['modid' => $modid, 'itemtype' => $data['itemtype']]
                     );
                 } else {
                     // We want to display the deep counts.
-                    $catcount =& $deepcount;
+                    $catcount = & $deepcount;
                 }
 
                 $this->var()->setCached('Blocks.categories', 'catcount', $catcount);
@@ -196,16 +214,16 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Specify type=... & func = ... arguments for $this->ctl()->getModuleURL()
         if (empty($urltype)) {
-            if ($this->var()->isCached('Blocks.categories','urltype')) {
-                $urltype = $this->var()->getCached('Blocks.categories','urltype');
+            if ($this->var()->isCached('Blocks.categories', 'urltype')) {
+                $urltype = $this->var()->getCached('Blocks.categories', 'urltype');
             }
             if (empty($urltype)) {
                 $urltype = 'user';
             }
         }
         if (empty($urlfunc)) {
-            if ($this->var()->isCached('Blocks.categories','urlfunc')) {
-                $urlfunc = $this->var()->getCached('Blocks.categories','urlfunc');
+            if ($this->var()->isCached('Blocks.categories', 'urlfunc')) {
+                $urlfunc = $this->var()->getCached('Blocks.categories', 'urlfunc');
             }
             if (empty($urlfunc)) {
                 $urlfunc = 'view';
@@ -213,35 +231,47 @@ class CategoryNavigationProperty extends SelectProperty
         }
 
         // Specify the module to use as argument for $this->ctl()->getModuleURL()
-        if (empty($urlmodule)) $urlmodule = $modname;
+        if (empty($urlmodule)) {
+            $urlmodule = $modname;
+        }
 
-// TODO: check other URL parameters with DD (using objectid, tplmodule etc.) ?
+        // TODO: check other URL parameters with DD (using objectid, tplmodule etc.) ?
 
         // Get current DD object name (if any)
         if ($modname == 'dynamicdata' && !isset($data['name'])) {
-            if ($this->var()->isCached('Blocks.categories','name')) {
-                $data['name'] = $this->var()->getCached('Blocks.categories','name');
+            if ($this->var()->isCached('Blocks.categories', 'name')) {
+                $data['name'] = $this->var()->getCached('Blocks.categories', 'name');
             } else {
                 // try to get name from input
                 $this->var()->check('name', $data['name'], 'str', null);
             }
         }
-        if (empty($data['name'])) $data['name'] = null;
+        if (empty($data['name'])) {
+            $data['name'] = null;
+        }
         $name = $data['name'];
 
         if ($modname == 'dynamicdata' && !empty($data['name'])) {
             // Specify the URL parameter to use as argument for $this->ctl()->getModuleURL()
-            if (empty($urlparam)) $urlparam = 'name';
+            if (empty($urlparam)) {
+                $urlparam = 'name';
+            }
 
             // Specify the URL value to use as argument for $this->ctl()->getModuleURL()
-            if (empty($urlvalue)) $urlvalue = $data['name'];
+            if (empty($urlvalue)) {
+                $urlvalue = $data['name'];
+            }
 
         } else {
             // Specify the URL parameter to use as argument for $this->ctl()->getModuleURL()
-            if (empty($urlparam)) $urlparam = 'itemtype';
+            if (empty($urlparam)) {
+                $urlparam = 'itemtype';
+            }
 
             // Specify the URL value to use as argument for $this->ctl()->getModuleURL()
-            if (empty($urlvalue)) $urlvalue = $data['itemtype'];
+            if (empty($urlvalue)) {
+                $urlvalue = $data['itemtype'];
+            }
         }
 
         // Specify additional arguments for $this->ctl()->getModuleURL()
@@ -255,8 +285,8 @@ class CategoryNavigationProperty extends SelectProperty
         $urlargs[$urlparam] = $urlvalue;
 
         // Get current categories
-        if ($this->var()->isCached('Blocks.categories','catid')) {
-           $catid = $this->var()->getCached('Blocks.categories','catid');
+        if ($this->var()->isCached('Blocks.categories', 'catid')) {
+            $catid = $this->var()->getCached('Blocks.categories', 'catid');
         }
         if (empty($catid)) {
             // try to get catid from input
@@ -267,26 +297,26 @@ class CategoryNavigationProperty extends SelectProperty
         $istree = 0;
         if (!empty($catid)) {
             // if we're viewing all items below a certain category, i.e. catid = _NN
-            if (strstr($catid,'_')) {
-                 $catid = preg_replace('/_/','',$catid);
-                 $istree = 1;
+            if (strstr($catid, '_')) {
+                $catid = preg_replace('/_/', '', $catid);
+                $istree = 1;
             }
-            if (strpos($catid,' ')) {
-                $cids = explode(' ',$catid);
+            if (strpos($catid, ' ')) {
+                $cids = explode(' ', $catid);
                 $andcids = true;
-            } elseif (strpos($catid,'+')) {
-                $cids = explode('+',$catid);
+            } elseif (strpos($catid, '+')) {
+                $cids = explode('+', $catid);
                 $andcids = true;
             } else {
-                $cids = explode('-',$catid);
+                $cids = explode('-', $catid);
                 $andcids = false;
             }
         } elseif (empty($cids)) {
-            if ($this->var()->isCached('Blocks.categories','cids')) {
-                $cids = $this->var()->getCached('Blocks.categories','cids');
+            if ($this->var()->isCached('Blocks.categories', 'cids')) {
+                $cids = $this->var()->getCached('Blocks.categories', 'cids');
             }
-            if ($this->var()->isCached('Blocks.categories','andcids')) {
-                $andcids = $this->var()->getCached('Blocks.categories','andcids');
+            if ($this->var()->isCached('Blocks.categories', 'andcids')) {
+                $andcids = $this->var()->getCached('Blocks.categories', 'andcids');
             }
             if (empty($cids)) {
                 // try to get cids from input
@@ -305,10 +335,14 @@ class CategoryNavigationProperty extends SelectProperty
                 } else {
                     $cids = [];
                     if ((empty($module) || $module == $modname) && !empty($itemid)) {
-                        $links = $this->mod()->apiFunc('categories','user','getlinks',
-                                              array('modid' => $modid,
-                                                    'itemtype' => $itemtype,
-                                                    'iids' => array($itemid)));
+                        $links = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getlinks',
+                            ['modid' => $modid,
+                                'itemtype' => $itemtype,
+                                'iids' => [$itemid]]
+                        );
                         if (!empty($links) && count($links) > 0) {
                             $cids = array_keys($links);
                         }
@@ -317,7 +351,7 @@ class CategoryNavigationProperty extends SelectProperty
             }
         }
         if (!empty($cids) && !is_array($cids)) {
-            $cids = array($cids);
+            $cids = [$cids];
         }
         if (count($cids) > 0) {
             $seencid = [];
@@ -344,7 +378,9 @@ class CategoryNavigationProperty extends SelectProperty
         $data['urlextra'] = $urlextra;
         $data['urlargs'] = $urlargs;
 
-        if(!isset($data['layout'])) $data['layout'] = $this->display_layout;
+        if (!isset($data['layout'])) {
+            $data['layout'] = $this->display_layout;
+        }
         switch ($data['layout']) {
 
             case 'tree':
@@ -357,9 +393,13 @@ class CategoryNavigationProperty extends SelectProperty
                         $catparents = [];
                         $catitems = [];
                         // Get child categories
-                        $children = $this->mod()->apiFunc('categories','user','getchildren',
-                                                 array('cid' => $cid,
-                                                       'return_itself' => true));
+                        $children = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getchildren',
+                            ['cid' => $cid,
+                                'return_itself' => true]
+                        );
 
                         foreach ($children as $cat) {
                             if (!empty($catcount[$cat['cid']])) {
@@ -368,10 +408,10 @@ class CategoryNavigationProperty extends SelectProperty
                                 $count = 0;
 
                                 // TODO: check! When does this section get executed?
-    // <mikespub> this is used in the dynamic case, to show the base categories for a module+itemtype
-    //            when no categories are currently selected
-    // See also the navigation block, which was supposed to stay in sync with this code, except
-    // for returning null instead of '', and adding some block title at the end of the code...
+                                // <mikespub> this is used in the dynamic case, to show the base categories for a module+itemtype
+                                //            when no categories are currently selected
+                                // See also the navigation block, which was supposed to stay in sync with this code, except
+                                // for returning null instead of '', and adding some block title at the end of the code...
                                 // TODO: how much duplication is there in these three loops?
                                 // Note: when hiding empty categories, check the deep count
                                 // as a child category may be empty, but it could still have
@@ -387,34 +427,42 @@ class CategoryNavigationProperty extends SelectProperty
                             }
 
                             $label = $this->var()->prep($cat['name']);
-                        // TODO: now this is a tricky part...
+                            // TODO: now this is a tricky part...
                             $urlargs['catid'] = $cat['cid'];
-                            $link = $this->ctl()->getModuleURL($urlmodule,$urltype,$urlfunc,
-                                              $urlargs);
+                            $link = $this->ctl()->getModuleURL(
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
+                                $urlargs
+                            );
 
                             if ($cat['cid'] == $cid) {
-                                $catparents[] = array('catlabel' => $label,
-                                                      'catid' => $cat['cid'],
-                                                      'catlink' => $link,
-                                                      'catcount' => $count);
+                                $catparents[] = ['catlabel' => $label,
+                                    'catid' => $cat['cid'],
+                                    'catlink' => $link,
+                                    'catcount' => $count];
                             } else {
-                                $catitems[] = array('catlabel' => $label,
-                                                    'catid' => $cat['cid'],
-                                                    'catlink' => $link,
-                                                    'catcount' => $count);
+                                $catitems[] = ['catlabel' => $label,
+                                    'catid' => $cat['cid'],
+                                    'catlink' => $link,
+                                    'catcount' => $count];
                             }
                         }
-                        $data['cattrees'][] = array('catitems' => $catitems,
-                                                    'catparents' => $catparents);
+                        $data['cattrees'][] = ['catitems' => $catitems,
+                            'catparents' => $catparents];
                     }
                 } elseif (isset($rootcids) && count($rootcids) > 0) {
                     foreach ($rootcids as $cid) {
                         $catparents = [];
                         $catitems = [];
                         // Get child categories
-                        $children = $this->mod()->apiFunc('categories','user','getchildren',
-                                                 array('cid' => $cid,
-                                                       'return_itself' => true));
+                        $children = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getchildren',
+                            ['cid' => $cid,
+                                'return_itself' => true]
+                        );
                         foreach ($children as $cat) {
                             if (!empty($catcount[$cat['cid']])) {
                                 $count = $catcount[$cat['cid']];
@@ -435,36 +483,44 @@ class CategoryNavigationProperty extends SelectProperty
                             }
 
                             $label = $this->var()->prep($cat['name']);
-                        // TODO: now this is a tricky part...
+                            // TODO: now this is a tricky part...
                             $urlargs['catid'] = $cat['cid'];
-                            $link = $this->ctl()->getModuleURL($urlmodule,$urltype,$urlfunc,
-                                              $urlargs);
+                            $link = $this->ctl()->getModuleURL(
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
+                                $urlargs
+                            );
                             if ($cat['cid'] == $cid) {
-                                $catparents[] = array('catlabel' => $label,
-                                                      'catid' => $cat['cid'],
-                                                      'catlink' => $link,
-                                                      'catcount' => $count);
+                                $catparents[] = ['catlabel' => $label,
+                                    'catid' => $cat['cid'],
+                                    'catlink' => $link,
+                                    'catcount' => $count];
                             } else {
-                                $catitems[] = array('catlabel' => $label,
-                                                    'catid' => $cat['cid'],
-                                                    'catlink' => $link,
-                                                    'catcount' => $count);
+                                $catitems[] = ['catlabel' => $label,
+                                    'catid' => $cat['cid'],
+                                    'catlink' => $link,
+                                    'catcount' => $count];
                             }
                         }
-                        $data['cattrees'][] = array('catitems' => $catitems,
-                                                    'catparents' => $catparents);
+                        $data['cattrees'][] = ['catitems' => $catitems,
+                            'catparents' => $catparents];
                     }
                 } else {
                     foreach ($cids as $cid) {
                         $catparents = [];
                         $catitems = [];
                         // Get category information
-                        $parents = $this->mod()->apiFunc('categories','user','getancestors',
-                                                array('cid' => $cid));
+                        $parents = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getancestors',
+                            ['cid' => $cid]
+                        );
                         if (empty($parents)) {
                             continue;
                         }
-                    // TODO: do something with parents
+                        // TODO: do something with parents
                         $root = '';
                         $parentid = 0;
                         foreach ($parents as $id => $info) {
@@ -478,40 +534,56 @@ class CategoryNavigationProperty extends SelectProperty
                         // yes, this excludes the top-level categories too :-)
                         if (empty($parentid) || empty($root)) {
                             $parentid = $cid;
-                    //        return;
+                            //        return;
                         }
                         if (!empty($parents[$parentid])) {
                             $cat = $parents[$parentid];
                             $label = $this->var()->prep($cat['name']);
                             $urlargs['catid'] = $cat['cid'];
-                            $link = $this->ctl()->getModuleURL($urlmodule,$urltype,$urlfunc,
-                                              $urlargs);
+                            $link = $this->ctl()->getModuleURL(
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
+                                $urlargs
+                            );
                             if (!empty($catcount[$cat['cid']])) {
                                 $count = $catcount[$cat['cid']];
                             } else {
                                 // JJ: TODO: check hiding.
                                 $count = 0;
                             }
-                            $catparents[] = array('catlabel' => $label,
-                                                  'catid' => $cat['cid'],
-                                                  'catlink' => $link,
-                                                  'catcount' => $count);
+                            $catparents[] = ['catlabel' => $label,
+                                'catid' => $cat['cid'],
+                                'catlink' => $link,
+                                'catcount' => $count];
                         }
                         // Get sibling categories
-                        $siblings = $this->mod()->apiFunc('categories','user','getchildren',
-                                                 array('cid' => $parentid));
+                        $siblings = $this->mod()->apiFunc(
+                            'categories',
+                            'user',
+                            'getchildren',
+                            ['cid' => $parentid]
+                        );
                         if ($data['showchildren'] && $parentid != $cid) {
                             // Get child categories
-                            $children = $this->mod()->apiFunc('categories','user','getchildren',
-                                                     array('cid' => $cid));
+                            $children = $this->mod()->apiFunc(
+                                'categories',
+                                'user',
+                                'getchildren',
+                                ['cid' => $cid]
+                            );
                         }
 
                         // Generate list of sibling categories
                         foreach ($siblings as $cat) {
                             $label = $this->var()->prep($cat['name']);
                             $urlargs['catid'] = $cat['cid'];
-                            $link = $this->ctl()->getModuleURL($urlmodule,$urltype,$urlfunc,
-                                              $urlargs);
+                            $link = $this->ctl()->getModuleURL(
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
+                                $urlargs
+                            );
                             if (!empty($catcount[$cat['cid']])) {
                                 $count = $catcount[$cat['cid']];
                             } else {
@@ -527,30 +599,34 @@ class CategoryNavigationProperty extends SelectProperty
                                 if ($data['showchildren'] && !empty($children) && count($children) > 0) {
                                     foreach ($children as $cat) {
                                         $clabel = $this->var()->prep($cat['name']);
-                                    // TODO: now this is a tricky part...
+                                        // TODO: now this is a tricky part...
                                         $urlargs['catid'] = $cat['cid'];
-                                        $clink = $this->ctl()->getModuleURL($urlmodule,$urltype,$urlfunc,
-                                                           $urlargs);
+                                        $clink = $this->ctl()->getModuleURL(
+                                            $urlmodule,
+                                            $urltype,
+                                            $urlfunc,
+                                            $urlargs
+                                        );
                                         if (!empty($catcount[$cat['cid']])) {
                                             $ccount = $catcount[$cat['cid']];
                                         } else {
                                             $ccount = 0;
                                         }
-                                        $catchildren[] = array('clabel' => $clabel,
-                                                               'cid' => $cat['cid'],
-                                                               'clink' => $clink,
-                                                               'ccount' => $ccount);
+                                        $catchildren[] = ['clabel' => $clabel,
+                                            'cid' => $cat['cid'],
+                                            'clink' => $clink,
+                                            'ccount' => $ccount];
                                     }
                                 }
                             }
-                            $catitems[] = array('catlabel' => $label,
-                                                'catid' => $savecid,
-                                                'catlink' => $link,
-                                                'catcount' => $count,
-                                                'catchildren' => $catchildren);
+                            $catitems[] = ['catlabel' => $label,
+                                'catid' => $savecid,
+                                'catlink' => $link,
+                                'catcount' => $count,
+                                'catchildren' => $catchildren];
                         }
-                        $data['cattrees'][] = array('catitems' => $catitems,
-                                                    'catparents' => $catparents);
+                        $data['cattrees'][] = ['catitems' => $catitems,
+                            'catparents' => $catparents];
                     }
                 }
                 break;
@@ -563,30 +639,38 @@ class CategoryNavigationProperty extends SelectProperty
 
                     // Get root categories
                     $catlist = $this->mod()->apiFunc(
-                        'categories','user','getcatinfo',
-                        array('cids' => $basecids)
+                        'categories',
+                        'user',
+                        'getcatinfo',
+                        ['cids' => $basecids]
                     );
                     $join = '';
 
-                    if (empty($catlist) || !is_array($catlist)) {return '';}
+                    if (empty($catlist) || !is_array($catlist)) {
+                        return '';
+                    }
 
                     // preserve order of base categories if possible
                     foreach ($basecids as $cid) {
-                        if (!isset($catlist[$cid])) continue;
+                        if (!isset($catlist[$cid])) {
+                            continue;
+                        }
                         $cat = $catlist[$cid];
                         // TODO: now this is a tricky part...
                         $urlargs['catid'] = $cat['cid'];
                         $link = $this->ctl()->getModuleURL(
-                            $urlmodule,$urltype,$urlfunc,
+                            $urlmodule,
+                            $urltype,
+                            $urlfunc,
                             $urlargs
                         );
                         $label = $this->var()->prep($cat['name']);
-                        $data['catitems'][] = array(
+                        $data['catitems'][] = [
                             'catlabel' => $label,
                             'catid' => $cat['cid'],
                             'catlink' => $link,
-                            'catjoin' => $join
-                        );
+                            'catjoin' => $join,
+                        ];
                         $join = ' | ';
                     }
                 } else {
@@ -605,14 +689,18 @@ class CategoryNavigationProperty extends SelectProperty
                     foreach ($cids as $cid) {
                         // Get category information.
                         $parents = $this->mod()->apiFunc(
-                            'categories', 'user', 'getancestors',
-                            array('cid' => $cid, 'self' => true)
+                            'categories',
+                            'user',
+                            'getancestors',
+                            ['cid' => $cid, 'self' => true]
                         );
 
                         // Some kind of error; skip this category.
                         // The ancestors list should never be empty, as it
                         // includes 'self'.
-                        if (empty($parents)) {continue;}
+                        if (empty($parents)) {
+                            continue;
+                        }
 
                         $catleft = 0;
                         $baseorder = 0;
@@ -646,20 +734,22 @@ class CategoryNavigationProperty extends SelectProperty
                         $label = $this->ml('All');
                         unset($urlargs['catid']);
                         $link = $this->ctl()->getModuleURL(
-                            $urlmodule,$urltype,$urlfunc,
+                            $urlmodule,
+                            $urltype,
+                            $urlfunc,
                             $urlargs
                         );
                         $join = '';
                         $baseflag = 0;
                         $trailbasecid = 0;
 
-                        $catitems[] = array(
+                        $catitems[] = [
                             'catlabel' => $label,
                             'catid' => $cid,
                             'catlink' => $link,
                             'catjoin' => $join,
-                            'baseflag' => $baseflag
-                        );
+                            'baseflag' => $baseflag,
+                        ];
 
                         // TODO: The join value only makes sense if the complete trail is
                         // displayed. If only a partial trail is displayed, then the join
@@ -670,7 +760,9 @@ class CategoryNavigationProperty extends SelectProperty
 
                         // Loop for each ancestor and create an entry.
                         foreach ($parents as $cat) {
-                            if ($baseflag == 2) {$baseflag = 3;}
+                            if ($baseflag == 2) {
+                                $baseflag = 3;
+                            }
 
                             // Is this cid a base cid?
                             if ($baseflag == 1 && in_array($cat['cid'], $basecids)) {
@@ -682,9 +774,9 @@ class CategoryNavigationProperty extends SelectProperty
                                     // return the index in the basecids
                                     $baseorder = array_search($cat['cid'], $basecids);
                                     if ($baseorder === false) {
-                                         $baseorder = 0;
+                                        $baseorder = 0;
                                     } else {
-                                         $baseorder++;
+                                        $baseorder++;
                                     }
                                 }
                             }
@@ -701,7 +793,9 @@ class CategoryNavigationProperty extends SelectProperty
                             } else {
                                 $urlargs['catid'] = $cat['cid'];
                                 $link = $this->ctl()->getModuleURL(
-                                    $urlmodule, $urltype, $urlfunc,
+                                    $urlmodule,
+                                    $urltype,
+                                    $urlfunc,
                                     $urlargs
                                 );
                             }
@@ -728,13 +822,13 @@ class CategoryNavigationProperty extends SelectProperty
                                 }
                             }
 
-                            $catitems[] = array(
+                            $catitems[] = [
                                 'catlabel' => $label,
                                 'catid' => $cat['cid'],
                                 'catlink' => $link,
                                 'catjoin' => $join,
-                                'baseflag' => $baseflag
-                            );
+                                'baseflag' => $baseflag,
+                            ];
                         }
 
                         // TODO: move to template.
@@ -743,22 +837,24 @@ class CategoryNavigationProperty extends SelectProperty
                         } else {
                             $urlargs['catid'] = '_' . $cid;
                             $viewall = $this->ctl()->getModuleURL(
-                                $urlmodule, $urltype, $urlfunc,
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
                                 $urlargs
                             );
                         }
-                        $data['cattrails'][] = array(
+                        $data['cattrails'][] = [
                             'catitems' => $catitems,
                             'catcount' => $curcount,
                             'viewall' => $viewall,
                             'catid' => $cid,
                             'catleft' => $catleft,
                             'baseorder' => $baseorder,
-                            'basecatid' => $trailbasecid
-                        );
+                            'basecatid' => $trailbasecid,
+                        ];
                     }
                     // sort navigation trails by base category order, then by Celko tree
-                    uasort($data['cattrails'], array('CategoryNavigationProperty','sortbyorder'));
+                    uasort($data['cattrails'], ['CategoryNavigationProperty','sortbyorder']);
                     // re-order the list of cids and descriptions accordingly
                     $sortcids = [];
                     $sortdescr = [];
@@ -776,23 +872,27 @@ class CategoryNavigationProperty extends SelectProperty
                             $label = $this->ml('Any of these categories');
                             $urlargs['catid'] = join('-', $sortcids);
                             $link = $this->ctl()->getModuleURL(
-                                $urlmodule,$urltype,$urlfunc,
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
                                 $urlargs
                             );
                             $join = '';
-                            $catitems[] = array(
+                            $catitems[] = [
                                 'catlabel' => $label,
                                 'catid' => join('-', $sortcids),
                                 'catlink' => $link,
                                 'catjoin' => $join,
-                                'baseflag' => 5
-                            );
+                                'baseflag' => 5,
+                            ];
                         }
                         if (empty($andcids)) {
                             $label = $this->ml('All of these categories');
                             $urlargs['catid'] = join('+', $sortcids);
                             $link = $this->ctl()->getModuleURL(
-                                $urlmodule, $urltype, $urlfunc,
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
                                 $urlargs
                             );
                             if (!empty($itemid)) {
@@ -800,21 +900,21 @@ class CategoryNavigationProperty extends SelectProperty
                             } else {
                                 $join = '';
                             }
-                            $catitems[] = array(
+                            $catitems[] = [
                                 'catlabel' => $label,
                                 'catid' => join('+', $sortcids),
                                 'catlink' => $link,
                                 'catjoin' => $join,
-                                'baseflag' => 5
-                            );
+                                'baseflag' => 5,
+                            ];
                         }
                         $curcount = 0;
-                        $data['cattrails'][] = array(
+                        $data['cattrails'][] = [
                             'catitems' => $catitems,
-                            'catcount' => $curcount
-                        );
+                            'catcount' => $curcount,
+                        ];
                         // add a hit for the categories we're viewing here
-                        if (empty($itemid) && $this->mod()->isHooked('hitcount','categories')) {
+                        if (empty($itemid) && $this->mod()->isHooked('hitcount', 'categories')) {
                             foreach ($cids as $cid) {
                                 if (empty($cid)) {
                                     continue;
@@ -822,9 +922,13 @@ class CategoryNavigationProperty extends SelectProperty
                                 // if we're viewing all items below a certain category, i.e. catid = _NN
                                 $cid = str_replace('_', '', $cid);
                                 // FIXME: if this fails, an exception will be set, so it needs to be cleared?
-                                $this->mod()->apiFunc('hitcount','admin','update',
-                                              array('modname' => 'categories',
-                                                    'objectid' => $cid));
+                                $this->mod()->apiFunc(
+                                    'hitcount',
+                                    'admin',
+                                    'update',
+                                    ['modname' => 'categories',
+                                        'objectid' => $cid]
+                                );
                             }
                         }
                     }
@@ -849,18 +953,20 @@ class CategoryNavigationProperty extends SelectProperty
                         $curcat['itemid'] = $cids[0];
                         $urlargs['catid'] = $cids[0];
                         $curcat['returnurl'] = $this->ctl()->getModuleURL(
-                            $urlmodule, $urltype, $urlfunc,
+                            $urlmodule,
+                            $urltype,
+                            $urlfunc,
                             $urlargs
                         );
                         // pass along the current module & itemtype for pubsub (urgh)
                         $curcat['current_module'] = $data['module'];
                         $curcat['current_itemtype'] = $data['itemtype'];
                         // calling item display hooks *for the categories module* here !
-                    // FIXME: if hitcount is hooked to categories, this will also increase the hitcount
-                    //        of the category when displaying an article that belongs to that single category
-                    // Possible solution : extend $this->var()->isCached('Hooks.hitcount','nocount') mechanism to take
-                    // into account the module ???
-                        $data['cathooks'] = $this->mod()->callHooks('item','display',$cids[0],$curcat,'categories');
+                        // FIXME: if hitcount is hooked to categories, this will also increase the hitcount
+                        //        of the category when displaying an article that belongs to that single category
+                        // Possible solution : extend $this->var()->isCached('Hooks.hitcount','nocount') mechanism to take
+                        // into account the module ???
+                        $data['cathooks'] = $this->mod()->callHooks('item', 'display', $cids[0], $curcat, 'categories');
                         // saving the current cat id for use e.g. with DD tags (<xar:data-display module="categories" itemid="$catid"/>)
                         $data['catid'] = $curcat['cid'];
                     }
@@ -890,8 +996,10 @@ class CategoryNavigationProperty extends SelectProperty
                     if ($data['showchildren'] == 2) {
                         // Get child categories (all sub-levels)
                         $childlist = $this->mod()->apiFunc(
-                            'categories', 'visual', 'listarray',
-                            array('cid' => $cids[0])
+                            'categories',
+                            'visual',
+                            'listarray',
+                            ['cid' => $cids[0]]
                         );
                         if (empty($childlist) || count($childlist) == 0) {
                             break;
@@ -903,7 +1011,9 @@ class CategoryNavigationProperty extends SelectProperty
                             $label = $this->var()->prep($info['name']);
                             $urlargs['catid'] = $info['id'];
                             $link = $this->ctl()->getModuleURL(
-                                $urlmodule, $urltype, $urlfunc,
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
                                 $urlargs
                             );
                             if (!empty($catcount[$info['id']])) {
@@ -911,22 +1021,24 @@ class CategoryNavigationProperty extends SelectProperty
                             } else {
                                 $count = 0;
                             }
-                            $data['catlines'][] = array(
+                            $data['catlines'][] = [
                                 'catlabel' => $label,
                                 'catid' => $info['id'],
                                 'catlink' => $link,
                                 'catdescr' => '',
                                 'catcount' => $count,
                                 'beforetags' => $info['beforetags'],
-                                'aftertags' => $info['aftertags']
-                            );
+                                'aftertags' => $info['aftertags'],
+                            ];
                         }
                         unset($childlist);
                     } elseif ($data['showchildren'] == 1) {
                         // Get child categories (1 level only)
                         $children = $this->mod()->apiFunc(
-                            'categories', 'user', 'getchildren',
-                            array('cid' => $cids[0])
+                            'categories',
+                            'user',
+                            'getchildren',
+                            ['cid' => $cids[0]]
                         );
                         if (empty($children) || count($children) == 0) {
                             break;
@@ -956,39 +1068,41 @@ class CategoryNavigationProperty extends SelectProperty
                             $label = $this->var()->prep($cat['name']);
                             $urlargs['catid'] = $cat['cid'];
                             $link = $this->ctl()->getModuleURL(
-                                $urlmodule, $urltype, $urlfunc,
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
                                 $urlargs
                             );
                             if (!empty($cat['description']) && $cat['description'] != $cat['name']) {
-                                    $descr = $this->var()->prepHTML($cat['description']);
-                                } else {
-                                    $descr = '';
-                                }
+                                $descr = $this->var()->prepHTML($cat['description']);
+                            } else {
+                                $descr = '';
+                            }
                             if (!empty($cat['image'])) {
                                 // find the image in categories (we need to specify the module here)
                                 $image = $this->tpl()->getImage($cat['image'], 'categories');
                                 $numicons++;
-                                $data['caticons'][] = array(
+                                $data['caticons'][] = [
                                     'catlabel' => $label,
                                     'catid' => $cat['cid'],
                                     'catlink' => $link,
                                     'catdescr' => $descr,
                                     'catimage' => $image,
                                     'catcount' => $count,
-                                    'catnum' => $numicons
-                                );
+                                    'catnum' => $numicons,
+                                ];
                             } else {
                                 $beforetags = '<li>';
                                 $aftertags = '</li>';
-                                $data['catlines'][] = array(
+                                $data['catlines'][] = [
                                     'catlabel' => $label,
                                     'catid' => $cat['cid'],
                                     'catlink' => $link,
                                     'catdescr' => $descr,
                                     'catcount' => $count,
                                     'beforetags' => $beforetags,
-                                    'aftertags' => $aftertags
-                                );
+                                    'aftertags' => $aftertags,
+                                ];
                             }
                         }
                         unset($children);
@@ -1016,52 +1130,68 @@ class CategoryNavigationProperty extends SelectProperty
                 } else {
                     // See if we need to show anything
                     if (empty($showprevnext)) {
-                        if ($this->var()->isCached('Blocks.categories','showprevnext')) {
-                            $showprevnext = $this->var()->getCached('Blocks.categories','showprevnext');
+                        if ($this->var()->isCached('Blocks.categories', 'showprevnext')) {
+                            $showprevnext = $this->var()->getCached('Blocks.categories', 'showprevnext');
                             if (empty($showprevnext)) {
                                 return '';
                             }
                         }
                     }
-                    $cat = $this->mod()->apiFunc('categories','user','getcatinfo',
-                                    array('cid' => $cids[0]));
+                    $cat = $this->mod()->apiFunc(
+                        'categories',
+                        'user',
+                        'getcatinfo',
+                        ['cid' => $cids[0]]
+                    );
                     if (empty($cat)) {
                         return '';
                     }
-                    $neighbours = $this->mod()->apiFunc('categories','user','getneighbours',
-                                               $cat);
+                    $neighbours = $this->mod()->apiFunc(
+                        'categories',
+                        'user',
+                        'getneighbours',
+                        $cat
+                    );
                     if (empty($neighbours) || count($neighbours) == 0) {
                         return '';
                     }
                     foreach ($neighbours as $neighbour) {
-    //                    if ($neighbour['link'] == 'parent') {
-    //                        $data['uplabel'] = $neighbour['name'];
-    //                        $data['upcid'] = $neighbour['cid'];
-    //                        $urlargs['catid'] = $neighbour['cid'];
-    //                        $data['uplink'] = $this->ctl()->getModuleURL($urlmodule,$urltype,$urlfunc,
-    //                                                    $urlargs);
-    //                    } elseif ($neighbour['link'] == 'previous') {
+                        //                    if ($neighbour['link'] == 'parent') {
+                        //                        $data['uplabel'] = $neighbour['name'];
+                        //                        $data['upcid'] = $neighbour['cid'];
+                        //                        $urlargs['catid'] = $neighbour['cid'];
+                        //                        $data['uplink'] = $this->ctl()->getModuleURL($urlmodule,$urltype,$urlfunc,
+                        //                                                    $urlargs);
+                        //                    } elseif ($neighbour['link'] == 'previous') {
                         if ($neighbour['link'] == 'previous') {
                             $data['prevlabel'] = $neighbour['name'];
                             $data['prevcid'] = $neighbour['cid'];
                             $urlargs['catid'] = $neighbour['cid'];
-                            $data['prevlink'] = $this->ctl()->getModuleURL($urlmodule,$urltype,$urlfunc,
-                                                          $urlargs);
+                            $data['prevlink'] = $this->ctl()->getModuleURL(
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
+                                $urlargs
+                            );
                         } elseif ($neighbour['link'] == 'next') {
                             $data['nextlabel'] = $neighbour['name'];
                             $data['nextcid'] = $neighbour['cid'];
                             $urlargs['catid'] = $neighbour['cid'];
-                            $data['nextlink'] = $this->ctl()->getModuleURL($urlmodule,$urltype,$urlfunc,
-                                                          $urlargs);
+                            $data['nextlink'] = $this->ctl()->getModuleURL(
+                                $urlmodule,
+                                $urltype,
+                                $urlfunc,
+                                $urlargs
+                            );
                         }
                     }
-                    if (!isset($data['nextlabel']) &&
-                        !isset($data['prevlabel'])) {
+                    if (!isset($data['nextlabel'])
+                        && !isset($data['prevlabel'])) {
                         return '';
                     }
-    //                if (!isset($data['uplabel'])) {
-    //                    $data['uplabel'] = '&#160;';
-    //                }
+                    //                if (!isset($data['uplabel'])) {
+                    //                    $data['uplabel'] = '&#160;';
+                    //                }
                 }
                 break;
         }
@@ -1076,21 +1206,23 @@ class CategoryNavigationProperty extends SelectProperty
 
     /**
      * sort navigation trails by base category order, then by Celko tree
-     * 
+     *
      * @param array<string, mixed> $a Parameter data array
      * @param array<string, mixed> $b Parameter data array
      * @return int Returns sort number
      */
-    static function sortbyorder ($a,$b)
+    public static function sortbyorder($a, $b)
     {
         if ($a['baseorder'] == $b['baseorder']) {
-            if ($a['catleft'] == $b['catleft']) return 0;
+            if ($a['catleft'] == $b['catleft']) {
+                return 0;
+            }
             return ($a['catleft'] > $b['catleft']) ? 1 : -1;
         }
         return ($a['baseorder'] > $b['baseorder']) ? 1 : -1;
     }
 
-	/**
+    /**
      * Retrieve or check an individual option on demand
      *
      * @param  $check boolean
@@ -1101,18 +1233,24 @@ class CategoryNavigationProperty extends SelectProperty
      *                - true, if an option exists whose store value is $this->value<br/>
      *                - false, if no such option exists<br/>
      */
-    function getOption($check = false)
+    public function getOption($check = false)
     {
         if (!isset($this->value)) {
-             if ($check) return true;
-             return null;
+            if ($check) {
+                return true;
+            }
+            return null;
         }
-        $result = $this->mod()->apiFunc('categories','user','getcatinfo',array('cid' => $this->value));
+        $result = $this->mod()->apiFunc('categories','user','getcatinfo',['cid' => $this->value]);
         if (!empty($result)) {
-            if ($check) return true;
+            if ($check) {
+                return true;
+            }
             return $result['name'];
         }
-        if ($check) return false;
+        if ($check) {
+            return false;
+        }
         return $this->value;
     }
 

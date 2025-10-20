@@ -78,8 +78,8 @@ class DisplayMethod extends MethodClass
         $this->tpl()->setPageTitle($myobject->label);
 
         // Return the template variables defined in this function
-        if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display.xt') ||
-            file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xt')) {
+        if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display.xt')
+            || file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xt')) {
             return $this->tpl()->module($args['tplmodule'], 'user', 'display', $data, $args['template']);
         } else {
             return $this->tpl()->module('dynamicdata', 'user', 'display', $data, $args['template']);

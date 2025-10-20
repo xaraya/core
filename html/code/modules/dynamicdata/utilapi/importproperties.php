@@ -99,8 +99,8 @@ class ImportpropertiesMethod extends MethodClass
         }
 
         $fields = $utilapi->getstatic(['module_id' => $module_id,
-                'itemtype' => $itemtype,
-                'table' => $table]);
+            'itemtype' => $itemtype,
+            'table' => $table]);
         if (!isset($fields) || !is_array($fields)) {
             return;
         }
@@ -108,16 +108,16 @@ class ImportpropertiesMethod extends MethodClass
         // create new properties
         foreach ($fields as $name => $field) {
             $id = $adminapi->createproperty(['name'       => $name,
-                    'label'      => $field['label'],
-                    'objectid'   => $objectid,
-                    'moduleid'   => $module_id,
-                    'itemtype'   => $itemtype,
-                    'type'       => $field['type'],
-                    'defaultvalue' => $field['default'],
-                    'source'     => $field['source'],
-                    'status'     => $field['status'],
-                    'seq'      => $field['seq'],
-                    'configuration' => $field['configuration']]);
+                'label'      => $field['label'],
+                'objectid'   => $objectid,
+                'moduleid'   => $module_id,
+                'itemtype'   => $itemtype,
+                'type'       => $field['type'],
+                'defaultvalue' => $field['default'],
+                'source'     => $field['source'],
+                'status'     => $field['status'],
+                'seq'      => $field['seq'],
+                'configuration' => $field['configuration']]);
             if (empty($id)) {
                 return;
             }

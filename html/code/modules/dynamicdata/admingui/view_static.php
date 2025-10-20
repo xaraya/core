@@ -62,9 +62,9 @@ class ViewStaticMethod extends MethodClass
         $data['menutitle'] = $this->ml('Dynamic Data Utilities');
 
         $static = $utilapi->getstatic(['module'   => $module,
-                'module_id'    => $module_id,
-                'itemtype' => $itemtype,
-                'table'    => $table]);
+            'module_id'    => $module_id,
+            'itemtype' => $itemtype,
+            'table'    => $table]);
 
         $metas = $utilapi->getmeta([]);
         $data['tables'] = [];

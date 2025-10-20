@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\installer
  * @subpackage installer
@@ -23,10 +24,10 @@ function sql_230_03()
     ");
     $data['reply'] = xarML("
         Success!
-    ");    
-    
+    ");
+
     //Load Table Maintainance API
-    sys::import('xaraya.tableddl');    
+    sys::import('xaraya.tableddl');
     // create table
     $dbconn  = xarDB::getConn();
     try {
@@ -43,20 +44,20 @@ function sql_230_03()
         *   `configuration` mediumtext NOT NULL,
         *   PRIMARY KEY (`id`)
          */
-        $fields = array(
-            'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true,     'primary_key' => true),
-            'theme_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),    
-            'name' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => '', 'charset' => $charset),
-            'description' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset),
-            'property_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-            'label' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset),
-            'configuration' => array('type' => 'text', 'null' => false, 'charset' => $charset)
-        );
+        $fields = [
+            'id' => ['type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true,     'primary_key' => true],
+            'theme_id' => ['type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'],
+            'name' => ['type' => 'varchar', 'size' => 64, 'null' => false, 'default' => '', 'charset' => $charset],
+            'description' => ['type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset],
+            'property_id' => ['type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'],
+            'label' => ['type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset],
+            'configuration' => ['type' => 'text', 'null' => false, 'charset' => $charset],
+        ];
 
         // Create the eventsystem table
         $query = xarTableDDL::createTable($table, $fields);
         $dbconn->Execute($query);
-        $dbconn->commit();     
+        $dbconn->commit();
 
     } catch (Exception $e) {
         // Damn

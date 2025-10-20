@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Finclude Block
  *
@@ -17,7 +18,6 @@
 sys::import('xaraya.structures.containers.blocks.basicblock');
 class Base_FincludeBlock extends BasicBlock implements iBlock
 {
-
     protected $type                = 'finclude';
     protected $module              = 'base';
     protected $text_type           = 'finclude';

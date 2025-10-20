@@ -60,17 +60,17 @@ class GetsourcefilenameMethod extends MethodClass
         $this->log()->info("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt");
         $this->log()->info("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xt");
 
-        if (!empty($templateName) &&
-            file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt")) {
+        if (!empty($templateName)
+            && file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt")) {
 
-        } elseif (!empty($templateName) &&
-            file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart.xt")) {
+        } elseif (!empty($templateName)
+            && file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart.xt")) {
 
-        } elseif (!empty($templateName) &&
-            file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart-$mailType.xt")) {
+        } elseif (!empty($templateName)
+            && file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart-$mailType.xt")) {
 
-        } elseif (!empty($templateName) &&
-            file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart.xt")) {
+        } elseif (!empty($templateName)
+            && file_exists($sourceFileName = "$tplMessagingDir/$templateName-$messagepart.xt")) {
 
         } else {
             throw new FileNotFoundException($this->ml('No template was found corresponding to #(1) #(2)', $templateName, $messagepart));

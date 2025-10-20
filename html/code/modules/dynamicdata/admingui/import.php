@@ -67,7 +67,8 @@ class ImportMethod extends MethodClass
         $data['authid'] = $this->sec()->genAuthKey();
 
         $filetype = 'xml';
-        $files = $adminapi->browse(['basedir' => $basedir,
+        $files = $adminapi->browse(
+            ['basedir' => $basedir,
                 'filetype' => $filetype]
         );
         if (!isset($files) || count($files) < 1) {
@@ -96,7 +97,8 @@ class ImportMethod extends MethodClass
                     throw new FileNotFoundException($basedir, 'No files were found to import in directory "#(1)"');
                 }
                 try {
-                    $objectid = $utilapi->import(['file' => $basedir . '/' . $file,
+                    $objectid = $utilapi->import(
+                        ['file' => $basedir . '/' . $file,
                             'keepitemid' => $keepitemid,
                             'overwrite' =>  $overwrite,
                             'prefix' => $data['prefix']]
@@ -108,7 +110,8 @@ class ImportMethod extends MethodClass
                 }
             } else {
                 try {
-                    $objectid = $utilapi->import(['xml' => $xml,
+                    $objectid = $utilapi->import(
+                        ['xml' => $xml,
                             'keepitemid' => $keepitemid,
                             'overwrite' =>  $overwrite,
                             'prefix' => $data['prefix']]

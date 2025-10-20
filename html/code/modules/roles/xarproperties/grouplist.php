@@ -1,4 +1,5 @@
 <?php
+
 /* Include the base class */
 sys::import('modules.base.xarproperties.dropdown');
 
@@ -19,7 +20,7 @@ class GroupListProperty extends SelectProperty
     public $id         = 45;
     public $name       = 'grouplist';
     public $desc       = 'Group List';
-    public $reqmodules = array('roles');
+    public $reqmodules = ['roles'];
 
     public $previous_groupid = 0;
     public $current_groupid  = 0;
@@ -43,24 +44,24 @@ class GroupListProperty extends SelectProperty
     *   group:name[,name] - select only the given group(s)
     */
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
-	/**
-	 * Get the value of a dropdown
-	 * 
-	 * @param  string name The name of the dropdown
-	 * @param  string value The value of the dropdown
-	 */
+    /**
+     * Get the value of a dropdown
+     *
+     * @param  string name The name of the dropdown
+     * @param  string value The value of the dropdown
+     */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
-        
+
         // Get the previous group from the form
         $this->var()->find('previous_value_' . $name, $previous_value, 'int', 0);
         $this->previous_groupid = $previous_value;
@@ -68,20 +69,26 @@ class GroupListProperty extends SelectProperty
         return parent::checkInput();
     }
 
-	/**
-	 * Validate the value of a selected dropdown option
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of a selected dropdown option
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
-        
+        if (!parent::validateValue($value)) {
+            return false;
+        }
+
         if (!empty($value)) {
             // check if this is a valid group id
-            $group = $this->mod()->apiFunc('roles','user','get',
-                                   array('id' => $value,
-                                         'itemtype' => 2)); // we're looking for a group here
+            $group = $this->mod()->apiFunc(
+                'roles',
+                'user',
+                'get',
+                ['id' => $value,
+                    'itemtype' => 2]
+            ); // we're looking for a group here
             if (!empty($group)) {
                 $this->current_groupid = $value;
                 return true;
@@ -95,17 +102,17 @@ class GroupListProperty extends SelectProperty
         return false;
     }
 
-	/**
+    /**
      * Create Value
-     * 
+     *
      * @param int $itemid
      * @return boolean|void Returns true
      */
-    public function createValue($itemid=0)
+    public function createValue($itemid = 0)
     {
         $xartable = $this->db()->getTables();
         $rolemembers = $xartable['rolemembers'];
-        
+
         if ($this->initialization_update_behavior == 'replace' && $this->previous_groupid) {
             if (!$itemid) {
                 $bindvars = [];
@@ -114,7 +121,9 @@ class GroupListProperty extends SelectProperty
                 $dbconn = $this->db()->getConn();
                 $stmt = $dbconn->prepareStatement($query);
                 $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
-                if(!$result) return;
+                if (!$result) {
+                    return;
+                }
             } else {
                 $bindvars = [];
                 $query = "UPDATE FROM $rolemembers SET parent_id = ? WHERE role_id = ? AND parent_id = ?";
@@ -124,10 +133,14 @@ class GroupListProperty extends SelectProperty
                 $dbconn = $this->db()->getConn();
                 $stmt = $dbconn->prepareStatement($query);
                 $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
-                if(!$result) return;
+                if (!$result) {
+                    return;
+                }
             }
         } else {
-            if (!$itemid) return true;
+            if (!$itemid) {
+                return true;
+            }
             $bindvars = [];
             $query = "INSERT INTO $rolemembers (role_id, parent_id) VALUES (?, ?)";
             $bindvars[] = $itemid;
@@ -135,37 +148,39 @@ class GroupListProperty extends SelectProperty
             $dbconn = $this->db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
-            if(!$result) return;
-        }        
+            if (!$result) {
+                return;
+            }
+        }
         return true;
     }
 
-	/**
+    /**
      * Updates value for the given item id.
-	 *
+     *
      * @param int $itemid ID of the item to be updated
      * @return boolean Returns true on success, false on failure
      */
-    public function updateValue($itemid=0)
+    public function updateValue($itemid = 0)
     {
         return $this->createValue($itemid);
     }
 
-	/**
+    /**
      * Deletes a value by item ID. Not implemented
-     * 
+     *
      * @param int $itemid Item ID to be deleted
      * @return int Returns Item ID
      */
-    public function deleteValue($itemid=0)
+    public function deleteValue($itemid = 0)
     {
         return $itemid;
     }
 
-	/**
-	 * Get the value by item ID
-	 * @param int $itemid the item id of value
-	 */
+    /**
+     * Get the value by item ID
+     * @param int $itemid the item id of value
+     */
     public function retrieveValue($itemid)
     {
         $this->value = $itemid;
@@ -181,8 +196,12 @@ class GroupListProperty extends SelectProperty
             $dbconn = $this->db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, $this->db()->getFetchAssoc());
-            if(!$result) return;echo $query;
-            foreach ($result->next() as $row) {var_dump($row);echo "X";
+            if (!$result) {
+                return;
+            }echo $query;
+            foreach ($result->next() as $row) {
+                var_dump($row);
+                echo "X";
                 $candidate = xarRoles::get($row['parent_id']);
                 if ($candidate->isAncestor($basegroup) || ($candidate->getId() == $basegroup->getId())) {
                     $value = $row['parent_id'];
@@ -193,41 +212,55 @@ class GroupListProperty extends SelectProperty
         return $value;
     }
 
-	/**
-	 * Display a dropdown for input
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
+    /**
+     * Display a dropdown for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
+        if (isset($data['behavior'])) {
+            $this->initialization_update_behavior = $data['behavior'];
+        }
         // CHECKME: is this needed?
-        if (isset($data['basegroup'])) $this->validation_group_list = $data['basegroup'];
-        if (isset($data['parent'])) $this->validation_parentgroup_list = $data['parent'];
-        if (isset($data['ancestor'])) $this->validation_ancestorgroup_list = $data['ancestor'];
-        if (isset($data['show_top'])) $this->show_top = $data['show_top'];
+        if (isset($data['basegroup'])) {
+            $this->validation_group_list = $data['basegroup'];
+        }
+        if (isset($data['parent'])) {
+            $this->validation_parentgroup_list = $data['parent'];
+        }
+        if (isset($data['ancestor'])) {
+            $this->validation_ancestorgroup_list = $data['ancestor'];
+        }
+        if (isset($data['show_top'])) {
+            $this->show_top = $data['show_top'];
+        }
 
-        // If we are not standalone get the group value first 
+        // If we are not standalone get the group value first
         if ($this->_itemid) {
             $data['value'] = $this->value;
-//            $data['value'] = $this->retrieveValue($this->_itemid);
+            //            $data['value'] = $this->retrieveValue($this->_itemid);
         }
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a dropdown for output
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */	
+    /**
+     * Display a dropdown for output
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
     public function showOutput(array $data = [])
     {
-        if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
-        if (isset($data['basegroup'])) $this->validation_group_list = $data['basegroup'];
+        if (isset($data['behavior'])) {
+            $this->initialization_update_behavior = $data['behavior'];
+        }
+        if (isset($data['basegroup'])) {
+            $this->validation_group_list = $data['basegroup'];
+        }
 
-        // If we are not standalone get the group value first 
+        // If we are not standalone get the group value first
         if ($this->_itemid) {
             // It's a standalone property
             $data['value'] = $this->retrieveValue($this->_itemid);
@@ -244,9 +277,9 @@ class GroupListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
-	/**
+    /**
      * Retrieve the list of options
-     * 
+     *
      */
     public function getOptions()
     {
@@ -263,7 +296,7 @@ class GroupListProperty extends SelectProperty
         }
         // TODO: handle large # of groups too (optional - less urgent than for users)
         $options = $this->getFirstline();
-        $options = array_merge($options,$this->mod()->apiFunc('roles', 'user', 'getallgroups', $select_options) ?? []);
+        $options = array_merge($options, $this->mod()->apiFunc('roles', 'user', 'getallgroups', $select_options) ?? []);
         return $options;
     }
 

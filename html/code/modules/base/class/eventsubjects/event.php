@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -8,9 +9,9 @@
  * @link http://xaraya.info/index.php/release/68.html
  */
 /**
- * Event Messaging System 
+ * Event Messaging System
 **/
-/** 
+/**
  * Event Subject
  *
  * This event is raised by the event system every time the notify method is called

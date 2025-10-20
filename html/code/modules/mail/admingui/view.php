@@ -74,11 +74,11 @@ class ViewMethod extends MethodClass
     {
         $data = [];
         $data['authid'] = $this->sec()->genAuthKey();
-        $data['qdef_name'] = isset($qDef) ? $qDef : 'mailqueues';
+        $data['qdef_name'] = $qDef ?? 'mailqueues';
         $data['qdef_method'] = 1;
-        $data['qdef_create'] = array(array('id' => 1,'name' => $this->ml('Create new object with name')));
-        $data['qdef_choose'] = array(array('id' => 2,'name' => $this->ml('Use an existing object')));
+        $data['qdef_create'] = [['id' => 1,'name' => $this->ml('Create new object with name')]];
+        $data['qdef_choose'] = [['id' => 2,'name' => $this->ml('Use an existing object')]];
         $data['context'] = $context;
-        return $this->tpl()->module('mail','admin','queue-newdef',$data);
+        return $this->tpl()->module('mail', 'admin', 'queue-newdef', $data);
     }
 }

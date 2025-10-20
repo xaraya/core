@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upgrade file
  *
@@ -14,33 +15,33 @@
 function main_upgrade_211()
 {
     $data['upgrade']['message'] = xarML('The upgrade to version 2.1.1 was successfully completed');
-    $data['upgrade']['tasks'] = array();
+    $data['upgrade']['tasks'] = [];
 
-    $upgrades = array(
-                        'sql_211_01',
-                        'sql_211_02',
-                    );
+    $upgrades = [
+        'sql_211_01',
+        'sql_211_02',
+    ];
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/211/database/' . $upgrade . '.php')) {
-            $data['upgrade']['tasks'][] = array(
+            $data['upgrade']['tasks'][] = [
                 'reply' => xarML('Failed!'),
                 'description' => Upgrader::$errormessage,
                 'reference' => $upgrade,
                 'success' => false,
-            );
+            ];
             $data['upgrade']['errormessage'] = xarML('Some checks failed. Check the reference(s) above to determine the cause.');
             continue;
         }
         $result = $upgrade();
-        $data['upgrade']['tasks'][] = array(
-                            'reply' => $result['reply'],
-                            'description' => $result['task'],
-                            'reference' => $upgrade,
-                            'success' => $result['success'],
-                            );        
+        $data['upgrade']['tasks'][] = [
+            'reply' => $result['reply'],
+            'description' => $result['task'],
+            'reference' => $upgrade,
+            'success' => $result['success'],
+        ];
         if (!$result['success']) {
             $data['upgrade']['errormessage'] = xarML('Some parts of the upgrade failed. Check the reference(s) above to determine the cause.');
-//            break;
+            //            break;
         }
     }
     return $data;

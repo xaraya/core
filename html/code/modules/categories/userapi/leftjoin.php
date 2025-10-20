@@ -175,19 +175,19 @@ class LeftjoinMethod extends MethodClass
             $leftjoin['cids'] = [];
             $leftjoin['cids'][] = $catlinks[0] . '.category_id';
             for ($i = 1; $i < count($catlinks); $i++) {
-                $leftjoin['more'] .= ' LEFT JOIN ' . $categorieslinkagetable .
-                                         ' ' . $catlinks[$i] .
-                                     ' ON ' . $leftjoin['item_id'] . ' = ' .
-                                         $catlinks[$i] . '.item_id' .
-                                     ' AND ' . $leftjoin['module_id'] . ' = ' .
-                                         $catlinks[$i] . '.module_id ';
+                $leftjoin['more'] .= ' LEFT JOIN ' . $categorieslinkagetable
+                                         . ' ' . $catlinks[$i]
+                                     . ' ON ' . $leftjoin['item_id'] . ' = '
+                                         . $catlinks[$i] . '.item_id'
+                                     . ' AND ' . $leftjoin['module_id'] . ' = '
+                                         . $catlinks[$i] . '.module_id ';
                 $leftjoin['cids'][] = $catlinks[$i] . '.category_id';
             }
         } elseif (!empty($cidtree)) {
             $leftjoin['table'] = $categorieslinkagetable;
             $categoriestable = $xartable['categories'];
-            $leftjoin['more'] = ' LEFT JOIN ' . $categoriestable .
-                                ' ON ' . $categoriestable . '.id = ' . $leftjoin['category_id'] . ' ';
+            $leftjoin['more'] = ' LEFT JOIN ' . $categoriestable
+                                . ' ON ' . $categoriestable . '.id = ' . $leftjoin['category_id'] . ' ';
         } else {
             $leftjoin['table'] = $categorieslinkagetable;
             $leftjoin['more'] = '';

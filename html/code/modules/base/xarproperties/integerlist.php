@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Include the base class
  */
@@ -25,13 +26,13 @@ class NumberListProperty extends SelectProperty
     public $min;
     public $max;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
 
         // check configuration for allowed min/max values
-        if (count($this->options) == 0 && !empty($this->configuration) && strchr($this->configuration,':')) {
-            list($min,$max) = explode(':',$this->configuration);
+        if (count($this->options) == 0 && !empty($this->configuration) && strchr($this->configuration, ':')) {
+            [$min, $max] = explode(':', $this->configuration);
             if ($min !== '' && is_numeric($min)) {
                 $this->min = intval($min);
             }
@@ -40,22 +41,24 @@ class NumberListProperty extends SelectProperty
             }
             if (isset($this->min) && isset($this->max)) {
                 for ($i = $this->min; $i <= $this->max; $i++) {
-                    $this->options[] = array('id' => $i, 'name' => $i);
+                    $this->options[] = ['id' => $i, 'name' => $i];
                 }
             } else {
                 // you're in trouble :)
             }
         }
     }
-	/**
+    /**
  * Validate the value of a input
- *  
+ *
  * @return bool Returns true if the value passes all validation checks; otherwise returns false.
  */
 
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (!isset($value) || $value === '') {
             if (isset($this->min)) {
@@ -73,9 +76,9 @@ class NumberListProperty extends SelectProperty
             $this->value = null;
             return false;
         }
-        if (count($this->options) == 0 && (isset($this->min) || isset($this->max)) ) {
-            if ( (isset($this->min) && $this->value < $this->min) ||
-                 (isset($this->max) && $this->value > $this->max) ) {
+        if (count($this->options) == 0 && (isset($this->min) || isset($this->max))) {
+            if ((isset($this->min) && $this->value < $this->min)
+                 || (isset($this->max) && $this->value > $this->max)) {
                 $this->invalid = $this->ml('integer in range');
                 $this->log()->error($this->invalid);
                 $this->value = null;

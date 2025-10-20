@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\privileges
  * @subpackage privileges
@@ -25,34 +26,38 @@ class PrivilegesTreeProperty extends DataProperty
     public $id         = 30045;
     public $name       = 'privilegestree';
     public $desc       = 'PrivilegesTree';
-    public $reqmodules = array('privileges');
-	public $privs;
-	/**
-	 * Create an instance of this dataproperty<br/>
-	 * - It belongs to the privileges module<br/>
-	 * - It has its own input/output templates<br/>
-	 * - it is found at modules/privileges/xarproperties<br/>
-	 *
-	 */
-    function __construct(ObjectDescriptor $descriptor)
+    public $reqmodules = ['privileges'];
+    public $privs;
+    /**
+     * Create an instance of this dataproperty<br/>
+     * - It belongs to the privileges module<br/>
+     * - It has its own input/output templates<br/>
+     * - it is found at modules/privileges/xarproperties<br/>
+     *
+     */
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
 
-        if (!isset($allowtoggle)) $allowtoggle = 0;
+        if (!isset($allowtoggle)) {
+            $allowtoggle = 0;
+        }
         $this->tplmodule = 'privileges';
         $this->filepath   = 'modules/privileges/xarproperties';
         $this->privs = new xarPrivileges();
     }
-	
-	/**
-	 * Display a options for input to show wheather you want to display input for an instance or not.
-	 * 
-	 * @param array<string, mixed> $data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */	
+
+    /**
+     * Display a options for input to show wheather you want to display input for an instance or not.
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (!isset($data['show'])) $data['show'] = 'assigned';
+        if (!isset($data['show'])) {
+            $data['show'] = 'assigned';
+        }
         $trees = [];
         foreach ($this->privs->gettoplevelprivileges($data['show']) as $entry) {
             $node = new TreeNode($entry['id']);
@@ -67,15 +72,15 @@ class PrivilegesTreeProperty extends DataProperty
 // ---------------------------------------------------------------
 class PrivilegesTree extends Tree
 {
-	use HasDatabaseTrait;
+    use HasDatabaseTrait;
 
-	/**
-	*  Give privileges to user to create nodes
-	* 
-	* @param  TreeNode data An array of input parameters
-	* @return void 
-	*/
-    function createnodes(TreeNode $node)
+    /**
+    *  Give privileges to user to create nodes
+    *
+    * @param  TreeNode data An array of input parameters
+    * @return void
+    */
+    public function createnodes(TreeNode $node)
     {
         //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
         $dbconn = $this->db()->getConn();
@@ -97,9 +102,11 @@ class PrivilegesTree extends Tree
         // Add ordering
         $q->setorder('p.name');
         $q->run();
-        
+
         foreach ($q->output as $row) {
-        	if ($row['realm'] == null) $row['realm'] = 'All';
+            if ($row['realm'] == null) {
+                $row['realm'] = 'All';
+            }
             $this->treedata[] = $row;
         }
         parent::createnodes($node);

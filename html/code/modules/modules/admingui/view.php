@@ -201,34 +201,34 @@ class ViewMethod extends MethodClass
         $data['items'] = $items;
 
         $data['states'] = [
-            xarMod::STATE_ANY =>
-                ['id' => xarMod::STATE_ANY, 'name' => $this->ml('All')],
-            xarMod::STATE_INSTALLED =>
-                ['id' => xarMod::STATE_INSTALLED, 'name' => $this->ml('Installed')],
-            xarMod::STATE_ACTIVE =>
-                ['id' => xarMod::STATE_ACTIVE, 'name' => $this->ml('Active')],
-            xarMod::STATE_UPGRADED =>
-                ['id' => xarMod::STATE_UPGRADED, 'name' => $this->ml('Upgraded')],
-            xarMod::STATE_INACTIVE =>
-                ['id' => xarMod::STATE_INACTIVE, 'name' => $this->ml('Inactive')],
-            xarMod::STATE_UNINITIALISED =>
-                ['id' => xarMod::STATE_UNINITIALISED, 'name' => $this->ml('Not Installed')],
-            xarMod::STATE_MISSING_FROM_ACTIVE =>
-                ['id' => xarMod::STATE_MISSING_FROM_ACTIVE, 'name' => $this->ml('Missing (Active)')],
-            xarMod::STATE_MISSING_FROM_UPGRADED =>
-                ['id' => xarMod::STATE_MISSING_FROM_UPGRADED, 'name' => $this->ml('Missing (Upgraded)')],
-            xarMod::STATE_MISSING_FROM_INACTIVE =>
-                ['id' => xarMod::STATE_MISSING_FROM_INACTIVE, 'name' => $this->ml('Missing (Inactive)')],
-            xarMod::STATE_MISSING_FROM_UNINITIALISED =>
-                ['id' => xarMod::STATE_MISSING_FROM_UNINITIALISED, 'name' => $this->ml('Missing (Not Installed)')],
-            xarMod::STATE_ERROR_ACTIVE =>
-                ['id' => xarMod::STATE_ERROR_ACTIVE, 'name' => $this->ml('Error (Active)')],
-            xarMod::STATE_ERROR_UPGRADED =>
-                ['id' => xarMod::STATE_ERROR_UPGRADED, 'name' => $this->ml('Error (Upgraded)')],
-            xarMod::STATE_ERROR_INACTIVE =>
-                ['id' => xarMod::STATE_ERROR_INACTIVE, 'name' => $this->ml('Error (Inactive)')],
-            xarMod::STATE_ERROR_UNINITIALISED =>
-                ['id' => xarMod::STATE_ERROR_UNINITIALISED, 'name' => $this->ml('Error (Not Installed)')],
+            xarMod::STATE_ANY
+                => ['id' => xarMod::STATE_ANY, 'name' => $this->ml('All')],
+            xarMod::STATE_INSTALLED
+                => ['id' => xarMod::STATE_INSTALLED, 'name' => $this->ml('Installed')],
+            xarMod::STATE_ACTIVE
+                => ['id' => xarMod::STATE_ACTIVE, 'name' => $this->ml('Active')],
+            xarMod::STATE_UPGRADED
+                => ['id' => xarMod::STATE_UPGRADED, 'name' => $this->ml('Upgraded')],
+            xarMod::STATE_INACTIVE
+                => ['id' => xarMod::STATE_INACTIVE, 'name' => $this->ml('Inactive')],
+            xarMod::STATE_UNINITIALISED
+                => ['id' => xarMod::STATE_UNINITIALISED, 'name' => $this->ml('Not Installed')],
+            xarMod::STATE_MISSING_FROM_ACTIVE
+                => ['id' => xarMod::STATE_MISSING_FROM_ACTIVE, 'name' => $this->ml('Missing (Active)')],
+            xarMod::STATE_MISSING_FROM_UPGRADED
+                => ['id' => xarMod::STATE_MISSING_FROM_UPGRADED, 'name' => $this->ml('Missing (Upgraded)')],
+            xarMod::STATE_MISSING_FROM_INACTIVE
+                => ['id' => xarMod::STATE_MISSING_FROM_INACTIVE, 'name' => $this->ml('Missing (Inactive)')],
+            xarMod::STATE_MISSING_FROM_UNINITIALISED
+                => ['id' => xarMod::STATE_MISSING_FROM_UNINITIALISED, 'name' => $this->ml('Missing (Not Installed)')],
+            xarMod::STATE_ERROR_ACTIVE
+                => ['id' => xarMod::STATE_ERROR_ACTIVE, 'name' => $this->ml('Error (Active)')],
+            xarMod::STATE_ERROR_UPGRADED
+                => ['id' => xarMod::STATE_ERROR_UPGRADED, 'name' => $this->ml('Error (Upgraded)')],
+            xarMod::STATE_ERROR_INACTIVE
+                => ['id' => xarMod::STATE_ERROR_INACTIVE, 'name' => $this->ml('Error (Inactive)')],
+            xarMod::STATE_ERROR_UNINITIALISED
+                => ['id' => xarMod::STATE_ERROR_UNINITIALISED, 'name' => $this->ml('Error (Not Installed)')],
         ];
 
         $data['modtypes'] = [

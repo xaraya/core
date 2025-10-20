@@ -1,10 +1,11 @@
 <?php
+
 /* Include the parent class  */
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * The Checkbox property models an HTML input of type checkbox
- * 
+ *
  * @package modules\base
  * @subpackage base
  * @category Xaraya Web Applications Framework
@@ -23,18 +24,18 @@ class CheckboxProperty extends DataProperty
     public $id         = 14;
     public $name       = 'checkbox';
     public $desc       = 'Checkbox';
-    public $reqmodules = array('base');
+    public $reqmodules = ['base'];
 
     public $basetype   = 'checkbox';
 
-/**
- * Create an instance of this dataproperty<br/>
- * - It belongs to the base module<br/>
- * - It has its own input/output templates<br/>
- * - it is found at modules/base/xarproperties<br/>
- *
- */
-    function __construct(ObjectDescriptor $descriptor)
+    /**
+     * Create an instance of this dataproperty<br/>
+     * - It belongs to the base module<br/>
+     * - It has its own input/output templates<br/>
+     * - it is found at modules/base/xarproperties<br/>
+     *
+     */
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
@@ -42,14 +43,14 @@ class CheckboxProperty extends DataProperty
         $this->filepath  = 'modules/base/xarproperties';
     }
 
-/**
- * Get the value of a checkbox from a web page<br/>
- * The value is true if checked, otherwise it is false
- * 
- * @param  string name The name of the checkbox to be checked
- * @param  string value The value of the checkbox to be checked
- * @return bool   This method passes the value gotten to the validateValue method and returns its output.
- */
+    /**
+     * Get the value of a checkbox from a web page<br/>
+     * The value is true if checked, otherwise it is false
+     *
+     * @param  string name The name of the checkbox to be checked
+     * @param  string value The value of the checkbox to be checked
+     * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+     */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -61,11 +62,11 @@ class CheckboxProperty extends DataProperty
         return $this->validateValue($value);
     }
 
-/**
- * Validate the value of a checkbox (checked or not checked)
- *
- * @return bool Returns true if the value passes all validation checks; otherwise returns false.
- */
+    /**
+     * Validate the value of a checkbox (checked or not checked)
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
         $this->log()->debug("DataProperty::validateValue: Validating property " . $this->name);
@@ -78,30 +79,39 @@ class CheckboxProperty extends DataProperty
         return true;
     }
 
-/**
- * Display a checkbox for input
- * 
- * @param array<string, mixed> $data An array of input parameters
- * @return string     HTML markup to display the property for input on a web page
- */
+    /**
+     * Display a checkbox for input
+     *
+     * @param array<string, mixed> $data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
     public function showInput(array $data = [])
     {
-        if (isset($data['checked'])) $data['value']  = $data['checked'];
-        if (!isset($data['value'])) $data['value'] = $this->value;
-        if ($data['value'] === true || $data['value'] === 'true') $data['value'] = 1;
-        elseif ($data['value'] === false || $data['value'] === 'false') $data['value'] = 0;
+        if (isset($data['checked'])) {
+            $data['value']  = $data['checked'];
+        }
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
+        if ($data['value'] === true || $data['value'] === 'true') {
+            $data['value'] = 1;
+        } elseif ($data['value'] === false || $data['value'] === 'false') {
+            $data['value'] = 0;
+        }
         $data['checked'] = $data['value'];
-        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
+        if (!isset($data['onchange'])) {
+            $data['onchange'] = null;
+        } // let tpl decide what to do
         return parent::showInput($data);
     }
 
-/**
- * Convert an integer or string value to true/false
- * 
- * @param  mixed value The value to be converted
- * @return bool  Returns true if the integer or string value is 1, "1" or "true"; otherwise returns false.
- */
-    public function castType($value=null)
+    /**
+     * Convert an integer or string value to true/false
+     *
+     * @param  mixed value The value to be converted
+     * @return bool  Returns true if the integer or string value is 1, "1" or "true"; otherwise returns false.
+     */
+    public function castType($value = null)
     {
         return ($value === 1 || $value === '1' || $value === true || $value === 'true') ? true : false;
     }
