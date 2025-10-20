@@ -6,7 +6,7 @@
  * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -15,7 +15,6 @@
  * @author Vladimirs Metenchuks <voll@xaraya.com>
 **/
 
-define("CONVERT_TABLES_DIR", sys::lib() . 'xaraya/transforms/convtables/');
 sys::import('xaraya.facades.logger');
 use Xaraya\Facades\xarLog3;
 
@@ -164,6 +163,12 @@ class xarCharset extends xarObject
     public $lastConversion = ''; // Last used conversion
     public $conversionTable;     // Last conversion table
     public $noCharByteVal = 63;  // ASCII value for chars with no equivalent
+    public $convertTablesDir = '';
+
+    public function __construct()
+    {
+        $this->convertTablesDir = sys::lib() . 'xaraya/transforms/convtables/';
+    }
 
     /**
      * Converts unicode number to UTF-8 multibyte character
@@ -298,7 +303,7 @@ class xarCharset extends xarObject
 
         $convertTable = [];
         for ($i = 0; $i < func_num_args(); $i++) {
-            $fileName = CONVERT_TABLES_DIR . func_get_arg($i);
+            $fileName = $this->convertTablesDir . func_get_arg($i);
             $fp = fopen($fileName, "r");
             if ($fp === false) {
                 xarLog3::warning("xarCharset error, can NOT read file: " . $fileName);

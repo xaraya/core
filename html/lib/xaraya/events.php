@@ -44,7 +44,7 @@ use Xaraya\Facades\xarVar3;
  * @package core\events
  * @subpackage events
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -680,26 +680,20 @@ class xarEvents extends xarObject implements ixarEvents
         $tables = xarDB3::getTables();
         $q = new Query('DELETE', $tables['eventsystem']);
         $q->eq('itemtype', $itemtype);
-        // @deprecated 2.4.1 this hasn't been around in a long while
-        if (strtoupper($event) != 'ALL') {
-            $q->eq('event', $event);
-        }
+        $q->eq('event', $event);
 
-        // @deprecated 2.4.1 this hasn't been around in a long while
-        if (strtoupper($module) != 'ALL') {
-            if (is_numeric($module)) {
-                $module_id = $module;
-            } else {
-                $module_id = xarMod3::getRegID($module);
-            }
-            if (!empty($module_id)) {
-                $modinfo = xarMod3::getInfo($module_id);
-            }
-            if (empty($modinfo)) {
-                $invalid[] = 'module';
-            }
-            $q->eq('module_id', $module_id);
+        if (is_numeric($module)) {
+            $module_id = $module;
+        } else {
+            $module_id = xarMod3::getRegID($module);
         }
+        if (!empty($module_id)) {
+            $modinfo = xarMod3::getInfo($module_id);
+        }
+        if (empty($modinfo)) {
+            $invalid[] = 'module';
+        }
+        $q->eq('module_id', $module_id);
         if (!empty($invalid)) {
             $vars = [join(', ', $invalid), 'register', 'xarEvent'];
             $msg = "Invalid #(1) for method #(2)() in class #(3)";

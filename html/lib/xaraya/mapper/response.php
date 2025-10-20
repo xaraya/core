@@ -6,7 +6,7 @@
  * @package core\controllers
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -129,18 +129,5 @@ class xarResponse extends xarObject
             'context' => $context,
         ];
         return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
-    }
-
-    /**
-     * Carry out a redirect - legacy support for Jamaica 2.0 and 2.1
-     *
-     * @access public
-     * @param string $url the URL to redirect to
-     * @return bool|never
-     * @deprecated 2.2.0 use xarController::redirect() instead
-     */
-    public static function Redirect($url = '')
-    {
-        return xarController::redirect($url);
     }
 }

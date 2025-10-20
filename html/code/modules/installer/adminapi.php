@@ -3,7 +3,7 @@
 /**
  * @package modules\installer
  * @category Xaraya Web Applications Framework
- * @version 2.6.1
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link https://github.com/mikespub/xaraya-modules
@@ -17,10 +17,7 @@ use EmptyParameterException;
 use Exception;
 use FileNotFoundException;
 use FunctionNotFoundException;
-use xarDB;
 use xarMod;
-use xarSystemVars;
-use xarTableDDL;
 use xarVar;
 use sys;
 
@@ -143,140 +140,5 @@ class AdminApi extends AdminApiClass
         }
 
         return true;
-    }
-
-    /**
-     * Create a database
-     *
-     * @access public
-     * @param array<string, mixed> $args array of optional parameters<br/>
-     *        string   $args['dbName']<br/>
-     *        string   $args['dbType']
-     * @return boolean true on success, false on failure
-     * @deprecated 2.4.1 no longer used
-     */
-    public function createdb(array $args = [])
-    {
-        extract($args);
-        // Load in Table Maintainance API
-        sys::import('xaraya.xarTableDDL');
-
-        // Start connection, but use the configured connection db
-        $createArgs = [
-            'userName' => $dbUname,
-            'password' => $dbPass,
-            'databaseHost' => $dbHost,
-            'databaseType' => $dbType,
-            'databaseName' => $dbName,
-            'systemTablePrefix' => $dbPrefix,
-            'siteTablePrefix' => $dbPrefix];
-        $dbconn = xarDB::newConn($createArgs);
-
-        $dbCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
-        $query = xarTableDDL::createDatabase($dbName, $dbType, $dbCharset);
-        $result = $dbconn->Execute($query);
-        return true;
-    }
-
-
-    /**
-     * CheckForField
-     *
-     * @access public
-     * @param array<string, mixed> $args array of optional parameters<br/>
-     *        string   $args['field_name']<br/>
-     *        string   $args['table_name']
-     * @return boolean true if field exists false otherwise
-     * @author Sean Finkle
-     * @author John Cox
-     * @deprecated 2.4.1 no longer used
-     */
-    public function CheckForField(array $args = [])
-    {
-        extract($args);
-
-        // Argument check - make sure that all required arguments are present,
-        // if not then set an appropriate error message and return
-        if ((!isset($field_name)) || (!isset($table_name))) {
-            throw new EmptyParameterException('field_name or table_name');
-        }
-
-        $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
-
-        // CHECKME: Is this portable? In any case, use the meta classes
-        $query = "desc $table_name";
-        $result = $dbconn->ExecuteQuery($query);
-
-
-        while ($result->next()) {
-            if ($result['Field'] == $field_name) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * GetFieldType
-     *
-     * @access public
-     * @param array<string, mixed> $args array of optional parameters<br/>
-     *        string   $args['field_name']<br/>
-     *        string   $args['table_name']
-     * @return integer|void field type
-     * @author Sean Finkle
-     * @author John Cox
-     * @deprecated 2.4.1 no longer used
-     */
-    public function GetFieldType(array $args = [])
-    {
-        extract($args);
-
-        // Argument check - make sure that all required arguments are present,
-        // if not then set an appropriate error message and return
-        if ((!isset($field_name)) || (!isset($table_name))) {
-            throw new EmptyParameterException('field_name or table_name');
-        }
-
-        $dbconn = xarDB::getConn();
-
-        // CHECKME: Is this portable? In any case, use the meta classes
-        $query = "desc $table_name";
-        $result = $dbconn->executeQuery($query);
-
-        while ($result->next()) {
-            if ($result['Field'] == $field_name) {
-                return ($row['Type']);
-            }
-        }
-        return;
-    }
-
-    /**
-     * CheckTableExists
-     *
-     * @access public
-     * @param array<string, mixed> $args array of optional parameters<br/>
-     *        string   $args['table_name']
-     * @return boolean true if field exists false otherwise
-     * @author Sean Finkle
-     * @author John Cox
-     * @deprecated 2.4.1 no longer used
-     */
-    public function CheckTableExists(array $args = [])
-    {
-        extract($args);
-
-        // Argument check - make sure that all required arguments are present,
-        // if not then set an appropriate error message and return
-        if (!isset($table_name)) {
-            throw new EmptyParameterException('table_name');
-        }
-
-        $dbconn = xarDB::getConn();
-        $dbInfo = $dbconn->getDatabaseInfo();
-        return $dbInfo->hasTable($table_name);
     }
 }

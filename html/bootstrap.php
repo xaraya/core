@@ -19,13 +19,12 @@
  *
  * @package core
  * @subpackage core
- * @copyright (C) copyright-placeholder
+ * @version 2.8.1
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
-// test compatibility with composer autoload by disabling sys::import
-//require_once dirname(__DIR__).'/vendor/autoload.php';
 
 /**
  * Get the public properties of an object (this must be done outside the class)
@@ -65,24 +64,6 @@ class xarObject extends stdClass
     {
         // Reuse __toString magic by internal conversion.
         return sprintf('%s', $this);
-    }
-
-    /**
-     * Return the class for an object
-     *
-     * We want to be consistent with objects, so we need a class to model a class
-     * PHP allows directly only get_class() or something like that, which
-     * returns a string.
-     * By defining a class called Class_ (note the underscore to prevent a name conflict)
-     * we can get the class from each object and maintain the 'richness' of
-     * an object versus the 'flatness' of a string.
-     *
-     * @return Class_ the class of the object
-     * @deprecated 2.4.0 not used
-    **/
-    final public function getClass()
-    {
-        return new Class_($this);
     }
 
     /**
@@ -136,110 +117,6 @@ class xarObject extends stdClass
         // this is about as fast as it gets - unless you don't even need the values,
         // in which case you could cache the list of public properties (in private)
         return xarBoot_getPublicObjectProperties($this);
-    }
-}
-
-/**
- * Base class for the reflectable objects we will expose
- *
- * @package core
-**/
-abstract class Reflectable extends xarObject
-{
-    protected $reflect = null;
-
-    public function getName()
-    {
-        return $this->reflect->getName();
-    }
-}
-
-/**
- * A class to model a class in PHP (no longer used above)
- *
- * The purpose of this class is mainly to support the getClass() method
- * of the xarObject class above, but i can see it grow a bit further later on.
- * The class is final, there's only one definition of a class, it can not be
- * specialized in any way. Furthermore the constructor is made protected.
- * In combination with the final keyword, this makes this class only instantiable
- * by its ancestors, which only is the xarObject class and is exactly what we want.
- *
- * @package core
- * @todo can we come up with a better name without the underscore?
- * @todo look at visibility of the methods
- * @deprecated 2.4.0 not used
-**/
-final class Class_ extends Reflectable
-{
-    /**
-     * Create a Class_ object based on an instance object
-     *
-     * @param xarObject $object any object
-    **/
-    protected function __construct(xarObject $object)
-    {
-        $this->reflect = new ReflectionClass($object);
-    }
-
-    /**
-     * Get an array of Property objects
-     *
-     * @return Property[] array of Property objects from the class
-    **/
-    public function getProperties()
-    {
-        $ret = [];
-        foreach ($this->reflect->getProperties() as $p) {
-            $ret[] = new Property($this, $p->getName());
-        }
-        return $ret;
-    }
-
-    /**
-     * Return a property object by name from a class
-     *
-     * @param  string   $name Name of the property
-     * @return Property Property object
-    **/
-    final public function getProperty_($name)
-    {
-        return new Property($this, $name);
-    }
-}
-
-/**
- * A class to model a property in PHP
- *
- * The purpose of this class i mainly to support the getProperty_() method
- * in the xarObject class above, but i can see it grow a bit futher later on.
- * The class is final, there's only one definition of a property, it can not be
- * specialized in any way. The constructor is public here because of the getProperty
- * method in the Class_ class.
- *
- * @package core
- * @deprecated 2.4.0 not used
-**/
-final class Property extends Reflectable
-{
-    /**
-     * Create a Property object based on the class it is in
-     *
-     * @param Class_ $clazz the class object
-     * @param string $name  the name of the property
-    **/
-    public function __construct(Class_ $clazz, $name)
-    {
-        $this->reflect = new ReflectionProperty($clazz->getName(), $name);
-    }
-
-    public function isPublic()
-    {
-        return $this->reflect->isPublic();
-    }
-
-    public function getValue(xarObject $object)
-    {
-        return $this->reflect->getValue($object);
     }
 }
 

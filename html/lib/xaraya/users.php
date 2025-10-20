@@ -5,7 +5,7 @@
  *
  * @package core\users
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -49,15 +49,12 @@ class NotLoggedInException extends xarExceptions
 }
 
 /**
- * Authentication modules capabilities
+ * Authentication modules capabilities - moved to Xaraya\Authentication\Capability
  * (to be revised e.g. to differentiate read & update capability for core & dynamic)
+ * @deprecated 2.8.1 not used in 2.4+ auth modules
+ * define('XARUSER_AUTH_AUTHENTICATION', 1);
+ * ...
  */
-define('XARUSER_AUTH_AUTHENTICATION', 1);
-define('XARUSER_AUTH_DYNAMIC_USER_DATA_HANDLER', 2);
-define('XARUSER_AUTH_PERMISSIONS_OVERRIDER', 16);
-define('XARUSER_AUTH_USER_CREATEABLE', 32);
-define('XARUSER_AUTH_USER_DELETEABLE', 64);
-define('XARUSER_AUTH_USER_ENUMERABLE', 128);
 
 /**
  * User System
@@ -101,22 +98,9 @@ class xarUser extends xarObject
         xarDB3::importTables($tables);
 
         self::$authenticationModules = $args['authenticationModules'];
-        // @deprecated 2.4.0 remove someday
-        if (!defined('_XAR_ID_UNREGISTERED')) {
-            define('_XAR_ID_UNREGISTERED', xarSession::getAnonId());
-        }
 
         xarMLS::setCurrentLocale(self::getNavigationLocale());
         xarTpl::setThemeName(self::getNavigationThemeName());
-
-        // These events are now registered during authsystem module init
-        // Register the UserLogin event
-        //xarEvents::register('UserLogin');
-        // Register the UserLogout event
-        //xarEvents::register('UserLogout');
-
-        // Populate the GLOBAL for legacy calls
-        //$GLOBALS['xarUser_authenticationModules'] =  self::$authenticationModules;
 
         self::$initialized = true;
         return true;

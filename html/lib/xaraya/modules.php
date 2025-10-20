@@ -11,7 +11,7 @@
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -61,13 +61,6 @@ class ModuleNotActiveException extends xarExceptions
 {
     protected $message = 'The module "#(1)" was called, but it is not active.';
 }
-
-/**
- * Flags for loading APIs
- * @deprecated 2.6.2 moved to class constants
- */
-//define('XARMOD_LOAD_ONLYACTIVE', 1);
-//define('XARMOD_LOAD_ANYSTATE', 2);
 
 /*
     Bring in the module variables to maintain interface compatibility for now
@@ -267,20 +260,6 @@ class xarMod extends xarObject implements IxarMod
             return;
         }
         return (int) $ids['systemid'];
-    }
-
-    /**
-     * Get the module's current state
-     *
-     * @param int $modRegId the module's registered id
-     * @param string $type determines theme or module
-     * @return mixed the module's current state
-     * @deprecated 2.4.0 We dont need this, used nowhere
-     */
-    public static function getState($modRegId, $type = 'module')
-    {
-        $tmp = self::getInfo($modRegId, $type);
-        return (int) $tmp['state'];
     }
 
     /**

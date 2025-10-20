@@ -289,9 +289,6 @@ class RegenerateMethod extends MethodClass
             }
         }
 
-        // Finds and updates event handlers - replaced with xarEvent code and event observers
-        //if (!$adminapi->geteventhandlers()) {return;}
-
         return true;
     }
 }

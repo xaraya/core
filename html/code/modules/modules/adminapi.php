@@ -29,7 +29,7 @@ sys::import('xaraya.modules.adminapi');
  * @method mixed enablehooks(array $args = []) Enable hooks between a caller module and a hook module - Note : hooks will be enabled for all item types if no specific item type is given
  * @method mixed executeinitfunction(array $args = []) Loads xarinit.php file or module installer class and executes the given function
  * @method mixed getdbmodules(array $args = []) Get all modules in the database
- * @method mixed geteventhandlers(array $args = []) Get the list of active event handlers
+ * @method mixed geteventhandlers(array $args = []) Get the list of active event handlers @deprecated 2.4.0 replaced with xarEvent code and event observers
  * @method mixed getfilemodules(array $args = []) Get module information from xarversion.php for each module - Here we cycle through the modules directory and and - return an array of information from xarversion.php of each module.
  * @method mixed gethookedmodules(array $args = []) Get list of modules calling a particular hook module
  * @method mixed gethooklist(array $args = []) Obtain list of hooks (optionally for a particular module)
