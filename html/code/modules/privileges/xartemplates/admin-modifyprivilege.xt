@@ -316,7 +316,7 @@
                                     </a>
                                 </span>
                                 <a href="#xarController::URL('privileges','admin','removemember',['childid'=>$ppid,'parentid'=>$loop->item['parentid'],'authid'=>$authid])#">
-                                    <img src="#sys::code()#modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
+                                    <img src="#xarTpl::getCodeUrl()#modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
                                 </a>
                             </div>
                         </div>

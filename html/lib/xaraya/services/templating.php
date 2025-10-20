@@ -49,6 +49,10 @@ interface TemplatingInterface extends ServiceInterface
 
     public function getThemeDir(?string $theme = null): string;
 
+    public function getThemeUrl(?string $theme = null): string;
+
+    public function getCodeUrl(): string;
+
     public function getImage(string $fileName, ?string $scope = null, ?string $package = null): string|null;
 
     public function getFile(string $fileName, ?string $scope = null, ?string $package = null): string|null;
@@ -219,6 +223,22 @@ trait TemplatingTrait
     public function getThemeDir(?string $theme = null): string
     {
         return xarTpl::getThemeDir($theme);
+    }
+
+    /**
+     * Get theme URL
+     */
+    public function getThemeUrl(?string $theme = null): string
+    {
+        return xarTpl::getThemeUrl($theme);
+    }
+
+    /**
+     * Get code URL
+     */
+    public function getCodeUrl(): string
+    {
+        return xarTpl::getCodeUrl();
     }
 
     /**

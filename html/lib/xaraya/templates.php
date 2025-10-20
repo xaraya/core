@@ -295,6 +295,34 @@ class xarTpl extends xarObject
         return self::$themeDir;
     }
 
+    public static function getThemeUrl($theme=null)
+    {
+        $themeDir = self::getThemeDir($theme);
+
+        // Turn relative path into an absolute URL
+        $webDir = sys::web();
+        if (!empty($webDir) && strpos($themeDir, $webDir) === 0) {
+            $themeDir = substr($themeDir, strlen($webDir));
+        }
+        $themeUrl = xarServer::getBaseURL() . $themeDir;
+
+        return $themeUrl;
+    }
+
+    public static function getCodeUrl()
+    {
+        $codeDir = sys::code();
+
+        // Turn relative path into an absolute URL
+        $webDir = sys::web();
+        if (!empty($webDir) && strpos($codeDir, $webDir) === 0) {
+            $codeDir = substr($codeDir, strlen($webDir));
+        }
+        $codeUrl = xarServer::getBaseURL() . $codeDir;
+
+        return $codeUrl;
+    }
+
 /**
  * Set page template name
  *

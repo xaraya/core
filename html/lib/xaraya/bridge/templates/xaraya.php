@@ -88,6 +88,8 @@ class XarayaCoreExtension extends XarayaTwigExtension
             new TwigFunction('xar_pagetitle', $this->xar_pagetitle(...)),
             new TwigFunction('xar_pagetemplate', $this->xar_pagetemplate(...)),
             new TwigFunction('xar_themedir', $this->xar_themedir(...)),
+            new TwigFunction('xar_themeurl', $this->xar_themeurl(...)),
+            new TwigFunction('xar_codeurl', $this->xar_codeurl(...)),
             // <xar:sec mask="..." catch="false">
             new TwigFunction('xar_security_check', $this->xar_security_check(...)),
             new TwigFunction('xar_security_authkey', $this->xar_security_authkey(...)),
@@ -409,6 +411,18 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_themedir($theme = null)
     {
         return $this->tpl()->getThemeDir($theme);
+    }
+
+    public function xar_themeurl($theme = null)
+    {
+        // avoid double-encoding URLs
+        return $this->tpl()->getThemeUrl($theme);
+    }
+
+    public function xar_codeurl()
+    {
+        // avoid double-encoding URLs
+        return $this->tpl()->getCodeUrl();
     }
 
     public function xar_security_check($mask, $catch = 0, $component = '', $instance = '', $module = '', $rolename = '', $realm = 0, $level = 0)
