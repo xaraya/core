@@ -30,7 +30,9 @@
         "phpdocumentor/reflection": "Required to use bermuda_cleanup.php in developer/tools",
         "xaraya/modules": "Experiment with adding modules via composer cli",
         "xaraya/properties": "Experiment with adding properties via composer cli",
-        "xaraya/twig": "Use Twig template engine with Xaraya"
+        "xaraya/twig": "Use Twig template engine with Xaraya",
+        "ext-mysqli": "Access database via Creole library (legacy)",
+        "ext-pdo_mysql": "Access database via PDO driver (modern)"
     },
     "license": "GPL-2.0-or-later",
     "config": {

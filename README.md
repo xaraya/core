@@ -7,7 +7,7 @@ Optional [xaraya/modules](https://github.com/mikespub/xaraya-modules) and [xaray
 ## Requirements
 
 - PHP 8.2+ with mbstring, XML and XSL extensions
-- MariaDB 10.x or MySQL 8.x
+- MariaDB 10.x or MySQL 8.x (or SQLite 3.x in tests)
 - composer 2.x for installation
 
 ## Installation
