@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Initialization functions
  *
@@ -11,7 +12,7 @@
  * @link http://www.xaraya.info
  * @author Xaraya Development Team
 **/
-$themeinfo = array(
+$themeinfo = [
     'name'          => 'default',
     'id'            => 11005,
     'directory'     => 'default',
@@ -27,4 +28,4 @@ $themeinfo = array(
     'bl_version'    => '2.0',
     'class'         => 2,
     'twigtemplates' => true,
-);
+];

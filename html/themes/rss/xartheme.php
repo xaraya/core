@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Initialization functions
  *
@@ -11,7 +12,7 @@
  * @link http://www.xaraya.info
  * @author Xaraya Development Team
 **/
-$themeinfo = array(
+$themeinfo = [
     'name'          => 'RSS',
     'id'            => 31,
     'directory'     => 'rss',
@@ -28,4 +29,4 @@ $themeinfo = array(
     'class'         => 0,
     'twigtemplates' => true,
     'twigextension' => '.xml.twig',  // override default twig extension here
-);
+];

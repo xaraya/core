@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Initialization functions
  *
@@ -11,7 +12,7 @@
  * @link http://www.xaraya.info
  * @author Nathan Jacobson
 **/
-$themeinfo = array(
+$themeinfo = [
     'name'          => 'Kingston',
     'id'            => 1046,
     'directory'     => 'kingston',
@@ -27,4 +28,4 @@ $themeinfo = array(
     'bl_version'    => '2.0',
     'class'         => 2,
     'twigtemplates' => false,
-);
+];

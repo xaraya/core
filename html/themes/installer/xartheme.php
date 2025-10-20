@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Initialization functions
  *
@@ -11,7 +12,7 @@
  * @link http://www.xaraya.info
  * @author Xaraya Development Team
 **/
-$themeinfo = array(
+$themeinfo = [
     'name'          => 'Installer',
     'id'            => 996,
     'directory'     => 'installer',
@@ -27,4 +28,4 @@ $themeinfo = array(
     'bl_version'    => '1.0',
     'class'         => 4,
     'twigtemplates' => false,  // let's keep the installer with blocklayout for now
-);
+];

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Initialization functions
  *
@@ -11,7 +12,7 @@
  * @link http://www.xaraya.info
  * @author Xaraya Development Team
 **/
-$themeinfo = array(
+$themeinfo = [
     'name'          => 'Xaraya_Classic',
     'id'            => 21,
     'directory'     => 'Xaraya_Classic',
@@ -27,15 +28,15 @@ $themeinfo = array(
     'bl_version'    => '2.0',
     'class'         => 2,
     'twigtemplates' => false,
-);
+];
 
 /**
  * @package themes
  * @subpackage RSS theme
 **/
-$themevars = array(
-    array('name' => 'index', 'value' => '1', 'description' => 'turn on right blocks'),
-    array('name' => 'page_bg', 'value' => '#ffffff', 'description' => 'Page background color'),
-    array('name' => 'block_bg', 'value' => '#C6E0FF', 'description' => 'Block background color'),
-    array('name' => 'accent_bg', 'value' => '#CDD5F8', 'description' => 'Accent color'),
-);
+$themevars = [
+    ['name' => 'index', 'value' => '1', 'description' => 'turn on right blocks'],
+    ['name' => 'page_bg', 'value' => '#ffffff', 'description' => 'Page background color'],
+    ['name' => 'block_bg', 'value' => '#C6E0FF', 'description' => 'Block background color'],
+    ['name' => 'accent_bg', 'value' => '#CDD5F8', 'description' => 'Accent color'],
+];
