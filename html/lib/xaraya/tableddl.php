@@ -23,12 +23,8 @@
 **/
 
 // @todo move functions to class methods and use Database Service
-sys::import('xaraya.facades.database');
-sys::import('xaraya.facades.logger');
-sys::import('xaraya.facades.multilanguage');
-use Xaraya\Facades\xarDB3;
-use Xaraya\Facades\xarLog3;
-use Xaraya\Facades\xarMLS3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Public Functions:
@@ -60,7 +56,7 @@ function xarDBCreateDatabase($databaseName, $databaseType = null, $databaseChars
         throw new EmptyParameterException('databaseName');
     }
     if (empty($databaseType)) {
-        $databaseType = xarDB3::getType();
+        $databaseType = xar::db()->getType();
     }
 
     switch ($databaseType) {
@@ -115,7 +111,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType = "", $charset = ""
         throw new BadParameterException('fields', 'The #(1) parameter is not an array');
     }
     if (empty($databaseType)) {
-        $databaseType = xarDB3::getType();
+        $databaseType = xar::db()->getType();
     }
     if (empty($charset)) {
         $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
@@ -193,7 +189,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = null)
     }
 
     if (empty($databaseType)) {
-        $databaseType = xarDB3::getType();
+        $databaseType = xar::db()->getType();
     }
 
     // Select the correct database type
@@ -244,7 +240,7 @@ function xarDBDropTable($tableName, $databaseType = null)
         throw new EmptyParameterException('tableName');
     }
     if (empty($databaseType)) {
-        $databaseType = xarDB3::getType();
+        $databaseType = xar::db()->getType();
     }
 
     switch ($databaseType) {
@@ -295,7 +291,7 @@ function xarDBCreateColumn(string $columnType, array $args1 = [], array $args2 =
     }
     extract($args2);
     // Also this one: allow for an override
-    $databaseType ??= xarDB3::getType();
+    $databaseType ??= xar::db()->getType();
 
     switch ($databaseType) {
         case 'mysqli':
@@ -437,7 +433,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = null)
     }
 
     if (empty($databaseType)) {
-        $databaseType = xarDB3::getType();
+        $databaseType = xar::db()->getType();
     }
     // set Dbtype to pdosqlite
     $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
@@ -501,7 +497,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = null)
         throw new BadParameterException('index', 'The parameter "#(1)" must be an array, the "fields" key inside it must be an array and the "name" key must be set).');
     }
     if (empty($databaseType)) {
-        $databaseType = xarDB3::getType();
+        $databaseType = xar::db()->getType();
     }
 
     // set Dbtype to pdosqlite
@@ -578,11 +574,11 @@ class xarXMLInstaller extends xarObject
     private static function transform($xmlFile, $xslAction = 'display', $xslFile = null)
     {
         if (!isset($xmlFile)) {
-            throw new BadParameterException(xarMLS3::translate('No file to transform!'));
+            throw new BadParameterException(xar::mls()->translate('No file to transform!'));
         }
 
         // Get the database type from the connection
-        $databaseType = xarDB3::getType();
+        $databaseType = xar::db()->getType();
         switch ($databaseType) {
             case 'sqlite3':
             case 'pdosqlite':
@@ -603,20 +599,20 @@ class xarXMLInstaller extends xarObject
                 $databaseType = 'pgsql';
                 break;
             default:
-                throw new Exception(xarMLS3::translate("Unknown database type: '#(1)'", $databaseType));
+                throw new Exception(xar::mls()->translate("Unknown database type: '#(1)'", $databaseType));
         }
 
         if (!isset($xslFile)) {
             $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-' . $databaseType . '.xsl';
         }
         if (!file_exists($xslFile)) {
-            $msg = xarMLS3::translate('The file #(1) was not found', $xslFile);
+            $msg = xar::mls()->translate('The file #(1) was not found', $xslFile);
             throw new BadParameterException(null, $msg);
         }
         sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
-        $xslProc->setParameter('', 'tableprefix', xarDB3::getPrefix());
+        $xslProc->setParameter('', 'tableprefix', xar::db()->getPrefix());
         return $xslProc->transform($xmlFile);
     }
 
@@ -631,11 +627,11 @@ class xarXMLInstaller extends xarObject
         sys::import('creole.CreoleTypes');
         $code = (int) CreoleTypes::getCreoleCode(strtoupper($creoleType));
         if (null == $code) {
-            xarCore::exit(xarMLS3::translate("Unknown Creole type: '#(1)'", $creoleType));
+            xarCore::exit(xar::mls()->translate("Unknown Creole type: '#(1)'", $creoleType));
             return;
         }
         if (null == $type = strtoupper(self::$typesObject::getNativeType($code))) {
-            xarCore::exit(xarMLS3::translate("Unknown Creole type: '#(1)'", $creoleType));
+            xarCore::exit(xar::mls()->translate("Unknown Creole type: '#(1)'", $creoleType));
             return;
         }
         return $type;
@@ -652,7 +648,7 @@ class xarXMLInstaller extends xarObject
 
         $xmlfile = sys::code() . 'modules/' . $module . '/xardata/' . $tablefile . '.xml';
         if (!file_exists($xmlfile)) {
-            $msg = xarMLS3::translate('Could not find the file #(1) to create tables from', $xmlfile);
+            $msg = xar::mls()->translate('Could not find the file #(1) to create tables from', $xmlfile);
             throw new BadParameterException(null, $msg);
         }
 
@@ -666,9 +662,9 @@ class xarXMLInstaller extends xarObject
         array_pop($queries);
 
         // Execute each of the queries
-        $dbconn = xarDB3::getConn();
+        $dbconn = xar::db()->getConn();
         foreach ($queries as $q) {
-            xarLog3::info('Executing SQL: ' . $q);
+            xar::log()->info('Executing SQL: ' . $q);
             $dbconn->Execute($q);
         }
         return true;

@@ -19,13 +19,13 @@
  * Called in (api|gui) function after item is created as...
  * $item = array('module' => $module);
  * New way of calling hooks
- * xarHooks::notify('ModuleRemove', $item);
+ * xarHooks::notify('ModuleRemove', $item, $context);
  * Legacy way, supported for now, deprecated in future
  * xarModHooks::call('module', 'remove', $module, $item);
 **/
 sys::import('xaraya.structures.hooks.apisubject');
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class ModulesModuleRemoveSubject extends ApiHookSubject
 {
@@ -66,8 +66,8 @@ class ModulesModuleRemoveSubject extends ApiHookSubject
         $module_id = $extrainfo['module_id'];
 
         // remove the module from hooks and events...
-        $dbconn = xarDB3::getConn();
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        $tables = xar::db()->getTables();
 
         // Delete any hooks assigned for that module, or by that module
         $query = "DELETE FROM $tables[hooks] WHERE observer = ? OR subject = ?";

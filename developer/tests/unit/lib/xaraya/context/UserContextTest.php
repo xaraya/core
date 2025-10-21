@@ -16,6 +16,10 @@ final class UserContextTest extends TestCase
     {
         xarCache::init();
         xarDatabase::init();
+
+        // set context for core services here too
+        $context = new Context();
+        Xaraya\Services\xar::setServicesContext($context);
     }
 
     protected function tearDown(): void

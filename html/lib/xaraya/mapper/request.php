@@ -15,10 +15,9 @@
 **/
 
 sys::import('xaraya.facades.config');
-sys::import('xaraya.facades.logger');
+sys::import('xaraya.services.xar');
 use Xaraya\Requests\RequestInterface;
-use Xaraya\Facades\xarConfig3;
-use Xaraya\Facades\xarLog3;
+use Xaraya\Services\xar;
 
 class xarRequest extends xarObject
 {
@@ -267,7 +266,7 @@ class xarRequest extends xarObject
         } elseif (is_array($loopHole)) {
             // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
             //        because they request the current module too at the moment - unnecessary ?
-            xarLog3::info('Avoiding loop in xarController::getRequest()->getInfo()');
+            xar::log()->info('Avoiding loop in xarController::getRequest()->getInfo()');
             return $loopHole;
         }
         // Get variables
@@ -536,7 +535,7 @@ class xarRequest extends xarObject
     {
         if (!isset($this->isAjax)) {
             $xhp = xarServer::getVar('HTTP_X_REQUESTED_WITH');
-            if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest') && xarConfig3::getVar('Site.Core.AllowAJAX')) {
+            if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest') && xar::config()->getVar('Site.Core.AllowAJAX')) {
                 $this->isAjax = true;
             } else {
                 $this->isAjax = false;

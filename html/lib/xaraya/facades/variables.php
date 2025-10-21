@@ -28,6 +28,7 @@ sys::import('xaraya.services.servicefactory');
 /**
  * Make Variables Service available via facade - xarVar3:: static methods
  * similar to traditional xarVar::* method calls
+ * @deprecated 2.8.2 use xar::var()->* instead
  */
 class xarVar3
 {

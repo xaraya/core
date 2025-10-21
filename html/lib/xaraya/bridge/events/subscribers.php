@@ -40,7 +40,7 @@
  * $event = new DefaultEvent($subject);
  * // set context if available
  * $event->setContext($context);
- * // this will call xarHooks::notify('ItemCreate', $subject) and save any response in the subscriber
+ * // this will call xarHooks::notify('ItemCreate', $subject, $context) and save any response in the subscriber
  * $dispatcher->dispatch($event, 'xarHooks.item.ItemCreate');
  * $responses = $subscriber->getResponses();
  */
@@ -173,7 +173,7 @@ class EventCallbackSubscriber extends EventSubscriber implements EventSubscriber
             try {
                 $callbackFunc($event, $eventName);
             } catch (Exception $e) {
-                //xarLog3::info("Error in callback for $eventName: " . $e->getMessage());
+                //xar::log()->info("Error in callback for $eventName: " . $e->getMessage());
                 echo "Error in callback for $eventName: " . $e->getMessage();
             }
         }

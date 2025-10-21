@@ -19,7 +19,7 @@
  * Called in modify function as...
  * $item = array('module' => $module, $itemid => $itemid [, 'itemtype' => $itemtype, ...]);
  * New way of calling hooks
- * $data['hooks'] = xarHooks::notify('ItemModify', $item);
+ * $data['hooks'] = xarHooks::notify('ItemModify', $item, $context);
  * Legacy way, supported for now, deprecated in future
  * $data['hooks'] = xarModHooks::call('item', 'modify', $itemid, $item);
  * Output in modify template as

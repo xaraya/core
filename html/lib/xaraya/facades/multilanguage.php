@@ -28,6 +28,7 @@ sys::import('xaraya.services.servicefactory');
 /**
  * Make MultiLanguage Service available via facade - xarMLS3:: static methods
  * similar to traditional xarMLS::* method calls
+ * @deprecated 2.8.2 use xar::mls()->* instead
  */
 class xarMLS3
 {

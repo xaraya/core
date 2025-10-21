@@ -14,9 +14,9 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.facades.config');
+sys::import('xaraya.services.xar');
 use Xaraya\Requests\RequestInterface;
-use Xaraya\Facades\xarConfig3;
+use Xaraya\Services\xar;
 
 class xarController extends xarObject
 {
@@ -90,7 +90,7 @@ class xarController extends xarObject
     public static function getConfig()
     {
         // xarController::init() comes after xarVar::init()
-        $systemArgs = ['enableShortURLsSupport' => xarConfig3::getVar('Site.Core.EnableShortURLsSupport'),
+        $systemArgs = ['enableShortURLsSupport' => xar::config()->getVar('Site.Core.EnableShortURLsSupport'),
             'generateXMLURLs' => true];
         return $systemArgs;
     }
@@ -584,7 +584,7 @@ class xarController extends xarObject
         // If we are passed a route, then use it
         if (empty($route)) {
             // No route passed: use the default
-            $route = xarConfig3::getVar('Site.Core.EnableShortURLsSupport');
+            $route = xar::config()->getVar('Site.Core.EnableShortURLsSupport');
         }
         // Define the route
         if (!empty($route)) {

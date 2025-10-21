@@ -91,7 +91,7 @@ class InitialiseMethod extends MethodClass
         }
         // notify any observers that this module was initialised
         // NOTE: the ModInitialise event observer notifies ModuleInit hooks
-        xarEvents::notify('ModInitialise', $modInfo['name']);
+        xarEvents::notify('ModInitialise', $modInfo['name'], $this->getContext());
         // Success
         return true;
     }

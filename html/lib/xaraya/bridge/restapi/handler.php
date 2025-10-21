@@ -24,6 +24,7 @@ use Xaraya\Context\ContextFactory;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Authentication\AuthToken;
+use Xaraya\Services\xar;
 use xarObject;
 use xarCache;
 use xarDatabase;
@@ -311,6 +312,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         $context['mediatype'] = '';
         // @todo check if we already have a context? (via request or from elsewhere)
         $this->setContext($context);
+        // set context for core services here too
+        xar::setServicesContext($context);
         // get handler instance with context
         $handler = $this->resolveHandler($handler, $context);
         try {

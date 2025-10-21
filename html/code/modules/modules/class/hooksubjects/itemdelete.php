@@ -19,7 +19,7 @@
  * Called in (api|gui) function after item is deleted as...
  * $item = array('module' => $module, 'itemid' => $itemid [, 'itemtype' => $itemtype, ...]);
  * New way of calling hooks
- * xarHooks::notify('ItemDelete', $item);
+ * xarHooks::notify('ItemDelete', $item, $context);
  * Legacy way, supported for now, deprecated in future
  * xarModHooks::call('item', 'delete', $itemid, $item);
 **/

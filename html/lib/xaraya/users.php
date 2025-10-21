@@ -19,18 +19,8 @@
 // IS THIS STILL USED?
 global $installing;
 
-sys::import('xaraya.facades.config');
-sys::import('xaraya.facades.database');
-sys::import('xaraya.facades.logger');
-sys::import('xaraya.facades.modules');
-sys::import('xaraya.facades.multilanguage');
-sys::import('xaraya.facades.variables');
-use Xaraya\Facades\xarConfig3;
-use Xaraya\Facades\xarDB3;
-use Xaraya\Facades\xarLog3;
-use Xaraya\Facades\xarMod3;
-use Xaraya\Facades\xarMLS3;
-use Xaraya\Facades\xarVar3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Exception raised by the users subsystem
@@ -86,7 +76,7 @@ class xarUser extends xarObject
             $args = self::getConfig();
         }
         // User System and Security Service Tables
-        $prefix = xarDB3::getPrefix();
+        $prefix = xar::db()->getPrefix();
 
         // CHECKME: is this needed?
         $tables = [
@@ -95,7 +85,7 @@ class xarUser extends xarObject
             'rolemembers' => $prefix . '_rolemembers',
         ];
 
-        xarDB3::importTables($tables);
+        xar::db()->importTables($tables);
 
         self::$authenticationModules = $args['authenticationModules'];
 
@@ -108,7 +98,7 @@ class xarUser extends xarObject
 
     public static function getConfig()
     {
-        $systemArgs = ['authenticationModules' => xarConfig3::getVar('Site.User.AuthenticationModules')];
+        $systemArgs = ['authenticationModules' => xar::config()->getVar('Site.User.AuthenticationModules')];
         return $systemArgs;
     }
 
@@ -147,22 +137,22 @@ class xarUser extends xarObject
         foreach (self::$authenticationModules as $authModName) {
             // Bug #918 - If the module has been deactivated, then continue
             // checking with the next available authentication module
-            if (!xarMod3::isAvailable($authModName)) {
+            if (!xar::mod()->isAvailable($authModName)) {
                 continue;
             }
 
             // Every authentication module must at least implement the
             // authentication interface so there's at least the authenticate_user
             // user api function
-            if (!xarMod3::apiLoad($authModName, 'user')) {
+            if (!xar::mod()->apiLoad($authModName, 'user')) {
                 continue;
             }
 
-            $modId = xarMod3::getID($authModName);
+            $modId = xar::mod()->getID($authModName);
 
             // CHECKME: Does this raise an exception??? If so:
             // TODO: test with multiple auth modules and wrap in try/catch clause
-            $userId = xarMod3::apiFunc($authModName, 'user', 'authenticate_user', $args, $context);
+            $userId = xar::mod()->apiFunc($authModName, 'user', 'authenticate_user', $args);
             if (!isset($userId)) {
                 return; // throw back
             } elseif ($userId != self::AUTH_FAILED) {
@@ -171,8 +161,8 @@ class xarUser extends xarObject
             }
         }
         if ($userId == self::AUTH_FAILED || $userId == self::AUTH_DENIED) {
-            if (xarMod3::getVar('lastresort', 'privileges')) {
-                $secret = unserialize((string) xarMod3::getVar('lastresort', 'privileges'));
+            if (xar::mod()->getVar('lastresort', 'privileges')) {
+                $secret = unserialize((string) xar::mod()->getVar('lastresort', 'privileges'));
                 if ($secret['name'] == md5($userName) && $secret['password'] == md5($password)) {
                     $userId = self::LAST_RESORT;
                     $rememberMe = 0;
@@ -197,8 +187,8 @@ class xarUser extends xarObject
         } // throw back
 
         // Set user auth module information
-        $dbconn   = xarDB3::getConn();
-        $xartable = xarDB3::getTables();
+        $dbconn   = xar::db()->getConn();
+        $xartable = xar::db()->getTables();
 
         $rolestable = $xartable['roles'];
 
@@ -286,7 +276,7 @@ class xarUser extends xarObject
     public static function isDebugAdmin($userId = null)
     {
         $userId ??= xarSession::getUserId();
-        return in_array($userId, xarConfig3::getVar('Site.User.DebugAdmins'));
+        return in_array($userId, xar::config()->getVar('Site.User.DebugAdmins'));
     }
 
     /**
@@ -297,7 +287,7 @@ class xarUser extends xarObject
     public static function isSiteAdmin($userId = null)
     {
         $userId ??= xarSession::getUserId();
-        return $userId == xarMod3::getVar('admin', 'roles');
+        return $userId == xar::mod()->getVar('admin', 'roles');
     }
 
     /**
@@ -310,7 +300,7 @@ class xarUser extends xarObject
     {
         $themeName = xarTpl::getThemeName();
 
-        if (self::isLoggedIn() && (bool) xarMod3::getVar('enable_user_menu', 'themes')) {
+        if (self::isLoggedIn() && (bool) xar::mod()->getVar('enable_user_menu', 'themes')) {
             $id = self::getVar('id');
             $userThemeName = xarModUserVars::get('themes', 'default_theme', $id);
             if ($userThemeName) {
@@ -359,7 +349,7 @@ class xarUser extends xarObject
             $locale = xarSession::getVar('navigationLocale');
         }
         if (empty($locale)) {
-            $locale = xarConfig3::getVar('Site.MLS.DefaultLocale');
+            $locale = xar::config()->getVar('Site.MLS.DefaultLocale');
         }
         xarSession::setVar('navigationLocale', $locale);
         return $locale;
@@ -374,7 +364,7 @@ class xarUser extends xarObject
      */
     public static function setNavigationLocale($locale)
     {
-        xarLog3::info("Changing the navigation locale from " . self::getNavigationLocale() . " to " . $locale);
+        xar::log()->info("Changing the navigation locale from " . self::getNavigationLocale() . " to " . $locale);
         if (xarMLS::getMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
             xarSession::setVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
@@ -423,7 +413,7 @@ class xarUser extends xarObject
             // an exception of type NOT_LOGGED_IN is raised
             // CHECKME: if we're going the route of moditemvars, this doesn need to be the case
             if ($name == 'name' || $name == 'uname') {
-                return xarMLS3::translate('Anonymous');
+                return xar::mls()->translate('Anonymous');
             }
             throw new NotLoggedInException();
         }
@@ -433,18 +423,18 @@ class xarUser extends xarObject
             throw new BadParameterException('name');
         }
 
-        if (!xarVar3::isCached('User.Variables.' . $userId, $name)) {
+        if (!xar::var()->isCached('User.Variables.' . $userId, $name)) {
 
             if ($name == 'name' || $name == 'uname' || $name == 'email') {
                 if ($userId == self::LAST_RESORT) {
-                    return xarMLS3::translate('No Information'); // better return null here
+                    return xar::mls()->translate('No Information'); // better return null here
                 }
 
                 // Retrieve the item
                 // Rather than use roles_userapi_get, we hard code this unique case
                 // FIXME: Look at this again when we move to PDO
-                $dbconn = xarDB3::getConn();
-                $tables = xarDB3::getTables();
+                $dbconn = xar::db()->getConn();
+                $tables = xar::db()->getTables();
                 $rolestable = $tables['roles'];
                 $query = "SELECT * FROM " . $rolestable . " WHERE id = " . $userId;
                 $result = $dbconn->Execute($query);
@@ -452,7 +442,7 @@ class xarUser extends xarObject
                 // We want the result as an associative array
                 // First get the field names
                 $fields = [];
-                $result->setFetchMode(xarDB3::getFetchAssoc());
+                $result->setFetchMode(xar::db()->getFetchAssoc());
                 //                $result->next(); $result->previous();
                 $result->first();
                 if (!isset($result->fields)) {
@@ -464,7 +454,7 @@ class xarUser extends xarObject
                     $namefield  = key($tmp);
                     $fields[$namefield]['name'] = strtolower($namefield);
                 }
-                $result->setFetchMode(xarDB3::getFetchNum());
+                $result->setFetchMode(xar::db()->getFetchNum());
                 $result->first();
                 //                $result->next(); $result->previous();
 
@@ -487,27 +477,27 @@ class xarUser extends xarObject
                     throw new IDNotFoundException($userId, 'User identified by id #(1) does not exist.');
                 }
 
-                xarVar3::setCached('User.Variables.' . $userId, 'uname', $userRole['uname']);
-                xarVar3::setCached('User.Variables.' . $userId, 'name', $userRole['name']);
-                xarVar3::setCached('User.Variables.' . $userId, 'email', $userRole['email']);
+                xar::var()->setCached('User.Variables.' . $userId, 'uname', $userRole['uname']);
+                xar::var()->setCached('User.Variables.' . $userId, 'name', $userRole['name']);
+                xar::var()->setCached('User.Variables.' . $userId, 'email', $userRole['email']);
 
             } elseif (!self::isVarDefined($name)) {
-                if (xarMod3::getVar($name, 'roles') || xarMod3::getVar('set' . $name, 'roles')) { //acount for optionals that need to be activated)
+                if (xar::mod()->getVar($name, 'roles') || xar::mod()->getVar('set' . $name, 'roles')) { //acount for optionals that need to be activated)
                     $value = xarModUserVars::get('roles', $name, $userId);
                     if ($value == null) {
-                        xarVar3::setCached('User.Variables.' . $userId, $name, false);
+                        xar::var()->setCached('User.Variables.' . $userId, $name, false);
                         // Here we can't raise an exception because they're all optional
                         $optionalvars = ['locale','timezone','usertimezone','userlastlogin',
                             'userhome','primaryparent','passwordupdate'];
                         //if ($name != 'locale' && $name != 'timezone') {
                         if (!in_array($name, $optionalvars)) {
                             // log unknown user variables to inform the site admin
-                            $msg = xarMLS3::translate('User variable #(1) was not correctly registered', $name);
-                            xarLog3::error($msg);
+                            $msg = xar::mls()->translate('User variable #(1) was not correctly registered', $name);
+                            xar::log()->error($msg);
                         }
                         return;
                     } else {
-                        xarVar3::setCached('User.Variables.' . $userId, $name, $value);
+                        xar::var()->setCached('User.Variables.' . $userId, $name, $value);
                     }
                 }
 
@@ -522,17 +512,17 @@ class xarUser extends xarObject
                 $properties = & self::$objectRef->getProperties();
                 foreach (array_keys($properties) as $key) {
                     if (isset($properties[$key]->value)) {
-                        xarVar3::setCached('User.Variables.' . $userId, $key, $properties[$key]->value);
+                        xar::var()->setCached('User.Variables.' . $userId, $key, $properties[$key]->value);
                     }
                 }
             }
         }
 
-        if (!xarVar3::isCached('User.Variables.' . $userId, $name)) {
+        if (!xar::var()->isCached('User.Variables.' . $userId, $name)) {
             return false; //failure
         }
 
-        $cachedValue = xarVar3::getCached('User.Variables.' . $userId, $name);
+        $cachedValue = xar::var()->getCached('User.Variables.' . $userId, $name);
         if ($cachedValue === false) {
             // Variable already searched but doesn't exist and has no default
             return;
@@ -580,8 +570,8 @@ class xarUser extends xarObject
             throw new BadParameterException('name');
 
         } elseif (!self::isVarDefined($name)) {
-            if (xarMod3::getVar($name, 'roles')) {
-                xarVar3::setCached('User.Variables.' . $userId, $name, false);
+            if (xar::mod()->getVar($name, 'roles')) {
+                xar::var()->setCached('User.Variables.' . $userId, $name, false);
                 throw new IDNotFoundException($name, 'User variable #(1) was not correctly registered');
             } else {
                 xarModUserVars::set('roles', $name, $value, $userId);
@@ -609,7 +599,7 @@ class xarUser extends xarObject
         }
 
         // Keep in sync the UserVariables cache
-        xarVar3::setCached('User.Variables.' . $userId, $name, $value);
+        xar::var()->setCached('User.Variables.' . $userId, $name, $value);
 
         return true;
     }
@@ -659,8 +649,8 @@ class xarUser extends xarObject
             }
         }
 
-        $dbconn   = xarDB3::getConn();
-        $xartable = xarDB3::getTables();
+        $dbconn   = xar::db()->getConn();
+        $xartable = xar::db()->getTables();
 
         // Get user auth_module name
         $rolestable = $xartable['roles'];
@@ -671,7 +661,7 @@ class xarUser extends xarObject
                   WHERE mods.id = roles.auth_module_id AND
                         roles.id = ?";
         $stmt = & $dbconn->prepareStatement($query);
-        $result = & $stmt->executeQuery([$userId], xarDB3::getFetchNum());
+        $result = & $stmt->executeQuery([$userId], xar::db()->getFetchNum());
 
         if (!$result->next()) {
             // That user has never logon, strange, don't you think?
@@ -687,7 +677,7 @@ class xarUser extends xarObject
         }
         $result->Close();
 
-        if (!xarMod3::apiLoad($authModName, 'user')) {
+        if (!xar::mod()->apiLoad($authModName, 'user')) {
             return;
         }
 
@@ -705,7 +695,7 @@ class xarUser extends xarObject
     private static function isVarDefined($name)
     {
         // Retrieve the dynamic user object if necessary
-        if (!isset(self::$objectRef) && xarMod3::isHooked('dynamicdata', 'roles')) {
+        if (!isset(self::$objectRef) && xar::mod()->isHooked('dynamicdata', 'roles')) {
             sys::import('modules.dynamicdata.class.objects.factory');
             self::$objectRef = DataObjectFactory::getObject(['module' => 'roles']);
             if (empty(self::$objectRef) || empty(self::$objectRef->objectid)) {

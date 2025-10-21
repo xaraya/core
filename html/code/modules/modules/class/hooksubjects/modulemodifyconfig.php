@@ -22,7 +22,7 @@
  * Called in modifyconfig function as...
  * $item = array('module' => 'modulename' [, 'itemtype' => int]);
  * New way of calling hooks
- * $data['hooks'] = xarHooks::notify('ModuleModifyconfig', $item);
+ * $data['hooks'] = xarHooks::notify('ModuleModifyconfig', $item, $context);
  * Legacy way, supported for now, deprecated in future
  * $data['hooks'] = xarModHooks::call('module', 'modifyconfig', 'modulename', $item);
  * Output in modifyconfig template as

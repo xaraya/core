@@ -13,9 +13,9 @@
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('modules.dynamicdata.utilapi');
-sys::import('xaraya.facades.variables');
+sys::import('xaraya.services.xar');
 use Xaraya\Modules\DynamicData\UtilApi;
-use Xaraya\Facades\xarVar3;
+use Xaraya\Services\xar;
 
 /**
  * Generate the variables necessary to instantiate a *virtual* DataObject class (= not defined in database)
@@ -455,17 +455,17 @@ class VirtualObjectFactory extends xarObject
         if (static::$loaded) {
             return;
         }
-        if (!xarVar3::loadCached('DynamicData', 'PropertyTypes')) {
+        if (!xar::var()->loadCached('DynamicData', 'PropertyTypes')) {
             throw new Exception('No property types cached yet - you need to export at least 1 object to php');
         }
-        if (!xarVar3::loadCached('DynamicData', 'Configurations')) {
+        if (!xar::var()->loadCached('DynamicData', 'Configurations')) {
             throw new Exception('No configurations cached yet - you need to export at least 1 object to php');
         }
-        if (!xarVar3::loadCached('DynamicData', 'Databases')) {
+        if (!xar::var()->loadCached('DynamicData', 'Databases')) {
             throw new Exception('No databases cached yet - you need to visit DD > Utilities > DB Connections once');
         }
         // @todo adapt xarModVars::preload to allow preloading from cache?
-        //if (!xarVar3::loadCached('Mod.Variables.dynamicdata')) {  // 'databases'
+        //if (!xar::var()->loadCached('Mod.Variables.dynamicdata')) {  // 'databases'
         //    throw new Exception('No module variables cached yet - you need to export at least 1 object to php');
         //}
         static::$loaded = true;
@@ -477,11 +477,11 @@ class VirtualObjectFactory extends xarObject
      */
     public static function saveCoreCache()
     {
-        xarVar3::saveCached('DynamicData', 'PropertyTypes', __METHOD__);
-        xarVar3::saveCached('DynamicData', 'Configurations', __METHOD__);
+        xar::var()->saveCached('DynamicData', 'PropertyTypes', __METHOD__);
+        xar::var()->saveCached('DynamicData', 'Configurations', __METHOD__);
         // Saved in DD > Utilities > DB Connections = xaradmin/dbconfig.php for all modules - UtilApi::getAllDatabases()
-        //xarVar3::saveCached('DynamicData', 'Databases');
-        //xarVar3::saveCached('Mod.Variables.dynamicdata');  // 'databases'
+        //xar::var()->saveCached('DynamicData', 'Databases');
+        //xar::var()->saveCached('Mod.Variables.dynamicdata');  // 'databases'
     }
 }
 

@@ -14,10 +14,8 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-sys::import('xaraya.facades.database');
-sys::import('xaraya.facades.modules');
-use Xaraya\Facades\xarDB3;
-use Xaraya\Facades\xarMod3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class CategoryWorker extends xarObject
 {
@@ -37,8 +35,8 @@ class CategoryWorker extends xarObject
     public function __construct()
     {
         sys::import('xaraya.structures.query');
-        xarMod3::loadDbInfo('categories', 'categories');
-        $tables = xarDB3::getTables();
+        xar::mod()->loadDbInfo('categories', 'categories');
+        $tables = xar::db()->getTables();
         $this->table     = $tables['categories'];
         $this->cattable  = $tables['categories'];
         $this->basetable = $tables['categories_basecategories'];
@@ -380,7 +378,7 @@ class CategoryWorker extends xarObject
             return $bases;
         } else {
             // We are getting the base categories of a module
-            $xartable = xarDB3::getTables();
+            $xartable = xar::db()->getTables();
 
             sys::import('xaraya.structures.query');
             $q = new Query('SELECT');
@@ -398,7 +396,7 @@ class CategoryWorker extends xarObject
             // FIXME: no way to have get the same field twice with different aliases ?
             //$q->addfield('base.category_id AS cid');
             if (!empty($module)) {
-                $q->eq('module_id', (int) xarMod::getRegID($module));
+                $q->eq('module_id', (int) xar::mod()->getRegID($module));
             }
             if (!empty($module_id)) {
                 $q->eq('module_id', (int) $module_id);

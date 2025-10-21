@@ -39,6 +39,7 @@ use Xaraya\Context\ContextFactory;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
+use Xaraya\Services\xar;
 use GraphQL\GraphQL;
 use GraphQL\Error\DebugFlag;
 use GraphQL\Type\Definition\Type;
@@ -415,6 +416,8 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
         $context->enableTrace(self::$tracePath);
         // @todo check if we already have a context? (via request or from elsewhere)
         $this->setContext($context);
+        // set context for core services here too
+        xar::setServicesContext($context);
         $result = $this->getData($query, $variables, $operationName);
         if ($query == '{schema}') {
             $context['mediatype'] = 'text/plain';

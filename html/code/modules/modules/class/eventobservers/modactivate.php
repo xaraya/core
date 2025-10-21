@@ -33,7 +33,8 @@ class ModulesModActivateObserver extends EventObserver implements ixarEventObser
                 xarPageCache::flushCached('base');
             }
         }
+        $context = $subject->getContext();
         // let any hooks know the module was activated
-        xarHooks::notify('ModuleActivate', ['objectid' => $modName, 'module' => $modName]);
+        xarHooks::notify('ModuleActivate', ['objectid' => $modName, 'module' => $modName], $context);
     }
 }

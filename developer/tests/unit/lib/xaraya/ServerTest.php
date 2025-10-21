@@ -11,7 +11,7 @@ final class ServerTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         xarCache::init();
-        // preload Config.Variables here for xarConfig3::getVar() in xarServer::getConfig()
+        // preload Config.Variables here for xar::config()->getVar() in xarServer::getConfig()
         xarCoreCache::setCached('CoreCache.Preload', 'Config.Variables', 1);
     }
 

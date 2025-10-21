@@ -13,8 +13,8 @@
  * @link http://xaraya.info/index.php/release/70.html
 **/
 
-sys::import('xaraya.facades.logger');
-use Xaraya\Facades\xarLog3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Base CSS class
@@ -90,7 +90,7 @@ class xarCSS extends xarObject
 
     private function __construct()
     {
-        xarLog3::debug('xarCSS::__construct: hello world');
+        xar::log()->debug('xarCSS::__construct: hello world');
         $this->combined   = xarModVars::get('themes', 'css.combined');
         $this->compressed = xarModVars::get('themes', 'css.compressed');
     }
@@ -109,11 +109,11 @@ class xarCSS extends xarObject
     {
         // Check what libraries are present in the filesystem
         if (time() - $this->last_run > $this->expires) {
-            xarLog3::debug('xarCSS::__wakeup: unserialize & refresh ' . (string) $this->last_run);
+            xar::log()->debug('xarCSS::__wakeup: unserialize & refresh ' . (string) $this->last_run);
             $this->refresh();
             $this->refreshed = true;
         } else {
-            //xarLog3::debug('xarCSS::__wakeup: unserialize & NOT refresh');
+            //xar::log()->debug('xarCSS::__wakeup: unserialize & NOT refresh');
             $this->refreshed = false;
         }
         // Load the default libraries
@@ -134,7 +134,7 @@ class xarCSS extends xarObject
     **/
     public function __sleep()
     {
-        xarLog3::debug('xarCSS::__sleep: serialize');
+        xar::log()->debug('xarCSS::__sleep: serialize');
         // set the last run time before we exit
         $this->last_run = time();
         // return the array of public property names to store
@@ -154,10 +154,10 @@ class xarCSS extends xarObject
     public function __destruct()
     {
         if (!$this->refreshed && time() - $this->last_run < $this->expires) {
-            //xarLog3::debug('xarCSS::__destruct: NOT saving modvars');
+            //xar::log()->debug('xarCSS::__destruct: NOT saving modvars');
             return;
         }
-        xarLog3::debug('xarCSS::__destruct: saving modvars');
+        xar::log()->debug('xarCSS::__destruct: saving modvars');
         // basically, we serialize and set this object as a modvar
         // xarModVars::set can be a little flaky,
         // this workaround seems to do the trick
@@ -192,7 +192,7 @@ class xarCSS extends xarObject
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            xarLog3::info('xarCSS::getInstance: loading modvars');
+            xar::log()->info('xarCSS::getInstance: loading modvars');
             // try unserializing the stored modvar
             self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
@@ -202,7 +202,7 @@ class xarCSS extends xarObject
                 self::$instance = new $c();
             }
         } else {
-            xarLog3::info('xarCSS::getInstance: modvars already loaded');
+            xar::log()->info('xarCSS::getInstance: modvars already loaded');
         }
         self::$instance->combined   = xarModVars::get('themes', 'css.combined');
         self::$instance->compressed = xarModVars::get('themes', 'css.compressed');
@@ -279,7 +279,7 @@ class xarCSS extends xarObject
             if (!is_dir($path)) {
                 continue;
             }
-            //xarLog3::debug('xarCSS::refresh: looking in ' . $path);
+            //xar::log()->debug('xarCSS::refresh: looking in ' . $path);
             $folders = $this->getFolders($path, 1);
             if (empty($folders)) {
                 continue;

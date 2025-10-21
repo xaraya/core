@@ -28,6 +28,7 @@ sys::import('xaraya.services.servicefactory');
 /**
  * Make Config Service available via facade - xarConfig3:: static methods
  * similar to traditional xarConfigVars::* method calls
+ * @deprecated 2.8.2 use xar::config()->* instead
  */
 class xarConfig3
 {

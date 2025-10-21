@@ -26,7 +26,8 @@ class ModulesModDeactivateObserver extends EventObserver implements ixarEventObs
                 xarPageCache::flushCached('base');
             }
         }
+        $context = $subject->getContext();
         // let any hooks know the module was deactivated
-        xarHooks::notify('ModuleDeactivate', ['objectid' => $modName, 'module' => $modName]);
+        xarHooks::notify('ModuleDeactivate', ['objectid' => $modName, 'module' => $modName], $context);
     }
 }

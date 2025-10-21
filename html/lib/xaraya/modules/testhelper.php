@@ -42,8 +42,6 @@ class TestHelper extends TestCase
         xarEvents::init();
         // initialize modules
         xarMod::init();
-        // initialize users
-        xarUser::init();
         // create dummy context
         $context = static::createContext(['source' => __METHOD__]);
         // use RequestContext as request handler
@@ -52,6 +50,10 @@ class TestHelper extends TestCase
         // use SessionContext as session handler
         xarSession::setSessionClass(SessionContext::class);
         xarSession::init([], $context);
+        // set context for core services here too
+        \Xaraya\Services\xar::setServicesContext($context);
+        // initialize users
+        xarUser::init();
 
         // file paths are relative to html directory here
         static::$oldDir = (string) getcwd();

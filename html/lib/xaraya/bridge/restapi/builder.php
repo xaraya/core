@@ -15,7 +15,7 @@
 namespace Xaraya\Bridge\RestAPI;
 
 use Xaraya\Authentication\AuthToken;
-use Xaraya\Facades\xarMod3;
+use Xaraya\Services\xar;
 use xarObject;
 use xarMod;
 use xarServer;
@@ -1336,7 +1336,7 @@ class RestAPIBuilder extends xarObject
                 'apilist' => [],
             ];
             try {
-                $apiList = xarMod3::apiFunc($module, 'rest', 'getlist');
+                $apiList = xar::mod()->apiFunc($module, 'rest', 'getlist');
             } catch (Exception) {
                 $apiList = self::find_default_api_functions($module);
             }
@@ -1372,7 +1372,7 @@ class RestAPIBuilder extends xarObject
         $apiList = [];
         $found = xarMod::checkModuleFunction($module, 'userapi', 'getitemtypes');
         if ($found === $module) {
-            // $func name as used in xarMod3::apiFunc($module, $type, $func, $args)
+            // $func name as used in xar::mod()->apiFunc($module, $type, $func, $args)
             $apiList['getitemtypes'] = [
                 'type' => 'user',  // default = rest, other options are user, admin, ... as usual
                 'path' => 'itemtypes',  // path to use in REST API operation /modules/{module}/{path}
@@ -1387,7 +1387,7 @@ class RestAPIBuilder extends xarObject
         // Note: we can use method = get + paramaters or method = post + requestBody here - both will work
         $found = xarMod::checkModuleFunction($module, 'userapi', 'getitemlinks');
         if ($found === $module) {
-            // $func name as used in xarMod3::apiFunc($module, $type, $func, $args)
+            // $func name as used in xar::mod()->apiFunc($module, $type, $func, $args)
             $apiList['getitemlinks'] = [
                 'type' => 'user',  // default = rest, other options are user, admin, ... as usual
                 'path' => 'itemlinks',  // path to use in REST API operation /modules/{module}/{path}

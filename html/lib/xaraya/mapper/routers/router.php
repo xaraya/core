@@ -14,8 +14,8 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.facades.logger');
-use Xaraya\Facades\xarLog3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class xarRouter extends xarObject
 {
@@ -73,7 +73,7 @@ class xarRouter extends xarObject
                 $publicproperties = $request->getPublicProperties();
                 $request->setRoute($name);
                 $this->currentRoute = $name;
-                xarLog3::notice('The route is set: ' . $name);
+                xar::log()->notice('The route is set: ' . $name);
                 return true;
             }
         }

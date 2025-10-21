@@ -21,8 +21,8 @@
  *
  */
 sys::import('xaraya.mlsbackends.reference');
-sys::import('xaraya.facades.logger');
-use Xaraya\Facades\xarLog3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
@@ -376,7 +376,7 @@ class PHPBackendGenerator extends xarObject
         $xmlFileExists = false;
         if (file_exists($this->xmlFileName)) {
             if (!($fp1 = fopen($this->xmlFileName, "r"))) {
-                xarLog3::error("Could not open XML input: " . $this->xmlFileName);
+                xar::log()->error("Could not open XML input: " . $this->xmlFileName);
             }
             $data = fread($fp1, filesize($this->xmlFileName));
             fclose($fp1);
@@ -385,8 +385,8 @@ class PHPBackendGenerator extends xarObject
             xml_parser_free($xml_parser);
             $xmlFileExists = true;
         } else {
-            xarLog3::error("Context Type: " . $ctxType . " Context Name: " . $ctxName);
-            xarLog3::error("MLS Could not find XML input: " . $this->xmlFileName);
+            xar::log()->error("Context Type: " . $ctxType . " Context Name: " . $ctxName);
+            xar::log()->error("MLS Could not find XML input: " . $this->xmlFileName);
         }
 
         if (!$xmlFileExists) {
@@ -428,7 +428,7 @@ class PHPBackendGenerator extends xarObject
             fputs($fp2, "?>");
             fclose($fp2);
         } else {
-            xarLog3::error("Could not create file: " . $this->fileName);
+            xar::log()->error("Could not create file: " . $this->fileName);
             global $xarML_PHPBackend_entries;
             global $xarML_PHPBackend_keyEntries;
             $entryIndex = '';

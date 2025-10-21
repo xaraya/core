@@ -15,8 +15,8 @@
  *
  */
 
-sys::import('xaraya.facades.config');
-use Xaraya\Facades\xarConfig3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class XarDateTime extends DateTime
 {
@@ -39,7 +39,7 @@ class XarDateTime extends DateTime
         $this->hour = $hour;
         $this->minute = $minute;
         $this->second = $second;
-        $this->servertz = empty($timezone) ? xarConfig3::getVar('Site.Core.TimeZone') : $timezone;
+        $this->servertz = empty($timezone) ? xar::config()->getVar('Site.Core.TimeZone') : $timezone;
         $this->setISODate($this->year, $this->month, $this->day);
         $this->setTime($this->hour, $this->minute, $this->second);
     }

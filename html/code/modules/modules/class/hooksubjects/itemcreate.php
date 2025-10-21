@@ -20,7 +20,7 @@
  * Called in (api|gui) function after item is created as...
  * $item = array('module' => $module, 'itemid' => $itemid [, 'itemtype' => $itemtype, ...]);
  * New way of calling hooks
- * xarHooks::notify('ItemCreate', $item);
+ * xarHooks::notify('ItemCreate', $item, $context);
  * Legacy way, supported for now, deprecated in future
  * xarModHooks::call('item', 'create', $itemid, $item);
 **/

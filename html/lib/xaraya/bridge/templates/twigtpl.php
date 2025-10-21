@@ -6,17 +6,13 @@
 sys::import('xaraya.templates');
 sys::import('xaraya.bridge.templates.twigbridge');
 sys::import('xaraya.context.context');
-sys::import('xaraya.facades.logger');
-sys::import('xaraya.facades.modules');
-sys::import('xaraya.facades.variables');
+sys::import('xaraya.services.xar');
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 use Twig\TemplateWrapper;
 use Xaraya\Bridge\TemplateEngine\TwigBridge;
 use Xaraya\Context\Context;
-use Xaraya\Facades\xarLog3;
-use Xaraya\Facades\xarMod3;
-use Xaraya\Facades\xarVar3;
+use Xaraya\Services\xar;
 
 //use xarMod;
 //use xarServer;
@@ -116,7 +112,7 @@ class xarTwigTpl extends xarTpl
         // @checkme set generate XML urls to false to avoid autoescape issues
         xarServer::$generateXMLURLs = false;
         xarMod::$genXmlUrls = false;
-        xarLog3::notice(__METHOD__ . ": New twig environment for context from " . ($context['source'] ?? 'unknown'));
+        xar::log()->notice(__METHOD__ . ": New twig environment for context from " . ($context['source'] ?? 'unknown'));
 
         return $twig;
     }
@@ -211,7 +207,7 @@ class xarTwigTpl extends xarTpl
     public static function addModuleTemplates()
     {
         // make other modules configurable based on fileinfo from xarversion.php
-        $fileModules = xarMod3::apiFunc('modules', 'admin', 'getfilemodules');
+        $fileModules = xar::mod()->apiFunc('modules', 'admin', 'getfilemodules');
         // support templates/twig or vendor/xaraya/twig/html directory for standard templates
         $twigDir = static::getTwigTemplatesDir();
         foreach ($fileModules as $name => $fileInfo) {
@@ -225,7 +221,7 @@ class xarTwigTpl extends xarTpl
             // @todo support individual module templates directories too!?
             $path = 'code/modules/' . $fileInfo['directory'];
             if (!is_dir($twigDir . '/' . $path)) {
-                xarLog3::warning(__METHOD__ . ": Invalid path for Twig namespace '$name' $twigDir/$path");
+                xar::log()->warning(__METHOD__ . ": Invalid path for Twig namespace '$name' $twigDir/$path");
                 continue;
             }
             static::$namespaces[$name] = $path;
@@ -242,7 +238,7 @@ class xarTwigTpl extends xarTpl
     {
         // @todo this assumes we're running in sys::web() because it looks for 'themes'
         // make other themes configurable based on fileinfo from xartheme.php
-        $fileThemes = xarMod3::apiFunc('themes', 'admin', 'getfilethemes');
+        $fileThemes = xar::mod()->apiFunc('themes', 'admin', 'getfilethemes');
         foreach ($fileThemes as $name => $fileInfo) {
             $name = strtolower($name);
             // no namespace for themes
@@ -354,7 +350,7 @@ class xarTwigTpl extends xarTpl
         $themeName = strtolower($themeName);
         // make other themes configurable based on fileinfo from xartheme.php
         if (empty(static::$extensions['themes'][$themeName])) {
-            xarLog3::info(__METHOD__ . ": Theme {$themeName} does not support twig templates");
+            xar::log()->info(__METHOD__ . ": Theme {$themeName} does not support twig templates");
             return false;
         }
         return true;
@@ -415,8 +411,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "page:$themeName:$tplType:$tplName:$pageName";
         // cache frequently-used sourcefilenames
-        if (xarVar3::isCached('Templates.Twig', $cachename)) {
-            return xarVar3::getCached('Templates.Twig', $cachename);
+        if (xar::var()->isCached('Templates.Twig', $cachename)) {
+            return xar::var()->getCached('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -448,7 +444,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
+        xar::var()->setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -484,8 +480,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "box:$themeName:$tplName";
         // cache frequently-used sourcefilenames
-        if (xarVar3::isCached('Templates.Twig', $cachename)) {
-            return xarVar3::getCached('Templates.Twig', $cachename);
+        if (xar::var()->isCached('Templates.Twig', $cachename)) {
+            return xar::var()->getCached('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -510,7 +506,7 @@ class xarTwigTpl extends xarTpl
         $templates[] = '@blocks/blocks/block' . $extension;
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
+        xar::var()->setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -526,14 +522,14 @@ class xarTwigTpl extends xarTpl
             return true;
         }
         if (in_array($modName, ['installer'])) {
-            xarLog3::info(__METHOD__ . ": Core module installer does not support twig templates");
+            xar::log()->info(__METHOD__ . ": Core module installer does not support twig templates");
             return false;
         }
         static::getNamespaces();
         $modName = strtolower($modName);
         // make other modules configurable based on fileinfo from xarversion.php
         if (empty(static::$extensions['modules'][$modName])) {
-            xarLog3::info(__METHOD__ . ": Module {$modName} does not support twig templates");
+            xar::log()->info(__METHOD__ . ": Module {$modName} does not support twig templates");
             return false;
         }
         return true;
@@ -579,8 +575,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "module:$themeName:$modName:$modType:$funcName:$tplName";
         // cache frequently-used sourcefilenames
-        if (xarVar3::isCached('Templates.Twig', $cachename)) {
-            return xarVar3::getCached('Templates.Twig', $cachename);
+        if (xar::var()->isCached('Templates.Twig', $cachename)) {
+            return xar::var()->getCached('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -641,7 +637,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
+        xar::var()->setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -656,14 +652,14 @@ class xarTwigTpl extends xarTpl
         if (empty($modName) || $modName == 'auto') {
             $blockType = strtolower($blockType);
             if (empty(static::$extensions['block'][$blockType])) {
-                xarLog3::info(__METHOD__ . ": Stand-alone block {$blockType} does not support twig templates");
+                xar::log()->info(__METHOD__ . ": Stand-alone block {$blockType} does not support twig templates");
                 return false;
             }
             return true;
         }
         // let the module be the main blocker here
         if (!static::isModuleSupported($modName)) {
-            xarLog3::info(__METHOD__ . ": Block {$blockType} of module {$modName} does not support twig templates");
+            xar::log()->info(__METHOD__ . ": Block {$blockType} of module {$modName} does not support twig templates");
             return false;
         }
         // otherwise let's always assume that it is supported ;-)
@@ -714,8 +710,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "block:$themeName:$modName:$blockType:$tplName:$tplBase:$tplModule";
         // cache frequently-used sourcefilenames
-        if (xarVar3::isCached('Templates.Twig', $cachename)) {
-            return xarVar3::getCached('Templates.Twig', $cachename);
+        if (xar::var()->isCached('Templates.Twig', $cachename)) {
+            return xar::var()->getCached('Templates.Twig', $cachename);
         }
 
         // use name of blocktype as base unless over-ridden
@@ -737,7 +733,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
+        xar::var()->setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
         /**
@@ -760,7 +756,7 @@ class xarTwigTpl extends xarTpl
     {
         // let the module be the main blocker here
         if (!static::isModuleSupported($modName)) {
-            xarLog3::info(__METHOD__ . ": Object {$objectName} of module {$modName} does not support twig templates");
+            xar::log()->info(__METHOD__ . ": Object {$objectName} of module {$modName} does not support twig templates");
             return false;
         }
         // otherwise let's always assume that it is supported ;-)
@@ -806,8 +802,8 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "object:$themeName:$modName:$objectName:$tplType:$tplBase";
         // cache frequently-used sourcefilenames
-        if (xarVar3::isCached('Templates.Twig', $cachename)) {
-            return xarVar3::getCached('Templates.Twig', $cachename);
+        if (xar::var()->isCached('Templates.Twig', $cachename)) {
+            return xar::var()->getCached('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -841,7 +837,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
+        xar::var()->setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -856,14 +852,14 @@ class xarTwigTpl extends xarTpl
         if ($modName == 'auto') {
             $propertyName = strtolower($propertyName);
             if (empty(static::$extensions['property'][$propertyName])) {
-                xarLog3::info(__METHOD__ . ": Stand-alone property {$propertyName} does not support twig templates");
+                xar::log()->info(__METHOD__ . ": Stand-alone property {$propertyName} does not support twig templates");
                 return false;
             }
             return true;
         }
         // let the module be the main blocker here
         if (!static::isModuleSupported($modName)) {
-            xarLog3::info(__METHOD__ . ": Property {$propertyName} of module {$modName} does not support twig templates");
+            xar::log()->info(__METHOD__ . ": Property {$propertyName} of module {$modName} does not support twig templates");
             return false;
         }
         // otherwise let's always assume that it is supported ;-)
@@ -911,11 +907,11 @@ class xarTwigTpl extends xarTpl
     {
         $cachename = "property:$themeName:$modName:$propertyName:$tplType:$tplBase";
         // cache frequently-used sourcefilenames
-        if (xarVar3::isCached('Templates.Twig', $cachename)) {
-            return xarVar3::getCached('Templates.Twig', $cachename);
+        if (xar::var()->isCached('Templates.Twig', $cachename)) {
+            return xar::var()->getCached('Templates.Twig', $cachename);
         }
         if (!empty($tplBase)) {
-            $tplType = xarVar3::prepPath($tplBase);
+            $tplType = xar::var()->prepPath($tplBase);
         }
 
         // @todo define this in theme config
@@ -951,7 +947,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xarVar3::setCached('Templates.Twig', $cachename, $templateName);
+        xar::var()->setCached('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }

@@ -1,7 +1,7 @@
 <?php
 
-sys::import('xaraya.facades.logger');
-use Xaraya\Facades\xarLog3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class XarayaXSLProcessor extends xarObject
 {
@@ -68,7 +68,7 @@ class XarayaXSLProcessor extends xarObject
     public static function phpexpression($expr)
     {
         $res = ExpressionTransformer::transformPHPExpression($expr);
-        xarLog3::info("BL: '$expr' resolved to '$res'");
+        xar::log()->info("BL: '$expr' resolved to '$res'");
         return $res;
     }
 

@@ -28,6 +28,7 @@ sys::import('xaraya.services.servicefactory');
 /**
  * Make Logger Service available via facade - xarLog3:: static methods
  * similar to traditional xarLog::* method calls
+ * @deprecated 2.8.2 use xar::log()->* instead
  */
 class xarLog3
 {

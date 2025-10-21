@@ -17,10 +17,10 @@
 
 sys::import('xaraya.requests.interface');
 sys::import('xaraya.requests.handler');
-sys::import('xaraya.facades.config');
+sys::import('xaraya.services.xar');
 use Xaraya\Requests\RequestInterface;
 use Xaraya\Requests\RequestHandler;
-use Xaraya\Facades\xarConfig3;
+use Xaraya\Services\xar;
 
 class xarServer extends xarObject
 {
@@ -73,7 +73,7 @@ class xarServer extends xarObject
      */
     public static function getConfig()
     {
-        $systemArgs = ['enableShortURLsSupport' => xarConfig3::getVar('Site.Core.EnableShortURLsSupport'),
+        $systemArgs = ['enableShortURLsSupport' => xar::config()->getVar('Site.Core.EnableShortURLsSupport'),
             'generateXMLURLs' => true];
         return $systemArgs;
     }
@@ -229,12 +229,12 @@ class xarServer extends xarObject
     {
         if (method_exists('xarConfigVars', 'Get')) {
             try {
-                if (xarConfig3::getVar('Site.Core.EnableSecureServer') == true) {
+                if (xar::config()->getVar('Site.Core.EnableSecureServer') == true) {
                     if (preg_match('/^http:/', self::getVar('REQUEST_URI') ?? '')) {
                         return self::PROTOCOL_HTTP;
                     }
                     $serverport = self::getVar('SERVER_PORT');
-                    $protocol = ($serverport == xarConfig3::getVar('Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
+                    $protocol = ($serverport == xar::config()->getVar('Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
                     return $protocol;
                 }
             } catch (Exception $e) {

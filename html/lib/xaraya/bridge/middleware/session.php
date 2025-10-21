@@ -23,7 +23,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\Context;
-use Xaraya\Facades\xarConfig3;
+use Xaraya\Services\xar;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
@@ -59,7 +59,7 @@ class SessionMiddleware implements MiddlewareInterface
         $this->config = array_replace(xarSession::getConfig(), $config);
         $this->cookieName = $this->config['cookieName'] ?? SessionHandler::COOKIE;
         $this->prefix = SessionHandler::PREFIX;
-        $this->anonId = intval(xarConfig3::getVar('Site.User.AnonymousUID', 5));
+        $this->anonId = intval(xar::config()->getVar('Site.User.AnonymousUID', 5));
         //$this->storage = new SessionDatabaseStorage($this->config);
         $this->storage = new SessionCacheStorage($this->config);
         // register callback functions for UserLogin and UserLogout events - to update userId in request

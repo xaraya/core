@@ -14,7 +14,7 @@
 
 namespace Xaraya\Bridge\RestAPI;
 
-use Xaraya\Facades\xarMod3;
+use Xaraya\Services\xar;
 use xarMod;
 use xarRoles;
 use xarSecurity;
@@ -96,7 +96,6 @@ class ModuleAPIHandler extends RestAPIHandler
      * @param array<string, mixed> $args
      * @uses xarMod::init()
      * @uses xarUser::init()
-     * @uses xarMod3::apiFunc()
      * @throws \ForbiddenOperationException
      * @return mixed
      */
@@ -152,7 +151,8 @@ class ModuleAPIHandler extends RestAPIHandler
                 $params = array_merge($func['args'], $params);
             }
         }
-        return xarMod3::apiFunc($func['module'], $func['type'], $func['name'], $params, $context);
+        // context for core services is set in handler
+        return xar::mod()->apiFunc($func['module'], $func['type'], $func['name'], $params);
     }
 
     /**
@@ -160,7 +160,6 @@ class ModuleAPIHandler extends RestAPIHandler
      * @param array<string, mixed> $args
      * @uses xarMod::init()
      * @uses xarUser::init()
-     * @uses xarMod3::apiFunc()
      * @throws \ForbiddenOperationException
      * @return mixed
      */
@@ -209,7 +208,8 @@ class ModuleAPIHandler extends RestAPIHandler
         if (!empty($more) && !empty($func['args'])) {
             $params = array_merge($params, $func['args']);
         }
-        return xarMod3::apiFunc($func['module'], $func['type'], $func['name'], $params, $context);
+        // context for core services is set in handler
+        return xar::mod()->apiFunc($func['module'], $func['type'], $func['name'], $params);
     }
 
     /**
@@ -396,7 +396,7 @@ class ModuleAPIHandler extends RestAPIHandler
         foreach ($modulelist as $module) {
             $default[$module] = [
                 'module' => $module,
-                'apilist' => xarMod3::apiFunc($module, 'rest', 'getlist'),
+                'apilist' => xar::mod()->apiFunc($module, 'rest', 'getlist'),
             ];
         }
         return $default;

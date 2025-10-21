@@ -12,16 +12,8 @@
  * @author mrb <marcel@xaraya.com>
  */
 
-sys::import('xaraya.facades.database');
-sys::import('xaraya.facades.logger');
-sys::import('xaraya.facades.modules');
-sys::import('xaraya.facades.multilanguage');
-sys::import('xaraya.facades.variables');
-use Xaraya\Facades\xarDB3;
-use Xaraya\Facades\xarLog3;
-use Xaraya\Facades\xarMod3;
-use Xaraya\Facades\xarMLS3;
-use Xaraya\Facades\xarVar3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Class to model registration information for a property
@@ -64,9 +56,9 @@ class PropertyRegistration extends DataContainer
 
     public static function clearCache()
     {
-        $dbconn = xarDB3::getConn();
-        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        $tables = xar::db()->getTables();
         $sql = "DELETE FROM $tables[dynamic_properties_def]";
         $res = $dbconn->ExecuteUpdate($sql);
         return $res;
@@ -101,17 +93,17 @@ class PropertyRegistration extends DataContainer
 
         /*
                 foreach($this->reqmodules as $required)
-                    if(!xarMod3::isAvailable($required))
+                    if(!xar::mod()->isAvailable($required))
                         return false;
         */
-        $dbconn = xarDB3::getConn();
-        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        $tables = xar::db()->getTables();
         $propdefTable = $tables['dynamic_properties_def'];
 
         // Make sure the db is the same as in the old days
         assert(count($this->reqmodules) <= 1);
-        $module_id = empty($this->reqmodules) ? 0 : xarMod3::getID($this->reqmodules[0]);
+        $module_id = empty($this->reqmodules) ? 0 : xar::mod()->getID($this->reqmodules[0]);
 
         if ($this->format == 0) {
             $this->format = $this->id;
@@ -174,16 +166,16 @@ class PropertyRegistration extends DataContainer
 
     public static function Retrieve()
     {
-        if (xarVar3::isCached('DynamicData', 'PropertyTypes')) {
-            return xarVar3::getCached('DynamicData', 'PropertyTypes');
+        if (xar::var()->isCached('DynamicData', 'PropertyTypes')) {
+            return xar::var()->getCached('DynamicData', 'PropertyTypes');
         }
-        $dbconn = xarDB3::getConn();
-        xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
-        // CHECKME: $tables[modules] is defined in xarMod3::init()
+        $dbconn = xar::db()->getConn();
+        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        // CHECKME: $tables[modules] is defined in xar::mod()->init()
         if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
-            xarMod3::loadDbInfo('modules', 'modules');
+            xar::mod()->loadDbInfo('modules', 'modules');
         }
-        $tables = xarDB3::getTables();
+        $tables = xar::db()->getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
                           p.filepath, p.class,
@@ -226,7 +218,7 @@ class PropertyRegistration extends DataContainer
             }
         }
         $result->close();
-        xarVar3::setCached('DynamicData', 'PropertyTypes', $proptypes);
+        xar::var()->setCached('DynamicData', 'PropertyTypes', $proptypes);
         return $proptypes;
     }
 
@@ -240,10 +232,10 @@ class PropertyRegistration extends DataContainer
      */
     public static function importPropertyTypes($flush = true, $dirs = [])
     {
-        xarLog3::notice('DynamicData: Flushing the property cache');
+        xar::log()->notice('DynamicData: Flushing the property cache');
         sys::import('xaraya.structures.relativedirectoryiterator');
 
-        $dbconn = xarDB3::getConn(); // Need this for the transaction
+        $dbconn = xar::db()->getConn(); // Need this for the transaction
         $propDirs = [];
 
         // @todo use xarClassMap::getProperties() and filter on $dirs if needed?
@@ -256,27 +248,27 @@ class PropertyRegistration extends DataContainer
             #
             # Get the list of properties directories in the active modules
             #
-            xarLog3::notice('DynamicData: Searching for property directories');
+            xar::log()->notice('DynamicData: Searching for property directories');
             if (!empty($dirs) && is_array($dirs)) {
                 // We got an array of directories passed in for which to import properties
                 // typical usecase: a module which has its own property, during install phase needs that property before
                 // the module is active.
                 $propDirs = $dirs;
             } else {
-                if (!xarVar3::getCached('installer', 'installing')) {
+                if (!xar::var()->getCached('installer', 'installing')) {
                     // Repopulate the configurations table
-                    $tables = xarDB3::getTables();
+                    $tables = xar::db()->getTables();
                     $sql = "DELETE FROM $tables[dynamic_configurations]";
                     $res = $dbconn->ExecuteUpdate($sql);
 
                     $dat_file = sys::code() . 'modules/dynamicdata/xardata/configurations-dat.xml';
                     $data = ['file' => $dat_file];
-                    $objectid = xarMod3::apiFunc('dynamicdata', 'util', 'import', $data);
+                    $objectid = xar::mod()->apiFunc('dynamicdata', 'util', 'import', $data);
                 }
-                xarLog3::notice('DynamicData: Looking for active modules');
-                $activeMods = xarMod3::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod3::STATE_ACTIVE]]);
+                xar::log()->notice('DynamicData: Looking for active modules');
+                $activeMods = xar::mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xar::mod()::STATE_ACTIVE]]);
                 assert(!empty($activeMods)); // this should never happen
-                xarLog3::debug('DynamicData: There are ' . count($activeMods) . ' active modules');
+                xar::log()->debug('DynamicData: There are ' . count($activeMods) . ' active modules');
 
                 foreach ($activeMods as $modInfo) {
                     // FIXME: the modinfo directory does NOT end with a /
@@ -297,7 +289,7 @@ class PropertyRegistration extends DataContainer
                         $dat_file = sys::code() . $dir;
                         $data = ['file' => $dat_file];
                         try {
-                            $objectid = xarMod3::apiFunc('dynamicdata', 'util', 'import', $data);
+                            $objectid = xar::mod()->apiFunc('dynamicdata', 'util', 'import', $data);
                         } catch (Exception) {
                         }
                     }
@@ -306,7 +298,7 @@ class PropertyRegistration extends DataContainer
                 // Clear the cache
                 self::clearCache();
             }
-            xarLog3::notice('DynamicData: Retrieved the list of directories to be searched');
+            xar::log()->notice('DynamicData: Retrieved the list of directories to be searched');
 
             # --------------------------------------------------------
             #
@@ -343,13 +335,13 @@ class PropertyRegistration extends DataContainer
                         try {
                             sys::import($dp);
                         } catch (Exception) {
-                            throw new Exception(xarMLS3::translate('The file #(1) could not be loaded<br/>', $dp . '.php'));
+                            throw new Exception(xar::mls()->translate('The file #(1) could not be loaded<br/>', $dp . '.php'));
                         }
                         $loaded[$file] = true;
                     }
                 } // loop over the files in a directory
             } // loop over the directories
-            xarLog3::notice('DynamicData: Retrieved the list of properties in modules');
+            xar::log()->notice('DynamicData: Retrieved the list of properties in modules');
 
             # --------------------------------------------------------
             #
@@ -380,8 +372,8 @@ class PropertyRegistration extends DataContainer
                         sys::import($dp);
                     } catch (Exception) {
                         // Die silently for now
-                        if (xarMod3::getVar('debugmode', 'dynamicdata') && xarUser::isDebugAdmin()) {
-                            echo xarMLS3::translate('The file #(1) could not be loaded<br/>', $dp . '.php');
+                        if (xar::mod()->getVar('debugmode', 'dynamicdata') && xarUser::isDebugAdmin()) {
+                            echo xar::mls()->translate('The file #(1) could not be loaded<br/>', $dp . '.php');
                         }
                     }
                     $loaded[$file] = true;
@@ -390,7 +382,7 @@ class PropertyRegistration extends DataContainer
             // We don't need the array of loaded files any more
             unset($loaded);
 
-            xarLog3::notice('DynamicData: Retrieved the list of standalone properties');
+            xar::log()->notice('DynamicData: Retrieved the list of standalone properties');
 
             # --------------------------------------------------------
             #
@@ -437,7 +429,7 @@ class PropertyRegistration extends DataContainer
             // Now sort the properties in the order they need to be installed
             $sortedClasses = self::topological_sort($classesToSort, $edges);
 
-            xarLog3::notice('DynamicData: Checked and sorted the property classes to register');
+            xar::log()->notice('DynamicData: Checked and sorted the property classes to register');
 
             // Process the sorted classes
             $i = 0;
@@ -452,10 +444,10 @@ class PropertyRegistration extends DataContainer
                 try {
                     /** @var DataProperty $property */
                     $property = new $propertyClass($descriptor);
-                    xarLog3::debug('DynamicData: Registering the property ' . $propertyClass);
+                    xar::log()->debug('DynamicData: Registering the property ' . $propertyClass);
                 } catch (Exception $e) {
-                    xarLog3::debug('DynamicData: The property ' . $propertyClass . ' could not be instantiated');
-                    throw new Exception(xarMLS3::translate('The property #(1) could not be instantiated. #(2)', $propertyClass, $e->getMessage()));
+                    xar::log()->debug('DynamicData: The property ' . $propertyClass . ' could not be instantiated');
+                    throw new Exception(xar::mls()->translate('The property #(1) could not be instantiated. #(2)', $propertyClass, $e->getMessage()));
                 }
                 if (empty($property->id)) {
                     continue;
@@ -509,7 +501,7 @@ class PropertyRegistration extends DataContainer
                 unset($currentproptypes);
 
                 // Configuring each property type
-                if (xarVar3::getCached('installer', 'installing') === true) {
+                if (xar::var()->getCached('installer', 'installing') === true) {
                     // We don't need this when installing Xaraya
                     // This saves a lot of db calls
                     continue;
@@ -526,11 +518,11 @@ class PropertyRegistration extends DataContainer
         }
 
         // Clear the property types from cached memory
-        xarVar3::delCached('DynamicData', 'PropertyTypes');
+        xar::var()->delCached('DynamicData', 'PropertyTypes');
 
         // Sort the property types
         ksort($proptypes);
-        xarLog3::notice('DynamicData: Property cache successfully flushed');
+        xar::log()->notice('DynamicData: Property cache successfully flushed');
         return $proptypes;
     }
 

@@ -20,8 +20,8 @@
  * <http://creole.phpdb.org>.
  */
 
-sys::import('xaraya.facades.logger');
-use Xaraya\Facades\xarLog3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Class that contains common/shared functionality for Statements.
@@ -160,7 +160,7 @@ abstract class StatementCommon
      */
     public function execute($sql, $fetchmode = null)
     {
-        xarLog3::debug("DB: Executing $sql");
+        xar::log()->debug("DB: Executing $sql");
         if (!$this->isSelect($sql)) {
             $this->updateCount = $this->executeUpdate($sql);
             return false;
@@ -239,7 +239,7 @@ abstract class StatementCommon
      */
     public function executeQuery($sql, $fetchmode = null)
     {
-        xarLog3::debug("DB: Executing $sql");
+        xar::log()->debug("DB: Executing $sql");
         $this->updateCount = null;
         if ($this->limit > 0 || $this->offset > 0) {
             $this->conn->applyLimit($sql, $this->offset, $this->limit);
@@ -257,7 +257,7 @@ abstract class StatementCommon
      */
     public function executeUpdate($sql)
     {
-        xarLog3::debug("DB: Executing $sql");
+        xar::log()->debug("DB: Executing $sql");
         if ($this->resultSet) {
             $this->resultSet->close();
         }

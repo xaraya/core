@@ -48,8 +48,8 @@ use sys;
 use Exception;
 
 sys::import('xaraya.modules.servicestrait');
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * For documentation purposes only - available via ModuleTrait
@@ -217,7 +217,7 @@ trait ModuleTrait
         if (class_exists($className)) {
             $tablesCall = new $className();
             // pass along the DB prefix to $tablesCall
-            return $tablesCall(xarDB3::getPrefix());
+            return $tablesCall(xar::db()->getPrefix());
         }
 
         // Load the database definition if required
@@ -229,7 +229,7 @@ trait ModuleTrait
         $tablefunc = $this->getModName() . '_' . 'xartables';
         if (function_exists($tablefunc)) {
             // pass along the DB prefix to $tablefunc
-            $prefix = xarDB3::getPrefix();
+            $prefix = xar::db()->getPrefix();
             return $tablefunc($prefix);
         }
         return [];

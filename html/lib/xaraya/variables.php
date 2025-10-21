@@ -81,10 +81,8 @@ interface IxarVars
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
 
-sys::import('xaraya.facades.config');
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarConfig3;
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class xarVars extends xarObject {}
 
@@ -134,14 +132,14 @@ class xarVar extends xarObject
             return true;
         }
         // Configuration init needs to be done first
-        $tables = ['config_vars' => xarDB3::getPrefix() . '_module_vars'];
+        $tables = ['config_vars' => xar::db()->getPrefix() . '_module_vars'];
 
-        xarDB3::importTables($tables);
+        xar::db()->importTables($tables);
 
         // Initialise the variable cache
         sys::import('xaraya.variables.config');
-        self::$allowableHTML = xarConfig3::getVar('Site.Core.AllowableHTML', []);
-        self::$fixHTMLEntities = xarConfig3::getVar('Site.Core.FixHTMLEntities', true);
+        self::$allowableHTML = xar::config()->getVar('Site.Core.AllowableHTML', []);
+        self::$fixHTMLEntities = xar::config()->getVar('Site.Core.FixHTMLEntities', true);
 
         self::$initialized = true;
         return true;
@@ -313,7 +311,7 @@ class xarVar extends xarObject
 
             // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
             if ($prep & self::PREP_FOR_STORE) {
-                $dbconn = xarDB3::getConn();
+                $dbconn = xar::db()->getConn();
                 $value = $dbconn->qstr($value);
             }
 

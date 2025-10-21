@@ -19,7 +19,7 @@
  * Called in new function as...
  * $item = array('module' => $module, $itemid => $itemid [, 'itemtype' => $itemtype, ...]);
  * New way of calling hooks
- * $data['hooks'] = xarHooks::notify('ItemNew', $item);
+ * $data['hooks'] = xarHooks::notify('ItemNew', $item, $context);
  * Legacy way, supported for now, deprecated in future
  * $data['hooks'] = xarModHooks::call('item', 'new', $itemid, $item);
  * Output in new template as

@@ -13,8 +13,8 @@
 */
 
 sys::import('xaraya.validations');
-sys::import('xaraya.facades.config');
-use Xaraya\Facades\xarConfig3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * HTML Validation Class
@@ -35,7 +35,7 @@ class HtmlValidation extends ValueValidations
         }
 
         $allowedTags = [];
-        foreach (xarConfig3::getVar('Site.Core.AllowableHTML') as $k => $v) {
+        foreach (xar::config()->getVar('Site.Core.AllowableHTML') as $k => $v) {
             if ($v) {
                 $allowedTags[] = $k;
             }

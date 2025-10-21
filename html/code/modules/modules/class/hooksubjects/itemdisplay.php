@@ -19,7 +19,7 @@
  * Called in display function as...
  * $item = array('module' => $module, $itemid => $itemid [, 'itemtype' => $itemtype, ...]);
  * New way of calling hooks
- * $data['hooks'] = xarHooks::notify('ItemDisplay', $item);
+ * $data['hooks'] = xarHooks::notify('ItemDisplay', $item, $context);
  * Legacy way, supported for now, deprecated in future
  * $data['hooks'] = xarModHooks::call('item', 'display', $itemid, $item);
  * Output in display template as

@@ -41,7 +41,7 @@
  * // trigger an event or hook call in Xaraya
  * $itemid = spl_object_id($subscriber);
  * $args = ['module' => 'dynamicdata', 'itemtype' => 3, 'itemid' => $itemid];
- * xarHooks::notify('ItemUpdate', $args);
+ * xarHooks::notify('ItemUpdate', $args, $context);
  *
  * // receive the event via the event dispatcher in the event subscriber
  */

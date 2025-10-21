@@ -21,12 +21,8 @@ use FunctionNotFoundException;
 use sys;
 
 sys::import('modules.dynamicdata.traits.userapi');
-sys::import('xaraya.facades.database');
-sys::import('xaraya.facades.modules');
-sys::import('xaraya.facades.multilanguage');
-use Xaraya\Facades\xarDB3;
-use Xaraya\Facades\xarMod3;
-use Xaraya\Facades\xarMLS3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Handle (traditional) DD user api functions via module class
@@ -34,7 +30,7 @@ use Xaraya\Facades\xarMLS3;
  *
  * @method mixed countitems(array $args = []) utility function to count the number of items held by this module
  * @method mixed decodeShorturl(array $args = []) extract function and arguments from short URLs for this module, and pass - them back to xarGetRequestInfo()
- * @method mixed dropdownlist(array $args = []) Get an array of DD items (itemid => fieldvalue) for use in dropdown lists - E.g. to specify the parent of an item for parent-child relationships, - add a dynamic data field of type Dropdown List with the configuration rule - xarMod3::apiMethod('dynamicdata','userapi','dropdownlist',array('field' => 'name','module' => 'dynamicdata','itemtype' => 2))
+ * @method mixed dropdownlist(array $args = []) Get an array of DD items (itemid => fieldvalue) for use in dropdown lists - E.g. to specify the parent of an item for parent-child relationships, - add a dynamic data field of type Dropdown List with the configuration rule - xar::mod()->apiMethod('dynamicdata','userapi','dropdownlist',array('field' => 'name','module' => 'dynamicdata','itemtype' => 2))
  * @method mixed encodeShorturl(array $args = []) return the path for a short URL to xarController::URL for this module
  * @method mixed getfield(array $args = []) get a specific item field
  * @method mixed getitem(array $args = []) get all data fields (dynamic or static) for an item - (identified by module + item type + item id or table + item id)
@@ -87,14 +83,14 @@ class UserApi implements UserApiInterface
      */
     public static function findModuleItemTypes($moduleId, $native = false, $extensions = true): array
     {
-        $module = xarMod3::getName($moduleId);
+        $module = xar::mod()->getName($moduleId);
 
         $types = [];
         if ($native) {
             // Try to get the itemtypes
             try {
                 // @todo create an adaptor class for procedural getitemtypes in modules
-                $types = xarMod3::apiFunc($module, 'user', 'getitemtypes', []);
+                $types = xar::mod()->apiFunc($module, 'user', 'getitemtypes', []);
             } catch (FunctionNotFoundException) {
                 // No worries
             }
@@ -102,8 +98,8 @@ class UserApi implements UserApiInterface
         // @todo combine with getItemTypes()
         if ($extensions) {
             // Get all the objects at once
-            xarMod3::loadDbInfo('dynamicdata', 'dynamicdata');
-            $xartable = xarDB3::getTables();
+            xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+            $xartable = xar::db()->getTables();
 
             $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -118,17 +114,17 @@ class UserApi implements UserApiInterface
             $query .= " WHERE module_id = ? ";
             $bindvars[] = (int) $moduleId;
 
-            $dbconn = xarDB3::getConn();
+            $dbconn = xar::db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xarDB3::getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, xar::db()->getFetchAssoc());
 
             // put in itemtype as key for easier manipulation
             while ($result->next()) {
                 $row = $result->fields;
                 $types [$row['itemtype']] = [
                     'label' => $row['objectlabel'],
-                    'title' => xarMLS3::translate('View #(1)', $row['objectlabel']),
-                    'url' => xarMod3::getURL('user', 'view', ['itemtype' => $row['itemtype']], 'dynamicdata'),
+                    'title' => xar::mls()->translate('View #(1)', $row['objectlabel']),
+                    'url' => xar::mod()->getURL('user', 'view', ['itemtype' => $row['itemtype']], 'dynamicdata'),
                 ];
             }
         }

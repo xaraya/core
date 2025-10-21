@@ -22,8 +22,8 @@ use xarDB;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.factory');
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * DataObject Importer
@@ -52,7 +52,7 @@ class DataObjectImporter
     {
         $this->proptypes = DataPropertyMaster::getPropertyTypes();
 
-        $this->prefix = $prefix ?? (xarDB3::getPrefix() . '_');
+        $this->prefix = $prefix ?? (xar::db()->getPrefix() . '_');
         $this->overwrite = $overwrite;
         $this->keepitemid = $keepitemid;
     }
@@ -78,7 +78,7 @@ class DataObjectImporter
             $format = 'xml';
         }
         if (!isset($prefix)) {
-            $prefix = xarDB3::getPrefix();
+            $prefix = xar::db()->getPrefix();
         }
         // @todo allow non-prefixed table names someday
         $prefix .= '_';

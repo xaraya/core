@@ -24,8 +24,8 @@
  */
 
 // PRIVATE FUNCTIONS BELOW - do not call directly
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Generate the MySQL specific SQL to create a table
@@ -68,7 +68,7 @@ function xarDB__mysqlCreateTable($tableName, $fields, $charset = null)
     // creating DDL to return, not executing it.
     // There are instances when we don't want to drop the table, but
     // look for the exception to know the table has been created.
-    $dbconn = xarDB3::getConn();
+    $dbconn = xar::db()->getConn();
     $query  = 'DROP TABLE IF EXISTS ' . $tableName;
     // CHECKME: Do we want to use bind vars here?
     $result = & $dbconn->Execute($query);
@@ -180,7 +180,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
             // the existing schema. Also b/c the fetch mode may or may not be set to NUM, set it to
             // ASSOC so we don't have to loop through the entire returned array looking for are our one
             // field and field type
-            $dbconn = xarDB3::getConn();
+            $dbconn = xar::db()->getConn();
             $dbInfo = $dbconn->getDatabaseInfo();
             $tblInfo = $dbInfo->getTable($tableName);
             $tableInfoArray = $tblInfo->getColumns();

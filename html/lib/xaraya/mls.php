@@ -26,10 +26,8 @@
 sys::import('xaraya.locales');
 sys::import('xaraya.transforms.xarCharset');
 sys::import('xaraya.mlsbackends.reference');
-sys::import('xaraya.facades.config');
-sys::import('xaraya.facades.logger');
-use Xaraya\Facades\xarConfig3;
-use Xaraya\Facades\xarLog3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Multilanguage System Class
@@ -133,13 +131,13 @@ class xarMLS extends xarObject
     public static function getConfig()
     {
         // FIXME: Site.MLS.MLSMode is NULL during install
-        $systemArgs = ['MLSMode'             => xarConfig3::getVar('Site.MLS.MLSMode'),
-            //                      'translationsBackend' => xarConfig3::getVar('Site.MLS.TranslationsBackend'),
+        $systemArgs = ['MLSMode'             => xar::config()->getVar('Site.MLS.MLSMode'),
+            //                      'translationsBackend' => xar::config()->getVar('Site.MLS.TranslationsBackend'),
             'translationsBackend' => 'xml2php',
-            'defaultLocale'       => xarConfig3::getVar('Site.MLS.DefaultLocale'),
-            'allowedLocales'      => xarConfig3::getVar('Site.MLS.AllowedLocales'),
-            'defaultTimeZone'     => xarConfig3::getVar('Site.Core.TimeZone'),
-            'defaultTimeOffset'   => xarConfig3::getVar('Site.MLS.DefaultTimeOffset'),
+            'defaultLocale'       => xar::config()->getVar('Site.MLS.DefaultLocale'),
+            'allowedLocales'      => xar::config()->getVar('Site.MLS.AllowedLocales'),
+            'defaultTimeZone'     => xar::config()->getVar('Site.Core.TimeZone'),
+            'defaultTimeOffset'   => xar::config()->getVar('Site.MLS.DefaultTimeOffset'),
         ];
         return $systemArgs;
     }
@@ -420,7 +418,7 @@ class xarMLS extends xarObject
         if (xarUser::isLoggedIn()) {
             $usertz = xarModUserVars::get('roles', 'usertimezone');
         } else {
-            $usertz = xarConfig3::getVar('Site.Core.TimeZone');
+            $usertz = xar::config()->getVar('Site.Core.TimeZone');
         }
         $useroffset = $datetime->getTZOffset($usertz);
 
@@ -440,7 +438,7 @@ class xarMLS extends xarObject
             return true;
         }
 
-        xarLog3::info("Changing the default locale from " . self::getCurrentLocale() . " to " . $locale);
+        xar::log()->info("Changing the default locale from " . self::getCurrentLocale() . " to " . $locale);
 
         static $called = 0;
 
@@ -462,7 +460,7 @@ class xarMLS extends xarObject
                 if (!in_array($locale, $siteLocales)) {
                     // Locale not available, use the default
                     $locale = self::getSiteLocale();
-                    xarLog3::info("Falling back to default locale: $locale");
+                    xar::log()->info("Falling back to default locale: $locale");
                 }
         }
 
@@ -474,8 +472,8 @@ class xarMLS extends xarObject
             assert($curCharset == "utf-8");
             // To be able to continue, we set the mode to BOXED
             if ($curCharset != "utf-8") {
-                xarLog3::info("Resetting MLS mode to BOXED");
-                xarConfig3::setVar('Site.MLS.MLSMode', self::BOXED_MULTI_LANGUAGE_MODE);
+                xar::log()->info("Resetting MLS mode to BOXED");
+                xar::config()->setVar('Site.MLS.MLSMode', self::BOXED_MULTI_LANGUAGE_MODE);
             } else {
                 if (!xarCore::funcIsDisabled('ini_set')) {
                     ini_set('mbstring.func_overload', 7);
@@ -534,14 +532,14 @@ class xarMLS extends xarObject
         static $loadedCommons = [];
         static $loadedTranslations = [];
 
-        xarLog3::debug("MLS: Loading translations for the context " . "$domainType,$domainName,$contextType,$contextName");
+        xar::log()->debug("MLS: Loading translations for the context " . "$domainType,$domainName,$contextType,$contextName");
 
         if (!isset(self::$backend)) {
-            xarLog3::warning("xarMLS: No translation backend was selected for " . "$domainType,$domainName,$contextType,$contextName");
+            xar::log()->warning("xarMLS: No translation backend was selected for " . "$domainType,$domainName,$contextType,$contextName");
             return false;
         }
         if (empty(self::$currentLocale)) {
-            xarLog3::warning("xarMLS: No current locale was selected");
+            xar::log()->warning("xarMLS: No current locale was selected");
             return false;
         }
 
@@ -632,10 +630,10 @@ class xarMLS extends xarObject
      **/
     public static function loadTranslations($path)
     {
-        xarLog3::debug("MLS: Loading translations for the path: $path");
+        xar::log()->debug("MLS: Loading translations for the path: $path");
         // @todo with migration to module class methods, it doesn't matter if the old path still exists
         //if(!file_exists($path)) {
-        //    xarLog3::warning("MLS: Failed loading translations for a non-existing path ($path)");
+        //    xar::log()->warning("MLS: Failed loading translations for a non-existing path ($path)");
         //    return true;
         //}
 
@@ -828,7 +826,7 @@ class xarMLS extends xarObject
                     return $madeDir;
                 } catch (Exception $e) {
                     $msg = xarMLS::translate("Could not create directory #(1). The directories under #(2) must be writeable by PHP.", $path, $next_path);
-                    xarLog3::error($msg);
+                    xar::log()->error($msg);
                     xarCore::exit($msg);
                     // throw new PermissionException?
                     return false;

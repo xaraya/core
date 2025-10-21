@@ -231,7 +231,11 @@ final class ClassMapTest extends TestCase
         //$expected = 'No connection available';
         //$this->expectExceptionMessage($expected);
 
-        // we can instantiate hooksubject instance without database here thanks to xarMod3::getRegID($module)
+        // set context for core services here too
+        $context = new Xaraya\Context\Context(['source' => __METHOD__]);
+        Xaraya\Services\xar::setServicesContext($context);
+
+        // we can instantiate hooksubject instance without database here thanks to xar::mod()->getRegID($module)
         $item = ['module' => 'dynamicdata', 'itemtype' => 4, 'itemid' => 1];
         $instance = new $classname($item);
         $this->assertInstanceOf($classname, $instance);
@@ -782,6 +786,9 @@ final class ClassMapTest extends TestCase
 
         $route = 'dynamicdata-view-name';
         $context = new \Xaraya\Context\Context(['source' => __METHOD__]);
+        // set context for core services here too
+        \Xaraya\Services\xar::setServicesContext($context);
+
         $expected = \Xaraya\Modules\DynamicData\UserGui::class;
         $handler = $result['classname']::getHandler($route, $context);
         $this->assertInstanceOf($expected, $handler->getInstance());

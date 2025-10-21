@@ -19,11 +19,11 @@
 
 sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.handler');
-sys::import('xaraya.facades.config');
+sys::import('xaraya.services.xar');
 use Xaraya\Sessions\SessionInterface;
 use Xaraya\Sessions\SessionHandler;
 use Xaraya\Sessions\SessionException;
-use Xaraya\Facades\xarConfig3;
+use Xaraya\Services\xar;
 
 class xarSession
 {
@@ -70,7 +70,7 @@ class xarSession
         //self::$refererCheck = $args['refererCheck'));
         //self::sessionClass = $args['sessionClass'] ?? SessionHandler::class;
 
-        self::$anonId = (int) xarConfig3::getVar('Site.User.AnonymousUID', 5);
+        self::$anonId = (int) xar::config()->getVar('Site.User.AnonymousUID', 5);
 
         // Set up the session object with context
         $session = new self::$sessionClass($args, $context);
@@ -88,14 +88,14 @@ class xarSession
     public static function getConfig()
     {
         $systemArgs = [
-            'securityLevel'     => xarConfig3::getVar('Site.Session.SecurityLevel'),
-            'duration'          => xarConfig3::getVar('Site.Session.Duration'),
-            'inactivityTimeout' => xarConfig3::getVar('Site.Session.InactivityTimeout'),
-            'cookieName'        => xarConfig3::getVar('Site.Session.CookieName'),
-            'cookiePath'        => xarConfig3::getVar('Site.Session.CookiePath'),
-            'cookieDomain'      => xarConfig3::getVar('Site.Session.CookieDomain'),
-            'refererCheck'      => xarConfig3::getVar('Site.Session.RefererCheck'),
-            //'sessionClass'      => xarConfig3::getVar('Site.Session.HandlerClass'),
+            'securityLevel'     => xar::config()->getVar('Site.Session.SecurityLevel'),
+            'duration'          => xar::config()->getVar('Site.Session.Duration'),
+            'inactivityTimeout' => xar::config()->getVar('Site.Session.InactivityTimeout'),
+            'cookieName'        => xar::config()->getVar('Site.Session.CookieName'),
+            'cookiePath'        => xar::config()->getVar('Site.Session.CookiePath'),
+            'cookieDomain'      => xar::config()->getVar('Site.Session.CookieDomain'),
+            'refererCheck'      => xar::config()->getVar('Site.Session.RefererCheck'),
+            //'sessionClass'      => xar::config()->getVar('Site.Session.HandlerClass'),
         ];
         return $systemArgs;
     }
@@ -159,7 +159,7 @@ class xarSession
         }
         // ignore templates and security try to get stuff in session
         if ($name == 'navigationLocale') {
-            return xarConfig3::getVar('Site.MLS.DefaultLocale');
+            return xar::config()->getVar('Site.MLS.DefaultLocale');
         } elseif ($name == 'privilegeset') {
             return null;
         }

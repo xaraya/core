@@ -19,10 +19,8 @@
 */
 
 sys::import('modules.privileges.class.masks');
-sys::import('xaraya.facades.database');
-sys::import('xaraya.facades.logger');
-use Xaraya\Facades\xarDB3;
-use Xaraya\Facades\xarLog3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class xarPrivileges extends xarMasks
 {
@@ -150,7 +148,7 @@ class xarPrivileges extends xarMasks
         $realmid = null;
         if ($realm != 'All') {
             $stmt = parent::$dbconn->prepareStatement('SELECT id FROM ' . parent::$realmstable . ' WHERE name=?');
-            $result = $stmt->executeQuery([$realm], xarDB3::getFetchAssoc());
+            $result = $stmt->executeQuery([$realm], xar::db()->getFetchAssoc());
             if ($result->next()) {
                 $realmid = $result->getInt('id');
             }
@@ -283,7 +281,7 @@ class xarPrivileges extends xarMasks
     {
         parent::initialize();
 
-        xarLog3::info('PRIV: getting all privileges, once!');
+        xar::log()->info('PRIV: getting all privileges, once!');
         $where = "WHERE itemtype = " . self::PRIVILEGES_PRIVILEGETYPE;
         if (!empty($args['name'])) {
             $where .= ' AND p.name = ' . $args['name'];
@@ -512,7 +510,7 @@ class xarPrivileges extends xarMasks
 
         $stmt = parent::$dbconn->prepareStatement($query);
         //Execute the query, bail if an exception was thrown
-        $result = $stmt->executeQuery([self::PRIVILEGES_PRIVILEGETYPE,$id], xarDB3::getFetchNum());
+        $result = $stmt->executeQuery([self::PRIVILEGES_PRIVILEGETYPE,$id], xar::db()->getFetchNum());
 
         if ($result->next()) {
             [$id, $name, $realm, $module_id, $module, $component, $instance, $level, $description] = $result->fields;

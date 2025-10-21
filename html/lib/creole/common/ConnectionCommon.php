@@ -20,8 +20,8 @@
  * <http://creole.phpdb.org>.
  */
 
-sys::import('xaraya.facades.logger');
-use Xaraya\Facades\xarLog3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Class that contains some shared/default information for connections.  Classes may wish to extend this so
@@ -185,7 +185,7 @@ abstract class ConnectionCommon
             $this->setSavepoint($savepointIdentifier);
         }
         $this->transactionOpcount++;
-        xarLog3::info("DB: starting transaction [" . $this->transactionOpcount . "]");
+        xar::log()->info("DB: starting transaction [" . $this->transactionOpcount . "]");
     }
 
     /**
@@ -196,11 +196,11 @@ abstract class ConnectionCommon
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->commitTrans();
-                xarLog3::info("DB: committed transaction [" . $this->transactionOpcount . "]");
+                xar::log()->info("DB: committed transaction [" . $this->transactionOpcount . "]");
             } elseif ($this->supportsSavepoints()) {
                 $savepointIdentifier = array_pop($this->nestedTransactionSavepoints);
                 $this->releaseSavepoint($savepointIdentifier);
-                xarLog3::warning("DB: releasing savepoint of transaction [" . $this->transactionOpcount . "]");
+                xar::log()->warning("DB: releasing savepoint of transaction [" . $this->transactionOpcount . "]");
             }
             $this->transactionOpcount--;
         }
@@ -217,7 +217,7 @@ abstract class ConnectionCommon
             } elseif ($this->supportsSavepoints()) {
                 $savepointIdentifier = array_pop($this->nestedTransactionSavepoints);
                 $this->rollbackToSavepoint($savepointIdentifier);
-                xarLog3::warning("DB: Rolled back transaction [" . $this->transactionOpcount . "]");
+                xar::log()->warning("DB: Rolled back transaction [" . $this->transactionOpcount . "]");
             }
             $this->transactionOpcount--;
         }
@@ -321,7 +321,7 @@ abstract class ConnectionCommon
     // to prevent changing all execute statements
     public function &Execute($sql, $bindvars = [], $fetchmode = null)
     {
-        xarLog3::debug("DB: Executing $sql");
+        xar::log()->debug("DB: Executing $sql");
         $stmt = $this->prepareStatement($sql);
         if ($stmt) {
             if ($this->isSelect($sql)) {
@@ -355,7 +355,7 @@ abstract class ConnectionCommon
 
     public function &SelectLimit($sql, $limit = 0, $offset = 0, $bindvars = [], $fetchmode = null)
     {
-        xarLog3::debug("DB: Executing $sql");
+        xar::log()->debug("DB: Executing $sql");
         $stmt = $this->prepareStatement($sql);
         $stmt->setLimit($limit);
         $stmt->setOffset($offset);

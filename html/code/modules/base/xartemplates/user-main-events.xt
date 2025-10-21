@@ -122,7 +122,7 @@
 
 <p>All subject classes must implement ixarEventSubject interface (see xaraya.structures.events.subject)</p>
 <ol>
-<li>xarEvents::notify('event', $args) is called</li>
+<li>xarEvents::notify('event', $args, $context) is called</li>
 <li>The event system instantiates the event subject, passing args (if any) to constructor.</li>
 <li>The event system retrieves, instantiates and attaches class observers to the subject.</li>
 <li>The event system calls the method ($func defined when subject was registered)</li>
@@ -135,7 +135,7 @@
 
 <p>This is basically by-passing the event system and calling an api function. The api function itself is responsible for retrieving and notifying its observers, and returning a response (if any) to the event system. Observers of API subjects may or may not be registered in the event system, it is up to the API function to retrieve them from wherever it was designed to store them</p>. 
 <ol>
-<li>xarEvents::notify('event', $args) is called</li>
+<li>xarEvents::notify('event', $args, $context) is called</li>
 <li>The event system calls the api function passing it args (if any) and returns the response (if any) to the caller.</li>
 </ol>
 

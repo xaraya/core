@@ -30,6 +30,7 @@ sys::import('xaraya.services.servicefactory');
 /**
  * Make Database Service available via facade - xarDB3:: static methods
  * similar to traditional xarDB::* method calls
+ * @deprecated 2.8.2 use xar::db()->* instead
  */
 class xarDB3
 {

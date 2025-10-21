@@ -29,12 +29,8 @@ use sys;
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.validations');
 sys::import('modules.dynamicdata.class.import.generic');
-sys::import('xaraya.facades.config');
-sys::import('xaraya.facades.logger');
-sys::import('xaraya.facades.modules');
-use Xaraya\Facades\xarConfig3;
-use Xaraya\Facades\xarLog3;
-use Xaraya\Facades\xarMod3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * DataObject XML Importer
@@ -76,7 +72,7 @@ class XmlImporter extends DataObjectImporter
 
         if (!empty($file)) {
             $xml = file_get_contents($file);
-            xarLog3::info('DD: Importing file ' . $file);
+            xar::log()->info('DD: Importing file ' . $file);
             if (empty($xml)) {
                 return null;
             }
@@ -125,7 +121,7 @@ class XmlImporter extends DataObjectImporter
         $args = [];
         // Get the object's name
         $args['name'] = (string) ($xmlobject->attributes()->name);
-        xarLog3::info('DD: importing ' . $args['name']);
+        xar::log()->info('DD: importing ' . $args['name']);
 
         // check if the object exists
         $info = DataObjectFactory::getObjectInfo(['name' => $args['name']]);
@@ -165,7 +161,7 @@ class XmlImporter extends DataObjectImporter
         unset($args['objectid']);
 
         // Add an item to the object
-        $args['itemtype'] = xarMod3::apiMethod(
+        $args['itemtype'] = xar::mod()->apiMethod(
             'dynamicdata',
             'adminapi',
             'getnextitemtype',

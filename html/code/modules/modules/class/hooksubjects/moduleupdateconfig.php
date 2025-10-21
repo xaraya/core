@@ -18,7 +18,7 @@
  * Called in (api|gui) function after item is created as...
  * $item = array('module' => $module [, 'itemtype' => $itemtype]);
  * New way of calling hooks
- * xarHooks::notify('ModuleUpdateconfig', $item);
+ * xarHooks::notify('ModuleUpdateconfig', $item, $context);
  * Legacy way, supported for now, deprecated in future
  * xarModHooks::call('module', 'updateconfig', $module, $item);
 **/

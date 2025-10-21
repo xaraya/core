@@ -20,12 +20,12 @@
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
 sys::import('xaraya.database.interface');
-sys::import('xaraya.facades.logger');
+sys::import('xaraya.services.xar');
 use Xaraya\Database\xarDB_Interface;
 use Xaraya\Database\ConnectionInterface;
 use Xaraya\Database\StatementInterface;
 use Xaraya\Database\ResultSetInterface;
-use Xaraya\Facades\xarLog3;
+use Xaraya\Services\xar;
 
 class xarDB_PDO extends xarObject implements xarDB_Interface
 {
@@ -208,7 +208,7 @@ class PDOConnection extends PDO implements ConnectionInterface
      */
     public function begin()
     {
-        xarLog3::debug("PDOConnection::begin: starting transaction");
+        xar::log()->debug("PDOConnection::begin: starting transaction");
         // Only start a transaction of we need to
         if (!PDO::inTransaction()) {
             parent::beginTransaction();
@@ -247,7 +247,7 @@ class PDOConnection extends PDO implements ConnectionInterface
      */
     public function executeUpdate($string = '')
     {
-        xarLog3::debug("PDOConnection::executeUpdate: Executing $string");
+        xar::log()->debug("PDOConnection::executeUpdate: Executing $string");
         try {
             $affected_rows = $this->exec($string);
         } catch (Exception $e) {
@@ -275,7 +275,7 @@ class PDOConnection extends PDO implements ConnectionInterface
      */
     public function Execute($string, $bindvars = [], ?int $fetchmode = null)
     {
-        xarLog3::debug("PDOConnection::Execute: Executing $string");
+        xar::log()->debug("PDOConnection::Execute: Executing $string");
         try {
             $fetchmode ??= PDO::FETCH_NUM;
 
@@ -316,7 +316,7 @@ class PDOConnection extends PDO implements ConnectionInterface
      */
     public function executeQuery($string = '', ?int $fetchmode = null)
     {
-        xarLog3::debug("PDOConnection::executeQuery: Executing $string");
+        xar::log()->debug("PDOConnection::executeQuery: Executing $string");
         try {
             $fetchmode ??= PDO::FETCH_NUM;
 
@@ -361,7 +361,7 @@ class PDOConnection extends PDO implements ConnectionInterface
                 $bindvars[] = $offset;
             }
         }
-        xarLog3::debug("PDOConnection::SelectLimit: Executing $string");
+        xar::log()->debug("PDOConnection::SelectLimit: Executing $string");
         if (empty($bindvars)) {
             try {
                 $stmt = $this->query($string, $fetchmode);
@@ -443,7 +443,7 @@ class PDOConnection extends PDO implements ConnectionInterface
     #[\ReturnTypeWillChange]
     public function commit()
     {
-        xarLog3::debug("PDOConnection::commit: commit transaction");
+        xar::log()->debug("PDOConnection::commit: commit transaction");
         if (PDO::inTransaction()) {
             parent::commit();
         }
@@ -453,7 +453,7 @@ class PDOConnection extends PDO implements ConnectionInterface
     #[\ReturnTypeWillChange]
     public function rollback()
     {
-        xarLog3::debug("PDOConnection::rollback: roll back transaction");
+        xar::log()->debug("PDOConnection::rollback: roll back transaction");
         if (PDO::inTransaction()) {
             parent::rollBack();
         }
@@ -573,7 +573,7 @@ class xarPDOStatement extends xarObject implements StatementInterface
      */
     public function executeQuery($bindvars = [], ?int $fetchmode = null)
     {
-        xarLog3::debug("xarPDOStatement::executeQuery: Preparing " . $this->pdo->queryString);
+        xar::log()->debug("xarPDOStatement::executeQuery: Preparing " . $this->pdo->queryString);
 
         $fetchmode ??= $this->fetchmode;
 
@@ -597,7 +597,7 @@ class xarPDOStatement extends xarObject implements StatementInterface
         }
 
         // Run the query
-        xarLog3::debug("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString);
+        xar::log()->debug("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString);
 
         $success = $this->pdostmt->execute();
         if (!$success) {
@@ -634,7 +634,7 @@ class xarPDOStatement extends xarObject implements StatementInterface
     /* Be insistent and enforce types here */
     public function executeUpdate($bindvars = [])
     {
-        xarLog3::debug("xarPDOStatement::executeUpdate: Preparing " . $this->pdo->queryString);
+        xar::log()->debug("xarPDOStatement::executeUpdate: Preparing " . $this->pdo->queryString);
 
         // Add the bindvars to the prepared statement
         $index = 0;
@@ -649,7 +649,7 @@ class xarPDOStatement extends xarObject implements StatementInterface
             }
         }
 
-        xarLog3::debug("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString);
+        xar::log()->debug("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString);
 
         $success = $this->pdostmt->execute();
         if (!$success) {

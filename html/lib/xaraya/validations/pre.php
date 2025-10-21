@@ -53,8 +53,8 @@
 **/
 
 sys::import('xaraya.validations');
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Strings Validation Class
@@ -105,7 +105,7 @@ class PreValidation extends ValueValidations
                     case 'sql':
                         // @todo this doesnt belong here, creates database dependency too
                         // Preparing for use as a quoted SQL string.
-                        $dbconn = xarDB3::getConn();
+                        $dbconn = xar::db()->getConn();
                         // @todo when using bindvars this can be just (string) $subject
                         $subject = $dbconn->qstr($subject);
                         break;

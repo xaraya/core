@@ -21,10 +21,8 @@ use Exception;
 use sys;
 
 sys::import('xaraya.datastores.interface');
-sys::import('xaraya.facades.database');
-sys::import('xaraya.facades.multilanguage');
-use Xaraya\Facades\xarDB3;
-use Xaraya\Facades\xarMLS3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Base class for DD objects datastore
@@ -137,13 +135,13 @@ class DDObject extends xarObject implements IDDObject
 
     /**
      * Translate string with optional arguments
-     * = short-hand version for xarMLS3::translate()
+     * = short-hand version for xar::mls()->translate()
      * @param string $rawstring
      * @param mixed ...$args
      */
     public function ml($rawstring, ...$args): string
     {
-        return xarMLS3::translate($rawstring, ...$args);
+        return xar::mls()->translate($rawstring, ...$args);
     }
 }
 
@@ -246,10 +244,10 @@ class DataStoreFactory extends xarObject
     public static function &getDataSources($object = null)
     {
         $sources = [];
-        $sources[] = ['id' => '', 'name' => xarMLS3::translate('None')];
+        $sources[] = ['id' => '', 'name' => xar::mls()->translate('None')];
 
         if (empty($object)) {
-            $sources[] = ['id' => 'dynamicdata', 'name' => xarMLS3::translate('DynamicData')];
+            $sources[] = ['id' => 'dynamicdata', 'name' => xar::mls()->translate('DynamicData')];
             return $sources;
         }
 
@@ -260,7 +258,7 @@ class DataStoreFactory extends xarObject
             }
         }
         if (empty($object->datasources)) {
-            $sources[] = ['id' => 'dynamicdata', 'name' => xarMLS3::translate('DynamicData')];
+            $sources[] = ['id' => 'dynamicdata', 'name' => xar::mls()->translate('DynamicData')];
             return $sources;
         }
 
@@ -272,7 +270,7 @@ class DataStoreFactory extends xarObject
             return static::getExternalDataSources($object->datasources, $object->dbConnIndex);
         }
 
-        $dbconn = xarDB3::getConn($object->dbConnIndex);
+        $dbconn = xar::db()->getConn($object->dbConnIndex);
         $dbInfo = $dbconn->getDatabaseInfo();
 
         // try to get the meta table definition
@@ -286,7 +284,7 @@ class DataStoreFactory extends xarObject
             }
             // Bail if we don't have an object
             if (!is_object($tableobject)) {
-                $message = xarMLS3::translate("'#(1)' is not a valid table name. Go back and change it.", $tablename);
+                $message = xar::mls()->translate("'#(1)' is not a valid table name. Go back and change it.", $tablename);
                 throw new Exception($message);
             }
 
@@ -308,7 +306,7 @@ class DataStoreFactory extends xarObject
     public static function &getExternalDataSources($datasources = [], $dbConnIndex = '')
     {
         $sources = [];
-        $sources[] = ['id' => '', 'name' => xarMLS3::translate('None')];
+        $sources[] = ['id' => '', 'name' => xar::mls()->translate('None')];
 
         // try to get the meta table definition
         foreach ($datasources as $key => $value) {

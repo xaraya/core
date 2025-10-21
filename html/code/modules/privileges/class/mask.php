@@ -17,8 +17,8 @@
  * @access  public
 */
 
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class xarMask extends xarObject
 {
@@ -57,7 +57,7 @@ class xarMask extends xarObject
     {
         extract($pargs);
 
-        $xartable = xarDB3::getTables();
+        $xartable = xar::db()->getTables();
         $this->privilegestable = $xartable['privileges'];
         $this->privmemberstable = $xartable['privmembers'];
         $this->rolestable = $xartable['roles'];

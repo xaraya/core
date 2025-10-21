@@ -78,7 +78,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      * Constructor for the session handler
      *
      * @param array<string, mixed> $args not by reference anymore
-     * @param mixed $context not used in default session handler
+     * @param mixed $context not used in default session handler except for events
      * @return void
      * @throws SessionException
      **/
@@ -261,7 +261,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             if ($this->register($ipAddress)) {
                 // Congratulations. We have created a new session
                 //xarEvents::trigger('SessionCreate');
-                xarEvents::notify('SessionCreate');
+                xarEvents::notify('SessionCreate', [], $this->context);
             } else {
                 // Registering failed, now what?
             }

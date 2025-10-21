@@ -15,7 +15,7 @@
 namespace Xaraya\Bridge\RestAPI;
 
 use Xaraya\Authentication\AuthToken;
-use Xaraya\Facades\xarMod3;
+use Xaraya\Services\xar;
 use xarMod;
 use xarRoles;
 use xarUser;
@@ -75,7 +75,6 @@ class GenericAPIHandler extends RestAPIHandler
      * @param array<string, mixed> $args
      * @uses xarMod::init()
      * @uses xarUser::init()
-     * @uses xarMod3::apiFunc()
      * @throws \UnauthorizedOperationException
      * @return array<string, mixed>
      */
@@ -108,7 +107,7 @@ class GenericAPIHandler extends RestAPIHandler
         xarUser::init();
         // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
         // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
-        $userId = xarMod3::apiFunc('authsystem', 'user', 'authenticate_user', $args['input'], $context);
+        $userId = xar::mod()->apiFunc('authsystem', 'user', 'authenticate_user', $args['input']);
         if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
             if (!headers_sent()) {
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');

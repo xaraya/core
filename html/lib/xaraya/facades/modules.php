@@ -30,6 +30,7 @@ sys::import('xaraya.services.servicefactory');
 /**
  * Make Modules Service available via facade - xarMod3:: static methods
  * similar to traditional xarMod::* method calls - modName is mandatory here
+ * @deprecated 2.8.2 use xar::mod()->* instead
  */
 class xarMod3
 {

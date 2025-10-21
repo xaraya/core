@@ -16,8 +16,8 @@
  */
 
 sys::import('xaraya.variables');
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 interface IxarModItemVars
 {
@@ -56,8 +56,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         }
 
         // Not in cache, need to retrieve it
-        $dbconn = xarDB3::getConn();
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        $tables = xar::db()->getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
         //unset($modvarid);
@@ -70,7 +70,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $bindvars = [(int) $modvarid, (int) $itemid];
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchNum());
+        $result = $stmt->executeQuery($bindvars, xar::db()->getFetchNum());
 
         if (!$result->next()) {
             // No value, return the modvar default
@@ -91,8 +91,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
             throw new EmptyParameterException('name');
         }
 
-        $dbconn = xarDB3::getConn();
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        $tables = xar::db()->getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
 
@@ -139,8 +139,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
             throw new EmptyParameterException('name');
         }
 
-        $dbconn = xarDB3::getConn();
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        $tables = xar::db()->getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
         // We need the variable id

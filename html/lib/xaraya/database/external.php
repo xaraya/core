@@ -19,8 +19,8 @@ namespace Xaraya\Database;
 use xarDB;
 use sys;
 
-// sys::import('xaraya.facades.database');
-// use Xaraya\Facades\xarDB3;
+// sys::import('xaraya.services.xar');
+// use Xaraya\Services\xar;
 
 /**
  * Provide an external database connection to something via PDO/DBAL/... DB driver

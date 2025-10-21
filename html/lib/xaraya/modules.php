@@ -24,18 +24,10 @@
 
 sys::import("xaraya.context.contexttrait");
 sys::import("xaraya.context.context");
-sys::import('xaraya.facades.caching');
-sys::import('xaraya.facades.config');
-sys::import('xaraya.facades.database');
-sys::import('xaraya.facades.logger');
-sys::import('xaraya.facades.multilanguage');
+sys::import('xaraya.services.xar');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\Context;
-use Xaraya\Facades\xarCache3;
-use Xaraya\Facades\xarConfig3;
-use Xaraya\Facades\xarDB3;
-use Xaraya\Facades\xarLog3;
-use Xaraya\Facades\xarMLS3;
+use Xaraya\Services\xar;
 
 /**
  * Exception raised by the modules subsystem
@@ -128,7 +120,7 @@ class xarMod extends xarObject implements IxarMod
         //xarEvents::register('ModAPILoad');
 
         // Modules Support Tables
-        $prefix = xarDB3::getPrefix();
+        $prefix = xar::db()->getPrefix();
 
         // How we want it
         $tables['modules']         = $prefix . '_modules';
@@ -137,14 +129,14 @@ class xarMod extends xarObject implements IxarMod
         $tables['hooks']           = $prefix . '_hooks';
         $tables['themes']          = $prefix . '_themes';
 
-        xarDB3::importTables($tables);
+        xar::db()->importTables($tables);
         self::$initialized = true;
         return true;
     }
 
     public static function getConfig()
     {
-        $systemArgs = ['enableShortURLsSupport' => xarConfig3::getVar('Site.Core.EnableShortURLsSupport'),
+        $systemArgs = ['enableShortURLsSupport' => xar::config()->getVar('Site.Core.EnableShortURLsSupport'),
             'generateXMLURLs' => true];
         return $systemArgs;
     }
@@ -190,7 +182,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modInfo['displayname'])) {
             $modInfo['displayname'] = $modName;
         }
-        return xarMLS3::translate($modInfo['displayname']);
+        return xar::mls()->translate($modInfo['displayname']);
     }
 
     /**
@@ -212,7 +204,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modInfo['displaydescription'])) {
             $modInfo['displaydescription'] = $modName;
         }
-        return xarMLS3::translate($modInfo['displaydescription']);
+        return xar::mls()->translate($modInfo['displaydescription']);
     }
 
     /**
@@ -272,7 +264,7 @@ class xarMod extends xarObject implements IxarMod
      */
     public static function isAvailable($modName, $type = 'module')
     {
-        //xarLog3::debug("xarMod::isAvailable: begin $type:$modName");
+        //xar::log()->debug("xarMod::isAvailable: begin $type:$modName");
 
         // FIXME: there is no point to the cache here, since
         // xarMod::getBaseInfo() caches module details anyway.
@@ -300,7 +292,7 @@ class xarMod extends xarObject implements IxarMod
                 $modAvailableCache[$modBaseInfo['name']] = true;
             }
         }
-        //xarLog3::debug("xarMod::isAvailable: end $type:$modName");
+        //xar::log()->debug("xarMod::isAvailable: end $type:$modName");
         return $modAvailableCache[$modBaseInfo['name']];
     }
 
@@ -335,14 +327,14 @@ class xarMod extends xarObject implements IxarMod
                 throw new BadParameterException('module/theme type');
         }
         // Log it when it doesn't come from the cache
-        xarLog3::debug("xarMod::getInfo: Getting database info of ID '" . $modRegId . "' (a " . $type . ")");
+        xar::log()->debug("xarMod::getInfo: Getting database info of ID '" . $modRegId . "' (a " . $type . ")");
 
-        $dbconn = xarDB3::getConn();
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        $tables = xar::db()->getTables();
 
         if (!isset($tables['modules'])) {
             self::loadDbInfo('modules', 'modules');
-            $tables = xarDB3::getTables();
+            $tables = xar::db()->getTables();
         }
 
         switch ($type) {
@@ -370,7 +362,7 @@ class xarMod extends xarObject implements IxarMod
                 break;
         }
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery([$modRegId], xarDB3::getFetchNum());
+        $result = $stmt->executeQuery([$modRegId], xar::db()->getFetchNum());
 
         if (!$result->next()) {
             $result->close();
@@ -428,9 +420,9 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modFileInfo)) {
             // We couldn't get file info, fill in unknowns.
             // The exception for this is logged in getFileInfo
-            $unknown = xarMLS3::translate('Unknown');
+            $unknown = xar::mls()->translate('Unknown');
             $modFileInfo['class'] = $unknown;
-            $modFileInfo['description'] = xarMLS3::translate('This module is not installed properly. Not all info could be retrieved');
+            $modFileInfo['description'] = xar::mls()->translate('This module is not installed properly. Not all info could be retrieved');
             $modFileInfo['category'] = $unknown;
             $modFileInfo['displayname'] = $unknown;
             $modFileInfo['displaydescription'] = $unknown;
@@ -501,15 +493,15 @@ class xarMod extends xarObject implements IxarMod
             return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
-        xarLog3::debug("xarMod::getBaseInfo: Getting database info of '" . $modName . "' (a " . $type . ")");
+        xar::log()->debug("xarMod::getBaseInfo: Getting database info of '" . $modName . "' (a " . $type . ")");
 
-        $dbconn = xarDB3::getConn();
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        $tables = xar::db()->getTables();
 
         // theme+s or module+s
         if (!isset($tables[$type . 's'])) {
             self::loadDbInfo($type . 's', $type . 's');
-            $tables = xarDB3::getTables();
+            $tables = xar::db()->getTables();
         }
         $table = $tables[$type . 's'];
 
@@ -526,7 +518,7 @@ class xarMod extends xarObject implements IxarMod
         }
         $bindvars = [$modName, $modName];
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xarDB3::getFetchNum());
+        $result = $stmt->executeQuery($bindvars, xar::db()->getFetchNum());
 
         if (!$result->next()) {
             $result->close();
@@ -589,7 +581,7 @@ class xarMod extends xarObject implements IxarMod
             return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir . " / " . $type);
         }
         // Log it when it didnt came from cache
-        xarLog3::debug("xarMod::getFileInfo: Getting file info of '" . $modOsDir . "' (a " . $type . ")");
+        xar::log()->debug("xarMod::getFileInfo: Getting file info of '" . $modOsDir . "' (a " . $type . ")");
 
 
         // TODO redo legacy support via type.
@@ -608,8 +600,8 @@ class xarMod extends xarObject implements IxarMod
                 $fileName = sys::code() . 'modules/' . $modOsDir . '/xarversion.php';
                 $part = 'xarversion';
                 // If the locale is already present, it means we can make the translations available
-                if (!empty(xarMLS3::getCurrentLocale())) {
-                    xarMLS3::loadModuleTranslations($modOsDir, '', 'version');
+                if (!empty(xar::mls()->getCurrentLocale())) {
+                    xar::mls()->loadModuleTranslations($modOsDir, '', 'version');
                 }
                 break;
             case 'property':
@@ -621,7 +613,7 @@ class xarMod extends xarObject implements IxarMod
                 $part = $modOsDir;
                 break;
             case 'theme':
-                $fileName = xarConfig3::getVar('Site.BL.ThemesDirectory') . '/' . $modOsDir . '/xartheme.php';
+                $fileName = xar::config()->getVar('Site.BL.ThemesDirectory') . '/' . $modOsDir . '/xartheme.php';
                 $part = 'xartheme';
                 break;
             default:
@@ -630,7 +622,7 @@ class xarMod extends xarObject implements IxarMod
 
         if (!file_exists($fileName)) {
             // Don't raise an exception, it is too harsh, but log it tho (bug 295)
-            xarLog3::warning("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir");
+            xar::log()->warning("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir");
             // throw new FileNotFoundException($fileName);
             return;
         }
@@ -728,7 +720,7 @@ class xarMod extends xarObject implements IxarMod
             require_once $result['filepath'];
             $tablesCall = new $result['classname']();
             // pass along the DB prefix to $tablesCall
-            xarDB3::importTables($tablesCall(xarDB3::getPrefix()));
+            xar::db()->importTables($tablesCall(xar::db()->getPrefix()));
             $loadedDbInfoCache[$modName] = true;
             return true;
         }
@@ -763,7 +755,7 @@ class xarMod extends xarObject implements IxarMod
         $tablefunc = $modName . '_' . 'xartables';
         if (function_exists($tablefunc)) {
             // pass along the DB prefix to $tablefunc
-            xarDB3::importTables($tablefunc(xarDB3::getPrefix()));
+            xar::db()->importTables($tablefunc(xar::db()->getPrefix()));
         }
 
         $loadedDbInfoCache[$modName] = true;
@@ -789,12 +781,12 @@ class xarMod extends xarObject implements IxarMod
         }
 
         // Get a cache key for this module function if it's suitable for module caching
-        $cacheKey = xarCache3::getModuleKey($modName, $modType, $funcName, $args);
+        $cacheKey = xar::cache()->getModuleKey($modName, $modType, $funcName, $args);
 
         // Check if the module function is cached
-        if (xarCache3::hasModule($cacheKey)) {
+        if (xar::cache()->hasModule($cacheKey)) {
             // Return the cached module function output
-            return xarCache3::getModule($cacheKey);
+            return xar::cache()->getModule($cacheKey);
         }
         if (!isset($context)) {
             $context = new Context(['source' => __METHOD__]);
@@ -810,7 +802,7 @@ class xarMod extends xarObject implements IxarMod
                 $tplData = '';
             }
             // Set the output of the module function in cache
-            xarCache3::setModule($cacheKey, $tplData);
+            xar::cache()->setModule($cacheKey, $tplData);
             return $tplData;
         }
 
@@ -827,7 +819,7 @@ class xarMod extends xarObject implements IxarMod
         $tplOutput = xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
 
         // Set the output of the module function in cache
-        xarCache3::setModule($cacheKey, $tplOutput);
+        xar::cache()->setModule($cacheKey, $tplOutput);
 
         return $tplOutput;
     }
@@ -906,7 +898,7 @@ class xarMod extends xarObject implements IxarMod
                 }
             }
 
-            xarLog3::info("xarMod::callFunc: Calling $modFunc");
+            xar::log()->info("xarMod::callFunc: Calling $modFunc");
 
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {
@@ -950,7 +942,7 @@ class xarMod extends xarObject implements IxarMod
 
             if ($found) {
                 // Load the translations file, only if we have loaded the API function for the first time here.
-                if (xarMLS3::loadModuleTranslations($modName, $modType . $funcType, $funcName) === null) {
+                if (xar::mls()->loadModuleTranslations($modName, $modType . $funcType, $funcName) === null) {
                     return;
                 }
             }
@@ -1017,7 +1009,7 @@ class xarMod extends xarObject implements IxarMod
         }
 
         // Log it when it doesn't come from the cache
-        xarLog3::debug("xarMod::load: Loading $modName:$modType");
+        xar::log()->debug("xarMod::load: Loading $modName:$modType");
 
         $modBaseInfo = self::getBaseInfo($modName);
         // Not a valid module - throw exception
@@ -1065,7 +1057,7 @@ class xarMod extends xarObject implements IxarMod
         }
 
         // Load the module translations files (common functions, uncut functions etc.)
-        if (xarMLS3::loadModuleTranslations($modName, '', $modType) === null) {
+        if (xar::mls()->loadModuleTranslations($modName, '', $modType) === null) {
             return;
         }
 
@@ -1100,7 +1092,7 @@ class xarMod extends xarObject implements IxarMod
                     self::$moduleClasses[$modName] = new $class($modName, $context);
                 } catch (Throwable $e) {
                     self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $context);
-                    xarLog3::warning("xarMod::getModule: Error loading $class for module $modName");
+                    xar::log()->warning("xarMod::getModule: Error loading $class for module $modName");
                 }
             } else {
                 self::$moduleClasses[$modName] = new \Xaraya\Modules\DefaultModule($modName, $context);
@@ -1154,10 +1146,10 @@ class xarMod extends xarObject implements IxarMod
             // returns null for DefaultModule() = no suitable class method
             $methods_cache[$key] = $instance->getCallableMethod($modType, $funcName, $callType);
             if (!isset($methods_cache[$key])) {
-                xarLog3::info("xarMod::getModuleClassMethod: Missing method for $key");
+                xar::log()->info("xarMod::getModuleClassMethod: Missing method for $key");
             } else {
                 // Load the translations file, only if we have loaded the function for the first time here.
-                xarMLS3::loadModuleTranslations($modName, $modType, $funcName);
+                xar::mls()->loadModuleTranslations($modName, $modType, $funcName);
             }
         }
         return $methods_cache[$key];
@@ -1289,7 +1281,7 @@ class xarModAlias extends xarObject implements IxarModAlias
         if ($alias == 'object') {
             return $alias;
         }
-        $aliasesMap = xarConfig3::getVar('System.ModuleAliases');
+        $aliasesMap = xar::config()->getVar('System.ModuleAliases');
         return (!empty($aliasesMap[$alias])) ? $aliasesMap[$alias] : $alias;
     }
 

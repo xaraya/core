@@ -28,6 +28,7 @@ sys::import('xaraya.services.servicefactory');
 /**
  * Make Caching Service available via facade - xarCache3:: static methods
  * similar to traditional xarCache::* method calls
+ * @deprecated 2.8.2 use xar::cache()->* instead
  */
 class xarCache3
 {

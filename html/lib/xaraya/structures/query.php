@@ -12,8 +12,8 @@
 
 sys::import('xaraya.services.hasdatabasetrait');
 sys::import('xaraya.services.hasmultilanguagetrait');
-sys::import('xaraya.facades.config');
-use Xaraya\Facades\xarConfig3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Query class for SQL abstraction
@@ -90,7 +90,7 @@ class Query
     public function __construct($type = 'SELECT', $tables = '', $fields = '', $dbConnIndex = 0)
     {
         // Set the debugflag
-        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xarConfig3::getVar('Site.BL.ShowQueries', false) && xarUser::isDebugAdmin()) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xar::config()->getVar('Site.BL.ShowQueries', false) && xarUser::isDebugAdmin()) {
             $this->debugflag = true;
         }
 

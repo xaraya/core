@@ -15,8 +15,8 @@
  */
 
 sys::import('xaraya.variables');
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Class to handle configuration variables
@@ -48,8 +48,8 @@ class xarConfigVars extends xarVars implements IxarVars
         // Question is wether we want to invent new configvars on the fly or not
         self::delete(null, $name);
 
-        $dbconn = xarDB3::getConn();
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        $tables = xar::db()->getTables();
         $config_varsTable = $tables['config_vars'];
 
         //Here we serialize the configuration variables
@@ -103,7 +103,7 @@ class xarConfigVars extends xarVars implements IxarVars
                 return xarCore::VERSION_SUB;
             case 'prefix':
                 // FIXME: Can we do this another way (dependency)
-                return xarDB3::getPrefix();
+                return xar::db()->getPrefix();
         }
 
         // From the cache
@@ -114,8 +114,8 @@ class xarConfigVars extends xarVars implements IxarVars
 
         // Need to retrieve it
         // @todo checkme What should we do here? preload again, or just fetch the one?
-        $dbconn = xarDB3::getConn();
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        $tables = xar::db()->getTables();
         $varstable = $tables['config_vars'] ?? null;
         // No tables, probably installing
         if ($varstable == null) {
@@ -124,7 +124,7 @@ class xarConfigVars extends xarVars implements IxarVars
 
         $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery([$name], xarDB3::getFetchNum());
+        $result = $stmt->executeQuery([$name], xar::db()->getFetchNum());
         if ($result->next()) {
             // Found it, retrieve and cache it
             $value = $result->get(2);
@@ -149,8 +149,8 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     public static function delete($scope, $name)
     {
-        $dbconn = xarDB3::getConn();
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        $tables = xar::db()->getTables();
         $config_varsTable = $tables['config_vars'];
         $query = "DELETE FROM $config_varsTable WHERE name = ? AND module_id is null";
 
@@ -177,16 +177,16 @@ class xarConfigVars extends xarVars implements IxarVars
         }
 
         try {
-            $dbconn = xarDB3::getConn();
-            $tables = xarDB3::getTables();
-            $varstable = xarDB3::getPrefix() . '_module_vars';
+            $dbconn = xar::db()->getConn();
+            $tables = xar::db()->getTables();
+            $varstable = xar::db()->getPrefix() . '_module_vars';
         } catch (Exception $e) {
             return false;
         }
 
         $query = "SELECT name, value FROM $varstable WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery([], xarDB3::getFetchAssoc());
+        $result = $stmt->executeQuery([], xar::db()->getFetchAssoc());
         while ($result->next()) {
             $newval = unserialize($result->getString('value'));
 

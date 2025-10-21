@@ -24,8 +24,8 @@
  */
 
 // PRIVATE FUNCTIONS BELOW - do not call directly
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Generate the DataDict specific SQL to create a table

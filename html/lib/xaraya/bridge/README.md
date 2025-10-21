@@ -72,7 +72,7 @@ $event = new DefaultEvent($subject);
 // set context if available
 $event->setContext($context);
 
-// this will call xarHooks::notify('ItemCreate', $subject) and save any response in the subscriber
+// this will call xarHooks::notify('ItemCreate', $subject, $context) and save any response in the subscriber
 $dispatcher->dispatch($event, 'xarHooks.item.ItemCreate');
 $responses = $subscriber->getResponses();
 ```
@@ -101,7 +101,8 @@ $dispatcher->addSubscriber($subscriber);
 
 // trigger an event or hook call in Xaraya
 $args = ['module' => 'dynamicdata', 'itemtype' => 3, 'itemid' => 123];
-xarHooks::notify('ItemUpdate', $args);
+$context = null;
+xarHooks::notify('ItemUpdate', $args, $context);
 
 // receive the event via the event dispatcher in the event subscriber
 ```

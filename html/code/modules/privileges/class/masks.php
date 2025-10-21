@@ -25,8 +25,8 @@
 */
 
 sys::import('modules.privileges.class.security');
-sys::import('xaraya.facades.database');
-use Xaraya\Facades\xarDB3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class xarMasks extends xarSecurity
 {
@@ -134,7 +134,7 @@ class xarMasks extends xarSecurity
         $realmid = null;
         if ($realm != 'All') {
             $stmt = self::$dbconn->prepareStatement('SELECT id FROM ' . self::$realmstable . ' WHERE name=?');
-            $result = $stmt->executeQuery([$realm], xarDB3::getFetchAssoc());
+            $result = $stmt->executeQuery([$realm], xar::db()->getFetchAssoc());
             if ($result->next()) {
                 $realmid = $result->getInt('id');
             }

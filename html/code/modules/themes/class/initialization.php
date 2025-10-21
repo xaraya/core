@@ -13,10 +13,8 @@
  * @author mrb <marcel@xaraya.com>
  */
 
-sys::import('xaraya.facades.database');
-sys::import('xaraya.facades.modules');
-use Xaraya\Facades\xarDB3;
-use Xaraya\Facades\xarMod3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Class to model registration information for a property
@@ -28,9 +26,9 @@ class ThemeInitialization extends xarObject
 {
     public static function clearCache()
     {
-        $dbconn = xarDB3::getConn();
-        xarMod3::loadDbInfo('themes', 'themes');
-        $tables = xarDB3::getTables();
+        $dbconn = xar::db()->getConn();
+        xar::mod()->loadDbInfo('themes', 'themes');
+        $tables = xar::db()->getTables();
         $sql = "DELETE FROM $tables[themes_configurations]";
         $res = $dbconn->ExecuteUpdate($sql);
         return $res;
@@ -47,7 +45,7 @@ class ThemeInitialization extends xarObject
     {
         sys::import('xaraya.structures.relativedirectoryiterator');
 
-        $dbconn = xarDB3::getConn(); // Need this for the transaction
+        $dbconn = xar::db()->getConn(); // Need this for the transaction
         $themeDirs = [];
 
         // We do the whole thing, or not at all (given proper db support)

@@ -352,6 +352,9 @@ class xarCore extends xarObject
             sys::import('xaraya.context.factory');
             $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
         }
+        // set context for core services here too
+        sys::import('xaraya.services.xar');
+        Xaraya\Services\xar::setServicesContext($context);
 
         /**
          * Bring HTTP Protocol Server/Request/Response utilities into the story

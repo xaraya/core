@@ -21,8 +21,8 @@
  * API type hook, observers should return array of $extrainfo
 **/
 sys::import('xaraya.structures.hooks.subject');
-sys::import('xaraya.facades.logger');
-use Xaraya\Facades\xarLog3;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 abstract class ApiHookSubject extends HookSubject
 {
@@ -45,7 +45,7 @@ abstract class ApiHookSubject extends HookSubject
                 }
             } catch (Exception $e) {
                 // hooks shouldn't fail, ever!
-                xarLog3::warning("Failed notifying hook observer $obs->module : " . $e->getMessage());
+                xar::log()->warning("Failed notifying hook observer $obs->module : " . $e->getMessage());
                 continue;
             }
         }
