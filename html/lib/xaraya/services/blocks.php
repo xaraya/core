@@ -62,6 +62,7 @@ trait BlocksTrait
      * @param array<string, mixed> $tplData
      * @param ?string $templateName
      * @return string
+     * @deprecated 2.8.1 use tpl()->block() in general with modName blockType
      */
     public function template(string $funcName, array $tplData = [], ?string $templateName = null): string
     {
@@ -89,6 +90,7 @@ trait BlocksTrait
      * Add standard template variables (module, itemtype and context)
      * @param array<string, mixed> $tplData
      * @return array<string, mixed>
+     * @deprecated 2.8.1 only used in block()->template()
      */
     public function prepare(array $tplData = []): array
     {
@@ -151,14 +153,14 @@ trait BlocksTrait
  * Access xarBlock*::* Blocks methods (template, ...)
  *
  * Available methods:
- * - template() for current block type - or use tpl()->block() in general with modName blockType
- * - prepare()
+ * - template() for current block type - @deprecated 2.8.1 use tpl()->block() in general with modName blockType
+ * - prepare() - @deprecated 2.8.1 only used in block()->template()
  * - guiRequest()
  * - apiRequest()
  * - ...
  *
- * Required methods in parent:
- * - getModName()
+ * Required methods in parent: @todo 2.8.x deprecate if no longer useful
+ * - getModName() for block()->template() and block()->prepare()
  * - getBlockType() for block()->template()
  *
  */
@@ -168,6 +170,7 @@ class BlocksService implements BlocksInterface
 
     /**
      * Get name of the module from parent
+     * @deprecated 2.8.1 only used for block()->template() and block()->prepare()
      */
     public function getModName(): string
     {
@@ -176,6 +179,7 @@ class BlocksService implements BlocksInterface
 
     /**
      * Get block type from parent
+     * @deprecated 2.8.1 only used for block()->template()
      */
     public function getBlockType(): string
     {

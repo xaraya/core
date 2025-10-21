@@ -32,6 +32,7 @@ interface DataPropertyInterface extends ServiceInterface
     /**
      * Render output with property template
      * @param array<mixed> $tplData
+     * @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
      */
     public function template(string $tplType, array $tplData = []): string;
 
@@ -69,6 +70,7 @@ trait DataPropertyTrait
      * @param array<mixed> $tplData
      * @param ?string $tplBase
      * @return string
+     * @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
      */
     public function template(string $tplType, array $tplData = [], ?string $tplBase = null): string
     {
@@ -122,14 +124,15 @@ trait DataPropertyTrait
  * Access DataProperty*::* methods with context (getProperty, template, ...)
  *
  * Available methods:
- * - template() for current property - or use tpl()->property() in general with modName propertyName
+ * - template() for current property - @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
  * - getPropertyTypes()
  * - getProperties()
  * - getProperty()
  * - ...
  *
- * Required methods in parent:
- * - getPropertyName() for prop()->template()
+ * Required methods in parent: @todo 2.8.x deprecate if no longer useful
+ * - getModName() for prop()->template()
+ * - getPropertyTemplate() for prop()->template()
  *
  * @todo do something with getParent()->getProperty() + simplify methods by name or propid?
  *

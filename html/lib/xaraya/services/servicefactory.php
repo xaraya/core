@@ -24,6 +24,15 @@ use xarLog;
  */
 class ServiceFactory
 {
+    /** @var ?ServicesInterface */
+    protected static $xarServices = null;  // Access core service with static methods
+
+    public static function getServicesClass(): ServicesInterface
+    {
+        self::$xarServices ??= new ServicesClass();
+        return self::$xarServices;
+    }
+
     /**
      * Summary of getControllerService
      */

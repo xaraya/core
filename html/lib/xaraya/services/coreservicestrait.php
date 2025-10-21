@@ -351,14 +351,14 @@ trait CoreServicesTrait
      * Access xarBlock*::* Blocks methods (template, ...)
      *
      * Available methods:
-     * - template() for current block type - or use tpl()->block() in general with modName blockType
-     * - prepare()
+     * - template() for current block type - @deprecated 2.8.1 use tpl()->block() in general with modName blockType
+     * - prepare() - @deprecated 2.8.1 only used in block()->template()
      * - guiRequest()
      * - apiRequest()
      * - ...
      *
      * Required methods in parent:
-     * - getModName()
+     * - getModName() for block()->template() and block()->prepare()
      * - getBlockType() for block()->template()
      *
      */
@@ -373,6 +373,7 @@ trait CoreServicesTrait
      *
      * Available methods:
      * - getURL() for current object - or use ctl()->getObjectURL() in general with objectName
+     * - template() for current object - or use tpl()->object() in general with modName objectTemplate
      * - getObject()
      * - getObjectList()
      * - getObjectLoader()
@@ -396,14 +397,15 @@ trait CoreServicesTrait
      * Access DataProperty*::* methods with context (getProperty, template, ...)
      *
      * Available methods:
-     * - template() for current property - or use tpl()->property() in general with modName propertyName
+     * - template() for current property - @deprecated 2.8.1 use tpl()->property() in general with modName propertyName
      * - getPropertyTypes()
      * - getProperties()
      * - getProperty()
      * - ...
      *
      * Required methods in parent:
-     * - getPropertyName() for prop()->template()
+     * - getModName() for prop()->template()
+     * - getPropertyTemplate() for prop()->template()
      *
      */
     public function prop(): DataPropertyInterface
