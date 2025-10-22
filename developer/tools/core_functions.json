@@ -7,22 +7,8 @@
             "$l = 0"
         ],
         "namespace": "",
-        "lines": "61-94",
+        "lines": "62-95",
         "docs": null
-    },
-    "blocks_adminapi_load_legacy": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/blocks/load.php",
-        "name": "blocks_adminapi_load_legacy",
-        "args": [
-            "$module",
-            "$type",
-            "$func",
-            "$className",
-            "$blockDir"
-        ],
-        "namespace": "",
-        "lines": "14-124",
-        "docs": {}
     },
     "debug": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/exceptions.php",
@@ -31,7 +17,7 @@
             "$anything"
         ],
         "namespace": "",
-        "lines": "62-65",
+        "lines": "63-66",
         "docs": {}
     },
     "m": {
@@ -42,66 +28,8 @@
             "$level = 0"
         ],
         "namespace": "",
-        "lines": "55-59",
+        "lines": "56-60",
         "docs": {}
-    },
-    "xar_legacy_templates_entities": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xar_legacy_templates_entities",
-        "args": [],
-        "namespace": "",
-        "lines": "426-536",
-        "docs": {}
-    },
-    "xar_legacy_templates_fixlegacy": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xar_legacy_templates_fixLegacy",
-        "args": [
-            "$templatestring"
-        ],
-        "namespace": "",
-        "lines": "399-420",
-        "docs": {}
-    },
-    "xar_legacy_templates_loadsourcefilename": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xar_legacy_templates_loadsourcefilename",
-        "args": [
-            "$tplBaseDir",
-            "$tplSubPart",
-            "$tplBase",
-            "$templateName",
-            "$canTemplateName",
-            "$canonical"
-        ],
-        "namespace": "",
-        "lines": "377-390",
-        "docs": {}
-    },
-    "xar_legacy_validations_dropdown": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/validations.php",
-        "name": "xar_legacy_validations_dropdown",
-        "args": [
-            "$validation"
-        ],
-        "namespace": "",
-        "lines": "15-26",
-        "docs": {}
-    },
-    "xarassignprivilege": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarAssignPrivilege",
-        "args": [
-            "$privilege",
-            "$role"
-        ],
-        "namespace": "",
-        "lines": "165-168",
-        "docs": {},
-        "uses": "xarPrivileges::assign()",
-        "class": "xarPrivileges",
-        "check": "assign",
-        "method": "assign"
     },
     "xaraya\\bridge\\test\\graphql_client": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/client.php",
@@ -159,63 +87,6 @@
         "lines": "25-181",
         "docs": {}
     },
-    "xarblock_init": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarBlock_init",
-        "args": [
-            "&$args"
-        ],
-        "namespace": "",
-        "lines": "325-325",
-        "docs": {},
-        "uses": "xarBlock::init()",
-        "class": "xarBlock",
-        "check": "init",
-        "method": "init"
-    },
-    "xarblock_render": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarBlock_render",
-        "args": [
-            "$blockinfo"
-        ],
-        "namespace": "",
-        "lines": "332-332",
-        "docs": {},
-        "uses": "xarBlock::render()",
-        "class": "xarBlock",
-        "check": "render",
-        "method": "render"
-    },
-    "xarblock_renderblock": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarBlock_renderBlock",
-        "args": [
-            "$args"
-        ],
-        "namespace": "",
-        "lines": "339-339",
-        "docs": {},
-        "uses": "xarBlock::renderBlock()",
-        "class": "xarBlock",
-        "check": "renderBlock",
-        "method": "renderBlock"
-    },
-    "xarblock_rendergroup": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarBlock_renderGroup",
-        "args": [
-            "$groupname",
-            "$template = NULL"
-        ],
-        "namespace": "",
-        "lines": "346-346",
-        "docs": {},
-        "uses": "xarBlock::renderGroup()",
-        "class": "xarBlock",
-        "check": "renderGroup",
-        "method": "renderGroup"
-    },
     "xarboot_getpublicobjectproperties": {
         "file": "/home/mikespub/xaraya-core/html/bootstrap.php",
         "name": "xarBoot_getPublicObjectProperties",
@@ -223,106 +94,10 @@
             "$obj"
         ],
         "namespace": "",
-        "lines": "33-36",
+        "lines": "32-35",
         "docs": {},
         "class": "xarBoot",
         "check": "getPublicObjectProperties"
-    },
-    "xarcache_getstorage": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarCache_getStorage",
-        "args": [
-            "array $args = array()"
-        ],
-        "namespace": "",
-        "lines": "364-364",
-        "docs": {},
-        "uses": "xarCache::getStorage()",
-        "class": "xarCache",
-        "check": "getStorage",
-        "method": "getStorage"
-    },
-    "xarcache_init": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarCache_init",
-        "args": [
-            "$args = false"
-        ],
-        "namespace": "",
-        "lines": "357-357",
-        "docs": {},
-        "uses": "xarCache::init()",
-        "class": "xarCache",
-        "check": "init",
-        "method": "init"
-    },
-    "xarconfiggetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarConfigGetVar",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "109-109",
-        "docs": {},
-        "uses": "xarConfigVars::get()",
-        "class": "xarConfigVars",
-        "check": "get",
-        "method": "get"
-    },
-    "xarconfigsetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarConfigSetVar",
-        "args": [
-            "$name",
-            "$value"
-        ],
-        "namespace": "",
-        "lines": "103-103",
-        "docs": {},
-        "uses": "xarConfigVars::set()",
-        "class": "xarConfigVars",
-        "check": "set",
-        "method": "set"
-    },
-    "xarcore_getsystemvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarCore_getSystemVar",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "68-72",
-        "docs": {},
-        "uses": "xarSystemVars::get()",
-        "class": "xarSystemVars",
-        "check": "get",
-        "method": "get"
-    },
-    "xarcoregetvardirpath": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarCoreGetVarDirPath",
-        "args": [],
-        "namespace": "",
-        "lines": "58-58",
-        "docs": {},
-        "uses": "sys::varpath()",
-        "class": "sys",
-        "check": "GetVarDirPath",
-        "method": "varpath",
-        "rargs": ""
-    },
-    "xarcurrentrole": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarCurrentRole",
-        "args": [],
-        "namespace": "",
-        "lines": "254-257",
-        "docs": {},
-        "uses": "xarRoles::current()",
-        "class": "xarRoles",
-        "check": "current",
-        "method": "current"
     },
     "xardb__datadictaltertable": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
@@ -332,7 +107,7 @@
             "$args"
         ],
         "namespace": "",
-        "lines": "83-151",
+        "lines": "86-154",
         "docs": {},
         "class": "xarDB",
         "check": "_datadictAlterTable"
@@ -345,7 +120,7 @@
             "$parameters"
         ],
         "namespace": "",
-        "lines": "162-382",
+        "lines": "165-385",
         "docs": {},
         "class": "xarDB",
         "check": "_datadictColumnDefinition"
@@ -357,7 +132,7 @@
             "$databaseName"
         ],
         "namespace": "",
-        "lines": "395-406",
+        "lines": "398-409",
         "docs": {},
         "class": "xarDB",
         "check": "_datadictCreateDatabase"
@@ -370,7 +145,7 @@
             "$index"
         ],
         "namespace": "",
-        "lines": "439-450",
+        "lines": "442-453",
         "docs": {},
         "class": "xarDB",
         "check": "_datadictCreateIndex"
@@ -383,7 +158,7 @@
             "$fields"
         ],
         "namespace": "",
-        "lines": "39-65",
+        "lines": "40-68",
         "docs": {},
         "class": "xarDB",
         "check": "_datadictCreateTable"
@@ -396,7 +171,7 @@
             "$index"
         ],
         "namespace": "",
-        "lines": "462-473",
+        "lines": "465-476",
         "docs": {},
         "class": "xarDB",
         "check": "_datadictDropIndex"
@@ -408,7 +183,7 @@
             "$tableName"
         ],
         "namespace": "",
-        "lines": "417-428",
+        "lines": "420-431",
         "docs": {},
         "class": "xarDB",
         "check": "_datadictDropTable"
@@ -418,7 +193,7 @@
         "name": "xarDB__datadictInit",
         "args": [],
         "namespace": "",
-        "lines": "479-494",
+        "lines": "482-490",
         "docs": {},
         "class": "xarDB",
         "check": "_datadictInit"
@@ -431,7 +206,7 @@
             "$args"
         ],
         "namespace": "",
-        "lines": "104-207",
+        "lines": "105-208",
         "docs": {},
         "class": "xarDB",
         "check": "_mysqlAlterTable"
@@ -444,7 +219,7 @@
             "$parameters"
         ],
         "namespace": "",
-        "lines": "217-452",
+        "lines": "218-457",
         "docs": {},
         "class": "xarDB",
         "check": "_mysqlColumnDefinition"
@@ -458,7 +233,7 @@
             "$charset = null"
         ],
         "namespace": "",
-        "lines": "38-87",
+        "lines": "39-88",
         "docs": {},
         "class": "xarDB",
         "check": "_mysqlCreateTable"
@@ -471,7 +246,7 @@
             "$args"
         ],
         "namespace": "",
-        "lines": "99-191",
+        "lines": "103-197",
         "docs": {},
         "class": "xarDB",
         "check": "_oracleAlterTable"
@@ -484,7 +259,7 @@
             "$parameters"
         ],
         "namespace": "",
-        "lines": "201-395",
+        "lines": "207-401",
         "docs": {},
         "class": "xarDB",
         "check": "_oracleColumnDefinition"
@@ -498,7 +273,7 @@
             "$charset = null"
         ],
         "namespace": "",
-        "lines": "38-83",
+        "lines": "39-87",
         "docs": {},
         "class": "xarDB",
         "check": "_oracleCreateTable"
@@ -511,7 +286,7 @@
             "$parameters"
         ],
         "namespace": "",
-        "lines": "182-390",
+        "lines": "187-395",
         "docs": {},
         "class": "xarDB",
         "check": "_postgresColumnDefinition"
@@ -524,7 +299,7 @@
             "$args"
         ],
         "namespace": "",
-        "lines": "99-172",
+        "lines": "103-177",
         "docs": {},
         "class": "xarDB",
         "check": "_postgresqlAlterTable"
@@ -538,7 +313,7 @@
             "$charset = null"
         ],
         "namespace": "",
-        "lines": "36-83",
+        "lines": "37-87",
         "docs": {},
         "class": "xarDB",
         "check": "_postgresqlCreateTable"
@@ -551,7 +326,7 @@
             "$args"
         ],
         "namespace": "",
-        "lines": "88-120",
+        "lines": "89-121",
         "docs": {},
         "class": "xarDB",
         "check": "_sqliteAlterTable"
@@ -564,7 +339,7 @@
             "$parameters"
         ],
         "namespace": "",
-        "lines": "134-293",
+        "lines": "135-309",
         "docs": {},
         "class": "xarDB",
         "check": "_sqliteColumnDefinition"
@@ -578,7 +353,7 @@
             "$charset = null"
         ],
         "namespace": "",
-        "lines": "35-71",
+        "lines": "36-72",
         "docs": {},
         "class": "xarDB",
         "check": "_sqliteCreateTable"
@@ -590,7 +365,7 @@
             "array &$args"
         ],
         "namespace": "",
-        "lines": "380-399",
+        "lines": "390-409",
         "docs": null,
         "class": "xarDB",
         "check": "init"
@@ -601,10 +376,10 @@
         "args": [
             "$tableName",
             "$args",
-            "$databaseType = NULL"
+            "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "176-218",
+        "lines": "181-225",
         "docs": {},
         "uses": "xarTableDDL::alterTable()",
         "class": "xarTableDDL",
@@ -618,10 +393,10 @@
             "string $columnType",
             "array $args1 = []",
             "array $args2 = []",
-            "$databaseType = NULL"
+            "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "269-383",
+        "lines": "278-408",
         "docs": {},
         "uses": "xarTableDDL::dropTable()",
         "class": "xarTableDDL",
@@ -633,11 +408,11 @@
         "name": "xarDBCreateDatabase",
         "args": [
             "$databaseName",
-            "$databaseType = NULL",
+            "$databaseType = null",
             "$databaseCharset = 'utf-8'"
         ],
         "namespace": "",
-        "lines": "55-91",
+        "lines": "52-90",
         "docs": {},
         "uses": "xarTableDDL::createDatabase()",
         "class": "xarTableDDL",
@@ -650,10 +425,10 @@
         "args": [
             "$tableName",
             "$index",
-            "$databaseType = NULL"
+            "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "396-451",
+        "lines": "421-478",
         "docs": {},
         "uses": "xarTableDDL::createIndex()",
         "class": "xarTableDDL",
@@ -670,7 +445,7 @@
             "$charset = \"\""
         ],
         "namespace": "",
-        "lines": "105-153",
+        "lines": "104-158",
         "docs": {},
         "uses": "xarTableDDL::createTable()",
         "class": "xarTableDDL",
@@ -683,10 +458,10 @@
         "args": [
             "$tableName",
             "$index",
-            "$databaseType = NULL"
+            "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "463-501",
+        "lines": "490-530",
         "docs": {},
         "uses": "xarTableDDL::dropIndex()",
         "class": "xarTableDDL",
@@ -698,222 +473,32 @@
         "name": "xarDBDropTable",
         "args": [
             "$tableName",
-            "$databaseType = NULL"
+            "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "229-258",
+        "lines": "236-267",
         "docs": {},
         "uses": "xarTableDDL::dropTable()",
         "class": "xarTableDDL",
         "check": "dropTable",
         "method": "dropTable"
     },
-    "xardbgetconn": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarDBGetConn",
-        "args": [
-            "$index = 0"
-        ],
-        "namespace": "",
-        "lines": "269-269",
-        "docs": {},
-        "uses": "xarDB::getConn()",
-        "class": "xarDB",
-        "check": "getConn",
-        "method": "getConn"
-    },
-    "xardbgethost": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarDBGetHost",
-        "args": [],
-        "namespace": "",
-        "lines": "81-81",
-        "docs": {},
-        "uses": "xarDB::getHost()",
-        "class": "xarDB",
-        "check": "getHost",
-        "method": "getHost"
-    },
-    "xardbgetname": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarDBGetName",
-        "args": [],
-        "namespace": "",
-        "lines": "90-90",
-        "docs": {},
-        "uses": "xarDB::getName()",
-        "class": "xarDB",
-        "check": "getName",
-        "method": "getName"
-    },
-    "xardbgetsitetableprefix": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarDBGetSiteTablePrefix",
-        "args": [],
-        "namespace": "",
-        "lines": "282-282",
-        "docs": {},
-        "uses": "xarDB::getPrefix()",
-        "class": "xarDB",
-        "check": "getPrefix",
-        "method": "getPrefix"
-    },
-    "xardbgetsystemtableprefix": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarDBGetSystemTablePrefix",
-        "args": [],
-        "namespace": "",
-        "lines": "275-275",
-        "docs": {},
-        "uses": "xarDB::getPrefix()",
-        "class": "xarDB",
-        "check": "getPrefix",
-        "method": "getPrefix"
-    },
-    "xardbgettables": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarDBGetTables",
-        "args": [],
-        "namespace": "",
-        "lines": "289-289",
-        "docs": {},
-        "uses": "xarDB::getTables()",
-        "class": "xarDB",
-        "check": "getTables",
-        "method": "getTables"
-    },
-    "xardbgettype": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarDBGetType",
-        "args": [],
-        "namespace": "",
-        "lines": "304-304",
-        "docs": {},
-        "uses": "xarDB::getType()",
-        "class": "xarDB",
-        "check": "getType",
-        "method": "getType"
-    },
-    "xardbloadtablemaintenanceapi": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarDBLoadTableMaintenanceAPI",
-        "args": [],
-        "namespace": "",
-        "lines": "297-297",
-        "docs": {},
-        "uses": "xarTableDDL::init()",
-        "class": "xarTableDDL",
-        "check": "init",
-        "method": "init"
-    },
-    "xardbnewdatadict": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarDBNewDataDict",
-        "args": [
-            "\\Connection &$dbconn",
-            "$mode = 'READONLY'"
-        ],
-        "namespace": "",
-        "lines": "311-314",
-        "docs": {},
-        "uses": "xarTableDDL::init()",
-        "class": "xarTableDDL",
-        "check": "init",
-        "method": "init"
-    },
-    "xardefineinstance": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarDefineInstance",
-        "args": [
-            "$module",
-            "$type",
-            "$query",
-            "$propagate = 0",
-            "$table2 = ''",
-            "$childId = ''",
-            "$parentId = ''",
-            "$description = ''"
-        ],
-        "namespace": "",
-        "lines": "202-205",
-        "docs": {},
-        "uses": "xarPrivileges::defineInstance()",
-        "class": "xarPrivileges",
-        "check": "defineInstance",
-        "method": "defineInstance"
-    },
-    "xarfindrole": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarFindRole",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "243-243",
-        "docs": {},
-        "uses": "xarRoles::findRole()",
-        "class": "xarRoles",
-        "check": "findRole",
-        "method": "findRole"
-    },
-    "xargetgroups": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarGetGroups",
-        "args": [],
-        "namespace": "",
-        "lines": "231-231",
-        "docs": {},
-        "uses": "xarRoles::getgroups()",
-        "class": "xarRoles",
-        "check": "getgroups",
-        "method": "getgroups"
-    },
-    "xarisancestor": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarIsAncestor",
-        "args": [
-            "$name1",
-            "$name2"
-        ],
-        "namespace": "",
-        "lines": "276-279",
-        "docs": {},
-        "uses": "xarRoles::isAncestor()",
-        "class": "xarRoles",
-        "check": "isAncestor",
-        "method": "isAncestor"
-    },
-    "xarisparent": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarIsParent",
-        "args": [
-            "$name1",
-            "$name2"
-        ],
-        "namespace": "",
-        "lines": "265-268",
-        "docs": {},
-        "uses": "xarRoles::isParent()",
-        "class": "xarRoles",
-        "check": "isParent",
-        "method": "isParent"
-    },
     "xarlocaleformatcurrency": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
         "name": "xarLocaleFormatCurrency",
         "args": [
             "$currency",
-            "$localeData = NULL"
+            "$localeData = null"
         ],
         "namespace": "",
-        "lines": "207-214",
+        "lines": "218-225",
         "docs": {},
         "class": "xarLocale",
         "check": "FormatCurrency",
         "method": "formatCurrency",
         "margs": [
             "$currency",
-            "$localeData = NULL"
+            "$localeData = null"
         ]
     },
     "xarlocaleformatdate": {
@@ -925,7 +510,7 @@
             "$addoffset = true"
         ],
         "namespace": "",
-        "lines": "524-548",
+        "lines": "546-570",
         "docs": {},
         "class": "xarLocale",
         "check": "FormatDate",
@@ -941,18 +526,18 @@
         "name": "xarLocaleFormatNumber",
         "args": [
             "$number",
-            "$localeData = NULL",
+            "$localeData = null",
             "$isCurrency = false"
         ],
         "namespace": "",
-        "lines": "229-312",
+        "lines": "240-330",
         "docs": {},
         "class": "xarLocale",
         "check": "FormatNumber",
         "method": "formatNumber",
         "margs": [
             "$number",
-            "$localeData = NULL",
+            "$localeData = null",
             "$isCurrency = false"
         ]
     },
@@ -965,7 +550,7 @@
             "$addoffset = false"
         ],
         "namespace": "",
-        "lines": "498-506",
+        "lines": "520-528",
         "docs": {},
         "class": "xarLocale",
         "check": "FormatUTCDate",
@@ -985,7 +570,7 @@
             "$addoffset = true"
         ],
         "namespace": "",
-        "lines": "353-380",
+        "lines": "371-398",
         "docs": {},
         "class": "xarLocale",
         "check": "GetFormattedDate",
@@ -1005,7 +590,7 @@
             "$addoffset = true"
         ],
         "namespace": "",
-        "lines": "421-484",
+        "lines": "439-506",
         "docs": {},
         "class": "xarLocale",
         "check": "GetFormattedTime",
@@ -1025,7 +610,7 @@
             "$addoffset = false"
         ],
         "namespace": "",
-        "lines": "326-335",
+        "lines": "344-353",
         "docs": {},
         "class": "xarLocale",
         "check": "GetFormattedUTCDate",
@@ -1045,7 +630,7 @@
             "$addoffset = false"
         ],
         "namespace": "",
-        "lines": "394-403",
+        "lines": "412-421",
         "docs": {},
         "class": "xarLocale",
         "check": "GetFormattedUTCTime",
@@ -1056,64 +641,22 @@
             "$addoffset = false"
         ]
     },
-    "xarlocalegetinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarLocaleGetInfo",
-        "args": [
-            "$locale"
-        ],
-        "namespace": "",
-        "lines": "104-107",
-        "docs": {},
-        "uses": "xarMLS::localeGetInfo()",
-        "class": "xarMLS",
-        "check": "localeGetInfo",
-        "method": "localeGetInfo"
-    },
-    "xarlocalegetlist": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarLocaleGetList",
-        "args": [
-            "$filter = array()"
-        ],
-        "namespace": "",
-        "lines": "124-127",
-        "docs": {},
-        "uses": "xarMLS::localeGetList()",
-        "class": "xarMLS",
-        "check": "localeGetList",
-        "method": "localeGetList"
-    },
-    "xarlocalegetstring": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarLocaleGetString",
-        "args": [
-            "$localeInfo"
-        ],
-        "namespace": "",
-        "lines": "114-117",
-        "docs": {},
-        "uses": "xarMLS::localeGetString()",
-        "class": "xarMLS",
-        "check": "localeGetString",
-        "method": "localeGetString"
-    },
     "xarlocaleparsecurrency": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
         "name": "xarLocaleParseCurrency",
         "args": [
             "$currency",
-            "$localeData = NULL"
+            "$localeData = null"
         ],
         "namespace": "",
-        "lines": "152-162",
+        "lines": "160-170",
         "docs": {},
         "class": "xarLocale",
         "check": "ParseCurrency",
         "method": "parseCurrency",
         "margs": [
             "$currency",
-            "$localeData = NULL"
+            "$localeData = null"
         ]
     },
     "xarlocaleparsenumber": {
@@ -1121,18 +664,18 @@
         "name": "xarLocaleParseNumber",
         "args": [
             "$number",
-            "$localeData = NULL",
+            "$localeData = null",
             "$isCurrency = false"
         ],
         "namespace": "",
-        "lines": "179-190",
+        "lines": "187-201",
         "docs": {},
         "class": "xarLocale",
         "check": "ParseNumber",
         "method": "parseNumber",
         "margs": [
             "$number",
-            "$localeData = NULL",
+            "$localeData = null",
             "$isCurrency = false"
         ]
     },
@@ -1143,7 +686,7 @@
             "array $array"
         ],
         "namespace": "",
-        "lines": "16-109",
+        "lines": "17-110",
         "docs": {},
         "class": "xarLog",
         "check": "_dumpVariable"
@@ -1153,7 +696,7 @@
         "name": "xarLog__shutdown_handler",
         "args": [],
         "namespace": "",
-        "lines": "264-295",
+        "lines": "282-313",
         "docs": {},
         "class": "xarLog",
         "check": "_shutdown_handler"
@@ -1165,305 +708,21 @@
             "$string"
         ],
         "namespace": "",
-        "lines": "17-31",
+        "lines": "18-32",
         "docs": {},
         "class": "xarLog",
         "check": "_stringToLevel"
     },
-    "xarlogconfigfile": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/log.php",
-        "name": "xarLogConfigFile",
-        "args": [],
-        "namespace": "",
-        "lines": "20-23",
-        "docs": {},
-        "uses": "xarLog::configFile()",
-        "class": "xarLog",
-        "check": "configFile",
-        "method": "configFile"
-    },
-    "xarlogconfigreadable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/log.php",
-        "name": "xarLogConfigReadable",
-        "args": [],
-        "namespace": "",
-        "lines": "30-33",
-        "docs": {},
-        "uses": "xarLog::configReadable()",
-        "class": "xarLog",
-        "check": "configReadable",
-        "method": "configReadable"
-    },
-    "xarlogfallbackfile": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/log.php",
-        "name": "xarLogFallbackFile",
-        "args": [],
-        "namespace": "",
-        "lines": "40-43",
-        "docs": {},
-        "uses": "xarLog::fallbackFile()",
-        "class": "xarLog",
-        "check": "fallbackFile",
-        "method": "fallbackFile"
-    },
-    "xarlogfallbackpossible": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/log.php",
-        "name": "xarLogFallbackPossible",
-        "args": [],
-        "namespace": "",
-        "lines": "50-53",
-        "docs": {},
-        "uses": "xarLog::fallbackPossible()",
-        "class": "xarLog",
-        "check": "fallbackPossible",
-        "method": "fallbackPossible"
-    },
-    "xarlogmessage": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/log.php",
-        "name": "xarLogMessage",
-        "args": [
-            "$message",
-            "$level = ''"
-        ],
-        "namespace": "",
-        "lines": "60-64",
-        "docs": {},
-        "uses": "xarLog::message()",
-        "class": "xarLog",
-        "check": "message",
-        "method": "message"
-    },
-    "xarlogvariable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/log.php",
-        "name": "xarLogVariable",
-        "args": [
-            "$name",
-            "$var",
-            "$level = ''"
-        ],
-        "namespace": "",
-        "lines": "71-75",
-        "docs": {},
-        "uses": "xarLog::variable()",
-        "class": "xarLog",
-        "check": "variable",
-        "method": "variable"
-    },
-    "xarmakeprivilegemember": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarMakePrivilegeMember",
-        "args": [
-            "$childName",
-            "$parentName"
-        ],
-        "namespace": "",
-        "lines": "149-152",
-        "docs": {},
-        "uses": "xarPrivileges::makeMember()",
-        "class": "xarPrivileges",
-        "check": "makeMember",
-        "method": "makeMember"
-    },
-    "xarmakeprivilegeroot": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarMakePrivilegeRoot",
-        "args": [
-            "$privilege"
-        ],
-        "namespace": "",
-        "lines": "164-164",
-        "docs": {},
-        "class": "xarMake",
-        "check": "PrivilegeRoot"
-    },
-    "xarmakerolememberbyid": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarMakeRoleMemberByID",
-        "args": [
-            "$childId",
-            "$parentId"
-        ],
-        "namespace": "",
-        "lines": "96-99",
-        "docs": {},
-        "uses": "xarRoles::makeMemberByID()",
-        "class": "xarRoles",
-        "check": "makeMemberByID",
-        "method": "makeMemberByID"
-    },
-    "xarmakerolememberbyname": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarMakeRoleMemberByName",
-        "args": [
-            "$childName",
-            "$parentName"
-        ],
-        "namespace": "",
-        "lines": "64-67",
-        "docs": {},
-        "uses": "xarRoles::makeMemberByName()",
-        "class": "xarRoles",
-        "check": "makeMemberByName",
-        "method": "makeMemberByName"
-    },
-    "xarmakerolememberbyuname": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarMakeRoleMemberByUname",
-        "args": [
-            "$childName",
-            "$parentName"
-        ],
-        "namespace": "",
-        "lines": "80-83",
-        "docs": {},
-        "uses": "xarRoles::makeMemberByUname()",
-        "class": "xarRoles",
-        "check": "makeMemberByUname",
-        "method": "makeMemberByUname"
-    },
-    "xarmakeroleroot": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarMakeRoleRoot",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "170-170",
-        "docs": {},
-        "class": "xarMake",
-        "check": "RoleRoot"
-    },
-    "xarmaskexists": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarMaskExists",
-        "args": [
-            "$name",
-            "$module = \"All\"",
-            "$component = \"All\""
-        ],
-        "namespace": "",
-        "lines": "361-364",
-        "docs": {},
-        "uses": "xarSecurity::hasMask()",
-        "class": "xarSecurity",
-        "check": "hasMask",
-        "method": "hasMask"
-    },
     "xarml": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/mls.php",
         "name": "xarML",
         "args": [
-            "$rawstring"
+            "$rawstring",
+            "...$args"
         ],
         "namespace": "",
-        "lines": "83-86",
-        "docs": {},
-        "uses": "xarMLS::translate()",
-        "class": "xarMLS",
-        "check": "translate",
-        "method": "translate"
-    },
-    "xarmlbykey": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLByKey",
-        "args": [
-            "$key"
-        ],
-        "namespace": "",
-        "lines": "94-97",
-        "docs": {},
-        "uses": "xarMLS::translateByKey()",
-        "class": "xarMLS",
-        "check": "translateByKey",
-        "method": "translateByKey"
-    },
-    "xarmls__iswritable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLS__iswritable",
-        "args": [
-            "$directory = NULL"
-        ],
-        "namespace": "",
-        "lines": "214-217",
-        "docs": {},
-        "uses": "xarMLS::iswritable()",
-        "class": "xarMLS",
-        "check": "iswritable",
-        "method": "iswritable"
-    },
-    "xarmls__mkdirr": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLS__mkdirr",
-        "args": [
-            "$path"
-        ],
-        "namespace": "",
-        "lines": "204-207",
-        "docs": {},
-        "uses": "xarMLS::mkdirr()",
-        "class": "xarMLS",
-        "check": "mkdirr",
-        "method": "mkdirr"
-    },
-    "xarmls__parselocalestring": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLS__parseLocaleString",
-        "args": [
-            "$locale"
-        ],
-        "namespace": "",
-        "lines": "194-197",
-        "docs": {},
-        "uses": "xarMLS::parseLocaleString()",
-        "class": "xarMLS",
-        "check": "parseLocaleString",
-        "method": "parseLocaleString"
-    },
-    "xarmls_convertfrominput": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLS_convertFromInput",
-        "args": [
-            "$var",
-            "$method"
-        ],
-        "namespace": "",
-        "lines": "184-187",
-        "docs": {},
-        "uses": "xarMLS::convertFromInput()",
-        "class": "xarMLS",
-        "check": "convertFromInput",
-        "method": "convertFromInput"
-    },
-    "xarmls_loadtranslations": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLS_loadTranslations",
-        "args": [
-            "$dnType",
-            "$dnName",
-            "$ctxType",
-            "$ctxName"
-        ],
-        "namespace": "",
-        "lines": "164-167",
-        "docs": {},
-        "uses": "xarMLS::_loadTranslations()",
-        "class": "xarMLS",
-        "check": "_loadTranslations",
-        "method": "_loadTranslations"
-    },
-    "xarmls_setcurrentlocale": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLS_setCurrentLocale",
-        "args": [
-            "$locale"
-        ],
-        "namespace": "",
-        "lines": "154-157",
-        "docs": {},
-        "uses": "xarMLS::setCurrentLocale()",
-        "class": "xarMLS",
-        "check": "setCurrentLocale",
-        "method": "setCurrentLocale"
+        "lines": "1036-1039",
+        "docs": {}
     },
     "xarmls_strftime": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
@@ -1473,701 +732,24 @@
             "$timestamp = null"
         ],
         "namespace": "",
-        "lines": "587-618",
+        "lines": "609-640",
         "docs": {},
         "class": "xarMLS",
         "check": "strftime"
-    },
-    "xarmls_useroffset": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLS_userOffset",
-        "args": [
-            "$timestamp = null"
-        ],
-        "namespace": "",
-        "lines": "144-147",
-        "docs": {},
-        "uses": "xarMLS::userOffset()",
-        "class": "xarMLS",
-        "check": "userOffset",
-        "method": "userOffset"
-    },
-    "xarmls_usertime": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLS_userTime",
-        "args": [
-            "$time = null",
-            "$flag = 1"
-        ],
-        "namespace": "",
-        "lines": "134-137",
-        "docs": {},
-        "uses": "xarMLS::userTime()",
-        "class": "xarMLS",
-        "check": "userTime",
-        "method": "userTime"
-    },
-    "xarmlsgetcharsetfromlocale": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLSGetCharsetFromLocale",
-        "args": [
-            "$locale"
-        ],
-        "namespace": "",
-        "lines": "72-75",
-        "docs": {},
-        "uses": "xarMLS::getCharsetFromLocale()",
-        "class": "xarMLS",
-        "check": "getCharsetFromLocale",
-        "method": "getCharsetFromLocale"
-    },
-    "xarmlsgetcurrentlocale": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLSGetCurrentLocale",
-        "args": [],
-        "namespace": "",
-        "lines": "62-65",
-        "docs": {},
-        "uses": "xarMLS::getCurrentLocale()",
-        "class": "xarMLS",
-        "check": "getCurrentLocale",
-        "method": "getCurrentLocale"
-    },
-    "xarmlsgetmode": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLSGetMode",
-        "args": [],
-        "namespace": "",
-        "lines": "32-35",
-        "docs": {},
-        "uses": "xarMLS::getMode()",
-        "class": "xarMLS",
-        "check": "getMode",
-        "method": "getMode"
-    },
-    "xarmlsgetsitelocale": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLSGetSiteLocale",
-        "args": [],
-        "namespace": "",
-        "lines": "42-45",
-        "docs": {},
-        "uses": "xarMLS::getSiteLocale()",
-        "class": "xarMLS",
-        "check": "getSiteLocale",
-        "method": "getSiteLocale"
-    },
-    "xarmlslistsitelocales": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLSListSiteLocales",
-        "args": [],
-        "namespace": "",
-        "lines": "52-55",
-        "docs": {},
-        "uses": "xarMLS::listSiteLocales()",
-        "class": "xarMLS",
-        "check": "listSiteLocales",
-        "method": "listSiteLocales"
     },
     "xarmlsloadlocaledata": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
         "name": "xarMLSLoadLocaleData",
         "args": [
-            "$locale = NULL"
+            "$locale = null"
         ],
         "namespace": "",
-        "lines": "48-137",
+        "lines": "49-145",
         "docs": {},
         "uses": "xarLocale::loadData()",
         "class": "xarLocale",
         "check": "loadData",
         "method": "loadData"
-    },
-    "xarmlsloadtranslations": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/mls.php",
-        "name": "xarMLSLoadTranslations",
-        "args": [
-            "$path"
-        ],
-        "namespace": "",
-        "lines": "174-177",
-        "docs": {},
-        "uses": "xarMLS::loadTranslations()",
-        "class": "xarMLS",
-        "check": "loadTranslations",
-        "method": "loadTranslations"
-    },
-    "xarmod__loaddbinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarMod__loadDbInfo",
-        "args": [
-            "$modName",
-            "$modDir"
-        ],
-        "namespace": "",
-        "lines": "203-204",
-        "docs": {},
-        "uses": "xarMod::loadDbInfo()",
-        "class": "xarMod",
-        "check": "loadDbInfo",
-        "method": "loadDbInfo"
-    },
-    "xarmod__urladdparameterstopath": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarMod__URLaddParametersToPath",
-        "args": [
-            "$args",
-            "$path",
-            "$pini",
-            "$psep"
-        ],
-        "namespace": "",
-        "lines": "113-116",
-        "docs": {},
-        "uses": "RequestURL::addParametersToPath()",
-        "class": "RequestURL",
-        "check": "_URLaddParametersToPath",
-        "method": "addParametersToPath",
-        "rargs": "$args, $path, $pini, $psep"
-    },
-    "xarmod__urlencode": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarMod__URLencode",
-        "args": [
-            "$data",
-            "$type = 'getname'"
-        ],
-        "namespace": "",
-        "lines": "93-96",
-        "docs": {},
-        "uses": "RequestURL::encode()",
-        "class": "RequestURL",
-        "check": "_URLencode",
-        "method": "encode",
-        "rargs": "$data, $type"
-    },
-    "xarmod__urlnested": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarMod__URLnested",
-        "args": [
-            "$args",
-            "$prefix"
-        ],
-        "namespace": "",
-        "lines": "103-106",
-        "docs": {},
-        "uses": "RequestURL::nested()",
-        "class": "RequestURL",
-        "check": "_URLnested",
-        "method": "nested",
-        "rargs": "$args, $prefix"
-    },
-    "xarmod_getbaseinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarMod_getBaseInfo",
-        "args": [
-            "$modName",
-            "$type = 'module'"
-        ],
-        "namespace": "",
-        "lines": "187-188",
-        "docs": {},
-        "uses": "xarMod::getBaseInfo()",
-        "class": "xarMod",
-        "check": "getBaseInfo",
-        "method": "getBaseInfo"
-    },
-    "xarmod_getfileinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarMod_getFileInfo",
-        "args": [
-            "$modOsDir",
-            "$type = 'module'"
-        ],
-        "namespace": "",
-        "lines": "195-196",
-        "docs": {},
-        "uses": "xarMod::getFileInfo()",
-        "class": "xarMod",
-        "check": "getFileInfo",
-        "method": "getFileInfo"
-    },
-    "xarmod_getstate": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarMod_getState",
-        "args": [
-            "$modRegId",
-            "$modMode = XARMOD_MODE_PER_SITE",
-            "$type = 'module'"
-        ],
-        "namespace": "",
-        "lines": "219-220",
-        "docs": {},
-        "uses": "xarMod::getState()",
-        "class": "xarMod",
-        "check": "getState",
-        "method": "getState"
-    },
-    "xarmodapifunc": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModAPIFunc",
-        "args": [
-            "$modName",
-            "$modType = 'user'",
-            "$funcName = 'main'",
-            "$args = array()"
-        ],
-        "namespace": "",
-        "lines": "243-244",
-        "docs": {},
-        "uses": "xarMod::apiFunc()",
-        "class": "xarMod",
-        "check": "apiFunc",
-        "method": "apiFunc"
-    },
-    "xarmodapiload": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModAPILoad",
-        "args": [
-            "$modName",
-            "$modType = 'user'"
-        ],
-        "namespace": "",
-        "lines": "259-260",
-        "docs": {},
-        "uses": "xarMod::apiLoad()",
-        "class": "xarMod",
-        "check": "apiLoad",
-        "method": "apiLoad"
-    },
-    "xarmodcallhooks": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/hooks.php",
-        "name": "xarModCallHooks",
-        "args": [
-            "$hookScope",
-            "$hookAction",
-            "$hookId",
-            "$extraInfo = NULL",
-            "$callerModName = NULL",
-            "$callerItemType = ''"
-        ],
-        "namespace": "",
-        "lines": "24-27",
-        "docs": {},
-        "uses": "xarModHooks::call()",
-        "class": "xarModHooks",
-        "check": "call",
-        "method": "call"
-    },
-    "xarmoddbinfoload": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModDBInfoLoad",
-        "args": [
-            "$modName",
-            "$modDir = NULL",
-            "$type = 'module'"
-        ],
-        "namespace": "",
-        "lines": "211-212",
-        "docs": {},
-        "uses": "xarMod::loadDbInfo()",
-        "class": "xarMod",
-        "check": "loadDbInfo",
-        "method": "loadDbInfo"
-    },
-    "xarmoddelalias": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModDelAlias",
-        "args": [
-            "$alias",
-            "$modName"
-        ],
-        "namespace": "",
-        "lines": "284-284",
-        "docs": {},
-        "uses": "xarModAlias::delete()",
-        "class": "xarModAlias",
-        "check": "delete",
-        "method": "delete"
-    },
-    "xarmoddelallvars": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarModDelAllVars",
-        "args": [
-            "$modName"
-        ],
-        "namespace": "",
-        "lines": "143-143",
-        "docs": {},
-        "uses": "xarModVars::delete_all()",
-        "class": "xarModVars",
-        "check": "delete_all",
-        "method": "delete_all"
-    },
-    "xarmoddeluservar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModDelUserVar",
-        "args": [
-            "$modName",
-            "$name",
-            "$id = NULL"
-        ],
-        "namespace": "",
-        "lines": "86-86",
-        "docs": {},
-        "uses": "xarModUserVars::delete()",
-        "class": "xarModUserVars",
-        "check": "delete",
-        "method": "delete"
-    },
-    "xarmoddelvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarModDelVar",
-        "args": [
-            "$modName",
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "136-136",
-        "docs": {},
-        "uses": "xarModVars::delete()",
-        "class": "xarModVars",
-        "check": "delete",
-        "method": "delete"
-    },
-    "xarmodfunc": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModFunc",
-        "args": [
-            "$modName",
-            "$modType = 'user'",
-            "$funcName = 'main'",
-            "$args = array()"
-        ],
-        "namespace": "",
-        "lines": "235-236",
-        "docs": {},
-        "uses": "xarMod::guiFunc()",
-        "class": "xarMod",
-        "check": "guiFunc",
-        "method": "guiFunc"
-    },
-    "xarmodgetalias": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModGetAlias",
-        "args": [
-            "$alias"
-        ],
-        "namespace": "",
-        "lines": "272-272",
-        "docs": {},
-        "uses": "xarModAlias::resolve()",
-        "class": "xarModAlias",
-        "check": "resolve",
-        "method": "resolve"
-    },
-    "xarmodgetdisplayabledescription": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModGetDisplayableDescription",
-        "args": [
-            "$modName = NULL",
-            "$type = 'module'"
-        ],
-        "namespace": "",
-        "lines": "163-164",
-        "docs": {},
-        "uses": "xarMod::getDisplayDescription()",
-        "class": "xarMod",
-        "check": "getDisplayDescription",
-        "method": "getDisplayDescription"
-    },
-    "xarmodgetdisplayablename": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModGetDisplayableName",
-        "args": [
-            "$modName = NULL",
-            "$type = 'module'"
-        ],
-        "namespace": "",
-        "lines": "155-156",
-        "docs": {},
-        "uses": "xarMod::getDisplayName()",
-        "class": "xarMod",
-        "check": "getDisplayName",
-        "method": "getDisplayName"
-    },
-    "xarmodgethooklist": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/hooks.php",
-        "name": "xarModGetHookList",
-        "args": [
-            "$callerModName",
-            "$hookScope",
-            "$hookAction",
-            "$callerItemType = ''"
-        ],
-        "namespace": "",
-        "lines": "36-39",
-        "docs": {},
-        "uses": "xarModHooks::getList()",
-        "class": "xarModHooks",
-        "check": "getList",
-        "method": "getList"
-    },
-    "xarmodgetidfromname": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModGetIDFromName",
-        "args": [
-            "$modName",
-            "$type = 'module'"
-        ],
-        "namespace": "",
-        "lines": "171-172",
-        "docs": {},
-        "uses": "xarMod::getRegID()",
-        "class": "xarMod",
-        "check": "getRegID",
-        "method": "getRegID"
-    },
-    "xarmodgetinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModGetInfo",
-        "args": [
-            "$modRegId",
-            "$type = 'module'"
-        ],
-        "namespace": "",
-        "lines": "179-180",
-        "docs": {},
-        "uses": "xarMod::getInfo()",
-        "class": "xarMod",
-        "check": "getInfo",
-        "method": "getInfo"
-    },
-    "xarmodgetname": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModGetName",
-        "args": [],
-        "namespace": "",
-        "lines": "139-140",
-        "docs": {},
-        "uses": "xarMod::getName()",
-        "class": "xarMod",
-        "check": "getName",
-        "method": "getName"
-    },
-    "xarmodgetnamefromid": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModGetNameFromID",
-        "args": [
-            "$regid"
-        ],
-        "namespace": "",
-        "lines": "147-148",
-        "docs": {},
-        "uses": "xarMod::getName()",
-        "class": "xarMod",
-        "check": "getName",
-        "method": "getName"
-    },
-    "xarmodgetuservar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarModGetUserVar",
-        "args": [
-            "$modName",
-            "$name",
-            "$id = NULL",
-            "$prep = NULL"
-        ],
-        "namespace": "",
-        "lines": "150-150",
-        "docs": {},
-        "uses": "xarModUserVars::get()",
-        "class": "xarModUserVars",
-        "check": "get",
-        "method": "get"
-    },
-    "xarmodgetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarModGetVar",
-        "args": [
-            "$modName",
-            "$name",
-            "$prep = NULL"
-        ],
-        "namespace": "",
-        "lines": "122-122",
-        "docs": {},
-        "uses": "xarModVars::get()",
-        "class": "xarModVars",
-        "check": "get",
-        "method": "get"
-    },
-    "xarmodgetvarid": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModGetVarId",
-        "args": [
-            "$modName",
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "79-79",
-        "docs": {},
-        "uses": "xarModVars::getID()",
-        "class": "xarModVars",
-        "check": "getID",
-        "method": "getID"
-    },
-    "xarmodisavailable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModIsAvailable",
-        "args": [
-            "$modName",
-            "$type = 'module'"
-        ],
-        "namespace": "",
-        "lines": "227-228",
-        "docs": {},
-        "uses": "xarMod::isAvailable()",
-        "class": "xarMod",
-        "check": "isAvailable",
-        "method": "isAvailable"
-    },
-    "xarmodishooked": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/hooks.php",
-        "name": "xarModIsHooked",
-        "args": [
-            "$hookModName",
-            "$callerModName = NULL",
-            "$callerItemType = ''"
-        ],
-        "namespace": "",
-        "lines": "48-51",
-        "docs": {},
-        "uses": "xarModHooks::isHooked()",
-        "class": "xarModHooks",
-        "check": "isHooked",
-        "method": "isHooked"
-    },
-    "xarmodload": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModLoad",
-        "args": [
-            "$modName",
-            "$modType = 'user'"
-        ],
-        "namespace": "",
-        "lines": "251-252",
-        "docs": {},
-        "uses": "xarMod::load()",
-        "class": "xarMod",
-        "check": "load",
-        "method": "load"
-    },
-    "xarmodregisterhook": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/hooks.php",
-        "name": "xarModRegisterHook",
-        "args": [
-            "$hookScope",
-            "$hookAction",
-            "$hookArea",
-            "$hookModName",
-            "$hookModType",
-            "$hookModFunc"
-        ],
-        "namespace": "",
-        "lines": "60-63",
-        "docs": {},
-        "uses": "xarModHooks::register()",
-        "class": "xarModHooks",
-        "check": "register",
-        "method": "register"
-    },
-    "xarmodsetalias": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModSetAlias",
-        "args": [
-            "$alias",
-            "$modName"
-        ],
-        "namespace": "",
-        "lines": "278-278",
-        "docs": {},
-        "uses": "xarModAlias::set()",
-        "class": "xarModAlias",
-        "check": "set",
-        "method": "set"
-    },
-    "xarmodsetuservar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarModSetUserVar",
-        "args": [
-            "$modName",
-            "$name",
-            "$value",
-            "$id = NULL"
-        ],
-        "namespace": "",
-        "lines": "157-157",
-        "docs": {},
-        "uses": "xarModUserVars::set()",
-        "class": "xarModUserVars",
-        "check": "set",
-        "method": "set"
-    },
-    "xarmodsetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarModSetVar",
-        "args": [
-            "$modName",
-            "$name",
-            "$value"
-        ],
-        "namespace": "",
-        "lines": "129-129",
-        "docs": {},
-        "uses": "xarModVars::set()",
-        "class": "xarModVars",
-        "check": "set",
-        "method": "set"
-    },
-    "xarmodunregisterhook": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/hooks.php",
-        "name": "xarModUnregisterHook",
-        "args": [
-            "$hookScope",
-            "$hookAction",
-            "$hookArea",
-            "$hookModName",
-            "$hookModType",
-            "$hookModFunc"
-        ],
-        "namespace": "",
-        "lines": "72-75",
-        "docs": {},
-        "uses": "xarModHooks::unregister()",
-        "class": "xarModHooks",
-        "check": "unregister",
-        "method": "unregister"
-    },
-    "xarmodurl": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
-        "name": "xarModURL",
-        "args": [
-            "$modName = NULL",
-            "$modType = 'user'",
-            "$funcName = 'main'",
-            "$args = array()",
-            "$generateXMLURL = NULL",
-            "$fragment = NULL",
-            "$entrypoint = array()"
-        ],
-        "namespace": "",
-        "lines": "123-126",
-        "docs": {},
-        "uses": "xarController::URL()",
-        "class": "xarController",
-        "check": "URL",
-        "method": "URL"
     },
     "xarpage_checkusercaching": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/caching/output/page.php",
@@ -2176,1272 +758,17 @@
             "$cacheGroups"
         ],
         "namespace": "",
-        "lines": "429-448",
+        "lines": "430-449",
         "docs": {},
         "class": "xarPage",
         "check": "checkUserCaching"
-    },
-    "xarprivexists": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarPrivExists",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "346-349",
-        "docs": {},
-        "uses": "xarSecurity::hasPrivilege()",
-        "class": "xarSecurity",
-        "check": "hasPrivilege",
-        "method": "hasPrivilege"
-    },
-    "xarregistermask": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarRegisterMask",
-        "args": [
-            "$name",
-            "$realm",
-            "$module",
-            "$component",
-            "$instance",
-            "$level",
-            "$description = ''"
-        ],
-        "namespace": "",
-        "lines": "410-413",
-        "docs": {},
-        "uses": "xarMasks::register()",
-        "class": "xarMasks",
-        "check": "register",
-        "method": "register"
-    },
-    "xarregisterprivilege": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarRegisterPrivilege",
-        "args": [
-            "$name",
-            "$realm",
-            "$module",
-            "$component",
-            "$instance",
-            "$level",
-            "$description = ''"
-        ],
-        "namespace": "",
-        "lines": "133-136",
-        "docs": {},
-        "uses": "xarPrivileges::register()",
-        "class": "xarPrivileges",
-        "check": "register",
-        "method": "register"
-    },
-    "xarremoveinstances": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarRemoveInstances",
-        "args": [
-            "$module"
-        ],
-        "namespace": "",
-        "lines": "217-220",
-        "docs": {},
-        "uses": "xarPrivileges::removeInstances()",
-        "class": "xarPrivileges",
-        "check": "removeInstances",
-        "method": "removeInstances"
-    },
-    "xarremovemasks": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarRemoveMasks",
-        "args": [
-            "$module"
-        ],
-        "namespace": "",
-        "lines": "438-441",
-        "docs": {},
-        "uses": "xarMasks::removemasks()",
-        "class": "xarMasks",
-        "check": "removemasks",
-        "method": "removemasks"
-    },
-    "xarremoveprivileges": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarRemovePrivileges",
-        "args": [
-            "$module"
-        ],
-        "namespace": "",
-        "lines": "180-183",
-        "docs": {},
-        "uses": "xarPrivileges::removeModule()",
-        "class": "xarPrivileges",
-        "check": "removeModule",
-        "method": "removeModule"
-    },
-    "xarremoverolememberbyid": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarRemoveRoleMemberByID",
-        "args": [
-            "$childId",
-            "$parentId"
-        ],
-        "namespace": "",
-        "lines": "112-115",
-        "docs": {},
-        "uses": "xarRoles::removeMemberByID()",
-        "class": "xarRoles",
-        "check": "removeMemberByID",
-        "method": "removeMemberByID"
-    },
-    "xarrequestgetinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarRequestGetInfo",
-        "args": [],
-        "namespace": "",
-        "lines": "230-230",
-        "docs": {},
-        "uses": "arController::getRequest()->getInfo()",
-        "class": "xarRequest",
-        "check": "GetInfo",
-        "method": "getInfo",
-        "margs": [
-            "$url = ''"
-        ]
-    },
-    "xarrequestgetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarRequestGetVar",
-        "args": [
-            "$name",
-            "$allowOnlyMethod = NULL"
-        ],
-        "namespace": "",
-        "lines": "223-223",
-        "docs": {},
-        "uses": "xarController::getVar()",
-        "class": "xarController",
-        "check": "getVar",
-        "method": "getVar"
-    },
-    "xarrequestislocalreferer": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarRequestIsLocalReferer",
-        "args": [],
-        "namespace": "",
-        "lines": "237-237",
-        "docs": {},
-        "uses": "xarController::isLocalReferer()",
-        "class": "xarController",
-        "check": "isLocalReferer",
-        "method": "isLocalReferer"
-    },
-    "xarresponseredirect": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarResponseRedirect",
-        "args": [
-            "$redirectURL"
-        ],
-        "namespace": "",
-        "lines": "244-244",
-        "docs": {},
-        "uses": "xarController::redirect()",
-        "class": "xarController",
-        "check": "redirect",
-        "method": "redirect"
-    },
-    "xarreturnprivilege": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarReturnPrivilege",
-        "args": [
-            "$pid",
-            "$name",
-            "$realm",
-            "$module",
-            "$component",
-            "$instance",
-            "$level"
-        ],
-        "namespace": "",
-        "lines": "318-321",
-        "docs": {},
-        "uses": "xarPrivileges::external()",
-        "class": "xarPrivileges",
-        "check": "external",
-        "method": "external"
-    },
-    "xarsecconfirmauthkey": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarSecConfirmAuthKey",
-        "args": [
-            "$modName = NULL",
-            "$authIdVarName = 'authid'",
-            "$catch = false"
-        ],
-        "namespace": "",
-        "lines": "468-471",
-        "docs": {},
-        "uses": "xarSec::confirmAuthKey()",
-        "class": "xarSec",
-        "check": "confirmAuthKey",
-        "method": "confirmAuthKey"
-    },
-    "xarsecgenauthkey": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarSecGenAuthKey",
-        "args": [
-            "$modName = NULL"
-        ],
-        "namespace": "",
-        "lines": "452-455",
-        "docs": {},
-        "uses": "xarSec::genAuthKey()",
-        "class": "xarSec",
-        "check": "genAuthKey",
-        "method": "genAuthKey"
-    },
-    "xarsecuritycheck": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarSecurityCheck",
-        "args": [
-            "$mask",
-            "$showException = 1",
-            "$component = ''",
-            "$instance = ''",
-            "$module = ''",
-            "$role = ''",
-            "$pnrealm = 0",
-            "$pnlevel = 0"
-        ],
-        "namespace": "",
-        "lines": "384-394",
-        "docs": {},
-        "uses": "xarSecurity::check()",
-        "class": "xarSecurity",
-        "check": "check",
-        "method": "check"
-    },
-    "xarsecuritylevel": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarSecurityLevel",
-        "args": [
-            "$levelname"
-        ],
-        "namespace": "",
-        "lines": "333-336",
-        "docs": {},
-        "uses": "xarSecurity::getLevel()",
-        "class": "xarSecurity",
-        "check": "getLevel",
-        "method": "getLevel"
-    },
-    "xarservergetbaseuri": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarServerGetBaseURI",
-        "args": [],
-        "namespace": "",
-        "lines": "188-188",
-        "docs": {},
-        "uses": "xarServer::getBaseURI()",
-        "class": "xarServer",
-        "check": "getBaseURI",
-        "method": "getBaseURI"
-    },
-    "xarservergetbaseurl": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarServerGetBaseURL",
-        "args": [],
-        "namespace": "",
-        "lines": "209-209",
-        "docs": {},
-        "uses": "xarServer::getBaseURL()",
-        "class": "xarServer",
-        "check": "getBaseURL",
-        "method": "getBaseURL"
-    },
-    "xarservergetcurrenturl": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarServerGetCurrentURL",
-        "args": [
-            "$args = array()",
-            "$generateXMLURL = NULL",
-            "$target = NULL"
-        ],
-        "namespace": "",
-        "lines": "216-216",
-        "docs": {},
-        "uses": "xarServer::getCurrentURL()",
-        "class": "xarServer",
-        "check": "getCurrentURL",
-        "method": "getCurrentURL"
-    },
-    "xarservergethost": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarServerGetHost",
-        "args": [],
-        "namespace": "",
-        "lines": "195-195",
-        "docs": {},
-        "uses": "xarServer::getHost()",
-        "class": "xarServer",
-        "check": "getHost",
-        "method": "getHost"
-    },
-    "xarservergetprotocol": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarServerGetProtocol",
-        "args": [],
-        "namespace": "",
-        "lines": "202-202",
-        "docs": {},
-        "uses": "xarServer::getProtocol()",
-        "class": "xarServer",
-        "check": "getProtocol",
-        "method": "getProtocol"
-    },
-    "xarservergetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarServerGetVar",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "181-181",
-        "docs": {},
-        "uses": "xarServer::getVar()",
-        "class": "xarServer",
-        "check": "getVar",
-        "method": "getVar"
-    },
-    "xarsession_init": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/sessions.php",
-        "name": "xarSession_init",
-        "args": [
-            "&$args"
-        ],
-        "namespace": "",
-        "lines": "46-46",
-        "docs": {},
-        "uses": "xarSession::init()",
-        "class": "xarSession",
-        "check": "init",
-        "method": "init"
-    },
-    "xarsession_setuserinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/sessions.php",
-        "name": "xarSession_setUserInfo",
-        "args": [
-            "$userId",
-            "$rememberSession"
-        ],
-        "namespace": "",
-        "lines": "79-80",
-        "docs": {},
-        "uses": "xarSession::setUserInfo()",
-        "class": "xarSession",
-        "check": "setUserInfo",
-        "method": "setUserInfo"
-    },
-    "xarsessiondelvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/sessions.php",
-        "name": "xarSessionDelVar",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "64-64",
-        "docs": {},
-        "uses": "xarSession::delVar()",
-        "class": "xarSession",
-        "check": "delVar",
-        "method": "delVar"
-    },
-    "xarsessiongetid": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/sessions.php",
-        "name": "xarSessionGetId",
-        "args": [],
-        "namespace": "",
-        "lines": "70-70",
-        "docs": {},
-        "uses": "xarSession::getId()",
-        "class": "xarSession",
-        "check": "getId",
-        "method": "getId"
-    },
-    "xarsessiongetsecuritylevel": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/sessions.php",
-        "name": "xarSessionGetSecurityLevel",
-        "args": [],
-        "namespace": "",
-        "lines": "26-29",
-        "docs": {},
-        "uses": "xarSession::getSecurityLevel()",
-        "class": "xarSession",
-        "check": "getSecurityLevel",
-        "method": "getSecurityLevel"
-    },
-    "xarsessiongetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/sessions.php",
-        "name": "xarSessionGetVar",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "52-52",
-        "docs": {},
-        "uses": "xarSession::getVar()",
-        "class": "xarSession",
-        "check": "getVar",
-        "method": "getVar"
-    },
-    "xarsessionsetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/sessions.php",
-        "name": "xarSessionSetVar",
-        "args": [
-            "$name",
-            "$value"
-        ],
-        "namespace": "",
-        "lines": "58-58",
-        "docs": {},
-        "uses": "xarSession::setVar()",
-        "class": "xarSession",
-        "check": "setVar",
-        "method": "setVar"
-    },
-    "xartheme_getbaseinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/themes.php",
-        "name": "xarTheme_getBaseInfo",
-        "args": [
-            "$themeName"
-        ],
-        "namespace": "",
-        "lines": "84-84",
-        "docs": {},
-        "uses": "xarTheme::getBaseInfo()",
-        "class": "xarTheme",
-        "check": "getBaseInfo",
-        "method": "getBaseInfo"
-    },
-    "xartheme_getfileinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/themes.php",
-        "name": "xarTheme_getFileInfo",
-        "args": [
-            "$themeOsDir"
-        ],
-        "namespace": "",
-        "lines": "74-74",
-        "docs": {},
-        "uses": "xarTheme::getFileInfo()",
-        "class": "xarTheme",
-        "check": "getFileInfo",
-        "method": "getFileInfo"
-    },
-    "xartheme_getvarsbytheme": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/themes.php",
-        "name": "xarTheme_getVarsByTheme",
-        "args": [
-            "$themeName"
-        ],
-        "namespace": "",
-        "lines": "94-97",
-        "docs": {},
-        "uses": "xarTheme::getVarsByTheme()",
-        "class": "xarTheme",
-        "check": "getVarsByTheme",
-        "method": "getVarsByTheme"
-    },
-    "xarthemegetidfromname": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/themes.php",
-        "name": "xarThemeGetIDFromName",
-        "args": [
-            "$themeName",
-            "$id = 'regid'"
-        ],
-        "namespace": "",
-        "lines": "38-41",
-        "docs": {},
-        "uses": "xarTheme::getIDFromName()",
-        "class": "xarTheme",
-        "check": "getIDFromName",
-        "method": "getIDFromName"
-    },
-    "xarthemegetinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/themes.php",
-        "name": "xarThemeGetInfo",
-        "args": [
-            "$regId"
-        ],
-        "namespace": "",
-        "lines": "51-51",
-        "docs": {},
-        "uses": "xarTheme::getInfo()",
-        "class": "xarTheme",
-        "check": "getInfo",
-        "method": "getInfo"
-    },
-    "xarthemegetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/themes.php",
-        "name": "xarThemeGetVar",
-        "args": [
-            "$themeName",
-            "$name",
-            "$prep = NULL"
-        ],
-        "namespace": "",
-        "lines": "23-23",
-        "docs": {},
-        "uses": "xarThemeVars::get()",
-        "class": "xarThemeVars",
-        "check": "get",
-        "method": "get"
-    },
-    "xarthemeisavailable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/themes.php",
-        "name": "xarThemeIsAvailable",
-        "args": [
-            "$themeName"
-        ],
-        "namespace": "",
-        "lines": "61-61",
-        "docs": {},
-        "uses": "xarTheme::isAvailable()",
-        "class": "xarTheme",
-        "check": "isAvailable",
-        "method": "isAvailable"
-    },
-    "xartpl__executefromfile": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl__executeFromFile",
-        "args": [
-            "$sourceFileName",
-            "$tplData",
-            "$tplType = 'module'"
-        ],
-        "namespace": "",
-        "lines": "311-314",
-        "docs": {},
-        "uses": "xarTpl::executeFromFile()",
-        "class": "xarTpl",
-        "check": "executeFromFile",
-        "method": "executeFromFile"
-    },
-    "xartpl_includemoduletemplate": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl_includeModuleTemplate",
-        "args": [
-            "$modName",
-            "$templateName",
-            "$tplData",
-            "$propertyName = ''"
-        ],
-        "namespace": "",
-        "lines": "296-299",
-        "docs": {},
-        "uses": "xarTpl::includeModuleTemplate()",
-        "class": "xarTpl",
-        "check": "includeModuleTemplate",
-        "method": "includeModuleTemplate"
-    },
-    "xartpl_includethemetemplate": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl_includeThemeTemplate",
-        "args": [
-            "$templateName",
-            "$tplData"
-        ],
-        "namespace": "",
-        "lines": "284-287",
-        "docs": {},
-        "uses": "xarTpl::includeThemeTemplate()",
-        "class": "xarTpl",
-        "check": "includeThemeTemplate",
-        "method": "includeThemeTemplate"
-    },
-    "xartpl_init": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl_init",
-        "args": [
-            "&$args"
-        ],
-        "namespace": "",
-        "lines": "20-23",
-        "docs": {},
-        "uses": "xarTpl::init()",
-        "class": "xarTpl",
-        "check": "init",
-        "method": "init"
-    },
-    "xartpl_modifyheadercontent": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl_modifyHeaderContent",
-        "args": [
-            "$sourceFileName",
-            "&$tplOutput"
-        ],
-        "namespace": "",
-        "lines": "368-371",
-        "docs": {},
-        "uses": "xarTpl::modifyHeaderContent()",
-        "class": "xarTpl",
-        "check": "modifyHeaderContent",
-        "method": "modifyHeaderContent"
-    },
-    "xartpl_outputphpcommentblockintemplates": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl_outputPHPCommentBlockInTemplates",
-        "args": [],
-        "namespace": "",
-        "lines": "344-347",
-        "docs": {},
-        "uses": "xarTpl::outputPHPCommentBlockInTemplates()",
-        "class": "xarTpl",
-        "check": "outputPHPCommentBlockInTemplates",
-        "method": "outputPHPCommentBlockInTemplates"
-    },
-    "xartpl_outputtemplate": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl_outputTemplate",
-        "args": [
-            "$sourceFileName",
-            "&$tplOutput"
-        ],
-        "namespace": "",
-        "lines": "332-335",
-        "docs": {},
-        "uses": "xarTpl::outputTemplate()",
-        "class": "xarTpl",
-        "check": "outputTemplate",
-        "method": "outputTemplate"
-    },
-    "xartpl_outputtemplatefilenames": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl_outputTemplateFilenames",
-        "args": [],
-        "namespace": "",
-        "lines": "356-359",
-        "docs": {},
-        "uses": "xarTpl::outputTemplateFilenames()",
-        "class": "xarTpl",
-        "check": "outputTemplateFilenames",
-        "method": "outputTemplateFilenames"
-    },
-    "xartpl_renderblockbox": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl_renderBlockBox",
-        "args": [
-            "$blockInfo",
-            "$templateName = NULL"
-        ],
-        "namespace": "",
-        "lines": "272-275",
-        "docs": {},
-        "uses": "xarTpl::renderBlockBox()",
-        "class": "xarTpl",
-        "check": "renderBlockBox",
-        "method": "renderBlockBox"
-    },
-    "xartpl_renderpage": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTpl_renderPage",
-        "args": [
-            "$mainModuleOutput",
-            "$pageTemplate = NULL"
-        ],
-        "namespace": "",
-        "lines": "260-263",
-        "docs": {},
-        "uses": "xarTpl::renderPage()",
-        "class": "xarTpl",
-        "check": "renderPage",
-        "method": "renderPage"
-    },
-    "xartplblock": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplBlock",
-        "args": [
-            "$modName",
-            "$blockType",
-            "$tplData = array()",
-            "$tplName = NULL",
-            "$tplBase = NULL"
-        ],
-        "namespace": "",
-        "lines": "170-173",
-        "docs": {},
-        "uses": "xarTpl::block()",
-        "class": "xarTpl",
-        "check": "block",
-        "method": "block"
-    },
-    "xartplcompilestring": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplCompileString",
-        "args": [
-            "$templateSource"
-        ],
-        "namespace": "",
-        "lines": "248-251",
-        "docs": {},
-        "uses": "xarTpl::compileString()",
-        "class": "xarTpl",
-        "check": "compileString",
-        "method": "compileString"
-    },
-    "xartplfile": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplFile",
-        "args": [
-            "$fileName",
-            "&$tplData"
-        ],
-        "namespace": "",
-        "lines": "236-239",
-        "docs": {},
-        "uses": "xarTpl::file()",
-        "class": "xarTpl",
-        "check": "file",
-        "method": "file"
-    },
-    "xartplgetdoctype": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplGetDoctype",
-        "args": [],
-        "namespace": "",
-        "lines": "110-113",
-        "docs": {},
-        "uses": "xarTpl::getDoctype()",
-        "class": "xarTpl",
-        "check": "getDoctype",
-        "method": "getDoctype"
-    },
-    "xartplgetimage": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplGetImage",
-        "args": [
-            "$modImage",
-            "$modName = NULL"
-        ],
-        "namespace": "",
-        "lines": "212-215",
-        "docs": {},
-        "uses": "xarTpl::getImage()",
-        "class": "xarTpl",
-        "check": "getImage",
-        "method": "getImage"
-    },
-    "xartplgetpager": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarTplGetPager",
-        "args": [
-            "$startNum",
-            "$total",
-            "$urltemplate",
-            "$itemsPerPage = 10",
-            "$blockOptions = array()",
-            "$template = 'default'",
-            "$tplmodule = 'base'"
-        ],
-        "namespace": "",
-        "lines": "386-390",
-        "docs": {},
-        "uses": "xarTplPager::getPager()",
-        "class": "xarTplPager",
-        "check": "getPager",
-        "method": "getPager"
-    },
-    "xartplgetpagetemplatename": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplGetPageTemplateName",
-        "args": [],
-        "namespace": "",
-        "lines": "86-89",
-        "docs": {},
-        "uses": "xarTpl::getPageTemplateName()",
-        "class": "xarTpl",
-        "check": "getPageTemplateName",
-        "method": "getPageTemplateName"
-    },
-    "xartplgetpagetitle": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplGetPageTitle",
-        "args": [],
-        "namespace": "",
-        "lines": "146-149",
-        "docs": {},
-        "uses": "xarTpl::getPageTitle()",
-        "class": "xarTpl",
-        "check": "getPageTitle",
-        "method": "getPageTitle"
-    },
-    "xartplgetthemedir": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplGetThemeDir",
-        "args": [
-            "$theme = null"
-        ],
-        "namespace": "",
-        "lines": "74-77",
-        "docs": {},
-        "uses": "xarTpl::getThemeDir()",
-        "class": "xarTpl",
-        "check": "getThemeDir",
-        "method": "getThemeDir"
-    },
-    "xartplgetthemename": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplGetThemeName",
-        "args": [],
-        "namespace": "",
-        "lines": "32-35",
-        "docs": {},
-        "uses": "xarTpl::getThemeName()",
-        "class": "xarTpl",
-        "check": "getThemeName",
-        "method": "getThemeName"
-    },
-    "xartplmodule": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplModule",
-        "args": [
-            "$modName",
-            "$modType",
-            "$funcName",
-            "$tplData = array()",
-            "$templateName = NULL"
-        ],
-        "namespace": "",
-        "lines": "158-161",
-        "docs": {},
-        "uses": "xarTpl::module()",
-        "class": "xarTpl",
-        "check": "module",
-        "method": "module"
-    },
-    "xartplobject": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplObject",
-        "args": [
-            "$modName",
-            "$objectName",
-            "$tplType = 'showdisplay'",
-            "$tplData = array()",
-            "$tplBase = NULL"
-        ],
-        "namespace": "",
-        "lines": "194-197",
-        "docs": {},
-        "uses": "xarTpl::object()",
-        "class": "xarTpl",
-        "check": "object",
-        "method": "object"
-    },
-    "xartplpagerinfo": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
-        "name": "xarTplPagerInfo",
-        "args": [
-            "$currentItem",
-            "$total",
-            "$itemsPerPage = 10",
-            "$blockOptions = 10"
-        ],
-        "namespace": "",
-        "lines": "375-379",
-        "docs": {},
-        "uses": "xarTplPager::getInfo()",
-        "class": "xarTplPager",
-        "check": "getInfo",
-        "method": "getInfo"
-    },
-    "xartplproperty": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplProperty",
-        "args": [
-            "$modName",
-            "$propertyName",
-            "$tplType = 'showoutput'",
-            "$tplData = array()",
-            "$tplBase = NULL"
-        ],
-        "namespace": "",
-        "lines": "182-185",
-        "docs": {},
-        "uses": "xarTpl::property()",
-        "class": "xarTpl",
-        "check": "property",
-        "method": "property"
-    },
-    "xartplsetdoctype": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplSetDoctype",
-        "args": [
-            "$doctypeName"
-        ],
-        "namespace": "",
-        "lines": "122-125",
-        "docs": {},
-        "uses": "xarTpl::setDoctype()",
-        "class": "xarTpl",
-        "check": "setDoctype",
-        "method": "setDoctype"
-    },
-    "xartplsetpagetemplatename": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplSetPageTemplateName",
-        "args": [
-            "$templateName"
-        ],
-        "namespace": "",
-        "lines": "98-101",
-        "docs": {},
-        "uses": "xarTpl::setPageTemplateName()",
-        "class": "xarTpl",
-        "check": "setPageTemplateName",
-        "method": "setPageTemplateName"
-    },
-    "xartplsetpagetitle": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplSetPageTitle",
-        "args": [
-            "$title = NULL",
-            "$module = NULL"
-        ],
-        "namespace": "",
-        "lines": "134-137",
-        "docs": {},
-        "uses": "xarTpl::setPageTitle()",
-        "class": "xarTpl",
-        "check": "setPageTitle",
-        "method": "setPageTitle"
-    },
-    "xartplsetthemedir": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplSetThemeDir",
-        "args": [
-            "$themeDir"
-        ],
-        "namespace": "",
-        "lines": "56-59",
-        "docs": {},
-        "uses": "xarTpl::setThemeDir()",
-        "class": "xarTpl",
-        "check": "setThemeDir",
-        "method": "setThemeDir"
-    },
-    "xartplsetthemename": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplSetThemeName",
-        "args": [
-            "$themeName"
-        ],
-        "namespace": "",
-        "lines": "44-47",
-        "docs": {},
-        "uses": "xarTpl::setThemeName()",
-        "class": "xarTpl",
-        "check": "setThemeName",
-        "method": "setThemeName"
-    },
-    "xartplstring": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/templates.php",
-        "name": "xarTplString",
-        "args": [
-            "$templateCode",
-            "&$tplData"
-        ],
-        "namespace": "",
-        "lines": "224-227",
-        "docs": {},
-        "uses": "xarTpl::string()",
-        "class": "xarTpl",
-        "check": "string",
-        "method": "string"
-    },
-    "xartree": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarTree",
-        "args": [],
-        "namespace": "",
-        "lines": "292-299",
-        "docs": {},
-        "uses": "xarTreeRenderer"
-    },
-    "xarufindrole": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarUFindRole",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "248-248",
-        "docs": {},
-        "uses": "xarRoles::ufindRole()",
-        "class": "xarRoles",
-        "check": "ufindRole",
-        "method": "ufindRole"
-    },
-    "xarunregistermask": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
-        "name": "xarUnregisterMask",
-        "args": [
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "423-426",
-        "docs": {},
-        "uses": "xarMasks::unregister()",
-        "class": "xarMasks",
-        "check": "unregister",
-        "method": "unregister"
-    },
-    "xarusercomparepasswords": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserComparePasswords",
-        "args": [
-            "$givenPassword",
-            "$realPassword",
-            "$userName",
-            "$cryptSalt = ''"
-        ],
-        "namespace": "",
-        "lines": "114-117",
-        "docs": {},
-        "uses": "xarUser::comparePasswords()",
-        "class": "xarUser",
-        "check": "comparePasswords",
-        "method": "comparePasswords"
-    },
-    "xarusergetnavigationlocale": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserGetNavigationLocale",
-        "args": [],
-        "namespace": "",
-        "lines": "78-81",
-        "docs": {},
-        "uses": "xarUser::getNavigationLocale()",
-        "class": "xarUser",
-        "check": "getNavigationLocale",
-        "method": "getNavigationLocale"
-    },
-    "xarusergetnavigationthemename": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserGetNavigationThemeName",
-        "args": [],
-        "namespace": "",
-        "lines": "60-63",
-        "docs": {},
-        "uses": "xarUser::getNavigationThemeName()",
-        "class": "xarUser",
-        "check": "getNavigationThemeName",
-        "method": "getNavigationThemeName"
-    },
-    "xarusergetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserGetVar",
-        "args": [
-            "$name",
-            "$userId = NULL"
-        ],
-        "namespace": "",
-        "lines": "96-99",
-        "docs": {},
-        "uses": "xarUser::getVar()",
-        "class": "xarUser",
-        "check": "getVar",
-        "method": "getVar"
-    },
-    "xaruserisloggedin": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserIsLoggedIn",
-        "args": [],
-        "namespace": "",
-        "lines": "51-54",
-        "docs": {},
-        "uses": "xarUser::isLoggedIn()",
-        "class": "xarUser",
-        "check": "isLoggedIn",
-        "method": "isLoggedIn"
-    },
-    "xaruserlogin": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserLogIn",
-        "args": [
-            "$userName",
-            "$password",
-            "$rememberMe = 0"
-        ],
-        "namespace": "",
-        "lines": "33-36",
-        "docs": {},
-        "uses": "xarUser::logIn()",
-        "class": "xarUser",
-        "check": "logIn",
-        "method": "logIn"
-    },
-    "xaruserlogout": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserLogOut",
-        "args": [],
-        "namespace": "",
-        "lines": "42-45",
-        "docs": {},
-        "uses": "xarUser::logOut()",
-        "class": "xarUser",
-        "check": "logOut",
-        "method": "logOut"
-    },
-    "xarusersetnavigationlocale": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserSetNavigationLocale",
-        "args": [
-            "$locale"
-        ],
-        "namespace": "",
-        "lines": "87-90",
-        "docs": {},
-        "uses": "xarUser::setNavigationLocale()",
-        "class": "xarUser",
-        "check": "setNavigationLocale",
-        "method": "setNavigationLocale"
-    },
-    "xarusersetnavigationthemename": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserSetNavigationThemeName",
-        "args": [
-            "$themeName"
-        ],
-        "namespace": "",
-        "lines": "69-72",
-        "docs": {},
-        "uses": "xarUser::setNavigationThemeName()",
-        "class": "xarUser",
-        "check": "setNavigationThemeName",
-        "method": "setNavigationThemeName"
-    },
-    "xarusersetvar": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
-        "name": "xarUserSetVar",
-        "args": [
-            "$name",
-            "$value",
-            "$userId = null"
-        ],
-        "namespace": "",
-        "lines": "105-108",
-        "docs": {},
-        "uses": "xarUser::setVar()",
-        "class": "xarUser",
-        "check": "setVar",
-        "method": "setVar"
-    },
-    "xarvar_init": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
-        "name": "xarVar_init",
-        "args": [
-            "&$args"
-        ],
-        "namespace": "",
-        "lines": "43-46",
-        "docs": {},
-        "uses": "xarVar::init()",
-        "class": "xarVar",
-        "check": "init",
-        "method": "init"
-    },
-    "xarvarbatchfetch": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
-        "name": "xarVarBatchFetch",
-        "args": [],
-        "namespace": "",
-        "lines": "53-56",
-        "docs": {},
-        "uses": "xarVar::batchFetch()",
-        "class": "xarVar",
-        "check": "batchFetch",
-        "method": "batchFetch"
-    },
-    "xarvardelcached": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
-        "name": "xarVarDelCached",
-        "args": [
-            "$scope",
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "126-126",
-        "docs": {},
-        "uses": "xarVar::delCached()",
-        "class": "xarVar",
-        "check": "delCached",
-        "method": "delCached"
-    },
-    "xarvarfetch": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
-        "name": "xarVarFetch",
-        "args": [
-            "$name",
-            "$validation",
-            "&$value",
-            "$defaultValue = NULL",
-            "$flags = xarVar::GET_OR_POST",
-            "$prep = xarVar::PREP_FOR_NOTHING"
-        ],
-        "namespace": "",
-        "lines": "63-66",
-        "docs": {},
-        "uses": "xarVar::fetch()",
-        "class": "xarVar",
-        "check": "fetch",
-        "method": "fetch"
-    },
-    "xarvarflushcached": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
-        "name": "xarVarFlushCached",
-        "args": [
-            "$scope"
-        ],
-        "namespace": "",
-        "lines": "132-132",
-        "docs": {},
-        "uses": "xarVar::flushCached()",
-        "class": "xarVar",
-        "check": "flushCached",
-        "method": "flushCached"
-    },
-    "xarvargetcached": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
-        "name": "xarVarGetCached",
-        "args": [
-            "$scope",
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "114-114",
-        "docs": {},
-        "uses": "xarVar::getCached()",
-        "class": "xarVar",
-        "check": "getCached",
-        "method": "getCached"
-    },
-    "xarvariscached": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
-        "name": "xarVarIsCached",
-        "args": [
-            "$scope",
-            "$name"
-        ],
-        "namespace": "",
-        "lines": "108-108",
-        "docs": {},
-        "uses": "xarVar::isCached()",
-        "class": "xarVar",
-        "check": "isCached",
-        "method": "isCached"
     },
     "xarvarprepemaildisplay": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepEmailDisplay",
         "args": [],
         "namespace": "",
-        "lines": "616-649",
+        "lines": "635-668",
         "docs": {},
         "class": "xarVar",
         "check": "PrepEmailDisplay",
@@ -3455,7 +782,7 @@
         "name": "xarVarPrepForDisplay",
         "args": [],
         "namespace": "",
-        "lines": "481-510",
+        "lines": "495-524",
         "docs": {},
         "class": "xarVar",
         "check": "PrepForDisplay",
@@ -3469,7 +796,7 @@
         "name": "xarVarPrepForOS",
         "args": [],
         "namespace": "",
-        "lines": "666-689",
+        "lines": "685-708",
         "docs": {},
         "class": "xarVar",
         "check": "PrepForOS",
@@ -3483,7 +810,7 @@
         "name": "xarVarPrepHTMLDisplay",
         "args": [],
         "namespace": "",
-        "lines": "523-593",
+        "lines": "537-610",
         "docs": {},
         "class": "xarVar",
         "check": "PrepHTMLDisplay",
@@ -3499,42 +826,9 @@
             "$matches"
         ],
         "namespace": "",
-        "lines": "595-603",
+        "lines": "612-622",
         "docs": null,
         "class": "xarVar",
         "check": "PrepHTMLDisplay__callback"
-    },
-    "xarvarsetcached": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
-        "name": "xarVarSetCached",
-        "args": [
-            "$scope",
-            "$name",
-            "$value"
-        ],
-        "namespace": "",
-        "lines": "120-120",
-        "docs": {},
-        "uses": "xarVar::setCached()",
-        "class": "xarVar",
-        "check": "setCached",
-        "method": "setCached"
-    },
-    "xarvarvalidate": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
-        "name": "xarVarValidate",
-        "args": [
-            "$validation",
-            "&$subject",
-            "$supress = false",
-            "$name = ''"
-        ],
-        "namespace": "",
-        "lines": "73-76",
-        "docs": {},
-        "uses": "xarVar::validate()",
-        "class": "xarVar",
-        "check": "validate",
-        "method": "validate"
     }
 }

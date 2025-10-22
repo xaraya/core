@@ -905,7 +905,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         //        $this->hookvalues['module'] = $this->mod()->getName($this->moduleid);
         //        $this->hookvalues['itemtype'] = $this->itemtype;
         //        $this->hookvalues['itemid'] = $this->itemid;
-        // CHECKME: is this sufficient in most cases, or do we need an explicit xarController::URL() ?
+        // CHECKME: is this sufficient in most cases, or do we need an explicit $this->ctl()->getActionURL() ?
         $this->hookvalues['returnurl'] = $this->ctl()->getCurrentURL();
 
         // Use the standard method to call hooks + pass context
@@ -1218,7 +1218,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         // check if we have specific access rules for this level
         if (!empty($access_rules) && is_array($access_rules) && !empty($access_rules[$level])) {
             $anonid = $this->config()->getVar('Site.User.AnonymousUID');
-            if (empty($roleid) && !empty(xarSession::getAnonId()) && $this->user()->isLoggedIn()) {
+            if (empty($roleid) && !empty($this->session()->getAnonId()) && $this->user()->isLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
                 $grouplist = xarCache::getParents();
             } elseif (!empty($roleid) && $roleid != $anonid) {

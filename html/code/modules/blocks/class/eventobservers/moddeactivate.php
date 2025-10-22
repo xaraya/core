@@ -13,6 +13,8 @@
  */
 
 sys::import('xaraya.structures.events.observer');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * ModDeactivate Subject Observer
@@ -32,7 +34,7 @@ class BlocksModDeactivateObserver extends EventObserver implements ixarEventObse
             }
         }
         // refresh block types
-        xarMod::apiFunc(
+        xar::mod()->apiFunc(
             'blocks',
             'types',
             'refresh',

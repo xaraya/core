@@ -63,7 +63,7 @@ class xarConfigVars extends xarVars implements IxarVars
         $bindvars = [null, $name, $serialvalue];
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
-        xarCoreCache::setCached(self::$KEY, $name, $value);
+        xar::var()->setCached(self::$KEY, $name, $value);
 
         return true;
     }
@@ -107,8 +107,8 @@ class xarConfigVars extends xarVars implements IxarVars
         }
 
         // From the cache
-        if (xarCoreCache::isCached(self::$KEY, $name)) {
-            $value = xarCoreCache::getCached(self::$KEY, $name);
+        if (xar::var()->isCached(self::$KEY, $name)) {
+            $value = xar::var()->getCached(self::$KEY, $name);
             return $value;
         }
 
@@ -129,7 +129,7 @@ class xarConfigVars extends xarVars implements IxarVars
             // Found it, retrieve and cache it
             $value = $result->get(2);
             $value = unserialize((string) $value);
-            xarCoreCache::setCached(self::$KEY, $result->getString(1), $value);
+            xar::var()->setCached(self::$KEY, $result->getString(1), $value);
             $result->close();
             return $value;
         }
@@ -157,7 +157,7 @@ class xarConfigVars extends xarVars implements IxarVars
         // We want to make the next two statements atomic
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate([$name]);
-        xarCoreCache::delCached(self::$KEY, $name);
+        xar::var()->delCached(self::$KEY, $name);
 
         return true;
     }
@@ -171,7 +171,7 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     private static function preload()
     {
-        if (xarCoreCache::hasPreload(self::$KEY) && xarCoreCache::loadCached(self::$KEY)) {
+        if (xar::var()->hasPreload(self::$KEY) && xar::var()->loadCached(self::$KEY)) {
             self::$preloaded = true;
             return true;
         }
@@ -192,12 +192,12 @@ class xarConfigVars extends xarVars implements IxarVars
 
             $val = $result->getString('value') ?? 's:0:""';
             $newval = unserialize($val);
-            xarCoreCache::setCached(self::$KEY, $result->getString('name'), $newval);
+            xar::var()->setCached(self::$KEY, $result->getString('name'), $newval);
         }
         $result->close();
 
-        if (xarCoreCache::hasPreload(self::$KEY)) {
-            xarCoreCache::saveCached(self::$KEY);
+        if (xar::var()->hasPreload(self::$KEY)) {
+            xar::var()->saveCached(self::$KEY);
         }
 
         self::$preloaded = true;
@@ -211,8 +211,8 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     public static function cache($scope = null)
     {
-        if (xarCoreCache::hasPreload(self::$KEY)) {
-            xarCoreCache::saveCached(self::$KEY);
+        if (xar::var()->hasPreload(self::$KEY)) {
+            xar::var()->saveCached(self::$KEY);
         }
     }
 }

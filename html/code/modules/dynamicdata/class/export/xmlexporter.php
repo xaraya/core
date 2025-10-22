@@ -17,10 +17,11 @@ namespace Xaraya\DataObject\Export;
 use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
-use xarVar;
 use sys;
 
 sys::import('modules.dynamicdata.class.export.generic');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * DataObject XML Exporter
@@ -52,7 +53,7 @@ class XmlExporter extends DataObjectExporter
             if (is_array($objectdef->properties[$name]->value)) {
                 $xml .= "  <$name>\n";
                 foreach ($objectdef->$name as $field => $value) {
-                    $xml .= "    <$field>" . xarVar::prepForDisplay($value) . "</$field>\n";
+                    $xml .= "    <$field>" . xar::var()->prep($value) . "</$field>\n";
                 }
                 $xml .= "  </$name>\n";
             } elseif (in_array($name, ['access', 'config', 'sources', 'relations', 'objects', 'category'])) {
@@ -61,7 +62,7 @@ class XmlExporter extends DataObjectExporter
                 $xml .= "  <$name>" . $value . "</$name>\n";
             } else {
                 $value = $objectdef->properties[$name]->value;
-                $xml .= "  <$name>" . xarVar::prepForDisplay($value) . "</$name>\n";
+                $xml .= "  <$name>" . xar::var()->prep($value) . "</$name>\n";
             }
         }
         $xml = $this->addProperties($xml);
@@ -88,16 +89,16 @@ class XmlExporter extends DataObjectExporter
                 $val = $properties[$name][$key];
                 if ($key == 'type') {
                     // replace numeric property type with text version
-                    $xml .= "      <$key>" . xarVar::prepForDisplay($this->proptypes[$val]['name']) . "</$key>\n";
+                    $xml .= "      <$key>" . xar::var()->prep($this->proptypes[$val]['name']) . "</$key>\n";
                 } elseif ($key == 'source') {
                     // replace local table prefix with default xar_* one
                     $val = preg_replace("/^{$this->prefix}/", 'xar_', $val);
-                    $xml .= "      <$key>" . xarVar::prepForDisplay($val) . "</$key>\n";
+                    $xml .= "      <$key>" . xar::var()->prep($val) . "</$key>\n";
                 } elseif ($key == 'configuration') {
                     // don't replace anything in the serialized value
                     $xml .= "      <$key>" . $val . "</$key>\n";
                 } else {
-                    $xml .= "      <$key>" . xarVar::prepForDisplay($val) . "</$key>\n";
+                    $xml .= "      <$key>" . xar::var()->prep($val) . "</$key>\n";
                 }
             }
             $xml .= "    </property>\n";

@@ -429,7 +429,7 @@ class xarCSS extends xarObject
         $tag = [
             'method'     => $method,
             'scope'      => $scope,
-            'base'       => !empty($base) ? xarVar::prepForOS($base) : xarCSS::CSSCOMMONBASE,
+            'base'       => !empty($base) ? xar::var()->prepPath($base) : xarCSS::CSSCOMMONBASE,
             'file'       => !empty($file) ? $file : xarCSS::CSSCOMMONFILE,
             'fileext'    => !empty($fileext) ? $fileext : xarCSS::CSSCOMMONFILEEXT,
             'type'       => !empty($type) ? $type : xarCSS::CSSTYPETEXT,
@@ -444,7 +444,7 @@ class xarCSS extends xarObject
             'property'   => '',
             'block'      => '',
             'url'        => '',
-            'alternatedir' => !empty($alternatedir) ? xarVar::prepForOS($alternatedir) : '',
+            'alternatedir' => !empty($alternatedir) ? xar::var()->prepPath($alternatedir) : '',
         ];
 
         // Local or remote absolute url, just include it and return
@@ -510,7 +510,7 @@ class xarCSS extends xarObject
             case 'block':
                 if (!empty($block)) {
                     $tag['block'] = $block;
-                    $block = xarVar::prepForOS($block);
+                    $block = xar::var()->prepPath($block);
                     // themes/theme/blocks/block/style
                     $paths[] = $themeDir . '/blocks/' . $block . '/' . $tag['base'] . '/' . $fileName;
                     // themes/common/blocks/block/style
@@ -520,7 +520,7 @@ class xarCSS extends xarObject
                     break;
                 }
                 if (empty($module)) {
-                    $module = xarVar::getCached('Security.Variables', 'currentmodule');
+                    $module = xar::var()->getCached('Security.Variables', 'currentmodule');
                 }
                 // no break
             case 'module':
@@ -555,7 +555,7 @@ class xarCSS extends xarObject
                 break;
             case 'property':
                 $tag['property'] = $property;
-                $property = xarVar::prepForOS($property);
+                $property = xar::var()->prepPath($property);
                 // themes/theme/properties/property/style
 
                 $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
@@ -572,9 +572,9 @@ class xarCSS extends xarObject
         }
 
         // Debug display
-        if (xarModVars::get('themes', 'debugmode') && xarUser::isDebugAdmin()) {
+        if (xar::mod('themes')->getVar('debugmode') && xar::user()->isDebugAdmin()) {
             foreach ($paths as $path) {
-                echo xarML('Possible location: ') . $path . "<br/>";
+                echo xar::ml('Possible location: ') . $path . "<br/>";
             }
         }
 
@@ -584,8 +584,8 @@ class xarCSS extends xarObject
             }
             $filePath = $path;
             // Debug display
-            if (xarModVars::get('themes', 'debugmode') && xarUser::isDebugAdmin()) {
-                echo "<b>" . xarML('Chosen: ') . $path . "</b><br/>";
+            if (xar::mod('themes')->getVar('debugmode') && xar::user()->isDebugAdmin()) {
+                echo "<b>" . xar::ml('Chosen: ') . $path . "</b><br/>";
             }
             break;
         }
@@ -954,8 +954,8 @@ class xarCSSLib extends xarObject
         // first run, populate the library meta data
         $this->name = $name;
         $this->displayname = ucfirst($this->name);
-        $this->description = xarML('#(1) CSS Framework', $this->displayname);
-        $this->osdirectory = xarVar::prepForOS($this->name);
+        $this->description = xar::ml('#(1) CSS Framework', $this->displayname);
+        $this->osdirectory = xar::var()->prepPath($this->name);
     }
 
     /**

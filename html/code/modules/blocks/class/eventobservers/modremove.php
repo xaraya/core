@@ -13,6 +13,8 @@
  */
 
 sys::import('xaraya.structures.events.observer');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * ModRemove Subject Observer
@@ -25,12 +27,12 @@ class BlocksModRemoveObserver extends EventObserver implements ixarEventObserver
     public function notify(ixarEventSubject $subject)
     {
         $modName = $subject->getArgs();
-        xarVar::setCached('Blocks.event', 'modremove', $modName);
+        xar::var()->setCached('Blocks.event', 'modremove', $modName);
         //
         // Delete block details for this module.
         //
         // Get block types.
-        $blocktypes = xarMod::apiFunc(
+        $blocktypes = xar::mod()->apiFunc(
             'blocks',
             'types',
             'getitems',
@@ -40,10 +42,10 @@ class BlocksModRemoveObserver extends EventObserver implements ixarEventObserver
         // Delete block types.
         if (is_array($blocktypes) && !empty($blocktypes)) {
             foreach ($blocktypes as $blocktype) {
-                xarMod::apiFunc('blocks', 'types', 'deleteitem', $blocktype);
+                xar::mod()->apiFunc('blocks', 'types', 'deleteitem', $blocktype);
             }
         }
-        xarVar::delCached('Blocks.event', 'modremove');
+        xar::var()->delCached('Blocks.event', 'modremove');
 
     }
 }

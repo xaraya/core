@@ -1,0 +1,4004 @@
+{
+    "xaraya\\blocks\\blockservicestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/structures/containers/blocks/servicestrait.php",
+        "name": "Xaraya\\Blocks\\BlockServicesTrait",
+        "methods": {
+            "getmodname": {
+                "name": "getModName",
+                "args": [],
+                "lines": "42-45"
+            },
+            "getitemtype": {
+                "name": "getItemType",
+                "args": [],
+                "lines": "50-53"
+            },
+            "getmodtype": {
+                "name": "getModType",
+                "args": [],
+                "lines": "58-62"
+            },
+            "getblocktype": {
+                "name": "getBlockType",
+                "args": [],
+                "lines": "67-70"
+            },
+            "getobject": {
+                "name": "getObject",
+                "args": [],
+                "lines": "75-78"
+            },
+            "getproperty": {
+                "name": "getProperty",
+                "args": [],
+                "lines": "83-86"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Blocks\\",
+        "lines": "35-87",
+        "traits": [
+            "Xaraya\\Services\\ServicesTrait"
+        ]
+    },
+    "xaraya\\bridge\\graphql\\types\\dataobjecttrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/dataobjecttrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\DataObjectTrait",
+        "methods": {
+            "get_type_config": {
+                "name": "get_type_config",
+                "args": [
+                    "$typename",
+                    "$object = null"
+                ],
+                "lines": "66-78"
+            },
+            "get_object_fields": {
+                "name": "get_object_fields",
+                "args": [
+                    "$object"
+                ],
+                "lines": "85-92"
+            },
+            "object_field_resolver": {
+                "name": "object_field_resolver",
+                "args": [
+                    "$typename",
+                    "$object = null"
+                ],
+                "lines": "102-105"
+            },
+            "get_page_type": {
+                "name": "get_page_type",
+                "args": [
+                    "$name",
+                    "$type = null",
+                    "$object = null"
+                ],
+                "lines": "114-117"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "58-118"
+    },
+    "xaraya\\bridge\\graphql\\types\\deferredtrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/deferredtrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\DeferredTrait",
+        "methods": {
+            "get_deferred_field": {
+                "name": "get_deferred_field",
+                "args": [
+                    "$fieldname",
+                    "$typename",
+                    "$islist = false"
+                ],
+                "lines": "89-98"
+            },
+            "deferred_property_resolver": {
+                "name": "deferred_property_resolver",
+                "args": [
+                    "$typename",
+                    "$fieldname",
+                    "$object"
+                ],
+                "lines": "111-177"
+            },
+            "deferred_field_resolver": {
+                "name": "deferred_field_resolver",
+                "args": [
+                    "$typename",
+                    "$fieldname",
+                    "$object = null"
+                ],
+                "lines": "189-239"
+            },
+            "add_deferred": {
+                "name": "add_deferred",
+                "args": [
+                    "$typename",
+                    "$id",
+                    "$fieldlist = null"
+                ],
+                "lines": "248-251"
+            },
+            "load_deferred": {
+                "name": "load_deferred",
+                "args": [
+                    "$typename"
+                ],
+                "lines": "262-277"
+            },
+            "get_deferred": {
+                "name": "get_deferred",
+                "args": [
+                    "$typename",
+                    "$id"
+                ],
+                "lines": "285-289"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "77-290"
+    },
+    "xaraya\\bridge\\graphql\\types\\inputobjecttrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/inputobjecttrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\InputObjectTrait",
+        "methods": {
+            "get_input_type": {
+                "name": "get_input_type",
+                "args": [
+                    "$typename",
+                    "$object = null"
+                ],
+                "lines": "57-72"
+            },
+            "get_input_fields": {
+                "name": "get_input_fields",
+                "args": [
+                    "$object",
+                    "&$newType"
+                ],
+                "lines": "80-88"
+            },
+            "input_value_parser": {
+                "name": "input_value_parser",
+                "args": [
+                    "$typename",
+                    "$object"
+                ],
+                "lines": "96-99"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "49-100"
+    },
+    "xaraya\\bridge\\graphql\\types\\mutationcreatetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/mutationcreatetrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\MutationCreateTrait",
+        "methods": {
+            "get_create_mutation": {
+                "name": "get_create_mutation",
+                "args": [
+                    "$name",
+                    "$typename",
+                    "$object"
+                ],
+                "lines": "56-70"
+            },
+            "create_mutation_resolver": {
+                "name": "create_mutation_resolver",
+                "args": [
+                    "$typename",
+                    "$object = null"
+                ],
+                "lines": "81-113"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "47-114"
+    },
+    "xaraya\\bridge\\graphql\\types\\mutationdeletetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/mutationdeletetrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\MutationDeleteTrait",
+        "methods": {
+            "get_delete_mutation": {
+                "name": "get_delete_mutation",
+                "args": [
+                    "$name",
+                    "$typename",
+                    "$object"
+                ],
+                "lines": "57-71"
+            },
+            "delete_mutation_resolver": {
+                "name": "delete_mutation_resolver",
+                "args": [
+                    "$typename",
+                    "$object = null"
+                ],
+                "lines": "82-109"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "48-110"
+    },
+    "xaraya\\bridge\\graphql\\types\\mutationstrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/mutationstrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\MutationsTrait",
+        "methods": {
+            "get_mutation_fields": {
+                "name": "get_mutation_fields",
+                "args": [],
+                "lines": "65-74"
+            },
+            "get_mutation_field": {
+                "name": "get_mutation_field",
+                "args": [
+                    "$name",
+                    "$kind = ''"
+                ],
+                "lines": "84-96"
+            },
+            "mutation_field_resolver": {
+                "name": "mutation_field_resolver",
+                "args": [
+                    "$typename = 'mutation'"
+                ],
+                "lines": "104-130"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "50-131",
+        "traits": [
+            "Xaraya\\Bridge\\GraphQL\\Types\\MutationCreateTrait",
+            "Xaraya\\Bridge\\GraphQL\\Types\\MutationUpdateTrait",
+            "Xaraya\\Bridge\\GraphQL\\Types\\MutationDeleteTrait"
+        ]
+    },
+    "xaraya\\bridge\\graphql\\types\\mutationupdatetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/mutationupdatetrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\MutationUpdateTrait",
+        "methods": {
+            "get_update_mutation": {
+                "name": "get_update_mutation",
+                "args": [
+                    "$name",
+                    "$typename",
+                    "$object"
+                ],
+                "lines": "56-70"
+            },
+            "update_mutation_resolver": {
+                "name": "update_mutation_resolver",
+                "args": [
+                    "$typename",
+                    "$object = null"
+                ],
+                "lines": "81-109"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "47-110"
+    },
+    "xaraya\\bridge\\graphql\\types\\queriestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/queriestrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\QueriesTrait",
+        "methods": {
+            "get_query_fields": {
+                "name": "get_query_fields",
+                "args": [],
+                "lines": "62-71"
+            },
+            "get_query_field": {
+                "name": "get_query_field",
+                "args": [
+                    "$name",
+                    "$kind = ''"
+                ],
+                "lines": "81-101"
+            },
+            "query_field_resolver": {
+                "name": "query_field_resolver",
+                "args": [
+                    "$typename = 'query'"
+                ],
+                "lines": "108-134"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "47-135",
+        "traits": [
+            "Xaraya\\Bridge\\GraphQL\\Types\\QueryPageTrait",
+            "Xaraya\\Bridge\\GraphQL\\Types\\QueryListTrait",
+            "Xaraya\\Bridge\\GraphQL\\Types\\QueryItemTrait"
+        ]
+    },
+    "xaraya\\bridge\\graphql\\types\\queryitemtrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/queryitemtrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\QueryItemTrait",
+        "methods": {
+            "get_item_query": {
+                "name": "get_item_query",
+                "args": [
+                    "$itemname",
+                    "$typename",
+                    "$object"
+                ],
+                "lines": "56-70"
+            },
+            "item_query_resolver": {
+                "name": "item_query_resolver",
+                "args": [
+                    "$typename",
+                    "$object = null"
+                ],
+                "lines": "81-141"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "47-142"
+    },
+    "xaraya\\bridge\\graphql\\types\\querylisttrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/querylisttrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\QueryListTrait",
+        "methods": {
+            "get_list_query": {
+                "name": "get_list_query",
+                "args": [
+                    "$listname",
+                    "$typename",
+                    "$object"
+                ],
+                "lines": "57-81"
+            },
+            "list_query_resolver": {
+                "name": "list_query_resolver",
+                "args": [
+                    "$typename",
+                    "$object = null"
+                ],
+                "lines": "92-134"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "48-135"
+    },
+    "xaraya\\bridge\\graphql\\types\\querypagetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/traits/querypagetrait.php",
+        "name": "Xaraya\\Bridge\\GraphQL\\Types\\QueryPageTrait",
+        "methods": {
+            "get_page_query": {
+                "name": "get_page_query",
+                "args": [
+                    "$pagename",
+                    "$typename",
+                    "$object"
+                ],
+                "lines": "57-77"
+            },
+            "page_query_resolver": {
+                "name": "page_query_resolver",
+                "args": [
+                    "$typename",
+                    "$object = null"
+                ],
+                "lines": "88-169"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\GraphQL\\Types\\",
+        "lines": "48-170"
+    },
+    "xaraya\\bridge\\middleware\\defaultresponsetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/middleware/responsetrait.php",
+        "name": "Xaraya\\Bridge\\Middleware\\DefaultResponseTrait",
+        "methods": {
+            "getresponsefactory": {
+                "name": "getResponseFactory",
+                "args": [],
+                "lines": "54-57"
+            },
+            "setresponsefactory": {
+                "name": "setResponseFactory",
+                "args": [
+                    "\\Psr\\Http\\Message\\ResponseFactoryInterface $responseFactory"
+                ],
+                "lines": "59-62"
+            },
+            "getstreamfactory": {
+                "name": "getStreamFactory",
+                "args": [],
+                "lines": "64-71"
+            },
+            "setstreamfactory": {
+                "name": "setStreamFactory",
+                "args": [
+                    "\\Psr\\Http\\Message\\StreamFactoryInterface $streamFactory"
+                ],
+                "lines": "73-76"
+            },
+            "createresponse": {
+                "name": "createResponse",
+                "args": [
+                    "string $body",
+                    "string $mediaType = 'text/html; charset=utf-8'"
+                ],
+                "lines": "78-86"
+            },
+            "createjsonresponse": {
+                "name": "createJsonResponse",
+                "args": [
+                    "$result",
+                    "string $mediaType = 'application/json; charset=utf-8'",
+                    "bool $numeric = true"
+                ],
+                "lines": "88-107"
+            },
+            "createnotfoundresponse": {
+                "name": "createNotFoundResponse",
+                "args": [
+                    "string $path"
+                ],
+                "lines": "109-115"
+            },
+            "createunauthorizedresponse": {
+                "name": "createUnauthorizedResponse",
+                "args": [
+                    "int $status = 401"
+                ],
+                "lines": "117-123"
+            },
+            "createforbiddenresponse": {
+                "name": "createForbiddenResponse",
+                "args": [
+                    "int $status = 403"
+                ],
+                "lines": "125-131"
+            },
+            "createredirectresponse": {
+                "name": "createRedirectResponse",
+                "args": [
+                    "string $redirectURL",
+                    "int $status = 302"
+                ],
+                "lines": "133-139"
+            },
+            "createexceptionresponse": {
+                "name": "createExceptionResponse",
+                "args": [
+                    "\\Throwable $e",
+                    "$result = null"
+                ],
+                "lines": "141-153"
+            },
+            "createfileresponse": {
+                "name": "createFileResponse",
+                "args": [
+                    "string $path",
+                    "?string $mediaType = null"
+                ],
+                "lines": "155-169"
+            },
+            "cleanresponse": {
+                "name": "cleanResponse",
+                "args": [
+                    "\\Psr\\Http\\Message\\ResponseInterface $response",
+                    "?callable $cleaner = null"
+                ],
+                "lines": "174-196"
+            },
+            "wrapresponse": {
+                "name": "wrapResponse",
+                "args": [
+                    "\\Psr\\Http\\Message\\ResponseInterface $response"
+                ],
+                "lines": "201-205"
+            },
+            "wrapoutputinpage": {
+                "name": "wrapOutputInPage",
+                "args": [
+                    "string $body",
+                    "$context = null"
+                ],
+                "lines": "207-211"
+            },
+            "emitresponse": {
+                "name": "emitResponse",
+                "args": [
+                    "\\Psr\\Http\\Message\\ResponseInterface $response"
+                ],
+                "lines": "216-236"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Middleware\\",
+        "lines": "47-237"
+    },
+    "xaraya\\bridge\\requests\\basicbridgetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/bridgetrait.php",
+        "name": "Xaraya\\Bridge\\Requests\\BasicBridgeTrait",
+        "methods": {
+            "preparecontroller": {
+                "name": "prepareController",
+                "args": [
+                    "string $module = 'base'",
+                    "string $baseUri = ''"
+                ],
+                "lines": "42-59"
+            },
+            "wrapoutputinpage": {
+                "name": "wrapOutputInPage",
+                "args": [
+                    "string $body",
+                    "$context = null"
+                ],
+                "lines": "67-71"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Requests\\",
+        "lines": "34-72"
+    },
+    "xaraya\\bridge\\requests\\blockbridgetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/blocktrait.php",
+        "name": "Xaraya\\Bridge\\Requests\\BlockBridgeTrait",
+        "methods": {
+            "block": {
+                "name": "block",
+                "args": [],
+                "lines": "72-76"
+            },
+            "getblockroutes": {
+                "name": "getBlockRoutes",
+                "args": [
+                    "string $pathPrefix = ''",
+                    "string $namePrefix = ''",
+                    "?string $handler = null",
+                    "array $extra = []"
+                ],
+                "lines": "86-96"
+            },
+            "parseblockpath": {
+                "name": "parseBlockPath",
+                "args": [
+                    "string $path = '/'",
+                    "array $query = []",
+                    "string $prefix = ''"
+                ],
+                "lines": "105-109"
+            },
+            "buildblockpath": {
+                "name": "buildBlockPath",
+                "args": [
+                    "string|int $type = 'menu'",
+                    "?string $method = null",
+                    "string|int|null $instance = null",
+                    "array $extra = []",
+                    "string $prefix = '/block'"
+                ],
+                "lines": "120-124"
+            },
+            "handleblockrequest": {
+                "name": "handleBlockRequest",
+                "args": [
+                    "$vars",
+                    "&$request = null"
+                ],
+                "lines": "132-151"
+            },
+            "runblockguirequest": {
+                "name": "runBlockGuiRequest",
+                "args": [
+                    "$vars",
+                    "$query = null"
+                ],
+                "lines": "160-166"
+            },
+            "runblockapirequest": {
+                "name": "runBlockApiRequest",
+                "args": [
+                    "$vars",
+                    "$query = null"
+                ],
+                "lines": "174-180"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Requests\\",
+        "lines": "66-181"
+    },
+    "xaraya\\bridge\\requests\\commonbridgetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/commontrait.php",
+        "name": "Xaraya\\Bridge\\Requests\\CommonBridgeTrait",
+        "methods": [],
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Requests\\",
+        "lines": "25-32",
+        "traits": [
+            "Xaraya\\Bridge\\Requests\\DataObjectBridgeTrait",
+            "Xaraya\\Bridge\\Requests\\ModuleBridgeTrait",
+            "Xaraya\\Bridge\\Requests\\BlockBridgeTrait"
+        ]
+    },
+    "xaraya\\bridge\\requests\\commonrequesttrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/requesttrait.php",
+        "name": "Xaraya\\Bridge\\Requests\\CommonRequestTrait",
+        "methods": {
+            "getmethod": {
+                "name": "getMethod",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "111-120"
+            },
+            "getpathinfo": {
+                "name": "getPathInfo",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "127-136"
+            },
+            "getbaseuri": {
+                "name": "getBaseUri",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "143-169"
+            },
+            "getqueryparams": {
+                "name": "getQueryParams",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "176-193"
+            },
+            "getserverparams": {
+                "name": "getServerParams",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "200-212"
+            },
+            "getcookieparams": {
+                "name": "getCookieParams",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "219-231"
+            },
+            "getauthtoken": {
+                "name": "getAuthToken",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "238-253"
+            },
+            "getuploadedfiles": {
+                "name": "getUploadedFiles",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "260-270"
+            },
+            "getparsedbody": {
+                "name": "getParsedBody",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "277-289"
+            },
+            "getjsonbody": {
+                "name": "getJsonBody",
+                "args": [
+                    "$request = null"
+                ],
+                "lines": "296-316"
+            },
+            "setrawinput": {
+                "name": "setRawInput",
+                "args": [
+                    "$input"
+                ],
+                "lines": "323-326"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Requests\\",
+        "lines": "100-327",
+        "traits": [
+            "Xaraya\\Bridge\\Requests\\Psr7BaseUriTrait"
+        ]
+    },
+    "xaraya\\bridge\\requests\\dataobjectbridgetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/dataobjecttrait.php",
+        "name": "Xaraya\\Bridge\\Requests\\DataObjectBridgeTrait",
+        "methods": {
+            "data": {
+                "name": "data",
+                "args": [],
+                "lines": "75-79"
+            },
+            "getdataobjectroutes": {
+                "name": "getDataObjectRoutes",
+                "args": [
+                    "string $pathPrefix = ''",
+                    "string $namePrefix = ''",
+                    "?string $handler = null",
+                    "array $extra = []"
+                ],
+                "lines": "89-125"
+            },
+            "parsedataobjectpath": {
+                "name": "parseDataObjectPath",
+                "args": [
+                    "string $path = '/'",
+                    "array $query = []",
+                    "string $prefix = ''"
+                ],
+                "lines": "134-158"
+            },
+            "builddataobjectpath": {
+                "name": "buildDataObjectPath",
+                "args": [
+                    "string $object = 'sample'",
+                    "?string $method = null",
+                    "string|int|null $itemid = null",
+                    "array $extra = []",
+                    "string $prefix = '/object'"
+                ],
+                "lines": "170-193"
+            },
+            "builduri": {
+                "name": "buildUri",
+                "args": [
+                    "?string $object = null",
+                    "?string $method = null",
+                    "string|int|null $itemid = null",
+                    "array $extra = []"
+                ],
+                "lines": "204-208"
+            },
+            "handleobjectrequest": {
+                "name": "handleObjectRequest",
+                "args": [
+                    "$vars",
+                    "&$request = null"
+                ],
+                "lines": "217-268"
+            },
+            "rundataobjectguirequest": {
+                "name": "runDataObjectGuiRequest",
+                "args": [
+                    "$params"
+                ],
+                "lines": "276-285"
+            },
+            "rundataobjectapirequest": {
+                "name": "runDataObjectApiRequest",
+                "args": [
+                    "$params"
+                ],
+                "lines": "293-321"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Requests\\",
+        "lines": "69-322"
+    },
+    "xaraya\\bridge\\requests\\genericbridgetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/generictrait.php",
+        "name": "Xaraya\\Bridge\\Requests\\GenericBridgeTrait",
+        "methods": {
+            "getgenericroutes": {
+                "name": "getGenericRoutes",
+                "args": [
+                    "string $pathPrefix = ''",
+                    "string $namePrefix = ''",
+                    "?string $handler = null",
+                    "array $extra = []"
+                ],
+                "lines": "76-90"
+            },
+            "parsegenericpath": {
+                "name": "parseGenericPath",
+                "args": [
+                    "string $path = '/'",
+                    "array $query = []",
+                    "string $prefix = ''"
+                ],
+                "lines": "99-111"
+            },
+            "buildgenericpath": {
+                "name": "buildGenericPath",
+                "args": [
+                    "string $route = ''",
+                    "?string $type = null",
+                    "string|int|null $path = null",
+                    "array $extra = []",
+                    "string $prefix = ''"
+                ],
+                "lines": "122-129"
+            },
+            "rungenericguirequest": {
+                "name": "runGenericGuiRequest",
+                "args": [
+                    "$vars",
+                    "$query"
+                ],
+                "lines": "137-140"
+            },
+            "rungenericapirequest": {
+                "name": "runGenericApiRequest",
+                "args": [
+                    "$vars",
+                    "$query"
+                ],
+                "lines": "148-151"
+            },
+            "handleroutesrequest": {
+                "name": "handleRoutesRequest",
+                "args": [
+                    "$vars",
+                    "&$request = null"
+                ],
+                "lines": "159-164"
+            },
+            "runroutesguirequest": {
+                "name": "runRoutesGuiRequest",
+                "args": [
+                    "$vars"
+                ],
+                "lines": "171-179"
+            },
+            "runroutesapirequest": {
+                "name": "runRoutesApiRequest",
+                "args": [
+                    "$vars"
+                ],
+                "lines": "186-193"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Requests\\",
+        "lines": "63-194"
+    },
+    "xaraya\\bridge\\requests\\modulebridgetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/moduletrait.php",
+        "name": "Xaraya\\Bridge\\Requests\\ModuleBridgeTrait",
+        "methods": {
+            "mod": {
+                "name": "mod",
+                "args": [],
+                "lines": "72-76"
+            },
+            "getmoduleroutes": {
+                "name": "getModuleRoutes",
+                "args": [
+                    "string $pathPrefix = ''",
+                    "string $namePrefix = ''",
+                    "?string $handler = null",
+                    "array $extra = []"
+                ],
+                "lines": "86-109"
+            },
+            "parsemodulepath": {
+                "name": "parseModulePath",
+                "args": [
+                    "string $path = '/'",
+                    "array $query = []",
+                    "string $prefix = ''"
+                ],
+                "lines": "118-143"
+            },
+            "buildmodulepath": {
+                "name": "buildModulePath",
+                "args": [
+                    "string $module = 'base'",
+                    "?string $type = null",
+                    "string|int|null $func = null",
+                    "array $extra = []",
+                    "string $prefix = ''"
+                ],
+                "lines": "155-186"
+            },
+            "builduri": {
+                "name": "buildUri",
+                "args": [
+                    "?string $module = null",
+                    "?string $type = null",
+                    "string|int|null $func = null",
+                    "array $extra = []"
+                ],
+                "lines": "197-201"
+            },
+            "handlemodulerequest": {
+                "name": "handleModuleRequest",
+                "args": [
+                    "$vars",
+                    "&$request = null"
+                ],
+                "lines": "209-254"
+            },
+            "runmoduleguirequest": {
+                "name": "runModuleGuiRequest",
+                "args": [
+                    "$vars",
+                    "$query"
+                ],
+                "lines": "262-265"
+            },
+            "runmoduleapirequest": {
+                "name": "runModuleApiRequest",
+                "args": [
+                    "$vars",
+                    "$query"
+                ],
+                "lines": "273-276"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Requests\\",
+        "lines": "66-277"
+    },
+    "xaraya\\bridge\\requests\\psr7baseuritrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/psr7baseuritrait.php",
+        "name": "Xaraya\\Bridge\\Requests\\Psr7BaseUriTrait",
+        "methods": {
+            "stripbaseuri": {
+                "name": "stripBaseUri",
+                "args": [
+                    "$request"
+                ],
+                "lines": "31-52"
+            },
+            "setbaseuri": {
+                "name": "setBaseUri",
+                "args": [
+                    "string|object $request"
+                ],
+                "lines": "57-71"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Requests\\",
+        "lines": "23-72"
+    },
+    "xaraya\\bridge\\requests\\staticfilebridgetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/staticfiletrait.php",
+        "name": "Xaraya\\Bridge\\Requests\\StaticFileBridgeTrait",
+        "methods": {
+            "getstaticfileroutes": {
+                "name": "getStaticFileRoutes",
+                "args": [
+                    "string $pathPrefix = ''",
+                    "string $namePrefix = 'static-'",
+                    "?string $handler = null",
+                    "?array $extra = null"
+                ],
+                "lines": "71-89"
+            },
+            "parsestaticfilepath": {
+                "name": "parseStaticFilePath",
+                "args": [
+                    "string $path = '/'",
+                    "array $query = []",
+                    "string $prefix = ''",
+                    "string $type = 'theme'"
+                ],
+                "lines": "99-119"
+            },
+            "parsemodulefilepath": {
+                "name": "parseModuleFilePath",
+                "args": [
+                    "string $path = '/'",
+                    "array $query = []",
+                    "string $prefix = '/code/modules'",
+                    "string $type = 'module'"
+                ],
+                "lines": "129-132"
+            },
+            "parsethemefilepath": {
+                "name": "parseThemeFilePath",
+                "args": [
+                    "string $path = '/'",
+                    "array $query = []",
+                    "string $prefix = '/themes'",
+                    "string $type = 'theme'"
+                ],
+                "lines": "142-145"
+            },
+            "parsevarfilepath": {
+                "name": "parseVarFilePath",
+                "args": [
+                    "string $path = '/'",
+                    "array $query = []",
+                    "string $prefix = '/var'",
+                    "string $type = 'var'"
+                ],
+                "lines": "155-158"
+            },
+            "buildstaticfilepath": {
+                "name": "buildStaticFilePath",
+                "args": [
+                    "string $source = 'default'",
+                    "?string $folder = null",
+                    "?string $file = null",
+                    "array $extra = []",
+                    "string $prefix = ''"
+                ],
+                "lines": "169-181"
+            },
+            "buildmodulefilepath": {
+                "name": "buildModuleFilePath",
+                "args": [
+                    "string $source = 'base'",
+                    "?string $folder = null",
+                    "?string $file = null",
+                    "array $extra = []",
+                    "string $prefix = '/code/modules'"
+                ],
+                "lines": "192-195"
+            },
+            "buildthemefilepath": {
+                "name": "buildThemeFilePath",
+                "args": [
+                    "string $source = 'default'",
+                    "?string $folder = null",
+                    "?string $file = null",
+                    "array $extra = []",
+                    "string $prefix = '/themes'"
+                ],
+                "lines": "206-209"
+            },
+            "buildvarfilepath": {
+                "name": "buildVarFilePath",
+                "args": [
+                    "string $source = 'cache'",
+                    "?string $folder = null",
+                    "?string $file = null",
+                    "array $extra = []",
+                    "string $prefix = '/var'"
+                ],
+                "lines": "220-223"
+            },
+            "builduri": {
+                "name": "buildUri",
+                "args": [
+                    "?string $source = null",
+                    "?string $folder = null",
+                    "string|int|null $file = null",
+                    "array $extra = []",
+                    "string $prefix = ''"
+                ],
+                "lines": "229-236"
+            },
+            "handlethemefilerequest": {
+                "name": "handleThemeFileRequest",
+                "args": [
+                    "$vars",
+                    "&$request = null"
+                ],
+                "lines": "244-259"
+            },
+            "handlemodulefilerequest": {
+                "name": "handleModuleFileRequest",
+                "args": [
+                    "$vars",
+                    "&$request = null"
+                ],
+                "lines": "267-282"
+            },
+            "handlevarfilerequest": {
+                "name": "handleVarFileRequest",
+                "args": [
+                    "$vars",
+                    "&$request = null"
+                ],
+                "lines": "290-305"
+            },
+            "getstaticfilerequest": {
+                "name": "getStaticFileRequest",
+                "args": [
+                    "$params"
+                ],
+                "lines": "313-335"
+            },
+            "getmodulefilerequest": {
+                "name": "getModuleFileRequest",
+                "args": [
+                    "$params"
+                ],
+                "lines": "343-360"
+            },
+            "getthemefilerequest": {
+                "name": "getThemeFileRequest",
+                "args": [
+                    "$params"
+                ],
+                "lines": "368-385"
+            },
+            "getvarfilerequest": {
+                "name": "getVarFileRequest",
+                "args": [
+                    "$params"
+                ],
+                "lines": "393-410"
+            },
+            "getotherfilerequest": {
+                "name": "getOtherFileRequest",
+                "args": [
+                    "$params"
+                ],
+                "lines": "418-433"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Bridge\\Requests\\",
+        "lines": "57-434"
+    },
+    "xaraya\\caching\\cachetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/caching/cachetrait.php",
+        "name": "Xaraya\\Caching\\CacheTrait",
+        "methods": {
+            "enablecache": {
+                "name": "enableCache",
+                "args": [
+                    "?bool $enable = null"
+                ],
+                "lines": "157-163"
+            },
+            "setcachescope": {
+                "name": "setCacheScope",
+                "args": [
+                    "$cacheScope",
+                    "$allow = 0"
+                ],
+                "lines": "171-183"
+            },
+            "getcachekey": {
+                "name": "getCacheKey",
+                "args": [
+                    "$id = null"
+                ],
+                "lines": "190-199"
+            },
+            "setcachekey": {
+                "name": "setCacheKey",
+                "args": [
+                    "$cacheKey"
+                ],
+                "lines": "206-212"
+            },
+            "hascachekey": {
+                "name": "hasCacheKey",
+                "args": [],
+                "lines": "218-224"
+            },
+            "iscached": {
+                "name": "isCached",
+                "args": [
+                    "$cacheKey"
+                ],
+                "lines": "231-237"
+            },
+            "getcached": {
+                "name": "getCached",
+                "args": [
+                    "$cacheKey"
+                ],
+                "lines": "244-250"
+            },
+            "setcached": {
+                "name": "setCached",
+                "args": [
+                    "$cacheKey",
+                    "$value",
+                    "$expire = null"
+                ],
+                "lines": "259-265"
+            },
+            "delcached": {
+                "name": "delCached",
+                "args": [
+                    "$cacheKey"
+                ],
+                "lines": "272-278"
+            },
+            "keycached": {
+                "name": "keyCached",
+                "args": [
+                    "$cacheKey"
+                ],
+                "lines": "285-291"
+            },
+            "getcachedvalue": {
+                "name": "getCachedValue",
+                "args": [
+                    "$id",
+                    "$callback",
+                    "...$args"
+                ],
+                "lines": "300-316"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Caching\\",
+        "lines": "148-317"
+    },
+    "xaraya\\context\\contexttrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/context/contexttrait.php",
+        "name": "Xaraya\\Context\\ContextTrait",
+        "methods": {
+            "getcontext": {
+                "name": "getContext",
+                "args": [],
+                "lines": "82-85"
+            },
+            "setcontext": {
+                "name": "setContext",
+                "args": [
+                    "$context"
+                ],
+                "lines": "91-94"
+            },
+            "hascontext": {
+                "name": "hasContext",
+                "args": [],
+                "lines": "99-102"
+            },
+            "__clone": {
+                "name": "__clone",
+                "args": [],
+                "lines": "108-111"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Context\\",
+        "lines": "74-112"
+    },
+    "xaraya\\modules\\adminapitrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules/adminapitrait.php",
+        "name": "Xaraya\\Modules\\AdminApiTrait",
+        "methods": {
+            "configure": {
+                "name": "configure",
+                "args": [],
+                "lines": "66-71"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Modules\\",
+        "lines": "57-72",
+        "traits": [
+            "Xaraya\\Modules\\UserApiTrait"
+        ]
+    },
+    "xaraya\\modules\\adminguitrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules/adminguitrait.php",
+        "name": "Xaraya\\Modules\\AdminGuiTrait",
+        "methods": {
+            "configure": {
+                "name": "configure",
+                "args": [],
+                "lines": "66-71"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Modules\\",
+        "lines": "57-72",
+        "traits": [
+            "Xaraya\\Modules\\UserGuiTrait"
+        ]
+    },
+    "xaraya\\modules\\installertrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules/installertrait.php",
+        "name": "Xaraya\\Modules\\InstallerTrait",
+        "methods": {
+            "configure": {
+                "name": "configure",
+                "args": [],
+                "lines": "85-97"
+            },
+            "upgrade": {
+                "name": "upgrade",
+                "args": [
+                    "$oldversion"
+                ],
+                "lines": "105-119"
+            },
+            "init": {
+                "name": "init",
+                "args": [],
+                "lines": "127-144"
+            },
+            "activate": {
+                "name": "activate",
+                "args": [],
+                "lines": "152-155"
+            },
+            "deactivate": {
+                "name": "deactivate",
+                "args": [],
+                "lines": "163-166"
+            },
+            "delete": {
+                "name": "delete",
+                "args": [],
+                "lines": "173-177"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Modules\\",
+        "lines": "68-178",
+        "traits": [
+            "Xaraya\\Modules\\ModuleServicesTrait"
+        ]
+    },
+    "xaraya\\modules\\methodservicestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules/method.php",
+        "name": "Xaraya\\Modules\\MethodServicesTrait",
+        "methods": {
+            "__invoke": {
+                "name": "__invoke",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "94-97"
+            },
+            "__construct": {
+                "name": "__construct",
+                "args": [
+                    "string $modName",
+                    "int $itemtype = 0",
+                    "?\\Xaraya\\Modules\\ModuleServicesInterface $parent = null"
+                ],
+                "lines": "103-112"
+            },
+            "configure": {
+                "name": "configure",
+                "args": [],
+                "lines": "117-120"
+            },
+            "getparent": {
+                "name": "getParent",
+                "args": [],
+                "lines": "126-129"
+            },
+            "setparent": {
+                "name": "setParent",
+                "args": [
+                    "\\Xaraya\\Modules\\ModuleServicesInterface $parent"
+                ],
+                "lines": "135-138"
+            },
+            "getmodule": {
+                "name": "getModule",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "143-146"
+            },
+            "userapi": {
+                "name": "userapi",
+                "args": [],
+                "lines": "151-154"
+            },
+            "usergui": {
+                "name": "usergui",
+                "args": [],
+                "lines": "159-162"
+            },
+            "adminapi": {
+                "name": "adminapi",
+                "args": [],
+                "lines": "167-170"
+            },
+            "admingui": {
+                "name": "admingui",
+                "args": [],
+                "lines": "175-178"
+            },
+            "getmodname": {
+                "name": "getModName",
+                "args": [],
+                "lines": "183-186"
+            },
+            "setmodname": {
+                "name": "setModName",
+                "args": [
+                    "string $modName"
+                ],
+                "lines": "191-194"
+            },
+            "getitemtype": {
+                "name": "getItemType",
+                "args": [],
+                "lines": "199-202"
+            },
+            "setitemtype": {
+                "name": "setItemType",
+                "args": [
+                    "int $itemtype = 0"
+                ],
+                "lines": "207-210"
+            },
+            "getblocktype": {
+                "name": "getBlockType",
+                "args": [],
+                "lines": "215-218"
+            },
+            "getobject": {
+                "name": "getObject",
+                "args": [],
+                "lines": "223-226"
+            },
+            "getproperty": {
+                "name": "getProperty",
+                "args": [],
+                "lines": "231-234"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Modules\\",
+        "lines": "85-235",
+        "traits": [
+            "Xaraya\\Services\\ParentServicesTrait"
+        ]
+    },
+    "xaraya\\modules\\moduleservicestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules/servicestrait.php",
+        "name": "Xaraya\\Modules\\ModuleServicesTrait",
+        "methods": {
+            "__construct": {
+                "name": "__construct",
+                "args": [
+                    "string $modName",
+                    "?\\Xaraya\\Modules\\ModuleInterface $parent = null",
+                    "?\\Xaraya\\Context\\Context $context = null"
+                ],
+                "lines": "130-137"
+            },
+            "configure": {
+                "name": "configure",
+                "args": [],
+                "lines": "144-147"
+            },
+            "getmodtype": {
+                "name": "getModType",
+                "args": [],
+                "lines": "152-155"
+            },
+            "setmodtype": {
+                "name": "setModType",
+                "args": [
+                    "string $modType"
+                ],
+                "lines": "160-163"
+            },
+            "hasmethod": {
+                "name": "hasMethod",
+                "args": [
+                    "string $funcName",
+                    "string $callType = 'api'"
+                ],
+                "lines": "171-199"
+            },
+            "getmodule": {
+                "name": "getModule",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "205-216"
+            },
+            "setmodule": {
+                "name": "setModule",
+                "args": [
+                    "?\\Xaraya\\Modules\\ModuleInterface $parent"
+                ],
+                "lines": "222-225"
+            },
+            "userapi": {
+                "name": "userapi",
+                "args": [],
+                "lines": "230-235"
+            },
+            "usergui": {
+                "name": "usergui",
+                "args": [],
+                "lines": "240-245"
+            },
+            "adminapi": {
+                "name": "adminapi",
+                "args": [],
+                "lines": "250-255"
+            },
+            "admingui": {
+                "name": "admingui",
+                "args": [],
+                "lines": "260-265"
+            },
+            "__call": {
+                "name": "__call",
+                "args": [
+                    "string $funcName",
+                    "array $arguments = []"
+                ],
+                "lines": "273-299"
+            },
+            "getmethodclass": {
+                "name": "getMethodClass",
+                "args": [
+                    "string $className"
+                ],
+                "lines": "308-311"
+            },
+            "getclassname": {
+                "name": "getClassName",
+                "args": [
+                    "string $funcName"
+                ],
+                "lines": "323-329"
+            },
+            "getnamespace": {
+                "name": "getNamespace",
+                "args": [],
+                "lines": "335-339"
+            },
+            "getmodname": {
+                "name": "getModName",
+                "args": [],
+                "lines": "344-347"
+            },
+            "setmodname": {
+                "name": "setModName",
+                "args": [
+                    "string $modName"
+                ],
+                "lines": "352-355"
+            },
+            "getitemtype": {
+                "name": "getItemType",
+                "args": [],
+                "lines": "360-363"
+            },
+            "setitemtype": {
+                "name": "setItemType",
+                "args": [
+                    "int $itemtype = 0"
+                ],
+                "lines": "368-371"
+            },
+            "getblocktype": {
+                "name": "getBlockType",
+                "args": [],
+                "lines": "376-379"
+            },
+            "getobject": {
+                "name": "getObject",
+                "args": [],
+                "lines": "384-387"
+            },
+            "getproperty": {
+                "name": "getProperty",
+                "args": [],
+                "lines": "392-395"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Modules\\",
+        "lines": "67-396",
+        "traits": [
+            "Xaraya\\Services\\CoreServicesTrait"
+        ]
+    },
+    "xaraya\\modules\\moduletrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules/moduletrait.php",
+        "name": "Xaraya\\Modules\\ModuleTrait",
+        "methods": {
+            "__construct": {
+                "name": "__construct",
+                "args": [
+                    "string $modName",
+                    "?\\Xaraya\\Context\\Context $context = null"
+                ],
+                "lines": "100-105"
+            },
+            "configure": {
+                "name": "configure",
+                "args": [],
+                "lines": "111-114"
+            },
+            "getmodname": {
+                "name": "getModName",
+                "args": [],
+                "lines": "116-119"
+            },
+            "setmodname": {
+                "name": "setModName",
+                "args": [
+                    "string $modName"
+                ],
+                "lines": "121-124"
+            },
+            "createcomponent": {
+                "name": "createComponent",
+                "args": [
+                    "string $className"
+                ],
+                "lines": "133-136"
+            },
+            "getclassname": {
+                "name": "getClassName",
+                "args": [
+                    "string $type"
+                ],
+                "lines": "143-148"
+            },
+            "getnamespace": {
+                "name": "getNamespace",
+                "args": [],
+                "lines": "150-154"
+            },
+            "getcomponent": {
+                "name": "getComponent",
+                "args": [
+                    "string $type"
+                ],
+                "lines": "156-173"
+            },
+            "hascomponent": {
+                "name": "hasComponent",
+                "args": [
+                    "string $type"
+                ],
+                "lines": "175-179"
+            },
+            "setcontext": {
+                "name": "setContext",
+                "args": [
+                    "$context"
+                ],
+                "lines": "181-192"
+            },
+            "getname": {
+                "name": "getName",
+                "args": [],
+                "lines": "194-197"
+            },
+            "getfileinfo": {
+                "name": "getFileInfo",
+                "args": [],
+                "lines": "203-207"
+            },
+            "gettables": {
+                "name": "getTables",
+                "args": [],
+                "lines": "213-236"
+            },
+            "userapi": {
+                "name": "userapi",
+                "args": [],
+                "lines": "238-243"
+            },
+            "usergui": {
+                "name": "usergui",
+                "args": [],
+                "lines": "245-250"
+            },
+            "adminapi": {
+                "name": "adminapi",
+                "args": [],
+                "lines": "252-257"
+            },
+            "admingui": {
+                "name": "admingui",
+                "args": [],
+                "lines": "259-264"
+            },
+            "installer": {
+                "name": "installer",
+                "args": [],
+                "lines": "266-271"
+            },
+            "restapi": {
+                "name": "restapi",
+                "args": [],
+                "lines": "273-278"
+            },
+            "schedulerapi": {
+                "name": "schedulerapi",
+                "args": [],
+                "lines": "280-285"
+            },
+            "setclasstypes": {
+                "name": "setClassTypes",
+                "args": [],
+                "lines": "290-308"
+            },
+            "getclasstype": {
+                "name": "getClassType",
+                "args": [
+                    "string $modType"
+                ],
+                "lines": "313-326"
+            },
+            "getcallablemethod": {
+                "name": "getCallableMethod",
+                "args": [
+                    "string $modType",
+                    "string $funcName",
+                    "string $callType = 'api'"
+                ],
+                "lines": "331-348"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Modules\\",
+        "lines": "86-349",
+        "traits": [
+            "Xaraya\\Context\\ContextTrait"
+        ]
+    },
+    "xaraya\\modules\\userapitrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules/userapitrait.php",
+        "name": "Xaraya\\Modules\\UserApiTrait",
+        "methods": {
+            "configure": {
+                "name": "configure",
+                "args": [],
+                "lines": "78-83"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Modules\\",
+        "lines": "69-84",
+        "traits": [
+            "Xaraya\\Modules\\ModuleServicesTrait"
+        ]
+    },
+    "xaraya\\modules\\userguitrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules/userguitrait.php",
+        "name": "Xaraya\\Modules\\UserGuiTrait",
+        "methods": {
+            "configure": {
+                "name": "configure",
+                "args": [],
+                "lines": "83-88"
+            },
+            "main": {
+                "name": "main",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "95-105"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Modules\\",
+        "lines": "74-106",
+        "traits": [
+            "Xaraya\\Modules\\ModuleServicesTrait"
+        ]
+    },
+    "xaraya\\services\\blockstrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/blocks.php",
+        "name": "Xaraya\\Services\\BlocksTrait",
+        "methods": {
+            "template": {
+                "name": "template",
+                "args": [
+                    "string $funcName",
+                    "array $tplData = []",
+                    "?string $templateName = null"
+                ],
+                "lines": "67-87",
+                "uses": "xarTpl::block()"
+            },
+            "prepare": {
+                "name": "prepare",
+                "args": [
+                    "array $tplData = []"
+                ],
+                "lines": "95-103"
+            },
+            "rendergroup": {
+                "name": "renderGroup",
+                "args": [
+                    "string $groupName",
+                    "?string $template"
+                ],
+                "lines": "108-111"
+            },
+            "renderblock": {
+                "name": "renderBlock",
+                "args": [
+                    "array $args"
+                ],
+                "lines": "117-120"
+            },
+            "guirequest": {
+                "name": "guiRequest",
+                "args": [
+                    "array $args"
+                ],
+                "lines": "128-134"
+            },
+            "apirequest": {
+                "name": "apiRequest",
+                "args": [
+                    "array $args"
+                ],
+                "lines": "143-149"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "54-150",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\cachingtrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/caching.php",
+        "name": "Xaraya\\Services\\CachingTrait",
+        "methods": {
+            "getmodulekey": {
+                "name": "getModuleKey",
+                "args": [
+                    "string $modName",
+                    "string $modType = 'user'",
+                    "string $funcName = 'main'",
+                    "array $args = []"
+                ],
+                "lines": "138-144"
+            },
+            "hasmodule": {
+                "name": "hasModule",
+                "args": [
+                    "?string $cacheKey"
+                ],
+                "lines": "149-155"
+            },
+            "getmodule": {
+                "name": "getModule",
+                "args": [
+                    "string $cacheKey"
+                ],
+                "lines": "160-163"
+            },
+            "setmodule": {
+                "name": "setModule",
+                "args": [
+                    "?string $cacheKey",
+                    "string $value"
+                ],
+                "lines": "168-174"
+            },
+            "getblockkey": {
+                "name": "getBlockKey",
+                "args": [
+                    "array $blockInfo = []"
+                ],
+                "lines": "181-184"
+            },
+            "hasblock": {
+                "name": "hasBlock",
+                "args": [
+                    "?string $cacheKey"
+                ],
+                "lines": "189-195"
+            },
+            "getblock": {
+                "name": "getBlock",
+                "args": [
+                    "string $cacheKey"
+                ],
+                "lines": "200-203"
+            },
+            "setblock": {
+                "name": "setBlock",
+                "args": [
+                    "?string $cacheKey",
+                    "string $value"
+                ],
+                "lines": "208-214"
+            },
+            "getobjectkey": {
+                "name": "getObjectKey",
+                "args": [
+                    "string $objectName",
+                    "string $methodName = 'view'",
+                    "array $args = []"
+                ],
+                "lines": "221-227"
+            },
+            "hasobject": {
+                "name": "hasObject",
+                "args": [
+                    "?string $cacheKey"
+                ],
+                "lines": "232-238"
+            },
+            "getobject": {
+                "name": "getObject",
+                "args": [
+                    "string $cacheKey"
+                ],
+                "lines": "243-246"
+            },
+            "setobject": {
+                "name": "setObject",
+                "args": [
+                    "?string $cacheKey",
+                    "string $value"
+                ],
+                "lines": "251-257"
+            },
+            "getvariablekey": {
+                "name": "getVariableKey",
+                "args": [
+                    "string $scope",
+                    "string $name"
+                ],
+                "lines": "263-266"
+            },
+            "hasvariable": {
+                "name": "hasVariable",
+                "args": [
+                    "?string $cacheKey"
+                ],
+                "lines": "271-277"
+            },
+            "getvariable": {
+                "name": "getVariable",
+                "args": [
+                    "string $cacheKey"
+                ],
+                "lines": "282-285"
+            },
+            "setvariable": {
+                "name": "setVariable",
+                "args": [
+                    "?string $cacheKey",
+                    "string|object $value"
+                ],
+                "lines": "290-296"
+            },
+            "delvariable": {
+                "name": "delVariable",
+                "args": [
+                    "?string $cacheKey"
+                ],
+                "lines": "301-307"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "129-308",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\configtrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/config.php",
+        "name": "Xaraya\\Services\\ConfigTrait",
+        "methods": {
+            "getvar": {
+                "name": "getVar",
+                "args": [
+                    "string $varName",
+                    "$value = null"
+                ],
+                "lines": "46-49"
+            },
+            "setvar": {
+                "name": "setVar",
+                "args": [
+                    "string $varName",
+                    "$value"
+                ],
+                "lines": "54-57"
+            },
+            "delvar": {
+                "name": "delVar",
+                "args": [
+                    "string $varName"
+                ],
+                "lines": "62-65"
+            },
+            "cache": {
+                "name": "cache",
+                "args": [],
+                "lines": "70-73"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "39-74",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\controllertrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/controller.php",
+        "name": "Xaraya\\Services\\ControllerTrait",
+        "methods": {
+            "getmoduleurl": {
+                "name": "getModuleURL",
+                "args": [
+                    "?string $modName = null",
+                    "string $modType = 'user'",
+                    "string $funcName = 'main'",
+                    "array $args = []",
+                    "?bool $generateXMLURL = null"
+                ],
+                "lines": "137-140"
+            },
+            "getobjecturl": {
+                "name": "getObjectURL",
+                "args": [
+                    "?string $objectName = null",
+                    "string $methodName = 'view'",
+                    "array $args = []",
+                    "?bool $generateXMLURL = null"
+                ],
+                "lines": "146-149"
+            },
+            "getactionurl": {
+                "name": "getActionURL",
+                "args": [
+                    "object $object",
+                    "string $action = ''",
+                    "$itemid = null",
+                    "array $extra = []"
+                ],
+                "lines": "160-163"
+            },
+            "getrouteurl": {
+                "name": "getRouteURL",
+                "args": [
+                    "string $route",
+                    "array $params = []"
+                ],
+                "lines": "169-183"
+            },
+            "setrouter": {
+                "name": "setRouter",
+                "args": [
+                    "?\\Xaraya\\Routing\\RouterInterface $router"
+                ],
+                "lines": "185-188"
+            },
+            "getcurrenturl": {
+                "name": "getCurrentURL",
+                "args": [
+                    "array $args = []",
+                    "?bool $generateXMLURL = null"
+                ],
+                "lines": "194-197"
+            },
+            "getbaseurl": {
+                "name": "getBaseURL",
+                "args": [],
+                "lines": "202-205"
+            },
+            "getbaseuri": {
+                "name": "getBaseURI",
+                "args": [],
+                "lines": "210-213"
+            },
+            "getentrypoint": {
+                "name": "getEntryPoint",
+                "args": [],
+                "lines": "218-221"
+            },
+            "getservervar": {
+                "name": "getServerVar",
+                "args": [
+                    "string $varName"
+                ],
+                "lines": "227-230"
+            },
+            "getsystemvar": {
+                "name": "getSystemVar",
+                "args": [
+                    "string $varName"
+                ],
+                "lines": "236-239"
+            },
+            "getrequest": {
+                "name": "getRequest",
+                "args": [],
+                "lines": "245-248"
+            },
+            "getrequestvar": {
+                "name": "getRequestVar",
+                "args": [
+                    "string $varName",
+                    "?string $allowOnlyMethod = null"
+                ],
+                "lines": "254-257"
+            },
+            "getrequestmethod": {
+                "name": "getRequestMethod",
+                "args": [],
+                "lines": "259-262"
+            },
+            "islocalreferer": {
+                "name": "isLocalReferer",
+                "args": [],
+                "lines": "264-267"
+            },
+            "issamereferer": {
+                "name": "isSameReferer",
+                "args": [],
+                "lines": "269-272"
+            },
+            "redirect": {
+                "name": "redirect",
+                "args": [
+                    "string $url",
+                    "?int $httpResponse = null"
+                ],
+                "lines": "279-282",
+                "uses": "xarController::redirect()"
+            },
+            "forbidden": {
+                "name": "forbidden",
+                "args": [
+                    "string $msg = ''",
+                    "?string $template = null"
+                ],
+                "lines": "288-291"
+            },
+            "notfound": {
+                "name": "notFound",
+                "args": [
+                    "string $msg = ''",
+                    "?string $template = null"
+                ],
+                "lines": "297-300"
+            },
+            "badrequest": {
+                "name": "badRequest",
+                "args": [
+                    "?string $layout = null"
+                ],
+                "lines": "306-309"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "127-310",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\coreservicestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/coreservicestrait.php",
+        "name": "Xaraya\\Services\\CoreServicesTrait",
+        "methods": {
+            "setcoreservices": {
+                "name": "setCoreServices",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "113-126"
+            },
+            "service": {
+                "name": "service",
+                "args": [
+                    "string $name",
+                    "...$args"
+                ],
+                "lines": "132-152"
+            },
+            "ctl": {
+                "name": "ctl",
+                "args": [],
+                "lines": "177-181"
+            },
+            "log": {
+                "name": "log",
+                "args": [],
+                "lines": "200-204"
+            },
+            "mls": {
+                "name": "mls",
+                "args": [],
+                "lines": "223-227"
+            },
+            "mod": {
+                "name": "mod",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "272-284"
+            },
+            "sec": {
+                "name": "sec",
+                "args": [],
+                "lines": "299-303"
+            },
+            "tpl": {
+                "name": "tpl",
+                "args": [],
+                "lines": "323-327"
+            },
+            "var": {
+                "name": "var",
+                "args": [],
+                "lines": "344-348"
+            },
+            "block": {
+                "name": "block",
+                "args": [],
+                "lines": "365-369"
+            },
+            "data": {
+                "name": "data",
+                "args": [],
+                "lines": "390-394"
+            },
+            "prop": {
+                "name": "prop",
+                "args": [],
+                "lines": "411-415"
+            },
+            "cache": {
+                "name": "cache",
+                "args": [],
+                "lines": "444-448"
+            },
+            "config": {
+                "name": "config",
+                "args": [],
+                "lines": "461-465"
+            },
+            "session": {
+                "name": "session",
+                "args": [],
+                "lines": "479-483"
+            },
+            "user": {
+                "name": "user",
+                "args": [
+                    "?int $userId = null"
+                ],
+                "lines": "498-510"
+            },
+            "db": {
+                "name": "db",
+                "args": [],
+                "lines": "525-529"
+            },
+            "exit": {
+                "name": "exit",
+                "args": [
+                    "int|string $status = 0"
+                ],
+                "lines": "535-540"
+            },
+            "sys": {
+                "name": "sys",
+                "args": [],
+                "lines": "545-553"
+            },
+            "ml": {
+                "name": "ml",
+                "args": [
+                    "$rawstring",
+                    "...$args"
+                ],
+                "lines": "561-564"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "82-565",
+        "traits": [
+            "Xaraya\\Context\\ContextTrait"
+        ]
+    },
+    "xaraya\\services\\databasetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/database.php",
+        "name": "Xaraya\\Services\\DatabaseTrait",
+        "methods": {
+            "create": {
+                "name": "create",
+                "args": [
+                    "$parent = null"
+                ],
+                "lines": "82-93"
+            },
+            "getconn": {
+                "name": "getConn",
+                "args": [
+                    "int|string $index = 0"
+                ],
+                "lines": "98-102"
+            },
+            "getfetchassoc": {
+                "name": "getFetchAssoc",
+                "args": [],
+                "lines": "107-110"
+            },
+            "getfetchnum": {
+                "name": "getFetchNum",
+                "args": [],
+                "lines": "115-118"
+            },
+            "getname": {
+                "name": "getName",
+                "args": [],
+                "lines": "123-126"
+            },
+            "getprefix": {
+                "name": "getPrefix",
+                "args": [],
+                "lines": "131-134"
+            },
+            "gettype": {
+                "name": "getType",
+                "args": [],
+                "lines": "139-142"
+            },
+            "gettables": {
+                "name": "getTables",
+                "args": [],
+                "lines": "148-151"
+            },
+            "importtables": {
+                "name": "importTables",
+                "args": [
+                    "array $tables = []"
+                ],
+                "lines": "157-160"
+            },
+            "hasconn": {
+                "name": "hasConn",
+                "args": [
+                    "int|string $index = 0"
+                ],
+                "lines": "165-169"
+            },
+            "newconn": {
+                "name": "newConn",
+                "args": [
+                    "?array $args = null"
+                ],
+                "lines": "175-179"
+            },
+            "getconnindex": {
+                "name": "getConnIndex",
+                "args": [],
+                "lines": "184-188"
+            },
+            "getconnection": {
+                "name": "getConnection",
+                "args": [
+                    "array $dsn",
+                    "$flags"
+                ],
+                "lines": "194-197"
+            },
+            "gettypemap": {
+                "name": "getTypeMap",
+                "args": [],
+                "lines": "203-206"
+            },
+            "withpdo": {
+                "name": "withPDO",
+                "args": [],
+                "lines": "208-211"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "73-212",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\dataobjecttrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/dataobject.php",
+        "name": "Xaraya\\Services\\DataObjectTrait",
+        "methods": {
+            "geturl": {
+                "name": "getURL",
+                "args": [
+                    "string $methodName = 'view'",
+                    "array $args = []",
+                    "?string $objectName = null"
+                ],
+                "lines": "112-116"
+            },
+            "template": {
+                "name": "template",
+                "args": [
+                    "string $tplType",
+                    "array $tplData = []"
+                ],
+                "lines": "125-141",
+                "uses": "xarTpl::object()"
+            },
+            "getobject": {
+                "name": "getObject",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "147-150"
+            },
+            "getobjectlist": {
+                "name": "getObjectList",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "156-159"
+            },
+            "getobjectloader": {
+                "name": "getObjectLoader",
+                "args": [
+                    "?string $objectName = null",
+                    "array $fieldlist = ['id', 'name']"
+                ],
+                "lines": "165-169"
+            },
+            "getobjectinfo": {
+                "name": "getObjectInfo",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "176-179"
+            },
+            "getobjectinterface": {
+                "name": "getObjectInterface",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "186-189"
+            },
+            "getobjects": {
+                "name": "getObjects",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "196-199"
+            },
+            "getobjectid": {
+                "name": "getObjectID",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "206-209"
+            },
+            "getobjectdescriptor": {
+                "name": "getObjectDescriptor",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "215-218"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "104-219",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\datapropertytrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/dataproperty.php",
+        "name": "Xaraya\\Services\\DataPropertyTrait",
+        "methods": {
+            "template": {
+                "name": "template",
+                "args": [
+                    "string $tplType",
+                    "array $tplData = []",
+                    "?string $tplBase = null"
+                ],
+                "lines": "75-92",
+                "uses": "xarTpl::property()"
+            },
+            "getpropertytypes": {
+                "name": "getPropertyTypes",
+                "args": [],
+                "lines": "98-101"
+            },
+            "getproperties": {
+                "name": "getProperties",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "108-111"
+            },
+            "getproperty": {
+                "name": "getProperty",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "117-120"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "62-121",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\hasdatabasetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/hasdatabasetrait.php",
+        "name": "Xaraya\\Services\\HasDatabaseTrait",
+        "methods": {
+            "db": {
+                "name": "db",
+                "args": [],
+                "lines": "58-62"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "49-63"
+    },
+    "xaraya\\services\\hasmultilanguagetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/hasmultilanguagetrait.php",
+        "name": "Xaraya\\Services\\HasMultiLanguageTrait",
+        "methods": {
+            "mls": {
+                "name": "mls",
+                "args": [],
+                "lines": "41-45"
+            },
+            "ml": {
+                "name": "ml",
+                "args": [
+                    "$rawstring",
+                    "...$args"
+                ],
+                "lines": "53-56"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "32-57"
+    },
+    "xaraya\\services\\loggertrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/logger.php",
+        "name": "Xaraya\\Services\\LoggerTrait",
+        "methods": {
+            "create": {
+                "name": "create",
+                "args": [
+                    "$parent = null"
+                ],
+                "lines": "90-101"
+            },
+            "message": {
+                "name": "message",
+                "args": [
+                    "string|\\Stringable $message",
+                    "int $level = 0"
+                ],
+                "lines": "103-109"
+            },
+            "variable": {
+                "name": "variable",
+                "args": [
+                    "string $name",
+                    "$var",
+                    "int $level = 0"
+                ],
+                "lines": "111-117"
+            },
+            "emergency": {
+                "name": "emergency",
+                "args": [
+                    "string|\\Stringable $message",
+                    "array $var = []"
+                ],
+                "lines": "120-123"
+            },
+            "alert": {
+                "name": "alert",
+                "args": [
+                    "string|\\Stringable $message",
+                    "array $var = []"
+                ],
+                "lines": "126-129"
+            },
+            "critical": {
+                "name": "critical",
+                "args": [
+                    "string|\\Stringable $message",
+                    "array $var = []"
+                ],
+                "lines": "132-135"
+            },
+            "error": {
+                "name": "error",
+                "args": [
+                    "string|\\Stringable $message",
+                    "array $var = []"
+                ],
+                "lines": "138-141"
+            },
+            "warning": {
+                "name": "warning",
+                "args": [
+                    "string|\\Stringable $message",
+                    "array $var = []"
+                ],
+                "lines": "144-147"
+            },
+            "notice": {
+                "name": "notice",
+                "args": [
+                    "string|\\Stringable $message",
+                    "array $var = []"
+                ],
+                "lines": "150-153"
+            },
+            "info": {
+                "name": "info",
+                "args": [
+                    "string|\\Stringable $message",
+                    "array $var = []"
+                ],
+                "lines": "156-159"
+            },
+            "debug": {
+                "name": "debug",
+                "args": [
+                    "string|\\Stringable $message",
+                    "array $var = []"
+                ],
+                "lines": "162-165"
+            },
+            "log": {
+                "name": "log",
+                "args": [
+                    "$level",
+                    "string|\\Stringable $message",
+                    "array $var = []"
+                ],
+                "lines": "168-180"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "69-181",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\modulestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/modules.php",
+        "name": "Xaraya\\Services\\ModulesTrait",
+        "methods": {
+            "getvar": {
+                "name": "getVar",
+                "args": [
+                    "string $varName",
+                    "?string $modName = null"
+                ],
+                "lines": "106-110"
+            },
+            "setvar": {
+                "name": "setVar",
+                "args": [
+                    "string $varName",
+                    "$value",
+                    "?string $modName = null"
+                ],
+                "lines": "115-122"
+            },
+            "delvar": {
+                "name": "delVar",
+                "args": [
+                    "string $varName",
+                    "?string $modName = null"
+                ],
+                "lines": "127-131"
+            },
+            "getvarid": {
+                "name": "getVarID",
+                "args": [
+                    "string $varName",
+                    "?string $modName = null"
+                ],
+                "lines": "136-140"
+            },
+            "getuservar": {
+                "name": "getUserVar",
+                "args": [
+                    "string $varName",
+                    "?int $userId = null",
+                    "?string $modName = null"
+                ],
+                "lines": "142-146"
+            },
+            "setuservar": {
+                "name": "setUserVar",
+                "args": [
+                    "string $varName",
+                    "$value",
+                    "?int $userId = null",
+                    "?string $modName = null"
+                ],
+                "lines": "148-152"
+            },
+            "deluservar": {
+                "name": "delUserVar",
+                "args": [
+                    "string $varName",
+                    "?int $userId = null",
+                    "?string $modName = null"
+                ],
+                "lines": "154-158"
+            },
+            "getitemvar": {
+                "name": "getItemVar",
+                "args": [
+                    "string $varName",
+                    "$itemid = null",
+                    "?string $modName = null"
+                ],
+                "lines": "160-164"
+            },
+            "setitemvar": {
+                "name": "setItemVar",
+                "args": [
+                    "string $varName",
+                    "$value",
+                    "$itemid = null",
+                    "?string $modName = null"
+                ],
+                "lines": "166-170"
+            },
+            "delitemvar": {
+                "name": "delItemVar",
+                "args": [
+                    "string $varName",
+                    "$itemid = null",
+                    "?string $modName = null"
+                ],
+                "lines": "172-176"
+            },
+            "disableoverview": {
+                "name": "disableOverview",
+                "args": [],
+                "lines": "181-184"
+            },
+            "geturl": {
+                "name": "getURL",
+                "args": [
+                    "string $modType = 'user'",
+                    "string $funcName = 'main'",
+                    "array $args = []",
+                    "?string $modName = null"
+                ],
+                "lines": "190-194"
+            },
+            "template": {
+                "name": "template",
+                "args": [
+                    "string $funcName",
+                    "array $tplData = []",
+                    "?string $templateName = null"
+                ],
+                "lines": "204-229",
+                "uses": "xarTpl::module()"
+            },
+            "prepare": {
+                "name": "prepare",
+                "args": [
+                    "array $tplData = []"
+                ],
+                "lines": "236-244"
+            },
+            "getname": {
+                "name": "getName",
+                "args": [
+                    "?int $regID = null"
+                ],
+                "lines": "249-252"
+            },
+            "getid": {
+                "name": "getID",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "257-261"
+            },
+            "getregid": {
+                "name": "getRegID",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "266-273"
+            },
+            "getdisplayname": {
+                "name": "getDisplayName",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "278-282"
+            },
+            "getfileinfo": {
+                "name": "getFileInfo",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "288-292"
+            },
+            "getbaseinfo": {
+                "name": "getBaseInfo",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "298-302"
+            },
+            "getinfo": {
+                "name": "getInfo",
+                "args": [
+                    "int $modRegId"
+                ],
+                "lines": "308-311"
+            },
+            "gettables": {
+                "name": "getTables",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "318-334"
+            },
+            "isavailable": {
+                "name": "isAvailable",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "339-343"
+            },
+            "apifunc": {
+                "name": "apiFunc",
+                "args": [
+                    "?string $modName = null",
+                    "?string $modType = null",
+                    "string $funcName = 'main'",
+                    "array $args = []"
+                ],
+                "lines": "349-355"
+            },
+            "apiload": {
+                "name": "apiLoad",
+                "args": [
+                    "?string $modName = null",
+                    "?string $modType = null"
+                ],
+                "lines": "360-365"
+            },
+            "guifunc": {
+                "name": "guiFunc",
+                "args": [
+                    "?string $modName = null",
+                    "?string $modType = null",
+                    "string $funcName = 'main'",
+                    "array $args = []"
+                ],
+                "lines": "371-377"
+            },
+            "load": {
+                "name": "load",
+                "args": [
+                    "?string $modName = null",
+                    "?string $modType = null"
+                ],
+                "lines": "382-387"
+            },
+            "loaddbinfo": {
+                "name": "loadDbInfo",
+                "args": [
+                    "?string $modName = null",
+                    "?string $modDir = null"
+                ],
+                "lines": "395-401"
+            },
+            "getmodule": {
+                "name": "getModule",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "408-412"
+            },
+            "getmoduleclassmethod": {
+                "name": "getModuleClassMethod",
+                "args": [
+                    "?string $modName = null",
+                    "?string $modType = null",
+                    "string $funcName = 'main'",
+                    "string $callType = 'api'"
+                ],
+                "lines": "422-427"
+            },
+            "apimethod": {
+                "name": "apiMethod",
+                "args": [
+                    "?string $modName = null",
+                    "?string $modType = null",
+                    "string $funcName = 'main'",
+                    "array $args = []"
+                ],
+                "lines": "438-454"
+            },
+            "guimethod": {
+                "name": "guiMethod",
+                "args": [
+                    "?string $modName = null",
+                    "?string $modType = null",
+                    "string $funcName = 'main'",
+                    "array $args = []"
+                ],
+                "lines": "465-482"
+            },
+            "resolvealias": {
+                "name": "resolveAlias",
+                "args": [
+                    "string $name"
+                ],
+                "lines": "489-492"
+            },
+            "ishooked": {
+                "name": "isHooked",
+                "args": [
+                    "string $hookModName",
+                    "?string $callerModName = null",
+                    "?int $callerItemType = null"
+                ],
+                "lines": "497-502"
+            },
+            "callhooks": {
+                "name": "callHooks",
+                "args": [
+                    "string $scope",
+                    "string $action",
+                    "$itemid",
+                    "$extraInfo = null",
+                    "?string $callerModName = null",
+                    "?int $callerItemType = null"
+                ],
+                "lines": "509-527"
+            },
+            "notifyhooks": {
+                "name": "notifyHooks",
+                "args": [
+                    "string $event",
+                    "array $info = []"
+                ],
+                "lines": "535-541"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "99-542",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\multilanguagetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/multilanguage.php",
+        "name": "Xaraya\\Services\\MultiLanguageTrait",
+        "methods": {
+            "getcurrentlocale": {
+                "name": "getCurrentLocale",
+                "args": [],
+                "lines": "124-127"
+            },
+            "getcharsetfromlocale": {
+                "name": "getCharsetFromLocale",
+                "args": [
+                    "string $locale"
+                ],
+                "lines": "132-135"
+            },
+            "loadlocale": {
+                "name": "loadLocale",
+                "args": [
+                    "?string $locale = null"
+                ],
+                "lines": "142-146"
+            },
+            "formatdate": {
+                "name": "formatDate",
+                "args": [
+                    "?string $format = null",
+                    "$timestamp = null",
+                    "bool $addoffset = true"
+                ],
+                "lines": "155-158"
+            },
+            "getformatteddate": {
+                "name": "getFormattedDate",
+                "args": [
+                    "string $length = 'short'",
+                    "$timestamp = null",
+                    "bool $addoffset = true"
+                ],
+                "lines": "167-170"
+            },
+            "getformattedtime": {
+                "name": "getFormattedTime",
+                "args": [
+                    "string $length = 'short'",
+                    "$timestamp = null",
+                    "bool $addoffset = true"
+                ],
+                "lines": "179-182"
+            },
+            "usertime": {
+                "name": "userTime",
+                "args": [],
+                "lines": "188-191"
+            },
+            "translate": {
+                "name": "translate",
+                "args": [
+                    "$rawstring",
+                    "...$args"
+                ],
+                "lines": "199-202",
+                "uses": "xarMLS::translate()"
+            },
+            "getslug": {
+                "name": "getSlug",
+                "args": [
+                    "string $text",
+                    "string $separator = '_'",
+                    "?string $locale = null"
+                ],
+                "lines": "208-211"
+            },
+            "loadtranslations": {
+                "name": "loadTranslations",
+                "args": [
+                    "string $path"
+                ],
+                "lines": "219-222",
+                "uses": "xarMLS::loadTranslations()"
+            },
+            "loadmoduletranslations": {
+                "name": "loadModuleTranslations",
+                "args": [
+                    "string $modName",
+                    "string $modType",
+                    "string $funcName"
+                ],
+                "lines": "231-237"
+            },
+            "loadobjecttranslations": {
+                "name": "loadObjectTranslations",
+                "args": [
+                    "string $objectName",
+                    "string $propertyName"
+                ],
+                "lines": "245-248"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "117-249",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\parentservicestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/parentservicestrait.php",
+        "name": "Xaraya\\Services\\ParentServicesTrait",
+        "methods": {
+            "setcoreservices": {
+                "name": "setCoreServices",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "65-68"
+            },
+            "service": {
+                "name": "service",
+                "args": [
+                    "string $name",
+                    "...$args"
+                ],
+                "lines": "74-77"
+            },
+            "ctl": {
+                "name": "ctl",
+                "args": [],
+                "lines": "102-105"
+            },
+            "log": {
+                "name": "log",
+                "args": [],
+                "lines": "124-127"
+            },
+            "mls": {
+                "name": "mls",
+                "args": [],
+                "lines": "146-149"
+            },
+            "mod": {
+                "name": "mod",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "194-197"
+            },
+            "sec": {
+                "name": "sec",
+                "args": [],
+                "lines": "212-215"
+            },
+            "tpl": {
+                "name": "tpl",
+                "args": [],
+                "lines": "235-238"
+            },
+            "var": {
+                "name": "var",
+                "args": [],
+                "lines": "255-258"
+            },
+            "block": {
+                "name": "block",
+                "args": [],
+                "lines": "275-278"
+            },
+            "data": {
+                "name": "data",
+                "args": [],
+                "lines": "299-302"
+            },
+            "prop": {
+                "name": "prop",
+                "args": [],
+                "lines": "319-322"
+            },
+            "cache": {
+                "name": "cache",
+                "args": [],
+                "lines": "351-354"
+            },
+            "config": {
+                "name": "config",
+                "args": [],
+                "lines": "367-370"
+            },
+            "session": {
+                "name": "session",
+                "args": [],
+                "lines": "384-387"
+            },
+            "user": {
+                "name": "user",
+                "args": [
+                    "?int $userId = null"
+                ],
+                "lines": "402-405"
+            },
+            "db": {
+                "name": "db",
+                "args": [],
+                "lines": "420-423"
+            },
+            "exit": {
+                "name": "exit",
+                "args": [
+                    "int|string $status = 0"
+                ],
+                "lines": "429-432"
+            },
+            "sys": {
+                "name": "sys",
+                "args": [],
+                "lines": "437-440"
+            },
+            "ml": {
+                "name": "ml",
+                "args": [
+                    "$rawstring",
+                    "...$args"
+                ],
+                "lines": "448-451"
+            },
+            "getparent": {
+                "name": "getParent",
+                "args": [],
+                "lines": "453-457"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "57-458",
+        "traits": [
+            "Xaraya\\Context\\ContextTrait"
+        ]
+    },
+    "xaraya\\services\\securitytrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/security.php",
+        "name": "Xaraya\\Services\\SecurityTrait",
+        "methods": {
+            "checkaccess": {
+                "name": "checkAccess",
+                "args": [
+                    "string $mask",
+                    "string|int $action = ''",
+                    "?string $modName = null"
+                ],
+                "lines": "62-75"
+            },
+            "callsecuritycheck": {
+                "name": "callSecurityCheck",
+                "args": [
+                    "string $mask",
+                    "int $catch = 1"
+                ],
+                "lines": "83-87"
+            },
+            "check": {
+                "name": "check",
+                "args": [
+                    "string $mask",
+                    "int $catch = 1",
+                    "string $component = ''",
+                    "string $instance = ''",
+                    "string $module = ''",
+                    "string $rolename = ''",
+                    "int $realm = 0",
+                    "int $level = 0"
+                ],
+                "lines": "89-93"
+            },
+            "genauthkey": {
+                "name": "genAuthKey",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "98-103"
+            },
+            "confirmauthkey": {
+                "name": "confirmAuthKey",
+                "args": [
+                    "string $name = 'authid'",
+                    "?string $modName = null"
+                ],
+                "lines": "108-113"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "55-114",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\servicestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/servicestrait.php",
+        "name": "Xaraya\\Services\\ServicesTrait",
+        "methods": {
+            "getmodname": {
+                "name": "getModName",
+                "args": [],
+                "lines": "97-100"
+            },
+            "getitemtype": {
+                "name": "getItemType",
+                "args": [],
+                "lines": "105-108"
+            },
+            "getmodtype": {
+                "name": "getModType",
+                "args": [],
+                "lines": "113-116"
+            },
+            "getblocktype": {
+                "name": "getBlockType",
+                "args": [],
+                "lines": "121-124"
+            },
+            "getobject": {
+                "name": "getObject",
+                "args": [],
+                "lines": "129-132"
+            },
+            "getproperty": {
+                "name": "getProperty",
+                "args": [],
+                "lines": "137-140"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "90-141",
+        "traits": [
+            "Xaraya\\Services\\CoreServicesTrait"
+        ]
+    },
+    "xaraya\\services\\servicetrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/servicetrait.php",
+        "name": "Xaraya\\Services\\ServiceTrait",
+        "methods": {
+            "__construct": {
+                "name": "__construct",
+                "args": [
+                    "$parent"
+                ],
+                "lines": "55-58"
+            },
+            "getparent": {
+                "name": "getParent",
+                "args": [],
+                "lines": "63-68"
+            },
+            "getcontext": {
+                "name": "getContext",
+                "args": [],
+                "lines": "74-77"
+            },
+            "setcontext": {
+                "name": "setContext",
+                "args": [
+                    "$context"
+                ],
+                "lines": "79-87"
+            },
+            "hascontext": {
+                "name": "hasContext",
+                "args": [],
+                "lines": "89-92"
+            },
+            "create": {
+                "name": "create",
+                "args": [
+                    "$parent"
+                ],
+                "lines": "97-104"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "46-105",
+        "traits": [
+            "Xaraya\\Context\\ContextTrait"
+        ]
+    },
+    "xaraya\\services\\sessiontrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/session.php",
+        "name": "Xaraya\\Services\\SessionTrait",
+        "methods": {
+            "getvar": {
+                "name": "getVar",
+                "args": [
+                    "string $varName"
+                ],
+                "lines": "49-52"
+            },
+            "setvar": {
+                "name": "setVar",
+                "args": [
+                    "string $varName",
+                    "$value"
+                ],
+                "lines": "57-60"
+            },
+            "delvar": {
+                "name": "delVar",
+                "args": [
+                    "string $varName"
+                ],
+                "lines": "65-68"
+            },
+            "getuserid": {
+                "name": "getUserId",
+                "args": [],
+                "lines": "73-77"
+            },
+            "getanonid": {
+                "name": "getAnonId",
+                "args": [],
+                "lines": "82-85"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "42-86",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\templatingtrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/templating.php",
+        "name": "Xaraya\\Services\\TemplatingTrait",
+        "methods": {
+            "module": {
+                "name": "module",
+                "args": [
+                    "string $modName",
+                    "string $modType",
+                    "string $funcName",
+                    "array $tplData = []",
+                    "?string $templateName = null"
+                ],
+                "lines": "81-100",
+                "uses": "xarTpl::module()"
+            },
+            "block": {
+                "name": "block",
+                "args": [
+                    "string $modName",
+                    "string $blockType",
+                    "array $tplData = []",
+                    "?string $tplName = null",
+                    "?string $tplBase = null",
+                    "?string $tplModule = null"
+                ],
+                "lines": "113-128",
+                "uses": "xarTpl::block()"
+            },
+            "object": {
+                "name": "object",
+                "args": [
+                    "string $modName",
+                    "string $objectName",
+                    "string $tplType",
+                    "array $tplData = []"
+                ],
+                "lines": "139-152",
+                "uses": "xarTpl::object()"
+            },
+            "property": {
+                "name": "property",
+                "args": [
+                    "string $modName",
+                    "string $propertyName",
+                    "string $tplType = 'showoutput'",
+                    "array $tplData = []",
+                    "?string $tplBase = null"
+                ],
+                "lines": "164-178",
+                "uses": "xarTpl::property()"
+            },
+            "getpagetitle": {
+                "name": "getPageTitle",
+                "args": [],
+                "lines": "183-186"
+            },
+            "setpagetitle": {
+                "name": "setPageTitle",
+                "args": [
+                    "string $title",
+                    "?string $modName = null"
+                ],
+                "lines": "195-199",
+                "uses": "xarTpl::setPageTitle()"
+            },
+            "getpagetemplatename": {
+                "name": "getPageTemplateName",
+                "args": [],
+                "lines": "204-207"
+            },
+            "setpagetemplatename": {
+                "name": "setPageTemplateName",
+                "args": [
+                    "string $templateName"
+                ],
+                "lines": "215-218",
+                "uses": "xarTpl::setPageTemplateName()"
+            },
+            "getthemedir": {
+                "name": "getThemeDir",
+                "args": [
+                    "?string $theme = null"
+                ],
+                "lines": "223-226"
+            },
+            "getthemeurl": {
+                "name": "getThemeUrl",
+                "args": [
+                    "?string $theme = null"
+                ],
+                "lines": "231-234"
+            },
+            "getcodeurl": {
+                "name": "getCodeUrl",
+                "args": [],
+                "lines": "239-242"
+            },
+            "getimage": {
+                "name": "getImage",
+                "args": [
+                    "string $fileName",
+                    "?string $scope = null",
+                    "?string $package = null"
+                ],
+                "lines": "251-254"
+            },
+            "getfile": {
+                "name": "getFile",
+                "args": [
+                    "string $fileName",
+                    "?string $scope = null",
+                    "?string $package = null"
+                ],
+                "lines": "263-266"
+            },
+            "getpager": {
+                "name": "getPager",
+                "args": [
+                    "int $startNum",
+                    "int $total",
+                    "string $urltemplate",
+                    "int $itemsPerPage = 10",
+                    "int|array $blockOptions = []",
+                    "string $template = 'default'",
+                    "string $tplmodule = 'base'"
+                ],
+                "lines": "280-283",
+                "uses": "xarTplPager::getPager()"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "67-284",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\usertrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/user.php",
+        "name": "Xaraya\\Services\\UserTrait",
+        "methods": {
+            "getvar": {
+                "name": "getVar",
+                "args": [
+                    "string $varName"
+                ],
+                "lines": "59-62"
+            },
+            "setvar": {
+                "name": "setVar",
+                "args": [
+                    "string $varName",
+                    "$value"
+                ],
+                "lines": "67-70"
+            },
+            "getid": {
+                "name": "getId",
+                "args": [],
+                "lines": "75-79"
+            },
+            "getname": {
+                "name": "getName",
+                "args": [],
+                "lines": "81-84"
+            },
+            "getuser": {
+                "name": "getUser",
+                "args": [],
+                "lines": "86-89"
+            },
+            "getemail": {
+                "name": "getEmail",
+                "args": [],
+                "lines": "91-94"
+            },
+            "isloggedin": {
+                "name": "isLoggedIn",
+                "args": [],
+                "lines": "96-100"
+            },
+            "isdebugadmin": {
+                "name": "isDebugAdmin",
+                "args": [],
+                "lines": "102-105"
+            },
+            "issiteadmin": {
+                "name": "isSiteAdmin",
+                "args": [],
+                "lines": "107-110"
+            },
+            "getlocale": {
+                "name": "getLocale",
+                "args": [],
+                "lines": "112-115"
+            },
+            "setlocale": {
+                "name": "setLocale",
+                "args": [
+                    "string $locale"
+                ],
+                "lines": "117-120"
+            },
+            "getthemename": {
+                "name": "getThemeName",
+                "args": [],
+                "lines": "122-125"
+            },
+            "setthemename": {
+                "name": "setThemeName",
+                "args": [
+                    "string $themeName"
+                ],
+                "lines": "127-130"
+            },
+            "getcurrentid": {
+                "name": "getCurrentId",
+                "args": [],
+                "lines": "135-138"
+            },
+            "setcurrentid": {
+                "name": "setCurrentId",
+                "args": [
+                    "int $userId"
+                ],
+                "lines": "145-148"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "50-149",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\variablestrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/variables.php",
+        "name": "Xaraya\\Services\\VariablesTrait",
+        "methods": {
+            "fetch": {
+                "name": "fetch",
+                "args": [
+                    "$name",
+                    "$validation",
+                    "&$variable",
+                    "$defaultValue = null",
+                    "$flags = xarVar::GET_OR_POST",
+                    "$prep = xarVar::PREP_FOR_NOTHING"
+                ],
+                "lines": "171-175",
+                "uses": "xarVar::fetch()"
+            },
+            "get": {
+                "name": "get",
+                "args": [
+                    "$name",
+                    "&$variable",
+                    "$validation",
+                    "$defaultValue = null"
+                ],
+                "lines": "193-197",
+                "uses": "xarVar::fetch()"
+            },
+            "check": {
+                "name": "check",
+                "args": [
+                    "$name",
+                    "&$variable",
+                    "$validation = 'isset'",
+                    "$defaultValue = null"
+                ],
+                "lines": "215-232",
+                "uses": "xarVar::fetch()"
+            },
+            "find": {
+                "name": "find",
+                "args": [
+                    "$name",
+                    "&$variable",
+                    "$validation = 'isset'",
+                    "$defaultValue = null"
+                ],
+                "lines": "251-256",
+                "uses": "xarVar::fetch()"
+            },
+            "update": {
+                "name": "update",
+                "args": [
+                    "$name",
+                    "&$variable",
+                    "$validation = 'isset'",
+                    "$defaultValue = null"
+                ],
+                "lines": "274-291",
+                "uses": "xarVar::fetch()"
+            },
+            "validate": {
+                "name": "validate",
+                "args": [
+                    "$validation",
+                    "&$variable",
+                    "$suppress = false",
+                    "$name = ''"
+                ],
+                "lines": "304-307"
+            },
+            "getrequestvar": {
+                "name": "getRequestVar",
+                "args": [
+                    "string $name",
+                    "?string $allowOnlyMethod = null"
+                ],
+                "lines": "315-319"
+            },
+            "prep": {
+                "name": "prep",
+                "args": [
+                    "...$args"
+                ],
+                "lines": "327-330"
+            },
+            "prephtml": {
+                "name": "prepHTML",
+                "args": [
+                    "...$args"
+                ],
+                "lines": "338-341"
+            },
+            "prepemail": {
+                "name": "prepEmail",
+                "args": [
+                    "...$args"
+                ],
+                "lines": "349-352"
+            },
+            "preppath": {
+                "name": "prepPath",
+                "args": [
+                    "...$args"
+                ],
+                "lines": "360-363"
+            },
+            "iscached": {
+                "name": "isCached",
+                "args": [
+                    "string $scope",
+                    "string $name"
+                ],
+                "lines": "365-368"
+            },
+            "getcached": {
+                "name": "getCached",
+                "args": [
+                    "string $scope",
+                    "string $name"
+                ],
+                "lines": "370-373"
+            },
+            "setcached": {
+                "name": "setCached",
+                "args": [
+                    "string $scope",
+                    "string $name",
+                    "$value"
+                ],
+                "lines": "375-378"
+            },
+            "delcached": {
+                "name": "delCached",
+                "args": [
+                    "string $scope",
+                    "string $name"
+                ],
+                "lines": "380-383"
+            },
+            "haspreload": {
+                "name": "hasPreload",
+                "args": [
+                    "string $scope",
+                    "?string $name = null"
+                ],
+                "lines": "385-388"
+            },
+            "loadcached": {
+                "name": "loadCached",
+                "args": [
+                    "string $scope",
+                    "?string $name = null"
+                ],
+                "lines": "390-393"
+            },
+            "savecached": {
+                "name": "saveCached",
+                "args": [
+                    "string $scope",
+                    "?string $name = null",
+                    "?string $source = null"
+                ],
+                "lines": "395-398"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "148-399",
+        "traits": [
+            "Xaraya\\Services\\ServiceTrait"
+        ]
+    },
+    "xaraya\\services\\withstaticservices": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/withstaticservices.php",
+        "name": "Xaraya\\Services\\WithStaticServices",
+        "methods": {
+            "getservicesclass": {
+                "name": "getServicesClass",
+                "args": [
+                    "$context = null"
+                ],
+                "lines": "49-56"
+            },
+            "setservicescontext": {
+                "name": "setServicesContext",
+                "args": [
+                    "$context"
+                ],
+                "lines": "63-66"
+            },
+            "service": {
+                "name": "service",
+                "args": [
+                    "string $name",
+                    "...$args"
+                ],
+                "lines": "72-75"
+            },
+            "ctl": {
+                "name": "ctl",
+                "args": [],
+                "lines": "100-103"
+            },
+            "log": {
+                "name": "log",
+                "args": [],
+                "lines": "122-125"
+            },
+            "mls": {
+                "name": "mls",
+                "args": [],
+                "lines": "144-147"
+            },
+            "mod": {
+                "name": "mod",
+                "args": [
+                    "?string $modName = null"
+                ],
+                "lines": "192-198"
+            },
+            "sec": {
+                "name": "sec",
+                "args": [],
+                "lines": "213-216"
+            },
+            "tpl": {
+                "name": "tpl",
+                "args": [],
+                "lines": "236-239"
+            },
+            "var": {
+                "name": "var",
+                "args": [],
+                "lines": "256-259"
+            },
+            "block": {
+                "name": "block",
+                "args": [],
+                "lines": "276-279"
+            },
+            "data": {
+                "name": "data",
+                "args": [],
+                "lines": "300-303"
+            },
+            "prop": {
+                "name": "prop",
+                "args": [],
+                "lines": "320-323"
+            },
+            "cache": {
+                "name": "cache",
+                "args": [],
+                "lines": "352-355"
+            },
+            "config": {
+                "name": "config",
+                "args": [],
+                "lines": "368-371"
+            },
+            "session": {
+                "name": "session",
+                "args": [],
+                "lines": "385-388"
+            },
+            "user": {
+                "name": "user",
+                "args": [
+                    "?int $userId = null"
+                ],
+                "lines": "403-409"
+            },
+            "db": {
+                "name": "db",
+                "args": [],
+                "lines": "424-427"
+            },
+            "exit": {
+                "name": "exit",
+                "args": [
+                    "int|string $status = 0"
+                ],
+                "lines": "433-437"
+            },
+            "sys": {
+                "name": "sys",
+                "args": [],
+                "lines": "444-447"
+            },
+            "ml": {
+                "name": "ml",
+                "args": [
+                    "$rawstring",
+                    "...$args"
+                ],
+                "lines": "455-458"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "lines": "40-459"
+    },
+    "xaraya\\tools\\timertrait": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tools/timertrait.php",
+        "name": "Xaraya\\Tools\\TimerTrait",
+        "methods": {
+            "enabletimer": {
+                "name": "enableTimer",
+                "args": [
+                    "?bool $enable = null"
+                ],
+                "lines": "81-87"
+            },
+            "settimer": {
+                "name": "setTimer",
+                "args": [
+                    "string $label"
+                ],
+                "lines": "89-101"
+            },
+            "gettimers": {
+                "name": "getTimers",
+                "args": [],
+                "lines": "107-115"
+            },
+            "wraptimer": {
+                "name": "wrapTimer",
+                "args": [
+                    "string $label",
+                    "callable $callback",
+                    "...$args"
+                ],
+                "lines": "124-130"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Tools\\",
+        "lines": "69-131"
+    }
+}

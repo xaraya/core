@@ -39,16 +39,16 @@ interface ModulesInterface extends ServiceInterface
 {
     public const STATE_ACTIVE = xarMod::STATE_ACTIVE;
 
-    public function getVar(string $varName, ?string $modName = null): mixed;
-    public function setVar(string $varName, mixed $value, ?string $modName = null): bool;
-    public function delVar(string $varName, ?string $modName = null): bool;
-    public function getVarID(string $varName, ?string $modName = null): int;
-    public function getUserVar(string $varName, ?int $userId = null, ?string $modName = null): mixed;
-    public function setUserVar(string $varName, mixed $value, ?int $userId = null, ?string $modName = null): bool;
-    public function delUserVar(string $varName, ?int $userId = null, ?string $modName = null): bool;
-    public function getItemVar(string $varName, mixed $itemid = null, ?string $modName = null): mixed;
-    public function setItemVar(string $varName, mixed $value, mixed $itemid = null, ?string $modName = null): bool;
-    public function delItemVar(string $varName, mixed $itemid = null, ?string $modName = null): bool;
+    public function getVar(string $varName): mixed;
+    public function setVar(string $varName, mixed $value): bool;
+    public function delVar(string $varName): bool;
+    public function getVarID(string $varName): int;
+    public function getUserVar(string $varName, ?int $userId = null): mixed;
+    public function setUserVar(string $varName, mixed $value, ?int $userId = null): bool;
+    public function delUserVar(string $varName, ?int $userId = null): bool;
+    public function getItemVar(string $varName, mixed $itemid = null): mixed;
+    public function setItemVar(string $varName, mixed $value, mixed $itemid = null): bool;
+    public function delItemVar(string $varName, mixed $itemid = null): bool;
     public function disableOverview(): bool;
     /** @param array<string, mixed> $args */
     public function getURL(string $modType = 'user', string $funcName = 'main', array $args = [], ?string $modName = null): string;
@@ -103,18 +103,19 @@ trait ModulesTrait
     /**
      * Get module variable for this module
      */
-    public function getVar(string $varName, ?string $modName = null): mixed
+    public function getVar(string $varName): mixed
     {
-        $modName ??= $this->getModName();
+        // use $this->mod($modName)->getVar(...) to use specific module
+        $modName = $this->getModName();
         return xarModVars::get($modName, $varName);
     }
 
     /**
      * Set module variable for this module, or delete if value = null
      */
-    public function setVar(string $varName, mixed $value, ?string $modName = null): bool
+    public function setVar(string $varName, mixed $value): bool
     {
-        $modName ??= $this->getModName();
+        $modName = $this->getModName();
         if (is_null($value)) {
             return xarModVars::delete($modName, $varName);
         }
@@ -124,54 +125,57 @@ trait ModulesTrait
     /**
      * Delete module variable for this module
      */
-    public function delVar(string $varName, ?string $modName = null): bool
+    public function delVar(string $varName): bool
     {
-        $modName ??= $this->getModName();
+        $modName = $this->getModName();
         return xarModVars::delete($modName, $varName);
     }
 
     /**
      * Get module variable ID for this module
      */
-    public function getVarID(string $varName, ?string $modName = null): int
+    public function getVarID(string $varName): int
     {
-        $modName ??= $this->getModName();
+        // use $this->mod($modName)->getVarID(...) to use specific module
+        $modName = $this->getModName();
         return xarModVars::getID($modName, $varName);
     }
 
-    public function getUserVar(string $varName, ?int $userId = null, ?string $modName = null): mixed
+    public function getUserVar(string $varName, ?int $userId = null): mixed
     {
-        $modName ??= $this->getModName();
+        // use $this->mod($modName)->getUserVar(...) to use specific module
+        $modName = $this->getModName();
         return xarModUserVars::get($modName, $varName, $userId);
     }
 
-    public function setUserVar(string $varName, mixed $value, ?int $userId = null, ?string $modName = null): bool
+    public function setUserVar(string $varName, mixed $value, ?int $userId = null): bool
     {
-        $modName ??= $this->getModName();
+        $modName = $this->getModName();
         return xarModUserVars::set($modName, $varName, $value, $userId);
     }
 
-    public function delUserVar(string $varName, ?int $userId = null, ?string $modName = null): bool
+    public function delUserVar(string $varName, ?int $userId = null): bool
     {
-        $modName ??= $this->getModName();
+        $modName = $this->getModName();
         return xarModUserVars::delete($modName, $varName, $userId);
     }
 
-    public function getItemVar(string $varName, mixed $itemid = null, ?string $modName = null): mixed
+    public function getItemVar(string $varName, mixed $itemid = null): mixed
     {
-        $modName ??= $this->getModName();
+        // use $this->mod($modName)->getItemVar(...) to use specific module
+        $modName = $this->getModName();
         return xarModItemVars::get($modName, $varName, $itemid);
     }
 
-    public function setItemVar(string $varName, mixed $value, mixed $itemid = null, ?string $modName = null): bool
+    public function setItemVar(string $varName, mixed $value, mixed $itemid = null): bool
     {
-        $modName ??= $this->getModName();
+        $modName = $this->getModName();
         return xarModItemVars::set($modName, $varName, $value, $itemid);
     }
 
-    public function delItemVar(string $varName, mixed $itemid = null, ?string $modName = null): bool
+    public function delItemVar(string $varName, mixed $itemid = null): bool
     {
-        $modName ??= $this->getModName();
+        $modName = $this->getModName();
         return xarModItemVars::delete($modName, $varName, $itemid);
     }
 

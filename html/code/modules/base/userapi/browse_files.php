@@ -78,17 +78,17 @@ class BrowseFilesMethod extends MethodClass
 
         // Levels lies between 1 and max_levels.
         // Set levels=1 to stay in a single diectory.
-        if (!xarVar::validate('int:1:' . $max_levels, $levels, true)) {
+        if (!$this->var()->validate('int:1:' . $max_levels, $levels, true)) {
             $levels = $max_levels;
         }
 
         // The path return format is an unumerated type.
-        if (!xarVar::validate('enum:abs:rel:file', $retpath, true)) {
+        if (!$this->var()->validate('enum:abs:rel:file', $retpath, true)) {
             $retpath = 'file';
         }
 
         // An array of directories to skip.
-        if (!xarVar::validate('list:string:1', $skipdirs, true)) {
+        if (!$this->var()->validate('list:string:1', $skipdirs, true)) {
             $skipdirs = [];
         }
 

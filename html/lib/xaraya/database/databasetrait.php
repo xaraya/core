@@ -49,18 +49,13 @@ namespace Xaraya\Database;
 
 use Connection;
 use xarCore;
-use xarCoreCache;
-use xarDB;
-use xarMod;
-use xarModVars;
-use xarModUserVars;
-use xarSession;
-use xarUser;
 use BadParameterException;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.database.external');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * For documentation purposes only - available via DatabaseTrait
@@ -216,22 +211,23 @@ trait DatabaseTrait
         if (!empty($modName)) {
             $this->setDbModName($modName);
         }
+        $modName = $this->getDbModName();
         if (empty(static::$_databases)) {
             $allDatabases = [];
-            if (xarCoreCache::isCached('DynamicData', 'Databases')) {
-                $allDatabases = xarCoreCache::getCached('DynamicData', 'Databases');
+            if (xar::var()->isCached('DynamicData', 'Databases')) {
+                $allDatabases = xar::var()->getCached('DynamicData', 'Databases');
             }
-            if (!empty($allDatabases[$this->getDbModName()])) {
-                static::$_databases = $allDatabases[$this->getDbModName()];
+            if (!empty($allDatabases[$modName])) {
+                static::$_databases = $allDatabases[$modName];
             } else {
-                $databases = unserialize(xarModVars::get($this->getDbModName(), 'databases') ?? '');
+                $databases = unserialize(xar::mod($modName)->getVar('databases') ?? '');
                 if (empty($databases)) {
                     static::$_databases = [];
                 } else {
                     static::$_databases = $databases;
                 }
-                $allDatabases[$this->getDbModName()] = static::$_databases;
-                xarCoreCache::setCached('DynamicData', 'Databases', $allDatabases);
+                $allDatabases[$modName] = static::$_databases;
+                xar::var()->setCached('DynamicData', 'Databases', $allDatabases);
             }
         }
         return static::$_databases;
@@ -270,15 +266,15 @@ trait DatabaseTrait
     {
         $databases ??= static::$_databases;
         $modName ??= $this->getDbModName();
-        xarModVars::set($modName, 'databases', serialize($databases));
+        xar::mod($modName)->setVar('databases', serialize($databases));
         $allDatabases = [];
-        if (xarCoreCache::isCached('DynamicData', 'Databases')) {
-            $allDatabases = xarCoreCache::getCached('DynamicData', 'Databases');
+        if (xar::var()->isCached('DynamicData', 'Databases')) {
+            $allDatabases = xar::var()->getCached('DynamicData', 'Databases');
         }
         $allDatabases[$modName] = $databases;
-        xarCoreCache::setCached('DynamicData', 'Databases', $allDatabases);
+        xar::var()->setCached('DynamicData', 'Databases', $allDatabases);
         // Saved in DD > Utilities > DB Connections = xaradmin/dbconfig.php for all modules - UtilApi::getAllDatabases()
-        //xarCoreCache::saveCached('DynamicData', 'Databases');
+        //xar::var()->saveCached('DynamicData', 'Databases');
     }
 
     /**
@@ -356,24 +352,25 @@ trait DatabaseTrait
         }
         // we need 'module_itemvars' and/or 'module_vars' tables below
         if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
-            xarMod::loadDbInfo('modules', 'modules');
+            xar::mod()->loadDbInfo('modules', 'modules');
         }
+        $modName = $this->getDbModName();
         if (!empty($context)) {
             $userId = $context->getUserId();
             if (!empty($userId)) {
                 // @todo use user context?
-                $name = xarModUserVars::get($this->getDbModName(), 'dbName', $userId);
+                $name = xar::mod($modName)->getUserVar('dbName', $userId);
             } else {
                 // @todo use session context?
-                $name = xarSession::getVar($this->getDbModName() . ':dbName');
+                $name = xar::session()->getVar($modName . ':dbName');
             }
-        } elseif (xarUser::isLoggedIn()) {
-            $name = xarModUserVars::get($this->getDbModName(), 'dbName');
+        } elseif (xar::user()->isLoggedIn()) {
+            $name = xar::mod($modName)->getUserVar('dbName');
         } else {
-            $name = xarSession::getVar($this->getDbModName() . ':dbName');
+            $name = xar::session()->getVar($modName . ':dbName');
         }
         if (!isset($name)) {
-            $name = xarModVars::get($this->getDbModName(), 'dbName');
+            $name = xar::mod($modName)->getVar('dbName');
         }
         return $name;
     }
@@ -386,19 +383,20 @@ trait DatabaseTrait
      */
     public function setCurrentDatabase($name = '', $context = null)
     {
+        $modName = $this->getDbModName();
         if (!empty($context)) {
             $userId = $context->getUserId();
             if (!empty($userId)) {
                 // @todo use user context?
-                xarModUserVars::set($this->getDbModName(), 'dbName', $name, $userId);
+                xar::mod($modName)->setUserVar('dbName', $name, $userId);
             } else {
                 // @todo use session context?
-                xarSession::setVar($this->getDbModName() . ':dbName', $name);
+                xar::session()->setVar($modName . ':dbName', $name);
             }
-        } elseif (xarUser::isLoggedIn()) {
-            xarModUserVars::set($this->getDbModName(), 'dbName', $name);
+        } elseif (xar::user()->isLoggedIn()) {
+            xar::mod($modName)->setUserVar('dbName', $name);
         } else {
-            xarSession::setVar($this->getDbModName() . ':dbName', $name);
+            xar::session()->setVar($modName . ':dbName', $name);
         }
     }
 
@@ -419,7 +417,7 @@ trait DatabaseTrait
         }
         // @todo re-use Database Service to get connection here
         /** @var Connection $conn */
-        $conn = xarDB::getConn($dbConnIndex);
+        $conn = xar::db()->getConn($dbConnIndex);
         $dbInfo = $conn->getDatabaseInfo();
         $tables = $dbInfo->getTables();
         foreach ($tables as $tblInfo) {

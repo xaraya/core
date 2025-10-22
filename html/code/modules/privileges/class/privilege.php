@@ -54,7 +54,7 @@ class xarPrivilege extends xarMask
         if (empty($this->name)) {
             $msg = xarML('You must enter a name.', 'privileges');
             throw new DuplicateException(null, $msg);
-            //xarSession::setVar('errormsg', _MODARGSERROR);
+            //xar::session()->setVar('errormsg', _MODARGSERROR);
             //return false;
         }
 
@@ -426,9 +426,9 @@ class xarPrivilege extends xarMask
         $cacheId = $this->getID();
 
         // we retrieve and cache everything at once now
-        if (xarVar::isCached('Privileges.getChildren', 'cached')) {
-            if (xarVar::isCached('Privileges.getChildren', $cacheId)) {
-                return xarVar::getCached('Privileges.getChildren', $cacheId);
+        if (xar::var()->isCached('Privileges.getChildren', 'cached')) {
+            if (xar::var()->isCached('Privileges.getChildren', $cacheId)) {
+                return xar::var()->getCached('Privileges.getChildren', $cacheId);
             } else {
                 return [];
             }
@@ -466,9 +466,9 @@ class xarPrivilege extends xarMask
         }
         // done
         foreach (array_keys($children) as $parentid) {
-            xarVar::setCached('Privileges.getChildren', $parentid, $children[$parentid]);
+            xar::var()->setCached('Privileges.getChildren', $parentid, $children[$parentid]);
         }
-        xarVar::setCached('Privileges.getChildren', 'cached', 1);
+        xar::var()->setCached('Privileges.getChildren', 'cached', 1);
         if (isset($children[$cacheId])) {
             return $children[$cacheId];
         } else {

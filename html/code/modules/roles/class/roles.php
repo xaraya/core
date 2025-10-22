@@ -154,13 +154,13 @@ class xarRoles extends xarObject
     public static function get($id)
     {
         $cacheKey = 'Roles.ById';
-        if (xarVar::isCached($cacheKey, $id)) {
-            return xarVar::getCached($cacheKey, $id);
+        if (xar::var()->isCached($cacheKey, $id)) {
+            return xar::var()->getCached($cacheKey, $id);
         }
         // Need to get it from DB.
         // TODO: move caching to _lookuprole?
         $r = self::_lookuprole('id', (int) $id);
-        xarVar::setCached($cacheKey, $id, $r);
+        xar::var()->setCached($cacheKey, $id, $r);
         return $r;
     }
 
@@ -315,7 +315,7 @@ class xarRoles extends xarObject
 
     public static function current()
     {
-        return self::getRole(xarSession::getUserId());
+        return self::getRole(xar::session()->getUserId());
     }
 
     public static function isParent($name1, $name2)
@@ -351,8 +351,8 @@ class xarRoles extends xarObject
         // get rid of 30 repeating queries for base homepage due to security checks
         $cacheScope = 'Roles.ByLookup';
         $cacheName = "$field:$value:$itemtype:$state";
-        if (xarCoreCache::isCached($cacheScope, $cacheName)) {
-            $row = xarCoreCache::getCached($cacheScope, $cacheName);
+        if (xar::var()->isCached($cacheScope, $cacheName)) {
+            $row = xar::var()->getCached($cacheScope, $cacheName);
         } else {
             // retrieve the object's data from the repository
             // set up and execute the query
@@ -378,7 +378,7 @@ class xarRoles extends xarObject
             if (empty($row)) {
                 return;
             }
-            xarCoreCache::setCached($cacheScope, $cacheName, $row);
+            xar::var()->setCached($cacheScope, $cacheName, $row);
         }
 
         // create and return the role object
@@ -390,13 +390,13 @@ class xarRoles extends xarObject
             throw new Exception(xarML('Unknown role type'));
         }
         $cacheKey = 'Roles.ById';
-        if (xarVar::isCached($cacheKey, $row['id'])) {
-            return xarVar::getCached($cacheKey, $row['id']);
+        if (xar::var()->isCached($cacheKey, $row['id'])) {
+            return xar::var()->getCached($cacheKey, $row['id']);
         }
         sys::import('modules.dynamicdata.class.objects.factory');
         $role = DataObjectFactory::getObject(['name' => $name]);
         $role->getItem(['itemid' => $row['id']]);
-        xarVar::setCached($cacheKey, $row['id'], $role);
+        xar::var()->setCached($cacheKey, $row['id'], $role);
         return $role;
     }
 }

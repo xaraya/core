@@ -212,11 +212,11 @@ class XarayaCoreExtension extends XarayaTwigExtension
         if (isset($value)) {
             // @todo find some other way to delete vs. set :-)
             if ($value == 'DELETE_ME') {
-                return $this->mod()->delVar($name, $scope);
+                return $this->mod($scope)->delVar($name);
             }
-            return $this->mod()->setVar($name, $value, $scope);
+            return $this->mod($scope)->setVar($name, $value);
         }
-        return $this->mod()->getVar($name, $scope);
+        return $this->mod($scope)->getVar($name);
     }
 
     public function xar_moduleid($modName)
@@ -227,17 +227,17 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_moduservar($scope, $name, $userId = null, $value = null)
     {
         if (isset($value)) {
-            return $this->mod()->setUserVar($name, $value, $userId, $scope);
+            return $this->mod($scope)->setUserVar($name, $value, $userId);
         }
-        return $this->mod()->getUserVar($name, $userId, $scope);
+        return $this->mod($scope)->getUserVar($name, $userId);
     }
 
     public function xar_moditemvar($scope, $name, $userId = null, $value = null)
     {
         if (isset($value)) {
-            return $this->mod()->setItemVar($name, $value, $userId, $scope);
+            return $this->mod($scope)->setItemVar($name, $value, $userId);
         }
-        return $this->mod()->getItemVar($name, $userId, $scope);
+        return $this->mod($scope)->getItemVar($name, $userId);
     }
 
     public function xar_requestvar($name)
@@ -302,7 +302,7 @@ class XarayaCoreExtension extends XarayaTwigExtension
         $args['scope'] ??= 'local';
         $result = match ($args['scope']) {
             'local' => $args['name'],
-            'module' => $this->mod()->getVar($args['name'], $args['module']),
+            'module' => $this->mod($args['module'])->getVar($args['name']),
             'user' => $this->user($args['user'] ?? null)->getVar($args['name']),
             'config' => $this->config()->getVar($args['name']),
             'session' => $this->session()->getVar($args['name']),

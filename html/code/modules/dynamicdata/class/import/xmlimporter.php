@@ -128,7 +128,7 @@ class XmlImporter extends DataObjectImporter
         $dupexists = !empty($info);
         if ($dupexists && !$this->overwrite) {
             //$msg = 'Duplicate definition for #(1) #(2)';
-            //$vars = ['object',xarVar::prepForDisplay($args['name'])];
+            //$vars = ['object', xar::var()->prep($args['name'])];
             throw new DuplicateException(null, $args['name']);
         }
 
@@ -352,7 +352,7 @@ class XmlImporter extends DataObjectImporter
                         $objectname2objectid[$currentobject] = $$currentobject;
                     } else {
                         $msg = 'Unknown #(1) "#(2)"';
-                        $vars = array('object',xarVar::prepForDisplay($thisname));
+                        $vars = array('object', xar::var()->prep($thisname));
                         throw new BadParameterException($vars,$msg);
                     }
                 }

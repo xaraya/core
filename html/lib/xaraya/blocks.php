@@ -168,7 +168,7 @@ class xarBlock extends xarObject implements ixarBlock
             return $boxOutput;
 
         } catch (Exception $e) {
-            if ((bool) xar::mod()->getVar('noexceptions', 'blocks') || !xarUser::isDebugAdmin()) {
+            if ((bool) xar::mod('blocks')->getVar('noexceptions') || !xar::user()->isDebugAdmin()) {
                 xar::cache()->setBlock($cacheKey, '');
                 return '';
             } else {
@@ -497,7 +497,7 @@ class xarBlock extends xarObject implements ixarBlock
             $blockinfo = xar::mod()->apiFunc('blocks', 'blocks', 'getinfo', $args);
             return self::render($blockinfo, $context);
         } catch (Exception $e) {
-            if ((bool) xar::mod()->getVar('noexceptions', 'blocks') || !xarUser::isDebugAdmin()) {
+            if ((bool) xar::mod('blocks')->getVar('noexceptions') || !xar::user()->isDebugAdmin()) {
                 // Get a cache key for this block if it's suitable for block caching
                 if (!empty($blockinfo)) {
                     $cacheKey = xar::cache()->getBlockKey($blockinfo);

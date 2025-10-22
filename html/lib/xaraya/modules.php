@@ -314,13 +314,13 @@ class xarMod extends xarObject implements IxarMod
 
         switch ($type) {
             case 'module':
-                if (xarCoreCache::isCached('Mod.Infos', $modRegId)) {
-                    return xarCoreCache::getCached('Mod.Infos', $modRegId);
+                if (xar::var()->isCached('Mod.Infos', $modRegId)) {
+                    return xar::var()->getCached('Mod.Infos', $modRegId);
                 }
                 break;
             case 'theme':
-                if (xarCoreCache::isCached('Theme.Infos', $modRegId)) {
-                    return xarCoreCache::getCached('Theme.Infos', $modRegId);
+                if (xar::var()->isCached('Theme.Infos', $modRegId)) {
+                    return xar::var()->getCached('Theme.Infos', $modRegId);
                 }
                 break;
             default:
@@ -399,7 +399,7 @@ class xarMod extends xarObject implements IxarMod
         $modInfo['state'] = (int) $modInfo['state'];
 
         // Shortcut for os prepared directory
-        $modInfo['osdirectory'] = xarVar::prepForOS($modInfo['directory']);
+        $modInfo['osdirectory'] = xar::var()->prepPath($modInfo['directory']);
 
         switch ($type) {
             case 'module':
@@ -450,10 +450,10 @@ class xarMod extends xarObject implements IxarMod
         switch ($type) {
             case 'module':
             default:
-                xarCoreCache::setCached('Mod.Infos', $modRegId, $modInfo);
+                xar::var()->setCached('Mod.Infos', $modRegId, $modInfo);
                 break;
             case 'theme':
-                xarCoreCache::setCached('Theme.Infos', $modRegId, $modInfo);
+                xar::var()->setCached('Theme.Infos', $modRegId, $modInfo);
                 break;
         }
         return $modInfo;
@@ -489,8 +489,8 @@ class xarMod extends xarObject implements IxarMod
             $checkNoState = xarTheme::$noCacheState;
         }
 
-        if (empty($checkNoState) && xarCoreCache::isCached($cacheCollection, $modName)) {
-            return xarCoreCache::getCached($cacheCollection, $modName);
+        if (empty($checkNoState) && xar::var()->isCached($cacheCollection, $modName)) {
+            return xar::var()->getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
         xar::log()->debug("xarMod::getBaseInfo: Getting database info of '" . $modName . "' (a " . $type . ")");
@@ -543,7 +543,7 @@ class xarMod extends xarObject implements IxarMod
         $modBaseInfo['displaydescription'] = xarMod::getDisplayDescription($directory, $type);
         // Shortcut for os prepared directory
         // TODO: <marco> get rid of it since useless
-        $modBaseInfo['osdirectory'] = xarVar::prepForOS($directory);
+        $modBaseInfo['osdirectory'] = xar::var()->prepPath($directory);
         if ($type == 'theme') {
             try {
                 $modBaseInfo['configuration'] = unserialize($configuration);
@@ -556,7 +556,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modBaseInfo['state'])) {
             $modBaseInfo['state'] = self::STATE_UNINITIALISED;
         }
-        xarCoreCache::setCached($cacheCollection, $name, $modBaseInfo);
+        xar::var()->setCached($cacheCollection, $name, $modBaseInfo);
 
         return $modBaseInfo;
     }
@@ -577,8 +577,8 @@ class xarMod extends xarObject implements IxarMod
             throw new EmptyParameterException('modOsDir');
         }
 
-        if (empty(self::$noCacheState) && xarCoreCache::isCached('Mod.getFileInfos', $modOsDir . " / " . $type)) {
-            return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir . " / " . $type);
+        if (empty(self::$noCacheState) && xar::var()->isCached('Mod.getFileInfos', $modOsDir . " / " . $type)) {
+            return xar::var()->getCached('Mod.getFileInfos', $modOsDir . " / " . $type);
         }
         // Log it when it didnt came from cache
         xar::log()->debug("xarMod::getFileInfo: Getting file info of '" . $modOsDir . "' (a " . $type . ")");
@@ -683,7 +683,7 @@ class xarMod extends xarObject implements IxarMod
         $FileInfo['twigtemplates']  = $version['twigtemplates'] ?? false;
         $FileInfo['twigextension']  = $version['twigextension'] ?? '.html.twig';
 
-        xarCoreCache::setCached('Mod.getFileInfos', $name, $FileInfo);
+        xar::var()->setCached('Mod.getFileInfos', $name, $FileInfo);
         return $FileInfo;
     }
 
@@ -731,9 +731,9 @@ class xarMod extends xarObject implements IxarMod
             if (empty($modBaseInfo)) {
                 return;
             } // throw back
-            $modDir = xarVar::prepForOS($modBaseInfo['directory']);
+            $modDir = xar::var()->prepPath($modBaseInfo['directory']);
         } else {
-            $modDir = xarVar::prepForOS($modDir);
+            $modDir = xar::var()->prepPath($modDir);
         }
 
         // For base and modules, which don't have a xartables - CHECKME: why not again ?
@@ -1023,7 +1023,7 @@ class xarMod extends xarObject implements IxarMod
         }
 
         // Not the correct version - throw exception unless we are upgrading
-        if (!self::checkVersion($modName) && !xarVar::getCached('Upgrade', 'upgrading') && $modName != 'modules') {
+        if (!self::checkVersion($modName) && !xar::var()->getCached('Upgrade', 'upgrading') && $modName != 'modules') {
             xarCore::exit('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
             return false;
         }

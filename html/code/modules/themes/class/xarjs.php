@@ -466,7 +466,7 @@ class xarJS extends xarObject
                 }
                 // fall back to current block module calling the tag
                 if (empty($module)) {
-                    $module = xarVar::getCached('Security.Variables', 'currentmodule');
+                    $module = xar::var()->getCached('Security.Variables', 'currentmodule');
                 }
                 // block scope falls through to module validation
                 // no break
@@ -971,9 +971,9 @@ class xarJS extends xarObject
         }
 
         // Debug display
-        if (xarModVars::get('themes', 'debugmode') && xarUser::isDebugAdmin()) {
+        if (xar::mod('themes')->getVar('debugmode') && xar::user()->isDebugAdmin()) {
             foreach ($paths as $path) {
-                echo xarML('Possible location: ') . $path . "<br/>";
+                echo xar::ml('Possible location: ') . $path . "<br/>";
             }
         }
 
@@ -984,8 +984,8 @@ class xarJS extends xarObject
             }
             $filePath = $path;
             // Debug display
-            if (xarModVars::get('themes', 'debugmode') && xarUser::isDebugAdmin()) {
-                echo "<b>" . xarML('Chosen: ') . $path . "</b><br/>";
+            if (xar::mod('themes')->getVar('debugmode') && xar::user()->isDebugAdmin()) {
+                echo "<b>" . xar::ml('Chosen: ') . $path . "</b><br/>";
             }
             break;
         }
@@ -1189,8 +1189,8 @@ class xarJSLib extends xarObject
         // first run, populate the library meta data
         $this->name = $name;
         $this->displayname = ucfirst($this->name);
-        $this->description = xarML('#(1) JS Library', $this->displayname);
-        $this->osdirectory = xarVar::prepForOS($this->name);
+        $this->description = xar::ml('#(1) JS Library', $this->displayname);
+        $this->osdirectory = xar::var()->prepPath($this->name);
     }
     /**
      * Rebuild the entire cache of meta data for this lib

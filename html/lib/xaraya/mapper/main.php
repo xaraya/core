@@ -454,7 +454,7 @@ class xarController extends xarObject
             'layout' => $layout,
             'context' => $context,
         ];
-        return xarTpl::module('privileges', 'user', 'errors', $tplData);
+        return xar::tpl()->module('privileges', 'user', 'errors', $tplData);
     }
 
     /**

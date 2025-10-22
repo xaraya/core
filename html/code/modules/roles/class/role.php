@@ -110,7 +110,7 @@ class Role extends DataObject
 
         // Get a value for the parent id
         if (empty($data['parentid'])) {
-            xarVar::fetch('parentid', 'int', $data['parentid'], null, xarVar::DONT_SET);
+            xar::var()->check('parentid', $data['parentid'], 'int');
         }
         if (empty($data['parentid'])) {
             $data['parentid'] = (int) xarModVars::get('roles', 'defaultgroup');
@@ -124,7 +124,7 @@ class Role extends DataObject
         }
 
         // add the duvs
-        xarVar::fetch('duvs', 'array', $duvs, [], xarVar::NOT_REQUIRED);
+        xar::var()->find('duvs', $duvs, 'array', []);
         foreach ($duvs as $key => $value) {
             $this->mod()->setUserVar($key, $value, $id);
         }
@@ -141,7 +141,7 @@ class Role extends DataObject
     public function updateItem(array $data = [])
     {
         $id = parent::updateItem($data);
-        xarVar::fetch('duvs', 'array', $duvs, [], xarVar::NOT_REQUIRED);
+        xar::var()->find('duvs', $duvs, 'array', []);
         foreach ($duvs as $key => $value) {
             $this->mod()->setUserVar($key, $value, $id);
         }
@@ -418,8 +418,8 @@ class Role extends DataObject
         static $stmt = null;  // For each id, the query is the same, prepare it once.
 
         $cacheKey = "Privileges.ById";
-        if (xarVar::isCached($cacheKey, $this->properties['id']->value)) {
-            return xarVar::getCached($cacheKey, $this->properties['id']->value);
+        if (xar::var()->isCached($cacheKey, $this->properties['id']->value)) {
+            return xar::var()->getCached($cacheKey, $this->properties['id']->value);
         }
         // We'll have to get it.
         xar::log()->info("ROLE: getting privileges for id: " . $this->properties['id']->value);
@@ -456,7 +456,7 @@ class Role extends DataObject
                 'parentid' => 0]);
             array_push($privileges, $perm);
         }
-        xarVar::setCached($cacheKey, $this->properties['id']->value, $privileges);
+        xar::var()->setCached($cacheKey, $this->properties['id']->value, $privileges);
         return $privileges;
     }
 
@@ -693,8 +693,8 @@ class Role extends DataObject
         }
 
         // if it's cached, we can return it
-        if (xarVar::isCached($cacheKey, $this->properties['id']->value)) {
-            return xarVar::getCached($cacheKey, $this->properties['id']->value);
+        if (xar::var()->isCached($cacheKey, $this->properties['id']->value)) {
+            return xar::var()->getCached($cacheKey, $this->properties['id']->value);
         }
 
         // if this is a user just perform a SELECT on the rolemembers table
@@ -716,7 +716,7 @@ class Role extends DataObject
             $parents[] = $role;
         }
         // done
-        xarVar::setCached($cacheKey, $this->properties['id']->value, $parents);
+        xar::var()->setCached($cacheKey, $this->properties['id']->value, $parents);
         return $parents;
     }
 

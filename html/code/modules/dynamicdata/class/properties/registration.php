@@ -372,7 +372,7 @@ class PropertyRegistration extends DataContainer
                         sys::import($dp);
                     } catch (Exception) {
                         // Die silently for now
-                        if (xar::mod()->getVar('debugmode', 'dynamicdata') && xarUser::isDebugAdmin()) {
+                        if (xar::mod('dynamicdata')->getVar('debugmode') && xar::user()->isDebugAdmin()) {
                             echo xar::mls()->translate('The file #(1) could not be loaded<br/>', $dp . '.php');
                         }
                     }

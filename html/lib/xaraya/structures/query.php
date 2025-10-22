@@ -90,7 +90,7 @@ class Query
     public function __construct($type = 'SELECT', $tables = '', $fields = '', $dbConnIndex = 0)
     {
         // Set the debugflag
-        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xar::config()->getVar('Site.BL.ShowQueries', false) && xarUser::isDebugAdmin()) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xar::config()->getVar('Site.BL.ShowQueries', false) && xar::user()->isDebugAdmin()) {
             $this->debugflag = true;
         }
 
@@ -363,7 +363,7 @@ class Query
     public function createto($newtablename = null)
     {
         if (!isset($newtablename)) {
-            $newtablename = "temp" . xarSession::getUserId() . time();
+            $newtablename = "temp" . xar::session()->getUserId() . time();
         }
         $this->createtablename = $newtablename;
         $this->settype("CREATE");
@@ -2006,7 +2006,7 @@ class Query
     }
     public function sessiongetvar($x)
     {
-        $q = xarSession::getVar($x);
+        $q = xar::session()->getVar($x);
         if (empty($q)) {
             return;
         }
@@ -2017,7 +2017,7 @@ class Query
     {
         $q = $this;
         unset($q->dbconn);
-        xarSession::setVar($x, serialize($q));
+        xar::session()->setVar($x, serialize($q));
     }
     public function setdistinct($x = 1)
     {
@@ -2273,7 +2273,7 @@ class Query
 
     public function setdebug($debugflag = 1)
     {
-        if ($debugflag && xarUser::isDebugAdmin()) {
+        if ($debugflag && xar::user()->isDebugAdmin()) {
             $this->debugflag = true;
             $this->starttime = microtime(true);
         } else {

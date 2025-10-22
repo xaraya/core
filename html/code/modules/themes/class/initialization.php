@@ -84,7 +84,7 @@ class ThemeInitialization extends xarObject
 
 
         // Clear the property types from cached memory
-        //        xarCoreCache::delCached('DynamicData','PropertyTypes');
+        //        xar::var()->delCached('DynamicData','PropertyTypes');
 
         return true;
     }

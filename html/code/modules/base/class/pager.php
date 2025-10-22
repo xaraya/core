@@ -9,6 +9,9 @@
  * @link http://xaraya.info/index.php/release/68.html
  */
 
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 class xarTplPager extends xarObject
 {
     /**
@@ -83,12 +86,12 @@ class xarTplPager extends xarObject
         // If this request was the same as the last one, then return the cached pager details.
         // TODO: is there a better way of caching for each unique request?
         $request = md5($currentItem . ':' . $lastItem . ':' . $itemsPerPage . ':' . serialize($blockOptions));
-        if (xarCoreCache::getCached('Pager.core', 'request') == $request) {
-            return xarCoreCache::getCached('Pager.core', 'details');
+        if (xar::var()->getCached('Pager.core', 'request') == $request) {
+            return xar::var()->getCached('Pager.core', 'details');
         }
 
         // Record the values in this request.
-        xarCoreCache::setCached('Pager.core', 'request', $request);
+        xar::var()->setCached('Pager.core', 'request', $request);
 
         // Max number of items in a block of pages.
         $itemsPerBlock = ($blockSize * $itemsPerPage);
@@ -222,7 +225,7 @@ class xarTplPager extends xarObject
         }
 
         // Cache all the pager details.
-        xarCoreCache::setCached('Pager.core', 'details', $data);
+        xar::var()->setCached('Pager.core', 'details', $data);
 
         return $data;
 
@@ -269,17 +272,17 @@ class xarTplPager extends xarObject
         // Couple of cached values used in various pages.
         // It is unclear what these values are supposed to be used for.
         if ($data['prevblockpages'] > 0) {
-            xarCoreCache::setCached('Pager.first', 'leftarrow', $data['firsturl']);
+            xar::var()->setCached('Pager.first', 'leftarrow', $data['firsturl']);
         }
 
         // Links for next block of pages.
         if ($data['nextblockpages'] > 0) {
-            xarCoreCache::setCached('Pager.last', 'rightarrow', $data['lasturl']);
+            xar::var()->setCached('Pager.last', 'rightarrow', $data['lasturl']);
         }
 
-        // Pass along the context for xarTpl::module() if needed - from blockOptions
+        // Pass along the context for xar::tpl()->module() if needed - from blockOptions
         $data['context'] ??= $blockOptions['context'] ?? null;
-        return trim(xarTpl::module($tplmodule, 'pager', $template, $data));
+        return trim(xar::tpl()->module($tplmodule, 'pager', $template, $data));
     }
 
     /**
@@ -292,7 +295,7 @@ class xarTplPager extends xarObject
     public static function getPagerURL($urlitemmatch = '%%', $urltemplate = null)
     {
         if (empty($urltemplate)) {
-            return xarServer::getCurrentURL(['startnum' => $urlitemmatch]);
+            return xar::ctl()->getCurrentURL(['startnum' => $urlitemmatch]);
         }
         $rawurlitemmatch = $urlitemmatch;
         $urlitemmatch = rawurlencode($urlitemmatch);

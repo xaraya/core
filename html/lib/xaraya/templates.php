@@ -138,7 +138,7 @@ class xarTpl extends xarObject
     {
         $systemArgs = [
             'enableTemplatesCaching' => xar::config()->getVar('Site.BL.CacheTemplates'),
-            'defaultThemeDir'        => xar::mod()->getVar('default_theme', 'themes') ?? 'default',
+            'defaultThemeDir'        => xar::mod('themes')->getVar('default_theme') ?? 'default',
             'generateXMLURLs'        => true,
             'defaultDocType'         => xar::config()->getVar('Site.BL.DocType'),
         ];
@@ -270,7 +270,7 @@ class xarTpl extends xarObject
         // If it is not set, set it return the default theme.
         // @checkme: modules is a depency of templates, redundant check?
         if (method_exists('xarModVars', 'get')) {
-            $themeName = xar::mod()->getVar('default_theme', 'themes');
+            $themeName = xar::mod('themes')->getVar('default_theme');
             if (!empty($themeName)) {
                 self::setThemeName($themeName);
             }
@@ -402,8 +402,8 @@ class xarTpl extends xarObject
         if (!method_exists('xarModVars', 'Get') || !empty(xar::var()->getCached('installer', 'installing'))) {
             self::$pageTitle = $title;
         } else {
-            $order      = xar::mod()->getVar('SiteTitleOrder', 'themes');
-            $separator  = xar::mod()->getVar('SiteTitleSeparator', 'themes');
+            $order      = xar::mod('themes')->getVar('SiteTitleOrder');
+            $separator  = xar::mod('themes')->getVar('SiteTitleSeparator');
             if (empty($module)) {
                 // FIXME: the ucwords is layout stuff which doesn't belong here
                 // <chris/> Why don't we just use display name then?
@@ -412,16 +412,16 @@ class xarTpl extends xarObject
             switch (strtolower($order)) {
                 case 'default':
                 default:
-                    self::$pageTitle = xar::mod()->getVar('SiteName', 'themes') . $separator . $module . $separator . $title;
+                    self::$pageTitle = xar::mod('themes')->getVar('SiteName') . $separator . $module . $separator . $title;
                     break;
                 case 'sp':
-                    self::$pageTitle = xar::mod()->getVar('SiteName', 'themes') . $separator . $title;
+                    self::$pageTitle = xar::mod('themes')->getVar('SiteName') . $separator . $title;
                     break;
                 case 'mps':
-                    self::$pageTitle = $module . $separator . $title . $separator . xar::mod()->getVar('SiteName', 'themes');
+                    self::$pageTitle = $module . $separator . $title . $separator . xar::mod('themes')->getVar('SiteName');
                     break;
                 case 'pms':
-                    self::$pageTitle = $title . $separator . $module . $separator . xar::mod()->getVar('SiteName', 'themes');
+                    self::$pageTitle = $title . $separator . $module . $separator . xar::mod('themes')->getVar('SiteName');
                     break;
                 case 'to':
                     self::$pageTitle = $title;
@@ -489,7 +489,7 @@ class xarTpl extends xarObject
         // 3. Use 1. to link to 2.
         // @checkme: modules is a depency of templates, redundant check?
         if (method_exists('xarModVars', 'get') && method_exists('xarUser', 'getVar') && empty(xar::var()->getCached('installer', 'installing'))) {
-            if (xar::mod()->getVar('variable_dump', 'themes') && xarUser::isDebugAdmin()) {
+            if (xar::mod('themes')->getVar('variable_dump') && xar::user()->isDebugAdmin()) {
                 echo '<pre>',var_export($tplData, 1),'</pre>';
             }
         }
@@ -1483,7 +1483,7 @@ class xarTpl extends xarObject
                 self::$showPHPCommentBlockInTemplates = 0;
                 // @checkme: modules is a depency of templates, redundant check?
                 if (method_exists('xarModVars', 'Get')) {
-                    $showphpcbit = xar::mod()->getVar('ShowPHPCommentBlockInTemplates', 'themes');
+                    $showphpcbit = xar::mod('themes')->getVar('ShowPHPCommentBlockInTemplates');
                     if (!empty($showphpcbit)) {
                         self::$showPHPCommentBlockInTemplates = 1;
                     }
@@ -1513,7 +1513,7 @@ class xarTpl extends xarObject
             self::$showTemplateFilenames = 0;
             // @checkme: modules is a depency of templates, redundant check?
             if (method_exists('xarModVars', 'Get')) {
-                $showtemplates = xar::mod()->getVar('ShowTemplates', 'themes');
+                $showtemplates = xar::mod('themes')->getVar('ShowTemplates');
                 if (!empty($showtemplates)) {
                     self::$showTemplateFilenames = 1;
                 }

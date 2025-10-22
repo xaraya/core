@@ -659,7 +659,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
             $test = $this->mod($nameparts[1])->getVar($this->properties[$name]->name);
             if ($test === null) {
-                $this->mod()->setVar($this->properties[$name]->name, $this->properties[$name]->defaultvalue, $nameparts[1]);
+                $this->mod($nameparts[1])->setVar($this->properties[$name]->name, $this->properties[$name]->defaultvalue);
             }
         }
         return true;

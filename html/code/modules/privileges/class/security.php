@@ -149,12 +149,12 @@ class xarSecurity extends xarObject
     */
     public static function check($mask, $catch = 1, $component = '', $instance = '', $module = '', $rolename = '', $realm = 0, $level = 0)
     {
-        $installing = xarCoreCache::getCached('installer', 'installing');
+        $installing = xar::var()->getCached('installer', 'installing');
         if (isset($installing) && ($installing == true)) {
             return true;
         }
         self::initialize();
-        $userID = xarSession::getUserId();
+        $userID = xar::session()->getUserId();
 
         xar::log()->info("xarSecurity::check: Testing user $userID against mask $mask");
 
@@ -213,8 +213,8 @@ class xarSecurity extends xarObject
             // <mikespub> this gets set in xarBlock::render, to replace the xarModVars::set /
             // xarModVars::get combination you used before (although $module will generally
             // not be 'blocks', so I have no idea why this is needed anyway)
-            if ($module == 'blocks' && xarVar::isCached('Security.Variables', 'currentmodule')) {
-                $module = xarVar::getCached('Security.Variables', 'currentmodule');
+            if ($module == 'blocks' && xar::var()->isCached('Security.Variables', 'currentmodule')) {
+                $module = xar::var()->getCached('Security.Variables', 'currentmodule');
             }
 
             if ($component == "") {
@@ -309,9 +309,9 @@ class xarSecurity extends xarObject
         // an empty role means take the current user
         if ($rolename == '') {
             // mrb: again?
-            $userID = xarSession::getUserId();
+            $userID = xar::session()->getUserId();
             if (empty($userID)) {
-                $userID = xarSession::getAnonId();
+                $userID = xar::session()->getAnonId();
             }
             $role = xarRoles::get($userID);
         } else {
@@ -322,14 +322,14 @@ class xarSecurity extends xarObject
         if (($rolename == '') || ($rolename == xarUser::getVar('uname'))) {
             // We are checking the privileges of the current user
             // See if we have something cached
-            if (!xarVar::isCached('Security.Variables', 'privilegeset.' . $userID)) {
+            if (!xar::var()->isCached('Security.Variables', 'privilegeset.' . $userID)) {
 
                 // CHECKME: why not cache this as module user variable instead of session ?
                 //          That would save a lot of space for anonymous sessions...
 
                 // No go from cache. Try and get it from the session
                 sys::import('modules.privileges.class.privilege');
-                $privileges = unserialize(xarSession::getVar('privilegeset') ?? '');
+                $privileges = unserialize(xar::session()->getVar('privilegeset') ?? '');
                 // Check that privileges haven't been changed since we last cached the privilegeset
                 $clearcache = xarModVars::get('privileges', 'clearcache');
                 if (empty($privileges) || empty($privileges['updated']) || $clearcache > $privileges['updated']) {
@@ -341,15 +341,15 @@ class xarSecurity extends xarObject
                         $privileges['updated'] = time();
                     }
                     // Save them to the sesssion too
-                    xarSession::setVar('privilegeset', serialize($privileges));
+                    xar::session()->setVar('privilegeset', serialize($privileges));
                 }
 
                 // Save them to the cache
-                xarVar::setCached('Security.Variables', 'privilegeset.' . $userID, $privileges);
+                xar::var()->setCached('Security.Variables', 'privilegeset.' . $userID, $privileges);
 
             } else {
                 // get the irreducible set of privileges for the current user from cache
-                $privileges = xarVar::getCached('Security.Variables', 'privilegeset.' . $userID);
+                $privileges = xar::var()->getCached('Security.Variables', 'privilegeset.' . $userID);
             }
         } else {
             // This is a different user, force recalculation
@@ -403,7 +403,7 @@ class xarSecurity extends xarObject
     public static function getMask($name, $modid = 0, $component = "All", $suppresscache = false)
     {
         self::initialize();
-        if ($suppresscache || !xarVar::isCached('Security.Masks', $name)) {
+        if ($suppresscache || !xar::var()->isCached('Security.Masks', $name)) {
             $bindvars = [];
             $query = "SELECT masks.id AS id, masks.name AS name, realms.name AS realm,
                              module_id AS module_id, modules.name as module, masks.component as component, masks.instance AS instance,
@@ -430,9 +430,9 @@ class xarSecurity extends xarObject
             if (is_null($pargs['realm'])) {
                 $pargs['realm']  = 'All';
             }
-            xarVar::setCached('Security.Masks', $name, $pargs);
+            xar::var()->setCached('Security.Masks', $name, $pargs);
         } else {
-            $pargs = xarVar::getCached('Security.Masks', $name);
+            $pargs = xar::var()->getCached('Security.Masks', $name);
         }
         sys::import('modules.privileges.class.mask');
         return new xarMask($pargs);
@@ -508,7 +508,7 @@ class xarSecurity extends xarObject
     */
     public static function testprivileges($mask, $privilegeset, $pass, $role = '')
     {
-        $candebug = xarUser::isDebugAdmin();
+        $candebug = xar::user()->isDebugAdmin();
         $test = self::$test && $candebug;
         $testdeny = self::$testdeny && $candebug;
         $testmask = self::$testmask;

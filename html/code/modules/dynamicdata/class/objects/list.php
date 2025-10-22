@@ -418,7 +418,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             return;
         }
 
-        if (!empty(xarSession::getAnonId()) && $this->user()->isLoggedIn()) {
+        if (!empty($this->session()->getAnonId()) && $this->user()->isLoggedIn()) {
             // get the direct parents of the current user (no ancestors)
             $grouplist = xarCache::getParents();
         } else {

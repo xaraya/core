@@ -161,8 +161,8 @@ class xarUser extends xarObject
             }
         }
         if ($userId == self::AUTH_FAILED || $userId == self::AUTH_DENIED) {
-            if (xar::mod()->getVar('lastresort', 'privileges')) {
-                $secret = unserialize((string) xar::mod()->getVar('lastresort', 'privileges'));
+            if (xar::mod('privileges')->getVar('lastresort')) {
+                $secret = unserialize((string) xar::mod('privileges')->getVar('lastresort'));
                 if ($secret['name'] == md5($userName) && $secret['password'] == md5($password)) {
                     $userId = self::LAST_RESORT;
                     $rememberMe = 0;
@@ -287,7 +287,7 @@ class xarUser extends xarObject
     public static function isSiteAdmin($userId = null)
     {
         $userId ??= xarSession::getUserId();
-        return $userId == xar::mod()->getVar('admin', 'roles');
+        return $userId == xar::mod('roles')->getVar('admin');
     }
 
     /**
@@ -300,9 +300,8 @@ class xarUser extends xarObject
     {
         $themeName = xarTpl::getThemeName();
 
-        if (self::isLoggedIn() && (bool) xar::mod()->getVar('enable_user_menu', 'themes')) {
-            $id = self::getVar('id');
-            $userThemeName = xarModUserVars::get('themes', 'default_theme', $id);
+        if (self::isLoggedIn() && (bool) xar::mod('themes')->getVar('enable_user_menu')) {
+            $userThemeName = xar::mod('themes')->getUserVar('default_theme');
             if ($userThemeName) {
                 $themeName = $userThemeName;
             }
@@ -322,7 +321,7 @@ class xarUser extends xarObject
     {
         assert($themeName != "");
         // uservar system takes care of dealing with anynomous
-        xarModUserVars::set('themes', 'default_theme', $themeName);
+        xar::mod('themes')->setUserVar('default_theme', $themeName);
     }
 
     /**
@@ -341,7 +340,7 @@ class xarUser extends xarObject
                 return true;
             }
 
-            $locale = xarModUserVars::get('roles', 'locale');
+            $locale = xar::mod('roles')->getUserVar('locale', $id);
             if (empty($locale)) {
                 $locale = xarSession::getVar('navigationLocale');
             }
@@ -368,7 +367,7 @@ class xarUser extends xarObject
         if (xarMLS::getMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
             xarSession::setVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
-                xarModUserVars::set('roles', 'locale', $locale);
+                xar::mod('roles')->setUserVar('locale', $locale);
             }
             return true;
         }
@@ -482,8 +481,8 @@ class xarUser extends xarObject
                 xar::var()->setCached('User.Variables.' . $userId, 'email', $userRole['email']);
 
             } elseif (!self::isVarDefined($name)) {
-                if (xar::mod()->getVar($name, 'roles') || xar::mod()->getVar('set' . $name, 'roles')) { //acount for optionals that need to be activated)
-                    $value = xarModUserVars::get('roles', $name, $userId);
+                if (xar::mod('roles')->getVar($name) || xar::mod('roles')->getVar('set' . $name)) { //acount for optionals that need to be activated)
+                    $value = xar::mod('roles')->getUserVar($name, $userId);
                     if ($value == null) {
                         xar::var()->setCached('User.Variables.' . $userId, $name, false);
                         // Here we can't raise an exception because they're all optional
@@ -570,11 +569,11 @@ class xarUser extends xarObject
             throw new BadParameterException('name');
 
         } elseif (!self::isVarDefined($name)) {
-            if (xar::mod()->getVar($name, 'roles')) {
+            if (xar::mod('roles')->getVar($name)) {
                 xar::var()->setCached('User.Variables.' . $userId, $name, false);
                 throw new IDNotFoundException($name, 'User variable #(1) was not correctly registered');
             } else {
-                xarModUserVars::set('roles', $name, $value, $userId);
+                xar::mod('roles')->setUserVar($name, $value, $userId);
             }
         } else {
             // retrieve the user item

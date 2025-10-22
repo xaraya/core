@@ -71,7 +71,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
                     ];
                 }
                 // add aliases for module if aliases are in use
-                if ((bool) $this->mod()->getVar('use_module_alias', $modname) && !empty($aliases[$modname])) {
+                if ((bool) $this->mod($modname)->getVar('use_module_alias') && !empty($aliases[$modname])) {
                     $this->modulelist[$modname]['aliases'] = $aliases[$modname];
                 } else {
                     $this->modulelist[$modname]['aliases'] = [];
@@ -108,7 +108,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
     **/
     protected function getModuleLink($link, $expand = false)
     {
-        if (empty($link['modname']) || empty($link['visible']) || (bool) $this->mod()->getVar($this->menumodtype . '_menu_link', $link['modname'])) {
+        if (empty($link['modname']) || empty($link['visible']) || (bool) $this->mod($link['modname'])->getVar($this->menumodtype . '_menu_link')) {
             return false;
         }
 

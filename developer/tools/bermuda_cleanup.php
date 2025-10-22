@@ -34,6 +34,7 @@ class XarayaCodeAnalyzer
     public $functions = [];
     public $constants = [];
     public $classes = [];
+    public $traits = [];
     public $totals = [];
     public $inDir = null;
     public $skipVendor = false;
@@ -60,6 +61,7 @@ class XarayaCodeAnalyzer
         $this->functions = [];
         $this->constants = [];
         $this->classes = [];
+        $this->traits = [];
         $this->totals = [
             'namespaces' => 0,
             'files' => 0,
@@ -70,6 +72,7 @@ class XarayaCodeAnalyzer
             'interfaces' => 0,
             'traits' => 0,
             'class_const' => 0,
+            'trait_const' => 0,
             'methods' => 0,
         ];
     }
@@ -163,6 +166,13 @@ class XarayaCodeAnalyzer
                 $this->totals['class_const'] += count($class->getConstants());
             }
         }
+        foreach ($file->getTraits() as $trait) {
+            $this->add_trait($trait, $fpath);
+            if ($totals) {
+                $this->totals['methods'] += count($trait->getMethods());
+                $this->totals['trait_const'] += count($trait->getConstants());
+            }
+        }
     }
 
     public function add_function($function, $fpath)
@@ -243,6 +253,42 @@ class XarayaCodeAnalyzer
         foreach ($class->getConstants() as $constant) {
             $cname = $constant->getName();
             $this->classes[$lname]['const'][strtolower($cname)] = ['name' => $cname, 'value' => $constant->getValue()];
+        }
+        foreach ($class->getUsedTraits() as $trait) {
+            $tname = substr((string) $trait, 1);
+            $this->classes[$lname]['traits'][] = $tname;
+        }
+    }
+
+    public function add_trait($trait, $fpath)
+    {
+        //$name = $trait->getName();
+        $name = substr((string) $trait->getFqsen(), 1);
+        $lname = strtolower($name);
+        if (array_key_exists(strtolower($lname), $this->classes)) {
+            $this->log('Class Conflict: ' . $name, true);
+        }
+        $this->traits[$lname] = ['file' => $fpath, 'name' => $name, 'methods' => [], 'const' => []];
+        $this->traits[$lname]['namespace'] = substr($name, 0, strlen($name) - strlen($trait->getName()));
+        //$this->traits[$lname]['parent'] = (string) $trait->getParent();
+        $this->traits[$lname]['lines'] = $trait->getLocation()->getLineNumber() . '-' . $trait->getEndLocation()->getLineNumber();
+        foreach ($trait->getMethods() as $method) {
+            $mname = $method->getName();
+            $args = $this->get_arguments($method);
+            $this->traits[$lname]['methods'][strtolower($mname)] = ['name' => $mname, 'args' => $args];
+            $this->traits[$lname]['methods'][strtolower($mname)]['lines'] = $method->getLocation()->getLineNumber() . '-' . $method->getEndLocation()->getLineNumber();
+            $uses = $this->get_docblock_uses($method);
+            if (!empty($uses)) {
+                $this->traits[$lname]['methods'][strtolower($mname)]['uses'] = $uses;
+            }
+        }
+        foreach ($trait->getConstants() as $constant) {
+            $cname = $constant->getName();
+            $this->traits[$lname]['const'][strtolower($cname)] = ['name' => $cname, 'value' => $constant->getValue()];
+        }
+        foreach ($trait->getUsedTraits() as $use) {
+            $tname = substr((string) $use, 1);
+            $this->traits[$lname]['traits'][] = $tname;
         }
     }
 
@@ -368,6 +414,46 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
         $class = $this->classes[$lname];
         // nothing interesting to do here for now...
         if (preg_match('/^(xar[A-Z]\w+)$/', $class['name'], $matches)) {
+            return 1;
+        }
+        return 0;
+    }
+
+
+    public function find_core_traits()
+    {
+        if (empty($this->classes)) {
+            $this->load_core_files();
+        }
+        $found = 0;
+        foreach (array_keys($this->traits) as $lname) {
+            $found += $this->match_core_trait($lname);
+        }
+        $this->save_core_traits();
+        $this->log('Found Traits: ' . $found, true);
+    }
+
+    public function load_core_traits()
+    {
+        if ($this->refresh || !file_exists('core_traits.json')) {
+            $this->find_core_traits();
+        }
+        $contents = file_get_contents('core_traits.json');
+        $this->traits = json_decode($contents, true);
+        $this->log('Load Traits: ' . count($this->traits), true);
+    }
+
+    public function save_core_traits()
+    {
+        ksort($this->traits);
+        file_put_contents('core_traits.json', $this->to_json($this->traits));
+    }
+
+    public function match_core_trait($lname)
+    {
+        $trait = $this->traits[$lname];
+        // nothing interesting to do here for now...
+        if (preg_match('/^(xar[A-Z]\w+)$/', $trait['name'], $matches)) {
             return 1;
         }
         return 0;
@@ -597,6 +683,7 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
         $this->load_project($inDir, $extraFiles);
         $this->parse_project();
         $this->find_core_classes();
+        $this->find_core_traits();
         $this->find_core_functions();
         $this->find_core_constants();
         //$this->find_core_replaced();
@@ -1301,7 +1388,7 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
     public function get_coreclass_calls($fpath, $lines)
     {
         $calls = [];
-        $pattern = '/((xar|Data|Property|Creole|PDO)[A-Z]\w+)::(\w+)\(([^\[\)]*)/';
+        $pattern = '/((xar|Data|Property|Creole|PDO)\w*)::(\w+)\(([^\[\)]*)/';
         $contents = implode("\n", $this->get_file_lines($fpath, $lines));
         $matches = [];
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
@@ -1936,6 +2023,7 @@ $inDir = dirname(__DIR__, 2) . '/vendor/xaraya/';
 $inDir = dirname(__DIR__, 2) . '/html/code/modules/dynamicdata/';
 $migrator = new XarayaModuleMigrator($inDir, true);
 $migrator->verbose = false;
+$migrator->skipVendor = false;
 $migrator->load_project();
 $migrator->parse_project();
 $refresh = false;
@@ -1953,6 +2041,7 @@ $replace = false;
 //$found = $migrator->replace_property_services('dynamicdata', $replace);
 //$found = $migrator->replace_block_services('dynamicdata', $replace);
 //$migrator->replace_internal_methods('dynamicdata', '', $replace);
+//[$called, $summary] = $migrator->find_called_dependencies('', '', '');
 [$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '');
 file_put_contents('call_dependencies.json', $migrator->to_json($called));
 $output = $migrator->draw_mermaid_graph($called);

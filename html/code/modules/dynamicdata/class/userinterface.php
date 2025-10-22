@@ -15,13 +15,12 @@
 
 sys::import("xaraya.context.contexttrait");
 sys::import("xaraya.context.context");
-sys::import("xaraya.services.variables");
+sys::import('xaraya.services.xar');
 use Xaraya\DataObject\Handlers\DefaultHandler;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
 use Xaraya\Context\Context;
-use Xaraya\Services\ServiceFactory;
-use Xaraya\Services\VariablesInterface;
+use Xaraya\Services\xar;
 
 /**
  * Dynamic Object User Interface (work in progress)
@@ -91,13 +90,6 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
     // current handler
     /** @var DefaultHandler|object|null */
     private $handler = null;
-    private ?VariablesInterface $xarVar = null;
-
-    protected function var(): VariablesInterface
-    {
-        $this->xarVar ??= ServiceFactory::getVariablesService($this);
-        return $this->xarVar;
-    }
 
     /**
      * Set up any initial parameters (all optional)
@@ -212,7 +204,7 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
         // sanity check on method aliases during setup
         foreach ($this->alias as $alias => $realmethod) {
             if (empty($this->mapper[$realmethod])) {
-                throw new Exception(xarMLS::translate('Unknown method #(1) for alias #(2)', $realmethod, $alias));
+                throw new Exception(xar::ml('Unknown method #(1) for alias #(2)', $realmethod, $alias));
             }
         }
 
@@ -240,8 +232,8 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
     {
         // set the context before checking any variables
         $this->setContext($context);
-        $this->var()->check('method', $args['method']);
-        $this->var()->check('itemid', $args['itemid']);
+        xar::var()->check('method', $args['method']);
+        xar::var()->check('itemid', $args['itemid']);
 
         // default method is 'view' without itemid, or 'display' with an itemid
         if (empty($args['method'])) {

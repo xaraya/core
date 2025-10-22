@@ -12,7 +12,10 @@
 
 namespace Xaraya\Modules\DynamicData;
 
-use xarDB;
+use sys;
+
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class Tables
 {
@@ -26,7 +29,7 @@ class Tables
      */
     public function __invoke(?string $prefix = null)
     {
-        $prefix ??= xarDB::getPrefix();
+        $prefix ??= xar::db()->getPrefix();
         $tables['dynamic_objects']        = $prefix . '_dynamic_objects';
         $tables['dynamic_properties']     = $prefix . '_dynamic_properties';
         $tables['dynamic_data']           = $prefix . '_dynamic_data';
