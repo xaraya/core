@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use Xaraya\Context\Context;
+use sys;
 
 /**
  * Make Core Services available via self::service() etc. in trait (WIP)
@@ -39,28 +40,65 @@ use Xaraya\Context\Context;
  */
 trait WithStaticServices
 {
-    /** @var ?ServicesInterface */
-    protected static $xarServices = null;  // Access core services with static methods
+    /** @var class-string<ServiceStorageInterface> */
+    public static $storageClass = StaticServiceStorage::class;
+    /** @var ?ServiceStorageInterface */
+    protected static $serviceStorage = null;  // Access core services with static methods
+
+    /**
+     * Set the storage class and reset the storage - see reactphp.php or swoole coroutine
+     * @param class-string<ServiceStorageInterface> $storageClass
+     */
+    public static function setStorageClass(string $storageClass): void
+    {
+        static::$storageClass = $storageClass;
+        static::$serviceStorage = null;
+    }
+
+    /**
+     * Get the current service storage strategy.
+     *
+     * This is the key extension point. For a concurrent environment, this
+     * method could be updated to return a Fiber-aware storage implementation.
+     */
+    protected static function getServiceStorage(): ServiceStorageInterface
+    {
+        if (static::$serviceStorage === null) {
+            sys::import('xaraya.services.servicestorage');
+            // For now, we always use the static storage for traditional requests.
+            // In the future, we could detect a Fiber environment here and switch.
+            if (class_exists(static::$storageClass)) {
+                static::$serviceStorage = new static::$storageClass();
+            } else {
+                static::$serviceStorage = new StaticServiceStorage();
+            }
+        }
+        return static::$serviceStorage;
+    }
 
     /**
      * Get services class with optional context
      * @param ?Context<string, mixed> $context
      */
-    public static function getServicesClass($context = null): ServicesInterface
+    public static function getServicesClass(?Context $context = null): ServicesInterface
     {
-        self::$xarServices ??= ServiceFactory::getServicesClass();
-        if (!is_null($context)) {
-            self::$xarServices->setContext($context);
+        $storage = self::getServiceStorage();
+        if (!$storage->has()) {
+            $storage->set(new ServicesClass());
         }
-        return self::$xarServices;
+        $services = $storage->get();
+        assert($services instanceof ServicesInterface);
+        if (!is_null($context)) {
+            $services->setContext($context);
+        }
+        return $services;
     }
 
     /**
      * Set context for core services
-     * @param ?Context<string, mixed> $context
-     * @return void
+     * @param Context<string, mixed> $context
      */
-    public static function setServicesContext($context)
+    public static function setServicesContext(Context $context): void
     {
         self::getServicesClass($context);
     }

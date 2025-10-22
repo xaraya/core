@@ -111,7 +111,7 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public function getQueryVar($name)
     {
-        if (!$this->context->offsetExists('query')) {
+        if (!$this->getContext()->offsetExists('query')) {
             return null;
         }
         $queryVars = $this->context->offsetGet('query');
