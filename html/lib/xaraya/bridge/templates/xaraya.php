@@ -73,7 +73,6 @@ class XarayaCoreExtension extends XarayaTwigExtension
             new TwigFunction('xar_systemvar', $this->xar_systemvar(...)),
             new TwigFunction('xar_varcache', $this->xar_varcache(...)),
             new TwigFunction('xar_findvar', $this->xar_findvar(...)),
-            // new TwigFunction('xar_oldvar', $this->xar_oldvar(...)),
             new TwigFunction('xar_isloggedin', $this->xar_isloggedin(...)),
             new TwigFunction('xar_userid', $this->xar_userid(...)),
             new TwigFunction('xar_modname', $this->xar_modname(...)),
@@ -287,32 +286,6 @@ class XarayaCoreExtension extends XarayaTwigExtension
     {
         $this->var()->find($name, $variable, $validation, $defaultValue);
         return $variable;
-    }
-
-    /**
-     * <xar:set name="checked">
-     *    <xar:var scope="module" module="themes" name="var_dump"/>
-     * </xar:set>
-     * @todo use context where relevant
-     * @deprecated 2.5.0 use specific xar_*var() function instead
-     */
-    public function xar_oldvar($args = [])
-    {
-        // @todo not sure how this is supposed to work
-        $args['scope'] ??= 'local';
-        $result = match ($args['scope']) {
-            'local' => $args['name'],
-            'module' => $this->mod($args['module'])->getVar($args['name']),
-            'user' => $this->user($args['user'] ?? null)->getVar($args['name']),
-            'config' => $this->config()->getVar($args['name']),
-            'session' => $this->session()->getVar($args['name']),
-            'request' => $this->ctl()->getRequestVar($args['name']),
-            default => 'Unknown scope ' . $args['scope'],
-        };
-        if (!empty($args['prep'])) {
-            return $this->var()->prep($result);
-        }
-        return $result;
     }
 
     public function xar_isloggedin()

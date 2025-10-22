@@ -59,12 +59,6 @@ class StandardinstallMethod extends MethodClass
                 $dat_file = sys::code() . 'modules/' . $module . '/xardata/' . $name . '-dat.xml';
 
                 $data = ['file' => $def_file, 'keepitemid' => false];
-                // @deprecated 2.4.0 no additional object arguments supported since Jamaica
-                if (is_array($dd_object)) {
-                    // pass the args we received though to the import routine
-                    // (and from there to the class(es) that will use them
-                    $data = array_merge($data, $dd_object);
-                }
 
                 // check for $name-def.xml file if available
                 if (file_exists($def_file)) {

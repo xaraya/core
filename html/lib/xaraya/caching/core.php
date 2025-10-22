@@ -276,10 +276,9 @@ return $values;
      *
      * @param ixarCache_Storage $cacheStorage  the cache storage instance you want to use (typically in-memory like apcu, redis, ...)
      * @param int    $cacheExpire   how long do you want to keep values in second-level cache storage (if the storage supports it)
-     * @param int   $isBulkStorage do we load/save all variables in bulk by scope or not ? - @deprecated 2.4.1  no longer relevant
      * @return void
     **/
-    public static function setCacheStorage($cacheStorage, $cacheExpire = 0, $isBulkStorage = 0)
+    public static function setCacheStorage($cacheStorage, $cacheExpire = 0)
     {
         self::$cacheStorage = $cacheStorage;
         self::$cacheStorage->setExpire($cacheExpire);

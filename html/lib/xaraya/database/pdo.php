@@ -1322,17 +1322,6 @@ class PDOResultSet extends xarObject implements ResultSetInterface
         return true;
     }
 
-    // @todo Remove this in the code
-    /**
-     * Summary of MoveNext
-     * @deprecated 2.4.1 use next() instead
-     * @return bool
-     */
-    public function MoveNext()
-    {
-        return $this->next();
-    }
-
     /**
      * Summary of rewind
      * @return bool
@@ -1361,18 +1350,6 @@ class PDOResultSet extends xarObject implements ResultSetInterface
 
         $this->refresh_keys(0, $fetchmode);
         return $this->fields;
-    }
-
-    // TODO: remove this from the code
-    /**
-     * Summary of fetchRow
-     * @param ?int $fetchmode
-     * @deprecated 2.4.1 use getRow() instead
-     * @return array<mixed>|mixed
-     */
-    public function fetchRow(?int $fetchmode = null)
-    {
-        return $this->getRow($fetchmode);
     }
 
     /**
@@ -1456,17 +1433,6 @@ class PDOResultSet extends xarObject implements ResultSetInterface
     public function valid()
     {
         return $this->valid;
-    }
-
-    // Two of these functions is one too many
-    /**
-     * Summary of RecordCount
-     * @deprecated 2.4.1 use getRecordCount() instead
-     * @return int
-     */
-    public function RecordCount()
-    {
-        return $this->getRecordCount();
     }
 
     /**

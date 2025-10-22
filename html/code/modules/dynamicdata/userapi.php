@@ -41,11 +41,11 @@ use Xaraya\Services\xar;
  * @method mixed getitemsforview(array $args = []) return the properties and items
  * @method mixed getitemtypes(array $args = []) Utility function to retrieve the list of itemtypes of this module (if any).
  * @method mixed getmoduleitemtypes(array $args = []) utility function to retrieve the list of item types of a module (if any)
- * @method mixed getobject(array $args = []) get a dynamic object @deprecated use $this->data()->getObject()
+ * @method mixed getobject(array $args = []) get a dynamic object @deprecated 2.6.2 use $this->data()->getObject()
  * @method mixed getobjectlist(array $args = []) get a dynamic object list
  * @method mixed getobjects(array $args = []) get the list of defined dynamic objects
  * @method mixed getprop(array $args = []) Get field properties for a specific module + item type
- * @method mixed getproperty(array $args = []) get a dynamic property @deprecated use $this->prop()->getProperty()
+ * @method mixed getproperty(array $args = []) get a dynamic property @deprecated 2.6.2 use $this->prop()->getProperty()
  * @method mixed getproptypes(array $args = []) Get the list of defined property types
  * @method mixed sessioncontext(array $args = []) get an array of context data for a module using dynamicdata (was getcontext)
  * @method mixed showdisplay(array $args = []) Display an item in a template

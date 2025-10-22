@@ -1980,14 +1980,6 @@ class Query
         [$id] = $result->fields;
         return (int) $id;
     }
-    /** @deprecated 2.2.0 no longer supported - try lastid() after insert if needed */
-    public function nextid($table = "", $id = "")
-    {
-        if (!isset($this->dbconn)) {
-            $this->dbconn = $this->getDbConn();
-        }
-        return $this->dbconn->PO_Insert_ID($table, $id);
-    }
     public function openconnection($x = '')
     {
         if (empty($x)) {

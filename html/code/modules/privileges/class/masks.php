@@ -218,26 +218,7 @@ class xarMasks extends xarSecurity
         return true;
     }
 
-
     /**
-     * xarSecLevel: Return an access level based on its name
-     *
-     * @author  Marc Lutolf <marcinmilan@xaraya.com>
-     * @access  public
-     * @uses xarSecurity::getLevel()
-     * @deprecated
-     * @param   string $levelname the
-     * @return  integer access level
-    */
-    public static function xarSecLevel($levelname)
-    {
-        return xarSecurity::getLevel($levelname);
-    }
-
-    /**
-            if ($module == '') $module = xarController::getRequest()->getModule();
-                xarController::redirect(xarController::URL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
-                xarController::redirect(xarController::URL('privileges','user','errors',array('layout' => 'no_privileges')));
      * forgetprivsets: remove all irreducible set of privileges from the db
      *
      * used to lighten the cache

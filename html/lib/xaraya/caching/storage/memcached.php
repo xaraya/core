@@ -15,15 +15,15 @@ if (!class_exists('Memcache')) {
 }
 
 /**
- * Cache data using the PHP Memcache extension [http://www.php.net/memcache]
- * and one or more memcached server(s) [http://www.danga.com/memcached/]
- * @deprecated
+ * Cache data using the PHP Memcache PECL extension [https://www.php.net/memcache]
+ * and one or more memcached server(s) [https://www.memcached.org/]
+ * Not to be confused with PHP Memcached PECL extension [https://www.php.net/memcached]
  */
 class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_Storage
 {
     /** @var string|array<mixed> */
     public $host    = 'localhost';
-    public int $port       = 11211; // default values, cfr. http://php.net/manual/en/function.memcache-addserver.php
+    public int $port       = 11211; // default values, cfr. https://php.net/manual/en/function.memcache-addserver.php
     public bool $persistent = true;
     public int $weight     = 1;
     public int $timeout    = 1;

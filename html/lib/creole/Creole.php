@@ -61,13 +61,6 @@ class Creole
     public const PERSISTENT = 1;
 
     /**
-     * Flag to pass to the connection to indicate that no case conversions
-     * should be performed by ResultSet on keys of fetched rows.
-     * @deprecated use COMPAT_ASSOC_LOWER
-     */
-    public const NO_ASSOC_LOWER = 16;
-
-    /**
      * Flag to pass to the connection to indicate that a to-lower case conversion
      * should be performed by ResultSet on keys of fetched rows.
      */
@@ -207,10 +200,6 @@ class Creole
         }
         if (isset($dsninfo['compat_all']) && ! empty($dsninfo['compat_all'])) {
             $flags |= Creole::COMPAT_ALL;
-        }
-
-        if ($flags & Creole::NO_ASSOC_LOWER) {
-            trigger_error("The Creole::NO_ASSOC_LOWER flag has been deprecated, and is now the default behavior. Use Creole::COMPAT_ASSOC_LOWER to lowercase resulset keys.", E_USER_WARNING);
         }
 
         // sort $dsninfo by keys so the serialized result is always the same

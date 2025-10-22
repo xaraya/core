@@ -230,6 +230,8 @@ class xarBlock extends xarObject implements ixarBlock
         }
 
         // @deprecated 2.7.0 remove old code
+        $key = !empty($blockinfo['module']) ? $blockinfo['module'] . ':' . $blockinfo['type'] : $blockinfo['type'];
+        throw new ClassNotFoundException($key);
 
         // @checkme do we want to foresee anything special for other interfaces, or always let them go through the search process below?
         // @checkme best would be to simply autoload the class, if we do know the actual $classname - otherwise we'll need $filepath too

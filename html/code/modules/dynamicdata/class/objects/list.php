@@ -601,7 +601,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Show a view of an object
      *
-     * @return string xarTpl::object
+     * @return string $this->tpl()->object()
      */
     public function showView(array $args = [])
     {

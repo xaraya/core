@@ -210,10 +210,9 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     /**
      * Utility function to send the data to the browser or app
      * @param mixed $data
-     * @param mixed $context @deprecated 2.6.3 switch to instance methods
      * @return void
      */
-    public function output($data, $context = null)
+    public function output($data)
     {
         if (is_string($data)) {
             //header('Access-Control-Allow-Origin: *');

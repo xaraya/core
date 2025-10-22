@@ -857,8 +857,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         // CHECKME: prevent recursive hook calls in general
         $this->var()->setCached('DynamicData', 'HookAction', $action);
 
-        // <chris> moved this from xarObjectHooks::initHookSubject()
-        // This is the correct place to handle it, hooks system doesn't need to know
         // initialize hookvalues
         $this->hookvalues = [];
 
@@ -918,9 +916,6 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         // A response is a response, it's up to the caller to decide if it's appropriate
         // For now we'll populate both with the same data
         $this->hookvalues = $this->hookoutput = $hooks;
-
-        // let xarObjectHooks worry about calling the different hooks
-        //xarObjectHooks::callHooks($this, $action);
 
         // the result of API actions will be in $this->hookvalues
         // the result of GUI actions will be in $this->hookoutput

@@ -30,7 +30,6 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
 
     /** @var mixed */
     protected $db     = null;
-    //protected $tables = null;
     /** @var int|string */
     public $dbConnIndex = 0;
 

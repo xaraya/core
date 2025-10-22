@@ -12,38 +12,6 @@
  * @link http://xaraya.info/index.php/release/200.html
  */
 
-/**
- * @deprecated 2.6.2 use xarInstall::func() instead
- */
-function xarInstallFunc($funcName = 'main', $args = [])
-{
-    return xarInstall::func($funcName, $args);
-}
-
-/**
- * @deprecated 2.6.2 use xarInstall::apiFunc() instead
- */
-function xarInstallAPIFunc($funcName = 'main', $args = [])
-{
-    return xarInstall::apiFunc($funcName, $args);
-}
-
-/**
- * @deprecated 2.6.2 use xarInstall::apiLoad() instead
- */
-function xarInstallAPILoad()
-{
-    return xarInstall::apiLoad();
-}
-
-/**
- * @deprecated 2.6.2 use xarInstall::load() instead
- */
-function xarInstallLoad($func)
-{
-    return xarInstall::load($func);
-}
-
 class xarInstall extends xarObject
 {
     /**

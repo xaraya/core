@@ -212,12 +212,3 @@ class RoutingHandler implements MiddlewareInterface, RequestHandlerInterface
         $this->responseUtil->emitResponse($response);
     }
 }
-
-/**
- * Summary of FastRouteHandler
- * @deprecated 2.6.2 use RoutingHandler() instead
- */
-class FastRouteHandler extends RoutingHandler
-{
-    // ...
-}

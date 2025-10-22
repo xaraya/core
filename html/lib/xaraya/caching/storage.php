@@ -66,14 +66,10 @@ class xarCache_Storage extends xarObject
                 $classname = 'xarCache_Database_Storage';
                 break;
 
-            case 'apc':
             case 'apcu':
                 if (function_exists('apcu_fetch')) {
                     sys::import('xaraya.caching.storage.apcu');
                     $classname = 'xarCache_APCu_Storage';
-                } elseif (function_exists('apc_fetch')) {
-                    sys::import('xaraya.caching.storage.apc');
-                    $classname = 'xarCache_APC_Storage';
                 } else {
                     sys::import('xaraya.caching.storage.filesystem');
                     $classname = 'xarCache_FileSystem_Storage';
@@ -95,36 +91,6 @@ class xarCache_Storage extends xarObject
                 if (class_exists('Memcache')) {
                     sys::import('xaraya.caching.storage.memcached');
                     $classname = 'xarCache_MemCached_Storage';
-                } else {
-                    sys::import('xaraya.caching.storage.filesystem');
-                    $classname = 'xarCache_FileSystem_Storage';
-                }
-                break;
-
-            case 'mmcache':
-                if (function_exists('mmcache_get')) {
-                    sys::import('xaraya.caching.storage.mmcache');
-                    $classname = 'xarCache_MMCache_Storage';
-                } else {
-                    sys::import('xaraya.caching.storage.filesystem');
-                    $classname = 'xarCache_FileSystem_Storage';
-                }
-                break;
-
-            case 'eaccelerator':
-                if (function_exists('eaccelerator_get')) {
-                    sys::import('xaraya.caching.storage.eaccelarator');
-                    $classname = 'xarCache_eAccelerator_Storage';
-                } else {
-                    sys::import('xaraya.caching.storage.filesystem');
-                    $classname = 'xarCache_FileSystem_Storage';
-                }
-                break;
-
-            case 'xcache':
-                if (function_exists('xcache_get')) {
-                    sys::import('xaraya.caching.storage.xcache');
-                    $classname = 'xarCache_XCache_Storage';
                 } else {
                     sys::import('xaraya.caching.storage.filesystem');
                     $classname = 'xarCache_FileSystem_Storage';

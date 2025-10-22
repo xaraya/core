@@ -378,10 +378,9 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      * Send Content-Type and JSON result to the browser
      * @param mixed $result
      * @param mixed $status
-     * @param mixed $context for mediaType @deprecated 2.6.3 switch to instance methods
      * @return void
      */
-    public function output($result, $status = 200, $context = null)
+    public function output($result, $status = 200)
     {
         if (!isset($result) && php_sapi_name() !== 'cli') {
             return;
