@@ -12,8 +12,6 @@
 
 namespace Xaraya\Modules\Roles;
 
-use xarDB;
-
 class Tables
 {
     /**
@@ -24,9 +22,8 @@ class Tables
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @return array<mixed> the registered tables of this module
      */
-    public function __invoke(?string $prefix = null)
+    public function __invoke(string $prefix = 'xar')
     {
-        $prefix ??= xarDB::getPrefix();
         $tables['roles']          = $prefix . '_roles';
         $tables['rolemembers']    = $prefix . '_rolemembers';
         return $tables;

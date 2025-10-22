@@ -624,7 +624,7 @@ class xarMLS extends xarObject
      * @todo static hash on path to prevent double loading?
      * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
      * @todo pnFile.php type files support needed?
-     * @todo xarversion.php type files support
+     * @todo version.php type files support
      * @todo xar(whatever)api.php type files support? (javascript for example)
      * @todo do we want core per file support?
      **/

@@ -18,6 +18,7 @@ namespace Xaraya\Services;
 
 use Xaraya\Context\ContextInterface;
 use Xaraya\Modules\ModuleInterface;
+use xarClassMap;
 use xarMod;
 use xarModAlias;
 use xarModVars;
@@ -286,7 +287,7 @@ trait ModulesTrait
     }
 
     /**
-     * Get info from xarversion.php
+     * Get info from version.php
      * @return array<string, mixed>
      */
     public function getFileInfo(?string $modName = null): array
@@ -315,13 +316,20 @@ trait ModulesTrait
     }
 
     /**
-     * Get tables from xartables.php
+     * Get tables from tables.php
      * @todo pass along the DB prefix to $tablefunc
      * @return array<string, mixed>
      */
     public function getTables(?string $modName = null): array
     {
         $modName ??= $this->getModName();
+        $result = xarClassMap::findTables($modName);
+        if (!empty($result) && class_exists($result['classname'])) {
+            $tablesCall = new $result['classname']();
+            // @todo pass along the DB prefix to $tablesCall
+            return $tablesCall();
+        }
+
         // Load the database definition if required
         try {
             include_once sys::code() . 'modules/' . $modName . '/xartables.php';
@@ -330,7 +338,6 @@ trait ModulesTrait
         }
         $tablefunc = $modName . '_' . 'xartables';
         if (function_exists($tablefunc)) {
-            // xarDB::importTables($tablefunc());
             // @todo pass along the DB prefix to $tablefunc
             return $tablefunc();
         }

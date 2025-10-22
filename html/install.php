@@ -146,13 +146,22 @@ function xarInstallLoader()
     */
     xarDebug::setExceptionHandler(['ExceptionHandlers','bone']);
 
+    /**
+     * Get context from globals if not specified (default)
+     */
+    sys::import('xaraya.context.factory');
+    $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
+    // set context for core services here too
+    sys::import('xaraya.services.xar');
+    Xaraya\Services\xar::setServicesContext($context);
+
     // Start HTTP Protocol Server/Request/Response utilities
     $systemArgs = ['enableShortURLsSupport' => false,
         'defaultModuleName'      => 'installer',
         'defaultModuleType'      => 'admin',
         'defaultModuleFunction'  => 'main',
         'generateXMLURLs'        => false];
-    xarServer::init($systemArgs);
+    xarServer::init($systemArgs, $context);
     xarController::init($systemArgs);
 
     // Start BlockLayout Template Engine

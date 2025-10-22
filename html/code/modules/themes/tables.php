@@ -13,8 +13,6 @@
 
 namespace Xaraya\Modules\Themes;
 
-use xarDB;
-
 class Tables
 {
     /**
@@ -25,9 +23,8 @@ class Tables
      * @author Marty Vance
      * @return array<mixed> the registered tables of this module
      */
-    public function __invoke(?string $prefix = null)
+    public function __invoke(string $prefix = 'xar')
     {
-        $prefix ??= xarDB::getPrefix();
         $tables['themes'] = $prefix . '_themes';
         $tables['themes_configurations'] = $prefix . '_themes_configurations';
         return $tables;

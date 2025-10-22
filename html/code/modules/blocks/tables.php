@@ -13,8 +13,6 @@
 
 namespace Xaraya\Modules\Blocks;
 
-use xarDB;
-
 class Tables
 {
     /**
@@ -25,9 +23,8 @@ class Tables
      *
      * @return array<mixed> Registered table names to a globally accessibl array
      */
-    public function __invoke(?string $prefix = null)
+    public function __invoke(string $prefix = 'xar')
     {
-        $prefix ??= xarDB::getPrefix();
         //$tables['userblocks']         = $prefix . '_userblocks';
         $tables['block_instances']        = $prefix . '_block_instances';
         //$tables['block_group_instances']  = $prefix . '_block_group_instances';

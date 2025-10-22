@@ -16,8 +16,6 @@
 
 namespace Xaraya\Modules\Categories;
 
-use xarDB;
-
 class Tables
 {
     /**
@@ -27,11 +25,10 @@ class Tables
      * @author  mikespub <postnuke@mikespub.net>
      * @return array<mixed> Table information
      */
-    public function __invoke(?string $prefix = null)
+    public function __invoke(string $prefix = 'xar')
     {
         // Initialise table array
         $xartable = [];
-        $prefix ??= xarDB::getPrefix();
 
         // Set the table name
         $xartable['categories'] = $prefix . '_categories';

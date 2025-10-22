@@ -12,11 +12,6 @@
 
 namespace Xaraya\Modules\DynamicData;
 
-use sys;
-
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
-
 class Tables
 {
     /**
@@ -27,9 +22,8 @@ class Tables
      * @author mikespub <mikespub@xaraya.com>
      * @return array<mixed> the registered tables of this module
      */
-    public function __invoke(?string $prefix = null)
+    public function __invoke(string $prefix = 'xar')
     {
-        $prefix ??= xar::db()->getPrefix();
         $tables['dynamic_objects']        = $prefix . '_dynamic_objects';
         $tables['dynamic_properties']     = $prefix . '_dynamic_properties';
         $tables['dynamic_data']           = $prefix . '_dynamic_data';

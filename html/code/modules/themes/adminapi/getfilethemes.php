@@ -74,7 +74,7 @@ class GetfilethemesMethod extends MethodClass
 
                         // TODO: beautify :-)
                         if (!isset($regId)) {
-                            $this->session()->setVar('errormsg', "Theme '$name' doesn't seem to have a registered theme ID defined in xarversion.php - skipping...\nPlease register your theme at http://www.xaraya.com/index.php?module=release&func=addid if you haven't done so yet, and add \$themeversion['id'] = 'your ID'; in xarversion.php");
+                            $this->session()->setVar('errormsg', "Theme '$name' doesn't seem to have a registered theme ID defined in xartheme.php - skipping...");
                             continue 2;
                         }
 

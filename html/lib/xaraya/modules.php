@@ -562,7 +562,7 @@ class xarMod extends xarObject implements IxarMod
     }
 
     /**
-     * Get info from xarversion.php for module specified by modOsDir
+     * Get info from version.php for module specified by modOsDir
      *
      * @param string $modOsDir the module's directory
      * @param string $type determines theme or module
@@ -589,12 +589,14 @@ class xarMod extends xarObject implements IxarMod
             case 'module':
                 sys::import('xaraya.classmap');
                 $result = xarClassMap::findVersion($modOsDir);
-                if (!empty($result)) {
-                    // @todo use class_exists() with autoload
-                    require_once $result['filepath'];
+                if (!empty($result) && class_exists($result['classname'])) {
                     $versionCall = new $result['classname']();
-                    $version = $versionCall();
-                    return self::parseFileInfo($version, $modOsDir . " / " . $type);
+                    $modversion = $versionCall();
+                    // If the locale is already present, it means we can make the translations available
+                    if (!empty(xar::mls()->getCurrentLocale())) {
+                        xar::mls()->loadModuleTranslations($modOsDir, '', 'version');
+                    }
+                    return self::parseFileInfo($modversion, $modOsDir . " / " . $type);
                 }
                 // Spliffster, additional mod info from modules/$modDir/xarversion.php
                 $fileName = sys::code() . 'modules/' . $modOsDir . '/xarversion.php';
@@ -715,9 +717,7 @@ class xarMod extends xarObject implements IxarMod
 
         sys::import('xaraya.classmap');
         $result = xarClassMap::findTables($modName);
-        if (!empty($result)) {
-            // @todo use class_exists() with autoload
-            require_once $result['filepath'];
+        if (!empty($result) && class_exists($result['classname'])) {
             $tablesCall = new $result['classname']();
             // pass along the DB prefix to $tablesCall
             xar::db()->importTables($tablesCall(xar::db()->getPrefix()));

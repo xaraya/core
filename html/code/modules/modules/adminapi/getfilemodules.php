@@ -26,9 +26,9 @@ class GetfilemodulesMethod extends MethodClass
     /** functions imported by bermuda_cleanup */
 
     /**
-     * Get module information from xarversion.php for each module
-     * Here we cycle through the modules directory and and
-     * return an array of information from xarversion.php of each module.
+     * Get module information from version.php for each module
+     * Here we cycle through the modules directory and
+     * return an array of information from version.php of each module.
      *
      * Excluded directories:
      * MT  - this is a special directory of Monotone
@@ -67,7 +67,7 @@ class GetfilemodulesMethod extends MethodClass
                 default:
                     if (is_dir(sys::code() . "modules/$modOsDir")) {
 
-                        // no xarversion.php, no module
+                        // no version.php, no module
                         $modFileInfo = $this->mod()->getFileInfo($modOsDir);
                         if (empty($modFileInfo)) {
                             continue 2;
@@ -90,7 +90,7 @@ class GetfilemodulesMethod extends MethodClass
 
                         // TODO: beautify :-)
                         if (!isset($regId)) {
-                            $this->session()->setVar('errormsg', "Module '$name' doesn't seem to have a registered module ID defined in xarversion.php - skipping...\nPlease register your module at http://www.xaraya.com");
+                            $this->session()->setVar('errormsg', "Module '$name' doesn't seem to have a registered module ID defined in version.php - skipping...");
                             continue 2;
                         }
 

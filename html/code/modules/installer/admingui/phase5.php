@@ -16,6 +16,7 @@ use Xaraya\Modules\Installer\AdminGui;
 use Exception;
 use SQLException;
 use SQLite3;
+use xarClassMap;
 use xarDB;
 use xarDatabase;
 use xarInst;
@@ -343,6 +344,7 @@ class Phase5Method extends MethodClass
                         VALUES (?,?,?,?,?,?,?,?,?)";
         $newStmt     = $dbconn->prepareStatement($newModSql);
 
+        sys::import('xaraya.classmap');
         $modules = ['authsystem','roles','privileges','installer','blocks','themes','dynamicdata','mail','categories'];
         // Series of updates, begin transaction
         try {
@@ -351,10 +353,19 @@ class Phase5Method extends MethodClass
                 // Insert module
                 $modversion = [];
                 $bindvars = [];
-                // NOTE: We can not use the sys::import here, since the variable scope is important.
-                include_once sys::code() . "modules/$modName/xarversion.php";
+                $result = xarClassMap::findVersion($modName);
+                if (!empty($result) && class_exists($result['classname'])) {
+                    $versionCall = new $result['classname']();
+                    $modversion = $versionCall();
+                } else {
+                    // NOTE: We can not use the sys::import here, since the variable scope is important.
+                    include sys::code() . "modules/$modName/xarversion.php";
+                }
+                if (empty($modversion)) {
+                    throw new \ConfigurationException($modname, 'Invalid version.php or xarversion.php file for module #(1)', $this->getContext());
+                }
                 $bindvars = [$modName,
-                    $modversion['id'],       // regid, from xarversion
+                    $modversion['id'],       // regid, from version.php
                     $modName,
                     $modversion['version'],
                     $modversion['class'],
@@ -374,8 +385,13 @@ class Phase5Method extends MethodClass
         // 4. Initialize all the modules we haven't yet
         $modules = ['privileges','roles','blocks','authsystem','themes','dynamicdata','mail','categories'];
         foreach ($modules as $module) {
-            if (file_exists("code/modules/$module/xartables.php")) {
-                include_once("code/modules/$module/xartables.php");
+            $result = xarClassMap::findTables($module);
+            if (!empty($result) && class_exists($result['classname'])) {
+                $tablesCall = new $result['classname']();
+                // pass along the DB prefix to $tablesCall
+                $this->db()->importTables($tablesCall($prefix));
+            } elseif (file_exists("code/modules/$module/xartables.php")) {
+                include_once sys::code() . "modules/$module/xartables.php";
                 $tablefunc = $module . '_xartables';
                 // pass along the DB prefix to $tablefunc
                 if (function_exists($tablefunc)) {

@@ -95,7 +95,7 @@ class xarMod3
     }
 
     /**
-     * Get info from xarversion.php - modName is mandatory here
+     * Get info from version.php - modName is mandatory here
      * @return array<string, mixed>
      */
     public static function getFileInfo(string $modName): array
@@ -122,7 +122,7 @@ class xarMod3
     }
 
     /**
-     * Get tables from xartables.php - modName is mandatory here
+     * Get tables from tables.php - modName is mandatory here
      * @return array<string, mixed>
      */
     public static function getTables(string $modName): array

@@ -206,7 +206,7 @@ class xarTwigTpl extends xarTpl
 
     public static function addModuleTemplates()
     {
-        // make other modules configurable based on fileinfo from xarversion.php
+        // make other modules configurable based on fileinfo from version.php
         $fileModules = xar::mod()->apiFunc('modules', 'admin', 'getfilemodules');
         // support templates/twig or vendor/xaraya/twig/html directory for standard templates
         $twigDir = static::getTwigTemplatesDir();
@@ -527,7 +527,7 @@ class xarTwigTpl extends xarTpl
         }
         static::getNamespaces();
         $modName = strtolower($modName);
-        // make other modules configurable based on fileinfo from xarversion.php
+        // make other modules configurable based on fileinfo from version.php
         if (empty(static::$extensions['modules'][$modName])) {
             xar::log()->info(__METHOD__ . ": Module {$modName} does not support twig templates");
             return false;
