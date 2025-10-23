@@ -322,9 +322,9 @@ class RelationsMethod extends MethodClass
             } elseif (!empty($update)) {
                 $this->var()->check('getlinkedobjects', $getlinkedobjects);
                 if (!empty($getlinkedobjects)) {
-                    xarModItemVars::set('dynamicdata', 'getlinkedobjects', 1, $objectid);
+                    $this->mod()->setItemVar('getlinkedobjects', 1, $objectid);
                 } else {
-                    xarModItemVars::set('dynamicdata', 'getlinkedobjects', 0, $objectid);
+                    $this->mod()->setItemVar('getlinkedobjects', 0, $objectid);
                 }
             }
 

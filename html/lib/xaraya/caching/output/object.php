@@ -145,8 +145,9 @@ class xarObjectCache extends xarObject
     public static function getCacheSettings()
     {
         if (!isset(self::$cacheSettings)) {
+            sys::import('xaraya.services.xar');
             $settings = [];
-            $serialsettings = xarModVars::get('dynamicdata', 'objectcache_settings');
+            $serialsettings = Xaraya\Services\xar::mod('dynamicdata')->getVar('objectcache_settings');
             if (!empty($serialsettings)) {
                 $settings = unserialize($serialsettings);
             }

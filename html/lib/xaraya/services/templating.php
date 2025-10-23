@@ -47,7 +47,11 @@ interface TemplatingInterface extends ServiceInterface
 
     public function setPageTemplateName(string $templateName): bool;
 
+    public function getBaseDir(): string;
+
     public function getThemeDir(?string $theme = null): string;
+
+    public function getThemeName(): string;
 
     public function getThemeUrl(?string $theme = null): string;
 
@@ -218,11 +222,27 @@ trait TemplatingTrait
     }
 
     /**
+     * Get base directory
+     */
+    public function getBaseDir(): string
+    {
+        return xarTpl::getBaseDir();
+    }
+
+    /**
      * Get theme directory
      */
     public function getThemeDir(?string $theme = null): string
     {
         return xarTpl::getThemeDir($theme);
+    }
+
+    /**
+     * Get theme name in use
+     */
+    public function getThemeName(): string
+    {
+        return xarTpl::getThemeName();
     }
 
     /**

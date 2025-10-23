@@ -243,7 +243,7 @@ class xarMask extends xarObject
             $p2 = $mask->normalize();
         }
         // match realm. bail if no match.
-        switch (xarModVars::get('privileges', 'realmcomparison')) {
+        switch (xar::mod('privileges')->getVar('realmcomparison')) {
             case "contains":
                 $fails = $p1[1] != $p2[1];
                 break;
@@ -361,7 +361,7 @@ class xarMask extends xarObject
         } elseif (($var === null) || (strtolower($var ?? '') == 'empty')) {
             $this->module_id = null;
         } else {
-            $this->module_id = xarMod::getID($var);
+            $this->module_id = xar::mod()->getID($var);
         }
     }
     public function setComponent($var)

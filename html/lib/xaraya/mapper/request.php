@@ -59,9 +59,9 @@ class xarRequest extends xarObject
     public function __construct($url = null)
     {
         // Make this load lazily
-        //$this->setModule(xarModVars::get('modules', 'defaultmodule'));
-        //$this->setType(xarModVars::get('modules', 'defaultmoduletype'));
-        //$this->setFunction(xarModVars::get('modules', 'defaultmodulefunction'));
+        //$this->setModule(xar::mod('modules')->getVar('defaultmodule'));
+        //$this->setType(xar::mod('modules')->getVar('defaultmoduletype'));
+        //$this->setFunction(xar::mod('modules')->getVar('defaultmodulefunction'));
 
         // xarController::getRequest() comes after xarCore::xarInit()
         $this->setServerContext(xarServer::getInstance());
@@ -322,9 +322,9 @@ class xarRequest extends xarObject
             } else {
                 // If $modName is still empty we use the default module/type/func to be loaded in that such case
                 if (empty($this->defaultRequestInfo)) {
-                    $this->defaultRequestInfo = [xarModVars::get('modules', 'defaultmodule'),
-                        xarModVars::get('modules', 'defaultmoduletype'),
-                        xarModVars::get('modules', 'defaultmodulefunction')];
+                    $this->defaultRequestInfo = [xar::mod('modules')->getVar('defaultmodule'),
+                        xar::mod('modules')->getVar('defaultmoduletype'),
+                        xar::mod('modules')->getVar('defaultmodulefunction')];
                 }
                 $requestInfo = $this->defaultRequestInfo;
             }
@@ -373,7 +373,7 @@ class xarRequest extends xarObject
     /** @return string */
     public function getModule()
     {
-        $this->module ??= xarModVars::get('modules', 'defaultmodule');
+        $this->module ??= xar::mod('modules')->getVar('defaultmodule');
         return $this->module;
     }
     /** @return string */
@@ -384,13 +384,13 @@ class xarRequest extends xarObject
     /** @return string */
     public function getType()
     {
-        $this->type ??= xarModVars::get('modules', 'defaultmoduletype');
+        $this->type ??= xar::mod('modules')->getVar('defaultmoduletype');
         return $this->type;
     }
     /** @return string */
     public function getFunction()
     {
-        $this->func ??= xarModVars::get('modules', 'defaultmodulefunction');
+        $this->func ??= xar::mod('modules')->getVar('defaultmodulefunction');
         return $this->func;
     }
     /** @return string */

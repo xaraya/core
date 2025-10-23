@@ -34,8 +34,6 @@
 
 namespace Xaraya\Modules;
 
-use xarMod;
-use xarModVars;
 use sys;
 
 sys::import('xaraya.modules.servicestrait');
@@ -128,14 +126,14 @@ trait InstallerTrait
     {
         $module = $this->getModName();
         $objects = $this->objects ?? [];
-        if (!xarMod::apiFunc('modules', 'admin', 'standardinstall', ['module' => $module, 'objects' => $objects])) {
+        if (!$this->mod()->apiFunc('modules', 'admin', 'standardinstall', ['module' => $module, 'objects' => $objects])) {
             return false;
         }
 
         // Set up module variables
         $variables = $this->variables ?? [];
         foreach ($variables as $name => $value) {
-            xarModVars::set($module, $name, $value);
+            $this->mod()->setVar($name, $value);
         }
 
         // Installation complete; check for upgrades
@@ -173,6 +171,6 @@ trait InstallerTrait
     public function delete()
     {
         $module = $this->getModName();
-        return xarMod::apiFunc('modules', 'admin', 'standarddeinstall', ['module' => $module]);
+        return $this->mod()->apiFunc('modules', 'admin', 'standarddeinstall', ['module' => $module]);
     }
 }

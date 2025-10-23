@@ -36,6 +36,8 @@ if (file_exists(sys::varpath() . '/security/on.touch')) {
 //        said another way, can we move the two files to /includes (partially preferably)
 sys::import('modules.privileges.class.privileges');
 sys::import('modules.roles.class.roles');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 // @todo move xarSecurity class from privileges to here or keep it modular?
 
@@ -68,8 +70,8 @@ class xarSec extends xarObject
         }
 
         // Date gives extra security but leave it out for now
-        // $key = xarSession::getVar('rand') . $modName . date ('YmdGi');
-        $key = xarSession::getVar('rand') . strtolower($modName);
+        // $key = xar::session()->getVar('rand') . $modName . date ('YmdGi');
+        $key = xar::session()->getVar('rand') . strtolower($modName);
 
         // Encrypt key
         $authid = md5($key);
@@ -106,7 +108,7 @@ class xarSec extends xarObject
         $authid = xarController::getVar($authIdVarName);
 
         // Regenerate static part of key
-        $partkey = xarSession::getVar('rand') . strtolower($modName);
+        $partkey = xar::session()->getVar('rand') . strtolower($modName);
 
         // Not using time-sensitive keys for the moment
         //    // Key life is 5 minutes, so search backwards and forwards 5
@@ -121,7 +123,7 @@ class xarSec extends xarObject
         //            // We've used up the current random
         //            // number, make up a new one
         //            srand((double) microtime(true) * 1000000.0);
-        //            xarSession::setVar('rand', rand());
+        //            xar::session()->setVar('rand', rand());
         //
         //            return true;
         //        }
@@ -129,7 +131,7 @@ class xarSec extends xarObject
         if ((md5($partkey)) == $authid) {
             // Match - generate new random number for next key and leave happy
             srand((float) microtime(true) * 1000000.0);
-            xarSession::setVar('rand', rand());
+            xar::session()->setVar('rand', rand());
             return true;
         }
         // Not found, assume invalid

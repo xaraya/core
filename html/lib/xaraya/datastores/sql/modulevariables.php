@@ -22,6 +22,8 @@ use Exception;
 use sys;
 
 sys::import('xaraya.datastores.sql.relational');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Class to handle module variables datastores
@@ -73,7 +75,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
             return;
         }
         foreach ($fieldlist as $field) {
-            $value = xarModItemVars::get($this->modulename, $field, $itemid);
+            $value = xar::mod($this->modulename)->getItemVar($field, $itemid);
             // set the value for this property
             $this->object->properties[$field]->value = $value;
         }
@@ -101,9 +103,9 @@ class ModuleVariablesDataStore extends RelationalDataStore
                 continue;
             }
             if (empty($itemid)) {
-                xarModVars::set($this->modulename, $field, $value);
+                xar::mod($this->modulename)->setVar($field, $value);
             } else {
-                xarModItemVars::set($this->modulename, $field, $value, $itemid);
+                xar::mod($this->modulename)->setItemVar($field, $value, $itemid);
             }
         }
         return $itemid;

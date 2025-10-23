@@ -41,7 +41,7 @@ class GenericAPIHandler extends RestAPIHandler
     public function whoami($args = [])
     {
         $userId = $this->checkUser();
-        //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
+        //return array('id' => xar::user()->getVar('id'), 'name' => xar::user()->getVar('name'));
         xarMod::init();
         xarUser::init();
         $role = xarRoles::getRole($userId);

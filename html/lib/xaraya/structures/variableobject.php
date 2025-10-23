@@ -9,6 +9,10 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 /**
  * Base Variable Object Class
  * Singleton object class which models a module|user|session variable
@@ -58,14 +62,14 @@ abstract class xarVariableObject extends xarObject
         if (!isset(static::$instance)) {
             switch (static::$scope) {
                 case 'module':
-                    static::$instance = @unserialize((string) xarModVars::get(static::$module, static::$variable));
+                    static::$instance = @unserialize((string) xar::mod(static::$module)->getVar(static::$variable));
                     break;
                 case 'user':
                     $role_id ??= xarSession::getUserId();
-                    static::$instance = @unserialize((string) xarModUserVars::get(static::$module, static::$variable, $role_id));
+                    static::$instance = @unserialize((string) xar::mod(static::$module)->getUserVar(static::$variable, $role_id));
                     break;
                 case 'session':
-                    static::$instance = @unserialize((string) xarSession::getVar(static::$variable));
+                    static::$instance = @unserialize((string) xar::session()->getVar(static::$variable));
                     break;
             }
             // NOTE: if the object unserialized successfully
@@ -140,14 +144,14 @@ abstract class xarVariableObject extends xarObject
         // NOTE: the __sleep() method will be called when the object is serialized here
         switch ($scope) {
             case 'module':
-                xarModVars::set(static::$module, static::$variable, serialize(static::$instance));
+                xar::mod(static::$module)->setVar(static::$variable, serialize(static::$instance));
                 break;
             case 'user':
                 // @fixme where is $this->_role_id supposed to come from?
-                xarModUserVars::set(static::$module, static::$variable, serialize(static::$instance), $this->_role_id);
+                xar::mod(static::$module)->setUserVar(static::$variable, serialize(static::$instance), $this->_role_id);
                 break;
             case 'session':
-                xarSession::setVar(static::$variable, serialize(static::$instance));
+                xar::session()->setVar(static::$variable, serialize(static::$instance));
                 break;
             default:
                 return false;

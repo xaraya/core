@@ -49,7 +49,7 @@ class xarMasks extends xarSecurity
     public static function getmasks($modid = self::PRIVILEGES_ALL, $component = 'All')
     {
         self::initialize();
-        // TODO: try to do all this a bit more compact and without xarMod::getBaseInfo
+        // TODO: try to do all this a bit more compact and without xar::mod()->getBaseInfo
         // TODO: sort on the name of the mod again
         // TODO: evaluate ambiguous signature of this method: does 'All' mean get *only* the masks which apply to all modules
         //       or get *all* masks.
@@ -125,7 +125,7 @@ class xarMasks extends xarSecurity
         } elseif ($module == null) {
             $module_id = null;
         } else {
-            $module_id = xarMod::getID($module);
+            $module_id = xar::mod()->getID($module);
         }
         if (is_string($level)) {
             $level = xarSecurity::getLevel($level);
@@ -210,7 +210,7 @@ class xarMasks extends xarSecurity
         } elseif ($module == null) {
             $modid = null;
         } else {
-            $modid = xarMod::getID($module);
+            $modid = xar::mod()->getID($module);
         }
         $query = "DELETE FROM " . self::$privilegestable . " WHERE itemtype = ? AND module_id = ?";
         //Execute the query, bail if an exception was thrown
@@ -302,7 +302,7 @@ class xarMasks extends xarSecurity
     public static function clearCache()
     {
         if (class_exists('xarModVars')) {
-            xarModVars::set('privileges', 'clearcache', time());
+            xar::mod('privileges')->setVar('clearcache', time());
         }
     }
 }

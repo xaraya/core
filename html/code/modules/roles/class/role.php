@@ -113,7 +113,7 @@ class Role extends DataObject
             xar::var()->check('parentid', $data['parentid'], 'int');
         }
         if (empty($data['parentid'])) {
-            $data['parentid'] = (int) xarModVars::get('roles', 'defaultgroup');
+            $data['parentid'] = (int) xar::mod('roles')->getVar('defaultgroup');
         }
         if (!empty($data['parentid'])) {
             sys::import('modules.roles.class.roles');
@@ -306,7 +306,7 @@ class Role extends DataObject
             $this->setID($data['itemid']);
         }
 
-        if ($this->getID() == (int) xarModVars::get('roles', 'defaultgroup')) {
+        if ($this->getID() == (int) xar::mod('roles')->getVar('defaultgroup')) {
             return xarTpl::module('roles', 'user', 'errors', ['layout' => 'remove_defaultusergroup', 'group' => $this->getID()]);
         }
 

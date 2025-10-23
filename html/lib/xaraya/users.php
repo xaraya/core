@@ -207,7 +207,7 @@ class xarUser extends xarObject
         // Set session variables
 
         // Keep a reference to auth module that authenticates successfully
-        xarSession::setVar('authenticationModule', $authModName);
+        xar::session()->setVar('authenticationModule', $authModName);
 
         // FIXME: <marco> here we could also set a last_logon timestamp
         //<jojodee> currently set in individual authsystem when success on login returned to it
@@ -218,7 +218,7 @@ class xarUser extends xarObject
         // User logged in successfully, trigger the proper event with the new userid
         //xarEvents::trigger('UserLogin',$userId);
         xarEvents::notify('UserLogin', $userId, $context);
-        xarSession::delVar('privilegeset');
+        xar::session()->delVar('privilegeset');
         return true;
     }
 
@@ -242,7 +242,7 @@ class xarUser extends xarObject
             return; // throw back
         }
 
-        xarSession::delVar('authenticationModule');
+        xar::session()->delVar('authenticationModule');
 
         if (!empty($context)) {
             $context->setUserId(xarSession::getAnonId());
@@ -251,7 +251,7 @@ class xarUser extends xarObject
         //xarEvents::trigger('UserLogout',$userId);
         xarEvents::notify('UserLogout', $userId, $context);
 
-        xarSession::delVar('privilegeset');
+        xar::session()->delVar('privilegeset');
         return true;
     }
 
@@ -342,15 +342,15 @@ class xarUser extends xarObject
 
             $locale = xar::mod('roles')->getUserVar('locale', $id);
             if (empty($locale)) {
-                $locale = xarSession::getVar('navigationLocale');
+                $locale = xar::session()->getVar('navigationLocale');
             }
         } else {
-            $locale = xarSession::getVar('navigationLocale');
+            $locale = xar::session()->getVar('navigationLocale');
         }
         if (empty($locale)) {
             $locale = xar::config()->getVar('Site.MLS.DefaultLocale');
         }
-        xarSession::setVar('navigationLocale', $locale);
+        xar::session()->setVar('navigationLocale', $locale);
         return $locale;
     }
 
@@ -365,7 +365,7 @@ class xarUser extends xarObject
     {
         xar::log()->info("Changing the navigation locale from " . self::getNavigationLocale() . " to " . $locale);
         if (xarMLS::getMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
-            xarSession::setVar('navigationLocale', $locale);
+            xar::session()->setVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
                 xar::mod('roles')->setUserVar('locale', $locale);
             }
@@ -642,7 +642,7 @@ class xarUser extends xarObject
     private static function getAuthModule($userId)
     {
         if ($userId == xarSession::getUserId()) {
-            $authModName = xarSession::getVar('authenticationModule');
+            $authModName = xar::session()->getVar('authenticationModule');
             if (isset($authModName)) {
                 return $authModName;
             }

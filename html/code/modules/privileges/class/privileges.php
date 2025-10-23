@@ -41,7 +41,7 @@ class xarPrivileges extends xarMasks
         foreach ($instances as $instance) {
             // make privilege wizard URLs relative, for easier migration of sites
             if (!empty($instance['header']) && $instance['header'] == 'external' && !empty($instance['query'])) {
-                $base = xarServer::getBaseURL();
+                $base = xar::ctl()->getBaseURL();
                 $instance['query'] = str_replace($base, '', $instance['query']);
             }
 
@@ -79,7 +79,7 @@ class xarPrivileges extends xarMasks
                           ( module_id, component, header,
                             query, ddlimit, description)
                           VALUES (?,?,?,?,?,?)";
-                    $modInfo = xarMod::getBaseInfo($module);
+                    $modInfo = xar::mod()->getBaseInfo($module);
                     $module_id = $modInfo['systemid'];
                     $bindvars = [
                         $module_id, $type, $instance['header'],
@@ -111,7 +111,7 @@ class xarPrivileges extends xarMasks
         parent::initialize();
         try {
             parent::$dbconn->begin();
-            $modInfo = xarMod::getBaseInfo($module);
+            $modInfo = xar::mod()->getBaseInfo($module);
             $module_id = $modInfo['systemid'];
             $query = "DELETE FROM " . parent::$instancestable . " WHERE module_id = ?";
             //Execute the query, bail if an exception was thrown
@@ -158,7 +158,7 @@ class xarPrivileges extends xarMasks
         } elseif ($module == null) {
             $module_id = null;
         } else {
-            $module_id = xarMod::getID($module);
+            $module_id = xar::mod()->getID($module);
         }
         if (is_string($level)) {
             $level = xarSecurity::getLevel($level);
@@ -235,7 +235,7 @@ class xarPrivileges extends xarMasks
             if ($args['module'] == strtolower('All')) {
                 $where .= " AND p.module_id = " . 0;
             } else {
-                $where .= " AND p.module_id = " . xarMod::getID($args['module']);
+                $where .= " AND p.module_id = " . xar::mod()->getID($args['module']);
             }
         }
         $query = "SELECT p.id, p.name, r.id AS role_id,r.itemtype,r.name AS role_name,
@@ -290,7 +290,7 @@ class xarPrivileges extends xarMasks
             if ($args['module'] == strtolower('All')) {
                 $where .= " AND p.module_id = " . 0;
             } else {
-                $where .= " AND p.module_id = " . xarMod::getID($args['module']);
+                $where .= " AND p.module_id = " . xar::mod()->getID($args['module']);
             }
         }
         if (!empty($args['component'])) {
@@ -461,7 +461,7 @@ class xarPrivileges extends xarMasks
                 $allmodules[] = [
                     'id'   => $result->getInt(1),
                     'name' => $result->getString(2),
-                    //'display' => xarMod::getDisplayName($name),
+                    //'display' => xar::mod()->getDisplayName($name),
                     'display' => ucfirst($result->getString(2)),
                 ];
             }
@@ -597,7 +597,7 @@ class xarPrivileges extends xarMasks
         if (!isset($stmt)) {
             $stmt = parent::$dbconn->prepareStatement($query);
         }
-        $result = $stmt->executeQuery([self::PRIVILEGES_PRIVILEGETYPE, xarMod::getID($module)]);
+        $result = $stmt->executeQuery([self::PRIVILEGES_PRIVILEGETYPE, xar::mod()->getID($module)]);
         while ($result->next()) {
             [$id, $name, $realm, $module_id, $component, $instance, $level, $description, $itemtype, $module] = $result->fields;
             $pargs = [
@@ -671,7 +671,7 @@ class xarPrivileges extends xarMasks
      */
     public static function external($pid, $name, $realm, $module, $component, $instance, $level)
     {
-        // from xarMod::apiFunc('privileges','admin','returnprivilege',array(...));
+        // from xar::mod()->apiFunc('privileges','admin','returnprivilege',array(...));
         if (!empty($instance) && is_array($instance)) {
             $instance = implode(':', $instance);
         }
@@ -681,7 +681,7 @@ class xarPrivileges extends xarMasks
             $pargs = ['name'      => $name,
                 'realm'     => $realm,
                 'module'    => $module,
-                'module_id' => xarMod::getID($module),
+                'module_id' => xar::mod()->getID($module),
                 'component' => $component,
                 'instance'  => $instance,
                 'level'     => $level,

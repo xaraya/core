@@ -12,6 +12,10 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
 **/
+
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 /**
  * Base Meta class
 **/
@@ -26,7 +30,7 @@ class xarMeta extends xarObject
         // Get list of tags from meta block and populate queue
         // NOTE: we CAN'T do this in the meta block when it's rendered, it's too
         // late to cater for content appended dynamically by other xar:meta tags
-        $meta = @unserialize(xarModVars::get('themes', 'meta.tags') ?? '');
+        $meta = @unserialize(xar::mod('themes')->getVar('meta.tags') ?? '');
         if (!empty($meta)) {
             foreach ($meta as $tag) {
                 $this->register($tag);
@@ -139,7 +143,7 @@ class xarMeta extends xarObject
             return '';
         }
         $args['meta'] = self::$meta;
-        return xarTpl::module('themes', 'meta', 'render', $args);
+        return xar::tpl()->module('themes', 'meta', 'render', $args);
     }
 
     /**

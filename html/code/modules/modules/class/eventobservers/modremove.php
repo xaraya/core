@@ -12,7 +12,11 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/1.html
 **/
+
 sys::import('xaraya.structures.events.observer');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 class ModulesModRemoveObserver extends EventObserver implements ixarEventObserver
 {
     public $module = 'modules';
@@ -24,8 +28,8 @@ class ModulesModRemoveObserver extends EventObserver implements ixarEventObserve
         // Delete any masks still around
         xarMasks::removemasks($modName);
         // check and reset the defaultmodule if we're about to remove it
-        if ($modName == xarModVars::get('modules', 'defaultmodule')) {
-            xarModVars::set('modules', 'defaultmodule', 'base');
+        if ($modName == xar::mod('modules')->getVar('defaultmodule')) {
+            xar::mod('modules')->setVar('defaultmodule', 'base');
         }
         $context = $subject->getContext();
         // let any hooks know the module is being removed

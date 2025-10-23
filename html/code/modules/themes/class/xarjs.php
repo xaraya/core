@@ -156,14 +156,14 @@ class xarJS extends xarObject
         }
         xar::log()->debug('xarJS::__destruct: saving modvars');
         // basically, we serialize and set this object as a modvar
-        // xarModVars::set can be a little flaky,
+        // xar::mod()->setVar can be a little flaky,
         // this workaround seems to do the trick
         // NOTE: when we call serialize here, the __sleep() magic method is called
         try {
-            xarModVars::set(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE, serialize($this));
+            xar::mod(xarJS::STORAGE_MODULE)->setVar(xarJS::STORAGE_VARIABLE, serialize($this));
         } catch (Exception $e) {
-            xarModVars::delete(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE);
-            xarModVars::set(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE, serialize($this));
+            xar::mod(xarJS::STORAGE_MODULE)->delVar(xarJS::STORAGE_VARIABLE);
+            xar::mod(xarJS::STORAGE_MODULE)->setVar(xarJS::STORAGE_VARIABLE, serialize($this));
         }
     }
 
@@ -195,7 +195,7 @@ class xarJS extends xarObject
         if (!isset(self::$instance)) {
             xar::log()->debug('xarJS::getInstance: loading modvars');
             // try unserializing the stored modvar
-            self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE) ?? '');
+            self::$instance = @unserialize(xar::mod(xarJS::STORAGE_MODULE)->getVar(xarJS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
             if (empty(self::$instance)) {
                 $c = __CLASS__;
@@ -226,22 +226,22 @@ class xarJS extends xarObject
         // now find all libs in the filesystem
         // we want to look in all active themes
         $filter = ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE];
-        $themes = xarMod::apiFunc('themes', 'admin', 'getlist', $filter);
+        $themes = xar::mod()->apiFunc('themes', 'admin', 'getlist', $filter);
         // we want to look in all active modules
-        $modules = xarMod::apiFunc(
+        $modules = xar::mod()->apiFunc(
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
+            ['filter' => ['State' => xar::mod()::STATE_ACTIVE]]
         );
         // we want to look in all properties
-        $properties = xarMod::apiFunc('dynamicdata', 'user', 'getproptypes');
+        $properties = xar::mod()->apiFunc('dynamicdata', 'user', 'getproptypes');
 
         // set default paths and filenames
-        $baseDir     = xarTpl::getBaseDir();
-        $themeDir    = xarTpl::getThemeDir();
-        $themeName   = xarTpl::getThemeName();
-        $commonDir   = xarTpl::getThemeDir('common');
+        $baseDir     = xar::tpl()->getBaseDir();
+        $themeDir    = xar::tpl()->getThemeDir();
+        $themeName   = xar::tpl()->getThemeName();
+        $commonDir   = xar::tpl()->getThemeDir('common');
         $codeDir     = sys::code();
         $libBase     = xarJS::LIB_BASE;
         $libXml      = xarJS::LIB_XML;
@@ -473,7 +473,7 @@ class xarJS extends xarObject
             case 'module':
                 // fall back to current module calling the tag
                 if (empty($module)) {
-                    $module = xarMod::getName();
+                    $module = xar::mod()->getName();
                 }
                 // got to have a module
                 if (empty($module)) {
@@ -539,7 +539,7 @@ class xarJS extends xarObject
 
                 $info = $this->getPluginInfo($lib, $plugin, $version, $file, $style);
                 if ($info['origin'] == 'local') {
-                    $src = xarServer::getBaseURL() . $info['src'];
+                    $src = xar::ctl()->getBaseURL() . $info['src'];
                 } else {
                     $src = $info['src'];
                 }
@@ -734,7 +734,7 @@ class xarJS extends xarObject
                 if (!empty($webDir) && strpos($relPath, $webDir) === 0) {
                     $relPath = substr($relPath, strlen($webDir));
                 }
-                $filePath = xarServer::getBaseURL() . $relPath;
+                $filePath = xar::ctl()->getBaseURL() . $relPath;
 
                 if (!empty($params)) {
                     $filePath .= '?' . $params;
@@ -877,7 +877,7 @@ class xarJS extends xarObject
         }
         $args['javascript'] = $javascript;
         $args['comments'] = !empty($args['comments']);
-        return xarTpl::module('themes', 'javascript', 'render', $args);
+        return xar::tpl()->module('themes', 'javascript', 'render', $args);
     }
 
     /**
@@ -903,8 +903,8 @@ class xarJS extends xarObject
         }
 
         // set common paths to look in
-        $themeDir = xarTpl::getThemeDir();
-        $commonDir = xarTpl::getThemeDir('common');
+        $themeDir = xar::tpl()->getThemeDir();
+        $commonDir = xar::tpl()->getThemeDir('common');
         $codeDir = sys::code();
 
         $paths = [];
@@ -926,9 +926,9 @@ class xarJS extends xarObject
                 break;
             case 'module':
                 if (empty($package)) {
-                    $package = xarMod::getName();
+                    $package = xar::mod()->getName();
                 }
-                $modInfo = xarMod::getBaseInfo($package);
+                $modInfo = xar::mod()->getBaseInfo($package);
                 if (empty($modInfo)) {
                     return;
                 }
@@ -1205,28 +1205,28 @@ class xarJSLib extends xarObject
     public function findFiles()
     {
         // we want to look in all active themes
-        $themes = xarMod::apiFunc(
+        $themes = xar::mod()->apiFunc(
             'themes',
             'admin',
             'getlist',
             ['filter' => ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE]]
         );
         // we want to look in all active modules
-        $modules = xarMod::apiFunc(
+        $modules = xar::mod()->apiFunc(
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
+            ['filter' => ['State' => xar::mod()::STATE_ACTIVE]]
         );
         // we want to look in all properties
-        $properties = xarMod::apiFunc('dynamicdata', 'user', 'getproptypes');
+        $properties = xar::mod()->apiFunc('dynamicdata', 'user', 'getproptypes');
 
         // set default paths and filenames
         $libName     = $this->name;
-        $baseDir     = xarTpl::getBaseDir();
-        $themeDir    = xarTpl::getThemeDir();
-        $themeName   = xarTpl::getThemeName();
-        $commonDir   = xarTpl::getThemeDir('common');
+        $baseDir     = xar::tpl()->getBaseDir();
+        $themeDir    = xar::tpl()->getThemeDir();
+        $themeName   = xar::tpl()->getThemeName();
+        $commonDir   = xar::tpl()->getThemeDir('common');
         $codeDir     = sys::code();
         $libBase     = xarJS::LIB_BASE;
         $libXml      = xarJS::LIB_XML;

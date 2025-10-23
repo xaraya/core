@@ -75,7 +75,7 @@ class xarDDObject extends xarObject implements IxarDDObject
         $context['modtype'] ??= $objectName;
 
         // @todo refine configuration elsewhere later
-        $twig_support = xarModVars::get('dynamicdata', 'twig_support');
+        $twig_support = xar::mod('dynamicdata')->getVar('twig_support');
         if (!empty($twig_support)) {
             if (empty($context['twig'])) {
                 $context['twig'] = true;
