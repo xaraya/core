@@ -22,8 +22,8 @@ final class BridgeCombinedTest extends TestCase
         static::$psr17Factory = $psr17Factory;
         static::$requestCreator = $requestCreator;
         xarCache::init();
-        xarSession::setSessionClass(SessionContext::class);
         xarServer::setRequestClass(RequestHandler::class);
+        xarSession::setSessionClass(SessionContext::class);
         $context = new Context(['source' => __METHOD__]);
         xarCore::xarInit(xarCore::SYSTEM_USER, $context);
     }

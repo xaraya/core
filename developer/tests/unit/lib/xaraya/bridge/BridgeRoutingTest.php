@@ -10,8 +10,8 @@ final class BridgeRoutingTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         xarCache::init();
-        xarSession::setSessionClass(SessionContext::class);
         xarServer::setRequestClass(RequestHandler::class);
+        xarSession::setSessionClass(SessionContext::class);
         xarCore::xarInit(xarCore::SYSTEM_USER);
     }
 

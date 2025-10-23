@@ -14,13 +14,13 @@ use Xaraya\Bridge\Routing\RoutingStaticBridge;
 
 sys::init();
 xarCache::init();
-// try out request context class - can't with PSR-17 ::fromGlobals()
-//xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
+// try out request context class
+xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class
 xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
 xarCore::xarInit(xarCore::SYSTEM_USER);
 
-// Concatenate and parse string into $_GET: php fastroute.php /object/sample ...
+// Concatenate and parse string into $_GET: php routing.php /object/sample ...
 if (php_sapi_name() === 'cli') {
     //parse_str(implode('&', array_slice($argv, 1)), $_GET);
     if ($argc > 1 && str_contains($argv[1], '/')) {

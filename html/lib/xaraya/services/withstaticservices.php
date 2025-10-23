@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.2
+ * @version 2.8.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -17,7 +17,6 @@
 namespace Xaraya\Services;
 
 use Xaraya\Context\Context;
-use sys;
 
 /**
  * Make Core Services available via self::service() etc. in trait (WIP)
@@ -25,7 +24,7 @@ use sys;
  * ```
  * use Xaraya\Services\WithStaticServices;
  *
- * class SomethingInteresting
+ * class xar
  * {
  *     use WithStaticServices;
  *
@@ -64,7 +63,6 @@ trait WithStaticServices
     protected static function getServiceStorage(): ServiceStorageInterface
     {
         if (static::$serviceStorage === null) {
-            sys::import('xaraya.services.servicestorage');
             // For now, we always use the static storage for traditional requests.
             // In the future, we could detect a Fiber environment here and switch.
             if (class_exists(static::$storageClass)) {
@@ -80,14 +78,14 @@ trait WithStaticServices
      * Get services class with optional context
      * @param ?Context<string, mixed> $context
      */
-    public static function getServicesClass(?Context $context = null): ServicesInterface
+    public static function getServicesClass(?Context $context = null): StaticServicesClass
     {
         $storage = self::getServiceStorage();
         if (!$storage->has()) {
-            $storage->set(new ServicesClass());
+            $storage->set(new StaticServicesClass());
         }
         $services = $storage->get();
-        assert($services instanceof ServicesInterface);
+        assert($services instanceof StaticServicesClass);
         if (!is_null($context)) {
             $services->setContext($context);
         }

@@ -15,7 +15,9 @@
  */
 
 sys::import("xaraya.context.context");
+sys::import("xaraya.services.xar");
 use Xaraya\Context\Context;
+use Xaraya\Services\xar;
 
 /**
  * Interface declaration for xarDDObject
@@ -64,7 +66,9 @@ class xarDDObject extends xarObject implements IxarDDObject
         $args['object'] = $objectName;
         $args['method'] = $methodName;
         if (!isset($context)) {
-            $context = new Context(['source' => __METHOD__]);
+            // $context = new Context(['source' => __METHOD__]);
+            // Use context from static services class here
+            $context = xar::getServicesClass()->getContext();
         }
         // Set module name and type in context if needed (dummy)
         $context['module'] ??= 'object';
@@ -105,7 +109,9 @@ class xarDDObject extends xarObject implements IxarDDObject
         // Pass the object name to the object class
         $args['name'] = $objectName;
         if (!isset($context)) {
-            $context = new Context(['source' => __METHOD__]);
+            // $context = new Context(['source' => __METHOD__]);
+            // Use context from static services class here
+            $context = xar::getServicesClass()->getContext();
         }
 
         sys::import('modules.dynamicdata.class.objects.factory');
@@ -198,7 +204,9 @@ class xarDDObject extends xarObject implements IxarDDObject
         $args['name'] = $objectName;
         $args['method'] = $methodName;
         if (!isset($context)) {
-            $context = new Context(['source' => __METHOD__]);
+            // $context = new Context(['source' => __METHOD__]);
+            // Use context from static services class here
+            $context = xar::getServicesClass()->getContext();
         }
 
         sys::import('modules.dynamicdata.class.simpleinterface');

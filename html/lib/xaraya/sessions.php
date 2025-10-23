@@ -5,7 +5,7 @@
  *
  * @package core\sessions
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -39,15 +39,14 @@ class xarSession
     //private static $cookiePath;
     //private static $cookieDomain;
     //private static $refererCheck;
-    /** @var ?SessionInterface */
-    private static $instance;
-    /** @var ?int */
-    private static $lastSaved;
     /** @var class-string<SessionInterface> */
     private static $sessionClass = SessionHandler::class;
+    /** @var array<string, mixed> */
+    private static array $args = [];
+    protected static bool $initialized = false;
 
     /**
-     * Initialise the Session Support
+     * Initialise the Session Support (optional) - depends on the caller
      * This can only be called once for PHP session handler - use setInstance() if needed
      * @param array<string, mixed> $args
      * @param mixed $context
@@ -56,7 +55,7 @@ class xarSession
     public static function init(array $args = [], $context = null)
     {
         if (empty($args)) {
-            if (!empty(self::$instance)) {
+            if (empty($context) && !empty(self::$initialized)) {
                 return true;
             }
             $args = self::getConfig();
@@ -69,15 +68,17 @@ class xarSession
         //self::$cookieDomain = $args['cookieDomain'];
         //self::$refererCheck = $args['refererCheck'));
         //self::sessionClass = $args['sessionClass'] ?? SessionHandler::class;
+        self::$args = $args;
 
         self::$anonId = (int) xar::config()->getVar('Site.User.AnonymousUID', 5);
 
         // Set up the session object with context
-        $session = new self::$sessionClass($args, $context);
+        $session = self::newInstance($context);
         self::setInstance($session);
 
         // Initialize the session
         $session->initialize();
+        self::$initialized = true;
         return true;
     }
 
@@ -111,16 +112,18 @@ class xarSession
     }
 
     /**
-     * Get the session class instance
+     * Get the session class instance (optional)
      * @return ?SessionInterface
      */
     public static function getInstance()
     {
-        if (!isset(self::$instance)) {
+        // moved to static services class
+        $instance = xar::getServicesClass()->getSessionInstance();
+        if (!isset($instance)) {
             // do *not* initialize session here - depends on the caller
-            //self::init();
+            //self::init(self::$args, xar::getServicesClass()->getContext());
         }
-        return self::$instance;
+        return $instance;
     }
 
     /**
@@ -130,7 +133,18 @@ class xarSession
      */
     public static function setInstance($instance)
     {
-        self::$instance = $instance;
+        // moved to static services class
+        xar::getServicesClass()->setSessionInstance($instance);
+    }
+
+    /**
+     * Summary of newInstance
+     * @param mixed $context
+     * @return SessionInterface
+     */
+    public static function newInstance($context = null)
+    {
+        return new self::$sessionClass(self::$args, $context);
     }
 
     /**
@@ -140,10 +154,11 @@ class xarSession
      */
     public static function getId($id = null)
     {
-        if (!isset(self::$instance)) {
+        $instance = self::getInstance();
+        if (!isset($instance)) {
             return $id;
         }
-        return self::$instance->getId($id);
+        return $instance->getId($id);
     }
 
     /**
@@ -174,10 +189,11 @@ class xarSession
      */
     public static function getVar($name)
     {
-        if (!isset(self::$instance)) {
+        $instance = self::getInstance();
+        if (!isset($instance)) {
             return self::getDefaultVar($name);
         }
-        return self::$instance->getVar($name);
+        return $instance->getVar($name);
     }
 
     /**
@@ -194,14 +210,15 @@ class xarSession
             return false;
         }
 
-        if (!isset(self::$instance)) {
+        $instance = self::getInstance();
+        if (!isset($instance)) {
             // ignore templates and security try to save stuff in session
             if ($name == 'navigationLocale' || $name == 'privilegeset') {
                 return false;
             }
             throw new SessionException('Session was not initialized to set ' . $name);
         }
-        return self::$instance->setVar($name, $value);
+        return $instance->setVar($name, $value);
     }
 
     /**
@@ -215,7 +232,7 @@ class xarSession
             return false;
         }
 
-        return self::$instance->delVar($name);
+        return self::getInstance()?->delVar($name) ?? false;
     }
 
     /**
@@ -224,11 +241,11 @@ class xarSession
      * @param int $rememberSession
      * @throws SQLException
      * @todo this seems a strange duck (only used in roles by the looks of it)
-     * @return bool
+     * @return ?bool
      */
     public static function setUserInfo($userId, $rememberSession)
     {
-        return self::$instance->setUserInfo($userId, $rememberSession);
+        return self::getInstance()?->setUserInfo($userId, $rememberSession);
     }
 
     /**
@@ -304,6 +321,6 @@ class xarSession
      */
     public static function clear($spared = [])
     {
-        return self::$instance->clear();
+        return self::getInstance()?->clear() ?? false;
     }
 }

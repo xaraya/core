@@ -13,6 +13,7 @@
 namespace Xaraya\Context;
 
 use Xaraya\Requests\RequestInterface;
+use Xaraya\Services\xar;
 use sys;
 use RuntimeException;
 
@@ -61,6 +62,9 @@ class RequestContext implements ContextInterface, RequestInterface
     public function getContext()
     {
         if (!isset($this->context)) {
+            // $this->context = new Context(['source' => __CLASS__]);
+            // Use context from static services class here
+            $this->context = xar::getServicesClass()->getContext();
             throw new RuntimeException('Request context is not initialized yet');
         }
         return $this->context;

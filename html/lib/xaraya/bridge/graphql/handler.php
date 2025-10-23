@@ -31,6 +31,7 @@ use Xaraya\Bridge\GraphQL\Types\GraphQLObjects;
 use Xaraya\Bridge\GraphQL\Types\GraphQLTypes;
 use Xaraya\Caching\CacheInterface;
 use Xaraya\Caching\CacheTrait;
+use Xaraya\Context\RequestContext;
 use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
@@ -47,6 +48,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Validator\Rules;
 use GraphQL\Validator\DocumentValidator;
 use xarObject;
+use xarServer;
 use sys;
 use Exception;
 use FunctionNotFoundException;
@@ -80,6 +82,12 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     public static bool $cacheOperation = false;
     public static int $queryComplexity = 0;
     public static int $queryDepth = 0;
+
+    public function __construct()
+    {
+        // use request context for query params etc.
+        xarServer::setRequestClass(RequestContext::class);
+    }
 
     /**
      * Utility function to execute a GraphQL query and get the data
@@ -379,6 +387,31 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
     }
 
     /**
+     * Summary of setRequestContext
+     * @param mixed $request
+     * @return Context<string, mixed>
+     */
+    public function setRequestContext(&$request = null)
+    {
+        // $request from RoutingBridge overrides any existing context here
+        if (isset($request)) {
+            $context = ContextFactory::fromRequest($request, __METHOD__);
+            // Set context for core services here first
+            xar::setServicesContext($context);
+        } elseif (empty($this->getContext())) {
+            $context = ContextFactory::fromGlobals(__METHOD__);
+            // Set context for core services here first
+            xar::setServicesContext($context);
+        } else {
+            $context = $this->getContext();
+            // Assume context for core services is already set here
+        }
+        // Initialize server - not really needed since xarServer::getInstance() is on demand
+        //xarServer::init([], $context);
+        return $context;
+    }
+
+    /**
      * Summary of handleRequest - different processing for GraphQL API - see gql.php
      * @param array<string, mixed> $vars
      * @param mixed $request
@@ -386,6 +419,8 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function handleRequest($vars = [], &$request = null)
     {
+        // set context for this request first - see RestAPI
+        $context = $this->setRequestContext($request);
         // dispatcher doesn't provide query params by default
         $params = $this->getQueryParams($request);
         // handle php://input for POST etc.
@@ -403,20 +438,12 @@ class GraphQLHandler extends xarObject implements CommonRequestInterface, Contex
         if (!empty($variables) && is_string($variables)) {
             $variables = json_decode($variables, true);
         }
-        // load config before setting the context
+        // load config before updating the context
         $this->loadConfig();
-        // $request from RoutingBridge overrides any existing context here
-        if (isset($request)) {
-            $context = ContextFactory::fromRequest($request, __METHOD__);
-        } else {
-            $context = $this->getContext() ?? ContextFactory::fromGlobals(__METHOD__);
-        }
         $context['mediatype'] = '';
         $context->enableTrace(self::$tracePath);
         // @todo check if we already have a context? (via request or from elsewhere)
         $this->setContext($context);
-        // set context for core services here too
-        xar::setServicesContext($context);
         $result = $this->getData($query, $variables, $operationName);
         if ($query == '{schema}') {
             $context['mediatype'] = 'text/plain';

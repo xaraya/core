@@ -270,6 +270,8 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             // so we don't test for the IP-address session var
             $this->current();
         }
+        // Let context know about this session
+        $this->setContext($this->context);
         return true;
     }
 

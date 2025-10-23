@@ -151,7 +151,7 @@ function xarInstallLoader()
      */
     sys::import('xaraya.context.factory');
     $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
-    // set context for core services here too
+    // Set context for core services here first
     sys::import('xaraya.services.xar');
     Xaraya\Services\xar::setServicesContext($context);
 

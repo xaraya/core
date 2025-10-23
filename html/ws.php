@@ -360,7 +360,7 @@ function xarModernWebServices(string $type)
             return;
         case 'htmx':
             xarCache::init();
-            // try out request context class - can't with PSR-17 ::fromGlobals()
+            // try out request context class
             //xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
             // try out session context class
             //xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);

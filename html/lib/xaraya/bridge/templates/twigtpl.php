@@ -101,7 +101,9 @@ class xarTwigTpl extends xarTpl
 
         // get $context from GUI/API function call or DataObject
         if (!isset($context)) {
-            $context = new Context(['source' => __METHOD__]);
+            // $context = new Context(['source' => __METHOD__]);
+            // Use context from static services class here
+            $context = xar::getServicesClass()->getContext();
         }
 
         $twigbridge = new TwigBridge($paths, $options, $context);

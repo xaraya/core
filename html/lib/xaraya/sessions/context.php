@@ -16,6 +16,7 @@ use Xaraya\Sessions\SessionInterface;
 use Xaraya\Sessions\VirtualSession;
 use Xaraya\Sessions\Storage\SessionCacheStorage;
 use Xaraya\Sessions\Storage\SessionStorageInterface;
+use Xaraya\Services\xar;
 use xarSession;
 use sys;
 use RuntimeException;
@@ -124,7 +125,9 @@ class SessionContext implements ContextInterface, SessionInterface
     public function getContext()
     {
         if (!isset($this->context)) {
-            $this->context = new Context(['source' => __CLASS__]);
+            // $this->context = new Context(['source' => __CLASS__]);
+            // Use context from static services class here
+            $this->context = xar::getServicesClass()->getContext();
             throw new RuntimeException('Session context is not initialized yet');
         }
         return $this->context;

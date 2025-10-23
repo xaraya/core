@@ -6,7 +6,7 @@
  * @package core
  * @subpackage server
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -33,38 +33,39 @@ class xarServer extends xarObject
     public static $allowShortURLs = true;
     /** @var bool */
     public static $generateXMLURLs = true;
-    /** @var ?RequestInterface */
-    private static $instance;
     /** @var class-string<RequestInterface> */
     private static $requestClass = RequestHandler::class;
+    /** @var array<string, mixed> */
+    private static array $args = [];
     protected static bool $initialized = false;
 
     /**
-     * Initialize
+     * Initialise the Server Support (required)
      * @param array<string, mixed> $args
      * @param mixed $context
-     * @return void
+     * @return boolean true
      */
     public static function init(array $args = [], $context = null)
     {
         if (empty($args)) {
-            if (empty($context) && !empty(self::$instance)) {
-                return;
+            if (empty($context) && !empty(self::$initialized)) {
+                return true;
             }
             $args = self::getConfig();
         }
         self::$allowShortURLs = $args['enableShortURLsSupport'];
         self::$generateXMLURLs = $args['generateXMLURLs'];
         self::$baseurl = null;
+        self::$args = $args;
 
         // Set up the request object with context
-        $request = new self::$requestClass($args, $context);
+        $request = self::newInstance($context);
         self::setInstance($request);
+
         // Initialize the request
         $request->initialize();
-        // This event is now registered during base module init
-        //xarEvents::register('ServerRequest');
         self::$initialized = true;
+        return true;
     }
 
     /**
@@ -89,19 +90,21 @@ class xarServer extends xarObject
     }
 
     /**
-     * Get the request class instance
+     * Get the request class instance (on demand)
      * @return RequestInterface
      */
     public static function getInstance()
     {
-        if (!isset(self::$instance)) {
-            // Set up the request object - @todo with context?
-            $request = new self::$requestClass([]);
-            self::setInstance($request);
+        // moved to static services class
+        $instance = xar::getServicesClass()->getRequestInstance();
+        if (!isset($instance)) {
+            // Set up the request object with context from static services class here
+            $instance = self::newInstance(xar::getServicesClass()->getContext());
+            self::setInstance($instance);
             // Initialize the request
-            $request->initialize();
+            $instance->initialize();
         }
-        return self::$instance;
+        return $instance;
     }
 
     /**
@@ -111,7 +114,18 @@ class xarServer extends xarObject
      */
     public static function setInstance($instance)
     {
-        self::$instance = $instance;
+        // moved to static services class
+        xar::getServicesClass()->setRequestInstance($instance);
+    }
+
+    /**
+     * Summary of newInstance
+     * @param mixed $context
+     * @return RequestInterface
+     */
+    public static function newInstance($context = null)
+    {
+        return new self::$requestClass(self::$args, $context);
     }
 
     /**

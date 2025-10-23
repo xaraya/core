@@ -68,8 +68,11 @@ class Dispatcher implements ContextInterface
             $vars = array_merge($vars, $params);
         }
         // @todo create context from globals in calling script if needed
-        // $this->context ??= ContextFactory::fromGlobals(__METHOD__);
-        $this->context ??= new Context(['source' => __METHOD__]);
+        if (empty($this->context)) {
+            $this->context = new Context(['source' => __METHOD__]);
+            // Set context for core services here first!?
+            // xar::setServicesContext($this->context);
+        }
         // $this->context->enableTrace(true);
         [$result, $context] = $this->callHandler($handler, $vars);
         return [$result, $context];

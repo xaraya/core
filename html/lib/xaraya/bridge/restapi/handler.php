@@ -16,6 +16,7 @@ namespace Xaraya\Bridge\RestAPI;
 
 use Xaraya\Caching\CacheInterface;
 use Xaraya\Caching\CacheTrait;
+use Xaraya\Context\RequestContext;
 use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
@@ -23,6 +24,7 @@ use Xaraya\Bridge\Requests\CommonRequestTrait;
 use Xaraya\Context\ContextFactory;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
+use Xaraya\Context\Context;
 use Xaraya\Authentication\AuthToken;
 use Xaraya\Services\xar;
 use xarObject;
@@ -57,6 +59,12 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     public static $schemas = [];
     /** @var array<string, mixed> */
     public static $config = [];
+
+    public function __construct()
+    {
+        // @todo use request context for query params etc.
+        //xarServer::setRequestClass(RequestContext::class);
+    }
 
     /**
      * Summary of getOpenAPI
@@ -187,6 +195,31 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     }
 
     /**
+     * Summary of setRequestContext
+     * @param mixed $request
+     * @return Context<string, mixed>
+     */
+    public function setRequestContext(&$request = null)
+    {
+        // $request from RoutingBridge overrides any existing context here
+        if (isset($request)) {
+            $context = ContextFactory::fromRequest($request, __METHOD__);
+            // Set context for core services here first
+            xar::setServicesContext($context);
+        } elseif (empty($this->getContext())) {
+            $context = ContextFactory::fromGlobals(__METHOD__);
+            // Set context for core services here first
+            xar::setServicesContext($context);
+        } else {
+            $context = $this->getContext();
+            // Assume context for core services is already set here
+        }
+        // Initialize server - not really needed since xarServer::getInstance() is on demand
+        //xarServer::init([], $context);
+        return $context;
+    }
+
+    /**
      * Summary of callHandler - different processing for REST API - see rst.php
      * @param mixed $handler
      * @param array<string, mixed> $vars
@@ -198,6 +231,11 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         if (empty($vars)) {
             $vars = [];
         }
+        // set context for this request first - see GraphQL
+        $context = $this->setRequestContext($request);
+        $context['mediatype'] = '';
+        // @todo check if we already have a context? (via request or from elsewhere)
+        $this->setContext($context);
         $params = [];
         $params['path'] = $vars;
         $params['query'] = $this->getQueryParams($request);
@@ -302,20 +340,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         // initialize users
         //xarUser::init();
         $this->setTimer('handle');
-        // define context of the request - see GraphQL
-        // $request from RoutingBridge overrides any existing context here
-        if (isset($request)) {
-            $context = ContextFactory::fromRequest($request, __METHOD__);
-        } else {
-            $context = $this->getContext() ?? ContextFactory::fromGlobals(__METHOD__);
-        }
-        $context['mediatype'] = '';
-        // @todo check if we already have a context? (via request or from elsewhere)
-        $this->setContext($context);
-        // set context for core services here too
-        xar::setServicesContext($context);
         // get handler instance with context
-        $handler = $this->resolveHandler($handler, $context);
+        $handler = $this->resolveHandler($handler);
         try {
             // no longer pass $context to method call here, since we use instance now
             $result = call_user_func($handler, $params);
@@ -342,16 +368,15 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             $this->setCached($cacheKey, $result);
         }
         $this->setTimer('result');
-        return [$result, $context];
+        return [$result, $this->getContext()];
     }
 
     /**
      * Summary of resolveHandler
      * @param mixed $handler
-     * @param mixed $context
      * @return mixed
      */
-    public function resolveHandler($handler, &$context)
+    public function resolveHandler($handler)
     {
         if (!is_array($handler)) {
             // @todo handle first class callable syntax $this->method(...)
@@ -369,7 +394,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
             $callInstance = new $routeClassName();
         }
         // set the context in the handler instance
-        $callInstance->setContext($context);
+        $callInstance->setContext($this->getContext());
         $handler = [$callInstance, $routeMethod];
         return $handler;
     }

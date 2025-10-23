@@ -5,7 +5,7 @@
  *
  * @package core\core
  * @category Xaraya Web Applications Framework
- * @version 2.8.1
+ * @version 2.8.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -261,6 +261,17 @@ class xarCore extends xarObject
         }
 
         /**
+         * Get context from globals if not specified (default)
+         */
+        if (is_null($context)) {
+            sys::import('xaraya.context.factory');
+            $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
+        }
+        // Set context for core services here first
+        sys::import('xaraya.services.xar');
+        Xaraya\Services\xar::setServicesContext($context);
+
+        /**
          * Start Database Connection Handling System
          *
          * Most of the stuff, except for logging, exception and system related things,
@@ -344,17 +355,6 @@ class xarCore extends xarObject
             self::$runLevel = $new_SYSTEM_level;
             return true;
         }
-
-        /**
-         * Get context from globals if not specified (default)
-         */
-        if (is_null($context)) {
-            sys::import('xaraya.context.factory');
-            $context = Xaraya\Context\ContextFactory::fromGlobals(__METHOD__);
-        }
-        // set context for core services here too
-        sys::import('xaraya.services.xar');
-        Xaraya\Services\xar::setServicesContext($context);
 
         /**
          * Bring HTTP Protocol Server/Request/Response utilities into the story

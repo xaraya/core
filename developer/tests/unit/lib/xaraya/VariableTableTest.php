@@ -1,6 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Xaraya\Context\Context;
+use Xaraya\Services\xar;
 
 final class VariableTableTest extends TestCase
 {
@@ -8,6 +10,10 @@ final class VariableTableTest extends TestCase
     {
         xarCache::init();
         xarDatabase::init();
+
+        // Set context for core services here first - for $this->mod()->loadDbInfo(...) inside DD
+        $context = new Context();
+        xar::setServicesContext($context);
     }
 
     protected function getFixtureFile($name)

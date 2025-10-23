@@ -99,7 +99,9 @@ class xarBlock extends xarObject implements ixarBlock
             return xar::cache()->getBlock($cacheKey);
         }
         if (!isset($context)) {
-            $context = new Context(['source' => __METHOD__]);
+            // $context = new Context(['source' => __METHOD__]);
+            // Use context from static services class here
+            $context = xar::getServicesClass()->getContext();
         }
 
         try {
@@ -492,7 +494,9 @@ class xarBlock extends xarObject implements ixarBlock
         }
         $args['type_state'] = [self::TYPE_STATE_ACTIVE]; // valid block type states
         if (!isset($context)) {
-            $context = new Context(['source' => __METHOD__]);
+            // $context = new Context(['source' => __METHOD__]);
+            // Use context from static services class here
+            $context = xar::getServicesClass()->getContext();
         }
         // get block info
         try {
@@ -530,7 +534,9 @@ class xarBlock extends xarObject implements ixarBlock
             throw new EmptyParameterException('groupname');
         }
         if (!isset($context)) {
-            $context = new Context(['source' => __METHOD__]);
+            // $context = new Context(['source' => __METHOD__]);
+            // Use context from static services class here
+            $context = xar::getServicesClass()->getContext();
         }
         return self::renderBlock(['instance' => $groupname, 'box_template' => $template], $context);
     }

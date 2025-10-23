@@ -12,6 +12,7 @@
 namespace Xaraya\Requests;
 
 use Xaraya\Context\ContextFactory;
+use Xaraya\Services\xar;
 use sys;
 
 sys::import('xaraya.context.factory');
@@ -172,7 +173,13 @@ class RequestHandler implements RequestInterface
     {
         // not used in default request handler
         if (!isset($this->context)) {
-            $this->context = ContextFactory::fromGlobals(__CLASS__);
+            // Use context from static services class here
+            $this->context = xar::getServicesClass()->getContext();
+            if (empty($this->context)) {
+                debug_print_backtrace();
+                $this->context = ContextFactory::fromGlobals(__CLASS__);
+                xar::setServicesContext($this->context);
+            }
         }
         return $this->context;
     }

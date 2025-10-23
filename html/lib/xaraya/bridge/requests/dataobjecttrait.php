@@ -253,6 +253,8 @@ trait DataObjectBridgeTrait
         }
 
         $context = ContextFactory::fromRequest($request, __METHOD__);
+        // Set context for core services here first!?
+        // xar::setServicesContext($context);
         $context['mediatype'] = '';
         static::$baseUri = $this->getBaseUri($request) . static::$prefix;
         $context['baseuri'] = static::$baseUri;

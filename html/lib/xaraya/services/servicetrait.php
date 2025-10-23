@@ -130,8 +130,9 @@ class DummyParent implements ContextInterface
     public function getContext()
     {
         if (!isset($this->context)) {
-            //$this->context = xarServer::getInstance()?->getContext();
-            $this->context = new Context(['source' => $this->parent]);
+            // $this->context = new Context(['source' => $this->parent]);
+            // Use context from static services class here
+            $this->context = xar::getServicesClass()->getContext();
         }
         return $this->context;
     }

@@ -32,8 +32,8 @@ sys::init();
 LocalTimer::setTimer('sys');
 xarCache::init();
 LocalTimer::setTimer('cache');
-// try out request context class - can't with PSR-17 ::fromGlobals()
-//xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
+// try out request context class
+xarServer::setRequestClass(\Xaraya\Context\RequestContext::class);
 // try out session context class
 xarSession::setSessionClass(\Xaraya\Context\SessionContext::class);
 xarCore::xarInit(xarCore::SYSTEM_USER);

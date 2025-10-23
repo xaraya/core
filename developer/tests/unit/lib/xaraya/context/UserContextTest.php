@@ -5,6 +5,7 @@ use Xaraya\Authentication\AuthToken;
 use Xaraya\Context\Context;
 use Xaraya\Context\RequestContext;
 use Xaraya\Sessions\VirtualSession;
+use Xaraya\Services\xar;
 
 /**
  * We need to run each test in a separate process here to avoid session issues
@@ -17,9 +18,9 @@ final class UserContextTest extends TestCase
         xarCache::init();
         xarDatabase::init();
 
-        // set context for core services here too
+        // Set context for core services here first
         $context = new Context();
-        Xaraya\Services\xar::setServicesContext($context);
+        xar::setServicesContext($context);
     }
 
     protected function tearDown(): void
@@ -38,6 +39,9 @@ final class UserContextTest extends TestCase
         $expected = null;
         $userId = $context->getUserId();
         $this->assertEquals($expected, $userId);
+
+        $expected = null;
+        $this->assertEquals($expected, $context->getSession());
     }
 
     public function testRemoteUserContext(): void
@@ -103,18 +107,26 @@ final class UserContextTest extends TestCase
         // get last session for anonymous user
         $expected = 5;
         $sessionInfo = $this->getLastSessionInfo($expected);
+        $this->assertNotEmpty($sessionInfo);
 
         // we need to set $_COOKIE here to use the default PHP session handling
         $_COOKIE[RequestContext::$cookieName] = $sessionInfo['id'];
         $context = new Context([
             'cookie' => $_COOKIE,
         ]);
-        // expecting no userId and no session in context here
+        // expecting no userId in context here
         $expected = null;
         $userId = $context->getUserId();
         $this->assertEquals($expected, $userId);
-        $expected = null;
-        $this->assertEquals($expected, $context->getSession());
+
+        // expecting session in context here
+        $expected = VirtualSession::class;
+        $this->assertEquals($expected, $context->getSession()::class);
+
+        // verify that we have the same sessionId
+        $expected = $sessionInfo['id'];
+        $sessionId = xarSession::getId();
+        $this->assertEquals($expected, $sessionId);
 
         unset($_COOKIE[RequestContext::$cookieName]);
     }
@@ -124,6 +136,7 @@ final class UserContextTest extends TestCase
         // get last session for admin user
         $expected = 6;
         $sessionInfo = $this->getLastSessionInfo($expected);
+        $this->assertNotEmpty($sessionInfo);
 
         // we need to set $_COOKIE here to use the default PHP session handling
         $_COOKIE[RequestContext::$cookieName] = $sessionInfo['id'];

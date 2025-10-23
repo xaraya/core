@@ -159,7 +159,9 @@ class xarEvents extends xarObject implements ixarEvents
             }
             // context for core services is set in handler
             if (!isset($context)) {
-                $context = new Context(['source' => __METHOD__]);
+                // $context = new Context(['source' => __METHOD__]);
+                // Use context from static services class here
+                $context = xar::getServicesClass()->getContext();
             }
             // file load takes care of validation for us
             if (!self::fileLoad($info, $context)) {

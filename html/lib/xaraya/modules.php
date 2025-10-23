@@ -789,7 +789,9 @@ class xarMod extends xarObject implements IxarMod
             return xar::cache()->getModule($cacheKey);
         }
         if (!isset($context)) {
-            $context = new Context(['source' => __METHOD__]);
+            // $context = new Context(['source' => __METHOD__]);
+            // Use context from static services class here
+            $context = xar::getServicesClass()->getContext();
         }
         // Set module name and type in context if needed
         $context['module'] ??= $modName;
@@ -846,7 +848,9 @@ class xarMod extends xarObject implements IxarMod
             throw new EmptyParameterException('modName');
         }
         if (!isset($context)) {
-            $context = new Context(['source' => __METHOD__]);
+            // $context = new Context(['source' => __METHOD__]);
+            // Use context from static services class here
+            $context = xar::getServicesClass()->getContext();
         }
         // @todo call module api class method directly if available
         return self::callfunc($modName, $modType, $funcName, $args, 'api', $context);

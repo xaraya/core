@@ -156,6 +156,8 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface|callable $next): ResponseInterface
     {
+        // Set context for core services here first!?
+        // xar::setServicesContext($context);
         $token = null;
         if ($request->hasHeader('X-Auth-Token')) {
             $token = $request->getHeaderLine('X-Auth-Token');
