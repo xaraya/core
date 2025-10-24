@@ -23,16 +23,14 @@ use DeferredManyProperty;
 use BadParameterException;
 use sys;
 
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseTrait;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * DataObject Exporter
  */
 class DataObjectExporter
 {
-    use HasDatabaseTrait;
-
     /** @var array<string> */
     public array $deferred = [];
     /** @var array<int, mixed> */
@@ -43,7 +41,7 @@ class DataObjectExporter
     {
         $this->proptypes = DataPropertyMaster::getPropertyTypes();
 
-        $this->prefix = $this->db()->getPrefix();
+        $this->prefix = xar::db()->getPrefix();
         $this->prefix .= '_';
     }
 

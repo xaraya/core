@@ -10,15 +10,14 @@
  * @link http://www.xaraya.info
  */
 
-sys::import('xaraya.services.hasdatabasetrait');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Cache data in the database using the xar_cache_data table
  */
 class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    use \Xaraya\Services\HasDatabaseTrait;
-
     public string $table = '';
     public ?string $lastkey = null;
     public ?int $lastid = null;
@@ -42,8 +41,8 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         if (!empty($this->table)) {
             return $this->table;
         } elseif (class_exists('xarDB')) {
-            $this->dbconn = $this->db()->getConn();
-            $this->table = $this->db()->getPrefix() . '_cache_data';
+            $this->dbconn = xar::db()->getConn();
+            $this->table = xar::db()->getPrefix() . '_cache_data';
             return $this->table;
         } else {
             // can't use this storage until the core is loaded !

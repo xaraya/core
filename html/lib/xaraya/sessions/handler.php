@@ -26,8 +26,8 @@ use Xaraya\Database\ConnectionInterface;
 sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.exception');
 sys::import('xaraya.sessions.virtual');
-sys::import('xaraya.services.hasdatabasetrait');
-sys::import('xaraya.services.hasmultilanguagetrait');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Class to model the default session handler
@@ -59,9 +59,6 @@ interface iSessionHandler extends SessionHandlerInterface
  */
 class SessionHandler extends xarObject implements iSessionHandler, SessionInterface
 {
-    use \Xaraya\Services\HasDatabaseTrait;
-    use \Xaraya\Services\HasMultiLanguageTrait;
-
     public const PREFIX = 'XARSV';     // Reserved by us for our session vars
     public const COOKIE = 'XARAYASID'; // Our cookiename
     protected mixed $context = null;
@@ -89,12 +86,12 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             return;
         }
         // Register tables this subsystem uses
-        $tables = ['session_info' => $this->db()->getPrefix() . '_session_info'];
-        $this->db()->importTables($tables);
+        $tables = ['session_info' => xar::db()->getPrefix() . '_session_info'];
+        xar::db()->importTables($tables);
 
         // Set up our container.
-        $this->db = $this->db()->getConn();
-        $tbls     = $this->db()->getTables();
+        $this->db = xar::db()->getConn();
+        $tbls     = xar::db()->getTables();
         $this->tbl = $tbls['session_info'];
 
         // Set up the environment
@@ -385,7 +382,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     {
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->tbl WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
-        $result = $stmt->executeQuery([$sessionId], $this->db()->getFetchNum());
+        $result = $stmt->executeQuery([$sessionId], xar::db()->getFetchNum());
 
         if ($result->first()) {
             // Already have this session
@@ -578,8 +575,8 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      */
     public function setUserInfo($userId, $rememberSession)
     {
-        $dbconn   = $this->db()->getConn();
-        $xartable = $this->db()->getTables();
+        $dbconn   = xar::db()->getConn();
+        $xartable = xar::db()->getTables();
 
         $sessioninfoTable = $xartable['session_info'];
         try {
@@ -661,7 +658,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     public function clear($spared = [])
     {
         if (!is_array($spared)) {
-            $msg = $this->ml('Not an array: \'$spared\'');
+            $msg = xar::ml('Not an array: \'$spared\'');
             throw new BadParameterException(null, $msg);
         }
 

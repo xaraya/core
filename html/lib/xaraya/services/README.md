@@ -8,7 +8,7 @@ Unfortunately, the systematic use of static method calls has its own problems. T
 
 Some of the core classes have now been converted to act more like proxies, but this is a cumbersome task and it doesn't really solve the underlying issues.
 
-## Present: Experiment with core trait (2.6.x)
+## Pilot: Experiment with core trait (2.6.x)
 
 On the module side, we can now migrate from procedural module functions to object-oriented module methods - see [Xaraya Modules](https://github.com/mikespub/xaraya-core/tree/com.xaraya.core.bermuda/html/lib/xaraya/modules).
 
@@ -18,7 +18,7 @@ The first step was to provide instance methods like `$this->fetch()` that would 
 
 However that quickly became un-manageable, not only for the number of core methods to support, but also because they could "pollute" and be accidently overridden in module classes or method classes.
 
-## Future: Using core services (2.7.x)
+## Transition: Using core services (2.7.x)
 
 So now we have a limited number of core services that are made available like `$this->var()`, and each supports its own methods like `$this->var()->fetch()`. It's a slightly more verbose way than `xarVar::fetch()`, but it allows us to do some future changes on the core side without affecting the modules and vice-versa.
 
@@ -45,5 +45,7 @@ Available services:
 ```
 
 The good news is that we could re-use the same mechanism in other places like ui handlers, hook observers, objects & properties etc. So ideally most of "end-user" modules should be able to get rid of static core methods calls, except perhaps for special cases like initialization or module configuration.
+
+## Transform: Using core services (2.8.x)
 
 To be continued...

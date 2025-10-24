@@ -16,7 +16,8 @@ use Xaraya\Sessions\VirtualSession;
 use sys;
 use Exception;
 
-sys::import('xaraya.services.hasdatabasetrait');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Session storage interface for virtual sessions
@@ -91,8 +92,6 @@ class SessionCacheStorage implements SessionStorageInterface
  */
 class SessionDatabaseStorage implements SessionStorageInterface
 {
-    use \Xaraya\Services\HasDatabaseTrait;
-
     /** @var \Connection|\PDOConnection */
     private $db;
     private string $table;
@@ -102,17 +101,17 @@ class SessionDatabaseStorage implements SessionStorageInterface
      */
     public function __construct(private array $config)
     {
-        $this->db = $this->db()->getConn();
+        $this->db = xar::db()->getConn();
         $this->table = $this->getTable();
     }
 
     private function getTable(): string
     {
-        $tables = $this->db()->getTables();
+        $tables = xar::db()->getTables();
         if (!isset($tables['session_info'])) {
             // Register tables this subsystem uses
-            $tables = ['session_info' => $this->db()->getPrefix() . '_session_info'];
-            $this->db()->importTables($tables);
+            $tables = ['session_info' => xar::db()->getPrefix() . '_session_info'];
+            xar::db()->importTables($tables);
         }
         return $tables['session_info'];
     }
@@ -125,7 +124,7 @@ class SessionDatabaseStorage implements SessionStorageInterface
         }
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->table WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
-        $result = $stmt->executeQuery([$sessionId], $this->db()->getFetchNum());
+        $result = $stmt->executeQuery([$sessionId], xar::db()->getFetchNum());
 
         if (!$result->first()) {
             return null;

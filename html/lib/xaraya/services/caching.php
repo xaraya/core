@@ -127,10 +127,44 @@ interface CachingInterface extends ServiceInterface
     public function delVariable(?string $cacheKey): void;
 
     /**
+     * Disable caching of the current output, e.g. when an authid is generated or if we redirect
+     */
+    public function noCache(): void;
+
+    /**
+     * Keep track of some page title for caching - see xarTpl::setPageTitle()
+     */
+    public function setPageTitle(?string $title = null, ?string $module = null): void;
+
+    /**
+     * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
+     * @param array<string, mixed> $args
+     */
+    public function addStyle(array $args = []): void;
+
+    /**
+     * Keep track of some javascript for caching - xarMod::apiFunc('themes','user','registerjs')
+     * @param array<string, mixed> $args
+     */
+    public function addJavascript(): void;
+
+    /**
      * Get a storage class instance for some type of cached data
      * @param array<string, mixed> $args
      */
     public function getStorage(array $args = []): ixarCache_Storage;
+
+    /**
+     * Get the parent group ids of the current user (with minimal overhead)
+     * @return array<mixed> of parent gids
+     */
+    public function getParents(?int $currentid = null): array;
+
+    /**
+     * Get the output cache directory to access stats and items in cache storage even
+     * if output caching is disabled (cfr. cachemanager admin stats/view/flushcache)
+     */
+    public function getOutputCacheDir(): string;
 }
 
 /**
@@ -375,12 +409,64 @@ trait CachingTrait
     }
 
     /**
+     * Disable caching of the current output, e.g. when an authid is generated or if we redirect
+     */
+    public function noCache(): void
+    {
+        xarCache::noCache();
+    }
+
+    /**
+     * Keep track of some page title for caching - see xarTpl::setPageTitle()
+     */
+    public function setPageTitle(?string $title = null, ?string $module = null): void
+    {
+        xarCache::setPageTitle($title, $module);
+    }
+
+    /**
+     * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
+     * @param array<string, mixed> $args
+     */
+    public function addStyle(array $args = []): void
+    {
+        xarCache::addStyle($args);
+    }
+
+    /**
+     * Keep track of some javascript for caching - xarMod::apiFunc('themes','user','registerjs')
+     * @param array<string, mixed> $args
+     */
+    public function addJavascript(array $args = []): void
+    {
+        xarCache::addJavaScript($args);
+    }
+
+    /**
      * Get a storage class instance for some type of cached data
      * @param array<string, mixed> $args
      */
     public function getStorage(array $args = []): ixarCache_Storage
     {
         return xarCache::getStorage($args);
+    }
+
+    /**
+     * Get the parent group ids of the current user (with minimal overhead)
+     * @return array<mixed> of parent gids
+     */
+    public function getParents(?int $currentid = null): array
+    {
+        return xarCache::getParents($currentid);
+    }
+
+    /**
+     * Get the output cache directory to access stats and items in cache storage even
+     * if output caching is disabled (cfr. cachemanager admin stats/view/flushcache)
+     */
+    public function getOutputCacheDir(): string
+    {
+        return xarCache::getOutputCacheDir();
     }
 }
 

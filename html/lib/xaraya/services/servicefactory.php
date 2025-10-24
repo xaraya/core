@@ -24,6 +24,14 @@ use xarLog;
  */
 class ServiceFactory
 {
+    /**
+     * This distinguishes between shared services and parent-aware services, where shared services
+     * are common for all within a single request and are provided from StaticServicesClass, while
+     * parent-aware services are cloned for each parent so that methods like getModName() will work.
+     * @todo Some services are actually independent of request, but should use connection pool (db) 
+     * or central processor (log) to safely work in fiber or coroutine environments (besides using
+     * async drivers)
+     */
     /** @var array<string> */
     public static array $sharedServices = ['ctl', 'log', 'mls', 'var', 'cache', 'config', 'session', 'db'];
 

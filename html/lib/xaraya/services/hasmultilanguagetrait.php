@@ -28,6 +28,7 @@ sys::import('xaraya.services.servicefactory');
 /**
  * Make MultiLanguage Service available via trait - $this->mls() instance method
  * aligned with method in Core Services Interface
+ * @deprecated 2.8.3 use xar::mls() or xar::ml() instead
  */
 trait HasMultiLanguageTrait
 {
@@ -36,11 +37,10 @@ trait HasMultiLanguageTrait
 
     /**
      * Access multilanguage service
-     * @todo see if the caller can pass this along someday (dependency injection)
      */
     protected function mls(): MultiLanguageInterface
     {
-        $this->xarMLS ??= ServiceFactory::getMultiLanguageService($this);
+        $this->xarMLS ??= xar::mls();
         return $this->xarMLS;
     }
 

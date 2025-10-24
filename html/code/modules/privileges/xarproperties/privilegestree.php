@@ -15,8 +15,8 @@
 sys::import('xaraya.structures.tree');
 sys::import('modules.privileges.class.privileges');
 sys::import('modules.dynamicdata.class.properties.base');
-sys::import('xaraya.services.hasdatabasetrait');
-use Xaraya\Services\HasDatabaseTrait;
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Handle Privileges Tree property
@@ -72,8 +72,6 @@ class PrivilegesTreeProperty extends DataProperty
 // ---------------------------------------------------------------
 class PrivilegesTree extends Tree
 {
-    use HasDatabaseTrait;
-
     /**
     *  Give privileges to user to create nodes
     *
@@ -83,8 +81,8 @@ class PrivilegesTree extends Tree
     public function createnodes(TreeNode $node)
     {
         //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
-        $dbconn = $this->db()->getConn();
-        $xartable = $this->db()->getTables();
+        $dbconn = xar::db()->getConn();
+        $xartable = xar::db()->getTables();
         $q = new Query('SELECT');
         // Add fields
         $q->addfields("p.id AS id, p.name AS name, p.component AS component, p.instance AS instance, p.level AS level, p. description AS description");

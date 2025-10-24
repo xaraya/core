@@ -10,8 +10,6 @@
  * @link http://www.xaraya.info
  */
 
-sys::import('xaraya.services.hasdatabasetrait');
-sys::import('xaraya.services.hasmultilanguagetrait');
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
@@ -21,9 +19,6 @@ use Xaraya\Services\xar;
  */
 class Query
 {
-    use \Xaraya\Services\HasDatabaseTrait;
-    use \Xaraya\Services\HasMultiLanguageTrait;
-
     public $version             = "3.6";
     public $id;                                 // A unique identifier for this query
     public $type                = 'SELECT';     // Normalized array of tables used in the statement
@@ -100,7 +95,7 @@ class Query
             throw new ForbiddenOperationException($type, 'This operation is not supported yet. "#(1)"');
         }
         if ($type != "SELECT" && is_array($tables) && count($tables) > 1) {
-            $msg = $this->ml('The type #(1) can only take  a single table name', $type);
+            $msg = xar::ml('The type #(1) can only take  a single table name', $type);
             throw new BadParameterException(null, $msg);
         }
 
@@ -125,7 +120,7 @@ class Query
      */
     protected function &getDbConn(): object
     {
-        return $this->db()->getConn($this->dbConnIndex);
+        return xar::db()->getConn($this->dbConnIndex);
     }
 
     public function setDbConnIndex($dbConnIndex = 0)
@@ -142,7 +137,7 @@ class Query
         if (!isset($this->dbconn)) {
             $this->dbconn = $this->getDbConn();
         }
-        if ($this->debugflag && $this->db()->withPDO()) {
+        if ($this->debugflag && xar::db()->withPDO()) {
             $this->dbconn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         if (empty($statement) && ($this->optimize == true)) {
@@ -161,7 +156,7 @@ class Query
             // Special case for multitable inserts
             if ($this->type == 'INSERT' && count($this->tables) > 1) {
                 if (empty($this->primary)) {
-                    throw new Exception($this->ml('Cannot execute a multitable insert without a primary field defined'));
+                    throw new Exception(xar::ml('Cannot execute a multitable insert without a primary field defined'));
                 }
                 try {
                     $this->multiinsert();
@@ -182,7 +177,7 @@ class Query
                 return $result;
             }
             // This is a select
-            if ($this->db()->withPDO()) {
+            if (xar::db()->withPDO()) {
                 if ($this->rowstodo != 0 && $this->limits == 1) {
                     $begin = $this->startat - 1;
                     if ($this->usebinding) {
@@ -234,7 +229,7 @@ class Query
         } // Better than the private var, fields should still be protected
         $this->output = [];
         if ($display == 1) {
-            if ($this->db()->withPDO()) {
+            if (xar::db()->withPDO()) {
                 $this->output = $result->getall();
             } elseif (!empty($this->dbConnIndex) && get_class($result) === 'PdoSQLiteResultSet') {
                 // PDO ResultSet doesn't handle EOF very well in Creole
@@ -257,7 +252,7 @@ class Query
             } else {
                 if (!$this->israwstatement) {
                     if ($this->fields == [] && $numfields > 0) {
-                        $result->setFetchMode($this->db()->getFetchAssoc());
+                        $result->setFetchMode(xar::db()->getFetchAssoc());
                         $result->first();
                         for ($i = 0;$i < $numfields;$i++) {
                             $tmp = array_slice($result->fields, $i, 1);
@@ -265,7 +260,7 @@ class Query
                             $this->fields[$namefield]['name'] = strtolower($namefield ?? '');
                         }
                     }
-                    $result->setFetchMode($this->db()->getFetchNum());
+                    $result->setFetchMode(xar::db()->getFetchNum());
                     $result->first();
                     while ($result->next()) {
                         $i = 0;
@@ -394,7 +389,7 @@ class Query
                 $argsarray = $table;
             }
         } else {
-            throw new BadParameterException(null, $this->ml('This function can only take 1 or 2 parameters'));
+            throw new BadParameterException(null, xar::ml('This function can only take 1 or 2 parameters'));
         }
 
         $notdone = true;
@@ -434,7 +429,7 @@ class Query
                     } else {
                         $newfield = explode('=', $field);
                         if (!isset($newfield[1])) {
-                            throw new Exception($this->ml("The field #(1) needs to have a value", $newfield[0]));
+                            throw new Exception(xar::ml("The field #(1) needs to have a value", $newfield[0]));
                         }
                         $argsarray = $this->_deconstructfield(trim($newfield[0]));
                         $argsarray['value'] = trim($newfield[1]);
@@ -444,7 +439,7 @@ class Query
                 $argsarray = $field;
             }
         } else {
-            throw new BadParameterException(null, $this->ml('This function can only take 1 or 2 parameters'));
+            throw new BadParameterException(null, xar::ml('This function can only take 1 or 2 parameters'));
         }
 
         $done = false;
@@ -885,7 +880,7 @@ class Query
                 foreach ($conditions['deny'] as $condition) {
                     $limit = count($condition);
                     if (count($fields) != count($condition)) {
-                        $msg = $this->ml('Cannot match #(1) fields with #(2) conditions in addsecuritycheck().', count($fields), $limit);
+                        $msg = xar::ml('Cannot match #(1) fields with #(2) conditions in addsecuritycheck().', count($fields), $limit);
                         throw new BadParameterException(null, $msg);
                     }
                     for ($i = 0;$i < $limit;$i++) {
@@ -894,7 +889,7 @@ class Query
                 }
             }
         } else {
-            $msg = $this->ml('The addsecuritycheck method can only take 2 parameters');
+            $msg = xar::ml('The addsecuritycheck method can only take 2 parameters');
             throw new BadParameterException(null, $msg);
         }
     }
@@ -1005,7 +1000,7 @@ class Query
 
                 $sqlfield = $elements[0] . ' AND ' . $elements[1];
             } else {
-                throw new Exception($this->ml('Improper syntax for BETWEEN'));
+                throw new Exception(xar::ml('Improper syntax for BETWEEN'));
             }
         } else {
             if ($expression_flag) {
@@ -1348,7 +1343,7 @@ class Query
 
         // Sanity check
         if (count($sortedlinks) != count($this->tablelinks)) {
-            throw new Exception($this->ml('Incorrect reordering of query links'));
+            throw new Exception(xar::ml('Incorrect reordering of query links'));
         }
 
         $this->tablelinks = $sortedlinks;
@@ -1508,10 +1503,10 @@ class Query
                                 }
                             }
                         } else {
-                            throw new BadParameterException(null, $this->ml('The current field is missing a name'));
+                            throw new BadParameterException(null, xar::ml('The current field is missing a name'));
                         }
                     } else {
-                        throw new BadParameterException(null, $this->ml('The field #(1) is not an array:', $field));
+                        throw new BadParameterException(null, xar::ml('The field #(1) is not an array:', $field));
                     }
                 }
                 $names = substr($names, 0, strlen($names) - 2);
@@ -1525,14 +1520,14 @@ class Query
                 break;
             case "UPDATE":
                 if ($this->fields == ['*']) {
-                    throw new BadParameterException(null, $this->ml('Your query has no fields.'));
+                    throw new BadParameterException(null, xar::ml('Your query has no fields.'));
                 }
                 foreach ($this->fields as $field) {
                     if (is_array($field)) {
                         if (isset($field['name'])) {
                             if (isset($field['value'])) {
                                 if (is_array($field['value'])) {
-                                    throw new BadParameterException(null, $this->ml('The value of field #(1) is an array.', $field['name']));
+                                    throw new BadParameterException(null, xar::ml('The value of field #(1) is an array.', $field['name']));
                                 }
                                 // Turn off binding if we have an expression for the value (such as another field)
                                 if (substr($field['value'], 0, 1) == '&') {
@@ -1562,10 +1557,10 @@ class Query
                                 }
                             }
                         } else {
-                            throw new BadParameterException(null, $this->ml('The current field is missing a name'));
+                            throw new BadParameterException(null, xar::ml('The current field is missing a name'));
                         }
                     } else {
-                        throw new BadParameterException(null, $this->ml('The field #(1) is not an array:', $field));
+                        throw new BadParameterException(null, xar::ml('The field #(1) is not an array:', $field));
                     }
                 }
                 if ($this->bindstring != "") {
@@ -1637,7 +1632,7 @@ class Query
                     $s .= $having['conjunction'] . " " . $having['expression'] . " ";
                 }
             } else {
-                $result = $this->ml('Incorrect HAVING clause');
+                $result = xar::ml('Incorrect HAVING clause');
                 xarCore::exit($result);
                 return;
             }
@@ -2406,7 +2401,7 @@ class Query
         #
         $parts = explode('.', $this->primary);
         if (!isset($parts[1])) {
-            throw new Exception($this->ml('Incorrect format for primary field: missing table alias'));
+            throw new Exception(xar::ml('Incorrect format for primary field: missing table alias'));
         }
         $primarytable = $parts[0];
         $primaryfield = $parts[1];
@@ -2531,7 +2526,7 @@ class Query
             # Sanity check: do we still have our primary table?
             #
             if (!isset($tablestodo[$primarytable])) {
-                throw new Exception($this->ml('Primary table #(1) no longer available!', $primarytable));
+                throw new Exception(xar::ml('Primary table #(1) no longer available!', $primarytable));
             }
 
             # --------------------------------------------------------
@@ -2653,7 +2648,7 @@ class Query
         $tableobject = $dbInfo->getTable($table['name']);
         $primarykey = $tableobject->getPrimaryKey()->getName();
         if (empty($primarykey)) {
-            throw new Exception($this->ml('Unable to retrieve primary key'));
+            throw new Exception(xar::ml('Unable to retrieve primary key'));
         }
 
         $itemid = $q->lastid($table['name'], $primarykey);

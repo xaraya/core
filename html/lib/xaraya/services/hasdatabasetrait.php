@@ -23,7 +23,7 @@ namespace Xaraya\Services;
 use sys;
 
 sys::import('xaraya.services.database');
-sys::import('xaraya.services.servicefactory');
+sys::import('xaraya.services.xar');
 
 /**
  * Make Database Service available via trait - $this->db() instance method
@@ -45,6 +45,7 @@ sys::import('xaraya.services.servicefactory');
  *     }
  * }
  * ```
+ * @deprecated 2.8.3 use xar::db() instead
  */
 trait HasDatabaseTrait
 {
@@ -53,11 +54,10 @@ trait HasDatabaseTrait
 
     /**
      * Access database service
-     * @todo see if the caller can pass this along someday (dependency injection)
      */
     protected function db(): DatabaseInterface
     {
-        $this->xarDb ??= ServiceFactory::getDatabaseService($this);
+        $this->xarDb ??= xar::db();
         return $this->xarDb;
     }
 }

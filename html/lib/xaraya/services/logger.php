@@ -31,8 +31,6 @@ interface LoggerInterface extends ServiceInterface
 {
     public const SLICE = 'logger';
 
-    public static function create(mixed $parent = null): LoggerInterface;
-
     public function message(string|\Stringable $message, int $level = 0): void;
 
     public function variable(string $name, mixed $var, int $level = 0): void;
@@ -83,24 +81,6 @@ trait LoggerTrait
         'info' => xarLog::LEVEL_INFO,
         'debug' => xarLog::LEVEL_DEBUG,
     ];
-
-    protected static ?LoggerInterface $xarLog = null;
-
-    /**
-     * Summary of create
-     */
-    public static function create(mixed $parent = null): LoggerInterface
-    {
-        // create singleton instance for any parent here
-        if (!isset(self::$xarLog)) {
-            // @todo handle context for facades
-            if (!is_object($parent)) {
-                $parent = new DummyParent($parent);
-            }
-            self::$xarLog = new self($parent);
-        }
-        return self::$xarLog;
-    }
 
     public function message(string|\Stringable $message, int $level = 0): void
     {

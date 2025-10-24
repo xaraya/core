@@ -18,7 +18,8 @@ use DataProperty;
 use sys;
 
 sys::import('xaraya.datastores.basic');
-sys::import('xaraya.services.hasdatabasetrait');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Base class for SQL Data Stores
@@ -26,8 +27,6 @@ sys::import('xaraya.services.hasdatabasetrait');
 **/
 class SQLDataStore extends OrderedDataStore implements ISQLDataStore
 {
-    use \Xaraya\Services\HasDatabaseTrait;
-
     /** @var mixed */
     protected $db     = null;
     /** @var int|string */
@@ -173,7 +172,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     {
         // Note: the only reason we keep this variable is for getLastId()
         if (empty($this->db)) {
-            $this->db = $this->db()->getConn($this->dbConnIndex);
+            $this->db = xar::db()->getConn($this->dbConnIndex);
         }
     }
 
@@ -184,7 +183,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      */
     protected function getTable($name)
     {
-        $tables = $this->db()->getTables();
+        $tables = xar::db()->getTables();
         if (!empty($tables[$name])) {
             return $tables[$name];
         }
@@ -196,7 +195,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      */
     protected function getType()
     {
-        return $this->db()->getType();
+        return xar::db()->getType();
     }
 
     /**

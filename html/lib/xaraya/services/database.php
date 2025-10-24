@@ -32,8 +32,8 @@ sys::import('xaraya.services.servicetrait');
 interface DatabaseInterface extends ServiceInterface
 {
     public const SLICE = 'database';
-
-    public static function create(mixed $parent = null): DatabaseInterface;
+    public const FETCHMODE_ASSOC = xarDB::FETCHMODE_ASSOC;
+    public const FETCHMODE_NUM = xarDB::FETCHMODE_NUM;
 
     public function &getConn(int|string $index = 0): object;
 
@@ -75,24 +75,6 @@ interface DatabaseInterface extends ServiceInterface
 trait DatabaseTrait
 {
     use ServiceTrait;
-
-    protected static ?DatabaseInterface $xarDB = null;
-
-    /**
-     * Summary of create
-     */
-    public static function create(mixed $parent = null): DatabaseInterface
-    {
-        // create singleton instance for any parent here
-        if (!isset(self::$xarDB)) {
-            // @todo handle context for facades
-            if (!is_object($parent)) {
-                $parent = new DummyParent($parent);
-            }
-            self::$xarDB = new self($parent);
-        }
-        return self::$xarDB;
-    }
 
     /**
      * Summary of getConn

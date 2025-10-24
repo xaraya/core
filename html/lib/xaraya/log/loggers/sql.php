@@ -21,7 +21,9 @@
  *
  */
 sys::import('xaraya.log.loggers.xarLogger');
-sys::import('xaraya.services.hasdatabasetrait');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 // Modified from the original by the Xaraya Team
 
 /**
@@ -47,8 +49,6 @@ sys::import('xaraya.services.hasdatabasetrait');
  */
 class xarLogger_sql extends xarLogger
 {
-    use \Xaraya\Services\HasDatabaseTrait;
-
     /**
      * String holding the database table to use.
      * @var string
@@ -86,7 +86,7 @@ class xarLogger_sql extends xarLogger
         parent::close();
 
         // Create the database connection
-        $this->dbconn = $this->db()->getConn();
+        $this->dbconn = xar::db()->getConn();
 
         // Write the records to the database and stop logging.
         foreach ($this->buffer as $line) {
