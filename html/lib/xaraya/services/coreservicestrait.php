@@ -83,25 +83,12 @@ trait CoreServicesTrait
 {
     use ContextTrait;
 
-    protected ?ControllerInterface $xarCtl = null;
-    protected ?LoggerInterface $xarLog = null;
-    protected ?MultiLanguageInterface $xarMls = null;
-    protected ?ModulesInterface $xarMod = null;
-    /** @var array<string, ModulesInterface> */
-    protected array $xarModClones = [];
-    protected ?SecurityInterface $xarSec = null;
-    protected ?TemplatingInterface $xarTpl = null;
-    protected ?VariablesInterface $xarVar = null;
-    protected ?BlocksInterface $xarBlock = null;
-    protected ?DataObjectInterface $xarData = null;
-    protected ?DataPropertyInterface $xarProp = null;
-    protected ?CachingInterface $xarCache = null;
-    protected ?ConfigInterface $xarConfig = null;
-    protected ?SessionInterface $xarSession = null;
-    protected ?UserInterface $xarUser = null;
-    /** @var array<string, UserInterface> */
-    protected array $xarUserClones = [];
-    protected ?DatabaseInterface $xarDb = null;
+    /**
+     * Instance-level cache for parent-specific or mocked services.
+     * @var array<string, ServiceInterface|callable>
+     */
+    protected array $localServiceCache = [];
+    protected ?StaticServicesClass $xarServices = null;
     /** @var ?callable */
     protected $xarExit = null;
     protected ?sys $xarSys = null;
@@ -112,17 +99,25 @@ trait CoreServicesTrait
      */
     public function setCoreServices(array $args = []): void
     {
-        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'config', 'session', 'user', 'db', 'exit', 'sys'];
+        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'config', 'session', 'user', 'db', 'exit'];
         foreach ($args as $name => $service) {
             if (!in_array($name, $supported)) {
                 throw new Exception('Unsupported service ' . $name);
             }
-            $varName = 'xar' . ucfirst($name);
-            if (!property_exists($this, $varName)) {
-                throw new Exception('Unsupported property ' . $varName);
-            }
-            $this->{$varName} = $service;
+            // Pre-populate the local cache with the mocked/overridden service.
+            $this->localServiceCache[$name] = $service;
         }
+    }
+
+    /**
+     * Get the static services class instance for this request, and cache it locally.
+     */
+    protected function getStaticServices(): StaticServicesClass
+    {
+        if (!isset($this->xarServices)) {
+            $this->xarServices = xar::getServicesClass();
+        }
+        return $this->xarServices;
     }
 
     /**
@@ -131,24 +126,62 @@ trait CoreServicesTrait
      */
     public function service(string $name, ...$args): ServiceInterface
     {
-        return match ($name) {
-            'ctl' => $this->ctl(),
-            'log' => $this->log(),
-            'mls' => $this->mls(),
-            'mod' => $this->mod(...$args),
-            'sec' => $this->sec(),
-            'tpl' => $this->tpl(),
-            'var' => $this->var(),
-            'block' => $this->block(),
-            'data' => $this->data(),
-            'prop' => $this->prop(),
-            'cache' => $this->cache(),
-            'config' => $this->config(),
-            'session' => $this->session(),
-            'user' => $this->user(...$args),
-            'db' => $this->db(),
-            default => throw new Exception('Unsupported service ' . $name),
-        };
+        // Use a unique key for services with arguments (e.g., mod('roles'), user(123))
+        $cacheKey = $name;
+        if (!empty($args)) {
+            // Simple key generation, assuming scalar arguments.
+            $cacheKey .= '.' . implode('.', $args);
+        }
+
+        // Check for a locally cached or mocked service first.
+        if (isset($this->localServiceCache[$cacheKey])) {
+            return $this->localServiceCache[$cacheKey];
+        }
+
+        // Get the static services class instance for this request, using the local cache
+        $services = $this->getStaticServices();
+
+        // If it's a shared service, get it from the central cache and return directly.
+        if (in_array($name, ServiceFactory::$sharedServices)) {
+            return $services->getServicePrototype($name);
+        }
+
+        // It's a parent-aware service, so we need to clone it.
+
+        // If it's a specialized request (with args) and we have the base service locally,
+        // clone that directly to avoid going to the central cache.
+        if (!empty($args) && isset($this->localServiceCache[$name])) {
+            $prototype = $this->localServiceCache[$name];
+        } else {
+            // Get the prototype from the central request-level cache.
+            $prototype = $services->getServicePrototype($name);
+        }
+
+        // Clone the prototype to create an instance specific to this parent object.
+        $serviceInstance = clone $prototype;
+
+        // Ensure the parent is set on the cloned instance.
+        // This is crucial for parent-aware services.
+        if (method_exists($serviceInstance, 'setParent')) {
+            $serviceInstance->setParent($this);
+        }
+
+        // If there were no arguments, cache and return the generic parent-aware service.
+        if (empty($args)) {
+            $this->localServiceCache[$name] = $serviceInstance;
+            return $serviceInstance;
+        }
+
+        // Handle services with arguments by specializing the cloned instance.
+        if ($name === 'mod' && isset($args[0])) {
+            $serviceInstance->setCurrentModName($args[0]);
+        } elseif ($name === 'user' && isset($args[0])) {
+            $serviceInstance->setCurrentId($args[0]);
+        }
+
+        // Cache the specialized service instance.
+        $this->localServiceCache[$cacheKey] = $serviceInstance;
+        return $serviceInstance;
     }
 
     /**
@@ -176,8 +209,7 @@ trait CoreServicesTrait
      */
     public function ctl(): ControllerInterface
     {
-        $this->xarCtl ??= ServiceFactory::getControllerService($this);
-        return $this->xarCtl;
+        return $this->service('ctl');
     }
 
     /**
@@ -199,8 +231,7 @@ trait CoreServicesTrait
      */
     public function log(): LoggerInterface
     {
-        $this->xarLog ??= ServiceFactory::getLoggerService($this);
-        return $this->xarLog;
+        return $this->service('log');
     }
 
     /**
@@ -222,8 +253,7 @@ trait CoreServicesTrait
      */
     public function mls(): MultiLanguageInterface
     {
-        $this->xarMls ??= ServiceFactory::getMultiLanguageService($this);
-        return $this->xarMls;
+        return $this->service('mls');
     }
 
     /**
@@ -271,16 +301,10 @@ trait CoreServicesTrait
      */
     public function mod(?string $modName = null): ModulesInterface
     {
-        $this->xarMod ??= ServiceFactory::getModulesService($this);
-        if (isset($modName)) {
-            // @todo cache clones per modName too?
-            if (!array_key_exists($modName, $this->xarModClones)) {
-                $this->xarModClones[$modName] = clone $this->xarMod;
-                $this->xarModClones[$modName]->setCurrentModName($modName);
-            }
-            return $this->xarModClones[$modName];
+        if (!empty($modName)) {
+            return $this->service('mod', $modName);
         }
-        return $this->xarMod;
+        return $this->service('mod');
     }
 
     /**
@@ -298,8 +322,7 @@ trait CoreServicesTrait
      */
     public function sec(): SecurityInterface
     {
-        $this->xarSec ??= ServiceFactory::getSecurityService($this);
-        return $this->xarSec;
+        return $this->service('sec');
     }
 
     /**
@@ -322,8 +345,7 @@ trait CoreServicesTrait
      */
     public function tpl(): TemplatingInterface
     {
-        $this->xarTpl ??= ServiceFactory::getTemplatingService($this);
-        return $this->xarTpl;
+        return $this->service('tpl');
     }
 
     /**
@@ -343,8 +365,7 @@ trait CoreServicesTrait
      */
     public function var(): VariablesInterface
     {
-        $this->xarVar ??= ServiceFactory::getVariablesService($this);
-        return $this->xarVar;
+        return $this->service('var');
     }
 
     /**
@@ -364,8 +385,7 @@ trait CoreServicesTrait
      */
     public function block(): BlocksInterface
     {
-        $this->xarBlock ??= ServiceFactory::getBlocksService($this);
-        return $this->xarBlock;
+        return $this->service('block');
     }
 
     /**
@@ -389,8 +409,7 @@ trait CoreServicesTrait
      */
     public function data(): DataObjectInterface
     {
-        $this->xarData ??= ServiceFactory::getDataObjectService($this);
-        return $this->xarData;
+        return $this->service('data');
     }
 
     /**
@@ -410,8 +429,7 @@ trait CoreServicesTrait
      */
     public function prop(): DataPropertyInterface
     {
-        $this->xarProp ??= ServiceFactory::getDataPropertyService($this);
-        return $this->xarProp;
+        return $this->service('prop');
     }
 
     /**
@@ -443,8 +461,7 @@ trait CoreServicesTrait
      */
     public function cache(): CachingInterface
     {
-        $this->xarCache ??= ServiceFactory::getCachingService($this);
-        return $this->xarCache;
+        return $this->service('cache');
     }
 
     /**
@@ -460,8 +477,7 @@ trait CoreServicesTrait
      */
     public function config(): ConfigInterface
     {
-        $this->xarConfig ??= ServiceFactory::getConfigService($this);
-        return $this->xarConfig;
+        return $this->service('config');
     }
 
     /**
@@ -478,8 +494,7 @@ trait CoreServicesTrait
      */
     public function session(): SessionInterface
     {
-        $this->xarSession ??= ServiceFactory::getSessionService($this);
-        return $this->xarSession;
+        return $this->service('session');
     }
 
     /**
@@ -497,16 +512,10 @@ trait CoreServicesTrait
      */
     public function user(?int $userId = null): UserInterface
     {
-        $this->xarUser ??= ServiceFactory::getUserService($this);
-        if (isset($userId)) {
-            // @todo cache clones per userId too?
-            if (!array_key_exists($userId, $this->xarUserClones)) {
-                $this->xarUserClones[$userId] = clone $this->xarUser;
-                $this->xarUserClones[$userId]->setCurrentId($userId);
-            }
-            return $this->xarUserClones[$userId];
+        if (!empty($userId)) {
+            return $this->service('user', $userId);
         }
-        return $this->xarUser;
+        return $this->service('user');
     }
 
     /**
@@ -524,8 +533,7 @@ trait CoreServicesTrait
      */
     public function db(): DatabaseInterface
     {
-        $this->xarDb ??= ServiceFactory::getDatabaseService($this);
-        return $this->xarDb;
+        return $this->service('db');
     }
 
     /**
@@ -534,9 +542,12 @@ trait CoreServicesTrait
      */
     public function exit(int|string $status = 0)
     {
-        $this->xarExit ??= ServiceFactory::getExitCallable($this);
+        // Check the local cache first for a mocked 'exit' callable.
+        if (!isset($this->localServiceCache['exit'])) {
+            $this->localServiceCache['exit'] = ServiceFactory::getExitCallable($this);
+        }
         // call exit callable :-)
-        call_user_func($this->xarExit, $status);
+        call_user_func($this->localServiceCache['exit'], $status);
     }
 
     /**

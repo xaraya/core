@@ -541,10 +541,11 @@ class DataObjectFactory extends xarObject
      *     $args['moduleid'] module id of the object to retrieve +
      *     $args['itemtype'] item type of the object to retrieve
      *     $args['class'] optional classname (e.g. <module>_DataObject[_Interface])
+     * @param mixed $context optional context for the DataObjectUserInterface (default = none)
      * @return object the requested data object user interface instance
      * @todo  get rid of the classname munging
     **/
-    public static function &getObjectInterface(array $args = [])
+    public static function &getObjectInterface(array $args = [], $context = null)
     {
         sys::import('modules.dynamicdata.class.userinterface');
 
@@ -564,6 +565,7 @@ class DataObjectFactory extends xarObject
         }
         // here we can use our own classes to retrieve this
         $object = new $class($args);
+        $object->setContext($context);
         return $object;
     }
 

@@ -29,6 +29,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface BlocksInterface extends ServiceInterface
 {
+    public const SLICE = 'blocks';
+
     /** @param array<string, mixed> $tplData */
     public function template(string $funcName, array $tplData = [], ?string $templateName = null): string;
     /**

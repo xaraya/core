@@ -14,9 +14,6 @@
 
 namespace Xaraya\DataObject\DataStores;
 
-use xarMod;
-use xarModItemVars;
-use xarModVars;
 use DataProperty;
 use Exception;
 use sys;
@@ -120,7 +117,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
         }
 
         foreach ($fieldlist as $field) {
-            xarModItemVars::delete($this->modulename, $field, $itemid);
+            xar::mod($this->modulename)->delItemVar($field, $itemid);
         }
 
         return $itemid;
@@ -170,7 +167,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
             if (count($values) < 1) {
                 continue;
             }
-            $modid = xarMod::getID(substr(trim($key), 17));
+            $modid = xar::mod()->getID(substr(trim($key), 17));
             $bindmarkers = '?' . str_repeat(',?', count($values) - 1);
             // include module variable as default
             $query = "SELECT DISTINCT m.name,
@@ -233,7 +230,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
             if (count($values) < 1) {
                 continue;
             }
-            $modid = xarMod::getID(substr(trim($key), 17));
+            $modid = xar::mod()->getID(substr(trim($key), 17));
             $bindmarkers = '?' . str_repeat(',?', count($values) - 1);
             if ($this->getType() == 'sqlite') {
                 $query = "SELECT COUNT(*)

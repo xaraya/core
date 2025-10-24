@@ -24,13 +24,38 @@ use xarLog;
  */
 class ServiceFactory
 {
-    /** @var ?ServicesInterface */
-    protected static $xarServices = null;  // Access core service with static methods
+    /** @var array<string> */
+    public static array $sharedServices = ['ctl', 'log', 'mls', 'var', 'cache', 'config', 'session', 'db'];
 
-    public static function getServicesClass(): ServicesInterface
+    /**
+     * Create a new service instance (prototype) for the given name.
+     * This method is responsible for knowing how to construct each service type.
+     *
+     * @param string $name The name of the service to create.
+     * @param ServicesInterface $parent The parent object (typically StaticServicesClass) for the service.
+     * @return ServiceInterface The newly created service instance.
+     * @throws \Exception If the service name is unsupported.
+     */
+    public static function createServicePrototype(string $name, ServicesInterface $parent): ServiceInterface
     {
-        self::$xarServices ??= new ServicesClass();
-        return self::$xarServices;
+        return match ($name) {
+            'ctl' => self::getControllerService($parent),
+            'log' => self::getLoggerService($parent),
+            'mls' => self::getMultiLanguageService($parent),
+            'mod' => self::getModulesService($parent),
+            'sec' => self::getSecurityService($parent),
+            'tpl' => self::getTemplatingService($parent),
+            'var' => self::getVariablesService($parent),
+            'block' => self::getBlocksService($parent),
+            'data' => self::getDataObjectService($parent),
+            'prop' => self::getDataPropertyService($parent),
+            'cache' => self::getCachingService($parent),
+            'config' => self::getConfigService($parent),
+            'session' => self::getSessionService($parent),
+            'user' => self::getUserService($parent),
+            'db' => self::getDatabaseService($parent),
+            default => throw new \Exception('Unsupported service ' . $name),
+        };
     }
 
     /**
@@ -186,7 +211,7 @@ class ServiceFactory
         } elseif (is_string($parent)) {
             xarLog::message($method . ': starting service for ' . $parent, $level);
         } elseif (is_object($parent)) {
-            xarLog::message($method . ': starting service for ' . $parent::class, $level);
+            xarLog::message($method . ': starting service for ' . $parent::class . ' ' . spl_object_id($parent), $level);
         } else {
             // no idea what we got here - let's find out
             xarLog::message($method . ': starting service for ' . var_export($parent, true), $level);

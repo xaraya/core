@@ -145,6 +145,23 @@ class Context extends ArrayObject implements ContextObjectInterface
         $this->offsetSet('response', $response);
     }
 
+    public function getSliceValue(string $slice, string $name): mixed
+    {
+        if (!$this->offsetExists($slice)) {
+            $this->offsetSet($slice, []);
+            return null;
+        }
+        return $this->offsetGet($slice)[$name] ?? null;
+    }
+
+    public function setSliceValue(string $slice, string $name, mixed $value): void
+    {
+        if (!$this->offsetExists($slice)) {
+            $this->offsetSet($slice, []);
+        }
+        $this->offsetGet($slice)[$name] = $value;
+    }
+
     /**
      * Get or set enableTrace
      */

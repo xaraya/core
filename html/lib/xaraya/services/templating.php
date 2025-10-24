@@ -27,6 +27,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface TemplatingInterface extends ServiceInterface
 {
+    public const SLICE = 'templating';
+
     /** @param array<string, mixed> $tplData */
     public function module(string $modName, string $modType, string $funcName, array $tplData = [], ?string $templateName = null): string;
 
@@ -52,6 +54,8 @@ interface TemplatingInterface extends ServiceInterface
     public function getThemeDir(?string $theme = null): string;
 
     public function getThemeName(): string;
+
+    public function setThemeName(string $themeName): bool;
 
     public function getThemeUrl(?string $theme = null): string;
 
@@ -186,7 +190,9 @@ trait TemplatingTrait
      */
     public function getPageTitle(): string
     {
-        return xarTpl::getPageTitle();
+        // Get the page title from the current context
+        // @todo remove fallback to xarTpl once fully migrated
+        return $this->getContext()?->getSliceValue(static::SLICE, 'pageTitle') ?? xarTpl::getPageTitle();
     }
 
     /**
@@ -198,8 +204,14 @@ trait TemplatingTrait
      */
     public function setPageTitle(string $title, ?string $modName = null): bool
     {
-        $modName ??= $this->getModName();
-        return xarTpl::setPageTitle($title, ucwords($modName));
+        // getModName() might not be available on all parents, so check first
+        if (empty($modName) && method_exists($this->getParent(), 'getModName')) {
+            $modName = $this->getParent()->getModName();
+        }
+        // @todo see logic in xarTpl::setPageTitle()
+        xarTpl::setPageTitle($title, $modName);
+        $this->getContext()?->setSliceValue(static::SLICE, 'pageTitle', xarTpl::getPageTitle());
+        return true;
     }
 
     /**
@@ -243,6 +255,14 @@ trait TemplatingTrait
     public function getThemeName(): string
     {
         return xarTpl::getThemeName();
+    }
+
+    /**
+     * Set theme name
+     */
+    public function setThemeName(string $themeName): bool
+    {
+        return xarTpl::setThemeName($themeName);
     }
 
     /**

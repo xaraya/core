@@ -18,6 +18,8 @@ namespace Xaraya\Requests;
  */
 interface RequestInterface
 {
+    public const SLICE = 'request';
+
     /**
      * Constructor for the request handler
      * @param array<string, mixed> $args not by reference anymore

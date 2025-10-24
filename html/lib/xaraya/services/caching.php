@@ -16,10 +16,12 @@
 
 namespace Xaraya\Services;
 
+use ixarCache_Storage;
 use xarCache;
 use xarModuleCache;
 use xarBlockCache;
 use xarObjectCache;
+use xarPageCache;
 use xarVariableCache;
 use sys;
 
@@ -30,6 +32,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface CachingInterface extends ServiceInterface
 {
+    public const SLICE = 'caching';
+
     /**
      * Get a cache key for module output caching
      * @param array<string, mixed> $args optional parameters
@@ -121,6 +125,12 @@ interface CachingInterface extends ServiceInterface
      * Delete a cached variable
      */
     public function delVariable(?string $cacheKey): void;
+
+    /**
+     * Get a storage class instance for some type of cached data
+     * @param array<string, mixed> $args
+     */
+    public function getStorage(array $args = []): ixarCache_Storage;
 }
 
 /**
@@ -129,6 +139,13 @@ interface CachingInterface extends ServiceInterface
 trait CachingTrait
 {
     use ServiceTrait;
+
+    /** @var ?ixarCache_Storage */
+    protected ?ixarCache_Storage $moduleStorage = null;
+    protected ?ixarCache_Storage $blockStorage = null;
+    protected ?ixarCache_Storage $objectStorage = null;
+    protected ?ixarCache_Storage $variableStorage = null;
+    protected ?ixarCache_Storage $pageStorage = null;
 
     /**
      * Get a cache key for module output caching
@@ -140,7 +157,10 @@ trait CachingTrait
         if (empty($modName)) {
             return null;
         }
-        return xarCache::getModuleKey($modName, $modType, $funcName, $args);
+        if (empty($this->moduleStorage)) {
+            return null;
+        }
+        return xarModuleCache::getCacheKey($modName, $modType, $funcName, $args);
     }
 
     /**
@@ -151,6 +171,9 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return false;
         }
+        if (empty($this->moduleStorage)) {
+            return false;
+        }
         return xarModuleCache::isCached($cacheKey);
     }
 
@@ -159,6 +182,9 @@ trait CachingTrait
      */
     public function getModule(string $cacheKey): string
     {
+        if (empty($this->moduleStorage)) {
+            return '';
+        }
         return xarModuleCache::getCached($cacheKey);
     }
 
@@ -168,6 +194,9 @@ trait CachingTrait
     public function setModule(?string $cacheKey, string $value): void
     {
         if (empty($cacheKey)) {
+            return;
+        }
+        if (empty($this->moduleStorage)) {
             return;
         }
         xarModuleCache::setCached($cacheKey, $value);
@@ -180,7 +209,10 @@ trait CachingTrait
      */
     public function getBlockKey(array $blockInfo = []): ?string
     {
-        return xarCache::getBlockKey($blockInfo);
+        if (empty($this->blockStorage)) {
+            return null;
+        }
+        return xarBlockCache::getCacheKey($blockInfo);
     }
 
     /**
@@ -191,6 +223,9 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return false;
         }
+        if (empty($this->blockStorage)) {
+            return false;
+        }
         return xarBlockCache::isCached($cacheKey);
     }
 
@@ -199,6 +234,9 @@ trait CachingTrait
      */
     public function getBlock(string $cacheKey): string
     {
+        if (empty($this->blockStorage)) {
+            return '';
+        }
         return xarBlockCache::getCached($cacheKey);
     }
 
@@ -208,6 +246,9 @@ trait CachingTrait
     public function setBlock(?string $cacheKey, string $value): void
     {
         if (empty($cacheKey)) {
+            return;
+        }
+        if (empty($this->blockStorage)) {
             return;
         }
         xarBlockCache::setCached($cacheKey, $value);
@@ -223,7 +264,10 @@ trait CachingTrait
         if (empty($objectName)) {
             return null;
         }
-        return xarCache::getObjectKey($objectName, $methodName, $args);
+        if (empty($this->objectStorage)) {
+            return null;
+        }
+        return xarObjectCache::getCacheKey($objectName, $methodName, $args);
     }
 
     /**
@@ -234,6 +278,9 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return false;
         }
+        if (empty($this->objectStorage)) {
+            return false;
+        }
         return xarObjectCache::isCached($cacheKey);
     }
 
@@ -242,6 +289,9 @@ trait CachingTrait
      */
     public function getObject(string $cacheKey): string
     {
+        if (empty($this->objectStorage)) {
+            return '';
+        }
         return xarObjectCache::getCached($cacheKey);
     }
 
@@ -253,6 +303,9 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return;
         }
+        if (empty($this->objectStorage)) {
+            return;
+        }
         xarObjectCache::setCached($cacheKey, $value);
     }
 
@@ -262,7 +315,10 @@ trait CachingTrait
      */
     public function getVariableKey(string $scope, string $name): ?string
     {
-        return xarCache::getVariableKey($scope, $name);
+        if (empty($this->variableStorage)) {
+            return null;
+        }
+        return xarVariableCache::getCacheKey($scope, $name);
     }
 
     /**
@@ -273,6 +329,9 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return false;
         }
+        if (empty($this->variableStorage)) {
+            return false;
+        }
         return xarVariableCache::isCached($cacheKey);
     }
 
@@ -281,6 +340,9 @@ trait CachingTrait
      */
     public function getVariable(string $cacheKey): string|object
     {
+        if (empty($this->variableStorage)) {
+            return '';
+        }
         return xarVariableCache::getCached($cacheKey);
     }
 
@@ -290,6 +352,9 @@ trait CachingTrait
     public function setVariable(?string $cacheKey, string|object $value): void
     {
         if (empty($cacheKey)) {
+            return;
+        }
+        if (empty($this->variableStorage)) {
             return;
         }
         xarVariableCache::setCached($cacheKey, $value);
@@ -303,7 +368,19 @@ trait CachingTrait
         if (empty($cacheKey)) {
             return;
         }
+        if (empty($this->variableStorage)) {
+            return;
+        }
         xarVariableCache::delCached($cacheKey);
+    }
+
+    /**
+     * Get a storage class instance for some type of cached data
+     * @param array<string, mixed> $args
+     */
+    public function getStorage(array $args = []): ixarCache_Storage
+    {
+        return xarCache::getStorage($args);
     }
 }
 
@@ -334,4 +411,27 @@ trait CachingTrait
 class CachingService implements CachingInterface
 {
     use CachingTrait;
+
+    public function __construct(mixed $parent)
+    {
+        $this->parent = $parent;
+
+        // Get the caching configuration
+        // $config = xarCache::getConfig();
+
+        // Enable output caching if configured
+        if (xarCache::$outputCacheIsEnabled) {
+            // Note: we don't want to call xarOutputCache::init() here again
+            $this->moduleStorage = xarModuleCache::$cacheStorage;
+            $this->blockStorage = xarBlockCache::$cacheStorage;
+            $this->objectStorage = xarObjectCache::$cacheStorage;
+            $this->pageStorage = xarPageCache::$cacheStorage;
+        }
+
+        // Enable variable caching if configured
+        if (xarCache::$variableCacheIsEnabled) {
+            // Note: we don't want to call xarVariableCache::init() here again
+            $this->variableStorage = xarVariableCache::$cacheStorage;
+        }
+    }
 }

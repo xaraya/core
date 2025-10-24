@@ -260,7 +260,6 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
         if ($this->isNew()) {
             if ($this->register($ipAddress)) {
                 // Congratulations. We have created a new session
-                //xarEvents::trigger('SessionCreate');
                 xarEvents::notify('SessionCreate', [], $this->context);
             } else {
                 // Registering failed, now what?

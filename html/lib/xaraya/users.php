@@ -16,9 +16,6 @@
  * @todo <marco> user status field
  */
 
-// IS THIS STILL USED?
-global $installing;
-
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
 
@@ -89,8 +86,9 @@ class xarUser extends xarObject
 
         self::$authenticationModules = $args['authenticationModules'];
 
-        xarMLS::setCurrentLocale(self::getNavigationLocale());
-        xarTpl::setThemeName(self::getNavigationThemeName());
+        // @todo update for each request context
+        xar::mls()->setCurrentLocale(self::getNavigationLocale());
+        xar::tpl()->setThemeName(self::getNavigationThemeName());
 
         self::$initialized = true;
         return true;
@@ -175,14 +173,13 @@ class xarUser extends xarObject
 
         // Catch common variations (0, false, '', ...)
         if (empty($rememberMe)) {
-            $rememberMe = false;
+            $rememberMe = 0;
         } else {
-            $rememberMe = true;
+            $rememberMe = 1;
         }
 
         // Set user session information
-        // TODO: make this a class static in xarSession.php
-        if (!xarSession::setUserInfo($userId, $rememberMe)) {
+        if (!xar::session()->setUserInfo($userId, $rememberMe)) {
             return;
         } // throw back
 
@@ -216,7 +213,6 @@ class xarUser extends xarObject
             $context->setUserId($userId);
         }
         // User logged in successfully, trigger the proper event with the new userid
-        //xarEvents::trigger('UserLogin',$userId);
         xarEvents::notify('UserLogin', $userId, $context);
         xar::session()->delVar('privilegeset');
         return true;
@@ -234,10 +230,10 @@ class xarUser extends xarObject
             return true;
         }
         // get the current userid before logging out
-        $userId = xarSession::getUserId();
+        $userId = xar::session()->getUserId();
 
         // Reset user session information
-        $res = xarSession::setUserInfo(xarSession::getAnonId(), false);
+        $res = xar::session()->setUserInfo(xar::session()->getAnonId(), 0);
         if (!isset($res)) {
             return; // throw back
         }
@@ -245,10 +241,9 @@ class xarUser extends xarObject
         xar::session()->delVar('authenticationModule');
 
         if (!empty($context)) {
-            $context->setUserId(xarSession::getAnonId());
+            $context->setUserId(xar::session()->getAnonId());
         }
         // User logged out successfully, trigger the proper event with the old userid
-        //xarEvents::trigger('UserLogout',$userId);
         xarEvents::notify('UserLogout', $userId, $context);
 
         xar::session()->delVar('privilegeset');
@@ -264,8 +259,8 @@ class xarUser extends xarObject
      */
     public static function isLoggedIn($context = null)
     {
-        $userId = xarSession::getUserId() ?? 0;
-        return (!empty($userId) && $userId != xarSession::getAnonId());
+        $userId = xar::session()->getUserId() ?? 0;
+        return (!empty($userId) && $userId != xar::session()->getAnonId());
     }
 
     /**
@@ -275,7 +270,7 @@ class xarUser extends xarObject
      */
     public static function isDebugAdmin($userId = null)
     {
-        $userId ??= xarSession::getUserId();
+        $userId ??= xar::session()->getUserId();
         return in_array($userId, xar::config()->getVar('Site.User.DebugAdmins'));
     }
 
@@ -286,7 +281,7 @@ class xarUser extends xarObject
      */
     public static function isSiteAdmin($userId = null)
     {
-        $userId ??= xarSession::getUserId();
+        $userId ??= xar::session()->getUserId();
         return $userId == xar::mod('roles')->getVar('admin');
     }
 
@@ -298,7 +293,7 @@ class xarUser extends xarObject
      */
     public static function getNavigationThemeName()
     {
-        $themeName = xarTpl::getThemeName();
+        $themeName = xar::tpl()->getThemeName();
 
         if (self::isLoggedIn() && (bool) xar::mod('themes')->getVar('enable_user_menu')) {
             $userThemeName = xar::mod('themes')->getUserVar('default_theme');
@@ -364,7 +359,7 @@ class xarUser extends xarObject
     public static function setNavigationLocale($locale)
     {
         xar::log()->info("Changing the navigation locale from " . self::getNavigationLocale() . " to " . $locale);
-        if (xarMLS::getMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
+        if (xar::mls()->getMode() != xar::mls()::SINGLE_LANGUAGE_MODE) {
             xar::session()->setVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
                 xar::mod('roles')->setUserVar('locale', $locale);
@@ -386,7 +381,7 @@ class xarUser extends xarObject
      * @param  integer $userId integer the user to get the variable for
      * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
      * @throws EmptyParameterException, NotLoggedInException, BadParameterException, IDNotFoundException
-     * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSession::getUserId()) {
+     * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xar::session()->getUserId()) {
      * @todo <marco FIXME: ignoring unknown user variables for now...
      * @todo redesign the delegation to auth* modules for handling user variables
      * @todo add some security for getting to user variables (at least from another id)
@@ -400,14 +395,14 @@ class xarUser extends xarObject
 
         // @todo see UserContext::getUserId() for userId without session
         if (empty($userId)) {
-            $userId = xarSession::getUserId();
+            $userId = xar::session()->getUserId();
         }
         //LEGACY
         if ($name == 'id' || $name == 'uid') {
             return $userId;
         }
 
-        if (empty($userId) || $userId == xarSession::getAnonId()) {
+        if (empty($userId) || $userId == xar::session()->getAnonId()) {
             // Anonymous user => only id, name and uname allowed, for other variable names
             // an exception of type NOT_LOGGED_IN is raised
             // CHECKME: if we're going the route of moditemvars, this doesn need to be the case
@@ -555,9 +550,9 @@ class xarUser extends xarObject
         }
 
         if (empty($userId)) {
-            $userId = xarSession::getUserId();
+            $userId = xar::session()->getUserId();
         }
-        if (empty($userId) || $userId == xarSession::getAnonId()) {
+        if (empty($userId) || $userId == xar::session()->getAnonId()) {
             // Anonymous user
             throw new NotLoggedInException();
         }
@@ -641,7 +636,7 @@ class xarUser extends xarObject
      */
     private static function getAuthModule($userId)
     {
-        if ($userId == xarSession::getUserId()) {
+        if ($userId == xar::session()->getUserId()) {
             $authModName = xar::session()->getVar('authenticationModule');
             if (isset($authModName)) {
                 return $authModName;

@@ -29,6 +29,8 @@ sys::import('modules.dynamicdata.class.objects.factory');
  */
 interface DataPropertyInterface extends ServiceInterface
 {
+    public const SLICE = 'dataproperty';
+
     /**
      * Render output with property template
      * @param array<mixed> $tplData

@@ -33,6 +33,8 @@ sys::import('modules.dynamicdata.class.objects.factory');
  */
 interface DataObjectInterface extends ServiceInterface
 {
+    public const SLICE = 'dataobject';
+
     /**
      * Get url for this object method
      * @param array<string, mixed> $args

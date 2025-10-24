@@ -27,10 +27,24 @@ sys::import('xaraya.services.servicetrait');
  */
 interface MultiLanguageInterface extends ServiceInterface
 {
+    public const SLICE = 'multilanguage';
+
+    public const SINGLE_LANGUAGE_MODE = xarMLS::SINGLE_LANGUAGE_MODE;
+
     /**
      * Get the current locale or empty if not defined yet
      */
     public function getCurrentLocale(): string;
+
+    /**
+     * Set current locale
+     */
+    public function setCurrentLocale(string $locale): bool;
+
+    /**
+     * Get the current MLS mode
+     */
+    public function getMode(): mixed;
 
     /**
      * Get the charset component from a locale
@@ -124,6 +138,22 @@ trait MultiLanguageTrait
     public function getCurrentLocale(): string
     {
         return xarMLS::getCurrentLocale();
+    }
+
+    /**
+     * Set current locale
+     */
+    public function setCurrentLocale(string $locale): bool
+    {
+        return xarMLS::setCurrentLocale($locale);
+    }
+
+    /**
+     * Get the current MLS mode
+     */
+    public function getMode(): mixed
+    {
+        return xarMLS::getMode();
     }
 
     /**

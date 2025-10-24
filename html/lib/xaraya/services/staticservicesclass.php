@@ -29,10 +29,14 @@ use Xaraya\Sessions\SessionInterface;
  */
 class StaticServicesClass extends ServicesClass
 {
+    public const SLICE = 'static';
+
     /** @var ?RequestInterface */
     protected $requestInstance = null;
     /** @var ?SessionInterface */
     protected $sessionInstance = null;
+    /** @var array<string, ServiceInterface> */
+    public array $serviceCache = [];
 
     /**
      * @return Context<string, mixed>|null
@@ -93,5 +97,21 @@ class StaticServicesClass extends ServicesClass
     public function setSessionInstance($instance)
     {
         $this->sessionInstance = $instance;
+    }
+
+    /**
+     * Get a service prototype instance, creating it if not already cached.
+     * This ensures only one prototype per service type per request.
+     *
+     * @param string $name The name of the service.
+     * @return ServiceInterface The service prototype.
+     */
+    public function getServicePrototype(string $name): ServiceInterface
+    {
+        if (!isset($this->serviceCache[$name])) {
+            // For prototypes, the parent is the static services class itself.
+            $this->serviceCache[$name] = ServiceFactory::createServicePrototype($name, $this);
+        }
+        return $this->serviceCache[$name];
     }
 }

@@ -116,7 +116,8 @@ final class DataObjectTest extends TestCase
     public function testObjectInterface(): void
     {
         $params = ['object' => 'sample', 'linktype' => 'object'];
-        $interface = DataObjectFactory::getObjectInterface($params);
+        $context = new Xaraya\Context\Context(['source' => __METHOD__]);
+        $interface = DataObjectFactory::getObjectInterface($params, $context);
         $expected = 'sample';
         $this->assertEquals($expected, $interface->args['object']);
 

@@ -19,6 +19,8 @@ namespace Xaraya\Sessions;
  */
 interface SessionInterface
 {
+    public const SLICE = 'session';
+
     /**
      * Constructor for the session handler
      * @param array<string, mixed> $args not by reference anymore

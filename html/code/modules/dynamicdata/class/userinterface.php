@@ -107,9 +107,12 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
      *     $args['linkfunc'] main function handling all object method calls (= if we're not using object URLs)
      *     $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
      *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList() later on
+     * @param mixed $context optional context for the DataObjectUserInterface (default = none)
      */
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], $context = null)
     {
+        $this->setContext($context);
+
         // set a specific framework
         if (!empty($args['framework'])) {
             $this->framework = $args['framework'];
@@ -231,7 +234,11 @@ class DataObjectUserInterface extends xarObject implements ContextInterface
     public function handle(array $args = [], ?Context $context = null)
     {
         // set the context before checking any variables
-        $this->setContext($context);
+        if (isset($context)) {
+            $this->setContext($context);
+        } else {
+            $context = $this->getContext();
+        }
         xar::var()->check('method', $args['method']);
         xar::var()->check('itemid', $args['itemid']);
 

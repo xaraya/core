@@ -28,6 +28,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface SecurityInterface extends ServiceInterface
 {
+    public const SLICE = 'security';
+
     /**
      * Check access based on security mask or module action
      */

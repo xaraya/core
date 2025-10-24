@@ -27,6 +27,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface UserInterface extends ServiceInterface
 {
+    public const SLICE = 'user2';
+
     public function getVar(string $varName): mixed;
     public function setVar(string $varName, mixed $value): bool;
     public function getId(): ?int;

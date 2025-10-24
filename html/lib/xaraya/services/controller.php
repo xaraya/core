@@ -30,6 +30,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface ControllerInterface extends ServiceInterface
 {
+    public const SLICE = 'controller';
+
     /**
      * Get url for some module type function
      * @param array<string, mixed> $args

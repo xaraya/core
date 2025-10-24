@@ -29,11 +29,14 @@ sys::import('xaraya.services.servicetrait');
  */
 interface SessionInterface extends ServiceInterface
 {
+    public const SLICE = 'session2';
+
     public function getVar(string $varName): mixed;
     public function setVar(string $varName, mixed $value): bool;
     public function delVar(string $varName): mixed;
     public function getUserId(): ?int;
     public function getAnonId(): ?int;
+    public function setUserInfo(int $userId, int $rememberSession): ?bool;
 }
 
 /**
@@ -82,6 +85,14 @@ trait SessionTrait
     public function getAnonId(): ?int
     {
         return xarSession::getAnonId();
+    }
+
+    /**
+     * Set user info
+     */
+    public function setUserInfo(int $userId, int $rememberSession): ?bool
+    {
+        return xarSession::setUserInfo($userId, $rememberSession);
     }
 }
 

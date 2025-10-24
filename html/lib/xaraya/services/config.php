@@ -27,6 +27,8 @@ sys::import('xaraya.variables.config');
  */
 interface ConfigInterface extends ServiceInterface
 {
+    public const SLICE = 'config';
+
     public function getVar(string $varName, mixed $value = null): mixed;
     public function setVar(string $varName, mixed $value): bool;
     public function delVar(string $varName): mixed;

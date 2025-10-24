@@ -112,7 +112,7 @@ class xarMLS extends xarObject
         // Register MLS events
         // These should be done before the xarMLS::setCurrentLocale function
         // These are now registered during base module init
-        // @CHECKME: <chris> grep -R xarEvents::trigger . finds no results
+        // @CHECKME: <chris> grep -R xarEvents::notify . finds no results
         // It appears these events are never raised ?
         // In addition, these seem more like exceptions than 'events' ?
         //xarEvents::register('MLSMissingTranslationString');
@@ -242,7 +242,7 @@ class xarMLS extends xarObject
 
         if (empty($trans)) {
             // FIXME: postpone
-            //xarEvt_fire('MLSMissingTranslationString', $string);
+            //xarEvents::notify('MLSMissingTranslationString', $string);
             $trans = $string;
         }
         if (func_num_args() > 1) {
@@ -281,7 +281,7 @@ class xarMLS extends xarObject
         }
         if (empty($trans)) {
             // FIXME: postpone
-            //xarEvt_fire('MLSMissingTranslationKey', $key);
+            //xarEvents::notify('MLSMissingTranslationKey', $key);
             $trans = $key;
         }
         if (func_num_args() > 1) {
@@ -608,7 +608,7 @@ class xarMLS extends xarObject
             return true;
         } else {
             // FIXME: postpone
-            //xarEvt_fire('MLSMissingTranslationDomain', array($domainType, $domainName));
+            //xarEvents::notify('MLSMissingTranslationDomain', array($domainType, $domainName));
 
             $loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = false;
             return false;

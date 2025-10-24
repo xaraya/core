@@ -31,6 +31,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface DatabaseInterface extends ServiceInterface
 {
+    public const SLICE = 'database';
+
     public static function create(mixed $parent = null): DatabaseInterface;
 
     public function &getConn(int|string $index = 0): object;

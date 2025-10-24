@@ -47,7 +47,7 @@ class ChangelanguageMethod extends MethodClass
         if (!in_array($locale, $locales)) {
             throw new LocaleNotFoundException($locale);
         }
-        if (xarUser::setNavigationLocale($locale) == false) {
+        if ($this->user()->setLocale($locale) == false) {
             // Wrong MLS mode
             // FIXME: <marco> Show a custom error here or just throw an exception?
             // <paul> throw an exception. trap it later if we want it to look nice,

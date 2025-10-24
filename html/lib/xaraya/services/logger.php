@@ -29,6 +29,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface LoggerInterface extends ServiceInterface
 {
+    public const SLICE = 'logger';
+
     public static function create(mixed $parent = null): LoggerInterface;
 
     public function message(string|\Stringable $message, int $level = 0): void;

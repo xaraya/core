@@ -38,6 +38,7 @@ interface ServiceInterface extends ContextInterface
 {
     public function __construct(mixed $parent);
     public function getParent(): mixed;
+    public function setParent(mixed $parent): void;
 }
 
 /**
@@ -65,6 +66,14 @@ trait ServiceTrait
         // @todo this should only be called when parent has services interface
         assert($this->parent instanceof ServicesInterface);
         return $this->parent;
+    }
+
+    /**
+     * Set parent of service class
+     */
+    public function setParent(mixed $parent): void
+    {
+        $this->parent = $parent;
     }
 
     /**

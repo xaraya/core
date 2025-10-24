@@ -38,6 +38,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface ModulesInterface extends ServiceInterface
 {
+    public const SLICE = 'modules';
+
     public const STATE_ACTIVE = xarMod::STATE_ACTIVE;
 
     public function getVar(string $varName): mixed;

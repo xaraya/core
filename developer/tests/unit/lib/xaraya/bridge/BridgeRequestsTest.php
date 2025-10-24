@@ -187,7 +187,7 @@ final class BridgeRequestsTest extends TestCase
         $expected = filesize($filename);
 
         $params = ['object' => 'sample'];
-        $context = null;
+        $context = new Xaraya\Context\Context(['source' => __METHOD__]);
         $handler = new DataObjectGuiHandler();
         $handler->setContext($context);
         $output = $handler->runDataObjectRequest($params);

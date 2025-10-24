@@ -30,6 +30,8 @@ sys::import('xaraya.services.servicetrait');
  */
 interface VariablesInterface extends ServiceInterface
 {
+    public const SLICE = 'variables';
+
     /**
      * Fetch variable by name, with validation, variable, defaultValue, flags and prep
      *
