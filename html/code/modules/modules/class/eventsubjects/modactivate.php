@@ -2,7 +2,7 @@
 
 /**
  * ModAcativate System Event Subject
- * Notifies observers when a module is activated (via xarMod::apiFunc('modules','admin','activate')
+ * Notifies observers when a module is activated (via xar::mod()->apiFunc('modules','admin','activate')
  * @package modules\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework

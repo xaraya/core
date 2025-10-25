@@ -79,14 +79,6 @@
                     </li>
                 </xar:if>
                 <!-- TODO check whether a modules supports syndication, do not hardcode in here -->
-                <!-- FIXME deprecate this and remove the articles dependency -->
-                <xar:if condition="!empty($displayrss) and ($thismodname eq 'articles')">
-                   <li class="xar-menu-item">
-                        <a title="#$rsstitle#" href="#xarServer::getCurrentURL(['theme' => 'rss'])#">
-                            #$rsslabel#
-                        </a>
-                    </li>
-                </xar:if>
                 </ul>
             </li>
         </ul>

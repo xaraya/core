@@ -188,7 +188,7 @@ class CategoriesProperty extends DataProperty
             return $this->updateLinks($itemid);
         }
         sys::import('xaraya.structures.query');
-        $this->mod()->apiLoad('categories');
+        $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
 
         // This property is standalone
@@ -256,7 +256,7 @@ class CategoriesProperty extends DataProperty
     public function deleteValue($itemid = 0)
     {
         sys::import('xaraya.structures.query');
-        $this->mod()->apiLoad('categories');
+        $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
 
         if (isset($this->objectref)) {
@@ -416,7 +416,7 @@ class CategoriesProperty extends DataProperty
             if (!isset($data['value'])) {
                 // If we have no values passed, get an array of values (selected categories) for each tree
                 $data['value'] = [];
-                $this->mod()->apiLoad('categories');
+                $this->mod()->loadDbInfo('categories');
                 $xartable = $this->db()->getTables();
                 sys::import('xaraya.structures.query');
                 foreach ($data['base_category'] as $key => $value) {
@@ -549,7 +549,7 @@ class CategoriesProperty extends DataProperty
     public function mountValue($itemid = 0)
     {
         sys::import('xaraya.structures.query');
-        $this->mod()->apiLoad('categories');
+        $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
         $q = new Query('SELECT');
         $q->addtable($xartable['categories'], 'c');
@@ -592,7 +592,7 @@ class CategoriesProperty extends DataProperty
             $this->itemid = $object->properties[$object->primary]->value;
         }
         $prinaryfield = $object->properties[$object->primary]->source;
-        $this->mod()->load('categories');
+        $this->mod()->loadDbInfo('categories');
         $q = $object->dataquery;
         $tables = $this->db()->getTables();
         $q->addtable($tables['categories'], 'c');
@@ -651,7 +651,7 @@ class CategoriesProperty extends DataProperty
         $tableprefix = $this->id . "_";
 
         // Assemble the links to the object's table
-        $this->mod()->load('categories');
+        $this->mod()->loadDbInfo('categories');
         $tables = $this->db()->getTables();
         $q->addTable($tables['categories_linkage'], $tableprefix . 'linkage');
         $q->leftjoin($primary_source, $tableprefix . 'linkage.item_id');
@@ -711,7 +711,7 @@ class CategoriesProperty extends DataProperty
     private function getLinks($itemid = 0)
     {
         sys::import('xaraya.structures.query');
-        $this->mod()->apiLoad('categories');
+        $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
 
         $q = new Query('SELECT', $xartable['categories_linkage']);
@@ -739,7 +739,7 @@ class CategoriesProperty extends DataProperty
     private function updateLinks($itemid = 0)
     {
         sys::import('xaraya.structures.query');
-        $this->mod()->apiLoad('categories');
+        $this->mod()->loadDbInfo('categories');
         $xartable = $this->db()->getTables();
 
         // This property is bound

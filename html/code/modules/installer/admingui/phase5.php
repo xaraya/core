@@ -417,9 +417,9 @@ class Phase5Method extends MethodClass
         //if (!xarInstall::apiFunc('initialise', array('directory'=>'blocks', 'initfunc'=>'activate'))) return;
 
         // create the default masks and privilege instances
-        sys::import('modules.privileges.xarsetup');
-        // @todo move to privileges/xarinit.php or privileges/installer.php
-        privileges_initializeSetup();
+        if (!xarInstall::apiFunc('initialise', ['directory' => 'privileges', 'initfunc' => 'initializeSetup'])) {
+            return;
+        }
 
         // TODO: is this is correct place for a default value for a modvar?
         $this->mod('base')->setVar('AlternatePageTemplate', 'homepage');

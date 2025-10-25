@@ -156,22 +156,26 @@ function xarInstallLoader()
     Xaraya\Services\xar::setServicesContext($context);
 
     // Start HTTP Protocol Server/Request/Response utilities
-    $systemArgs = ['enableShortURLsSupport' => false,
+    $systemArgs = [
+        'enableShortURLsSupport' => false,
         'defaultModuleName'      => 'installer',
         'defaultModuleType'      => 'admin',
         'defaultModuleFunction'  => 'main',
-        'generateXMLURLs'        => false];
+        'generateXMLURLs'        => false,
+    ];
     xarServer::init($systemArgs, $context);
     xarController::init($systemArgs);
 
     // Start BlockLayout Template Engine
     // This is probably the trickiest part, but we want the installer
     // templateable too obviously
-    $systemArgs = ['enableTemplatesCaching' => false,
+    $systemArgs = [
+        'enableTemplatesCaching' => false,
         'defaultThemeDir'        => 'installer',
         'pageTemplateName'       => 'admin',
         'defaultDocType'         => 'xhtml1-strict',
-        'generateXMLURLs'        => false];
+        'generateXMLURLs'        => false,
+    ];
     xarTpl::init($systemArgs);
 
     // Get the install language everytime we request install.php
@@ -209,10 +213,12 @@ function xarInstallLoader()
     sort($allowedLocales);
 
     // Start Multi Language System
-    $systemArgs = ['translationsBackend' => 'xml2php',
+    $systemArgs = [
+        'translationsBackend' => 'xml2php',
         'MLSMode'             => 'BOXED',
         'defaultLocale'       => $install_language,
-        'allowedLocales'      => $allowedLocales];
+        'allowedLocales'      => $allowedLocales,
+    ];
     xarMLS::init($systemArgs);
 }
 

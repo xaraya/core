@@ -19,7 +19,7 @@ class xarInstall extends xarObject
      *
      * @author John Robeson
      * @author Marcel van der Boom <marcel@hsdev.com>
-     * This function is similar to xarMod::guiFunc but simplified.
+     * This function is similar to xar::mod()->guiFunc but simplified.
      * We need this because during install we cant have the module
      * subsystem online directly, so we need a direct way of calling
      * the admin functions of the installer. The actual functions

@@ -20,5 +20,6 @@ sys::import('xaraya.bridge.graphql.handler');
 /**
  * Class to handle GraphQL queries
  * @uses \sys::autoload()
+ * @deprecated 2.7.3 use GraphQLHandler() instead
  */
 class xarGraphQL extends GraphQLHandler {}

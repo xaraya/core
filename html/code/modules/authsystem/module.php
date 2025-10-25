@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Authsystem;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get authsystem module classes via xarMod::getModule()
+ * Get authsystem module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

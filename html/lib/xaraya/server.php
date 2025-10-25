@@ -74,8 +74,10 @@ class xarServer extends xarObject
      */
     public static function getConfig()
     {
-        $systemArgs = ['enableShortURLsSupport' => xar::config()->getVar('Site.Core.EnableShortURLsSupport'),
-            'generateXMLURLs' => true];
+        $systemArgs = [
+            'enableShortURLsSupport' => xar::config()->getVar('Site.Core.EnableShortURLsSupport'),
+            'generateXMLURLs'        => true,
+        ];
         return $systemArgs;
     }
 

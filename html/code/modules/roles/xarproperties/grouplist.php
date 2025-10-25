@@ -187,7 +187,7 @@ class GroupListProperty extends SelectProperty
         $value = 0;
         $basegroup = xarRoles::get($this->initialization_basegroup);
         if (!empty($basegroup)) {
-            $this->mod()->load('roles');
+            $this->mod()->loadDbInfo('roles');
             $xartables = $this->db()->getTables();
             $rolemembers = $xartables['rolemembers'];
             $bindvars = [];

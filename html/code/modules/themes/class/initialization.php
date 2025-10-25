@@ -27,7 +27,7 @@ class ThemeInitialization extends xarObject
     public static function clearCache()
     {
         $dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('themes', 'themes');
+        xar::mod()->loadDbInfo('themes');
         $tables = xar::db()->getTables();
         $sql = "DELETE FROM $tables[themes_configurations]";
         $res = $dbconn->ExecuteUpdate($sql);
@@ -61,7 +61,7 @@ class ThemeInitialization extends xarObject
                 // Clear the cache
                 self::ClearCache();
 
-                $activeThemes = xarMod::apiFunc('themes', 'admin', 'getlist', ['filter' => ['State' => xarTheme::STATE_ACTIVE]]);
+                $activeThemes = xar::mod()->apiFunc('themes', 'admin', 'getlist', ['filter' => ['State' => xarTheme::STATE_ACTIVE]]);
                 assert(!empty($activeThemes)); // this should never happen
 
                 foreach ($activeThemes as $themeInfo) {

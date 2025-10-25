@@ -127,8 +127,10 @@ class Installer extends InstallerClass
         $this->config()->setVar('Site.User.AuthenticationModules', $authModules);
 
         // Start Modules Support
-        $systemArgs = ['enableShortURLsSupport' => false,
-            'generateXMLURLs' => false];
+        $systemArgs = [
+            'enableShortURLsSupport' => false,
+            'generateXMLURLs'        => false,
+        ];
         xarMod::init($systemArgs);
 
         // Installation complete; check for upgrades

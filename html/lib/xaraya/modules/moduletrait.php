@@ -203,6 +203,12 @@ trait ModuleTrait
     public function getFileInfo(): array
     {
         // Xaraya\Modules\MyFancyModule\Version
+        $className = $this->getNamespace() . '\\Version';
+        if (class_exists($className)) {
+            $versionCall = new $className();
+            $modversion = $versionCall();
+            return xarMod::parseFileInfo($modversion);
+        }
         return xarMod::getFileInfo($this->getModName());
     }
 

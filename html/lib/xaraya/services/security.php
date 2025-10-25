@@ -48,7 +48,7 @@ interface SecurityInterface extends ServiceInterface
     /**
      * Confirm authorisation key by name for this module
      */
-    public function confirmAuthKey(string $name = 'authid', ?string $modName = null): bool;
+    public function confirmAuthKey(?string $modName = null, string $name = 'authid'): bool;
 }
 
 /**
@@ -107,7 +107,7 @@ trait SecurityTrait
     /**
      * Confirm authorisation key for this module
      */
-    public function confirmAuthKey(string $name = 'authid', ?string $modName = null): bool
+    public function confirmAuthKey(?string $modName = null, string $name = 'authid'): bool
     {
         $modName ??= $this->getModName();
         // Note: this should be restricted to gui methods

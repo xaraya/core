@@ -59,7 +59,8 @@ class NewMethod extends MethodClass
         $item['exclude_module'] = ['dynamicdata'];
         $item['module'] = 'roles';
         $item['itemtype'] = $data['itemtype'];
-        $data['hooks'] = $this->mod()->callHooks('item', 'new', '', $item);
+        $item['itemid'] = '';
+        $data['hooks'] = $this->mod()->notifyHooks('ItemNew', $item);
 
         if ($confirm) {
             // Check for a valid confirmation key

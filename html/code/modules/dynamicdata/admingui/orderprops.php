@@ -66,7 +66,6 @@ class OrderpropsMethod extends MethodClass
             throw new BadParameterException($vars, $msg);
         }
 
-        // @todo presumably this was removed for Ajax calls? But confirmAuthKey() already skips them
         if (!$this->sec()->confirmAuthKey()) {
             //return $this->ctl()->badRequest('bad_author');
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';

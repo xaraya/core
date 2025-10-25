@@ -57,7 +57,7 @@ class PropertyRegistration extends DataContainer
     public static function clearCache()
     {
         $dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        xar::mod()->loadDbInfo('dynamicdata');
         $tables = xar::db()->getTables();
         $sql = "DELETE FROM $tables[dynamic_properties_def]";
         $res = $dbconn->ExecuteUpdate($sql);
@@ -97,7 +97,7 @@ class PropertyRegistration extends DataContainer
                         return false;
         */
         $dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        xar::mod()->loadDbInfo('dynamicdata');
         $tables = xar::db()->getTables();
         $propdefTable = $tables['dynamic_properties_def'];
 
@@ -170,7 +170,7 @@ class PropertyRegistration extends DataContainer
             return xar::var()->getCached('DynamicData', 'PropertyTypes');
         }
         $dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        xar::mod()->loadDbInfo('dynamicdata');
         // CHECKME: $tables[modules] is defined in xar::mod()->init()
         if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
             xar::mod()->loadDbInfo('modules', 'modules');
@@ -266,7 +266,7 @@ class PropertyRegistration extends DataContainer
                     $objectid = xar::mod()->apiFunc('dynamicdata', 'util', 'import', $data);
                 }
                 xar::log()->notice('DynamicData: Looking for active modules');
-                $activeMods = xar::mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xar::mod()::STATE_ACTIVE]]);
+                $activeMods = xar::mod()->apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_ACTIVE]]);
                 assert(!empty($activeMods)); // this should never happen
                 xar::log()->debug('DynamicData: There are ' . count($activeMods) . ' active modules');
 

@@ -30,7 +30,7 @@ class GetMethod extends MethodClass
 
     /**
      * Get a specific privilege
-     * Transient hack, will be removed
+     * @todo Transient hack, will be removed
      * @param array<string,mixed> $args array of optional parameters<br/>
      * @see AdminApi::get()
      */

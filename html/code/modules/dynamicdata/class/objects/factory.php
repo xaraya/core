@@ -30,7 +30,7 @@ class DataObjectFactory extends xarObject
     {
         extract($args);
         $dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        xar::mod()->loadDbInfo('dynamicdata');
         $xartable = xar::db()->getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
@@ -107,7 +107,7 @@ class DataObjectFactory extends xarObject
         }
 
         $dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        xar::mod()->loadDbInfo('dynamicdata');
         $xartable = xar::db()->getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
@@ -190,7 +190,7 @@ class DataObjectFactory extends xarObject
             return xar::var()->getCached($cacheKey, $args['name']);
         }
 
-        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        xar::mod()->loadDbInfo('dynamicdata');
         $xartable = xar::db()->getTables();
         sys::import('xaraya.structures.query');
         $q = new Query();
@@ -649,7 +649,7 @@ class DataObjectFactory extends xarObject
         }
 
         // Do direct queries here, for speed
-        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        xar::mod()->loadDbInfo('dynamicdata');
         $tables = xar::db()->getTables();
 
         sys::import('xaraya.structures.query');

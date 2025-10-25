@@ -136,8 +136,10 @@ class xarMod extends xarObject implements IxarMod
 
     public static function getConfig()
     {
-        $systemArgs = ['enableShortURLsSupport' => xar::config()->getVar('Site.Core.EnableShortURLsSupport'),
-            'generateXMLURLs' => true];
+        $systemArgs = [
+            'enableShortURLsSupport' => xar::config()->getVar('Site.Core.EnableShortURLsSupport'),
+            'generateXMLURLs'        => true,
+        ];
         return $systemArgs;
     }
 
@@ -483,7 +485,7 @@ class xarMod extends xarObject implements IxarMod
         // like in the installer for example.
         if ($type == 'module') {
             $cacheCollection = 'Mod.BaseInfos';
-            $checkNoState = xarMod::$noCacheState;
+            $checkNoState = self::$noCacheState;
         } else {
             $cacheCollection = 'Theme.BaseInfos';
             $checkNoState = xarTheme::$noCacheState;
@@ -539,8 +541,8 @@ class xarMod extends xarObject implements IxarMod
         $modBaseInfo['state'] = (int) $state;
         $modBaseInfo['name'] = $name;
         $modBaseInfo['directory'] = $directory;
-        $modBaseInfo['displayname'] = xarMod::getDisplayName($directory, $type);
-        $modBaseInfo['displaydescription'] = xarMod::getDisplayDescription($directory, $type);
+        $modBaseInfo['displayname'] = self::getDisplayName($directory, $type);
+        $modBaseInfo['displaydescription'] = self::getDisplayDescription($directory, $type);
         // Shortcut for os prepared directory
         // TODO: <marco> get rid of it since useless
         $modBaseInfo['osdirectory'] = xar::var()->prepPath($directory);
@@ -646,7 +648,7 @@ class xarMod extends xarObject implements IxarMod
         return self::parseFileInfo($version, $modOsDir . " / " . $type);
     }
 
-    protected static function parseFileInfo($version, $name)
+    public static function parseFileInfo($version, $name = '')
     {
         // name and id are required, assert them, otherwise the module is invalid
         assert(isset($version["name"]) && isset($version["id"]));
@@ -685,8 +687,20 @@ class xarMod extends xarObject implements IxarMod
         $FileInfo['twigtemplates']  = $version['twigtemplates'] ?? false;
         $FileInfo['twigextension']  = $version['twigextension'] ?? '.html.twig';
 
-        xar::var()->setCached('Mod.getFileInfos', $name, $FileInfo);
+        if (!empty($name)) {
+            xar::var()->setCached('Mod.getFileInfos', $name, $FileInfo);
+        }
         return $FileInfo;
+    }
+
+    /**
+     * Set noCache
+     * @param bool $noCache
+     * @return void
+     */
+    public static function setNoCache($noCache)
+    {
+        self::$noCacheState = (bool) $noCache;
     }
 
     /**
@@ -893,10 +907,10 @@ class xarMod extends xarObject implements IxarMod
         if (!function_exists($modFunc)) {
             // attempt to load the module's api - this will load xaruserapi.php or xaruser.php etc. if they exist
             if ($funcType == 'api') {
-                xarMod::apiLoad($modName, $modType, self::LOAD_ANYSTATE, $context);
+                self::apiLoad($modName, $modType, self::LOAD_ANYSTATE, $context);
             } else {
                 try {
-                    xarMod::load($modName, $modType, self::LOAD_ONLYACTIVE, $context);
+                    self::load($modName, $modType, self::LOAD_ONLYACTIVE, $context);
                 } catch (Exception $e) {
                     return xarController::notFound('Function not found', $context);
                 }
@@ -1036,9 +1050,6 @@ class xarMod extends xarObject implements IxarMod
         $modDir = $modBaseInfo['directory'];
         $fileName = sys::code() . 'modules/' . $modDir . '/xar' . $modType . '.php';
 
-        // Removed the exception.  Causing some weird results with modules without an api.
-        // <nuncanada> But now we wont know if something was loaded or not!
-        // <nuncanada> We need some way to find it out.
         // Assume failure
         if (file_exists($fileName)) {
             sys::import('modules.' . $modDir . '.xar' . $modType);
@@ -1057,6 +1068,7 @@ class xarMod extends xarObject implements IxarMod
             } else {
                 // this is (not really) OK too - do nothing
                 $loadedModuleCache[$cacheKey] = false;
+                xar::log()->info("xarMod::load: Loading $modName:$modType FAILED");
             }
         }
 
@@ -1293,11 +1305,11 @@ class xarModAlias extends xarObject implements IxarModAlias
      */
     public static function set($alias, $modName)
     {
-        if (!xarMod::apiLoad('modules', 'admin')) {
+        if (!xar::mod()->apiLoad('modules', 'admin')) {
             return;
         }
         $args = ['modName' => $modName, 'aliasModName' => $alias];
-        return xarMod::apiFunc('modules', 'admin', 'add_module_alias', $args);
+        return xar::mod()->apiFunc('modules', 'admin', 'add_module_alias', $args);
     }
 
     /**
@@ -1305,10 +1317,10 @@ class xarModAlias extends xarObject implements IxarModAlias
      */
     public static function delete($alias, $modName)
     {
-        if (!xarMod::apiLoad('modules', 'admin')) {
+        if (!xar::mod()->apiLoad('modules', 'admin')) {
             return;
         }
         $args = ['modName' => $modName, 'aliasModName' => $alias];
-        return xarMod::apiFunc('modules', 'admin', 'delete_module_alias', $args);
+        return xar::mod()->apiFunc('modules', 'admin', 'delete_module_alias', $args);
     }
 }

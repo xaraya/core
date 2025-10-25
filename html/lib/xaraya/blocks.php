@@ -71,7 +71,7 @@ class xarBlock extends xarObject implements ixarBlock
             return true;
         }
         // Blocks Support Tables
-        xar::mod()->loadDbInfo('blocks', 'blocks');
+        xar::mod()->loadDbInfo('blocks');
         self::$initialized = true;
         return true;
     }

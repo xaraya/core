@@ -15,6 +15,9 @@
  * @author jsb
 **/
 
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 class xarModuleCache extends xarObject
 {
     public static int $cacheTime      = 7200;
@@ -164,9 +167,8 @@ class xarModuleCache extends xarObject
     public static function getCacheSettings()
     {
         if (!isset(self::$cacheSettings)) {
-            sys::import('xaraya.services.xar');
             $settings = [];
-            $serialsettings = Xaraya\Services\xar::mod('modules')->getVar('modulecache_settings');
+            $serialsettings = xar::mod('modules')->getVar('modulecache_settings');
             if (!empty($serialsettings)) {
                 $settings = unserialize($serialsettings);
             }
@@ -290,12 +292,12 @@ class xarModuleCache extends xarObject
         }
         if (!empty($content['styles']) && is_array($content['styles'])) {
             foreach ($content['styles'] as $info) {
-                xarMod::apiFunc('themes', 'user', 'register', $info);
+                xar::mod()->apiFunc('themes', 'user', 'register', $info);
             }
         }
         if (!empty($content['script']) && is_array($content['script'])) {
             foreach ($content['script'] as $info) {
-                xarMod::apiFunc('themes', 'user', 'registerjs', $info);
+                xar::mod()->apiFunc('themes', 'user', 'registerjs', $info);
             }
         }
         return $content['output'];
@@ -378,7 +380,7 @@ class xarModuleCache extends xarObject
     }
 
     /**
-     * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
+     * Keep track of some stylesheet for caching - see xar::mod()->apiFunc('themes','user','register')
      * @param array<string, mixed> $args
      * @return void
      */
@@ -391,7 +393,7 @@ class xarModuleCache extends xarObject
     }
 
     /**
-     * Keep track of some javascript for caching - see xarMod::apiFunc('themes','user','registerjs')
+     * Keep track of some javascript for caching - see xar::mod()->apiFunc('themes','user','registerjs')
      * @param array<string, mixed> $args
      * @return void
      */

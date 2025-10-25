@@ -15,7 +15,7 @@ chdir($baseDir . '/html');
 
 // initialize bootstrap
 sys::init();
-// initialize database to call xarMod::apiFunc() for namespaces
+// initialize database to call xar::mod()->apiFunc() for namespaces
 xarCache::init();
 xarDatabase::init();
 

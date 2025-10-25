@@ -82,9 +82,11 @@
                     <li>
                         <strong>WYSIWYG editors:</strong>&#160;A default WYSIWYG editor can be chosen from a dropdown of available editors (these need to be installed by their modules).
                     </li>
+                <!--
                     <li>
                         <strong>Legacy support:</strong>&#160;Activating legacy support will allow earlier versions of Xaraya modules to run on the site. Note that legacy support changes as versions are released, so the setting  in general provides support only for the most recent versions.
                     </li>
+                -->
                     <li>
                         <strong>ShortURLs:</strong>&#160;a global setting which defines whether the site supports short URLs. Single modules must have their own settings enabled to activate their own support for short URLs.
                     </li>

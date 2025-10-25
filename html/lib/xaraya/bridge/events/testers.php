@@ -37,11 +37,12 @@ namespace Xaraya\Bridge\Events;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Exception;
-use xarMod;
 use sys;
 
 sys::import('xaraya.events');
 sys::import('xaraya.hooks');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 use xarEvents;
 use xarHooks;
 
@@ -243,7 +244,7 @@ class TestHookListeners extends HookListenerProvider
             $args['objectid'] = $modname;
         }
         $args['extrainfo']['module'] = $modname;
-        $args['extrainfo']['module_id'] = xarMod::getRegID($modname);
+        $args['extrainfo']['module_id'] = xar::mod()->getRegID($modname);
         $args['extrainfo']['itemtype'] = $itemtype;
         // get an event subject relevant to the subject module
         $subject = $this->getEventSubject($event, $args);

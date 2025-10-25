@@ -77,6 +77,28 @@ trait TemplatingTrait
     use ServiceTrait;
 
     /**
+     * Initialize service class
+     * @param array<string, mixed> $args
+     */
+    public function init(array $args = []): bool
+    {
+        if (empty($args)) {
+            $args = $this->getConfig();
+        }
+        $this->getContext()[static::SLICE] ??= $args;
+        return true;
+    }
+
+    /**
+     * Get configuration
+     * @return array<string, mixed>
+     */
+    public function getConfig(): array
+    {
+        return [];
+    }
+
+    /**
      * Render output with module template
      * @uses xarTpl::module()
      * @param string $modName

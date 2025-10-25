@@ -2,7 +2,7 @@
 
 /**
  * ModApiLoad System Event Subject
- * Notifies observers when a module api is loaded (via xarMod::apiLoad)
+ * Notifies observers when a module api is loaded (via xar::mod()->apiLoad)
  * @package modules\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework

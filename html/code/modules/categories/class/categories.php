@@ -244,7 +244,7 @@ class CategoryTree extends Tree
         if ($node->id != null) {
             $node->cid = $node->id;
         }
-        $data = xarMod::apiFunc(
+        $data = xar::mod()->apiFunc(
             'categories',
             'user',
             'getcat',

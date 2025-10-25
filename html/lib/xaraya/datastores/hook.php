@@ -14,12 +14,13 @@
 
 namespace Xaraya\DataObject\DataStores;
 
-use xarMod;
 use DataProperty;
 use DataPropertyMaster;
 use sys;
 
 sys::import('xaraya.datastores.basic');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 /**
  * Class to handle hook datastore
@@ -59,9 +60,9 @@ class HookDataStore extends BasicDataStore
         $modname = $args['modname'];
 
         foreach (array_keys($this->fields) as $hook) {
-            if (xarMod::isAvailable($hook)) {
+            if (xar::mod()->isAvailable($hook)) {
                 // TODO: find some more consistent way to do this !
-                $value = xarMod::apiFunc(
+                $value = xar::mod()->apiFunc(
                     $hook,
                     'user',
                     'get',

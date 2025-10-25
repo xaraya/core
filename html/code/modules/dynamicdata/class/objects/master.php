@@ -34,6 +34,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     /**
      * These constants are added for convenience. They are currently not being used
      * TODO: Remove the ones we don't need. Probably the last 3 at least
+     * @deprecated 2.4.1 not used
      */
     public const MODULE_ID                 = 182;
     public const ITEMTYPE_OBJECTS          = 0;
@@ -80,7 +81,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     // CHECKME: should be overridden by DataObjectList and DataObject to exclude DISPLAYONLY resp. VIEWONLY !?
     public $status      = 65;           // inital status is active and can add/modify
     public $propertyprefix   = 'dd_';   // the prefix used for automatic designations of property names and IDs in templates
-    public $anonymous   = 0;            // if true forces display of names of properties instead of dd_xx designations
+    // public $anonymous   = 0;            // @deprecated 2.4.1 if true forces display of names of properties instead of dd_xx designations
     public $where       = '';           // where clause for the object dataquery
 
     public $layout = 'default';         // optional layout inside the templates
@@ -93,8 +94,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     protected $cached_urls  = [];       // cached URLs for use in getActionURL()
 
     public $primary = null;             // primary key is item id (or objectid in the case of the objects object)
-    public $secondary = null;           // secondary key could be item type (e.g. for articles)
-    public $filter = false;             // set this true to automatically filter by current itemtype on secondary key
+    // public $secondary = null;           // @deprecated 2.4.1 secondary key could be item type (e.g. for articles)
+    // public $filter = false;             // @deprecated 2.4.1 set this true to automatically filter by current itemtype on secondary key
     public $upload = false;             // flag indicating if this object has some property that provides file upload
     public $propertyargs;
     public $visibility = 'public';      // hint to DD whether this is a private object for a particular module, a protected object
@@ -106,8 +107,8 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
     public $hooktransform = [];    // list of names for the properties to be transformed by the transform hook
 
     // CHECKME: this is no longer needed
-    private $hooklist     = null;       // list of hook modules (= observers) to call
-    private $hookscope    = 'item';     // the hook scope for dataobject (for now)
+    // private $hooklist     = null;       // @deprecated 2.4.1 list of hook modules (= observers) to call
+    // private $hookscope    = 'item';     // @deprecated 2.4.1 the hook scope for dataobject (for now)
 
     public $links         = null;       // links between objects
 
@@ -159,7 +160,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         $this->descriptor = $descriptor;
         $descriptor->refresh($this);
 
-        $this->mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        $this->mod()->loadDbInfo('dynamicdata');
 
         // use the object name as default template override (*-*-[template].x*)
         if (empty($this->template) && !empty($this->name)) {

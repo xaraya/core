@@ -52,7 +52,8 @@ class xarDispatcher extends xarObject
         if (empty($module)) {
             return false;
         }
-        $available = xarMod::isAvailable($module);
+        sys::import('xaraya.services.xar');
+        $available = \Xaraya\Services\xar::mod()->isAvailable($module);
         return $available;
     }
 

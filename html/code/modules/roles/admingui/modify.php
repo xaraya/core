@@ -95,7 +95,7 @@ class ModifyMethod extends MethodClass
         $item['module'] = 'roles';
         $item['itemtype'] = $data['object']->getType();
         $item['itemid'] = $id;
-        $data['hooks'] = $this->mod()->callHooks('item', 'modify', $id, $item);
+        $data['hooks'] = $this->mod()->notifyHooks('ItemModify', $item);
 
         $data['groups'] = $groups;
         $data['parents'] = $parents;

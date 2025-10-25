@@ -467,7 +467,7 @@ class ParentServicesClass extends ServicesClass
 
 /**
  * Child class using services from parent class
- * e.g. method -> module or property -> object
+ * e.g. method -> module or property -> object or service -> services
  */
 class ChildServicesClass implements ParentServicesInterface
 {

@@ -19,7 +19,7 @@ sys::import('xaraya.modules.adminapi');
 /**
  * Handle the privileges admin API
  *
- * @method mixed get(array $args = []) Get a specific privilege - Transient hack, will be removed
+ * @method mixed get(array $args = []) Get a specific privilege - @todo Transient hack, will be removed
  * @method mixed getcomponents(array $args = []) getcomponents: returns all the current components of a module.
  * @method mixed getinstances(array $args = []) getinstances: returns all the current privilege instances of a module/component combination.
  * @method mixed menu(array $args = []) generate the common admin menu configuration

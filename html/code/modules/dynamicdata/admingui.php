@@ -25,7 +25,7 @@ sys::import('modules.dynamicdata.traits.admingui');
  * Note: this does not replace the object-centric UI handlers or direct use of object methods
  *
  * @method mixed access(array $args = []) Access control for objects - This is a standard function that is called whenever an administrator - wishes to modify the access to an object
- * @method mixed create(array $args = []) This is a standard function that is called with the results of the - form supplied by xarMod::guiFunc('dynamicdata','admin','new') to create a new item
+ * @method mixed create(array $args = []) This is a standard function that is called with the results of the - form supplied by xar::mod()->guiFunc('dynamicdata','admin','new') to create a new item
  * @method mixed dbconfig(array $args = []) Database configurations used by modules and objects
  * @method mixed delete(array $args = []) delete item
  * @method mixed deleteStatic(array $args = [])
@@ -51,7 +51,7 @@ sys::import('modules.dynamicdata.traits.admingui');
  * @method mixed renameStaticTable(array $args = [])
  * @method mixed showpropval(array $args = []) Show configuration of some property
  * @method mixed testApis(array $args = []) Test APIs
- * @method mixed update(array $args = []) Update current item - This is a standard function that is called with the results of the - form supplied by xarMod::guiFunc('dynamicdata','admin','modify') to update a current item
+ * @method mixed update(array $args = []) Update current item - This is a standard function that is called with the results of the - form supplied by xar::mod()->guiFunc('dynamicdata','admin','modify') to update a current item
  * @method mixed updatePropertydefs(array $args = []) Update configuration parameters of the module - This is a standard function to update the configuration parameters of the - module given the information passed back by the modification form
  * @method mixed updateprop(array $args = []) Update the dynamic properties for a module + itemtype
  * @method mixed utilities(array $args = []) Utilities

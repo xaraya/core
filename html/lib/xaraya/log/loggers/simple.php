@@ -260,7 +260,7 @@ class xarLogger_simple extends xarLogger
         if (($this->fp = @fopen($this->filename, 'a')) == false) {
             $err = error_get_last();
             throw new LoggerException('Unable to open log file for writing: ' . $this->filename
-                . ' (' . $err['message'] . ')');
+                . ' (' . ($err['message'] ?? '') . ')');
         }
 
         return true;

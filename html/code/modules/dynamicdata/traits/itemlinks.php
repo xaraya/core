@@ -121,7 +121,7 @@ trait ItemLinksTrait
             if ($linktype == 'object') {
                 $url = $this->ctl()->getObjectURL($objectinfo['name'], $linkfunc);
             } else {
-                // adapted from xarMod::apiFunc('dynamicdata', 'user', 'getitemtypes')
+                // adapted from xar::mod()->apiFunc('dynamicdata', 'user', 'getitemtypes')
                 $url = $this->ctl()->getModuleURL($tplmodule, $linktype, $linkfunc, ['itemtype' => $objectinfo['itemtype']]);
             }
             $itemtypes[$objectinfo['itemtype']] = [
@@ -230,7 +230,7 @@ trait ItemLinksTrait
                     $url = $this->ctl()->getObjectURL($object->name, $linkfunc, ['itemid' => $itemid]);
                 }
             } else {
-                // adapted from xarMod::apiFunc('dynamicdata', 'user', 'getitemlinks')
+                // adapted from xar::mod()->apiFunc('dynamicdata', 'user', 'getitemlinks')
                 $url = $this->ctl()->getModuleURL($tplmodule, $linktype, $linkfunc, ['name' => $args['name'], 'itemid' => $itemid]);
             }
             $itemlinks[$itemid] = [

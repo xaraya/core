@@ -133,7 +133,7 @@ class GetitemsMethod extends MethodClass
                 $item += $this->var()->getCached('Mod.Infos', $item['regid']);
             } else {
                 $item['displayname'] = $this->mod()->getDisplayName($item['name']);
-                $item['displaydescription'] = xarMod::getDisplayDescription($item['name']);
+                $item['displaydescription'] = $this->mod()->getDisplayDescription($item['name']);
                 // Shortcut for os prepared directory
                 $item['osdirectory'] = $this->var()->prepPath($item['directory']);
 

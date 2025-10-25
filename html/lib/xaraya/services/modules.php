@@ -40,8 +40,6 @@ interface ModulesInterface extends ServiceInterface
 {
     public const SLICE = 'modules';
 
-    public const STATE_ACTIVE = xarMod::STATE_ACTIVE;
-
     public function getVar(string $varName): mixed;
     public function setVar(string $varName, mixed $value): bool;
     public function delVar(string $varName): bool;
@@ -66,12 +64,14 @@ interface ModulesInterface extends ServiceInterface
     public function getID(?string $modName = null): ?int;
     public function getRegID(?string $modName = null): int;
     public function getDisplayName(?string $modName = null): string;
+    public function getDisplayDescription(?string $modName = null): string;
     /** @return array<string, mixed> */
     public function getFileInfo(?string $modName = null): array;
     /** @return array<string, mixed> */
     public function getBaseInfo(?string $modName = null): array;
     /** @return array<string, mixed> */
     public function getInfo(int $modRegId): array;
+    public function setNoCache(bool $noCache): void;
     /** @return array<string, mixed> */
     public function getTables(?string $modName = null): array;
     public function isAvailable(?string $modName = null): bool;
@@ -82,6 +82,7 @@ interface ModulesInterface extends ServiceInterface
     public function guiFunc(?string $modName = null, ?string $modType = null, string $funcName = 'main', array $args = []): mixed;
     public function load(?string $modName = null, ?string $modType = null): mixed;
     public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed;
+    public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string;
     public function getModule(?string $modName = null): ModuleInterface;
     public function getModuleClassMethod(?string $modName = null, ?string $modType = null, string $funcName = 'main', string $callType = 'api'): ?callable;
     /** @param array<string, mixed> $args */
@@ -289,6 +290,15 @@ trait ModulesTrait
     }
 
     /**
+     * Get the displayable description for modName
+     */
+    public function getDisplayDescription(string $modName = null): string
+    {
+        $modName ??= $this->getModName();
+        return xarMod::getDisplayDescription($modName);
+    }
+
+    /**
      * Get info from version.php
      * @return array<string, mixed>
      */
@@ -315,6 +325,14 @@ trait ModulesTrait
     public function getInfo(int $modRegId): array
     {
         return xarMod::getInfo($modRegId);
+    }
+
+    /**
+     * Set noCache
+     */
+    public function setNoCache(bool $noCache): void
+    {
+        xarMod::setNoCache($noCache);
     }
 
     /**
@@ -411,6 +429,18 @@ trait ModulesTrait
         // preset module dir == module name here
         $modDir ??= $modName;
         return xarMod::loadDbInfo($modName, $modDir);
+    }
+
+    /**
+     * Check if a particular module function exists, or default back to 'dynamicdata'
+     * @param string $tplmodule optional module where the templates reside
+     * @param string $type link type (user, userapi, admin, adminapi, ...)
+     * @param string $func link function (display, getitemtypes, ...)
+     * @return string tplmodule or 'dynamicdata'
+     */
+    public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string
+    {
+        return xarMod::checkModuleFunction($tplmodule, $type, $func, $defaultmodule);
     }
 
     /**
@@ -531,11 +561,6 @@ trait ModulesTrait
         $extraInfo['module'] ??= $callerModName;
         $extraInfo['itemtype'] ??= $callerItemType;
         // skip legacy format here - handled by HookSubject if needed
-        //$args = [
-        //    'objectid' => $itemid,
-        //    'extrainfo' => $extraInfo,
-        //];
-        //return $this->notifyHooks($event, $args);
         return $this->notifyHooks($event, $extraInfo);
     }
 

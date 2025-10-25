@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Blocks;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get blocks module classes via xarMod::getModule()
+ * Get blocks module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

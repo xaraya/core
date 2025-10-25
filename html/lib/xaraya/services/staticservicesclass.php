@@ -53,6 +53,7 @@ class StaticServicesClass extends ServicesClass
     public function setContext($context)
     {
         $this->context = $context;
+        // reset request & session instance if context is replaced
         $this->requestInstance = null;
         $this->sessionInstance = null;
     }
@@ -72,6 +73,7 @@ class StaticServicesClass extends ServicesClass
     /**
      * @param ?RequestInterface $instance
      * @return void
+     * @see xarServer::setInstance()
      */
     public function setRequestInstance($instance)
     {
@@ -93,6 +95,7 @@ class StaticServicesClass extends ServicesClass
     /**
      * @param ?SessionInterface $instance
      * @return void
+     * @see xarSession::setInstance()
      */
     public function setSessionInstance($instance)
     {

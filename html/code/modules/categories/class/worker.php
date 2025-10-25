@@ -35,7 +35,7 @@ class CategoryWorker extends xarObject
     public function __construct()
     {
         sys::import('xaraya.structures.query');
-        xar::mod()->loadDbInfo('categories', 'categories');
+        xar::mod()->loadDbInfo('categories');
         $tables = xar::db()->getTables();
         $this->table     = $tables['categories'];
         $this->cattable  = $tables['categories'];
@@ -153,7 +153,12 @@ class CategoryWorker extends xarObject
         return $info;
     }
 
-    // Legacy call
+    /**
+     * Summary of getcatinfo
+     * @param mixed $id
+     * @return array|null
+     * @deprecated 2.4.1 Legacy call
+     */
     public function getcatinfo($id = 0)
     {
         return $this->getInfo($id);

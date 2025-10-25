@@ -384,9 +384,10 @@ class xarCore extends xarObject
          * Assemble the autoload functions
          *
          * @todo <mfl> eventually remove the caching condition
+         * @deprecated 2.8.3 always enabled now
          */
         if (xarCache::isVariableCacheEnabled()) {
-            sys::autoload();
+            // sys::autoload();
         }
 
         /**
@@ -529,7 +530,6 @@ class xarCore extends xarObject
             assert_options(ASSERT_ACTIVE, 1);    // Activate when debugging
             assert_options(ASSERT_WARNING, 1);    // Issue a php warning
             assert_options(ASSERT_BAIL, 0);    // Stop processing?
-            //assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition? Removed for PHP 8.x
             xarDebug::$sqlCalls = 0;
             xarDebug::$startTime = microtime(true);
         }

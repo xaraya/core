@@ -19,7 +19,7 @@ sys::import('xaraya.modules.userapi');
 /**
  * Handle the categories user API
  *
- * @method mixed countcats(array $args = []) Count number of categories (optionally below some category) - Usage : $num = xarMod::apiFunc('categories', 'user', 'countcats', $cat); -         $total = xarMod::apiFunc('categories', 'user', 'countcats', array());
+ * @method mixed countcats(array $args = []) Count number of categories (optionally below some category) - Usage : $num = xar::mod()->apiFunc('categories', 'user', 'countcats', $cat); -         $total = xar::mod()->apiFunc('categories', 'user', 'countcats', array());
  * @method mixed countitems(array $args = []) Count number of items
  * @method mixed deepcount(array $args = []) Count number of items per category, or number of categories for each item
  * @method mixed getallcatbases(array $args = []) get category bases

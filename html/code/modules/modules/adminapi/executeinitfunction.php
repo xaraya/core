@@ -71,7 +71,7 @@ class ExecuteinitfunctionMethod extends MethodClass
             $xarinitfile = sys::code() . 'modules/' . $modInfo['osdirectory'] . '/xarinit.php';
         } else {
             // use modType = 'installer' here to get the module Installer class (if available)
-            $func = xarMod::getModuleClassMethod($modInfo['name'], 'installer', $args['function'], 'api');
+            $func = $this->mod()->getModuleClassMethod($modInfo['name'], 'installer', $args['function'], 'api');
             if (!empty($func)) {
                 $this->run_callable($func, $args, $modInfo);
                 return true;

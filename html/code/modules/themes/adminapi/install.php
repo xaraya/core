@@ -60,9 +60,7 @@ class InstallMethod extends MethodClass
         }
 
         // Make xarTheme::getInfo not cache anything...
-        //We should make a funcion to handle this or maybe whenever we
-        //have a central caching solution...
-        xarTheme::$noCacheState = true;
+        xarTheme::setNoCache(true);
 
         $installer->installmodule($regid);
         return true;

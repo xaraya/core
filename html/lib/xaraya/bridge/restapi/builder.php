@@ -149,7 +149,7 @@ class RestAPIBuilder extends xarObject
         ];
         $doc['info']['x-generated'] = date('c');
         $doc['servers'] = [
-            ['url' => xarServer::getBaseURL() . self::$endpoint],
+            ['url' => xar::ctl()->getBaseURL() . self::$endpoint],
         ];
         $doc['paths'] = self::$paths;
         $doc['components'] = [
@@ -1370,7 +1370,7 @@ class RestAPIBuilder extends xarObject
     public static function find_default_api_functions($module)
     {
         $apiList = [];
-        $found = xarMod::checkModuleFunction($module, 'userapi', 'getitemtypes');
+        $found = xar::mod()->checkModuleFunction($module, 'userapi', 'getitemtypes');
         if ($found === $module) {
             // $func name as used in xar::mod()->apiFunc($module, $type, $func, $args)
             $apiList['getitemtypes'] = [
@@ -1385,7 +1385,7 @@ class RestAPIBuilder extends xarObject
             ];
         }
         // Note: we can use method = get + paramaters or method = post + requestBody here - both will work
-        $found = xarMod::checkModuleFunction($module, 'userapi', 'getitemlinks');
+        $found = xar::mod()->checkModuleFunction($module, 'userapi', 'getitemlinks');
         if ($found === $module) {
             // $func name as used in xar::mod()->apiFunc($module, $type, $func, $args)
             $apiList['getitemlinks'] = [

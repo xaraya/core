@@ -98,7 +98,7 @@ class UserApi implements UserApiInterface
         // @todo combine with getItemTypes()
         if ($extensions) {
             // Get all the objects at once
-            xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+            xar::mod()->loadDbInfo('dynamicdata');
             $xartable = xar::db()->getTables();
 
             $dynamicobjects = $xartable['dynamic_objects'];

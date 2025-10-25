@@ -124,30 +124,6 @@ class UpdatehooksMethod extends MethodClass
                 }
 
             }
-            /*
-            foreach ($subjects as $module => $values) {
-                // remove current assignments
-                xarHooks::detach($curhook, $module, -1);
-                if ($values['hookstate'] == 0) {
-                    // not hooked to any itemtypes
-                    continue;
-                } elseif ($values['hookstate'] == 1) {
-                    // hooked to all itemtypes
-                    xarHooks::attach($curhook, $module, 0, 0);
-                    continue;
-                } else {
-                    // hooked to some itemtypes
-                    if (!empty($values['itemtypes'])) {
-                        foreach ($values['itemtypes'] as $id => $ishooked) {
-                            if (!empty($ishooked)) {
-                                xarHooks::attach($curhook, $module, $id, 0);
-                                continue;
-                            }
-                        }
-                    }
-                }
-            }
-            */
         } else {
             // Legacy support, deprecated
             // get the list of all (active) modules

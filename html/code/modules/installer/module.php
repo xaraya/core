@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Installer;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get installer module classes via xarMod::getModule()
+ * Get installer module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

@@ -54,7 +54,7 @@ trait BasicBridgeTrait
         //xarController::$redirectTo = [ModuleRequestHandler::class, 'redirectTo'];
         // Note: do this after updating controller entryPoint, so that request entryPoint matches
         xarController::getRequest()->setEntryPoint(xarController::$entryPoint);
-        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
+        // set current module to 'module' for Xaraya controller - used e.g. in xar::mod()->getName()
         xarController::getRequest()->setModule($module);
     }
 

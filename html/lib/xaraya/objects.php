@@ -288,25 +288,25 @@ class xarDDObject extends xarObject implements IxarDDObject
 
         switch ($action) {
             case 'display':
-                $tplmodule = xarMod::checkModuleFunction($object->tplmodule, $object->linktype, $object->linkfunc);
-                $link = xarServer::getModuleURL($tplmodule, $object->linktype, $object->linkfunc, $urlargs);
+                $tplmodule = xar::mod()->checkModuleFunction($object->tplmodule, $object->linktype, $object->linkfunc);
+                $link = xar::ctl()->getModuleURL($tplmodule, $object->linktype, $object->linkfunc, $urlargs);
                 break;
 
             case 'view':
                 unset($urlargs['itemid']);
-                $tplmodule = xarMod::checkModuleFunction($object->tplmodule, $object->linktype, 'view');
-                $link = xarServer::getModuleURL($tplmodule, $object->linktype, 'view', $urlargs);
+                $tplmodule = xar::mod()->checkModuleFunction($object->tplmodule, $object->linktype, 'view');
+                $link = xar::ctl()->getModuleURL($tplmodule, $object->linktype, 'view', $urlargs);
                 break;
 
                 // special case when dealing with objectid 1 = objects
             case 'modifyprop':
-                $tplmodule = xarMod::checkModuleFunction($object->tplmodule, 'admin', 'modifyprop');
-                $link = xarServer::getModuleURL($tplmodule, 'admin', 'modifyprop', $urlargs);
+                $tplmodule = xar::mod()->checkModuleFunction($object->tplmodule, 'admin', 'modifyprop');
+                $link = xar::ctl()->getModuleURL($tplmodule, 'admin', 'modifyprop', $urlargs);
                 break;
 
                 // special case when dealing with objectid 1 = objects
             case 'viewitems':
-                $link = xarServer::getModuleURL(
+                $link = xar::ctl()->getModuleURL(
                     'dynamicdata',
                     'admin',
                     'view',
@@ -321,8 +321,8 @@ class xarDDObject extends xarObject implements IxarDDObject
             case 'modify':
             case 'delete':
             default:
-                $tplmodule = xarMod::checkModuleFunction($object->tplmodule, 'admin', $action);
-                $link = xarServer::getModuleURL($tplmodule, 'admin', $action, $urlargs);
+                $tplmodule = xar::mod()->checkModuleFunction($object->tplmodule, 'admin', $action);
+                $link = xar::ctl()->getModuleURL($tplmodule, 'admin', $action, $urlargs);
                 break;
         }
 
@@ -352,21 +352,21 @@ class xarDDObject extends xarObject implements IxarDDObject
         switch ($action) {
             case 'new':
                 unset($urlargs['itemid']);
-                $link = xarServer::getObjectURL($object->name, 'create', $urlargs);
+                $link = xar::ctl()->getObjectURL($object->name, 'create', $urlargs);
                 break;
 
             case 'modify':
-                $link = xarServer::getObjectURL($object->name, 'update', $urlargs);
+                $link = xar::ctl()->getObjectURL($object->name, 'update', $urlargs);
                 break;
 
             case 'view':
-                $link = xarServer::getObjectURL($object->name, 'view');
+                $link = xar::ctl()->getObjectURL($object->name, 'view');
                 break;
 
                 // all other actions should correspond to some gui method
             case 'display':
             default:
-                $link = xarServer::getObjectURL($object->name, $action, $urlargs);
+                $link = xar::ctl()->getObjectURL($object->name, $action, $urlargs);
                 break;
         }
 
@@ -387,32 +387,32 @@ class xarDDObject extends xarObject implements IxarDDObject
         switch ($action) {
             case 'display':
                 // CHECKME: reset method in the current URL ?
-                $link = xarServer::getCurrentURL(['method' => null, 'itemid' => $itemid]);
+                $link = xar::ctl()->getCurrentURL(['method' => null, 'itemid' => $itemid]);
                 break;
 
             case 'new':
                 // CHECKME: reset itemid in the current URL ?
-                $link = xarServer::getCurrentURL(['method' => 'create', 'itemid' => null]);
+                $link = xar::ctl()->getCurrentURL(['method' => 'create', 'itemid' => null]);
                 break;
 
             case 'modify':
                 // CHECKME: pass method and itemid to the current URL ?
-                $link = xarServer::getCurrentURL(['method' => 'update', 'itemid' => $itemid]);
+                $link = xar::ctl()->getCurrentURL(['method' => 'update', 'itemid' => $itemid]);
                 break;
 
             case 'delete':
                 // CHECKME: pass method and itemid to the current URL ?
-                $link = xarServer::getCurrentURL(['method' => 'delete', 'itemid' => $itemid]);
+                $link = xar::ctl()->getCurrentURL(['method' => 'delete', 'itemid' => $itemid]);
                 break;
 
             case 'view':
                 // CHECKME: reset method and itemid in the current URL ?
-                $link = xarServer::getCurrentURL(['method' => null, 'itemid' => null]);
+                $link = xar::ctl()->getCurrentURL(['method' => null, 'itemid' => null]);
                 break;
 
             default:
                 // CHECKME: pass method and itemid to the current URL ?
-                $link = xarServer::getCurrentURL(['method' => $action, 'itemid' => $itemid]);
+                $link = xar::ctl()->getCurrentURL(['method' => $action, 'itemid' => $itemid]);
                 break;
         }
 

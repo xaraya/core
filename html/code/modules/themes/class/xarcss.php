@@ -233,7 +233,7 @@ class xarCSS extends xarObject
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xar::mod()::STATE_ACTIVE]]
+            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
         );
         // we want to look in all active themes
         // we want to look in all active modules
@@ -977,7 +977,7 @@ class xarCSSLib extends xarObject
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xar::mod()::STATE_ACTIVE]]
+            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
         );
         // set default paths and filenames
         $libName     = $this->name;

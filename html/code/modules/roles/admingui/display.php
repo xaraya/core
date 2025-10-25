@@ -78,6 +78,7 @@ class DisplayMethod extends MethodClass
         $item['exclude_module'] = ['dynamicdata'];
         $item['module'] = 'roles';
         $item['itemtype'] = $data['itemtype']; // handle groups differently someday ?
+        $item['itemid'] = $id;
         $item['returnurl'] = $this->ctl()->getModuleURL(
             'roles',
             'user',
@@ -85,7 +86,7 @@ class DisplayMethod extends MethodClass
             ['id' => $id]
         );
         $hooks = [];
-        $hooks = $this->mod()->callHooks('item', 'display', $id, $item);
+        $hooks = $this->mod()->notifyHooks('ItemDisplay', $item);
         $data['hooks'] = $hooks;
         $data['object'] = $role;
         $this->tpl()->setPageTitle($this->var()->prep($data['name']));

@@ -51,9 +51,9 @@ class GetcatinfoMethod extends MethodClass
         sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         if (isset($cid)) {
-            $info = $worker->getcatinfo($cid);
+            $info = $worker->getInfo($cid);
         } else {
-            $info = $worker->getcatinfo($cids);
+            $info = $worker->getInfo($cids);
         }
         return $info;
     }

@@ -86,7 +86,7 @@ class StaticFileMiddleware extends StaticFileRouter implements DefaultRouterInte
         // @checkme keep track of the current base uri if filtered in router
         $this->setBaseUri($request);
         $context['baseuri'] = static::$baseUri;
-        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
+        // set current module to 'module' for Xaraya controller - used e.g. in xar::mod()->getName()
         //$this->prepareController($attribs['module'], static::$baseUri);
         //$context['module'] = $attribs['module'];
         // @todo where do we decide to use Twig or not

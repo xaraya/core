@@ -110,13 +110,7 @@ class DeleteMethod extends MethodClass
                     return;
                 }
 
-                // call item delete hooks (for DD etc.)
-                // TODO: move to remove() function
-                $pargs['exclude_module'] = ['dynamicdata'];
-                $pargs['module'] = 'roles';
-                $pargs['itemtype'] = $itemtype;
-                $pargs['itemid'] = $id;
-                $this->mod()->callHooks('item', 'delete', $id, $pargs);
+                // call item delete hooks (for DD etc.) = in role->deleteItem() now
             } else {
                 return $this->tpl()->module('roles', 'user', 'errors', ['layout' => 'remove_active_session', 'user' => $role->getName()]);
             }

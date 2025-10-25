@@ -179,7 +179,7 @@ class MyRequestHandler
 
 ## Middleware and Request Handler (PSR-15)
 
-PSR-15 compatible middleware controllers to handle Module requests with xarMod::guiFunc() or DataObject requests with DataObjectUserInterface() as part of a middleware pipeline or request handler.
+PSR-15 compatible middleware controllers to handle Module requests with xar::mod()->guiFunc() or DataObject requests with DataObjectUserInterface() as part of a middleware pipeline or request handler.
 
 Requirement: some package providing PSR-7 [psr/http-message-implementation](https://packagist.org/providers/psr/http-message-implementation) and PSR-17 [psr/http-factory-implementation](https://packagist.org/providers/psr/http-factory-implementation), for example [nyholm/psr7](https://packagist.org/packages/nyholm/psr7) or [guzzlehttp/psr7](https://packagist.org/packages/guzzlehttp/psr7)
 ```

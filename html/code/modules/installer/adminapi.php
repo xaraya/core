@@ -88,7 +88,7 @@ class AdminApi extends AdminApiClass
      * @access public
      * @param array<string, mixed> $args array of optional parameters<br/>
      *        string   $args['directory'] the directory to include<br/>
-     *        string   $args['initfunc'] init|upgrade|remove
+     *        string   $args['initfunc'] init|upgrade|remove|...
      * @return boolean true on success, false on failure
      * @throws EmptyParameterException
      * @throws FileNotFoundException
@@ -102,14 +102,14 @@ class AdminApi extends AdminApiClass
             throw new EmptyParameterException('directory or initfunc');
         }
 
-        $osDirectory = xarVar::prepForOS($directory);
+        $osDirectory = $this->var()->prepPath($directory);
         $modInitFile = sys::code() . 'modules/' . $osDirectory . '/xarinit.php';
 
 
         // support module Installer classes - see modules_adminapi_executeinitfunction()
         if (!file_exists($modInitFile)) {
             // use modType = 'installer' here to get the module Installer class (if available)
-            $modInitFunc = xarMod::getModuleClassMethod($directory, 'installer', $initfunc, 'api');
+            $modInitFunc = $this->mod()->getModuleClassMethod($directory, 'installer', $initfunc, 'api');
             if (!empty($modInitFunc)) {
                 // Note: we don't support upgrade($oldversion) here
                 $res = $modInitFunc();

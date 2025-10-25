@@ -244,7 +244,7 @@ trait ModuleBridgeTrait
         $context['mediatype'] = '';
         static::$baseUri = $this->getBaseUri($request) . static::$prefix;
         $context['baseuri'] = static::$baseUri;
-        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
+        // set current module to 'module' for Xaraya controller - used e.g. in xar::mod()->getName()
         $this->prepareController($vars['module'], static::$baseUri);
         $context['module'] = $vars['module'];
         // @todo check if we already have a context? (via request or from elsewhere)

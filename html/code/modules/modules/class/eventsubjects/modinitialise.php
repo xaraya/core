@@ -2,7 +2,7 @@
 
 /**
  * ModInitialise System Event Subject
- * Notifies observers when a module is initialised (via xarMod::apiFunc('modules','admin','initialise')
+ * Notifies observers when a module is initialised (via xar::mod()->apiFunc('modules','admin','initialise')
  * @package modules\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework

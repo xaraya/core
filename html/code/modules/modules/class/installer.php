@@ -14,6 +14,9 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 class InstallerTool extends xarObject
 {
     private $extType                  = 'modules';
@@ -36,11 +39,11 @@ class InstallerTool extends xarObject
     {
         $this->extType = $type;
         if ($this->extType == 'themes') {
-            $this->fileExtensions = xarMod::apiFunc('themes', 'admin', 'getfilethemes');
-            $this->databaseExtensions = xarMod::apiFunc('themes', 'admin', 'getdbthemes');
+            $this->fileExtensions = xar::mod()->apiFunc('themes', 'admin', 'getfilethemes');
+            $this->databaseExtensions = xar::mod()->apiFunc('themes', 'admin', 'getdbthemes');
         } else {
-            $this->fileExtensions = xarMod::apiFunc('modules', 'admin', 'getfilemodules');
-            $this->databaseExtensions = xarMod::apiFunc('modules', 'admin', 'getdbmodules');
+            $this->fileExtensions = xar::mod()->apiFunc('modules', 'admin', 'getfilemodules');
+            $this->databaseExtensions = xar::mod()->apiFunc('modules', 'admin', 'getdbmodules');
         }
         // FIXME do something else here
         if (empty($this->fileExtensions)) {
@@ -94,7 +97,7 @@ class InstallerTool extends xarObject
                         break;
                 }
                 if (isset($newstate)) {
-                    $set = xarMod::apiFunc(
+                    $set = xar::mod()->apiFunc(
                         $this->extType,
                         'admin',
                         'setstate',
@@ -115,7 +118,7 @@ class InstallerTool extends xarObject
         }
 
         // Get module information
-        $extInfo = xarMod::getInfo($regid);
+        $extInfo = xar::mod()->getInfo($regid);
         if (!isset($extInfo)) {
             throw new ModuleBaseInfoNotFoundException("with regid $regid");
         }
@@ -205,7 +208,7 @@ class InstallerTool extends xarObject
 
         // Get module information
         try {
-            $extInfo = xarMod::getInfo($regid);
+            $extInfo = xar::mod()->getInfo($regid);
         } catch (NotFoundExceptions $e) {
             //Add this module to the unsatisfiable list
             $this->unsatisfiable[$regid] = $regid;
@@ -257,7 +260,7 @@ class InstallerTool extends xarObject
 
         // Get module information
         try {
-            $extInfo = xarMod::getInfo($regid);
+            $extInfo = xar::mod()->getInfo($regid);
         } catch (NotFoundExceptions $e) {
             //Add this module to the unsatisfiable list
             $this->unsatisfiable[$regid] = $regid;
@@ -408,7 +411,7 @@ class InstallerTool extends xarObject
         }
 
         // Get module information
-        $extInfo = xarMod::getInfo($regid);
+        $extInfo = xar::mod()->getInfo($regid);
 
         //TODO: Add version checks later on
         switch ($extInfo['state']) {
@@ -440,7 +443,7 @@ class InstallerTool extends xarObject
 
     public function assembledependencies($regid = null)
     {
-        $extInfo = xarMod::getInfo($regid);
+        $extInfo = xar::mod()->getInfo($regid);
         if (!isset($extInfo)) {
             throw new ModuleNotFoundException($regid, 'Module (regid: #(1)) does not exist.');
         }
@@ -459,10 +462,8 @@ class InstallerTool extends xarObject
             return;
         }
 
-        // Make xarMod::getInfo not cache anything...
-        //We should make a function to handle this or maybe whenever we
-        //have a central caching solution...
-        xarMod::$noCacheState = true;
+        // Make xar::mod()->getInfo not cache anything...
+        xar::mod()->setNoCache(true);
 
         if (!empty($extInfo['extensions'])) {
             foreach ($extInfo['extensions'] as $extension) {
@@ -504,7 +505,7 @@ class InstallerTool extends xarObject
                 continue;
             }
 
-            if (!xarMod::isAvailable(xarMod::getName($modId))) {
+            if (!xar::mod()->isAvailable(xar::mod()->getName($modId))) {
                 if (!$this->assembledependencies($modId)) {
                     $msg = xarML('Unable to initialise dependency module with ID (#(1)).', $modId);
                     throw new Exception($msg);
@@ -518,12 +519,12 @@ class InstallerTool extends xarObject
     {
         $topid = $this->modulestack->pop();
         if ($this->extType == 'themes') {
-            $extInfo = xarMod::getInfo($regid, 'theme');
+            $extInfo = xarTheme::getInfo($regid);
             if (!isset($extInfo)) {
                 throw new ThemeNotFoundException($regid, 'Theme (regid: #(1)) does not exist.');
             }
         } else {
-            $extInfo = xarMod::getInfo($regid);
+            $extInfo = xar::mod()->getInfo($regid);
             if (!isset($extInfo)) {
                 throw new ModuleNotFoundException($regid, 'Module (regid: #(1)) does not exist.');
             }
@@ -553,14 +554,14 @@ class InstallerTool extends xarObject
         //Checks if the extension is already initialised
         if (!$initialised) {
             // Finally, now that dependencies are dealt with, initialize the module
-            if (!xarMod::apiFunc($this->extType, 'admin', 'initialise', ['regid' => $regid])) {
+            if (!xar::mod()->apiFunc($this->extType, 'admin', 'initialise', ['regid' => $regid])) {
                 $msg = xarML('Unable to initialise extension "#(1)".', $extInfo['displayname']);
                 throw new Exception($msg);
             }
         }
 
         // And activate it!
-        if (!xarMod::apiFunc($this->extType, 'admin', 'activate', ['regid' => $regid])) {
+        if (!xar::mod()->apiFunc($this->extType, 'admin', 'activate', ['regid' => $regid])) {
             $msg = xarML('Unable to activate extension "#(1)".', $extInfo['displayname']);
             throw new Exception($msg);
         }
@@ -631,13 +632,11 @@ class InstallerTool extends xarObject
             return;
         }
 
-        // Make xarMod::getInfo not cache anything...
-        //We should make a funcion to handle this instead of seeting a global var
-        //or maybe whenever we have a central caching solution...
-        xarMod::$noCacheState = true;
+        // Make xar::mod()->getInfo not cache anything...
+        xar::mod()->setNoCache(true);
 
         // Get module information
-        $extInfo = xarMod::getInfo($regid);
+        $extInfo = xar::mod()->getInfo($regid);
         if (!isset($extInfo)) {
             throw new ModuleNotFoundException($regid, 'Module (regid: #(1)) does not exist.');
         }
@@ -654,7 +653,7 @@ class InstallerTool extends xarObject
         $dependents = $this->getalldependents($regid);
 
         foreach ($dependents['active'] as $active_dependent) {
-            if (!xarMod::apiFunc('modules', 'admin', 'deactivate', ['regid' => $active_dependent['regid']])) {
+            if (!xar::mod()->apiFunc('modules', 'admin', 'deactivate', ['regid' => $active_dependent['regid']])) {
                 $msg = xarML('Unable to deactivate module "#(1)".', $active_dependent['displayname']);
                 throw new Exception($msg);
             }
@@ -684,21 +683,21 @@ class InstallerTool extends xarObject
 
         //Deactivate Actives
         foreach ($dependents['active'] as $active_dependent) {
-            if (!xarMod::apiFunc('modules', 'admin', 'deactivate', ['regid' => $active_dependent['regid']])) {
+            if (!xar::mod()->apiFunc('modules', 'admin', 'deactivate', ['regid' => $active_dependent['regid']])) {
                 throw new BadParameterException($active_dependent['displayname'], 'Unable to deactivate module "#(1)".');
             }
         }
 
         //Remove the previously active
         foreach ($dependents['active'] as $active_dependent) {
-            if (!xarMod::apiFunc('modules', 'admin', 'remove', ['regid' => $active_dependent['regid']])) {
+            if (!xar::mod()->apiFunc('modules', 'admin', 'remove', ['regid' => $active_dependent['regid']])) {
                 throw new BadParameterException($active_dependent['displayname'], 'Unable to remove module "#(1)".');
             }
         }
 
         //Remove the initialised
         foreach ($dependents['initialised'] as $active_dependent) {
-            if (!xarMod::apiFunc('modules', 'admin', 'remove', ['regid' => $active_dependent['regid']])) {
+            if (!xar::mod()->apiFunc('modules', 'admin', 'remove', ['regid' => $active_dependent['regid']])) {
                 throw new BadParameterException($active_dependent['displayname'], 'Unable to remove module "#(1)".');
             }
         }
@@ -708,8 +707,8 @@ class InstallerTool extends xarObject
 
     public function checkCore($regid = null)
     {
-        xarMod::apiFunc('modules', 'admin', 'regenerate');
-        $info = xarMod::getInfo($regid);
+        xar::mod()->apiFunc('modules', 'admin', 'regenerate');
+        $info = xar::mod()->getInfo($regid);
         if (!empty($info['dependencyinfo']) && !empty($info['dependencyinfo'][0])) {
             $valid_ge = true;
             $valid_le = true;

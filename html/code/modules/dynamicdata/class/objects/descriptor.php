@@ -114,7 +114,7 @@ class DataObjectDescriptor extends ObjectDescriptor
         if (!empty($args['moduleid']) && isset($args['itemtype']) && xar::var()->isCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype'])) {
             return xar::var()->getCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype']);
         }
-        xar::mod()->loadDbInfo('dynamicdata', 'dynamicdata');
+        xar::mod()->loadDbInfo('dynamicdata');
         $xartable = xar::db()->getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
 

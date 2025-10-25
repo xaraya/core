@@ -30,7 +30,7 @@
  *
  * If you support more than 1 database (besides the Xaraya DB), you can set the current DB for the user with:
  * ```
- * $userapi = xarMod::userapi('library');
+ * $userapi = xar::mod()->userapi('library');
  * $userapi->setCurrentDatabase($name)
  * ```
  *
@@ -352,7 +352,7 @@ trait DatabaseTrait
         }
         // we need 'module_itemvars' and/or 'module_vars' tables below
         if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
-            xar::mod()->loadDbInfo('modules', 'modules');
+            xar::mod()->loadDbInfo('modules');
         }
         $modName = $this->getDbModName();
         if (!empty($context)) {

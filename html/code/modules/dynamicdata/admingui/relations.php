@@ -137,8 +137,6 @@ class RelationsMethod extends MethodClass
             } else {
                 $data['relations'] = [];
             }
-            // FIXME: remove initialization of modvar after next release
-            $this->mod()->setVar('getlinkedobjects', 0);
 
             $data['yumlspec'] = '';
             $data['yumlpath'] = '';

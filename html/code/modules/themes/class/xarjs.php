@@ -232,7 +232,7 @@ class xarJS extends xarObject
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xar::mod()::STATE_ACTIVE]]
+            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
         );
         // we want to look in all properties
         $properties = xar::mod()->apiFunc('dynamicdata', 'user', 'getproptypes');
@@ -1216,7 +1216,7 @@ class xarJSLib extends xarObject
             'modules',
             'admin',
             'getlist',
-            ['filter' => ['State' => xar::mod()::STATE_ACTIVE]]
+            ['filter' => ['State' => xarMod::STATE_ACTIVE]]
         );
         // we want to look in all properties
         $properties = xar::mod()->apiFunc('dynamicdata', 'user', 'getproptypes');

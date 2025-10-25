@@ -2,7 +2,7 @@
 
 /**
  * ModRemove System Event Subject
- * Notifies observers when a module is removed (via xarMod::apiFunc('modules','admin','remove')
+ * Notifies observers when a module is removed (via xar::mod()->apiFunc('modules','admin','remove')
  * @package modules\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework

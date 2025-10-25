@@ -227,7 +227,7 @@ final class ClassMapTest extends TestCase
         $this->assertCount(1, $subjects);
 
         //$this->markTestIncomplete('Risky: Test code or tested code did not remove its own error handlers');
-        // we can't instantiate hooksubject instance without database here due to xarMod::getRegID($module)
+        // we can't instantiate hooksubject instance without database here due to xar::mod()->getRegID($module)
         //$expected = 'No connection available';
         //$this->expectExceptionMessage($expected);
 
@@ -707,7 +707,7 @@ final class ClassMapTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        // we can't get an instance without database here - UserGui relies on xarMod::load() in configure()
+        // we can't get an instance without database here - UserGui relies on xar::mod()->load() in configure()
         $expected = 'No connection available';
         $this->expectExceptionMessage($expected);
 
@@ -779,7 +779,7 @@ final class ClassMapTest extends TestCase
         $route = $result['classname']::findCustomRouteName($params);
         $this->assertEquals($expected, $route);
 
-        // we can't get an instance without database here - UserGui relies on xarMod::load() in configure()
+        // we can't get an instance without database here - UserGui relies on xar::mod()->load() in configure()
         //$expected = 'No connection available';
         //$this->expectExceptionMessage($expected);
         xarDatabase::init();

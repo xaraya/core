@@ -124,6 +124,17 @@ class xarTpl extends xarObject
             throw new FileNotFoundException($pageTemplateName . '.xt', "xarTpl::init: Called a nonexistent #(1) page in theme directory '" . self::getThemeDir() . "'");
         }
 
+        // initialize context for templating service
+        xar::tpl()->init([
+            'themeDir'         => self::$themeDir,
+            'themeName'        => self::$themeName,
+            'pageTemplateName' => self::$pageTemplateName,
+            'generateXMLURLs'  => self::$generateXMLURLs,
+            'doctype'          => self::$doctype,
+            'baseDir'          => self::getBaseDir(),
+            'pageTitle'        => self::getPageTitle(),
+        ]);
+
         // @todo is the core define still needed now?
         sys::import('xaraya.caching.template');
         xarTemplateCache::init(sys::varpath() . xarConst::TPL_CACHEDIR, $args['enableTemplatesCaching']);
@@ -304,7 +315,7 @@ class xarTpl extends xarObject
         if (!empty($webDir) && strpos($themeDir, $webDir) === 0) {
             $themeDir = substr($themeDir, strlen($webDir));
         }
-        $themeUrl = xarServer::getBaseURL() . $themeDir;
+        $themeUrl = xar::ctl()->getBaseURL() . $themeDir;
 
         return $themeUrl;
     }
@@ -318,7 +329,7 @@ class xarTpl extends xarObject
         if (!empty($webDir) && strpos($codeDir, $webDir) === 0) {
             $codeDir = substr($codeDir, strlen($webDir));
         }
-        $codeUrl = xarServer::getBaseURL() . $codeDir;
+        $codeUrl = xar::ctl()->getBaseURL() . $codeDir;
 
         return $codeUrl;
     }
@@ -394,7 +405,7 @@ class xarTpl extends xarObject
     public static function setPageTitle($title = null, $module = null)
     {
         // keep track of page title when we're caching
-        xarCache::setPageTitle($title, $module);
+        xar::cache()->setPageTitle($title, $module);
 
         xar::log()->info("xarTpl::setPageTitle: Setting pageTitle to $title");
 
@@ -682,7 +693,7 @@ class xarTpl extends xarObject
         if ($debug) {
             foreach ($paths as $path) {
                 $path = preg_replace('%\/\/+%', '/', $path);
-                echo xarMLS::translate('Possible location: ') . $path . "<br/>";
+                echo xar::mls()->translate('Possible location: ') . $path . "<br/>";
             }
         }
 
@@ -699,7 +710,7 @@ class xarTpl extends xarObject
 
                 // Debug display
                 if ($debug) {
-                    echo "<b>" . xarMLS::translate('Chosen: ') . $sourceFileName . "</b><br/>";
+                    echo "<b>" . xar::mls()->translate('Chosen: ') . $sourceFileName . "</b><br/>";
                 }
                 break;
             }
@@ -974,7 +985,7 @@ class xarTpl extends xarObject
         if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
             $filePath = substr($filePath, strlen($webDir));
         }
-        $filePath = xarServer::getBaseURL() . $filePath;
+        $filePath = xar::ctl()->getBaseURL() . $filePath;
 
         // Return as an XML URL if required.
         // This will generally have little effect, but is here for
@@ -1079,7 +1090,7 @@ class xarTpl extends xarObject
         if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
             $filePath = substr($filePath, strlen($webDir));
         }
-        $filePath = xarServer::getBaseURL() . $filePath;
+        $filePath = xar::ctl()->getBaseURL() . $filePath;
 
         // Return as an XML URL if required.
         // This will generally have little effect, but is here for
@@ -1263,96 +1274,6 @@ class xarTpl extends xarObject
         return self::executeFromFile($sourceFileName, $tplData);
     }
 
-    /**
-     * Include a subtemplate from the theme space
-     * @NOTE: this method is no longer used and is targetted for removal
-     *
-     * @access public
-     * @param  string $templateName Basically handler function for <xar:template type="theme".../>
-     * @param array<mixed> $tplData template variables
-     * @return string
-     */
-    public static function includeThemeTemplate($templateName, $tplData)
-    {
-        // get source file (current > common)
-        $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $templateName, null, 'includes');
-        if (empty($sourceFileName)) {
-            // Not found: raise an exception
-            throw new FileNotFoundException($templateName, 'Could not find include template #(1).xt');
-        }
-        return self::executeFromFile($sourceFileName, $tplData);
-    }
-
-    /**
-     * Include a subtemplate from the module space
-     * @NOTE: this method is no longer used and is targetted for removal
-     *
-     * @access public
-     * @param  string $modName      name of the module from which to include the template
-     * @param  string $templateName Basically handler function for <xar:template type="module".../>
-     * @param array<mixed> $tplData template variables
-     * @param  string $propertyName name of the property from which to include the template
-     * @throws FileNotFoundException
-     * @return string
-     */
-    public static function includeModuleTemplate($modName, $templateName, $tplData, $propertyName = '')
-    {
-        // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
-        $templateName = xar::var()->prepPath($templateName);
-        $themeDir = self::getThemeDir();
-        $commonDir = self::getThemeDir('common');
-
-        // @checkme: when do we pass a list of modules to this function?
-        $modules = explode(',', $modName);
-        foreach ($modules as $module) {
-            $thismodule = trim($module);
-            // module include in current theme
-            $sourceFileName = "$themeDir/modules/$thismodule/includes/$templateName.xt";
-            if (file_exists($sourceFileName)) {
-                break;
-            }
-            // module include in common
-            $sourceFileName = "$commonDir/modules/$thismodule/includes/$templateName.xt";
-            if (file_exists($sourceFileName)) {
-                break;
-            }
-            // module include in module
-            $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
-            if (file_exists($sourceFileName)) {
-                break;
-            }
-            // @checkme: dd as fall back in all cases? what if dd happens to supply
-            // a same named but unrelated template?
-            if (!file_exists($sourceFileName)) {
-                $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
-            }
-        }
-        if (file_exists($sourceFileName)) {
-            return self::executeFromFile($sourceFileName, $tplData);
-        }
-
-        // Check for a property template as a fallback
-        // @checkme: again, what happens if we got a match from a same named but unrelated template?
-        // property include in current theme
-        $sourceFileName = "$themeDir/properties/$propertyName/templates/includes/$templateName.xt";
-        if (file_exists($sourceFileName)) {
-            return self::executeFromFile($sourceFileName, $tplData);
-        }
-        // property include in common
-        $sourceFileName = "$commonDir/properties/$propertyName/xartemplates/includes/$templateName.xt";
-        if (file_exists($sourceFileName)) {
-            return self::executeFromFile($sourceFileName, $tplData);
-        }
-        // property include in property
-        $sourceFileName = sys::code() . "properties/$propertyName/xartemplates/includes/$templateName.xt";
-        if (file_exists($sourceFileName)) {
-            return self::executeFromFile($sourceFileName, $tplData);
-        }
-
-        // Not found: raise an exception
-        throw new FileNotFoundException($templateName, 'Could not find include template #(1).xt');
-    }
-
     /* PRIVATE FUNCTIONS */
 
     /**
@@ -1378,7 +1299,7 @@ class xarTpl extends xarObject
 
         } else {
             // Load translations for the template
-            xarMLS::loadTranslations($sourceFileName);
+            xar::mls()->loadTranslations($sourceFileName);
 
             xar::log()->debug("xarTpl::executeFromFile: Using template $sourceFileName");
             $templateCode = null;
@@ -1442,7 +1363,7 @@ class xarTpl extends xarObject
 
         $finalTemplate = '';
         try {
-            if (self::outputTemplateFilenames() && class_exists('xarUser') && (xarUser::isDebugAdmin())) {
+            if (self::outputTemplateFilenames() && class_exists('xarUser') && (xar::user()->isDebugAdmin())) {
                 $outputStartComment = true;
                 if ($isHeaderContent === false) {
                     if ($isHeaderContent = self::modifyHeaderContent($sourceFileName, $tplOutput)) {
@@ -1478,7 +1399,7 @@ class xarTpl extends xarObject
             $allowed = method_exists('xarUser', 'getVar');
             if ($allowed
                 && !isset(self::$showPHPCommentBlockInTemplates)
-                && xarUser::isDebugAdmin()) {
+                && xar::user()->isDebugAdmin()) {
                 // Default to not show the comments
                 self::$showPHPCommentBlockInTemplates = 0;
                 // @checkme: modules is a depency of templates, redundant check?
@@ -1503,7 +1424,7 @@ class xarTpl extends xarObject
      * @access public
      * @return int value of xarTpl::showTemplateFilenames (0 or 1)
      *
-     * @todo Check whether the check for xarModVars::get is needed
+     * @todo Check whether the check for xar::mod()->getVar is needed
      * @todo Rethink this function
      */
     public static function outputTemplateFilenames()

@@ -14,7 +14,7 @@ namespace Xaraya\Modules\Mail;
 use Xaraya\Modules\ModuleClass;
 
 /**
- * Get mail module classes via xarMod::getModule()
+ * Get mail module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

@@ -21,7 +21,7 @@ use sys;
 sys::import('modules.dynamicdata.class.objects');
 
 /**
- * Get dynamicdata module classes via xarMod::getModule()
+ * Get dynamicdata module classes via xar::mod()->getModule()
  */
 class Module extends ModuleClass
 {

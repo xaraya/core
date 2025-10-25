@@ -2,7 +2,7 @@
 
 /**
  * ModDeactivate System Event Subject
- * Notifies observers when a module is deactivated (via xarMod::apiFunc('modules','admin','deactivate')
+ * Notifies observers when a module is deactivated (via xar::mod()->apiFunc('modules','admin','deactivate')
  * @package modules\modules
  * @subpackage modules
  * @category Xaraya Web Applications Framework

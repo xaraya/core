@@ -118,9 +118,6 @@ class xarVar extends xarObject
      *
      * Sets up allowable html and htmlentities options
      *
-     *
-     * @global array xarVar_allowableHTML
-     * @global bool xarVar_fixHTMLEntities
      * @param array<mixed> $args
      * @return boolean
      * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities

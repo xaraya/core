@@ -98,6 +98,16 @@ class xarTheme extends xarObject
     }
 
     /**
+     * Set noCache
+     * @param bool $noCache
+     * @return void
+     */
+    public static function setNoCache($noCache)
+    {
+        self::$noCacheState = (bool) $noCache;
+    }
+
+    /**
      * Get all theme variables for a particular theme
      */
     public static function getVarsByTheme($themeName)

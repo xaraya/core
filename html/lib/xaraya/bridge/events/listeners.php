@@ -47,13 +47,14 @@ namespace Xaraya\Bridge\Events;
 
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Exception;
-use xarMod;
 use sys;
 
 sys::import('xaraya.events');
 sys::import('xaraya.hooks');
 sys::import('xaraya.structures.events.apiobserver');
 sys::import('xaraya.structures.events.guiobserver');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 use xarEvents;
 use xarHooks;
 use ixarEventSubject;
@@ -143,7 +144,8 @@ class EventListenerProvider implements ListenerProviderInterface
     {
         // get info for specified event
         $info = $this->getEventInfo($event);
-        $module = xarMod::getName($info['module_id']);
+        // @checkme getEventInfo already returns $info['module']
+        $module = xar::mod()->getName($info['module_id']);
         switch (strtolower($info['area'])) {
             // support namespaces in modules (and core someday) - we may use $info['classname'] here
             case 'class':
@@ -168,7 +170,7 @@ class EventListenerProvider implements ListenerProviderInterface
                 return $subject;
 
             case 'api':
-                //$response = xarMod::apiFunc($module, $info['type'], $info['func'], $args);
+                //$response = xar::mod()->apiFunc($module, $info['type'], $info['func'], $args);
                 break;
 
             case 'gui':
@@ -190,7 +192,7 @@ class EventListenerProvider implements ListenerProviderInterface
             if (!xarEvents::fileLoad($obs)) {
                 continue;
             }
-            $obsmod = xarMod::getName($obs['module_id']);
+            $obsmod = xar::mod()->getName($obs['module_id']);
             $obs['module'] = $obsmod;
             $obsclass = match (strtolower($obs['area'])) {
                 // wrap api function in apiclass observer

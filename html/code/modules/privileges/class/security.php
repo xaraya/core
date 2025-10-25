@@ -84,7 +84,7 @@ class xarSecurity extends xarObject
         }
 
         self::$dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('privileges', 'privileges');
+        xar::mod()->loadDbInfo('privileges');
         $xartable = xar::db()->getTables();
         self::$privilegestable = $xartable['privileges'];
         self::$privmemberstable = $xartable['privmembers'];

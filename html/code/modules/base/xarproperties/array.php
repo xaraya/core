@@ -205,22 +205,6 @@ class ArrayProperty extends DataProperty
 
             $temp = [];
             if (!$this->validation_associative_array) {
-                /*
-                    //Legacy format. remove?
-                    $elements = "";
-                    foreach ($value as $element) {
-                        if (is_array($element)) {
-                            $subelements = "";
-                            foreach($element as $subelement){
-                                $subelements .= $subelement."%@$#";
-                            }
-                            $elements .= $subelements.";";
-                        } else {
-                            $elements .= $element.";";
-                        }
-                    }
-                    $this->value = $elements;
-                */
                 // Non associative array
                 // CHECKME: the 100000 column should already be gone here. In that case we can remove the foreach loop
                 foreach ($value as $i => $column) {
@@ -274,16 +258,6 @@ class ArrayProperty extends DataProperty
         }
         if (!$this->validation_associative_array) {
             return $value;
-            /*
-                //Legacy format. remove?
-                $outer = explode(';',$this->value);
-                $value = [];
-                foreach ($outer as $element) {
-                    $inner = explode('%@$#',$element);
-                    if (count($inner)>1) $value[] = $inner;
-                    else $value[] = $element;
-                }
-            */
         } else {
             $temp = [];
             if (empty($value)) {

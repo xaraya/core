@@ -73,7 +73,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         // @checkme keep track of the current base uri if filtered in router
         $this->setBaseUri($request);
         $context['baseuri'] = static::$baseUri;
-        // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName() in DD list
+        // set current module to 'object' for Xaraya controller - used e.g. in xar::mod()->getName() in DD list
         $this->prepareController('object', static::$baseUri);
         $context['module'] = 'object';
         // @todo where do we decide to use Twig or not

@@ -56,7 +56,7 @@ class Category extends DataObject
             }
 
             // do the Celko dance and update all the left/right values
-            return xarMod::apiFunc('categories', 'admin', 'updatecelkolinks', ['cid' => $id, 'type' => 'create']);
+            return $this->mod()->apiFunc('categories', 'admin', 'updatecelkolinks', ['cid' => $id, 'type' => 'create']);
         } else {
             // This is a "normal" programatic create
             // The dataobject may already contain all the information it needs

@@ -21,7 +21,6 @@ use Xaraya\Services\xar;
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @todo replace xarModHooks::call() with $this->callHooks() or $this->mod()->notifyHooks()
  */
 class Role extends DataObject
 {
@@ -51,8 +50,8 @@ class Role extends DataObject
     {
         parent::__construct($descriptor);
 
-        xar::mod()->loadDbInfo('roles', 'roles');
-        xar::mod()->loadDbInfo('privileges', 'privileges');
+        xar::mod()->loadDbInfo('roles');
+        xar::mod()->loadDbInfo('privileges');
 
         $xartable = xar::db()->getTables();
         $this->rolestable = $xartable['roles'];
@@ -134,7 +133,7 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
         $item['exclude_module'] = ['dynamicdata'];
-        xarModHooks::call('item', 'create', $id, $item);
+        $this->mod()->notifyHooks('ItemCreate', $item);
         return $id;
     }
 
@@ -149,7 +148,7 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
         $item['exclude_module'] = ['dynamicdata'];
-        xarModHooks::call('item', 'update', $id, $item);
+        $this->mod()->notifyHooks('ItemUpdate', $item);
         return $id;
     }
 
@@ -224,10 +223,11 @@ class Role extends DataObject
 
         }
 
+        // @todo nice idea, but with this info we're not sure who is linking to where
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
-        xarModHooks::call('item', 'link', $this->getID(), $item);
+        $this->mod()->notifyHooks('ItemLink', $item);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -283,10 +283,11 @@ class Role extends DataObject
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, xar::db()->getFetchAssoc());
         }
+        // @todo nice idea, but with this info we're not sure who is unlinking from where
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
-        xarModHooks::call('item', 'unlink', $this->getID(), $item);
+        $this->mod()->notifyHooks('ItemUnlink', $item);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -358,9 +359,10 @@ class Role extends DataObject
         // Let any hooks know that we have deleted this user.
         $item['module'] = 'roles';
         $item['itemid'] = $this->getID();
+        $item['itemtype'] = $this->getType();
         $item['method'] = 'delete';
         $item['exclude_module'] = ['dynamicdata'];
-        xarModHooks::call('item', 'delete', $this->getID(), $item);
+        $this->mod()->notifyHooks('ItemDelete', $item);
 
         // CHECKME: re-assign all privileges to the child roles ? (probably not)
         return true;
@@ -402,7 +404,7 @@ class Role extends DataObject
         $item['itemid'] = $this->getID();
         $item['itemtype'] = $this->getType();
         $item['method'] = 'purge';
-        xarModHooks::call('item', 'delete', $this->getID(), $item);
+        $this->mod()->notifyHooks('ItemDelete', $item);
         return true;
     }
 

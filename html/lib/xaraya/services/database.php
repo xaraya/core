@@ -32,8 +32,6 @@ sys::import('xaraya.services.servicetrait');
 interface DatabaseInterface extends ServiceInterface
 {
     public const SLICE = 'database';
-    public const FETCHMODE_ASSOC = xarDB::FETCHMODE_ASSOC;
-    public const FETCHMODE_NUM = xarDB::FETCHMODE_NUM;
 
     public function &getConn(int|string $index = 0): object;
 

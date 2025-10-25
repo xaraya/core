@@ -68,6 +68,7 @@ class RemovememberMethod extends MethodClass
             return;
         }
 
+        // @todo nice idea, but with this info we're not sure who is unlinking from where
         // call item create hooks (for DD etc.)
         $pargs['module']   = 'roles';
         $pargs['itemtype'] = $role->getType(); // we might have something separate for groups later on

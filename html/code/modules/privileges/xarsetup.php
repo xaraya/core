@@ -13,7 +13,7 @@
  * Default setup for roles and privileges
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @todo move to privileges/xarinit.php or privileges/installer.php
+ * @deprecated 2.8.3 moved to privileges/installer.php
  */
 function privileges_initializeSetup()
 {
@@ -138,7 +138,6 @@ function privileges_initializeSetup()
     ];
     xarPrivileges::defineInstance('categories', 'Link', $instances);
     // TODO: get this parent/child stuff to work someday, or implement some other way ?
-    //xarPrivileges::defineInstance('categories', 'Category', $instances);
     xarPrivileges::defineInstance(
         'categories',
         'Category',
@@ -156,20 +155,11 @@ function privileges_initializeSetup()
     * xarMasks::register(Name,Realm,Module,Component,Instance,Level,Description)
     *********************************************************************/
 
-    //    xarMasks::register('AdminAll','All','All','All','All','ACCESS_ADMIN');
-
     xarMasks::register('ViewBase', 'All', 'base', 'All', 'All', 'ACCESS_OVERVIEW');
     xarMasks::register('ReadBase', 'All', 'base', 'All', 'All', 'ACCESS_READ');
     xarMasks::register('EditBase', 'All', 'base', 'All', 'All', 'ACCESS_EDIT');
     xarMasks::register('ManageBase', 'All', 'base', 'All', 'All', 'ACCESS_DELETE');
     xarMasks::register('AdminBase', 'All', 'base', 'All', 'All', 'ACCESS_ADMIN');
-    /* This AdminPanel mask is added to replace the adminpanel module equivalent
-     *   - since adminpanel module is removed as of 1.1.0
-     * At some stage we should remove this but practice has been to use this mask in xarSecurity::check
-     * frequently in module code and templates - left here for now for ease in backward compatibiilty
-     * @todo remove this
-     */
-    xarMasks::register('AdminPanel', 'All', 'base', 'All', 'All', 'ACCESS_ADMIN');
 
     xarMasks::register('AdminInstaller', 'All', 'installer', 'All', 'All', 'ACCESS_ADMIN');
 

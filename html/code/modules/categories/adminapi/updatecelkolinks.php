@@ -47,8 +47,8 @@ class UpdatecelkolinksMethod extends MethodClass
         //Get the information on the category and its parent
         sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
-        $cat = $worker->getcatinfo($cid);
-        $catparent = $worker->getcatinfo($cat['parent_id']);
+        $cat = $worker->getInfo($cid);
+        $catparent = $worker->getInfo($cat['parent_id']);
 
         $point_of_insertion = $catparent['right_id'];
 

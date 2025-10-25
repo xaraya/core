@@ -15,6 +15,8 @@
 **/
 
 sys::import('xaraya.mapper.controllers.interfaces');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
 
 class BaseActionController extends xarObject
 {
@@ -56,7 +58,7 @@ class BaseActionController extends xarObject
             sys::import('xaraya.objects');
             $response->output = xarDDObject::guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs(), $context);
         } else {
-            $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getFunctionArgs(), $context);
+            $response->output = xar::mod()->guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getFunctionArgs(), $context);
         }
     }
 

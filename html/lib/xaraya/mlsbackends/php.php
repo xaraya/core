@@ -71,7 +71,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
             return true;
         }
         // FIXME: I should comment it because it creates infinite loop
-        // MLS -> xarMod::getBaseInfo -> xarDisplayableName -> xarMod::getFileInfo -> MLS
+        // MLS -> xar::mod()->getBaseInfo -> xarDisplayableName -> xar::mod()->getFileInfo -> MLS
         // We don't use and don't translate KEYS files now,
         // but I will recheck this code in the menus clone
         //        if ($dnType == xarMLS::DNTYPE_MODULE) {
@@ -82,7 +82,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
     /*
         function loadKEYS($dnName)
         {
-            $modBaseInfo = xarMod::getBaseInfo($dnName);
+            $modBaseInfo = xar::mod()->getBaseInfo($dnName);
             $fileName = "modules/$modBaseInfo[directory]/KEYS";
             if (file_exists($fileName)) {
 
