@@ -474,14 +474,20 @@ class VirtualObjectFactory extends xarObject
     /**
      * Save core cache with property types and configurations
      * @return void
+     * @see \Xaraya\DataObject\Export\PhpExporter::exportObjectDef()
      */
     public static function saveCoreCache()
     {
         xar::var()->saveCached('DynamicData', 'PropertyTypes', __METHOD__);
         xar::var()->saveCached('DynamicData', 'Configurations', __METHOD__);
-        // Saved in DD > Utilities > DB Connections = xaradmin/dbconfig.php for all modules - UtilApi::getAllDatabases()
+        // Saved in DD > Utilities > DB Connections = modules/dynamicdata/admingui/dbconfig.php
+        // for all modules - see UtilApi::getAllDatabases()
         //xar::var()->saveCached('DynamicData', 'Databases');
-        //xar::var()->saveCached('Mod.Variables.dynamicdata');  // 'databases'
+        // Saved in DD > Modify Configuration = modules/dynamicdata/admingui/modifyconfig.php
+        // and DD > Utilities > Test APIs = modules/dynamicdata/admingui/test_apis.php
+        //xar::mod('dynamicdata')->cacheVars();  // 'databases'
+        // Saved in Base > Modify Configuration = modules/base/admingui/modifyconfig.php
+        //xar::config()->cacheVars();
     }
 }
 

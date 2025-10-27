@@ -2,6 +2,7 @@
 
 use Xaraya\Modules\TestHelper;
 use Xaraya\Modules\DynamicData\TestGui;
+use Xaraya\Services\xar;
 
 final class TestGuiTest extends TestHelper
 {

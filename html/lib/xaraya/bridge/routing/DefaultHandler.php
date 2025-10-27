@@ -8,7 +8,7 @@
 
 namespace Xaraya\Routing;
 
-use Xaraya\Services\ServiceFactory;
+use Xaraya\Services\xar;
 
 /**
  * Default handler class for routing & dispatching outside Xaraya
@@ -62,13 +62,13 @@ class DefaultHandler extends ModuleHandler
         unset($args['module']);
         unset($args['type']);
         unset($args['func']);
-        // parent for modules service here
+        // parent for modules service here - @todo not anymore
         $this->modName = $modName;
         $this->modType = $modType;
         $this->funcName = $funcName;
         // @todo (re-)set request in xarController here for MenuBlock::setRequestInfo() in admin menu!?
         \xarController::setRequest(['module' => $this->getModName(), 'type' => $this->getModType(), 'func' => $this->funcName]);
-        $xarMod = ServiceFactory::getModulesService($this);
+        $xarMod = xar::mod();
         $result = $xarMod->guiMethod($modName, $modType, $funcName, $args);
         // always apply template here
         if (is_array($result)) {

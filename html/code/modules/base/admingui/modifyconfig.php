@@ -151,7 +151,7 @@ class ModifyconfigMethod extends MethodClass
             return $result;
         }
         // save to cache if enabled
-        $this->config()->cache();
+        $this->config()->cacheVars(__METHOD__);
 
         // Call updateconfig hooks
         $this->mod()->callHooks('module', 'updateconfig', 'base', ['module' => 'base']);

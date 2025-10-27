@@ -16,19 +16,12 @@
 
 namespace Xaraya\Services;
 
-use Xaraya\Context\ContextInterface;
 use Xaraya\Modules\ModuleInterface;
-use xarClassMap;
 use xarMod;
 use xarModAlias;
-use xarModVars;
-use xarModItemVars;
-use xarModUserVars;
 use xarController;
 use xarTpl;
-use xarHooks;
 use sys;
-use Exception;
 use FunctionNotFoundException;
 
 sys::import('xaraya.services.servicetrait');
@@ -43,6 +36,7 @@ interface ModulesInterface extends ServiceInterface
     public function getVar(string $varName): mixed;
     public function setVar(string $varName, mixed $value): bool;
     public function delVar(string $varName): bool;
+    public function cacheVars(?string $source = null): void;
     public function getVarID(string $varName): int;
     public function getUserVar(string $varName, ?int $userId = null): mixed;
     public function setUserVar(string $varName, mixed $value, ?int $userId = null): bool;
@@ -104,14 +98,63 @@ trait ModulesTrait
 {
     use ServiceTrait;
 
+    private ?Modules\VarsHelper $varsHelper = null;
+    private ?Modules\UserVarsHelper $userVarsHelper = null;
+    private ?Modules\ItemVarsHelper $itemVarsHelper = null;
+    private ?Modules\InfoHelper $infoHelper = null;
+    private ?Modules\ExecHelper $execHelper = null;
+    private ?Modules\HooksHelper $hooksHelper = null;
+    private ?Modules\AliasHelper $aliasHelper = null;
+
+    private function getVarsHelper(): Modules\VarsHelper
+    {
+        $this->varsHelper ??= $this->getParent()->service('modules.vars');
+        return $this->varsHelper;
+    }
+
+    private function getUserVarsHelper(): Modules\UserVarsHelper
+    {
+        $this->userVarsHelper ??= $this->getParent()->service('modules.user');
+        return $this->userVarsHelper;
+    }
+
+    private function getItemVarsHelper(): Modules\ItemVarsHelper
+    {
+        $this->itemVarsHelper ??= $this->getParent()->service('modules.item');
+        return $this->itemVarsHelper;
+    }
+
+    private function getInfoHelper(): Modules\InfoHelper
+    {
+        $this->infoHelper ??= $this->getParent()->service('modules.info');
+        return $this->infoHelper;
+    }
+
+    private function getExecHelper(): Modules\ExecHelper
+    {
+        $this->execHelper ??= $this->getParent()->service('modules.exec');
+        return $this->execHelper;
+    }
+
+    private function getHooksHelper(): Modules\HooksHelper
+    {
+        $this->hooksHelper ??= $this->getParent()->service('modules.hooks');
+        return $this->hooksHelper;
+    }
+
+    private function getAliasHelper(): Modules\AliasHelper
+    {
+        $this->aliasHelper ??= $this->getParent()->service('modules.alias');
+        return $this->aliasHelper;
+    }
+
     /**
      * Get module variable for this module
      */
     public function getVar(string $varName): mixed
     {
-        // use $this->mod($modName)->getVar(...) to use specific module
         $modName = $this->getModName();
-        return xarModVars::get($modName, $varName);
+        return $this->getVarsHelper()->get($modName, $varName);
     }
 
     /**
@@ -120,10 +163,7 @@ trait ModulesTrait
     public function setVar(string $varName, mixed $value): bool
     {
         $modName = $this->getModName();
-        if (is_null($value)) {
-            return xarModVars::delete($modName, $varName);
-        }
-        return xarModVars::set($modName, $varName, $value);
+        return $this->getVarsHelper()->set($modName, $varName, $value);
     }
 
     /**
@@ -132,7 +172,16 @@ trait ModulesTrait
     public function delVar(string $varName): bool
     {
         $modName = $this->getModName();
-        return xarModVars::delete($modName, $varName);
+        return $this->getVarsHelper()->delete($modName, $varName);
+    }
+
+    /**
+     * Cache all module variables for this module (if CoreCache.Preload is enabled for it)
+     */
+    public function cacheVars(?string $source = null): void
+    {
+        $modName = $this->getModName();
+        $this->getVarsHelper()->cache($modName, $source);
     }
 
     /**
@@ -140,47 +189,44 @@ trait ModulesTrait
      */
     public function getVarID(string $varName): int
     {
-        // use $this->mod($modName)->getVarID(...) to use specific module
         $modName = $this->getModName();
-        return xarModVars::getID($modName, $varName);
+        return $this->getVarsHelper()->getID($modName, $varName);
     }
 
     public function getUserVar(string $varName, ?int $userId = null): mixed
     {
-        // use $this->mod($modName)->getUserVar(...) to use specific module
         $modName = $this->getModName();
-        return xarModUserVars::get($modName, $varName, $userId);
+        return $this->getUserVarsHelper()->get($modName, $varName, $userId);
     }
 
     public function setUserVar(string $varName, mixed $value, ?int $userId = null): bool
     {
         $modName = $this->getModName();
-        return xarModUserVars::set($modName, $varName, $value, $userId);
+        return $this->getUserVarsHelper()->set($modName, $varName, $value, $userId);
     }
 
     public function delUserVar(string $varName, ?int $userId = null): bool
     {
         $modName = $this->getModName();
-        return xarModUserVars::delete($modName, $varName, $userId);
+        return $this->getUserVarsHelper()->delete($modName, $varName, $userId);
     }
 
     public function getItemVar(string $varName, mixed $itemid = null): mixed
     {
-        // use $this->mod($modName)->getItemVar(...) to use specific module
         $modName = $this->getModName();
-        return xarModItemVars::get($modName, $varName, $itemid);
+        return $this->getItemVarsHelper()->get($modName, $varName, $itemid);
     }
 
     public function setItemVar(string $varName, mixed $value, mixed $itemid = null): bool
     {
         $modName = $this->getModName();
-        return xarModItemVars::set($modName, $varName, $value, $itemid);
+        return $this->getItemVarsHelper()->set($modName, $varName, $value, $itemid);
     }
 
     public function delItemVar(string $varName, mixed $itemid = null): bool
     {
         $modName = $this->getModName();
-        return xarModItemVars::delete($modName, $varName, $itemid);
+        return $this->getItemVarsHelper()->delete($modName, $varName, $itemid);
     }
 
     /**
@@ -188,7 +234,7 @@ trait ModulesTrait
      */
     public function disableOverview(): bool
     {
-        return xarModVars::get('modules', 'disableoverview') ? true : false;
+        return $this->getVarsHelper()->disableOverview();
     }
 
     /**
@@ -256,7 +302,7 @@ trait ModulesTrait
      */
     public function getName(?int $regID = null): string
     {
-        return xarMod::getName($regID);
+        return $this->getInfoHelper()->getName($regID);
     }
 
     /**
@@ -265,7 +311,7 @@ trait ModulesTrait
     public function getID(?string $modName = null): ?int
     {
         $modName ??= $this->getModName();
-        return xarMod::getID($modName);
+        return $this->getInfoHelper()->getID($modName);
     }
 
     /**
@@ -274,10 +320,7 @@ trait ModulesTrait
     public function getRegID(?string $modName = null): int
     {
         $modName ??= $this->getModName();
-        // avoid getting module id from xarMod::getRegID() here
-        //return xarMod::getRegID($this->getModName());
-        $fileInfo = $this->getFileInfo($modName);
-        return (int) ($fileInfo['regid'] ?? 0);
+        return $this->getInfoHelper()->getRegID($modName);
     }
 
     /**
@@ -286,16 +329,16 @@ trait ModulesTrait
     public function getDisplayName(?string $modName = null): string
     {
         $modName ??= $this->getModName();
-        return xarMod::getDisplayName($modName);
+        return $this->getInfoHelper()->getDisplayName($modName);
     }
 
     /**
      * Get the displayable description for modName
      */
-    public function getDisplayDescription(string $modName = null): string
+    public function getDisplayDescription(?string $modName = null): string
     {
         $modName ??= $this->getModName();
-        return xarMod::getDisplayDescription($modName);
+        return $this->getInfoHelper()->getDisplayDescription($modName);
     }
 
     /**
@@ -305,7 +348,7 @@ trait ModulesTrait
     public function getFileInfo(?string $modName = null): array
     {
         $modName ??= $this->getModName();
-        return xarMod::getFileInfo($modName) ?? [];
+        return $this->getInfoHelper()->getFileInfo($modName);
     }
 
     /**
@@ -315,7 +358,7 @@ trait ModulesTrait
     public function getBaseInfo(?string $modName = null): array
     {
         $modName ??= $this->getModName();
-        return xarMod::getBaseInfo($modName) ?? [];
+        return $this->getInfoHelper()->getBaseInfo($modName);
     }
 
     /**
@@ -324,7 +367,7 @@ trait ModulesTrait
      */
     public function getInfo(int $modRegId): array
     {
-        return xarMod::getInfo($modRegId);
+        return $this->getInfoHelper()->getInfo($modRegId);
     }
 
     /**
@@ -343,25 +386,7 @@ trait ModulesTrait
     public function getTables(?string $modName = null): array
     {
         $modName ??= $this->getModName();
-        $result = xarClassMap::findTables($modName);
-        if (!empty($result) && class_exists($result['classname'])) {
-            $tablesCall = new $result['classname']();
-            // @todo pass along the DB prefix to $tablesCall
-            return $tablesCall();
-        }
-
-        // Load the database definition if required
-        try {
-            include_once sys::code() . 'modules/' . $modName . '/xartables.php';
-        } catch (Exception $e) {
-            return [];
-        }
-        $tablefunc = $modName . '_' . 'xartables';
-        if (function_exists($tablefunc)) {
-            // @todo pass along the DB prefix to $tablefunc
-            return $tablefunc();
-        }
-        return [];
+        return $this->getInfoHelper()->getTables($modName);
     }
 
     /**
@@ -370,7 +395,7 @@ trait ModulesTrait
     public function isAvailable(?string $modName = null): bool
     {
         $modName ??= $this->getModName();
-        return xarMod::isAvailable($modName) ? true : false;
+        return $this->getInfoHelper()->isAvailable($modName);
     }
 
     /**
@@ -381,8 +406,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        // @todo handle context for facades
-        return xarMod::apiFunc($modName, $modType, $funcName, $args, $this->getContext());
+        return $this->getExecHelper()->apiFunc($modName, $modType, $funcName, $args, $this->getContext());
     }
 
     /**
@@ -392,7 +416,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return xarMod::apiLoad($modName, $modType, xarMod::LOAD_ANYSTATE, $this->getContext());
+        return $this->getExecHelper()->apiLoad($modName, $modType, $this->getContext());
     }
 
     /**
@@ -403,8 +427,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        // @todo handle context for facades
-        return xarMod::guiFunc($modName, $modType, $funcName, $args, $this->getContext());
+        return $this->getExecHelper()->guiFunc($modName, $modType, $funcName, $args, $this->getContext());
     }
 
     /**
@@ -414,7 +437,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return xarMod::load($modName, $modType, xarMod::LOAD_ONLYACTIVE, $this->getContext());
+        return $this->getExecHelper()->load($modName, $modType, $this->getContext());
     }
 
     /**
@@ -426,9 +449,7 @@ trait ModulesTrait
     public function loadDbInfo(?string $modName = null, ?string $modDir = null): mixed
     {
         $modName ??= $this->getModName();
-        // preset module dir == module name here
-        $modDir ??= $modName;
-        return xarMod::loadDbInfo($modName, $modDir);
+        return $this->getInfoHelper()->loadDbInfo($modName, $modDir);
     }
 
     /**
@@ -440,7 +461,7 @@ trait ModulesTrait
      */
     public function checkModuleFunction(string $tplmodule = 'dynamicdata', string $type = 'user', string $func = 'display', string $defaultmodule = 'dynamicdata'): string
     {
-        return xarMod::checkModuleFunction($tplmodule, $type, $func, $defaultmodule);
+        return $this->getExecHelper()->checkModuleFunction($tplmodule, $type, $func, $defaultmodule);
     }
 
     /**
@@ -451,7 +472,7 @@ trait ModulesTrait
     public function getModule(?string $modName = null): ModuleInterface
     {
         $modName ??= $this->getModName();
-        return xarMod::getModule($modName, $this->getContext());
+        return $this->getExecHelper()->getModule($modName, $this->getContext());
     }
 
     /**
@@ -466,7 +487,7 @@ trait ModulesTrait
     {
         $modName ??= $this->getModName();
         $modType ??= $this->getModType();
-        return xarMod::getModuleClassMethod($modName, $modType, $funcName, $callType, $this->getContext());
+        return $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, $callType, $this->getContext());
     }
 
     /**
@@ -485,15 +506,11 @@ trait ModulesTrait
         if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
             $modType .= 'api';
         }
-        $callable = xarMod::getModuleClassMethod($modName, $modType, $funcName, 'api', $this->getContext());
+        $callable = $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, 'api', $this->getContext());
         if (empty($callable)) {
             throw new FunctionNotFoundException($funcName);
         }
-        // this expects an instance in $callable[0]
-        if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
-            $callable[0]->setContext($this->getContext());
-        }
-        return $callable($args);
+        return $this->getExecHelper()->callMethod($callable, $args, $this->getContext());
     }
 
     /**
@@ -513,15 +530,11 @@ trait ModulesTrait
         //if (!str_ends_with($modType, 'api') && !str_ends_with($modType, 'gui')) {
         //    $modType .= 'gui';
         //}
-        $callable = xarMod::getModuleClassMethod($modName, $modType, $funcName, 'gui', $this->getContext());
+        $callable = $this->getExecHelper()->getModuleClassMethod($modName, $modType, $funcName, 'gui', $this->getContext());
         if (empty($callable)) {
             throw new FunctionNotFoundException($funcName);
         }
-        // this expects an instance in $callable[0]
-        if (is_array($callable) && is_a($callable[0] ?? '', ContextInterface::class)) {
-            $callable[0]->setContext($this->getContext());
-        }
-        return $callable($args);
+        return $this->getExecHelper()->callMethod($callable, $args, $this->getContext());
     }
 
     /**
@@ -532,6 +545,7 @@ trait ModulesTrait
     public function resolveAlias(string $name): string
     {
         return xarModAlias::resolve($name);
+        // return $this->getAliasHelper()->resolveAlias($name);
     }
 
     /**
@@ -541,7 +555,7 @@ trait ModulesTrait
     {
         $callerModName ??= $this->getModName();
         $callerItemType ??= $this->getItemType();
-        return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
+        return $this->getHooksHelper()->isHooked($hookModName, $callerModName, $callerItemType);
     }
 
     /**
@@ -575,7 +589,7 @@ trait ModulesTrait
         $info['itemid'] ??= null;
         $info['module'] ??= $this->getModName();
         $info['itemtype'] ??= $this->getItemType();
-        return xarHooks::notify($event, $info, $this->getContext());
+        return $this->getHooksHelper()->notifyHooks($event, $info, $this->getContext());
     }
 }
 
@@ -660,6 +674,21 @@ class ModulesService implements ModulesInterface
         $this->currentModName = $modName;
     }
 
+    /**
+     * Create a specialized version of this service for a specific module name.
+     * @param mixed ...$args
+     * @return ServiceInterface
+     */
+    public function specialize(...$args): ServiceInterface
+    {
+        $clone = clone $this;
+        if (isset($args[0])) {
+            $clone->setCurrentModName($args[0]);
+        }
+        return $clone;
+    }
+
+    // @todo remove this when all specialize() methods are implemented
     public function __clone()
     {
         $this->currentModName = null;

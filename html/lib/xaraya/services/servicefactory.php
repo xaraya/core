@@ -24,16 +24,27 @@ use xarLog;
  */
 class ServiceFactory
 {
+    public const SLICE = 'factory';
+
     /**
      * This distinguishes between shared services and parent-aware services, where shared services
      * are common for all within a single request and are provided from StaticServicesClass, while
      * parent-aware services are cloned for each parent so that methods like getModName() will work.
-     * @todo Some services are actually independent of request, but should use connection pool (db) 
+     * @todo Some services are actually independent of request, but should use connection pool (db)
      * or central processor (log) to safely work in fiber or coroutine environments (besides using
      * async drivers)
      */
-    /** @var array<string> */
-    public static array $sharedServices = ['ctl', 'log', 'mls', 'var', 'cache', 'config', 'session', 'db'];
+    /** @var list<string> */
+    public static array $sharedServices = [
+        // public services
+        'ctl', 'log', 'mls', 'var', 'cache', 'config', 'session', 'db',
+        // internal modules helpers
+        'modules.vars', 'modules.user', 'modules.item', 'modules.info', 'modules.exec', 'modules.hooks', 'modules.alias',
+    ];
+    /** @var list<string> */
+    public static array $argumentServices = [
+        'user',
+    ];
 
     /**
      * Create a new service instance (prototype) for the given name.
@@ -47,6 +58,7 @@ class ServiceFactory
     public static function createServicePrototype(string $name, ServicesInterface $parent): ServiceInterface
     {
         return match ($name) {
+            // public services
             'ctl' => self::getControllerService($parent),
             'log' => self::getLoggerService($parent),
             'mls' => self::getMultiLanguageService($parent),
@@ -62,6 +74,14 @@ class ServiceFactory
             'session' => self::getSessionService($parent),
             'user' => self::getUserService($parent),
             'db' => self::getDatabaseService($parent),
+            // internal modules helpers
+            'modules.vars' => self::getModuleVarsHelper($parent),
+            'modules.user' => self::getModuleUserVarsHelper($parent),
+            'modules.item' => self::getModuleItemVarsHelper($parent),
+            'modules.info' => self::getModuleInfoHelper($parent),
+            'modules.exec' => self::getModuleExecHelper($parent),
+            'modules.hooks' => self::getModuleHooksHelper($parent),
+            'modules.alias' => self::getModuleAliasHelper($parent),
             default => throw new \Exception('Unsupported service ' . $name),
         };
     }
@@ -209,6 +229,48 @@ class ServiceFactory
     {
         self::log(__METHOD__, $parent);
         return DatabaseService::create($parent);
+    }
+
+    public static function getModuleVarsHelper(ServicesInterface $parent): ServiceInterface
+    {
+        self::log(__METHOD__, $parent);
+        return new Modules\VarsHelper($parent);
+    }
+
+    public static function getModuleUserVarsHelper(ServicesInterface $parent): ServiceInterface
+    {
+        self::log(__METHOD__, $parent);
+        return new Modules\UserVarsHelper($parent);
+    }
+
+    public static function getModuleItemVarsHelper(ServicesInterface $parent): ServiceInterface
+    {
+        self::log(__METHOD__, $parent);
+        return new Modules\ItemVarsHelper($parent);
+    }
+
+    public static function getModuleInfoHelper(ServicesInterface $parent): ServiceInterface
+    {
+        self::log(__METHOD__, $parent);
+        return new Modules\InfoHelper($parent);
+    }
+
+    public static function getModuleExecHelper(ServicesInterface $parent): ServiceInterface
+    {
+        self::log(__METHOD__, $parent);
+        return new Modules\ExecHelper($parent);
+    }
+
+    public static function getModuleHooksHelper(ServicesInterface $parent): ServiceInterface
+    {
+        self::log(__METHOD__, $parent);
+        return new Modules\HooksHelper($parent);
+    }
+
+    public static function getModuleAliasHelper(ServicesInterface $parent): ServiceInterface
+    {
+        self::log(__METHOD__, $parent);
+        return new Modules\AliasHelper($parent);
     }
 
     protected static function log(string $method, object|string|null $parent = null): void

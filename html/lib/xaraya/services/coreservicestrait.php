@@ -42,6 +42,10 @@ interface CoreServicesInterface extends ContextInterface
 {
     /** @param array<string, mixed> $args */
     public function setCoreServices(array $args = []): void;
+    public function getStaticServices(): StaticServicesClass;
+    public function getLocalService(string $key): ServiceInterface|callable|null;
+    public function setLocalService(string $key, ServiceInterface|callable $service): void;
+    public function hasLocalService(string $key): bool;
     /** @param array<mixed> $args */
     public function service(string $name, ...$args): ServiceInterface;
     public function ctl(): ControllerInterface;
@@ -87,7 +91,7 @@ trait CoreServicesTrait
      * Instance-level cache for parent-specific or mocked services.
      * @var array<string, ServiceInterface|callable>
      */
-    protected array $localServiceCache = [];
+    public array $localServiceCache = [];
     protected ?StaticServicesClass $xarServices = null;
     /** @var ?callable */
     protected $xarExit = null;
@@ -112,7 +116,7 @@ trait CoreServicesTrait
     /**
      * Get the static services class instance for this request, and cache it locally.
      */
-    protected function getStaticServices(): StaticServicesClass
+    public function getStaticServices(): StaticServicesClass
     {
         if (!isset($this->xarServices)) {
             $this->xarServices = xar::getServicesClass();
@@ -121,67 +125,36 @@ trait CoreServicesTrait
     }
 
     /**
+     * Summary of getLocalService
+     */
+    public function getLocalService(string $key): ServiceInterface|callable|null
+    {
+        return $this->localServiceCache[$key] ?? null;
+    }
+
+    /**
+     * Summary of setLocalService
+     */
+    public function setLocalService(string $key, ServiceInterface|callable $service): void
+    {
+        $this->localServiceCache[$key] = $service;
+    }
+
+    /**
+     * Summary of hasLocalService
+     */
+    public function hasLocalService(string $key): bool
+    {
+        return isset($this->localServiceCache[$key]);
+    }
+
+    /**
      * Get core service by name
      * @param array<mixed> $args
      */
     public function service(string $name, ...$args): ServiceInterface
     {
-        // Use a unique key for services with arguments (e.g., mod('roles'), user(123))
-        $cacheKey = $name;
-        if (!empty($args)) {
-            // Simple key generation, assuming scalar arguments.
-            $cacheKey .= '.' . implode('.', $args);
-        }
-
-        // Check for a locally cached or mocked service first.
-        if (isset($this->localServiceCache[$cacheKey])) {
-            return $this->localServiceCache[$cacheKey];
-        }
-
-        // Get the static services class instance for this request, using the local cache
-        $services = $this->getStaticServices();
-
-        // If it's a shared service, get it from the central cache and return directly.
-        if (in_array($name, ServiceFactory::$sharedServices)) {
-            return $services->getServicePrototype($name);
-        }
-
-        // It's a parent-aware service, so we need to clone it.
-
-        // If it's a specialized request (with args) and we have the base service locally,
-        // clone that directly to avoid going to the central cache.
-        if (!empty($args) && isset($this->localServiceCache[$name])) {
-            $prototype = $this->localServiceCache[$name];
-        } else {
-            // Get the prototype from the central request-level cache.
-            $prototype = $services->getServicePrototype($name);
-        }
-
-        // Clone the prototype to create an instance specific to this parent object.
-        $serviceInstance = clone $prototype;
-
-        // Ensure the parent is set on the cloned instance.
-        // This is crucial for parent-aware services.
-        if (method_exists($serviceInstance, 'setParent')) {
-            $serviceInstance->setParent($this);
-        }
-
-        // If there were no arguments, cache and return the generic parent-aware service.
-        if (empty($args)) {
-            $this->localServiceCache[$name] = $serviceInstance;
-            return $serviceInstance;
-        }
-
-        // Handle services with arguments by specializing the cloned instance.
-        if ($name === 'mod' && isset($args[0])) {
-            $serviceInstance->setCurrentModName($args[0]);
-        } elseif ($name === 'user' && isset($args[0])) {
-            $serviceInstance->setCurrentId($args[0]);
-        }
-
-        // Cache the specialized service instance.
-        $this->localServiceCache[$cacheKey] = $serviceInstance;
-        return $serviceInstance;
+        return ServiceOrchestrator::get($this, $name, ...$args);
     }
 
     /**

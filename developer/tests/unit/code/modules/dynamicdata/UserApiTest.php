@@ -3,6 +3,7 @@
 use Xaraya\Modules\TestHelper;
 use Xaraya\Modules\DynamicData\UserApi;
 use Xaraya\Services\ModulesInterface;
+use Xaraya\Services\xar;
 
 final class UserApiTest extends TestHelper
 {

@@ -47,6 +47,7 @@ class PhpExporter extends JsonExporter
         if ($this->tofile) {
             $filepath = sys::varpath() . '/cache/variables/' . ucwords($objectdef->name, '_') . '.php';
             file_put_contents($filepath, $info);
+            // @todo find some other place to call this too
             VirtualObjectFactory::saveCoreCache();
         }
         return $info;

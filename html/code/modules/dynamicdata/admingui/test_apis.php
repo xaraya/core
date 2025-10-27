@@ -159,7 +159,7 @@ class TestApisMethod extends MethodClass
             $this->mod()->setVar('graphql_cache_operation', !empty($cacheOperation) ? true : false);
             // save to cache if enabled
             $this->clearCacheFiles();
-            xarModVars::cache('dynamicdata');
+            $this->mod()->cacheVars(__METHOD__);
         } else {
             $restapiserial = $this->mod()->getVar('restapi_object_list');
             if (!empty($restapiserial)) {

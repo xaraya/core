@@ -140,14 +140,18 @@ class xarModVars extends xarVars implements IxarModVars
     /**
      * Cache all module variables for a particular module (if CoreCache.Preload is enabled for it)
      * @param  string $scope Module name
+     * @param ?string $source
      * @return void
      */
-    public static function cache($scope)
+    public static function cache($scope, $source = null)
     {
         $cacheScope = 'Mod.Variables.' . $scope;
         if (xar::var()->hasPreload($cacheScope)) {
-            xar::var()->saveCached($cacheScope);
+            $source ??= __METHOD__;
+            xar::var()->saveCached($cacheScope, null, $source);
         }
+        // Saved in DD > Modify Configuration = modules/dynamicdata/admingui/modifyconfig.php
+        //xar::mod('dynamicdata')->cacheVars();
     }
 
     /**

@@ -32,7 +32,7 @@ interface ConfigInterface extends ServiceInterface
     public function getVar(string $varName, mixed $value = null): mixed;
     public function setVar(string $varName, mixed $value): bool;
     public function delVar(string $varName): mixed;
-    public function cache(): void;
+    public function cacheVars(?string $source = null): void;
 }
 
 /**
@@ -69,9 +69,10 @@ trait ConfigTrait
     /**
      * Cache config variables
      */
-    public function cache(): void
+    public function cacheVars(?string $source = null): void
     {
-        xarConfigVars::cache();
+        $source ??= __CLASS__ . '::' . __FUNCTION__;
+        xarConfigVars::cache($source);
     }
 }
 

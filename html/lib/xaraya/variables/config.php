@@ -206,13 +206,16 @@ class xarConfigVars extends xarVars implements IxarVars
 
     /**
      * Cache all site configuration variables (if CoreCache.Preload is enabled for it)
-     * @param string|null $scope not used
+     * @param string|null $source not used
      * @return void
      */
-    public static function cache($scope = null)
+    public static function cache($source = null)
     {
         if (xar::var()->hasPreload(self::$KEY)) {
-            xar::var()->saveCached(self::$KEY);
+            $source ??= __METHOD__;
+            xar::var()->saveCached(self::$KEY, null, $source);
         }
+        // Saved in Base > Modify Configuration = modules/base/admingui/modifyconfig.php
+        //xar::config()->cacheVars();
     }
 }

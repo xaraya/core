@@ -217,6 +217,7 @@ class xarCoreCache extends xarObject
     public static function saveCached($scope, $name = null, $source = null)
     {
         $source ??= __METHOD__;
+        $date = date('c');
         if (isset($name)) {
             if (!self::isCached($scope, $name)) {
                 return false;
@@ -226,6 +227,7 @@ class xarCoreCache extends xarObject
             $info = '<?php
 /**
  * Exported by ' . $source . '
+ * Generated: ' . $date . '
  */
 $value = ' . var_export($value, true) . ';
 return $value;
@@ -241,6 +243,7 @@ return $value;
         $info = '<?php
 /**
  * Exported by ' . $source . '
+ * Generated: ' . $date . '
  */
 $values = ' . var_export($values, true) . ';
 return $values;

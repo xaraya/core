@@ -273,7 +273,8 @@ trait DatabaseTrait
         }
         $allDatabases[$modName] = $databases;
         xar::var()->setCached('DynamicData', 'Databases', $allDatabases);
-        // Saved in DD > Utilities > DB Connections = xaradmin/dbconfig.php for all modules - UtilApi::getAllDatabases()
+        // Saved in DD > Utilities > DB Connections = modules/dynamicdata/admingui/dbconfig.php
+        // for all modules - see UtilApi::getAllDatabases()
         //xar::var()->saveCached('DynamicData', 'Databases');
     }
 

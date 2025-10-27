@@ -134,6 +134,7 @@ final class ClassMapTest extends TestCase
             'thisfuncname' => null,
             'currenturl' => null,
             'truecurrenturl' => null,
+            'localServiceCache' => [],
         ];
         $this->assertEquals($expected, $defaults);
     }

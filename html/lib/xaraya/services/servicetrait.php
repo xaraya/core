@@ -43,6 +43,12 @@ interface ServiceInterface extends ContextInterface
     public function getConfig(): array;
     public function getParent(): mixed;
     public function setParent(mixed $parent): void;
+    /**
+     * Create a specialized version of this service instance.
+     * @param mixed ...$args
+     * @return ServiceInterface
+     */
+    public function specialize(...$args): ServiceInterface;
 }
 
 /**
@@ -100,6 +106,17 @@ trait ServiceTrait
     public function setParent(mixed $parent): void
     {
         $this->parent = $parent;
+    }
+
+    /**
+     * Create a specialized version of this service instance.
+     * By default, it just returns a clone of itself.
+     * @param mixed ...$args
+     * @return ServiceInterface
+     */
+    public function specialize(...$args): ServiceInterface
+    {
+        return clone $this;
     }
 
     /**

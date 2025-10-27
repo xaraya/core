@@ -148,6 +148,20 @@ trait UserTrait
     {
         $this->currentId = $userId;
     }
+
+    /**
+     * Create a specialized version of this service for a specific user ID.
+     * @param mixed ...$args
+     * @return ServiceInterface
+     */
+    public function specialize(...$args): ServiceInterface
+    {
+        $clone = clone $this;
+        if (isset($args[0])) {
+            $clone->setCurrentId($args[0]);
+        }
+        return $clone;
+    }
 }
 
 /**
@@ -167,6 +181,7 @@ class UserService implements UserInterface
 {
     use UserTrait;
 
+    // @todo remove this when all specialize() methods are implemented
     public function __clone()
     {
         $this->currentId = null;

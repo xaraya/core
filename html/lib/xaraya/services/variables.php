@@ -397,6 +397,9 @@ trait VariablesTrait
     public function saveCached(string $scope, ?string $name = null, ?string $source = null): bool
     {
         return xarCoreCache::saveCached($scope, $name, $source);
+        // Saved in DD > Utilities > DB Connections = modules/dynamicdata/admingui/dbconfig.php
+        // for all modules - see UtilApi::getAllDatabases()
+        //xar::var()->saveCached('DynamicData', 'Databases');
     }
 }
 

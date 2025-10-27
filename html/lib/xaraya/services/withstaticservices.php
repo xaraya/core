@@ -227,10 +227,10 @@ trait WithStaticServices
      */
     public static function mod(?string $modName = null): ModulesInterface
     {
-        if (is_null(self::getServicesClass()->getContext())) {
-            throw new \RuntimeException('Missing context for core services');
+        if (!empty($modName)) {
+            return self::service('mod', $modName);
         }
-        return self::service('mod', $modName);
+        return self::service('mod');
     }
 
     /**
@@ -440,10 +440,10 @@ trait WithStaticServices
      */
     public static function user(?int $userId = null): UserInterface
     {
-        if (is_null(self::getServicesClass()->getContext())) {
-            throw new \RuntimeException('Missing context for core services');
+        if (!empty($userId)) {
+            return self::service('user', $userId);
         }
-        return self::service('user', $userId);
+        return self::service('user');
     }
 
     /**

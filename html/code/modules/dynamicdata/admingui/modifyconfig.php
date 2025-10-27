@@ -89,7 +89,7 @@ class ModifyconfigMethod extends MethodClass
                 $this->mod()->setVar('caching', $caching);
                 $this->mod()->setVar('twig_support', $twig_support);
                 // save to cache if enabled
-                xarModVars::cache('dynamicdata');
+                $this->mod()->cacheVars(__METHOD__);
                 break;
         }
         return $data;

@@ -59,6 +59,35 @@ trait ParentServicesTrait
     use ContextTrait;
 
     /**
+     * Get static services class for shared service instances
+     */
+    public function getStaticServices(): StaticServicesClass
+    {
+        return $this->getParent()->getStaticServices();
+    }
+
+    /**
+     * Get local service by key
+     */
+    public function getLocalService(string $key): ServiceInterface|callable|null
+    {
+        return $this->getParent()->getLocalService($key);
+    }
+
+    /**
+     * Set local service by key
+     */
+    public function setLocalService(string $key, ServiceInterface|callable $service): void
+    {
+        $this->getParent()->setLocalService($key, $service);
+    }
+
+    public function hasLocalService(string $key): bool
+    {
+        return $this->getParent()->hasLocalService($key);
+    }
+
+    /**
      * Set core services for access via methods
      * @param array<string, mixed> $args array of name => service to replace default ones
      */
