@@ -33,6 +33,7 @@ sys::import('xaraya.services.blocks');
 sys::import('xaraya.services.dataobject');
 sys::import('xaraya.services.dataproperty');
 sys::import('xaraya.services.caching');
+sys::import('xaraya.services.request');
 sys::import('xaraya.objects');
 
 /**
@@ -59,6 +60,8 @@ interface CoreServicesInterface extends ContextInterface
     public function data(): DataObjectInterface;
     public function prop(): DataPropertyInterface;
     public function cache(): CachingInterface;
+    public function coreCache(): CoreCacheInterface;
+    public function req(): RequestInterface;
     public function config(): ConfigInterface;
     public function session(): SessionInterface;
     public function user(?int $userId = null): UserInterface;
@@ -182,7 +185,7 @@ trait CoreServicesTrait
      */
     public function ctl(): ControllerInterface
     {
-        return $this->service('ctl');
+        return $this->getStaticServices()->ctl();
     }
 
     /**
@@ -204,7 +207,7 @@ trait CoreServicesTrait
      */
     public function log(): LoggerInterface
     {
-        return $this->service('log');
+        return $this->getStaticServices()->log();
     }
 
     /**
@@ -226,7 +229,7 @@ trait CoreServicesTrait
      */
     public function mls(): MultiLanguageInterface
     {
-        return $this->service('mls');
+        return $this->getStaticServices()->mls();
     }
 
     /**
@@ -338,7 +341,7 @@ trait CoreServicesTrait
      */
     public function var(): VariablesInterface
     {
-        return $this->service('var');
+        return $this->getStaticServices()->var();
     }
 
     /**
@@ -434,7 +437,47 @@ trait CoreServicesTrait
      */
     public function cache(): CachingInterface
     {
-        return $this->service('cache');
+        return $this->getStaticServices()->cache();
+    }
+
+    /**
+     * Access CoreCacheService methods (has, get, set, del, flush, ...)
+     *
+     * Available methods:
+     * - has()
+     * - get()
+     * - set()
+     * - del()
+     * - flush()
+     * - hasPreload()
+     * - load()
+     * - save()
+     *
+     */
+    public function coreCache(): CoreCacheInterface
+    {
+        return $this->getStaticServices()->coreCache();
+    }
+
+    /**
+     * Access RequestService methods (getModule, getType, getFunction, ...)
+     *
+     * Available methods:
+     * - getModule()
+     * - getType()
+     * - getFunction()
+     * - getCurrentURL()
+     * - getBaseURI()
+     * - getServerVar()
+     * - getVar()
+     * - setServerVar()
+     * - getMethod()
+     * - isLocalReferer()
+     * - isSameReferer()
+     */
+    public function req(): RequestInterface
+    {
+        return $this->getStaticServices()->req();
     }
 
     /**
@@ -450,7 +493,7 @@ trait CoreServicesTrait
      */
     public function config(): ConfigInterface
     {
-        return $this->service('config');
+        return $this->getStaticServices()->config();
     }
 
     /**
@@ -467,7 +510,7 @@ trait CoreServicesTrait
      */
     public function session(): SessionInterface
     {
-        return $this->service('session');
+        return $this->getStaticServices()->session();
     }
 
     /**
@@ -485,10 +528,7 @@ trait CoreServicesTrait
      */
     public function user(?int $userId = null): UserInterface
     {
-        if (!empty($userId)) {
-            return $this->service('user', $userId);
-        }
-        return $this->service('user');
+        return $this->getStaticServices()->user($userId);
     }
 
     /**
@@ -506,7 +546,7 @@ trait CoreServicesTrait
      */
     public function db(): DatabaseInterface
     {
-        return $this->service('db');
+        return $this->getStaticServices()->db();
     }
 
     /**
@@ -544,6 +584,6 @@ trait CoreServicesTrait
      */
     public function ml($rawstring, ...$args): string
     {
-        return $this->mls()->translate($rawstring, ...$args);
+        return $this->getStaticServices()->mls()->translate($rawstring, ...$args);
     }
 }

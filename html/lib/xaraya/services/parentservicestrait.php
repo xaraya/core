@@ -383,6 +383,46 @@ trait ParentServicesTrait
     }
 
     /**
+     * Access CoreCacheService methods (has, get, set, del, flush, ...)
+     *
+     * Available methods:
+     * - has()
+     * - get()
+     * - set()
+     * - del()
+     * - flush()
+     * - hasPreload()
+     * - load()
+     * - save()
+     *
+     */
+    public function coreCache(): CoreCacheInterface
+    {
+        return $this->getParent()->coreCache();
+    }
+
+    /**
+     * Access RequestService methods (getModule, getType, getFunction, ...)
+     *
+     * Available methods:
+     * - getModule()
+     * - getType()
+     * - getFunction()
+     * - getCurrentURL()
+     * - getBaseURI()
+     * - getServerVar()
+     * - getVar()
+     * - setServerVar()
+     * - getMethod()
+     * - isLocalReferer()
+     * - isSameReferer()
+     */
+    public function req(): RequestInterface
+    {
+        return $this->getParent()->req();
+    }
+
+    /**
      * Access xarConfigVars::* Config methods (getVar, setVar, ...)
      *
      * Available methods:

@@ -29,12 +29,12 @@ class xarCache extends xarObject
      * Initialise the caching options
      *
      * @param string $cacheDir optional cache directory (default is sys::varpath() . '/cache')
-     * @return void or exit if session-less page caching finds a hit
+     * @return bool or exit if session-less page caching finds a hit
      */
     public static function init($cacheDir = null)
     {
         if (empty($cacheDir) && self::$initialized) {
-            return;
+            return true;
         }
         if (empty($cacheDir) || !is_dir($cacheDir)) {
             $cacheDir = sys::varpath() . '/cache';
@@ -69,6 +69,7 @@ class xarCache extends xarObject
             self::$variableCacheIsEnabled = xarVariableCache::init($config);
         }
         self::$initialized = true;
+        return true;
     }
 
     /**

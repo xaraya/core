@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use xarController;
+use xarResponse;
 use xarRequest;
 use xarServer;
 use xarSystemVars;
@@ -57,13 +58,22 @@ interface ControllerInterface extends ServiceInterface
      */
     public function getRouteURL(string $route, array $params = []): ?string;
 
+    /** @param array<string, mixed> $args */
+    public function init(array $args = [], mixed $context = null): bool;
+    /** @return array<string, mixed> */
+    public function getConfig(): array;
+    public function dispatch(xarRequest $request, mixed $context = null): void;
+    public function normalizeRequest(): void;
+    public function setCallback(string $name, ?callable $callback): void;
+    public function getCallback(string $name): ?callable;
+    public function setRequest(?string $url = null): void;
+    public function setResponse(?xarResponse $response = null): void;
+    public function getResponse(): xarResponse;
+
     public function setRouter(?\Xaraya\Routing\RouterInterface $router): void;
 
-    /**
-     * Get current url
-     * @param array<string, mixed> $args
-     */
-    public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string;
+    public function setBaseURL(?string $baseurl): void;
+    public function getPageTime(): float;
 
     /**
      * Get base url
@@ -71,9 +81,10 @@ interface ControllerInterface extends ServiceInterface
     public function getBaseURL(): string;
 
     /**
-     * Get base uri
+     * Get current url
+     * @param array<string, mixed> $args
      */
-    public function getBaseURI(): string;
+    public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string;
 
     /**
      * Get entry point = index.php or custom
@@ -83,19 +94,21 @@ interface ControllerInterface extends ServiceInterface
     public function getServerVar(string $varName): mixed;
 
     public function getSystemVar(string $varName): mixed;
+    public function getCurrentRequestString(array $args = [], ?bool $generateXMLURL = null, ?string $target = null): string;
+
+    /**
+     * Get base uri
+     */
+    public function getBaseURI(): string;
 
     /**
      * Get current request
      * @return xarRequest
      */
     public function getRequest(): xarRequest;
-
     public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed;
-
     public function getRequestMethod(): string;
-
     public function isLocalReferer(): bool;
-
     public function isSameReferer(): bool;
 
     /**
@@ -189,10 +202,71 @@ trait ControllerTrait
         self::$router = $router;
     }
 
+    /** @param array<string, mixed> $args */
+    public function init(array $args = [], mixed $context = null): bool
+    {
+        // this will be relying on RequestService in the future
+        return xarController::init($args, $context);
+    }
+
+    /** @return array<string, mixed> */
+    public function getConfig(): array
+    {
+        return xarController::getConfig();
+    }
+
+    public function dispatch(xarRequest $request, mixed $context = null): void
+    {
+        xarController::dispatch($request, $context);
+    }
+
+    public function normalizeRequest(): void
+    {
+        xarController::normalizeRequest();
+    }
+
+    public function setCallback(string $name, ?callable $callback): void
+    {
+        xarController::setCallback($name, $callback);
+    }
+
+    public function getCallback(string $name): ?callable
+    {
+        return xarController::getCallback($name);
+    }
+
+    public function setRequest(?string $url = null): void
+    {
+        // this will be relying on RequestService in the future
+        xarController::setRequest($url);
+    }
+
+    public function setResponse(?xarResponse $response = null): void
+    {
+        xarController::setResponse($response);
+    }
+
+    public function getResponse(): xarResponse
+    {
+        return xarController::getResponse();
+    }
+
+    public function setBaseURL(?string $baseurl): void
+    {
+        xarServer::setBaseURL($baseurl);
+    }
+
+    public function getPageTime(): float
+    {
+        // this will be relying on RequestService in the future
+        return xarServer::getPageTime();
+    }
+
     /**
      * Get current url
      * @param array<string, mixed> $args
      */
+    // this will be relying on RequestService in the future (getCurrentURL)
     public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string
     {
         return xarServer::getCurrentURL($args, $generateXMLURL);
@@ -206,9 +280,15 @@ trait ControllerTrait
         return xarServer::getBaseURL();
     }
 
+    public function getCurrentRequestString(array $args = [], ?bool $generateXMLURL = null, ?string $target = null): string
+    {
+        return xarServer::getCurrentRequestString($args, $generateXMLURL, $target);
+    }
+
     /**
      * Get base uri
      */
+    // this will be relying on RequestService in the future (getBaseURI)
     public function getBaseURI(): string
     {
         return xarServer::getBaseURI();
@@ -226,6 +306,7 @@ trait ControllerTrait
      * Get a server variable
      * @return mixed
      */
+    // this will be relying on RequestService in the future (getServerVar)
     public function getServerVar(string $varName): mixed
     {
         return xarServer::getVar($varName);
@@ -244,6 +325,7 @@ trait ControllerTrait
      * Get current request
      * @return xarRequest
      */
+    // this will be relying on RequestService in the future (getRequest)
     public function getRequest(): xarRequest
     {
         return xarController::getRequest();
@@ -253,21 +335,25 @@ trait ControllerTrait
      * Get a request variable
      * @return mixed
      */
-    public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed
+    // this will be relying on RequestService in the future (getVar)
+    public function getRequestVar(string $varName, ?string $allowOnlyMethod = null): mixed // @todo rename to getVar
     {
         return xarController::getVar($varName, $allowOnlyMethod);
     }
 
-    public function getRequestMethod(): string
+    // this will be relying on RequestService in the future (getMethod)
+    public function getRequestMethod(): string // @todo rename to getMethod
     {
         return xarServer::getVar('REQUEST_METHOD') ?? 'GET';
     }
 
+    // this will be relying on RequestService in the future (isLocalReferer)
     public function isLocalReferer(): bool
     {
         return xarController::isLocalReferer();
     }
 
+    // this will be relying on RequestService in the future (isSameReferer)
     public function isSameReferer(): bool
     {
         return xarController::isRefererSameModule();

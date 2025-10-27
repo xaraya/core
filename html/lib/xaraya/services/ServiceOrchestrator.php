@@ -41,7 +41,7 @@ class ServiceOrchestrator
         $cacheKey = $name;
         if (!empty($args)) {
             // Simple key generation, assuming scalar arguments.
-            $cacheKey .= '.' . implode('.', $args);
+            $cacheKey .= '-' . implode('.', $args);
         }
 
         // Check for a locally cached or mocked service first.
@@ -61,7 +61,7 @@ class ServiceOrchestrator
 
         // 2. Handle argument-aware services (cached centrally per argument set).
         if (in_array($name, ServiceFactory::$argumentServices)) {
-            // If already cached centrally (e.g., user.123), return it.
+            // If already cached centrally (e.g., user-123), return it.
             if (isset($services->serviceCache[$cacheKey])) {
                 return $services->serviceCache[$cacheKey];
             }

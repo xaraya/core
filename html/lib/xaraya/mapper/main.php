@@ -61,7 +61,7 @@ class xarController extends xarObject
      *
      * @param array<string, mixed> $args
      */
-    public static function init(array $args = []): void
+    public static function init(array $args = []): bool
     {
         if (empty($args)) {
             $args = self::getConfig();
@@ -81,6 +81,7 @@ class xarController extends xarObject
         }
         // xarController::init() comes after xarServer::init()
         self::$requestContext = xarServer::getInstance();
+        return true;
     }
 
     /**
@@ -236,12 +237,13 @@ class xarController extends xarObject
 
     /**
      * Summary of setResponse
+     * @param ?xarResponse $response
      * @return void
      */
-    public static function setResponse()
+    public static function setResponse($response = null)
     {
         sys::import('xaraya.mapper.response');
-        self::$response = new xarResponse();
+        self::$response = $response ?? new xarResponse();
     }
 
     /**

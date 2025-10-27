@@ -135,7 +135,7 @@ trait WithStaticServices
      */
     public static function ctl(): ControllerInterface
     {
-        return self::service('ctl');
+        return self::getServicesClass()->ctl();
     }
 
     /**
@@ -157,7 +157,7 @@ trait WithStaticServices
      */
     public static function log(): LoggerInterface
     {
-        return self::service('log');
+        return self::getServicesClass()->log();
     }
 
     /**
@@ -179,7 +179,7 @@ trait WithStaticServices
      */
     public static function mls(): MultiLanguageInterface
     {
-        return self::service('mls');
+        return self::getServicesClass()->mls();
     }
 
     /**
@@ -227,10 +227,7 @@ trait WithStaticServices
      */
     public static function mod(?string $modName = null): ModulesInterface
     {
-        if (!empty($modName)) {
-            return self::service('mod', $modName);
-        }
-        return self::service('mod');
+        return self::getServicesClass()->mod($modName);
     }
 
     /**
@@ -248,7 +245,7 @@ trait WithStaticServices
      */
     public static function sec(): SecurityInterface
     {
-        return self::service('sec');
+        return self::getServicesClass()->sec();
     }
 
     /**
@@ -271,7 +268,7 @@ trait WithStaticServices
      */
     public static function tpl(): TemplatingInterface
     {
-        return self::service('tpl');
+        return self::getServicesClass()->tpl();
     }
 
     /**
@@ -293,7 +290,7 @@ trait WithStaticServices
      */
     public static function var(): VariablesInterface
     {
-        return self::service('var');
+        return self::getServicesClass()->var();
     }
 
     /**
@@ -313,7 +310,7 @@ trait WithStaticServices
      */
     public static function block(): BlocksInterface
     {
-        return self::service('block');
+        return self::getServicesClass()->block();
     }
 
     /**
@@ -337,7 +334,7 @@ trait WithStaticServices
      */
     public static function data(): DataObjectInterface
     {
-        return self::service('data');
+        return self::getServicesClass()->data();
     }
 
     /**
@@ -357,7 +354,7 @@ trait WithStaticServices
      */
     public static function prop(): DataPropertyInterface
     {
-        return self::service('prop');
+        return self::getServicesClass()->prop();
     }
 
     /**
@@ -389,7 +386,47 @@ trait WithStaticServices
      */
     public static function cache(): CachingInterface
     {
-        return self::service('cache');
+        return self::getServicesClass()->cache();
+    }
+
+    /**
+     * Access CoreCacheService methods (has, get, set, del, flush, ...)
+     *
+     * Available methods:
+     * - has()
+     * - get()
+     * - set()
+     * - del()
+     * - flush()
+     * - hasPreload()
+     * - load()
+     * - save()
+     *
+     */
+    public static function coreCache(): CoreCacheInterface
+    {
+        return self::getServicesClass()->coreCache();
+    }
+
+    /**
+     * Access RequestService methods (getModule, getType, getFunction, ...)
+     *
+     * Available methods:
+     * - getModule()
+     * - getType()
+     * - getFunction()
+     * - getCurrentURL()
+     * - getBaseURI()
+     * - getServerVar()
+     * - getVar()
+     * - setServerVar()
+     * - getMethod()
+     * - isLocalReferer()
+     * - isSameReferer()
+     */
+    public static function req(): RequestInterface
+    {
+        return self::getServicesClass()->req();
     }
 
     /**
@@ -405,7 +442,7 @@ trait WithStaticServices
      */
     public static function config(): ConfigInterface
     {
-        return self::service('config');
+        return self::getServicesClass()->config();
     }
 
     /**
@@ -422,7 +459,7 @@ trait WithStaticServices
      */
     public static function session(): SessionInterface
     {
-        return self::service('session');
+        return self::getServicesClass()->session();
     }
 
     /**
@@ -440,10 +477,7 @@ trait WithStaticServices
      */
     public static function user(?int $userId = null): UserInterface
     {
-        if (!empty($userId)) {
-            return self::service('user', $userId);
-        }
-        return self::service('user');
+        return self::getServicesClass()->user($userId);
     }
 
     /**
@@ -461,7 +495,7 @@ trait WithStaticServices
      */
     public static function db(): DatabaseInterface
     {
-        return self::service('db');
+        return self::getServicesClass()->db();
     }
 
     /**
@@ -492,6 +526,6 @@ trait WithStaticServices
      */
     public static function ml($rawstring, ...$args): string
     {
-        return self::mls()->translate($rawstring, ...$args);
+        return self::getServicesClass()->mls()->translate($rawstring, ...$args);
     }
 }
