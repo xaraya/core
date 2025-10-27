@@ -106,13 +106,17 @@ trait CoreServicesTrait
      */
     public function setCoreServices(array $args = []): void
     {
-        $supported = ['ctl', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'config', 'session', 'user', 'db', 'exit'];
+        $supported = ['ctl', 'req', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'mem', 'config', 'session', 'user', 'db', 'exit'];
         foreach ($args as $name => $service) {
             if (!in_array($name, $supported)) {
                 throw new Exception('Unsupported service ' . $name);
             }
             // Pre-populate the local cache with the mocked/overridden service.
             $this->localServiceCache[$name] = $service;
+        }
+        if (!empty($args) && $this::class != StaticServicesClass::class) {
+            // Pre-populate the static services cache with the mocked/overridden service.
+            $this->getStaticServices()->setCoreServices($args);
         }
     }
 

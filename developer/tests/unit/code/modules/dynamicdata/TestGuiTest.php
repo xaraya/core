@@ -12,6 +12,16 @@ final class TestGuiTest extends TestHelper
         xarServer::setBaseURL('http://localhost/');
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        parent::tearDownAfterClass();
+
+        // reset static services cache here after mocks (if not running in separate process)
+        $services = xar::getServicesClass();
+        $args = ['ctl' => null, 'sec' => null, 'exit' => null];
+        $services->setCoreServices($args);
+    }
+
     public function testTestGui(): void
     {
         $expected = TestGui::class;

@@ -69,6 +69,23 @@ class StaticServicesClass extends ServicesClass
     }
 
     /**
+     * Set core services for access via methods
+     * @param array<string, mixed> $args array of name => service to replace default ones
+     */
+    public function setCoreServices(array $args = []): void
+    {
+        $supported = ['ctl', 'req', 'log', 'mls', 'mod', 'sec', 'tpl', 'var', 'block', 'data', 'prop', 'cache', 'mem', 'config', 'session', 'user', 'db', 'exit'];
+        foreach ($args as $name => $service) {
+            if (!in_array($name, $supported)) {
+                throw new Exception('Unsupported service ' . $name);
+            }
+            // Pre-populate the static services cache with the mocked/overridden service.
+            $this->serviceCache[$name] = $service;
+        }
+        parent::setCoreServices($args);
+    }
+
+    /**
      * @return RequestFacade|null
      */
     public function getRequestInstance()
