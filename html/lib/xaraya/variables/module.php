@@ -59,8 +59,8 @@ class xarModVars extends xarVars implements IxarModVars
         $cacheScope = 'Mod.Variables.' . $scope;
 
         // Try to get it from the cache
-        if (xar::var()->isCached($cacheScope, $name)) {
-            $value = xar::var()->getCached($cacheScope, $name);
+        if (xar::mem()->has($cacheScope, $name)) {
+            $value = xar::mem()->get($cacheScope, $name);
             return $value;
         }
 
@@ -84,7 +84,7 @@ class xarModVars extends xarVars implements IxarModVars
         if ($result->next()) {
             // Found
             $value = $result->get(2);
-            xar::var()->setCached($cacheScope, $result->getString(1), $value);
+            xar::mem()->set($cacheScope, $result->getString(1), $value);
         }
         $result->close();
         return $value;
@@ -105,7 +105,7 @@ class xarModVars extends xarVars implements IxarModVars
         }
 
         $cacheScope = 'Mod.Variables.' . $scope;
-        if (xar::var()->hasPreload($cacheScope) && xar::var()->loadCached($cacheScope)) {
+        if (xar::mem()->hasPreload($cacheScope) && xar::mem()->load($cacheScope)) {
             self::$preloaded[$scope] = true;
             return true;
         }
@@ -125,12 +125,12 @@ class xarModVars extends xarVars implements IxarModVars
         $result = $stmt->executeQuery([$modBaseInfo['systemid']], xar::db()->getFetchAssoc());
 
         while ($result->next()) {
-            xar::var()->setCached($cacheScope, $result->getString('name'), $result->get('value'));
+            xar::mem()->set($cacheScope, $result->getString('name'), $result->get('value'));
         }
         $result->close();
 
-        if (xar::var()->hasPreload($cacheScope)) {
-            xar::var()->saveCached($cacheScope);
+        if (xar::mem()->hasPreload($cacheScope)) {
+            xar::mem()->save($cacheScope);
         }
 
         self::$preloaded[$scope] = true;
@@ -146,9 +146,9 @@ class xarModVars extends xarVars implements IxarModVars
     public static function cache($scope, $source = null)
     {
         $cacheScope = 'Mod.Variables.' . $scope;
-        if (xar::var()->hasPreload($cacheScope)) {
+        if (xar::mem()->hasPreload($cacheScope)) {
             $source ??= __METHOD__;
-            xar::var()->saveCached($cacheScope, null, $source);
+            xar::mem()->save($cacheScope, null, $source);
         }
         // Saved in DD > Modify Configuration = modules/dynamicdata/admingui/modifyconfig.php
         //xar::mod('dynamicdata')->cacheVars();
@@ -203,7 +203,7 @@ class xarModVars extends xarVars implements IxarModVars
         $stmt->executeUpdate($bindvars);
 
         // Update cache for the variable
-        xar::var()->setCached('Mod.Variables.' . $scope, $name, $value);
+        xar::mem()->set('Mod.Variables.' . $scope, $name, $value);
         return true;
     }
 
@@ -245,7 +245,7 @@ class xarModVars extends xarVars implements IxarModVars
         $stmt->executeUpdate($bindvars);
 
         // Removed it from the cache
-        xar::var()->delCached('Mod.Variables.' . $scope, $name);
+        xar::mem()->del('Mod.Variables.' . $scope, $name);
         return true;
     }
 
@@ -336,8 +336,8 @@ class xarModVars extends xarVars implements IxarModVars
             return;
         } // throw back
 
-        if (xar::var()->isCached('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
-            return xar::var()->getCached('Mod.GetVarID', $modBaseInfo['name'] . $name);
+        if (xar::mem()->has('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
+            return xar::mem()->get('Mod.GetVarID', $modBaseInfo['name'] . $name);
         }
 
         $dbconn = xar::db()->getConn();
@@ -357,7 +357,7 @@ class xarModVars extends xarVars implements IxarModVars
         $modvarid = $result->getInt(1);
         $result->Close();
 
-        xar::var()->setCached('Mod.GetVarID', $scope . $name, $modvarid);
+        xar::mem()->set('Mod.GetVarID', $scope . $name, $modvarid);
         return $modvarid;
     }
 }

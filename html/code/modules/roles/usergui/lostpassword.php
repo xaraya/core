@@ -98,7 +98,7 @@ class LostpasswordMethod extends MethodClass
                 // We need to tell some hooks that we are coming from the lost password screen
                 // and not the update the actual roles screen.  Right now, the keywords vanish
                 // into thin air.  Bug 1960 and 3161
-                $this->var()->setCached('Hooks.all', 'noupdate', 1);
+                $this->mem()->set('Hooks.all', 'noupdate', 1);
 
                 //Update user password
                 $role = xarRoles::get($user['id']);

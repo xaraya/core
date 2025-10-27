@@ -740,8 +740,8 @@ class xarEvents extends xarObject implements ixarEvents
         // Cached event subjects and observers
         $cacheScope = 'Events.Subjects';
         $cacheName = $subjecttype;
-        if (xar::var()->isCached($cacheScope, $cacheName)) {
-            $subjects = xar::var()->getCached($cacheScope, $cacheName);
+        if (xar::mem()->has($cacheScope, $cacheName)) {
+            $subjects = xar::mem()->get($cacheScope, $cacheName);
             return $subjects;
         }
 
@@ -792,7 +792,7 @@ class xarEvents extends xarObject implements ixarEvents
         };
         $result->close();
         // return cached results
-        xar::var()->setCached($cacheScope, $cacheName, $subjects);
+        xar::mem()->set($cacheScope, $cacheName, $subjects);
         return $subjects;
     }
 
@@ -815,8 +815,8 @@ class xarEvents extends xarObject implements ixarEvents
         $cacheScope = 'Events.Observers';
         $cacheName = $observertype;
         $observers = [];
-        if (xar::var()->isCached($cacheScope, $cacheName)) {
-            $observers = xar::var()->getCached($cacheScope, $cacheName);
+        if (xar::mem()->has($cacheScope, $cacheName)) {
+            $observers = xar::mem()->get($cacheScope, $cacheName);
             if (isset($observers[$event])) {
                 return $observers[$event];
             }
@@ -885,7 +885,7 @@ class xarEvents extends xarObject implements ixarEvents
             $observers[$event] = [];
         }
 
-        xar::var()->setCached($cacheScope, $cacheName, $observers);
+        xar::mem()->set($cacheScope, $cacheName, $observers);
         return $observers[$event];
     }
 

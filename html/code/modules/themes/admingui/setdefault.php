@@ -69,8 +69,8 @@ class SetdefaultMethod extends MethodClass
             return true;
         }
 
-        if ($this->var()->isCached('Mod.Variables.themes', 'default_theme')) {
-            $this->var()->delCached('Mod.Variables.themes', 'default_theme');
+        if ($this->mem()->has('Mod.Variables.themes', 'default_theme')) {
+            $this->mem()->del('Mod.Variables.themes', 'default_theme');
         }
 
         //update the database - activate the theme

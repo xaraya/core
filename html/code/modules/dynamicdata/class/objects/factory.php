@@ -102,8 +102,8 @@ class DataObjectFactory extends xarObject
             }
             $infoid = $args['moduleid'] . ':' . $args['itemtype'];
         }
-        if (xar::var()->isCached($cacheKey, $infoid)) {
-            return xar::var()->getCached($cacheKey, $infoid);
+        if (xar::mem()->has($cacheKey, $infoid)) {
+            return xar::mem()->get($cacheKey, $infoid);
         }
 
         $dbconn = xar::db()->getConn();
@@ -165,8 +165,8 @@ class DataObjectFactory extends xarObject
         ] = $result->fields;
         $result->close();
 
-        xar::var()->setCached($cacheKey, $info['objectid'], $info);
-        xar::var()->setCached($cacheKey, $info['name'], $info);
+        xar::mem()->set($cacheKey, $info['objectid'], $info);
+        xar::mem()->set($cacheKey, $info['name'], $info);
         return $info;
     }
 
@@ -183,11 +183,11 @@ class DataObjectFactory extends xarObject
         }
 
         $cacheKey = 'DynamicData._ObjectInfo';
-        if (isset($args['objectid']) && xar::var()->isCached($cacheKey, $args['objectid'])) {
-            return xar::var()->getCached($cacheKey, $args['objectid']);
+        if (isset($args['objectid']) && xar::mem()->has($cacheKey, $args['objectid'])) {
+            return xar::mem()->get($cacheKey, $args['objectid']);
         }
-        if (isset($args['name']) && xar::var()->isCached($cacheKey, $args['name'])) {
-            return xar::var()->getCached($cacheKey, $args['name']);
+        if (isset($args['name']) && xar::mem()->has($cacheKey, $args['name'])) {
+            return xar::mem()->get($cacheKey, $args['name']);
         }
 
         xar::mod()->loadDbInfo('dynamicdata');
@@ -237,8 +237,8 @@ class DataObjectFactory extends xarObject
         $result = $q->output();
         $row = $q->row();
         if (!empty($row)) {
-            xar::var()->setCached($cacheKey, $row['object_id'], $result);
-            xar::var()->setCached($cacheKey, $row['object_name'], $result);
+            xar::mem()->set($cacheKey, $row['object_id'], $result);
+            xar::mem()->set($cacheKey, $row['object_name'], $result);
         }
         return $result;
     }

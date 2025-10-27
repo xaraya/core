@@ -366,40 +366,40 @@ trait VariablesTrait
 
     public function isCached(string $scope, string $name): bool
     {
-        return $this->getParent()->coreCache()->has($scope, $name);
+        return $this->getParent()->mem()->has($scope, $name);
     }
 
     public function getCached(string $scope, string $name): mixed
     {
-        return $this->getParent()->coreCache()->get($scope, $name);
+        return $this->getParent()->mem()->get($scope, $name);
     }
 
     public function setCached(string $scope, string $name, mixed $value): void
     {
-        $this->getParent()->coreCache()->set($scope, $name, $value);
+        $this->getParent()->mem()->set($scope, $name, $value);
     }
 
     public function delCached(string $scope, string $name): void
     {
-        $this->getParent()->coreCache()->del($scope, $name);
+        $this->getParent()->mem()->del($scope, $name);
     }
 
     public function hasPreload(string $scope, ?string $name = null): bool
     {
-        return $this->getParent()->coreCache()->hasPreload($scope, $name);
+        return $this->getParent()->mem()->hasPreload($scope, $name);
     }
 
     public function loadCached(string $scope, ?string $name = null): bool
     {
-        return $this->getParent()->coreCache()->load($scope, $name);
+        return $this->getParent()->mem()->load($scope, $name);
     }
 
     public function saveCached(string $scope, ?string $name = null, ?string $source = null): bool
     {
-        return $this->getParent()->coreCache()->save($scope, $name, $source);
+        return $this->getParent()->mem()->save($scope, $name, $source);
         // Saved in DD > Utilities > DB Connections = modules/dynamicdata/admingui/dbconfig.php
         // for all modules - see UtilApi::getAllDatabases()
-        //xar::coreCache()->save('DynamicData', 'Databases');
+        //xar::mem()->save('DynamicData', 'Databases');
     }
 }
 

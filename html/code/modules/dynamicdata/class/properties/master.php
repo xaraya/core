@@ -331,8 +331,8 @@ class DataPropertyMaster extends xarObject
     public static function getAllConfigProperties()
     {
         // cache configuration for all properties
-        if (xar::var()->isCached('DynamicData', 'Configurations')) {
-            return xar::var()->getCached('DynamicData', 'Configurations');
+        if (xar::mem()->has('DynamicData', 'Configurations')) {
+            return xar::mem()->get('DynamicData', 'Configurations');
         }
         // Can't use DD methods here as we go into a recursion loop
         $xartable = xar::db()->getTables();
@@ -357,7 +357,7 @@ class DataPropertyMaster extends xarObject
             $item = $result->fields;
             $allconfigproperties[$item['name']] = $item;
         }
-        xar::var()->setCached('DynamicData', 'Configurations', $allconfigproperties);
+        xar::mem()->set('DynamicData', 'Configurations', $allconfigproperties);
         return $allconfigproperties;
     }
 

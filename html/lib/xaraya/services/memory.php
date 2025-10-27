@@ -24,9 +24,9 @@ sys::import('xaraya.services.servicetrait');
 /**
  * For documentation purposes only
  */
-interface CoreCacheInterface extends ServiceInterface
+interface MemoryInterface extends ServiceInterface
 {
-    public const SLICE = 'core.cache';
+    public const SLICE = 'memory';
 
     public function has(string $scope, string $name): bool;
     public function get(string $scope, string $name): mixed;
@@ -41,7 +41,7 @@ interface CoreCacheInterface extends ServiceInterface
 /**
  * Core Cache Service for in-memory, request-scoped caching
  */
-class CoreCacheService implements CoreCacheInterface
+class MemoryService implements MemoryInterface
 {
     use ServiceTrait;
 

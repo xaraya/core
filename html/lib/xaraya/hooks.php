@@ -99,8 +99,8 @@ class xarHooks extends xarEvents
         $cacheScope = 'Hooks.Observers';
         $cacheName = $subject_module . '.' . $subject_itemtype;
         $observers = [];
-        if (xar::var()->isCached($cacheScope, $cacheName)) {
-            $observers = xar::var()->getCached($cacheScope, $cacheName);
+        if (xar::mem()->has($cacheScope, $cacheName)) {
+            $observers = xar::mem()->get($cacheScope, $cacheName);
             if (isset($observers[$event])) {
                 return $observers[$event];
             }
@@ -183,7 +183,7 @@ class xarHooks extends xarEvents
             ];
         };
         $result->close();
-        xar::var()->setCached($cacheScope, $cacheName, $observers);
+        xar::mem()->set($cacheScope, $cacheName, $observers);
         return $observers[$event];
     }
 

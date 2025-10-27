@@ -59,8 +59,8 @@ class SetstateMethod extends MethodClass
         }
 
         // Clear cache to make sure we get newest values
-        if ($this->var()->isCached('Theme.Infos', $regid)) {
-            $this->var()->delCached('Theme.Infos', $regid);
+        if ($this->mem()->has('Theme.Infos', $regid)) {
+            $this->mem()->del('Theme.Infos', $regid);
         }
 
         //Get theme info

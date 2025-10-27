@@ -166,8 +166,8 @@ class PropertyRegistration extends DataContainer
 
     public static function Retrieve()
     {
-        if (xar::var()->isCached('DynamicData', 'PropertyTypes')) {
-            return xar::var()->getCached('DynamicData', 'PropertyTypes');
+        if (xar::mem()->has('DynamicData', 'PropertyTypes')) {
+            return xar::mem()->get('DynamicData', 'PropertyTypes');
         }
         $dbconn = xar::db()->getConn();
         xar::mod()->loadDbInfo('dynamicdata');
@@ -218,7 +218,7 @@ class PropertyRegistration extends DataContainer
             }
         }
         $result->close();
-        xar::var()->setCached('DynamicData', 'PropertyTypes', $proptypes);
+        xar::mem()->set('DynamicData', 'PropertyTypes', $proptypes);
         return $proptypes;
     }
 
@@ -255,7 +255,7 @@ class PropertyRegistration extends DataContainer
                 // the module is active.
                 $propDirs = $dirs;
             } else {
-                if (!xar::var()->getCached('installer', 'installing')) {
+                if (!xar::mem()->get('installer', 'installing')) {
                     // Repopulate the configurations table
                     $tables = xar::db()->getTables();
                     $sql = "DELETE FROM $tables[dynamic_configurations]";
@@ -501,7 +501,7 @@ class PropertyRegistration extends DataContainer
                 unset($currentproptypes);
 
                 // Configuring each property type
-                if (xar::var()->getCached('installer', 'installing') === true) {
+                if (xar::mem()->get('installer', 'installing') === true) {
                     // We don't need this when installing Xaraya
                     // This saves a lot of db calls
                     continue;
@@ -518,7 +518,7 @@ class PropertyRegistration extends DataContainer
         }
 
         // Clear the property types from cached memory
-        xar::var()->delCached('DynamicData', 'PropertyTypes');
+        xar::mem()->del('DynamicData', 'PropertyTypes');
 
         // Sort the property types
         ksort($proptypes);

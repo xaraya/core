@@ -130,12 +130,12 @@ class UtilApi extends UserApi implements DatabaseInterface
         }
         // save databases in core cache if needed
         $old_databases = [];
-        if ($this->var()->isCached('DynamicData', 'Databases')) {
-            $old_databases = $this->var()->getCached('DynamicData', 'Databases');
+        if ($this->mem()->has('DynamicData', 'Databases')) {
+            $old_databases = $this->mem()->get('DynamicData', 'Databases');
         }
         if (json_encode($old_databases) != json_encode($all_databases)) {
-            $this->var()->setCached('DynamicData', 'Databases', $all_databases);
-            $this->var()->saveCached('DynamicData', 'Databases', __METHOD__);
+            $this->mem()->set('DynamicData', 'Databases', $all_databases);
+            $this->mem()->save('DynamicData', 'Databases', __METHOD__);
         }
         return $all_databases;
     }

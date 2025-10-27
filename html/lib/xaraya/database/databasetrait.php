@@ -214,8 +214,8 @@ trait DatabaseTrait
         $modName = $this->getDbModName();
         if (empty(static::$_databases)) {
             $allDatabases = [];
-            if (xar::var()->isCached('DynamicData', 'Databases')) {
-                $allDatabases = xar::var()->getCached('DynamicData', 'Databases');
+            if (xar::mem()->has('DynamicData', 'Databases')) {
+                $allDatabases = xar::mem()->get('DynamicData', 'Databases');
             }
             if (!empty($allDatabases[$modName])) {
                 static::$_databases = $allDatabases[$modName];
@@ -227,7 +227,7 @@ trait DatabaseTrait
                     static::$_databases = $databases;
                 }
                 $allDatabases[$modName] = static::$_databases;
-                xar::var()->setCached('DynamicData', 'Databases', $allDatabases);
+                xar::mem()->set('DynamicData', 'Databases', $allDatabases);
             }
         }
         return static::$_databases;
@@ -268,14 +268,14 @@ trait DatabaseTrait
         $modName ??= $this->getDbModName();
         xar::mod($modName)->setVar('databases', serialize($databases));
         $allDatabases = [];
-        if (xar::var()->isCached('DynamicData', 'Databases')) {
-            $allDatabases = xar::var()->getCached('DynamicData', 'Databases');
+        if (xar::mem()->has('DynamicData', 'Databases')) {
+            $allDatabases = xar::mem()->get('DynamicData', 'Databases');
         }
         $allDatabases[$modName] = $databases;
-        xar::var()->setCached('DynamicData', 'Databases', $allDatabases);
+        xar::mem()->set('DynamicData', 'Databases', $allDatabases);
         // Saved in DD > Utilities > DB Connections = modules/dynamicdata/admingui/dbconfig.php
         // for all modules - see UtilApi::getAllDatabases()
-        //xar::var()->saveCached('DynamicData', 'Databases');
+        //xar::mem()->save('DynamicData', 'Databases');
     }
 
     /**

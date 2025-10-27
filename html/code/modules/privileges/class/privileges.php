@@ -494,8 +494,8 @@ class xarPrivileges extends xarMasks
         parent::initialize();
 
         $cacheKey = 'Privilege.ByPid';
-        if (xar::var()->isCached($cacheKey, $id)) {
-            return xar::var()->getCached($cacheKey, $id);
+        if (xar::mem()->has($cacheKey, $id)) {
+            return xar::mem()->get($cacheKey, $id);
         }
         // Need to get it
         $query = "SELECT p.id, p.name, r.name, p.module_id, m.name, p.component, p.instance, p.level, p.description
@@ -527,7 +527,7 @@ class xarPrivileges extends xarMasks
 
             sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
-            xar::var()->setCached($cacheKey, $id, $priv);
+            xar::mem()->set($cacheKey, $id, $priv);
             return $priv;
         } else {
             return;

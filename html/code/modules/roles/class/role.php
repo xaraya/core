@@ -420,8 +420,8 @@ class Role extends DataObject
         static $stmt = null;  // For each id, the query is the same, prepare it once.
 
         $cacheKey = "Privileges.ById";
-        if (xar::var()->isCached($cacheKey, $this->properties['id']->value)) {
-            return xar::var()->getCached($cacheKey, $this->properties['id']->value);
+        if (xar::mem()->has($cacheKey, $this->properties['id']->value)) {
+            return xar::mem()->get($cacheKey, $this->properties['id']->value);
         }
         // We'll have to get it.
         xar::log()->info("ROLE: getting privileges for id: " . $this->properties['id']->value);
@@ -458,7 +458,7 @@ class Role extends DataObject
                 'parentid' => 0]);
             array_push($privileges, $perm);
         }
-        xar::var()->setCached($cacheKey, $this->properties['id']->value, $privileges);
+        xar::mem()->set($cacheKey, $this->properties['id']->value, $privileges);
         return $privileges;
     }
 
@@ -695,8 +695,8 @@ class Role extends DataObject
         }
 
         // if it's cached, we can return it
-        if (xar::var()->isCached($cacheKey, $this->properties['id']->value)) {
-            return xar::var()->getCached($cacheKey, $this->properties['id']->value);
+        if (xar::mem()->has($cacheKey, $this->properties['id']->value)) {
+            return xar::mem()->get($cacheKey, $this->properties['id']->value);
         }
 
         // if this is a user just perform a SELECT on the rolemembers table
@@ -718,7 +718,7 @@ class Role extends DataObject
             $parents[] = $role;
         }
         // done
-        xar::var()->setCached($cacheKey, $this->properties['id']->value, $parents);
+        xar::mem()->set($cacheKey, $this->properties['id']->value, $parents);
         return $parents;
     }
 

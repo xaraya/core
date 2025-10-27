@@ -78,8 +78,8 @@ class ParseuserhomeMethod extends MethodClass
                     {
                         $url = explode(':', substr($url, 1, - 1));
                         // Get current pubtype type (if any)
-                        if ($this->var()->isCached('Blocks.articles', 'ptid')) {
-                            $ptid = $this->var()->getCached('Blocks.articles', 'ptid');
+                        if ($this->mem()->has('Blocks.articles', 'ptid')) {
+                            $ptid = $this->mem()->get('Blocks.articles', 'ptid');
                         }
                         if (empty($ptid)) {
                             // try to get ptid from input
@@ -95,15 +95,15 @@ class ParseuserhomeMethod extends MethodClass
                 case '(': // category link
                     {
                         $url = explode(':', substr($url, 1, - 1));
-                        if ($this->var()->isCached('Blocks.categories', 'catid')) {
-                            $catid = $this->var()->getCached('Blocks.categories', 'catid');
+                        if ($this->mem()->has('Blocks.categories', 'catid')) {
+                            $catid = $this->mem()->get('Blocks.categories', 'catid');
                         }
                         if (empty($catid)) {
                             // try to get catid from input
                             $this->var()->check('catid', $catid);
                         }
-                        if (empty($catid) && $this->var()->isCached('Blocks.categories', 'cids')) {
-                            $cids = $this->var()->getCached('Blocks.categories', 'cids');
+                        if (empty($catid) && $this->mem()->has('Blocks.categories', 'cids')) {
+                            $cids = $this->mem()->get('Blocks.categories', 'cids');
                         } else {
                             $cids = [];
                         }

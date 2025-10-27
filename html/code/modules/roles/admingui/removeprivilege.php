@@ -91,7 +91,7 @@ class RemoveprivilegeMethod extends MethodClass
             // We need to tell some hooks that we are coming from the add privilege screen
             // and not the update the actual roles screen.  Right now, the keywords vanish
             // into thin air.  Bug 1960 and 3161
-            $this->var()->setCached('Hooks.all', 'noupdate', 1);
+            $this->mem()->set('Hooks.all', 'noupdate', 1);
 
             // CHECKME: do we really want to do that here (other than for flushing the cache) ?
             // call update hooks and let them know that the role has changed

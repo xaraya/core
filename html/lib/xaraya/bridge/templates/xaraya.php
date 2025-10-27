@@ -265,13 +265,13 @@ class XarayaCoreExtension extends XarayaTwigExtension
     public function xar_varcache($scope, $name, $value = null)
     {
         if (!isset($value)) {
-            return $this->var()->getCached($scope, $name);
+            return $this->mem()->get($scope, $name);
         }
         // @todo find some other way to delete vs. set :-)
         if ($value == 'DELETE_ME') {
-            $this->var()->delCached($scope, $name);
+            $this->mem()->del($scope, $name);
         } else {
-            $this->var()->setCached($scope, $name, $value);
+            $this->mem()->set($scope, $name, $value);
         }
     }
 

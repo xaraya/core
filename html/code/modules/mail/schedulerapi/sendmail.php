@@ -86,7 +86,7 @@ class SendmailMethod extends MethodClass
 
         // Trick : make sure we're dealing with up-to-date information here,
         //         because sending all those mails may have taken a while...
-        $this->var()->delCached('Mod.Variables.mail', 'queue');
+        $this->mem()->del('Mod.Variables.mail', 'queue');
 
         // get the current waiting queue
         $serialqueue = $this->mod()->getVar('queue');

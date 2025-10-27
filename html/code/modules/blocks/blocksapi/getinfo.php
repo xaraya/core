@@ -123,14 +123,14 @@ class GetinfoMethod extends MethodClass
         // set a cache key based on filter params
         $key = md5(serialize($filter));
         // see if we cached it already
-        if ($this->var()->isCached('Block.Info', $key)) {
-            $blockinfo = $this->var()->getCached('Block.Info', $key);
+        if ($this->mem()->has('Block.Info', $key)) {
+            $blockinfo = $this->mem()->get('Block.Info', $key);
         } else {
             // we need to get the actual $classname and $filepath from getitems() - requires UPGRADE due to table change
             // call the types or instances api (both return the same data set)
             $blockinfo = $this->mod()->apiFunc('blocks', $apitype, 'getitem', $filter);
             // cache it
-            $this->var()->setCached('Block.Info', $key, $blockinfo);
+            $this->mem()->set('Block.Info', $key, $blockinfo);
         }
         // were we supplied with instance or type and/or module params to a non-existent block/type?
         if (empty($blockinfo)) {

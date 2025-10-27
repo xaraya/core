@@ -140,8 +140,8 @@ class ThemeConfigurationProperty extends TextBoxProperty
     public function getThemeConfigurations()
     {
         // cache configuration for all properties
-        if ($this->var()->isCached('Themes', 'Configurations')) {
-            $allconfigurations = $this->var()->getCached('Themes', 'Configurations');
+        if ($this->mem()->has('Themes', 'Configurations')) {
+            $allconfigurations = $this->mem()->get('Themes', 'Configurations');
         } else {
             sys::import('xaraya.structures.query');
             $this->mod()->loadDbInfo('themes');
@@ -187,7 +187,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
                 }
             }
 
-            $this->var()->setCached('Themes', 'Configurations', $allconfigurations);
+            $this->mem()->set('Themes', 'Configurations', $allconfigurations);
         }
         return $allconfigurations;
     }

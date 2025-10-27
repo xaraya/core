@@ -137,20 +137,20 @@ class GetitemsMethod extends MethodClass
                 $item[$field] = array_shift($result->fields);
             }
 
-            if ($this->var()->isCached('Theme.Infos', $item['regid'])) {
+            if ($this->mem()->has('Theme.Infos', $item['regid'])) {
                 // merge cached info with db info
-                $item += $this->var()->getCached('Theme.Infos', $item['regid']);
+                $item += $this->mem()->get('Theme.Infos', $item['regid']);
             } else {
                 $item['displayname'] = $item['name'];
                 // Shortcut for os prepared directory
                 $item['osdirectory'] = $this->var()->prepPath($item['directory']);
 
-                $this->var()->setCached('Theme.BaseInfos', $item['name'], $item);
+                $this->mem()->set('Theme.BaseInfos', $item['name'], $item);
 
                 $fileinfo = xarTheme::getFileInfo($item['osdirectory']);
                 if (!empty($fileinfo)) {
                     $item = array_merge($fileinfo, $item);
-                    $this->var()->setCached('Theme.Infos', $item['regid'], $item);
+                    $this->mem()->set('Theme.Infos', $item['regid'], $item);
                     switch ($item['state']) {
                         case xarTheme::STATE_MISSING_FROM_UNINITIALISED:
                             $item['state'] = xarTheme::STATE_UNINITIALISED;

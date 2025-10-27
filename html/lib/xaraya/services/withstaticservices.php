@@ -390,7 +390,7 @@ trait WithStaticServices
     }
 
     /**
-     * Access CoreCacheService methods (has, get, set, del, flush, ...)
+     * Access MemoryService methods (has, get, set, del, flush, ...)
      *
      * Available methods:
      * - has()
@@ -403,9 +403,9 @@ trait WithStaticServices
      * - save()
      *
      */
-    public static function coreCache(): CoreCacheInterface
+    public static function mem(): MemoryInterface
     {
-        return self::getServicesClass()->coreCache();
+        return self::getServicesClass()->mem();
     }
 
     /**

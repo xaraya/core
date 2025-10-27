@@ -82,8 +82,8 @@ class ViewMethod extends MethodClass
                     if ($info['class'] != 2) {
                         $new_user_theme = $old_user_theme;
                     } else {
-                        if ($this->var()->isCached('Mod.Variables.themes', 'default_theme')) {
-                            $this->var()->delCached('Mod.Variables.themes', 'default_theme');
+                        if ($this->mem()->has('Mod.Variables.themes', 'default_theme')) {
+                            $this->mem()->del('Mod.Variables.themes', 'default_theme');
                         }
                         if (!$adminapi->install(['regid' => $themeid])) {
                             $new_user_theme = $old_user_theme;
@@ -101,8 +101,8 @@ class ViewMethod extends MethodClass
                     if ($info['class'] != 2) {
                         $new_admin_theme = $old_admin_theme;
                     } else {
-                        if ($this->var()->isCached('Mod.Variables.themes', 'admin_theme')) {
-                            $this->var()->delCached('Mod.Variables.themes', 'admin_theme');
+                        if ($this->mem()->has('Mod.Variables.themes', 'admin_theme')) {
+                            $this->mem()->del('Mod.Variables.themes', 'admin_theme');
                         }
                         if (!$adminapi->install(['regid' => $themeid])) {
                             $new_admin_theme = $old_admin_theme;

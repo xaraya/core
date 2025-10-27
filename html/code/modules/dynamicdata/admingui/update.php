@@ -92,7 +92,7 @@ class UpdateMethod extends MethodClass
                 // if we're editing a dynamic property, save its property type to cache
                 // for correct processing of the configuration rule (ValidationProperty)
                 if ($myobject->objectid == 2) {
-                    $this->var()->setCached('dynamicdata', 'currentproptype', $myobject->properties['type']);
+                    $this->mem()->set('dynamicdata', 'currentproptype', $myobject->properties['type']);
                 }
 
                 $isvalid = $myobject->checkInput([], 0, 'dd');

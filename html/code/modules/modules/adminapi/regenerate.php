@@ -221,8 +221,8 @@ class RegenerateMethod extends MethodClass
                         }
 
                         // Clear cache to make sure we set the correct states
-                        //if ($this->var()->isCached('Mod.Infos', $modinfo['regid'])) {
-                        //    $this->var()->delCached('Mod.Infos', $modinfo['regid']);
+                        //if ($this->mem()->has('Mod.Infos', $modinfo['regid'])) {
+                        //    $this->mem()->del('Mod.Infos', $modinfo['regid']);
                         //}
 
                         // Set error state

@@ -137,7 +137,7 @@ class ModifyMethod extends MethodClass
 
                     // if we're editing a dynamic property, save its property type to cache
                     // for correct processing of the configuration rule (ValidationProperty)
-                    $this->var()->setCached('dynamicdata', 'currentproptype', $object->properties['type']);
+                    $this->mem()->set('dynamicdata', 'currentproptype', $object->properties['type']);
                 }
 
                 $data['preview'] = $preview;

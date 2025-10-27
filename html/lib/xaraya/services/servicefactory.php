@@ -38,7 +38,7 @@ class ServiceFactory
     public static array $sharedServices = [
         // public services
         'ctl', 'log', 'mls', 'var', 'cache', 'config', 'session', 'db',
-        'req', 'core.cache',
+        'req', 'mem',
         // internal helpers
         'modules.vars', 'modules.user', 'modules.item', 'modules.info', 'modules.exec', 'modules.hooks', 'modules.alias',
     ];
@@ -73,7 +73,7 @@ class ServiceFactory
             'cache' => self::getCachingService($parent),
             'config' => self::getConfigService($parent),
             'req' => self::getRequestService($parent),
-            'core.cache' => self::getCoreCacheService($parent),
+            'mem' => self::getMemoryService($parent),
             'session' => self::getSessionService($parent),
             'user' => self::getUserService($parent),
             'db' => self::getDatabaseService($parent),
@@ -197,10 +197,10 @@ class ServiceFactory
         return ConfigService::create($parent);
     }
 
-    public static function getCoreCacheService(object|string|null $parent = null): CoreCacheInterface
+    public static function getMemoryService(object|string|null $parent = null): MemoryInterface
     {
         self::log(__METHOD__, $parent);
-        return CoreCacheService::create($parent);
+        return MemoryService::create($parent);
     }
 
     public static function getRequestService(object|string|null $parent = null): RequestInterface

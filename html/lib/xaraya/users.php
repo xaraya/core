@@ -417,7 +417,7 @@ class xarUser extends xarObject
             throw new BadParameterException('name');
         }
 
-        if (!xar::var()->isCached('User.Variables.' . $userId, $name)) {
+        if (!xar::mem()->has('User.Variables.' . $userId, $name)) {
 
             if ($name == 'name' || $name == 'uname' || $name == 'email') {
                 if ($userId == self::LAST_RESORT) {
@@ -471,15 +471,15 @@ class xarUser extends xarObject
                     throw new IDNotFoundException($userId, 'User identified by id #(1) does not exist.');
                 }
 
-                xar::var()->setCached('User.Variables.' . $userId, 'uname', $userRole['uname']);
-                xar::var()->setCached('User.Variables.' . $userId, 'name', $userRole['name']);
-                xar::var()->setCached('User.Variables.' . $userId, 'email', $userRole['email']);
+                xar::mem()->set('User.Variables.' . $userId, 'uname', $userRole['uname']);
+                xar::mem()->set('User.Variables.' . $userId, 'name', $userRole['name']);
+                xar::mem()->set('User.Variables.' . $userId, 'email', $userRole['email']);
 
             } elseif (!self::isVarDefined($name)) {
                 if (xar::mod('roles')->getVar($name) || xar::mod('roles')->getVar('set' . $name)) { //acount for optionals that need to be activated)
                     $value = xar::mod('roles')->getUserVar($name, $userId);
                     if ($value == null) {
-                        xar::var()->setCached('User.Variables.' . $userId, $name, false);
+                        xar::mem()->set('User.Variables.' . $userId, $name, false);
                         // Here we can't raise an exception because they're all optional
                         $optionalvars = ['locale','timezone','usertimezone','userlastlogin',
                             'userhome','primaryparent','passwordupdate'];
@@ -491,7 +491,7 @@ class xarUser extends xarObject
                         }
                         return;
                     } else {
-                        xar::var()->setCached('User.Variables.' . $userId, $name, $value);
+                        xar::mem()->set('User.Variables.' . $userId, $name, $value);
                     }
                 }
 
@@ -506,17 +506,17 @@ class xarUser extends xarObject
                 $properties = & self::$objectRef->getProperties();
                 foreach (array_keys($properties) as $key) {
                     if (isset($properties[$key]->value)) {
-                        xar::var()->setCached('User.Variables.' . $userId, $key, $properties[$key]->value);
+                        xar::mem()->set('User.Variables.' . $userId, $key, $properties[$key]->value);
                     }
                 }
             }
         }
 
-        if (!xar::var()->isCached('User.Variables.' . $userId, $name)) {
+        if (!xar::mem()->has('User.Variables.' . $userId, $name)) {
             return false; //failure
         }
 
-        $cachedValue = xar::var()->getCached('User.Variables.' . $userId, $name);
+        $cachedValue = xar::mem()->get('User.Variables.' . $userId, $name);
         if ($cachedValue === false) {
             // Variable already searched but doesn't exist and has no default
             return;
@@ -565,7 +565,7 @@ class xarUser extends xarObject
 
         } elseif (!self::isVarDefined($name)) {
             if (xar::mod('roles')->getVar($name)) {
-                xar::var()->setCached('User.Variables.' . $userId, $name, false);
+                xar::mem()->set('User.Variables.' . $userId, $name, false);
                 throw new IDNotFoundException($name, 'User variable #(1) was not correctly registered');
             } else {
                 xar::mod('roles')->setUserVar($name, $value, $userId);
@@ -593,7 +593,7 @@ class xarUser extends xarObject
         }
 
         // Keep in sync the UserVariables cache
-        xar::var()->setCached('User.Variables.' . $userId, $name, $value);
+        xar::mem()->set('User.Variables.' . $userId, $name, $value);
 
         return true;
     }

@@ -105,14 +105,14 @@ class DataObjectDescriptor extends ObjectDescriptor
     public static function findObject(array $args = [])
     {
         $cacheKey = 'DynamicData.FindObject';
-        if (!empty($args['objectid']) && xar::var()->isCached($cacheKey, $args['objectid'])) {
-            return xar::var()->getCached($cacheKey, $args['objectid']);
+        if (!empty($args['objectid']) && xar::mem()->has($cacheKey, $args['objectid'])) {
+            return xar::mem()->get($cacheKey, $args['objectid']);
         }
-        if (!empty($args['name']) && xar::var()->isCached($cacheKey, $args['name'])) {
-            return xar::var()->getCached($cacheKey, $args['name']);
+        if (!empty($args['name']) && xar::mem()->has($cacheKey, $args['name'])) {
+            return xar::mem()->get($cacheKey, $args['name']);
         }
-        if (!empty($args['moduleid']) && isset($args['itemtype']) && xar::var()->isCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype'])) {
-            return xar::var()->getCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype']);
+        if (!empty($args['moduleid']) && isset($args['itemtype']) && xar::mem()->has($cacheKey, $args['moduleid'] . ':' . $args['itemtype'])) {
+            return xar::mem()->get($cacheKey, $args['moduleid'] . ':' . $args['itemtype']);
         }
         xar::mod()->loadDbInfo('dynamicdata');
         $xartable = xar::db()->getTables();
@@ -156,13 +156,13 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['name'] = $row['name'];
         }
         if (!empty($args['objectid'])) {
-            xar::var()->setCached($cacheKey, $args['objectid'], $row);
+            xar::mem()->set($cacheKey, $args['objectid'], $row);
         }
         if (!empty($args['name'])) {
-            xar::var()->setCached($cacheKey, $args['name'], $row);
+            xar::mem()->set($cacheKey, $args['name'], $row);
         }
         if (!empty($args['moduleid']) && isset($args['itemtype'])) {
-            xar::var()->setCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype'], $row);
+            xar::mem()->set($cacheKey, $args['moduleid'] . ':' . $args['itemtype'], $row);
         }
         return $row;
     }

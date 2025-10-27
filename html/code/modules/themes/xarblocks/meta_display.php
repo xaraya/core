@@ -76,11 +76,11 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
         // while we're here, handle modules setting meta refresh via the cache
         // NOTE: this functionality is deprecated, instead use the xar:meta tag, eg...
         // <xar:meta type="http-equiv" value="refresh" content="3; URL=http://www.example.com"/>
-        if ($this->var()->isCached('Meta.refresh', 'url') && $this->var()->isCached('Meta.refresh', 'time')) {
+        if ($this->mem()->has('Meta.refresh', 'url') && $this->mem()->has('Meta.refresh', 'time')) {
             $xarmeta->register([
                 'type' => 'http-equiv',
                 'value' => 'Refresh',
-                'content' => $this->var()->getCached('Meta.refresh', 'time') . '; URL=' . $this->var()->getCached('Meta.refresh', 'url'),
+                'content' => $this->mem()->get('Meta.refresh', 'time') . '; URL=' . $this->mem()->get('Meta.refresh', 'url'),
                 'lang' => '',
                 'dir' => '',
                 'scheme' => '',
@@ -92,8 +92,8 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
         }
 
         //Pager Buttons
-        $meta['first']          = $this->var()->getCached('Pager.first', 'leftarrow');
-        $meta['last']           = $this->var()->getCached('Pager.last', 'rightarrow');
+        $meta['first']          = $this->mem()->get('Pager.first', 'leftarrow');
+        $meta['last']           = $this->mem()->get('Pager.last', 'rightarrow');
 
         return $meta;
 

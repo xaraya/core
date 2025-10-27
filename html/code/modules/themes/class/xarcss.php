@@ -520,7 +520,7 @@ class xarCSS extends xarObject
                     break;
                 }
                 if (empty($module)) {
-                    $module = xar::var()->getCached('Security.Variables', 'currentmodule');
+                    $module = xar::mem()->get('Security.Variables', 'currentmodule');
                 }
                 // no break
             case 'module':

@@ -183,8 +183,8 @@ class GetvalidationMethod extends MethodClass
                     $url = $this->ctl()->getModuleURL('roles', 'user', 'main');
 
                     $time = '4';
-                    $this->var()->setCached('Meta.refresh', 'url', $url);
-                    $this->var()->setCached('Meta.refresh', 'time', $time);
+                    $this->mem()->set('Meta.refresh', 'url', $url);
+                    $this->mem()->set('Meta.refresh', 'time', $time);
                 }
 
                 //TODO : This registration and validation processes need to be totally revamped and clearly defined - make do for now

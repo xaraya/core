@@ -58,8 +58,8 @@ class SetstateMethod extends MethodClass
         }
 
         // Clear cache to make sure we get newest values
-        if ($this->var()->isCached('Mod.Infos', $regid)) {
-            $this->var()->delCached('Mod.Infos', $regid);
+        if ($this->mem()->has('Mod.Infos', $regid)) {
+            $this->mem()->del('Mod.Infos', $regid);
         }
 
         //Get module info
@@ -126,8 +126,8 @@ class SetstateMethod extends MethodClass
         // We're update module state here we must update at least
         // the base info in the cache.
         $modInfo['state'] = $state;
-        $this->var()->setCached('Mod.Infos', $regid, $modInfo);
-        $this->var()->setCached('Mod.BaseInfos', $modInfo['name'], $modInfo);
+        $this->mem()->set('Mod.Infos', $regid, $modInfo);
+        $this->mem()->set('Mod.BaseInfos', $modInfo['name'], $modInfo);
 
         return $state;
     }

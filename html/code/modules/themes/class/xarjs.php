@@ -466,7 +466,7 @@ class xarJS extends xarObject
                 }
                 // fall back to current block module calling the tag
                 if (empty($module)) {
-                    $module = xar::var()->getCached('Security.Variables', 'currentmodule');
+                    $module = xar::mem()->get('Security.Variables', 'currentmodule');
                 }
                 // block scope falls through to module validation
                 // no break

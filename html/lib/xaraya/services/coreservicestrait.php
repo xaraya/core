@@ -60,7 +60,7 @@ interface CoreServicesInterface extends ContextInterface
     public function data(): DataObjectInterface;
     public function prop(): DataPropertyInterface;
     public function cache(): CachingInterface;
-    public function coreCache(): CoreCacheInterface;
+    public function mem(): MemoryInterface;
     public function req(): RequestInterface;
     public function config(): ConfigInterface;
     public function session(): SessionInterface;
@@ -441,7 +441,7 @@ trait CoreServicesTrait
     }
 
     /**
-     * Access CoreCacheService methods (has, get, set, del, flush, ...)
+     * Access MemoryService methods (has, get, set, del, flush, ...)
      *
      * Available methods:
      * - has()
@@ -454,9 +454,9 @@ trait CoreServicesTrait
      * - save()
      *
      */
-    public function coreCache(): CoreCacheInterface
+    public function mem(): MemoryInterface
     {
-        return $this->getStaticServices()->coreCache();
+        return $this->getStaticServices()->mem();
     }
 
     /**

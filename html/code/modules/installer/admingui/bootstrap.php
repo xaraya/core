@@ -38,7 +38,7 @@ class BootstrapMethod extends MethodClass
             throw new Exception('Already installed');
         }
         $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
-        $this->var()->setCached('installer', 'installing', true);
+        $this->mem()->set('installer', 'installing', true);
 
         # --------------------------------------------------------
         # Create DD configuration and sample objects

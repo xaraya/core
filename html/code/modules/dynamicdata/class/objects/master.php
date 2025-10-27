@@ -841,7 +841,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         } elseif (empty($this->primary)) {
             return;
             // if we already have some hook call in progress
-        } elseif ($this->var()->isCached('DynamicData', 'HookAction')) {
+        } elseif ($this->mem()->has('DynamicData', 'HookAction')) {
             return;
         }
 
@@ -856,7 +856,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         }
 
         // CHECKME: prevent recursive hook calls in general
-        $this->var()->setCached('DynamicData', 'HookAction', $action);
+        $this->mem()->set('DynamicData', 'HookAction', $action);
 
         // initialize hookvalues
         $this->hookvalues = [];
@@ -922,7 +922,7 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
         // the result of GUI actions will be in $this->hookoutput
 
         // CHECKME: prevent recursive hook calls in general
-        $this->var()->delCached('DynamicData', 'HookAction');
+        $this->mem()->del('DynamicData', 'HookAction');
     }
 
     /**

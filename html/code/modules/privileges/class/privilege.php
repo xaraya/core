@@ -426,9 +426,9 @@ class xarPrivilege extends xarMask
         $cacheId = $this->getID();
 
         // we retrieve and cache everything at once now
-        if (xar::var()->isCached('Privileges.getChildren', 'cached')) {
-            if (xar::var()->isCached('Privileges.getChildren', $cacheId)) {
-                return xar::var()->getCached('Privileges.getChildren', $cacheId);
+        if (xar::mem()->has('Privileges.getChildren', 'cached')) {
+            if (xar::mem()->has('Privileges.getChildren', $cacheId)) {
+                return xar::mem()->get('Privileges.getChildren', $cacheId);
             } else {
                 return [];
             }
@@ -466,9 +466,9 @@ class xarPrivilege extends xarMask
         }
         // done
         foreach (array_keys($children) as $parentid) {
-            xar::var()->setCached('Privileges.getChildren', $parentid, $children[$parentid]);
+            xar::mem()->set('Privileges.getChildren', $parentid, $children[$parentid]);
         }
-        xar::var()->setCached('Privileges.getChildren', 'cached', 1);
+        xar::mem()->set('Privileges.getChildren', 'cached', 1);
         if (isset($children[$cacheId])) {
             return $children[$cacheId];
         } else {

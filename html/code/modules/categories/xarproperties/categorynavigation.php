@@ -96,8 +96,8 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get current module
         if (empty($data['module'])) {
-            if ($this->var()->isCached('Blocks.categories', 'module')) {
-                $modname = $this->var()->getCached('Blocks.categories', 'module');
+            if ($this->mem()->has('Blocks.categories', 'module')) {
+                $modname = $this->mem()->get('Blocks.categories', 'module');
             }
             if (empty($modname)) {
                 $modname = $this->mod()->getName();
@@ -112,8 +112,8 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get current item type (if any)
         if (!isset($data['itemtype'])) {
-            if ($this->var()->isCached('Blocks.categories', 'itemtype')) {
-                $data['itemtype'] = $this->var()->getCached('Blocks.categories', 'itemtype');
+            if ($this->mem()->has('Blocks.categories', 'itemtype')) {
+                $data['itemtype'] = $this->mem()->get('Blocks.categories', 'itemtype');
             } else {
                 // try to get itemtype from input
                 $this->var()->check('itemtype', $data['itemtype'], 'id');
@@ -126,8 +126,8 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get current item id (if any)
         if (!isset($data['itemid'])) {
-            if ($this->var()->isCached('Blocks.categories', 'itemid')) {
-                $data['itemid'] = $this->var()->getCached('Blocks.categories', 'itemid');
+            if ($this->mem()->has('Blocks.categories', 'itemid')) {
+                $data['itemid'] = $this->mem()->get('Blocks.categories', 'itemid');
             } else {
                 // try to get itemid from input
                 $this->var()->check('itemid', $data['itemid'], 'id');
@@ -176,8 +176,8 @@ class CategoryNavigationProperty extends SelectProperty
         } elseif (empty($catcount)) {
             // A 'deep count' sums the totals at each node with the totals of all descendants.
             if ($data['showcatcount'] > 1 || empty($data['showempty'])) {
-                if ($this->var()->isCached('Blocks.categories', 'deepcount')) {
-                    $deepcount = $this->var()->getCached('Blocks.categories', 'deepcount');
+                if ($this->mem()->has('Blocks.categories', 'deepcount')) {
+                    $deepcount = $this->mem()->get('Blocks.categories', 'deepcount');
                 } else {
                     $deepcount = $this->mod()->apiFunc(
                         'categories',
@@ -185,12 +185,12 @@ class CategoryNavigationProperty extends SelectProperty
                         'deepcount',
                         ['modid' => $modid, 'itemtype' => $data['itemtype']]
                     );
-                    $this->var()->setCached('Blocks.categories', 'deepcount', $deepcount);
+                    $this->mem()->set('Blocks.categories', 'deepcount', $deepcount);
                 }
             }
 
-            if ($this->var()->isCached('Blocks.categories', 'catcount')) {
-                $catcount = $this->var()->getCached('Blocks.categories', 'catcount');
+            if ($this->mem()->has('Blocks.categories', 'catcount')) {
+                $catcount = $this->mem()->get('Blocks.categories', 'catcount');
             } else {
                 // Get number of items per category (for this module).
                 // If showcatcount == 2 then add in all descendants too.
@@ -208,22 +208,22 @@ class CategoryNavigationProperty extends SelectProperty
                     $catcount = & $deepcount;
                 }
 
-                $this->var()->setCached('Blocks.categories', 'catcount', $catcount);
+                $this->mem()->set('Blocks.categories', 'catcount', $catcount);
             }
         }
 
         // Specify type=... & func = ... arguments for $this->ctl()->getModuleURL()
         if (empty($urltype)) {
-            if ($this->var()->isCached('Blocks.categories', 'urltype')) {
-                $urltype = $this->var()->getCached('Blocks.categories', 'urltype');
+            if ($this->mem()->has('Blocks.categories', 'urltype')) {
+                $urltype = $this->mem()->get('Blocks.categories', 'urltype');
             }
             if (empty($urltype)) {
                 $urltype = 'user';
             }
         }
         if (empty($urlfunc)) {
-            if ($this->var()->isCached('Blocks.categories', 'urlfunc')) {
-                $urlfunc = $this->var()->getCached('Blocks.categories', 'urlfunc');
+            if ($this->mem()->has('Blocks.categories', 'urlfunc')) {
+                $urlfunc = $this->mem()->get('Blocks.categories', 'urlfunc');
             }
             if (empty($urlfunc)) {
                 $urlfunc = 'view';
@@ -239,8 +239,8 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get current DD object name (if any)
         if ($modname == 'dynamicdata' && !isset($data['name'])) {
-            if ($this->var()->isCached('Blocks.categories', 'name')) {
-                $data['name'] = $this->var()->getCached('Blocks.categories', 'name');
+            if ($this->mem()->has('Blocks.categories', 'name')) {
+                $data['name'] = $this->mem()->get('Blocks.categories', 'name');
             } else {
                 // try to get name from input
                 $this->var()->check('name', $data['name'], 'str', null);
@@ -285,8 +285,8 @@ class CategoryNavigationProperty extends SelectProperty
         $urlargs[$urlparam] = $urlvalue;
 
         // Get current categories
-        if ($this->var()->isCached('Blocks.categories', 'catid')) {
-            $catid = $this->var()->getCached('Blocks.categories', 'catid');
+        if ($this->mem()->has('Blocks.categories', 'catid')) {
+            $catid = $this->mem()->get('Blocks.categories', 'catid');
         }
         if (empty($catid)) {
             // try to get catid from input
@@ -312,11 +312,11 @@ class CategoryNavigationProperty extends SelectProperty
                 $andcids = false;
             }
         } elseif (empty($cids)) {
-            if ($this->var()->isCached('Blocks.categories', 'cids')) {
-                $cids = $this->var()->getCached('Blocks.categories', 'cids');
+            if ($this->mem()->has('Blocks.categories', 'cids')) {
+                $cids = $this->mem()->get('Blocks.categories', 'cids');
             }
-            if ($this->var()->isCached('Blocks.categories', 'andcids')) {
-                $andcids = $this->var()->getCached('Blocks.categories', 'andcids');
+            if ($this->mem()->has('Blocks.categories', 'andcids')) {
+                $andcids = $this->mem()->get('Blocks.categories', 'andcids');
             }
             if (empty($cids)) {
                 // try to get cids from input
@@ -964,7 +964,7 @@ class CategoryNavigationProperty extends SelectProperty
                         // calling item display hooks *for the categories module* here !
                         // FIXME: if hitcount is hooked to categories, this will also increase the hitcount
                         //        of the category when displaying an article that belongs to that single category
-                        // Possible solution : extend $this->var()->isCached('Hooks.hitcount','nocount') mechanism to take
+                        // Possible solution : extend $this->mem()->has('Hooks.hitcount','nocount') mechanism to take
                         // into account the module ???
                         $data['cathooks'] = $this->mod()->callHooks('item', 'display', $cids[0], $curcat, 'categories');
                         // saving the current cat id for use e.g. with DD tags (<xar:data-display module="categories" itemid="$catid"/>)
@@ -975,8 +975,8 @@ class CategoryNavigationProperty extends SelectProperty
                     if (empty($itemid)) {
                         // Get current title
                         if (empty($title)) {
-                            if ($this->var()->isCached('Blocks.categories', 'title')) {
-                                $title = $this->var()->getCached('Blocks.categories', 'title');
+                            if ($this->mem()->has('Blocks.categories', 'title')) {
+                                $title = $this->mem()->get('Blocks.categories', 'title');
                             }
                         }
                         if (!empty($curcat['name'])) {
@@ -1130,8 +1130,8 @@ class CategoryNavigationProperty extends SelectProperty
                 } else {
                     // See if we need to show anything
                     if (empty($showprevnext)) {
-                        if ($this->var()->isCached('Blocks.categories', 'showprevnext')) {
-                            $showprevnext = $this->var()->getCached('Blocks.categories', 'showprevnext');
+                        if ($this->mem()->has('Blocks.categories', 'showprevnext')) {
+                            $showprevnext = $this->mem()->get('Blocks.categories', 'showprevnext');
                             if (empty($showprevnext)) {
                                 return '';
                             }

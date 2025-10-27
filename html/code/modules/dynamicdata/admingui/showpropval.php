@@ -95,7 +95,7 @@ class ShowpropvalMethod extends MethodClass
         $itemtype = $myobject->properties['itemtype']->value;
         $modinfo = $this->mod()->getInfo($module_id);
         if ($this->mod()->isHooked('uploads', $modinfo['name'], $itemtype)) {
-            $this->var()->setCached('Hooks.uploads','ishooked',1);
+            $this->mem()->set('Hooks.uploads','ishooked',1);
         }
         */
 

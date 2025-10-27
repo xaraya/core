@@ -383,7 +383,7 @@ trait ParentServicesTrait
     }
 
     /**
-     * Access CoreCacheService methods (has, get, set, del, flush, ...)
+     * Access MemoryService methods (has, get, set, del, flush, ...)
      *
      * Available methods:
      * - has()
@@ -396,9 +396,9 @@ trait ParentServicesTrait
      * - save()
      *
      */
-    public function coreCache(): CoreCacheInterface
+    public function mem(): MemoryInterface
     {
-        return $this->getParent()->coreCache();
+        return $this->getParent()->mem();
     }
 
     /**

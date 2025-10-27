@@ -410,7 +410,7 @@ class xarTpl extends xarObject
         xar::log()->info("xarTpl::setPageTitle: Setting pageTitle to $title");
 
         // @checkme: modules is a dependency of templates, redundant check?
-        if (!method_exists('xarModVars', 'Get') || !empty(xar::var()->getCached('installer', 'installing'))) {
+        if (!method_exists('xarModVars', 'Get') || !empty(xar::mem()->get('installer', 'installing'))) {
             self::$pageTitle = $title;
         } else {
             $order      = xar::mod('themes')->getVar('SiteTitleOrder');
@@ -499,7 +499,7 @@ class xarTpl extends xarObject
         // 2. Create a page in the themes module with an interface
         // 3. Use 1. to link to 2.
         // @checkme: modules is a depency of templates, redundant check?
-        if (method_exists('xarModVars', 'get') && method_exists('xarUser', 'getVar') && empty(xar::var()->getCached('installer', 'installing'))) {
+        if (method_exists('xarModVars', 'get') && method_exists('xarUser', 'getVar') && empty(xar::mem()->get('installer', 'installing'))) {
             if (xar::mod('themes')->getVar('variable_dump') && xar::user()->isDebugAdmin()) {
                 echo '<pre>',var_export($tplData, 1),'</pre>';
             }
@@ -601,8 +601,8 @@ class xarTpl extends xarObject
 
         $cachename = "$scope:$package:$tplBase:$tplName:$tplPart:$callerMod";
         // cache frequently-used sourcefilenames
-        if (xar::var()->isCached('Templates.Element', $cachename)) {
-            return xar::var()->getCached('Templates.Element', $cachename);
+        if (xar::mem()->has('Templates.Element', $cachename)) {
+            return xar::mem()->get('Templates.Element', $cachename);
         }
 
         // default paths
@@ -716,7 +716,7 @@ class xarTpl extends xarObject
             }
         }
 
-        xar::var()->setCached('Templates.Element', $cachename, $sourceFileName);
+        xar::mem()->set('Templates.Element', $cachename, $sourceFileName);
 
         return $sourceFileName;
 
@@ -749,8 +749,8 @@ class xarTpl extends xarObject
         $cachename = "$modName:$objectName:$tplType:$tplBase:objects";
 
         // cache frequently-used sourcefilenames for DD elements
-        if (xar::var()->isCached('Templates.DDElement', $cachename)) {
-            $sourceFileName = xar::var()->getCached('Templates.DDElement', $cachename);
+        if (xar::mem()->has('Templates.DDElement', $cachename)) {
+            $sourceFileName = xar::mem()->get('Templates.DDElement', $cachename);
             return self::executeFromFile($sourceFileName, $tplData);
         }
 
@@ -763,7 +763,7 @@ class xarTpl extends xarObject
             throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$objectName]");
         }
 
-        xar::var()->setCached('Templates.DDElement', $cachename, $sourceFileName);
+        xar::mem()->set('Templates.DDElement', $cachename, $sourceFileName);
 
         return self::executeFromFile($sourceFileName, $tplData);
     }
@@ -797,8 +797,8 @@ class xarTpl extends xarObject
         $cachename = "$modName:$propertyName:$tplType:$tplBase:properties";
 
         // cache frequently-used sourcefilenames for DD elements
-        if (xar::var()->isCached('Templates.DDElement', $cachename)) {
-            $sourceFileName = xar::var()->getCached('Templates.DDElement', $cachename);
+        if (xar::mem()->has('Templates.DDElement', $cachename)) {
+            $sourceFileName = xar::mem()->get('Templates.DDElement', $cachename);
             return self::executeFromFile($sourceFileName, $tplData);
         }
 
@@ -838,7 +838,7 @@ class xarTpl extends xarObject
             throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$propertyName]");
         }
 
-        xar::var()->setCached('Templates.DDElement', $cachename, $sourceFileName);
+        xar::mem()->set('Templates.DDElement', $cachename, $sourceFileName);
 
         return self::executeFromFile($sourceFileName, $tplData);
     }
@@ -1294,8 +1294,8 @@ class xarTpl extends xarObject
         assert(is_array($tplData));
 
         // cache frequently-used cachedfilenames
-        if (xar::var()->isCached('Templates.ExecuteFromFile', $sourceFileName)) {
-            $cachedFileName = xar::var()->getCached('Templates.ExecuteFromFile', $sourceFileName);
+        if (xar::mem()->has('Templates.ExecuteFromFile', $sourceFileName)) {
+            $cachedFileName = xar::mem()->get('Templates.ExecuteFromFile', $sourceFileName);
 
         } else {
             // Load translations for the template
@@ -1322,7 +1322,7 @@ class xarTpl extends xarObject
             // @todo get rid of the cachedFileName usage - why?
             $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
 
-            xar::var()->setCached('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);
+            xar::mem()->set('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);
         }
 
         // Execute the compiled template from the cache file

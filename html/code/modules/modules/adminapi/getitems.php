@@ -128,21 +128,21 @@ class GetitemsMethod extends MethodClass
             // Add systemid as alternative to id CHECKME: can we settle on id?
             $item['systemid'] = $item['id'];
 
-            if ($this->var()->isCached('Mod.Infos', $item['regid'])) {
+            if ($this->mem()->has('Mod.Infos', $item['regid'])) {
                 // Merge cached info with db info
-                $item += $this->var()->getCached('Mod.Infos', $item['regid']);
+                $item += $this->mem()->get('Mod.Infos', $item['regid']);
             } else {
                 $item['displayname'] = $this->mod()->getDisplayName($item['name']);
                 $item['displaydescription'] = $this->mod()->getDisplayDescription($item['name']);
                 // Shortcut for os prepared directory
                 $item['osdirectory'] = $this->var()->prepPath($item['directory']);
 
-                $this->var()->setCached('Mod.BaseInfos', $item['name'], $item);
+                $this->mem()->set('Mod.BaseInfos', $item['name'], $item);
 
                 $fileinfo = $this->mod()->getFileInfo($item['osdirectory']);
                 if (!empty($fileinfo)) {
                     $item = array_merge($fileinfo, $item);
-                    $this->var()->setCached('Mod.Infos', $item['regid'], $item);
+                    $this->mem()->set('Mod.Infos', $item['regid'], $item);
                     switch ($item['state']) {
                         case xarMod::STATE_MISSING_FROM_UNINITIALISED:
                             $item['state'] = xarMod::STATE_UNINITIALISED;

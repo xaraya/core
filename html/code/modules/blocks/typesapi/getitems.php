@@ -70,7 +70,7 @@ class GetitemsMethod extends MethodClass
                 $module_id = 0;
             } elseif (!is_string($module)
                 || (!$this->mod()->isAvailable($module)
-                    && (!$this->var()->isCached('Blocks.event', 'modremove') || $this->var()->getCached('Blocks.event', 'modremove') != $module))
+                    && (!$this->mem()->has('Blocks.event', 'modremove') || $this->mem()->get('Blocks.event', 'modremove') != $module))
             ) {
                 $invalid[] = 'module';
             } else {

@@ -35,15 +35,15 @@ class StaticServicesClass extends ServicesClass
     protected $requestInstance = null;
     /** @var ?SessionFacade */
     protected $sessionInstance = null;
-    /** @var ?CoreCacheInterface */
-    protected $coreCacheInstance = null;
+    /** @var ?MemoryInterface */
+    protected $memoryInstance = null;
     /** @var array<string, ServiceInterface> */
     public array $serviceCache = [];
 
     public function __construct()
     {
         // let's kick-start core cache here
-        $this->coreCache();
+        $this->mem();
     }
 
     /**
@@ -65,7 +65,7 @@ class StaticServicesClass extends ServicesClass
         $this->requestInstance = null;
         $this->sessionInstance = null;
         // don't reset core cache instance here
-        //$this->coreCacheInstance = null;
+        //$this->memoryInstance = null;
     }
 
     /**
@@ -113,25 +113,25 @@ class StaticServicesClass extends ServicesClass
     }
 
     /**
-     * @return CoreCacheInterface
-     * @todo use core.cache service instead
+     * @return MemoryInterface
+     * @todo use mem service instead
      */
-    public function getCoreCacheInstance()
+    public function getMemoryInstance()
     {
-        if (!isset($this->coreCacheInstance)) {
-            $this->coreCacheInstance = ServiceFactory::createServicePrototype('core.cache', $this);
+        if (!isset($this->memoryInstance)) {
+            $this->memoryInstance = ServiceFactory::createServicePrototype('mem', $this);
         }
-        return $this->coreCacheInstance;
+        return $this->memoryInstance;
     }
 
     /**
-     * @param ?CoreCacheInterface $instance
+     * @param ?MemoryInterface $instance
      * @return void
-     * @todo use core.cache service instead
+     * @todo use mem service instead
      */
-    public function setCoreCacheInstance($instance)
+    public function setMemoryInstance($instance)
     {
-        $this->coreCacheInstance = $instance;
+        $this->memoryInstance = $instance;
     }
 
     /**
@@ -281,7 +281,7 @@ class StaticServicesClass extends ServicesClass
     }
 
     /**
-     * Access CoreCacheService methods (has, get, set, del, flush, ...)
+     * Access MemoryService methods (has, get, set, del, flush, ...)
      *
      * Available methods:
      * - has()
@@ -294,9 +294,9 @@ class StaticServicesClass extends ServicesClass
      * - save()
      *
      */
-    public function coreCache(): CoreCacheInterface
+    public function mem(): MemoryInterface
     {
-        return $this->getServicePrototype('core.cache');
+        return $this->getServicePrototype('mem');
     }
 
     /**

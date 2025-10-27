@@ -100,8 +100,8 @@ class SubFormProperty extends DataProperty
 
         // retrieve new value for preview + new/modify combinations (in case we miss the preview)
         /*
-                if ($this->var()->isCached('DynamicData.SubForm',$name)) {
-                    $this->value = $this->var()->getCached('DynamicData.SubForm',$name);
+                if ($this->mem()->has('DynamicData.SubForm',$name)) {
+                    $this->value = $this->mem()->get('DynamicData.SubForm',$name);
                     return true;
                 }
         */
@@ -240,7 +240,7 @@ class SubFormProperty extends DataProperty
                 }
                 $value = $itemid;
                 // save new value for preview + new/modify combinations (in case we miss the preview)
-                $this->var()->setCached('DynamicData.SubForm', $name, $value);
+                $this->mem()->set('DynamicData.SubForm', $name, $value);
             }
             $this->value = $value;
 

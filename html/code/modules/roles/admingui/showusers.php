@@ -42,12 +42,12 @@ class ShowusersMethod extends MethodClass
             return;
         }
 
-        if ($this->var()->isCached('roles', 'defaultgroupid')) {
-            $defaultgroupid = $this->var()->getCached('roles', 'defaultgroupid');
+        if ($this->mem()->has('roles', 'defaultgroupid')) {
+            $defaultgroupid = $this->mem()->get('roles', 'defaultgroupid');
         } else {
             $defaultgroupid = $this->mod()->getVar('defaultgroup');
         }
-        $this->var()->setCached('roles', 'defaultgroupid', $defaultgroupid);
+        $this->mem()->set('roles', 'defaultgroupid', $defaultgroupid);
 
         $data = [];
         $this->var()->find('id', $id, 'int:0:', $defaultgroupid);

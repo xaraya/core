@@ -49,7 +49,7 @@ class MainMethod extends MethodClass
         if (!empty($page)) {
             $this->tpl()->setPageTitle($page);
             /* Cache the custom page name so it is accessible elsewhere */
-            $this->var()->setCached('Base.pages', 'page', $page);
+            $this->mem()->set('Base.pages', 'page', $page);
         } else {
             $pageTemplate = $this->mod()->getVar('AlternatePageTemplateName');
             if ($this->mod()->getVar('UseAlternatePageTemplate') != ''

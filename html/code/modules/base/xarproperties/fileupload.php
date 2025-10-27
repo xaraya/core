@@ -59,7 +59,7 @@ class FileUploadProperty extends DataProperty
 
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
-        if ($this->var()->getCached('Hooks.uploads', 'ishooked')) {
+        if ($this->mem()->get('Hooks.uploads', 'ishooked')) {
             $this->UploadsModule_isHooked = true;
         } else {
             // FIXME: this doesn't take into account the itemtype or non-main module objects
@@ -166,8 +166,8 @@ class FileUploadProperty extends DataProperty
         }
 
         // retrieve new value for preview + new/modify combinations
-        if ($this->var()->isCached('DynamicData.FileUpload', $name)) {
-            $this->value = $this->var()->getCached('DynamicData.FileUpload', $name);
+        if ($this->mem()->has('DynamicData.FileUpload', $name)) {
+            $this->value = $this->mem()->get('DynamicData.FileUpload', $name);
             return true;
         }
 
@@ -222,7 +222,7 @@ class FileUploadProperty extends DataProperty
                     $this->value = $return[1];
                 }
                 // save new value for preview + new/modify combinations
-                $this->var()->setCached('DynamicData.FileUpload', $name, $this->value);
+                $this->mem()->set('DynamicData.FileUpload', $name, $this->value);
                 return true;
             }
         }
@@ -327,23 +327,23 @@ class FileUploadProperty extends DataProperty
                 // Note: if you use this, make sure you unlink($this->value) yourself once you're done with it
                 $this->value = $filepath;
                 // save new value for preview + new/modify combinations
-                $this->var()->setCached('DynamicData.FileUpload', $name, $this->value);
+                $this->mem()->set('DynamicData.FileUpload', $name, $this->value);
 
                 //} elseif ($this->obfuscate_filename) {
                 // TODO: obfuscate filename + return hash & original filename + handle that combined value in the other methods
                 //    $this->value = $filehash . ',' . $filename;
                 //    // save new value for preview + new/modify combinations
-                //    $this->var()->setCached('DynamicData.FileUpload',$name,$this->value);
+                //    $this->mem()->set('DynamicData.FileUpload',$name,$this->value);
 
             } else {
                 $this->value = $filename;
                 // save new value for preview + new/modify combinations
-                $this->var()->setCached('DynamicData.FileUpload', $name, $this->value);
+                $this->mem()->set('DynamicData.FileUpload', $name, $this->value);
             }
 
             // retrieve new value for preview + new/modify combinations
-        } elseif ($this->var()->isCached('DynamicData.FileUpload', $name)) {
-            $this->value = $this->var()->getCached('DynamicData.FileUpload', $name);
+        } elseif ($this->mem()->has('DynamicData.FileUpload', $name)) {
+            $this->value = $this->mem()->get('DynamicData.FileUpload', $name);
         } elseif (!empty($value) &&  !(is_numeric($value) || stristr($value, ';'))) {
             if (!$this->validateExtension($value)) {
                 $this->invalid = $this->ml('The file type is not allowed');
@@ -392,7 +392,7 @@ class FileUploadProperty extends DataProperty
 
         // inform anyone that we're showing a file upload field, and that they need to use
         // <form ... enctype="multipart/form-data" ... > in their input form
-        $this->var()->setCached('Hooks.dynamicdata', 'withupload', 1);
+        $this->mem()->set('Hooks.dynamicdata', 'withupload', 1);
 
         if ($this->UploadsModule_isHooked == true) {
             // user must have hooked the uploads module after uploading files directly
@@ -506,7 +506,7 @@ class FileUploadProperty extends DataProperty
 
         // inform anyone that we're showing a file upload field, and that they need to use
         // <form ... enctype="multipart/form-data" ... > in their input form
-        $this->var()->setCached('Hooks.dynamicdata', 'withupload', 1);
+        $this->mem()->set('Hooks.dynamicdata', 'withupload', 1);
 
         return parent::showHidden($data);
     }

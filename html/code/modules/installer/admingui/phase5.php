@@ -56,7 +56,7 @@ class Phase5Method extends MethodClass
             throw new Exception('Already installed');
         }
         $this->var()->find('install_language', $install_language, 'str::', 'en_US.utf-8');
-        $this->var()->setCached('installer', 'installing', true);
+        $this->mem()->set('installer', 'installing', true);
 
         // Get the database connection configuration from the configuration file
         sys::import('xaraya.database');

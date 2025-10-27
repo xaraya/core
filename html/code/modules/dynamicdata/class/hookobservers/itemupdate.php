@@ -40,7 +40,7 @@ class ItemUpdate extends DataObjectHookObserver
         // We can exit immediately if the status flag is set because we are just updating
         // the status in the articles or other content module that works on that principle
         // Bug 1960 and 3161
-        if ($this->var()->isCached('Hooks.all', 'noupdate') || !empty($extrainfo['statusflag'])) {
+        if ($this->mem()->has('Hooks.all', 'noupdate') || !empty($extrainfo['statusflag'])) {
             return $extrainfo;
         }
 

@@ -154,13 +154,13 @@ class xarRoles extends xarObject
     public static function get($id)
     {
         $cacheKey = 'Roles.ById';
-        if (xar::var()->isCached($cacheKey, $id)) {
-            return xar::var()->getCached($cacheKey, $id);
+        if (xar::mem()->has($cacheKey, $id)) {
+            return xar::mem()->get($cacheKey, $id);
         }
         // Need to get it from DB.
         // TODO: move caching to _lookuprole?
         $r = self::_lookuprole('id', (int) $id);
-        xar::var()->setCached($cacheKey, $id, $r);
+        xar::mem()->set($cacheKey, $id, $r);
         return $r;
     }
 
@@ -351,8 +351,8 @@ class xarRoles extends xarObject
         // get rid of 30 repeating queries for base homepage due to security checks
         $cacheScope = 'Roles.ByLookup';
         $cacheName = "$field:$value:$itemtype:$state";
-        if (xar::var()->isCached($cacheScope, $cacheName)) {
-            $row = xar::var()->getCached($cacheScope, $cacheName);
+        if (xar::mem()->has($cacheScope, $cacheName)) {
+            $row = xar::mem()->get($cacheScope, $cacheName);
         } else {
             // retrieve the object's data from the repository
             // set up and execute the query
@@ -378,7 +378,7 @@ class xarRoles extends xarObject
             if (empty($row)) {
                 return;
             }
-            xar::var()->setCached($cacheScope, $cacheName, $row);
+            xar::mem()->set($cacheScope, $cacheName, $row);
         }
 
         // create and return the role object
@@ -390,13 +390,13 @@ class xarRoles extends xarObject
             throw new Exception(xarML('Unknown role type'));
         }
         $cacheKey = 'Roles.ById';
-        if (xar::var()->isCached($cacheKey, $row['id'])) {
-            return xar::var()->getCached($cacheKey, $row['id']);
+        if (xar::mem()->has($cacheKey, $row['id'])) {
+            return xar::mem()->get($cacheKey, $row['id']);
         }
         sys::import('modules.dynamicdata.class.objects.factory');
         $role = DataObjectFactory::getObject(['name' => $name]);
         $role->getItem(['itemid' => $row['id']]);
-        xar::var()->setCached($cacheKey, $row['id'], $role);
+        xar::mem()->set($cacheKey, $row['id'], $role);
         return $role;
     }
 }

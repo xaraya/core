@@ -50,8 +50,8 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $cacheCollection = 'ModItem.Variables.' . $scope;
         $cacheName = $itemid . $name;
 
-        if (xar::var()->isCached($cacheCollection, $cacheName)) {
-            $value = xar::var()->getCached($cacheCollection, $cacheName);
+        if (xar::mem()->has($cacheCollection, $cacheName)) {
+            $value = xar::mem()->get($cacheCollection, $cacheName);
             return $value;
         }
 
@@ -78,7 +78,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         } else {
             // We finally found it, update the appropriate cache
             [$value] = $result->getRow();
-            xar::var()->setCached($cacheCollection, $cacheName, $value);
+            xar::mem()->set($cacheCollection, $cacheName, $value);
         }
         $result->close();
         return $value;
@@ -128,7 +128,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         }
 
         $cachename = $itemid . $name;
-        xar::var()->setCached('ModItem.Variables.' . $scope, $cachename, $value);
+        xar::mem()->set('ModItem.Variables.' . $scope, $cachename, $value);
 
         return true;
     }
@@ -153,7 +153,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $stmt = $dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         $cachename = $itemid . $name;
-        xar::var()->delCached('ModItem.Variables.' . $scope, $cachename);
+        xar::mem()->del('ModItem.Variables.' . $scope, $cachename);
         return true;
     }
 }

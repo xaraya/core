@@ -1723,19 +1723,19 @@ class XarayaModuleMigrator extends XarayaModuleAnalyzer
             '/xarVar::prepForDisplay\(/' => '\$this->var()->prep(',
             '/xarVar::prepHTMLDisplay\(/' => '\$this->var()->prepHTML(',
             '/xarVar::prepForOS\(/' => '\$this->var()->prepPath(',
-            '/xarVar::isCached\(/' => '\$this->var()->isCached(',
-            '/xarVar::getCached\(/' => '\$this->var()->getCached(',
-            '/xarVar::setCached\(/' => '\$this->var()->setCached(',
-            '/xarVar::delCached\(/' => '\$this->var()->delCached(',
-            '/xarVar::loadCached\(/' => '\$this->var()->loadCached(',
-            '/xarVar::saveCached\(/' => '\$this->var()->saveCached(',
-            '/xarCoreCache::isCached\(/' => '\$this->var()->isCached(',
-            '/xarCoreCache::getCached\(/' => '\$this->var()->getCached(',
-            '/xarCoreCache::setCached\(/' => '\$this->var()->setCached(',
-            '/xarCoreCache::delCached\(/' => '\$this->var()->delCached(',
-            '/xarCoreCache::hasPreload\(/' => '\$this->var()->hasPreload(',
-            '/xarCoreCache::loadCached\(/' => '\$this->var()->loadCached(',
-            '/xarCoreCache::saveCached\(/' => '\$this->var()->saveCached(',
+            '/xarVar::isCached\(/' => '\$this->mem()->has(',
+            '/xarVar::getCached\(/' => '\$this->mem()->get(',
+            '/xarVar::setCached\(/' => '\$this->mem()->set(',
+            '/xarVar::delCached\(/' => '\$this->mem()->del(',
+            '/xarVar::loadCached\(/' => '\$this->mem()->load(',
+            '/xarVar::saveCached\(/' => '\$this->mem()->save(',
+            '/xarCoreCache::isCached\(/' => '\$this->mem()->has(',
+            '/xarCoreCache::getCached\(/' => '\$this->mem()->get(',
+            '/xarCoreCache::setCached\(/' => '\$this->mem()->set(',
+            '/xarCoreCache::delCached\(/' => '\$this->mem()->del(',
+            '/xarCoreCache::hasPreload\(/' => '\$this->mem()->hasPreload(',
+            '/xarCoreCache::loadCached\(/' => '\$this->mem()->load(',
+            '/xarCoreCache::saveCached\(/' => '\$this->mem()->save(',
             // @todo handle xarSecurity::check() with component & instance
             '/xarSec::genAuthKey\(/' => '\$this->sec()->genAuthKey(',
             '/xarSec::confirmAuthKey\(/' => '\$this->sec()->confirmAuthKey(',
@@ -2020,7 +2020,8 @@ $analyzer->find_installer_functions();
 /**
  */
 $inDir = dirname(__DIR__, 2) . '/vendor/xaraya/';
-$inDir = dirname(__DIR__, 2) . '/html/code/modules/dynamicdata/';
+$inDir = dirname(__DIR__, 2) . '/html/code/modules/';
+//$inDir = dirname(__DIR__, 2) . '/html/lib/xaraya/';
 $migrator = new XarayaModuleMigrator($inDir, true);
 $migrator->verbose = false;
 $migrator->skipVendor = false;
@@ -2041,11 +2042,12 @@ $replace = false;
 //$found = $migrator->replace_property_services('dynamicdata', $replace);
 //$found = $migrator->replace_block_services('dynamicdata', $replace);
 //$migrator->replace_internal_methods('dynamicdata', '', $replace);
-//[$called, $summary] = $migrator->find_called_dependencies('', '', '');
-[$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '');
+[$called, $summary] = $migrator->find_called_dependencies('', '', '');
+//[$called, $summary] = $migrator->find_called_dependencies('dynamicdata', '', '');
 file_put_contents('call_dependencies.json', $migrator->to_json($called));
 $output = $migrator->draw_mermaid_graph($called);
 file_put_contents('call_dependencies.md', $output);
+echo $migrator->to_json($summary);
 /**
 $modules = [
     'apischemas', 'cachemanager', 'calendar', 'changelog', 'ckeditor', 'comments',
