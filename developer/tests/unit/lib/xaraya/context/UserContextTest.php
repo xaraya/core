@@ -46,7 +46,7 @@ final class UserContextTest extends TestCase
 
     public function testRemoteUserContext(): void
     {
-        xarCoreCache::setCached('Testing:' . sys::CONFIG, 'Auth.RemoteUser', true);
+        xar::mem()->set('Testing:' . sys::CONFIG, 'Auth.RemoteUser', true);
         $expected = RequestContext::$remoteUser;
         xarSystemVars::set(sys::CONFIG, 'Auth.RemoteUser', $expected);
         $this->assertEquals($expected, xarSystemVars::get(sys::CONFIG, 'Auth.RemoteUser'));
@@ -63,12 +63,12 @@ final class UserContextTest extends TestCase
         $this->assertEquals($expected, $context->getSession()::class);
 
         xarSystemVars::set(sys::CONFIG, 'Auth.RemoteUser', null);
-        xarCoreCache::delCached('Testing:' . sys::CONFIG, 'Auth.RemoteUser');
+        xar::mem()->del('Testing:' . sys::CONFIG, 'Auth.RemoteUser');
     }
 
     public function testAuthTokenContext(): void
     {
-        xarCoreCache::setCached('Testing:' . sys::CONFIG, 'Auth.AuthToken', true);
+        xar::mem()->set('Testing:' . sys::CONFIG, 'Auth.AuthToken', true);
         $expected = RequestContext::$authToken;
         xarSystemVars::set(sys::CONFIG, 'Auth.AuthToken', $expected);
         $this->assertEquals($expected, xarSystemVars::get(sys::CONFIG, 'Auth.AuthToken'));
@@ -85,7 +85,7 @@ final class UserContextTest extends TestCase
         $this->assertEquals($expected, $context->getSession()::class);
 
         //xarSystemVars::set(sys::CONFIG, 'Auth.AuthToken', null);
-        xarCoreCache::delCached('Testing:' . sys::CONFIG, 'Auth.AuthToken');
+        xar::mem()->del('Testing:' . sys::CONFIG, 'Auth.AuthToken');
     }
 
     protected function getLastSessionInfo($userId = 5)

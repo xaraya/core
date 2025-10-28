@@ -131,7 +131,7 @@ class xarVariableCache extends xarObject
             if (empty($settings)) {
                 $settings = [];
                 // CHECKME: get a list of potential scopes from xarCoreCache as examples?
-                //$scopelist = xarCoreCache::getCachedScopes();
+                //$scopelist = xar::mem()->getCachedScopes();
                 //foreach ($scopelist as $scope) {
                 //    $settings[$scope] = 0;
                 //}

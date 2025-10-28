@@ -274,7 +274,7 @@ trait WithStaticServices
     /**
      * Access xarVar::* Variables methods (fetch, check, prep, ...)
      * @todo identify what can be shared across requests and what should be private
-     * in concurrent environments - see static xarCoreCache::$cacheCollection array
+     * in concurrent environments - see xar::mem()->cacheCollection array
      *
      * Available methods:
      * - get() - xarVar::GET_OR_POST = Get required variable by name: set the value if there is one, and validate the variable or throw excception

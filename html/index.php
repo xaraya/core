@@ -6,12 +6,15 @@
  * @package core\entrypoints
  * @subpackage entrypoints
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  * @author Marco Canini
  */
+
+use Xaraya\Context\ContextFactory;
+use Xaraya\Services\xar;
 
 function xarLoader()
 {
@@ -31,6 +34,15 @@ function xarLoader()
     set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 
     /**
+     * Get context from globals if not specified (default)
+     */
+    sys::import('xaraya.context.factory');
+    $context = ContextFactory::fromGlobals(__METHOD__);
+    // Set context for core services here first
+    sys::import('xaraya.services.xar');
+    xar::setServicesContext($context);
+
+    /**
      * Set up caching
      * Note: this happens first so we can serve cached pages to first-time visitors
      *       without loading the core
@@ -40,10 +52,10 @@ function xarLoader()
     xarCache::init();
 
     /**
-     * Load the Xaraya core
+     * Load the Xaraya core with context
      */
     sys::import('xaraya.core');
-    xarCore::xarInit(xarCore::SYSTEM_ALL);
+    xarCore::xarInit(xarCore::SYSTEM_ALL, $context);
 }
 
 /**
@@ -92,7 +104,7 @@ function xarMain()
         $themeName = xarVar::prepForOS($themeName);
         if (xarTheme::isAvailable($themeName)) {
             xarTpl::setThemeName($themeName);
-            xarVar::setCached('Themes.name', 'CurrentTheme', $themeName);
+            xar::mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
         // Admin theme
     } elseif (xarUser::isLoggedIn() && $request->getType() == 'admin') {
@@ -100,7 +112,7 @@ function xarMain()
         if (!empty($themeName) && xarTheme::isAvailable($themeName)) {
             $themeName = xarVar::prepForOS($themeName);
             xarTpl::setThemeName(strtolower($themeName));
-            xarVar::setCached('Themes.name', 'CurrentTheme', $themeName);
+            xar::mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
         // User Override (configured in themes admin modifyconfig)
     } elseif ((bool) xarModVars::get('themes', 'enable_user_menu') == true) {
@@ -115,7 +127,7 @@ function xarMain()
             && !empty($user_themes) && in_array($themeName, $user_themes)) {
             $themeName = xarVar::prepForOS($themeName);
             xarTpl::setThemeName(strtolower($themeName));
-            xarVar::setCached('Themes.name', 'CurrentTheme', $themeName);
+            xar::mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
     }
     xarLog::message('The theme is set: ' . xarTpl::getThemeName(), xarLog::LEVEL_NOTICE);

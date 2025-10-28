@@ -401,33 +401,33 @@ class xarVar extends xarObject
 
     /**@+
      * Wrapper functions for var caching as in Xaraya 1 API
-     * See the documentation of protected xarCoreCache::*Cached for details
+     * See the documentation of public xar::mem()->* methods for details
      *
      * @see xarCore
      */
     public static function isCached($scope, $name)
     {
-        return xarCoreCache::isCached($scope, $name);
+        return xar::mem()->has($scope, $name);
     }
 
     public static function getCached($scope, $name)
     {
-        return xarCoreCache::getCached($scope, $name);
+        return xar::mem()->get($scope, $name);
     }
 
     public static function setCached($scope, $name, $value)
     {
-        xarCoreCache::setCached($scope, $name, $value);
+        xar::mem()->set($scope, $name, $value);
     }
 
     public static function delCached($scope, $name)
     {
-        xarCoreCache::delCached($scope, $name);
+        xar::mem()->del($scope, $name);
     }
 
     public static function flushCached($scope)
     {
-        xarCoreCache::flushCached($scope);
+        xar::mem()->flush($scope);
     }
 
     public static function prepForDisplay(...$args)

@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Xaraya\Context\RequestContext;
 use Xaraya\Context\Context;
 use Xaraya\Requests\RequestHandler;
+use Xaraya\Services\xar;
 
 #[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 final class ServerTest extends TestCase
@@ -12,7 +13,7 @@ final class ServerTest extends TestCase
     {
         xarCache::init();
         // preload Config.Variables here for xar::config()->getVar() in xarServer::getConfig()
-        xarCoreCache::setCached('CoreCache.Preload', 'Config.Variables', 1);
+        xar::mem()->set('CoreCache.Preload', 'Config.Variables', 1);
     }
 
     public function tearDown(): void

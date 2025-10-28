@@ -1,5 +1,7 @@
 <?php
 
+use Xaraya\Services\xar;
+
 /* This one exception depends on BL being inside Xaraya, try to correct this later */
 if (!class_exists('xarExceptions')) {
     sys::import('xaraya.exceptions');
@@ -139,7 +141,7 @@ class XarayaCompiler extends xarBLCompiler
 
     private function getModuleTagPaths()
     {
-        if (method_exists('xarMod', 'apiFunc') && empty(xarCoreCache::getCached('installer', 'installing'))) {
+        if (method_exists('xarMod', 'apiFunc') && empty(xar::mem()->get('installer', 'installing'))) {
             $activeMods = xarMod::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_ACTIVE]]);
         } else {
             return [];
@@ -221,7 +223,7 @@ class XarayaCompiler extends xarBLCompiler
 
     private function getBlockTagPaths()
     {
-        if (method_exists('xarMod', 'apiFunc') && empty(xarCoreCache::getCached('installer', 'installing'))) {
+        if (method_exists('xarMod', 'apiFunc') && empty(xar::mem()->get('installer', 'installing'))) {
             $activeBlocks = xarMod::apiFunc('blocks', 'instances', 'getitems', ['state' => 2]);
         } else {
             return [];

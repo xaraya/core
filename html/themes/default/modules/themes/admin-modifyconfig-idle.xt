@@ -8,7 +8,7 @@
     &amp;xar_modurl- like entities are problematic in validation, otherwise handy - filling the
     array of options manually by using a php array. - invalid xml (=&gt;) - mixing of template
     (xml) domain and code (php) domain - use of value="#$submitbutton#" in submit button is purely
-    for ML reasons, that should not be needed. - xarVar::delCached should be in the code, the
+    for ML reasons, that should not be needed. - \Xaraya\Services\xar::mem()->del should be in the code, the
     templater should not be bothered by it - input controls like a text input field require 4 lines
     of xml, but most of it is unstructured. Alternative examples have been added inline as comments
     for inspiration. - - ...amend when encountering more...</xar:comment>
@@ -87,14 +87,14 @@
                     1)</xar:set>
                     <xar:data-label label="Copyright" for="copyright"/>
                     <xar:data-input type="textbox" name="copyright" id="copyright" value="$valCopyright"/>
-                </div>#xarVar::delCached('Mod.Variables.themes','SiteCopyRight')# 
+                </div>#\Xaraya\Services\xar::mem()->del('Mod.Variables.themes','SiteCopyRight')# 
                 <div class="textareaContainer">
                     <xar:set name="valFooternote">xarModVars::get('themes', 'SiteFooter',
                     1)</xar:set>
                     <xar:data-label label="Footer Note" for="footer"/>
                     <xar:data-input type="textarea" id="footer" name="footer" cols="60" rows="5"
                     value="$valFooternote"/>
-                </div>#xarVar::delCached('Mod.Variables.themes','SiteFooter')# 
+                </div>#\Xaraya\Services\xar::mem()->del('Mod.Variables.themes','SiteFooter')# 
                 <div class="textInputContainer">
                     <xar:set name="valSeperator">xarModVars::get('themes', 'SiteTitleSeparator', 1)</xar:set>
                     <xar:data-label label="Page Title Separator" for="separator"/>

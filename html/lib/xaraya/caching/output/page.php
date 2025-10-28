@@ -15,6 +15,8 @@
  * @author jsb
 **/
 
+use Xaraya\Services\xar;
+
 class xarPageCache extends xarObject
 {
     public static int $cacheTime         = 1800;
@@ -346,9 +348,9 @@ class xarPageCache extends xarObject
         }
 
         // Check if isCached() or xarSecurity or ... has told not to cache this page
-        if (xarCoreCache::isCached('Page.Caching', 'nocache')) {
+        if (xar::mem()->has('Page.Caching', 'nocache')) {
             // reset for next page request when using second-level cache storage
-            xarCoreCache::delCached('Page.Caching', 'nocache');
+            xar::mem()->del('Page.Caching', 'nocache');
             return;
         }
 

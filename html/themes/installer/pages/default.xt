@@ -15,7 +15,7 @@
 			<link rel="stylesheet" type="text/css" href="themes/installer/style/style.css"/>
 		</head>
 		<body>
-			<xar:set name="isupgrade">#xarVar::getCached('Upgrade', 'upgrading')#</xar:set>
+			<xar:set name="isupgrade">#\Xaraya\Services\xar::mem()->get('Upgrade', 'upgrading')#</xar:set>
 			<div id="header">
 				<div id="header_logo">
 					<div id="head_link">Xaraya</div>

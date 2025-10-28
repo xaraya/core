@@ -1,12 +1,15 @@
 <?php
 
+use Xaraya\Context\ContextFactory;
+use Xaraya\Services\xar;
+
 /**
  * Loads the files required for running an upgrade
  *
  * @package modules\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
- * @version 2.8.1
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -28,16 +31,25 @@ function xarUpgradeLoader()
     set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 
     /**
+     * Get context from globals if not specified (default)
+     */
+    sys::import('xaraya.context.factory');
+    $context = ContextFactory::fromGlobals(__METHOD__);
+    // Set context for core services here first
+    sys::import('xaraya.services.xar');
+    xar::setServicesContext($context);
+
+    /**
      * Set up caching
      */
     sys::import('xaraya.caching');
     xarCache::init();
 
     /**
-     * Load the Xaraya core
+     * Load the Xaraya core with context
      */
     sys::import('xaraya.core');
-    xarCore::xarInit(xarCore::SYSTEM_ALL);
+    xarCore::xarInit(xarCore::SYSTEM_ALL, $context);
 }
 
 /**
@@ -78,7 +90,7 @@ class Upgrader
     {
         //xarConfigVars::set(null, 'System.Core.VersionNum', '2.4.0');
         // Let the system know that we are in the process of installing
-        xarVar::setCached('Upgrade', 'upgrading', 1);
+        xar::mem()->set('Upgrade', 'upgrading', 1);
 
         // Load the current request
         xarController::getRequest();

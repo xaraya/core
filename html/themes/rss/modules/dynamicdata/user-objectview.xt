@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="itemname">xarVar::getCached('XML','itemname')</xar:set>
+    <xar:set name="itemname">\Xaraya\Services\xar::mem()->get('XML','itemname')</xar:set>
     <xar:foreach in="$items" key="$itemid" value="$fields">
         <xar:element name="#$itemname#">
             <xar:foreach in="$fields" key="$name" value="$value">

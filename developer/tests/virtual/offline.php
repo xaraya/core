@@ -15,6 +15,7 @@ use Xaraya\DataObject\DataStores\MongoDBDataStore;
 use Xaraya\Context\Context;
 use Xaraya\DataObject\Generated\VirtualSample;
 use Xaraya\DataObject\Generated\VirtualSampleList;
+use Xaraya\Services\xar;
 use Brick\VarExporter\VarExporter;
 
 // initialize bootstrap
@@ -34,13 +35,13 @@ function init_online()
 
 function init_offline_cache()
 {
-    xarCoreCache::loadCached('Events.Subjects', '3');
-    xarCoreCache::loadCached('Hooks.Observers', 'dynamicdata.0');
-    xarCoreCache::loadCached('Events.Subjects', '1');
-    xarCoreCache::loadCached('Events.Observers', '2');
-    xarCoreCache::loadCached('Mod.BaseInfos');
+    xar::mem()->load('Events.Subjects', '3');
+    xar::mem()->load('Hooks.Observers', 'dynamicdata.0');
+    xar::mem()->load('Events.Subjects', '1');
+    xar::mem()->load('Events.Observers', '2');
+    xar::mem()->load('Mod.BaseInfos');
     /**
-    xarCoreCache::loadCached('Mod.Infos');
+    xar::mem()->load('Mod.Infos');
      */
 }
 
@@ -59,12 +60,12 @@ function hooks_register()
 
 function save_offline_cache()
 {
-    xarCoreCache::saveCached('Events.Subjects', '3');
-    xarCoreCache::saveCached('Hooks.Observers', 'dynamicdata.0');
-    xarCoreCache::saveCached('Events.Subjects', '1');
-    xarCoreCache::saveCached('Events.Observers', '2');
-    xarCoreCache::saveCached('Mod.BaseInfos');
-    xarCoreCache::saveCached('Mod.Infos');
+    xar::mem()->save('Events.Subjects', '3');
+    xar::mem()->save('Hooks.Observers', 'dynamicdata.0');
+    xar::mem()->save('Events.Subjects', '1');
+    xar::mem()->save('Events.Observers', '2');
+    xar::mem()->save('Mod.BaseInfos');
+    xar::mem()->save('Mod.Infos');
 }
 
 function get_cache_descriptor()

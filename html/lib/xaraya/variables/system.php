@@ -1,6 +1,8 @@
 <?php
 
 sys::import('xaraya.variables');
+use Xaraya\Services\xar;
+
 /**
  * Class to handle system variables
  *
@@ -56,7 +58,7 @@ class xarSystemVars extends xarVars implements IxarVars
             return true;
         }
         // Allow overriding system config for testing if needed - see UserContextTest
-        if (xarCoreCache::isCached('Testing:' . $scope, $name)) {
+        if (xar::mem()->has('Testing:' . $scope, $name)) {
             self::$systemVars[$scope][$name] = $value;
             return true;
         }

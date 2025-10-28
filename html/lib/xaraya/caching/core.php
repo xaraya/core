@@ -17,6 +17,7 @@
 
 /**
  * Core caching in memory for frequently-used values (within a single HTTP request)
+ * @deprecated 2.8.4 use xar::mem() instead
  */
 class xarCoreCache extends xarObject
 {

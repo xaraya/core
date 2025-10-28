@@ -377,7 +377,7 @@ class xarCore extends xarObject
         // Testing of autoload + second-level cache storage - please do not use on live sites
             sys::import('xaraya.caching.storage');
             $cache = xarCache_Storage::getCacheStorage(array('storage' => 'apcu', 'type' => 'core'));
-            xarCoreCache::setCacheStorage($cache);
+            xar::mem()->setCacheStorage($cache);
         */
 
         /**

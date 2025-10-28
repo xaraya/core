@@ -14,6 +14,9 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+
 /**
  * Class to model a compiled template
  *
@@ -79,14 +82,14 @@ class CompiledTemplate extends xarObject
                 global $_compiler_output;
 
                 // Have we already cached this template?
-                if (!xarCoreCache::isCached('template', $this->source)) {
+                if (!xar::mem()->has('template', $this->source)) {
                     // Get the compiled template from the template cache
                     $_compiler_output = file_get_contents($this->fileName);
                     // Stick it in the cache
-                    xarCoreCache::setCached('template', $this->source, $_compiler_output);
+                    xar::mem()->set('template', $this->source, $_compiler_output);
                 } else {
                     // Retrieve the compiled template from cache
-                    $_compiler_output = xarCoreCache::getCached('template', $this->source);
+                    $_compiler_output = xar::mem()->get('template', $this->source);
                 }
 
                 $res = include("var://_compiler_output");
