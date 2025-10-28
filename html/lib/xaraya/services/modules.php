@@ -33,9 +33,10 @@ interface ModulesInterface extends ServiceInterface
 {
     public const SLICE = 'modules';
 
-    public function getVar(string $varName): mixed;
+    public function getVar(string $varName, mixed $default = null): mixed;
     public function setVar(string $varName, mixed $value): bool;
     public function delVar(string $varName): bool;
+    public function flushVars(): bool;
     public function cacheVars(?string $source = null): void;
     public function getVarID(string $varName): int;
     public function getUserVar(string $varName, ?int $userId = null): mixed;
@@ -151,10 +152,10 @@ trait ModulesTrait
     /**
      * Get module variable for this module
      */
-    public function getVar(string $varName): mixed
+    public function getVar(string $varName, mixed $default = null): mixed
     {
         $modName = $this->getModName();
-        return $this->getVarsHelper()->get($modName, $varName);
+        return $this->getVarsHelper()->get($modName, $varName) ?? $default;
     }
 
     /**
@@ -173,6 +174,15 @@ trait ModulesTrait
     {
         $modName = $this->getModName();
         return $this->getVarsHelper()->delete($modName, $varName);
+    }
+
+    /**
+     * Delete all module variables for this module
+     */
+    public function flushVars(): bool
+    {
+        $modName = $this->getModName();
+        return $this->getVarsHelper()->flush($modName);
     }
 
     /**
@@ -544,8 +554,8 @@ trait ModulesTrait
      */
     public function resolveAlias(string $name): string
     {
-        return xarModAlias::resolve($name);
-        // return $this->getAliasHelper()->resolveAlias($name);
+        // @todo move back to ModulesService for direct method calls
+        return $this->getAliasHelper()->resolve($name);
     }
 
     /**

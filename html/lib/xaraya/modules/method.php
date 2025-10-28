@@ -252,7 +252,9 @@ trait MethodServicesTrait
  *
  * Available services:
  * - $this->ctl() = xarController::* Main Controller (getURL, redirect, ...)
+ * - $this->req() = xarRequest::* Server Request (getModule, getType, ...)
  * - $this->log() = xarLog::* Logger (message, variable, ...)
+ * - $this->mem() = xarCoreCache::* Memory Cache (has, get, ...)
  * - $this->mls() = xarMLS::* Multi-Language System (translate, ...)
  * - $this->mod() = xarMod*::* Modules (getVar, setVar, ...)
  * - $this->sec() = xarSec::* Security (checkAccess, genAuthKey, ...)
@@ -263,6 +265,7 @@ trait MethodServicesTrait
  * - $this->prop() = DataProperty*::* with context (getProperty, template, ...)
  * - $this->cache() = xar*Cache::* Caching (getModuleKey, getObjectKey, ...)
  * - $this->config() = xarConfigVars::* Config (getVar, setVar, ...)
+ * - $this->system() = xarSystemVars::* System (getVar, setVar, ...)
  * - $this->session() = xarSession::* Session (getVar, setVar, ...)
  * - $this->db() = xarDB::* Database (getConn, getPrefix, ...)
  * - ...

@@ -2,6 +2,7 @@
 
 sys::import('xaraya.variables');
 use Xaraya\Services\xar;
+use Xaraya\Services\SystemService;
 
 /**
  * Class to handle system variables
@@ -13,7 +14,7 @@ use Xaraya\Services\xar;
  * @package core\variables
  * @subpackage variables
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -23,7 +24,15 @@ use Xaraya\Services\xar;
 class xarSystemVars extends xarVars implements IxarVars
 {
     private static $KEY = 'System.Variables'; // const cannot be private :-(
-    private static $systemVars = null;
+    protected static ?SystemService $system = null;
+
+    protected static function system()
+    {
+        if (!isset(self::$system)) {
+            self::$system = xar::getServicesClass()->system();
+        }
+        return self::$system;
+    }
 
     /**
      * Gets a core system variable
@@ -34,61 +43,16 @@ class xarSystemVars extends xarVars implements IxarVars
      */
     public static function get($scope, $name)
     {
-        if (!isset($scope)) {
-            $scope = sys::CONFIG;
-        }
-
-        if (!isset(self::$systemVars[$scope])) {
-            self::preload($scope);
-        }
-
-        // We need the system variable; complain if it's not there
-        if (!isset(self::$systemVars[$scope][$name])) {
-            throw new Exception("xarSystemVars: Unknown system variable: '$name'.");
-        }
-
-        return self::$systemVars[$scope][$name];
+        return self::system()->getVar($scope, $name);
     }
 
     public static function set($scope, $name, $value)
     {
-        // Allow overriding system layout if needed
-        if ($scope == sys::LAYOUT) {
-            self::$systemVars[$scope][$name] = $value;
-            return true;
-        }
-        // Allow overriding system config for testing if needed - see UserContextTest
-        if (xar::mem()->has('Testing:' . $scope, $name)) {
-            self::$systemVars[$scope][$name] = $value;
-            return true;
-        }
-        // Not supported ?
-        return false;
+        return self::system()->setVar($scope, $name, $value);
     }
 
     public static function delete($scope, $name)
     {
-        // Not supported ?
-        return false;
-    }
-
-    private static function preload($scope)
-    {
-        $fileName = sys::varpath() . '/';
-        if ($scope == sys::LOG) {
-            $fileName .= 'logs/';
-        }
-        $fileName .= $scope;
-
-        // We need the file; complain if it's not there
-        if (!file_exists($fileName)) {
-            throw new Exception("The system config file '$fileName' could not be found.");
-        }
-
-        // Make stuff from config.system.php available
-        // NOTE: we can not use sys::import since the variable scope would be wrong.
-        include $fileName;
-        /** @phpstan-ignore-next-line */
-        self::$systemVars[$scope] = $systemConfiguration;
+        return self::system()->delVar($scope, $name);
     }
 }

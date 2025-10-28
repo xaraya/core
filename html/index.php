@@ -88,7 +88,7 @@ function xarMain()
     xarLog::message('Retrieved a request: ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction(), xarLog::LEVEL_NOTICE);
 
     // Default Page Title
-    $SiteSlogan = xarModVars::get('themes', 'SiteSlogan');
+    $SiteSlogan = xar::mod('themes')->getVar('SiteSlogan');
     xarTpl::setPageTitle(xarVar::prepForDisplay($SiteSlogan));
     xarLog::message('The page title is set: ' . xarTpl::getPageTitle(), xarLog::LEVEL_NOTICE);
 
@@ -108,18 +108,18 @@ function xarMain()
         }
         // Admin theme
     } elseif (xarUser::isLoggedIn() && $request->getType() == 'admin') {
-        $themeName = xarModVars::get('themes', 'admin_theme');
+        $themeName = xar::mod('themes')->getVar('admin_theme');
         if (!empty($themeName) && xarTheme::isAvailable($themeName)) {
             $themeName = xarVar::prepForOS($themeName);
             xarTpl::setThemeName(strtolower($themeName));
             xar::mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
         // User Override (configured in themes admin modifyconfig)
-    } elseif ((bool) xarModVars::get('themes', 'enable_user_menu') == true) {
+    } elseif ((bool) xar::mod('themes')->getVar('enable_user_menu') == true) {
         // users are allowed to set theme in profile, get user setting...
-        $themeName = xarModUserVars::get('themes', 'default_theme');
+        $themeName = xar::mod('themes')->getUserVar('default_theme');
         // get the list of permitted themes
-        $user_themes = xarModVars::get('themes', 'user_themes');
+        $user_themes = xar::mod('themes')->getVar('user_themes');
         $user_themes = !empty($user_themes) ? explode(',', $user_themes) : [];
 
         // check we have a valid theme

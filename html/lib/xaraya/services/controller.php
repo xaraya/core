@@ -35,15 +35,15 @@ interface ControllerInterface extends ServiceInterface
 
     /**
      * Get url for some module type function
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $params
      */
-    public function getModuleURL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $args = [], ?bool $generateXMLURL = null): string;
+    public function getModuleURL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $params = [], ?bool $generateXMLURL = null): string;
 
     /**
      * Get url for some object method
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $params
      */
-    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = [], ?bool $generateXMLURL = null): string;
+    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $params = [], ?bool $generateXMLURL = null): string;
 
     /**
      * Generate URL for a specific action on an object - the format will depend on the linktype
@@ -58,8 +58,8 @@ interface ControllerInterface extends ServiceInterface
      */
     public function getRouteURL(string $route, array $params = []): ?string;
 
-    /** @param array<string, mixed> $args */
-    public function init(array $args = [], mixed $context = null): bool;
+    /** @param array<string, mixed> $config */
+    public function init(array $config = [], mixed $context = null): bool;
     /** @return array<string, mixed> */
     public function getConfig(): array;
     public function dispatch(xarRequest $request, mixed $context = null): void;
@@ -82,9 +82,9 @@ interface ControllerInterface extends ServiceInterface
 
     /**
      * Get current url
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $params
      */
-    public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string;
+    public function getCurrentURL(array $params = [], ?bool $generateXMLURL = null): string;
 
     /**
      * Get entry point = index.php or custom
@@ -94,7 +94,7 @@ interface ControllerInterface extends ServiceInterface
     public function getServerVar(string $varName): mixed;
 
     public function getSystemVar(string $varName): mixed;
-    public function getCurrentRequestString(array $args = [], ?bool $generateXMLURL = null, ?string $target = null): string;
+    public function getCurrentRequestString(array $params = [], ?bool $generateXMLURL = null, ?string $target = null): string;
 
     /**
      * Get base uri
@@ -147,20 +147,20 @@ trait ControllerTrait
 
     /**
      * Get url for a module type function
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $params
      */
-    public function getModuleURL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $args = [], ?bool $generateXMLURL = null): string
+    public function getModuleURL(?string $modName = null, string $modType = 'user', string $funcName = 'main', array $params = [], ?bool $generateXMLURL = null): string
     {
-        return xarController::URL($modName, $modType, $funcName, $args, $generateXMLURL);
+        return xarController::URL($modName, $modType, $funcName, $params, $generateXMLURL);
     }
 
     /**
      * Get url for an object method
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $params
      */
-    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $args = [], ?bool $generateXMLURL = null): string
+    public function getObjectURL(?string $objectName = null, string $methodName = 'view', array $params = [], ?bool $generateXMLURL = null): string
     {
-        return xarServer::getObjectURL($objectName, $methodName, $args, $generateXMLURL);
+        return xarServer::getObjectURL($objectName, $methodName, $params, $generateXMLURL);
     }
 
     /**
@@ -202,11 +202,11 @@ trait ControllerTrait
         self::$router = $router;
     }
 
-    /** @param array<string, mixed> $args */
-    public function init(array $args = [], mixed $context = null): bool
+    /** @param array<string, mixed> $config */
+    public function init(array $config = [], mixed $context = null): bool
     {
         // this will be relying on RequestService in the future
-        return xarController::init($args, $context);
+        return xarController::init($config, $context);
     }
 
     /** @return array<string, mixed> */
@@ -264,12 +264,12 @@ trait ControllerTrait
 
     /**
      * Get current url
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $params
      */
     // this will be relying on RequestService in the future (getCurrentURL)
-    public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string
+    public function getCurrentURL(array $params = [], ?bool $generateXMLURL = null): string
     {
-        return xarServer::getCurrentURL($args, $generateXMLURL);
+        return xarServer::getCurrentURL($params, $generateXMLURL);
     }
 
     /**
@@ -280,9 +280,9 @@ trait ControllerTrait
         return xarServer::getBaseURL();
     }
 
-    public function getCurrentRequestString(array $args = [], ?bool $generateXMLURL = null, ?string $target = null): string
+    public function getCurrentRequestString(array $params = [], ?bool $generateXMLURL = null, ?string $target = null): string
     {
-        return xarServer::getCurrentRequestString($args, $generateXMLURL, $target);
+        return xarServer::getCurrentRequestString($params, $generateXMLURL, $target);
     }
 
     /**

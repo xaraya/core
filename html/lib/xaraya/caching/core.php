@@ -6,7 +6,7 @@
  * @package core\caching
  * @subpackage caching
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -15,15 +15,24 @@
  * @author jsb
  */
 
+use Xaraya\Services\MemoryService;
+use Xaraya\Services\xar;
+
 /**
  * Core caching in memory for frequently-used values (within a single HTTP request)
  * @deprecated 2.8.4 use xar::mem() instead
  */
 class xarCoreCache extends xarObject
 {
-    /** @var array<string, mixed> */
-    private static $cacheCollection = [];
-    private static ?ixarCache_Storage $cacheStorage = null;
+    protected static ?MemoryService $mem = null;
+
+    protected static function mem()
+    {
+        if (!isset(self::$mem)) {
+            self::$mem = xar::mem();
+        }
+        return self::$mem;
+    }
 
     /**
      * Initialise the caching options
@@ -34,15 +43,7 @@ class xarCoreCache extends xarObject
     **/
     public static function init(array $config = [])
     {
-        $scopes = ['CoreCache.Preload'];
-        // initialize core cache with some values from caching configuration
-        foreach ($scopes as $scope) {
-            if (!empty($config[$scope])) {
-                self::$cacheCollection[$scope] = $config[$scope];
-            }
-        }
-
-        return true;
+        return self::mem()->init($config);
     }
 
     /**
@@ -54,21 +55,7 @@ class xarCoreCache extends xarObject
     **/
     public static function isCached($scope, $name)
     {
-        // initialize cache if necessary
-        self::$cacheCollection[$scope] ??= [];
-        if (isset(self::$cacheCollection[$scope][$name])) {
-            return true;
-
-        } elseif (self::hasPreload($scope, $name) && self::loadCached($scope, $name)) {
-            return true;
-
-            // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
-        } elseif (isset(self::$cacheStorage) && self::$cacheStorage->isCached($scope . ':' . $name)) {
-            // pre-fetch the value from second-level cache here (if we don't load from bulk storage)
-            self::$cacheCollection[$scope][$name] = self::$cacheStorage->getCached($scope . ':' . $name);
-            return true;
-        }
-        return false;
+        return self::mem()->has($scope, $name);
     }
 
     /**
@@ -80,11 +67,7 @@ class xarCoreCache extends xarObject
     **/
     public static function getCached($scope, $name)
     {
-        if (!isset(self::$cacheCollection[$scope][$name])) {
-            // don't fetch the value from second-level cache here
-            return;
-        }
-        return self::$cacheCollection[$scope][$name];
+        return self::mem()->get($scope, $name);
     }
 
     /**
@@ -97,16 +80,7 @@ class xarCoreCache extends xarObject
     **/
     public static function setCached($scope, $name, $value)
     {
-        // initialize cache if necessary
-        self::$cacheCollection[$scope] ??= [];
-        self::$cacheCollection[$scope][$name] = $value;
-        if (self::hasPreload($scope, $name)) {
-            self::saveCached($scope, $name);
-        }
-        if (isset(self::$cacheStorage)) {
-            // save the value to second-level cache here
-            self::$cacheStorage->setCached($scope . ':' . $name, $value);
-        }
+        return self::mem()->set($scope, $name, $value);
     }
 
     /**
@@ -118,16 +92,7 @@ class xarCoreCache extends xarObject
     **/
     public static function delCached($scope, $name)
     {
-        if (isset(self::$cacheCollection[$scope][$name])) {
-            unset(self::$cacheCollection[$scope][$name]);
-        }
-        if (self::hasPreload($scope, $name)) {
-            self::delPreload($scope, $name);
-        }
-        if (isset(self::$cacheStorage)) {
-            // delete the value from second-level cache here
-            self::$cacheStorage->delCached($scope . ':' . $name);
-        }
+        return self::mem()->del($scope, $name);
     }
 
     /**
@@ -138,16 +103,7 @@ class xarCoreCache extends xarObject
     **/
     public static function flushCached($scope)
     {
-        if (isset(self::$cacheCollection[$scope])) {
-            unset(self::$cacheCollection[$scope]);
-        }
-        if (self::hasPreload($scope)) {
-            self::delPreload($scope);
-        }
-        if (isset(self::$cacheStorage)) {
-            // CHECKME: not all cache storage supports this in the same way !
-            self::$cacheStorage->flushCached($scope . ':');
-        }
+        return self::mem()->flush($scope);
     }
 
     /**
@@ -159,14 +115,7 @@ class xarCoreCache extends xarObject
     **/
     public static function hasPreload($scope, $name = null)
     {
-        if ($scope === 'CoreCache.Preload') {
-            return false;
-        }
-        if (isset($name)) {
-            // cache storage typically only works with a single cache namespace, so we add our own scope prefix here
-            return self::isCached('CoreCache.Preload', $scope . ':' . $name);
-        }
-        return self::isCached('CoreCache.Preload', $scope);
+        return self::mem()->hasPreload($scope, $name);
     }
 
     /**
@@ -178,33 +127,7 @@ class xarCoreCache extends xarObject
     **/
     public static function loadCached($scope, $name = null)
     {
-        if (isset($name)) {
-            $filepath = sys::varpath() . '/cache/core/' . $scope . '.' . $name . '.php';
-            if (!is_file($filepath)) {
-                return false;
-            }
-            // initialize cache if necessary
-            self::$cacheCollection[$scope] ??= [];
-            // replace value for name in cache scope
-            $value = include $filepath;
-            self::$cacheCollection[$scope][$name] = $value;
-            return true;
-        }
-        $filepath = sys::varpath() . '/cache/core/' . $scope . '.php';
-        if (!is_file($filepath)) {
-            return false;
-        }
-        // replace values for names in cache scope - keep the others as is
-        $values = include $filepath;
-        if (!is_array($values)) {
-            return false;
-        }
-        // initialize cache if necessary
-        self::$cacheCollection[$scope] ??= [];
-        foreach ($values as $name => $value) {
-            self::$cacheCollection[$scope][$name] = $value;
-        }
-        return true;
+        return self::mem()->load($scope, $name);
     }
 
     /**
@@ -217,40 +140,7 @@ class xarCoreCache extends xarObject
     **/
     public static function saveCached($scope, $name = null, $source = null)
     {
-        $source ??= __METHOD__;
-        $date = date('c');
-        if (isset($name)) {
-            if (!self::isCached($scope, $name)) {
-                return false;
-            }
-            $filepath = sys::varpath() . '/cache/core/' . $scope . '.' . $name . '.php';
-            $value = self::$cacheCollection[$scope][$name];
-            $info = '<?php
-/**
- * Exported by ' . $source . '
- * Generated: ' . $date . '
- */
-$value = ' . var_export($value, true) . ';
-return $value;
-';
-            file_put_contents($filepath, $info);
-            return true;
-        }
-        if (!isset(self::$cacheCollection[$scope])) {
-            return false;
-        }
-        $filepath = sys::varpath() . '/cache/core/' . $scope . '.php';
-        $values = self::$cacheCollection[$scope];
-        $info = '<?php
-/**
- * Exported by ' . $source . '
- * Generated: ' . $date . '
- */
-$values = ' . var_export($values, true) . ';
-return $values;
-';
-        file_put_contents($filepath, $info);
-        return true;
+        return self::mem()->save($scope, $name);
     }
 
     /**
@@ -262,17 +152,7 @@ return $values;
     **/
     public static function delPreload($scope, $name = null)
     {
-        if (isset($name)) {
-            $filepath = sys::varpath() . '/cache/core/' . $scope . '.' . $name . '.php';
-            if (is_file($filepath)) {
-                unlink($filepath);
-            }
-            return;
-        }
-        $filepath = sys::varpath() . '/cache/core/' . $scope . '.php';
-        if (is_file($filepath)) {
-            unlink($filepath);
-        }
+        return self::mem()->delPreload($scope, $name);
     }
 
     /**
@@ -284,17 +164,7 @@ return $values;
     **/
     public static function setCacheStorage($cacheStorage, $cacheExpire = 0)
     {
-        self::$cacheStorage = $cacheStorage;
-        self::$cacheStorage->setExpire($cacheExpire);
-        // Make sure we use type 'core' for the cache storage here
-        if (empty(self::$cacheStorage->type) || self::$cacheStorage->type != 'core') {
-            self::$cacheStorage->type = 'core';
-            // Update the global namespace and prefix of the cache storage
-            self::$cacheStorage->setNamespace(self::$cacheStorage->namespace);
-        }
-        // see what's going on in the cache storage ;-)
-        //self::$cacheStorage->logfile = sys::varpath() . '/logs/core_cache.txt';
-        // FIXME: some in-memory cache storage requires explicit garbage collection !?
+        return self::mem()->setCacheStorage($cacheStorage, $cacheExpire);
     }
 
     /**
@@ -304,6 +174,6 @@ return $values;
     **/
     public static function getCachedScopes()
     {
-        return array_keys(self::$cacheCollection);
+        return self::mem()->getCachedScopes();
     }
 }

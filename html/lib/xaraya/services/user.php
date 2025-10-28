@@ -98,7 +98,7 @@ trait UserTrait
     public function isLoggedIn(): bool
     {
         // @todo see UserContext::getUserId() for userId without session
-        return xarUser::isLoggedIn($this->getContext());
+        return xarUser::isLoggedIn($this->getCurrentId());
     }
 
     public function isDebugAdmin(): bool

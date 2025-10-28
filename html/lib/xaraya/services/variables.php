@@ -364,36 +364,43 @@ trait VariablesTrait
         return xarVar::prepForOS(...$args);
     }
 
+    /** @deprecated 2.8.4 use xar::mem()->has() instead */
     public function isCached(string $scope, string $name): bool
     {
         return $this->getParent()->mem()->has($scope, $name);
     }
 
+    /** @deprecated 2.8.4 use xar::mem()->get() instead */
     public function getCached(string $scope, string $name): mixed
     {
         return $this->getParent()->mem()->get($scope, $name);
     }
 
+    /** @deprecated 2.8.4 use xar::mem()->set() instead */
     public function setCached(string $scope, string $name, mixed $value): void
     {
         $this->getParent()->mem()->set($scope, $name, $value);
     }
 
+    /** @deprecated 2.8.4 use xar::mem()->del() instead */
     public function delCached(string $scope, string $name): void
     {
         $this->getParent()->mem()->del($scope, $name);
     }
 
+    /** @deprecated 2.8.4 use xar::mem()->hasPreload() instead */
     public function hasPreload(string $scope, ?string $name = null): bool
     {
         return $this->getParent()->mem()->hasPreload($scope, $name);
     }
 
+    /** @deprecated 2.8.4 use xar::mem()->load() instead */
     public function loadCached(string $scope, ?string $name = null): bool
     {
         return $this->getParent()->mem()->load($scope, $name);
     }
 
+    /** @deprecated 2.8.4 use xar::mem()->save() instead */
     public function saveCached(string $scope, ?string $name = null, ?string $source = null): bool
     {
         return $this->getParent()->mem()->save($scope, $name, $source);

@@ -446,6 +446,22 @@ trait WithStaticServices
     }
 
     /**
+     * Access xarSystemVars::* System methods (getVar, setVar, ...)
+     *
+     * Available methods:
+     * - getVar()
+     * - setVar()
+     * - delVar()
+     * - cache()
+     * - ...
+     *
+     */
+    public static function system(): SystemInterface
+    {
+        return self::getServicesClass()->system();
+    }
+
+    /**
      * Access xarSession::* Session methods (getVar, setVar, ...)
      *
      * Available methods:

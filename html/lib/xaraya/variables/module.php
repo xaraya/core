@@ -6,7 +6,7 @@
  * @package core\variables
  * @subpackage variables
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -15,6 +15,7 @@
 sys::import('xaraya.variables');
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+use Xaraya\Services\Modules\VarsHelper;
 
 /**
  * Build upon IxarVars to define interface for ModVars
@@ -27,10 +28,21 @@ interface IxarModVars extends IxarVars
 
 /**
  * Class to handle module variables
+ * @deprecated 2.8.4 use xar::mod()->*Var() instead
  */
 class xarModVars extends xarVars implements IxarModVars
 {
-    private static $preloaded = []; // Keep track of what module vars (per module) we already had
+    protected static ?VarsHelper $modvars = null;
+
+    protected static function modvars()
+    {
+        if (!isset(self::$modvars)) {
+            $modvars = xar::getServicesClass()->service('modules.vars');
+            assert($modvars instanceof VarsHelper);
+            self::$modvars = $modvars;
+        }
+        return self::$modvars;
+    }
 
     /**
      * Get a module variable
@@ -41,53 +53,10 @@ class xarModVars extends xarVars implements IxarModVars
      * @return mixed The value of the variable or void if variable doesn't exist
      * @throws EmptyParameterException
      */
-    public static function get($scope, $name, $value = null)
+    public static function get($scope, $name, $default = null)
     {
-        if (empty($scope)) {
-            throw new EmptyParameterException('modName');
-        }
-        if (empty($name)) {
-            throw new EmptyParameterException('name');
-        }
-
-        // Preload per module, once
-        if (!isset(self::$preloaded[$scope])) {
-            self::preload($scope);
-        }
-
-        // Lets first check to see if any of our type vars are already set in the cache.
-        $cacheScope = 'Mod.Variables.' . $scope;
-
-        // Try to get it from the cache
-        if (xar::mem()->has($cacheScope, $name)) {
-            $value = xar::mem()->get($cacheScope, $name);
-            return $value;
-        }
-
-        // Still no luck, let's do the hard work then
-        $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (empty($modBaseInfo)) {
-            return;
-        }
-
-        $dbconn = xar::db()->getConn();
-        $tables = xar::db()->getTables();
-
-        // Retrieve all the variables for this module at once
-        $module_varstable = $tables['module_vars'];
-        $query = "SELECT name, value FROM $module_varstable WHERE module_id = ? AND name = ?";
-        $bindvars = [(int) $modBaseInfo['systemid'],$name];
-
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xar::db()->getFetchNum());
-
-        if ($result->next()) {
-            // Found
-            $value = $result->get(2);
-            xar::mem()->set($cacheScope, $result->getString(1), $value);
-        }
-        $result->close();
-        return $value;
+        // @checkme this doesn't support a default value - check in caller
+        return self::modvars()->get($scope, $name) ?? $default;
     }
 
     /**
@@ -100,41 +69,7 @@ class xarModVars extends xarVars implements IxarModVars
      */
     public static function preload($scope)
     {
-        if (empty($scope)) {
-            throw new EmptyParameterException('modName');
-        }
-
-        $cacheScope = 'Mod.Variables.' . $scope;
-        if (xar::mem()->hasPreload($cacheScope) && xar::mem()->load($cacheScope)) {
-            self::$preloaded[$scope] = true;
-            return true;
-        }
-
-        $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (empty($modBaseInfo)) {
-            return;
-        }
-
-        $dbconn = xar::db()->getConn();
-        $tables = xar::db()->getTables();
-
-        $module_varstable = $tables['module_vars'];
-
-        $query = "SELECT name, value FROM $module_varstable WHERE module_id = ?";
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery([$modBaseInfo['systemid']], xar::db()->getFetchAssoc());
-
-        while ($result->next()) {
-            xar::mem()->set($cacheScope, $result->getString('name'), $result->get('value'));
-        }
-        $result->close();
-
-        if (xar::mem()->hasPreload($cacheScope)) {
-            xar::mem()->save($cacheScope);
-        }
-
-        self::$preloaded[$scope] = true;
-        return true;
+        return self::modvars()->preload($scope);
     }
 
     /**
@@ -145,13 +80,7 @@ class xarModVars extends xarVars implements IxarModVars
      */
     public static function cache($scope, $source = null)
     {
-        $cacheScope = 'Mod.Variables.' . $scope;
-        if (xar::mem()->hasPreload($cacheScope)) {
-            $source ??= __METHOD__;
-            xar::mem()->save($cacheScope, null, $source);
-        }
-        // Saved in DD > Modify Configuration = modules/dynamicdata/admingui/modifyconfig.php
-        //xar::mod('dynamicdata')->cacheVars();
+        return self::modvars()->cache($scope, $source);
     }
 
     /**
@@ -166,45 +95,7 @@ class xarModVars extends xarVars implements IxarModVars
      */
     public static function set($scope, $name, $value)
     {
-        if (empty($scope)) {
-            throw new EmptyParameterException('modName');
-        }
-        if (empty($name)) {
-            throw new EmptyParameterException('name');
-        }
-        assert(!is_null($value));
-
-        $dbconn = xar::db()->getConn();
-        $tables = xar::db()->getTables();
-        $modBaseInfo = xarMod::getBaseInfo($scope);
-        $module_varstable = $tables['module_vars'];
-        // We need the variable id
-        //unset($modvarid);
-        $modvarid = self::getID($scope, $name);
-
-        if ($value === false) {
-            $value = 0;
-        }
-        if ($value === true) {
-            $value = 1;
-        }
-        if (!$modvarid) {
-            // Not there yet
-            $query = "INSERT INTO $module_varstable
-                         (module_id, name, value)
-                      VALUES (?,?,?)";
-            $bindvars = [$modBaseInfo['systemid'],$name,(string) $value];
-        } else {
-            // Existing one
-            $query = "UPDATE $module_varstable SET value = ? WHERE id = ?";
-            $bindvars = [(string) $value,$modvarid];
-        }
-        $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate($bindvars);
-
-        // Update cache for the variable
-        xar::mem()->set('Mod.Variables.' . $scope, $name, $value);
-        return true;
+        return self::modvars()->set($scope, $name, $value);
     }
 
     /**
@@ -218,35 +109,7 @@ class xarModVars extends xarVars implements IxarModVars
      */
     public static function delete($scope, $name)
     {
-        if (empty($scope)) {
-            throw new EmptyParameterException('modName');
-        }
-
-        $dbconn = xar::db()->getConn();
-        $tables = xar::db()->getTables();
-        $modBaseInfo = xarMod::getBaseInfo($scope);
-
-        // Delete all the itemvars derived from this var first
-        $modvarid = self::getID($scope, $name);
-        // TODO: we should delegate this to moditemvars class somehow
-        if ($modvarid) {
-            $module_itemvarstable = $tables['module_itemvars'];
-            $query = "DELETE FROM $module_itemvarstable WHERE module_var_id = ?";
-            $stmt = $dbconn->prepareStatement($query);
-            $stmt->executeUpdate([(int) $modvarid]);
-        }
-
-        // Now delete the modvar itself
-        $module_varstable = $tables['module_vars'];
-        // Now delete the module var itself
-        $query = "DELETE FROM $module_varstable WHERE module_id = ? AND name = ?";
-        $bindvars = [$modBaseInfo['systemid'], $name];
-        $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate($bindvars);
-
-        // Removed it from the cache
-        xar::mem()->del('Mod.Variables.' . $scope, $name);
-        return true;
+        return self::modvars()->delete($scope, $name);
     }
 
     /**
@@ -259,56 +122,7 @@ class xarModVars extends xarVars implements IxarModVars
      */
     public static function delete_all($scope)
     {
-        if (empty($scope)) {
-            throw new EmptyParameterException('modName');
-        }
-
-        $modBaseInfo = xarMod::getBaseInfo($scope);
-
-        $dbconn = xar::db()->getConn();
-        $tables = xar::db()->getTables();
-
-        $module_varstable     = $tables['module_vars'];
-        $module_itemvarstable = $tables['module_itemvars'];
-
-        // PostGres (allows only one table in DELETE)
-        // MySql: multiple table delete only from 4.0 up
-        // Select the id's which need to be removed
-        $sql = "SELECT $module_varstable.id FROM $module_varstable WHERE $module_varstable.module_id = ?";
-        $stmt = $dbconn->prepareStatement($sql);
-        $result = $stmt->executeQuery([$modBaseInfo['systemid']], xar::db()->getFetchNum());
-
-        // Seems that at least mysql and pgsql support the scalar IN operator
-        $idlist = [];
-        while ($result->next()) {
-            $idlist[] = $result->getInt(1);
-        }
-        $result->close();
-        unset($result);
-
-        // We delete the module vars and the user vars in a transaction, which either succeeds completely or totally fails
-        try {
-            $dbconn->begin();
-            if (count($idlist) != 0) {
-                $bindmarkers = '?' . str_repeat(',?', count($idlist) - 1);
-                $sql = "DELETE FROM $module_itemvarstable WHERE $module_itemvarstable.module_var_id IN (" . $bindmarkers . ")";
-                $stmt = $dbconn->prepareStatement($sql);
-                $result = $stmt->executeUpdate($idlist);
-            }
-
-            // Now delete the module vars
-            $query = "DELETE FROM $module_varstable WHERE module_id = ?";
-            $stmt  = $dbconn->prepareStatement($query);
-            $result = $stmt->executeUpdate([$modBaseInfo['systemid']]);
-            $dbconn->commit();
-        } catch (SQLException $e) {
-            // If there was an SQL exception roll back to where we started
-            $dbconn->rollback();
-            // and raise it again so the handler catches
-            // TODO: demote to error? raise other type of exception?
-            throw $e;
-        }
-        return true;
+        return self::modvars()->flush($scope);
     }
 
     /**
@@ -325,39 +139,6 @@ class xarModVars extends xarVars implements IxarModVars
      */
     public static function getID($scope, $name)
     {
-        // Module name and variable name are both necesary
-        if (empty($scope) or empty($name)) {
-            throw new EmptyParameterException('modName and/or name');
-        }
-
-        // Retrieve module info, so we can decide where to look
-        $modBaseInfo = xarMod::getBaseInfo($scope);
-        if (empty($modBaseInfo)) {
-            return;
-        } // throw back
-
-        if (xar::mem()->has('Mod.GetVarID', $modBaseInfo['name'] . $name)) {
-            return xar::mem()->get('Mod.GetVarID', $modBaseInfo['name'] . $name);
-        }
-
-        $dbconn = xar::db()->getConn();
-        $tables = xar::db()->getTables();
-
-        $module_varstable = $tables['module_vars'];
-
-        $query = "SELECT id FROM $module_varstable WHERE module_id = ? AND name = ?";
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery([(int) $modBaseInfo['systemid'],$name], xar::db()->getFetchNum());
-        // If there is no such thing, the callee is responsible, return null
-        if (!$result->next()) {
-            return;
-        }
-
-        // Return the ID
-        $modvarid = $result->getInt(1);
-        $result->Close();
-
-        xar::mem()->set('Mod.GetVarID', $scope . $name, $modvarid);
-        return $modvarid;
+        return self::modvars()->getID($scope, $name);
     }
 }

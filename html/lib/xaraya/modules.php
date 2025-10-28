@@ -28,6 +28,7 @@ sys::import('xaraya.services.xar');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\Context;
 use Xaraya\Services\xar;
+use Xaraya\Services\Modules\AliasHelper;
 
 /**
  * Exception raised by the modules subsystem
@@ -1283,21 +1284,31 @@ interface IxarModAlias
  * Class to model interface to module aliases
  *
  * @package core\modules
+ * @version 2.8.4
  * @todo evaluate dependency consequences
  * @todo evaluate usage in modules, it's not very common, as in, perhaps worth to scrap and bolt onto a request mapper
  */
 class xarModAlias extends xarObject implements IxarModAlias
 {
+    protected static ?AliasHelper $modalias = null;
+
+    protected static function modalias()
+    {
+        if (!isset(self::$modalias)) {
+            $modalias = xar::getServicesClass()->service('modules.alias');
+            assert($modalias instanceof AliasHelper);
+            self::$modalias = $modalias;
+        }
+        return self::$modalias;
+    }
+
     /**
      * Resolve an alias for a module
      */
     public static function resolve($alias)
     {
-        if ($alias == 'object') {
-            return $alias;
-        }
-        $aliasesMap = xar::config()->getVar('System.ModuleAliases');
-        return (!empty($aliasesMap[$alias])) ? $aliasesMap[$alias] : $alias;
+        // @todo move back to ModulesService for direct method calls
+        return self::modalias()->resolve($alias);
     }
 
     /**
@@ -1305,11 +1316,8 @@ class xarModAlias extends xarObject implements IxarModAlias
      */
     public static function set($alias, $modName)
     {
-        if (!xar::mod()->apiLoad('modules', 'admin')) {
-            return;
-        }
-        $args = ['modName' => $modName, 'aliasModName' => $alias];
-        return xar::mod()->apiFunc('modules', 'admin', 'add_module_alias', $args);
+        // @todo move back to ModulesService for direct method calls
+        return self::modalias()->set($alias, $modName);
     }
 
     /**
@@ -1317,10 +1325,6 @@ class xarModAlias extends xarObject implements IxarModAlias
      */
     public static function delete($alias, $modName)
     {
-        if (!xar::mod()->apiLoad('modules', 'admin')) {
-            return;
-        }
-        $args = ['modName' => $modName, 'aliasModName' => $alias];
-        return xar::mod()->apiFunc('modules', 'admin', 'delete_module_alias', $args);
+        return self::modalias()->delete($alias, $modName);
     }
 }

@@ -354,6 +354,22 @@ class StaticServicesClass extends ServicesClass
     }
 
     /**
+     * Access xarSystemVars::* System methods (getVar, setVar, ...)
+     *
+     * Available methods:
+     * - getVar()
+     * - setVar()
+     * - delVar()
+     * - cache()
+     * - ...
+     *
+     */
+    public function system(): SystemInterface
+    {
+        return $this->getServicePrototype('system');
+    }
+
+    /**
      * Access xarSession::* Session methods (getVar, setVar, ...)
      *
      * Available methods:

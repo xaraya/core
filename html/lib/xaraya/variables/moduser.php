@@ -4,7 +4,7 @@
  * @package core\variables
  * @subpackage variables
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -15,15 +15,31 @@
  */
 sys::import('xaraya.variables');
 sys::import('xaraya.variables.moditem');
+sys::import('xaraya.services.xar');
+use Xaraya\Services\xar;
+use Xaraya\Services\Modules\UserVarsHelper;
 
 /**
  * Class to implement the interface to module user vars
  *
  * @todo decide on sessionvars for anonymous users
  * @todo when yes on the previous todo, remember promotion of the vars
+ * @deprecated 2.8.4 use xar::mod()->*UserVar() instead
  */
 class xarModUserVars extends xarModItemVars implements IxarModItemVars
 {
+    protected static ?UserVarsHelper $uservars = null;
+
+    protected static function uservars()
+    {
+        if (!isset(self::$uservars)) {
+            $uservars = xar::getServicesClass()->service('modules.user');
+            assert($uservars instanceof UserVarsHelper);
+            self::$uservars = $uservars;
+        }
+        return self::$uservars;
+    }
+
     /**
      * Get a user variable for a module
      *
@@ -42,16 +58,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      */
     public static function get($scope, $name, $itemid = null)
     {
-        // If id not specified take the current user
-        if ($itemid == null) {
-            $itemid = xarUser::getVar('id');
-        }
-
-        // Anonymous user always uses the module default setting
-        if ($itemid == xarSession::getAnonId()) {
-            return xarModVars::get($scope, $name);
-        }
-        return parent::get($scope, $name, $itemid);
+        return self::uservars()->get($scope, $name, $itemid);
     }
 
     /**
@@ -75,18 +82,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      */
     public static function set($scope, $name, $value, $itemid = null)
     {
-        // If no id specified assume current user
-        if ($itemid == null) {
-            $itemid = xarUser::getVar('id');
-        }
-
-        // For anonymous users no preference can be set
-        // MrB: should we raise an exception here?
-        if ($itemid == xarSession::getAnonId()) {
-            return false;
-        }
-
-        return parent::set($scope, $name, $value, $itemid);
+        return self::uservars()->set($scope, $name, $value, $itemid);
     }
 
     /**
@@ -106,19 +102,6 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      */
     public static function delete($scope, $name, $itemid = null)
     {
-        // If id is not set assume current user
-        if ($itemid == null) {
-            $itemid = xarUser::getVar('id');
-        }
-
-        // Deleting for anonymous user is useless return true
-        // MrB: should we continue, can't harm either and we have
-        //      a failsafe that records are deleted, bit dirty, but
-        //      it would work.
-        if ($itemid == xarSession::getAnonId()) {
-            return true;
-        }
-
-        return parent::delete($scope, $name, $itemid);
+        return self::uservars()->delete($scope, $name, $itemid);
     }
 }

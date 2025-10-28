@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.3
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -260,7 +260,7 @@ return $values;
         // return xarCoreCache::saveCached($scope, $name, $source);
     }
 
-    protected function delPreload(string $scope, ?string $name = null)
+    public function delPreload(string $scope, ?string $name = null)
     {
         // --- LEGACY METHOD BODY ---
         if (isset($name)) {
@@ -277,7 +277,7 @@ return $values;
         // --- END LEGACY METHOD BODY ---
     }
 
-    protected function setCacheStorage(ixarCache_Storage $cacheStorage, int $cacheExpire = 0)
+    public function setCacheStorage(ixarCache_Storage $cacheStorage, int $cacheExpire = 0)
     {
         // --- LEGACY METHOD BODY ---
         $this->cacheStorage = $cacheStorage;
@@ -294,7 +294,7 @@ return $values;
         // --- END LEGACY METHOD BODY ---
     }
 
-    protected function getCachedScopes()
+    public function getCachedScopes()
     {
         // --- LEGACY METHOD BODY ---
         return array_keys($this->cacheCollection);

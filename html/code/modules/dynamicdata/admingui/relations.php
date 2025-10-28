@@ -22,7 +22,6 @@ use DataStoreLinks;
 use Exception;
 use xarCore;
 use xarCurl;
-use xarModItemVars;
 use sys;
 
 sys::import('modules.dynamicdata.method');

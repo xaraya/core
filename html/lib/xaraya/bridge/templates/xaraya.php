@@ -231,12 +231,12 @@ class XarayaCoreExtension extends XarayaTwigExtension
         return $this->mod($scope)->getUserVar($name, $userId);
     }
 
-    public function xar_moditemvar($scope, $name, $userId = null, $value = null)
+    public function xar_moditemvar($scope, $name, $itemId = null, $value = null)
     {
         if (isset($value)) {
-            return $this->mod($scope)->setItemVar($name, $value, $userId);
+            return $this->mod($scope)->setItemVar($name, $value, $itemId);
         }
-        return $this->mod($scope)->getItemVar($name, $userId);
+        return $this->mod($scope)->getItemVar($name, $itemId);
     }
 
     public function xar_requestvar($name)

@@ -254,12 +254,12 @@ class xarUser extends xarObject
      * Check if the user logged in
      *
      * @todo see UserContext::getUserId() for userId without session
-     * @param mixed $context
+     * @param ?int $userId
      * @return boolean true if the user is logged in, false if they are not
      */
-    public static function isLoggedIn($context = null)
+    public static function isLoggedIn($userId = null)
     {
-        $userId = xar::session()->getUserId() ?? 0;
+        $userId ??= xar::session()->getUserId();
         return (!empty($userId) && $userId != xar::session()->getAnonId());
     }
 

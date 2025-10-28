@@ -37,8 +37,8 @@ if (interface_exists('Xaraya\Services\ServiceInterface', false)) {
 interface ServiceInterface extends ContextInterface
 {
     public function __construct(mixed $parent);
-    /** @param array<string, mixed> $args */
-    public function init(array $args = []): bool;
+    /** @param array<string, mixed> $config */
+    public function init(array $config = []): bool;
     /** @return array<string, mixed> */
     public function getConfig(): array;
     public function getParent(): mixed;
@@ -70,14 +70,14 @@ trait ServiceTrait
 
     /**
      * Initialize service class
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $config
      */
-    public function init(array $args = []): bool
+    public function init(array $config = []): bool
     {
-        if (empty($args)) {
-            $args = $this->getConfig();
+        if (empty($config)) {
+            $config = $this->getConfig();
         }
-        $this->getContext()[static::SLICE] ??= $args;
+        $this->getContext()[static::SLICE] ??= $config;
         return true;
     }
 

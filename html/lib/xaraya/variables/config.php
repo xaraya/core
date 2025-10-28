@@ -17,6 +17,7 @@
 sys::import('xaraya.variables');
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+use Xaraya\Services\ConfigService;
 
 /**
  * Class to handle configuration variables
@@ -26,7 +27,15 @@ use Xaraya\Services\xar;
 class xarConfigVars extends xarVars implements IxarVars
 {
     private static $KEY = 'Config.Variables'; // const cannot be private :-(
-    private static $preloaded = false;
+    protected static ?ConfigService $config = null;
+
+    protected static function config()
+    {
+        if (!isset(self::$config)) {
+            self::$config = xar::getServicesClass()->config();
+        }
+        return self::$config;
+    }
 
     /**
      * Sets a configuration variable.
@@ -40,32 +49,7 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     public static function set($scope, $name, $value)
     {
-        // FIXME: do we really want that ?
-        // This way, worst case: 3 queries:
-        // 1. deleting it
-        // 2. Getting a new id (for some backends)
-        // 3. inserting it.
-        // Question is wether we want to invent new configvars on the fly or not
-        self::delete(null, $name);
-
-        $dbconn = xar::db()->getConn();
-        $tables = xar::db()->getTables();
-        $config_varsTable = $tables['config_vars'];
-
-        //Here we serialize the configuration variables
-        //so they can effectively contain more than one value
-        $serialvalue = serialize($value);
-
-        //Insert
-        $query = "INSERT INTO $config_varsTable
-                  (module_id, name, value)
-                  VALUES (?,?,?)";
-        $bindvars = [null, $name, $serialvalue];
-        $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate($bindvars);
-        xar::mem()->set(self::$KEY, $name, $value);
-
-        return true;
+        return self::config()->setVar($name, $value);
     }
 
     /**
@@ -80,65 +64,7 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     public static function get($scope, $name, $value = null)
     {
-        // Preload the config vars once
-        if (!self::$preloaded) {
-            self::preload();
-        }
-
-        if (!self::$preloaded) {
-            throw new VariableNotFoundException($name, "Variable #(1) not found");
-        }
-
-        // Configvars which are not in the database (either in config file or in code defines)
-        switch ($name) {
-            case 'Site.DB.TablePrefix':
-                return xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
-            case 'System.Core.Generation':
-                return xarCore::GENERATION;
-            case 'System.Core.VersionNumber':
-                return xarCore::VERSION_NUM;
-            case 'System.Core.VersionId':
-                return xarCore::VERSION_ID;
-            case 'System.Core.VersionSub':
-                return xarCore::VERSION_SUB;
-            case 'prefix':
-                // FIXME: Can we do this another way (dependency)
-                return xar::db()->getPrefix();
-        }
-
-        // From the cache
-        if (xar::mem()->has(self::$KEY, $name)) {
-            $value = xar::mem()->get(self::$KEY, $name);
-            return $value;
-        }
-
-        // Need to retrieve it
-        // @todo checkme What should we do here? preload again, or just fetch the one?
-        $dbconn = xar::db()->getConn();
-        $tables = xar::db()->getTables();
-        $varstable = $tables['config_vars'] ?? null;
-        // No tables, probably installing
-        if ($varstable == null) {
-            throw new VariableNotFoundException($name, "Variable #(1) not found (no tables found, in fact)");
-        }
-
-        $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery([$name], xar::db()->getFetchNum());
-        if ($result->next()) {
-            // Found it, retrieve and cache it
-            $value = $result->get(2);
-            $value = unserialize((string) $value);
-            xar::mem()->set(self::$KEY, $result->getString(1), $value);
-            $result->close();
-            return $value;
-        }
-
-        // @todo: We found nothing, return the default if we had one
-        if ($value !== null) {
-            return $value;
-        }
-        throw new VariableNotFoundException($name, "Variable #(1) not found");
+        return self::config()->getVar($name, $value);
     }
 
     /**
@@ -149,59 +75,7 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     public static function delete($scope, $name)
     {
-        $dbconn = xar::db()->getConn();
-        $tables = xar::db()->getTables();
-        $config_varsTable = $tables['config_vars'];
-        $query = "DELETE FROM $config_varsTable WHERE name = ? AND module_id is null";
-
-        // We want to make the next two statements atomic
-        $stmt = $dbconn->prepareStatement($query);
-        $stmt->executeUpdate([$name]);
-        xar::mem()->del(self::$KEY, $name);
-
-        return true;
-    }
-
-    /**
-     * Pre-load site configuration variables
-     *
-     * @return boolean true on success, or void on database error
-     * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
-     * @todo look into removing the serialisation, creole does this when needed, automatically (well, almost)
-     */
-    private static function preload()
-    {
-        if (xar::mem()->hasPreload(self::$KEY) && xar::mem()->load(self::$KEY)) {
-            self::$preloaded = true;
-            return true;
-        }
-
-        try {
-            $dbconn = xar::db()->getConn();
-            $tables = xar::db()->getTables();
-            $varstable = xar::db()->getPrefix() . '_module_vars';
-        } catch (Exception $e) {
-            return false;
-        }
-
-        $query = "SELECT name, value FROM $varstable WHERE module_id is null";
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery([], xar::db()->getFetchAssoc());
-        while ($result->next()) {
-            $newval = unserialize($result->getString('value'));
-
-            $val = $result->getString('value') ?? 's:0:""';
-            $newval = unserialize($val);
-            xar::mem()->set(self::$KEY, $result->getString('name'), $newval);
-        }
-        $result->close();
-
-        if (xar::mem()->hasPreload(self::$KEY)) {
-            xar::mem()->save(self::$KEY);
-        }
-
-        self::$preloaded = true;
-        return true;
+        return self::config()->delVar($name);
     }
 
     /**
@@ -211,11 +85,6 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     public static function cache($source = null)
     {
-        if (xar::mem()->hasPreload(self::$KEY)) {
-            $source ??= __METHOD__;
-            xar::mem()->save(self::$KEY, null, $source);
-        }
-        // Saved in Base > Modify Configuration = modules/base/admingui/modifyconfig.php
-        //xar::config()->cacheVars();
+        return self::config()->cacheVars($source);
     }
 }

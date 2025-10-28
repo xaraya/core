@@ -72,6 +72,7 @@ class ServiceFactory
             'prop' => self::getDataPropertyService($parent),
             'cache' => self::getCachingService($parent),
             'config' => self::getConfigService($parent),
+            'system' => self::getSystemService($parent),
             'req' => self::getRequestService($parent),
             'mem' => self::getMemoryService($parent),
             'session' => self::getSessionService($parent),
@@ -195,6 +196,15 @@ class ServiceFactory
     {
         self::log(__METHOD__, $parent);
         return ConfigService::create($parent);
+    }
+
+    /**
+     * Summary of getSystemService
+     */
+    public static function getSystemService(object|string|null $parent = null): SystemInterface
+    {
+        self::log(__METHOD__, $parent);
+        return SystemService::create($parent);
     }
 
     public static function getMemoryService(object|string|null $parent = null): MemoryInterface

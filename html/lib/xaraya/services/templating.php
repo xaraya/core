@@ -78,14 +78,14 @@ trait TemplatingTrait
 
     /**
      * Initialize service class
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $config
      */
-    public function init(array $args = []): bool
+    public function init(array $config = []): bool
     {
-        if (empty($args)) {
-            $args = $this->getConfig();
+        if (empty($config)) {
+            $config = $this->getConfig();
         }
-        $this->getContext()[static::SLICE] ??= $args;
+        $this->getContext()[static::SLICE] ??= $config;
         return true;
     }
 
