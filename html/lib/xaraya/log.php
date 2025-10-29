@@ -245,7 +245,105 @@ class xarLog extends xarObject
 
         //Encapsulate core libraries in classes and let __call work lazy loading
         sys::import('xaraya.log.functions.dumpvariable');
-        self::message(xarLog__dumpVariable($args), $level);
+        self::message(self::dumpVariable($args), $level);
+    }
+
+    /**
+     *  Helper function for variable logging
+     * @param array<string, mixed> $array
+     */
+    public static function dumpVariable(array $array)
+    {
+        static $depth = 0;
+
+        // $var, $name, $classname and $format
+        extract($array);
+
+        if ($depth > 32) {
+            return 'Recursive Depth Exceeded';
+        }
+
+        if ($depth == 0) {
+            $blank = '';
+        } else {
+            $blank = str_repeat(' ', $depth);
+        }
+        $depth += 1;
+
+        $TYPE_COLOR = "#FF0000";
+        $NAME_COLOR = "#0000FF";
+        $VALUE_COLOR = "#999900";
+
+        $str = '';
+
+        $format ??= '';
+        if (isset($name)) {
+            if ($format == 'html') {
+                $str = "<span style=\"color: $NAME_COLOR;\">" . $blank . 'Variable name: <b>'
+                    . htmlspecialchars($name) . '</b></span><br/>';
+            } else {
+                $str = $blank . "Variable name: $name\n";
+            }
+        }
+
+        $name ??= '';
+        $var ??= '';
+        $type = gettype($var);
+        if (is_object($var)) {
+            $args = ['name' => $name, 'var' => get_object_vars($var), 'classname' => get_class($var), 'format' => $format];
+            // RECURSIVE CALL
+            $str = self::dumpVariable($args);
+        } elseif (is_array($var)) {
+
+            if (isset($classname)) {
+                $type = 'class';
+            } else {
+                $type = 'array';
+            }
+
+            if ($format == 'html') {
+                $str .= "<span style=\"color: $TYPE_COLOR;\">" . $blank . "Variable type: $type</span><br/>";
+            } else {
+                $str .= $blank . "Variable type: $type\n";
+            }
+
+            if ($format == 'html') {
+                $str .= '{<br/><ul>';
+            } else {
+                $str .= $blank . "{\n";
+            }
+
+            foreach ($var as $key => $val) {
+                $args = ['name' => $key, 'var' => $val, 'format' => $format];
+                // RECURSIVE CALL
+                $str .= self::dumpVariable($args);
+            }
+
+            if ($format == 'html') {
+                $str .= '</ul>}<br/><br/>';
+            } else {
+                $str .= $blank . "}\n\n";
+            }
+        } else {
+            if ($var === null) {
+                $var = 'NULL';
+            } elseif ($var === false) {
+                $var = 'false';
+            } elseif ($var === true) {
+                $var = 'true';
+            }
+            if ($format == 'html') {
+                $str .= "<span style=\"color: $TYPE_COLOR;\">" . $blank . "Variable type: $type</span><br/>";
+                $str .= "<span style=\"color: $VALUE_COLOR;\">" . $blank . 'Variable value: "'
+                    . htmlspecialchars($var) . '"</span><br/><br/>';
+            } else {
+                $str .= $blank . "Variable type: $type\n";
+                $str .= $blank . "Variable value: \"$var\"\n\n";
+            }
+        }
+
+        $depth -= 1;
+        return $str;
     }
 
     /**
@@ -278,6 +376,7 @@ class xarLog extends xarObject
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
+ * @checkme keep as separate function for shutdown here?
 **/
 function xarLog__shutdown_handler()
 {

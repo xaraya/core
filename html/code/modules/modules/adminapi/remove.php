@@ -71,7 +71,7 @@ class RemoveMethod extends MethodClass
             // All cleanup needs to happen before a module entry is removed
             xarEvents::notify('ModRemove', $modinfo['name'], $this->getContext());
             // this is now handled by the modules module ModRemove event observer
-            //xarModVars::delete_all($modinfo['name']);
+            //xar::mod($modinfo['name'])->flushVars();
 
             // Remove the module itself
             try {
@@ -92,7 +92,7 @@ class RemoveMethod extends MethodClass
             // All cleanup needs to happen before a module entry is removed
             xarEvents::notify('ModRemove', $modinfo['name'], $this->getContext());
             // this is now handled by the modules module ModRemove event observer
-            //xarModVars::delete_all($modinfo['name']);
+            //xar::mod($modinfo['name'])->flushVars();
 
             // Update state of module
             $adminapi->setstate(['regid' => $regid,'state' => xarMod::STATE_UNINITIALISED]);

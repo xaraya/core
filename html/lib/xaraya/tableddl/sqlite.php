@@ -3,16 +3,10 @@
 /**
  * Table Maintenance API for SQLite
  *
- * NOTE: THIS SUBSYSTEM IS SCHEDULED FOR DEPRECATION. EXISTING CODE
- * DEPENDS ON IT, THAT IS WHY IT IS HERE. IF YOU ARE WRITING NEW CODE
- * USE THE METHODS IN xarDataDict.php. BOTH SUBSYSTEMS ARE NOT 100% FINISHED
- * BUT THIS ONE WILL BE ABANDONED, YOU MIGHT AS WELL WRITE YOUR CODE TO USE
- * THE MAINTAINED SUBSYSTEM.
-
  * @package core
  * @subpackage database
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -23,287 +17,289 @@
  *       Document functions
  */
 
+namespace Xaraya\Database\TableDDL;
+
+use BadParameterException;
+
 // PRIVATE FUNCTIONS BELOW - do not call directly
 
-/**
- * Generate the SQLite specific SQL to create a table
- *
- *
- * @param string $tableName the physical table name
- * @param array<mixed> $fields an array containing the fields to create
- * @return string|false the generated SQL statement, or false on failure
- */
-function xarDB__sqliteCreateTable($tableName, $fields, $charset = null)
+class SqliteDDL
 {
-    $sql_fields = [];
-    $primary_key = [];
-    $increment_start = false;
+    /**
+     * Generate the SQLite specific SQL to create a table
+     *
+     * @param string $tableName the physical table name
+     * @param array<mixed> $fields an array containing the fields to create
+     * @return string|false the generated SQL statement, or false on failure
+     */
+    public static function createTable($tableName, $fields, $charset = null)
+    {
+        $sql_fields = [];
+        $primary_key = [];
+        $increment_start = false;
 
-    foreach ($fields as $field_name => $parameters) {
-        $parameters['command'] = 'create';
-        $this_field = xarDB__sqliteColumnDefinition($field_name, $parameters);
+        foreach ($fields as $field_name => $parameters) {
+            $parameters['command'] = 'create';
+            $this_field = static::columnDefinition($field_name, $parameters);
 
-        $sql_fields[] = $field_name . ' '
-            . $this_field['type'] . ' '
-            . $this_field['unsigned'] . ' '
-            . $this_field['null'] . ' '
-            . $this_field['default'] . ' '
-        . $this_field['auto_increment'];
+            $sql_fields[] = $field_name . ' '
+                . $this_field['type'] . ' '
+                . $this_field['unsigned'] . ' '
+                . $this_field['null'] . ' '
+                . $this_field['default'] . ' '
+            . $this_field['auto_increment'];
 
-        if ($this_field['primary_key'] == true) {
-            $primary_key[] = $field_name;
+            if ($this_field['primary_key'] == true) {
+                $primary_key[] = $field_name;
+            }
+            if (empty($this_field['increment_start'])) {
+                $this_field['increment_start'] = false;
+            }
+            if ($this_field['increment_start'] != false) {
+                $increment_start = $this_field['increment_start'];
+            }
         }
-        if (empty($this_field['increment_start'])) {
-            $this_field['increment_start'] = false;
+
+        $sql = 'CREATE TABLE ' . $tableName . ' (' . implode(', ', $sql_fields);
+
+        if (!empty($primary_key)) {
+            $sql .= ', PRIMARY KEY (' . implode(',', $primary_key) . ')';
         }
-        if ($this_field['increment_start'] != false) {
-            $increment_start = $this_field['increment_start'];
-        }
+        $sql .= ')';
+
+        return $sql;
     }
 
-    $sql = 'CREATE TABLE ' . $tableName . ' (' . implode(', ', $sql_fields);
-
-    if (!empty($primary_key)) {
-        $sql .= ', PRIMARY KEY (' . implode(',', $primary_key) . ')';
-    }
-    $sql .= ')';
-
-    return $sql;
-}
-
-/**
- * SQLite specific function to alter a table
- *
- *
- * @param string $tableName the table to alter
- * @param array<string, mixed> $args
- * with
- *     $args['command'] command to perform on the table
- *     $args['field'] name of column to modify
- *     $args['after_field']
- *     $args['new_name'] new name of table
- * @return string|false sqlite specific sql to alter a table
- * @throws BadParameterException
- * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
- */
-function xarDB__sqliteAlterTable($tableName, $args)
-{
-    switch ($args['command']) {
-        case 'add':
-            if (empty($args['field'])) {
-                throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
-            }
-
-            $sql = 'ALTER TABLE ' . $tableName . ' ADD ' . $args['field'] . ' ';
-            $coldef = xarDB__sqliteColumnDefinition($args['field'], $args);
-            $sql .= $coldef['type'] . ' '
-                . $coldef['unsigned'] . ' '
-                . $coldef['null'] . ' '
-                . $coldef['default'] . ' '
-                . $coldef['auto_increment'] . ' ';
-
-            if ($coldef['primary_key']) {
-                $sql .= 'PRIMARY KEY ';
-            }
-
-            break;
-        case 'rename':
-            if (empty($args['new_name'])) {
-                throw new BadParameterException('args', 'Invalid parameter "#(1)" (new_name key must be set.)');
-            }
-            $sql = 'ALTER TABLE ' . $tableName . ' RENAME TO ' . $args['new_name'];
-            break;
-        default:
-            throw new BadParameterException($args['command'], 'Unknown command: "#(1)"');
-    }
-
-    return $sql;
-}
-
-/**
- * SQLite specific column type generation
- *
- * Note that SQLite only cares about INTEGER PRIMARY KEY
- * all other specs are not needed. We left them in here, so the SQL generated
- * is at least more clear.
- *
- *
- * @param string $field_name
- * @param array<mixed> $parameters
- *
- */
-function xarDB__sqliteColumnDefinition($field_name, $parameters)
-{
-    $this_field = [];
-
-    switch ($parameters['type']) {
-        case 'integer':
-            if (empty($parameters['size'])) {
-                $parameters['size'] = 'int';
-            }
-            // Let's always use integer instead of int, so when it gets set as primary key, we get the autoinc behaviour for free
-            switch ($parameters['size']) {
-                case 'tiny':
-                    $this_field['type'] = 'TINYINT';
-                    break;
-                case 'small':
-                    $this_field['type'] = 'SMALLINT';
-                    break;
-                case 'medium':
-                    $this_field['type'] = 'MEDIUMINT';
-                    break;
-                case 'big':
-                    $this_field['type'] = 'BIGINT';
-                    break;
-                default:
-                    $this_field['type'] = 'INTEGER';
-            } // switch ($parameters['size'])
-            break;
-        case 'char':
-            if (empty($parameters['size'])) {
-                return false;
-            }
-            $this_field['type'] = 'CHAR(' . $parameters['size'] . ')';
-            break;
-        case 'varchar':
-            if (empty($parameters['size'])) {
-                return false;
-            }
-            $this_field['type'] = 'VARCHAR(' . $parameters['size'] . ')';
-            break;
-        case 'text':
-            if (empty($parameters['size'])) {
-                $parameters['size'] = 'text';
-            }
-            $this_field['type'] = 'TEXT';
-            break;
-        case 'blob':
-            if (empty($parameters['size'])) {
-                $parameters['size'] = 'blob';
-            }
-            $this_field['type'] = 'BLOB';
-            break;
-        case 'boolean':
-            $this_field['type'] = "BOOLEAN";
-            if (isset($parameters['default'])) {
-                // default values are numbers, not strings
-                $parameters['default'] = $parameters['default'] ? 1 : 0;
-            }
-            break;
-        case 'datetime':
-            $this_field['type'] = "DATETIME";
-            if (isset($parameters['default'])) {
-                // Check if this is an array and convert back to string
-                // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
-                if (is_array($parameters['default'])) {
-                    $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year']
-                                         . '-' . $datetime_defaults['month']
-                                         . '-' . $datetime_defaults['day']
-                                         . ' ' . $datetime_defaults['hour']
-                                         . ':' . $datetime_defaults['minute']
-                                         . ':' . $datetime_defaults['second'];
+    /**
+     * SQLite specific function to alter a table
+     *
+     * @param string $tableName the table to alter
+     * @param array<string, mixed> $args
+     * with
+     *     $args['command'] command to perform on the table
+     *     $args['field'] name of column to modify
+     *     $args['after_field']
+     *     $args['new_name'] new name of table
+     * @return string|false sqlite specific sql to alter a table
+     * @throws BadParameterException
+     */
+    public static function alterTable($tableName, $args)
+    {
+        switch ($args['command']) {
+            case 'add':
+                if (empty($args['field'])) {
+                    throw new BadParameterException('args', 'Invalid parameter "#(1)" (field key must be set).');
                 }
-            }
-            break;
-        case 'date':
-            $this_field['type'] = "DATE";
-            if (isset($parameters['default'])) {
-                // Check if this is an array and convert back to string
-                // array('year'=>2002,'month'=>04,'day'=>17)
-                if (is_array($parameters['default'])) {
-                    $datetime_defaults = $parameters['default'];
-                    $parameters['default'] = $datetime_defaults['year']
-                                         . '-' . $datetime_defaults['month']
-                                         . '-' . $datetime_defaults['day'];
+
+                $sql = 'ALTER TABLE ' . $tableName . ' ADD ' . $args['field'] . ' ';
+                $coldef = static::columnDefinition($args['field'], $args);
+                $sql .= $coldef['type'] . ' '
+                    . $coldef['unsigned'] . ' '
+                    . $coldef['null'] . ' '
+                    . $coldef['default'] . ' '
+                    . $coldef['auto_increment'] . ' ';
+
+                if ($coldef['primary_key']) {
+                    $sql .= 'PRIMARY KEY ';
                 }
-            }
-            break;
-        case 'float':
-            if (empty($parameters['size'])) {
-                $parameters['size'] = 'float';
-            }
-            switch ($parameters['size']) {
-                case 'double':
-                    $data_type = 'DOUBLE';
-                    break;
-                case 'decimal':
-                    $data_type = 'DECIMAL';
-                    break;
-                default:
-                    $data_type = 'FLOAT';
-            }
-            if (isset($parameters['width']) && isset($parameters['decimals'])) {
-                $data_type .= '(' . $parameters['width'] . ',' . $parameters['decimals'] . ')';
-            }
-            $this_field['type'] = $data_type;
-            break;
-        case 'time':
-            $this_field['type'] = "TIME";
-            break;
-        case 'timestamp':
-            if (empty($parameters['size'])) {
-                $parameters['size'] = 'timestamp';
-            }
-            switch ($parameters['size']) {
-                case 'YY':
-                    $this_field['type'] = 'TIMESTAMP(2)';
-                    break;
-                case 'YYYY':
-                    $this_field['type'] = 'TIMESTAMP(4)';
-                    break;
-                case 'YYYYMM':
-                    $this_field['type'] = 'TIMESTAMP(6)';
-                    break;
-                case 'YYYYMMDD':
-                    $this_field['type'] = 'TIMESTAMP(8)';
-                    break;
-                case 'YYYYMMDDHH':
-                    $this_field['type'] = 'TIMESTAMP(10)';
-                    break;
-                case 'YYYYMMDDHHMM':
-                    $this_field['type'] = 'TIMESTAMP(12)';
-                    break;
-                case 'YYYYMMDDHHMMSS':
-                    $this_field['type'] = 'TIMESTAMP(14)';
-                    break;
-                default:
-                    $this_field['type'] = 'TIMESTAMP';
-            }
-            break;
-        default:
-            return false;
+
+                break;
+            case 'rename':
+                if (empty($args['new_name'])) {
+                    throw new BadParameterException('args', 'Invalid parameter "#(1)" (new_name key must be set.)');
+                }
+                $sql = 'ALTER TABLE ' . $tableName . ' RENAME TO ' . $args['new_name'];
+                break;
+            default:
+                throw new BadParameterException($args['command'], 'Unknown command: "#(1)"');
+        }
+
+        return $sql;
     }
 
-    // Test for UNSIGNED
-    $this_field['unsigned'] = (isset($parameters['unsigned']) && $parameters['unsigned'] == true)
-                            ? 'UNSIGNED'
+    /**
+     * SQLite specific column type generation
+     *
+     * Note that SQLite only cares about INTEGER PRIMARY KEY
+     * all other specs are not needed. We left them in here, so the SQL generated
+     * is at least more clear.
+     *
+     * @param string $field_name
+     * @param array<mixed> $parameters
+     */
+    public static function columnDefinition($field_name, $parameters)
+    {
+        $this_field = [];
+
+        switch ($parameters['type']) {
+            case 'integer':
+                if (empty($parameters['size'])) {
+                    $parameters['size'] = 'int';
+                }
+                // Let's always use integer instead of int, so when it gets set as primary key, we get the autoinc behaviour for free
+                switch ($parameters['size']) {
+                    case 'tiny':
+                        $this_field['type'] = 'TINYINT';
+                        break;
+                    case 'small':
+                        $this_field['type'] = 'SMALLINT';
+                        break;
+                    case 'medium':
+                        $this_field['type'] = 'MEDIUMINT';
+                        break;
+                    case 'big':
+                        $this_field['type'] = 'BIGINT';
+                        break;
+                    default:
+                        $this_field['type'] = 'INTEGER';
+                } // switch ($parameters['size'])
+                break;
+            case 'char':
+                if (empty($parameters['size'])) {
+                    return false;
+                }
+                $this_field['type'] = 'CHAR(' . $parameters['size'] . ')';
+                break;
+            case 'varchar':
+                if (empty($parameters['size'])) {
+                    return false;
+                }
+                $this_field['type'] = 'VARCHAR(' . $parameters['size'] . ')';
+                break;
+            case 'text':
+                if (empty($parameters['size'])) {
+                    $parameters['size'] = 'text';
+                }
+                $this_field['type'] = 'TEXT';
+                break;
+            case 'blob':
+                if (empty($parameters['size'])) {
+                    $parameters['size'] = 'blob';
+                }
+                $this_field['type'] = 'BLOB';
+                break;
+            case 'boolean':
+                $this_field['type'] = "BOOLEAN";
+                if (isset($parameters['default'])) {
+                    // default values are numbers, not strings
+                    $parameters['default'] = $parameters['default'] ? 1 : 0;
+                }
+                break;
+            case 'datetime':
+                $this_field['type'] = "DATETIME";
+                if (isset($parameters['default'])) {
+                    // Check if this is an array and convert back to string
+                    // array('year'=>2002,'month'=>04,'day'=>17,'hour'=>'12','minute'=>59,'second'=>0)
+                    if (is_array($parameters['default'])) {
+                        $datetime_defaults = $parameters['default'];
+                        $parameters['default'] = $datetime_defaults['year']
+                                            . '-' . $datetime_defaults['month']
+                                            . '-' . $datetime_defaults['day']
+                                            . ' ' . $datetime_defaults['hour']
+                                            . ':' . $datetime_defaults['minute']
+                                            . ':' . $datetime_defaults['second'];
+                    }
+                }
+                break;
+            case 'date':
+                $this_field['type'] = "DATE";
+                if (isset($parameters['default'])) {
+                    // Check if this is an array and convert back to string
+                    // array('year'=>2002,'month'=>04,'day'=>17)
+                    if (is_array($parameters['default'])) {
+                        $datetime_defaults = $parameters['default'];
+                        $parameters['default'] = $datetime_defaults['year']
+                                            . '-' . $datetime_defaults['month']
+                                            . '-' . $datetime_defaults['day'];
+                    }
+                }
+                break;
+            case 'float':
+                if (empty($parameters['size'])) {
+                    $parameters['size'] = 'float';
+                }
+                switch ($parameters['size']) {
+                    case 'double':
+                        $data_type = 'DOUBLE';
+                        break;
+                    case 'decimal':
+                        $data_type = 'DECIMAL';
+                        break;
+                    default:
+                        $data_type = 'FLOAT';
+                }
+                if (isset($parameters['width']) && isset($parameters['decimals'])) {
+                    $data_type .= '(' . $parameters['width'] . ',' . $parameters['decimals'] . ')';
+                }
+                $this_field['type'] = $data_type;
+                break;
+            case 'time':
+                $this_field['type'] = "TIME";
+                break;
+            case 'timestamp':
+                if (empty($parameters['size'])) {
+                    $parameters['size'] = 'timestamp';
+                }
+                switch ($parameters['size']) {
+                    case 'YY':
+                        $this_field['type'] = 'TIMESTAMP(2)';
+                        break;
+                    case 'YYYY':
+                        $this_field['type'] = 'TIMESTAMP(4)';
+                        break;
+                    case 'YYYYMM':
+                        $this_field['type'] = 'TIMESTAMP(6)';
+                        break;
+                    case 'YYYYMMDD':
+                        $this_field['type'] = 'TIMESTAMP(8)';
+                        break;
+                    case 'YYYYMMDDHH':
+                        $this_field['type'] = 'TIMESTAMP(10)';
+                        break;
+                    case 'YYYYMMDDHHMM':
+                        $this_field['type'] = 'TIMESTAMP(12)';
+                        break;
+                    case 'YYYYMMDDHHMMSS':
+                        $this_field['type'] = 'TIMESTAMP(14)';
+                        break;
+                    default:
+                        $this_field['type'] = 'TIMESTAMP';
+                }
+                break;
+            default:
+                return false;
+        }
+
+        // Test for UNSIGNED
+        $this_field['unsigned'] = (isset($parameters['unsigned']) && $parameters['unsigned'] == true)
+                                ? 'UNSIGNED'
+                                : '';
+
+        // Test for NO NULLS
+        $this_field['null']    = (isset($parameters['null']) && $parameters['null'] == false)
+                            ? 'NOT NULL'
                             : '';
 
-    // Test for NO NULLS
-    $this_field['null']    = (isset($parameters['null']) && $parameters['null'] == false)
-                        ? 'NOT NULL'
-                        : '';
-
-    // Test for DEFAULTS
-    $this_field['default'] = '';
-    if (isset($parameters['default'])) {
-        if ($parameters['default'] == 'NULL') {
-            $this_field['default'] = "DEFAULT NULL";
-        } elseif (is_string($parameters['default'])) {
-            $this_field['default'] = "DEFAULT '" . $parameters['default'] . "'";
-        } else {
-            $this_field['default'] = "DEFAULT " . $parameters['default'];
+        // Test for DEFAULTS
+        $this_field['default'] = '';
+        if (isset($parameters['default'])) {
+            if ($parameters['default'] == 'NULL') {
+                $this_field['default'] = "DEFAULT NULL";
+            } elseif (is_string($parameters['default'])) {
+                $this_field['default'] = "DEFAULT '" . $parameters['default'] . "'";
+            } else {
+                $this_field['default'] = "DEFAULT " . $parameters['default'];
+            }
         }
+
+        // Test for AUTO_INCREMENT
+        $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true) ? 'AUTO_INCREMENT' : '';
+
+        // Test for PRIMARY KEY
+        $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
+                                ? true
+                                : false;
+
+        return $this_field;
     }
-
-    // Test for AUTO_INCREMENT
-    $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true) ? 'AUTO_INCREMENT' : '';
-
-    // Test for PRIMARY KEY
-    $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)
-                               ? true
-                               : false;
-
-    return $this_field;
 }

@@ -222,57 +222,57 @@
                     "array $blockinfo = []",
                     "$context = null"
                 ],
-                "lines": "129-134"
+                "lines": "130-135"
             },
             "init": {
                 "name": "init",
                 "args": [],
-                "lines": "137-137"
+                "lines": "138-138"
             },
             "display": {
                 "name": "display",
                 "args": [],
-                "lines": "140-144"
+                "lines": "141-145"
             },
             "modify": {
                 "name": "modify",
                 "args": [],
-                "lines": "147-151"
+                "lines": "148-152"
             },
             "update": {
                 "name": "update",
                 "args": [
                     "$data = []"
                 ],
-                "lines": "154-158"
+                "lines": "155-159"
             },
             "delete": {
                 "name": "delete",
                 "args": [],
-                "lines": "161-165"
+                "lines": "162-166"
             },
             "upgrade": {
                 "name": "upgrade",
                 "args": [
                     "$oldversion"
                 ],
-                "lines": "168-182"
+                "lines": "169-183"
             },
             "getinit": {
                 "name": "getInit",
                 "args": [],
-                "lines": "184-187"
+                "lines": "185-188"
             },
             "getinfo": {
                 "name": "getInfo",
                 "args": [],
-                "lines": "191-200"
+                "lines": "192-201"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\BlockType",
-        "lines": "93-213",
+        "lines": "94-214",
         "traits": [
             "Xaraya\\Blocks\\BlockServicesTrait"
         ]
@@ -362,7 +362,7 @@
         "const": [],
         "namespace": "",
         "parent": "\\xarExceptions",
-        "lines": "18-21"
+        "lines": "20-23"
     },
     "blexception": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/templates.php",
@@ -1550,7 +1550,7 @@
         "const": [],
         "namespace": "",
         "parent": "\\NotFoundExceptions",
-        "lines": "19-22"
+        "lines": "25-28"
     },
     "loggerexception": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/log.php",
@@ -1596,7 +1596,7 @@
         "const": [],
         "namespace": "",
         "parent": "\\NotFoundExceptions",
-        "lines": "35-38"
+        "lines": "36-39"
     },
     "modulenotactiveexception": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
@@ -1605,7 +1605,7 @@
         "const": [],
         "namespace": "",
         "parent": "\\xarExceptions",
-        "lines": "52-55"
+        "lines": "53-56"
     },
     "modulenotfoundexception": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
@@ -1614,7 +1614,7 @@
         "const": [],
         "namespace": "",
         "parent": "\\NotFoundExceptions",
-        "lines": "43-46"
+        "lines": "44-47"
     },
     "mxcheckvalidation": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/validations/mxcheck.php",
@@ -8686,7 +8686,7 @@
                 "args": [
                     "$scope",
                     "$name",
-                    "$userId = null",
+                    "$itemId = null",
                     "$value = null"
                 ],
                 "lines": "234-240"
@@ -9701,6 +9701,250 @@
         "namespace": "Xaraya\\Context\\",
         "parent": "",
         "lines": "29-155"
+    },
+    "xaraya\\database\\tableddl\\datadict": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
+        "name": "Xaraya\\Database\\TableDDL\\DataDict",
+        "methods": {
+            "createtable": {
+                "name": "createTable",
+                "args": [
+                    "$tableName",
+                    "$fields"
+                ],
+                "lines": "44-72"
+            },
+            "altertable": {
+                "name": "alterTable",
+                "args": [
+                    "$tableName",
+                    "$args"
+                ],
+                "lines": "90-158"
+            },
+            "columndefinition": {
+                "name": "columnDefinition",
+                "args": [
+                    "$field_name",
+                    "$parameters"
+                ],
+                "lines": "169-389"
+            },
+            "createdatabase": {
+                "name": "createDatabase",
+                "args": [
+                    "$databaseName"
+                ],
+                "lines": "402-413"
+            },
+            "droptable": {
+                "name": "dropTable",
+                "args": [
+                    "$tableName"
+                ],
+                "lines": "424-435"
+            },
+            "createindex": {
+                "name": "createIndex",
+                "args": [
+                    "$tableName",
+                    "$index"
+                ],
+                "lines": "446-457"
+            },
+            "dropindex": {
+                "name": "dropIndex",
+                "args": [
+                    "$tableName",
+                    "$index"
+                ],
+                "lines": "469-480"
+            },
+            "init": {
+                "name": "init",
+                "args": [],
+                "lines": "486-494"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Database\\TableDDL\\",
+        "parent": "",
+        "lines": "32-495"
+    },
+    "xaraya\\database\\tableddl\\mysqliddl": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/mysqli.php",
+        "name": "Xaraya\\Database\\TableDDL\\MysqliDDL",
+        "methods": {
+            "createtable": {
+                "name": "createTable",
+                "args": [
+                    "$tableName",
+                    "$fields",
+                    "$charset = null"
+                ],
+                "lines": "39-88"
+            },
+            "altertable": {
+                "name": "alterTable",
+                "args": [
+                    "$tableName",
+                    "$args"
+                ],
+                "lines": "104-207"
+            },
+            "columndefinition": {
+                "name": "columnDefinition",
+                "args": [
+                    "$field_name",
+                    "$parameters"
+                ],
+                "lines": "215-454"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Database\\TableDDL\\",
+        "parent": "",
+        "lines": "30-455"
+    },
+    "xaraya\\database\\tableddl\\oracleddl": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/oracle.php",
+        "name": "Xaraya\\Database\\TableDDL\\OracleDDL",
+        "methods": {
+            "createtable": {
+                "name": "createTable",
+                "args": [
+                    "$tableName",
+                    "$fields",
+                    "$charset = null"
+                ],
+                "lines": "40-88"
+            },
+            "altertable": {
+                "name": "alterTable",
+                "args": [
+                    "$tableName",
+                    "$args"
+                ],
+                "lines": "103-197"
+            },
+            "columndefinition": {
+                "name": "columnDefinition",
+                "args": [
+                    "$field_name",
+                    "$parameters"
+                ],
+                "lines": "206-400"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Database\\TableDDL\\",
+        "parent": "",
+        "lines": "30-401"
+    },
+    "xaraya\\database\\tableddl\\pdomysqliddl": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/pdomysqli.php",
+        "name": "Xaraya\\Database\\TableDDL\\PDOMysqliDDL",
+        "methods": {
+            "createtable": {
+                "name": "createTable",
+                "args": [
+                    "$tableName",
+                    "$fields",
+                    "$charset = null"
+                ],
+                "lines": "42-91"
+            },
+            "altertable": {
+                "name": "alterTable",
+                "args": [
+                    "$tableName",
+                    "$args"
+                ],
+                "lines": "107-210"
+            },
+            "columndefinition": {
+                "name": "columnDefinition",
+                "args": [
+                    "$field_name",
+                    "$parameters"
+                ],
+                "lines": "219-458"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Database\\TableDDL\\",
+        "parent": "",
+        "lines": "31-459"
+    },
+    "xaraya\\database\\tableddl\\postgresddl": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/postgres.php",
+        "name": "Xaraya\\Database\\TableDDL\\PostgresDDL",
+        "methods": {
+            "createtable": {
+                "name": "createTable",
+                "args": [
+                    "$tableName",
+                    "$fields",
+                    "$charset = null"
+                ],
+                "lines": "35-85"
+            },
+            "altertable": {
+                "name": "alterTable",
+                "args": [
+                    "$tableName",
+                    "$args"
+                ],
+                "lines": "101-175"
+            },
+            "columndefinition": {
+                "name": "columnDefinition",
+                "args": [
+                    "$field_name",
+                    "$parameters"
+                ],
+                "lines": "185-393"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Database\\TableDDL\\",
+        "parent": "",
+        "lines": "24-394"
+    },
+    "xaraya\\database\\tableddl\\sqliteddl": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/sqlite.php",
+        "name": "Xaraya\\Database\\TableDDL\\SqliteDDL",
+        "methods": {
+            "createtable": {
+                "name": "createTable",
+                "args": [
+                    "$tableName",
+                    "$fields",
+                    "$charset = null"
+                ],
+                "lines": "35-71"
+            },
+            "altertable": {
+                "name": "alterTable",
+                "args": [
+                    "$tableName",
+                    "$args"
+                ],
+                "lines": "86-118"
+            },
+            "columndefinition": {
+                "name": "columnDefinition",
+                "args": [
+                    "$field_name",
+                    "$parameters"
+                ],
+                "lines": "130-304"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Database\\TableDDL\\",
+        "parent": "",
+        "lines": "26-305"
     },
     "xaraya\\dataobject\\datastores\\basicdatastore": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/datastores/basic.php",
@@ -11918,7 +12162,7 @@
         "const": [],
         "namespace": "Xaraya\\Modules\\",
         "parent": "",
-        "lines": "85-89",
+        "lines": "88-92",
         "traits": [
             "Xaraya\\Modules\\AdminApiTrait"
         ]
@@ -11930,7 +12174,7 @@
         "const": [],
         "namespace": "Xaraya\\Modules\\",
         "parent": "",
-        "lines": "86-90",
+        "lines": "89-93",
         "traits": [
             "Xaraya\\Modules\\AdminGuiTrait"
         ]
@@ -11996,7 +12240,7 @@
         "const": [],
         "namespace": "Xaraya\\Modules\\",
         "parent": "",
-        "lines": "276-287",
+        "lines": "279-290",
         "traits": [
             "Xaraya\\Modules\\MethodServicesTrait"
         ]
@@ -12117,7 +12361,7 @@
         "const": [],
         "namespace": "Xaraya\\Modules\\",
         "parent": "",
-        "lines": "85-89",
+        "lines": "88-92",
         "traits": [
             "Xaraya\\Modules\\UserApiTrait"
         ]
@@ -12129,7 +12373,7 @@
         "const": [],
         "namespace": "Xaraya\\Modules\\",
         "parent": "",
-        "lines": "86-90",
+        "lines": "89-93",
         "traits": [
             "Xaraya\\Modules\\UserGuiTrait"
         ]
@@ -12938,7 +13182,7 @@
         "const": [],
         "namespace": "Xaraya\\Services\\",
         "parent": "",
-        "lines": "541-546",
+        "lines": "560-565",
         "traits": [
             "Xaraya\\Services\\ParentServicesTrait"
         ]
@@ -12950,7 +13194,7 @@
         "const": [],
         "namespace": "Xaraya\\Services\\",
         "parent": "",
-        "lines": "90-93",
+        "lines": "252-255",
         "traits": [
             "Xaraya\\Services\\ConfigTrait"
         ]
@@ -13118,13 +13362,20 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/memory.php",
         "name": "Xaraya\\Services\\MemoryService",
         "methods": {
+            "init": {
+                "name": "init",
+                "args": [
+                    "array $config = []"
+                ],
+                "lines": "60-73"
+            },
             "has": {
                 "name": "has",
                 "args": [
                     "string $scope",
                     "string $name"
                 ],
-                "lines": "51-56"
+                "lines": "75-97"
             },
             "get": {
                 "name": "get",
@@ -13132,7 +13383,7 @@
                     "string $scope",
                     "string $name"
                 ],
-                "lines": "58-63"
+                "lines": "99-111"
             },
             "set": {
                 "name": "set",
@@ -13141,7 +13392,7 @@
                     "string $name",
                     "$value"
                 ],
-                "lines": "65-70"
+                "lines": "113-130"
             },
             "del": {
                 "name": "del",
@@ -13149,14 +13400,14 @@
                     "string $scope",
                     "string $name"
                 ],
-                "lines": "72-77"
+                "lines": "132-149"
             },
             "flush": {
                 "name": "flush",
                 "args": [
                     "string $scope"
                 ],
-                "lines": "79-84"
+                "lines": "151-168"
             },
             "haspreload": {
                 "name": "hasPreload",
@@ -13164,7 +13415,7 @@
                     "string $scope",
                     "?string $name = null"
                 ],
-                "lines": "86-90"
+                "lines": "170-184"
             },
             "load": {
                 "name": "load",
@@ -13172,7 +13423,7 @@
                     "string $scope",
                     "?string $name = null"
                 ],
-                "lines": "92-96"
+                "lines": "186-219"
             },
             "save": {
                 "name": "save",
@@ -13181,13 +13432,34 @@
                     "?string $name = null",
                     "?string $source = null"
                 ],
-                "lines": "98-102"
+                "lines": "221-261"
+            },
+            "delpreload": {
+                "name": "delPreload",
+                "args": [
+                    "string $scope",
+                    "?string $name = null"
+                ],
+                "lines": "263-278"
+            },
+            "setcachestorage": {
+                "name": "setCacheStorage",
+                "args": [
+                    "\\ixarCache_Storage $cacheStorage",
+                    "int $cacheExpire = 0"
+                ],
+                "lines": "280-295"
+            },
+            "getcachedscopes": {
+                "name": "getCachedScopes",
+                "args": [],
+                "lines": "297-302"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
         "parent": "",
-        "lines": "44-103",
+        "lines": "45-303",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -13196,12 +13468,28 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/modules/aliashelper.php",
         "name": "Xaraya\\Services\\Modules\\AliasHelper",
         "methods": {
-            "resolvealias": {
-                "name": "resolveAlias",
+            "resolve": {
+                "name": "resolve",
                 "args": [
-                    "string $name"
+                    "string $alias"
                 ],
-                "lines": "34-37"
+                "lines": "35-46"
+            },
+            "set": {
+                "name": "set",
+                "args": [
+                    "$alias",
+                    "$modName"
+                ],
+                "lines": "48-59"
+            },
+            "delete": {
+                "name": "delete",
+                "args": [
+                    "$alias",
+                    "$modName"
+                ],
+                "lines": "61-72"
             }
         },
         "const": {
@@ -13212,7 +13500,7 @@
         },
         "namespace": "Xaraya\\Services\\Modules\\",
         "parent": "\\Xaraya\\Services\\ServiceClass",
-        "lines": "25-38"
+        "lines": "26-73"
     },
     "xaraya\\services\\modules\\exechelper": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/modules/exechelper.php",
@@ -13456,7 +13744,7 @@
                     "string $varName",
                     "$itemid = null"
                 ],
-                "lines": "29-32"
+                "lines": "29-83"
             },
             "set": {
                 "name": "set",
@@ -13466,7 +13754,7 @@
                     "$value",
                     "$itemid = null"
                 ],
-                "lines": "34-37"
+                "lines": "85-140"
             },
             "delete": {
                 "name": "delete",
@@ -13475,7 +13763,7 @@
                     "string $varName",
                     "$itemid = null"
                 ],
-                "lines": "39-42"
+                "lines": "142-175"
             }
         },
         "const": {
@@ -13485,8 +13773,8 @@
             }
         },
         "namespace": "Xaraya\\Services\\Modules\\",
-        "parent": "\\Xaraya\\Services\\ServiceClass",
-        "lines": "25-43"
+        "parent": "\\Xaraya\\Services\\Modules\\VarsHelper",
+        "lines": "25-176"
     },
     "xaraya\\services\\modules\\uservarshelper": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/modules/uservarshelper.php",
@@ -13497,9 +13785,9 @@
                 "args": [
                     "string $modName",
                     "string $varName",
-                    "?int $userId = null"
+                    "$userId = null"
                 ],
-                "lines": "29-32"
+                "lines": "26-41"
             },
             "set": {
                 "name": "set",
@@ -13507,18 +13795,18 @@
                     "string $modName",
                     "string $varName",
                     "$value",
-                    "?int $userId = null"
+                    "$userId = null"
                 ],
-                "lines": "34-37"
+                "lines": "43-59"
             },
             "delete": {
                 "name": "delete",
                 "args": [
                     "string $modName",
                     "string $varName",
-                    "?int $userId = null"
+                    "$userId = null"
                 ],
-                "lines": "39-42"
+                "lines": "61-79"
             }
         },
         "const": {
@@ -13528,8 +13816,8 @@
             }
         },
         "namespace": "Xaraya\\Services\\Modules\\",
-        "parent": "\\Xaraya\\Services\\ServiceClass",
-        "lines": "25-43"
+        "parent": "\\Xaraya\\Services\\Modules\\ItemVarsHelper",
+        "lines": "22-80"
     },
     "xaraya\\services\\modules\\varshelper": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/modules/varshelper.php",
@@ -13541,7 +13829,7 @@
                     "string $modName",
                     "string $varName"
                 ],
-                "lines": "29-32"
+                "lines": "34-89"
             },
             "set": {
                 "name": "set",
@@ -13550,7 +13838,7 @@
                     "string $varName",
                     "$value"
                 ],
-                "lines": "34-40"
+                "lines": "91-144"
             },
             "delete": {
                 "name": "delete",
@@ -13558,7 +13846,7 @@
                     "string $modName",
                     "string $varName"
                 ],
-                "lines": "42-45"
+                "lines": "146-185"
             },
             "cache": {
                 "name": "cache",
@@ -13566,7 +13854,7 @@
                     "string $modName",
                     "?string $source = null"
                 ],
-                "lines": "47-51"
+                "lines": "187-201"
             },
             "getid": {
                 "name": "getID",
@@ -13574,23 +13862,41 @@
                     "string $modName",
                     "string $varName"
                 ],
-                "lines": "53-56"
+                "lines": "208-251"
             },
             "disableoverview": {
                 "name": "disableOverview",
                 "args": [],
-                "lines": "58-61"
+                "lines": "253-256"
+            },
+            "preload": {
+                "name": "preload",
+                "args": [
+                    "$modName"
+                ],
+                "lines": "258-300"
+            },
+            "flush": {
+                "name": "flush",
+                "args": [
+                    "$modName"
+                ],
+                "lines": "302-359"
             }
         },
         "const": {
             "slice": {
                 "name": "SLICE",
                 "value": "'modules.vars'"
+            },
+            "scope": {
+                "name": "SCOPE",
+                "value": "'Mod.Variables'"
             }
         },
         "namespace": "Xaraya\\Services\\Modules\\",
         "parent": "\\Xaraya\\Services\\ServiceClass",
-        "lines": "25-62"
+        "lines": "27-360"
     },
     "xaraya\\services\\modulesservice": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/modules.php",
@@ -13599,42 +13905,42 @@
             "getmodname": {
                 "name": "getModName",
                 "args": [],
-                "lines": "646-649"
+                "lines": "656-659"
             },
             "getitemtype": {
                 "name": "getItemType",
                 "args": [],
-                "lines": "654-657"
+                "lines": "664-667"
             },
             "getmodtype": {
                 "name": "getModType",
                 "args": [],
-                "lines": "662-665"
+                "lines": "672-675"
             },
             "setcurrentmodname": {
                 "name": "setCurrentModName",
                 "args": [
                     "string $modName"
                 ],
-                "lines": "672-675"
+                "lines": "682-685"
             },
             "specialize": {
                 "name": "specialize",
                 "args": [
                     "...$args"
                 ],
-                "lines": "682-689"
+                "lines": "692-699"
             },
             "__clone": {
                 "name": "__clone",
                 "args": [],
-                "lines": "692-695"
+                "lines": "702-705"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
         "parent": "",
-        "lines": "637-696",
+        "lines": "647-706",
         "traits": [
             "Xaraya\\Services\\ModulesTrait"
         ]
@@ -13658,7 +13964,7 @@
         "const": [],
         "namespace": "Xaraya\\Services\\",
         "parent": "\\Xaraya\\Services\\ServicesClass",
-        "lines": "532-535"
+        "lines": "551-554"
     },
     "xaraya\\services\\requestservice": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/request.php",
@@ -13712,182 +14018,189 @@
                     "string $name",
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "59-90"
+                "lines": "59-91"
             },
             "getcontrollerservice": {
                 "name": "getControllerService",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "95-99"
+                "lines": "96-100"
             },
             "getloggerservice": {
                 "name": "getLoggerService",
                 "args": [
                     "object|string|null $parent = null"
                 ],
-                "lines": "104-108"
+                "lines": "105-109"
             },
             "getmultilanguageservice": {
                 "name": "getMultiLanguageService",
                 "args": [
                     "object|string|null $parent"
                 ],
-                "lines": "113-117"
+                "lines": "114-118"
             },
             "getmodulesservice": {
                 "name": "getModulesService",
                 "args": [
                     "object|string|null $parent"
                 ],
-                "lines": "122-126"
+                "lines": "123-127"
             },
             "getsecurityservice": {
                 "name": "getSecurityService",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "131-135"
+                "lines": "132-136"
             },
             "gettemplatingservice": {
                 "name": "getTemplatingService",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "140-144"
+                "lines": "141-145"
             },
             "getvariablesservice": {
                 "name": "getVariablesService",
                 "args": [
                     "object|string|null $parent"
                 ],
-                "lines": "149-153"
+                "lines": "150-154"
             },
             "getblocksservice": {
                 "name": "getBlocksService",
                 "args": [
                     "object|string|null $parent"
                 ],
-                "lines": "158-162"
+                "lines": "159-163"
             },
             "getdataobjectservice": {
                 "name": "getDataObjectService",
                 "args": [
                     "object|string|null $parent"
                 ],
-                "lines": "167-171"
+                "lines": "168-172"
             },
             "getdatapropertyservice": {
                 "name": "getDataPropertyService",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "176-180"
+                "lines": "177-181"
             },
             "getcachingservice": {
                 "name": "getCachingService",
                 "args": [
                     "object|string|null $parent = null"
                 ],
-                "lines": "185-189"
+                "lines": "186-190"
             },
             "getconfigservice": {
                 "name": "getConfigService",
                 "args": [
                     "object|string|null $parent = null"
                 ],
-                "lines": "194-198"
+                "lines": "195-199"
+            },
+            "getsystemservice": {
+                "name": "getSystemService",
+                "args": [
+                    "object|string|null $parent = null"
+                ],
+                "lines": "204-208"
             },
             "getmemoryservice": {
                 "name": "getMemoryService",
                 "args": [
                     "object|string|null $parent = null"
                 ],
-                "lines": "200-204"
+                "lines": "210-214"
             },
             "getrequestservice": {
                 "name": "getRequestService",
                 "args": [
                     "object|string|null $parent = null"
                 ],
-                "lines": "206-210"
+                "lines": "216-220"
             },
             "getsessionservice": {
                 "name": "getSessionService",
                 "args": [
                     "object|string|null $parent = null"
                 ],
-                "lines": "216-220"
+                "lines": "226-230"
             },
             "getuserservice": {
                 "name": "getUserService",
                 "args": [
                     "object|string|null $parent = null"
                 ],
-                "lines": "225-229"
+                "lines": "235-239"
             },
             "getexitcallable": {
                 "name": "getExitCallable",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "234-241"
+                "lines": "244-251"
             },
             "getdatabaseservice": {
                 "name": "getDatabaseService",
                 "args": [
                     "object|string|null $parent = null"
                 ],
-                "lines": "243-247"
+                "lines": "253-257"
             },
             "getmodulevarshelper": {
                 "name": "getModuleVarsHelper",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "249-253"
+                "lines": "259-263"
             },
             "getmoduleuservarshelper": {
                 "name": "getModuleUserVarsHelper",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "255-259"
+                "lines": "265-269"
             },
             "getmoduleitemvarshelper": {
                 "name": "getModuleItemVarsHelper",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "261-265"
+                "lines": "271-275"
             },
             "getmoduleinfohelper": {
                 "name": "getModuleInfoHelper",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "267-271"
+                "lines": "277-281"
             },
             "getmoduleexechelper": {
                 "name": "getModuleExecHelper",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "273-277"
+                "lines": "283-287"
             },
             "getmodulehookshelper": {
                 "name": "getModuleHooksHelper",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "279-283"
+                "lines": "289-293"
             },
             "getmodulealiashelper": {
                 "name": "getModuleAliasHelper",
                 "args": [
                     "\\Xaraya\\Services\\ServicesInterface $parent"
                 ],
-                "lines": "285-289"
+                "lines": "295-299"
             },
             "log": {
                 "name": "log",
@@ -13895,7 +14208,7 @@
                     "string $method",
                     "object|string|null $parent = null"
                 ],
-                "lines": "291-304"
+                "lines": "301-314"
             }
         },
         "const": {
@@ -13906,7 +14219,7 @@
         },
         "namespace": "Xaraya\\Services\\",
         "parent": "",
-        "lines": "25-305"
+        "lines": "25-315"
     },
     "xaraya\\services\\serviceorchestrator": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/ServiceOrchestrator.php",
@@ -13934,7 +14247,7 @@
         "const": [],
         "namespace": "Xaraya\\Services\\",
         "parent": "",
-        "lines": "146-157",
+        "lines": "149-160",
         "traits": [
             "Xaraya\\Services\\ServicesTrait"
         ]
@@ -13972,46 +14285,53 @@
                 ],
                 "lines": "61-69"
             },
+            "setcoreservices": {
+                "name": "setCoreServices",
+                "args": [
+                    "array $args = []"
+                ],
+                "lines": "75-86"
+            },
             "getrequestinstance": {
                 "name": "getRequestInstance",
                 "args": [],
-                "lines": "74-81"
+                "lines": "91-98"
             },
             "setrequestinstance": {
                 "name": "setRequestInstance",
                 "args": [
                     "$instance"
                 ],
-                "lines": "88-91"
+                "lines": "105-108"
             },
             "getsessioninstance": {
                 "name": "getSessionInstance",
                 "args": [],
-                "lines": "96-103"
+                "lines": "113-120"
             },
             "setsessioninstance": {
                 "name": "setSessionInstance",
                 "args": [
                     "$instance"
                 ],
-                "lines": "110-113"
+                "lines": "127-130"
             },
             "getmemoryinstance": {
                 "name": "getMemoryInstance",
                 "args": [],
-                "lines": "119-125"
+                "lines": "136-142"
             },
             "setmemoryinstance": {
                 "name": "setMemoryInstance",
                 "args": [
                     "$instance"
                 ],
-                "lines": "132-135"
+                "lines": "149-152"
             },
             "getstaticservices": {
                 "name": "getStaticServices",
                 "args": [],
-                "lines": "140-143"
+                "lines": "157-160"
             },
             "service": {
                 "name": "service",
@@ -14019,71 +14339,76 @@
                     "string $name",
                     "...$args"
                 ],
-                "lines": "149-157"
+                "lines": "166-174"
             },
             "ctl": {
                 "name": "ctl",
                 "args": [],
-                "lines": "182-185"
+                "lines": "199-202"
             },
             "log": {
                 "name": "log",
                 "args": [],
-                "lines": "204-207"
+                "lines": "221-224"
             },
             "mls": {
                 "name": "mls",
                 "args": [],
-                "lines": "226-229"
+                "lines": "243-246"
             },
             "var": {
                 "name": "var",
                 "args": [],
-                "lines": "246-249"
+                "lines": "263-266"
             },
             "cache": {
                 "name": "cache",
                 "args": [],
-                "lines": "278-281"
+                "lines": "295-298"
             },
             "mem": {
                 "name": "mem",
                 "args": [],
-                "lines": "297-300"
+                "lines": "314-317"
             },
             "req": {
                 "name": "req",
                 "args": [],
-                "lines": "318-321"
+                "lines": "335-338"
             },
             "config": {
                 "name": "config",
                 "args": [],
-                "lines": "334-337"
+                "lines": "351-354"
+            },
+            "system": {
+                "name": "system",
+                "args": [],
+                "lines": "367-370"
             },
             "session": {
                 "name": "session",
                 "args": [],
-                "lines": "351-354"
+                "lines": "384-387"
             },
             "user": {
                 "name": "user",
                 "args": [
                     "?int $userId = null"
                 ],
-                "lines": "369-375"
+                "lines": "402-408"
             },
             "db": {
                 "name": "db",
                 "args": [],
-                "lines": "390-393"
+                "lines": "423-426"
             },
             "getserviceprototype": {
                 "name": "getServicePrototype",
                 "args": [
                     "string $name"
                 ],
-                "lines": "402-409"
+                "lines": "435-442"
             }
         },
         "const": {
@@ -14094,7 +14419,7 @@
         },
         "namespace": "Xaraya\\Services\\",
         "parent": "\\Xaraya\\Services\\ServicesClass",
-        "lines": "30-410"
+        "lines": "30-443"
     },
     "xaraya\\services\\staticservicestorage": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/servicestorage.php",
@@ -14174,6 +14499,18 @@
         "namespace": "Xaraya\\Services\\",
         "parent": "",
         "lines": "129-170"
+    },
+    "xaraya\\services\\systemservice": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/system.php",
+        "name": "Xaraya\\Services\\SystemService",
+        "methods": [],
+        "const": [],
+        "namespace": "Xaraya\\Services\\",
+        "parent": "",
+        "lines": "137-140",
+        "traits": [
+            "Xaraya\\Services\\SystemTrait"
+        ]
     },
     "xaraya\\services\\templatingservice": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/templating.php",
@@ -14303,7 +14640,7 @@
         "const": [],
         "namespace": "Xaraya\\Services\\",
         "parent": "",
-        "lines": "421-424",
+        "lines": "429-432",
         "traits": [
             "Xaraya\\Services\\VariablesTrait"
         ]
@@ -14822,6 +15159,25 @@
         "parent": "",
         "lines": "22-366"
     },
+    "xaraya\\tools\\legacy": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tools/legacy.php",
+        "name": "Xaraya\\Tools\\Legacy",
+        "methods": {
+            "strftime": {
+                "name": "strftime",
+                "args": [
+                    "string $format",
+                    "$timestamp = null",
+                    "?string $locale = null"
+                ],
+                "lines": "27-183"
+            }
+        },
+        "const": [],
+        "namespace": "Xaraya\\Tools\\",
+        "parent": "",
+        "lines": "5-184"
+    },
     "xarayacompiler": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/templating/compiler.php",
         "name": "XarayaCompiler",
@@ -14829,40 +15185,40 @@
             "instance": {
                 "name": "instance",
                 "args": [],
-                "lines": "43-49"
+                "lines": "45-51"
             },
             "configure": {
                 "name": "configure",
                 "args": [],
-                "lines": "55-91"
+                "lines": "57-93"
             },
             "boot": {
                 "name": "boot",
                 "args": [
                     "$customDoc = null"
                 ],
-                "lines": "102-138"
+                "lines": "104-140"
             },
             "getmoduletagpaths": {
                 "name": "getModuleTagPaths",
                 "args": [],
-                "lines": "140-174"
+                "lines": "142-176"
             },
             "getpropertytagpaths": {
                 "name": "getPropertyTagPaths",
                 "args": [],
-                "lines": "176-220"
+                "lines": "178-222"
             },
             "getblocktagpaths": {
                 "name": "getBlockTagPaths",
                 "args": [],
-                "lines": "222-256"
+                "lines": "224-258"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarBLCompiler",
-        "lines": "35-257"
+        "lines": "37-259"
     },
     "xarayasourcetemplate": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/templating/source.php",
@@ -15091,26 +15447,26 @@
                 "args": [
                     "$cacheDir = null"
                 ],
-                "lines": "34-73"
+                "lines": "37-79"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "79-87"
+                "lines": "85-93"
             },
             "getpagekey": {
                 "name": "getPageKey",
                 "args": [
                     "$url = null"
                 ],
-                "lines": "95-101"
+                "lines": "101-107"
             },
             "getblockkey": {
                 "name": "getBlockKey",
                 "args": [
                     "$blockInfo"
                 ],
-                "lines": "109-114"
+                "lines": "115-120"
             },
             "getmodulekey": {
                 "name": "getModuleKey",
@@ -15120,7 +15476,7 @@
                     "$funcName = 'main'",
                     "$args = []"
                 ],
-                "lines": "125-131"
+                "lines": "131-137"
             },
             "getobjectkey": {
                 "name": "getObjectKey",
@@ -15129,7 +15485,7 @@
                     "$methodName = 'view'",
                     "$args = []"
                 ],
-                "lines": "141-147"
+                "lines": "147-153"
             },
             "getvariablekey": {
                 "name": "getVariableKey",
@@ -15137,12 +15493,12 @@
                     "$scope",
                     "$name"
                 ],
-                "lines": "156-162"
+                "lines": "162-168"
             },
             "nocache": {
                 "name": "noCache",
                 "args": [],
-                "lines": "168-190"
+                "lines": "174-196"
             },
             "setpagetitle": {
                 "name": "setPageTitle",
@@ -15150,66 +15506,66 @@
                     "$title = null",
                     "$module = null"
                 ],
-                "lines": "198-212"
+                "lines": "204-218"
             },
             "addstyle": {
                 "name": "addStyle",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "219-233"
+                "lines": "225-239"
             },
             "addjavascript": {
                 "name": "addJavaScript",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "240-254"
+                "lines": "246-260"
             },
             "getstorage": {
                 "name": "getStorage",
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "273-277"
+                "lines": "279-283"
             },
             "getparents": {
                 "name": "getParents",
                 "args": [
                     "$currentid = null"
                 ],
-                "lines": "287-319"
+                "lines": "293-325"
             },
             "getoutputcachedir": {
                 "name": "getOutputCacheDir",
                 "args": [],
-                "lines": "326-340"
+                "lines": "332-346"
             },
             "isoutputcacheenabled": {
                 "name": "isOutputCacheEnabled",
                 "args": [],
-                "lines": "346-349"
+                "lines": "352-355"
             },
             "iscorecacheenabled": {
                 "name": "isCoreCacheEnabled",
                 "args": [],
-                "lines": "355-358"
+                "lines": "361-364"
             },
             "istemplatecacheenabled": {
                 "name": "isTemplateCacheEnabled",
                 "args": [],
-                "lines": "364-367"
+                "lines": "370-373"
             },
             "isvariablecacheenabled": {
                 "name": "isVariableCacheEnabled",
                 "args": [],
-                "lines": "373-376"
+                "lines": "379-382"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "18-377"
+        "lines": "21-383"
     },
     "xarcache_apcu_storage": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/caching/storage/apcu.php",
@@ -16296,6 +16652,11 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables/config.php",
         "name": "xarConfigVars",
         "methods": {
+            "config": {
+                "name": "config",
+                "args": [],
+                "lines": "32-38"
+            },
             "set": {
                 "name": "set",
                 "args": [
@@ -16303,7 +16664,7 @@
                     "$name",
                     "$value"
                 ],
-                "lines": "41-69"
+                "lines": "50-53"
             },
             "get": {
                 "name": "get",
@@ -16312,7 +16673,7 @@
                     "$name",
                     "$value = null"
                 ],
-                "lines": "81-142"
+                "lines": "65-68"
             },
             "delete": {
                 "name": "delete",
@@ -16320,25 +16681,20 @@
                     "$scope",
                     "$name"
                 ],
-                "lines": "150-163"
-            },
-            "preload": {
-                "name": "preload",
-                "args": [],
-                "lines": "172-205"
+                "lines": "76-79"
             },
             "cache": {
                 "name": "cache",
                 "args": [
                     "$source = null"
                 ],
-                "lines": "212-220"
+                "lines": "86-89"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarVars",
-        "lines": "26-221"
+        "lines": "27-90"
     },
     "xarconst": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/core.php",
@@ -16818,12 +17174,17 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/caching/core.php",
         "name": "xarCoreCache",
         "methods": {
+            "mem": {
+                "name": "mem",
+                "args": [],
+                "lines": "29-35"
+            },
             "init": {
                 "name": "init",
                 "args": [
                     "array $config = []"
                 ],
-                "lines": "34-45"
+                "lines": "44-47"
             },
             "iscached": {
                 "name": "isCached",
@@ -16831,7 +17192,7 @@
                     "$scope",
                     "$name"
                 ],
-                "lines": "54-71"
+                "lines": "56-59"
             },
             "getcached": {
                 "name": "getCached",
@@ -16839,7 +17200,7 @@
                     "$scope",
                     "$name"
                 ],
-                "lines": "80-87"
+                "lines": "68-71"
             },
             "setcached": {
                 "name": "setCached",
@@ -16848,7 +17209,7 @@
                     "$name",
                     "$value"
                 ],
-                "lines": "97-109"
+                "lines": "81-84"
             },
             "delcached": {
                 "name": "delCached",
@@ -16856,14 +17217,14 @@
                     "$scope",
                     "$name"
                 ],
-                "lines": "118-130"
+                "lines": "93-96"
             },
             "flushcached": {
                 "name": "flushCached",
                 "args": [
                     "$scope"
                 ],
-                "lines": "138-150"
+                "lines": "104-107"
             },
             "haspreload": {
                 "name": "hasPreload",
@@ -16871,7 +17232,7 @@
                     "$scope",
                     "$name = null"
                 ],
-                "lines": "159-169"
+                "lines": "116-119"
             },
             "loadcached": {
                 "name": "loadCached",
@@ -16879,7 +17240,7 @@
                     "$scope",
                     "$name = null"
                 ],
-                "lines": "178-207"
+                "lines": "128-131"
             },
             "savecached": {
                 "name": "saveCached",
@@ -16888,7 +17249,7 @@
                     "$name = null",
                     "$source = null"
                 ],
-                "lines": "217-253"
+                "lines": "141-144"
             },
             "delpreload": {
                 "name": "delPreload",
@@ -16896,7 +17257,7 @@
                     "$scope",
                     "$name = null"
                 ],
-                "lines": "262-275"
+                "lines": "153-156"
             },
             "setcachestorage": {
                 "name": "setCacheStorage",
@@ -16904,18 +17265,18 @@
                     "$cacheStorage",
                     "$cacheExpire = 0"
                 ],
-                "lines": "284-297"
+                "lines": "165-168"
             },
             "getcachedscopes": {
                 "name": "getCachedScopes",
                 "args": [],
-                "lines": "304-307"
+                "lines": "175-178"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "21-308"
+        "lines": "25-179"
     },
     "xardatabase": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/database.php",
@@ -17794,7 +18155,7 @@
                 "args": [
                     "$locale = null"
                 ],
-                "lines": "855-858"
+                "lines": "226-322"
             },
             "parsecurrency": {
                 "name": "parseCurrency",
@@ -17802,7 +18163,7 @@
                     "$currency",
                     "$localeData = null"
                 ],
-                "lines": "859-862"
+                "lines": "327-337"
             },
             "parsenumber": {
                 "name": "parseNumber",
@@ -17811,7 +18172,7 @@
                     "$localeData = null",
                     "$isCurrency = false"
                 ],
-                "lines": "863-866"
+                "lines": "342-356"
             },
             "formatcurrency": {
                 "name": "formatCurrency",
@@ -17819,7 +18180,7 @@
                     "$currency",
                     "$localeData = null"
                 ],
-                "lines": "867-870"
+                "lines": "361-368"
             },
             "formatnumber": {
                 "name": "formatNumber",
@@ -17828,7 +18189,7 @@
                     "$localeData = null",
                     "$isCurrency = false"
                 ],
-                "lines": "871-874"
+                "lines": "373-463"
             },
             "getformattedutcdate": {
                 "name": "getFormattedUTCDate",
@@ -17837,7 +18198,7 @@
                     "$timestamp = null",
                     "$addoffset = false"
                 ],
-                "lines": "875-878"
+                "lines": "468-477"
             },
             "getformatteddate": {
                 "name": "getFormattedDate",
@@ -17846,7 +18207,7 @@
                     "$timestamp = null",
                     "$addoffset = true"
                 ],
-                "lines": "879-882"
+                "lines": "487-514"
             },
             "getformattedutctime": {
                 "name": "getFormattedUTCTime",
@@ -17855,7 +18216,7 @@
                     "$timestamp = null",
                     "$addoffset = false"
                 ],
-                "lines": "883-886"
+                "lines": "519-528"
             },
             "getformattedtime": {
                 "name": "getFormattedTime",
@@ -17864,7 +18225,7 @@
                     "$timestamp = null",
                     "$addoffset = true"
                 ],
-                "lines": "887-890"
+                "lines": "538-605"
             },
             "formatutcdate": {
                 "name": "formatUTCDate",
@@ -17873,7 +18234,7 @@
                     "$time = null",
                     "$addoffset = false"
                 ],
-                "lines": "891-894"
+                "lines": "610-618"
             },
             "formatdate": {
                 "name": "formatDate",
@@ -17882,13 +18243,21 @@
                     "$timestamp = null",
                     "$addoffset = true"
                 ],
-                "lines": "895-898"
+                "lines": "627-651"
+            },
+            "strftime": {
+                "name": "strftime",
+                "args": [
+                    "$format = null",
+                    "$timestamp = null"
+                ],
+                "lines": "682-713"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "841-899"
+        "lines": "212-714"
     },
     "xarlog": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/log.php",
@@ -17943,13 +18312,20 @@
                 ],
                 "lines": "239-249"
             },
+            "dumpvariable": {
+                "name": "dumpVariable",
+                "args": [
+                    "array $array"
+                ],
+                "lines": "255-347"
+            },
             "addlogger": {
                 "name": "addLogger",
                 "args": [
                     "$type",
                     "$config_args"
                 ],
-                "lines": "257-268"
+                "lines": "355-366"
             }
         },
         "const": {
@@ -17992,7 +18368,7 @@
         },
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "39-269"
+        "lines": "39-367"
     },
     "xarlogger": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/log/loggers/xarLogger.php",
@@ -18039,12 +18415,19 @@
                 "name": "getTime",
                 "args": [],
                 "lines": "172-183"
+            },
+            "stringtolevel": {
+                "name": "stringToLevel",
+                "args": [
+                    "$string"
+                ],
+                "lines": "191-195"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "39-184"
+        "lines": "39-196"
     },
     "xarlogger_errorlog": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/log/loggers/errorlog.php",
@@ -18625,12 +19008,12 @@
                 "args": [
                     "$locale"
                 ],
-                "lines": "678-724"
+                "lines": "50-96"
             },
             "getlocaledata": {
                 "name": "getLocaleData",
                 "args": [],
-                "lines": "726-729"
+                "lines": "98-101"
             },
             "beginelement": {
                 "name": "beginElement",
@@ -18639,7 +19022,7 @@
                     "$tag",
                     "$attribs"
                 ],
-                "lines": "731-743"
+                "lines": "103-115"
             },
             "endelement": {
                 "name": "endElement",
@@ -18647,7 +19030,7 @@
                     "$parser",
                     "$tag"
                 ],
-                "lines": "745-768"
+                "lines": "117-140"
             },
             "characterdata": {
                 "name": "characterData",
@@ -18655,7 +19038,7 @@
                     "$parser",
                     "$data"
                 ],
-                "lines": "770-774"
+                "lines": "142-146"
             },
             "maximumtaghandler": {
                 "name": "maximumTagHandler",
@@ -18664,7 +19047,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "lines": "776-779"
+                "lines": "148-151"
             },
             "minimumtaghandler": {
                 "name": "minimumTagHandler",
@@ -18673,7 +19056,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "lines": "781-784"
+                "lines": "153-156"
             },
             "groupingsizetaghandler": {
                 "name": "groupingSizeTagHandler",
@@ -18682,7 +19065,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "lines": "788-791"
+                "lines": "160-163"
             },
             "isdecimalseparatoralwaysshowntaghandler": {
                 "name": "isDecimalSeparatorAlwaysShownTagHandler",
@@ -18691,7 +19074,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "lines": "793-801"
+                "lines": "165-173"
             },
             "monthtaghandler": {
                 "name": "monthTagHandler",
@@ -18700,7 +19083,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "lines": "805-817"
+                "lines": "177-189"
             },
             "weekdaytaghandler": {
                 "name": "weekdayTagHandler",
@@ -18709,13 +19092,13 @@
                     "$attribs",
                     "$content"
                 ],
-                "lines": "821-833"
+                "lines": "193-205"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "665-835"
+        "lines": "37-207"
     },
     "xarmls__phptranslationsbackend": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/mlsbackends/php.php",
@@ -19163,19 +19546,19 @@
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "106-135"
+                "lines": "107-136"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "137-144"
+                "lines": "138-145"
             },
             "getname": {
                 "name": "getName",
                 "args": [
                     "$regID = null"
                 ],
-                "lines": "155-165"
+                "lines": "156-166"
             },
             "getdisplayname": {
                 "name": "getDisplayName",
@@ -19183,7 +19566,7 @@
                     "$modName = null",
                     "$type = 'module'"
                 ],
-                "lines": "177-188"
+                "lines": "178-189"
             },
             "getdisplaydescription": {
                 "name": "getDisplayDescription",
@@ -19191,7 +19574,7 @@
                     "$modName = null",
                     "$type = 'module'"
                 ],
-                "lines": "199-210"
+                "lines": "200-211"
             },
             "getids": {
                 "name": "getIds",
@@ -19199,7 +19582,7 @@
                     "$modName",
                     "$type = 'module'"
                 ],
-                "lines": "217-229"
+                "lines": "218-230"
             },
             "getregid": {
                 "name": "getRegID",
@@ -19207,14 +19590,14 @@
                     "$modName",
                     "$type = 'module'"
                 ],
-                "lines": "238-242"
+                "lines": "239-243"
             },
             "getid": {
                 "name": "getID",
                 "args": [
                     "$modName"
                 ],
-                "lines": "250-257"
+                "lines": "251-258"
             },
             "isavailable": {
                 "name": "isAvailable",
@@ -19222,7 +19605,7 @@
                     "$modName",
                     "$type = 'module'"
                 ],
-                "lines": "267-299"
+                "lines": "268-300"
             },
             "getinfo": {
                 "name": "getInfo",
@@ -19230,7 +19613,7 @@
                     "$modRegId",
                     "$type = 'module'"
                 ],
-                "lines": "311-462"
+                "lines": "312-463"
             },
             "getbaseinfo": {
                 "name": "getBaseInfo",
@@ -19238,7 +19621,7 @@
                     "$modName",
                     "$type = 'module'"
                 ],
-                "lines": "473-564"
+                "lines": "474-565"
             },
             "getfileinfo": {
                 "name": "getFileInfo",
@@ -19246,7 +19629,7 @@
                     "$modOsDir",
                     "$type = 'module'"
                 ],
-                "lines": "576-649"
+                "lines": "577-650"
             },
             "parsefileinfo": {
                 "name": "parseFileInfo",
@@ -19254,14 +19637,14 @@
                     "$version",
                     "$name = ''"
                 ],
-                "lines": "651-694"
+                "lines": "652-695"
             },
             "setnocache": {
                 "name": "setNoCache",
                 "args": [
                     "$noCache"
                 ],
-                "lines": "701-704"
+                "lines": "702-705"
             },
             "loaddbinfo": {
                 "name": "loadDbInfo",
@@ -19270,7 +19653,7 @@
                     "$modDir = null",
                     "$type = 'module'"
                 ],
-                "lines": "715-777"
+                "lines": "716-778"
             },
             "guifunc": {
                 "name": "guiFunc",
@@ -19281,7 +19664,7 @@
                     "$args = []",
                     "$context = null"
                 ],
-                "lines": "791-841"
+                "lines": "792-842"
             },
             "apifunc": {
                 "name": "apiFunc",
@@ -19292,7 +19675,7 @@
                     "$args = []",
                     "$context = null"
                 ],
-                "lines": "859-871"
+                "lines": "860-872"
             },
             "callfunc": {
                 "name": "callFunc",
@@ -19304,7 +19687,7 @@
                     "$funcType = ''",
                     "$context = null"
                 ],
-                "lines": "877-976"
+                "lines": "878-977"
             },
             "load": {
                 "name": "load",
@@ -19314,7 +19697,7 @@
                     "$flags = self::LOAD_ONLYACTIVE",
                     "$context = null"
                 ],
-                "lines": "986-989"
+                "lines": "987-990"
             },
             "apiload": {
                 "name": "apiLoad",
@@ -19324,7 +19707,7 @@
                     "$flags = self::LOAD_ANYSTATE",
                     "$context = null"
                 ],
-                "lines": "999-1002"
+                "lines": "1000-1003"
             },
             "privateload": {
                 "name": "privateLoad",
@@ -19334,7 +19717,7 @@
                     "$flags = self::LOAD_UNDEFINED",
                     "$context = null"
                 ],
-                "lines": "1016-1090"
+                "lines": "1017-1091"
             },
             "getmodule": {
                 "name": "getModule",
@@ -19342,7 +19725,7 @@
                     "$modName",
                     "$context = null"
                 ],
-                "lines": "1098-1119",
+                "lines": "1099-1120",
                 "uses": "sys::autoload()"
             },
             "userapi": {
@@ -19351,7 +19734,7 @@
                     "$modName",
                     "$context = null"
                 ],
-                "lines": "1126-1129"
+                "lines": "1127-1130"
             },
             "usergui": {
                 "name": "usergui",
@@ -19359,7 +19742,7 @@
                     "$modName",
                     "$context = null"
                 ],
-                "lines": "1136-1139"
+                "lines": "1137-1140"
             },
             "getmoduleclassmethod": {
                 "name": "getModuleClassMethod",
@@ -19370,14 +19753,14 @@
                     "$callType = 'api'",
                     "$context = null"
                 ],
-                "lines": "1154-1171"
+                "lines": "1155-1172"
             },
             "checkversion": {
                 "name": "checkVersion",
                 "args": [
                     "$modName"
                 ],
-                "lines": "1178-1187"
+                "lines": "1179-1188"
             },
             "checkmodulefunction": {
                 "name": "checkModuleFunction",
@@ -19387,7 +19770,7 @@
                     "$func = 'display'",
                     "$defaultmodule = 'dynamicdata'"
                 ],
-                "lines": "1197-1225"
+                "lines": "1198-1226"
             },
             "checkaccess": {
                 "name": "checkAccess",
@@ -19396,7 +19779,7 @@
                     "$action",
                     "$roleid = null"
                 ],
-                "lines": "1236-1268"
+                "lines": "1237-1269"
             }
         },
         "const": {
@@ -19471,18 +19854,23 @@
         },
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "75-1269"
+        "lines": "76-1270"
     },
     "xarmodalias": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
         "name": "xarModAlias",
         "methods": {
+            "modalias": {
+                "name": "modalias",
+                "args": [],
+                "lines": "1295-1303"
+            },
             "resolve": {
                 "name": "resolve",
                 "args": [
                     "$alias"
                 ],
-                "lines": "1294-1301"
+                "lines": "1308-1312"
             },
             "set": {
                 "name": "set",
@@ -19490,7 +19878,7 @@
                     "$alias",
                     "$modName"
                 ],
-                "lines": "1306-1313"
+                "lines": "1317-1321"
             },
             "delete": {
                 "name": "delete",
@@ -19498,13 +19886,13 @@
                     "$alias",
                     "$modName"
                 ],
-                "lines": "1318-1325"
+                "lines": "1326-1329"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "1289-1326"
+        "lines": "1291-1330"
     },
     "xarmodhooks": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/hooks.php",
@@ -19576,6 +19964,11 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables/moditem.php",
         "name": "xarModItemVars",
         "methods": {
+            "itemvars": {
+                "name": "itemvars",
+                "args": [],
+                "lines": "44-52"
+            },
             "get": {
                 "name": "get",
                 "args": [
@@ -19583,7 +19976,7 @@
                     "$name",
                     "$itemid = null"
                 ],
-                "lines": "40-85"
+                "lines": "54-57"
             },
             "set": {
                 "name": "set",
@@ -19593,7 +19986,7 @@
                     "$value",
                     "$itemid = null"
                 ],
-                "lines": "87-134"
+                "lines": "59-62"
             },
             "delete": {
                 "name": "delete",
@@ -19602,13 +19995,13 @@
                     "$name",
                     "$itemid = null"
                 ],
-                "lines": "136-158"
+                "lines": "64-67"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarVars",
-        "lines": "38-159"
+        "lines": "40-68"
     },
     "xarmodulecache": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/caching/output/module.php",
@@ -19707,6 +20100,11 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables/moduser.php",
         "name": "xarModUserVars",
         "methods": {
+            "uservars": {
+                "name": "uservars",
+                "args": [],
+                "lines": "33-41"
+            },
             "get": {
                 "name": "get",
                 "args": [
@@ -19714,7 +20112,7 @@
                     "$name",
                     "$itemid = null"
                 ],
-                "lines": "43-55"
+                "lines": "59-62"
             },
             "set": {
                 "name": "set",
@@ -19724,7 +20122,7 @@
                     "$value",
                     "$itemid = null"
                 ],
-                "lines": "76-90"
+                "lines": "83-86"
             },
             "delete": {
                 "name": "delete",
@@ -19733,33 +20131,38 @@
                     "$name",
                     "$itemid = null"
                 ],
-                "lines": "107-123"
+                "lines": "103-106"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarModItemVars",
-        "lines": "25-124"
+        "lines": "29-107"
     },
     "xarmodvars": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables/module.php",
         "name": "xarModVars",
         "methods": {
+            "modvars": {
+                "name": "modvars",
+                "args": [],
+                "lines": "37-45"
+            },
             "get": {
                 "name": "get",
                 "args": [
                     "$scope",
                     "$name",
-                    "$value = null"
+                    "$default = null"
                 ],
-                "lines": "44-91"
+                "lines": "56-60"
             },
             "preload": {
                 "name": "preload",
                 "args": [
                     "$scope"
                 ],
-                "lines": "101-138"
+                "lines": "70-73"
             },
             "cache": {
                 "name": "cache",
@@ -19767,7 +20170,7 @@
                     "$scope",
                     "$source = null"
                 ],
-                "lines": "146-155"
+                "lines": "81-84"
             },
             "set": {
                 "name": "set",
@@ -19776,7 +20179,7 @@
                     "$name",
                     "$value"
                 ],
-                "lines": "167-208"
+                "lines": "96-99"
             },
             "delete": {
                 "name": "delete",
@@ -19784,14 +20187,14 @@
                     "$scope",
                     "$name"
                 ],
-                "lines": "219-250"
+                "lines": "110-113"
             },
             "delete_all": {
                 "name": "delete_all",
                 "args": [
                     "$scope"
                 ],
-                "lines": "260-312"
+                "lines": "123-126"
             },
             "getid": {
                 "name": "getID",
@@ -19799,13 +20202,13 @@
                     "$scope",
                     "$name"
                 ],
-                "lines": "326-362"
+                "lines": "140-143"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarVars",
-        "lines": "31-363"
+        "lines": "33-144"
     },
     "xarobject": {
         "file": "/home/mikespub/xaraya-core/html/bootstrap.php",
@@ -19986,47 +20389,47 @@
                 "args": [
                     "array $args = []"
                 ],
-                "lines": "41-83"
+                "lines": "43-85"
             },
             "getcachekey": {
                 "name": "getCacheKey",
                 "args": [
                     "$url = null"
                 ],
-                "lines": "91-132"
+                "lines": "93-134"
             },
             "getcachesettings": {
                 "name": "getCacheSettings",
                 "args": [],
-                "lines": "138-146"
+                "lines": "140-148"
             },
             "checkcachingrules": {
                 "name": "checkCachingRules",
                 "args": [
                     "$url = null"
                 ],
-                "lines": "155-192"
+                "lines": "157-194"
             },
             "sendheaders": {
                 "name": "sendHeaders",
                 "args": [
                     "$modtime = 0"
                 ],
-                "lines": "200-265"
+                "lines": "202-267"
             },
             "iscached": {
                 "name": "isCached",
                 "args": [
                     "$cacheKey"
                 ],
-                "lines": "274-305"
+                "lines": "276-307"
             },
             "getcached": {
                 "name": "getCached",
                 "args": [
                     "$cacheKey"
                 ],
-                "lines": "314-328"
+                "lines": "316-330"
             },
             "setcached": {
                 "name": "setCached",
@@ -20034,20 +20437,27 @@
                     "$cacheKey",
                     "$value"
                 ],
-                "lines": "338-398"
+                "lines": "340-400"
             },
             "flushcached": {
                 "name": "flushCached",
                 "args": [
                     "$cacheKey"
                 ],
-                "lines": "405-412"
+                "lines": "407-414"
+            },
+            "checkusercaching": {
+                "name": "checkUserCaching",
+                "args": [
+                    "$cacheGroups"
+                ],
+                "lines": "423-442"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "18-413"
+        "lines": "20-443"
     },
     "xarrequest": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/mapper/request.php",
@@ -20781,13 +21191,18 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables/system.php",
         "name": "xarSystemVars",
         "methods": {
+            "system": {
+                "name": "system",
+                "args": [],
+                "lines": "29-35"
+            },
             "get": {
                 "name": "get",
                 "args": [
                     "$scope",
                     "$name"
                 ],
-                "lines": "33-49"
+                "lines": "44-47"
             },
             "set": {
                 "name": "set",
@@ -20796,7 +21211,7 @@
                     "$name",
                     "$value"
                 ],
-                "lines": "51-65"
+                "lines": "49-52"
             },
             "delete": {
                 "name": "delete",
@@ -20804,20 +21219,13 @@
                     "$scope",
                     "$name"
                 ],
-                "lines": "67-71"
-            },
-            "preload": {
-                "name": "preload",
-                "args": [
-                    "$scope"
-                ],
-                "lines": "73-91"
+                "lines": "54-57"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarVars",
-        "lines": "21-92"
+        "lines": "24-58"
     },
     "xartableddl": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl.php",
@@ -20826,7 +21234,7 @@
             "init": {
                 "name": "init",
                 "args": [],
-                "lines": "534-537"
+                "lines": "104-107"
             },
             "createdatabase": {
                 "name": "createDatabase",
@@ -20835,7 +21243,8 @@
                     "$databaseType = null",
                     "$databaseCharset = 'utf-8'"
                 ],
-                "lines": "538-541"
+                "lines": "118-152",
+                "uses": "xarTableDDL::createDatabase()"
             },
             "createtable": {
                 "name": "createTable",
@@ -20845,7 +21254,8 @@
                     "$databaseType = \"\"",
                     "$charset = \"\""
                 ],
-                "lines": "542-545"
+                "lines": "165-216",
+                "uses": "xarTableDDL::createTable()"
             },
             "altertable": {
                 "name": "alterTable",
@@ -20854,7 +21264,8 @@
                     "$args",
                     "$databaseType = null"
                 ],
-                "lines": "546-549"
+                "lines": "238-282",
+                "uses": "xarTableDDL::alterTable()"
             },
             "droptable": {
                 "name": "dropTable",
@@ -20862,17 +21273,19 @@
                     "$tableName",
                     "$databaseType = null"
                 ],
-                "lines": "550-553"
+                "lines": "292-323",
+                "uses": "xarTableDDL::dropTable()"
             },
-            "xardbcreatecolumn": {
-                "name": "xarDBCreateColumn",
+            "createcolumn": {
+                "name": "createColumn",
                 "args": [
                     "string $columnType",
                     "array $args1 = []",
                     "array $args2 = []",
                     "$databaseType = null"
                 ],
-                "lines": "554-557"
+                "lines": "333-463",
+                "uses": "xarTableDDL::dropTable()"
             },
             "createindex": {
                 "name": "createIndex",
@@ -20881,7 +21294,8 @@
                     "$index",
                     "$databaseType = null"
                 ],
-                "lines": "558-561"
+                "lines": "475-532",
+                "uses": "xarTableDDL::createIndex()"
             },
             "dropindex": {
                 "name": "dropIndex",
@@ -20890,13 +21304,14 @@
                     "$index",
                     "$databaseType = null"
                 ],
-                "lines": "562-565"
+                "lines": "544-584",
+                "uses": "xarTableDDL::dropIndex()"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "532-566"
+        "lines": "102-585"
     },
     "xartemplatecache": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/caching/template.php",
@@ -21023,7 +21438,7 @@
                 "args": [
                     "$themeName"
                 ],
-                "lines": "113-120"
+                "lines": "114-121"
             }
         },
         "const": {
@@ -21070,7 +21485,7 @@
         },
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "28-121"
+        "lines": "28-122"
     },
     "xarthemevars": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables/theme.php",
@@ -21700,7 +22115,7 @@
             "isloggedin": {
                 "name": "isLoggedIn",
                 "args": [
-                    "$context = null"
+                    "$userId = null"
                 ],
                 "lines": "260-264"
             },
@@ -22098,6 +22513,43 @@
         "parent": "\\xarObject",
         "lines": "23-207"
     },
+    "xarvarprep": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "name": "xarVarPrep",
+        "methods": {
+            "fordisplay": {
+                "name": "forDisplay",
+                "args": [],
+                "lines": "494-523"
+            },
+            "htmldisplay": {
+                "name": "htmlDisplay",
+                "args": [],
+                "lines": "536-609"
+            },
+            "htmldisplaycallback": {
+                "name": "htmlDisplayCallback",
+                "args": [
+                    "$matches"
+                ],
+                "lines": "611-621"
+            },
+            "emaildisplay": {
+                "name": "emailDisplay",
+                "args": [],
+                "lines": "634-667"
+            },
+            "foros": {
+                "name": "forOS",
+                "args": [],
+                "lines": "684-707"
+            }
+        },
+        "const": [],
+        "namespace": "",
+        "parent": "",
+        "lines": "482-708"
+    },
     "xarvars": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVars",
@@ -22159,14 +22611,14 @@
                     "$xslAction = 'display'",
                     "$xslFile = null"
                 ],
-                "lines": "574-617"
+                "lines": "593-636"
             },
             "getnativetype": {
                 "name": "getNativeType",
                 "args": [
                     "$creoleType"
                 ],
-                "lines": "625-638"
+                "lines": "644-657"
             },
             "createtable": {
                 "name": "createTable",
@@ -22174,13 +22626,13 @@
                     "$tablefile",
                     "$module"
                 ],
-                "lines": "640-671"
+                "lines": "659-690"
             }
         },
         "const": [],
         "namespace": "",
         "parent": "\\xarObject",
-        "lines": "568-672"
+        "lines": "587-691"
     },
     "xmlparseexception": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/exceptions/types.php",

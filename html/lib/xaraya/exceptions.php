@@ -60,7 +60,7 @@ class GeneralException extends xarExceptions
  * @return void
  * @throws DebugException
 **/
-function debug($anything)
+function xar_debug($anything)
 {
     throw new DebugException('DEBUGGING', var_export($anything, true));
 }

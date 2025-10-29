@@ -221,7 +221,7 @@ class GetstaticMethod extends MethodClass
 
                 // try to figure out if it's the item id
                 // TODO: let modules define this
-                //debug($colInfo);
+                //xar_debug($colInfo);
                 if ($colInfo->isAutoIncrement()) {
                     // not allowed to modify primary key !
                     $proptype = $proptypeid['itemid']; // Item ID

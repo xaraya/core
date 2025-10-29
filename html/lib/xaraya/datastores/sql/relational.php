@@ -73,7 +73,7 @@ class RelationalDataStore extends SQLDataStore
     public function getFieldName(DataProperty &$property)
     {
         if (!is_object($property)) {
-            debug($property);
+            xar_debug($property);
         } // <-- this throws an exception
         // support [database.]table.field syntax
         if (preg_match('/^(.+)\.(\w+)$/', $property->source, $matches)) {

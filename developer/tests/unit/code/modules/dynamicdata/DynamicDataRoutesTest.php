@@ -9,6 +9,7 @@ use Xaraya\Modules\DynamicData\DynamicDataRoutes;
 final class DynamicDataRoutesTest extends TestHelper
 {
     private static RouterInterface $router;
+    private bool $hasExceptions = false;
 
     public static function setUpBeforeClass(): void
     {
@@ -24,6 +25,16 @@ final class DynamicDataRoutesTest extends TestHelper
         // make sure we reset the Controller here for later tests
         $dispatcher = new Dispatcher();
         $dispatcher->resetController();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        if ($this->hasExceptions) {
+            restore_exception_handler();
+            restore_error_handler();
+            $this->hasExceptions = false;
+        }
     }
 
     public function testRoutesMain(): void

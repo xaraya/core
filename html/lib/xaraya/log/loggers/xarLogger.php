@@ -181,4 +181,16 @@ class xarLogger extends xarObject
         //return strftime($this->timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3),3);
         return date($this->dateFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3), 3);
     }
+
+    /**
+     * Returns the defined integer representation of a string from the configuration.
+     *
+     * @param string $string   One of the priority level strings.
+     * @return int             The constant representing the $level string.
+     */
+    public static function stringToLevel($string)
+    {
+        $strings = array_flip(self::$levels);
+        return $strings[$string] ?? 0;
+    }
 }

@@ -183,7 +183,7 @@ class xarPageCache extends xarObject
             && (empty(xarOutputCache::$cacheTheme)
              || strpos($themeDir, xarOutputCache::$cacheTheme))
             // the current user is eligible for receiving cached pages AND
-            && xarPage_checkUserCaching(self::$cacheGroups)) {
+            && self::checkUserCaching(self::$cacheGroups)) {
             // set the current cacheKey
             self::$cacheKey = $cacheKey;
 
@@ -412,40 +412,32 @@ class xarPageCache extends xarObject
 
         self::$cacheStorage->flushCached($cacheKey);
     }
-}
 
-/**
- * Check if the user can benefit from page caching
- *
- * @package core\caching
- * @subpackage caching
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
- * @param string $cacheGroups
- * @return boolean
- * @todo Note : don't do this if admins get cached too :)
-**/
-function xarPage_checkUserCaching($cacheGroups)
-{
-    if (!xarUser::isLoggedIn()) {
-        // always allow caching for anonymous users
-        return true;
-    } elseif (empty($cacheGroups)) {
-        // if no other cache groups are defined
+    /**
+     * Check if the user can benefit from page caching
+     *
+     * @param string $cacheGroups
+     * @return boolean
+     * @todo Note : don't do this if admins get cached too :)
+    **/
+    public static function checkUserCaching($cacheGroups)
+    {
+        if (!xarUser::isLoggedIn()) {
+            // always allow caching for anonymous users
+            return true;
+        } elseif (empty($cacheGroups)) {
+            // if no other cache groups are defined
+            return false;
+        }
+
+        $gidlist = xarCache::getParents();
+
+        $groups = explode(';', $cacheGroups);
+        foreach ($groups as $groupid) {
+            if (in_array($groupid, $gidlist)) {
+                return true;
+            }
+        }
         return false;
     }
-
-    $gidlist = xarCache::getParents();
-
-    $groups = explode(';', $cacheGroups);
-    foreach ($groups as $groupid) {
-        if (in_array($groupid, $gidlist)) {
-            return true;
-        }
-    }
-    return false;
 }

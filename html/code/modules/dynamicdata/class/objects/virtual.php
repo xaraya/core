@@ -464,7 +464,7 @@ class VirtualObjectFactory extends xarObject
         if (!xar::mem()->load('DynamicData', 'Databases')) {
             throw new Exception('No databases cached yet - you need to visit DD > Utilities > DB Connections once');
         }
-        // @todo adapt xarModVars::preload to allow preloading from cache?
+        // @todo adapt xar::mod() preload Vars to allow preloading from cache?
         //if (!xar::mem()->load('Mod.Variables.dynamicdata')) {  // 'databases'
         //    throw new Exception('No module variables cached yet - you need to export at least 1 object to php');
         //}

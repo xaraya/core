@@ -101,7 +101,7 @@
 
 
 	<xsl:processing-instruction name="php">
-	  <xsl:text> echo xarDBCreateColumn(</xsl:text>
+	  <xsl:text> echo xarTableDDL::createColumn(</xsl:text>
 	  
       <!-- Run the following for any children of this column element: there should only be one -->
       <xsl:for-each select="*">

@@ -24,72 +24,72 @@ xarCore::xarInit(xarCore::SYSTEM_ALL);
 if(!xarUser::logIn('Admin','12345')) {
     throw new Exception("Authentication failed\n");
 } else {
-    m('Authenticated');
+    xar_m('Authenticated');
 }
 
 
 sys::import('xaraya.structures.sequences.queue');
 sys::import('xaraya.structures.sequences.stack');
-m('WHY IS THIS NOT USING THE LOVELY UNITTESTS?');
+xar_m('WHY IS THIS NOT USING THE LOVELY UNITTESTS?');
 $l=0;
-m('Testing DD queue',$l++);
+xar_m('Testing DD queue',$l++);
 $q = new Queue('dd',array('name'=>'masterq'));
 $q->clear();
-_tests($q,$l--);
+xar_tests($q,$l--);
 
-m('Testing DD stack',$l++);
+xar_m('Testing DD stack',$l++);
 $q = new Stack('dd',array('name'=>'masterq'));
 $q->clear();
-_tests($q,$l--);
+xar_tests($q,$l--);
 
-m('Testing array queue',$l++);
+xar_m('Testing array queue',$l++);
 $q = new Queue();
 $q->clear();
-_tests($q,$l--);
+xar_tests($q,$l--);
 
-m('Testing array stack',$l++);
+xar_m('Testing array stack',$l++);
 $q = new Stack();
 $q->clear();
-_tests($q,$l--);
+xar_tests($q,$l--);
 */
 
-function m($msg, $level = 0)
+function xar_m($msg, $level = 0)
 {
     $prefix = str_repeat('  ', $level);
     echo "$prefix - $msg\n";
 }
 
-function _tests($seq, $l = 0)
+function xar_tests($seq, $l = 0)
 {
     $seqName = get_class($seq);
-    m("Operations on empty $seqName", $l++);
-    m("Size of empty $seqName: " . $seq->size, $l);
+    xar_m("Operations on empty $seqName", $l++);
+    xar_m("Size of empty $seqName: " . $seq->size, $l);
     $s = $seq->empty ? "yes" : "NO?";
-    m("Empty $seqName is empty: $s", $l);
-    m("Popping from empty $seqName", $l);
+    xar_m("Empty $seqName is empty: $s", $l);
+    xar_m("Popping from empty $seqName", $l);
     $seq->pop();
     $l--;
 
     $seq->clear();
-    m("Pushing and popping 1 item into the $seqName", $l++);
-    m("first", $l);
+    xar_m("Pushing and popping 1 item into the $seqName", $l++);
+    xar_m("first", $l);
     $seq->push("first", $l--);
-    m("Getting items back", $l++);
-    m($seq->pop(), $l);
+    xar_m("Getting items back", $l++);
+    xar_m($seq->pop(), $l);
     $l--;
 
-    m("Pushing and popping 3 items into the $seqName", $l++);
-    m("first", $l);
+    xar_m("Pushing and popping 3 items into the $seqName", $l++);
+    xar_m("first", $l);
     $seq->push("first");
-    m("second", $l);
+    xar_m("second", $l);
     $seq->push("second");
-    m("third", $l);
+    xar_m("third", $l);
     $seq->push("third");
     $l--;
 
-    m("Getting items back", $l++);
-    m($seq->pop(), $l);
-    m($seq->pop(), $l);
-    m($seq->pop(),$l);
+    xar_m("Getting items back", $l++);
+    xar_m($seq->pop(), $l);
+    xar_m($seq->pop(), $l);
+    xar_m($seq->pop(),$l);
     $l--;
 }

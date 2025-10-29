@@ -109,6 +109,7 @@ class xarTheme extends xarObject
 
     /**
      * Get all theme variables for a particular theme
+     * @deprecated 2.4.1 not supported
      */
     public static function getVarsByTheme($themeName)
     {

@@ -84,7 +84,7 @@ class InitialiseMethod extends MethodClass
         $set = $adminapi->setstate(['regid' => $regid,
             'state' => xarMod::STATE_INACTIVE]);
 
-        // debug($set);
+        // xar_debug($set);
         if (!isset($set)) {
             $msg = $this->ml('Module state change failed');
             throw new Exception($msg);

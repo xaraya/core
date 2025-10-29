@@ -24,7 +24,7 @@ class ModulesModRemoveObserver extends EventObserver implements ixarEventObserve
     {
         $modName = $subject->getArgs();
         // Delete any module variables that the module cleanup function might have missed.
-        xarModVars::delete_all($modName);
+        xar::mod($modName)->flushVars();
         // Delete any masks still around
         xarMasks::removemasks($modName);
         // check and reset the defaultmodule if we're about to remove it

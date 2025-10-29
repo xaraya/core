@@ -17,6 +17,7 @@
 namespace Xaraya\Services;
 
 use xarVar;
+use xarVarPrep;
 use xarCoreCache;
 use xarController;
 use sys;
@@ -328,7 +329,7 @@ trait VariablesTrait
      */
     public function prep(...$args)
     {
-        return xarVar::prepForDisplay(...$args);
+        return xarVarPrep::forDisplay(...$args);
     }
 
     /**
@@ -339,7 +340,7 @@ trait VariablesTrait
      */
     public function prepHTML(...$args)
     {
-        return xarVar::prepHTMLDisplay(...$args);
+        return xarVarPrep::htmlDisplay(...$args);
     }
 
     /**
@@ -350,7 +351,7 @@ trait VariablesTrait
      */
     public function prepEmail(...$args)
     {
-        return xarVar::prepEmailDisplay(...$args);
+        return xarVarPrep::emailDisplay(...$args);
     }
 
     /**
@@ -361,7 +362,7 @@ trait VariablesTrait
      */
     public function prepPath(...$args)
     {
-        return xarVar::prepForOS(...$args);
+        return xarVarPrep::forOS(...$args);
     }
 
     /** @deprecated 2.8.4 use xar::mem()->has() instead */

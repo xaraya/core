@@ -6,14 +6,14 @@
  * @package core\validation
  * @subpackage validation
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
 */
 
-sys::import('xaraya.tools.strftime');
-use function Xaraya\Tools\strftime;
+sys::import('xaraya.tools.legacy');
+use Xaraya\Tools\Legacy;
 
 /**
  * Date Validation Class
@@ -103,7 +103,7 @@ class DateValidation extends ValueValidations
 
         // If converted okay, convert it back to a string.
         if ($timestamp > 0) {
-            $subject = strftime($store_format, $timestamp);
+            $subject = Legacy::strftime($store_format, $timestamp);
         } else {
             $msg = 'Not a valid date format';
             throw new VariableValidationException(null, $msg);

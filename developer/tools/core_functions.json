@@ -1,18 +1,7 @@
 {
-    "_tests": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/structures/sequences/runtests.php",
-        "name": "_tests",
-        "args": [
-            "$seq",
-            "$l = 0"
-        ],
-        "namespace": "",
-        "lines": "62-95",
-        "docs": null
-    },
-    "debug": {
+    "xar_debug": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/exceptions.php",
-        "name": "debug",
+        "name": "xar_debug",
         "args": [
             "$anything"
         ],
@@ -20,9 +9,9 @@
         "lines": "63-66",
         "docs": {}
     },
-    "m": {
+    "xar_m": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/structures/sequences/runtests.php",
-        "name": "m",
+        "name": "xar_m",
         "args": [
             "$msg",
             "$level = 0"
@@ -30,6 +19,17 @@
         "namespace": "",
         "lines": "56-60",
         "docs": {}
+    },
+    "xar_tests": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/structures/sequences/runtests.php",
+        "name": "xar_tests",
+        "args": [
+            "$seq",
+            "$l = 0"
+        ],
+        "namespace": "",
+        "lines": "62-95",
+        "docs": null
     },
     "xaraya\\bridge\\test\\graphql_client": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/graphql/client.php",
@@ -76,7 +76,7 @@
         "docs": {}
     },
     "xaraya\\tools\\strftime": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tools/strftime.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tools/legacy.php",
         "name": "Xaraya\\Tools\\strftime",
         "args": [
             "string $format",
@@ -84,7 +84,7 @@
             "?string $locale = null"
         ],
         "namespace": "Xaraya\\Tools\\",
-        "lines": "25-181",
+        "lines": "189-192",
         "docs": {}
     },
     "xarboot_getpublicobjectproperties": {
@@ -98,265 +98,6 @@
         "docs": {},
         "class": "xarBoot",
         "check": "getPublicObjectProperties"
-    },
-    "xardb__datadictaltertable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
-        "name": "xarDB__datadictAlterTable",
-        "args": [
-            "$tableName",
-            "$args"
-        ],
-        "namespace": "",
-        "lines": "86-154",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_datadictAlterTable"
-    },
-    "xardb__datadictcolumndefinition": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
-        "name": "xarDB__datadictColumnDefinition",
-        "args": [
-            "$field_name",
-            "$parameters"
-        ],
-        "namespace": "",
-        "lines": "165-385",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_datadictColumnDefinition"
-    },
-    "xardb__datadictcreatedatabase": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
-        "name": "xarDB__datadictCreateDatabase",
-        "args": [
-            "$databaseName"
-        ],
-        "namespace": "",
-        "lines": "398-409",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_datadictCreateDatabase"
-    },
-    "xardb__datadictcreateindex": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
-        "name": "xarDB__datadictCreateIndex",
-        "args": [
-            "$tableName",
-            "$index"
-        ],
-        "namespace": "",
-        "lines": "442-453",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_datadictCreateIndex"
-    },
-    "xardb__datadictcreatetable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
-        "name": "xarDB__datadictCreateTable",
-        "args": [
-            "$tableName",
-            "$fields"
-        ],
-        "namespace": "",
-        "lines": "40-68",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_datadictCreateTable"
-    },
-    "xardb__datadictdropindex": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
-        "name": "xarDB__datadictDropIndex",
-        "args": [
-            "$tableName",
-            "$index"
-        ],
-        "namespace": "",
-        "lines": "465-476",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_datadictDropIndex"
-    },
-    "xardb__datadictdroptable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
-        "name": "xarDB__datadictDropTable",
-        "args": [
-            "$tableName"
-        ],
-        "namespace": "",
-        "lines": "420-431",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_datadictDropTable"
-    },
-    "xardb__datadictinit": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
-        "name": "xarDB__datadictInit",
-        "args": [],
-        "namespace": "",
-        "lines": "482-490",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_datadictInit"
-    },
-    "xardb__mysqlaltertable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/pdomysqli.php",
-        "name": "xarDB__mysqlAlterTable",
-        "args": [
-            "$tableName",
-            "$args"
-        ],
-        "namespace": "",
-        "lines": "105-208",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_mysqlAlterTable"
-    },
-    "xardb__mysqlcolumndefinition": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/pdomysqli.php",
-        "name": "xarDB__mysqlColumnDefinition",
-        "args": [
-            "$field_name",
-            "$parameters"
-        ],
-        "namespace": "",
-        "lines": "218-457",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_mysqlColumnDefinition"
-    },
-    "xardb__mysqlcreatetable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/pdomysqli.php",
-        "name": "xarDB__mysqlCreateTable",
-        "args": [
-            "$tableName",
-            "$fields",
-            "$charset = null"
-        ],
-        "namespace": "",
-        "lines": "39-88",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_mysqlCreateTable"
-    },
-    "xardb__oraclealtertable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/oracle.php",
-        "name": "xarDB__oracleAlterTable",
-        "args": [
-            "$tableName",
-            "$args"
-        ],
-        "namespace": "",
-        "lines": "103-197",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_oracleAlterTable"
-    },
-    "xardb__oraclecolumndefinition": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/oracle.php",
-        "name": "xarDB__oracleColumnDefinition",
-        "args": [
-            "$field_name",
-            "$parameters"
-        ],
-        "namespace": "",
-        "lines": "207-401",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_oracleColumnDefinition"
-    },
-    "xardb__oraclecreatetable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/oracle.php",
-        "name": "xarDB__oracleCreateTable",
-        "args": [
-            "$tableName",
-            "$fields",
-            "$charset = null"
-        ],
-        "namespace": "",
-        "lines": "39-87",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_oracleCreateTable"
-    },
-    "xardb__postgrescolumndefinition": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/postgres.php",
-        "name": "xarDB__postgresColumnDefinition",
-        "args": [
-            "$field_name",
-            "$parameters"
-        ],
-        "namespace": "",
-        "lines": "187-395",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_postgresColumnDefinition"
-    },
-    "xardb__postgresqlaltertable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/postgres.php",
-        "name": "xarDB__postgresqlAlterTable",
-        "args": [
-            "$tableName",
-            "$args"
-        ],
-        "namespace": "",
-        "lines": "103-177",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_postgresqlAlterTable"
-    },
-    "xardb__postgresqlcreatetable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/postgres.php",
-        "name": "xarDB__postgresqlCreateTable",
-        "args": [
-            "$tableName",
-            "$fields",
-            "$charset = null"
-        ],
-        "namespace": "",
-        "lines": "37-87",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_postgresqlCreateTable"
-    },
-    "xardb__sqlitealtertable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/sqlite.php",
-        "name": "xarDB__sqliteAlterTable",
-        "args": [
-            "$tableName",
-            "$args"
-        ],
-        "namespace": "",
-        "lines": "89-121",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_sqliteAlterTable"
-    },
-    "xardb__sqlitecolumndefinition": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/sqlite.php",
-        "name": "xarDB__sqliteColumnDefinition",
-        "args": [
-            "$field_name",
-            "$parameters"
-        ],
-        "namespace": "",
-        "lines": "135-309",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_sqliteColumnDefinition"
-    },
-    "xardb__sqlitecreatetable": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/sqlite.php",
-        "name": "xarDB__sqliteCreateTable",
-        "args": [
-            "$tableName",
-            "$fields",
-            "$charset = null"
-        ],
-        "namespace": "",
-        "lines": "36-72",
-        "docs": {},
-        "class": "xarDB",
-        "check": "_sqliteCreateTable"
     },
     "xardb_init": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/database.php",
@@ -379,7 +120,7 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "181-225",
+        "lines": "58-61",
         "docs": {},
         "uses": "xarTableDDL::alterTable()",
         "class": "xarTableDDL",
@@ -396,12 +137,12 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "278-408",
+        "lines": "76-79",
         "docs": {},
-        "uses": "xarTableDDL::dropTable()",
+        "uses": "xarTableDDL::createColumn()",
         "class": "xarTableDDL",
-        "check": "dropTable",
-        "method": "dropTable"
+        "check": "createColumn",
+        "method": "createColumn"
     },
     "xardbcreatedatabase": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl.php",
@@ -412,7 +153,7 @@
             "$databaseCharset = 'utf-8'"
         ],
         "namespace": "",
-        "lines": "52-90",
+        "lines": "40-43",
         "docs": {},
         "uses": "xarTableDDL::createDatabase()",
         "class": "xarTableDDL",
@@ -428,7 +169,7 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "421-478",
+        "lines": "85-88",
         "docs": {},
         "uses": "xarTableDDL::createIndex()",
         "class": "xarTableDDL",
@@ -445,7 +186,7 @@
             "$charset = \"\""
         ],
         "namespace": "",
-        "lines": "104-158",
+        "lines": "49-52",
         "docs": {},
         "uses": "xarTableDDL::createTable()",
         "class": "xarTableDDL",
@@ -461,7 +202,7 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "490-530",
+        "lines": "94-97",
         "docs": {},
         "uses": "xarTableDDL::dropIndex()",
         "class": "xarTableDDL",
@@ -476,208 +217,12 @@
             "$databaseType = null"
         ],
         "namespace": "",
-        "lines": "236-267",
+        "lines": "67-70",
         "docs": {},
         "uses": "xarTableDDL::dropTable()",
         "class": "xarTableDDL",
         "check": "dropTable",
         "method": "dropTable"
-    },
-    "xarlocaleformatcurrency": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleFormatCurrency",
-        "args": [
-            "$currency",
-            "$localeData = null"
-        ],
-        "namespace": "",
-        "lines": "218-225",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "FormatCurrency",
-        "method": "formatCurrency",
-        "margs": [
-            "$currency",
-            "$localeData = null"
-        ]
-    },
-    "xarlocaleformatdate": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleFormatDate",
-        "args": [
-            "$format = null",
-            "$timestamp = null",
-            "$addoffset = true"
-        ],
-        "namespace": "",
-        "lines": "546-570",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "FormatDate",
-        "method": "formatDate",
-        "margs": [
-            "$format = null",
-            "$timestamp = null",
-            "$addoffset = true"
-        ]
-    },
-    "xarlocaleformatnumber": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleFormatNumber",
-        "args": [
-            "$number",
-            "$localeData = null",
-            "$isCurrency = false"
-        ],
-        "namespace": "",
-        "lines": "240-330",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "FormatNumber",
-        "method": "formatNumber",
-        "margs": [
-            "$number",
-            "$localeData = null",
-            "$isCurrency = false"
-        ]
-    },
-    "xarlocaleformatutcdate": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleFormatUTCDate",
-        "args": [
-            "$format = null",
-            "$time = null",
-            "$addoffset = false"
-        ],
-        "namespace": "",
-        "lines": "520-528",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "FormatUTCDate",
-        "method": "formatUTCDate",
-        "margs": [
-            "$format = null",
-            "$time = null",
-            "$addoffset = false"
-        ]
-    },
-    "xarlocalegetformatteddate": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleGetFormattedDate",
-        "args": [
-            "$length = 'short'",
-            "$timestamp = null",
-            "$addoffset = true"
-        ],
-        "namespace": "",
-        "lines": "371-398",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "GetFormattedDate",
-        "method": "getFormattedDate",
-        "margs": [
-            "$length = 'short'",
-            "$timestamp = null",
-            "$addoffset = true"
-        ]
-    },
-    "xarlocalegetformattedtime": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleGetFormattedTime",
-        "args": [
-            "$length = 'short'",
-            "$timestamp = null",
-            "$addoffset = true"
-        ],
-        "namespace": "",
-        "lines": "439-506",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "GetFormattedTime",
-        "method": "getFormattedTime",
-        "margs": [
-            "$length = 'short'",
-            "$timestamp = null",
-            "$addoffset = true"
-        ]
-    },
-    "xarlocalegetformattedutcdate": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleGetFormattedUTCDate",
-        "args": [
-            "$length = 'short'",
-            "$timestamp = null",
-            "$addoffset = false"
-        ],
-        "namespace": "",
-        "lines": "344-353",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "GetFormattedUTCDate",
-        "method": "getFormattedUTCDate",
-        "margs": [
-            "$length = 'short'",
-            "$timestamp = null",
-            "$addoffset = false"
-        ]
-    },
-    "xarlocalegetformattedutctime": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleGetFormattedUTCTime",
-        "args": [
-            "$length = 'short'",
-            "$timestamp = null",
-            "$addoffset = false"
-        ],
-        "namespace": "",
-        "lines": "412-421",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "GetFormattedUTCTime",
-        "method": "getFormattedUTCTime",
-        "margs": [
-            "$length = 'short'",
-            "$timestamp = null",
-            "$addoffset = false"
-        ]
-    },
-    "xarlocaleparsecurrency": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleParseCurrency",
-        "args": [
-            "$currency",
-            "$localeData = null"
-        ],
-        "namespace": "",
-        "lines": "160-170",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "ParseCurrency",
-        "method": "parseCurrency",
-        "margs": [
-            "$currency",
-            "$localeData = null"
-        ]
-    },
-    "xarlocaleparsenumber": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarLocaleParseNumber",
-        "args": [
-            "$number",
-            "$localeData = null",
-            "$isCurrency = false"
-        ],
-        "namespace": "",
-        "lines": "187-201",
-        "docs": {},
-        "class": "xarLocale",
-        "check": "ParseNumber",
-        "method": "parseNumber",
-        "margs": [
-            "$number",
-            "$localeData = null",
-            "$isCurrency = false"
-        ]
     },
     "xarlog__dumpvariable": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/log/functions/dumpvariable.php",
@@ -686,17 +231,19 @@
             "array $array"
         ],
         "namespace": "",
-        "lines": "17-110",
+        "lines": "18-21",
         "docs": {},
         "class": "xarLog",
-        "check": "_dumpVariable"
+        "check": "_dumpVariable",
+        "method": "dumpVariable",
+        "rargs": "$array"
     },
     "xarlog__shutdown_handler": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/log.php",
         "name": "xarLog__shutdown_handler",
         "args": [],
         "namespace": "",
-        "lines": "282-313",
+        "lines": "381-412",
         "docs": {},
         "class": "xarLog",
         "check": "_shutdown_handler"
@@ -708,10 +255,12 @@
             "$string"
         ],
         "namespace": "",
-        "lines": "18-32",
+        "lines": "20-23",
         "docs": {},
-        "class": "xarLog",
-        "check": "_stringToLevel"
+        "class": "xarLogger",
+        "check": "_stringToLevel",
+        "method": "stringToLevel",
+        "rargs": "$string"
     },
     "xarml": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/mls.php",
@@ -724,51 +273,14 @@
         "lines": "1036-1039",
         "docs": {}
     },
-    "xarmls_strftime": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarMLS_strftime",
-        "args": [
-            "$format = null",
-            "$timestamp = null"
-        ],
-        "namespace": "",
-        "lines": "609-640",
-        "docs": {},
-        "class": "xarMLS",
-        "check": "strftime"
-    },
-    "xarmlsloadlocaledata": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
-        "name": "xarMLSLoadLocaleData",
-        "args": [
-            "$locale = null"
-        ],
-        "namespace": "",
-        "lines": "49-145",
-        "docs": {},
-        "uses": "xarLocale::loadData()",
-        "class": "xarLocale",
-        "check": "loadData",
-        "method": "loadData"
-    },
-    "xarpage_checkusercaching": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/caching/output/page.php",
-        "name": "xarPage_checkUserCaching",
-        "args": [
-            "$cacheGroups"
-        ],
-        "namespace": "",
-        "lines": "430-449",
-        "docs": {},
-        "class": "xarPage",
-        "check": "checkUserCaching"
-    },
     "xarvarprepemaildisplay": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepEmailDisplay",
-        "args": [],
+        "args": [
+            "...$args"
+        ],
         "namespace": "",
-        "lines": "632-665",
+        "lines": "732-735",
         "docs": {},
         "class": "xarVar",
         "check": "PrepEmailDisplay",
@@ -780,9 +292,11 @@
     "xarvarprepfordisplay": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepForDisplay",
-        "args": [],
+        "args": [
+            "...$args"
+        ],
         "namespace": "",
-        "lines": "492-521",
+        "lines": "714-717",
         "docs": {},
         "class": "xarVar",
         "check": "PrepForDisplay",
@@ -794,9 +308,11 @@
     "xarvarprepforos": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepForOS",
-        "args": [],
+        "args": [
+            "...$args"
+        ],
         "namespace": "",
-        "lines": "682-705",
+        "lines": "741-744",
         "docs": {},
         "class": "xarVar",
         "check": "PrepForOS",
@@ -808,9 +324,11 @@
     "xarvarprephtmldisplay": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepHTMLDisplay",
-        "args": [],
+        "args": [
+            "...$args"
+        ],
         "namespace": "",
-        "lines": "534-607",
+        "lines": "723-726",
         "docs": {},
         "class": "xarVar",
         "check": "PrepHTMLDisplay",
@@ -818,17 +336,5 @@
         "margs": [
             "...$args"
         ]
-    },
-    "xarvarprephtmldisplay__callback": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
-        "name": "xarVarPrepHTMLDisplay__callback",
-        "args": [
-            "$matches"
-        ],
-        "namespace": "",
-        "lines": "609-619",
-        "docs": null,
-        "class": "xarVar",
-        "check": "PrepHTMLDisplay__callback"
     }
 }

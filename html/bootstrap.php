@@ -263,9 +263,9 @@ final class sys extends xarObject
     {
         // test compatibility with composer autoload by disabling sys::import
         // works fine except with *_xartables (fixed) or other function files (?)
-        //if (self::$autoload) {
-        //    return true;
-        //}
+        if (self::$autoload && (!str_contains($dp, '.xar') || !str_starts_with($dp, 'modules.'))) {
+            return true;
+        }
         $dp = str_replace('.', '/', $dp);
         if ((0 === strpos($dp, 'modules/')) || (0 === strpos($dp, 'properties/')) || (0 === strpos($dp, 'blocks/'))) {
             return self::once(self::code() . $dp, $offset);

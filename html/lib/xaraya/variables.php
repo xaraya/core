@@ -433,25 +433,25 @@ class xarVar extends xarObject
     public static function prepForDisplay(...$args)
     {
         // pass along the function arguments as is
-        return xarVarPrepForDisplay(...$args);
+        return xarVarPrep::forDisplay(...$args);
     }
 
     public static function prepHTMLDisplay(...$args)
     {
         // pass along the function arguments as is
-        return xarVarPrepHTMLDisplay(...$args);
+        return xarVarPrep::htmlDisplay(...$args);
     }
 
     public static function prepEmailDisplay(...$args)
     {
         // pass along the function arguments as is
-        return xarVarPrepEmailDisplay(...$args);
+        return xarVarPrep::emailDisplay(...$args);
     }
 
     public static function prepForOS(...$args)
     {
         // pass along the function arguments as is
-        return xarVarPrepForOS(...$args);
+        return xarVarPrep::forOS(...$args);
     }
 }
 
@@ -479,227 +479,266 @@ class xarVar extends xarObject
     ----------------------------------------------------------------------
 */
 
-/**
- * Ready user output
- *
- * Gets a variable, cleaning it up such that the text is
- * shown exactly as expected. Can have as many parameters as desired.
- *
- *
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
- */
-function xarVarPrepForDisplay()
+class xarVarPrep
 {
-    $resarray = [];
-    $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
-    // stopgap for now. we need to agree on a naming convention for the charsets that won't confuse the hell out of everyone
-    $charset = $charset == 'utf8' ? 'utf-8' : $charset;
-    foreach (func_get_args() as $var) {
-        if (is_bool($var)) {
-            $var = $var ? 'true' : 'false';
-        } elseif (!isset($var)) {
-            $var = '';
-        } else {
-            // Prepare var
-            try {
-                $var = htmlspecialchars($var, ENT_COMPAT, $charset);
-            } catch (Exception $e) {
-                $var = htmlspecialchars($var);
+    /**
+     * Ready user output
+     *
+     * Gets a variable, cleaning it up such that the text is
+     * shown exactly as expected. Can have as many parameters as desired.
+     *
+     *
+     * @return mixed prepared variable if only one variable passed
+     * in, otherwise an array of prepared variables
+     */
+    public static function forDisplay()
+    {
+        $resarray = [];
+        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+        // stopgap for now. we need to agree on a naming convention for the charsets that won't confuse the hell out of everyone
+        $charset = $charset == 'utf8' ? 'utf-8' : $charset;
+        foreach (func_get_args() as $var) {
+            if (is_bool($var)) {
+                $var = $var ? 'true' : 'false';
+            } elseif (!isset($var)) {
+                $var = '';
+            } else {
+                // Prepare var
+                try {
+                    $var = htmlspecialchars($var, ENT_COMPAT, $charset);
+                } catch (Exception $e) {
+                    $var = htmlspecialchars($var);
+                }
             }
+            // Add to array
+            $resarray[] = $var;
         }
-        // Add to array
-        $resarray[] = $var;
+
+        // Return vars
+        if (func_num_args() == 1) {
+            return $resarray[0];
+        } else {
+            return $resarray;
+        }
     }
 
-    // Return vars
-    if (func_num_args() == 1) {
-        return $resarray[0];
-    } else {
-        return $resarray;
+    /**
+     * Ready HTML output
+     *
+     * Gets a variable, cleaning it up such that the text is
+     * shown exactly as expected, except for allowed HTML tags which
+     * are allowed through. Can have as many parameters as desired.
+     *
+     *
+     * @return mixed prepared variable if only one variable passed
+     * in, otherwise an array of prepared variables
+     */
+    public static function htmlDisplay()
+    {
+        // <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
+        static $allowedtags = null;
+
+        if (!isset($allowedtags)) {
+            $allowedHTML = [];
+            foreach (xarVar::$allowableHTML as $k => $v) {
+                if ($k == '!--') {
+                    if ($v <> 0) {
+                        $allowedHTML[] = "$k.*?--";
+                    }
+                } else {
+                    switch ($v) {
+                        case 0:
+                            break;
+                        case 1:
+                            $allowedHTML[] = "/?$k\s*/?";
+                            break;
+                        case 2:
+                            $allowedHTML[] = "/?$k(\s+[^>]*)?/?";
+                            break;
+                    }
+                }
+            }
+            if (count($allowedHTML) > 0) {
+                $allowedtags = '~<(' . join('|', $allowedHTML) . ')>~is';
+            } else {
+                $allowedtags = '';
+            }
+        }
+
+        $resarray = [];
+        foreach (func_get_args() as $var) {
+            // Preparse var to mark the HTML that we want
+            if (!empty($allowedtags)) {
+                $var = preg_replace($allowedtags, "\022\\1\024", $var);
+            }
+
+            // Prepare var
+            $var = htmlspecialchars($var);
+
+            // Fix the HTML that we want
+            /*
+                    $var = preg_replace('/\022([^\024]*)\024/e',
+                                        "'<' . strtr('\\1',
+                                                        array('&gt;' => '>',
+                                                            '&lt;' => '<',
+                                                            '&quot;' => '\"',
+                                                            '&amp;' => '&'))
+                                        . '>';", $var);
+            */
+            $var = preg_replace_callback(
+                '/\022([^\024]*)\024/',
+                [self::class, 'htmlDisplayCallback'],
+                $var
+            );
+
+            // Fix entities if required
+            if (xarVar::$fixHTMLEntities) {
+                $var = preg_replace('/&amp;([a-z#0-9]+);/i', "&\\1;", $var);
+            }
+
+            // Add to array
+            array_push($resarray, $var);
+        }
+
+        // Return vars
+        if (func_num_args() == 1) {
+            return $resarray[0];
+        } else {
+            return $resarray;
+        }
     }
+
+    public static function htmlDisplayCallback($matches)
+    {
+        return '<' . strtr(
+            $matches[1],
+            ['&gt;' => '>',
+                '&lt;' => '<',
+                '&quot;' => '"',
+                '&amp;' => '&']
+        )
+            . '>';
+    }
+
+    /**
+     * Ready obfuscated e-mail output
+     *
+     * Gets a variable, cleaning it up such that e-mail addresses are
+     * slightly obfuscated against e-mail harvesters.
+     *
+     *
+     * @return mixed prepared variable if only one variable passed
+     * in, otherwise an array of prepared variables
+     * @todo this looks like something for the mail module or an EmailAddress class somewhere
+     */
+    public static function emailDisplay()
+    {
+        /*
+            // This search and replace finds the text 'x@y' and replaces
+            // it with HTML entities, this provides protection against
+            // email harvesters
+            //
+            // Note that the use of \024 and \022 are needed to ensure that
+            // this does not break HTML tags that might be around either
+            // the username or the domain name
+            static $search = array('/([^\024])@([^\022])/se');
+
+            static $replace = array('"&#" .
+                                    sprintf("%03d", ord("\\1")) .
+                                    ";&#064;&#" .
+                                    sprintf("%03d", ord("\\2")) . ";";');
+
+        */
+        $resarray = [];
+        foreach (func_get_args() as $var) {
+            // Prepare var
+            //        $var = preg_replace($search, $replace, $var);
+            $var = strtr($var, ['@' => '&#064;']);
+            // Add to array
+            array_push($resarray, $var);
+        }
+
+        // Return vars
+        if (func_num_args() == 1) {
+            return $resarray[0];
+        } else {
+            return $resarray;
+        }
+    }
+
+    /**
+     * Ready operating system output
+     *
+     * Gets a variable, cleaning it up such that any attempts
+     * to access files outside of the scope of the Xaraya
+     * system is not allowed. Can have as many parameters as desired.
+     *
+     *
+     * @return mixed prepared variable if only one variable passed
+     * in, otherwise an array of prepared variables
+     *
+     * @todo the / also prevents relative access in some cases (template tag for example)
+     * @todo this puts responsibility on callee to know how things work, and gets a mangled name back, not very nice
+     * @todo make it have 1 return type
+     */
+    public static function forOS()
+    {
+        static $special_characters = [':'  => ' ',  // c:\foo\bar
+            '/'  => ' ',  // /etc/passwd
+            '\\' => ' ',  // \\financialserver\fire.these.people
+            '..' => ' ',  // ../../../etc/passwd
+            '?'  => ' ',  // wildcard
+            '*'  => ' ']; // wildcard
+
+        $args = func_get_args();
+
+        foreach ($args as $key => $var) {
+            // Remove out bad characters
+            $args[$key] = strtr($var, $special_characters);
+        }
+
+
+        // Return vars
+        if (func_num_args() == 1) {
+            return $args[0];
+        } else {
+            return $args;
+        }
+    }
+}
+
+/**
+ * Ready user output
+ * @deprecated 2.8.4 use xarVarPrep::forDisplay() instead
+ */
+function xarVarPrepForDisplay(...$args)
+{
+    return xarVarPrep::forDisplay(...$args);
 }
 
 /**
  * Ready HTML output
- *
- * Gets a variable, cleaning it up such that the text is
- * shown exactly as expected, except for allowed HTML tags which
- * are allowed through. Can have as many parameters as desired.
- *
- *
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
+ * @deprecated 2.8.4 use xarVarPrep::htmlDisplay() instead
  */
-function xarVarPrepHTMLDisplay()
+function xarVarPrepHTMLDisplay(...$args)
 {
-    // <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
-    static $allowedtags = null;
-
-    if (!isset($allowedtags)) {
-        $allowedHTML = [];
-        foreach (xarVar::$allowableHTML as $k => $v) {
-            if ($k == '!--') {
-                if ($v <> 0) {
-                    $allowedHTML[] = "$k.*?--";
-                }
-            } else {
-                switch ($v) {
-                    case 0:
-                        break;
-                    case 1:
-                        $allowedHTML[] = "/?$k\s*/?";
-                        break;
-                    case 2:
-                        $allowedHTML[] = "/?$k(\s+[^>]*)?/?";
-                        break;
-                }
-            }
-        }
-        if (count($allowedHTML) > 0) {
-            $allowedtags = '~<(' . join('|', $allowedHTML) . ')>~is';
-        } else {
-            $allowedtags = '';
-        }
-    }
-
-    $resarray = [];
-    foreach (func_get_args() as $var) {
-        // Preparse var to mark the HTML that we want
-        if (!empty($allowedtags)) {
-            $var = preg_replace($allowedtags, "\022\\1\024", $var);
-        }
-
-        // Prepare var
-        $var = htmlspecialchars($var);
-
-        // Fix the HTML that we want
-        /*
-                $var = preg_replace('/\022([^\024]*)\024/e',
-                                       "'<' . strtr('\\1',
-                                                    array('&gt;' => '>',
-                                                          '&lt;' => '<',
-                                                          '&quot;' => '\"',
-                                                          '&amp;' => '&'))
-                                       . '>';", $var);
-        */
-        $var = preg_replace_callback(
-            '/\022([^\024]*)\024/',
-            'xarVarPrepHTMLDisplay__callback',
-            $var
-        );
-
-        // Fix entities if required
-        if (xarVar::$fixHTMLEntities) {
-            $var = preg_replace('/&amp;([a-z#0-9]+);/i', "&\\1;", $var);
-        }
-
-        // Add to array
-        array_push($resarray, $var);
-    }
-
-    // Return vars
-    if (func_num_args() == 1) {
-        return $resarray[0];
-    } else {
-        return $resarray;
-    }
-}
-
-function xarVarPrepHTMLDisplay__callback($matches)
-{
-    return '<' . strtr(
-        $matches[1],
-        ['&gt;' => '>',
-            '&lt;' => '<',
-            '&quot;' => '"',
-            '&amp;' => '&']
-    )
-           . '>';
+    return xarVarPrep::htmlDisplay(...$args);
 }
 
 /**
  * Ready obfuscated e-mail output
- *
- * Gets a variable, cleaning it up such that e-mail addresses are
- * slightly obfuscated against e-mail harvesters.
- *
- *
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
- * @todo this looks like something for the mail module or an EmailAddress class somewhere
+ * @deprecated 2.8.4 use xarVarPrep::emailDisplay() instead
  */
-function xarVarPrepEmailDisplay()
+function xarVarPrepEmailDisplay(...$args)
 {
-    /*
-        // This search and replace finds the text 'x@y' and replaces
-        // it with HTML entities, this provides protection against
-        // email harvesters
-        //
-        // Note that the use of \024 and \022 are needed to ensure that
-        // this does not break HTML tags that might be around either
-        // the username or the domain name
-        static $search = array('/([^\024])@([^\022])/se');
-
-        static $replace = array('"&#" .
-                                sprintf("%03d", ord("\\1")) .
-                                ";&#064;&#" .
-                                sprintf("%03d", ord("\\2")) . ";";');
-
-    */
-    $resarray = [];
-    foreach (func_get_args() as $var) {
-        // Prepare var
-        //        $var = preg_replace($search, $replace, $var);
-        $var = strtr($var, ['@' => '&#064;']);
-        // Add to array
-        array_push($resarray, $var);
-    }
-
-    // Return vars
-    if (func_num_args() == 1) {
-        return $resarray[0];
-    } else {
-        return $resarray;
-    }
+    return xarVarPrep::emailDisplay(...$args);
 }
 
 /**
  * Ready operating system output
- *
- * Gets a variable, cleaning it up such that any attempts
- * to access files outside of the scope of the Xaraya
- * system is not allowed. Can have as many parameters as desired.
- *
- *
- * @return mixed prepared variable if only one variable passed
- * in, otherwise an array of prepared variables
- *
- * @todo the / also prevents relative access in some cases (template tag for example)
- * @todo this puts responsibility on callee to know how things work, and gets a mangled name back, not very nice
- * @todo make it have 1 return type
+ * @deprecated 2.8.4 use xarVarPrep::forOS() instead
  */
-function xarVarPrepForOS()
+function xarVarPrepForOS(...$args)
 {
-    static $special_characters = [':'  => ' ',  // c:\foo\bar
-        '/'  => ' ',  // /etc/passwd
-        '\\' => ' ',  // \\financialserver\fire.these.people
-        '..' => ' ',  // ../../../etc/passwd
-        '?'  => ' ',  // wildcard
-        '*'  => ' ']; // wildcard
-
-    $args = func_get_args();
-
-    foreach ($args as $key => $var) {
-        // Remove out bad characters
-        $args[$key] = strtr($var, $special_characters);
-    }
-
-
-    // Return vars
-    if (func_num_args() == 1) {
-        return $args[0];
-    } else {
-        return $args;
-    }
+    return xarVarPrep::forOS(...$args);
 }

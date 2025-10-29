@@ -142,7 +142,7 @@ class StandarddeinstallMethod extends MethodClass
         #
         xarMasks::removemasks($module);
         xarPrivileges::removeInstances($module);
-        xarModVars::delete_all($module);
+        $this->mod($module)->flushVars();
 
         // Deinstall successful
         return true;

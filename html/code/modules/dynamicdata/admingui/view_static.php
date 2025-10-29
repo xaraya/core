@@ -73,7 +73,7 @@ class ViewStaticMethod extends MethodClass
         }
         $data['table'] = $table;
 
-        //debug($static);
+        //xar_debug($static);
         if (!isset($static) || $static == false) {
             $data['tabledata'] = [];
         } else {
