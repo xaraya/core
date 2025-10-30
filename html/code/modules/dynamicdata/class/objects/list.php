@@ -926,7 +926,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $viewvalues[$itemid] = [];
             foreach ($args['fieldlist'] as $name) {
                 if (isset($this->properties[$name])) {
-                    $label = $this->var()->prep($this->properties[$name]->label);
+                    $label = \xarVarPrep::forDisplay($this->properties[$name]->label);
                     if (isset($this->items[$itemid][$name])) {
                         $value = $this->properties[$name]->showOutput(['value' => $this->items[$itemid][$name]]);
                     } else {

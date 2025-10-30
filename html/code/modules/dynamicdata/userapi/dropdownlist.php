@@ -92,7 +92,7 @@ class DropdownlistMethod extends MethodClass
                     $list[$itemid] = $value;
                 }
             } else {
-                $list[$itemid] = $this->var()->prep($item[$field]);
+                $list[$itemid] = \xarVarPrep::forDisplay($item[$field]);
             }
         }
         return $list;

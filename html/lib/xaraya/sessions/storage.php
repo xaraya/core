@@ -95,23 +95,33 @@ class SessionDatabaseStorage implements SessionStorageInterface
     /** @var \Connection|\PDOConnection */
     private $db;
     private string $table;
+    protected $xarDb = null;         // Access database service with instance methods
+
+    /**
+     * Access database service
+     */
+    protected function db()
+    {
+        $this->xarDb ??= xar::db();
+        return $this->xarDb;
+    }
 
     /**
      * @param array<string, mixed> $config
      */
     public function __construct(private array $config)
     {
-        $this->db = xar::db()->getConn();
+        $this->db = $this->db()->getConn();
         $this->table = $this->getTable();
     }
 
     private function getTable(): string
     {
-        $tables = xar::db()->getTables();
+        $tables = $this->db()->getTables();
         if (!isset($tables['session_info'])) {
             // Register tables this subsystem uses
-            $tables = ['session_info' => xar::db()->getPrefix() . '_session_info'];
-            xar::db()->importTables($tables);
+            $tables = ['session_info' => $this->db()->getPrefix() . '_session_info'];
+            $this->db()->importTables($tables);
         }
         return $tables['session_info'];
     }
@@ -124,7 +134,7 @@ class SessionDatabaseStorage implements SessionStorageInterface
         }
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->table WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
-        $result = $stmt->executeQuery([$sessionId], xar::db()->getFetchNum());
+        $result = $stmt->executeQuery([$sessionId], $this->db()->getFetchNum());
 
         if (!$result->first()) {
             return null;

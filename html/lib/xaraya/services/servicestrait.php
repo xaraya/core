@@ -157,4 +157,14 @@ class ServicesClass implements ServicesInterface
     public $object;
     /** @var DataProperty */
     public $property;
+
+    public function setModName(string $modName): void
+    {
+        $this->moduleName = $modName;
+    }
+
+    public function setModType(string $modType): void
+    {
+        $this->moduleType = $modType;
+    }
 }

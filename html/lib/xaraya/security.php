@@ -65,13 +65,14 @@ class xarSec extends xarObject
      */
     public static function genAuthKey($modName = null)
     {
+        $xar = xar::getServicesClass();
         if (empty($modName)) {
-            $modName = xarController::getRequest()->getModule();
+            $modName = $xar->ctl()->getRequest()->getModule();
         }
 
         // Date gives extra security but leave it out for now
-        // $key = xar::session()->getVar('rand') . $modName . date ('YmdGi');
-        $key = xar::session()->getVar('rand') . strtolower($modName);
+        // $key = $xar->session()->getVar('rand') . $modName . date ('YmdGi');
+        $key = $xar->session()->getVar('rand') . strtolower($modName);
 
         // Encrypt key
         $authid = md5($key);
@@ -97,18 +98,19 @@ class xarSec extends xarObject
      */
     public static function confirmAuthKey($modName = null, $authIdVarName = 'authid', $catch = false)
     {
+        $xar = xar::getServicesClass();
         // We don't need this check for AJAX calls
-        if (xarController::getRequest()->isAjax()) {
+        if ($xar->ctl()->getRequest()->isAjax()) {
             return true;
         }
 
         if (!isset($modName)) {
-            $modName = xarController::getRequest()->getModule();
+            $modName = $xar->ctl()->getRequest()->getModule();
         }
         $authid = xarController::getVar($authIdVarName);
 
         // Regenerate static part of key
-        $partkey = xar::session()->getVar('rand') . strtolower($modName);
+        $partkey = $xar->session()->getVar('rand') . strtolower($modName);
 
         // Not using time-sensitive keys for the moment
         //    // Key life is 5 minutes, so search backwards and forwards 5
@@ -123,7 +125,7 @@ class xarSec extends xarObject
         //            // We've used up the current random
         //            // number, make up a new one
         //            srand((double) microtime(true) * 1000000.0);
-        //            xar::session()->setVar('rand', rand());
+        //            $xar->session()->setVar('rand', rand());
         //
         //            return true;
         //        }
@@ -131,7 +133,7 @@ class xarSec extends xarObject
         if ((md5($partkey)) == $authid) {
             // Match - generate new random number for next key and leave happy
             srand((float) microtime(true) * 1000000.0);
-            xar::session()->setVar('rand', rand());
+            $xar->session()->setVar('rand', rand());
             return true;
         }
         // Not found, assume invalid

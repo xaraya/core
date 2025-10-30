@@ -60,7 +60,7 @@ class JsonExporter extends DataObjectExporter
             if (is_array($objectdef->properties[$name]->value)) {
                 $info[$name] = [];
                 foreach ($objectdef->$name as $field => $value) {
-                    $info[$name][$field] = xar::var()->prep($value);
+                    $info[$name][$field] = \xarVarPrep::forDisplay($value);
                 }
             } elseif (in_array($name, ['access', 'config', 'sources', 'relations', 'objects', 'category'])) {
                 // don't replace anything in the serialized value
@@ -76,7 +76,7 @@ class JsonExporter extends DataObjectExporter
                 }
             } else {
                 $value = $objectdef->properties[$name]->value;
-                $info[$name] = xar::var()->prep($value);
+                $info[$name] = \xarVarPrep::forDisplay($value);
             }
         }
         $info = $this->addProperties($info);
@@ -101,11 +101,11 @@ class JsonExporter extends DataObjectExporter
                 $val = $properties[$name][$key];
                 if ($key == 'type') {
                     // replace numeric property type with text version
-                    $propinfo[$key] = xar::var()->prep($this->proptypes[$val]['name']);
+                    $propinfo[$key] = \xarVarPrep::forDisplay($this->proptypes[$val]['name']);
                 } elseif ($key == 'source') {
                     // replace local table prefix with default xar_* one
                     $val = preg_replace("/^{$this->prefix}/", 'xar_', $val);
-                    $propinfo[$key] = xar::var()->prep($val);
+                    $propinfo[$key] = \xarVarPrep::forDisplay($val);
                 } elseif ($key == 'configuration') {
                     // don't replace anything in the serialized value
                     if (!empty($val)) {
@@ -118,7 +118,7 @@ class JsonExporter extends DataObjectExporter
                         $propinfo[$key] = $val;
                     }
                 } else {
-                    $propinfo[$key] = xar::var()->prep($val);
+                    $propinfo[$key] = \xarVarPrep::forDisplay($val);
                 }
             }
             $info['properties'][] = $propinfo;

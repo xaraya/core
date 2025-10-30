@@ -226,7 +226,7 @@ class SitelockMethod extends MethodClass
         # Send the data to the template for display
         #
         $data['roles']        = $roles;
-        $data['serialroles']  = $this->var()->prep(serialize($roles));
+        $data['serialroles']  = \xarVarPrep::forDisplay(serialize($roles));
         $data['lockedoutmsg'] = $lockedoutmsg;
         $data['notifymsg']    = $notifymsg;
         $data['toggle']       = $toggle;

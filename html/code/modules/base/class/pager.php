@@ -83,15 +83,16 @@ class xarTplPager extends xarObject
             $currentItem = $lastItem;
         }
 
+        $xar = xar::getServicesClass();
         // If this request was the same as the last one, then return the cached pager details.
         // TODO: is there a better way of caching for each unique request?
         $request = md5($currentItem . ':' . $lastItem . ':' . $itemsPerPage . ':' . serialize($blockOptions));
-        if (xar::mem()->get('Pager.core', 'request') == $request) {
-            return xar::mem()->get('Pager.core', 'details');
+        if ($xar->mem()->get('Pager.core', 'request') == $request) {
+            return $xar->mem()->get('Pager.core', 'details');
         }
 
         // Record the values in this request.
-        xar::mem()->set('Pager.core', 'request', $request);
+        $xar->mem()->set('Pager.core', 'request', $request);
 
         // Max number of items in a block of pages.
         $itemsPerBlock = ($blockSize * $itemsPerPage);
@@ -225,7 +226,7 @@ class xarTplPager extends xarObject
         }
 
         // Cache all the pager details.
-        xar::mem()->set('Pager.core', 'details', $data);
+        $xar->mem()->set('Pager.core', 'details', $data);
 
         return $data;
 
@@ -269,20 +270,21 @@ class xarTplPager extends xarObject
             return '';
         }
 
+        $xar = xar::getServicesClass();
         // Couple of cached values used in various pages.
         // It is unclear what these values are supposed to be used for.
         if ($data['prevblockpages'] > 0) {
-            xar::mem()->set('Pager.first', 'leftarrow', $data['firsturl']);
+            $xar->mem()->set('Pager.first', 'leftarrow', $data['firsturl']);
         }
 
         // Links for next block of pages.
         if ($data['nextblockpages'] > 0) {
-            xar::mem()->set('Pager.last', 'rightarrow', $data['lasturl']);
+            $xar->mem()->set('Pager.last', 'rightarrow', $data['lasturl']);
         }
 
         // Pass along the context for xar::tpl()->module() if needed - from blockOptions
         $data['context'] ??= $blockOptions['context'] ?? null;
-        return trim(xar::tpl()->module($tplmodule, 'pager', $template, $data));
+        return trim($xar->tpl()->module($tplmodule, 'pager', $template, $data));
     }
 
     /**

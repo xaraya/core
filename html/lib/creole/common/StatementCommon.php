@@ -81,6 +81,16 @@ abstract class StatementCommon
      */
     protected $offset = 0;
 
+    protected $xarLog = null;
+
+    protected function log()
+    {
+        if (!isset($this->xarLog)) {
+            $this->xarLog = xar::log();
+        }
+        return $this->xarLog;
+    }
+
     /**
      * Create new statement instance.
      *
@@ -160,7 +170,7 @@ abstract class StatementCommon
      */
     public function execute($sql, $fetchmode = null)
     {
-        xar::log()->debug("DB: Executing $sql");
+        $this->log()->debug("DB: Executing $sql");
         if (!$this->isSelect($sql)) {
             $this->updateCount = $this->executeUpdate($sql);
             return false;
@@ -239,7 +249,7 @@ abstract class StatementCommon
      */
     public function executeQuery($sql, $fetchmode = null)
     {
-        xar::log()->debug("DB: Executing $sql");
+        $this->log()->debug("DB: Executing $sql");
         $this->updateCount = null;
         if ($this->limit > 0 || $this->offset > 0) {
             $this->conn->applyLimit($sql, $this->offset, $this->limit);
@@ -257,7 +267,7 @@ abstract class StatementCommon
      */
     public function executeUpdate($sql)
     {
-        xar::log()->debug("DB: Executing $sql");
+        $this->log()->debug("DB: Executing $sql");
         if ($this->resultSet) {
             $this->resultSet->close();
         }

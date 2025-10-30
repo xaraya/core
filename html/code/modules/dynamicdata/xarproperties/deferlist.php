@@ -198,7 +198,7 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return $this->var()->prep($item[$this->name]);
+        // return xarVarPrep::forDisplay($item[$this->name]);
         // $data = $this->getDeferredData(['value' => $item[$this->name], '_itemid' => $itemid]);
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             $item[$this->name] = json_encode($item[$this->name], JSON_NUMERIC_CHECK);

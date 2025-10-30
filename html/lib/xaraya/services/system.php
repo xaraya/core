@@ -77,7 +77,7 @@ trait SystemTrait
             return true;
         }
         // Allow overriding system config for testing if needed - see UserContextTest
-        if (xar::mem()->has('Testing:' . $scope, $name)) {
+        if ($this->getParent()->mem()->has('Testing:' . $scope, $name)) {
             $this->systemVars[$scope][$name] = $value;
             return true;
         }

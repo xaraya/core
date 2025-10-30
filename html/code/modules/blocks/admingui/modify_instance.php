@@ -725,7 +725,7 @@ class ModifyInstanceMethod extends MethodClass
 
                     if (is_array($value)) {/*
                             foreach ($value as $k => $v) {
-                                $v = $this->var()->prep($v);
+                                $v = \xarVarPrep::forDisplay($v);
                                 $value[$k] = $v;
                             }*/
                         $xml .= "  <$key>";

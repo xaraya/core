@@ -64,7 +64,7 @@ class GetstaticMethod extends MethodClass
 
         $invalid = [];
         if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
-            $invalid[] = 'module id ' . $this->var()->prep($module_id);
+            $invalid[] = 'module id ' . \xarVarPrep::forDisplay($module_id);
         }
         if (!isset($itemtype) || !is_numeric($itemtype)) {
             $invalid[] = 'item type';

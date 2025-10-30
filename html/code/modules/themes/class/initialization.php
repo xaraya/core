@@ -26,9 +26,10 @@ class ThemeInitialization extends xarObject
 {
     public static function clearCache()
     {
-        $dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('themes');
-        $tables = xar::db()->getTables();
+        $xar = xar::getServicesClass();
+        $dbconn = $xar->db()->getConn();
+        $xar->mod()->loadDbInfo('themes');
+        $tables = $xar->db()->getTables();
         $sql = "DELETE FROM $tables[themes_configurations]";
         $res = $dbconn->ExecuteUpdate($sql);
         return $res;
@@ -44,8 +45,9 @@ class ThemeInitialization extends xarObject
     public static function importConfigurations($flush = true, $dirs = [])
     {
         sys::import('xaraya.structures.relativedirectoryiterator');
+        $xar = xar::getServicesClass();
 
-        $dbconn = xar::db()->getConn(); // Need this for the transaction
+        $dbconn = $xar->db()->getConn(); // Need this for the transaction
         $themeDirs = [];
 
         // We do the whole thing, or not at all (given proper db support)
@@ -61,7 +63,7 @@ class ThemeInitialization extends xarObject
                 // Clear the cache
                 self::ClearCache();
 
-                $activeThemes = xar::mod()->apiFunc('themes', 'admin', 'getlist', ['filter' => ['State' => xarTheme::STATE_ACTIVE]]);
+                $activeThemes = $xar->mod()->apiFunc('themes', 'admin', 'getlist', ['filter' => ['State' => xarTheme::STATE_ACTIVE]]);
                 assert(!empty($activeThemes)); // this should never happen
 
                 foreach ($activeThemes as $themeInfo) {
@@ -84,7 +86,7 @@ class ThemeInitialization extends xarObject
 
 
         // Clear the property types from cached memory
-        //        xar::mem()->del('DynamicData','PropertyTypes');
+        //        $xar->mem()->del('DynamicData','PropertyTypes');
 
         return true;
     }

@@ -38,10 +38,11 @@ class xarPrivileges extends xarMasks
     public static function defineInstance($module, $type, $instances, $propagate = 0, $table2 = '', $childID = '', $parentID = '', $description = '')
     {
         parent::initialize();
+        $xar = xar::getServicesClass();
         foreach ($instances as $instance) {
             // make privilege wizard URLs relative, for easier migration of sites
             if (!empty($instance['header']) && $instance['header'] == 'external' && !empty($instance['query'])) {
-                $base = xar::ctl()->getBaseURL();
+                $base = $xar->ctl()->getBaseURL();
                 $instance['query'] = str_replace($base, '', $instance['query']);
             }
 
@@ -79,7 +80,7 @@ class xarPrivileges extends xarMasks
                           ( module_id, component, header,
                             query, ddlimit, description)
                           VALUES (?,?,?,?,?,?)";
-                    $modInfo = xar::mod()->getBaseInfo($module);
+                    $modInfo = $xar->mod()->getBaseInfo($module);
                     $module_id = $modInfo['systemid'];
                     $bindvars = [
                         $module_id, $type, $instance['header'],
@@ -281,7 +282,8 @@ class xarPrivileges extends xarMasks
     {
         parent::initialize();
 
-        xar::log()->info('PRIV: getting all privileges, once!');
+        $xar = xar::getServicesClass();
+        $xar->log()->info('PRIV: getting all privileges, once!');
         $where = "WHERE itemtype = " . self::PRIVILEGES_PRIVILEGETYPE;
         if (!empty($args['name'])) {
             $where .= ' AND p.name = ' . $args['name'];
@@ -290,7 +292,7 @@ class xarPrivileges extends xarMasks
             if ($args['module'] == strtolower('All')) {
                 $where .= " AND p.module_id = " . 0;
             } else {
-                $where .= " AND p.module_id = " . xar::mod()->getID($args['module']);
+                $where .= " AND p.module_id = " . $xar->mod()->getID($args['module']);
             }
         }
         if (!empty($args['component'])) {
@@ -493,9 +495,10 @@ class xarPrivileges extends xarMasks
     {
         parent::initialize();
 
+        $xar = xar::getServicesClass();
         $cacheKey = 'Privilege.ByPid';
-        if (xar::mem()->has($cacheKey, $id)) {
-            return xar::mem()->get($cacheKey, $id);
+        if ($xar->mem()->has($cacheKey, $id)) {
+            return $xar->mem()->get($cacheKey, $id);
         }
         // Need to get it
         $query = "SELECT p.id, p.name, r.name, p.module_id, m.name, p.component, p.instance, p.level, p.description
@@ -510,7 +513,7 @@ class xarPrivileges extends xarMasks
 
         $stmt = parent::$dbconn->prepareStatement($query);
         //Execute the query, bail if an exception was thrown
-        $result = $stmt->executeQuery([self::PRIVILEGES_PRIVILEGETYPE,$id], xar::db()->getFetchNum());
+        $result = $stmt->executeQuery([self::PRIVILEGES_PRIVILEGETYPE,$id], $xar->db()->getFetchNum());
 
         if ($result->next()) {
             [$id, $name, $realm, $module_id, $module, $component, $instance, $level, $description] = $result->fields;
@@ -527,7 +530,7 @@ class xarPrivileges extends xarMasks
 
             sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
-            xar::mem()->set($cacheKey, $id, $priv);
+            $xar->mem()->set($cacheKey, $id, $priv);
             return $priv;
         } else {
             return;

@@ -143,7 +143,7 @@ class GetitemsMethod extends MethodClass
             } else {
                 $item['displayname'] = $item['name'];
                 // Shortcut for os prepared directory
-                $item['osdirectory'] = $this->var()->prepPath($item['directory']);
+                $item['osdirectory'] = \xarVarPrep::forOS($item['directory']);
 
                 $this->mem()->set('Theme.BaseInfos', $item['name'], $item);
 

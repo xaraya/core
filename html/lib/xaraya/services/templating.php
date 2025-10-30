@@ -67,6 +67,8 @@ interface TemplatingInterface extends ServiceInterface
 
     /** @param int|array<mixed> $blockOptions */
     public function getPager(int $startNum, int $total, string $urltemplate, int $itemsPerPage = 10, int|array $blockOptions = [], string $template = 'default', string $tplmodule = 'base'): string;
+
+    public function renderPage(string $mainModuleOutput, ?string $pageTemplate = null): string;
 }
 
 /**
@@ -342,6 +344,16 @@ trait TemplatingTrait
     public function getPager(int $startNum, int $total, string $urltemplate, int $itemsPerPage = 10, int|array $blockOptions = [], string $template = 'default', string $tplmodule = 'base'): string
     {
         return xarTplPager::getPager($startNum, $total, $urltemplate, $itemsPerPage, $blockOptions, $template, $tplmodule);
+    }
+
+    /**
+     * Renders a page template.
+     * @param  string $mainModuleOutput       the module output
+     * @param  ?string $pageTemplate           the page template to use (without extension .xt)
+     */
+    public function renderPage(string $mainModuleOutput, ?string $pageTemplate = null): string
+    {
+        return xarTpl::renderPage($mainModuleOutput, $pageTemplate, $this->getContext());
     }
 }
 

@@ -74,7 +74,7 @@ class TextAreaProperty extends DataProperty
     public function showInput(array $data = [])
     {
         // TODO: the way the template is organized now, this only works when an id is set.
-        $data['value'] = isset($data['value']) ? $this->var()->prep($data['value']) : $this->var()->prep($this->value);
+        $data['value'] = isset($data['value']) ? xarVarPrep::forDisplay($data['value']) : xarVarPrep::forDisplay($this->value);
         if (empty($data['rows'])) {
             $data['rows'] = $this->display_rows;
         }

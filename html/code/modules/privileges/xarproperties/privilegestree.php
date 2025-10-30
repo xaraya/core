@@ -72,6 +72,16 @@ class PrivilegesTreeProperty extends DataProperty
 // ---------------------------------------------------------------
 class PrivilegesTree extends Tree
 {
+    protected $xarDB = null;
+
+    protected function db()
+    {
+        if (!isset($this->xarDB)) {
+            $this->xarDB = xar::db();
+        }
+        return $this->xarDB;
+    }
+
     /**
     *  Give privileges to user to create nodes
     *
@@ -81,8 +91,8 @@ class PrivilegesTree extends Tree
     public function createnodes(TreeNode $node)
     {
         //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
-        $dbconn = xar::db()->getConn();
-        $xartable = xar::db()->getTables();
+        $dbconn = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
         $q = new Query('SELECT');
         // Add fields
         $q->addfields("p.id AS id, p.name AS name, p.component AS component, p.instance AS instance, p.level AS level, p. description AS description");

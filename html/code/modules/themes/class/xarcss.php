@@ -7,7 +7,7 @@
  * @subpackage themes
  * @copyright see the html/credits.html file in this release
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
@@ -21,6 +21,7 @@ use Xaraya\Services\xar;
 **/
 class xarCSS extends xarObject
 {
+    public const CACHE_SCOPE = 'Themes.CSS';
     /**
      * Defines for this library
      *
@@ -54,8 +55,10 @@ class xarCSS extends xarObject
     //const CSSCOMMONCORE            = "xarcore-xhtml1-strict";
     public const CSSCOMMONCORE            = "core";
 
+    // this singleton instance belongs with static services class (or service in it)
     private static $instance;
-    private static $css;
+    // the queue of css belongs to the instance
+    private $css;
 
     // array of sheet objects
     public $local_libs      = [];
@@ -75,6 +78,15 @@ class xarCSS extends xarObject
     // avoid refreshing on each unserialize
     public $refreshed  = false;
     private $expires    = 86400; // One day
+    protected $xarServices = null;
+
+    protected function getServicesClass()
+    {
+        if (!isset($this->xarServices)) {
+            $this->xarServices = xar::getServicesClass();
+        }
+        return $this->xarServices;
+    }
 
     /**
      * object constructor
@@ -90,9 +102,10 @@ class xarCSS extends xarObject
 
     private function __construct()
     {
-        xar::log()->debug('xarCSS::__construct: hello world');
-        $this->combined   = xar::mod('themes')->getVar('css.combined');
-        $this->compressed = xar::mod('themes')->getVar('css.compressed');
+        $xar = $this->getServicesClass();
+        $xar->log()->debug('xarCSS::__construct: hello world');
+        $this->combined   = $xar->mod('themes')->getVar('css.combined');
+        $this->compressed = $xar->mod('themes')->getVar('css.compressed');
     }
 
     /**
@@ -157,16 +170,17 @@ class xarCSS extends xarObject
             //xar::log()->debug('xarCSS::__destruct: NOT saving modvars');
             return;
         }
-        xar::log()->debug('xarCSS::__destruct: saving modvars');
+        $xar = $this->getServicesClass();
+        $xar->log()->debug('xarCSS::__destruct: saving modvars');
         // basically, we serialize and set this object as a modvar
-        // xar::mod()->setVar can be a little flaky,
+        // $xar->mod()->setVar can be a little flaky,
         // this workaround seems to do the trick
         // NOTE: when we call serialize here, the __sleep() magic method is called
         try {
-            xar::mod(xarCSS::STORAGE_MODULE)->setVar(xarCSS::STORAGE_VARIABLE, serialize($this));
+            $xar->mod(xarCSS::STORAGE_MODULE)->setVar(xarCSS::STORAGE_VARIABLE, serialize($this));
         } catch (Exception $e) {
-            xar::mod(xarCSS::STORAGE_MODULE)->delVar(xarCSS::STORAGE_VARIABLE);
-            xar::mod(xarCSS::STORAGE_MODULE)->setVar(xarCSS::STORAGE_VARIABLE, serialize($this));
+            $xar->mod(xarCSS::STORAGE_MODULE)->delVar(xarCSS::STORAGE_VARIABLE);
+            $xar->mod(xarCSS::STORAGE_MODULE)->setVar(xarCSS::STORAGE_VARIABLE, serialize($this));
         }
     }
 
@@ -178,35 +192,28 @@ class xarCSS extends xarObject
      * @author Chris Powis <crisp@xaraya.com>
      * @access public
      * @return object current instance
-     *
-    **/
-    public static function getInstance_old()
-    {
-        if (!isset(self::$instance)) {
-            $c = __CLASS__;
-            self::$instance = new $c();
-        }
-        return self::$instance;
-    }
-
+     */
     public static function getInstance()
     {
-        if (!isset(self::$instance)) {
-            xar::log()->info('xarCSS::getInstance: loading modvars');
+        $xar = xar::getServicesClass();
+        if ($xar->mem()->has(self::CACHE_SCOPE, 'instance')) {
+            $instance = $xar->mem()->get(self::CACHE_SCOPE, 'instance');
+            $xar->log()->info('xarCSS::getInstance: modvars already loaded');
+        } else {
+            $xar->log()->info('xarCSS::getInstance: loading modvars');
             // try unserializing the stored modvar
-            self::$instance = @unserialize(xar::mod(xarCSS::STORAGE_MODULE)->getVar(xarCSS::STORAGE_VARIABLE) ?? '');
+            $instance = @unserialize($xar->mod(xarCSS::STORAGE_MODULE)->getVar(xarCSS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
-            if (empty(self::$instance)) {
+            if (empty($instance)) {
                 $c = __CLASS__;
                 // this is the one and only time the __construct() method will be run
-                self::$instance = new $c();
+                $instance = new $c();
             }
-        } else {
-            xar::log()->info('xarCSS::getInstance: modvars already loaded');
+            $xar->mem()->set(self::CACHE_SCOPE, 'instance', $instance);
         }
-        self::$instance->combined   = xar::mod('themes')->getVar('css.combined');
-        self::$instance->compressed = xar::mod('themes')->getVar('css.compressed');
-        return self::$instance;
+        $instance->combined   = $xar->mod('themes')->getVar('css.combined');
+        $instance->compressed = $xar->mod('themes')->getVar('css.compressed');
+        return $instance;
     }
 
     /**
@@ -224,12 +231,13 @@ class xarCSS extends xarObject
     **/
     public function refresh()
     {
+        $xar = $this->getServicesClass();
         // now find all libs in the filesystem
         // we want to look in all active themes
         $filter = ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE];
-        $themes = xar::mod()->apiFunc('themes', 'admin', 'getlist', $filter);
+        $themes = $xar->mod()->apiFunc('themes', 'admin', 'getlist', $filter);
         // we want to look in all active modules
-        $modules = xar::mod()->apiFunc(
+        $modules = $xar->mod()->apiFunc(
             'modules',
             'admin',
             'getlist',
@@ -238,10 +246,10 @@ class xarCSS extends xarObject
         // we want to look in all active themes
         // we want to look in all active modules
         // set default paths and filenames
-        $baseDir     = xar::tpl()->getBaseDir();
-        $themeDir    = xar::tpl()->getThemeDir();
-        $themeName   = xar::tpl()->getThemeName();
-        $commonDir   = xar::tpl()->getThemeDir('common');
+        $baseDir     = $xar->tpl()->getBaseDir();
+        $themeDir    = $xar->tpl()->getThemeDir();
+        $themeName   = $xar->tpl()->getThemeName();
+        $commonDir   = $xar->tpl()->getThemeDir('common');
         $codeDir     = sys::code();
         $libBase     = xarCSS::LIB_BASE;
         $libBaseAlt  = xarCSS::LIB_BASE_ALT;
@@ -279,7 +287,7 @@ class xarCSS extends xarObject
             if (!is_dir($path)) {
                 continue;
             }
-            //xar::log()->debug('xarCSS::refresh: looking in ' . $path);
+            //$xar->log()->debug('xarCSS::refresh: looking in ' . $path);
             $folders = $this->getFolders($path, 1);
             if (empty($folders)) {
                 continue;
@@ -424,12 +432,13 @@ class xarCSS extends xarObject
         if ($scope == 'property' && empty($property)) {
             return;
         }
+        $xar = $this->getServicesClass();
 
         // init tag from args / defaults
         $tag = [
             'method'     => $method,
             'scope'      => $scope,
-            'base'       => !empty($base) ? xar::var()->prepPath($base) : xarCSS::CSSCOMMONBASE,
+            'base'       => !empty($base) ? \xarVarPrep::forOS($base) : xarCSS::CSSCOMMONBASE,
             'file'       => !empty($file) ? $file : xarCSS::CSSCOMMONFILE,
             'fileext'    => !empty($fileext) ? $fileext : xarCSS::CSSCOMMONFILEEXT,
             'type'       => !empty($type) ? $type : xarCSS::CSSTYPETEXT,
@@ -444,7 +453,7 @@ class xarCSS extends xarObject
             'property'   => '',
             'block'      => '',
             'url'        => '',
-            'alternatedir' => !empty($alternatedir) ? xar::var()->prepPath($alternatedir) : '',
+            'alternatedir' => !empty($alternatedir) ? \xarVarPrep::forOS($alternatedir) : '',
         ];
 
         // Local or remote absolute url, just include it and return
@@ -482,8 +491,8 @@ class xarCSS extends xarObject
 
         // set common paths to look in
         $fileName = $tag['file'] . '.' . $tag['fileext'];
-        $themeDir = xar::tpl()->getThemeDir();
-        $commonDir = xar::tpl()->getThemeDir('common');
+        $themeDir = $xar->tpl()->getThemeDir();
+        $commonDir = $xar->tpl()->getThemeDir('common');
         $codeDir = sys::code();
 
         $paths = [];
@@ -499,7 +508,7 @@ class xarCSS extends xarObject
             case 'theme':
                 if (!empty($theme)) {
                     // themes/theme/style
-                    $paths[] = xar::tpl()->getThemeDir($theme) . '/' . $tag['base'] . '/' . $fileName;
+                    $paths[] = $xar->tpl()->getThemeDir($theme) . '/' . $tag['base'] . '/' . $fileName;
                     $tag['theme'] = $theme;
                 }
                 // themes/theme/style
@@ -510,7 +519,7 @@ class xarCSS extends xarObject
             case 'block':
                 if (!empty($block)) {
                     $tag['block'] = $block;
-                    $block = xar::var()->prepPath($block);
+                    $block = \xarVarPrep::forOS($block);
                     // themes/theme/blocks/block/style
                     $paths[] = $themeDir . '/blocks/' . $block . '/' . $tag['base'] . '/' . $fileName;
                     // themes/common/blocks/block/style
@@ -520,14 +529,14 @@ class xarCSS extends xarObject
                     break;
                 }
                 if (empty($module)) {
-                    $module = xar::mem()->get('Security.Variables', 'currentmodule');
+                    $module = $xar->mem()->get('Security.Variables', 'currentmodule');
                 }
                 // no break
             case 'module':
                 if (empty($module)) {
-                    $module = xar::mod()->getName();
+                    $module = $xar->mod()->getName();
                 }
-                $modInfo = xar::mod()->getBaseInfo($module);
+                $modInfo = $xar->mod()->getBaseInfo($module);
                 if (empty($modInfo)) {
                     return;
                 }
@@ -555,7 +564,7 @@ class xarCSS extends xarObject
                 break;
             case 'property':
                 $tag['property'] = $property;
-                $property = xar::var()->prepPath($property);
+                $property = \xarVarPrep::forOS($property);
                 // themes/theme/properties/property/style
 
                 $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
@@ -572,9 +581,9 @@ class xarCSS extends xarObject
         }
 
         // Debug display
-        if (xar::mod('themes')->getVar('debugmode') && xar::user()->isDebugAdmin()) {
+        if ($xar->mod('themes')->getVar('debugmode') && $xar->user()->isDebugAdmin()) {
             foreach ($paths as $path) {
-                echo xar::ml('Possible location: ') . $path . "<br/>";
+                echo $xar->ml('Possible location: ') . $path . "<br/>";
             }
         }
 
@@ -584,8 +593,8 @@ class xarCSS extends xarObject
             }
             $filePath = $path;
             // Debug display
-            if (xar::mod('themes')->getVar('debugmode') && xar::user()->isDebugAdmin()) {
-                echo "<b>" . xar::ml('Chosen: ') . $path . "</b><br/>";
+            if ($xar->mod('themes')->getVar('debugmode') && $xar->user()->isDebugAdmin()) {
+                echo "<b>" . $xar->ml('Chosen: ') . $path . "</b><br/>";
             }
             break;
         }
@@ -598,7 +607,7 @@ class xarCSS extends xarObject
         if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
             $filePath = substr($filePath, strlen($webDir));
         }
-        $filePath = xar::ctl()->getBaseURL() . $filePath;
+        $filePath = $xar->ctl()->getBaseURL() . $filePath;
         $tag['url'] = $filePath;
 
         return $this->queue($method, $scope, $tag['url'], $tag);
@@ -624,12 +633,13 @@ class xarCSS extends xarObject
         if (empty($scope) || empty($method) || empty($url) || empty($data)) {
             return;
         }
+        $xar = $this->getServicesClass();
 
         // keep track of style when we're caching
-        xarCache::addStyle($data);
+        $xar->cache()->addStyle($data);
 
         // init the queue
-        if (!isset(self::$css)) {
+        if (!isset($this->css)) {
             // scope rendering order...
             $scopes = [
                 'common'   => [],
@@ -639,7 +649,7 @@ class xarCSS extends xarObject
                 'property' => [],
             ];
             // method rendering order...
-            self::$css = [
+            $this->css = [
                 'import' => $scopes,
                 'link'   => $scopes,
                 'embed'  => $scopes,
@@ -647,7 +657,7 @@ class xarCSS extends xarObject
             unset($scopes);
         }
         // skip unknown scopes/methods (for now)
-        if (!isset(self::$css[$method][$scope])) {
+        if (!isset($this->css[$method][$scope])) {
             return;
         }
 
@@ -656,7 +666,7 @@ class xarCSS extends xarObject
         $index = md5($url);
 
         // queue the style
-        self::$css[$method][$scope][$index] = $data;
+        $this->css[$method][$scope][$index] = $data;
 
         return true;
     }
@@ -675,17 +685,18 @@ class xarCSS extends xarObject
     **/
     public function render($args)
     {
-        if (empty(self::$css)) {
+        if (empty($this->css)) {
             return '';
         }
         extract($args);
         if ($this->combined) {
             $this->combine();
         }
-        $args['styles'] = & self::$css;
+        $xar = $this->getServicesClass();
+        $args['styles'] = & $this->css;
         $args['comments'] = !empty($comments);
 
-        return xar::tpl()->module('themes', 'css', 'render', $args);
+        return $xar->tpl()->module('themes', 'css', 'render', $args);
     }
 
     /**
@@ -702,11 +713,11 @@ class xarCSS extends xarObject
     **/
     private function combine()
     {
-        if (empty(self::$css) || !$this->combined) {
+        if (empty($this->css) || !$this->combined) {
             return;
         }
         $content = '';
-        foreach (self::$css as $method => $scopes) {
+        foreach ($this->css as $method => $scopes) {
             if (empty($scopes)) {
                 continue;
             }
@@ -749,7 +760,7 @@ class xarCSS extends xarObject
                     $content .= "\n\n";
                     // remove combined css from queue
                     // @todo: this should be queued and only removed when the file is written
-                    unset(self::$css[$method][$scope][$index]);
+                    unset($this->css[$method][$scope][$index]);
                 }
             }
         }
@@ -770,17 +781,18 @@ class xarCSS extends xarObject
             }
             fclose($fp);
         }
+        $xar = $this->getServicesClass();
 
         // Turn relative path into an absolute URL
         $webDir = sys::web();
         if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
             $filePath = substr($filePath, strlen($webDir));
         }
-        $filePath = xar::ctl()->getBaseURL() . $filePath;
+        $filePath = $xar->ctl()->getBaseURL() . $filePath;
 
         // Queue the combined stylesheet
         $index = md5($cacheKey . '.css');
-        self::$css['link']['theme'][$index] = [
+        $this->css['link']['theme'][$index] = [
             'method' => 'link',
             'scope' => 'theme',
             'rel' => 'stylesheet',
@@ -836,8 +848,9 @@ class xarCSS extends xarObject
     **/
     private function fixurlpaths($string, $fileName)
     {
+        $xar = $this->getServicesClass();
         // remove the domain name from path (if any)
-        $base = xar::ctl()->getBaseURL();
+        $base = $xar->ctl()->getBaseURL();
         if (strpos($fileName, $base) === 0) {
             $fileName = str_replace($base, '', $fileName);
         }
@@ -945,17 +958,27 @@ class xarCSSLib extends xarObject
     public $styles        = []; // all styles
     public $templates;
     public $scripts;
+    protected $xarServices = null;
+
+    protected function getServicesClass()
+    {
+        if (!isset($this->xarServices)) {
+            $this->xarServices = xar::getServicesClass();
+        }
+        return $this->xarServices;
+    }
 
     public function __construct($name)
     {
         if (empty($name)) {
             throw new BadParameterException($name, 'Invalid name "#(1)" for xarCSSLib');
         }
+        $xar = $this->getServicesClass();
         // first run, populate the library meta data
         $this->name = $name;
         $this->displayname = ucfirst($this->name);
-        $this->description = xar::ml('#(1) CSS Framework', $this->displayname);
-        $this->osdirectory = xar::var()->prepPath($this->name);
+        $this->description = $xar->ml('#(1) CSS Framework', $this->displayname);
+        $this->osdirectory = \xarVarPrep::forOS($this->name);
     }
 
     /**
@@ -965,15 +988,16 @@ class xarCSSLib extends xarObject
     **/
     public function findFiles()
     {
+        $xar = $this->getServicesClass();
         // we want to look in all active themes
-        $themes = xar::mod()->apiFunc(
+        $themes = $xar->mod()->apiFunc(
             'themes',
             'admin',
             'getlist',
             ['filter' => ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE]]
         );
         // we want to look in all active modules
-        $modules = xar::mod()->apiFunc(
+        $modules = $xar->mod()->apiFunc(
             'modules',
             'admin',
             'getlist',
@@ -981,10 +1005,10 @@ class xarCSSLib extends xarObject
         );
         // set default paths and filenames
         $libName     = $this->name;
-        $baseDir     = xar::tpl()->getBaseDir();
-        $themeDir    = xar::tpl()->getThemeDir();
-        $themeName   = xar::tpl()->getThemeName();
-        $commonDir   = xar::tpl()->getThemeDir('common');
+        $baseDir     = $xar->tpl()->getBaseDir();
+        $themeDir    = $xar->tpl()->getThemeDir();
+        $themeName   = $xar->tpl()->getThemeName();
+        $commonDir   = $xar->tpl()->getThemeDir('common');
         $codeDir     = sys::code();
         $libBase     = xarCSS::LIB_BASE;
         $libBaseAlt  = xarCSS::LIB_BASE_ALT;

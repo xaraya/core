@@ -128,15 +128,16 @@ class xarVar extends xarObject
         if (empty($args) && self::$initialized) {
             return true;
         }
+        $xar = xar::getServicesClass();
         // Configuration init needs to be done first
-        $tables = ['config_vars' => xar::db()->getPrefix() . '_module_vars'];
+        $tables = ['config_vars' => $xar->db()->getPrefix() . '_module_vars'];
 
-        xar::db()->importTables($tables);
+        $xar->db()->importTables($tables);
 
         // Initialise the variable cache
         sys::import('xaraya.variables.config');
-        self::$allowableHTML = xar::config()->getVar('Site.Core.AllowableHTML', []);
-        self::$fixHTMLEntities = xar::config()->getVar('Site.Core.FixHTMLEntities', true);
+        self::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);
+        self::$fixHTMLEntities = $xar->config()->getVar('Site.Core.FixHTMLEntities', true);
 
         self::$initialized = true;
         return true;
@@ -231,8 +232,8 @@ class xarVar extends xarObject
      *
      * The $prep flag will prepare $value by passing it to one of the following:
      *   xarVar::PREP_FOR_NOTHING:    no prep (default)
-     *   xarVar::PREP_FOR_DISPLAY:    xarVarPrepForDisplay($value)
-     *   xarVar::PREP_FOR_HTML:       xarVarPrepHTMLDisplay($value)
+     *   xarVar::PREP_FOR_DISPLAY:    xarVarPrep::forDisplay($value)
+     *   xarVar::PREP_FOR_HTML:       xarVarPrep::htmlDisplay($value)
      *   xarVar::PREP_FOR_STORE:      dbconn->qstr($value)
      *   xarVar::PREP_TRIM:           trim($value)
      *
@@ -242,7 +243,7 @@ class xarVar extends xarObject
      * @param mixed $value contains the converted value of fetched variable
      * @param mixed $defaultValue the default value
      * @param integer $flags bitmask which modify the behaviour of function
-     * @param integer $prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
+     * @param integer $prep will prep the value with xarVarPrep::forDisplay, xarVarPrep::htmlDisplay, or dbconn->qstr()
      * @throws EmptyParameterException
      * @throws VariableValidationException
      * @return true
@@ -300,10 +301,10 @@ class xarVar extends xarObject
         } else {
             // Value is ok, handle preparation of that value
             if ($prep & self::PREP_FOR_DISPLAY) {
-                $value = xarVarPrepForDisplay($value);
+                $value = xarVarPrep::forDisplay($value);
             }
             if ($prep & self::PREP_FOR_HTML) {
-                $value = xarVarPrepHTMLDisplay($value);
+                $value = xarVarPrep::htmlDisplay($value);
             }
 
             // TODO: this is used nowhere, plus it introduces a db connection here which is of no use

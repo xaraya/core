@@ -8,6 +8,7 @@ namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\TwigFunction;
 use Exception;
+use xarVarPrep;
 
 /**
  * DynamicData Tags
@@ -161,7 +162,7 @@ class DynamicDataTagExtension extends XarayaTwigExtension
         // If we have an object, throw out its label
         if (!empty($args['object'])) {
             $object = $args['object'];
-            return $this->var()->prep($object->label);
+            return xarVarPrep::forDisplay($object->label);
         }
         // We have a property
         if (!empty($args['property'])) {

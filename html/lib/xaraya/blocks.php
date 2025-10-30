@@ -90,18 +90,19 @@ class xarBlock extends xarObject implements ixarBlock
      */
     public static function render(array $blockinfo = [], $context = null)
     {
+        $xar = xar::getServicesClass();
         // Get a cache key for this block if it's suitable for block caching
-        $cacheKey = xar::cache()->getBlockKey($blockinfo);
+        $cacheKey = $xar->cache()->getBlockKey($blockinfo);
 
         // Check if the block is cached
-        if (xar::cache()->hasBlock($cacheKey)) {
+        if ($xar->cache()->hasBlock($cacheKey)) {
             // Return the cached block output
-            return xar::cache()->getBlock($cacheKey);
+            return $xar->cache()->getBlock($cacheKey);
         }
         if (!isset($context)) {
             // $context = new Context(['source' => __METHOD__]);
             // Use context from static services class here
-            $context = xar::getServicesClass()->getContext();
+            $context = $xar->getContext();
         }
 
         try {
@@ -113,12 +114,12 @@ class xarBlock extends xarObject implements ixarBlock
             // check if block expired already
             $now = time();
             if ($block->expire && $now > $block->expire) {
-                xar::cache()->setBlock($cacheKey, '');
+                $xar->cache()->setBlock($cacheKey, '');
                 return '';
             }
             // checkAccess for display method
             if (!$block->checkAccess('display')) {
-                xar::cache()->setBlock($cacheKey, '');
+                $xar->cache()->setBlock($cacheKey, '');
                 if (isset($block->display_access) && $block->display_access['failure']) {
                     // @TODO: render to an error/exception block?
                     return xarTpl::module(
@@ -134,14 +135,14 @@ class xarBlock extends xarObject implements ixarBlock
             if ($block->state == self::BLOCK_STATE_HIDDEN) {
                 // just execute the display method and return an empty string
                 $block->display();
-                xar::cache()->setBlock($cacheKey, '');
+                $xar->cache()->setBlock($cacheKey, '');
                 return '';
             }
             // render the block
             $blockinfo['content'] = self::guiMethod($block, 'display');
             // no content, ok, nothing to display
             if (empty($blockinfo['content'])) {
-                xar::cache()->setBlock($cacheKey, '');
+                $xar->cache()->setBlock($cacheKey, '');
                 return '';
             }
             // render to box template if necessary
@@ -165,13 +166,13 @@ class xarBlock extends xarObject implements ixarBlock
             }
 
             // Set the output of the block in cache
-            xar::cache()->setBlock($cacheKey, $boxOutput);
+            $xar->cache()->setBlock($cacheKey, $boxOutput);
 
             return $boxOutput;
 
         } catch (Exception $e) {
-            if ((bool) xar::mod('blocks')->getVar('noexceptions') || !xar::user()->isDebugAdmin()) {
-                xar::cache()->setBlock($cacheKey, '');
+            if ((bool) $xar->mod('blocks')->getVar('noexceptions') || !$xar->user()->isDebugAdmin()) {
+                $xar->cache()->setBlock($cacheKey, '');
                 return '';
             } else {
                 throw($e);
@@ -492,22 +493,23 @@ class xarBlock extends xarObject implements ixarBlock
         if (isset($args['instance'])) {  // valid block instance states
             $args['state'] = [self::BLOCK_STATE_VISIBLE, self::BLOCK_STATE_HIDDEN];
         }
+        $xar = xar::getServicesClass();
         $args['type_state'] = [self::TYPE_STATE_ACTIVE]; // valid block type states
         if (!isset($context)) {
             // $context = new Context(['source' => __METHOD__]);
             // Use context from static services class here
-            $context = xar::getServicesClass()->getContext();
+            $context = $xar->getContext();
         }
         // get block info
         try {
-            $blockinfo = xar::mod()->apiFunc('blocks', 'blocks', 'getinfo', $args);
+            $blockinfo = $xar->mod()->apiFunc('blocks', 'blocks', 'getinfo', $args);
             return self::render($blockinfo, $context);
         } catch (Exception $e) {
-            if ((bool) xar::mod('blocks')->getVar('noexceptions') || !xar::user()->isDebugAdmin()) {
+            if ((bool) $xar->mod('blocks')->getVar('noexceptions') || !$xar->user()->isDebugAdmin()) {
                 // Get a cache key for this block if it's suitable for block caching
                 if (!empty($blockinfo)) {
-                    $cacheKey = xar::cache()->getBlockKey($blockinfo);
-                    xar::cache()->setBlock($cacheKey, '');
+                    $cacheKey = $xar->cache()->getBlockKey($blockinfo);
+                    $xar->cache()->setBlock($cacheKey, '');
                 }
                 return '';
             } else {

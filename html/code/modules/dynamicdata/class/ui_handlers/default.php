@@ -192,7 +192,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         }
 
         if (!method_exists($this->object, $this->method)) {
-            return $this->mls()->translate('Unknown method #(1) for #(2)', $this->var()->prep($this->method), $this->object->label);
+            return $this->mls()->translate('Unknown method #(1) for #(2)', \xarVarPrep::forDisplay($this->method), $this->object->label);
         }
 
         // Pre-fetch item(s) for some standard dataobject methods
@@ -218,7 +218,7 @@ class DefaultHandler extends xarObject implements HandlerServicesInterface
         }
 
         $title = $this->object->label;
-        $this->tpl()->setPageTitle($this->var()->prep($title));
+        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($title));
 
         // Here we try to run the requested method directly
         $output = $this->object->{$this->method}($this->args);

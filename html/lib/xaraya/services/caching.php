@@ -35,6 +35,33 @@ interface CachingInterface extends ServiceInterface
     public const SLICE = 'caching';
 
     /**
+     * Get a cache key for page output caching
+     * @param ?string $url optional url to be checked if not the current url
+     * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Page, or null if not applicable
+     */
+    public function getPageKey(?string $url = null): ?string;
+
+    /**
+     * Check if the content of a page is available in cache or not
+     */
+    public function hasPage(?string $cacheKey): bool;
+
+    /**
+     * Get the content of a cached page + output to browser
+     */
+    public function sendPage(string $cacheKey): bool|null;
+
+    /**
+     * Get the content of a cached page
+     */
+    public function getPage(string $cacheKey): string;
+
+    /**
+     * Set the content of a cached page
+     */
+    public function setPage(string $cacheKey, string $value): void;
+
+    /**
      * Get a cache key for module output caching
      * @param array<string, mixed> $args optional parameters
      * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Module, or null if not applicable
@@ -146,7 +173,13 @@ interface CachingInterface extends ServiceInterface
      * Keep track of some javascript for caching - xarMod::apiFunc('themes','user','registerjs')
      * @param array<string, mixed> $args
      */
-    public function addJavascript(): void;
+    public function addJavascript(array $args = []): void;
+
+    /**
+     * Keep track of some meta tags for caching - xarMod::apiFunc('themes','user','registermeta')
+     * @param array<string, mixed> $args
+     */
+    public function addMeta(array $args = []): void;
 
     /**
      * Get a storage class instance for some type of cached data
@@ -180,6 +213,77 @@ trait CachingTrait
     protected ?ixarCache_Storage $objectStorage = null;
     protected ?ixarCache_Storage $variableStorage = null;
     protected ?ixarCache_Storage $pageStorage = null;
+
+    /**
+     * Get a cache key for page output caching
+     * @param ?string $url optional url to be checked if not the current url
+     * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Page, or null if not applicable
+     */
+    public function getPageKey(?string $url = null): ?string
+    {
+        if (empty($this->pageStorage)) {
+            return null;
+        }
+        return xarPageCache::getCacheKey($url);
+    }
+
+    /**
+     * Check if the content of a page is available in cache or not
+     */
+    public function hasPage(?string $cacheKey): bool
+    {
+        if (empty($cacheKey)) {
+            return false;
+        }
+        if (empty($this->pageStorage)) {
+            return false;
+        }
+        return xarPageCache::isCached($cacheKey);
+    }
+
+    /**
+     * Get the content of a cached page + output to browser
+     */
+    public function sendPage(string $cacheKey): bool|null
+    {
+        if (empty($cacheKey)) {
+            return false;
+        }
+        if (empty($this->pageStorage)) {
+            return null;
+        }
+        $output = 1;
+        return xarPageCache::getCached($cacheKey, $output);
+    }
+
+    /**
+     * Get the content of a cached page
+     */
+    public function getPage(string $cacheKey): string
+    {
+        if (empty($cacheKey)) {
+            return '';
+        }
+        if (empty($this->pageStorage)) {
+            return '';
+        }
+        $output = 0;
+        return xarPageCache::getCached($cacheKey, $output);
+    }
+
+    /**
+     * Set the content of a cached page
+     */
+    public function setPage(string $cacheKey, string $value): void
+    {
+        if (empty($cacheKey)) {
+            return;
+        }
+        if (empty($this->pageStorage)) {
+            return;
+        }
+        xarPageCache::setCached($cacheKey, $value);
+    }
 
     /**
      * Get a cache key for module output caching
@@ -216,6 +320,9 @@ trait CachingTrait
      */
     public function getModule(string $cacheKey): string
     {
+        if (empty($cacheKey)) {
+            return '';
+        }
         if (empty($this->moduleStorage)) {
             return '';
         }
@@ -268,6 +375,9 @@ trait CachingTrait
      */
     public function getBlock(string $cacheKey): string
     {
+        if (empty($cacheKey)) {
+            return '';
+        }
         if (empty($this->blockStorage)) {
             return '';
         }
@@ -323,6 +433,9 @@ trait CachingTrait
      */
     public function getObject(string $cacheKey): string
     {
+        if (empty($cacheKey)) {
+            return '';
+        }
         if (empty($this->objectStorage)) {
             return '';
         }
@@ -374,6 +487,9 @@ trait CachingTrait
      */
     public function getVariable(string $cacheKey): string|object
     {
+        if (empty($cacheKey)) {
+            return '';
+        }
         if (empty($this->variableStorage)) {
             return '';
         }
@@ -443,6 +559,15 @@ trait CachingTrait
     }
 
     /**
+     * Keep track of some meta tags for caching - xarMod::apiFunc('themes','user','registermeta')
+     * @param array<string, mixed> $args
+     */
+    public function addMeta(array $args = []): void
+    {
+        xarCache::addMeta($args);
+    }
+
+    /**
      * Get a storage class instance for some type of cached data
      * @param array<string, mixed> $args
      */
@@ -474,6 +599,11 @@ trait CachingTrait
  * Access xar*Cache::* Caching methods (getModuleKey, getObjectKey, ...)
  *
  * Available methods:
+ * - getPageKey()
+ * - hasPage()
+ * - sendPage() - output to browser
+ * - getPage()
+ * - setPage()
  * - getModuleKey()
  * - hasModule()
  * - getModule()

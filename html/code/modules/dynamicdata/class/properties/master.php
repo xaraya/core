@@ -48,12 +48,13 @@ class DataPropertyMaster extends xarObject
      */
     public static function getProperties(array $args = [])
     {
-        xar::log()->debug("DataPropertyMaster::getProperties: Getting all properties");
+        $xar = xar::getServicesClass();
+        $xar->log()->debug("DataPropertyMaster::getProperties: Getting all properties");
         // we can't use our own classes here, because we'd have an endless loop :-)
 
-        $dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('dynamicdata');
-        $xartable = xar::db()->getTables();
+        $dbconn = $xar->db()->getConn();
+        $xar->mod()->loadDbInfo('dynamicdata');
+        $xartable = $xar->db()->getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 
@@ -141,8 +142,9 @@ class DataPropertyMaster extends xarObject
         if (!self::isPropertyEnabled($args)) {
             return;
         }
+        $xar = xar::getServicesClass();
 
-        xar::log()->debug("DataPropertyMaster::addProperty: Adding a new property " . $args['name']);
+        $xar->log()->debug("DataPropertyMaster::addProperty: Adding a new property " . $args['name']);
 
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.
@@ -203,6 +205,7 @@ class DataPropertyMaster extends xarObject
         if (!isset($args['name']) && !isset($args['type'])) {
             throw new BadParameterException(null, xar::mls()->translate('The getProperty method needs either a name or type parameter.'));
         }
+        $xar = xar::getServicesClass();
 
         if (isset($args['name']) || !is_numeric($args['type'])) {
             // TODO: type takes precedence if it exists. should this be changed?
@@ -233,7 +236,7 @@ class DataPropertyMaster extends xarObject
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['class'];
 
-            xar::log()->debug("DataPropertyMaster::getProperty: Getting a new property " . $propertyClass);
+            $xar->log()->debug("DataPropertyMaster::getProperty: Getting a new property " . $propertyClass);
 
             // If we don't have the class yet, get it now
             if (!class_exists($propertyClass)) {
@@ -249,9 +252,9 @@ class DataPropertyMaster extends xarObject
                 sys::import($dp);
 
                 // Load the translations for this file
-                $loaded = xar::mls()->loadTranslations($propertyfile);
+                $loaded = $xar->mls()->loadTranslations($propertyfile);
                 if (!$loaded) {
-                    xar::log()->warning("Property translations for $propertyClass NOT loaded");
+                    $xar->log()->warning("Property translations for $propertyClass NOT loaded");
                 }
             }
 
@@ -330,12 +333,13 @@ class DataPropertyMaster extends xarObject
      */
     public static function getAllConfigProperties()
     {
+        $xar = xar::getServicesClass();
         // cache configuration for all properties
-        if (xar::mem()->has('DynamicData', 'Configurations')) {
-            return xar::mem()->get('DynamicData', 'Configurations');
+        if ($xar->mem()->has('DynamicData', 'Configurations')) {
+            return $xar->mem()->get('DynamicData', 'Configurations');
         }
         // Can't use DD methods here as we go into a recursion loop
-        $xartable = xar::db()->getTables();
+        $xartable = $xar->db()->getTables();
         $configurations = $xartable['dynamic_configurations'];
 
         $bindvars = [];
@@ -348,16 +352,16 @@ class DataPropertyMaster extends xarObject
                             configuration
                     FROM $configurations ";
 
-        $dbconn = xar::db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xar::db()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
 
         $allconfigproperties = [];
         while ($result->next()) {
             $item = $result->fields;
             $allconfigproperties[$item['name']] = $item;
         }
-        xar::mem()->set('DynamicData', 'Configurations', $allconfigproperties);
+        $xar->mem()->set('DynamicData', 'Configurations', $allconfigproperties);
         return $allconfigproperties;
     }
 

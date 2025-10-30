@@ -88,15 +88,16 @@ class xarSession
      */
     public static function getConfig()
     {
+        $xar = xar::getServicesClass();
         $systemArgs = [
-            'securityLevel'     => xar::config()->getVar('Site.Session.SecurityLevel'),
-            'duration'          => xar::config()->getVar('Site.Session.Duration'),
-            'inactivityTimeout' => xar::config()->getVar('Site.Session.InactivityTimeout'),
-            'cookieName'        => xar::config()->getVar('Site.Session.CookieName'),
-            'cookiePath'        => xar::config()->getVar('Site.Session.CookiePath'),
-            'cookieDomain'      => xar::config()->getVar('Site.Session.CookieDomain'),
-            'refererCheck'      => xar::config()->getVar('Site.Session.RefererCheck'),
-            //'sessionClass'      => xar::config()->getVar('Site.Session.HandlerClass'),
+            'securityLevel'     => $xar->config()->getVar('Site.Session.SecurityLevel'),
+            'duration'          => $xar->config()->getVar('Site.Session.Duration'),
+            'inactivityTimeout' => $xar->config()->getVar('Site.Session.InactivityTimeout'),
+            'cookieName'        => $xar->config()->getVar('Site.Session.CookieName'),
+            'cookiePath'        => $xar->config()->getVar('Site.Session.CookiePath'),
+            'cookieDomain'      => $xar->config()->getVar('Site.Session.CookieDomain'),
+            'refererCheck'      => $xar->config()->getVar('Site.Session.RefererCheck'),
+            //'sessionClass'      => $xar->config()->getVar('Site.Session.HandlerClass'),
         ];
         return $systemArgs;
     }

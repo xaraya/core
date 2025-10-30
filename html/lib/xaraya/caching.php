@@ -176,10 +176,11 @@ class xarCache extends xarObject
         if (!self::isOutputCacheEnabled()) {
             return;
         }
+        $xar = xar::getServicesClass();
         if (xarOutputCache::isPageCacheEnabled()) {
             // set the current cacheKey to null
             xarPageCache::$cacheKey = null;
-            xar::mem()->set('Page.Caching', 'nocache', true);
+            $xar->mem()->set('Page.Caching', 'nocache', true);
         }
         if (xarOutputCache::isBlockCacheEnabled()) {
             // set the current cacheKey to null
@@ -260,6 +261,27 @@ class xarCache extends xarObject
     }
 
     /**
+     * Keep track of some meta tags for caching - xarMod::apiFunc('themes','user','registermeta')
+     * @param array<string, mixed> $args
+     * @return void
+     */
+    public static function addMeta(array $args = [])
+    {
+        if (!self::isOutputCacheEnabled()) {
+            return;
+        }
+        // TODO: refactor common code ?
+        if (xarOutputCache::isModuleCacheEnabled()) {
+            // add javascript for module output
+            xarModuleCache::addMeta($args);
+        }
+        if (xarOutputCache::isObjectCacheEnabled()) {
+            // add javascript for object output
+            xarObjectCache::addMeta($args);
+        }
+    }
+
+    /**
      * Get a storage class instance for some type of cached data
      *
      * @param array<string, mixed> $args
@@ -295,8 +317,9 @@ class xarCache extends xarObject
         if (empty($currentid)) {
             $currentid = xarSession::getUserId();
         }
-        if (xar::mem()->has('User.Variables.' . $currentid, 'parentlist')) {
-            return xar::mem()->get('User.Variables.' . $currentid, 'parentlist');
+        $xar = xar::getServicesClass();
+        if ($xar->mem()->has('User.Variables.' . $currentid, 'parentlist')) {
+            return $xar->mem()->get('User.Variables.' . $currentid, 'parentlist');
         }
         $gidlist = [];
         // load Database Service on demand here for caching
@@ -307,7 +330,7 @@ class xarCache extends xarObject
             $xarDB = \Xaraya\Services\ServiceFactory::getDatabaseService(__METHOD__);
         } catch (Throwable $e) {
             error_log('Unable to load database service in xarCache: ' . $e->getMessage());
-            xar::mem()->set('User.Variables.' . $currentid, 'parentlist', $gidlist);
+            $xar->mem()->set('User.Variables.' . $currentid, 'parentlist', $gidlist);
             return $gidlist;
         }
         $rolemembers = $xarDB->getPrefix() . '_rolemembers';
@@ -320,7 +343,7 @@ class xarCache extends xarObject
             $gidlist[] = $result->getInt(1);
         }
         $result->Close();
-        xar::mem()->set('User.Variables.' . $currentid, 'parentlist', $gidlist);
+        $xar->mem()->set('User.Variables.' . $currentid, 'parentlist', $gidlist);
         return $gidlist;
     }
 

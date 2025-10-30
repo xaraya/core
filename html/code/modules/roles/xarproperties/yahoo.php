@@ -76,7 +76,7 @@ class YahooProperty extends TextBoxProperty
 
         $data['link'] = '';
         if (!empty($data['value'])) {
-            $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target=' . $this->var()->prep($data['value']) . '&.src=pg';
+            $data['link'] = 'http://edit.yahoo.com/config/send_webmesg?.target=' . xarVarPrep::forDisplay($data['value']) . '&.src=pg';
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
@@ -93,7 +93,7 @@ class YahooProperty extends TextBoxProperty
         if (!isset($data['value'])) {
             $data['value'] = $this->value;
         }
-        $data['value'] = $this->var()->prep($data['value']);
+        $data['value'] = xarVarPrep::forDisplay($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {

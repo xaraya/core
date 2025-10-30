@@ -27,16 +27,17 @@ class DataObjectDescriptor extends ObjectDescriptor
 
     public static function getModID(array $args = [])
     {
+        $xar = xar::getServicesClass();
         foreach ($args as $key => &$value) {
             if (in_array($key, ['module','modid','module','moduleid'])) {
                 if (empty($value)) {
-                    $value = xar::mod()->getRegID(xar::mod()->getName());
+                    $value = $xar->mod()->getRegID($xar->mod()->getName());
                 }
                 if (is_numeric($value) || is_integer($value)) {
                     $args['moduleid'] = $value;
                 } else {
-                    //$info = xar::mod()->getInfo(xar::mod()->getRegID($value));
-                    $args['moduleid'] = xar::mod()->getRegID($value);
+                    //$info = $xar->mod()->getInfo($xar->mod()->getRegID($value));
+                    $args['moduleid'] = $xar->mod()->getRegID($value);
                 }
                 break;
             }
@@ -44,12 +45,12 @@ class DataObjectDescriptor extends ObjectDescriptor
         // Still not found?
         if (!isset($args['moduleid'])) {
             if (isset($args['fallbackmodule']) && ($args['fallbackmodule'] == 'current')) {
-                $args['fallbackmodule'] = xar::mod()->getName();
+                $args['fallbackmodule'] = $xar->mod()->getName();
             } else {
                 $args['fallbackmodule'] = 'dynamicdata';
             }
-            //$info = xar::mod()->getInfo(xar::mod()->getRegID($args['fallbackmodule']));
-            $args['moduleid'] = xar::mod()->getRegID($args['fallbackmodule']);
+            //$info = $xar->mod()->getInfo($xar->mod()->getRegID($args['fallbackmodule']));
+            $args['moduleid'] = $xar->mod()->getRegID($args['fallbackmodule']);
         }
         if (!isset($args['itemtype'])) {
             $args['itemtype'] = 0;
@@ -104,18 +105,19 @@ class DataObjectDescriptor extends ObjectDescriptor
      */
     public static function findObject(array $args = [])
     {
+        $xar = xar::getServicesClass();
         $cacheKey = 'DynamicData.FindObject';
-        if (!empty($args['objectid']) && xar::mem()->has($cacheKey, $args['objectid'])) {
-            return xar::mem()->get($cacheKey, $args['objectid']);
+        if (!empty($args['objectid']) && $xar->mem()->has($cacheKey, $args['objectid'])) {
+            return $xar->mem()->get($cacheKey, $args['objectid']);
         }
-        if (!empty($args['name']) && xar::mem()->has($cacheKey, $args['name'])) {
-            return xar::mem()->get($cacheKey, $args['name']);
+        if (!empty($args['name']) && $xar->mem()->has($cacheKey, $args['name'])) {
+            return $xar->mem()->get($cacheKey, $args['name']);
         }
-        if (!empty($args['moduleid']) && isset($args['itemtype']) && xar::mem()->has($cacheKey, $args['moduleid'] . ':' . $args['itemtype'])) {
-            return xar::mem()->get($cacheKey, $args['moduleid'] . ':' . $args['itemtype']);
+        if (!empty($args['moduleid']) && isset($args['itemtype']) && $xar->mem()->has($cacheKey, $args['moduleid'] . ':' . $args['itemtype'])) {
+            return $xar->mem()->get($cacheKey, $args['moduleid'] . ':' . $args['itemtype']);
         }
-        xar::mod()->loadDbInfo('dynamicdata');
-        $xartable = xar::db()->getTables();
+        $xar->mod()->loadDbInfo('dynamicdata');
+        $xartable = $xar->db()->getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $query = "SELECT id,
@@ -139,9 +141,9 @@ class DataObjectDescriptor extends ObjectDescriptor
             $bindvars[] = (int) $args['itemtype'];
         }
 
-        $dbconn = xar::db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xar::db()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
         if (!$result->first()) {
             $row = [];
         } else {
@@ -156,13 +158,13 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['name'] = $row['name'];
         }
         if (!empty($args['objectid'])) {
-            xar::mem()->set($cacheKey, $args['objectid'], $row);
+            $xar->mem()->set($cacheKey, $args['objectid'], $row);
         }
         if (!empty($args['name'])) {
-            xar::mem()->set($cacheKey, $args['name'], $row);
+            $xar->mem()->set($cacheKey, $args['name'], $row);
         }
         if (!empty($args['moduleid']) && isset($args['itemtype'])) {
-            xar::mem()->set($cacheKey, $args['moduleid'] . ':' . $args['itemtype'], $row);
+            $xar->mem()->set($cacheKey, $args['moduleid'] . ':' . $args['itemtype'], $row);
         }
         return $row;
     }

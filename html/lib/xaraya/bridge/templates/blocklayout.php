@@ -8,6 +8,7 @@ namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\TwigFunction;
 use Exception;
+use xarVarPrep;
 
 /**
  * Blocklayout Tags
@@ -194,16 +195,16 @@ class BlocklayoutTagExtension extends XarayaTwigExtension
 
     public function xar_prep_display(...$args)
     {
-        return $this->var()->prep(...$args);
+        return xarVarPrep::forDisplay(...$args);
     }
 
     public function xar_prep_html(...$args)
     {
-        return $this->var()->prepHTML(...$args);
+        return xarVarPrep::htmlDisplay(...$args);
     }
 
     public function xar_prep_email(...$args)
     {
-        return $this->var()->prepEmail(...$args);
+        return xarVarPrep::emailDisplay(...$args);
     }
 }

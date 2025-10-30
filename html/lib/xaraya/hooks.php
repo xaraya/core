@@ -96,11 +96,12 @@ class xarHooks extends xarEvents
         $subject_module = $args['module'];
         $subject_itemtype = empty($args['itemtype']) ? 0 : $args['itemtype'];
 
+        $xar = xar::getServicesClass();
         $cacheScope = 'Hooks.Observers';
         $cacheName = $subject_module . '.' . $subject_itemtype;
         $observers = [];
-        if (xar::mem()->has($cacheScope, $cacheName)) {
-            $observers = xar::mem()->get($cacheScope, $cacheName);
+        if ($xar->mem()->has($cacheScope, $cacheName)) {
+            $observers = $xar->mem()->get($cacheScope, $cacheName);
             if (isset($observers[$event])) {
                 return $observers[$event];
             }
@@ -109,8 +110,8 @@ class xarHooks extends xarEvents
         $observers[$event] = [];
 
         // Get database info
-        $dbconn   = xar::db()->getConn();
-        $xartable = xar::db()->getTables();
+        $dbconn   = $xar->db()->getConn();
+        $xartable = $xar->db()->getTables();
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
@@ -140,9 +141,9 @@ class xarHooks extends xarEvents
         // The common case is hooking DD to some itemtype that is already a dataobject:
         // We pass the itemid of the object through the hooks call, causing DD to display an object of the same itemid, which is of course the original object
         if (!empty($args['exclude_module'])) {
-            //$query .= " AND mo.regid NOT IN ('" . join("','", xar::mod()->getRegID($extraInfo['exclude_module'])) . "')";
+            //$query .= " AND mo.regid NOT IN ('" . join("','", $xar->mod()->getRegID($extraInfo['exclude_module'])) . "')";
             foreach ($args['exclude_module'] as $excluded_module) {
-                $where[] = "mo.regid != " . xar::mod()->getRegID($excluded_module);
+                $where[] = "mo.regid != " . $xar->mod()->getRegID($excluded_module);
             }
         }
 
@@ -183,7 +184,7 @@ class xarHooks extends xarEvents
             ];
         };
         $result->close();
-        xar::mem()->set($cacheScope, $cacheName, $observers);
+        $xar->mem()->set($cacheScope, $cacheName, $observers);
         return $observers[$event];
     }
 
@@ -209,12 +210,13 @@ class xarHooks extends xarEvents
         if (!empty($itemtype) && !is_numeric($itemtype)) {
             throw new BadParameterException('itemtype');
         }
+        $xar = xar::getServicesClass();
 
-        $observer_id = xar::mod()->getRegID($observer);
+        $observer_id = $xar->mod()->getRegID($observer);
         if (empty($observer_id)) {
             return;
         }
-        $subject_id = xar::mod()->getRegID($subject);
+        $subject_id = $xar->mod()->getRegID($subject);
         if (empty($subject_id)) {
             return;
         }
@@ -248,8 +250,8 @@ class xarHooks extends xarEvents
             }
         }
         // Get database info
-        $dbconn   = xar::db()->getConn();
-        $xartable = xar::db()->getTables();
+        $dbconn   = $xar->db()->getConn();
+        $xartable = $xar->db()->getTables();
         $htable = $xartable['hooks'];
         // Insert hook
         try {
@@ -290,12 +292,13 @@ class xarHooks extends xarEvents
         if (!empty($scope) && !is_numeric($scope) && !is_string($scope)) {
             throw new EmptyParameterException('scope');
         }
+        $xar = xar::getServicesClass();
 
-        $observer_id = xar::mod()->getRegID($observer);
+        $observer_id = $xar->mod()->getRegID($observer);
         if (empty($observer_id)) {
             return;
         }
-        $subject_id = xar::mod()->getRegID($subject);
+        $subject_id = $xar->mod()->getRegID($subject);
         if (empty($subject_id)) {
             return;
         }
@@ -305,8 +308,8 @@ class xarHooks extends xarEvents
         }
 
         // Get database info
-        $dbconn   = xar::db()->getConn();
-        $xartable = xar::db()->getTables();
+        $dbconn   = $xar->db()->getConn();
+        $xartable = $xar->db()->getTables();
         $htable = $xartable['hooks'];
         // Delete hook
         try {
@@ -357,12 +360,13 @@ class xarHooks extends xarEvents
         if (!empty($scope) && !is_numeric($scope) && !is_string($scope)) {
             throw new EmptyParameterException('scope');
         }
+        $xar = xar::getServicesClass();
 
-        $observer_id = xar::mod()->getRegID($observer);
+        $observer_id = $xar->mod()->getRegID($observer);
         if (empty($observer_id)) {
             return false;
         }
-        $subject_id = xar::mod()->getRegID($subject);
+        $subject_id = $xar->mod()->getRegID($subject);
         if (empty($subject_id)) {
             return false;
         }
@@ -375,8 +379,8 @@ class xarHooks extends xarEvents
         }
 
         // Get database info
-        $dbconn   = xar::db()->getConn();
-        $xartable = xar::db()->getTables();
+        $dbconn   = $xar->db()->getConn();
+        $xartable = $xar->db()->getTables();
         $htable = $xartable['hooks'];
         $query = "SELECT observer, subject, itemtype, scope
                   FROM $htable
@@ -414,6 +418,7 @@ class xarHooks extends xarEvents
     {
         // Get list of hook modules from event system
         $hookmods = parent::getObserverModules();
+        $xar = xar::getServicesClass();
 
         // format the list for output
         $hooklist = [];
@@ -421,7 +426,7 @@ class xarHooks extends xarEvents
             if (!empty($observer) && $modname != $observer) {
                 continue;
             }
-            $hooklist[$modname] = xar::mod()->getInfo(xar::mod()->getRegID($modname));
+            $hooklist[$modname] = $xar->mod()->getInfo($xar->mod()->getRegID($modname));
             $hooklist[$modname]['hooks'] = $hooks;
             $hooklist[$modname]['scopes'] = [];
             foreach ($hooks as $event => $info) {
@@ -443,22 +448,23 @@ class xarHooks extends xarEvents
         if (empty($observer)) {
             throw new EmptyParameterException('observer');
         }
+        $xar = xar::getServicesClass();
 
-        $observer_id = xar::mod()->getRegID($observer);
+        $observer_id = $xar->mod()->getRegID($observer);
         if (empty($observer_id)) {
             return;
         }
 
         if (!empty($subject)) {
-            $subject_id = xar::mod()->getRegID($subject);
+            $subject_id = $xar->mod()->getRegID($subject);
             if (empty($subject_id)) {
                 return;
             }
         }
 
         // Get database info
-        $dbconn   = xar::db()->getConn();
-        $xartable = xar::db()->getTables();
+        $dbconn   = $xar->db()->getConn();
+        $xartable = $xar->db()->getTables();
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
@@ -506,15 +512,16 @@ class xarHooks extends xarEvents
         if (isset($itemtype) && !is_numeric($itemtype)) {
             throw new BadParameterException('itemtype', 'Invalid #(1) for xarHooks::getSubjectObservers()');
         }
+        $xar = xar::getServicesClass();
 
-        $subject_id = xar::mod()->getRegID($subject);
+        $subject_id = $xar->mod()->getRegID($subject);
         if (empty($subject_id)) {
             return;
         }
 
         // Get database info
-        $dbconn   = xar::db()->getConn();
-        $xartable = xar::db()->getTables();
+        $dbconn   = $xar->db()->getConn();
+        $xartable = $xar->db()->getTables();
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];

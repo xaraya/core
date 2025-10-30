@@ -50,9 +50,9 @@ class CssconfigMethod extends MethodClass
         $data['configurable'] = $configurable;
 
         // labels and defaults
-        $data['submitbutton'] = $this->var()->prep($this->ml('Submit'));
-        $data['resetbutton'] = $this->var()->prep($this->ml('Reset to defaults'));
-        $data['unmanagednote'] = $this->var()->prep($this->ml('No configurable options are available in unmanaged mode.'));
+        $data['submitbutton'] = \xarVarPrep::forDisplay($this->ml('Submit'));
+        $data['resetbutton'] = \xarVarPrep::forDisplay($this->ml('Reset to defaults'));
+        $data['unmanagednote'] = \xarVarPrep::forDisplay($this->ml('No configurable options are available in unmanaged mode.'));
 
         switch ($component) {
             case "common":
@@ -64,28 +64,28 @@ class CssconfigMethod extends MethodClass
                 if ($data['csslinkoption'] == '') {
                     $this->mod()->setVar('csslinkoption', 'static');
                     if (file_exists($cssfilepath . 'core.css')) {
-                        $data['currentcssfile'] = $this->var()->prep($cssfilepath . 'core.css');
+                        $data['currentcssfile'] = \xarVarPrep::forDisplay($cssfilepath . 'core.css');
                     } else {
-                        $data['currentcssfile'] = $this->var()->prep($filemissing);
+                        $data['currentcssfile'] = \xarVarPrep::forDisplay($filemissing);
                     }
                 } elseif ($data['csslinkoption'] == 'static') {
                     if (file_exists($cssfilepath . '/core.css')) {
-                        $data['currentcssfile'] = $this->var()->prep($cssfilepath . 'core.css');
+                        $data['currentcssfile'] = \xarVarPrep::forDisplay($cssfilepath . 'core.css');
                         $handle = fopen($cssfilepath . '/core.css', 'r');
                         $data['csssource'] = fread($handle, filesize($cssfilepath . '/core.css'));
                         fclose($handle);
                     } else {
-                        $data['currentcssfile'] = $this->var()->prep($filemissing);
+                        $data['currentcssfile'] = \xarVarPrep::forDisplay($filemissing);
                     }
                 } elseif ($data['csslinkoption'] == 'dynamic') {
                     if (file_exists($cssfilepath . 'corecss.php')) {
-                        $data['currentcssfile'] = $this->var()->prep($cssfilepath . 'corecss.php');
+                        $data['currentcssfile'] = \xarVarPrep::forDisplay($cssfilepath . 'corecss.php');
                         $data['csssource'] = $this->mod()->getVar('corecss');
                     } else {
-                        $data['currentcssfile'] = $this->var()->prep($filemissing);
+                        $data['currentcssfile'] = \xarVarPrep::forDisplay($filemissing);
                     }
                 } else {
-                    $data['currentcssfile'] = $this->var()->prep($notlinked);
+                    $data['currentcssfile'] = \xarVarPrep::forDisplay($notlinked);
                 }
 
 

@@ -102,7 +102,7 @@ class AdminApi extends AdminApiClass
             throw new EmptyParameterException('directory or initfunc');
         }
 
-        $osDirectory = $this->var()->prepPath($directory);
+        $osDirectory = \xarVarPrep::forOS($directory);
         $modInitFile = sys::code() . 'modules/' . $osDirectory . '/xarinit.php';
 
 

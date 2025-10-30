@@ -77,7 +77,7 @@ class Themes_MetaBlock extends BasicBlock
                 $metatags[] = [
                     'type' => 'name',
                     'value' => 'author',
-                    'content' => $this->var()->prep($author),
+                    'content' => \xarVarPrep::forDisplay($author),
                     'lang' => '',
                     'dir' => '',
                     'scheme' => '',
@@ -137,7 +137,7 @@ class Themes_MetaBlock extends BasicBlock
                     $metatags[] = [
                         'type' => 'name',
                         'value' => 'DC.title',
-                        'content' => $this->var()->prep($author),
+                        'content' => \xarVarPrep::forDisplay($author),
                         'lang' => '',
                         'dir' => '',
                         'scheme' => '',
@@ -173,7 +173,7 @@ class Themes_MetaBlock extends BasicBlock
                 $author = $this->mod('themes')->getVar('SiteName');
                 // upgrades from 2.2.0 go here...
                 $linktags = [
-                    ['rel' => 'author', 'href' => !empty($data['authorpage']) ? $data['authorpage'] : '[baseurl]', 'title' => $this->var()->prep($author), 'type' => 'text/html'],
+                    ['rel' => 'author', 'href' => !empty($data['authorpage']) ? $data['authorpage'] : '[baseurl]', 'title' => \xarVarPrep::forDisplay($author), 'type' => 'text/html'],
                     ['rel' => 'copyright', 'href' => !empty($data['copyrightpage']) ? $data['copyrightpage'] : '', 'title' => '', 'type' => 'text/html'],
                     ['rel' => 'help', 'href' => !empty($data['helppage']) ? $data['helppage'] : '', 'title' => '', 'type' => 'text/html'],
                     ['rel' => 'glossary', 'href' => !empty($data['glossary']) ? $data['glossary'] : '', 'title' => '', 'type' => 'text/html'],
@@ -308,7 +308,7 @@ class Themes_MetaBlock extends BasicBlock
             }
         } else {
             // regular url, prepped for xml display if necessary
-            $decoded_url = xarMod::$genXmlUrls ? $this->var()->prep($url) : $url;
+            $decoded_url = xarMod::$genXmlUrls ? \xarVarPrep::forDisplay($url) : $url;
         }
 
         return $decoded_url;
@@ -328,7 +328,7 @@ class Themes_MetaBlock extends BasicBlock
         $metatags[] = [
             'type' => 'name',
             'value' => 'author',
-            'content' => $this->var()->prep($author),
+            'content' => \xarVarPrep::forDisplay($author),
             'lang' => '',
             'dir' => '',
             'scheme' => '',
@@ -385,7 +385,7 @@ class Themes_MetaBlock extends BasicBlock
     {
         $author = $this->mod('themes')->getVar('SiteName');
         $linktags = [
-            ['rel' => 'author', 'href' => '[baseurl]', 'title' => $this->var()->prep($author), 'type' => 'text/html'],
+            ['rel' => 'author', 'href' => '[baseurl]', 'title' => \xarVarPrep::forDisplay($author), 'type' => 'text/html'],
             ['rel' => 'copyright', 'href' => '', 'title' => '', 'type' => 'text/html'],
             ['rel' => 'help', 'href' => '', 'title' => '', 'type' => 'text/html'],
             ['rel' => 'glossary', 'href' => '', 'title' => '', 'type' => 'text/html'],

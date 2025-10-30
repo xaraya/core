@@ -57,7 +57,6 @@ class ModuleinlineMethod extends MethodClass
         }
 
         // @fixme replace with right javascript code or drop function
-        //return xarTplAddJavaScript($position, 'code', $code, $index);
         return $this->mod()->apiFunc('themes', 'user', 'registerjs', ['position' => $position, 'code' => $code, 'index' => $index]);
     }
 }

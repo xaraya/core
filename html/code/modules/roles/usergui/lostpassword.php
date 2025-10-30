@@ -53,7 +53,7 @@ class LostpasswordMethod extends MethodClass
             return true;
         }
 
-        $this->tpl()->setPageTitle($this->var()->prep($this->ml('Lost Password')));
+        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($this->ml('Lost Password')));
 
         $this->var()->find('phase', $phase, 'str:1:100', 'request');
 

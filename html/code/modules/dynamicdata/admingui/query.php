@@ -419,24 +419,24 @@ class QueryMethod extends MethodClass
                 }
             }
             if (!empty($fieldlist)) {
-                $data['sample'] .= 'fieldlist="' . $this->var()->prep(join(',', $fieldlist)) . '" ';
+                $data['sample'] .= 'fieldlist="' . \xarVarPrep::forDisplay(join(',', $fieldlist)) . '" ';
             }
             if (!empty($whereclause)) {
-                $data['sample'] .= 'where="' . $this->var()->prep(addslashes($whereclause)) . '" ';
+                $data['sample'] .= 'where="' . \xarVarPrep::forDisplay(addslashes($whereclause)) . '" ';
             }
             if (!empty($grouplist) && count($grouplist) > 0) {
-                $data['sample'] .= 'groupby="' . $this->var()->prep(join(',', $grouplist)) . '" ';
+                $data['sample'] .= 'groupby="' . \xarVarPrep::forDisplay(join(',', $grouplist)) . '" ';
             }
             if (!empty($sortlist) && count($sortlist) > 0) {
-                $data['sample'] .= 'sort="' . $this->var()->prep(join(',', $sortlist)) . '" ';
+                $data['sample'] .= 'sort="' . \xarVarPrep::forDisplay(join(',', $sortlist)) . '" ';
             }
             if (!empty($cache)) {
-                $data['sample'] .= 'cache="' . $this->var()->prep($cache) . '" ';
+                $data['sample'] .= 'cache="' . \xarVarPrep::forDisplay($cache) . '" ';
             }
             $data['sample'] .= 'layout="list" ';
             $data['sample'] .= 'linkfield="N/A" ';
-            $data['sample'] .= 'numitems="' . $this->var()->prep($numitems) . '" ';
-            $data['sample'] .= 'startnum="' . $this->var()->prep($startnum) . '" ';
+            $data['sample'] .= 'numitems="' . \xarVarPrep::forDisplay($numitems) . '" ';
+            $data['sample'] .= 'startnum="' . \xarVarPrep::forDisplay($startnum) . '" ';
             $data['sample'] .= '/&gt;';
             $this->session()->setVar('DynamicData.LastQuery', $newquery);
         } else {

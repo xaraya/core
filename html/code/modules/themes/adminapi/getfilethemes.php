@@ -79,7 +79,7 @@ class GetfilethemesMethod extends MethodClass
                         }
 
                         // TODO: beautify :-)
-                        if (!isset($regId) || $this->var()->prepPath($directory) != $themeOsDir) {
+                        if (!isset($regId) || \xarVarPrep::forOS($directory) != $themeOsDir) {
                             $this->session()->setVar(
                                 'errormsg',
                                 "Theme '$name' exists in $basedir/$themeOsDir "

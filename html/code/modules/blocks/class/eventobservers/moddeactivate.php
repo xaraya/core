@@ -26,6 +26,7 @@ class BlocksModDeactivateObserver extends EventObserver implements ixarEventObse
     public $module = 'blocks';
     public function notify(ixarEventSubject $subject)
     {
+        $xar = xar::getServicesClass();
         $modName = $subject->getArgs();
         if (xarCache::isOutputCacheEnabled()) {
             if (xarOutputCache::isBlockCacheEnabled()) {
@@ -34,7 +35,7 @@ class BlocksModDeactivateObserver extends EventObserver implements ixarEventObse
             }
         }
         // refresh block types
-        xar::mod()->apiFunc(
+        $xar->mod()->apiFunc(
             'blocks',
             'types',
             'refresh',

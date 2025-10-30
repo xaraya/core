@@ -97,9 +97,9 @@ class PreValidation extends ValueValidations
                         break;
                     case 'lower': $subject = strtolower($subject);
                         break;
-                    case 'html': $subject = xar::var()->prepHTML($subject);
+                    case 'html': $subject = xarVarPrep::htmlDisplay($subject);
                         break;
-                    case 'display': $subject = xar::var()->prep($subject);
+                    case 'display': $subject = xarVarPrep::forDisplay($subject);
                         break;
                     case 'store':
                     case 'sql':

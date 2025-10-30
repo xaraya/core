@@ -7,7 +7,7 @@
  * @subpackage themes
  * @copyright see the html/credits.html file in this release
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
@@ -27,6 +27,7 @@ use Xaraya\Services\xar;
 **/
 class xarJS extends xarObject
 {
+    public const CACHE_SCOPE = 'Themes.JS';
     // the name of the module and the modvar to use for storing this object
     public const STORAGE_MODULE           = 'themes';
     public const STORAGE_VARIABLE         = 'js.libs';
@@ -47,10 +48,10 @@ class xarJS extends xarObject
     public const LIB_PLUGIN_XML           = 'xarplugin.xml';
 
     // private properties - these are discarded when the object goes out of scope
-    // this singleton instance
+    // this singleton instance belongs with static services class (or service in it)
     private static $instance;
-    // the queue of js
-    public static $js;
+    // the queue of js belongs to the instance
+    public $js;
 
     // public properties - these are stored when the property goes out of scope
     // array of lib objects
@@ -69,6 +70,15 @@ class xarJS extends xarObject
     // avoid refreshing on each unserialize
     public $refreshed  = false;
     private $expires    = 86400; // One day
+    protected $xarServices = null;
+
+    protected function getServicesClass()
+    {
+        if (!isset($this->xarServices)) {
+            $this->xarServices = xar::getServicesClass();
+        }
+        return $this->xarServices;
+    }
 
     /**
      * Magic methods to make this object persistent
@@ -154,16 +164,17 @@ class xarJS extends xarObject
             //xar::log()->debug('xarJS::__destruct: NOT saving modvars');
             return;
         }
-        xar::log()->debug('xarJS::__destruct: saving modvars');
+        $xar = $this->getServicesClass();
+        $xar->log()->debug('xarJS::__destruct: saving modvars');
         // basically, we serialize and set this object as a modvar
-        // xar::mod()->setVar can be a little flaky,
+        // $xar->mod()->setVar can be a little flaky,
         // this workaround seems to do the trick
         // NOTE: when we call serialize here, the __sleep() magic method is called
         try {
-            xar::mod(xarJS::STORAGE_MODULE)->setVar(xarJS::STORAGE_VARIABLE, serialize($this));
+            $xar->mod(xarJS::STORAGE_MODULE)->setVar(xarJS::STORAGE_VARIABLE, serialize($this));
         } catch (Exception $e) {
-            xar::mod(xarJS::STORAGE_MODULE)->delVar(xarJS::STORAGE_VARIABLE);
-            xar::mod(xarJS::STORAGE_MODULE)->setVar(xarJS::STORAGE_VARIABLE, serialize($this));
+            $xar->mod(xarJS::STORAGE_MODULE)->delVar(xarJS::STORAGE_VARIABLE);
+            $xar->mod(xarJS::STORAGE_MODULE)->setVar(xarJS::STORAGE_VARIABLE, serialize($this));
         }
     }
 
@@ -192,20 +203,23 @@ class xarJS extends xarObject
     **/
     public static function getInstance()
     {
-        if (!isset(self::$instance)) {
-            xar::log()->debug('xarJS::getInstance: loading modvars');
+        $xar = xar::getServicesClass();
+        if ($xar->mem()->has(self::CACHE_SCOPE, 'instance')) {
+            $instance = $xar->mem()->get(self::CACHE_SCOPE, 'instance');
+            //$xar->log()->debug('xarJS::getInstance: NOT loading modvars');
+        } else {
+            $xar->log()->debug('xarJS::getInstance: loading modvars');
             // try unserializing the stored modvar
-            self::$instance = @unserialize(xar::mod(xarJS::STORAGE_MODULE)->getVar(xarJS::STORAGE_VARIABLE) ?? '');
+            $instance = @unserialize($xar->mod(xarJS::STORAGE_MODULE)->getVar(xarJS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
-            if (empty(self::$instance)) {
+            if (empty($instance)) {
                 $c = __CLASS__;
                 // this is the one and only time the __construct() method will be run
-                self::$instance = new $c();
+                $instance = new $c();
             }
-        } else {
-            //xar::log()->debug('xarJS::getInstance: NOT loading modvars');
+            $xar->mem()->set(self::CACHE_SCOPE, 'instance', $instance);
         }
-        return self::$instance;
+        return $instance;
     }
 
     /**
@@ -223,25 +237,26 @@ class xarJS extends xarObject
     **/
     public function refresh()
     {
+        $xar = $this->getServicesClass();
         // now find all libs in the filesystem
         // we want to look in all active themes
         $filter = ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE];
-        $themes = xar::mod()->apiFunc('themes', 'admin', 'getlist', $filter);
+        $themes = $xar->mod()->apiFunc('themes', 'admin', 'getlist', $filter);
         // we want to look in all active modules
-        $modules = xar::mod()->apiFunc(
+        $modules = $xar->mod()->apiFunc(
             'modules',
             'admin',
             'getlist',
             ['filter' => ['State' => xarMod::STATE_ACTIVE]]
         );
         // we want to look in all properties
-        $properties = xar::mod()->apiFunc('dynamicdata', 'user', 'getproptypes');
+        $properties = $xar->mod()->apiFunc('dynamicdata', 'user', 'getproptypes');
 
         // set default paths and filenames
-        $baseDir     = xar::tpl()->getBaseDir();
-        $themeDir    = xar::tpl()->getThemeDir();
-        $themeName   = xar::tpl()->getThemeName();
-        $commonDir   = xar::tpl()->getThemeDir('common');
+        $baseDir     = $xar->tpl()->getBaseDir();
+        $themeDir    = $xar->tpl()->getThemeDir();
+        $themeName   = $xar->tpl()->getThemeName();
+        $commonDir   = $xar->tpl()->getThemeDir('common');
         $codeDir     = sys::code();
         $libBase     = xarJS::LIB_BASE;
         $libXml      = xarJS::LIB_XML;
@@ -286,7 +301,7 @@ class xarJS extends xarObject
             if (!is_dir($path)) {
                 continue;
             }
-            //xar::log()->debug('xarJS::refresh: looking in ' . $path);
+            //$xar->log()->debug('xarJS::refresh: looking in ' . $path);
             $folders = $this->getFolders($path, 1);
             if (empty($folders)) {
                 continue;
@@ -450,6 +465,7 @@ class xarJS extends xarObject
                 $scope = 'theme';
             }
         }
+        $xar = $this->getServicesClass();
         // validate scope param
         switch ($scope) {
             case 'theme':
@@ -466,14 +482,14 @@ class xarJS extends xarObject
                 }
                 // fall back to current block module calling the tag
                 if (empty($module)) {
-                    $module = xar::mem()->get('Security.Variables', 'currentmodule');
+                    $module = $xar->mem()->get('Security.Variables', 'currentmodule');
                 }
                 // block scope falls through to module validation
                 // no break
             case 'module':
                 // fall back to current module calling the tag
                 if (empty($module)) {
-                    $module = xar::mod()->getName();
+                    $module = $xar->mod()->getName();
                 }
                 // got to have a module
                 if (empty($module)) {
@@ -539,7 +555,7 @@ class xarJS extends xarObject
 
                 $info = $this->getPluginInfo($lib, $plugin, $version, $file, $style);
                 if ($info['origin'] == 'local') {
-                    $src = xar::ctl()->getBaseURL() . $info['src'];
+                    $src = $xar->ctl()->getBaseURL() . $info['src'];
                 } else {
                     $src = $info['src'];
                 }
@@ -734,7 +750,7 @@ class xarJS extends xarObject
                 if (!empty($webDir) && strpos($relPath, $webDir) === 0) {
                     $relPath = substr($relPath, strlen($webDir));
                 }
-                $filePath = xar::ctl()->getBaseURL() . $relPath;
+                $filePath = $xar->ctl()->getBaseURL() . $relPath;
 
                 if (!empty($params)) {
                     $filePath .= '?' . $params;
@@ -776,12 +792,13 @@ class xarJS extends xarObject
         if (empty($position) || empty($type) || empty($scope) || empty($data) || empty($tag)) {
             return;
         }
+        $xar = $this->getServicesClass();
 
         // keep track of javascript when we're caching
-        xarCache::addJavascript($tag);
+        $xar->cache()->addJavascript($tag);
 
         // init the queue
-        if (!isset(self::$js)) {
+        if (!isset($this->js)) {
             // scope rendering order
             $scopes = [
                 'theme' => [],
@@ -799,7 +816,7 @@ class xarJS extends xarObject
             ];
 
             // positions
-            self::$js = [
+            $this->js = [
                 'head' => $types,
                 'body' => $types,
             ];
@@ -807,7 +824,7 @@ class xarJS extends xarObject
             unset($types);
         }
         // skip unknown position/type/scope (for now)
-        if (!isset(self::$js[$position][$type][$scope])) {
+        if (!isset($this->js[$position][$type][$scope])) {
             return;
         }
 
@@ -816,7 +833,7 @@ class xarJS extends xarObject
             $index = md5($data);
         }
 
-        self::$js[$position][$type][$scope][$index] = $tag;
+        $this->js[$position][$type][$scope][$index] = $tag;
         return true;
     }
 
@@ -838,16 +855,16 @@ class xarJS extends xarObject
         extract($args);
         $javascript = [];
         if (!empty($position) && !empty($type) && !empty($scope)
-            && isset(self::$js[$position][$type][$scope])) {
-            $javascript[$position][$type][$scope] = self::$js[$position][$type][$scope];
+            && isset($this->js[$position][$type][$scope])) {
+            $javascript[$position][$type][$scope] = $this->js[$position][$type][$scope];
         } elseif (!empty($position) && !empty($type)
-            && isset(self::$js[$position][$type])) {
-            $javascript[$position][$type] = self::$js[$position][$type];
+            && isset($this->js[$position][$type])) {
+            $javascript[$position][$type] = $this->js[$position][$type];
         } elseif (!empty($position)
-            && isset(self::$js[$position])) {
-            $javascript[$position] = self::$js[$position];
-        } elseif (isset(self::$js)) {
-            $javascript = self::$js;
+            && isset($this->js[$position])) {
+            $javascript[$position] = $this->js[$position];
+        } elseif (isset($this->js)) {
+            $javascript = $this->js;
         }
         if (empty($javascript)) {
             return;
@@ -875,9 +892,10 @@ class xarJS extends xarObject
         if (empty($javascript)) {
             return '';
         }
+        $xar = $this->getServicesClass();
         $args['javascript'] = $javascript;
         $args['comments'] = !empty($args['comments']);
-        return xar::tpl()->module('themes', 'javascript', 'render', $args);
+        return $xar->tpl()->module('themes', 'javascript', 'render', $args);
     }
 
     /**
@@ -901,10 +919,11 @@ class xarJS extends xarObject
         if (empty($scope) || empty($file) || empty($base)) {
             return;
         }
+        $xar = $this->getServicesClass();
 
         // set common paths to look in
-        $themeDir = xar::tpl()->getThemeDir();
-        $commonDir = xar::tpl()->getThemeDir('common');
+        $themeDir = $xar->tpl()->getThemeDir();
+        $commonDir = $xar->tpl()->getThemeDir('common');
         $codeDir = sys::code();
 
         $paths = [];
@@ -926,9 +945,9 @@ class xarJS extends xarObject
                 break;
             case 'module':
                 if (empty($package)) {
-                    $package = xar::mod()->getName();
+                    $package = $xar->mod()->getName();
                 }
-                $modInfo = xar::mod()->getBaseInfo($package);
+                $modInfo = $xar->mod()->getBaseInfo($package);
                 if (empty($modInfo)) {
                     return;
                 }
@@ -971,9 +990,9 @@ class xarJS extends xarObject
         }
 
         // Debug display
-        if (xar::mod('themes')->getVar('debugmode') && xar::user()->isDebugAdmin()) {
+        if ($xar->mod('themes')->getVar('debugmode') && $xar->user()->isDebugAdmin()) {
             foreach ($paths as $path) {
-                echo xar::ml('Possible location: ') . $path . "<br/>";
+                echo $xar->ml('Possible location: ') . $path . "<br/>";
             }
         }
 
@@ -984,8 +1003,8 @@ class xarJS extends xarObject
             }
             $filePath = $path;
             // Debug display
-            if (xar::mod('themes')->getVar('debugmode') && xar::user()->isDebugAdmin()) {
-                echo "<b>" . xar::ml('Chosen: ') . $path . "</b><br/>";
+            if ($xar->mod('themes')->getVar('debugmode') && $xar->user()->isDebugAdmin()) {
+                echo "<b>" . $xar->ml('Chosen: ') . $path . "</b><br/>";
             }
             break;
         }
@@ -1180,17 +1199,27 @@ class xarJSLib extends xarObject
     public $styles        = []; // all styles
     public $plugins       = []; // all plugins
     public $templates     = []; // all templates
+    protected $xarServices = null;
+
+    protected function getServicesClass()
+    {
+        if (!isset($this->xarServices)) {
+            $this->xarServices = xar::getServicesClass();
+        }
+        return $this->xarServices;
+    }
 
     public function __construct($name)
     {
         if (empty($name)) {
             throw new BadParameterException($name, 'Invalid name "#(1)" for xarJSLib');
         }
+        $xar = $this->getServicesClass();
         // first run, populate the library meta data
         $this->name = $name;
         $this->displayname = ucfirst($this->name);
-        $this->description = xar::ml('#(1) JS Library', $this->displayname);
-        $this->osdirectory = xar::var()->prepPath($this->name);
+        $this->description = $xar->ml('#(1) JS Library', $this->displayname);
+        $this->osdirectory = \xarVarPrep::forOS($this->name);
     }
     /**
      * Rebuild the entire cache of meta data for this lib
@@ -1204,29 +1233,30 @@ class xarJSLib extends xarObject
     **/
     public function findFiles()
     {
+        $xar = $this->getServicesClass();
         // we want to look in all active themes
-        $themes = xar::mod()->apiFunc(
+        $themes = $xar->mod()->apiFunc(
             'themes',
             'admin',
             'getlist',
             ['filter' => ['Class' => 2, 'State' => xarTheme::STATE_ACTIVE]]
         );
         // we want to look in all active modules
-        $modules = xar::mod()->apiFunc(
+        $modules = $xar->mod()->apiFunc(
             'modules',
             'admin',
             'getlist',
             ['filter' => ['State' => xarMod::STATE_ACTIVE]]
         );
         // we want to look in all properties
-        $properties = xar::mod()->apiFunc('dynamicdata', 'user', 'getproptypes');
+        $properties = $xar->mod()->apiFunc('dynamicdata', 'user', 'getproptypes');
 
         // set default paths and filenames
         $libName     = $this->name;
-        $baseDir     = xar::tpl()->getBaseDir();
-        $themeDir    = xar::tpl()->getThemeDir();
-        $themeName   = xar::tpl()->getThemeName();
-        $commonDir   = xar::tpl()->getThemeDir('common');
+        $baseDir     = $xar->tpl()->getBaseDir();
+        $themeDir    = $xar->tpl()->getThemeDir();
+        $themeName   = $xar->tpl()->getThemeName();
+        $commonDir   = $xar->tpl()->getThemeDir('common');
         $codeDir     = sys::code();
         $libBase     = xarJS::LIB_BASE;
         $libXml      = xarJS::LIB_XML;

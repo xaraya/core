@@ -101,7 +101,6 @@ class xarSessionLessCache extends xarObject
             sys::import('xaraya.caching.output.autosession');
             xarAutoSessionCache::logStatus('MISS', $autoCachePeriod);
         }
-        return;
     }
 
     /**

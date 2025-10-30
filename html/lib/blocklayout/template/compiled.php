@@ -81,15 +81,16 @@ class CompiledTemplate extends xarObject
                 // This variable will hold the stream contents
                 global $_compiler_output;
 
+                $mem = xar::mem();
                 // Have we already cached this template?
-                if (!xar::mem()->has('template', $this->source)) {
+                if (!$mem->has('template', $this->source)) {
                     // Get the compiled template from the template cache
                     $_compiler_output = file_get_contents($this->fileName);
                     // Stick it in the cache
-                    xar::mem()->set('template', $this->source, $_compiler_output);
+                    $mem->set('template', $this->source, $_compiler_output);
                 } else {
                     // Retrieve the compiled template from cache
-                    $_compiler_output = xar::mem()->get('template', $this->source);
+                    $_compiler_output = $mem->get('template', $this->source);
                 }
 
                 $res = include("var://_compiler_output");

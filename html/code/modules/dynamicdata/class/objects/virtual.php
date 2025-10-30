@@ -455,17 +455,18 @@ class VirtualObjectFactory extends xarObject
         if (static::$loaded) {
             return;
         }
-        if (!xar::mem()->load('DynamicData', 'PropertyTypes')) {
+        $xar = xar::getServicesClass();
+        if (!$xar->mem()->load('DynamicData', 'PropertyTypes')) {
             throw new Exception('No property types cached yet - you need to export at least 1 object to php');
         }
-        if (!xar::mem()->load('DynamicData', 'Configurations')) {
+        if (!$xar->mem()->load('DynamicData', 'Configurations')) {
             throw new Exception('No configurations cached yet - you need to export at least 1 object to php');
         }
-        if (!xar::mem()->load('DynamicData', 'Databases')) {
+        if (!$xar->mem()->load('DynamicData', 'Databases')) {
             throw new Exception('No databases cached yet - you need to visit DD > Utilities > DB Connections once');
         }
         // @todo adapt xar::mod() preload Vars to allow preloading from cache?
-        //if (!xar::mem()->load('Mod.Variables.dynamicdata')) {  // 'databases'
+        //if (!$xar->mem()->load('Mod.Variables.dynamicdata')) {  // 'databases'
         //    throw new Exception('No module variables cached yet - you need to export at least 1 object to php');
         //}
         static::$loaded = true;
@@ -478,16 +479,17 @@ class VirtualObjectFactory extends xarObject
      */
     public static function saveCoreCache()
     {
-        xar::mem()->save('DynamicData', 'PropertyTypes', __METHOD__);
-        xar::mem()->save('DynamicData', 'Configurations', __METHOD__);
+        $xar = xar::getServicesClass();
+        $xar->mem()->save('DynamicData', 'PropertyTypes', __METHOD__);
+        $xar->mem()->save('DynamicData', 'Configurations', __METHOD__);
         // Saved in DD > Utilities > DB Connections = modules/dynamicdata/admingui/dbconfig.php
         // for all modules - see UtilApi::getAllDatabases()
-        //xar::mem()->save('DynamicData', 'Databases');
+        //$xar->mem()->save('DynamicData', 'Databases');
         // Saved in DD > Modify Configuration = modules/dynamicdata/admingui/modifyconfig.php
         // and DD > Utilities > Test APIs = modules/dynamicdata/admingui/test_apis.php
-        //xar::mod('dynamicdata')->cacheVars();  // 'databases'
+        //$xar->mod('dynamicdata')->cacheVars();  // 'databases'
         // Saved in Base > Modify Configuration = modules/base/admingui/modifyconfig.php
-        //xar::config()->cacheVars();
+        //$xar->config()->cacheVars();
     }
 }
 

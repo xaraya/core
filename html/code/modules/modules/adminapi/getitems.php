@@ -135,7 +135,7 @@ class GetitemsMethod extends MethodClass
                 $item['displayname'] = $this->mod()->getDisplayName($item['name']);
                 $item['displaydescription'] = $this->mod()->getDisplayDescription($item['name']);
                 // Shortcut for os prepared directory
-                $item['osdirectory'] = $this->var()->prepPath($item['directory']);
+                $item['osdirectory'] = \xarVarPrep::forOS($item['directory']);
 
                 $this->mem()->set('Mod.BaseInfos', $item['name'], $item);
 

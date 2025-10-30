@@ -137,9 +137,9 @@ class URLTitleProperty extends TextBoxProperty
             $title = '';
         }
 
-        $data['title']    = $this->var()->prep($title);
-        $data['value']    = isset($value) ? $this->var()->prep($value) : $this->var()->prep($this->value);
-        $data['link']     = $this->var()->prep($link);
+        $data['title']    = xarVarPrep::forDisplay($title);
+        $data['value']    = isset($value) ? xarVarPrep::forDisplay($value) : xarVarPrep::forDisplay($this->value);
+        $data['link']     = xarVarPrep::forDisplay($link);
 
         return parent::showInput($data);
     }
@@ -179,7 +179,7 @@ class URLTitleProperty extends TextBoxProperty
         }
 
         if (!empty($title)) {
-            $title = $this->var()->prep($title);
+            $title = xarVarPrep::forDisplay($title);
         }
 
         $url_parts = parse_url($link);

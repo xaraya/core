@@ -46,7 +46,7 @@ class ModifyconfigMethod extends MethodClass
         $this->var()->find('forwarding_page', $data['forwarding_page'], 'str', $this->mod()->getVar('forwarding_page'));
         $this->var()->find('ask_forward', $data['ask_forward'], 'checkbox', $this->mod()->getVar('ask_forward'));
         if (!empty($data['forwarding_page'])) {
-            $data['forwarding_page'] = $this->var()->prep($data['forwarding_page']);
+            $data['forwarding_page'] = \xarVarPrep::forDisplay($data['forwarding_page']);
         }
 
         $data['module_settings'] = $this->mod()->apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'authsystem']);

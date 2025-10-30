@@ -592,12 +592,13 @@ class xarXMLInstaller extends xarObject
 
     private static function transform($xmlFile, $xslAction = 'display', $xslFile = null)
     {
+        $xar = xar::getServicesClass();
         if (!isset($xmlFile)) {
-            throw new BadParameterException(xar::mls()->translate('No file to transform!'));
+            throw new BadParameterException($xar->mls()->translate('No file to transform!'));
         }
 
         // Get the database type from the connection
-        $databaseType = xar::db()->getType();
+        $databaseType = $xar->db()->getType();
         switch ($databaseType) {
             case 'sqlite3':
             case 'pdosqlite':
@@ -618,20 +619,20 @@ class xarXMLInstaller extends xarObject
                 $databaseType = 'pgsql';
                 break;
             default:
-                throw new Exception(xar::mls()->translate("Unknown database type: '#(1)'", $databaseType));
+                throw new Exception($xar->mls()->translate("Unknown database type: '#(1)'", $databaseType));
         }
 
         if (!isset($xslFile)) {
             $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-' . $databaseType . '.xsl';
         }
         if (!file_exists($xslFile)) {
-            $msg = xar::mls()->translate('The file #(1) was not found', $xslFile);
+            $msg = $xar->mls()->translate('The file #(1) was not found', $xslFile);
             throw new BadParameterException(null, $msg);
         }
         sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
-        $xslProc->setParameter('', 'tableprefix', xar::db()->getPrefix());
+        $xslProc->setParameter('', 'tableprefix', $xar->db()->getPrefix());
         return $xslProc->transform($xmlFile);
     }
 

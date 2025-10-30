@@ -41,8 +41,9 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         if (!empty($this->table)) {
             return $this->table;
         } elseif (class_exists('xarDB')) {
-            $this->dbconn = xar::db()->getConn();
-            $this->table = xar::db()->getPrefix() . '_cache_data';
+            $db = xar::db();
+            $this->dbconn = $db->getConn();
+            $this->table = $db->getPrefix() . '_cache_data';
             return $this->table;
         } else {
             // can't use this storage until the core is loaded !

@@ -411,10 +411,11 @@ class xarTwigTpl extends xarTpl
      */
     public static function findPageTemplate($twig, $themeName, $tplType, $tplName, $pageName)
     {
+        $mem = xar::mem();
         $cachename = "page:$themeName:$tplType:$tplName:$pageName";
         // cache frequently-used sourcefilenames
-        if (xar::mem()->has('Templates.Twig', $cachename)) {
-            return xar::mem()->get('Templates.Twig', $cachename);
+        if ($mem->has('Templates.Twig', $cachename)) {
+            return $mem->get('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -446,7 +447,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xar::mem()->set('Templates.Twig', $cachename, $templateName);
+        $mem->set('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -480,10 +481,11 @@ class xarTwigTpl extends xarTpl
      */
     public static function findBoxTemplate($twig, $themeName, $tplName)
     {
+        $mem = xar::mem();
         $cachename = "box:$themeName:$tplName";
         // cache frequently-used sourcefilenames
-        if (xar::mem()->has('Templates.Twig', $cachename)) {
-            return xar::mem()->get('Templates.Twig', $cachename);
+        if ($mem->has('Templates.Twig', $cachename)) {
+            return $mem->get('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -508,7 +510,7 @@ class xarTwigTpl extends xarTpl
         $templates[] = '@blocks/blocks/block' . $extension;
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xar::mem()->set('Templates.Twig', $cachename, $templateName);
+        $mem->set('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -575,10 +577,11 @@ class xarTwigTpl extends xarTpl
      */
     public static function findModuleTemplate($twig, $themeName, $modName, $modType, $funcName, $tplName)
     {
+        $mem = xar::mem();
         $cachename = "module:$themeName:$modName:$modType:$funcName:$tplName";
         // cache frequently-used sourcefilenames
-        if (xar::mem()->has('Templates.Twig', $cachename)) {
-            return xar::mem()->get('Templates.Twig', $cachename);
+        if ($mem->has('Templates.Twig', $cachename)) {
+            return $mem->get('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -639,7 +642,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xar::mem()->set('Templates.Twig', $cachename, $templateName);
+        $mem->set('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -710,10 +713,11 @@ class xarTwigTpl extends xarTpl
      */
     public static function findBlockTemplate($twig, $themeName, $modName, $blockType, $tplName, $tplBase, $tplModule)
     {
+        $mem = xar::mem();
         $cachename = "block:$themeName:$modName:$blockType:$tplName:$tplBase:$tplModule";
         // cache frequently-used sourcefilenames
-        if (xar::mem()->has('Templates.Twig', $cachename)) {
-            return xar::mem()->get('Templates.Twig', $cachename);
+        if ($mem->has('Templates.Twig', $cachename)) {
+            return $mem->get('Templates.Twig', $cachename);
         }
 
         // use name of blocktype as base unless over-ridden
@@ -735,7 +739,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xar::mem()->set('Templates.Twig', $cachename, $templateName);
+        $mem->set('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
         /**
@@ -802,10 +806,11 @@ class xarTwigTpl extends xarTpl
      */
     public static function findObjectTemplate($twig, $themeName, $modName, $objectName, $tplType, $tplBase)
     {
+        $mem = xar::mem();
         $cachename = "object:$themeName:$modName:$objectName:$tplType:$tplBase";
         // cache frequently-used sourcefilenames
-        if (xar::mem()->has('Templates.Twig', $cachename)) {
-            return xar::mem()->get('Templates.Twig', $cachename);
+        if ($mem->has('Templates.Twig', $cachename)) {
+            return $mem->get('Templates.Twig', $cachename);
         }
 
         // @todo define this in theme config
@@ -839,7 +844,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xar::mem()->set('Templates.Twig', $cachename, $templateName);
+        $mem->set('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }
@@ -907,13 +912,14 @@ class xarTwigTpl extends xarTpl
      */
     public static function findPropertyTemplate($twig, $themeName, $modName, $propertyName, $tplType, $tplBase)
     {
+        $mem = xar::mem();
         $cachename = "property:$themeName:$modName:$propertyName:$tplType:$tplBase";
         // cache frequently-used sourcefilenames
-        if (xar::mem()->has('Templates.Twig', $cachename)) {
-            return xar::mem()->get('Templates.Twig', $cachename);
+        if ($mem->has('Templates.Twig', $cachename)) {
+            return $mem->get('Templates.Twig', $cachename);
         }
         if (!empty($tplBase)) {
-            $tplType = xar::var()->prepPath($tplBase);
+            $tplType = \xarVarPrep::forOS($tplBase);
         }
 
         // @todo define this in theme config
@@ -949,7 +955,7 @@ class xarTwigTpl extends xarTpl
         }
 
         $templateName = static::findTwigTemplate($twig, $templates);
-        xar::mem()->set('Templates.Twig', $cachename, $templateName);
+        $mem->set('Templates.Twig', $cachename, $templateName);
 
         return $templateName;
     }

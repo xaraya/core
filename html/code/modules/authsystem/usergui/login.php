@@ -76,8 +76,8 @@ class LoginMethod extends MethodClass
         if (preg_match('/authsystem/', $redirecturl)) {
             $redirecturl = $redirect;
         }
-        $redirecturl = $this->var()->prepHTML($redirecturl);
-        $rememberme = $this->var()->prepHTML($rememberme);
+        $redirecturl = \xarVarPrep::htmlDisplay($redirecturl);
+        $rememberme = \xarVarPrep::htmlDisplay($rememberme);
 
         // Scan authentication modules and set user state appropriately
         $extAuthentication = false;

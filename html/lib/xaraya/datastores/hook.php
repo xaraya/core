@@ -59,10 +59,11 @@ class HookDataStore extends BasicDataStore
         $itemid = $args['itemid'];
         $modname = $args['modname'];
 
+        $xar = $this->getServicesClass();
         foreach (array_keys($this->fields) as $hook) {
-            if (xar::mod()->isAvailable($hook)) {
+            if ($xar->mod()->isAvailable($hook)) {
                 // TODO: find some more consistent way to do this !
-                $value = xar::mod()->apiFunc(
+                $value = $xar->mod()->apiFunc(
                     $hook,
                     'user',
                     'get',

@@ -93,12 +93,12 @@ class xarPageCache extends xarObject
     public static function getCacheKey($url = null)
     {
         if (empty(self::$cacheStorage)) {
-            return;
+            return null;
         }
 
         // check if this page is suitable for page caching
         if (!(self::checkCachingRules($url))) {
-            return;
+            return null;
         }
 
         // we should be safe for caching now
@@ -311,20 +311,21 @@ class xarPageCache extends xarObject
      *
      *
      * @param  string $cacheKey the key identifying the particular page you want to access
-     * @return boolean|void   true if succeeded, false otherwise
+     * @param int $output = 1 default output content to browser
+     * @return boolean|null|string   true if succeeded, false otherwise, string if output = 0
      */
-    public static function getCached($cacheKey)
+    public static function getCached($cacheKey, $output = 1)
     {
         if (empty(self::$cacheStorage)) {
             return false;
         }
         // we only cache the top-most page in case of nested pages
         if (empty($cacheKey) || $cacheKey != self::$cacheKey) {
-            return;
+            return null;
         }
 
-        // output the content directly to the browser here
-        $result = self::$cacheStorage->getCached($cacheKey, 1);
+        // output the content directly to the browser here with $output = 1
+        $result = self::$cacheStorage->getCached($cacheKey, $output);
 
         return $result;
     }
@@ -347,10 +348,11 @@ class xarPageCache extends xarObject
             return;
         }
 
+        $mem = xar::mem();
         // Check if isCached() or xarSecurity or ... has told not to cache this page
-        if (xar::mem()->has('Page.Caching', 'nocache')) {
+        if ($mem->has('Page.Caching', 'nocache')) {
             // reset for next page request when using second-level cache storage
-            xar::mem()->del('Page.Caching', 'nocache');
+            $mem->del('Page.Caching', 'nocache');
             return;
         }
 

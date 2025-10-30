@@ -74,12 +74,12 @@ class xarBlockCache extends xarObject
     public static function getCacheKey($blockInfo)
     {
         if (empty(self::$cacheStorage)) {
-            return;
+            return null;
         }
 
         // Check if this block is suitable for block caching
         if (!(self::checkCachingRules($blockInfo))) {
-            return;
+            return null;
         }
 
         // we should be safe for caching now

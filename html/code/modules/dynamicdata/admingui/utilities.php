@@ -40,7 +40,7 @@ class UtilitiesMethod extends MethodClass
         extract($args);
         $data ??= [];
         $this->var()->find('q', $data['option'], 'str', 'query');
-        $this->tpl()->setPageTitle($this->var()->prep($this->ml($data['option'])));
+        $this->tpl()->setPageTitle(\xarVarPrep::forDisplay($this->ml($data['option'])));
         $this->ctl()->redirect($this->mod()->getURL('admin', 'import'));
         return true;
     }

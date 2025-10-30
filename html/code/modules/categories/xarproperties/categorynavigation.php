@@ -426,7 +426,7 @@ class CategoryNavigationProperty extends SelectProperty
                                 }
                             }
 
-                            $label = $this->var()->prep($cat['name']);
+                            $label = xarVarPrep::forDisplay($cat['name']);
                             // TODO: now this is a tricky part...
                             $urlargs['catid'] = $cat['cid'];
                             $link = $this->ctl()->getModuleURL(
@@ -482,7 +482,7 @@ class CategoryNavigationProperty extends SelectProperty
                                 }
                             }
 
-                            $label = $this->var()->prep($cat['name']);
+                            $label = xarVarPrep::forDisplay($cat['name']);
                             // TODO: now this is a tricky part...
                             $urlargs['catid'] = $cat['cid'];
                             $link = $this->ctl()->getModuleURL(
@@ -525,7 +525,7 @@ class CategoryNavigationProperty extends SelectProperty
                         $parentid = 0;
                         foreach ($parents as $id => $info) {
                             if (empty($root)) {
-                                $root = $this->var()->prep($info['name']);
+                                $root = xarVarPrep::forDisplay($info['name']);
                             }
                             if ($id = $cid) {
                                 $parentid = $info['parent'];
@@ -538,7 +538,7 @@ class CategoryNavigationProperty extends SelectProperty
                         }
                         if (!empty($parents[$parentid])) {
                             $cat = $parents[$parentid];
-                            $label = $this->var()->prep($cat['name']);
+                            $label = xarVarPrep::forDisplay($cat['name']);
                             $urlargs['catid'] = $cat['cid'];
                             $link = $this->ctl()->getModuleURL(
                                 $urlmodule,
@@ -576,7 +576,7 @@ class CategoryNavigationProperty extends SelectProperty
 
                         // Generate list of sibling categories
                         foreach ($siblings as $cat) {
-                            $label = $this->var()->prep($cat['name']);
+                            $label = xarVarPrep::forDisplay($cat['name']);
                             $urlargs['catid'] = $cat['cid'];
                             $link = $this->ctl()->getModuleURL(
                                 $urlmodule,
@@ -598,7 +598,7 @@ class CategoryNavigationProperty extends SelectProperty
                                 }
                                 if ($data['showchildren'] && !empty($children) && count($children) > 0) {
                                     foreach ($children as $cat) {
-                                        $clabel = $this->var()->prep($cat['name']);
+                                        $clabel = xarVarPrep::forDisplay($cat['name']);
                                         // TODO: now this is a tricky part...
                                         $urlargs['catid'] = $cat['cid'];
                                         $clink = $this->ctl()->getModuleURL(
@@ -664,7 +664,7 @@ class CategoryNavigationProperty extends SelectProperty
                             $urlfunc,
                             $urlargs
                         );
-                        $label = $this->var()->prep($cat['name']);
+                        $label = xarVarPrep::forDisplay($cat['name']);
                         $data['catitems'][] = [
                             'catlabel' => $label,
                             'catid' => $cat['cid'],
@@ -782,7 +782,7 @@ class CategoryNavigationProperty extends SelectProperty
                             }
 
                             // TODO: move the prep to the template.
-                            $label = $this->var()->prep($cat['name']);
+                            $label = xarVarPrep::forDisplay($cat['name']);
                             // TODO: make the link always available to the template, but make the
                             // template use the baseflag to determine whether to display the link
                             // or not.
@@ -812,9 +812,9 @@ class CategoryNavigationProperty extends SelectProperty
                                 // but not always. As it is, the HTML display prep is the wrong one
                                 // to use for an attribute anyway.
                                 if (!empty($cat['description'])) {
-                                    $descriptions[$cid] = $this->var()->prepHTML($cat['description']);
+                                    $descriptions[$cid] = \xarVarPrep::htmlDisplay($cat['description']);
                                 } else {
-                                    $descriptions[$cid] = $this->var()->prep($cat['name']);
+                                    $descriptions[$cid] = xarVarPrep::forDisplay($cat['name']);
                                 }
                                 // Save current category info for icon etc.
                                 if (count($cids) == 1) {
@@ -980,7 +980,7 @@ class CategoryNavigationProperty extends SelectProperty
                             }
                         }
                         if (!empty($curcat['name'])) {
-                            $title = $this->var()->prep($curcat['name']);
+                            $title = xarVarPrep::forDisplay($curcat['name']);
                         }
                         if (!empty($title)) {
                             $this->tpl()->setPageTitle($title);
@@ -991,7 +991,7 @@ class CategoryNavigationProperty extends SelectProperty
                     if (!empty($curcat['image'])) {
                         // find the image in categories (we need to specify the module here)
                         $data['catimage'] = $this->tpl()->getImage($curcat['image'], 'categories');
-                        $data['catname'] = $this->var()->prep($curcat['name']);
+                        $data['catname'] = xarVarPrep::forDisplay($curcat['name']);
                     }
                     if ($data['showchildren'] == 2) {
                         // Get child categories (all sub-levels)
@@ -1008,7 +1008,7 @@ class CategoryNavigationProperty extends SelectProperty
                             if ($info['id'] == $cids[0]) {
                                 continue;
                             }
-                            $label = $this->var()->prep($info['name']);
+                            $label = xarVarPrep::forDisplay($info['name']);
                             $urlargs['catid'] = $info['id'];
                             $link = $this->ctl()->getModuleURL(
                                 $urlmodule,
@@ -1065,7 +1065,7 @@ class CategoryNavigationProperty extends SelectProperty
                                 }
                             }
 
-                            $label = $this->var()->prep($cat['name']);
+                            $label = xarVarPrep::forDisplay($cat['name']);
                             $urlargs['catid'] = $cat['cid'];
                             $link = $this->ctl()->getModuleURL(
                                 $urlmodule,
@@ -1074,7 +1074,7 @@ class CategoryNavigationProperty extends SelectProperty
                                 $urlargs
                             );
                             if (!empty($cat['description']) && $cat['description'] != $cat['name']) {
-                                $descr = $this->var()->prepHTML($cat['description']);
+                                $descr = \xarVarPrep::htmlDisplay($cat['description']);
                             } else {
                                 $descr = '';
                             }

@@ -214,20 +214,21 @@ trait DatabaseTrait
         $modName = $this->getDbModName();
         if (empty(static::$_databases)) {
             $allDatabases = [];
-            if (xar::mem()->has('DynamicData', 'Databases')) {
-                $allDatabases = xar::mem()->get('DynamicData', 'Databases');
+            $xar = xar::getServicesClass();
+            if ($xar->mem()->has('DynamicData', 'Databases')) {
+                $allDatabases = $xar->mem()->get('DynamicData', 'Databases');
             }
             if (!empty($allDatabases[$modName])) {
                 static::$_databases = $allDatabases[$modName];
             } else {
-                $databases = unserialize(xar::mod($modName)->getVar('databases') ?? '');
+                $databases = unserialize($xar->mod($modName)->getVar('databases') ?? '');
                 if (empty($databases)) {
                     static::$_databases = [];
                 } else {
                     static::$_databases = $databases;
                 }
                 $allDatabases[$modName] = static::$_databases;
-                xar::mem()->set('DynamicData', 'Databases', $allDatabases);
+                $xar->mem()->set('DynamicData', 'Databases', $allDatabases);
             }
         }
         return static::$_databases;
@@ -266,16 +267,17 @@ trait DatabaseTrait
     {
         $databases ??= static::$_databases;
         $modName ??= $this->getDbModName();
-        xar::mod($modName)->setVar('databases', serialize($databases));
+        $xar = xar::getServicesClass();
+        $xar->mod($modName)->setVar('databases', serialize($databases));
         $allDatabases = [];
-        if (xar::mem()->has('DynamicData', 'Databases')) {
-            $allDatabases = xar::mem()->get('DynamicData', 'Databases');
+        if ($xar->mem()->has('DynamicData', 'Databases')) {
+            $allDatabases = $xar->mem()->get('DynamicData', 'Databases');
         }
         $allDatabases[$modName] = $databases;
-        xar::mem()->set('DynamicData', 'Databases', $allDatabases);
+        $xar->mem()->set('DynamicData', 'Databases', $allDatabases);
         // Saved in DD > Utilities > DB Connections = modules/dynamicdata/admingui/dbconfig.php
         // for all modules - see UtilApi::getAllDatabases()
-        //xar::mem()->save('DynamicData', 'Databases');
+        //$xar->mem()->save('DynamicData', 'Databases');
     }
 
     /**
@@ -351,27 +353,28 @@ trait DatabaseTrait
         if (count($this->getDatabases()) === 1) {
             return array_key_first(static::$_databases);
         }
+        $xar = xar::getServicesClass();
         // we need 'module_itemvars' and/or 'module_vars' tables below
         if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
-            xar::mod()->loadDbInfo('modules');
+            $xar->mod()->loadDbInfo('modules');
         }
         $modName = $this->getDbModName();
         if (!empty($context)) {
             $userId = $context->getUserId();
             if (!empty($userId)) {
                 // @todo use user context?
-                $name = xar::mod($modName)->getUserVar('dbName', $userId);
+                $name = $xar->mod($modName)->getUserVar('dbName', $userId);
             } else {
                 // @todo use session context?
-                $name = xar::session()->getVar($modName . ':dbName');
+                $name = $xar->session()->getVar($modName . ':dbName');
             }
-        } elseif (xar::user()->isLoggedIn()) {
-            $name = xar::mod($modName)->getUserVar('dbName');
+        } elseif ($xar->user()->isLoggedIn()) {
+            $name = $xar->mod($modName)->getUserVar('dbName');
         } else {
-            $name = xar::session()->getVar($modName . ':dbName');
+            $name = $xar->session()->getVar($modName . ':dbName');
         }
         if (!isset($name)) {
-            $name = xar::mod($modName)->getVar('dbName');
+            $name = $xar->mod($modName)->getVar('dbName');
         }
         return $name;
     }
@@ -385,19 +388,20 @@ trait DatabaseTrait
     public function setCurrentDatabase($name = '', $context = null)
     {
         $modName = $this->getDbModName();
+        $xar = xar::getServicesClass();
         if (!empty($context)) {
             $userId = $context->getUserId();
             if (!empty($userId)) {
                 // @todo use user context?
-                xar::mod($modName)->setUserVar('dbName', $name, $userId);
+                $xar->mod($modName)->setUserVar('dbName', $name, $userId);
             } else {
                 // @todo use session context?
-                xar::session()->setVar($modName . ':dbName', $name);
+                $xar->session()->setVar($modName . ':dbName', $name);
             }
-        } elseif (xar::user()->isLoggedIn()) {
-            xar::mod($modName)->setUserVar('dbName', $name);
+        } elseif ($xar->user()->isLoggedIn()) {
+            $xar->mod($modName)->setUserVar('dbName', $name);
         } else {
-            xar::session()->setVar($modName . ':dbName', $name);
+            $xar->session()->setVar($modName . ':dbName', $name);
         }
     }
 
@@ -416,9 +420,10 @@ trait DatabaseTrait
         if (!is_numeric($dbConnIndex)) {
             return ExternalDatabase::listTableNames($dbConnIndex);
         }
+        $xar = xar::getServicesClass();
         // @todo re-use Database Service to get connection here
         /** @var Connection $conn */
-        $conn = xar::db()->getConn($dbConnIndex);
+        $conn = $xar->db()->getConn($dbConnIndex);
         $dbInfo = $conn->getDatabaseInfo();
         $tables = $dbInfo->getTables();
         foreach ($tables as $tblInfo) {

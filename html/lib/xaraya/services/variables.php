@@ -109,6 +109,7 @@ interface VariablesInterface extends ServiceInterface
      *
      * @param string ...$args
      * @return mixed
+     * @deprecated 2.8.4 use xarVarPrep::forDisplay() instead
      */
     public function prep(...$args);
 
@@ -117,6 +118,7 @@ interface VariablesInterface extends ServiceInterface
      *
      * @param string ...$args
      * @return mixed
+     * @deprecated 2.8.4 use xarVarPrep::htmlDisplay() instead
      */
     public function prepHTML(...$args);
 
@@ -125,6 +127,7 @@ interface VariablesInterface extends ServiceInterface
      *
      * @param string ...$args
      * @return mixed
+     * @deprecated 2.8.4 use xarVarPrep::emailDisplay() instead
      */
     public function prepEmail(...$args);
 
@@ -133,15 +136,23 @@ interface VariablesInterface extends ServiceInterface
      *
      * @param string ...$args
      * @return mixed
+     * @deprecated 2.8.4 use xarVarPrep::forOS() instead
      */
     public function prepPath(...$args);
 
+    /** @deprecated 2.8.4 use xar::mem()->has() instead */
     public function isCached(string $scope, string $name): bool;
+    /** @deprecated 2.8.4 use xar::mem()->get() instead */
     public function getCached(string $scope, string $name): mixed;
+    /** @deprecated 2.8.4 use xar::mem()->set() instead */
     public function setCached(string $scope, string $name, mixed $value): void;
+    /** @deprecated 2.8.4 use xar::mem()->del() instead */
     public function delCached(string $scope, string $name): void;
+    /** @deprecated 2.8.4 use xar::mem()->hasPreload() instead */
     public function hasPreload(string $scope, ?string $name = null): bool;
+    /** @deprecated 2.8.4 use xar::mem()->load() instead */
     public function loadCached(string $scope, ?string $name = null): bool;
+    /** @deprecated 2.8.4 use xar::mem()->save() instead */
     public function saveCached(string $scope, ?string $name = null, ?string $source = null): bool;
 }
 
@@ -326,6 +337,7 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
+     * @deprecated 2.8.4 use xarVarPrep::forDisplay() instead
      */
     public function prep(...$args)
     {
@@ -337,6 +349,7 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
+     * @deprecated 2.8.4 use xarVarPrep::htmlDisplay() instead
      */
     public function prepHTML(...$args)
     {
@@ -348,6 +361,7 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
+     * @deprecated 2.8.4 use xarVarPrep::emailDisplay() instead
      */
     public function prepEmail(...$args)
     {
@@ -359,6 +373,7 @@ trait VariablesTrait
      *
      * @param string ...$args
      * @return mixed
+     * @deprecated 2.8.4 use xarVarPrep::forOS() instead
      */
     public function prepPath(...$args)
     {

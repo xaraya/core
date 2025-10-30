@@ -70,6 +70,16 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     private ?string $sessionId = null;  // The id assigned to us.
     private string $ipAddress = '';     // IP-address belonging to this session.
     private ?int $lastSaved = null;     // When was this session last saved ?
+    protected $xarDb = null;         // Access database service with instance methods
+
+    /**
+     * Access database service
+     */
+    protected function db()
+    {
+        $this->xarDb ??= xar::db();
+        return $this->xarDb;
+    }
 
     /**
      * Constructor for the session handler
@@ -86,12 +96,12 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
             return;
         }
         // Register tables this subsystem uses
-        $tables = ['session_info' => xar::db()->getPrefix() . '_session_info'];
-        xar::db()->importTables($tables);
+        $tables = ['session_info' => $this->db()->getPrefix() . '_session_info'];
+        $this->db()->importTables($tables);
 
         // Set up our container.
-        $this->db = xar::db()->getConn();
-        $tbls     = xar::db()->getTables();
+        $this->db = $this->db()->getConn();
+        $tbls     = $this->db()->getTables();
         $this->tbl = $tbls['session_info'];
 
         // Set up the environment
@@ -382,7 +392,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     {
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->tbl WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
-        $result = $stmt->executeQuery([$sessionId], xar::db()->getFetchNum());
+        $result = $stmt->executeQuery([$sessionId], $this->db()->getFetchNum());
 
         if ($result->first()) {
             // Already have this session
@@ -575,8 +585,8 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
      */
     public function setUserInfo($userId, $rememberSession)
     {
-        $dbconn   = xar::db()->getConn();
-        $xartable = xar::db()->getTables();
+        $dbconn   = $this->db()->getConn();
+        $xartable = $this->db()->getTables();
 
         $sessioninfoTable = $xartable['session_info'];
         try {

@@ -357,6 +357,11 @@ trait ParentServicesTrait
      * Access xar*Cache::* Caching methods (getModuleKey, getObjectKey, ...)
      *
      * Available methods:
+     * - getPageKey()
+     * - hasPage()
+     * - sendPage() - output to browser
+     * - getPage()
+     * - setPage()
      * - getModuleKey()
      * - hasModule()
      * - getModule()

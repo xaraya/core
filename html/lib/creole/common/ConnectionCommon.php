@@ -77,12 +77,22 @@ abstract class ConnectionCommon
     /* XARAYA MODIFICATION */
     // Adodb has a method on a connection(!!) for affected rows
     protected $affected_rows = 0;
-    /* END XARAYA MODIFICATION */
 
     /**
      *  A reference to the last query performed
      */
     protected $lastQuery;
+
+    protected $xarLog = null;
+
+    protected function log()
+    {
+        if (!isset($this->xarLog)) {
+            $this->xarLog = xar::log();
+        }
+        return $this->xarLog;
+    }
+    /* END XARAYA MODIFICATION */
 
     /**
      * This "magic" method is invoked upon serialize() and works in tandem with the __wakeup()
@@ -185,7 +195,7 @@ abstract class ConnectionCommon
             $this->setSavepoint($savepointIdentifier);
         }
         $this->transactionOpcount++;
-        xar::log()->info("DB: starting transaction [" . $this->transactionOpcount . "]");
+        $this->log()->info("DB: starting transaction [" . $this->transactionOpcount . "]");
     }
 
     /**
@@ -196,11 +206,11 @@ abstract class ConnectionCommon
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->commitTrans();
-                xar::log()->info("DB: committed transaction [" . $this->transactionOpcount . "]");
+                $this->log()->info("DB: committed transaction [" . $this->transactionOpcount . "]");
             } elseif ($this->supportsSavepoints()) {
                 $savepointIdentifier = array_pop($this->nestedTransactionSavepoints);
                 $this->releaseSavepoint($savepointIdentifier);
-                xar::log()->warning("DB: releasing savepoint of transaction [" . $this->transactionOpcount . "]");
+                $this->log()->warning("DB: releasing savepoint of transaction [" . $this->transactionOpcount . "]");
             }
             $this->transactionOpcount--;
         }
@@ -217,7 +227,7 @@ abstract class ConnectionCommon
             } elseif ($this->supportsSavepoints()) {
                 $savepointIdentifier = array_pop($this->nestedTransactionSavepoints);
                 $this->rollbackToSavepoint($savepointIdentifier);
-                xar::log()->warning("DB: Rolled back transaction [" . $this->transactionOpcount . "]");
+                $this->log()->warning("DB: Rolled back transaction [" . $this->transactionOpcount . "]");
             }
             $this->transactionOpcount--;
         }
@@ -321,7 +331,7 @@ abstract class ConnectionCommon
     // to prevent changing all execute statements
     public function &Execute($sql, $bindvars = [], $fetchmode = null)
     {
-        xar::log()->debug("DB: Executing $sql");
+        $this->log()->debug("DB: Executing $sql");
         $stmt = $this->prepareStatement($sql);
         if ($stmt) {
             if ($this->isSelect($sql)) {
@@ -355,7 +365,7 @@ abstract class ConnectionCommon
 
     public function &SelectLimit($sql, $limit = 0, $offset = 0, $bindvars = [], $fetchmode = null)
     {
-        xar::log()->debug("DB: Executing $sql");
+        $this->log()->debug("DB: Executing $sql");
         $stmt = $this->prepareStatement($sql);
         $stmt->setLimit($limit);
         $stmt->setOffset($offset);

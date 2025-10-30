@@ -248,8 +248,9 @@ class xarMasks extends xarSecurity
         static $selStmt = null;
         static $insStmt = null;
 
-        if (xar::mem()->has('Security.getprivset', $role->getID())) {
-            return xar::mem()->get('Security.getprivset', $role->getID());
+        $mem = xar::mem();
+        if ($mem->has('Security.getprivset', $role->getID())) {
+            return $mem->get('Security.getprivset', $role->getID());
         }
         $query = "SELECT set FROM " . self::$privsetstable . " WHERE id =?";
         if (!isset($selStmt)) {
@@ -271,7 +272,7 @@ class xarMasks extends xarSecurity
             [$serprivs] = $result->fields;
         }
         // MrB: Why the unserialize here?
-        xar::mem()->set('Security.getprivset', $role->getID(), unserialize($serprivs));
+        $mem->set('Security.getprivset', $role->getID(), unserialize($serprivs));
         return unserialize($serprivs);
     }
 

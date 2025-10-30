@@ -239,7 +239,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
         } elseif (xarMod::$genXmlUrls) {
             // regular url, prepped for xml display if necessary
-            $decoded_url = $this->var()->prep($url);
+            $decoded_url = \xarVarPrep::forDisplay($url);
         }
 
         // pass details of decode to calling function,

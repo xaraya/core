@@ -64,7 +64,7 @@ class SearchMethod extends MethodClass
             $data['ishooked'] = 1;
         } else {
             $data['ishooked'] = 0;
-            $data['q'] = isset($q) ? $this->var()->prep($q) : null;
+            $data['q'] = isset($q) ? \xarVarPrep::forDisplay($q) : null;
 
             $this->var()->check('name', $name, 'str:1');
             $this->var()->check('module_id', $module_id, 'int');

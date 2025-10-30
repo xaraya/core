@@ -82,64 +82,69 @@ function xarLoader()
  */
 function xarMain()
 {
+    // Get Xaraya Services Class
+    $xar = xar::getServicesClass();
+
     // Create the object that models this request
     $request = xarController::getRequest();
     xarController::normalizeRequest();
-    xarLog::message('Retrieved a request: ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction(), xarLog::LEVEL_NOTICE);
+    $xar->log()->notice('Retrieved a request: ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction());
+    // Set module name in Services Class for templates
+    $xar->setModName($request->getModule());
 
     // Default Page Title
-    $SiteSlogan = xar::mod('themes')->getVar('SiteSlogan');
-    xarTpl::setPageTitle(xarVar::prepForDisplay($SiteSlogan));
-    xarLog::message('The page title is set: ' . xarTpl::getPageTitle(), xarLog::LEVEL_NOTICE);
+    $SiteSlogan = $xar->mod('themes')->getVar('SiteSlogan');
+    $xar->tpl()->setPageTitle(xarVarPrep::forDisplay($SiteSlogan));
+    $xar->log()->notice('The page title is set: ' . $xar->tpl()->getPageTitle());
 
     // Check the Installation
     if (($request->getModule() != 'installer') && (xarSystemVars::get(sys::CONFIG, 'DB.Installation') != 3)) {
         die('Xaraya was not properly installed. The exact error cannot be diagnosed.<br/>Please rerun the installer. If you have important data in your database please make a backup first.');
     }
-    xarLog::message('The installation is checked', xarLog::LEVEL_NOTICE);
+    $xar->log()->notice('The installation is checked');
 
     // Theme Override
-    xarVar::fetch('theme', 'str:1:', $themeName, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+    $xar->var()->find('theme', $themeName, 'str:1:');
     if (!empty($themeName)) {
-        $themeName = xarVar::prepForOS($themeName);
+        $themeName = xarVarPrep::forOS($themeName);
         if (xarTheme::isAvailable($themeName)) {
-            xarTpl::setThemeName($themeName);
-            xar::mem()->set('Themes.name', 'CurrentTheme', $themeName);
+            $xar->tpl()->setThemeName($themeName);
+            $xar->mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
         // Admin theme
-    } elseif (xarUser::isLoggedIn() && $request->getType() == 'admin') {
-        $themeName = xar::mod('themes')->getVar('admin_theme');
+    } elseif ($xar->user()->isLoggedIn() && $request->getType() == 'admin') {
+        $themeName = $xar->mod('themes')->getVar('admin_theme');
         if (!empty($themeName) && xarTheme::isAvailable($themeName)) {
-            $themeName = xarVar::prepForOS($themeName);
-            xarTpl::setThemeName(strtolower($themeName));
-            xar::mem()->set('Themes.name', 'CurrentTheme', $themeName);
+            $themeName = xarVarPrep::forOS($themeName);
+            $xar->tpl()->setThemeName(strtolower($themeName));
+            $xar->mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
         // User Override (configured in themes admin modifyconfig)
-    } elseif ((bool) xar::mod('themes')->getVar('enable_user_menu') == true) {
+    } elseif ((bool) $xar->mod('themes')->getVar('enable_user_menu') == true) {
         // users are allowed to set theme in profile, get user setting...
-        $themeName = xar::mod('themes')->getUserVar('default_theme');
+        $themeName = $xar->mod('themes')->getUserVar('default_theme');
         // get the list of permitted themes
-        $user_themes = xar::mod('themes')->getVar('user_themes');
+        $user_themes = $xar->mod('themes')->getVar('user_themes');
         $user_themes = !empty($user_themes) ? explode(',', $user_themes) : [];
 
         // check we have a valid theme
         if (!empty($themeName) && xarTheme::isAvailable($themeName)
             && !empty($user_themes) && in_array($themeName, $user_themes)) {
-            $themeName = xarVar::prepForOS($themeName);
-            xarTpl::setThemeName(strtolower($themeName));
-            xar::mem()->set('Themes.name', 'CurrentTheme', $themeName);
+            $themeName = xarVarPrep::forOS($themeName);
+            $xar->tpl()->setThemeName(strtolower($themeName));
+            $xar->mem()->set('Themes.name', 'CurrentTheme', $themeName);
         }
     }
-    xarLog::message('The theme is set: ' . xarTpl::getThemeName(), xarLog::LEVEL_NOTICE);
+    $xar->log()->notice('The theme is set: ' . $xar->tpl()->getThemeName());
 
     // Get a cache key for this page if it's suitable for page caching
-    $cacheKey = xarCache::getPageKey();
+    $cacheKey = $xar->cache()->getPageKey();
 
     $run = 1;
     // Check if the page is cached
-    if (!empty($cacheKey) && xarPageCache::isCached($cacheKey)) {
+    if (!empty($cacheKey) && $xar->cache()->hasPage($cacheKey)) {
         // Output the cached page *or* a 304 Not Modified status
-        if (xarPageCache::getCached($cacheKey)) {
+        if ($xar->cache()->sendPage($cacheKey)) {
             // We could return true here, but we'll continue just in case
             // processing changes below someday...
             $run = 0;
@@ -150,34 +155,35 @@ function xarMain()
     } else {
         $message = 'The page is cached. Using the cached page.';
     }
-    xarLog::message($message, xarLog::LEVEL_NOTICE);
+    $xar->log()->notice($message);
 
     if ($run) {
 
         // Set page template
-        if (xarUser::isLoggedIn() && ($request->getType() == 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
+        if ($xar->user()->isLoggedIn() && ($request->getType() == 'admin') && ($xar->tpl()->getPageTemplateName() == 'default')) {
             // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
-            if (!xarTpl::setPageTemplateName('admin-' . $request->getModule())) {
-                xarTpl::setPageTemplateName('admin');
+            if (!$xar->tpl()->setPageTemplateName('admin-' . $request->getModule())) {
+                $xar->tpl()->setPageTemplateName('admin');
             }
-        } elseif (!xarUser::isLoggedIn() && (xarTpl::getPageTemplateName() == 'default')) {
+        } elseif (!$xar->user()->isLoggedIn() && ($xar->tpl()->getPageTemplateName() == 'default')) {
             // No need to reset anything here
             // Right now we do not allow for e.g. default-roles
-        } elseif (($request->getType() != 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
+        } elseif (($request->getType() != 'admin') && ($xar->tpl()->getPageTemplateName() == 'default')) {
 
             // Same thing as for admin on user side
-            if (!xarTpl::setPageTemplateName($request->getType() . '-' . $request->getModule())) {
-                xarTpl::setPageTemplateName($request->getType());
+            if (!$xar->tpl()->setPageTemplateName($request->getType() . '-' . $request->getModule())) {
+                $xar->tpl()->setPageTemplateName($request->getType());
             }
         }
 
         // User override for the page template
-        xarVar::fetch('pageName', 'str:1:', $pageName, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
+        $xar->var()->find('pageName', $pageName, 'str:1:');
         if (!empty($pageName)) {
-            xarTpl::setPageTemplateName($pageName);
+            $pageName = xarVarPrep::forDisplay($pageName);
+            $xar->tpl()->setPageTemplateName($pageName);
         }
-        xarLog::message('The page template is set: ' . xarTpl::getPageTemplateName(), xarLog::LEVEL_NOTICE);
+        $xar->log()->notice('The page template is set: ' . $xar->tpl()->getPageTemplateName());
 
         // if the debugger is active, start it
         if (xarCore::isDebuggerActive()) {
@@ -196,11 +202,11 @@ function xarMain()
         //$context['twig'] = true;
 
         // Process the request
-        xarLog::message('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction(), xarLog::LEVEL_NOTICE);
+        $xar->log()->notice('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction());
         xarController::dispatch($request);
 
         // Retrieve the output to send to the browser
-        xarLog::message('Processing request ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction(), xarLog::LEVEL_NOTICE);
+        $xar->log()->notice('Processing request ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction());
         $mainModuleOutput = xarController::getResponse()->getOutput();
 
         if (xarCore::isDebuggerActive()) {
@@ -218,20 +224,20 @@ function xarMain()
         }
 
         // We're all done, one ServerRequest made
-        xarLog::message('Notifying listeners of this request', xarLog::LEVEL_NOTICE);
+        $xar->log()->notice('Notifying listeners of this request');
         xarEvents::notify('ServerRequest', [], $context);
 
         // Render page with the output + pass along the current context
-        xarLog::message('Creating the page output', xarLog::LEVEL_NOTICE);
-        $pageOutput = xarTpl::renderPage($mainModuleOutput, null, $context);
+        $xar->log()->notice('Creating the page output');
+        $pageOutput = $xar->tpl()->renderPage($mainModuleOutput);
 
         // Set the output of the page in cache
         if (!empty($cacheKey)) {
             // Save the output in cache *before* sending it to the client
-            xarPageCache::setCached($cacheKey, $pageOutput);
+            $xar->cache()->setPage($cacheKey, $pageOutput);
         }
 
-        xarLog::message('Rendering the result page', xarLog::LEVEL_NOTICE);
+        $xar->log()->notice('Rendering the result page');
         echo $pageOutput;
     }
 

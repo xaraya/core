@@ -42,6 +42,8 @@ class xarModuleCache extends xarObject
     public static $styleList      = [];
     /** @var array<mixed> */
     public static $scriptList     = [];
+    /** @var array<mixed> */
+    public static $metaList     = [];
 
     /**
      * Initialise the module caching options
@@ -94,16 +96,16 @@ class xarModuleCache extends xarObject
     public static function getCacheKey($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
         if (empty(self::$cacheStorage)) {
-            return;
+            return null;
         }
 
         if (empty($modName) || empty($funcName)) {
-            return;
+            return null;
         }
 
         // Check if this module function is suitable for module caching
         if (!(self::checkCachingRules($modName, $modType, $funcName, $args))) {
-            return;
+            return null;
         }
 
         // Check the specified function params
@@ -286,18 +288,24 @@ class xarModuleCache extends xarObject
         // we're done with this cacheKey
         self::$cacheKey = null;
 
+        $xar = xar::getServicesClass();
         $content = unserialize((string) $value);
         if (!empty($content['title']) && is_array($content['title'])) {
             xarTpl::setPageTitle($content['title'][0], $content['title'][1]);
         }
         if (!empty($content['styles']) && is_array($content['styles'])) {
             foreach ($content['styles'] as $info) {
-                xar::mod()->apiFunc('themes', 'user', 'register', $info);
+                $xar->mod()->apiFunc('themes', 'user', 'register', $info);
             }
         }
         if (!empty($content['script']) && is_array($content['script'])) {
             foreach ($content['script'] as $info) {
-                xar::mod()->apiFunc('themes', 'user', 'registerjs', $info);
+                $xar->mod()->apiFunc('themes', 'user', 'registerjs', $info);
+            }
+        }
+        if (!empty($content['meta']) && is_array($content['meta'])) {
+            foreach ($content['meta'] as $info) {
+                $xar->mod()->apiFunc('themes', 'user', 'registermeta', $info);
             }
         }
         return $content['output'];
@@ -336,11 +344,14 @@ class xarModuleCache extends xarObject
                          . "<!-- end cache: module/" . $cacheKey . ' ' . self::$cacheCode . " -->\n";
             }
 
-            $content = ['output' => $value,
+            $content = [
+                'output' => $value,
                 'link'   => xarServer::getCurrentURL(),
                 'title'  => self::$pageTitle,
                 'styles' => self::$styleList,
-                'script' => self::$scriptList];
+                'script' => self::$scriptList,
+                'meta'   => self::$metaList,
+            ];
             $value = serialize($content);
 
             // Note: we pass along the expiration time here, because it may be different for each module
@@ -403,5 +414,18 @@ class xarModuleCache extends xarObject
             return;
         }
         self::$scriptList[] = $args;
+    }
+
+    /**
+     * Keep track of some meta tags for caching - see xar::mod()->apiFunc('themes','user','registermeta')
+     * @param array<string, mixed> $args
+     * @return void
+     */
+    public static function addMeta(array $args = [])
+    {
+        if (empty(self::$cacheKey)) {
+            return;
+        }
+        self::$metaList[] = $args;
     }
 }

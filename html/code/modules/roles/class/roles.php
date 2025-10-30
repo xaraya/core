@@ -45,9 +45,10 @@ class xarRoles extends xarObject
 
     public static function initialize()
     {
-        self::$dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('roles');
-        $xartable = xar::db()->getTables();
+        $xar = xar::getServicesClass();
+        self::$dbconn = $xar->db()->getConn();
+        $xar->mod()->loadDbInfo('roles');
+        $xartable = $xar->db()->getTables();
         self::$rolestable = $xartable['roles'];
         self::$rolememberstable = $xartable['rolemembers'];
     }
@@ -68,14 +69,15 @@ class xarRoles extends xarObject
         self::initialize();
         static $allgroups = [];
         if (empty($allgroups)) {
+            $xar = xar::getServicesClass();
             $query = "SELECT r.id AS id, r.name AS name, r.users AS users, rm.parent_id AS parentid 
                       FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
                       WHERE r.itemtype = ? AND r.state = ? ORDER BY r.name";
             $bindvars[] = self::ROLES_GROUPTYPE;
             $bindvars[] = self::ROLES_STATE_ACTIVE;
-            $dbconn = xar::db()->getConn();
+            $dbconn = $xar->db()->getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xar::db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
             if (!$result) {
                 return;
             }
@@ -99,15 +101,16 @@ class xarRoles extends xarObject
     public static function getgroup($id)
     {
         self::initialize();
+        $xar = xar::getServicesClass();
         $query = "SELECT r.id AS id, r.name AS name, r.users AS users, rm.parent_id AS parentid 
                   FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
                   WHERE role_id = ? AND r.itemtype = ? AND r.state = ? ORDER BY r.name";
         $bindvars[] = $id;
         $bindvars[] = self::ROLES_GROUPTYPE;
         $bindvars[] = self::ROLES_STATE_ACTIVE;
-        $dbconn = xar::db()->getConn();
+        $dbconn = $xar->db()->getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, xar::db()->getFetchAssoc());
+        $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
         if (!$result) {
             return;
         }
@@ -153,14 +156,15 @@ class xarRoles extends xarObject
      */
     public static function get($id)
     {
+        $xar = xar::getServicesClass();
         $cacheKey = 'Roles.ById';
-        if (xar::mem()->has($cacheKey, $id)) {
-            return xar::mem()->get($cacheKey, $id);
+        if ($xar->mem()->has($cacheKey, $id)) {
+            return $xar->mem()->get($cacheKey, $id);
         }
         // Need to get it from DB.
         // TODO: move caching to _lookuprole?
         $r = self::_lookuprole('id', (int) $id);
-        xar::mem()->set($cacheKey, $id, $r);
+        $xar->mem()->set($cacheKey, $id, $r);
         return $r;
     }
 
@@ -348,11 +352,12 @@ class xarRoles extends xarObject
      */
     private static function _lookuprole($field, $value, $itemtype = self::ROLES_USERTYPE, $state = self::ROLES_STATE_ALL)
     {
+        $xar = xar::getServicesClass();
         // get rid of 30 repeating queries for base homepage due to security checks
         $cacheScope = 'Roles.ByLookup';
         $cacheName = "$field:$value:$itemtype:$state";
-        if (xar::mem()->has($cacheScope, $cacheName)) {
-            $row = xar::mem()->get($cacheScope, $cacheName);
+        if ($xar->mem()->has($cacheScope, $cacheName)) {
+            $row = $xar->mem()->get($cacheScope, $cacheName);
         } else {
             // retrieve the object's data from the repository
             // set up and execute the query
@@ -368,7 +373,7 @@ class xarRoles extends xarObject
                 $params[] = $state;
             }
             $stmt = self::$dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($params, xar::db()->getFetchAssoc());
+            $result = $stmt->executeQuery($params, $xar->db()->getFetchAssoc());
             if (!$result) {
                 return;
             }
@@ -378,7 +383,7 @@ class xarRoles extends xarObject
             if (empty($row)) {
                 return;
             }
-            xar::mem()->set($cacheScope, $cacheName, $row);
+            $xar->mem()->set($cacheScope, $cacheName, $row);
         }
 
         // create and return the role object
@@ -390,13 +395,13 @@ class xarRoles extends xarObject
             throw new Exception(xarML('Unknown role type'));
         }
         $cacheKey = 'Roles.ById';
-        if (xar::mem()->has($cacheKey, $row['id'])) {
-            return xar::mem()->get($cacheKey, $row['id']);
+        if ($xar->mem()->has($cacheKey, $row['id'])) {
+            return $xar->mem()->get($cacheKey, $row['id']);
         }
         sys::import('modules.dynamicdata.class.objects.factory');
         $role = DataObjectFactory::getObject(['name' => $name]);
         $role->getItem(['itemid' => $row['id']]);
-        xar::mem()->set($cacheKey, $row['id'], $role);
+        $xar->mem()->set($cacheKey, $row['id'], $role);
         return $role;
     }
 }

@@ -27,6 +27,28 @@ class CategoryWorker extends xarObject
     private $left   = "left_id";
     private $right  = "right_id";
     private $parent = "parent_id";
+    protected $xarDB = null;
+    protected $xarMod = null;
+
+    protected function db()
+    {
+        if (!isset($this->xarDB)) {
+            $xar = xar::getServicesClass();
+            $this->xarDB = $xar->db();
+            $this->xarMod = $xar->mod();
+        }
+        return $this->xarDB;
+    }
+
+    protected function mod()
+    {
+        if (!isset($this->xarMod)) {
+            $xar = xar::getServicesClass();
+            $this->xarDB = $xar->db();
+            $this->xarMod = $xar->mod();
+        }
+        return $this->xarMod;
+    }
 
     /**
      * Constructor for CategoryWorker
@@ -35,8 +57,8 @@ class CategoryWorker extends xarObject
     public function __construct()
     {
         sys::import('xaraya.structures.query');
-        xar::mod()->loadDbInfo('categories');
-        $tables = xar::db()->getTables();
+        $this->mod()->loadDbInfo('categories');
+        $tables = $this->db()->getTables();
         $this->table     = $tables['categories'];
         $this->cattable  = $tables['categories'];
         $this->basetable = $tables['categories_basecategories'];
@@ -383,7 +405,7 @@ class CategoryWorker extends xarObject
             return $bases;
         } else {
             // We are getting the base categories of a module
-            $xartable = xar::db()->getTables();
+            $xartable = $this->db()->getTables();
 
             sys::import('xaraya.structures.query');
             $q = new Query('SELECT');
@@ -401,7 +423,7 @@ class CategoryWorker extends xarObject
             // FIXME: no way to have get the same field twice with different aliases ?
             //$q->addfield('base.category_id AS cid');
             if (!empty($module)) {
-                $q->eq('module_id', (int) xar::mod()->getRegID($module));
+                $q->eq('module_id', (int) $this->mod()->getRegID($module));
             }
             if (!empty($module_id)) {
                 $q->eq('module_id', (int) $module_id);

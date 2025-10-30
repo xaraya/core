@@ -52,6 +52,15 @@ class xarRequest extends xarObject
     private $isAjax   = null;
     /** @var ?RequestInterface */
     private $requestContext = null;
+    protected $xarServices = null;
+
+    protected function getServicesClass()
+    {
+        if (!isset($this->xarServices)) {
+            $this->xarServices = xar::getServicesClass();
+        }
+        return $this->xarServices;
+    }
 
     /**
      * @param ?string $url
@@ -264,9 +273,10 @@ class xarRequest extends xarObject
         if (is_array($currentRequestInfo) && empty($url)) {
             return $currentRequestInfo;
         } elseif (is_array($loopHole)) {
+            $xar = $this->getServicesClass();
             // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
             //        because they request the current module too at the moment - unnecessary ?
-            xar::log()->info('Avoiding loop in xarController::getRequest()->getInfo()');
+            $xar->log()->info('Avoiding loop in xarController::getRequest()->getInfo()');
             return $loopHole;
         }
         // Get variables
@@ -322,9 +332,10 @@ class xarRequest extends xarObject
             } else {
                 // If $modName is still empty we use the default module/type/func to be loaded in that such case
                 if (empty($this->defaultRequestInfo)) {
-                    $this->defaultRequestInfo = [xar::mod('modules')->getVar('defaultmodule'),
-                        xar::mod('modules')->getVar('defaultmoduletype'),
-                        xar::mod('modules')->getVar('defaultmodulefunction')];
+                    $xar = $this->getServicesClass();
+                    $this->defaultRequestInfo = [$xar->mod('modules')->getVar('defaultmodule'),
+                        $xar->mod('modules')->getVar('defaultmoduletype'),
+                        $xar->mod('modules')->getVar('defaultmodulefunction')];
                 }
                 $requestInfo = $this->defaultRequestInfo;
             }
@@ -373,7 +384,10 @@ class xarRequest extends xarObject
     /** @return string */
     public function getModule()
     {
-        $this->module ??= xar::mod('modules')->getVar('defaultmodule');
+        if (!isset($this->module)) {
+            $xar = $this->getServicesClass();
+            $this->module = $xar->mod('modules')->getVar('defaultmodule');
+        }
         return $this->module;
     }
     /** @return string */
@@ -384,13 +398,19 @@ class xarRequest extends xarObject
     /** @return string */
     public function getType()
     {
-        $this->type ??= xar::mod('modules')->getVar('defaultmoduletype');
+        if (!isset($this->type)) {
+            $xar = $this->getServicesClass();
+            $this->type = $xar->mod('modules')->getVar('defaultmoduletype');
+        }
         return $this->type;
     }
     /** @return string */
     public function getFunction()
     {
-        $this->func ??= xar::mod('modules')->getVar('defaultmodulefunction');
+        if (!isset($this->func)) {
+            $xar = $this->getServicesClass();
+            $this->func = $xar->mod('modules')->getVar('defaultmodulefunction');
+        }
         return $this->func;
     }
     /** @return string */
@@ -534,8 +554,9 @@ class xarRequest extends xarObject
     public function isAJAX()
     {
         if (!isset($this->isAjax)) {
+            $xar = $this->getServicesClass();
             $xhp = xarServer::getVar('HTTP_X_REQUESTED_WITH');
-            if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest') && xar::config()->getVar('Site.Core.AllowAJAX')) {
+            if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest') && $xar->config()->getVar('Site.Core.AllowAJAX')) {
                 $this->isAjax = true;
             } else {
                 $this->isAjax = false;

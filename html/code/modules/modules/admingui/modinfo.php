@@ -52,11 +52,11 @@ class ModinfoMethod extends MethodClass
         $modinfo = $this->mod()->getInfo($id);
 
         // data vars for template
-        $data['modid']              = $this->var()->prep($id);
-        $data['modname']            = $this->var()->prep($modinfo['name']);
-        $data['moddescr']           = $this->var()->prep($modinfo['description']);
-        $data['moddispname']        = $this->var()->prep($modinfo['displayname']);
-        $data['moddispdesc']        = $this->var()->prep($modinfo['displaydescription']);
+        $data['modid']              = \xarVarPrep::forDisplay($id);
+        $data['modname']            = \xarVarPrep::forDisplay($modinfo['name']);
+        $data['moddescr']           = \xarVarPrep::forDisplay($modinfo['description']);
+        $data['moddispname']        = \xarVarPrep::forDisplay($modinfo['displayname']);
+        $data['moddispdesc']        = \xarVarPrep::forDisplay($modinfo['displaydescription']);
         $data['modlisturl']         = $this->ctl()->getModuleURL('modules', 'admin', 'list');
 
         $aliasesMap = $this->config()->getVar('System.ModuleAliases');
@@ -67,12 +67,12 @@ class ModinfoMethod extends MethodClass
             }
         }
         $data['aliases']            = !empty($aliases) ? implode(', ', $aliases) : $this->ml('None');
-        $data['moddir']             = sys::code() . 'modules/' . $this->var()->prep($modinfo['directory']);
-        $data['modclass']           = $this->var()->prep($modinfo['class']);
-        $data['modcat']             = $this->var()->prep($modinfo['category']);
-        $data['modver']             = $this->var()->prep($modinfo['version']);
-        $data['modauthor']          = $this->var()->prep($modinfo['author']);
-        $data['modcontact']         = $this->var()->prep($modinfo['contact']);
+        $data['moddir']             = sys::code() . 'modules/' . \xarVarPrep::forDisplay($modinfo['directory']);
+        $data['modclass']           = \xarVarPrep::forDisplay($modinfo['class']);
+        $data['modcat']             = \xarVarPrep::forDisplay($modinfo['category']);
+        $data['modver']             = \xarVarPrep::forDisplay($modinfo['version']);
+        $data['modauthor']          = \xarVarPrep::forDisplay($modinfo['author']);
+        $data['modcontact']         = \xarVarPrep::forDisplay($modinfo['contact']);
         if (!empty($modinfo['dependencyinfo'])) {
 
             $dependencies = [];

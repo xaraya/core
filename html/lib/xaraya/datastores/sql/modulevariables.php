@@ -19,8 +19,6 @@ use Exception;
 use sys;
 
 sys::import('xaraya.datastores.sql.relational');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 
 /**
  * Class to handle module variables datastores
@@ -71,8 +69,9 @@ class ModuleVariablesDataStore extends RelationalDataStore
         if (count($fieldlist) < 1) {
             return;
         }
+        $xar = $this->getServicesClass();
         foreach ($fieldlist as $field) {
-            $value = xar::mod($this->modulename)->getItemVar($field, $itemid);
+            $value = $xar->mod($this->modulename)->getItemVar($field, $itemid);
             // set the value for this property
             $this->object->properties[$field]->value = $value;
         }
@@ -91,6 +90,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
         if (count($fieldlist) < 1) {
             return 0;
         }
+        $xar = $this->getServicesClass();
 
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
@@ -100,9 +100,9 @@ class ModuleVariablesDataStore extends RelationalDataStore
                 continue;
             }
             if (empty($itemid)) {
-                xar::mod($this->modulename)->setVar($field, $value);
+                $xar->mod($this->modulename)->setVar($field, $value);
             } else {
-                xar::mod($this->modulename)->setItemVar($field, $value, $itemid);
+                $xar->mod($this->modulename)->setItemVar($field, $value, $itemid);
             }
         }
         return $itemid;
@@ -115,9 +115,10 @@ class ModuleVariablesDataStore extends RelationalDataStore
         if (count($fieldlist) < 1) {
             return 0;
         }
+        $xar = $this->getServicesClass();
 
         foreach ($fieldlist as $field) {
-            xar::mod($this->modulename)->delItemVar($field, $itemid);
+            $xar->mod($this->modulename)->delItemVar($field, $itemid);
         }
 
         return $itemid;
@@ -163,11 +164,12 @@ class ModuleVariablesDataStore extends RelationalDataStore
             $modulefields[$this->modulename] ??= [];
             $modulefields[$this->modulename][] = $field->name;
         }
+        $xar = $this->getServicesClass();
         foreach ($modulefields as $key => $values) {
             if (count($values) < 1) {
                 continue;
             }
-            $modid = xar::mod()->getID(substr(trim($key), 17));
+            $modid = $xar->mod()->getID(substr(trim($key), 17));
             $bindmarkers = '?' . str_repeat(',?', count($values) - 1);
             // include module variable as default
             $query = "SELECT DISTINCT m.name,
@@ -224,13 +226,14 @@ class ModuleVariablesDataStore extends RelationalDataStore
             $modulefields[$this->modulename] ??= [];
             $modulefields[$this->modulename][] = $field->name;
         }
+        $xar = $this->getServicesClass();
         // include module variable as default
         $numitems = 1;
         foreach ($modulefields as $key => $values) {
             if (count($values) < 1) {
                 continue;
             }
-            $modid = xar::mod()->getID(substr(trim($key), 17));
+            $modid = $xar->mod()->getID(substr(trim($key), 17));
             $bindmarkers = '?' . str_repeat(',?', count($values) - 1);
             if ($this->getType() == 'sqlite') {
                 $query = "SELECT COUNT(*)

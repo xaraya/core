@@ -172,7 +172,8 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     {
         // Note: the only reason we keep this variable is for getLastId()
         if (empty($this->db)) {
-            $this->db = xar::db()->getConn($this->dbConnIndex);
+            $xar = $this->getServicesClass();
+            $this->db = $xar->db()->getConn($this->dbConnIndex);
         }
     }
 
@@ -183,7 +184,8 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      */
     protected function getTable($name)
     {
-        $tables = xar::db()->getTables();
+        $xar = $this->getServicesClass();
+        $tables = $xar->db()->getTables();
         if (!empty($tables[$name])) {
             return $tables[$name];
         }
@@ -195,7 +197,8 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      */
     protected function getType()
     {
-        return xar::db()->getType();
+        $xar = $this->getServicesClass();
+        return $xar->db()->getType();
     }
 
     /**

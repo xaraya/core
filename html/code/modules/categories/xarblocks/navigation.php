@@ -392,7 +392,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             ['itemtype' => $itemtype,
                                 'catid' => $cat['id']]
                         );
-                        $label = $this->var()->prep($cat['name']);
+                        $label = \xarVarPrep::forDisplay($cat['name']);
                         $data['catitems'][] = ['catlabel' => $label,
                             'catid' => $cat['id'],
                             'catlink' => $link,
@@ -438,7 +438,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             'catjoin' => $join];
                         $join = ' &gt; ';
                         foreach ($parents as $cat) {
-                            $label = $this->var()->prep($cat['name']);
+                            $label = \xarVarPrep::forDisplay($cat['name']);
                             if ($cat['id'] == $cid && empty($itemid) && empty($andcids)) {
                                 $link = '';
                             } else {
@@ -457,9 +457,9 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                     $curcount = $catcount[$cat['id']];
                                 }
                                 if (!empty($cat['description'])) {
-                                    $descriptions[] = $this->var()->prepHTML($cat['description']);
+                                    $descriptions[] = \xarVarPrep::htmlDisplay($cat['description']);
                                 } else {
-                                    $descriptions[] = $this->var()->prep($cat['name']);
+                                    $descriptions[] = \xarVarPrep::forDisplay($cat['name']);
                                 }
                                 // save current category info for icon etc.
                                 if (count($cids) == 1) {
@@ -555,7 +555,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                             }
                                         }
                                         if (!empty($curcat['name'])) {
-                                            $title = $this->var()->prep($curcat['name']);
+                                            $title = \xarVarPrep::forDisplay($curcat['name']);
                                         }
                                         $this->tpl()->setPageTitle($title);
                                     }
@@ -564,7 +564,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                     if (!empty($curcat['image'])) {
                         // find the image in categories (we need to specify the module here)
                         $data['catimage'] = $this->tpl()->getImage($curcat['image'], 'categories');
-                        $data['catname'] = $this->var()->prep($curcat['name']);
+                        $data['catname'] = \xarVarPrep::forDisplay($curcat['name']);
                     }
                     if ($showchildren == 2) {
                         // Get child categories (all sub-levels)
@@ -581,7 +581,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             if ($info['id'] == $cids[0]) {
                                 continue;
                             }
-                            $label = $this->var()->prep($info['name']);
+                            $label = \xarVarPrep::forDisplay($info['name']);
                             // TODO: now this is a tricky part...
                             $link = $this->ctl()->getModuleURL(
                                 $modname,
@@ -597,7 +597,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             }
                             /* don't show descriptions in (potentially) multi-level trees
                                                 if (!empty($info['description'])) {
-                                                    $descr = $this->var()->prepHTML($info['description']);
+                                                    $descr = \xarVarPrep::htmlDisplay($info['description']);
                                                 } else {
                                                     $descr = '';
                                                 }
@@ -630,7 +630,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         $numicons = 0;
                         foreach ($children as $cat) {
                             // TODO: now this is a tricky part...
-                            $label = $this->var()->prep($cat['name']);
+                            $label = \xarVarPrep::forDisplay($cat['name']);
                             $link = $this->ctl()->getModuleURL(
                                 $modname,
                                 $type,
@@ -655,7 +655,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                     'catnum' => $numicons];
                             } else {
                                 if (!empty($cat['description']) && $cat['description'] != $cat['name']) {
-                                    $descr = $this->var()->prepHTML($cat['description']);
+                                    $descr = \xarVarPrep::htmlDisplay($cat['description']);
                                 } else {
                                     $descr = '';
                                 }
@@ -756,7 +756,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                     'catid' => $cat['id']]
                             );
 
-                            $label = $this->var()->prep($cat['name']);
+                            $label = \xarVarPrep::forDisplay($cat['name']);
                             if ($cat['id'] == $cid) {
                                 $catparents[] = ['catlabel' => $label,
                                     'catid' => $cat['id'],
@@ -806,7 +806,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                             }
 
-                            $label = $this->var()->prep($cat['name']);
+                            $label = \xarVarPrep::forDisplay($cat['name']);
                             // TODO: now this is a tricky part...
                             $link = $this->ctl()->getModuleURL(
                                 $modname,
@@ -850,7 +850,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         $parentid = 0;
                         foreach ($parents as $id => $info) {
                             if (empty($root)) {
-                                $root = $this->var()->prep($info['name']);
+                                $root = \xarVarPrep::forDisplay($info['name']);
                             }
                             if ($id == $cid) {
                                 $parentid = $info['parent'];
@@ -863,7 +863,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         }
                         if (!empty($parents[$parentid])) {
                             $cat = $parents[$parentid];
-                            $label = $this->var()->prep($cat['name']);
+                            $label = \xarVarPrep::forDisplay($cat['name']);
                             $link = $this->ctl()->getModuleURL(
                                 $modname,
                                 $type,
@@ -919,7 +919,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                             }
 
-                            $label = $this->var()->prep($cat['name']);
+                            $label = \xarVarPrep::forDisplay($cat['name']);
                             $link = $this->ctl()->getModuleURL(
                                 $modname,
                                 $type,
@@ -939,7 +939,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                                 if ($showchildren && !empty($children) && count($children) > 0) {
                                     foreach ($children as $cat) {
-                                        $clabel = $this->var()->prep($cat['name']);
+                                        $clabel = \xarVarPrep::forDisplay($cat['name']);
                                         // TODO: now this is a tricky part...
                                         $clink = $this->ctl()->getModuleURL(
                                             $modname,

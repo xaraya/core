@@ -7,7 +7,7 @@
  * @subpackage themes
  * @copyright see the html/credits.html file in this release
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
@@ -21,8 +21,20 @@ use Xaraya\Services\xar;
 **/
 class xarMeta extends xarObject
 {
+    public const CACHE_SCOPE = 'Themes.Meta';
+    // this singleton instance belongs with static services class (or service in it)
     private static $instance;
-    private static $meta;
+    // the queue of meta belongs to the instance
+    private $meta;
+    protected $xarServices = null;
+
+    protected function getServicesClass()
+    {
+        if (!isset($this->xarServices)) {
+            $this->xarServices = xar::getServicesClass();
+        }
+        return $this->xarServices;
+    }
 
     // prevent direct creation of this object
     private function __construct()
@@ -30,7 +42,8 @@ class xarMeta extends xarObject
         // Get list of tags from meta block and populate queue
         // NOTE: we CAN'T do this in the meta block when it's rendered, it's too
         // late to cater for content appended dynamically by other xar:meta tags
-        $meta = @unserialize(xar::mod('themes')->getVar('meta.tags') ?? '');
+        $xar = $this->getServicesClass();
+        $meta = @unserialize($xar->mod('themes')->getVar('meta.tags') ?? '');
         if (!empty($meta)) {
             foreach ($meta as $tag) {
                 $this->register($tag);
@@ -48,11 +61,15 @@ class xarMeta extends xarObject
     **/
     public static function getInstance()
     {
-        if (!isset(self::$instance)) {
+        $xar = xar::getServicesClass();
+        if ($xar->mem()->has(self::CACHE_SCOPE, 'instance')) {
+            $instance = $xar->mem()->get(self::CACHE_SCOPE, 'instance');
+        } else {
             $c = __CLASS__;
-            self::$instance = new $c();
+            $instance = new $c();
+            $xar->mem()->set(self::CACHE_SCOPE, 'instance', $instance);
         }
-        return self::$instance;
+        return $instance;
     }
 
     /**
@@ -139,11 +156,12 @@ class xarMeta extends xarObject
     **/
     public function render(array $args = [])
     {
-        if (empty(self::$meta)) {
+        if (empty($this->meta)) {
             return '';
         }
-        $args['meta'] = self::$meta;
-        return xar::tpl()->module('themes', 'meta', 'render', $args);
+        $xar = $this->getServicesClass();
+        $args['meta'] = $this->meta;
+        return $xar->tpl()->module('themes', 'meta', 'render', $args);
     }
 
     /**
@@ -161,17 +179,21 @@ class xarMeta extends xarObject
         if (empty($type) || empty($value) || empty($tag)) {
             return;
         }
+        $xar = $this->getServicesClass();
+
+        // keep track of meta tags when we're caching
+        $xar->cache()->addMeta($tag);
 
         // init the queue
-        if (!isset(self::$meta)) {
-            self::$meta = [
+        if (!isset($this->meta)) {
+            $this->meta = [
                 'http-equiv' => [],
                 'name' => [],
             ];
         }
 
         // don't queue tags with invalid type attributes
-        if (!isset(self::$meta[$type])) {
+        if (!isset($this->meta[$type])) {
             return;
         }
 
@@ -179,9 +201,9 @@ class xarMeta extends xarObject
         $index = "$tag[type]:$tag[value]:$tag[lang]";
 
         // see if we're appending and we have a tag with the same language
-        if ($append && isset(self::$meta[$type][$value][$index])) {
+        if ($append && isset($this->meta[$type][$value][$index])) {
             // get the queued tag
-            $q = self::$meta[$type][$value][$index];
+            $q = $this->meta[$type][$value][$index];
             // append content
             $q['content'] .= "; $tag[content]";
             // merge any data not already populated from the incoming tag
@@ -194,7 +216,7 @@ class xarMeta extends xarObject
         }
 
         // queue the tag
-        self::$meta[$type][$value][$index] = $tag;
+        $this->meta[$type][$value][$index] = $tag;
 
         return true;
     }

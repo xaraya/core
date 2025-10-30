@@ -510,7 +510,7 @@ class ArrayProperty extends DataProperty
      */
     public function exportValue($itemid, $item)
     {
-        // return $this->var()->prep($item[$this->name]);
+        // return xarVarPrep::forDisplay($item[$this->name]);
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             return serialize($item[$this->name]);
         }

@@ -77,7 +77,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
             }
             $block_options[] = [
                 'id' => $block['block_id'],
-                'name' => $this->var()->prep($block['name']),
+                'name' => \xarVarPrep::forDisplay($block['name']),
             ];
         }
         $data['block_options'] = $block_options;

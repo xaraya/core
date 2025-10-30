@@ -83,9 +83,10 @@ class xarSecurity extends xarObject
             return;
         }
 
-        self::$dbconn = xar::db()->getConn();
-        xar::mod()->loadDbInfo('privileges');
-        $xartable = xar::db()->getTables();
+        $xar = xar::getServicesClass();
+        self::$dbconn = $xar->db()->getConn();
+        $xar->mod()->loadDbInfo('privileges');
+        $xartable = $xar->db()->getTables();
         self::$privilegestable = $xartable['privileges'];
         self::$privmemberstable = $xartable['privmembers'];
         self::$modulestable = $xartable['modules'];
@@ -97,14 +98,14 @@ class xarSecurity extends xarObject
 
         // CHECKME: do we need to be careful during installation here or not ?
         if (class_exists('xarModVars')) {
-            self::$realmcomparison = xar::mod('privileges')->getVar('realmcomparison');
-            self::$test = xar::mod('privileges')->getVar('test');
-            self::$testdeny = xar::mod('privileges')->getVar('testdeny');
-            self::$testmask = xar::mod('privileges')->getVar('testmask');
-            self::$inheritdeny = xar::mod('privileges')->getVar('inheritdeny');
-            self::$realmvalue = xar::mod('privileges')->getVar('realmvalue');
-            self::$exceptionredirect = xar::mod('privileges')->getVar('exceptionredirect');
-            self::$maskbasedsecurity = xar::mod('privileges')->getVar('maskbasedsecurity');
+            self::$realmcomparison = $xar->mod('privileges')->getVar('realmcomparison');
+            self::$test = $xar->mod('privileges')->getVar('test');
+            self::$testdeny = $xar->mod('privileges')->getVar('testdeny');
+            self::$testmask = $xar->mod('privileges')->getVar('testmask');
+            self::$inheritdeny = $xar->mod('privileges')->getVar('inheritdeny');
+            self::$realmvalue = $xar->mod('privileges')->getVar('realmvalue');
+            self::$exceptionredirect = $xar->mod('privileges')->getVar('exceptionredirect');
+            self::$maskbasedsecurity = $xar->mod('privileges')->getVar('maskbasedsecurity');
         }
 
         // @todo refactor callers to do this directly
@@ -149,14 +150,15 @@ class xarSecurity extends xarObject
     */
     public static function check($mask, $catch = 1, $component = '', $instance = '', $module = '', $rolename = '', $realm = 0, $level = 0)
     {
-        $installing = xar::mem()->get('installer', 'installing');
+        $xar = xar::getServicesClass();
+        $installing = $xar->mem()->get('installer', 'installing');
         if (isset($installing) && ($installing == true)) {
             return true;
         }
         self::initialize();
-        $userID = xar::session()->getUserId();
+        $userID = $xar->session()->getUserId();
 
-        xar::log()->info("xarSecurity::check: Testing user $userID against mask $mask");
+        $xar->log()->info("xarSecurity::check: Testing user $userID against mask $mask");
 
         if ($userID == xarUser::LAST_RESORT) {
             return true;
@@ -176,7 +178,7 @@ class xarSecurity extends xarObject
             }
             $found = 0;
             foreach (self::$maskbasedgrouplist as $groupid) {
-                $val = xar::mod('privileges')->getVar('SC:' . $savedmask . ':' . $groupid);
+                $val = $xar->mod('privileges')->getVar('SC:' . $savedmask . ':' . $groupid);
                 if (!empty($val)) {
                     // access for this group - stop checking and return true
                     return true;
@@ -206,15 +208,15 @@ class xarSecurity extends xarObject
             // get the masks pertaining to the current module and the component requested
             // <mikespub> why do you need this in the first place ?
             if ($module == '') {
-                $module = xar::ctl()->getRequest()->getModule();
+                $module = $xar->ctl()->getRequest()->getModule();
             }
 
             // I'm a bit lost on this line. Does this var ever get set?
             // <mikespub> this gets set in xar::block()->render, to replace the xar::mod()->setVar /
             // xar::mod()->getVar combination you used before (although $module will generally
             // not be 'blocks', so I have no idea why this is needed anyway)
-            if ($module == 'blocks' && xar::mem()->has('Security.Variables', 'currentmodule')) {
-                $module = xar::mem()->get('Security.Variables', 'currentmodule');
+            if ($module == 'blocks' && $xar->mem()->has('Security.Variables', 'currentmodule')) {
+                $module = $xar->mem()->get('Security.Variables', 'currentmodule');
             }
 
             if ($component == "") {
@@ -222,7 +224,7 @@ class xarSecurity extends xarObject
             } else {
                 $msg = xarML('Did not find mask #(1) registered for component #(2) in module #(3)', $maskname, $component, $module);
             }
-            xar::log()->info("xarSecurity::check: " . $msg);
+            $xar->log()->info("xarSecurity::check: " . $msg);
             return false;
         }
 
@@ -256,7 +258,7 @@ class xarSecurity extends xarObject
             //perhaps something for later.
             // <mrb> i dont grok this, theme can be realm?
             case "theme":
-                $mask->setRealm(xar::mod('themes')->getVar('default_theme'));
+                $mask->setRealm($xar->mod('themes')->getVar('default_theme'));
                 break;
             case "domain":
                 $host = xarServer::getHost();
@@ -276,13 +278,13 @@ class xarSecurity extends xarObject
                 break;
             case "group":
                 //get some info on the user
-                $thisname = xar::user()->getVar('uname');
+                $thisname = $xar->user()->getVar('uname');
                 $role = xarRoles::ufindRole($thisname);
                 $parent = 'Everybody'; //set a default
                 //We now have primary parent implemented
                 //Use primary parent if implemented else get first parent??
                 //TODO: this needs to be reviewed
-                $useprimary = xar::mod('roles')->getVar('setprimaryparent');
+                $useprimary = $xar->mod('roles')->getVar('setprimaryparent');
                 if ($useprimary) { //grab the primary parent
                     $parent = $role->getPrimaryParent(); //string value
                 } else { //we don't have a primary parent so use the first parent?? ... hmm review
@@ -309,9 +311,9 @@ class xarSecurity extends xarObject
         // an empty role means take the current user
         if ($rolename == '') {
             // mrb: again?
-            $userID = xar::session()->getUserId();
+            $userID = $xar->session()->getUserId();
             if (empty($userID)) {
-                $userID = xar::session()->getAnonId();
+                $userID = $xar->session()->getAnonId();
             }
             $role = xarRoles::get($userID);
         } else {
@@ -319,19 +321,19 @@ class xarSecurity extends xarObject
         }
 
         // check if we already have the irreducible set of privileges for the current user
-        if (($rolename == '') || ($rolename == xar::user()->getVar('uname'))) {
+        if (($rolename == '') || ($rolename == $xar->user()->getVar('uname'))) {
             // We are checking the privileges of the current user
             // See if we have something cached
-            if (!xar::mem()->has('Security.Variables', 'privilegeset.' . $userID)) {
+            if (!$xar->mem()->has('Security.Variables', 'privilegeset.' . $userID)) {
 
                 // CHECKME: why not cache this as module user variable instead of session ?
                 //          That would save a lot of space for anonymous sessions...
 
                 // No go from cache. Try and get it from the session
                 sys::import('modules.privileges.class.privilege');
-                $privileges = unserialize(xar::session()->getVar('privilegeset') ?? '');
+                $privileges = unserialize($xar->session()->getVar('privilegeset') ?? '');
                 // Check that privileges haven't been changed since we last cached the privilegeset
-                $clearcache = xar::mod('privileges')->getVar('clearcache');
+                $clearcache = $xar->mod('privileges')->getVar('clearcache');
                 if (empty($privileges) || empty($privileges['updated']) || $clearcache > $privileges['updated']) {
 
                     // Still no go. Assemble the privleges
@@ -341,15 +343,15 @@ class xarSecurity extends xarObject
                         $privileges['updated'] = time();
                     }
                     // Save them to the sesssion too
-                    xar::session()->setVar('privilegeset', serialize($privileges));
+                    $xar->session()->setVar('privilegeset', serialize($privileges));
                 }
 
                 // Save them to the cache
-                xar::mem()->set('Security.Variables', 'privilegeset.' . $userID, $privileges);
+                $xar->mem()->set('Security.Variables', 'privilegeset.' . $userID, $privileges);
 
             } else {
                 // get the irreducible set of privileges for the current user from cache
-                $privileges = xar::mem()->get('Security.Variables', 'privilegeset.' . $userID);
+                $privileges = $xar->mem()->get('Security.Variables', 'privilegeset.' . $userID);
             }
         } else {
             // This is a different user, force recalculation
@@ -365,9 +367,9 @@ class xarSecurity extends xarObject
         if (self::$maskbasedsecurity && !empty($savedmask) && count(self::$maskbasedgrouplist) == 1) {
             $groupid = self::$maskbasedgrouplist[0];
             if (!empty($pass)) {
-                xar::mod('privileges')->setVar('SC:' . $savedmask . ':' . $groupid, true);
+                $xar->mod('privileges')->setVar('SC:' . $savedmask . ':' . $groupid, true);
             } else {
-                xar::mod('privileges')->setVar('SC:' . $savedmask . ':' . $groupid, false);
+                $xar->mod('privileges')->setVar('SC:' . $savedmask . ':' . $groupid, false);
             }
         }
 
@@ -375,16 +377,16 @@ class xarSecurity extends xarObject
 
         if ($catch && !$pass) {
             $requrl = xarServer::getCurrentURL([], false);
-            if (self::$exceptionredirect && !xar::user()->isLoggedIn()) {
+            if (self::$exceptionredirect && !$xar->user()->isLoggedIn()) {
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
-                $redirectURL = xar::ctl()->getModuleURL(xar::mod()->getName(xar::mod('roles')->getVar('defaultauthmodule')), 'user', 'showloginform', ['redirecturl' => rawurlencode($requrl)], false);
+                $redirectURL = $xar->ctl()->getModuleURL($xar->mod()->getName($xar->mod('roles')->getVar('defaultauthmodule')), 'user', 'showloginform', ['redirecturl' => rawurlencode($requrl)], false);
             } else {
                 // Redirect to the privileges error page
-                $redirectURL = xar::ctl()->getModuleURL('privileges', 'user', 'errors', ['layout' => 'no_privileges', 'redirecturl' => rawurlencode($requrl)], false);
+                $redirectURL = $xar->ctl()->getModuleURL('privileges', 'user', 'errors', ['layout' => 'no_privileges', 'redirecturl' => rawurlencode($requrl)], false);
             }
             // @todo have context available here!?
-            xar::ctl()->redirect($redirectURL);
+            $xar->ctl()->redirect($redirectURL);
             return $pass;
         }
         return $pass;
@@ -403,7 +405,8 @@ class xarSecurity extends xarObject
     public static function getMask($name, $modid = 0, $component = "All", $suppresscache = false)
     {
         self::initialize();
-        if ($suppresscache || !xar::mem()->has('Security.Masks', $name)) {
+        $xar = xar::getServicesClass();
+        if ($suppresscache || !$xar->mem()->has('Security.Masks', $name)) {
             $bindvars = [];
             $query = "SELECT masks.id AS id, masks.name AS name, realms.name AS realm,
                              module_id AS module_id, modules.name as module, masks.component as component, masks.instance AS instance,
@@ -422,7 +425,7 @@ class xarSecurity extends xarObject
             $query .= " AND itemtype = ? ";
             $bindvars[] = self::PRIVILEGES_MASKTYPE;
             $stmt = self::$dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xar::db()->getFetchAssoc());
+            $result = $stmt->executeQuery($bindvars, $xar->db()->getFetchAssoc());
             if (!$result->next()) {
                 return;
             } // Mask isn't there.
@@ -430,9 +433,9 @@ class xarSecurity extends xarObject
             if (is_null($pargs['realm'])) {
                 $pargs['realm']  = 'All';
             }
-            xar::mem()->set('Security.Masks', $name, $pargs);
+            $xar->mem()->set('Security.Masks', $name, $pargs);
         } else {
-            $pargs = xar::mem()->get('Security.Masks', $name);
+            $pargs = $xar->mem()->get('Security.Masks', $name);
         }
         sys::import('modules.privileges.class.mask');
         return new xarMask($pargs);
@@ -508,7 +511,8 @@ class xarSecurity extends xarObject
     */
     public static function testprivileges($mask, $privilegeset, $pass, $role = '')
     {
-        $candebug = xar::user()->isDebugAdmin();
+        $xar = xar::getServicesClass();
+        $candebug = $xar->user()->isDebugAdmin();
         $test = self::$test && $candebug;
         $testdeny = self::$testdeny && $candebug;
         $testmask = self::$testmask;
@@ -533,7 +537,7 @@ class xarSecurity extends xarObject
                 } else {
                     $msg .= " NOT FOUND. \n";
                 }
-                xar::log()->debug($msg);
+                $xar->log()->debug($msg);
             }
             if ($privilege['level'] == 0 && self::includes($privilege, $mask)) {
                 if (!self::$inheritdeny && is_object($role)) {
@@ -570,7 +574,7 @@ class xarSecurity extends xarObject
                 echo "Comparing <font color='blue'>[" . self::present($privilege) . "]</font> and <font color='green'>[" . self::present($mask) . "]</font>. ";
                 $msg = "Comparing \n  Privilege: " . self::present($privilege)
                     . "\n       Mask: " . self::present($mask);
-                xar::log()->debug($msg);
+                $xar->log()->debug($msg);
             }
             if (self::includes($privilege, $mask)) {
                 if (self::implies($privilege, $mask)) {
@@ -579,7 +583,7 @@ class xarSecurity extends xarObject
                         $msg = $privilege['name'] . " WINS! "
                             . "Privilege includes mask. "
                             . "Privilege level greater or equal.\n";
-                        xar::log()->debug($msg);
+                        $xar->log()->debug($msg);
                     }
                     if (!$pass || $privilege['level'] > $pass['level']) {
                         $pass = $privilege;
@@ -590,7 +594,7 @@ class xarSecurity extends xarObject
                         $msg = $mask['name'] . " MATCHES! "
                                 . "Privilege includes mask. Privilege level "
                                 . "lesser.\n";
-                        xar::log()->debug($msg);
+                        $xar->log()->debug($msg);
                     }
                 }
                 $matched = true;
@@ -601,7 +605,7 @@ class xarSecurity extends xarObject
                         $msg = $privilege['name'] . " WINS! "
                             . "Mask includes privilege. Privilege level "
                             . "greater or equal.\n";
-                        xar::log()->debug($msg);
+                        $xar->log()->debug($msg);
                     }
                     if (!$pass || $privilege['level'] > $pass['level']) {
                         $pass = $privilege;
@@ -613,14 +617,14 @@ class xarSecurity extends xarObject
                         $msg = $mask['name'] . " MATCHES! "
                             . "Mask includes privilege. Privilege level "
                             . "lesser.\n";
-                        xar::log()->debug($msg);
+                        $xar->log()->debug($msg);
                     }
                 }
             } else {
                 if ($test && ($testmask == $mask['name'] || $testmask == "All")) {
                     echo "<font color='red'>no match</font>. Continuing with other checks..<br />";
                     $msg = "NO MATCH.\n";
-                    xar::log()->debug($msg);
+                    $xar->log()->debug($msg);
                 }
             }
         }
