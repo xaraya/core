@@ -8,14 +8,14 @@
             <xar:foreach in="$users" key="$id" value="$user">
                 <li>
                     <a href="#xarController::URL('roles','user','display',['id'=>$user['id']])#">
-                        #xarVar::prepForDisplay($user['name'])#
+                        #xarVarPrep::forDisplay($user['name'])#
                     </a>
                 </li>
             </xar:foreach>
         </ul>
     </xar:if>
     <xar:if condition="!empty($status)">
-        <p>#xarVar::prepForDisplay($status)#</p>
+        <p>#xarVarPrep::forDisplay($status)#</p>
     </xar:if>
     <p></p>
     <xar:if condition="!empty($properties) and count($properties) gt 0">

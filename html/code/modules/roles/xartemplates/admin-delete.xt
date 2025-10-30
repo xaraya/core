@@ -26,11 +26,11 @@
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
                                 <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
-                                #xarVar::prepForDisplay($parents[$i]['parentname'])#</a>
+                                #xarVarPrep::forDisplay($parents[$i]['parentname'])#</a>
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">
-                        #xarVar::prepForDisplay($parents[$i]['parentname'])#</xar:set>
+                        #xarVarPrep::forDisplay($parents[$i]['parentname'])#</xar:set>
                     </xar:for>
                 </ul>
             </div>

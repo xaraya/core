@@ -74,7 +74,7 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- If we have an object, throw out its label -->
-        <xsl:text>echo xarVar::prepForDisplay(</xsl:text>
+        <xsl:text>echo xarVarPrep::forDisplay(</xsl:text>
         <xsl:value-of select="@object"/><xsl:text>-&gt;label);</xsl:text>
       </xsl:otherwise>
     </xsl:choose>

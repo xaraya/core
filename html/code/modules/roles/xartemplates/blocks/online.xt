@@ -41,7 +41,7 @@
                         <xar:else />
                             <xar:img scope="module" module="roles" file="ob_user_other.gif" class="xar-icon"/>
                         </xar:if>
-                        <a href="#$dd['userurl']#">#xarVar::prepForDisplay($dd['name'])#</a>
+                        <a href="#$dd['userurl']#">#xarVarPrep::forDisplay($dd['name'])#</a>
                     </td>
                     <td>&#160;</td>
                     <td class="xar-align-center">
@@ -82,7 +82,7 @@
          <p>
              Welcome to our latest member,
              <a href="#xarController::URL('roles','user','display',['id'=>$lastuser['id']])#">
-                 #xarVar::prepForDisplay($lastuser['name'])#
+                 #xarVarPrep::forDisplay($lastuser['name'])#
              </a>
          </p>
     </xar:if>

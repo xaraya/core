@@ -73,7 +73,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <input type="text" name="subject" id="subject" value="#xarVar::prepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                        <input type="text" name="subject" id="subject" value="#xarVarPrep::forDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                     </div>
                 </div>
                 <div class="xar-row">
@@ -84,7 +84,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVar::prepForDisplay($message)#</textarea>
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrep::forDisplay($message)#</textarea>
                     </div>
                 </div>
             </fieldset>

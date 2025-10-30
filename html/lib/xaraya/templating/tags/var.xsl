@@ -36,7 +36,7 @@
           <xsl:call-template name="xarvar_getcode"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:text>xarVar::prepForDisplay(</xsl:text>
+          <xsl:text>xarVarPrep::forDisplay(</xsl:text>
             <xsl:call-template name="xarvar_getcode"/>
           <xsl:text>)</xsl:text>
         </xsl:otherwise>
@@ -56,7 +56,7 @@
                 <xsl:call-template name="xarvar_getcode"/>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:text>xarVar::prepForDisplay(</xsl:text>
+                <xsl:text>xarVarPrep::forDisplay(</xsl:text>
                   <xsl:call-template name="xarvar_getcode"/>
                 <xsl:text>)</xsl:text>
               </xsl:otherwise>

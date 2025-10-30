@@ -140,7 +140,7 @@ class SelectProperty extends DataProperty
         }
         // get the option corresponding to this value
         $result = $this->getOption();
-        // only apply xarVar::prepForDisplay on strings, not arrays et al.
+        // only apply xarVarPrep::forDisplay on strings, not arrays et al.
         if (!empty($result) && is_string($result)) {
             $result = xarVarPrep::forDisplay($result);
         }

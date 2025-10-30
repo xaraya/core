@@ -17,7 +17,7 @@
         </xar:if>
         <xar:if condition="!empty($valcode)">
             <xar:set name="validationlink">xarController::URL('roles','user','getvalidation',
-            ['phase' => 'getvalidate','uname' => xarVar::prepForDisplay($uname),
+            ['phase' => 'getvalidate','uname' => xarVarPrep::forDisplay($uname),
             'valcode' => $valcode])</xar:set>
             <p>To continue, please follow 
             <a href="#$validationlink#">this link</a>.</p>
@@ -38,7 +38,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <input type="text" name="uname" id="uname" value="#xarVar::prepForDisplay($uname)#"/>
+                            <input type="text" name="uname" id="uname" value="#xarVarPrep::forDisplay($uname)#"/>
                         </div>
                     </div>
                     <div class="xar-row">

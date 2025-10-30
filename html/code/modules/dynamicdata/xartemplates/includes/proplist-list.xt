@@ -58,7 +58,7 @@
                     <xar:data-input property="$fieldtypeprop" name="$name" id="$id" value="$field['type']"/>
                 </td>
                 <td class="#$displayclass#">
-                    <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVar::prepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium"/>
+                    <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrep::forDisplay($field['defaultvalue'])#" class="xar-form-textmedium"/>
                 </td>
                 <td class="#$displayclass#">
                     <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">

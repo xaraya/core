@@ -41,7 +41,7 @@ interface VariablesInterface extends ServiceInterface
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param mixed $defaultValue the default value (default null)
      * @param integer $flags bitmask which modify the behaviour of function (default xarVar::GET_OR_POST)
-     * @param integer $prep will prep the value with xarVar::prepForDisplay, xarVar::prepHTMLDisplay, or dbconn->qstr()
+     * @param integer $prep will prep the value with xarVarPrep::forDisplay, xarVarPrep::htmlDisplay, or dbconn->qstr()
      * @return true
      */
     public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): true;
@@ -179,7 +179,7 @@ trait VariablesTrait
      * @param mixed $variable contains the converted value of fetched variable by reference
      * @param mixed $defaultValue the default value (default null)
      * @param integer $flags bitmask which modify the behaviour of function (default xarVar::GET_OR_POST)
-     * @param integer $prep will prep the value with xarVar::prepForDisplay, xarVar::prepHTMLDisplay, or dbconn->qstr()
+     * @param integer $prep will prep the value with xarVarPrep::forDisplay, xarVarPrep::htmlDisplay, or dbconn->qstr()
      * @return true
      */
     public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): true

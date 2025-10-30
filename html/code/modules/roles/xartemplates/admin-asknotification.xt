@@ -57,7 +57,7 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <input type="text" name="subject" id="subject" value="#xarVar::prepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                    <input type="text" name="subject" id="subject" value="#xarVarPrep::forDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                 </div>
             </div>
             <div class="xar-row">
@@ -68,7 +68,7 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVar::prepForDisplay($message)#</textarea>
+                    <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrep::forDisplay($message)#</textarea>
                 </div>
             </div>
             <fieldset class="xar-form-actions">
@@ -76,7 +76,7 @@
                 <input type="hidden" name="phase" id="phase" value="notify"/>
                 <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
                 <input type="hidden" name="id" id="id" value="#$id#"/>
-                <input type="hidden" name="pass" id="pass" value="#xarVar::prepForDisplay($pass)#"/>
+                <input type="hidden" name="pass" id="pass" value="#xarVarPrep::forDisplay($pass)#"/>
                 <input type="hidden" name="ip" id="ip" value="#$ip#"/>
                 <input type="hidden" name="groupid" id="groupid" value="#$groupid#"/>
                 <input type="hidden" name="state" id="state" value="#$state#"/>
@@ -190,7 +190,7 @@
                     <div class="xar-row">
                         <div class="xar-col">
                             <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                                $#xarVar::prepForDisplay($name)#
+                                $#xarVarPrep::forDisplay($name)#
                             </span>
                         </div>
                         <div class="xar-col">

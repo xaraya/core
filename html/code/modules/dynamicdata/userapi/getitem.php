@@ -82,7 +82,7 @@ class GetitemMethod extends MethodClass
         }
         if (count($invalid) > 0) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-            $vars = [join(', ', $invalid), 'user', 'getall', 'DynamicData'];
+            $vars = [join(', ', $invalid), 'user', 'getitem', 'DynamicData'];
             throw new BadParameterException($vars, $msg);
         }
 
