@@ -1216,10 +1216,10 @@ class DataObjectMaster extends xarObject implements DataObjectServicesInterface
             $anonid = $this->config()->getVar('Site.User.AnonymousUID');
             if (empty($roleid) && !empty($this->session()->getAnonId()) && $this->user()->isLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
-                $grouplist = xarCache::getParents();
+                $grouplist = $this->cache()->getParents();
             } elseif (!empty($roleid) && $roleid != $anonid) {
                 // get the direct parents of the specified user (no ancestors)
-                $grouplist = xarCache::getParents($roleid);
+                $grouplist = $this->cache()->getParents($roleid);
             } else {
                 // check anonymous visitors by themselves
                 $grouplist = [$anonid];

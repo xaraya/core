@@ -257,11 +257,11 @@ class DataObjectFactory extends xarObject
     **/
     public static function flushVariableCache($args = [])
     {
+        $xar = xar::getServicesClass();
         // check if variable caching is actually enabled at all...
-        if (!xarCache::isVariableCacheEnabled()) {
+        if (!$xar->cache()->withVariables()) {
             return;
         }
-        $xar = xar::getServicesClass();
         // get the missing object information
         if (empty($args['name']) || empty($args['objectid'])) {
             $args = static::getObjectInfo($args);
@@ -298,8 +298,9 @@ class DataObjectFactory extends xarObject
     **/
     public static function getVariableCacheKey($scope, $args = [])
     {
+        $xar = xar::getServicesClass();
         // check if variable caching is actually enabled at all...
-        if (!xarCache::isVariableCacheEnabled()) {
+        if (!$xar->cache()->withVariables()) {
             return null;
         }
         if (empty($scope)) {
@@ -308,7 +309,6 @@ class DataObjectFactory extends xarObject
         if (empty($args['objectid']) && empty($args['name'])) {
             throw new Exception(xar::mls()->translate('Cannot get object information without an objectid or a name'));
         }
-        $xar = xar::getServicesClass();
         $name = '';
         if (!empty($args['name'])) {
             $scope .= '.ByName';

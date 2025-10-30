@@ -20,10 +20,6 @@ use Xaraya\Services\ServicesClass;
 use xarCore;
 use xarMod;
 use xarVersion;
-use xarCache;
-use xarOutputCache;
-use xarPageCache;
-use xarBlockCache;
 use sys;
 use Stack;
 use ThemeInitialization;
@@ -615,16 +611,12 @@ class InstallerTool extends ServicesClass
             // set the target location (anchor) to go to within the page
             //$target = $extInfo['name'];
 
-            if (xarCache::isOutputCacheEnabled()) {
-                if (xarOutputCache::isPageCacheEnabled()) {
-                    xarPageCache::flushCached('modules');
-                    // a status update might mean a new menulink and new base homepage
-                    xarPageCache::flushCached('base');
-                }
-                if (xarOutputCache::isBlockCacheEnabled()) {
-                    // a status update might mean a new menulink and new base homepage
-                    xarBlockCache::flushCached('base');
-                }
+            if ($this->cache()->withOutput()) {
+                $this->cache()->flushPages('modules');
+                // a status update might mean a new menulink and new base homepage
+                $this->cache()->flushPages('base');
+                // a status update might mean a new menulink and new base homepage
+                $this->cache()->flushBlocks('base');
             }
 
             $this->ctl()->redirect($return_url);

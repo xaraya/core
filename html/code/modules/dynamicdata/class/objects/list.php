@@ -409,7 +409,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         if (!empty($this->session()->getAnonId()) && $this->user()->isLoggedIn()) {
             // get the direct parents of the current user (no ancestors)
-            $grouplist = xarCache::getParents();
+            $grouplist = $this->cache()->getParents();
         } else {
             // check anonymous visitors by themselves
             $anonid = $this->config()->getVar('Site.User.AnonymousUID');

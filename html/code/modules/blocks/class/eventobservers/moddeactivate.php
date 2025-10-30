@@ -26,12 +26,8 @@ class BlocksModDeactivateObserver extends EventObserver implements ixarEventObse
     {
         $xar = $subject->getServicesClass();
         $modName = $subject->getArgs();
-        if (xarCache::isOutputCacheEnabled()) {
-            if (xarOutputCache::isBlockCacheEnabled()) {
-                // a status update might mean a new menulink and new base homepage
-                xarBlockCache::flushCached('base');
-            }
-        }
+        // a status update might mean a new menulink and new base homepage
+        $xar->cache()->flushBlocks('base');
         // refresh block types
         $xar->mod()->apiFunc(
             'blocks',

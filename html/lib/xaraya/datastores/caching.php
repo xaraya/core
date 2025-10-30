@@ -17,7 +17,6 @@
 namespace Xaraya\DataObject\DataStores;
 
 use ixarCache_Storage;
-use xarCache;
 use Exception;
 use sys;
 
@@ -173,8 +172,9 @@ class CachingDataStore extends BasicDataStore
         if (!empty($this->cacheStorage)) {
             return $this->cacheStorage;
         }
+        $xar = $this->getServicesClass();
         // Note: we use dummy or apcu by default here - see VirtualObjectDescriptor
-        $this->cacheStorage = xarCache::getStorage([
+        $this->cacheStorage = $xar->cache()->getStorage([
             'storage'   => $this->storageType ?: 'apcu',
             'type'      => 'datastore',
             //'provider'  => $provider,

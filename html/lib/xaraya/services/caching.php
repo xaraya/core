@@ -34,6 +34,10 @@ interface CachingInterface extends ServiceInterface
 {
     public const SLICE = 'caching';
 
+    public function withOutput(): bool;
+
+    public function withPages(): bool;
+
     /**
      * Get a cache key for page output caching
      * @param ?string $url optional url to be checked if not the current url
@@ -49,17 +53,24 @@ interface CachingInterface extends ServiceInterface
     /**
      * Get the content of a cached page + output to browser
      */
-    public function sendPage(string $cacheKey): bool|null;
+    public function sendPage(?string $cacheKey): bool|null;
 
     /**
      * Get the content of a cached page
      */
-    public function getPage(string $cacheKey): string;
+    public function getPage(?string $cacheKey): string;
 
     /**
      * Set the content of a cached page
      */
-    public function setPage(string $cacheKey, string $value): void;
+    public function setPage(?string $cacheKey, string $value): void;
+
+    /**
+     * Flush page cache entries
+     */
+    public function flushPages(string $cacheScope): void;
+
+    public function withModules(): bool;
 
     /**
      * Get a cache key for module output caching
@@ -76,12 +87,19 @@ interface CachingInterface extends ServiceInterface
     /**
      * Get the output of the module function from cache
      */
-    public function getModule(string $cacheKey): string;
+    public function getModule(?string $cacheKey): string;
 
     /**
      * Set the output of the module function in cache
      */
     public function setModule(?string $cacheKey, string $value): void;
+
+    /**
+     * Flush module cache entries
+     */
+    public function flushModules(string $cacheScope): void;
+
+    public function withBlocks(): bool;
 
     /**
      * Get a cache key for block output caching
@@ -98,12 +116,19 @@ interface CachingInterface extends ServiceInterface
     /**
      * Get the output of the block display from cache
      */
-    public function getBlock(string $cacheKey): string;
+    public function getBlock(?string $cacheKey): string;
 
     /**
      * Set the output of the block display in cache
      */
     public function setBlock(?string $cacheKey, string $value): void;
+
+    /**
+     * Flush block cache entries
+     */
+    public function flushBlocks(string $cacheScope): void;
+
+    public function withObjects(): bool;
 
     /**
      * Get a cache key for object output caching
@@ -120,16 +145,23 @@ interface CachingInterface extends ServiceInterface
     /**
      * Get the output of the object method from cache
      */
-    public function getObject(string $cacheKey): string;
+    public function getObject(?string $cacheKey): string;
 
     /**
      * Set the output of the object method in cache
      */
-    public function setObject(string $cacheKey, string $value): void;
+    public function setObject(?string $cacheKey, string $value): void;
+
+    /**
+     * Flush object cache entries
+     */
+    public function flushObjects(string $cacheScope): void;
+
+    public function withVariables(): bool;
 
     /**
      * Get a cache key for variable instance caching
-     * @return string|null cacheKey to be used with xarVariableCache::(is|get|set)Cached, or null if not applicable
+     * @return string|null cacheKey to be used with $this->cache()->(is|get|set)Variable, or null if not applicable
      */
     public function getVariableKey(string $scope, string $name): ?string;
 
@@ -141,7 +173,7 @@ interface CachingInterface extends ServiceInterface
     /**
      * Get the value of a cached variable
      */
-    public function getVariable(string $cacheKey): string|object;
+    public function getVariable(?string $cacheKey): string|object;
 
     /**
      * Set the value of a cached variable
@@ -152,6 +184,11 @@ interface CachingInterface extends ServiceInterface
      * Delete a cached variable
      */
     public function delVariable(?string $cacheKey): void;
+
+    /**
+     * Flush a particular cache scope
+     */
+    public function flushVariables(string $cacheScope): void;
 
     /**
      * Disable caching of the current output, e.g. when an authid is generated or if we redirect
@@ -207,12 +244,24 @@ trait CachingTrait
 {
     use ServiceTrait;
 
-    /** @var ?ixarCache_Storage */
+    protected ?ixarCache_Storage $pageStorage = null;
     protected ?ixarCache_Storage $moduleStorage = null;
     protected ?ixarCache_Storage $blockStorage = null;
     protected ?ixarCache_Storage $objectStorage = null;
     protected ?ixarCache_Storage $variableStorage = null;
-    protected ?ixarCache_Storage $pageStorage = null;
+
+    public function withOutput(): bool
+    {
+        if (!empty($this->pageStorage) || !empty($this->moduleStorage) || !empty($this->blockStorage) || !empty($this->objectStorage)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function withPages(): bool
+    {
+        return empty($this->pageStorage) ? false : true;
+    }
 
     /**
      * Get a cache key for page output caching
@@ -244,7 +293,7 @@ trait CachingTrait
     /**
      * Get the content of a cached page + output to browser
      */
-    public function sendPage(string $cacheKey): bool|null
+    public function sendPage(?string $cacheKey): bool|null
     {
         if (empty($cacheKey)) {
             return false;
@@ -259,7 +308,7 @@ trait CachingTrait
     /**
      * Get the content of a cached page
      */
-    public function getPage(string $cacheKey): string
+    public function getPage(?string $cacheKey): string
     {
         if (empty($cacheKey)) {
             return '';
@@ -274,7 +323,7 @@ trait CachingTrait
     /**
      * Set the content of a cached page
      */
-    public function setPage(string $cacheKey, string $value): void
+    public function setPage(?string $cacheKey, string $value): void
     {
         if (empty($cacheKey)) {
             return;
@@ -283,6 +332,22 @@ trait CachingTrait
             return;
         }
         xarPageCache::setCached($cacheKey, $value);
+    }
+
+    /**
+     * Flush page cache entries
+     */
+    public function flushPages(string $cacheScope): void
+    {
+        if (empty($this->pageStorage)) {
+            return;
+        }
+        xarPageCache::flushCached($cacheScope);
+    }
+
+    public function withModules(): bool
+    {
+        return empty($this->moduleStorage) ? false : true;
     }
 
     /**
@@ -318,7 +383,7 @@ trait CachingTrait
     /**
      * Get the output of the module function from cache
      */
-    public function getModule(string $cacheKey): string
+    public function getModule(?string $cacheKey): string
     {
         if (empty($cacheKey)) {
             return '';
@@ -341,6 +406,22 @@ trait CachingTrait
             return;
         }
         xarModuleCache::setCached($cacheKey, $value);
+    }
+
+    /**
+     * Flush module cache entries
+     */
+    public function flushModules(string $cacheScope): void
+    {
+        if (empty($this->moduleStorage)) {
+            return;
+        }
+        xarModuleCache::flushCached($cacheScope);
+    }
+
+    public function withBlocks(): bool
+    {
+        return empty($this->blockStorage) ? false : true;
     }
 
     /**
@@ -373,7 +454,7 @@ trait CachingTrait
     /**
      * Get the output of the block display from cache
      */
-    public function getBlock(string $cacheKey): string
+    public function getBlock(?string $cacheKey): string
     {
         if (empty($cacheKey)) {
             return '';
@@ -396,6 +477,22 @@ trait CachingTrait
             return;
         }
         xarBlockCache::setCached($cacheKey, $value);
+    }
+
+    /**
+     * Flush block cache entries
+     */
+    public function flushBlocks(string $cacheScope): void
+    {
+        if (empty($this->blockStorage)) {
+            return;
+        }
+        xarBlockCache::flushCached($cacheScope);
+    }
+
+    public function withObjects(): bool
+    {
+        return empty($this->objectStorage) ? false : true;
     }
 
     /**
@@ -431,7 +528,7 @@ trait CachingTrait
     /**
      * Get the output of the object method from cache
      */
-    public function getObject(string $cacheKey): string
+    public function getObject(?string $cacheKey): string
     {
         if (empty($cacheKey)) {
             return '';
@@ -457,8 +554,24 @@ trait CachingTrait
     }
 
     /**
+     * Flush object cache entries
+     */
+    public function flushObjects(string $cacheScope): void
+    {
+        if (empty($this->objectStorage)) {
+            return;
+        }
+        xarObjectCache::flushCached($cacheScope);
+    }
+
+    public function withVariables(): bool
+    {
+        return empty($this->variableStorage) ? false : true;
+    }
+
+    /**
      * Get a cache key for variable value caching
-     * @return string|null cacheKey to be used with xarVariableCache::(is|get|set)Cached, or null if not applicable
+     * @return string|null cacheKey to be used with $this->cache()->(is|get|set)Variable, or null if not applicable
      */
     public function getVariableKey(string $scope, string $name): ?string
     {
@@ -485,7 +598,7 @@ trait CachingTrait
     /**
      * Get the value of a cached variable
      */
-    public function getVariable(string $cacheKey): string|object
+    public function getVariable(?string $cacheKey): string|object
     {
         if (empty($cacheKey)) {
             return '';
@@ -522,6 +635,17 @@ trait CachingTrait
             return;
         }
         xarVariableCache::delCached($cacheKey);
+    }
+
+    /**
+     * Flush a particular cache scope
+     */
+    public function flushVariables(string $cacheScope): void
+    {
+        if (empty($this->variableStorage)) {
+            return;
+        }
+        xarVariableCache::flushCached($cacheScope);
     }
 
     /**
@@ -638,10 +762,10 @@ class CachingService implements CachingInterface
         // Enable output caching if configured
         if (xarCache::$outputCacheIsEnabled) {
             // Note: we don't want to call xarOutputCache::init() here again
+            $this->pageStorage = xarPageCache::$cacheStorage;
             $this->moduleStorage = xarModuleCache::$cacheStorage;
             $this->blockStorage = xarBlockCache::$cacheStorage;
             $this->objectStorage = xarObjectCache::$cacheStorage;
-            $this->pageStorage = xarPageCache::$cacheStorage;
         }
 
         // Enable variable caching if configured

@@ -17,8 +17,8 @@ namespace Xaraya\Authentication;
 
 use Xaraya\Context\Context;
 use Xaraya\Context\RequestContext;
+use Xaraya\Services\xar;
 use ixarCache_Storage;
-use xarCache;
 
 /**
  * Auth Token Storage
@@ -124,7 +124,7 @@ class AuthToken
         if (!isset(self::$tokenStorage)) {
             //self::loadConfig();
             // @checkme access cachestorage directly here
-            self::$tokenStorage = xarCache::getStorage([
+            self::$tokenStorage = xar::cache()->getStorage([
                 'storage' => self::$storageType,
                 'type' => 'token',
                 'expire' => self::$tokenExpires,

@@ -14,11 +14,7 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use ModuleNotFoundException;
-use xarBlockCache;
-use xarCache;
 use xarMod;
-use xarOutputCache;
-use xarPageCache;
 use sys;
 
 sys::import('xaraya.modules.method');
@@ -144,16 +140,12 @@ class InstallMethod extends MethodClass
         // set the target location (anchor) to go to within the page
         $target = $minfo['name'];
 
-        if (xarCache::isOutputCacheEnabled()) {
-            if (xarOutputCache::isPageCacheEnabled()) {
-                xarPageCache::flushCached('modules');
-                // a status update might mean a new menulink and new base homepage
-                xarPageCache::flushCached('base');
-            }
-            if (xarOutputCache::isBlockCacheEnabled()) {
-                // a status update might mean a new menulink and new base homepage
-                xarBlockCache::flushCached('base');
-            }
+        if ($this->cache()->withOutput()) {
+            $this->cache()->flushPages('modules');
+            // a status update might mean a new menulink and new base homepage
+            $this->cache()->flushPages('base');
+            // a status update might mean a new menulink and new base homepage
+            $this->cache()->flushBlocks('base');
         }
 
         if (empty($return_url)) {

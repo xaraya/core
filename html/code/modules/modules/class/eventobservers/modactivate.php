@@ -27,13 +27,11 @@ class ModulesModActivateObserver extends EventObserver implements ixarEventObser
         if (empty($modInfo)) {
             return;
         }
-        PropertyRegistration::importPropertyTypes(true, ['modules/' . $modInfo['directory'] . '/xarproperties']);
-        if (xarCache::isOutputCacheEnabled() && function_exists('xarMod::getName') && $xar->mod()->getName() != 'installer') {
-            if (xarOutputCache::isPageCacheEnabled()) {
-                xarPageCache::flushCached('modules');
-                // a status update might mean a new menulink and new base homepage
-                xarPageCache::flushCached('base');
-            }
+        $xar->prop()->importPropertyTypes(true, ['modules/' . $modInfo['directory'] . '/xarproperties']);
+        if ($xar->cache()->withOutput() && function_exists('xarMod::getName') && $xar->mod()->getName() != 'installer') {
+            $xar->cache()->flushPages('modules');
+            // a status update might mean a new menulink and new base homepage
+            $xar->cache()->flushPages('base');
         }
         $context = $subject->getContext();
         // let any hooks know the module was activated
