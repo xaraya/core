@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * Make Core Services available via $this->getServicesClass() in trait (instance method)
+ *
+ * @package core\services
+ * @subpackage services
+ * @category Xaraya Web Applications Framework
+ * @version 2.8.4
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ * @author mikespub <mikespub@xaraya.com>
+**/
+
+namespace Xaraya\Services;
+
+/**
+ * Make Core Services available via $this->getServicesClass() in trait (instance method)
+ *
+ * ```
+ * use Xaraya\Services\WithServicesClass;
+ *
+ * class MyFancyClass
+ * {
+ *     use WithServicesClass;
+ *
+ *     public function helloWorld():
+ *     {
+ *         $xar = $this->getServicesClass();
+ *         $dbconn = $xar->db()->getConn();
+ *         // ...
+ *     }
+ * }
+ * ```
+ */
+trait WithServicesClass
+{
+    protected ?StaticServicesClass $xarServices = null;
+
+    public function getServicesClass(): StaticServicesClass
+    {
+        if (!isset($this->xarServices)) {
+            $this->xarServices = xar::getServicesClass();
+        }
+        return $this->xarServices;
+    }
+}

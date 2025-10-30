@@ -20,9 +20,9 @@ use xarMod;
 use xarOutputCache;
 use xarPageCache;
 use sys;
-use InstallerTool;
 
 sys::import('xaraya.modules.method');
+use Xaraya\Modules\InstallerTool;
 
 /**
  * modules admin install function

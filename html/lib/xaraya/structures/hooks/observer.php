@@ -4,7 +4,7 @@
  * @package core\hooks
  * @subpackage hooks
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info

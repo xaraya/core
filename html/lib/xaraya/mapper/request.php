@@ -18,9 +18,12 @@ sys::import('xaraya.facades.config');
 sys::import('xaraya.services.xar');
 use Xaraya\Requests\RequestInterface;
 use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 
 class xarRequest extends xarObject
 {
+    use WithServicesClass;
+
     protected string $url          = '';
     protected string $actionstring = '';
     protected bool $dispatched   = false;
@@ -52,15 +55,6 @@ class xarRequest extends xarObject
     private $isAjax   = null;
     /** @var ?RequestInterface */
     private $requestContext = null;
-    protected $xarServices = null;
-
-    protected function getServicesClass()
-    {
-        if (!isset($this->xarServices)) {
-            $this->xarServices = xar::getServicesClass();
-        }
-        return $this->xarServices;
-    }
 
     /**
      * @param ?string $url

@@ -15,12 +15,15 @@
 
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 
 /**
  * Base CSS class
 **/
 class xarCSS extends xarObject
 {
+    use WithServicesClass;
+
     public const CACHE_SCOPE = 'Themes.CSS';
     /**
      * Defines for this library
@@ -78,15 +81,6 @@ class xarCSS extends xarObject
     // avoid refreshing on each unserialize
     public $refreshed  = false;
     private $expires    = 86400; // One day
-    protected $xarServices = null;
-
-    protected function getServicesClass()
-    {
-        if (!isset($this->xarServices)) {
-            $this->xarServices = xar::getServicesClass();
-        }
-        return $this->xarServices;
-    }
 
     /**
      * object constructor
@@ -122,7 +116,8 @@ class xarCSS extends xarObject
     {
         // Check what libraries are present in the filesystem
         if (time() - $this->last_run > $this->expires) {
-            xar::log()->debug('xarCSS::__wakeup: unserialize & refresh ' . (string) $this->last_run);
+            $xar = $this->getServicesClass();
+            $xar->log()->debug('xarCSS::__wakeup: unserialize & refresh ' . (string) $this->last_run);
             $this->refresh();
             $this->refreshed = true;
         } else {
@@ -147,7 +142,8 @@ class xarCSS extends xarObject
     **/
     public function __sleep()
     {
-        xar::log()->debug('xarCSS::__sleep: serialize');
+        $xar = $this->getServicesClass();
+        $xar->log()->debug('xarCSS::__sleep: serialize');
         // set the last run time before we exit
         $this->last_run = time();
         // return the array of public property names to store
@@ -938,6 +934,8 @@ class xarCSS extends xarObject
 **/
 class xarCSSLib extends xarObject
 {
+    use WithServicesClass;
+
     // required meta data, filled in when the object is created
     public $name;
     public $displayname;
@@ -958,15 +956,6 @@ class xarCSSLib extends xarObject
     public $styles        = []; // all styles
     public $templates;
     public $scripts;
-    protected $xarServices = null;
-
-    protected function getServicesClass()
-    {
-        if (!isset($this->xarServices)) {
-            $this->xarServices = xar::getServicesClass();
-        }
-        return $this->xarServices;
-    }
 
     public function __construct($name)
     {

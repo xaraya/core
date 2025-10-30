@@ -5,7 +5,7 @@
  * @package core\events
  * @subpackage events
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -15,6 +15,7 @@
 sys::import('xaraya.context.contexttrait');
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
+use Xaraya\Services\WithServicesClass;
 
 interface ixarEventSubject extends ContextInterface
 {
@@ -43,6 +44,10 @@ interface ixarEventSubject extends ContextInterface
      * @return void
      */
     public function setArgs($args);
+    /**
+     * @return \Xaraya\Services\StaticServicesClass
+     */
+    public function getServicesClass();
 }
 
 /**
@@ -54,6 +59,7 @@ interface ixarEventSubject extends ContextInterface
 abstract class EventSubject extends xarObject implements ixarEventSubject
 {
     use ContextTrait;
+    use WithServicesClass;
 
     /** @var mixed */
     protected $args;                // args passed from caller when event is raised

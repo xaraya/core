@@ -5,7 +5,7 @@
  * @package core\events
  * @subpackage events
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -36,9 +36,10 @@ class GuiEventObserver extends EventObserver
 
     public function notify(ixarEventSubject $subject)
     {
+        $xar = $subject->getServicesClass();
         // function was already imported in events fileLoad, but that doesn't mean the module was loaded
-        xarMod::load($this->module, $this->type);
+        $xar->mod()->load($this->module, $this->type);
         // note, no try / catch here, subject notify method should handle exceptions
-        return xarMod::guiFunc($this->module, $this->type, $this->func, $subject->getArgs(), $subject->getContext());
+        return $xar->mod()->guiFunc($this->module, $this->type, $this->func, $subject->getArgs(), $subject->getContext());
     }
 }

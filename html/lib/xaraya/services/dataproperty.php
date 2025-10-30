@@ -18,6 +18,7 @@ namespace Xaraya\Services;
 
 use DataPropertyMaster;
 use DataProperty;
+use PropertyRegistration;
 use xarTpl;
 use sys;
 
@@ -56,6 +57,13 @@ interface DataPropertyInterface extends ServiceInterface
      * @param array<string, mixed> $args with ['type' => '...']
      */
     public function getProperty(array $args = []): DataProperty;
+
+    /**
+     * Import DataProperty types into the property_types table
+     * @param array<string> $dirs
+     * @return array<mixed> an array of the property types currently available
+     */
+    public static function importPropertyTypes(bool $flush = true, array $dirs = []): array;
 }
 
 /**
@@ -119,6 +127,17 @@ trait DataPropertyTrait
     public function getProperty(array $args = []): DataProperty
     {
         return DataPropertyMaster::getProperty($args);
+    }
+
+    /**
+     * Import DataProperty types into the property_types table
+     * @param array<string> $dirs
+     * @return array<mixed> an array of the property types currently available
+     * @todo flush seems to be unused
+     */
+    public static function importPropertyTypes(bool $flush = true, array $dirs = []): array
+    {
+        return PropertyRegistration::importPropertyTypes($flush, $dirs);
     }
 }
 

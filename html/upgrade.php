@@ -85,19 +85,18 @@ class xarUpgrader
     private static $instance          = null;
 
     public static $errormessage       = '';
-    protected $xar = null;
 
     protected function __construct()
     {
         // Get Xaraya Services Class
-        $this->xar = xar::getServicesClass();
+        $xar = xar::getServicesClass();
 
-        //xarConfigVars::set(null, 'System.Core.VersionNum', '2.4.0');
+        //$xar->config()->setVar('System.Core.VersionNum', '2.4.1');
         // Let the system know that we are in the process of installing
-        $this->xar->mem()->set('Upgrade', 'upgrading', 1);
+        $xar->mem()->set('Upgrade', 'upgrading', 1);
 
         // Set module name in Services Class for templates
-        $this->xar->setModName('installer');
+        $xar->setModName('installer');
 
         // Load the current request
         xarController::getRequest();
@@ -106,21 +105,21 @@ class xarUpgrader
         error_reporting(E_ALL);
 
         // Make sure we can render a page
-        $this->xar->tpl()->setPageTitle(xarMLS::translate('Xaraya Upgrade'));
-        if (!$this->xar->tpl()->setThemeName('installer')) {
+        $xar->tpl()->setPageTitle($xar->mls()->translate('Xaraya Upgrade'));
+        if (!$xar->tpl()->setThemeName('installer')) {
             throw new Exception('You need the installer theme if you want to upgrade Xaraya.');
         }
 
         // Set the default page title before calling the module function
-        $this->xar->tpl()->setPageTitle(xarMLS::translate("Upgrading Xaraya"));
+        $xar->tpl()->setPageTitle($xar->mls()->translate("Upgrading Xaraya"));
 
-        $output = $this->xar->mod()->guiFunc('installer', 'admin', 'upgrade');
-        $this->renderPage($output);
+        $output = $xar->mod()->guiFunc('installer', 'admin', 'upgrade');
+        $this->renderPage($output, $xar);
     }
 
-    private function renderPage($output)
+    private function renderPage($output, $xar)
     {
-        if ($this->xar->isDebuggerActive()) {
+        if ($xar->isDebuggerActive()) {
             if (ob_get_length() > 0) {
                 $rawOutput = ob_get_contents();
                 $output = 'The following lines were printed in raw mode by module, however this
@@ -135,7 +134,7 @@ class xarUpgrader
         }
 
         // Render page with the output
-        $pageOutput = $this->xar->tpl()->renderPage($output);
+        $pageOutput = $xar->tpl()->renderPage($output);
         echo $pageOutput;
         return true;
     }

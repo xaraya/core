@@ -15,13 +15,12 @@ use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
 use Exception;
-use xarController;
 use xarMod;
 use sys;
-use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
+use Xaraya\Modules\InstallerTool;
 
 /**
  * modules admin upgrade function

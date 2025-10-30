@@ -23,6 +23,7 @@ use sys;
 sys::import('xaraya.datastores.interface');
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 
 /**
  * Base class for DD objects datastore
@@ -30,19 +31,12 @@ use Xaraya\Services\xar;
  */
 class DDObject extends xarObject implements IDDObject
 {
+    use WithServicesClass;
+
     /** @var string */
     public $name;
     /** @var SimpleXMLElement */
     public $schemaobject;
-    protected $xarServices = null;
-
-    protected function getServicesClass()
-    {
-        if (!isset($this->xarServices)) {
-            $this->xarServices = xar::getServicesClass();
-        }
-        return $this->xarServices;
-    }
 
     /**
      * Summary of __construct

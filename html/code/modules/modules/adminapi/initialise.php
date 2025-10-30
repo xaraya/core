@@ -19,10 +19,10 @@ use ModuleNotFoundException;
 use xarEvents;
 use xarMod;
 use sys;
-use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
+use Xaraya\Modules\InstallerTool;
 
 /**
  * modules adminapi initialise function

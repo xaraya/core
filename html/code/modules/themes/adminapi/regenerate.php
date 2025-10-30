@@ -16,7 +16,7 @@ use Xaraya\Modules\Themes\AdminApi;
 use DuplicateException;
 use xarTheme;
 use sys;
-use InstallerTool;
+use Xaraya\Modules\InstallerTool;
 use ThemeInitialization;
 
 sys::import('xaraya.modules.method');

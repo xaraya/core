@@ -5,7 +5,7 @@
  * @package modules\blocks
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -13,8 +13,6 @@
  */
 
 sys::import('xaraya.structures.events.observer');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 
 /**
  * ModRemove Subject Observer
@@ -26,7 +24,7 @@ class BlocksModRemoveObserver extends EventObserver implements ixarEventObserver
     public $module = 'blocks';
     public function notify(ixarEventSubject $subject)
     {
-        $xar = xar::getServicesClass();
+        $xar = $subject->getServicesClass();
         $modName = $subject->getArgs();
         $xar->mem()->set('Blocks.event', 'modremove', $modName);
         //

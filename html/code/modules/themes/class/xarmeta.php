@@ -15,26 +15,20 @@
 
 sys::import('xaraya.services.xar');
 use Xaraya\Services\xar;
+use Xaraya\Services\WithServicesClass;
 
 /**
  * Base Meta class
 **/
 class xarMeta extends xarObject
 {
+    use WithServicesClass;
+
     public const CACHE_SCOPE = 'Themes.Meta';
     // this singleton instance belongs with static services class (or service in it)
     private static $instance;
     // the queue of meta belongs to the instance
     private $meta;
-    protected $xarServices = null;
-
-    protected function getServicesClass()
-    {
-        if (!isset($this->xarServices)) {
-            $this->xarServices = xar::getServicesClass();
-        }
-        return $this->xarServices;
-    }
 
     // prevent direct creation of this object
     private function __construct()

@@ -14,13 +14,11 @@ namespace Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Modules\AdminGui;
 use Xaraya\Modules\Modules\AdminApi;
-use PropertyRegistration;
-use xarController;
 use sys;
-use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
+use Xaraya\Modules\InstallerTool;
 
 /**
  * modules admin remove function
@@ -88,7 +86,7 @@ class RemoveMethod extends MethodClass
                     return;
                 }
                 // Clear the property cache
-                PropertyRegistration::importPropertyTypes(true);
+                $this->prop()->importPropertyTypes(true);
                 $this->ctl()->redirect($return_url);
                 return true;
             } else {
@@ -111,7 +109,7 @@ class RemoveMethod extends MethodClass
         } // Else
 
         // Clear the property cache
-        PropertyRegistration::importPropertyTypes(true);
+        $this->prop()->importPropertyTypes(true);
 
         // Hmmm, I wonder if the target adding is considered a hack
         // it certainly depends on the implementation of xarController::URL

@@ -14,13 +14,12 @@ namespace Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\MethodClass;
 use Xaraya\Modules\Themes\AdminGui;
 use Xaraya\Modules\Themes\AdminApi;
-use xarController;
 use xarTheme;
 use sys;
-use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
+use Xaraya\Modules\InstallerTool;
 
 /**
  * themes admin deactivate function

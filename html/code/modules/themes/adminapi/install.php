@@ -16,10 +16,10 @@ use Xaraya\Modules\Themes\AdminApi;
 use EmptyParameterException;
 use xarTheme;
 use sys;
-use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
+use Xaraya\Modules\InstallerTool;
 
 /**
  * themes adminapi install function

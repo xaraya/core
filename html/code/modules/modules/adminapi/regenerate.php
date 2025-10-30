@@ -17,10 +17,10 @@ use DuplicateException;
 use xarMod;
 use xarVersion;
 use sys;
-use InstallerTool;
 
 sys::import('xaraya.modules.method');
 sys::import('modules.modules.class.installer');
+use Xaraya\Modules\InstallerTool;
 
 /**
  * modules adminapi regenerate function
