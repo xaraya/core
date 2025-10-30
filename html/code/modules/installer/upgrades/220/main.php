@@ -37,10 +37,10 @@ function main_upgrade_220()
 
     ];
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/220/database/' . $upgrade . '.php')) {
+        if (!xarUpgrader::loadFile('upgrades/220/database/' . $upgrade . '.php')) {
             $data['upgrade']['tasks'][] = [
                 'reply' => xarML('Failed!'),
-                'description' => Upgrader::$errormessage,
+                'description' => xarUpgrader::$errormessage,
                 'reference' => $upgrade,
                 'success' => false,
             ];

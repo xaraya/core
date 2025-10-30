@@ -22,10 +22,10 @@ function main_upgrade_211()
         'sql_211_02',
     ];
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/211/database/' . $upgrade . '.php')) {
+        if (!xarUpgrader::loadFile('upgrades/211/database/' . $upgrade . '.php')) {
             $data['upgrade']['tasks'][] = [
                 'reply' => xarML('Failed!'),
-                'description' => Upgrader::$errormessage,
+                'description' => xarUpgrader::$errormessage,
                 'reference' => $upgrade,
                 'success' => false,
             ];

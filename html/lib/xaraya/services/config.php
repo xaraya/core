@@ -128,7 +128,7 @@ trait ConfigTrait
         // 2. Getting a new id (for some backends)
         // 3. inserting it.
         // Question is wether we want to invent new configvars on the fly or not
-        self::delete(null, $varName);
+        $this->delVar($varName);
 
         $db = $this->getParent()->db();
         $dbconn = $db->getConn();

@@ -263,8 +263,21 @@ final class sys extends xarObject
     {
         // test compatibility with composer autoload by disabling sys::import
         // works fine except with *_xartables (fixed) or other function files (?)
-        if (self::$autoload && (!str_contains($dp, '.xar') || !str_starts_with($dp, 'modules.'))) {
-            return true;
+        if (self::$autoload) {
+            if (str_starts_with($dp, 'modules.')) {
+                // import legacy xar* files
+                if (!str_contains($dp, '.xar')) {
+                    return true;
+                }
+                // @todo skip import of module properties for get_declared_classes()
+                // @see PropertyRegistration::importPropertyTypes()
+            } elseif (str_starts_with($dp, 'properties.')) {
+                // @todo skip import of stand-alone properties for get_declared_classes()
+                // @see PropertyRegistration::importPropertyTypes()
+            } else {
+                // autoload everything else
+                return true;
+            }
         }
         $dp = str_replace('.', '/', $dp);
         if ((0 === strpos($dp, 'modules/')) || (0 === strpos($dp, 'properties/')) || (0 === strpos($dp, 'blocks/'))) {

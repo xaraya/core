@@ -55,10 +55,10 @@ function main_check_210()
         'sql_210_roles_tree',
     ];
     foreach ($checks as $check) {
-        if (!Upgrader::loadFile('checks/210/database/' . $check . '.php')) {
+        if (!xarUpgrader::loadFile('checks/210/database/' . $check . '.php')) {
             $data['check']['tasks'][] = [
                 'reply' => xarML('Failed!'),
-                'description' => Upgrader::$errormessage,
+                'description' => xarUpgrader::$errormessage,
                 'reference' => $check,
                 'success' => false,
             ];

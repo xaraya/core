@@ -111,7 +111,7 @@ class ItemVarsHelper extends VarsHelper
 
         // First delete it.
         // FIXME: do we really want this ?
-        self::delete($modName, $varName, $itemid);
+        $this->delete($modName, $varName, $itemid);
 
         if ($value === false) {
             $value = 0;

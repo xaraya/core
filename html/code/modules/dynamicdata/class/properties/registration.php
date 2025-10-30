@@ -191,7 +191,7 @@ class PropertyRegistration extends DataContainer
 
         $result = $dbconn->executeQuery($query);
         $proptypes = [];
-        if ($result->RecordCount() === 0) {
+        if ($result->getRecordCount() === 0) {
             $proptypes = self::importPropertyTypes(false);
         } else {
             while ($result->next()) {

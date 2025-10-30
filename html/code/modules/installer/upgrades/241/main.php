@@ -22,10 +22,10 @@ function main_upgrade_241()
         'sql_241_03', // Add class and filepath columns to the block_types table
     ];
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/241/database/' . $upgrade . '.php')) {
+        if (!xarUpgrader::loadFile('upgrades/241/database/' . $upgrade . '.php')) {
             $data['upgrade']['tasks'][] = [
                 'reply' => xarML('Failed!'),
-                'description' => Upgrader::$errormessage,
+                'description' => xarUpgrader::$errormessage,
                 'reference' => $upgrade,
                 'success' => false,
             ];

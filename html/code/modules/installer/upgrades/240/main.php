@@ -20,10 +20,10 @@ function main_upgrade_240()
         'sql_240_01', // Upgrading the core module version numbers
     ];
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/240/database/' . $upgrade . '.php')) {
+        if (!xarUpgrader::loadFile('upgrades/240/database/' . $upgrade . '.php')) {
             $data['upgrade']['tasks'][] = [
                 'reply' => xarML('Failed!'),
-                'description' => Upgrader::$errormessage,
+                'description' => xarUpgrader::$errormessage,
                 'reference' => $upgrade,
                 'success' => false,
             ];

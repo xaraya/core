@@ -235,33 +235,38 @@ function xarInstallLoader()
  */
 function xarInstallMain()
 {
+    // Get Xaraya Services Class
+    $xar = xar::getServicesClass();
+
     // Let the system know that we are in the process of installing
-    xar::mem()->set('installer', 'installing', 1);
+    $xar->mem()->set('installer', 'installing', 1);
+    // Set module name in Services Class for templates
+    $xar->setModName('installer');
 
     // Make sure we can render a page
-    xarTpl::setPageTitle(xarMLS::translate('Xaraya installer'));
-    if (!xarTpl::setThemeName('installer')) {
+    $xar->tpl()->setPageTitle($xar->mls()->translate('Xaraya installer'));
+    if (!$xar->tpl()->setThemeName('installer')) {
         throw new Exception('You need the installer theme if you want to install Xaraya.');
     }
 
     // Handle installation phase designation
-    xarVar::fetch('install_phase', 'int:1:6', $phase, 1, xarVar::NOT_REQUIRED);
+    $xar->var()->find('install_phase', $phase, 'int:1:6', 1);
 
     // Build function name from phase
     $funcName = 'phase' . $phase;
 
     // If the debugger is active, start it
-    if (xarCore::isDebuggerActive()) {
+    if ($xar->isDebuggerActive()) {
         ob_start();
     }
 
     // Set the default page title before calling the module function
-    xarTpl::setPageTitle(xarMLS::translate("Installing Xaraya"));
+    $xar->tpl()->setPageTitle($xar->mls()->translate("Installing Xaraya"));
 
     // Run installer function
     $mainModuleOutput = xarInstall::func($funcName);
 
-    if (xarCore::isDebuggerActive()) {
+    if ($xar->isDebuggerActive()) {
         if (ob_get_length() > 0) {
             $rawOutput = ob_get_contents();
             $mainModuleOutput = 'The following lines were printed in raw mode by module, however this
@@ -276,7 +281,7 @@ function xarInstallMain()
     }
 
     // Render page using the installer theme admin.xt page template
-    $pageOutput = xarTpl::renderPage($mainModuleOutput, 'admin');
+    $pageOutput = $xar->tpl()->renderPage($mainModuleOutput, 'admin');
 
     echo $pageOutput;
     return true;

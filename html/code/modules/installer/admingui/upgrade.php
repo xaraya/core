@@ -16,7 +16,7 @@ use Xaraya\Modules\Installer\AdminGui;
 use xarCore;
 use xarVersion;
 use sys;
-use Upgrader;
+use xarUpgrader;
 
 sys::import('xaraya.modules.method');
 
@@ -122,8 +122,8 @@ class UpgradeMethod extends MethodClass
         } elseif ($data['phase'] == 3) {
             $data['active_step'] = 3;
             // Get the list of version upgrades
-            Upgrader::loadFile('upgrades/upgrade_list.php');
-            $upgrade_list = installer_adminapi_get_upgrade_list();
+            xarUpgrader::loadFile('upgrades/upgrade_list.php');
+            $upgrade_list = \installer_adminapi_get_upgrade_list();
 
             // Run the upgrades
             $upgrades = [];
@@ -132,12 +132,12 @@ class UpgradeMethod extends MethodClass
                 if (xarVersion::compare($upgrade_version, $dbversion) <= 0) {
                     continue;
                 }
-                if (!Upgrader::loadFile('upgrades/' . $abbr_version . '/main.php')) {
+                if (!xarUpgrader::loadFile('upgrades/' . $abbr_version . '/main.php')) {
                     $upgrades[$upgrade_version]['message'] = $this->ml('There are no upgrades for version #(1)', $upgrade_version);
                     $upgrades[$upgrade_version]['tasks'] = [];
                     //return $data;
                 } else {
-                    $upgrade_function = 'main_upgrade_' . $abbr_version;
+                    $upgrade_function = '\main_upgrade_' . $abbr_version;
                     $result = $upgrade_function();
                     $upgrades[$upgrade_version] = $result['upgrade'];
                 }
@@ -157,20 +157,20 @@ class UpgradeMethod extends MethodClass
 
             sys::import('xaraya.version');
             // Get the list of version checks
-            Upgrader::loadFile('checks/check_list.php');
-            $check_list = installer_adminapi_get_check_list();
+            xarUpgrader::loadFile('checks/check_list.php');
+            $check_list = \installer_adminapi_get_check_list();
 
             // Run the checks
             $checks = [];
             foreach ($check_list as $abbr_version => $check_version) {
                 // @checkme <chris/> only run checks for current version ?
                 // if (xarVersion::compare($check_version, $dbversion) != 0) continue;
-                if (!Upgrader::loadFile('checks/' . $abbr_version . '/main.php')) {
+                if (!xarUpgrader::loadFile('checks/' . $abbr_version . '/main.php')) {
                     $checks[$check_version]['message'] = $this->ml('There are no checks for version #(1)', $check_version);
                     $checks[$check_version]['tasks'] = [];
                     //return $data;
                 } else {
-                    $check_function = 'main_check_' . $abbr_version;
+                    $check_function = '\main_check_' . $abbr_version;
                     $result = $check_function();
                     $checks[$check_version] = $result['check'];
                 }

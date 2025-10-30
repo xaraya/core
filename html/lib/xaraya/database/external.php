@@ -421,6 +421,9 @@ abstract class ExternalConnection implements ConnectionInterface
     abstract public function begin();
     abstract public function commit();
     abstract public function rollback();
+    abstract public function getDSN();
+    abstract public function getFlags();
+    abstract public function isConnected();
 }
 
 /**

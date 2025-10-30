@@ -54,10 +54,10 @@ function main_upgrade_210()
         'sql_210_23',
     ];
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/210/database/' . $upgrade . '.php')) {
+        if (!xarUpgrader::loadFile('upgrades/210/database/' . $upgrade . '.php')) {
             $data['upgrade']['tasks'][] = [
                 'reply' => xarML('Failed!'),
-                'description' => Upgrader::$errormessage,
+                'description' => xarUpgrader::$errormessage,
                 'reference' => $upgrade,
                 'success' => false,
             ];

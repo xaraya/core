@@ -312,7 +312,8 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     final public function getContent()
     {
         $disallowed = array_merge(
-            ['content', 'refresh', 'allow_multiple'],
+            // these are supposed to be protected, not public properties
+            ['content', 'refresh', 'allow_multiple', 'localServiceCache', 'xarServices'],
             array_keys($this->getTypeInfo()),
             array_keys($this->getInstanceInfo()),
             array_keys($this->getConfiguration()),

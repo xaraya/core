@@ -34,10 +34,10 @@ function main_check_220()
         'sql_220_hooks',
     ];
     foreach ($checks as $check) {
-        if (!Upgrader::loadFile('checks/220/database/' . $check . '.php')) {
+        if (!xarUpgrader::loadFile('checks/220/database/' . $check . '.php')) {
             $data['check']['tasks'][] = [
                 'reply' => xarML('Failed!'),
-                'description' => Upgrader::$errormessage,
+                'description' => xarUpgrader::$errormessage,
                 'reference' => $check,
                 'success' => false,
             ];

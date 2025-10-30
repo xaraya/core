@@ -470,6 +470,7 @@ class xarEvents extends xarObject implements ixarEvents
         if (empty($event) || !is_string($event) || strlen($event) > 255) {
             $invalid[] = 'event';
         }
+        $xar = xar::getServicesClass();
 
         // Check we have a valid module
         /** @var string $module */

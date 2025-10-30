@@ -21,8 +21,6 @@ use xarDB;
 use xarDatabase;
 use xarInst;
 use xarInstall;
-use xarSecurity;
-use xarSystemVars;
 use xarTableDDL;
 use xarVar;
 use sys;

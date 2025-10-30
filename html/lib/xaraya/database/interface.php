@@ -197,7 +197,7 @@ interface ConnectionInterface
 
     //public function close();
 
-    //public function isConnected();
+    public function isConnected();
 
     //public function getAutoCommit();
 

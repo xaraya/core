@@ -20,10 +20,10 @@ function main_upgrade_281()
         'sql_281_01', // Upgrading the core module version numbers
     ];
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/281/database/' . $upgrade . '.php')) {
+        if (!xarUpgrader::loadFile('upgrades/281/database/' . $upgrade . '.php')) {
             $data['upgrade']['tasks'][] = [
                 'reply' => xarML('Failed!'),
-                'description' => Upgrader::$errormessage,
+                'description' => xarUpgrader::$errormessage,
                 'reference' => $upgrade,
                 'success' => false,
             ];

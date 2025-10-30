@@ -89,6 +89,7 @@ function xarMain()
     $request = xarController::getRequest();
     xarController::normalizeRequest();
     $xar->log()->notice('Retrieved a request: ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction());
+
     // Set module name in Services Class for templates
     $xar->setModName($request->getModule());
 
@@ -186,7 +187,7 @@ function xarMain()
         $xar->log()->notice('The page template is set: ' . $xar->tpl()->getPageTemplateName());
 
         // if the debugger is active, start it
-        if (xarCore::isDebuggerActive()) {
+        if ($xar->isDebuggerActive()) {
             ob_start();
         }
 
@@ -209,7 +210,7 @@ function xarMain()
         $xar->log()->notice('Processing request ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction());
         $mainModuleOutput = xarController::getResponse()->getOutput();
 
-        if (xarCore::isDebuggerActive()) {
+        if ($xar->isDebuggerActive()) {
             if (ob_get_length() > 0) {
                 $rawOutput = ob_get_contents();
                 $mainModuleOutput = 'The following lines were printed in raw mode by module, however this

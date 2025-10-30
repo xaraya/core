@@ -58,7 +58,7 @@ function xarUpgradeLoader()
  * @package modules\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -72,7 +72,7 @@ function xarUpgradeLoader()
  *  Please add any special notes for a special upgrade in admin-upgrade3.xd in installer.<br/>
  *  TODO: cleanup and consolidate the upgrade functions in installer
  */
-class Upgrader
+class xarUpgrader
 {
     /**
      * Constants for current upgrade phases
@@ -85,12 +85,19 @@ class Upgrader
     private static $instance          = null;
 
     public static $errormessage       = '';
+    protected $xar = null;
 
     protected function __construct()
     {
+        // Get Xaraya Services Class
+        $this->xar = xar::getServicesClass();
+
         //xarConfigVars::set(null, 'System.Core.VersionNum', '2.4.0');
         // Let the system know that we are in the process of installing
-        xar::mem()->set('Upgrade', 'upgrading', 1);
+        $this->xar->mem()->set('Upgrade', 'upgrading', 1);
+
+        // Set module name in Services Class for templates
+        $this->xar->setModName('installer');
 
         // Load the current request
         xarController::getRequest();
@@ -99,21 +106,21 @@ class Upgrader
         error_reporting(E_ALL);
 
         // Make sure we can render a page
-        xarTpl::setPageTitle(xarMLS::translate('Xaraya Upgrade'));
-        if (!xarTpl::setThemeName('installer')) {
+        $this->xar->tpl()->setPageTitle(xarMLS::translate('Xaraya Upgrade'));
+        if (!$this->xar->tpl()->setThemeName('installer')) {
             throw new Exception('You need the installer theme if you want to upgrade Xaraya.');
         }
 
         // Set the default page title before calling the module function
-        xarTpl::setPageTitle(xarMLS::translate("Upgrading Xaraya"));
+        $this->xar->tpl()->setPageTitle(xarMLS::translate("Upgrading Xaraya"));
 
-        $output = xarMod::guiFunc('installer', 'admin', 'upgrade');
+        $output = $this->xar->mod()->guiFunc('installer', 'admin', 'upgrade');
         $this->renderPage($output);
     }
 
     private function renderPage($output)
     {
-        if (xarCore::isDebuggerActive()) {
+        if ($this->xar->isDebuggerActive()) {
             if (ob_get_length() > 0) {
                 $rawOutput = ob_get_contents();
                 $output = 'The following lines were printed in raw mode by module, however this
@@ -128,7 +135,7 @@ class Upgrader
         }
 
         // Render page with the output
-        $pageOutput = xarTpl::renderPage($output);
+        $pageOutput = $this->xar->tpl()->renderPage($output);
         echo $pageOutput;
         return true;
     }
@@ -145,12 +152,11 @@ class Upgrader
     {
         $checkpath = sys::code() . 'modules/installer/' . $path;
         if (!file_exists($checkpath)) {
-            self::$errormessage = xarMLS::translate("The required file '#(1)' was not found.", $checkpath);
+            self::$errormessage = xar::mls()->translate("The required file '#(1)' was not found.", $checkpath);
             return false;
         }
-        $importpath = str_replace('/', '.', 'modules/installer/' . $path);
-        $importpath = substr($importpath, 0, strlen($importpath) - 4);
-        sys::import($importpath);
+        // no sys::import here
+        include_once $checkpath;
         return true;
     }
 }
@@ -162,4 +168,4 @@ xarUpgradeLoader();
 /**
  * Run the upgrade
  */
-Upgrader::getInstance();
+xarUpgrader::getInstance();

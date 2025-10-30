@@ -26,10 +26,10 @@ function main_upgrade_230()
         'sql_230_07', // soloblocks refactor
     ];
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/230/database/' . $upgrade . '.php')) {
+        if (!xarUpgrader::loadFile('upgrades/230/database/' . $upgrade . '.php')) {
             $data['upgrade']['tasks'][] = [
                 'reply' => xarML('Failed!'),
-                'description' => Upgrader::$errormessage,
+                'description' => xarUpgrader::$errormessage,
                 'reference' => $upgrade,
                 'success' => false,
             ];

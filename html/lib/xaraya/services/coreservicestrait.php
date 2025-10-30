@@ -95,7 +95,7 @@ trait CoreServicesTrait
      * Instance-level cache for parent-specific or mocked services.
      * @var array<string, ServiceInterface|callable>
      */
-    public array $localServiceCache = [];
+    protected array $localServiceCache = [];
     protected ?StaticServicesClass $xarServices = null;
     /** @var ?callable */
     protected $xarExit = null;

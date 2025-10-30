@@ -506,6 +506,19 @@ class PDOConnection extends PDO implements ConnectionInterface
         }
         return $dsnstring;
     }
+
+    /**
+     * Returns false if connection is closed.
+     * @return boolean
+     * @see https://www.php.net/manual/en/pdo.connections.php
+     */
+    public function isConnected()
+    {
+        if ($this->getAttribute(PDO::ATTR_PERSISTENT)) {
+            // @todo check persistent connection here?
+        }
+        return true;
+    }
 }
 
 //---------------------------------------------------------------------------
