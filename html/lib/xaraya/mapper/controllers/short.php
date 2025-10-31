@@ -63,7 +63,7 @@ class ShortActionController extends BaseActionController implements iController
 
     public function getActionString(xarRequest $request): string
     {
-        $initialpath = xarServer::getBaseURL() . $request->getEntryPoint();
+        $initialpath = $request->getBaseURL() . $request->getEntryPoint();
         if (str_starts_with($request->getURL(), $initialpath)) {
             $actionstring = substr($request->getURL(), strlen($initialpath) + 1);
         } else {

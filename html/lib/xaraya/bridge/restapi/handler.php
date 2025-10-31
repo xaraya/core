@@ -17,6 +17,7 @@ namespace Xaraya\Bridge\RestAPI;
 use Xaraya\Caching\CacheInterface;
 use Xaraya\Caching\CacheTrait;
 use Xaraya\Context\RequestContext;
+use Xaraya\Services\WithServicesClass;
 use Xaraya\Tools\TimerInterface;
 use Xaraya\Tools\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
@@ -30,7 +31,6 @@ use Xaraya\Services\xar;
 use xarObject;
 use xarCache;
 use xarDatabase;
-use xarServer;
 use sys;
 use ForbiddenOperationException;
 use UnauthorizedOperationException;
@@ -53,6 +53,7 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
     use ContextTrait;
     use TimerTrait;  // activate with self::enableTimer(true)
     use CacheTrait;  // activate with self::enableCache(true)
+    use WithServicesClass;
 
     public static string $endpoint = 'rst.php/v1';
     /** @var array<string, mixed> */
@@ -82,6 +83,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         }
         $content = file_get_contents($openapi);
         $doc = json_decode($content, true);
+        // @checkme set server url to current path here
+        //$doc['servers'][0]['url'] = $this->getBaseURL();
         return $doc;
     }
 
@@ -94,10 +97,11 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
      */
     public function getBaseURL($base = '', $path = null, $args = [])
     {
+        $ctl = $this->getServicesClass()->ctl();
         if (empty($path)) {
-            return xarServer::getBaseURL() . self::$endpoint . $base;
+            return $ctl->getBaseURL() . self::$endpoint . $base;
         }
-        return xarServer::getBaseURL() . self::$endpoint . $base . '/' . $path;
+        return $ctl->getBaseURL() . self::$endpoint . $base . '/' . $path;
     }
 
     /**
@@ -251,9 +255,6 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         /**
         if ($handler[1] === 'getOpenAPI') {
             header('Access-Control-Allow-Origin: *');
-            // @checkme set server url to current path here
-            //$result['servers'][0]['url'] = $this->getBaseURL();
-            $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . self::$endpoint;
         }
          */
         return [$result, $context];
@@ -417,7 +418,8 @@ class RestAPIHandler extends xarObject implements CommonRequestInterface, Contex
         if (!headers_sent() && $status !== 200) {
             http_response_code($status);
         }
-        if (!empty(xarServer::getVar('HTTP_ORIGIN'))) {
+        $req = $this->getServicesClass()->req();
+        if (!empty($req->getServerVar('HTTP_ORIGIN'))) {
             header('Access-Control-Allow-Origin: *');
         }
         if (is_string($result)) {

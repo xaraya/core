@@ -207,7 +207,7 @@ class PreValidation extends ValueValidations
                     if (!empty($parameters)) {
                         // Roll up the remaining parameters.
                         $validation = implode(':', $parameters);
-                        $return = xarVar::validate($validation, $subject);
+                        $return = xarVarPrep::validate($validation, $subject);
                     }
 
                     // The passthru validation consumes all further parameters, so clear

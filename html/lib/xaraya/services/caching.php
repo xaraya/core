@@ -161,7 +161,7 @@ interface CachingInterface extends ServiceInterface
 
     /**
      * Get a cache key for variable instance caching
-     * @return string|null cacheKey to be used with $this->cache()->(is|get|set)Variable, or null if not applicable
+     * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Variable, or null if not applicable
      */
     public function getVariableKey(string $scope, string $name): ?string;
 
@@ -571,7 +571,7 @@ trait CachingTrait
 
     /**
      * Get a cache key for variable value caching
-     * @return string|null cacheKey to be used with $this->cache()->(is|get|set)Variable, or null if not applicable
+     * @return string|null cacheKey to be used with $this->cache()->(has|get|set)Variable, or null if not applicable
      */
     public function getVariableKey(string $scope, string $name): ?string
     {

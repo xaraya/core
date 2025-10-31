@@ -93,7 +93,7 @@ class StaticServicesClass extends ServicesClass
     {
         if (!isset($this->requestInstance)) {
             // do *not* initialize request here - depends on the caller
-            //$this->requestInstance ??= xarServer::newInstance($this->context);
+            //$this->requestInstance ??= \xarServer::newInstance($this->context);
         }
         return $this->requestInstance;
     }
@@ -101,7 +101,7 @@ class StaticServicesClass extends ServicesClass
     /**
      * @param ?RequestFacade $instance
      * @return void
-     * @see xarServer::setInstance()
+     * @see \xarServer::setInstance()
      */
     public function setRequestInstance($instance)
     {

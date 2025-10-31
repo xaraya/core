@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.6.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -18,11 +18,12 @@ namespace Xaraya\Services;
 
 use xarVar;
 use xarVarPrep;
-use xarCoreCache;
-use xarController;
+use ValueValidations;
 use sys;
 use EmptyParameterException;
+use ValidationExceptions;
 use VariableValidationException;
+use Exception;
 
 sys::import('xaraya.services.servicetrait');
 
@@ -105,6 +106,13 @@ interface VariablesInterface extends ServiceInterface
     public function validate($validation, &$variable, $suppress = false, $name = ''): bool;
 
     /**
+     * Fetches and validates in a Batch.
+     * @param mixed $batch
+     * @return array<mixed> With the respective exceptions in case of failure
+     */
+    public function batchFetch(...$batch): array;
+
+    /**
      * Prepare text for display, and convert all html special characters
      *
      * @param string ...$args
@@ -184,8 +192,73 @@ trait VariablesTrait
      */
     public function fetch($name, $validation, &$variable, $defaultValue = null, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING): true
     {
+        assert(is_int($flags));
+        assert(empty($name) || preg_match("/^[a-zA-Z0-9_\[\]\"\x7f-\xff][a-zA-Z0-9_\[\]\"\x7f-\xff]*$/", $name));
+
+        $allowOnlyMethod = null;
+        if ($flags & xarVar::GET_ONLY) {
+            $allowOnlyMethod = 'GET';
+        }
+        if ($flags & xarVar::POST_ONLY) {
+            $allowOnlyMethod = 'POST';
+        }
+
+        // xarVar::DONT_SET does not set $variable, if there already is one
+        // This allows us to have a extract($args) before the xarVar::fetch and still run
+        // the variables thru the tests here.
+        $oldValue = null;
+        if (isset($variable) && $flags & xarVar::DONT_SET) {
+            $oldValue = $variable;
+        }
+
+        // xarVar::DONT_REUSE fetches the variable, regardless
+        // FIXME: this flag doesn't seem to work !?
+        // mrb: what doesn't work then? seems ok within the given workings
+        // --------v  this is kinda confusing though, especially when dont_set is used as flag.
+        if (!isset($variable) || ($flags & xarVar::DONT_REUSE)) {
+            $variable = $this->getRequestVar($name, $allowOnlyMethod);
+        }
+
+        // Suppress validation warnings when dont_set, not_required or a default value is specified
+        $supress = (($flags & xarVar::DONT_SET) || ($flags & xarVar::NOT_REQUIRED) || isset($defaultValue));
+        // Validate the $variable given
+        $validated = $this->validate($validation, $variable, $supress, $name);
+
+        if (!$validated) {
+            // The value does not validate
+            $variable = null; // we first make sure that this is what we expect to return
+
+            // Perhaps the default or old can be returned?
+            if (($flags & xarVar::NOT_REQUIRED) || isset($defaultValue)) {
+                // CHECKME:  even for the xarVar::DONT_SET flag !?
+                // if you set a non-null default value, assume you want to use it here
+                $variable = $defaultValue;
+            } elseif (($flags & xarVar::DONT_SET) && isset($oldValue) && $this->validate($validation, $oldValue, $supress)) {
+                // with xarVar::DONT_SET, make sure we don't pass invalid old values back either
+                $variable = $oldValue;
+            }
+        } else {
+            // Value is ok, handle preparation of that value
+            if ($prep & xarVar::PREP_FOR_DISPLAY) {
+                $variable = xarVarPrep::forDisplay($variable);
+            }
+            if ($prep & xarVar::PREP_FOR_HTML) {
+                $variable = xarVarPrep::htmlDisplay($variable);
+            }
+
+            // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
+            if ($prep & xarVar::PREP_FOR_STORE) {
+                $dbconn = $this->getParent()->db()->getConn();
+                $variable = $dbconn->qstr($variable);
+            }
+
+            if ($prep & xarVar::PREP_TRIM) {
+                $variable = trim($variable);
+            }
+        }
+        return true;
         // Note: this should be restricted to gui methods
-        return xarVar::fetch($name, $validation, $variable, $defaultValue, $flags, $prep);
+        //return xarVar::fetch($name, $validation, $variable, $defaultValue, $flags, $prep);
     }
 
     /**
@@ -207,7 +280,7 @@ trait VariablesTrait
     public function get($name, &$variable, $validation, $defaultValue = null): true
     {
         // Note: this should be restricted to gui methods
-        return xarVar::fetch($name, $validation, $variable, $defaultValue);
+        return $this->fetch($name, $validation, $variable, $defaultValue);
     }
 
     /**
@@ -317,7 +390,7 @@ trait VariablesTrait
      */
     public function validate($validation, &$variable, $suppress = false, $name = ''): bool
     {
-        return xarVar::validate($validation, $variable, $suppress, $name);
+        return xarVarPrep::validate($validation, $variable, $suppress, $name);
     }
 
     /**
@@ -328,8 +401,60 @@ trait VariablesTrait
      */
     protected function getRequestVar(string $name, ?string $allowOnlyMethod = null): mixed
     {
-        // @todo use context or ControllerService via parent someday?
-        return xarController::getVar($name, $allowOnlyMethod);
+        return $this->getParent()->req()->getVar($name, $allowOnlyMethod);
+    }
+
+    /**
+     * Fetches and validates in a Batch.
+     *
+     *   xarVar::fetch('reassign', 'checkbox',  $reassign, false, xarVar::NOT_REQUIRED);
+     *   xarVar::fetch('repeat',   'int:1:100', $repeat,   1,     xarVar::NOT_REQUIRED);
+     *
+     *  Can be done thru xarVar::batchFetch with:
+     *
+     *  $result = xarVar::batchFetch(array('reassign','checkbox', 'reassign', false, xarVar::NOT_REQUIRED),
+     *                             array('repeat', 'int:1:100', 'repeat'));
+     *
+     * Notice that i didnt use xarVar::NOT_REQUIRED because xarVar::batchFetch will trap the
+     * thrown exceptions for me in the result array, thus allowing me to get this easily
+     * back to the GUI warning the user that the variable didn't validate and for what reason
+     *
+     * if ($result['no_errors']) {
+     *     //No Errors!
+     *     $results[variable name]['value'] holds the inputs with the apropriate types
+     * } else {
+     *     //Errors Found, go back to the GUI and use the $result to display the errors
+     *     // in the right place
+     *     $results[variable name]['value'] holds the input values
+     *     $results[variable name]['error'] holds the Error Message ('' in case of none)
+     *  }
+     *
+     * @param mixed $batch
+     * @return array<mixed> With the respective exceptions in case of failure
+     */
+    public function batchFetch(...$batch): array
+    {
+        $result_array = [];
+        $no_errors    = true;
+
+        foreach ($batch as $line) {
+            $result_array[$line[2]] = [];
+            try {
+                $result = $this->fetch($line[0], $line[1], $result_array[$line[2]]['value'], $line[3] ?? null, $line[4] ?? xarVar::GET_OR_POST);
+                $result_array[$line[2]]['error'] = '';
+            } catch (ValidationExceptions $e) { // Only catch validation exceptions, the rest should be thrown
+                //Records the error presented in the given input variable
+                $result_array[$line[2]]['error'] = $e->getMessage();
+                //Mark that we've got an error
+                $no_errors = false;
+            }
+        }
+
+        //Chose this key name to avoid clashes and make it easy to go on if there is no
+        //errors present in the Fetched variables.
+        $result_array['no_errors'] = $no_errors;
+
+        return $result_array; // TODO: Is it the responsability of the callee to further handle this? If they dont => security risk.
     }
 
     /**

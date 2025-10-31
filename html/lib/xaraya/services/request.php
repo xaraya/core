@@ -6,7 +6,7 @@
  * @package core\services
  * @subpackage services
  * @category Xaraya Web Applications Framework
- * @version 2.8.3
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -16,10 +16,13 @@
 
 namespace Xaraya\Services;
 
-use xarController;
+use Xaraya\Context\Context;
+use Xaraya\Requests\RequestInterface as RequestFacade;
+use Xaraya\Requests\RequestHandler;
 use xarRequest;
-use xarServer;
+use xarSystemVars;
 use sys;
+use Exception;
 
 sys::import('xaraya.services.servicetrait');
 
@@ -30,22 +33,31 @@ interface RequestInterface extends ServiceInterface
 {
     public const SLICE = 'request2';
 
+    public static function setRequestClass(string $className): void;
+    /** @param array<string, mixed> $config */
+    public function setConfig(array $config = []): void;
+    public function getInstance(): RequestFacade;
+    public function setInstance(RequestFacade $instance): void;
+    public function newInstance(?Context $context = null): RequestFacade;
+    public function getRequest(mixed $url = null): xarRequest;
+    public function setRequest(mixed $url = null): void;
     public function getModule(): string;
     public function getType(): string;
     public function getFunction(): string;
-    /** @param array<string, mixed> $args */
-    public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string;
+    /** @param array<string, mixed> $params */
+    public function getURL(array $params = []): string;
+    public function getRequestString(array $params = []): string;
     public function getBaseURI(): string;
     public function getServerVar(string $varName): mixed;
-    public function setServerVar(string $name, mixed $value): void;
+    public function setServerVar(string $varName, mixed $value): void;
     public function getVar(string $varName, ?string $allowOnlyMethod = null): mixed;
+    public function getHost(): string;
+    public function getProtocol(): string;
     public function getMethod(): string;
     public function isLocalReferer(): bool;
     public function isSameReferer(): bool;
-    /** @return xarRequest */
-    public function getRequest(): xarRequest;
     /** @param array<mixed>|object $var */
-    public function getArrayVar(mixed $var, string $name): mixed;
+    public function getArrayVar(mixed $var, string $varName): mixed;
 }
 
 /**
@@ -55,12 +67,125 @@ trait RequestTrait
 {
     use ServiceTrait;
 
+    public const PROTOCOL_HTTP  = 'http';
+    public const PROTOCOL_HTTPS = 'https';
+
+    /** @var class-string<RequestFacade> */
+    private static $requestClass = RequestHandler::class;
+    /** @var bool */
+    public $allowShortURLs = false;
+    /** @var array<string, mixed> */
+    public $shortURLVariables;
+    /** @var array<string, mixed> */
+    private array $args = [];
+    protected bool $initialized = false;
+    /** @var xarRequest */
+    public $request;
+
+    public static function setRequestClass(string $className): void
+    {
+        // --- LEGACY METHOD BODY ---
+        self::$requestClass = $className;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /** @param array<string, mixed> $config */
+    public function init(array $config = [], ?Context $context = null): bool
+    {
+        // --- LEGACY METHOD BODY ---
+        if (empty($config)) {
+            if (empty($context) && !empty($this->initialized)) {
+                return true;
+            }
+            $config = $this->getConfig();
+        }
+        $this->setConfig($config);
+
+        // Set up the request object with context
+        $request = $this->newInstance($context);
+        $this->setInstance($request);
+
+        // Initialize the request
+        $request->initialize();
+        $this->initialized = true;
+        return true;
+        // --- END LEGACY METHOD BODY ---
+        // this will be relying on RequestService in the future
+        //return xarServer::init($config, $context);
+    }
+
+    /**
+     * Get server configuration
+     * @return array<string, mixed>
+     */
+    public function getConfig(): array
+    {
+        // --- LEGACY METHOD BODY ---
+        $systemArgs = [
+            'enableShortURLsSupport' => $this->getParent()->config()->getVar('Site.Core.EnableShortURLsSupport'),
+            //'generateXMLURLs'        => true,
+        ];
+        return $systemArgs;
+        // --- END LEGACY METHOD BODY ---
+        //return xarServer::getConfig();
+    }
+
+    /** @param array<string, mixed> $config */
+    public function setConfig(array $config = []): void
+    {
+        if (isset($config['enableShortURLsSupport'])) {
+            $this->allowShortURLs = $config['enableShortURLsSupport'];
+        }
+        $this->args = $config;
+    }
+
+    /**
+     * Get the request class instance (on demand)
+     */
+    public function getInstance(): RequestFacade
+    {
+        // --- LEGACY METHOD BODY ---
+        // moved to static services class
+        $instance = $this->getParent()->getRequestInstance();
+        if (!isset($instance)) {
+            // Set up the request object with context from static services class here
+            $instance = $this->newInstance($this->getContext());
+            $this->setInstance($instance);
+            // Initialize the request
+            $instance->initialize();
+        }
+        return $instance;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /**
+     * Set the request class instance
+     */
+    public function setInstance(RequestFacade $instance): void
+    {
+        // --- LEGACY METHOD BODY ---
+        // moved to static services class
+        $this->getParent()->setRequestInstance($instance);
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    /**
+     * Create new request class instance
+     */
+    public function newInstance(?Context $context = null): RequestFacade
+    {
+        $context ??= $this->getContext();
+        // --- LEGACY METHOD BODY ---
+        return new self::$requestClass($this->args, $context);
+        // --- END LEGACY METHOD BODY ---
+    }
+
     /**
      * Get the module that was resolved by the router for the current request.
      */
     public function getModule(): string
     {
-        return xarController::getRequest()->getModule();
+        return $this->getRequest()->getModule();
     }
 
     /**
@@ -68,7 +193,7 @@ trait RequestTrait
      */
     public function getType(): string
     {
-        return xarController::getRequest()->getType();
+        return $this->getRequest()->getType();
     }
 
     /**
@@ -76,16 +201,107 @@ trait RequestTrait
      */
     public function getFunction(): string
     {
-        return xarController::getRequest()->getFunction();
+        return $this->getRequest()->getFunction();
     }
 
     /**
      * Get current url
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $params
      */
-    public function getCurrentURL(array $args = [], ?bool $generateXMLURL = null): string
+    public function getURL(array $params = []): string
     {
-        return xarServer::getCurrentURL($args, $generateXMLURL);
+        // --- LEGACY METHOD BODY ---
+        $server   = $this->getHost();
+        $protocol = $this->getProtocol();
+        $baseurl  = "$protocol://$server";
+
+        // @checkme what you see is (not always) what you get - BaseURI may be missing here
+        $request  = $this->getRequestString($params);
+        $path     = $this->getBaseURI();
+        if (!empty($path) && strpos($request, $path) !== 0) {
+            $baseurl .= $path;
+        }
+        return $baseurl . $request;
+        // --- END LEGACY METHOD BODY ---
+        //return xarServer::getCurrentURL($params, $generateXMLURL);
+    }
+
+    public function getRequestString(array $params = []): string
+    {
+        // --- LEGACY METHOD BODY ---
+        // get current URI
+        $request = $this->getServerVar('REQUEST_URI');
+
+        if (empty($request)) {
+            // adapted patch from Chris van de Steeg for IIS
+            // TODO: please test this :)
+            $scriptname = $this->getServerVar('SCRIPT_NAME');
+            $pathinfo   = $this->getServerVar('PATH_INFO');
+            if ($pathinfo == $scriptname) {
+                $pathinfo = '';
+            }
+            if (!empty($scriptname)) {
+                $request = $scriptname . $pathinfo;
+                $querystring = $this->getServerVar('QUERY_STRING');
+                if (!empty($querystring)) {
+                    $request .= '?' . $querystring;
+                }
+            } else {
+                $request = '/';
+            }
+        }
+
+        if (empty($params)) {
+            return $request;
+        }
+
+        // TODO: re-use some common code (with in-line replacement here) or use parse_url + http_build_query ?
+
+        //$url_variables = parse_str($querystring);
+        //var_dump($url_variables);
+
+        // add optional parameters
+        if (strpos($request, '?') === false) {
+            $request .= '?';
+        } else {
+            $request .= '&';
+        }
+
+        // @todo this assumes all params are in the query string (no short urls or other routes)
+        foreach ($params as $k => $v) {
+            if (is_array($v)) {
+                foreach ($v as $l => $w) {
+                    // TODO: replace in-line here too ?
+                    if (!empty($w)) {
+                        $request .= $k . "[$l]=$w&";
+                    }
+                }
+            } else {
+                // if this parameter is already in the query string...
+                if (preg_match("/(&|\?)($k=[^&]*)/", $request, $matches)) {
+                    $find = $matches[2];
+                    // ... replace it in-line if it's not empty
+                    if (!empty($v)) {
+                        $request = preg_replace("#(&|\?)" . preg_quote($find) . "#", "$1$k=$v", $request);
+
+                        // ... or remove it otherwise
+                    } elseif ($matches[1] == '?') {
+                        $request = preg_replace("#\?" . preg_quote($find) . "(&|)#", '?', $request);
+                    } else {
+                        $request = str_replace("&$find", '', $request);
+                    }
+                    // <chris/> !empty is too greedy here, $v=0, $v='', et-al are valid
+                } elseif (!is_null($v)) {
+                    $request .= "$k=$v&";
+                }
+            }
+        }
+        // Strip off last &
+        $request = substr($request, 0, -1);
+
+        return $request;
+        // --- END LEGACY METHOD BODY ---
+        //return xarServer::getCurrentRequestString($params, $generateXMLURL, $target);
     }
 
     /**
@@ -93,7 +309,51 @@ trait RequestTrait
      */
     public function getBaseURI(): string
     {
-        return xarServer::getBaseURI();
+        // --- LEGACY METHOD BODY ---
+        // Allows overriding the Base URI from config.php
+        // it can be used to configure Xaraya for mod_rewrite by
+        // setting BaseURI = '' in config.php
+        try {
+            $BaseURI =  xarSystemVars::get(sys::LAYOUT, 'BaseURI');
+            return $BaseURI;
+        } catch (Exception $e) {
+            // We need to build it
+        }
+
+        // Get the name of this URI
+        $path = $this->getServerVar('REQUEST_URI');
+
+        //if ((empty($path)) ||
+        //    (substr($path, -1, 1) == '/')) {
+        //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
+        if (empty($path)) {
+            // REQUEST_URI was empty or pointed to a path
+            // adapted patch from Chris van de Steeg for IIS
+            // Try SCRIPT_NAME
+            $path = $this->getServerVar('SCRIPT_NAME');
+            if (empty($path)) {
+                // No luck there either
+                // Try looking at PATH_INFO
+                $path = $this->getServerVar('PATH_INFO');
+            }
+        }
+        /** @var string $path */
+
+        $path = preg_replace('/[#\?].*/', '', (string) $path);
+
+        $path = preg_replace('/\.php\/.*$/', '', $path);
+        if (substr($path, -1, 1) == '/') {
+            $path .= 'dummy';
+        }
+        $path = dirname($path);
+
+        //FIXME: This is VERY slow!!
+        if (preg_match('!^[/\\\]*$!', $path)) {
+            $path = '';
+        }
+        return $path;
+        // --- END LEGACY METHOD BODY ---
+        //return xarServer::getBaseURI();
     }
 
     /**
@@ -102,12 +362,16 @@ trait RequestTrait
      */
     public function getServerVar(string $varName): mixed
     {
-        return xarServer::getVar($varName);
+        // --- LEGACY METHOD BODY ---
+        return $this->getInstance()->getServerVar($varName);
+        // --- END LEGACY METHOD BODY ---
     }
 
-    public function setServerVar(string $name, mixed $value): void
+    public function setServerVar(string $varName, mixed $value): void
     {
-        xarServer::setVar($name, $value);
+        // --- LEGACY METHOD BODY ---
+        $this->getInstance()->setServerVar($varName, $value);
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -116,7 +380,110 @@ trait RequestTrait
      */
     public function getVar(string $varName, ?string $allowOnlyMethod = null): mixed
     {
-        return xarController::getVar($varName, $allowOnlyMethod);
+        // --- LEGACY METHOD BODY ---
+        // First check in $_POST
+        if (strpos($varName, '[') === false) {
+            $value = $this->getInstance()?->getBodyVar($varName) ?? null;
+            $isset = isset($value);
+        } else {
+            $value = $this->getArrayVar($this->getInstance()?->getParsedBody(), $varName);
+            $isset = isset($value);
+        }
+
+        if ($allowOnlyMethod == 'GET') {
+            // Short URLs variables override GET variables
+            if ($this->allowShortURLs && isset($this->shortURLVariables[$varName])) {
+                $value = $this->shortURLVariables[$varName];
+            } else {
+                // Then check in $_GET
+                $value = $this->getInstance()?->getQueryVar($varName);
+                if (!isset($value)) {
+                    // Nothing found, return null
+                    return null;
+                }
+            }
+            //$method = $allowOnlyMethod;
+        } elseif ($allowOnlyMethod == 'POST') {
+            if ($isset) {
+                // First check in $_POST
+                // see $value above
+            } else {
+                // Nothing found, return null
+                return null;
+            }
+            //$method = $allowOnlyMethod;
+        } else {
+            if ($this->allowShortURLs && isset($this->shortURLVariables[$varName])) {
+                // Short URLs variables override GET and POST variables
+                $value = $this->shortURLVariables[$varName];
+                //$method = 'GET';
+            } elseif ($isset) {
+                // Then check in $_POST
+                // see $value above
+                //$method = 'POST';
+            } else {
+                // Then check in $_GET
+                $value = $this->getInstance()?->getQueryVar($varName);
+                if (!isset($value)) {
+                    // Nothing found, return null
+                    return null;
+                }
+                //$method = 'GET';
+            }
+        }
+
+        //$value = xarMLS::convertFromInput($value, $method);
+
+        //if (get_magic_quotes_gpc()) {
+        //    $value = $this->stripVarSlashes($value);
+        //}
+        return $value;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    protected function stripVarSlashes($value)
+    {
+        // --- LEGACY METHOD BODY ---
+        $value = is_array($value) ? array_map(['self','stripVarSlashes'], $value) : stripslashes($value);
+        return $value;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    public function getHost(): string
+    {
+        // --- LEGACY METHOD BODY ---
+        $server = (string) $this->getServerVar('HTTP_HOST');
+        if (empty($server)) {
+            // @todo default to empty string here?
+            // HTTP_HOST is reliable only for HTTP 1.1
+            $server = (string) $this->getServerVar('SERVER_NAME');
+            $port   = (int) $this->getServerVar('SERVER_PORT');
+            $protocol = $this->getProtocol();
+            if (!empty($port) && !($protocol == self::PROTOCOL_HTTP && $port == 80) && !($protocol == self::PROTOCOL_HTTPS && $port == 443)) {
+                $server .= ":$port";
+            }
+        }
+        return $server;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    public function getProtocol(): string
+    {
+        // --- LEGACY METHOD BODY ---
+        try {
+            if ($this->getParent()->config()->getVar('Site.Core.EnableSecureServer')) {
+                if (preg_match('/^http:/', $this->getServerVar('REQUEST_URI') ?? '')) {
+                    return self::PROTOCOL_HTTP;
+                }
+                $serverport = $this->getServerVar('SERVER_PORT');
+                $protocol = ($serverport == $this->getParent()->config()->getVar('Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
+                return $protocol;
+            }
+        } catch (Exception $e) {
+            return self::PROTOCOL_HTTP;
+        }
+        return self::PROTOCOL_HTTP;
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -124,7 +491,7 @@ trait RequestTrait
      */
     public function getMethod(): string
     {
-        return xarServer::getVar('REQUEST_METHOD') ?? 'GET';
+        return $this->getServerVar('REQUEST_METHOD') ?? 'GET';
     }
 
     /**
@@ -132,7 +499,17 @@ trait RequestTrait
      */
     public function isLocalReferer(): bool
     {
-        return xarController::isLocalReferer();
+        // --- LEGACY METHOD BODY ---
+        $server  = $this->getHost();
+        $referer = $this->getServerVar('HTTP_REFERER');
+
+        if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
+            return true;
+        } else {
+            return false;
+        }
+        // --- END LEGACY METHOD BODY ---
+        //return xarController::isLocalReferer();
     }
 
     /**
@@ -140,16 +517,36 @@ trait RequestTrait
      */
     public function isSameReferer(): bool
     {
-        return xarController::isRefererSameModule();
+        // @todo this should parse referrer url according to routes etc. too - see xarRequest::getInfo()
+        // --- LEGACY METHOD BODY ---
+        //$referer = new xarRequest($this->getServerVar('HTTP_REFERER'));
+        //$refererinfo = $referer->getInfo();
+        $refererinfo = $this->getRequest()->getInfo($this->getServerVar('HTTP_REFERER'));
+        $module = $this->getRequest()->getModule();
+        return $module == $refererinfo[0];
+        // --- END LEGACY METHOD BODY ---
+        //return xarController::isRefererSameModule();
     }
 
     /**
      * Get current request object
      * @return xarRequest
      */
-    public function getRequest(): xarRequest
+    public function getRequest(mixed $url = null): xarRequest
     {
-        return xarController::getRequest();
+        // --- LEGACY METHOD BODY ---
+        if (empty($this->request)) {
+            $this->setRequest($url);
+        }
+        return $this->request;
+        // --- END LEGACY METHOD BODY ---
+    }
+
+    public function setRequest(mixed $url = null): void
+    {
+        // --- LEGACY METHOD BODY ---
+        $this->request = new xarRequest($url);
+        // --- END LEGACY METHOD BODY ---
     }
 
     /**
@@ -157,9 +554,33 @@ trait RequestTrait
      * @param array<mixed>|object $var
      * @return mixed
      */
-    public function getArrayVar(mixed $var, string $name): mixed
+    public function getArrayVar(mixed $var, string $varName): mixed
     {
-        return xarController::getArrayVar($var, $name);
+        // --- LEGACY METHOD BODY ---
+        if (empty($var) || !is_array($var)) {
+            return null;
+        }
+        // 1st: $key = 'name', $rest = [ 'key1]', 'key2]', '...]' ]
+        // 2nd: $key = 'key1]', $rest = [ 'key2]', '...]' ]
+        // 3rd: $key = 'key2]', $rest = [ '...]' ]
+        // 4th: $key = '...]', $rest = []
+        $rest = explode('[', $varName . '[');
+        $key = array_shift($rest);
+        array_pop($rest);
+        $key = rtrim($key, ']');
+        $key = str_replace('"', '', $key);
+        if (!isset($var[$key])) {
+            return null;
+        }
+        if (empty($rest)) {
+            // 4th: return $var[...]
+            return $var[$key];
+        }
+        // 1st: pass along key1][key2][...]
+        // 2nd: pass along key2][...]
+        // 3rd: pass along ...]
+        return $this->getArrayVar($var[$key], implode('[', $rest));
+        // --- END LEGACY METHOD BODY ---
     }
 }
 

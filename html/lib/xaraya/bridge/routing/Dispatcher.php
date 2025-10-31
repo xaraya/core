@@ -14,9 +14,8 @@ use Xaraya\Bridge\RestAPI\RestAPIHandler;
 use Xaraya\Context\Context;
 use Xaraya\Context\ContextInterface;
 use Xaraya\Context\ContextTrait;
+use Xaraya\Services\WithServicesClass;
 use xarClassMap;
-use xarController;
-use xarServer;
 use sys;
 use Exception;
 use FunctionNotFoundException;
@@ -27,6 +26,7 @@ use FunctionNotFoundException;
 class Dispatcher implements ContextInterface
 {
     use ContextTrait;
+    use WithServicesClass;
 
     public string $baseUri = '';
     public string $basePath = '';
@@ -138,16 +138,17 @@ class Dispatcher implements ContextInterface
     public function wrapOutputInPage(string $body): string
     {
         $this->context?->tracePath(__METHOD__);
+        $tpl = $this->getServicesClass()->tpl();
         // Set page template based on modType if logged in - see index.php
         if (is_a($this->handler, ModuleHandler::class)) {
             $modType = $this->handler->getModType();
             // we need $context['cookie'] and/or $context['server'] for this - see ContextFactory::fromGlobals()
             if (!empty($this->context?->getUserId())) {
-                \xarTpl::setPageTemplateName($modType);
+                $tpl->setPageTemplateName($modType);
             }
         }
         // Render page with the output - see index.php
-        return \xarTpl::renderPage($body, null, $this->context);
+        return $tpl->renderPage($body, null, $this->context);
     }
 
     /**
@@ -232,12 +233,13 @@ class Dispatcher implements ContextInterface
      */
     public function prepareController(string $baseUri)
     {
-        xarServer::setBaseURL($baseUri);
-        xarController::setCallback('buildUri', [$this, 'buildUri']);
-        xarController::setCallback('redirectTo', [$this, 'redirect']);
-        xarController::setCallback('forbiddenTo', [$this, 'forbidden']);
-        xarController::setCallback('notFoundTo', [$this, 'notFound']);
-        xarController::setCallback('badRequestTo', [$this, 'badRequest']);
+        $ctl = $this->getServicesClass()->ctl();
+        $ctl->setBaseURL($baseUri);
+        $ctl->setCallback('buildUri', [$this, 'buildUri']);
+        $ctl->setCallback('redirectTo', [$this, 'redirect']);
+        $ctl->setCallback('forbiddenTo', [$this, 'forbidden']);
+        $ctl->setCallback('notFoundTo', [$this, 'notFound']);
+        $ctl->setCallback('badRequestTo', [$this, 'badRequest']);
     }
 
     /**
@@ -246,12 +248,13 @@ class Dispatcher implements ContextInterface
      */
     public function resetController()
     {
-        xarServer::setBaseURL(null);
-        xarController::setCallback('buildUri', null);
-        xarController::setCallback('redirectTo', null);
-        xarController::setCallback('forbiddenTo', null);
-        xarController::setCallback('notFoundTo', null);
-        xarController::setCallback('badRequestTo', null);
+        $ctl = $this->getServicesClass()->ctl();
+        $ctl->setBaseURL(null);
+        $ctl->setCallback('buildUri', null);
+        $ctl->setCallback('redirectTo', null);
+        $ctl->setCallback('forbiddenTo', null);
+        $ctl->setCallback('notFoundTo', null);
+        $ctl->setCallback('badRequestTo', null);
     }
 
     /**

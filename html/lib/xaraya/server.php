@@ -6,7 +6,7 @@
  * @package core
  * @subpackage server
  * @category Xaraya Web Applications Framework
- * @version 2.8.3
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -20,8 +20,13 @@ sys::import('xaraya.requests.handler');
 sys::import('xaraya.services.xar');
 use Xaraya\Requests\RequestInterface;
 use Xaraya\Requests\RequestHandler;
+use Xaraya\Services\ControllerService;
+use Xaraya\Services\RequestService;
 use Xaraya\Services\xar;
 
+/**
+ * @deprecated 2.8.4 use xar::req() or xar::ctl() instead
+ */
 class xarServer extends xarObject
 {
     public const PROTOCOL_HTTP  = 'http';
@@ -38,6 +43,28 @@ class xarServer extends xarObject
     /** @var array<string, mixed> */
     private static array $args = [];
     protected static bool $initialized = false;
+    protected static ?ControllerService $ctlService = null;
+    protected static ?RequestService $reqService = null;
+
+    protected static function ctl(): ControllerService
+    {
+        if (!isset(self::$ctlService)) {
+            $xar = xar::getServicesClass();
+            self::$ctlService = $xar->ctl();
+            self::$reqService = $xar->req();
+        }
+        return self::$ctlService;
+    }
+
+    protected static function req(): RequestService
+    {
+        if (!isset(self::$reqService)) {
+            $xar = xar::getServicesClass();
+            self::$ctlService = $xar->ctl();
+            self::$reqService = $xar->req();
+        }
+        return self::$reqService;
+    }
 
     /**
      * Initialise the Server Support (required)
@@ -47,25 +74,10 @@ class xarServer extends xarObject
      */
     public static function init(array $args = [], $context = null)
     {
-        if (empty($args)) {
-            if (empty($context) && !empty(self::$initialized)) {
-                return true;
-            }
-            $args = self::getConfig();
-        }
-        self::$allowShortURLs = $args['enableShortURLsSupport'];
-        self::$generateXMLURLs = $args['generateXMLURLs'];
-        self::$baseurl = null;
-        self::$args = $args;
-
-        // Set up the request object with context
-        $request = self::newInstance($context);
-        self::setInstance($request);
-
-        // Initialize the request
-        $request->initialize();
-        self::$initialized = true;
-        return true;
+        // static cache for migration
+        self::$ctlService = null;
+        self::$reqService = null;
+        return self::req()->init($args);
     }
 
     /**
@@ -74,11 +86,7 @@ class xarServer extends xarObject
      */
     public static function getConfig()
     {
-        $systemArgs = [
-            'enableShortURLsSupport' => xar::config()->getVar('Site.Core.EnableShortURLsSupport'),
-            'generateXMLURLs'        => true,
-        ];
-        return $systemArgs;
+        return self::req()->getConfig();
     }
 
     /**
@@ -88,7 +96,7 @@ class xarServer extends xarObject
      */
     public static function setRequestClass($className)
     {
-        self::$requestClass = $className;
+        self::req()->setRequestClass($className);
     }
 
     /**
@@ -97,16 +105,7 @@ class xarServer extends xarObject
      */
     public static function getInstance()
     {
-        // moved to static services class
-        $instance = xar::getServicesClass()->getRequestInstance();
-        if (!isset($instance)) {
-            // Set up the request object with context from static services class here
-            $instance = self::newInstance(xar::getServicesClass()->getContext());
-            self::setInstance($instance);
-            // Initialize the request
-            $instance->initialize();
-        }
-        return $instance;
+        return self::req()->getInstance();
     }
 
     /**
@@ -116,8 +115,7 @@ class xarServer extends xarObject
      */
     public static function setInstance($instance)
     {
-        // moved to static services class
-        xar::getServicesClass()->setRequestInstance($instance);
+        self::req()->setInstance($instance);
     }
 
     /**
@@ -127,7 +125,7 @@ class xarServer extends xarObject
      */
     public static function newInstance($context = null)
     {
-        return new self::$requestClass(self::$args, $context);
+        return self::req()->newInstance($context);
     }
 
     /**
@@ -143,8 +141,7 @@ class xarServer extends xarObject
      */
     public static function getVar($name)
     {
-        assert(version_compare("7.2", phpversion()) <= 0);
-        return self::getInstance()->getServerVar($name);
+        return self::req()->getServerVar($name);
     }
 
     /**
@@ -155,7 +152,7 @@ class xarServer extends xarObject
      */
     public static function setVar($name, $value)
     {
-        self::getInstance()->setServerVar($name, $value);
+        self::req()->setServerVar($name, $value);
     }
 
     /**
@@ -167,48 +164,7 @@ class xarServer extends xarObject
      */
     public static function getBaseURI()
     {
-        // Allows overriding the Base URI from config.php
-        // it can be used to configure Xaraya for mod_rewrite by
-        // setting BaseURI = '' in config.php
-        try {
-            $BaseURI =  xarSystemVars::get(sys::LAYOUT, 'BaseURI');
-            return $BaseURI;
-        } catch (Exception $e) {
-            // We need to build it
-        }
-
-        // Get the name of this URI
-        $path = self::getVar('REQUEST_URI');
-
-        //if ((empty($path)) ||
-        //    (substr($path, -1, 1) == '/')) {
-        //what's wrong with a path (cfr. Indexes index.php, mod_rewrite etc.) ?
-        if (empty($path)) {
-            // REQUEST_URI was empty or pointed to a path
-            // adapted patch from Chris van de Steeg for IIS
-            // Try SCRIPT_NAME
-            $path = self::getVar('SCRIPT_NAME');
-            if (empty($path)) {
-                // No luck there either
-                // Try looking at PATH_INFO
-                $path = self::getVar('PATH_INFO');
-            }
-        }
-        /** @var string $path */
-
-        $path = preg_replace('/[#\?].*/', '', (string) $path);
-
-        $path = preg_replace('/\.php\/.*$/', '', $path);
-        if (substr($path, -1, 1) == '/') {
-            $path .= 'dummy';
-        }
-        $path = dirname($path);
-
-        //FIXME: This is VERY slow!!
-        if (preg_match('!^[/\\\]*$!', $path)) {
-            $path = '';
-        }
-        return $path;
+        return self::req()->getBaseURI();
     }
 
     /**
@@ -221,17 +177,7 @@ class xarServer extends xarObject
      */
     public static function getHost()
     {
-        $server = self::getVar('HTTP_HOST');
-        if (empty($server)) {
-            // HTTP_HOST is reliable only for HTTP 1.1
-            $server = self::getVar('SERVER_NAME');
-            $port   = self::getVar('SERVER_PORT');
-            $protocol = self::getProtocol();
-            if (!($protocol == self::PROTOCOL_HTTP && $port == 80) && !($protocol == self::PROTOCOL_HTTPS && $port == 443)) {
-                $server .= ":$port";
-            }
-        }
-        return $server;
+        return self::req()->getHost();
     }
 
     /**
@@ -243,21 +189,7 @@ class xarServer extends xarObject
      */
     public static function getProtocol()
     {
-        if (method_exists('xarConfigVars', 'Get')) {
-            try {
-                if (xar::config()->getVar('Site.Core.EnableSecureServer') == true) {
-                    if (preg_match('/^http:/', self::getVar('REQUEST_URI') ?? '')) {
-                        return self::PROTOCOL_HTTP;
-                    }
-                    $serverport = self::getVar('SERVER_PORT');
-                    $protocol = ($serverport == xar::config()->getVar('Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
-                    return $protocol;
-                }
-            } catch (Exception $e) {
-                return self::PROTOCOL_HTTP;
-            }
-        }
-        return self::PROTOCOL_HTTP;
+        return self::req()->getProtocol();
     }
 
     /**
@@ -267,16 +199,7 @@ class xarServer extends xarObject
      */
     public static function getBaseURL()
     {
-        if (self::$baseurl != null) {
-            return self::$baseurl;
-        }
-
-        $server   = self::getHost();
-        $protocol = self::getProtocol();
-        $path     = self::getBaseURI();
-
-        self::$baseurl = "$protocol://$server$path/";
-        return self::$baseurl;
+        return self::ctl()->getBaseURL();
     }
 
     /**
@@ -286,33 +209,7 @@ class xarServer extends xarObject
      */
     public static function setBaseURL($baseurl)
     {
-        // if entry point is specified in baseurl, e.g. http://localhost/xaraya/dispatch.php
-        if (!empty($baseurl) && !str_ends_with($baseurl, '/')) {
-            $parts = explode('/', $baseurl);
-            $entryPoint = array_pop($parts);
-            xarController::$entryPoint = $entryPoint;
-            // @checkme override system config here, since xarController does re-init() for each URL() for some reason...
-            xarSystemVars::set(sys::LAYOUT, 'BaseModURL', $entryPoint);
-            $baseurl = substr($baseurl, 0, -strlen($entryPoint));
-        }
-        self::$baseurl = $baseurl;
-        if (empty($baseurl)) {
-            xarSystemVars::set(sys::LAYOUT, 'BaseURI', null);
-            // reset entry point to default here
-            xarController::$entryPoint = 'index.php';
-            xarSystemVars::set(sys::LAYOUT, 'BaseModURL', null);
-            return;
-        }
-
-        $info = parse_url($baseurl);
-        self::setVar('SERVER_NAME', $info['host']);
-        if ($info['scheme'] === 'https') {
-            self::setVar('SERVER_PORT', $info['port'] ?? 443);
-        } else {
-            self::setVar('SERVER_PORT', $info['port'] ?? 80);
-        }
-        // strip trailing slash for BaseURI here - added again in getBaseURL()
-        xarSystemVars::set(sys::LAYOUT, 'BaseURI', rtrim($info['path'], '/'));
+        self::ctl()->setBaseURL($baseurl);
     }
 
     /**
@@ -322,7 +219,7 @@ class xarServer extends xarObject
      */
     public static function getPageTime()
     {
-        return microtime(true) - $GLOBALS["Xaraya_PageTime"];
+        return self::ctl()->getPageTime();
     }
 
     /**
@@ -336,17 +233,7 @@ class xarServer extends xarObject
      */
     public static function getCurrentURL($args = [], $generateXMLURL = null, $target = null)
     {
-        $server   = self::getHost();
-        $protocol = self::getProtocol();
-        $baseurl  = "$protocol://$server";
-
-        // @checkme what you see is (not always) what you get - BaseURI may be missing here
-        $request  = self::getCurrentRequestString($args, $generateXMLURL, $target);
-        $path     = self::getBaseURI();
-        if (!empty($path) && strpos($request, $path) !== 0) {
-            $baseurl .= $path;
-        }
-        return $baseurl . $request;
+        return self::ctl()->getCurrentURL($args, $generateXMLURL, $target);
     }
 
     /**
@@ -359,84 +246,8 @@ class xarServer extends xarObject
      */
     public static function getCurrentRequestString($args = [], $generateXMLURL = null, $target = null)
     {
-        // get current URI
-        $request = self::getVar('REQUEST_URI');
-
-        if (empty($request)) {
-            // adapted patch from Chris van de Steeg for IIS
-            // TODO: please test this :)
-            $scriptname = self::getVar('SCRIPT_NAME');
-            $pathinfo   = self::getVar('PATH_INFO');
-            if ($pathinfo == $scriptname) {
-                $pathinfo = '';
-            }
-            if (!empty($scriptname)) {
-                $request = $scriptname . $pathinfo;
-                $querystring = self::getVar('QUERY_STRING');
-                if (!empty($querystring)) {
-                    $request .= '?' . $querystring;
-                }
-            } else {
-                $request = '/';
-            }
-        }
-
-        // TODO: re-use some common code (with in-line replacement here) or use parse_url + http_build_query ?
-
-        //$url_variables = parse_str($querystring);
-        //var_dump($url_variables);
-
-        // add optional parameters
-        if (count($args) > 0) {
-            if (strpos($request, '?') === false) {
-                $request .= '?';
-            } else {
-                $request .= '&';
-            }
-
-            foreach ($args as $k => $v) {
-                if (is_array($v)) {
-                    foreach ($v as $l => $w) {
-                        // TODO: replace in-line here too ?
-                        if (!empty($w)) {
-                            $request .= $k . "[$l]=$w&";
-                        }
-                    }
-                } else {
-                    // if this parameter is already in the query string...
-                    if (preg_match("/(&|\?)($k=[^&]*)/", $request, $matches)) {
-                        $find = $matches[2];
-                        // ... replace it in-line if it's not empty
-                        if (!empty($v)) {
-                            $request = preg_replace("#(&|\?)" . preg_quote($find) . "#", "$1$k=$v", $request);
-
-                            // ... or remove it otherwise
-                        } elseif ($matches[1] == '?') {
-                            $request = preg_replace("#\?" . preg_quote($find) . "(&|)#", '?', $request);
-                        } else {
-                            $request = str_replace("&$find", '', $request);
-                        }
-                        // <chris/> !empty is too greedy here, $v=0, $v='', et-al are valid
-                    } elseif (!is_null($v)) {
-                        $request .= "$k=$v&";
-                    }
-                }
-            }
-            // Strip off last &
-            $request = substr($request, 0, -1);
-        }
-
-        // Finish up
-        if (!isset($generateXMLURL)) {
-            $generateXMLURL = self::$generateXMLURLs;
-        }
-        if (isset($target)) {
-            $request .= '#' . urlencode($target);
-        }
-        if ($generateXMLURL) {
-            $request = htmlspecialchars($request);
-        }
-        return $request;
+        // does not support $generateXMLURL or $target here - see self::ctl()->getCurrentURL()
+        return self::req()->getRequestString($args);
     }
 
     /**
@@ -454,8 +265,16 @@ class xarServer extends xarObject
      */
     public static function getModuleURL($modName = null, $modType = 'user', $funcName = 'main', $args = [], $generateXMLURL = null, $fragment = null, $entrypoint = [])
     {
-        // CHECKME: move xarMod URL() and xarMod__URL* stuff here, and leave stub in modules ?
-        return xarController::URL($modName, $modType, $funcName, $args, $generateXMLURL, $fragment, $entrypoint);
+        // Note: fragment and endpoint are not supported here
+        $url = self::ctl()->getModuleURL($modName, $modType, $funcName, $args, $generateXMLURL);
+
+        // Add the fragment if required.
+        if (isset($fragment)) {
+            $url .= '#' . urlencode($fragment);
+        }
+
+        // Return the URL.
+        return $url;
     }
 
     /**
@@ -470,65 +289,15 @@ class xarServer extends xarObject
      */
     public static function getObjectURL($objectName = null, $methodName = 'view', $args = [], $generateXMLURL = null, $fragment = null, $entrypoint = [])
     {
-        // Allow overriding building URL if needed
-        $callback = xarController::getCallback('buildUri');
-        if (!empty($callback) && is_callable($callback)) {
-            return call_user_func($callback, 'object', $objectName, $methodName, $args);
-        }
-        // 1. override any existing 'method' in args, and place before the rest
-        if (!empty($methodName)) {
-            $args = ['method' => $methodName] + $args;
-        }
-        // 2. override any existing 'object' or 'name' in args, and place before the rest
-        if (!empty($objectName)) {
-            unset($args['name']);
-            // use 'object' here to distinguish from module URLs
-            $args = ['object' => $objectName] + $args;
-        }
-        // 3. remove default method 'view' from URLs
-        if ($args['method'] == 'view') {
-            unset($args['method']);
-            // and remove default method 'display' from URLs with an itemid
-        } elseif (!empty($args['itemid']) && $args['method'] == 'display') {
-            unset($args['method']);
-        }
-
-        // TODO: some common code for getCurrentURL, getModuleURL and getObjectURL ?
-
-        // Create a new request and make its route the current route
-        $args['module'] = 'object';
-        $args['type'] = $objectName;
-        $args['func'] = $methodName;
-        sys::import('xaraya.mapper.request');
-        $request = new xarRequest($args);
-        $router = xarController::getRouter();
-        $request->setRoute($router->getRoute());
-
-        // Get the appropriate action controller for this request
-        $dispatcher = xarController::getDispatcher();
-        $controller = $dispatcher->findController($request);
-        $path = $controller->encode($request);
-
-        // Use Xaraya default (index.php) or BaseModURL if provided in config.system.php
-        $path = xarController::$entryPoint . $path;
-
-        // Remove the leading / from the path (if any).
-        $path = preg_replace('/^\//', '', $path);
+        // Note: fragment and endpoint are not supported here
+        $url = self::ctl()->getObjectURL($objectName, $methodName, $args, $generateXMLURL);
 
         // Add the fragment if required.
         if (isset($fragment)) {
-            $path .= '#' . urlencode($fragment);
-        }
-
-        // Encode the URL if an XML-compatible format is required.
-        if (!isset($generateXMLURL)) {
-            $generateXMLURL = self::$generateXMLURLs;
-        }
-        if ($generateXMLURL) {
-            $path = htmlspecialchars($path);
+            $url .= '#' . urlencode($fragment);
         }
 
         // Return the URL.
-        return self::getBaseURL() . $path;
+        return $url;
     }
 }

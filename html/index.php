@@ -86,8 +86,8 @@ function xarMain()
     $xar = xar::getServicesClass();
 
     // Create the object that models this request
-    $request = xarController::getRequest();
-    xarController::normalizeRequest();
+    $request = $xar->req()->getRequest();
+    $xar->ctl()->normalizeRequest($request);
     $xar->log()->notice('Retrieved a request: ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction());
 
     // Set module name in Services Class for templates
@@ -204,11 +204,11 @@ function xarMain()
 
         // Process the request
         $xar->log()->notice('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction());
-        xarController::dispatch($request);
+        $response = $xar->ctl()->dispatch($request);
 
         // Retrieve the output to send to the browser
         $xar->log()->notice('Processing request ' . $request->getModule() . "_" . $request->getType() . "_" . $request->getFunction());
-        $mainModuleOutput = xarController::getResponse()->getOutput();
+        $mainModuleOutput = $response->getOutput();
 
         if ($xar->isDebuggerActive()) {
             if (ob_get_length() > 0) {

@@ -6,7 +6,7 @@
  * @package core\controllers
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -14,10 +14,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-sys::import('xaraya.facades.config');
-sys::import('xaraya.services.xar');
 use Xaraya\Requests\RequestInterface;
-use Xaraya\Services\xar;
 use Xaraya\Services\WithServicesClass;
 
 class xarRequest extends xarObject
@@ -61,14 +58,15 @@ class xarRequest extends xarObject
      */
     public function __construct($url = null)
     {
+        $xar = $this->getServicesClass();
         // Make this load lazily
-        //$this->setModule(xar::mod('modules')->getVar('defaultmodule'));
-        //$this->setType(xar::mod('modules')->getVar('defaultmoduletype'));
-        //$this->setFunction(xar::mod('modules')->getVar('defaultmodulefunction'));
+        //$this->setModule($xar->mod('modules')->getVar('defaultmodule'));
+        //$this->setType($xar->mod('modules')->getVar('defaultmoduletype'));
+        //$this->setFunction($xar->mod('modules')->getVar('defaultmodulefunction'));
 
-        // xarController::getRequest() comes after xarCore::xarInit()
-        $this->setServerContext(xarServer::getInstance());
-        $this->setEntryPoint(xarController::$entryPoint);
+        // xar::req()->getRequest() comes after xarCore::xarInit()
+        $this->setServerContext($xar->req()->getInstance());
+        $this->setEntryPoint($xar->ctl()->getEntryPoint());
         $this->setURL($url);
     }
 
@@ -116,13 +114,14 @@ class xarRequest extends xarObject
      */
     public function setURL($url = null)
     {
+        $xar = $this->getServicesClass();
         if (null != $url) {
             // A URL was passed
             if (is_array($url)) {
                 // This is an array representing a traditional Xaraya URL array
                 if (!empty($url['module'])) {
                     // Resolve if this is an alias for some other module
-                    $this->setModule(xarModAlias::resolve($url['module']));
+                    $this->setModule($xar->mod()->resolveAlias($url['module']));
                     if ($this->getModule() != $url['module']) {
                         $this->setModuleAlias($url['module']);
                     }
@@ -144,8 +143,9 @@ class xarRequest extends xarObject
 
             } else {
                 // This is a string representing a URL
-                $url = preg_replace('/&amp;/', '&', $url);
-                $params = xarController::parseQuery($url);
+                $url = str_replace('&amp;', '&', $url);
+                // @todo take into account routing
+                $params = $xar->ctl()->parseQuery($url);
                 if (!empty($params['module'])) {
                     $this->setModule($params['module']);
                 }
@@ -164,14 +164,15 @@ class xarRequest extends xarObject
             // CHECKME: are these next lines needed?
             // Try and get it from the current request path
             // Note: we don't generate an XML compatible URL here
-            $url = xarServer::getCurrentURL([], false);
-            $params = $this->requestContext?->getQueryParams();
+            $url = $xar->req()->getURL();
+            $params = $xar->req()->getInstance()?->getQueryParams() ?? [];
 
             // We now have a URL. Set it.
             $this->url = $url;
 
+            // @todo avoid duplication of param parsing - see DefaultActionController::decode()
             // See if this is an object call; easiest to start like this
-            xarVar::fetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $objectName, null, xarVar::NOT_REQUIRED);
+            $xar->var()->find('object', $objectName, 'regexp:/^[a-z][a-z_0-9]*$/');
             // Found a module object name
             if (null != $objectName) {
                 $this->setModule('object');
@@ -180,12 +181,12 @@ class xarRequest extends xarObject
             } else {
                 $modName = null;
                 // Try and get the module the traditional Xaraya way
-                xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, null, xarVar::NOT_REQUIRED);
+                $xar->var()->find('module', $modName, 'regexp:/^[a-z][a-z_0-9]*$/');
 
                 // @todo let router do its job - see xarController::normalizeRequest()
                 // Else assume a form of short urls. The module name or the object keyword will be the first item
-                if (null == $modName && str_starts_with($url, xarServer::getBaseURL() . $this->entryPoint)) {
-                    $path = substr($url, strlen(xarServer::getBaseURL() . $this->entryPoint . xarController::$delimiter));
+                if (null == $modName && str_starts_with($url, $this->getBaseURL() . $this->entryPoint)) {
+                    $path = substr($url, strlen($this->getBaseURL() . $this->entryPoint . xarController::$delimiter));
                     $tokens = explode('/', $path);
                     $modName = array_shift($tokens);
 
@@ -199,7 +200,7 @@ class xarRequest extends xarObject
                     } else {
                         // Resolve if this is an alias for some other module
                         if (!empty($modName)) {
-                            $this->setModule(xarModAlias::resolve($modName));
+                            $this->setModule($xar->mod()->resolveAlias($modName));
                             if ($this->getModule() != $modName) {
                                 $this->setModuleAlias($modName);
                             }
@@ -208,7 +209,7 @@ class xarRequest extends xarObject
                 } else {
                     // Resolve if this is an alias for some other module
                     if (!empty($modName)) {
-                        $this->setModule(xarModAlias::resolve($modName));
+                        $this->setModule($xar->mod()->resolveAlias($modName));
                         if ($this->getModule() != $modName) {
                             $this->setModuleAlias($modName);
                         }
@@ -284,7 +285,9 @@ class xarRequest extends xarObject
             $currentRequestInfo = $info;
             return $info;
         }
-        $params = xarController::parseQuery($url);
+        $xar = $this->getServicesClass();
+        // @todo take into account routing
+        $params = $xar->ctl()->parseQuery($url);
         $regex = null;
         if (!empty($params)) {
             sys::import('xaraya.validations');
@@ -313,29 +316,26 @@ class xarRequest extends xarObject
             // Cache values into info static var
             $requestInfo = [$modName, $modType, $funcName];
         } else {
+            // @todo doesn't belong here - either we have an $url and check $params, or we don't - see above
             // Check if we have an object to work with for object URLs
-            xarVar::fetch('object', 'regexp:/^[a-zA-Z0-9_-]+$/', $objectName, null, xarVar::NOT_REQUIRED);
+            $xar->var()->find('object', $objectName, 'regexp:/^[a-zA-Z0-9_-]+$/');
             if (!empty($objectName)) {
                 // Check if we have a method to work with for object URLs
-                xarVar::fetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, null, xarVar::NOT_REQUIRED);
+                $xar->var()->find('method', $methodName, 'regexp:/^[a-zA-Z0-9_-]+$/');
                 // Specify 'dynamicdata' as module for xarTpl_* functions etc.
                 $requestInfo = ['object', $objectName, $methodName];
-                //if (empty($url)) {
-                //    $this->isObjectURL = true;
-                //}
             } else {
                 // If $modName is still empty we use the default module/type/func to be loaded in that such case
                 if (empty($this->defaultRequestInfo)) {
-                    $xar = $this->getServicesClass();
-                    $this->defaultRequestInfo = [$xar->mod('modules')->getVar('defaultmodule'),
+                    $this->defaultRequestInfo = [
+                        $xar->mod('modules')->getVar('defaultmodule'),
                         $xar->mod('modules')->getVar('defaultmoduletype'),
-                        $xar->mod('modules')->getVar('defaultmodulefunction')];
+                        $xar->mod('modules')->getVar('defaultmodulefunction'),
+                    ];
                 }
                 $requestInfo = $this->defaultRequestInfo;
             }
         }
-        // Save the current info in case we call this function again
-        //if (empty($url)) $currentRequestInfo = $requestInfo;
 
         return $requestInfo;
     }
@@ -351,14 +351,22 @@ class xarRequest extends xarObject
     }
 
     /** @return string */
+    public function getBaseURL()
+    {
+        $xar = $this->getServicesClass();
+        return $xar->ctl()->getBaseURL();
+    }
+    /** @return string */
     public function getProtocol()
     {
-        return xarServer::getProtocol();
+        $xar = $this->getServicesClass();
+        return $xar->req()->getProtocol();
     }
     /** @return string */
     public function getHost()
     {
-        return xarServer::getHost();
+        $xar = $this->getServicesClass();
+        return $xar->req()->getHost();
     }
     /** @return string */
     public function getModuleKey()
@@ -549,7 +557,7 @@ class xarRequest extends xarObject
     {
         if (!isset($this->isAjax)) {
             $xar = $this->getServicesClass();
-            $xhp = xarServer::getVar('HTTP_X_REQUESTED_WITH');
+            $xhp = $xar->req()->getServerVar('HTTP_X_REQUESTED_WITH');
             if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest') && $xar->config()->getVar('Site.Core.AllowAJAX')) {
                 $this->isAjax = true;
             } else {

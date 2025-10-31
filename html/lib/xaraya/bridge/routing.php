@@ -406,8 +406,8 @@ class RoutingBridge extends BasicBridge
             // @todo move to output?
             //header('Access-Control-Allow-Origin: *');
             // @checkme set server url to current path here
-            //$result['servers'][0]['url'] = RestAPIHandler::getBaseURL();
-            $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . RestAPIHandler::$endpoint;
+            $result['servers'][0]['url'] = $this->getRestApiHandler()->getBaseURL();
+            //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . RestAPIHandler::$endpoint;
         }
         return [$result, $context];
     }

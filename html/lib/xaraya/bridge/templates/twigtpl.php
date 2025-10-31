@@ -112,8 +112,7 @@ class xarTwigTpl extends xarTpl
         // @todo this only affects links generated *after* the main module has executed, so it's too late for that
         // see e.g. blocks admin view_instances - info_link, type_link etc. are already url-encoded
         // @checkme set generate XML urls to false to avoid autoescape issues
-        xarServer::$generateXMLURLs = false;
-        xarMod::$genXmlUrls = false;
+        xar::ctl()->setConfig(['generateXMLURLs' => false]);
         xar::log()->notice(__METHOD__ . ": New twig environment for context from " . ($context['source'] ?? 'unknown'));
 
         return $twig;

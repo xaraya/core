@@ -308,7 +308,7 @@ class Themes_MetaBlock extends BasicBlock
             }
         } else {
             // regular url, prepped for xml display if necessary
-            $decoded_url = xarMod::$genXmlUrls ? \xarVarPrep::forDisplay($url) : $url;
+            $decoded_url = $this->ctl()->withXMLURLs() ? \xarVarPrep::forDisplay($url) : $url;
         }
 
         return $decoded_url;

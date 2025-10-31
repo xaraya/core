@@ -31,7 +31,7 @@ use Xaraya\Tools\Legacy;
  * is retained here to aid compatibility with a matching date property.
  * Care is also taken with XX/YY/ZZZZ formats, as PHP uses the US ordering convention.
  *
- * Syntax is (when used from xarVar::validate) is:
+ * Syntax is (when used from xarVarPrep::validate) is:
  *  display-format[:store-format[:input-format:...]]
  * where each format string uses the format specifiers as defined by strftime()
  *

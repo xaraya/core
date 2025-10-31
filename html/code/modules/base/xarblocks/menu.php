@@ -206,7 +206,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
      */
     protected function _decodeURL($url, $infoarray = false)
     {
-        $url = preg_replace('/&amp;/', '&', $url);
+        $url = str_replace('&amp;', '&', $url);
         $args = [];
 
         if (strpos($url, '[') === 0) {
@@ -237,7 +237,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
             }
             $decoded_url = $this->ctl()->getModuleURL($modname, $modtype, $funcname, $args);
 
-        } elseif (xarMod::$genXmlUrls) {
+        } elseif ($this->ctl()->withXMLURLs()) {
             // regular url, prepped for xml display if necessary
             $decoded_url = \xarVarPrep::forDisplay($url);
         }

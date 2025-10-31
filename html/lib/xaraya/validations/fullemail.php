@@ -21,7 +21,7 @@ class FullEmailValidation extends EmailValidation
 {
     public function validate(&$subject, array $parameters)
     {
-        if (parent::validate($subject, []) && xarVar::validate('mxcheck', $subject)) {
+        if (parent::validate($subject, []) && xarVarPrep::validate('mxcheck', $subject)) {
             return true;
         }
         return false;

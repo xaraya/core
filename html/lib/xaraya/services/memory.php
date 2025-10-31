@@ -53,7 +53,6 @@ class MemoryService implements MemoryInterface
      * Initialise the caching options
      *
      * @param array<string, mixed> $config caching configuration from config.caching.php
-     * @return boolean
      * @todo configure optional second-level cache here ?
     **/
     public function init(array $config = []): bool

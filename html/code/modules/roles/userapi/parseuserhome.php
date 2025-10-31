@@ -141,7 +141,7 @@ class ParseuserhomeMethod extends MethodClass
                         }
                     }
                     // BUG 2023: Make sure manual URLs are prepped for XML, consistent with $this->ctl()->getModuleURL()
-                    if (!empty(xarMod::$genXmlUrls)) {
+                    if ($this->ctl()->withXMLURLs()) {
                         $url = \xarVarPrep::forDisplay($url);
                     }
             }

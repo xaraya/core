@@ -23,7 +23,6 @@ use sys;
 use UnauthorizedOperationException;
 
 sys::import('xaraya.context.context');
-sys::import('xaraya.facades.modules');
 sys::import('modules.authsystem.class.authtoken');
 
 /**

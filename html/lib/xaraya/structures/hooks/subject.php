@@ -63,16 +63,17 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
             throw new BadParameterException('extrainfo');
         }
 
+        $xar = $this->getServicesClass();
         if (empty($module)) {
             if (!empty($extrainfo['module'])) {
                 $module = $extrainfo['module'];
             } else {
-                $module = xar::mod()->getName();
+                $module = $xar->mod()->getName();
             }
         }
 
         // No module_id given here raises an exception
-        $module_id = xar::mod()->getRegID($module);
+        $module_id = $xar->mod()->getRegID($module);
         if (empty($module_id)) {
             throw new BadParameterException('module');
         }

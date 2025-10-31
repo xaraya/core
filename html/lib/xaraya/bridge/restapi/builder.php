@@ -18,13 +18,11 @@ use Xaraya\Authentication\AuthToken;
 use Xaraya\Services\xar;
 use xarObject;
 use xarMod;
-use xarServer;
 use sys;
 use DataObjectFactory;
 use DataPropertyMaster;
 use Exception;
 
-sys::import('xaraya.facades.modules');
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('modules.authsystem.class.authtoken');
 

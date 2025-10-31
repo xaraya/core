@@ -47,6 +47,7 @@
 
 namespace Xaraya\Database;
 
+use Xaraya\Services\WithServicesClass;
 use Connection;
 use xarCore;
 use BadParameterException;
@@ -54,8 +55,6 @@ use sys;
 
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.database.external');
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
 
 /**
  * For documentation purposes only - available via DatabaseTrait
@@ -171,6 +170,8 @@ interface DatabaseInterface
  */
 trait DatabaseTrait
 {
+    use WithServicesClass;
+
     /** @var array<string, mixed> */
     protected static array $_databases = [];
     /** @var array<string, mixed> */
@@ -214,7 +215,7 @@ trait DatabaseTrait
         $modName = $this->getDbModName();
         if (empty(static::$_databases)) {
             $allDatabases = [];
-            $xar = xar::getServicesClass();
+            $xar = $this->getServicesClass();
             if ($xar->mem()->has('DynamicData', 'Databases')) {
                 $allDatabases = $xar->mem()->get('DynamicData', 'Databases');
             }
@@ -267,7 +268,7 @@ trait DatabaseTrait
     {
         $databases ??= static::$_databases;
         $modName ??= $this->getDbModName();
-        $xar = xar::getServicesClass();
+        $xar = $this->getServicesClass();
         $xar->mod($modName)->setVar('databases', serialize($databases));
         $allDatabases = [];
         if ($xar->mem()->has('DynamicData', 'Databases')) {
@@ -353,7 +354,7 @@ trait DatabaseTrait
         if (count($this->getDatabases()) === 1) {
             return array_key_first(static::$_databases);
         }
-        $xar = xar::getServicesClass();
+        $xar = $this->getServicesClass();
         // we need 'module_itemvars' and/or 'module_vars' tables below
         if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
             $xar->mod()->loadDbInfo('modules');
@@ -388,7 +389,7 @@ trait DatabaseTrait
     public function setCurrentDatabase($name = '', $context = null)
     {
         $modName = $this->getDbModName();
-        $xar = xar::getServicesClass();
+        $xar = $this->getServicesClass();
         if (!empty($context)) {
             $userId = $context->getUserId();
             if (!empty($userId)) {
@@ -420,7 +421,7 @@ trait DatabaseTrait
         if (!is_numeric($dbConnIndex)) {
             return ExternalDatabase::listTableNames($dbConnIndex);
         }
-        $xar = xar::getServicesClass();
+        $xar = $this->getServicesClass();
         // @todo re-use Database Service to get connection here
         /** @var Connection $conn */
         $conn = $xar->db()->getConn($dbConnIndex);

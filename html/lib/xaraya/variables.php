@@ -5,7 +5,7 @@
  *
  * @package core\variables
  * @category Xaraya Web Applications Framework
- * @version 2.6.2
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -13,6 +13,10 @@
  * @author Marco Canini marco@xaraya.com
  * @author Flavio Botelho
  */
+
+use Xaraya\Services\MemoryService;
+use Xaraya\Services\VariablesService;
+use Xaraya\Services\xar;
 
 /**
  * Exception raised by the variables subsystem
@@ -81,14 +85,11 @@ interface IxarVars
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
 
-sys::import('xaraya.services.xar');
-use Xaraya\Services\xar;
-
 class xarVars extends xarObject {}
 
 /**
- * Move public static functions to class
  * @package core\variables
+ * @deprecated 2.8.4 use xar::var() or xar::mem() instead
  */
 class xarVar extends xarObject
 {
@@ -109,9 +110,29 @@ class xarVar extends xarObject
     public const PREP_FOR_STORE   = 4;
     public const PREP_TRIM        = 8;
 
-    public static $allowableHTML = [];
-    public static $fixHTMLEntities = true;
     protected static bool $initialized = false;
+    protected static ?MemoryService $memService = null;
+    protected static ?VariablesService $varService = null;
+
+    protected static function mem(): MemoryService
+    {
+        if (!isset(self::$memService)) {
+            $xar = xar::getServicesClass();
+            self::$memService = $xar->mem();
+            self::$varService = $xar->var();
+        }
+        return self::$memService;
+    }
+
+    protected static function var(): VariablesService
+    {
+        if (!isset(self::$varService)) {
+            $xar = xar::getServicesClass();
+            self::$memService = $xar->mem();
+            self::$varService = $xar->var();
+        }
+        return self::$varService;
+    }
 
     /**
      * Initialise the variable handling options
@@ -128,6 +149,9 @@ class xarVar extends xarObject
         if (empty($args) && self::$initialized) {
             return true;
         }
+        // static cache for migration
+        self::$memService = null;
+        self::$varService = null;
         $xar = xar::getServicesClass();
         // Configuration init needs to be done first
         $tables = ['config_vars' => $xar->db()->getPrefix() . '_module_vars'];
@@ -136,8 +160,8 @@ class xarVar extends xarObject
 
         // Initialise the variable cache
         sys::import('xaraya.variables.config');
-        self::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);
-        self::$fixHTMLEntities = $xar->config()->getVar('Site.Core.FixHTMLEntities', true);
+        xarVarPrep::$allowableHTML = $xar->config()->getVar('Site.Core.AllowableHTML', []);
+        xarVarPrep::$fixHTMLEntities = $xar->config()->getVar('Site.Core.FixHTMLEntities', true);
 
         self::$initialized = true;
         return true;
@@ -167,35 +191,12 @@ class xarVar extends xarObject
      *     $results[variable name]['value'] holds the input values
      *     $results[variable name]['error'] holds the Error Message ('' in case of none)
      *  }
-     *
+     * @param mixed $batch
      * @return array<mixed> With the respective exceptions in case of failure
     **/
-    public static function batchFetch()
+    public static function batchFetch(...$batch)
     {
-
-        $batch = func_get_args();
-
-        $result_array = [];
-        $no_errors    = true;
-
-        foreach ($batch as $line) {
-            $result_array[$line[2]] = [];
-            try {
-                $result = self::fetch($line[0], $line[1], $result_array[$line[2]]['value'], $line[3] ?? null, $line[4] ?? self::GET_OR_POST);
-                $result_array[$line[2]]['error'] = '';
-            } catch (ValidationExceptions $e) { // Only catch validation exceptions, the rest should be thrown
-                //Records the error presented in the given input variable
-                $result_array[$line[2]]['error'] = $e->getMessage();
-                //Mark that we've got an error
-                $no_errors = false;
-            }
-        }
-
-        //Chose this key name to avoid clashes and make it easy to go on if there is no
-        //errors present in the Fetched variables.
-        $result_array['no_errors'] = $no_errors;
-
-        return $result_array; // TODO: Is it the responsability of the callee to further handle this? If they dont => security risk.
+        return self::var()->batchFetch(...$batch);
     }
 
     /**
@@ -204,9 +205,9 @@ class xarVar extends xarObject
      * 1st try to use the variable provided, if this is not set (Or the xarVar::DONT_REUSE flag is used)
      * then try to get the variable from the input (POST/GET methods for now)
      *
-     * Then tries to validate the variable thru xarVar::validate.
+     * Then tries to validate the variable thru xarVarPrep::validate.
      *
-     * See xarVar::validate for details about nature of $validation.
+     * See xarVarPrep::validate for details about nature of $validation.
      * After the call the $value parameter passed by reference is set to the variable value converted to the proper type
      * according to the validation applied.
      *
@@ -253,71 +254,7 @@ class xarVar extends xarObject
     **/
     public static function fetch($name, $validation, &$value, $defaultValue = null, $flags = self::GET_OR_POST, $prep = self::PREP_FOR_NOTHING)
     {
-        assert(is_int($flags));
-        assert(empty($name) || preg_match("/^[a-zA-Z0-9_\[\]\"\x7f-\xff][a-zA-Z0-9_\[\]\"\x7f-\xff]*$/", $name));
-
-        $allowOnlyMethod = null;
-        if ($flags & self::GET_ONLY) {
-            $allowOnlyMethod = 'GET';
-        }
-        if ($flags & self::POST_ONLY) {
-            $allowOnlyMethod = 'POST';
-        }
-
-        // xarVar::DONT_SET does not set $value, if there already is one
-        // This allows us to have a extract($args) before the xarVar::fetch and still run
-        // the variables thru the tests here.
-        $oldValue = null;
-        if (isset($value) && $flags & self::DONT_SET) {
-            $oldValue = $value;
-        }
-
-        // xarVar::DONT_REUSE fetches the variable, regardless
-        // FIXME: this flag doesn't seem to work !?
-        // mrb: what doesn't work then? seems ok within the given workings
-        // --------v  this is kinda confusing though, especially when dont_set is used as flag.
-        if (!isset($value) || ($flags & self::DONT_REUSE)) {
-            $value = xarController::getVar($name, $allowOnlyMethod);
-        }
-
-        // Suppress validation warnings when dont_set, not_required or a default value is specified
-        $supress = (($flags & self::DONT_SET) || ($flags & self::NOT_REQUIRED) || isset($defaultValue));
-        // Validate the $value given
-        $validated = self::validate($validation, $value, $supress, $name);
-
-        if (!$validated) {
-            // The value does not validate
-            $value = null; // we first make sure that this is what we expect to return
-
-            // Perhaps the default or old can be returned?
-            if (($flags & self::NOT_REQUIRED) || isset($defaultValue)) {
-                // CHECKME:  even for the xarVar::DONT_SET flag !?
-                // if you set a non-null default value, assume you want to use it here
-                $value = $defaultValue;
-            } elseif (($flags & self::DONT_SET) && isset($oldValue) && self::validate($validation, $oldValue, $supress)) {
-                // with xarVar::DONT_SET, make sure we don't pass invalid old values back either
-                $value = $oldValue;
-            }
-        } else {
-            // Value is ok, handle preparation of that value
-            if ($prep & self::PREP_FOR_DISPLAY) {
-                $value = xarVarPrep::forDisplay($value);
-            }
-            if ($prep & self::PREP_FOR_HTML) {
-                $value = xarVarPrep::htmlDisplay($value);
-            }
-
-            // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
-            if ($prep & self::PREP_FOR_STORE) {
-                $dbconn = xar::db()->getConn();
-                $value = $dbconn->qstr($value);
-            }
-
-            if ($prep & self::PREP_TRIM) {
-                $value = trim($value);
-            }
-        }
-        return true;
+        return self::var()->fetch($name, $validation, $value, $defaultValue, $flags, $prep);
     }
 
     /**
@@ -349,10 +286,10 @@ class xarVar extends xarObject
      * 'list' validates if the subject is a list
      * 'list: *other validation*' validates if the subject is an array, and if every element of the array
      *                            validates in the *other validation*
-     *                          Example: xarVar::validate('list:str:1:20', $strings_array);
+     *                          Example: xarVarPrep::validate('list:str:1:20', $strings_array);
      *
      * 'enum' validates if the subject is any of the parameters
-     *                  Example: xarVar::validate('enum:apple:orange:strawberry', $options);
+     *                  Example: xarVarPrep::validate('enum:apple:orange:strawberry', $options);
      *
      * After the validation is performed, $convValue (passed by reference) is assigned to $subject converted the proper type.
      * Please note that conversions from string to integer or float are done by using the PHP built-in cast conversions,
@@ -367,37 +304,11 @@ class xarVar extends xarObject
      * @throws EmptyParameterException
      * @throws VariableValidationException
      * @return boolean true if the $subject validates correctly, false otherwise
+     * @deprecated 2.8.4 use xarVarPrep::validate() instead
      */
     public static function validate($validation, &$subject, $supress = false, $name = '')
     {
-        $valParams = explode(':', $validation);
-        $type = strtolower(array_shift($valParams));
-
-        if (empty($type)) {
-            throw new EmptyParameterException('type');
-        }
-
-        sys::import("xaraya.validations");
-        $v = ValueValidations::get($type);
-
-        try {
-            // Now featuring without passing the name everywhere :-)
-            $result = $v->validate($subject, $valParams);
-            return $result;
-        } catch (ValidationExceptions $e) {
-            // If a validation exception occurred, we can optionally suppress it
-            if (!$supress) {
-                // Rethrow with more verbose message
-                if ($name == '') {
-                    $name = '<unknown>';
-                } // @todo MLS!
-                throw new VariableValidationException([$name,$subject,$e->getMessage()]);
-            }
-        } catch (Exception $e) {
-            // But not the others (note that this part is redundant)
-            throw $e;
-        }
-        return false;
+        return xarVarPrep::validate($validation, $subject, $supress, $name);
     }
 
     /**@+
@@ -408,27 +319,27 @@ class xarVar extends xarObject
      */
     public static function isCached($scope, $name)
     {
-        return xar::mem()->has($scope, $name);
+        return self::mem()->has($scope, $name);
     }
 
     public static function getCached($scope, $name)
     {
-        return xar::mem()->get($scope, $name);
+        return self::mem()->get($scope, $name);
     }
 
     public static function setCached($scope, $name, $value)
     {
-        xar::mem()->set($scope, $name, $value);
+        self::mem()->set($scope, $name, $value);
     }
 
     public static function delCached($scope, $name)
     {
-        xar::mem()->del($scope, $name);
+        self::mem()->del($scope, $name);
     }
 
     public static function flushCached($scope)
     {
-        xar::mem()->flush($scope);
+        self::mem()->flush($scope);
     }
 
     public static function prepForDisplay(...$args)
@@ -482,23 +393,70 @@ class xarVar extends xarObject
 
 class xarVarPrep
 {
+    public static $allowableHTML = [];
+    public static $fixHTMLEntities = true;
+
+
+    /**
+     * Validates a variable performing the $validation test type on $variable.
+     *
+     * @param mixed $validation the validation to be performed
+     * @param mixed $variable the subject on which the validation must be performed, will be where the validated value will be returned
+     * @param bool $suppress suppress any exception if the validation fails or not (default false)
+     * @param string $name (optional) name of the variable for the exception message
+     * @throws EmptyParameterException
+     * @throws VariableValidationException
+     * @return bool true if the $variable validates correctly, false otherwise
+     */
+    public static function validate($validation, &$variable, $suppress = false, $name = ''): bool
+    {
+        $valParams = explode(':', $validation);
+        $type = strtolower(array_shift($valParams));
+
+        if (empty($type)) {
+            throw new EmptyParameterException('type');
+        }
+
+        sys::import("xaraya.validations");
+        $v = ValueValidations::get($type);
+
+        try {
+            // Now featuring without passing the name everywhere :-)
+            $result = $v->validate($variable, $valParams);
+            return $result;
+        } catch (ValidationExceptions $e) {
+            // If a validation exception occurred, we can optionally suppress it
+            if (!$suppress) {
+                // Rethrow with more verbose message
+                if ($name == '') {
+                    $name = '<unknown>';
+                } // @todo MLS!
+                throw new VariableValidationException([$name, $variable, $e->getMessage()]);
+            }
+        } catch (Exception $e) {
+            // But not the others (note that this part is redundant)
+            throw $e;
+        }
+        return false;
+    }
+
     /**
      * Ready user output
      *
      * Gets a variable, cleaning it up such that the text is
      * shown exactly as expected. Can have as many parameters as desired.
      *
-     *
+     * @param mixed $args
      * @return mixed prepared variable if only one variable passed
      * in, otherwise an array of prepared variables
      */
-    public static function forDisplay()
+    public static function forDisplay(...$args)
     {
         $resarray = [];
         $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         // stopgap for now. we need to agree on a naming convention for the charsets that won't confuse the hell out of everyone
         $charset = $charset == 'utf8' ? 'utf-8' : $charset;
-        foreach (func_get_args() as $var) {
+        foreach ($args as $var) {
             if (is_bool($var)) {
                 $var = $var ? 'true' : 'false';
             } elseif (!isset($var)) {
@@ -516,7 +474,7 @@ class xarVarPrep
         }
 
         // Return vars
-        if (func_num_args() == 1) {
+        if (count($args) == 1) {
             return $resarray[0];
         } else {
             return $resarray;
@@ -531,17 +489,18 @@ class xarVarPrep
      * are allowed through. Can have as many parameters as desired.
      *
      *
+     * @param mixed $args
      * @return mixed prepared variable if only one variable passed
      * in, otherwise an array of prepared variables
      */
-    public static function htmlDisplay()
+    public static function htmlDisplay(...$args)
     {
         // <nuncanada> Moving email obscurer functionality somewhere else : autolinks, transforms or whatever
         static $allowedtags = null;
 
         if (!isset($allowedtags)) {
             $allowedHTML = [];
-            foreach (xarVar::$allowableHTML as $k => $v) {
+            foreach (self::$allowableHTML as $k => $v) {
                 if ($k == '!--') {
                     if ($v <> 0) {
                         $allowedHTML[] = "$k.*?--";
@@ -567,7 +526,7 @@ class xarVarPrep
         }
 
         $resarray = [];
-        foreach (func_get_args() as $var) {
+        foreach ($args as $var) {
             // Preparse var to mark the HTML that we want
             if (!empty($allowedtags)) {
                 $var = preg_replace($allowedtags, "\022\\1\024", $var);
@@ -593,7 +552,7 @@ class xarVarPrep
             );
 
             // Fix entities if required
-            if (xarVar::$fixHTMLEntities) {
+            if (self::$fixHTMLEntities) {
                 $var = preg_replace('/&amp;([a-z#0-9]+);/i', "&\\1;", $var);
             }
 
@@ -602,7 +561,7 @@ class xarVarPrep
         }
 
         // Return vars
-        if (func_num_args() == 1) {
+        if (count($args) == 1) {
             return $resarray[0];
         } else {
             return $resarray;
@@ -628,11 +587,12 @@ class xarVarPrep
      * slightly obfuscated against e-mail harvesters.
      *
      *
+     * @param mixed $args
      * @return mixed prepared variable if only one variable passed
      * in, otherwise an array of prepared variables
      * @todo this looks like something for the mail module or an EmailAddress class somewhere
      */
-    public static function emailDisplay()
+    public static function emailDisplay(...$args)
     {
         /*
             // This search and replace finds the text 'x@y' and replaces
@@ -651,7 +611,7 @@ class xarVarPrep
 
         */
         $resarray = [];
-        foreach (func_get_args() as $var) {
+        foreach ($args as $var) {
             // Prepare var
             //        $var = preg_replace($search, $replace, $var);
             $var = strtr($var, ['@' => '&#064;']);
@@ -660,7 +620,7 @@ class xarVarPrep
         }
 
         // Return vars
-        if (func_num_args() == 1) {
+        if (count($args) == 1) {
             return $resarray[0];
         } else {
             return $resarray;
@@ -675,6 +635,7 @@ class xarVarPrep
      * system is not allowed. Can have as many parameters as desired.
      *
      *
+     * @param mixed $args
      * @return mixed prepared variable if only one variable passed
      * in, otherwise an array of prepared variables
      *
@@ -682,7 +643,7 @@ class xarVarPrep
      * @todo this puts responsibility on callee to know how things work, and gets a mangled name back, not very nice
      * @todo make it have 1 return type
      */
-    public static function forOS()
+    public static function forOS(...$args)
     {
         static $special_characters = [':'  => ' ',  // c:\foo\bar
             '/'  => ' ',  // /etc/passwd
@@ -691,8 +652,6 @@ class xarVarPrep
             '?'  => ' ',  // wildcard
             '*'  => ' ']; // wildcard
 
-        $args = func_get_args();
-
         foreach ($args as $key => $var) {
             // Remove out bad characters
             $args[$key] = strtr($var, $special_characters);
@@ -700,7 +659,7 @@ class xarVarPrep
 
 
         // Return vars
-        if (func_num_args() == 1) {
+        if (count($args) == 1) {
             return $args[0];
         } else {
             return $args;

@@ -131,6 +131,8 @@ class Installer extends InstallerClass
             'enableShortURLsSupport' => false,
             'generateXMLURLs'        => false,
         ];
+        // @todo do we want to reset ctl() here?
+        //$this->ctl()->init($systemArgs);
         xarMod::init($systemArgs);
 
         // Installation complete; check for upgrades

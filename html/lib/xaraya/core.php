@@ -150,9 +150,13 @@ if (!class_exists('sys')) {
  *
  */
 // Before we do anything make sure we can except out of code in a predictable matter
-sys::import('xaraya.exceptions');
+if (!class_exists('xarExceptions')) {
+    sys::import('xaraya.exceptions');
+}
 // Load core caching in case we didn't go through xarCache::init()
-sys::import('xaraya.caching.core');
+if (!class_exists('xarCoreCache')) {
+    sys::import('xaraya.caching.core');
+}
 
 /**
  * Xaraya core class

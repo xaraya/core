@@ -6,7 +6,7 @@
  * @package core\controllers
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -18,6 +18,7 @@ sys::import('xaraya.mapper.controllers.base');
 sys::import('xaraya.mapper.controllers.interfaces');
 sys::import('xaraya.requests.url');
 use Xaraya\Requests\RequestURL;
+use Xaraya\Services\xar;
 
 class DefaultActionController extends BaseActionController implements iController
 {
@@ -30,19 +31,22 @@ class DefaultActionController extends BaseActionController implements iControlle
      */
     public function decode(array $data = []): array
     {
-        xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $module, null, xarVar::NOT_REQUIRED);
+        $xar = xar::getServicesClass();
+        // @todo avoid duplication of param parsing - see xarRequest::setURL()
+        $request = $xar->req()->getRequest();
+        $xar->var()->find('module', $module, 'regexp:/^[a-z][a-z_0-9]*$/');
         if (null != $module) {
-            xarVar::fetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['type'], xarController::getRequest()->getType(), xarVar::NOT_REQUIRED);
-            xarVar::fetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['func'], xarController::getRequest()->getFunction(), xarVar::NOT_REQUIRED);
+            $xar->var()->find('type', $data['type'], "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $request->getType());
+            $xar->var()->find('func', $data['func'], "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $request->getFunction());
         }
-        xarVar::fetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $object, null, xarVar::NOT_REQUIRED);
+        $xar->var()->find('object', $object, 'regexp:/^[a-z][a-z_0-9]*$/');
         if (null != $object) {
             $data['object'] = $object;
-            xarVar::fetch('method', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['method'], xarController::getRequest()->getMethod(), xarVar::NOT_REQUIRED);
+            $xar->var()->find('method', $data['method'], "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $request->getMethod());
 
             // No admin equivalent for objectURL for now
-            if ((xarController::getRequest()->getModule() == 'object') && xarController::getRequest()->getType() == 'admin') {
-                xarController::getRequest()->setModule('dynamicdata');
+            if (($request->getModule() == 'object') && $request->getType() == 'admin') {
+                $request->setModule('dynamicdata');
                 $data['func'] = 'view';
             }
         }
@@ -66,7 +70,7 @@ class DefaultActionController extends BaseActionController implements iControlle
 
     public function getActionString(xarRequest $request): string
     {
-        $initialpath = xarServer::getBaseURL() . $request->getEntryPoint();
+        $initialpath = $request->getBaseURL() . $request->getEntryPoint();
         if (str_starts_with($request->getURL(), $initialpath)) {
             $actionstring = substr($request->getURL() ?? '', strlen($initialpath));
         } else {

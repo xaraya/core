@@ -6,7 +6,7 @@
  * @package core\controllers
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.8.4
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -22,7 +22,6 @@ class xarRouter extends xarObject
     /** @var array<string, xarRoute> */
     protected $routes       = [];
     protected string $currentRoute = 'default';
-    //protected $globalParams = array();
 
     public function addRoute(string $name, xarRoute $route): bool
     {
@@ -37,7 +36,7 @@ class xarRouter extends xarObject
     public function addDefaultRoutes()
     {
         if (empty($this->routes['default'])) {
-            $dispatcher = xarController::getDispatcher();
+            $dispatcher = xar::ctl()->getDispatcher();
 
             sys::import('xaraya.mapper.routers.routes.default');
             $route = new DefaultRoute([], $dispatcher);
@@ -70,7 +69,6 @@ class xarRouter extends xarObject
                         $request->$key = $value;
                     }
                 }
-                $publicproperties = $request->getPublicProperties();
                 $request->setRoute($name);
                 $this->currentRoute = $name;
                 xar::log()->notice('The route is set: ' . $name);
@@ -79,27 +77,6 @@ class xarRouter extends xarObject
         }
         return false;
     }
-
-    /**
-    public function assemble($userParams=array(), $name=null, $reset=false, $encode=true)
-    {
-        if ($name == null) {
-            $name = isset($this->currentRoute) ? $this->currentRoute : 'default';
-        }
-
-        $params = array_merge($this->globalParams, $userParams);
-
-        // @fixme what was this supposed to do? There is no assemble method in xarRoute()
-        $route = $this->getRoute($name);
-        $url   = $route->assemble($params, $reset, $encode);
-
-        if (!preg_match('|^[a-z]+://|', $url)) {
-            $url = rtrim(xarServer::getBaseURL(), xarController::$delimiter) . xarController::$delimiter . $url;
-        }
-
-        return $url;
-    }
-     */
 
     /**
      * Summary of route
@@ -115,21 +92,4 @@ class xarRouter extends xarObject
         //return $this->routes[$name];
         return $name;
     }
-
-    /**
-    protected function setRequestParams(xarRequest $request, $params)
-    {
-        foreach ($params as $key => $value) {
-            if ($key === 'module') {
-                $request->setModule($value);
-            }
-            if ($key === 'type') {
-                $request->setType($value);
-            }
-            if ($key === 'func') {
-                $request->setFunction($value);
-            }
-        }
-    }
-     */
 }

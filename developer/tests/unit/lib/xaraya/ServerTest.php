@@ -49,6 +49,7 @@ final class ServerTest extends TestCase
             'SCRIPT_NAME' => '/xaraya/index.php',
             'PATH_INFO' => '/site',
             'QUERY_STRING' => 'all=yes',
+            'HTTP_HOST' => 'test:123',
         ];
     }
 
@@ -61,15 +62,16 @@ final class ServerTest extends TestCase
 
         $this->assertEquals($expected['REQUEST_URI'], xarServer::getVar('REQUEST_URI'));
         $this->assertEquals('/xaraya', xarServer::getBaseURI());
-        $this->assertEquals('http://:/xaraya/index.php', xarServer::getModuleURL());
-        $this->assertEquals('http://:/xaraya/index.php?module=base&amp;type=user&amp;func=main', xarServer::getModuleURL('base'));
-        $this->assertEquals('http://:/xaraya/index.php?object=sample&amp;method=view', xarServer::getObjectURL('sample'));
+        $this->assertEquals('http://test:123/xaraya/index.php', xarServer::getModuleURL());
+        $this->assertEquals('http://test:123/xaraya/index.php?module=base&amp;type=user&amp;func=main', xarServer::getModuleURL('base'));
+        $this->assertEquals('http://test:123/xaraya/index.php?object=sample&amp;method=view', xarServer::getObjectURL('sample'));
     }
 
     public function testContextGetVar(): void
     {
         xarServer::setRequestClass(RequestContext::class);
         $context = new Context(['source' => __METHOD__]);
+        xar::setServicesContext($context);
         $expected = $this->getServerVars();
         $_SERVER = array_replace($_SERVER ?? [], $expected);
         xarServer::init(xarServer::getConfig(), $context);
@@ -91,8 +93,8 @@ final class ServerTest extends TestCase
         // @todo update xarController::$endpoint based on actual SCRIPT_NAME?
         $this->assertEquals($expected['REQUEST_URI'], xarServer::getVar('REQUEST_URI'));
         $this->assertEquals('/home', xarServer::getBaseURI());
-        $this->assertEquals('http://:/home/index.php', xarServer::getModuleURL());
-        $this->assertEquals('http://:/home/index.php?module=base&amp;type=user&amp;func=main', xarServer::getModuleURL('base'));
-        $this->assertEquals('http://:/home/index.php?object=sample&amp;method=view', xarServer::getObjectURL('sample'));
+        $this->assertEquals('http://test:123/home/index.php', xarServer::getModuleURL());
+        $this->assertEquals('http://test:123/home/index.php?module=base&amp;type=user&amp;func=main', xarServer::getModuleURL('base'));
+        $this->assertEquals('http://test:123/home/index.php?object=sample&amp;method=view', xarServer::getObjectURL('sample'));
     }
 }

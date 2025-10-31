@@ -534,7 +534,7 @@
                     "string $module = 'base'",
                     "string $baseUri = ''"
                 ],
-                "lines": "42-59"
+                "lines": "42-61"
             },
             "wrapoutputinpage": {
                 "name": "wrapOutputInPage",
@@ -542,12 +542,15 @@
                     "string $body",
                     "$context = null"
                 ],
-                "lines": "67-71"
+                "lines": "69-77"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Bridge\\Requests\\",
-        "lines": "34-72"
+        "lines": "32-78",
+        "traits": [
+            "Xaraya\\Services\\WithServicesClass"
+        ]
     },
     "xaraya\\bridge\\requests\\blockbridgetrait": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/bridge/requests/blocktrait.php",
@@ -2208,7 +2211,7 @@
                     "array $params = []",
                     "?bool $generateXMLURL = null"
                 ],
-                "lines": "152-155"
+                "lines": "177-182"
             },
             "getobjecturl": {
                 "name": "getObjectURL",
@@ -2218,7 +2221,7 @@
                     "array $params = []",
                     "?bool $generateXMLURL = null"
                 ],
-                "lines": "161-164"
+                "lines": "188-253"
             },
             "getactionurl": {
                 "name": "getActionURL",
@@ -2228,7 +2231,7 @@
                     "$itemid = null",
                     "array $extra = []"
                 ],
-                "lines": "175-178"
+                "lines": "264-267"
             },
             "getrouteurl": {
                 "name": "getRouteURL",
@@ -2236,27 +2239,50 @@
                     "string $route",
                     "array $params = []"
                 ],
-                "lines": "184-198"
+                "lines": "273-287"
+            },
+            "getrouter": {
+                "name": "getRouter",
+                "args": [],
+                "lines": "289-297"
             },
             "setrouter": {
                 "name": "setRouter",
                 "args": [
-                    "?\\Xaraya\\Routing\\RouterInterface $router"
+                    "?\\xarRouter $router"
                 ],
-                "lines": "200-203"
+                "lines": "299-304"
+            },
+            "getdispatcher": {
+                "name": "getDispatcher",
+                "args": [],
+                "lines": "306-314"
             },
             "init": {
                 "name": "init",
                 "args": [
-                    "array $config = []",
-                    "$context = null"
+                    "array $config = []"
                 ],
-                "lines": "206-210"
+                "lines": "317-337"
             },
             "getconfig": {
                 "name": "getConfig",
                 "args": [],
-                "lines": "213-216"
+                "lines": "340-350"
+            },
+            "setconfig": {
+                "name": "setConfig",
+                "args": [
+                    "array $config = []"
+                ],
+                "lines": "353-361"
+            },
+            "withxmlurls": {
+                "name": "withXMLURLs",
+                "args": [
+                    "?bool $setXMLURLs = null"
+                ],
+                "lines": "363-369"
             },
             "dispatch": {
                 "name": "dispatch",
@@ -2264,12 +2290,14 @@
                     "\\xarRequest $request",
                     "$context = null"
                 ],
-                "lines": "218-221"
+                "lines": "371-389"
             },
             "normalizerequest": {
                 "name": "normalizeRequest",
-                "args": [],
-                "lines": "223-226"
+                "args": [
+                    "?\\xarRequest $request = null"
+                ],
+                "lines": "391-404"
             },
             "setcallback": {
                 "name": "setCallback",
@@ -2277,96 +2305,97 @@
                     "string $name",
                     "?callable $callback"
                 ],
-                "lines": "228-231"
+                "lines": "406-414"
             },
             "getcallback": {
                 "name": "getCallback",
                 "args": [
                     "string $name"
                 ],
-                "lines": "233-236"
+                "lines": "416-424"
             },
             "setrequest": {
                 "name": "setRequest",
                 "args": [
-                    "?string $url = null"
+                    "$url = null"
                 ],
-                "lines": "238-242"
+                "lines": "426-429"
             },
             "setresponse": {
                 "name": "setResponse",
                 "args": [
                     "?\\xarResponse $response = null"
                 ],
-                "lines": "244-247"
+                "lines": "431-436"
             },
             "getresponse": {
                 "name": "getResponse",
                 "args": [],
-                "lines": "249-252"
+                "lines": "438-446"
             },
             "setbaseurl": {
                 "name": "setBaseURL",
                 "args": [
                     "?string $baseurl"
                 ],
-                "lines": "254-257"
+                "lines": "448-482"
             },
             "getpagetime": {
                 "name": "getPageTime",
                 "args": [],
-                "lines": "259-263"
+                "lines": "484-490"
             },
             "getcurrenturl": {
                 "name": "getCurrentURL",
                 "args": [
                     "array $params = []",
-                    "?bool $generateXMLURL = null"
+                    "?bool $generateXMLURL = null",
+                    "?string $target = null"
                 ],
-                "lines": "270-273"
+                "lines": "500-517"
             },
             "getbaseurl": {
                 "name": "getBaseURL",
                 "args": [],
-                "lines": "278-281"
-            },
-            "getcurrentrequeststring": {
-                "name": "getCurrentRequestString",
-                "args": [
-                    "array $params = []",
-                    "?bool $generateXMLURL = null",
-                    "?string $target = null"
-                ],
-                "lines": "283-286"
+                "lines": "522-538"
             },
             "getbaseuri": {
                 "name": "getBaseURI",
                 "args": [],
-                "lines": "292-295"
+                "lines": "543-546"
             },
             "getentrypoint": {
                 "name": "getEntryPoint",
                 "args": [],
-                "lines": "300-303"
+                "lines": "551-554"
+            },
+            "setentrypoint": {
+                "name": "setEntryPoint",
+                "args": [
+                    "string $entryPoint"
+                ],
+                "lines": "556-559"
             },
             "getservervar": {
                 "name": "getServerVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "310-313"
+                "lines": "565-568"
             },
             "getsystemvar": {
                 "name": "getSystemVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "319-322"
+                "lines": "574-577"
             },
             "getrequest": {
                 "name": "getRequest",
-                "args": [],
-                "lines": "329-332"
+                "args": [
+                    "$url = null"
+                ],
+                "lines": "583-586"
             },
             "getrequestvar": {
                 "name": "getRequestVar",
@@ -2374,22 +2403,29 @@
                     "string $varName",
                     "?string $allowOnlyMethod = null"
                 ],
-                "lines": "339-342"
+                "lines": "592-595"
             },
             "getrequestmethod": {
                 "name": "getRequestMethod",
                 "args": [],
-                "lines": "345-348"
+                "lines": "597-600"
+            },
+            "parsequery": {
+                "name": "parseQuery",
+                "args": [
+                    "?string $url = null"
+                ],
+                "lines": "605-630"
             },
             "islocalreferer": {
                 "name": "isLocalReferer",
                 "args": [],
-                "lines": "351-354"
+                "lines": "632-635"
             },
             "issamereferer": {
                 "name": "isSameReferer",
                 "args": [],
-                "lines": "357-360"
+                "lines": "637-640"
             },
             "redirect": {
                 "name": "redirect",
@@ -2397,8 +2433,7 @@
                     "string $url",
                     "?int $httpResponse = null"
                 ],
-                "lines": "367-370",
-                "uses": "xarController::redirect()"
+                "lines": "646-705"
             },
             "forbidden": {
                 "name": "forbidden",
@@ -2406,7 +2441,7 @@
                     "string $msg = ''",
                     "?string $template = null"
                 ],
-                "lines": "376-379"
+                "lines": "711-722"
             },
             "notfound": {
                 "name": "notFound",
@@ -2414,19 +2449,33 @@
                     "string $msg = ''",
                     "?string $template = null"
                 ],
-                "lines": "385-388"
+                "lines": "728-738"
             },
             "badrequest": {
                 "name": "badRequest",
                 "args": [
                     "?string $layout = null"
                 ],
-                "lines": "394-397"
+                "lines": "744-763"
+            },
+            "url": {
+                "name": "URL",
+                "args": [
+                    "?string $modName = null",
+                    "string $modType = 'user'",
+                    "string $funcName = 'main'",
+                    "array $params = []",
+                    "?bool $generateXMLURL = null",
+                    "?string $fragment = null",
+                    "$entrypoint = []",
+                    "?string $route = null"
+                ],
+                "lines": "769-852"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "142-398",
+        "lines": "143-853",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -3636,48 +3685,100 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/services/request.php",
         "name": "Xaraya\\Services\\RequestTrait",
         "methods": {
+            "setrequestclass": {
+                "name": "setRequestClass",
+                "args": [
+                    "string $className"
+                ],
+                "lines": "85-90"
+            },
+            "init": {
+                "name": "init",
+                "args": [
+                    "array $config = []",
+                    "?\\Xaraya\\Context\\Context $context = null"
+                ],
+                "lines": "93-115"
+            },
+            "getconfig": {
+                "name": "getConfig",
+                "args": [],
+                "lines": "121-131"
+            },
+            "setconfig": {
+                "name": "setConfig",
+                "args": [
+                    "array $config = []"
+                ],
+                "lines": "134-140"
+            },
+            "getinstance": {
+                "name": "getInstance",
+                "args": [],
+                "lines": "145-159"
+            },
+            "setinstance": {
+                "name": "setInstance",
+                "args": [
+                    "\\Xaraya\\Requests\\RequestInterface $instance"
+                ],
+                "lines": "164-170"
+            },
+            "newinstance": {
+                "name": "newInstance",
+                "args": [
+                    "?\\Xaraya\\Context\\Context $context = null"
+                ],
+                "lines": "175-181"
+            },
             "getmodule": {
                 "name": "getModule",
                 "args": [],
-                "lines": "61-64"
+                "lines": "186-189"
             },
             "gettype": {
                 "name": "getType",
                 "args": [],
-                "lines": "69-72"
+                "lines": "194-197"
             },
             "getfunction": {
                 "name": "getFunction",
                 "args": [],
-                "lines": "77-80"
+                "lines": "202-205"
             },
-            "getcurrenturl": {
-                "name": "getCurrentURL",
+            "geturl": {
+                "name": "getURL",
                 "args": [
-                    "array $args = []",
-                    "?bool $generateXMLURL = null"
+                    "array $params = []"
                 ],
-                "lines": "86-89"
+                "lines": "211-227"
+            },
+            "getrequeststring": {
+                "name": "getRequestString",
+                "args": [
+                    "array $params = []"
+                ],
+                "lines": "229-305"
             },
             "getbaseuri": {
                 "name": "getBaseURI",
                 "args": [],
-                "lines": "94-97"
+                "lines": "310-357"
             },
             "getservervar": {
                 "name": "getServerVar",
                 "args": [
                     "string $varName"
                 ],
-                "lines": "103-106"
+                "lines": "363-368"
             },
             "setservervar": {
                 "name": "setServerVar",
                 "args": [
-                    "string $name",
+                    "string $varName",
                     "$value"
                 ],
-                "lines": "108-111"
+                "lines": "370-375"
             },
             "getvar": {
                 "name": "getVar",
@@ -3685,40 +3786,75 @@
                     "string $varName",
                     "?string $allowOnlyMethod = null"
                 ],
-                "lines": "117-120"
+                "lines": "381-442"
+            },
+            "stripvarslashes": {
+                "name": "stripVarSlashes",
+                "args": [
+                    "$value"
+                ],
+                "lines": "444-450"
+            },
+            "gethost": {
+                "name": "getHost",
+                "args": [],
+                "lines": "452-468"
+            },
+            "getprotocol": {
+                "name": "getProtocol",
+                "args": [],
+                "lines": "470-487"
             },
             "getmethod": {
                 "name": "getMethod",
                 "args": [],
-                "lines": "125-128"
+                "lines": "492-495"
             },
             "islocalreferer": {
                 "name": "isLocalReferer",
                 "args": [],
-                "lines": "133-136"
+                "lines": "500-513"
             },
             "issamereferer": {
                 "name": "isSameReferer",
                 "args": [],
-                "lines": "141-144"
+                "lines": "518-529"
             },
             "getrequest": {
                 "name": "getRequest",
-                "args": [],
-                "lines": "150-153"
+                "args": [
+                    "$url = null"
+                ],
+                "lines": "535-543"
+            },
+            "setrequest": {
+                "name": "setRequest",
+                "args": [
+                    "$url = null"
+                ],
+                "lines": "545-550"
             },
             "getarrayvar": {
                 "name": "getArrayVar",
                 "args": [
                     "$var",
-                    "string $name"
+                    "string $varName"
                 ],
-                "lines": "160-163"
+                "lines": "557-584"
             }
         },
-        "const": [],
+        "const": {
+            "protocol_http": {
+                "name": "PROTOCOL_HTTP",
+                "value": "'http'"
+            },
+            "protocol_https": {
+                "name": "PROTOCOL_HTTPS",
+                "value": "'https'"
+            }
+        },
         "namespace": "Xaraya\\Services\\",
-        "lines": "54-164",
+        "lines": "66-585",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]
@@ -4292,7 +4428,7 @@
                     "$flags = xarVar::GET_OR_POST",
                     "$prep = xarVar::PREP_FOR_NOTHING"
                 ],
-                "lines": "185-189",
+                "lines": "193-262",
                 "uses": "xarVar::fetch()"
             },
             "get": {
@@ -4303,7 +4439,7 @@
                     "$validation",
                     "$defaultValue = null"
                 ],
-                "lines": "207-211",
+                "lines": "280-284",
                 "uses": "xarVar::fetch()"
             },
             "check": {
@@ -4314,7 +4450,7 @@
                     "$validation = 'isset'",
                     "$defaultValue = null"
                 ],
-                "lines": "229-246",
+                "lines": "302-319",
                 "uses": "xarVar::fetch()"
             },
             "find": {
@@ -4325,7 +4461,7 @@
                     "$validation = 'isset'",
                     "$defaultValue = null"
                 ],
-                "lines": "265-270",
+                "lines": "338-343",
                 "uses": "xarVar::fetch()"
             },
             "update": {
@@ -4336,7 +4472,7 @@
                     "$validation = 'isset'",
                     "$defaultValue = null"
                 ],
-                "lines": "288-305",
+                "lines": "361-378",
                 "uses": "xarVar::fetch()"
             },
             "validate": {
@@ -4347,7 +4483,7 @@
                     "$suppress = false",
                     "$name = ''"
                 ],
-                "lines": "318-321"
+                "lines": "391-422"
             },
             "getrequestvar": {
                 "name": "getRequestVar",
@@ -4355,35 +4491,42 @@
                     "string $name",
                     "?string $allowOnlyMethod = null"
                 ],
-                "lines": "329-333"
+                "lines": "430-433"
+            },
+            "batchfetch": {
+                "name": "batchFetch",
+                "args": [
+                    "...$batch"
+                ],
+                "lines": "463-486"
             },
             "prep": {
                 "name": "prep",
                 "args": [
                     "...$args"
                 ],
-                "lines": "342-345"
+                "lines": "495-498"
             },
             "prephtml": {
                 "name": "prepHTML",
                 "args": [
                     "...$args"
                 ],
-                "lines": "354-357"
+                "lines": "507-510"
             },
             "prepemail": {
                 "name": "prepEmail",
                 "args": [
                     "...$args"
                 ],
-                "lines": "366-369"
+                "lines": "519-522"
             },
             "preppath": {
                 "name": "prepPath",
                 "args": [
                     "...$args"
                 ],
-                "lines": "378-381"
+                "lines": "531-534"
             },
             "iscached": {
                 "name": "isCached",
@@ -4391,7 +4534,7 @@
                     "string $scope",
                     "string $name"
                 ],
-                "lines": "384-387"
+                "lines": "537-540"
             },
             "getcached": {
                 "name": "getCached",
@@ -4399,7 +4542,7 @@
                     "string $scope",
                     "string $name"
                 ],
-                "lines": "390-393"
+                "lines": "543-546"
             },
             "setcached": {
                 "name": "setCached",
@@ -4408,7 +4551,7 @@
                     "string $name",
                     "$value"
                 ],
-                "lines": "396-399"
+                "lines": "549-552"
             },
             "delcached": {
                 "name": "delCached",
@@ -4416,7 +4559,7 @@
                     "string $scope",
                     "string $name"
                 ],
-                "lines": "402-405"
+                "lines": "555-558"
             },
             "haspreload": {
                 "name": "hasPreload",
@@ -4424,7 +4567,7 @@
                     "string $scope",
                     "?string $name = null"
                 ],
-                "lines": "408-411"
+                "lines": "561-564"
             },
             "loadcached": {
                 "name": "loadCached",
@@ -4432,7 +4575,7 @@
                     "string $scope",
                     "?string $name = null"
                 ],
-                "lines": "414-417"
+                "lines": "567-570"
             },
             "savecached": {
                 "name": "saveCached",
@@ -4441,12 +4584,12 @@
                     "?string $name = null",
                     "?string $source = null"
                 ],
-                "lines": "420-426"
+                "lines": "573-579"
             }
         },
         "const": [],
         "namespace": "Xaraya\\Services\\",
-        "lines": "162-427",
+        "lines": "170-580",
         "traits": [
             "Xaraya\\Services\\ServiceTrait"
         ]

@@ -62,7 +62,7 @@ class ShortRoute extends xarRoute
             $path = substr($path, strlen($request->getEntryPoint()));
         } else {
             // This is a full URL
-            $path = substr($path, strlen(xarServer::getBaseURL() . $request->getEntryPoint()));
+            $path = substr($path, strlen($request->getBaseURL() . $request->getEntryPoint()));
         }
         if (empty($path)) {
             return false;

@@ -56,7 +56,7 @@ class DefaultRoute extends xarRoute
         }
 
         // Cater to URLs with &amp;
-        $querypart = preg_replace('/&amp;/', '&', $urlparts['query']);
+        $querypart = str_replace('&amp;', '&', $urlparts['query']);
         $pairs = explode(xarController::$separator, $querypart);
         foreach ($pairs as $pair) {
             if (trim($pair) == '') {

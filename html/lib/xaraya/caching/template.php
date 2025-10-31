@@ -13,7 +13,9 @@
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
-sys::import('xaraya.exceptions');
+if (!class_exists('xarExceptions')) {
+    sys::import('xaraya.exceptions');
+}
 
 /**
   * Declare an interface for the xarTemplateCache class so we dont shoot

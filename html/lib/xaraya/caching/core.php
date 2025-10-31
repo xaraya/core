@@ -24,14 +24,14 @@ use Xaraya\Services\xar;
  */
 class xarCoreCache extends xarObject
 {
-    protected static ?MemoryService $mem = null;
+    protected static ?MemoryService $memService = null;
 
-    protected static function mem()
+    protected static function mem(): MemoryService
     {
-        if (!isset(self::$mem)) {
-            self::$mem = xar::mem();
+        if (!isset(self::$memService)) {
+            self::$memService = xar::mem();
         }
-        return self::$mem;
+        return self::$memService;
     }
 
     /**
