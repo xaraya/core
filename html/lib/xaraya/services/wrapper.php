@@ -28,7 +28,6 @@ interface WrapperInterface extends ServiceInterface
     public const SLICE = 'wrapper';
 
     public function __call($method, $args);
-    public static function __callStatic($method, $args);
 }
 
 /**
@@ -38,54 +37,61 @@ trait WrapperTrait
 {
     use ServiceTrait;
 
+    /** @var callable */
+    public $callable;
+
+    /**
+     * Create service class for parent with instance
+     */
+    public function __construct(mixed $parent, ?callable $callable = null)
+    {
+        $this->parent = $parent;
+        $this->callable = $callable;
+    }
+
+    /**
+     * Magic call method on instance
+     */
+    public function __call($method, $args)
+    {
+        $callable = $this->callable;
+        return $callable($method, ...$args);
+    }
+
     /**
      * Summary of create
      * @param ?class-string $className
-     * @param ?object $instace
+     * @param ?object $instance
      */
-    public static function create(mixed $parent, $className, $instance): static
+    public static function create(mixed $parent, $className, &$instance): static
     {
         if (!is_object($parent)) {
             $parent = new DummyParent($parent);
         }
-        $wrapper = new class($parent) extends WrapperService {};
+        // use callable - we can't create anonymous class and change static property here
         if (isset($instance)) {
-            $wrapper::$className = $instance::class;
-            $wrapper::$instance = $instance;
-        } else {
-            $wrapper::$className = $className;
-            // @todo do we need to instantiate here
-            $wrapper::$instance = new $className();
+            $callable = function ($method, ...$args) use (&$instance) {
+                return $instance->$method(...$args);
+            };
+            return new static($parent, $callable);
         }
-        return $wrapper;
+        $callable = function ($method, ...$args) use ($className) {
+            return $className::$method(...$args);
+        };
+        return new static($parent, $callable);
     }
 }
 
 /**
- * Access *::* any class methods
+ * Access *::* any class methods as $this->*()->* instance methods
  *
  * Available methods:
+ * - $this->prep()->text()
+ * - $this->events()->notify()
  * - ...
  *
  */
 class WrapperService implements WrapperInterface
 {
     use WrapperTrait;
-
-    /** @var class-string */
-    public static $className;
-    /** @var object */
-    public static $instance;
-
-    public function __call($method, $args)
-    {
-        $instance = static::$instance;
-        return $instance->$method(...$args);
-    }
-
-    public static function __callStatic($method, $args)
-    {
-        $className = static::$className;
-        return $className::$method(...$args);
-    }
 }
